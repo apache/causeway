@@ -58,6 +58,7 @@ public class ClassIcon extends ObjectView {
     private IconGraphic iconSelected;
     private IconGraphic icon;
     private final ClassTitleText title;
+    private boolean identified;
 
     public ClassIcon(final Content content, ViewSpecification specification, ViewAxis axis) {
         super(content, specification, axis);
@@ -73,12 +74,14 @@ public class ClassIcon extends ObjectView {
 
     public void exited() {
         icon = iconUnselected;
+        identified = false;
         markDamaged();
         super.exited();
     }
     
     public void entered() {
         icon = iconSelected;
+        identified = true;
         markDamaged();
         super.entered();
     }
@@ -88,6 +91,10 @@ public class ClassIcon extends ObjectView {
 
         if(DEBUG) {
             canvas.drawRectangle(getSize(), Color.DEBUG1);
+        }
+        
+        if(identified) {
+            canvas.drawRectangle(getSize(), Style.SECONDARY2);
         }
         
         int x = 0;
