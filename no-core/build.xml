@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <!DOCTYPE project [
-	<!ENTITY properties SYSTEM "file:../naked-objects/properties.xml">
-	<!ENTITY targets SYSTEM "file:../naked-objects/targets.xml">
+	<!ENTITY properties SYSTEM "file:../build-templates/properties.xml">
+	<!ENTITY targets SYSTEM "file:../build-templates/targets.xml">
 ]>
 
-<project name="Naked Object framework" default="all" basedir=".">
+<project name="Naked Objects Core Framework" default="all" basedir=".">
 
 	<description>
 	</description>
