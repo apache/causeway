@@ -4,7 +4,7 @@ The viewer has technical status bar, which can be turned on using the following 
  Configuration is done via the configuration object, allowing configurations to be set from files, databases, etc. To get the configuration call:
  UiConfiguration.getInstance().
  ----
- ''''The design of the UI
+''''The design of the UI
 
 '''''The Viewer
 The skylark viewer is a lightweight viewer for rendering Naked Objects.  The entire viewer is series of composite views that use builders to create new views.  Each view is wrapped by decorators to give a view behaviours and visual features.  Each view is created to render a Content object.

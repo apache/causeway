@@ -2,6 +2,8 @@ SkylarkViewer
 DevelopmentLogOctober2004
 DsfaProject
 SkylarkGraphics
+HowToSetupNakedObjects
+
 ----
 '''Development Notes
 
