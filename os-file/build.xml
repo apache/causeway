@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE project [
+	<!ENTITY properties SYSTEM "file:../naked-objects/properties.xml">
+	<!ENTITY targets SYSTEM "file:../naked-objects/targets.xml">
+]>
+
+<project name="Naked Object Cache Object Store" default="all" basedir=".">
+	<description>Prevalyer style object store that journals all changes to the objects, and captures a snapshot
+		at shutdown.</description>
+
+	&properties;
+
+	<property name="component" value="os-file"/>
+	
+	<!-- classpath -->
+	<path id="libs.internal">
+		<fileset dir="../no-core/build/release">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	&targets;	
+</project>
+
+
