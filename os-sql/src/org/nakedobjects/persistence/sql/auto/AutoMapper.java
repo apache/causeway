@@ -161,7 +161,7 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 				}
 
 				val = val == null ? "NULL" : val;
-				((Value) fields[i]).initData(object, val);
+				((Value) fields[i]).restoreValue(object, val);
 
 			} else if (fields[i] instanceof OneToOneAssociation) {
 				NakedClass associatedCls = NakedClassManager.getInstance().getNakedClass(

@@ -6,8 +6,6 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 
 public class ClassIconSpecification extends IconSpecification {
-
-
 	public ClassIconSpecification() {
 		this(false, false);
 	}
@@ -17,7 +15,7 @@ public class ClassIconSpecification extends IconSpecification {
 	}
 	
     public View createView(Content content, ViewAxis axis) {
-		return new SimpleBorder(1, new ClassBackground(new IconView(content, this, null, Style.TITLE)));
+		return new SimpleBorder(1, new ClassIconBackground(new IconView(content, this, null, Style.TITLE)));
     }
 }
 

@@ -632,7 +632,7 @@ public class TextField extends AbstractField {
 
         if (inError) {
             textColor = new Color(0x999900);
-        } else if (isInvalid()) {
+        } else if (getState().isInvalid()) {
             textColor = Style.INVALID;
         } else if (hasFocus()) {
             if (isSaved) {
@@ -683,27 +683,32 @@ public class TextField extends AbstractField {
 
     public void editComplete() {
         if (canChangeValue()) {
-            String entry = textContent.getText();
-
-            // do nothing if entry is same as the value object
-            if (!entry.equals(getValue().title().toString())) {
-                LOG.debug("Field edited: \'" + entry + "\' to replace \'" + getValue().title() + "\'");
-
-                try {
-                    set(entry.toString());
-                    invalidReason = null;
-                    isSaved = true;
-                    markDamaged();
-                    getViewManager().setStatus("VALID ENTRY: " + entry);
-                    //getParent().invalidateLayout();
-                } catch (InvalidEntryException e) {
-                    invalidReason = "INVALID ENTRY: " + e.getMessage();
-                    getViewManager().setStatus(invalidReason);
-                    markDamaged();
-                }
+            initiateSave();
+        }      
+    }
+    
+    protected void save() {
+        String entry = textContent.getText();
+        
+        // do nothing if entry is same as the value object
+        if (!entry.equals(getValue().title().toString())) {
+            LOG.debug("Field edited: \'" + entry + "\' to replace \'" + getValue().title() + "\'");
+            
+            try {
+                parseEntry(entry.toString());
+                invalidReason = null;
+                isSaved = true;
+                markDamaged();
+                getViewManager().setStatus("VALID ENTRY: " + entry);
+                //getParent().invalidateLayout();
+            } catch (InvalidEntryException e) {
+                invalidReason = "INVALID ENTRY: " + e.getMessage();
+                getViewManager().setStatus(invalidReason);
+                markDamaged();
             }
         }
     }
+    
 
     public void entered() {
         getViewManager().showTextCursor();
@@ -791,10 +796,6 @@ public class TextField extends AbstractField {
 
     public boolean isIdentified() {
         return identified;
-    }
-
-    private boolean isInvalid() {
-        return invalidReason != null;
     }
 
     private boolean isOnResize(Location at) {
@@ -1062,7 +1063,11 @@ public class TextField extends AbstractField {
 
     public void refresh() {
         Value objectField = getObjectField();
-        if (invalidReason == null) {
+        if(objectField.isDerived()) {
+            NakedValue value = getValue();
+             textContent.setText(value.title().toString());
+
+        } else if (invalidReason == null) {
             // TODO decide how to deal with updates that affect a field that is being edited
             String text = getValue().title().toString();
 

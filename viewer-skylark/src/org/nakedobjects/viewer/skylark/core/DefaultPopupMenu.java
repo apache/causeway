@@ -226,7 +226,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
 		Location location = new Location(mouseAt);
 		location.move(-14, -10);
         setLocation(location);
-        
+       // limitBounds(this); -- does not work
     }
 
     public void invoke() {

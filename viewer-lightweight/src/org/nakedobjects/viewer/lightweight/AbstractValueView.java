@@ -245,7 +245,7 @@ public abstract class AbstractValueView extends AbstractView implements Internal
 
     protected void set(String value) {
         try {
-            objectField.set(((ObjectView) getParent()).getObject(), value);
+            objectField.parseAndSave(((ObjectView) getParent()).getObject(), value);
         } catch (InvalidEntryException e) {
             throw new NotImplementedException();
         }

@@ -1,20 +1,25 @@
 package org.nakedobjects.viewer.skylark.special;
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.collection.InternalCollection;
+import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.InternalCollectionContent;
 import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
+import org.nakedobjects.viewer.skylark.basic.ClassOption;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
 import org.nakedobjects.viewer.skylark.basic.TitleText;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
@@ -135,6 +140,7 @@ public class TreeNodeBorder extends AbstractBorder {
 		return wrappedView.toString() + "/TreeNodeBorder";
 	}
 
+ 	
  	public ViewAreaType viewAreaType(Location mouseLocation) {
 		int iconWidth = icon.getSize().getWidth();
  		int textWidth = text.getSize().getWidth();
@@ -148,6 +154,34 @@ public class TreeNodeBorder extends AbstractBorder {
  			
  		}
  	}
+ 	
+	public void menuOptions(MenuOptionSet options) {
+	    if(getContent() instanceof InternalCollectionContent) {
+	        InternalCollection collection = ((InternalCollectionContent) getContent()).getCollection();
+	        NakedClass nakedClass = NakedClassManager.getInstance().getNakedClass(collection.getType().getName());
+	        
+	        ClassOption.menuOptions(nakedClass, options);
+	        
+		    // TODO same as InternalCollectionBorder
+	    }
+        super.menuOptions(options);
+    }
+	
+    public void objectActionResult(Naked result, Location at) {
+        if(getContent() instanceof InternalCollectionContent) {
+	        //      TODO same as InternalCollectionBorder
+            InternalCollectionContent internalCollectionContent = (InternalCollectionContent) getContent();
+            OneToManyAssociation field = (OneToManyAssociation) internalCollectionContent.getField();
+            
+            //if(field.getType().isAssignableFrom(result.getClass())) {
+                NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
+            	field.setAssociation(target, (NakedObject) result);
+            //}
+
+           // super.objectActionResult(result, at);
+        }
+    }
+
 
 }
 

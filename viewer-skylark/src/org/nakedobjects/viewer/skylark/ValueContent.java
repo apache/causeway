@@ -6,7 +6,7 @@ import org.nakedobjects.object.reflect.Value;
 
 public class ValueContent implements FieldContent {
     private final Value field;
-	private final NakedValue object;
+	private NakedValue object;
 	
 	public ValueContent(NakedValue object, Value field) {
 		this.object = object;
@@ -41,6 +41,10 @@ public class ValueContent implements FieldContent {
 	public String toString() {
 		return object + "/"  + field;
 	}
+
+    public void updateDerivedValue(NakedValue object) {
+        this.object = object;
+    }
 }
 
 

@@ -2,7 +2,6 @@ package org.nakedobjects.viewer.skylark.core;
 
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;

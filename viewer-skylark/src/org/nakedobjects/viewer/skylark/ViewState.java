@@ -1,34 +1,14 @@
-/*
-        Naked Objects - a framework that exposes behaviourally complete
-        business objects directly to the user.
-        Copyright (C) 2000 - 2003  Naked Objects Group Ltd
-
-        This program is free software; you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation; either version 2 of the License, or
-        (at your option) any later version.
-
-        This program is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU General Public License for more details.
-
-        You should have received a copy of the GNU General Public License
-        along with this program; if not, write to the Free Software
-        Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-        The authors can be contacted via www.nakedobjects.org (the
-        registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-        Road, Woking GU21 1NR, UK).
-*/
 package org.nakedobjects.viewer.skylark;
 
 public class ViewState implements Cloneable {
-    private static final byte CAN_DROP = 0x10;
-    private static final byte CANT_DROP = 0x20;
+    private static final byte CAN_DROP = 0x08;
+    private static final byte CANT_DROP = 0x10;
     private static final byte OBJECT_IDENTIFIED = 0x04;
     private static final byte ROOT_VIEW_IDENTIFIED = 0x01;
     private static final byte VIEW_IDENTIFIED = 0x02;
+    private static final byte INVALID = 0x40;
+    private static final byte ACTIVE = 0x20;
+    
     private byte state;
 
     public void setCanDrop() {
@@ -95,4 +75,64 @@ public class ViewState implements Cloneable {
     	str += cantDrop() ? "Cant-drop " : "";
 		return str;
 	}
+
+    public void setActive() {
+        setFlag(ACTIVE);
+    }
+
+    public void setInactive() {
+        resetFlag(ACTIVE);    
+    }
+
+    public boolean isActive() {
+        return isFlagSet(ACTIVE);
+    } 
+    
+    private boolean isFlagSet(byte flag)  {
+        return (state & flag) > 0;
+    }
+
+    public void setValid() {
+        resetFlag(INVALID);
+    }
+    
+    private void setFlag(byte flag) {
+        state |= flag;
+    }
+
+    public void setInvalid() {
+        setFlag(INVALID);
+    }
+    
+    private void resetFlag(byte flag) {
+        state &= ~flag;    
+    }
+
+    public boolean isInvalid() {
+        return isFlagSet(INVALID);
+    }
 }
+
+/*
+Naked Objects - a framework that exposes behaviourally complete
+business objects directly to the user.
+Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+The authors can be contacted via www.nakedobjects.org (the
+registered address of Naked Objects Group is Kingsway House, 123 Goldworth
+Road, Woking GU21 1NR, UK).
+*/

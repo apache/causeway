@@ -2,7 +2,6 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 
 

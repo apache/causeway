@@ -87,6 +87,10 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
             Naked value = field.get(object);
     		
     		if(value instanceof NakedValue) {
+    		    NakedValue existing = ((ValueContent) subview.getContent()).getValue();
+    			if(value != existing) {
+    			    ((ValueContent) subview.getContent()).updateDerivedValue((NakedValue) value);
+    			}
     		    subview.refresh();
     		} else if (value instanceof NakedCollection) {
     		    subview.update((NakedObject) value);
@@ -97,7 +101,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
 				if(changeToNull || changedFromNull) {
 					View fieldView =	subviewDesign.createSubview(createContent(value, field), view.getViewAxis());
 					if(fieldView != null) {
-						view.replaceView(subviews[i], decorateSubview(fieldView));
+						view.replaceView(subview, decorateSubview(fieldView));
 					}
     			} 
     		}

@@ -2,6 +2,7 @@ package org.nakedobjects.viewer.skylark.metal;
 
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
+import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
@@ -42,10 +43,12 @@ public class ButtonBorder extends AbstractBorder {
         y  += VPADDING + 2;
         for (int i = 0; i < actions.length; i++) {
 	        String text = actions[i].getName(getView());
+	        Color color = actions[i].disabled(getView()).isVetoed() ? Style.DISABLED_MENU : Style.BLACK;
+	        Color border = actions[i].disabled(getView()).isVetoed() ? Style.DISABLED_MENU : Style.SECONDARY2;
 	        int buttonWidth = TEXT_PADDING + Style.NORMAL.stringWidth(text) + TEXT_PADDING;
 	        canvas.drawRectangle(x + 1, y + 1, buttonWidth - 1, buttonHeight, Style.WHITE);
-			canvas.drawRectangle(x, y, buttonWidth - 1, buttonHeight, Style.SECONDARY1);
-			canvas.drawText(text, x + 1 + TEXT_PADDING, y + VPADDING + Style.NORMAL.getAscent(), Style.BLACK, Style.NORMAL);
+			canvas.drawRectangle(x, y, buttonWidth - 1, buttonHeight, border);
+			canvas.drawText(text, x + 1 + TEXT_PADDING, y + VPADDING + Style.NORMAL.getAscent(), color, Style.NORMAL);
 	        x += BUTTON_SPACING + buttonWidth;
         }
         
@@ -55,12 +58,26 @@ public class ButtonBorder extends AbstractBorder {
     
     
     public void firstClick(Click click) {
-        int y = click.getLocation().getY();
-        if(y > getSize().getHeight() - bottom) {
+        int yy = click.getLocation().getY(); 
+        int xx = click.getLocation().getX();
+        if(yy > getSize().getHeight() - bottom) {
+            
+            int width = getSize().getWidth();
+            int x = width / 2 - buttonSetWidth / 2;
+            int y = getSize().getHeight() - bottom;
+          
             for (int i = 0; i < actions.length; i++) {
-                
+    	        String text = actions[i].getName(getView());
+    	        int buttonWidth = TEXT_PADDING + Style.NORMAL.stringWidth(text) + TEXT_PADDING;
+
+    	        if(actions[i].disabled(getView()).isAllowed() && xx > x && xx < x + buttonWidth && yy > y && yy < y + buttonHeight) {
+    	            actions[i].execute(getWorkspace(), getView(), getLocation()); 
+    	            return;
+                }
+    	        
+    	        x += BUTTON_SPACING + buttonWidth;
             }
-        }
+        } 
         super.firstClick(click);
     }
 }

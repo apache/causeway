@@ -27,11 +27,11 @@ import java.util.Vector;
 
 
 public class MenuOptionSet {
-    public static final int WINDOW = 0;
     public static final int VIEW = 1;
     public static final int OBJECT = 2;
-    public static final int EXPLORATION = 3;
-    public static final int DEBUG = 4;
+    public static final int CLASS = 3;
+    public static final int EXPLORATION = 4;
+    public static final int DEBUG = 5;
     private static final int LAST = DEBUG;
     private Color backgroundColor = Color.DEBUG1;
     private Vector[] set = new Vector[LAST + 1];
@@ -66,9 +66,9 @@ public class MenuOptionSet {
     public Vector getMenuOptions(boolean includeExploration, boolean includeDebug) {
         Vector v = new Vector();
 
-        createMenu(v, WINDOW);
         createMenu(v, VIEW);
         createMenu(v, OBJECT);
+        createMenu(v, CLASS);
 
         if (includeExploration) {
         	createMenu(v, EXPLORATION);

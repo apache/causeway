@@ -2,11 +2,19 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.MenuOption;
+import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
+import org.nakedobjects.viewer.skylark.Workspace;
+import org.nakedobjects.viewer.skylark.core.AbstractViewDecorator;
 
 
 public class IconSpecification implements ViewSpecification {
@@ -27,7 +35,7 @@ public class IconSpecification implements ViewSpecification {
 	}
 	
 	public View createView(Content content, ViewAxis axis) {
-		return new SimpleBorder(1, new IconView(content, this, null, Style.NORMAL));
+		return new SimpleBorder(1, new CloseIcon(new IconView(content, this, axis, Style.NORMAL)));
     }
 
 	public String getName() {
@@ -49,6 +57,43 @@ public class IconSpecification implements ViewSpecification {
 	public boolean isOpen() {
 		return false;
 	}
+}
+
+class CloseIcon extends AbstractViewDecorator {
+    protected CloseIcon(View wrappedView) {
+        super(wrappedView);
+    }
+    
+    public void secondClick(Click click) {
+        if(click.getViewAreaType() == ViewAreaType.VIEW) {
+            openIcon();
+        } else {
+            super.secondClick(click);
+        }
+    }
+    
+    private void openIcon() {
+        closeIcon();
+        getWorkspace().addOpenViewFor(((ObjectContent) getContent()).getObject(), getLocation());
+    }
+
+    private void closeIcon() {
+        getWorkspace().removeView(getView());
+    }
+
+    public void menuOptions(MenuOptionSet menuOptions) {
+        super.menuOptions(menuOptions);
+        
+        menuOptions.add(MenuOptionSet.VIEW, new MenuOption("Remove icon from workspace") {
+            public void execute(Workspace workspace, View view, Location at) {
+                closeIcon();
+            }});
+
+        menuOptions.add(MenuOptionSet.VIEW, new MenuOption("Open object") {
+            public void execute(Workspace workspace, View view, Location at) {
+                openIcon();
+            }});
+    }
 }
 
 

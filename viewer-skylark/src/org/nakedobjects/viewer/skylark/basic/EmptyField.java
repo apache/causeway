@@ -1,34 +1,9 @@
-
-/*
-    Naked Objects - a framework that exposes behaviourally complete
-    business objects directly to the user.
-    Copyright (C) 2000 - 2003  Naked Objects Group Ltd
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-    The authors can be contacted via www.nakedobjects.org (the
-    registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-    Road, Woking GU21 1NR, UK).
-*/
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.apache.log4j.Logger;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.security.Session;
@@ -47,7 +22,8 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
-import org.nakedobjects.viewer.skylark.util.ViewFactory;
+
+import org.apache.log4j.Logger;
 
 public class EmptyField extends AbstractView {
 	private static final Logger LOG = Logger.getLogger(EmptyField.class);
@@ -145,40 +121,27 @@ public class EmptyField extends AbstractView {
     }
 
     public void drop(ContentDrag drag) {
-        View dragSource = drag.getSourceView();
-
         if (canDrop(drag)) {
+	        NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
+	        View dragSource = drag.getSourceView();
             NakedObject source = ((ObjectContent) dragSource.getContent()).getObject();
-            NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
-
-            /*
-                        if (source instanceof NakedClass) {
-                            source = ((NakedClass) source).acquireInstance();
-
-                            try {
-                                source.makePersistent();
-                            } catch (ObjectStoreException e) {
-                                source = new NakedError("Failed to create object", e);
-
-                                                    RootView view = ViewFactory.getViewFactory().createRootView(source);
-                                view.setLocation(drag.getRelativeLocation());
-                                getWorkspace().addRootView(view);
-
-                                return;
-                            }
-
-                            source.created();
-                        }
-            */
-            OneToOneAssociation field = getEmptyField();
-
+            
+            NakedObject associatedObject;
+            OneToOneAssociation field = getEmptyField();      
             LOG.debug("drop " + source + " on " + field + "/" + target);
-            if (field.getType().isAssignableFrom(source.getClass())) {
-                field.setAssociation(target, source);
+            if (source instanceof NakedClass) {
+                associatedObject = ((NakedClass) source).createInstance();
             } else {
-                View view = ViewFactory.getViewFactory().createIconizedSubview(new OneToOneContent(source, field));
-               // view.setLocation(drag.getTargetLocation());
-                getParent().replaceView(getView(), view);
+                associatedObject = source;
+            }
+            
+            OneToOneContent content = new OneToOneContent(associatedObject, field);
+ //           View iconView = ViewFactory.getViewFactory().createIconizedSubview(content);
+ //           getParent().replaceView(getView(), iconView);
+            field.setAssociation(target, associatedObject);
+                        
+            if(! target.isPersistent()) {
+                getParent().invalidateContent();
             }
         }
     }
@@ -186,7 +149,7 @@ public class EmptyField extends AbstractView {
     public NakedClass forNakedClass() {
         OneToOneAssociation field = getEmptyField();
         String className = field.getType().getName();
-        return NakedObjectManager.getInstance().getNakedClass(className);
+        return NakedClassManager.getInstance().getNakedClass(className);
     }
 
     /**
@@ -291,3 +254,28 @@ public class EmptyField extends AbstractView {
     	}
     }
 }
+
+
+/*
+    Naked Objects - a framework that exposes behaviourally complete
+    business objects directly to the user.
+    Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    The authors can be contacted via www.nakedobjects.org (the
+    registered address of Naked Objects Group is Kingsway House, 123 Goldworth
+    Road, Woking GU21 1NR, UK).
+*/

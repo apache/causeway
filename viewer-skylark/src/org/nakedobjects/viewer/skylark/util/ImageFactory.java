@@ -68,7 +68,7 @@ public class ImageFactory {
 			return (Icon) icons.get(id);
 			
 		} else {
-			ImageTemplate template = loader.getImageTemplate(DIRECTORY + name);
+			ImageTemplate template = loader.getImageTemplateOrFallback(DIRECTORY + name);
 			Icon icon = template.getIcon(height, tint);
 			icons.put(id, icon);
 
@@ -84,8 +84,26 @@ public class ImageFactory {
 	   @see java.lang.Class#getResource(String)
 	 */
 	public Icon loadImage(String path) {
-		ImageTemplate template = loader.getImageTemplate(DIRECTORY + path);
+		ImageTemplate template = loader.getImageTemplateOrFallback(DIRECTORY + path);
 		return template.getFullSizeImage();
 	}
+
+    public boolean imageAvailable(String name, int height, Color tint) {
+		String id = name + "/" + height + "/" + tint;
+
+		if (icons.containsKey(id)) {
+			return true;
+			
+		} else {
+			ImageTemplate template = loader.getImageTemplate(DIRECTORY + name);
+			if(template == null) {
+			    return false;
+			} else {
+				Icon icon = template.getIcon(height, tint);
+				icons.put(id, icon);
+				return true;
+			}
+		}
+}
 }
 

@@ -79,16 +79,16 @@ public class ValueTests extends NakedObjectTestCase {
     }
     	
     public void testSetGet() throws InvalidEntryException {
-     	nameField.set(object, "Fred");
-     	salaryField.set(object, "20.41");
+     	nameField.parseAndSave(object, "Fred");
+     	salaryField.parseAndSave(object, "20.41");
      	
      	assertEquals("Fred", object.getName());
      	assertEquals(20.41, object.getSalary().doubleValue(), 0.001);
     }     	
     
     public void testInitGet() {
-    	nameField.initData(object, "Joe");
-    	salaryField.initData(object, "18.83");
+    	nameField.restoreValue(object, "Joe");
+    	salaryField.restoreValue(object, "18.83");
     
     	assertEquals("Joe", object.getName());
     	assertEquals(18.83, object.getSalary().doubleValue(), 0.001);

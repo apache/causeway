@@ -42,8 +42,9 @@ public class TreeBrowserSpecification implements ViewSpecification {
 	    	node = collectionCompositeNode.createView(content, axis);
 	    } else {
 	        node = objectCompositeNode.createView(content, axis);
+	        frame.setSelectedNode(node);
 	    }
-        frame.setLeft(new ScrollBorder(node));
+        frame.initLeftPane(new ScrollBorder(node));
         return view;
     }
 

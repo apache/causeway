@@ -58,6 +58,27 @@ public abstract class AbstractView implements View {
 		state = new ViewState();
 		view = this;
 	}
+	
+	   public void run(final BackgroundTask task) {
+	        Thread t = new Thread("background task") {
+	            public void run() {
+	                //isSaving = true;
+	                state.setActive();
+	                repaint();
+	                
+	                task.execute();
+
+	               // isSaving = false;
+	                state.setInactive();
+	                markDamaged();
+	                repaint();
+	            }
+	        };
+	        
+	        t.start();
+	    }
+
+
 
     public void addView(View view) {
         throw new NakedObjectRuntimeException();
@@ -323,9 +344,21 @@ public abstract class AbstractView implements View {
         return false;
     }
 	
+    /**
+     * Flags that the views do not properly represent the content, and hence it needs rebuilding.  Contrast this
+     *  with invalidateLayout(), which deals with an a complete view, but one that is not showing properly.
+     * 
+     * @see #invalidateLayout()
+     */
 	public void invalidateContent() {
 	}
 
+	/**
+	 * Flags that the views are possibly not displaying the content fully - too small, wrong place etc - although
+	 * views exists for all the content.  Contrast this with invalidateContent(), which deals with an incomplete view.
+	 * 
+	 * @see #invalidateContent()
+	 */
 	public void invalidateLayout() {
 		if(parent != null) {
 			parent.invalidateLayout();
@@ -449,6 +482,14 @@ public abstract class AbstractView implements View {
         draw(canvas);
     }
 
+    /**
+     * Forces a repaint; should only be used in places markDamaged() does not work because
+     * no user action occurs - within the required timeframe - that would otherwise cause a redraw automatically.
+     */
+	protected void repaint() {
+	    markDamaged();
+	    getViewManager().forceRepaint();
+	}
 	
     public void refresh() {
     }
@@ -530,8 +571,8 @@ public abstract class AbstractView implements View {
                     replaceOptions(ViewFactory.getViewFactory().closedSubviews(content, this), options);
             }
          } else {
-	        options.add(MenuOptionSet.WINDOW, CLOSE_OPTION);
-            options.add(MenuOptionSet.WINDOW, CLOSE_ALL_OPTION);
+	        options.add(MenuOptionSet.VIEW, CLOSE_OPTION);
+            options.add(MenuOptionSet.VIEW, CLOSE_ALL_OPTION);
 	        options.add(MenuOptionSet.VIEW, new PrintOption());  
 	        if (view.getSpecification().isReplaceable()) {
 	            // offer other/alternative views

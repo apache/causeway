@@ -1,7 +1,5 @@
 package org.nakedobjects.viewer.skylark.value;
 
-import org.nakedobjects.object.InvalidEntryException;
-import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Size;
@@ -56,12 +54,7 @@ public class OptionSelectionFieldOverlay extends AbstractView implements View {
 	public void firstClick(Click click) {
 		int y = click.getLocation().getY() - VPADDING;
 		int row = y / rowHeight;
-		try {
-            field.set(options[row]);
-        } catch (InvalidEntryException e) {
-            throw new NotImplementedException();
-
-        }
+		field.set(options[row]);
 		dispose();
 	}
 }

@@ -4,6 +4,7 @@ package org.nakedobjects.object.reflect;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Validity;
@@ -19,7 +20,7 @@ public class Value extends Field {
     }
 
 	public void clear(NakedObject inObject) {
-        ((NakedValue) delegatedTo.get(inObject)).clear();
+        delegatedTo.getValue(inObject).clear();
 	}
 	
     public About getAbout(SecurityContext context, NakedObject object) {
@@ -36,41 +37,49 @@ public class Value extends Field {
     	return getLabel(about);
     }
 
-    /**
-     Set the data in an NakedObject.  Passes in an existing object to for the object to reference.
-     */
-    public void initData(NakedObject inObject, Object setValue) {
-    	delegatedTo.restoreValue(inObject, setValue);
+    public void restoreValue(NakedObject inObject, String encodedValue) {
+    	delegatedTo.restoreValue(inObject, encodedValue);
     }
 
-    public void set(NakedObject inObject, String setValue) throws InvalidEntryException {
+    public void parseAndSave(NakedObject inObject, String textEntry) throws InvalidEntryException {
         if (isDerived()) {
-            throw new IllegalStateException("Can't set an attribute that is derived: " + getName());
+            throw new NakedObjectRuntimeException("Can't set an value that is derived: " + getName());
         }
-        NakedValue value = (NakedValue) delegatedTo.get(inObject);
+        NakedValue value = delegatedTo.getValue(inObject);
     
-        delegatedTo.parseValue(value, setValue);
+        delegatedTo.parseValue(value, textEntry);
         Validity validity = new Validity(value, getLabel(null, inObject));
         delegatedTo.isValid(inObject, validity);
         if(validity.isValid()) {  
-            delegatedTo.setValue(inObject, value);
+            delegatedTo.saveValue(inObject, value.saveString());
         } else {
 	        String originalValue = value.title().toString();
             delegatedTo.parseValue(value, originalValue);
             throw new InvalidEntryException(validity.getReason());
         }
- 
-        //      delegatedTo.setValue(inObject, setValue);
-    }
+     }
+
+    public void saveEncoded(NakedObject inObject, String encodedValue) throws InvalidEntryException {
+        if (isDerived()) {
+            throw new NakedObjectRuntimeException("Can't set an value that is derived: " + getName());
+        }
+        
+        delegatedTo.saveValue(inObject, encodedValue);
+     }
+
 
     public String toString() {
         return "Value [" + super.toString() + ",derived=" + isDerived() + "]";
     }
 
 	public Naked get(NakedObject fromObject) {
-		return delegatedTo.get(fromObject);
+		return getValue(fromObject);
 	}
-
+	
+	public NakedValue getValue(NakedObject fromObject) {
+		return delegatedTo.getValue(fromObject);
+	}
+	
 	public boolean isDerived() {
 		return delegatedTo.isDerived();
 	}

@@ -2,6 +2,7 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
+import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
@@ -86,6 +87,17 @@ public class WindowBorder extends AbstractBorder {
 		size.ensureWidth(left + icon.getSize().getWidth() + text.getSize().getWidth() + padding + right);
 		return size;
 	}
+	
+	public void secondClick(Click click) {
+        if(click.getViewAreaType() == ViewAreaType.VIEW) {
+            View iconView = new IconSpecification().createView(getContent(), null);
+            iconView.setLocation(getView().getLocation());
+            getWorkspace().removeView(getView());
+            getWorkspace().addView(iconView);
+        } else {
+            super.secondClick(click);
+        }
+    }
 	
  	public String toString() {
 		return wrappedView.toString() + "/WindowBorder [width=" + left + "]";

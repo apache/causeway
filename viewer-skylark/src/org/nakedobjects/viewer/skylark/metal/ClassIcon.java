@@ -4,21 +4,17 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.collection.InstanceCollection;
-import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
-import org.nakedobjects.viewer.skylark.UserAction;
+import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
-import org.nakedobjects.viewer.skylark.Workspace;
-import org.nakedobjects.viewer.skylark.basic.ClassOption;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
 import org.nakedobjects.viewer.skylark.core.ObjectView;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
@@ -58,20 +54,28 @@ public class ClassIcon extends ObjectView {
 
     public ClassIcon(Content content, ViewSpecification specification, ViewAxis axis) {
         super(content, specification, axis);
-
-        iconSelected = new IconGraphic(this, 85) {
-        	protected String iconName(NakedObject object) {
-				return super.iconName(object) + "_class_selected";
-			}
-        };
         
-        iconUnselected = new IconGraphic(this, 85) {
+        int iconSize = Configuration.getInstance().getInteger("viewer.skylark.class-icon-size", 85);
+
+        iconUnselected = new IconGraphic(this, iconSize) {
         	protected String iconName(NakedObject object) {
 				return super.iconName(object) + "_class";
 			}
         };
-
-        icon = iconUnselected;
+        if(!iconUnselected.isImageAvailable()) {
+            iconUnselected = new IconGraphic(this, iconSize);
+        }
+        
+        iconSelected = new IconGraphic(this, iconSize) {
+        	protected String iconName(NakedObject object) {
+				return super.iconName(object) + "_class_selected";
+			}
+        };        
+        if(!iconSelected.isImageAvailable()) {
+            iconSelected = iconUnselected;
+        }
+        
+       icon = iconUnselected;
     }
 
     public void exited() {
@@ -80,16 +84,10 @@ public class ClassIcon extends ObjectView {
         super.exited();
     }
     
-    public void menuOptions(MenuOptionSet options) {
-    	// see ClassOption and use?
-    //	ClassOption.menuOptions((NakedClass) ((ObjectContent) getContent()).getObject(), options);
-    	
-//    	NakedClass cls = (NakedClass) ((ObjectContent) getContent()).getObject();
-//		Action[] actions = cls.getClassActions(Action.USER, 0);
-    	
+    public void entered() {
         icon = iconSelected;
         markDamaged();
-        super.menuOptions(options);
+        super.entered();
     }
 
     public void draw(Canvas canvas) {
@@ -99,6 +97,14 @@ public class ClassIcon extends ObjectView {
         int y = icon.getBaseline();
         icon.draw(canvas, x, y);
         x += iconUnselected.getSize().getWidth();
+ 
+		NakedObject object = ((ObjectContent) getContent()).getObject();
+		NakedClass nc = ((NakedClass) object);
+		String name = nc.getShortName();
+
+		int w = Style.CLASS.stringWidth(name);
+		int h = Style.CLASS.getAscent() + VPADDING;
+        canvas.drawText(name, getSize().getWidth() / 2 - w / 2, y + h, Style.BLACK, Style.CLASS);
     }
 
     public int getBaseline() {
@@ -107,7 +113,8 @@ public class ClassIcon extends ObjectView {
 
     public Size getRequiredSize() {
         Size size = iconUnselected.getSize();
-
+        int text = Style.CLASS.getHeight();
+        size.extendHeight(text  + VPADDING);
         return size;
     }
 

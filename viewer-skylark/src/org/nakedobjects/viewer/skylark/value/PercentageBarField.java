@@ -39,24 +39,28 @@ public class PercentageBarField extends AbstractField {
         super(content, specification, axis);
     }
 
+    private Percentage entry = new Percentage();
+    
     public void drag(InternalDrag drag) {
         float x = drag.getTargetLocation().getX() - 2;
         setValue(x);
     }
 
     private void setValue(float x) {
+        float max = getSize().getWidth() - 4;
+        
+        if ((x >= 0) && (x <= max)) {
+            entry.setValue(x / max);
+            initiateSave();
+        }
+    }
+    
+    protected void save() {
         try {
-            float max = getSize().getWidth() - 4;
-            
-            if ((x >= 0) && (x <= max)) {
-                //getPercentage().setValue(x / max);
-                set(Float.toString(x / max));
-                markDamaged();
-            }
+                saveValue(entry);
         } catch(InvalidEntryException e) {
             throw new NotImplementedException();
-        }
-        
+        }        
     }
 
     public void draw(Canvas canvas) {
@@ -78,9 +82,9 @@ public class PercentageBarField extends AbstractField {
 
     public void firstClick(Click click) {
         float x = click.getLocation().getX() - 2;
-        setValue(x);
-    }
-
+        setValue(x);        
+    } 
+    
     private Percentage getPercentage() {
         ValueContent content = ((ValueContent) getContent());
         Percentage percentage = (Percentage) content.getValue();

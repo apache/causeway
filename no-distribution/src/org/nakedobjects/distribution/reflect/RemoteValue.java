@@ -1,7 +1,6 @@
 package org.nakedobjects.distribution.reflect;
 
 
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
@@ -38,19 +37,19 @@ public class RemoteValue implements ValueIf {
     	}
     }
 
-	public void restoreValue(NakedObject inObject, Object setValue) {
-		local.restoreValue(inObject, setValue);
+	public void restoreValue(NakedObject inObject, String encodeValue) {
+		local.restoreValue(inObject, encodeValue);
 	}
 
 	public boolean isDerived() {
 		return local.isDerived();
 	}
 
-	public Naked get(NakedObject inObject) {
+	public NakedValue getValue(NakedObject inObject) {
 	   	if(inObject.isPersistent() && fullProxy) {
 	   		throw new NotImplementedException(); 
 	   	} else {
-	   		return local.get(inObject);
+	   		return local.getValue(inObject);
 	   	}
 	}
 
@@ -74,16 +73,16 @@ public class RemoteValue implements ValueIf {
         local.isValid(inObject, validity);
     }
 
-    public void setValue(NakedObject inObject, NakedValue value) {
+    public void saveValue(NakedObject inObject, String encodedValue) {
        	if(inObject.isPersistent()) {
  	       try {
- 	            new SetValueRequest(inObject, this, value).execute();
+ 	            new SaveValueRequest(inObject, this, encodedValue).execute();
  	        } catch (NakedObjectRuntimeException e) {
  	            LOG.error("Problem with distribution ", e.getCause());
  	            throw (NakedObjectRuntimeException) e.getCause();
  	        }
      	} else {
-     		local.setValue(inObject, value);
+     		local.saveValue(inObject, encodedValue);
      	}    
     }
 }

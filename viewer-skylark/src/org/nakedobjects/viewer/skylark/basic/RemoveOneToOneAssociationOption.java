@@ -78,5 +78,7 @@ public class RemoveOneToOneAssociationOption extends MenuOption {
         
         LOG.debug("Remove " + associatedObject + " from " + parentObject);
         association.clearAssociation(parentObject, associatedObject);
+        
+        view.getParent().invalidateContent();
     }
 }

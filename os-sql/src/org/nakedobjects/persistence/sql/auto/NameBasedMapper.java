@@ -190,7 +190,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
                     loadInternalCollection(id, fields[i], (InternalCollection) fields[i].get(object));
                 } else if (fields[i] instanceof Value) {
                     try {
-                        ((Value) fields[i]).set(object, rs.getString(columnName(fields[i])));
+                        ((Value) fields[i]).parseAndSave(object, rs.getString(columnName(fields[i])));
                     } catch (InvalidEntryException e) {
                         LOG.error(e);
                     }

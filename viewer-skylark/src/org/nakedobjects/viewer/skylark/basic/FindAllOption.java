@@ -39,7 +39,7 @@ public class FindAllOption extends MenuOption {
     }
 
     public void execute(Workspace workspace, View view, Location at) {
-        InstanceCollection instances = new InstanceCollection(((ObjectContent) view.getContent()).getObject());
+        InstanceCollection instances = InstanceCollection.findInstances(((ObjectContent) view.getContent()).getObject());
 
 		NakedObject object = (instances.size() == 1) ? (NakedObject) instances.elements().nextElement() : instances;
 		

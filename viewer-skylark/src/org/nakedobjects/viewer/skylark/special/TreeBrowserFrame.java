@@ -1,6 +1,8 @@
 package org.nakedobjects.viewer.skylark.special;
 
 
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Content;
@@ -16,7 +18,8 @@ import org.nakedobjects.viewer.skylark.core.AbstractView;
 
 
 class TreeBrowserFrame extends AbstractView implements ViewAxis {
-    private ViewSpecification mainViewSpec;
+    private ViewSpecification mainViewFormSpec;
+    private ViewSpecification mainViewTableSpec;
     private boolean invalidLayout = true;
     private View left;
     private View right;
@@ -25,7 +28,8 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     protected TreeBrowserFrame(Content content, ViewSpecification specification) {
         super(content, specification, null);
         
-        mainViewSpec = new TreeBrowserFormSpecification();
+        mainViewFormSpec = new TreeBrowserFormSpecification();
+        mainViewTableSpec = new InternalTableSpecification();
     }
 
     public String debugDetails() {
@@ -122,12 +126,11 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     public void replaceView(View toReplace, View replacement) {
         if (toReplace == left) {
             left = replacement;
+            replacement.setParent(getView());
+            invalidateLayout();
         } else {
-            right = replacement;
+            throw new NakedObjectRuntimeException();
         }
-
-        replacement.setParent(getView());
-        invalidateLayout();
     }
     
     
@@ -139,22 +142,30 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
         }
     }
 
-    void setLeft(View view) {
+    void initLeftPane(View view) {
         left = view;
         left.setParent(getView());
     }
 
-    void setRight(View view) {
+    private void showInRightPane(View view) {
         right = view;
         right.setParent(getView());
+        invalidateLayout();
     }
 
     public void setSelectedNode(View view) {
-        if(mainViewSpec.canDisplay(((ObjectContent) view.getContent()).getObject())) {
-	        selectedNode = view;
-	        replaceView(null, mainViewSpec.createView(view.getContent(), null));
+        NakedObject object = ((ObjectContent) view.getContent()).getObject();
+        if(object != null) {
+	        if(mainViewFormSpec.canDisplay(object)) {
+		        selectedNode = view;
+		        showInRightPane(mainViewFormSpec.createView(view.getContent(), null));
+	        }
+	        if(mainViewTableSpec.canDisplay(object)) {
+		        selectedNode = view;
+		        showInRightPane(mainViewTableSpec.createView(view.getContent(), null));
+	        }
         }
-    }
+   }
 
     public String toString() {
         return "TreeBrowserFrame" + getId();

@@ -1,26 +1,3 @@
-/*
-    Naked Objects - a framework that exposes behaviourally complete
-    business objects directly to the user.
-    Copyright (C) 2000 - 2003  Naked Objects Group Ltd
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-    The authors can be contacted via www.nakedobjects.org (the
-    registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-    Road, Woking GU21 1NR, UK).
-*/
 package org.nakedobjects.viewer.skylark.value;
 
 import org.nakedobjects.object.InvalidEntryException;
@@ -47,11 +24,13 @@ import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
+import org.nakedobjects.viewer.skylark.core.BackgroundTask;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 
 public abstract class AbstractField extends AbstractView {
     private boolean identified;
+//    private boolean isSaving;
 
 	protected AbstractField(Content content, ViewSpecification design, ViewAxis axis) {
 		super(content, design, axis);
@@ -103,6 +82,14 @@ public abstract class AbstractField extends AbstractView {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
+        if(getState().isInvalid()) {
+            canvas.drawSolidRectangle(new Location(), getBounds().getSize(), Color.DEBUG3);
+        }
+ 
+        if(getState().isActive()) {
+            canvas.drawSolidRectangle(new Location(), getBounds().getSize(), Color.DEBUG2);
+        }
+        
         // outline bounds
         if (DEBUG) {
             canvas.drawRectangle(getBounds().getSize(), identified ? Color.DEBUG1 : Color.DEBUG2);
@@ -220,8 +207,37 @@ public abstract class AbstractField extends AbstractView {
     protected void refreshValue() {
     }
 
-    protected void set(String value) throws InvalidEntryException {
-        getObjectField().set(((ObjectContent) getParent().getContent()).getObject(), value);
+    protected final void initiateSave() {
+         run(new BackgroundTask() {
+            protected void execute() {
+                save();	
+                invalidateLayout();
+            }
+        });
+     }
+
+    protected abstract void save();
+
+    protected void saveValue(NakedValue value) throws InvalidEntryException {
+        parseEntry(value.title().toString());
+    }
+    
+    protected void parseEntry(final String entryText) throws InvalidEntryException {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        try {
+	        NakedObject parent = ((ObjectContent) getParent().getContent()).getObject();
+	        getObjectField().parseAndSave(parent, entryText);
+	        getState().setValid();
+        } catch(InvalidEntryException e) {
+            getState().setInvalid();
+            throw e;
+        }
     }
 
     public String toString() {
@@ -249,7 +265,28 @@ public abstract class AbstractField extends AbstractView {
     public Size getRequiredSize() {
         return new Size(0, Style.defaultFieldHeight());
     }
-
-
-
 }
+
+/*
+Naked Objects - a framework that exposes behaviourally complete
+business objects directly to the user.
+Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+The authors can be contacted via www.nakedobjects.org (the
+registered address of Naked Objects Group is Kingsway House, 123 Goldworth
+Road, Woking GU21 1NR, UK).
+*/

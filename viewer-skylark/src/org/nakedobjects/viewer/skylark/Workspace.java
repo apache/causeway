@@ -4,7 +4,7 @@ import org.nakedobjects.object.NakedObject;
 public interface Workspace extends View {
 	void lower(View view);
 	void removeOtherRootViews(View view);
-	void addOpenViewFor(Naked object, Location at);
+	View addOpenViewFor(Naked object, Location at);
 	void raise(View view);
 	void removeViewsFor(NakedObject object);
 }

@@ -21,6 +21,10 @@ public class IconGraphic {
         iconHeight = height;
     }
 
+    public boolean isImageAvailable() {
+        return ImageFactory.getImageFactory().imageAvailable(iconName(content.getObject()), iconHeight, null);  
+    }
+    
     public IconGraphic(View view, Text style) {
         content = (ObjectContent) view.getContent();
         iconHeight = (style.getHeight() * 120) / 100;

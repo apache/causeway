@@ -1,32 +1,9 @@
-package org.nakedobjects.viewer.skylark;
+package org.nakedobjects.viewer.skylark.core;
 
-import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.object.reflect.Field;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
 
-public class InternalCollectionContent extends ObjectContent implements FieldContent {
-	private OneToManyAssociation association;
 
-	public InternalCollectionContent(InternalCollection object, OneToManyAssociation association) {
-		super(object);
-		this.association = association;
-	}
-	
-	public Field getField() {
-		return association;
-	}
-	
-	public String getFieldName() {
-		return association.getName();
-	}
-	
-	public InternalCollection getCollection() {
-	    return (InternalCollection) super.getObject();
-	}
-	
-	public String toString() {
-		return getObject() + "/" + association;
-	}
+public abstract class BackgroundTask {
+     protected abstract void execute();
 }
 
 

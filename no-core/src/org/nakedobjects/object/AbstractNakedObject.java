@@ -9,11 +9,6 @@ import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.Value;
 import org.nakedobjects.object.value.Snapshot;
-import org.nakedobjects.utility.NotImplementedException;
-
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 
 import org.apache.log4j.Logger;
 
@@ -94,7 +89,7 @@ public abstract class AbstractNakedObject implements NakedObject {
 		about.unusableOnCondition(this instanceof NakedClass) || this instanceof InstanceCollection);
 	}
 */
-	public void aboutExplorationActionMakePersistent(ActionAbout about) {
+	public void aboutActionPersist(ActionAbout about) {
 		about.unusableOnCondition(isPersistent(), "Only non-persistent objects can be made persistent");
 	}
 
@@ -181,7 +176,7 @@ public abstract class AbstractNakedObject implements NakedObject {
         return clone;
     }
     
-    public NakedError explorationActionMakePersistent() {
+    public NakedError actionPersist() {
     	makePersistent();
         return null;
     }

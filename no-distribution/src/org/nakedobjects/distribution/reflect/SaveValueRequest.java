@@ -4,20 +4,20 @@ package org.nakedobjects.distribution.reflect;
 import org.nakedobjects.distribution.ObjectRequest;
 import org.nakedobjects.distribution.RequestContext;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.reflect.Value;
 import org.nakedobjects.object.reflect.ValueIf;
 
 
-public class SetValueRequest extends ObjectRequest {
+public class SaveValueRequest extends ObjectRequest {
     private final static long serialVersionUID = 1L;
     private String name;
-    private String value;
+    private String encodedValue;
     
-    public SetValueRequest(NakedObject inObject, ValueIf attribute, NakedValue value) {
+    public SaveValueRequest(NakedObject inObject, ValueIf attribute, String encodedValue) {
         super(inObject);
         name = attribute.getName();
-        this.value = value.saveString();
+        this.encodedValue = encodedValue;
     }
 
     protected void generateResponse(RequestContext server) {
@@ -27,17 +27,17 @@ public class SetValueRequest extends ObjectRequest {
             Value field = (Value) object.getNakedClass().getField(name);
 
             if (field == null) {
-                throw new IllegalStateException("DataAttributeMessage has invalid Field: " + name);
+                throw new NakedObjectRuntimeException("DataAttributeMessage has invalid Field: " + name);
             }
-            // set value
-            field.set(object, value);
+            // restore value and persist
+            field.saveEncoded(object, encodedValue);
         } catch (Exception e) {
             response = e;
         }
     }
 
     public String toString() {
-        return "SetValue [" + name + "/" + value + "]";
+        return "SetValue [" + name + "/" + encodedValue + "]";
     }
 }
 

@@ -285,7 +285,7 @@ public class Transaction {
     
     private void copyToField(Value valueField, NakedObject source, NakedObject proxy) {
         NakedValue value = (NakedValue) valueField.get(source);
-        valueField.initData(proxy, value.saveString());
+        valueField.restoreValue(proxy, value.saveString());
         log("  copy: " + value + " -> " + valueField.getName());
     }
     

@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.core;
 
-import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Permission;
@@ -9,7 +8,6 @@ import org.nakedobjects.security.Session;
 import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.InternalCollectionContent;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.OneToManyAssociationContent;
 import org.nakedobjects.viewer.skylark.View;
 
 public class InternalCollectionActions extends CollectionActions {

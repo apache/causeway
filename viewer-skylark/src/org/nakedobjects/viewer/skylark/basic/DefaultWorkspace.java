@@ -75,6 +75,7 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
 	    } else {
 		    view.markDamaged();
 			view.setLocation(newLocation);
+			limitBounds(view);
 		    view.markDamaged();
 	    }
 	}
@@ -274,16 +275,16 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
                         markDamaged();
                     }
                 });
-
-
 	}
 
-	public void addOpenViewFor(Naked object, Location at) {
+	public View addOpenViewFor(Naked object, Location at) {
 		ViewFactory factory = ViewFactory.getViewFactory();
 		View view = factory.createOpenRootView((NakedObject) object);
 		view.setLocation(at);
 		view.setSize(view.getRequiredSize());
 		getWorkspace().addView(view);
+		limitBounds(view);
+		return view;
 
 	}
 }

@@ -1,7 +1,16 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedCollection;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.collection.InternalCollection;
+import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.viewer.skylark.Canvas;
+import org.nakedobjects.viewer.skylark.InternalCollectionContent;
+import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
@@ -40,6 +49,27 @@ public class InternalCollectionBorder extends AbstractBorder {
 		super.draw(canvas);
 	}
 	
+	public void menuOptions(MenuOptionSet options) {
+        super.menuOptions(options);
+        
+        InternalCollection collection = ((InternalCollectionContent) getContent()).getCollection();
+        NakedClass nakedClass = NakedClassManager.getInstance().getNakedClass(collection.getType().getName());
+        
+        ClassOption.menuOptions(nakedClass, options);
+    }
+	
+    public void objectActionResult(Naked result, Location at) {
+        InternalCollectionContent internalCollectionContent = (InternalCollectionContent) getContent();
+        OneToManyAssociation field = (OneToManyAssociation) internalCollectionContent.getField();
+        
+//        if(field.getType().isAssignableFrom(result.getClass())) {
+            NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
+        	field.setAssociation(target, (NakedObject) result);
+ //       }
+
+        super.objectActionResult(result, at);
+    }
+
 	public String toString() {
 		return "InternalCollectionBorder/" + wrappedView ;
 	}

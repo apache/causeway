@@ -3,6 +3,10 @@ package org.nakedobjects.viewer.skylark.metal;
 import org.nakedobjects.object.FastFinder;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.security.Session;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.InternalCollectionContent;
 import org.nakedobjects.viewer.skylark.Location;
@@ -21,9 +25,10 @@ import org.nakedobjects.viewer.skylark.special.StackLayout;
 import org.nakedobjects.viewer.skylark.special.SubviewSpec;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
-public class FindFormSpecification extends AbstractCompositeViewSpecification {
-    
-	private static class DataFormSubviews implements SubviewSpec {
+public class FindFormSpecification  extends AbstractCompositeViewSpecification {
+	protected About about;
+
+    private static class DataFormSubviews implements SubviewSpec {
 		public View createSubview(Content content, ViewAxis axis) {
 			ViewFactory factory = ViewFactory.getViewFactory();
 			
@@ -57,11 +62,24 @@ public class FindFormSpecification extends AbstractCompositeViewSpecification {
     public View createView(Content content, ViewAxis axis) {
         UserAction[] actions = new UserAction[2];
         actions[0] = new ButtonAction("Find") {
+            public Permission disabled(View view) {
+                NakedObject target = ((ObjectContent) view.getContent()).getObject();
+                Action action = target.getNakedClass().getObjectAction(Action.USER, "Find");
+                About about = action.getAbout(Session.getSession().getSecurityContext(), target);
+                return about.canUse();
+            }
+            
             public void execute(Workspace workspace, View view, Location at) {
+                NakedObject target = ((ObjectContent) view.getContent()).getObject();
+                Action action = target.getNakedClass().getObjectAction(Action.USER, "Find");
+                NakedObject result = action.execute(target);
+                at.move(30, 60);
+                workspace.addOpenViewFor(result, at);
             }
         };
         actions[1] = new ButtonAction("Cancel") {
             public void execute(Workspace workspace, View view, Location at) {
+                workspace.removeView(view);
             }
         };
         return new WindowBorder(new ButtonBorder(actions, super.createView(content, new LabelAxis())));

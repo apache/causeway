@@ -6,15 +6,16 @@ import org.nakedobjects.object.collection.InstanceCollection;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
+import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.core.AbstractViewDecorator;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
-public class ClassBackground extends AbstractViewDecorator {
+public class ClassIconBackground extends AbstractViewDecorator {
 
-	protected ClassBackground(View wrappedView) {
+	protected ClassIconBackground(View wrappedView) {
 		super(wrappedView);
 	}
 	
@@ -33,6 +34,14 @@ public class ClassBackground extends AbstractViewDecorator {
 		view.setLocation(click.getLocation());
 		getWorkspace().addView(view);
 	}
+	
+	public void menuOptions(MenuOptionSet options) {
+    	NakedObject object = ((ObjectContent) getContent()).getObject();
+		NakedClass cls = ((NakedClass) object);
+		ClassOption.menuOptions(cls, options);
+        
+       // super.menuOptions(options);
+    }
 }
 
 

@@ -1,7 +1,5 @@
 package org.nakedobjects.viewer.skylark.value;
 
-import org.apache.log4j.Logger;
-
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.value.Time;
@@ -18,6 +16,8 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
+
+import org.apache.log4j.Logger;
 
 
 public class TimePeriodBarField extends AbstractField {
@@ -36,6 +36,8 @@ public class TimePeriodBarField extends AbstractField {
 		}
    }
     private static final Logger LOG = Logger.getLogger(TimePeriodBarField.class);
+    private int endTime;
+    private int startTime;
 
     protected TimePeriodBarField(Content content, ViewSpecification specification, ViewAxis axis) {
         super(content, specification, axis);
@@ -47,26 +49,26 @@ public class TimePeriodBarField extends AbstractField {
 
         if ((x >= 0) && (x <= max)) {
             int time = (int) (x / max * 3600 * 24);
-            Time end = getPeriod().getEnd();
-            end.setValue(time);
-
-            Time start = getPeriod().getStart();
-
-            TimePeriod tp = new TimePeriod();
-            tp.setValue(start, end);
-            try {
-                set(tp.title().toString());
-            } catch (InvalidEntryException e) {
-                throw new NotImplementedException();
-            }
-            LOG.debug("adjust time " + time + " " + getPeriod());
-            markDamaged();
+            endTime = time;
+            initiateSave();
         }
     }
+    
+    protected void save() {
+        Time end = getPeriod().getEnd();
+        end.setValue(endTime);
 
-    public View dragFrom(InternalDrag drag) {
-        // TODO Auto-generated method stub
-        return super.dragFrom(drag);
+        Time start = getPeriod().getStart();
+
+        TimePeriod tp = new TimePeriod();
+        tp.setValue(start, end);
+        try {
+            parseEntry(tp.title().toString());
+        } catch (InvalidEntryException e) {
+            throw new NotImplementedException();
+        }
+        LOG.debug("adjust time " + endTime + " " + getPeriod());
+        markDamaged();
     }
 
     public void draw(Canvas canvas) {

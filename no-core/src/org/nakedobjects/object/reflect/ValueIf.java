@@ -1,6 +1,5 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ValueParseException;
@@ -10,26 +9,23 @@ import org.nakedobjects.security.SecurityContext;
 
 
 public interface ValueIf extends MemberIf {
-
 	About getAbout(SecurityContext context, NakedObject object);
-	
-	void restoreValue(NakedObject inObject, Object setValue);
 
-	void setValue(NakedObject inObject, NakedValue value);
-	
-//	void set(NakedObject inObject, String setValue) throws InvalidEntryException;
-	
-	boolean isDerived();
+    Class getType();
 
-	Naked get(NakedObject fromObject);
+    NakedValue getValue(NakedObject fromObject);
 
-	boolean hasAbout();
-	
-	Class getType();
+    boolean hasAbout();
 
-    void parseValue(NakedValue value, String setValue)  throws ValueParseException;
+    boolean isDerived();
 
     void isValid(NakedObject inObject, Validity validity);
+
+    void parseValue(NakedValue value, String setValue) throws ValueParseException;
+
+    void restoreValue(NakedObject inObject, String encodeValue);
+
+    void saveValue(NakedObject inObject, String encodeValue);
 }
 
 

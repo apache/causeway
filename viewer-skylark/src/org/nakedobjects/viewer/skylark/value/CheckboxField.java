@@ -102,9 +102,13 @@ public class CheckboxField extends AbstractField {
     }
 
     public void firstClick(Click click) {
+        initiateSave();
+    }
+    
+    protected void save() {
         if (canChangeValue()) {
             try {
-                set(isSet() ? Logical.FALSE : Logical.TRUE);
+             	parseEntry(isSet() ? Logical.FALSE : Logical.TRUE);
 	            markDamaged();
             } catch (InvalidEntryException e) {
                 throw new NakedObjectRuntimeException(e);

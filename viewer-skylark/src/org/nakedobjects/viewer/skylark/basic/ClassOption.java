@@ -42,7 +42,10 @@ public class ClassOption extends MenuOption {
 	private NakedClass cls;
 	
 	public static void menuOptions(NakedClass cls, MenuOptionSet menuOptionSet) {
-		Action[] actions = cls.getClassActions(Action.USER, 0);
+		Action[] actions;
+		// TODO only need to display the object methods for the naked class (and not class method of the class
+		
+		actions = cls.getClassActions(Action.USER, 0);
 
 		for (int i = 0; i < actions.length; i++) {
 			addOption(cls, menuOptionSet, actions[i], MenuOptionSet.OBJECT);
@@ -54,7 +57,7 @@ public class ClassOption extends MenuOption {
 			addOption(cls, menuOptionSet, actions[i], MenuOptionSet.OBJECT);
 		}
 
-		actions = cls.getClassActions(Action.EXPLORATION, 0);
+	actions = cls.getClassActions(Action.EXPLORATION, 0);
 
 		if (actions.length > 0) {
 			for (int i = 0; i < actions.length; i++) {

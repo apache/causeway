@@ -100,40 +100,48 @@ class ImageLoader {
    If neither method works the default image is returned.
    @see java.lang.Class#getResource(String)
  */
+	ImageTemplate getImageTemplateOrFallback(String path) {
+	    ImageTemplate template = getImageTemplate(path);
+	    
+	    
+	    if(template == null) {
+	        LOG.info("using fallback image for " + path);
+	        template =  new ImageTemplate(unknownImage);
+	    }
+	    int pos = path.lastIndexOf('.');
+	    String root = pos == -1 ? path : path.substring(0, pos);
+	    images.put(root, template);
+	    
+	    return template;
+	}
+	
+	
 	ImageTemplate getImageTemplate(String path) {
-		if (path == null) {
-			throw new NullPointerException();
-		}
-		
-		int pos = path.lastIndexOf('.');
-		String root = pos == -1 ? path : path.substring(0, pos);
-		
-		if(images.contains(root)) {
-			return (ImageTemplate) images.get(root);
-			
-		} else {
-			Image image = null;
-			if(pos >= 0) {
-				image = load(path);
-				
-			} else {
-				for (int i = 0; i < EXTENSIONS.length; i++) {
-					image = load(root + "." + EXTENSIONS[i]);
-					if(image != null) {
-						break;
-					}
-				}
-			}
-			if(image == null) {
-				LOG.info("using fallback image for " + path);
-				image = unknownImage;
-			}
-			ImageTemplate template = new ImageTemplate(image);
-			images.put(root, template);
-				
-			return template;
-		}
-		
+	    if (path == null) {
+	        throw new NullPointerException();
+	    }
+	    
+	    int pos = path.lastIndexOf('.');
+	    String root = pos == -1 ? path : path.substring(0, pos);
+	    
+	    if(images.contains(root)) {
+	        return (ImageTemplate) images.get(root);
+	        
+	    } else {
+	        Image image = null;
+	        if(pos >= 0) {
+	            image = load(path);
+	            return new ImageTemplate(image);
+	        } else {
+	            for (int i = 0; i < EXTENSIONS.length; i++) {
+	                image = load(root + "." + EXTENSIONS[i]);
+	                if(image != null) {
+	                    return new ImageTemplate(image);
+	                }
+	            }
+	        }
+	        return null;
+	    }    
 	}
 	
 	private Image load(String path) {

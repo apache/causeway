@@ -50,31 +50,29 @@ public class JavaValue extends JavaField implements ValueIf {
         }
     }
 
-    /**
-     Set the data in an NakedObject.  Passes in an existing object to for the object to reference.
-     */
-    public void restoreValue(NakedObject inObject, Object setValue) {
+    public NakedValue getValue(NakedObject fromObject) {
+        return (NakedValue) get(fromObject);
+    }
+    
+    public void restoreValue(NakedObject inObject, String encodedValue) {
         NakedValue nakedValue = (NakedValue) get(inObject);
     	if(nakedValue == null) {
     		throw new ReflectionException("Value field '" + getName() + "' not set up in " + inObject);
     	}
-        LOG.debug("Attribute.init() " + getName() + " " + inObject + "/" + setValue);
-        nakedValue.restoreString((String) setValue);
+        LOG.debug("restoreValue() " + getName() + " " + inObject + "/" + encodedValue);
+        nakedValue.restoreString(encodedValue);
     }
 
-    /**
-     Set the data in an NakedObject.  Passes in an existing object to for the NO to reference.
-     */
-    public void setValue(NakedObject inObject, NakedValue value) {
+    public void saveValue(NakedObject inObject, String encodedValue) {
         NakedObjectManager objectManager = NakedObjectManager.getInstance();
         objectManager.startTransaction();
-        ((NakedValue) get(inObject)).copyObject(value);
+        ((NakedValue) get(inObject)).restoreString(encodedValue);
         inObject.objectChanged();
         objectManager.endTransaction();
     }
     
-    public void parseValue(NakedValue value, String setValue) throws ValueParseException {
-        value.parse(setValue);
+    public void parseValue(NakedValue value, String textEntry) throws ValueParseException {
+        value.parse(textEntry);
     }
     
     public void isValid(NakedObject inObject, Validity validity) {

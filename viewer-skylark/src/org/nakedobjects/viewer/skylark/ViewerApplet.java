@@ -23,11 +23,6 @@
  */
 package org.nakedobjects.viewer.skylark;
 
-import java.applet.Applet;
-import java.awt.Graphics;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import org.nakedobjects.object.LocalObjectManager;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.TransientObjectStore;
@@ -36,6 +31,11 @@ import org.nakedobjects.security.Session;
 import org.nakedobjects.security.User;
 import org.nakedobjects.utility.ComponentException;
 import org.nakedobjects.utility.ConfigurationException;
+
+import java.applet.Applet;
+import java.awt.Graphics;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class ViewerApplet extends Applet implements RenderingArea {
 
@@ -59,7 +59,7 @@ public class ViewerApplet extends Applet implements RenderingArea {
 	
 	        Session.initSession();
 	
-	        NakedObject root = (NakedObject) new InstanceCollection(User.class.getName())
+	        NakedObject root = (NakedObject) InstanceCollection.allInstances(User.class.getName())
 	                .elements().nextElement();
 	
 	        viewer.init(this, root);

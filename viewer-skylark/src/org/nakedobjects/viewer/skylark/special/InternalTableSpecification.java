@@ -1,34 +1,18 @@
-package org.nakedobjects.viewer.skylark;
+package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.object.reflect.Field;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.viewer.skylark.ViewSpecification;
 
-public class InternalCollectionContent extends ObjectContent implements FieldContent {
-	private OneToManyAssociation association;
+public class InternalTableSpecification extends TableSpecification {
+    private ViewSpecification rowSpecification = new TableRowSpecification();
 
-	public InternalCollectionContent(InternalCollection object, OneToManyAssociation association) {
-		super(object);
-		this.association = association;
-	}
-	
-	public Field getField() {
-		return association;
-	}
-	
-	public String getFieldName() {
-		return association.getName();
-	}
-	
-	public InternalCollection getCollection() {
-	    return (InternalCollection) super.getObject();
-	}
-	
-	public String toString() {
-		return getObject() + "/" + association;
-	}
+    public InternalTableSpecification() {
+        builder = new TableHeaderBuilder(new StackLayout(new CollectionElementBuilder(this)));
+    }
+
+    public String getName() {
+        return "Internal Table";
+    }
 }
-
 
 /*
 Naked Objects - a framework that exposes behaviourally complete

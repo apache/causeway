@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.value;
 
+import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.value.Option;
 import org.nakedobjects.viewer.skylark.Content;
@@ -11,6 +12,8 @@ import org.nakedobjects.viewer.skylark.basic.SimpleIdentifier;
 import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
 
 public class OptionSelectionField extends TextField {
+
+    private String selected;
 
     public static class Specification extends AbstractFieldSpecification {
         public boolean canDisplay(Naked object) {
@@ -35,6 +38,20 @@ public class OptionSelectionField extends TextField {
         Option value = (Option) content.getValue();
 
         return value;
+    }
+    
+    void set(String selected) {
+        this.selected = selected;
+        initiateSave();
+    }
+    
+    protected void save() {
+        try {
+            parseEntry(selected);
+        } catch (InvalidEntryException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }
 

@@ -226,7 +226,10 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
         }
 
         for (int i = 0; i < objectActions.length; i++) {
-            debugAboutDetail(text, objectActions[i], objectActions[i].getAbout(context, example));
+            Action action = objectActions[i];
+            int paramCount = action.getParameterCount();
+            NakedObject[] params = new NakedObject[paramCount];
+            debugAboutDetail(text, action, action.getAbout(context, example, params));
         }
 
         text.append("\n  Class Actions" + "\n");
@@ -236,8 +239,10 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
         }
 
         for (int i = 0; i < classActions.length; i++) {
-            debugAboutDetail(text, classActions[i],
-                    classActions[i].getAbout(context, example));
+            Action action = classActions[i];
+            int paramCount = action.getParameterCount();
+            NakedObject[] params = new NakedObject[paramCount];
+            debugAboutDetail(text, classActions[i], action.getAbout(context, example));
         }
 
         // return as string
@@ -272,7 +277,7 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
        Vector actions = new Vector();
         for (int i = 0; i < availableActions.length; i++) {
             Action action = availableActions[i];
-            if (action.getType().equals(type) && noParameters == -1 || action.parameters().length == noParameters) {
+            if (action.getType().equals(type) && (noParameters == -1 || action.parameters().length == noParameters)) {
                 actions.addElement(action);
             }
         }
@@ -312,7 +317,7 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
     
     public Action[] getClassActions(Action.Type type, int noParameters) {
         reflector();
-     	return getActions(objectActions, type, noParameters);
+     	return getActions(classActions, type, noParameters);
     }
 
     public Field getField(String name) {
