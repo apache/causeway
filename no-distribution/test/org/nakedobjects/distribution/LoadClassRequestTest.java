@@ -1,0 +1,82 @@
+package org.nakedobjects.distribution;
+
+import Serializable;
+
+import org.nakedobjects.object.MockClassManager;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.defaults.value.Date;
+import org.nakedobjects.object.defaults.value.TimeStamp;
+import org.nakedobjects.system.SystemClock;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
+import junit.framework.TestCase;
+
+
+public class LoadClassRequestTest extends TestCase {
+
+    public static void main(String[] args) {
+        junit.textui.TestRunner.run(LoadClassRequestTest.class);
+    }
+
+    protected void setUp() throws Exception {
+        Logger.getRootLogger().setLevel(Level.OFF);
+    }
+    
+    public void testLoadClass() {
+        SystemClock clock = new SystemClock();
+        TimeStamp.setClock(clock);
+        Date.setClock(clock);
+        
+        MockClassManager manager = MockClassManager.setup();
+        manager.setupAddNakedClass(MockClass.class);
+        
+        Request.init(new RequestFowarder(){
+
+            public Serializable executeRemotely(Request clientRequest) {
+                clientRequest.generateResponse(null);
+                return null;
+            }
+
+            public void init() {}
+
+            public void shutdown() {}});
+        
+
+        LoadClassRequest request = new LoadClassRequest(MockClass.class.getName());
+        NakedObjectSpecification nc = request.getNakedClass();
+
+        assertEquals(MockClass.class.getName(), nc.getName().stringValue());
+        assertEquals("org.domain.Reflector", nc.getReflector().stringValue());
+    }
+}
+
+    class MockClass  {
+
+    }
+
+    
+    /*
+ * Naked Objects - a framework that exposes behaviourally complete business
+ * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * Ltd
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * The authors can be contacted via www.nakedobjects.org (the registered address
+ * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
+ * 1NR, UK).
+ */

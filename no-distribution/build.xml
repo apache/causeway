@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE project [
-	<!ENTITY properties SYSTEM "file:../build-templates/properties.xml">
-	<!ENTITY targets SYSTEM "file:../build-templates/targets.xml">
+	<!ENTITY properties SYSTEM "file:../naked-objects/properties.xml">
+	<!ENTITY targets SYSTEM "file:../naked-objects/targets.xml">
 ]>
 
 <project name="Naked Object Cache Object Store" default="all" basedir=".">
@@ -14,7 +14,7 @@
 	
 	<!-- classpath -->
 	<path id="libs.internal">
-		<fileset dir="${no-core.release.dir}">
+		<fileset dir="../no-core/build/release">
 			<include name="no-core.jar"/>
 			<include name="no-core-test.jar"/>
 		</fileset>

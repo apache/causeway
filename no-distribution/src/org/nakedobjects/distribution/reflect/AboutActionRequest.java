@@ -4,7 +4,6 @@ package org.nakedobjects.distribution.reflect;
 import org.nakedobjects.distribution.ObjectProxy;
 import org.nakedobjects.distribution.ObjectRequest;
 import org.nakedobjects.distribution.RequestContext;
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
@@ -24,7 +23,7 @@ public class AboutActionRequest extends ObjectRequest {
     private ObjectProxy parameters[];
     private Type actionType;
     
-    public AboutActionRequest(NakedObject object, Action action, SecurityContext context, Naked parameters[]) {
+    public AboutActionRequest(NakedObject object, Action action, SecurityContext context, NakedObject parameters[]) {
         super(object);
         this.actionName = action.getName();
         this.actionType = action.getActionType();

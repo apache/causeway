@@ -1,27 +1,27 @@
 package org.nakedobjects.distribution;
 
-import org.apache.log4j.Logger;
 import org.nakedobjects.object.LoadedObjects;
 
 import java.io.Serializable;
+
+import org.apache.log4j.Logger;
 
 
 public abstract class Request implements Serializable {
 	private final static Logger LOG = Logger.getLogger(Request.class);
 	private static int nextId = 0;
-	private static DistributionInterface connection;
-	private static ProxyObjectManager proxyObjectManager;
+	private static RequestFowarder remoteRequest;
+	private static LoadedObjects loadedObjects;
     
-    public static void init(DistributionInterface conn) {
-    	Request.connection = conn;
+    public static void init(RequestFowarder forwarder) {
+    	Request.remoteRequest = forwarder;
     }
     
     public static void init(ProxyObjectManager proxyObjectManager) {
-        Request.proxyObjectManager = proxyObjectManager;
+        Request.loadedObjects = proxyObjectManager.getLoadedObjects();
     }
     
     protected final int id;
-    protected Serializable response = null;
 
     protected Request() {
         id = nextId++;
@@ -33,18 +33,14 @@ public abstract class Request implements Serializable {
 
     protected abstract void generateResponse(RequestContext context);
 
-    protected Serializable getResponse() {
-        return response;
-    }
-    
     protected void sendRequest() {
     	LOG.debug("send request " + this);
-    	response = connection.execute(this);
-    	LOG.debug("response " + (response == null ? "EMPTY RESPONSE" : response) + ", for request " + this);
+    	remoteRequest.executeRemotely(this);
+    	LOG.debug(" - response " + this);
     }
     
     protected LoadedObjects getLoadedObjects() {
-        return proxyObjectManager.getLoadedObjects();
+        return loadedObjects;
     }
 }
 

@@ -21,30 +21,34 @@
     registered address of Naked Objects Group is Kingsway House, 123 Goldworth
     Road, Woking GU21 1NR, UK).
 */
-package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.io.Memento;
-
-import java.io.Serializable;
+package org.nakedobjects.distribution.broadcast;
 
 
-public class ObjectUpdateMessage implements Serializable {
-    private static int nextId = 0;
-    private final static long serialVersionUID = 1L;
-    protected final int id;
-    private Memento memento;
+import org.nakedobjects.distribution.RequestContext;
 
-    public ObjectUpdateMessage(NakedObject object) {
-         id = nextId++;
-        memento = new Memento(object);
+import java.io.IOException;
+import java.net.Socket;
+
+
+public class FileListener extends Listener {
+
+    public FileListener(String host, int port, RequestContext server) throws IOException {
+        super(host, port, server);
+    }
+
+    protected Runnable createConnection(Socket clientSocket, RequestContext server) {
+        return new FileConnectionFromClient(clientSocket, server);
+    }
+
+    /**
+     Returns the name of the thread
+     */
+    public String getName() {
+        return "FileListener";
     }
 
     public String toString() {
-        return "ObjectUpdateMessage#" + id + " [" + memento + "]";
-    }
-
-    public void update(ProxyObjectManager client) {
-        client.updateFromServer(memento);
+        return "File Listener";
     }
 }

@@ -4,7 +4,7 @@ package org.nakedobjects.distribution.client;
 import org.nakedobjects.distribution.Request;
 import org.nakedobjects.distribution.RequestContext;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectMemento;
+import org.nakedobjects.object.io.Memento;
 
 import java.io.Serializable;
 
@@ -12,11 +12,11 @@ import java.io.Serializable;
 public class MakePersistentRequest extends Request {
     private final static long serialVersionUID = 1L;
     private transient NakedObject object;
-    private NakedObjectMemento data;
+    private Memento data;
     
     public MakePersistentRequest(NakedObject transientObject) {
         this.object = transientObject;
-    	data = new NakedObjectMemento(transientObject);
+    	data = new Memento(transientObject);
     }
 
     protected void generateResponse(RequestContext server) {

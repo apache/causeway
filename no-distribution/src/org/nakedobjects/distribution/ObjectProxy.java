@@ -5,8 +5,15 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedClNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ObjectNotFoundException;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.ResolveException;
+import org.nakedobjects.object.io.BinaryTransferableReader;
+import org.nakedobjects.object.io.BinaryTransferableWriter;
+import org.nakedobjects.object.io.Transferable;
+import org.nakedobjects.object.io.TransferableReader;
+import org.nakedobjects.object.io.TransferableWriter;
 
 import java.io.Serializable;
 
@@ -17,11 +24,16 @@ import java.io.Serializable;
    Holds the OID (Object) and object type (String).
  */
 public class ObjectProxy implements Serializable {
-    private final static long serialVersionUID = 670440236586243634L;
-    private final Object oid;
+    
+    private final Oid oid;
     private final String type;
 
-    public ObjectProxy(String type, Object oid) {
+    public ObjectProxy(NakedObject object) {
+        this.type = object.getSpecification().getFullName();
+        this.oid = object.getOid();
+    }
+
+    public ObjectProxy(String type, Oid oid) {
         if (oid == null) {
             throw new IllegalArgumentException(
                 "Cannot create an ExternalOid for Naked object that has no OID");
@@ -29,11 +41,6 @@ public class ObjectProxy implements Serializable {
 
         this.oid = oid;
         this.type = type;
-    }
-
-    public ObjectProxy(NakedObject object) {
-        this.type = object.getSpecification().getFullName();
-        this.oid = object.getOid();
     }
 
     public boolean equals(Object obj) {
@@ -72,7 +79,7 @@ public class ObjectProxy implements Serializable {
         try {
 	        NakedObjectManager objectManager = NakedObjectManager.getInstance();
             synchronized(objectManager){
-                NakedObjectSpecification cls = NakedObjectSpecification.getSpecification(type);
+                NakedObjectSpecification cls = NakedObjectSpecificationLoader.getInstance().loadSpecification(type);
                 if (loadedObjects.isLoaded(oid)) {
                     object = objectManager.getObject(oid, cls);
                 } else {

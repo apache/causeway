@@ -1,32 +1,40 @@
-package org.nakedobjects.distribution;
+package org.nakedobjects.distribution.duplex;
 
-import org.nakedobjects.object.LoadedObjects;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.ObjectNotFoundException;
+import java.util.Vector;
+
+import org.nakedobjects.distribution.ObjectUpdateMessage;
 
 
-public abstract class ObjectRequest extends Request {
-    protected ObjectProxy externalOid;
-    
-    protected ObjectRequest(NakedObject object) {
-        this(new ObjectProxy(object));
-    }
-    
-    protected ObjectRequest(ObjectProxy externalOid) {
-        if (externalOid == null) {
-            throw new IllegalArgumentException("An OID must be used in this message");
+final class ReceivedUpdates {
+    private Vector updates = new Vector();
+	private boolean running = true;
+
+	synchronized ObjectUpdateMessage getNextUpdate() {
+        while (updates.size() == 0  && running) {
+            try {
+                wait();
+            } catch (InterruptedException ignore) {
+            }
         }
-        this.externalOid = externalOid;
-    }
-    
-    public ObjectRequest(Object oid, NakedObjectSpecification hint) {
-        this(new ObjectProxy(hint.getFullName(), oid));
+
+        if(running) {
+        	ObjectUpdateMessage update = (ObjectUpdateMessage) updates.elementAt(0);
+        	updates.removeElementAt(0);
+        	return update;
+        } else {
+        	return null;
+        }
+	}
+
+	   synchronized void addUpdate(ObjectUpdateMessage update) {
+        updates.addElement(update);
+        notify();
     }
 
-    protected NakedObject getObject(LoadedObjects loadedObjects) throws ObjectNotFoundException {
-        return externalOid.recreateObject(loadedObjects);
-    }
+	public synchronized void shutdown() {
+		running = false;
+		notify();
+	}
 }
 
 /*

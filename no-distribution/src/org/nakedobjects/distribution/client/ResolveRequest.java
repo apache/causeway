@@ -34,7 +34,7 @@ public class ResolveRequest extends ObjectRequest {
 
     public void update(NakedObject object, LoadedObjects loadedObjects) {
         sendRequest();
-        ((NakedObjectMemento) response).updateNakedObject(object, loadedObjects);
+        ((Memento) response).updateNakedObject(object, loadedObjects);
     }
 }
 

@@ -1,42 +1,42 @@
-package org.nakedobjects.distribution.client;
 
+package org.nakedobjects.distribution.duplex;
 
-import java.util.Vector;
-
+import org.nakedobjects.container.configuration.ComponentException;
+import org.nakedobjects.distribution.ObjectUpdateMessage;
 import org.nakedobjects.distribution.RequestContext;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
-import org.nakedobjects.object.UnsupportedFindException;
-import org.nakedobjects.object.io.Memento;
+import org.nakedobjects.object.UpdateNotifier;
+
+import org.apache.log4j.Logger;
 
 
-public class GetInstancesForPattern extends AbstractGetInstances {
-    private final static long serialVersionUID = 1L;
-    private Memento patternMemento;
-	
+public class ServerEndPoint implements ConnectionFromClient {
+	private static final Logger LOG = Logger.getLogger(ServerEndPoint.class);
+    private ServerListener listener;
+
+
+    public void broadcast(ObjectUpdateMessage msg) {
+    	LOG.debug("Broadcasting update " + msg);
+        listener.update(msg);
+    }
+
+    public UpdateNotifier getNotifier() {
+        return null;
+    }
+
+    public void init(RequestContext server) throws ComponentException {
+            listener = new ServerListener(server);
+            listener.start();
+    }
+
+    public void shutdown() {
+    	listener.shutdown();
+    }
     
-    public GetInstancesForPattern(NakedObject pattern) {
-    	patternMemento = new Memento(pattern);
-    }
-
-    protected void generateResponse(RequestContext context) {
-       	NakedObject pattern;
-		pattern = patternMemento.recreateObject(context.getLoadedObjects());
-
-		NakedObjectManager objectManager = context.getObjectManager();
-		Vector instances;
-		try {
-			instances = objectManager.getInstances(pattern, null);
-			setInstances(instances);
-		} catch (UnsupportedFindException e) {
-			response = e;
-		}
-    }
-    
-     public String toString() {
-    	return "Instances [" + id + "," + super.toString() + "]";
-    }
+    public String toString() {
+		return "Duplex connection " + listener;
+	}
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete

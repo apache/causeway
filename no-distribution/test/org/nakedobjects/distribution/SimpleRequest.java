@@ -1,35 +1,45 @@
 package org.nakedobjects.distribution;
 
-import org.apache.log4j.Logger;
+import org.nakedobjects.object.io.TransferableReader;
+import org.nakedobjects.object.io.TransferableWriter;
 
 
-/**
- * Deals with requests from a client, by getting the Request object to invoke
- * its generateResonse() method, and returning that response.
- */
-public class RequestHandler {
- 	private static final Logger LOG = Logger.getLogger(RequestHandler.class);
-	private RequestContext context;
+public class SimpleRequest extends Request {
+    String myResponse;
+    final long no;
+    final String str;
 
- 	public RequestHandler(RequestContext context) {
- 		this.context = context;
- 	}
- 	
- 	public final byte[] execute(Request request, String client) {
- 	    request.response = new Response();
-        request.generateResponse(context);
-        log(client, request, request.response);
-        return request.response.getData();
+    public SimpleRequest(String str, long no) {
+        this.str = str;
+        this.no = no;
     }
-	
-	protected void log(String client, Request request, Response response) {
-		LOG.info("Request from " + client + ",  " + request + " ~ " + response);
-	}
+
+    public SimpleRequest(TransferableReader reader) {
+        str = reader.readString();
+        no = reader.readLong();
+    }
+
+    protected void generateResponse(RequestContext context) {
+        responseWriter.writeString("response abc");
+    }
+
+    protected void restoreResponse(TransferableReader reader) {
+        myResponse = reader.readString();
+    }
+
+    protected void writeRequestData(TransferableWriter writer) {
+        writer.writeString(str);
+        writer.writeLong(no);
+    }
+    
+    public String toString() {
+        return "SimpleRequest [str=" + str + ",response=" + myResponse + "]";
+    }
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

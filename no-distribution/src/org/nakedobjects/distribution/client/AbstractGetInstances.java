@@ -24,7 +24,7 @@ public abstract class AbstractGetInstances extends Request {
 		response = oids;
 	}
 
-	public Vector getElements(LoadedObjects loadedObjects) {
+	public NakedObject[] getElements(LoadedObjects loadedObjects) {
 		sendRequest();
 		Vector instances = new Vector(((Vector) response).size());
 		Enumeration e = ((Vector) response).elements();

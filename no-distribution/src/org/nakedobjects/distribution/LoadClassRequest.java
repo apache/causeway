@@ -1,28 +1,44 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedClNakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.io.TransferableReader;
+import org.nakedobjects.object.io.TransferableWriter;
 
 
 public class LoadClassRequest extends Request {
-	private WrappedString name;
+    private final String className;
 
-	public LoadClassRequest(String name) {
-		this.name = new WrappedString(name);
-	}
+    public LoadClassRequest(String className) {
+        this.className = className;
+    }
 
-	protected void generateResponse(RequestContext context) {
-		NakedObjectSpecification cls = NakedObjectSpecification.getSpecification(name.getValue());
-		response = new WrappedString(cls.getReflector().stringValue());
-	}
+    public LoadClassRequest(TransferableReader data) {
+        className = data.readString();
+    }
 
-	public NakedObjectSpecification getNakedClass() {
-		NakedObjectSpecification cls = new NakedObjectSpecification();
-		cls.getName().setValue(name.getValue());
-		cls.getReflector().setValue(((WrappedString) response).getValue());
-		return cls;
-	}
+    protected void generateResponse(RequestContext context) {
+        NakedObjectSpecification cls = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
+        response = new Response();
+        response.writeString(cls.getReflector().stringValue());
+        //		response = cls.getReflector().stringValue();
+    }
 
-	public String toString() {
-		return "LoadClass " + name;
-	}
+    public void writeData(TransferableWriter data) {
+        data.writeString(className);
+    }
+
+    public NakedObjectSpecification getNakedClass() {
+        sendRequest();
+        NakedObjectSpecification cls = new NakedObjectSpecification();
+        cls.getName().setValue(className);
+        cls.getReflector().setValue(response.readString());
+        //		cls.getReflector().setValue(response.getValue());
+        return cls;
+    }
+
+    public String toString() {
+        return "LoadClass " + className;
+    }
 }

@@ -21,30 +21,47 @@
     registered address of Naked Objects Group is Kingsway House, 123 Goldworth
     Road, Woking GU21 1NR, UK).
 */
-package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.io.Memento;
-
-import java.io.Serializable;
+package org.nakedobjects.distribution.broadcast;
 
 
-public class ObjectUpdateMessage implements Serializable {
-    private static int nextId = 0;
-    private final static long serialVersionUID = 1L;
-    protected final int id;
-    private Memento memento;
+import java.io.IOException;
+import java.io.OutputStream;
 
-    public ObjectUpdateMessage(NakedObject object) {
-         id = nextId++;
-        memento = new Memento(object);
+
+class CounterOutputStream extends OutputStream {
+    private int size = 0;
+    private java.io.OutputStream out;
+
+    public CounterOutputStream(OutputStream out) {
+        super();
+        this.out = out;
     }
 
-    public String toString() {
-        return "ObjectUpdateMessage#" + id + " [" + memento + "]";
+    public void close() throws IOException {
+        out.close();
     }
 
-    public void update(ProxyObjectManager client) {
-        client.updateFromServer(memento);
+    public void flush() throws IOException {
+        out.flush();
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void write(int b) throws IOException {
+        out.write(b);
+        size++;
+    }
+
+    public void write(byte b[]) throws IOException {
+        out.write(b);
+        size += b.length;
+    }
+
+    public void write(byte b[], int off, int len) throws IOException {
+        out.write(b, off, len);
+        size += len;
     }
 }

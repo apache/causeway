@@ -1,5 +1,6 @@
 package org.nakedobjects.distribution;
 
+
 import org.nakedobjects.distribution.client.DestroyObjectRequest;
 import org.nakedobjects.distribution.client.GetInstancesForCriteria;
 import org.nakedobjects.distribution.client.GetInstancesForPattern;
@@ -10,42 +11,44 @@ import org.nakedobjects.distribution.client.MakePersistentRequest;
 import org.nakedobjects.distribution.client.NumberOfInstances;
 import org.nakedobjects.distribution.client.ResolveRequest;
 import org.nakedobjects.distribution.client.SerialNumberRequest;
+import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
-import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.UpdateNotifier;
+import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
+import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
 import org.nakedobjects.object.io.Memento;
 import org.nakedobjects.system.Log;
 import org.nakedobjects.utility.NotImplementedException;
 
-
 import org.apache.log4j.Logger;
 
 
-public final class ProxyObjectManager extends NakedObjectManager {
+public final class ProxyObjectManager extends AbstractNakedObjectManager {
     final static Logger LOG = Logger.getLogger(ProxyObjectManager.class);
-    private Log log;
     private UpdateNotifier notifier;
     private LoadedObjects loadedObjects;
 
     public ProxyObjectManager(UpdateNotifier notifier) {
         this.notifier = notifier;
-        loadedObjects = new LoadedObjects();
-        
+        loadedObjects = new LoadedObjectsHashtable();
+       
 		Request.init(this);
-
     }
 
     public void abortTransaction() {
         LOG.debug("transactions (abort) IGNORED in proxy");
     }
 
-    public final Object createOid(NakedObject object) {
+    public final Oid createOid(NakedObject object) {
     	throw new NakedObjectRuntimeException();
     }
    
@@ -59,19 +62,27 @@ public final class ProxyObjectManager extends NakedObjectManager {
     	LOG.debug("transactions (end) IGNORED in proxy");
     }
 
-    public NakedObject[] getInstances(NakedObjectSpecification cls) {
+    public NakedObject[] getInstances(NakedObjectSpecification cls, boolean subclasses) {
         return new GetInstancesOfClass(cls).getElements(loadedObjects);
     }
     
-    public NakedObject[] getInstances(NakedObjectSpecification cls, String criteria) {
+    public NakedObject[] getInstances(NakedObjectSpecification cls, String criteria, boolean subclasses) {
         return new GetInstancesForCriteria(cls, criteria).getElements(loadedObjects);
     }
     
-   public NakedObject[] getInstances(NakedObject pattern) {
+   public NakedObject[] getInstances(NakedObject pattern, boolean subclasses) {
         return new GetInstancesForPattern(pattern).getElements(loadedObjects);
     }
     
-    public synchronized NakedObject getObject(Object oid, NakedObjectSpecification hint) {
+   protected NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) {
+       throw new NotImplementedException();
+   }
+   
+   protected NakedObjectContext getContext() {
+       throw new NotImplementedException();
+   }
+   
+    public synchronized NakedObject getObject(Oid oid, NakedObjectSpecification hint) {
         if (loadedObjects.isLoaded(oid)) {
         	LOG.debug("getObject (from already loaded objects) " + oid);
             return loadedObjects.getLoadedObject(oid);
@@ -83,6 +94,10 @@ public final class ProxyObjectManager extends NakedObjectManager {
         }
     }
 
+    public NakedClass getNakedClass(NakedObjectSpecification specification) {
+        throw new NotImplementedException();
+    }
+    
     /**
      * @deprecated
      */
@@ -97,14 +112,6 @@ public final class ProxyObjectManager extends NakedObjectManager {
     }
 
     public void init() {
-    }
-    
-    protected void log() {
-        log.log();
-    }
-
-    protected void log(String logEntry) {
-        log.log(logEntry);
     }
 
     public synchronized void makePersistent(NakedObject object) {
@@ -135,7 +142,6 @@ public final class ProxyObjectManager extends NakedObjectManager {
 
         if (object instanceof InternalCollection) { 
             //	new DataForInternalCollectionRequest((InternalCollection) object).update(this);
-            ;
         } else {
 	        object.setResolved();
             new ResolveRequest(object).update(object, loadedObjects);
@@ -171,7 +177,7 @@ public final class ProxyObjectManager extends NakedObjectManager {
 		LOG.debug("Update for " + oid + " ~ " + memento);
 		if(loadedObjects.isLoaded(oid)) {
 			NakedObject object = loadedObjects.getLoadedObject(oid);
-			memento.updateNakedObject(object, loadedObjects);
+			memento.updateObject(object, loadedObjects, object.getContext());
 	        notifier.broadcastObjectChanged(object, this);
 
 		} else {

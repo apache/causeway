@@ -6,6 +6,7 @@ import org.nakedobjects.distribution.ObjectRequest;
 import org.nakedobjects.distribution.RequestContext;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedClNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.ObjectStoreException;
@@ -57,7 +58,7 @@ public class ActionRequest extends ObjectRequest {
         	return new InstanceCollectionVector(cls, elements);
         } else if(response instanceof Memento) {
             Memento memento = (Memento) response;
-            return memento.recreateObject(getLoadedObjects(), context);
+            return memento.recreateObject(getLoadedObjects());
         } else {
         	ObjectProxy proxy = (ObjectProxy) response;
             return proxy.recreateObject(getLoadedObjects());

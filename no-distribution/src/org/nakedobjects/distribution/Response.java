@@ -1,38 +1,47 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.LoadedObjects;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.ObjectNotFoundException;
+import org.nakedobjects.object.io.TransferableWriter;
 
 
-public abstract class ObjectRequest extends Request {
-    protected ObjectProxy externalOid;
-    
-    protected ObjectRequest(NakedObject object) {
-        this(new ObjectProxy(object));
-    }
-    
-    protected ObjectRequest(ObjectProxy externalOid) {
-        if (externalOid == null) {
-            throw new IllegalArgumentException("An OID must be used in this message");
-        }
-        this.externalOid = externalOid;
-    }
-    
-    public ObjectRequest(Object oid, NakedObjectSpecification hint) {
-        this(new ObjectProxy(hint.getFullName(), oid));
+public class Response {
+    private TransferableWriter writer;
+
+    public Response(TransferableWriter writer) {
+        this.writer = writer;
     }
 
-    protected NakedObject getObject(LoadedObjects loadedObjects) throws ObjectNotFoundException {
-        return externalOid.recreateObject(loadedObjects);
+    public void writeString(String string) {
+        writer.writeString(string);
     }
+
+    public String readString() {
+        return null;
+    }
+
+    public void writeInt(int value) {
+        writer.writeInt(value);
+    }
+
+    public int readInt() {
+        return 0;
+    }
+
+    public void writeLong(long value) {
+        writer.writeLong(value);
+    }
+
+    public long readLong() {
+        return 0;
+    }
+
+
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -5,6 +5,10 @@ import org.nakedobjects.distribution.Request;
 import org.nakedobjects.distribution.RequestContext;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedClNakedObjectSpecification;
+import org.nakedobjects.object.io.BinaryTransferableReader;
+import org.nakedobjects.object.io.BinaryTransferableWriter;
+import org.nakedobjects.object.io.TransferableReader;
+import org.nakedobjects.object.io.TransferableWriter;
 
 
 public class NumberOfInstances extends Request {
@@ -17,16 +21,26 @@ public class NumberOfInstances extends Request {
 
 	protected void generateResponse(RequestContext context) {
 		NakedObjectSpecification cls = NakedObjectSpecification.getSpecification(className);
-        response = new Integer(context.getObjectManager().numberOfInstances(cls));
+//        response = new Integer(context.getObjectManager().numberOfInstances(cls));
+		response.writeInt(context.getObjectManager().numberOfInstances(cls));
     }
 
     public int size() {
         sendRequest();
-        return ((Integer) response).intValue();
+        //return ((Integer) response).intValue();
+        return response.readInt();
     }
 
     public String toString() {
         return "Number of instances [" + className + "]";
+    }
+
+    public void writeData(TransferableWriter data) {
+        data.writeString(className);
+    }
+
+    public void restore(TransferableReader data) {
+        className = data.readString();
     }
 }
 

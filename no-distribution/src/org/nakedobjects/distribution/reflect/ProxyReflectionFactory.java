@@ -14,7 +14,7 @@ import org.nakedobjects.object.reflect.ValueField;
 import org.apache.log4j.Logger;
 
 
-public class ProxyReflectionFactory implements ReflectionFactory {
+public class ProxyReflectionFactory implements ReflectionFactory  {
     private static final Logger LOG = Logger.getLogger(ProxyReflectionFactory.class);
 
     public ActionSpecification createAction(Action localDelegate) {

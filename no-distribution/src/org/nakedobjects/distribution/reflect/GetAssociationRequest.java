@@ -4,7 +4,6 @@ package org.nakedobjects.distribution.reflect;
 import org.nakedobjects.distribution.ObjectRequest;
 import org.nakedobjects.distribution.RequestContext;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectMemento;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.io.Memento;
@@ -37,7 +36,7 @@ public class GetAssociationRequest extends ObjectRequest {
 
     public NakedObject getAssociate() throws ObjectStoreException {
         sendRequest();
-        return ((Memento) response).recreateObject(getLoadedObjects(), context);
+        return ((Memento) response).recreateObject(getLoadedObjects());
     }
 
     public String toString() {

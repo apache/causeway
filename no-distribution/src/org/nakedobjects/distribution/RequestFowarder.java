@@ -1,12 +1,11 @@
 package org.nakedobjects.distribution;
 
-import java.io.Serializable;
+import java.io.Serializable;;
 
 
-// TODO rename this
-public interface DistributionInterface {
+public interface RequestFowarder {
     // TODO network failure could occur - should throw exception
-    Serializable execute(Request clientRequest);
+    Serializable executeRemotely(Request clientRequest);
 
     void init();
 

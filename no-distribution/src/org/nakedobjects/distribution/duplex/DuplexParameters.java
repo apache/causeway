@@ -1,30 +1,39 @@
-package org.nakedobjects.distribution;
 
-import java.io.Serializable;
+package org.nakedobjects.distribution.duplex;
 
-public class WrappedString implements Serializable {
-    private String value;
+import org.nakedobjects.container.configuration.Configuration;
 
-    public WrappedString() {}
-    
-    public WrappedString(String value) {
-        this.value = value;
-    }
 
-    public String getValue() {
-        return value;
-    }
-    
-    public String toString() {
-        return value;
-    }
+class DuplexParameters {
+	
+	private int duplexPort;
+	private String duplexHost;
+	
+	DuplexParameters() {
+        Configuration params = Configuration.getInstance();
+
+        duplexPort = params.getInteger("connection.duplex.port", 1099);
+    	duplexHost = params.getString("connection.duplex.host", "localhost");
+ 	}
+
+	String server() {
+		return duplexHost + ":" + duplexPort;
+	}
+	
+	String host() {
+		return duplexHost;
+	}
+	
+	int port() {
+		return duplexPort;
+	}
 }
 
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2003  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
