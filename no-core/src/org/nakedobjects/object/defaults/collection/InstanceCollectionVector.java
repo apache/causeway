@@ -229,6 +229,30 @@ public class InstanceCollectionVector implements TypedNakedCollection, InternalN
     }
 
     public void clearPersistDirty() {}
+
+    public void sort() {
+        Vector sorted = new Vector(elements.size());
+        
+        outer:
+        for(Enumeration e = elements.elements(); e.hasMoreElements();) {
+            NakedObject  element = (NakedObject)  e.nextElement();
+            String title = element.titleString();
+            
+            int i = 0;
+            for(Enumeration f = sorted.elements(); f.hasMoreElements();) {
+                NakedObject  sortedElement = (NakedObject)  f.nextElement();
+                String sortedTitle = sortedElement.titleString();
+                if(sortedTitle.compareTo(title) > 0) {
+                    sorted.insertElementAt(element, i);
+                    continue outer;
+                }
+                i++;
+            }
+            sorted.addElement(element);
+        }
+        
+        elements = sorted;
+    }
     
     
     

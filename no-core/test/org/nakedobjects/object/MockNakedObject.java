@@ -14,6 +14,8 @@ import org.nakedobjects.object.security.Session;
 
 public class MockNakedObject implements NakedObject {
 
+    private String titleString;
+
     public Object getObject() {
         return this;
     }
@@ -54,9 +56,13 @@ public class MockNakedObject implements NakedObject {
     }
 
     public String titleString() {
-        return null;
+        return titleString;
     }
 
+    public void setupTitleString(String titleString) {
+        this.titleString = titleString;
+    }
+    
     public boolean isEmpty(NakedObjectField field) {
         return false;
     }
@@ -143,6 +149,10 @@ public class MockNakedObject implements NakedObject {
 
     public NakedValue getValue(OneToOneAssociation field) {
         return null;
+    }
+    
+    public String toString() {
+        return super.toString() + " " + titleString;
     }
 
 }
