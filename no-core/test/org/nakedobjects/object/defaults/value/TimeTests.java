@@ -20,6 +20,14 @@ public class TimeTests extends ValueTestCase {
         assertEquals("Set with values", t.dateValue(), t3.dateValue());
     }
 
+    public void testGetHour() {
+        assertEquals(10, t.getHour());
+    }
+
+    public void testGetMinute() {
+        assertEquals(40, t.getMinute());
+    }
+    
     public void testZero() {
         assertEquals("Zero value", 0, Time.getZero());
     }

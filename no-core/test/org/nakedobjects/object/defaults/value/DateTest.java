@@ -1,75 +1,93 @@
 package org.nakedobjects.object.defaults.value;
 
+import org.nakedobjects.object.system.TestClock;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 public class DateTest extends ValueTestCase {
 
-    public void testSaveRestore() throws Exception {
-    	Date date1 = new Date();
-    	date1.parse("2003-1-4");
-    	assertFalse(date1.isEmpty());
-    	
-    	Date date2 = new Date();
-    	date2.restoreString(date1.saveString());
-    	assertEquals(date1.dateValue(), date2.dateValue());
-    	assertFalse(date2.isEmpty());
+    private Date actual;
+
+    protected void setUp() throws Exception {
+        Logger.getRootLogger().setLevel(Level.OFF);
+        new TestClock();
+        actual = new Date(2000, 2, 1);
     }
-    
-    public void testSaveRestorOfNull() throws Exception {
-    	Date date1 = new Date();
-    	date1.clear();
-    	assertTrue("Date isEmpty", date1.isEmpty());
-    	
-    	Date date2 = new Date();
-    	date2.restoreString(date1.saveString());
-    	assertEquals(date1.dateValue(), date2.dateValue());
-    	assertTrue(date2.isEmpty());
+
+    public void testGetDay() {
+        assertEquals(1, actual.getDay());
     }
-    
+
+    public void testGetMonth() {
+        assertEquals(2, actual.getMonth());
+    }
+
+    public void testGetYear() {
+        assertEquals(2000, actual.getYear());
+    }
 
     public void testNew() {
         Date expected = new Date(2003, 8, 17);
         Date actual = new Date();
         assertEquals(expected, actual);
     }
-    
-    public void testToday() {
-        Date expected = new Date(2003, 8, 17);
-        Date actual = new Date(2000, 1, 1);
-        actual.today();
-        assertEquals(expected, actual);
-    }
-    
-    
+
     public void testReset() {
         Date expected = new Date(2003, 8, 17);
-        Date actual = new Date(2000, 1, 1);
         actual.reset();
         assertEquals(expected, actual);
     }
 
+    public void testSaveRestore() throws Exception {
+        Date date1 = new Date();
+        date1.parse("2003-1-4");
+        assertFalse(date1.isEmpty());
+
+        Date date2 = new Date();
+        date2.restoreString(date1.saveString());
+        assertEquals(date1.dateValue(), date2.dateValue());
+        assertFalse(date2.isEmpty());
+    }
+
+    public void testSaveRestorOfNull() throws Exception {
+        Date date1 = new Date();
+        date1.clear();
+        assertTrue("Date isEmpty", date1.isEmpty());
+
+        Date date2 = new Date();
+        date2.restoreString(date1.saveString());
+        assertEquals(date1.dateValue(), date2.dateValue());
+        assertTrue(date2.isEmpty());
+    }
+
+    public void testToday() {
+        Date expected = new Date(2003, 8, 17);
+        actual.today();
+        assertEquals(expected, actual);
+    }
 }
 
-
 /*
-Naked Objects - a framework that exposes behaviourally complete
-business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-The authors can be contacted via www.nakedobjects.org (the
-registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-Road, Woking GU21 1NR, UK).
-*/
+ * Naked Objects - a framework that exposes behaviourally complete business
+ * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * Ltd
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * The authors can be contacted via www.nakedobjects.org (the registered address
+ * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
+ * 1NR, UK).
+ */

@@ -11,8 +11,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import org.apache.log4j.Logger;
-
 
 /**
  * Value object representing a date, time, or datestamp value.
@@ -145,10 +143,24 @@ public java.util.Date dateValue() {
       return c;
    }
 
-   public String getObjectHelpText() {
-       return "A Date object, storing day, month and year.";
+   public int getDay() {
+       Calendar c = Calendar.getInstance();
+       c.setTime(date);
+       return c.get(Calendar.DAY_OF_MONTH);
    }
 
+   public int getMonth() {
+       Calendar c = Calendar.getInstance();
+       c.setTime(date);
+       return c.get(Calendar.MONTH) + 1;
+   }
+
+   public int getYear() {
+       Calendar c = Calendar.getInstance();
+       c.setTime(date);
+       return c.get(Calendar.YEAR);
+   }
+   
    /**
     *  Return true if the date is blank
     */
@@ -422,10 +434,6 @@ public java.util.Date dateValue() {
         clearTime(cal);
         set(cal);
     }
-
-    public Logger getLogger() { return logger; }
-    private final static Logger logger = Logger.getLogger(Date.class);
-
 }
 
 

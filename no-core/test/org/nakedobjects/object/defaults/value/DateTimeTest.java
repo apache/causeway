@@ -2,10 +2,35 @@ package org.nakedobjects.object.defaults.value;
 
 
 public class DateTimeTest extends ValueTestCase {
-    
+    private DateTime actual;
+
     protected void setUp() throws Exception {
         super.setUp();
+        actual = new DateTime(2000,2, 1, 10, 59, 30);
+     }
+
+
+    public void testGetDay() {
+        assertEquals(1, actual.getDay());
     }
+
+    public void testGetMonth() {
+        assertEquals(2, actual.getMonth());
+    }
+
+    public void testGetYear() {
+        assertEquals(2000, actual.getYear());
+    }
+
+    public void testGetMinute() {
+        assertEquals(59, actual.getMinute());
+    }
+    
+    public void testGetHour() {
+        assertEquals(10, actual.getHour());
+    }
+
+
 
     public void testSaveRestore() throws Exception {
     	DateTime timeStamp1 = new DateTime();

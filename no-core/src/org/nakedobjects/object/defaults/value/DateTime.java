@@ -196,6 +196,36 @@ public class DateTime extends Magnitude {
         }
     }
 
+    public int getDay() {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        return c.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public int getMonth() {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        return c.get(Calendar.MONTH) + 1;
+    }
+
+    public int getYear() {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        return c.get(Calendar.YEAR);
+    }
+
+    public int getHour() {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        return c.get(Calendar.HOUR);
+    }
+
+    public int getMinute() {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        return c.get(Calendar.MINUTE);
+    }
+
     public long longValue() {
         return date.getTime();
     }

@@ -24,60 +24,56 @@ import org.apache.log4j.Logger;
  * </p>
  */
 
-/* other methods to implement
-
- comparision methods
-
- sameHourAs() hour ==hour
- sameMinuteAs() minutes = minutes
- sameTimeAs(hour, min) hour == hour & minutes == minutes
-
- withinNextTimePeriod(int hours, int minutes);
- withinTimePeriod(Date d, int hours, int minutes);
- withinPreviousTimePeriod(int hours, int minutes); d.hour >= this.hour >= d.hour + hours & d.minutes >= this.minutes >= d.minutes + minutes
+/*
+ * other methods to implement
+ * 
+ * comparision methods
+ * 
+ * sameHourAs() hour ==hour sameMinuteAs() minutes = minutes sameTimeAs(hour,
+ * min) hour == hour & minutes == minutes
+ * 
+ * withinNextTimePeriod(int hours, int minutes); withinTimePeriod(Date d, int
+ * hours, int minutes); withinPreviousTimePeriod(int hours, int minutes); d.hour >=
+ * this.hour >= d.hour + hours & d.minutes >= this.minutes >= d.minutes +
+ * minutes
  */
 public class Time extends Magnitude {
-	private static final Logger LOG = Logger.getLogger(Time.class);
+    private static Clock clock;
+    private static final DateFormat ISO_LONG = new SimpleDateFormat("HH:mm");
+    private static final DateFormat ISO_SHORT = new SimpleDateFormat("HHmm");
+    private static final Logger LOG = Logger.getLogger(Time.class);
     private static final DateFormat LONG_FORMAT = DateFormat.getTimeInstance(DateFormat.LONG);
     private static final DateFormat MEDIUM_FORMAT = DateFormat.getTimeInstance(DateFormat.MEDIUM);
-	private static final long serialVersionUID = 1L;
-	private static final DateFormat SHORT_FORMAT = DateFormat.getTimeInstance(DateFormat.SHORT);
-	private static final DateFormat ISO_LONG = new SimpleDateFormat("HH:mm");
-	private static final DateFormat ISO_SHORT = new SimpleDateFormat("HHmm");
-    private final static long zero;
-	public static final int MINUTE = 60;
-	public static final int HOUR = 60 * MINUTE;
-	public static final int DAY = 24 * HOUR;
-	private static Clock clock;
+    public static final int MINUTE = 60;
+    public static final int HOUR = 60 * MINUTE;
+    public static final int DAY = 24 * HOUR;
+    private static final long serialVersionUID = 1L;
+    private static final DateFormat SHORT_FORMAT = DateFormat.getTimeInstance(DateFormat.SHORT);
     private static final TimeZone timeZone;
-	
-	public static void setClock(Clock clock) {
-	    Time.clock = clock;
-	}
+    private final static long zero;
 
-    static {        	
-       timeZone = TimeZone.getTimeZone("GMT");
+    static {
+        timeZone = TimeZone.getTimeZone("GMT");
         SHORT_FORMAT.setTimeZone(timeZone);
         MEDIUM_FORMAT.setTimeZone(timeZone);
         LONG_FORMAT.setTimeZone(timeZone);
         ISO_LONG.setTimeZone(timeZone);
         ISO_SHORT.setTimeZone(timeZone);
-        
+
         Calendar cal = Calendar.getInstance();
         cal.setTimeZone(timeZone);
-		// set to 1-Jan-1970 00:00:00 (the epoch)
+        // set to 1-Jan-1970 00:00:00 (the epoch)
         cal.set(Calendar.MILLISECOND, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.clear(Calendar.AM_PM);
-		cal.clear(Calendar.HOUR);
+        cal.clear(Calendar.AM_PM);
+        cal.clear(Calendar.HOUR);
         cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.set(Calendar.MONTH, 0);
         cal.set(Calendar.YEAR, 1970);
         zero = cal.getTime().getTime();
-        
-        
+
         LOG.info("Locale " + Locale.getDefault());
         LOG.info("Short fomat " + SHORT_FORMAT.format(new Date()));
         LOG.info("Medium fomat " + MEDIUM_FORMAT.format(new Date()));
@@ -88,35 +84,42 @@ public class Time extends Magnitude {
         return zero / 1000;
     }
 
+    public static void setClock(Clock clock) {
+        Time.clock = clock;
+    }
+
     private java.util.Date date;
     private transient DateFormat format = SHORT_FORMAT;
 
     /*
-    Create a Time object for storing a time with the time set to the current time.
-    */
+     * Create a Time object for storing a time with the time set to the current
+     * time.
+     */
     public Time() {
-        if(clock == null) {
+        if (clock == null) {
             throw new NakedObjectRuntimeException("Clock not set up");
         }
         setValue(new java.util.Date(clock.getTime()));
     }
 
     /*
-    Create a Time object for storing a time with the time set to the specified hours and minutes.
-    */
+     * Create a Time object for storing a time with the time set to the
+     * specified hours and minutes.
+     */
     public Time(int hour, int minute) {
         setValue(hour, minute);
     }
 
     /*
-    Create a Time object for storing a time with the time set to the specified time.
-    */
+     * Create a Time object for storing a time with the time set to the
+     * specified time.
+     */
     public Time(Time time) {
         date = time.date;
     }
 
     /**
-     Add the specified hours and minutes to this time value.
+     * Add the specified hours and minutes to this time value.
      */
     public void add(int hours, int minutes) {
         Calendar cal = Calendar.getInstance();
@@ -141,18 +144,15 @@ public class Time extends Magnitude {
 
     private void checkTime(int hour, int minute, int second) {
         if ((hour < 0) || (hour > 23)) {
-            throw new IllegalArgumentException(
-                "Hour must be in the range 0 - 23 inclusive");
+            throw new IllegalArgumentException("Hour must be in the range 0 - 23 inclusive");
         }
 
         if ((minute < 0) || (minute > 59)) {
-            throw new IllegalArgumentException(
-                "Minute must be in the range 0 - 59 inclusive");
+            throw new IllegalArgumentException("Minute must be in the range 0 - 59 inclusive");
         }
 
         if ((second < 0) || (second > 59)) {
-            throw new IllegalArgumentException(
-                "Second must be in the range 0 - 59 inclusive");
+            throw new IllegalArgumentException("Second must be in the range 0 - 59 inclusive");
         }
     }
 
@@ -162,15 +162,15 @@ public class Time extends Magnitude {
 
     public void copyObject(Naked object) {
         if (!(object instanceof Time)) {
-            throw new IllegalArgumentException(
-                "Can only copy the value of  a Date object");
+            throw new IllegalArgumentException("Can only copy the value of  a Date object");
         }
 
         date = (object == null) ? null : ((Time) object).date;
     }
 
     /**
-     Returns a Calendar object with the irrelevant field (determined by this objects type) set to zero.
+     * Returns a Calendar object with the irrelevant field (determined by this
+     * objects type) set to zero.
      */
     private Calendar createCalendar() {
         Calendar cal = Calendar.getInstance();
@@ -180,8 +180,8 @@ public class Time extends Magnitude {
         cal.set(Calendar.MILLISECOND, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.DAY_OF_MONTH, 1);
-		cal.clear(Calendar.AM_PM);
-		cal.clear(Calendar.HOUR);
+        cal.clear(Calendar.AM_PM);
+        cal.clear(Calendar.HOUR);
         cal.set(Calendar.MONTH, 0);
         cal.set(Calendar.YEAR, 1970);
 
@@ -193,22 +193,37 @@ public class Time extends Magnitude {
     }
 
     /**
-     @deprecated  replaced by dateValue
-     @see #dateValue
+     * @deprecated replaced by dateValue
+     * @see #dateValue
      */
     public java.util.Date getDate() {
         return date;
     }
 
+    public int getHour() {
+        Calendar c = Calendar.getInstance();
+        c.setTimeZone(timeZone);
+        c.setTime(date);
+        return c.get(Calendar.HOUR);
+    }
+
+    public int getMinute() {
+        Calendar c = Calendar.getInstance();
+        c.setTimeZone(timeZone);
+        c.setTime(date);
+        return c.get(Calendar.MINUTE);
+    }
+
     /**
-     *  Return true if the date is blank
+     * Return true if the date is blank
      */
     public boolean isEmpty() {
         return date == null;
     }
 
     /**
-     returns true if the time of this object has the same value as the specified time
+     * returns true if the time of this object has the same value as the
+     * specified time
      */
     public boolean isEqualTo(Magnitude time) {
         if (time instanceof Time) {
@@ -219,12 +234,12 @@ public class Time extends Magnitude {
     }
 
     /**
-     returns true if the time of this object is earlier than the specified time
+     * returns true if the time of this object is earlier than the specified
+     * time
      */
     public boolean isLessThan(Magnitude time) {
         if (time instanceof Time) {
-            return (date != null) && !time.isEmpty() &&
-            date.before(((Time) time).date);
+            return (date != null) && !time.isEmpty() && date.before(((Time) time).date);
         } else {
             throw new IllegalArgumentException("Parameter must be of type Time");
         }
@@ -246,8 +261,7 @@ public class Time extends Magnitude {
             String str = text.toLowerCase();
             Calendar cal = createCalendar();
 
-            if (str.equals("now")) {
-            } else if (str.startsWith("+")) {
+            if (str.equals("now")) {} else if (str.startsWith("+")) {
                 int hours;
 
                 hours = Integer.valueOf(str.substring(1)).intValue();
@@ -260,9 +274,7 @@ public class Time extends Magnitude {
                 cal.setTime(date);
                 cal.add(Calendar.HOUR_OF_DAY, -hours);
             } else {
-                DateFormat[] formats = new DateFormat[] {
-                        LONG_FORMAT, MEDIUM_FORMAT, SHORT_FORMAT, ISO_LONG, ISO_SHORT
-                    };
+                DateFormat[] formats = new DateFormat[] { LONG_FORMAT, MEDIUM_FORMAT, SHORT_FORMAT, ISO_LONG, ISO_SHORT };
 
                 for (int i = 0; i < formats.length; i++) {
                     try {
@@ -283,6 +295,7 @@ public class Time extends Magnitude {
 
     /**
      * Reset this time so it contains the current time.
+     * 
      * @see org.nakedobjects.object.NakedValue#reset()
      */
     public void reset() {
@@ -328,8 +341,9 @@ public class Time extends Magnitude {
     }
 
     /*
-    Sets this object's time to be the same as the specified hour, minute and second.
-    */
+     * Sets this object's time to be the same as the specified hour, minute and
+     * second.
+     */
     public void setValue(int hour, int minute) {
         checkTime(hour, minute, 0);
 
@@ -351,12 +365,12 @@ public class Time extends Magnitude {
         }
     }
 
-	public void setValue(long time) {
+    public void setValue(long time) {
         Calendar cal = Calendar.getInstance();
 
         cal.setTime(new Date(time * 1000));
         set(cal);
-	}
+    }
 
     public void setValue(Time time) {
         if (time == null) {
@@ -372,25 +386,25 @@ public class Time extends Magnitude {
 }
 
 /*
-Naked Objects - a framework that exposes behaviourally complete
-business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-The authors can be contacted via www.nakedobjects.org (the
-registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-Road, Woking GU21 1NR, UK).
-*/
+ * Naked Objects - a framework that exposes behaviourally complete business
+ * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * Ltd
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * The authors can be contacted via www.nakedobjects.org (the registered address
+ * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
+ * 1NR, UK).
+ */
