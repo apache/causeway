@@ -2,8 +2,8 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.defaults.Allow;
 import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.Assert;

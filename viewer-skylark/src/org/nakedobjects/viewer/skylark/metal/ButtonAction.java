@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.defaults.Allow;
 import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
 

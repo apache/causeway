@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.defaults.AbstractPermission;
 import org.nakedobjects.object.reflect.UndoStack;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
@@ -61,7 +61,7 @@ public class ViewerAssistant {
     private MenuOption loggingOption(String name, final Level level) {
         return new MenuOption("Log " + level + " " + name + "...") {
                 public Permission disabled(View component) {
-                    return Permission.allow(LogManager.getRootLogger().getLevel() != level);
+                    return AbstractPermission.allow(LogManager.getRootLogger().getLevel() != level);
                 }
 
                 public void execute(Workspace workspace, View view, Location at) {

@@ -29,8 +29,8 @@ import java.awt.Graphics;
 import java.awt.PrintJob;
 import java.awt.Toolkit;
 
-import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.defaults.Allow;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;

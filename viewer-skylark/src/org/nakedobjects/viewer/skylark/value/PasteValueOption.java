@@ -32,9 +32,9 @@ import java.awt.datatransfer.Transferable;
 
 import org.apache.log4j.Logger;
 import org.nakedobjects.object.ValueParseException;
-import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.object.control.defaults.Allow;
+import org.nakedobjects.object.control.defaults.Veto;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;

@@ -27,9 +27,9 @@ package org.nakedobjects.viewer.skylark.value;
 
 
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.object.control.defaults.Allow;
+import org.nakedobjects.object.control.defaults.Veto;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;

@@ -4,6 +4,7 @@ import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.defaults.AbstractPermission;
 import org.nakedobjects.object.defaults.value.MultilineTextString;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
@@ -24,7 +25,6 @@ import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.SimpleIdentifier;
 import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
-import org.nakedobjects.viewer.skylark.core.AbstractView;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -316,8 +316,6 @@ public class TextField extends AbstractField {
 
         /**
          * returns true is a selection exists - if the start and end locations are not the same
-         * 
-         * @return
          */
         boolean hasSelection() {
             return !(cursor.line == start.line && cursor.character == start.character);
@@ -492,9 +490,7 @@ public class TextField extends AbstractField {
     }
 
     public void drag(InternalDrag drag) {
-        if (isResizing) {
-            ;
-        } else {
+        if (!isResizing) {
             if (canChangeValue()) {
                 selection.extendTo(drag.getTargetLocation());
                 markDamaged();
@@ -807,7 +803,7 @@ public class TextField extends AbstractField {
 
     private boolean isOnResize(Location at) {
         int size = lineHeight() * 3 / 5;
-        int x = AbstractView.HPADDING + getMaxWidth() + 1;
+        int x = View.HPADDING + getMaxWidth() + 1;
         int y = getBaseline() - size - lineHeight();
 
         return (at.getX() >= x) && (at.getY() >= y);
@@ -1022,7 +1018,7 @@ public class TextField extends AbstractField {
             }
             
             public Permission disabled(View component) {
-                return Permission.allow(invalidReason != null);
+                return AbstractPermission.allow(invalidReason != null);
             }
         });
         super.menuOptions(options);

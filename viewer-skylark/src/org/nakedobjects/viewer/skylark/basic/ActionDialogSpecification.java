@@ -5,9 +5,12 @@ import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.UserAction;
+import org.nakedobjects.viewer.skylark.ValueContent;
+import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.ValueParameter;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
+import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.metal.ButtonAction;
@@ -17,6 +20,7 @@ import org.nakedobjects.viewer.skylark.special.ActionFieldBuilder;
 import org.nakedobjects.viewer.skylark.special.ObjectParameter;
 import org.nakedobjects.viewer.skylark.special.StackLayout;
 import org.nakedobjects.viewer.skylark.special.SubviewSpec;
+import org.nakedobjects.viewer.skylark.util.ViewFactory;
 import org.nakedobjects.viewer.skylark.value.TextField;
 
 public class ActionDialogSpecification extends AbstractCompositeViewSpecification {
@@ -96,7 +100,13 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
 	            View view = (new ActionParameterField.Specification()).createView(content, axis);
 	            return view;
             } else if(content instanceof ValueParameter) {
-               	return new TextField.Specification().createView(content, axis);
+                ViewFactory factory = ViewFactory.getViewFactory();
+
+                if (content instanceof ValueField) {
+                    ViewSpecification specification = factory.getValueFieldSpecification((ValueContent) content);
+                    return specification.createView(content, axis);
+                }
+               	//return new TextField.Specification().createView(content, axis);
             }
             return null;
         }

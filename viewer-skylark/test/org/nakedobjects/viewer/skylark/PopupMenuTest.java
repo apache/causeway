@@ -29,8 +29,8 @@ import java.awt.event.MouseEvent;
 import junit.framework.TestCase;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.defaults.Allow;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.DefaultPopupMenu;
