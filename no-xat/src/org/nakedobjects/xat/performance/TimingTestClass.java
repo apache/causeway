@@ -1,6 +1,5 @@
 package org.nakedobjects.xat.performance;
 
-import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.xat.TestClass;
 import org.nakedobjects.xat.TestClassDecorator;
 import org.nakedobjects.xat.TestObject;
@@ -29,13 +28,12 @@ public class TimingTestClass extends TestClassDecorator {
         timer.userDelay(4, 8);
         timer.start();
         TestObject instance = super.newInstance();
-        NakedObject object = (NakedObject) instance.getForObject();
+        instance.getForObject();
         timer.stop();
        doc.record(timer);
         return instance;
     }
     
-
     public TestObject invokeAction(final String name) {
         Timer timer = new Timer("c;lass action '" + name + "'");
         timer.userDelay(4, 8);

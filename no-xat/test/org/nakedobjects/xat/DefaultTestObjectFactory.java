@@ -28,9 +28,14 @@ public class DefaultTestObjectFactory implements TestObjectFactory{
         return new TestValueImpl(parent, field);
     }
 
-    public Documentor getDocumentor(String name) {
+    public Documentor getDocumentor() {
         return documentor;
     }
+    
+    public void testStarting(String className, String methodName) {
+    }
+    
+    public void testEnding() {}
 
     public TestValue createParamerTestValue(NakedValue value) {
         return new ParameterValueImpl(value);

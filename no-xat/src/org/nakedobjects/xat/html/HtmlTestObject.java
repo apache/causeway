@@ -17,11 +17,6 @@ public class HtmlTestObject extends TestObjectDecorator {
         this.doc = documentor;
     }
 
-    /** @deprecated */
-    public void assertCantInvokeAction(String name) {
-        assertActionUnusable(name);
-    }
-    
     public void assertActionUnusable(String name) {
         super.assertActionUnusable(name);
         doc("Right clicking on the " + doc.objectString(getForObject()));
@@ -30,11 +25,6 @@ public class HtmlTestObject extends TestObjectDecorator {
         doc("</strong> is not currently available. ");
     }
 
-    /** @deprecated */
-    public void assertCantInvokeAction(String name, TestObject parameter) {
-        assertActionUsable(name, parameter);
-    }
-    
     public void assertActionUsable(String name, TestObject parameter) {
         super.assertActionUsable(name, parameter);
         doc("note that it can't be dropped onto the ");
@@ -54,8 +44,8 @@ public class HtmlTestObject extends TestObjectDecorator {
 
     public void assertFieldContains(String message, String fieldName, NakedValue expectedValue) {
         super.assertFieldContains(message, fieldName, expectedValue);
-        doc("<p>Note that the field <em>" + fieldName + "</em> in the " + doc.objectString(getForObject())
-                + " is now set to '" + getField(fieldName).getForObject().titleString() + "'.");
+        doc("<p>Note that the field <em>" + fieldName + "</em> in the " + doc.objectString(getForObject()) + " is now set to '"
+                + getField(fieldName).getForObject().titleString() + "'.");
     }
 
     public void assertFieldContains(String fieldName, TestObject expectedView) {
@@ -68,11 +58,48 @@ public class HtmlTestObject extends TestObjectDecorator {
         }
     }
 
+    public void assertFieldDoesNotContain(String fieldName, String testValue) {
+        super.assertFieldDoesNotContain(fieldName, testValue);
+        if (getField(fieldName) instanceof TestValue) {
+            doc("<p>Note that the field <em>" + fieldName + "</em> in the " + doc.objectString(getForObject())
+                    + " does not contain a value of '" + testValue + "'.");
+        } else {
+            doc("<p>Note that object in the field <em>" + fieldName + "</em> of " + doc.objectString(getForObject())
+                    + " does not contains an object titled of '" + getField(fieldName).getForObject().titleString() + "'.");
+        }
+    }
+
+    public void assertFieldDoesNotContain(String message, String fieldName, NakedValue expectedValue) {
+        super.assertFieldDoesNotContain(message, fieldName, expectedValue);
+        doc("<p>Note that the field <em>" + fieldName + "</em> in the " + doc.objectString(getForObject())
+                + " does not contain '" + getField(fieldName).getForObject().titleString() + "'.");
+    }
+
+    public void assertFieldDoesNotContain(String fieldName, TestObject testView) {
+        super.assertFieldDoesNotContain(fieldName, testView);
+        NakedObject actualValue = (NakedObject) getForObject();
+        if (actualValue instanceof NakedCollection) {
+            doc("<em>" + fieldName + "</em> does not contain an instance of " + doc.objectString(testView.getForObject()) + "; ");
+        } else {
+            doc("<em>" + fieldName + "</em> does not contains " + doc.objectString(actualValue) + "; ");
+        }
+    }
+
+    public void assertNoOfElements(String collectionName, int noOfElements) {
+        super.assertNoOfElements(collectionName, noOfElements);
+        doc("<em>" + collectionName + "</em> contains " + noOfElements + " elements; ");
+    }
+
+    public void assertNoOfElementsNotEqual(String collectionName, int noOfElements) {
+        super.assertNoOfElementsNotEqual(collectionName, noOfElements);
+        doc("<em>" + collectionName + "</em> does not contain " + noOfElements + " elements; ");
+    }
+
     public void assertTitleEquals(String expectedTitle) {
         super.assertTitleEquals(expectedTitle);
         doc("Note the new  title: " + doc.objectString(getForObject()) + " .");
     }
-    
+
     public void associate(String fieldName, TestObject draggedView) {
         super.associate(fieldName, draggedView);
         doc("Drop it into the ");
@@ -81,8 +108,8 @@ public class HtmlTestObject extends TestObjectDecorator {
 
     private void doc(String text) {
         doc.doc(text);
-    } 
-    
+    }
+
     private void docln(String text) {
         doc.docln(text);
     }
@@ -102,6 +129,7 @@ public class HtmlTestObject extends TestObjectDecorator {
         docln(", which returns " + doc.objectString(result.getForObject()) + ". ");
         return result;
     }
+
     public TestObject invokeAction(String name) {
         TestObject result = super.invokeAction(name);
         doc("Right click on the " + doc.objectString(getForObject()));
@@ -124,7 +152,7 @@ public class HtmlTestObject extends TestObjectDecorator {
         }
         return result;
     }
-    
+
     private String objectString(Naked object) {
         return doc.objectString(object);
     }

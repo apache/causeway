@@ -16,34 +16,42 @@ import java.util.Date;
 public class HtmlDocumentor extends AbstractDocumentor {
     private boolean isList = false;
     private PrintWriter writer;
+    private File dir;
 
-    public HtmlDocumentor(String directory, String name) {
-        File dir = new File(directory);
+    public HtmlDocumentor(String directory) {
+        dir = new File(directory);
         if(!dir.exists()) {
             dir.mkdirs();
         }
+        
+    }
+    
+    public void open(String className, String name) {
         try {
-            String title = makeTitle(name);
-            writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(directory + name.replace(' ', '_') + "-xat.html")));
-            writer.println("<html>");
-            writer.println("<head>");
-            writer.println("<style type=\"text/css\">");
-            writer.println("<!--");
-            writer.println("H1 {color: darkblue}");
-            writer.println("P{line-height: 150%}");
-            writer.println("OL LI {line-height: 150%; margin-bottom: 8pt}");
-            writer
-                    .println("EM  {background-color: #cccccc; border-left: solid #cccccc 3px; border-right: solid #cccccc 3px; border-top: solid #cccccc 1px; border-bottom: solid #cccccc 1px ; font-style: normal}");
-            writer
-                    .println("CODE  {background-color: #cccccc; border-top: solid #cccccc 1px; border-bottom: solid black 1px; font-family: sans-serif}");
-            writer.println("IMG  {padding-right: 4px}");
-            writer.println("-->");
-            writer.println("</style>");
-            writer.println("<title>" + title + "</title>");
-            writer.println("</head>");
-            writer.println("<body>");
-            writer.write("<h1>Documentation: " + title + "</h1>");
-            writer.write("<small>Generated " + DateFormat.getDateTimeInstance().format(new Date()) + "</small>");
+            String fileName = className.replace(' ', '_') + "-xat.html";
+            if(writer == null) {
+	            writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File(dir, fileName))));
+	            String title = makeTitle(name);
+	            writer.println("<html>");
+	            writer.println("<head>");
+	            writer.println("<style type=\"text/css\">");
+	            writer.println("<!--");
+	            writer.println("H1 {color: darkblue}");
+	            writer.println("P{line-height: 150%}");
+	            writer.println("OL LI {line-height: 150%; margin-bottom: 8pt}");
+	            writer
+	                    .println("EM  {background-color: #cccccc; border-left: solid #cccccc 3px; border-right: solid #cccccc 3px; border-top: solid #cccccc 1px; border-bottom: solid #cccccc 1px ; font-style: normal}");
+	            writer
+	                    .println("CODE  {background-color: #cccccc; border-top: solid #cccccc 1px; border-bottom: solid black 1px; font-family: sans-serif}");
+	            writer.println("IMG  {padding-right: 4px}");
+	            writer.println("-->");
+	            writer.println("</style>");
+	            writer.println("<title>" + title + "</title>");
+	            writer.println("</head>");
+	            writer.println("<body>");
+	            writer.write("<h1>Documentation: " + title + "</h1>");
+	            writer.write("<small>Generated " + DateFormat.getDateTimeInstance().format(new Date()) + "</small>");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -124,7 +132,6 @@ public class HtmlDocumentor extends AbstractDocumentor {
             docln("<h2>" + text + "</h2>");
         }
     }
-
 }
 
 /*

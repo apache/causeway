@@ -12,8 +12,24 @@ public abstract class TestObjectDecorator implements TestObject {
         this.wrappedObject = wrappedObject;
     }
 
+    public void assertActionExists(String name) {
+        wrappedObject.assertActionExists(name);
+    }
+
+    public void assertActionExists(String name, TestNaked[] parameters) {
+        wrappedObject.assertActionExists(name, parameters);
+    }
+
+    public void assertActionExists(String name, TestObject parameter) {
+        wrappedObject.assertActionExists(name, parameter);
+    }
+
     public void assertActionInvisible(String name) {
         wrappedObject.assertActionInvisible(name);
+    }
+
+    public void assertActionInvisible(String name, TestNaked[] parameters) {
+        wrappedObject.assertActionInvisible(name, parameters);
     }
 
     public void assertActionInvisible(String name, TestObject parameter) {
@@ -24,12 +40,20 @@ public abstract class TestObjectDecorator implements TestObject {
         wrappedObject.assertActionUnusable(name);
     }
 
+    public void assertActionUnusable(String name, TestNaked[] parameters) {
+        wrappedObject.assertActionUnusable(name, parameters);
+    }
+
     public void assertActionUnusable(String name, TestObject parameter) {
         wrappedObject.assertActionUnusable(name, parameter);
     }
 
     public void assertActionUsable(String name) {
         wrappedObject.assertActionUsable(name);
+    }
+
+    public void assertActionUsable(String name, TestNaked[] parameters) {
+        wrappedObject.assertActionUsable(name, parameters);
     }
 
     public void assertActionUsable(String name, TestObject parameter) {
@@ -40,18 +64,12 @@ public abstract class TestObjectDecorator implements TestObject {
         wrappedObject.assertActionVisible(name);
     }
 
+    public void assertActionVisible(String name, TestNaked[] parameters) {
+        wrappedObject.assertActionVisible(name, parameters);
+    }
+
     public void assertActionVisible(String name, TestObject parameter) {
         wrappedObject.assertActionVisible(name, parameter);
-    }
-
-    /** @deprecated */
-    public void assertCantInvokeAction(String name) {
-        wrappedObject.assertCantInvokeAction(name);
-    }
-
-    /** @deprecated */
-    public void assertCantInvokeAction(String name, TestObject parameter) {
-        wrappedObject.assertCantInvokeAction(name, parameter);
     }
 
     public void assertEmpty(String fieldName) {
@@ -98,6 +116,34 @@ public abstract class TestObjectDecorator implements TestObject {
         wrappedObject.assertFieldContainsType(message, fieldName, title, expectedType);
     }
 
+    public void assertFieldDoesNotContain(String fieldName, NakedValue testValue) {
+        wrappedObject.assertFieldDoesNotContain(fieldName, testValue);
+    }
+
+    public void assertFieldDoesNotContain(String fieldName, String testValue) {
+        wrappedObject.assertFieldDoesNotContain(fieldName, testValue);
+    }
+
+    public void assertFieldDoesNotContain(String message, String fieldName, NakedValue testValue) {
+        wrappedObject.assertFieldDoesNotContain(message, fieldName, testValue);
+    }
+
+    public void assertFieldDoesNotContain(String message, String fieldName, String testValue) {
+        wrappedObject.assertFieldDoesNotContain(message, fieldName, testValue);
+    }
+
+    public void assertFieldDoesNotContain(String message, String fieldName, TestObject testView) {
+        wrappedObject.assertFieldDoesNotContain(message, fieldName, testView);
+    }
+
+    public void assertFieldDoesNotContain(String fieldName, TestObject testView) {
+        wrappedObject.assertFieldDoesNotContain(fieldName, testView);
+    }
+
+    public void assertFieldExists(String fieldName) {
+        wrappedObject.assertFieldExists(fieldName);
+    }
+
     public void assertFieldInvisible(String fieldName) {
         wrappedObject.assertFieldInvisible(fieldName);
     }
@@ -106,17 +152,20 @@ public abstract class TestObjectDecorator implements TestObject {
         wrappedObject.assertFieldModifiable(fieldName);
     }
 
-    /** @deprecated */
-    public void assertFieldReadOnly(String fieldName) {
-        wrappedObject.assertFieldReadOnly(fieldName);
-    }
-
     public void assertFieldUnmodifiable(String fieldName) {
         wrappedObject.assertFieldUnmodifiable(fieldName);
     }
 
     public void assertFieldVisible(String fieldName) {
         wrappedObject.assertFieldVisible(fieldName);
+    }
+
+    public void assertNoOfElements(String collectionName, int noOfElements) {
+        wrappedObject.assertNoOfElements(collectionName, noOfElements);
+    }
+
+    public void assertNoOfElementsNotEqual(String collectionName, int noOfElements) {
+        wrappedObject.assertNoOfElementsNotEqual(collectionName, noOfElements);
     }
 
     public void assertNotEmpty(String fieldName) {
@@ -191,6 +240,10 @@ public abstract class TestObjectDecorator implements TestObject {
         return wrappedObject.invokeAction(name);
     }
 
+    public TestObject invokeAction(String name, TestNaked[] parameters) {
+        return wrappedObject.invokeAction(name, parameters);
+    }
+
     public TestObject invokeAction(String name, TestObject parameter) {
         return wrappedObject.invokeAction(name, parameter);
     }
@@ -210,41 +263,7 @@ public abstract class TestObjectDecorator implements TestObject {
     public void testField(String fieldName, TestObject expectedObject) {
         wrappedObject.testField(fieldName, expectedObject);
     }
-    
-    public void assertActionExists(String name) {
-        wrappedObject.assertActionExists(name);  
-        }
-
-    public void assertActionExists(String name, TestObject parameter) {
-        wrappedObject.assertActionExists(name, parameter);
-        }
-
-
-    public void assertActionInvisible(String name, TestNaked[] parameters) {
-        wrappedObject.assertActionInvisible(name, parameters);
-    }
-    public void assertActionUnusable(String name, TestNaked[] parameters) {
-        wrappedObject.assertActionUnusable(name, parameters);
-    }
-    public void assertActionUsable(String name, TestNaked[] parameters) {
-        wrappedObject.assertActionUsable(name, parameters);
-    }
-    public void assertActionVisible(String name, TestNaked[] parameters) {
-        wrappedObject.assertActionVisible(name, parameters);
-    }
-    
-    public TestObject invokeAction(String name, TestNaked[] parameters) {
-        return wrappedObject.invokeAction(name, parameters);
-    }
-    
-    public void assertActionExists(String name, TestNaked[] parameters) {
-        wrappedObject.assertActionExists(name, parameters);
-    }
-    
-    public void assertFieldExists(String fieldName) {
-        wrappedObject.assertFieldExists(fieldName);
-    }    
-}    
+}
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business

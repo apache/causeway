@@ -1,6 +1,8 @@
 package org.nakedobjects.xat;
 
 import org.nakedobjects.container.configuration.ComponentException;
+import org.nakedobjects.container.configuration.ComponentLoader;
+import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObjectContext;
@@ -24,7 +26,6 @@ import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Role;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.object.security.User;
-import org.nakedobjects.xat.html.HtmlTestObjectFactory;
 
 import java.util.Hashtable;
 
@@ -42,10 +43,10 @@ public abstract class AcceptanceTestCase extends TestCase {
     private ExplorationSetUp explorationSetUp;
 
     public AcceptanceTestCase() {}
-    
+
     public AcceptanceTestCase(String name) {
         super(name);
-     }
+    }
 
     protected void append(String text) {
         docln(text);
@@ -68,87 +69,88 @@ public abstract class AcceptanceTestCase extends TestCase {
     protected void note(String text) {
         docln(text);
     }
-    
+
     public void addFixture(ExplorationFixture fixture) {
         explorationSetUp.addFixture(fixture);
     }
 
     public TestValue createParameterTestValue(NakedValue value) {
-        return testObjectFactory.createParamerTestValue(value);    
+        return testObjectFactory.createParamerTestValue(value);
     }
-    
+
     protected void setUp() throws Exception {
         LogManager.getLoggerRepository().setThreshold(Level.ERROR);
-         
+
         /*
          * TODO Refactor
          * 
-         * When tests are run they need to execute against a specific object manager, and create test objects
-         * that generate specific output.  The following need to be provided to the case:
-         * 		NakedObjectManager
-         * 		TestObjectFactory
+         * When tests are run they need to execute against a specific object
+         * manager, and create test objects that generate specific output. The
+         * following need to be provided to the case: NakedObjectManager
+         * TestObjectFactory
          * 
          * These need to be provide differently for different runs of the tests.
-         */ 
+         */
 
         objectManager = createObjectManager();
-        
-        try {        
-	        NakedObjectContext context = new NakedObjectContext(objectManager);
-	        Session session = ClientSession.getSession();
 
-	        explorationSetUp = new ExplorationSetUp(context);
-	        setUpFixtures();
-	       
-	        // TODO replace dynamically
-	        if(testObjectFactory == null) {
-	            testObjectFactory = new HtmlTestObjectFactory();
-	        }
-	        
-	        documentor = testObjectFactory.getDocumentor(getName().substring(4));
-	        
-	        new NakedObjectSpecificationLoaderImpl();
-	       
-	        
-	        explorationSetUp.installFixtures();
-	        String[] cls = explorationSetUp.getClasses();
-	        for (int i = 0; i < cls.length; i++) {
-	            NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(cls[i]);
-	            
-	            NakedClass spec = new SimpleNakedClass(cls[i]);
-	            spec.setContext(context);
-	            spec.setNakedClass(nc);
-	            
-	            TestClass view = testObjectFactory.createTestClass(session, spec);
-	
-	            classes.put(nc.getFullName().toLowerCase(), view);
-	        }
+        try {
+            NakedObjectContext context = new NakedObjectContext(objectManager);
+            Session session = ClientSession.getSession();
 
-	        if(session.getUser() == null) {
-             User user = new User("exploration user");
-            user.setContext(context);
-            user.getRoles().add(new Role("explorer"));
-            session.setUser(user);
-        }
-        } catch(Exception e) {
-            // If an exception is thrown in setUp then tearDown is not called, hence object manager is
-            // left running, but shouldn't be.
+            explorationSetUp = new ExplorationSetUp(context);
+            setUpFixtures();
+
+            if (testObjectFactory == null) {
+                Configuration.installConfiguration("xat.properties");
+                testObjectFactory = (TestObjectFactory) ComponentLoader.loadComponent("test-object-factory",
+                        NonDocumentingTestObjectFactory.class, TestObjectFactory.class);
+            }
+            documentor = testObjectFactory.getDocumentor();
+            documentor.start();
+            String className = getClass().getName();
+            String methodName = getName().substring(4);
+            testObjectFactory.testStarting(className, methodName);
+
+            new NakedObjectSpecificationLoaderImpl();
+
+            explorationSetUp.installFixtures();
+            String[] cls = explorationSetUp.getClasses();
+            for (int i = 0; i < cls.length; i++) {
+                NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(cls[i]);
+
+                NakedClass spec = new SimpleNakedClass(cls[i]);
+                spec.setContext(context);
+                spec.setNakedClass(nc);
+
+                TestClass view = testObjectFactory.createTestClass(session, spec);
+
+                classes.put(nc.getFullName().toLowerCase(), view);
+            }
+
+            if (session.getUser() == null) {
+                User user = new User("exploration user");
+                user.setContext(context);
+                user.getRoles().add(new Role("explorer"));
+                session.setUser(user);
+            }
+        } catch (Exception e) {
+            // If an exception is thrown in setUp then tearDown is not called,
+            // hence object manager is left running, but shouldn't be.
             e.printStackTrace();
             objectManager.shutdown();
-            
+
             throw e;
         }
-        
-        
     }
 
     protected LocalObjectManager createObjectManager() throws ConfigurationException, ComponentException {
-		NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
-		NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
+        NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
+        NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
 
         NakedObjectStore nos;
         nos = new TransientObjectStore();
-        OidGenerator oidGenerator = new SimpleOidGenerator();     
+        OidGenerator oidGenerator = new SimpleOidGenerator();
         return new LocalObjectManager(nos, new NullUpdateNotifier(), oidGenerator);
     }
 
@@ -169,7 +171,7 @@ public abstract class AcceptanceTestCase extends TestCase {
      * Marks the start of a new step within a story. Adds the specified text to
      * the script documentation, which will then be followed by the generated
      * text from the action methods.
-      */
+     */
     protected void nextStep(String text) {
         documentor.step(text);
     }
@@ -178,23 +180,23 @@ public abstract class AcceptanceTestCase extends TestCase {
         startDocumenting();
         nextStep();
     }
-    
+
     protected void firstStep(String text) {
         startDocumenting();
         nextStep(text);
     }
-    
+
     public void setTestObjectFactory(TestObjectFactory testObjectFactory) {
         this.testObjectFactory = testObjectFactory;
     }
-   
-   protected void stopDocumenting() {
+
+    protected void stopDocumenting() {
         documentor.stop();
     }
 
     /**
      * Gives a story a subtitle in the script documentation.
-      */
+     */
     protected void subtitle(String text) {
         documentor.subtitle(text);
     }
@@ -202,17 +204,17 @@ public abstract class AcceptanceTestCase extends TestCase {
     protected void tearDown() throws Exception {
         objectManager.shutdown();
         ClientSession.end();
-        documentor.close();
+        testObjectFactory.testEnding();
+        documentor.stop();
     }
 
     /**
      * Gives a story a subtitle in the script documentation.
-    */
+     */
     protected void title(String text) {
         documentor.title(text);
     }
 }
-
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business

@@ -28,7 +28,8 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     private Hashtable fields;
     private Session session;
 
-    public TestObjectImpl(final Session session, final NakedObject object, final Hashtable viewCache, final TestObjectFactory factory) {
+    public TestObjectImpl(final Session session, final NakedObject object, final Hashtable viewCache,
+            final TestObjectFactory factory) {
         this.session = session;
         this.factory = factory;
         setForObject(object);
@@ -74,7 +75,6 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         }
     }
 
-
     public void assertActionExists(final String name, final TestNaked[] parameters) {
         if (getAction(name, parameters) == null) {
             throw new NakedAssertionFailedError("Field '" + name + "' is not found in " + getForObject());
@@ -91,7 +91,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         assertActionInvisible(name, getAction(name), new TestNaked[0]);
     }
 
-    private void assertActionInvisible(String name, ActionSpecification action,TestNaked[] parameters) {
+    private void assertActionInvisible(String name, ActionSpecification action, TestNaked[] parameters) {
         boolean vetoed = action.getAbout(session, (NakedObject) getForObject(), nakedObjects(parameters)).canAccess().isVetoed();
         Assert.assertTrue("action '" + name + "' is visible", vetoed);
     }
@@ -148,7 +148,8 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     }
 
     private void assertActionVisible(String name, ActionSpecification action, TestNaked[] parameters) {
-        boolean allowed = action.getAbout(session, (NakedObject) getForObject(), nakedObjects(parameters)).canAccess().isAllowed();
+        boolean allowed = action.getAbout(session, (NakedObject) getForObject(), nakedObjects(parameters)).canAccess()
+                .isAllowed();
         assertTrue("action '" + name + "' is invisible", allowed);
     }
 
@@ -158,16 +159,6 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
     public void assertActionVisible(String name, TestObject parameter) {
         assertActionVisible(name, getAction(name, new TestNaked[] { parameter }), new TestNaked[] { parameter });
-    }
-
-    /** @deprecated */
-    public void assertCantInvokeAction(final String name) {
-        assertActionUnusable(name);
-    }
-
-    /** @deprecated */
-    public void assertCantInvokeAction(final String name, final TestObject parameter) {
-        assertActionUnusable(name, parameter);
     }
 
     public void assertEmpty(final String fieldName) {
@@ -224,10 +215,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
      *  
      */
     public void assertFieldContains(final String message, final String fieldName, final NakedValue expectedValue) {
-        FieldSpecification field = fieldFor(fieldName);
-        assertFieldVisible(fieldName, field);
-
-        TestNaked actual = getField(fieldName);
+        TestNaked actual = retrieveField(fieldName);
         NakedValue actualValue = ((NakedValue) actual.getForObject());
 
         if (!actualValue.isSameAs(expectedValue)) {
@@ -258,7 +246,8 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
                     return;
                 }
             }
-            throw new NakedAssertionFailedError(expected(message) + " object titled '" + expectedValue + "' but could not find it in the internal collection");
+            throw new NakedAssertionFailedError(expected(message) + " object titled '" + expectedValue
+                    + "' but could not find it in the internal collection");
         } else {
             String actualValue = object.titleString().toString();
 
@@ -278,34 +267,35 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
      *                       failure.
      * @group assert
      */
-    public void assertFieldContains(final String message, final String fieldName, final TestObject expected) {
-        FieldSpecification field = fieldFor(fieldName);
-        assertFieldVisible(fieldName, field);
+    public void assertFieldContains(final String message, final String fieldName, final TestObject expectedView) {
 
-        Naked actualObject = getField(fieldName).getForObject();
+        Naked actualObject = retrieveNakedField(fieldName);
 
-        if (expected == null) {
+        if (expectedView == null) {
             if (actualObject instanceof InternalCollection) {
                 int size = ((InternalCollection) actualObject).size();
 
                 if (size > 0) {
-                    throw new NakedAssertionFailedError(expected(message) + " '" + fieldName + "' collection to contain zero elements, but found " + size);
+                    throw new NakedAssertionFailedError(expected(message) + " '" + fieldName
+                            + "' collection to contain zero elements, but found " + size);
                 }
             } else if (actualObject != null) {
                 throw new NakedAssertionFailedError(expected(message) + " an empty field, but found " + actualObject);
             }
         } else {
-            Naked expectedObject = expected.getForObject();
+            Naked expectedObject = expectedView.getForObject();
 
             if (actualObject == null) {
                 if (expectedObject != null)
                     throw new NakedAssertionFailedError(expected(message) + expectedObject + "  but found an empty field");
             } else if (actualObject instanceof InternalCollection) {
                 if (!((InternalCollection) actualObject).contains((NakedObject) expectedObject)) {
-                    throw new NakedAssertionFailedError(expected(message) + " '" + fieldName + "' collection to contain " + expectedObject);
+                    throw new NakedAssertionFailedError(expected(message) + " '" + fieldName + "' collection to contain "
+                            + expectedObject);
                 }
             } else if (!actualObject.equals(expectedObject)) {
-                throw new NakedAssertionFailedError(expected(message) + " object of " + expectedObject + " but got " + actualObject);
+                throw new NakedAssertionFailedError(expected(message) + " object of " + expectedObject + " but got "
+                        + actualObject);
             }
         }
     }
@@ -347,14 +337,144 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
                 NakedObject element = collection.elementAt(i);
                 if (element.titleString().toString().equals(title)) {
                     if (!element.getSpecification().getShortName().equals(expectedType)) {
-                        throw new NakedAssertionFailedError(expected(message) + " object " + title + " to be of type " + expectedType + " but was "
-                                + element.getSpecification().getShortName());
+                        throw new NakedAssertionFailedError(expected(message) + " object " + title + " to be of type "
+                                + expectedType + " but was " + element.getSpecification().getShortName());
                     }
                     return;
                 }
             }
-            throw new NakedAssertionFailedError(expected(message) + " object " + title + " but could not find it in the internal collection");
+            throw new NakedAssertionFailedError(expected(message) + " object " + title
+                    + " but could not find it in the internal collection");
         }
+    }
+
+    /**
+     * Check that the specified field does not contain the expected value. If it
+     * does contain the expected value the test fails.
+     * 
+     * @group assert
+     */
+
+    public void assertFieldDoesNotContain(final String fieldName, final NakedValue expectedValue) {
+        assertFieldDoesNotContain(null, simpleName(fieldName), expectedValue);
+    }
+
+    /**
+     * Check that the specified field does not contain the expected value. If it
+     * does contain the expected value the test fails.
+     * 
+     * @group assert
+     */
+    public void assertFieldDoesNotContain(final String fieldName, final String expectedValue) {
+        assertFieldDoesNotContain(null, simpleName(fieldName), expectedValue);
+    }
+
+    /**
+     * Check that the specified field has the same value as the specified
+     * NakedValue. If it differs the test fails. A note is added to the
+     * documentation to explain that the specified field now has a specific
+     * value.
+     *  
+     */
+    public void assertFieldDoesNotContain(final String message, final String fieldName, final NakedValue expectedValue) {
+        TestNaked actual = retrieveField(fieldName);
+        NakedValue actualValue = ((NakedValue) actual.getForObject());
+
+        if (actualValue.isSameAs(expectedValue)) {
+            throw new NakedAssertionFailedError(expected(message) + " value of " + expectedValue + " is the same as  "
+                    + actualValue);
+        }
+    }
+
+    /**
+     * Check that the specified field does not contain the expected value. If it
+     * does contain the expected value the test fails.
+     * 
+     * @param message
+     *                       text to add to the failure message, which is displayed after a
+     *                       failure.
+     * @param fieldName
+     *                       Name of the Field to check
+     * @param testValue
+     *                       Value the Field should not contain
+     * @group assert
+     */
+
+    public void assertFieldDoesNotContain(final String message, final String fieldName, final String testValue) {
+        Naked object = retrieveNakedField(fieldName);
+        if (object instanceof InternalCollection) {
+            InternalCollection collection = (InternalCollection) object;
+            for (int i = 0; i < collection.size(); i++) {
+                NakedObject element = collection.elementAt(i);
+                if (element.titleString().toString().equals(testValue)) {
+                    throw new NakedAssertionFailedError(expected(message) + " object titled '" + testValue
+                            + "'  was found in the internal collection");
+                }
+            }
+
+        } else {
+            String actualValue = object.titleString().toString();
+
+            if (actualValue.equals(testValue)) {
+                throw new NakedAssertionFailedError(expected(message) + " value " + testValue + " is the same as " + actualValue);
+            }
+        }
+    }
+
+    /**
+     * Added to confirm in negative tests that a Field does not contain the
+     * expected value // This works for
+     * 
+     * @param message
+     *                       text to add to the failure message, which is displayed after a
+     *                       failure.
+     * @param fieldName
+     *                       Name of the field to check the value in
+ 
+      *      * @group assert
+     */
+
+    public void assertFieldDoesNotContain(final String message, final String fieldName, final TestObject testView) {
+        Naked actualObject = retrieveNakedField(fieldName);
+
+        if (testView == null) {
+            if (actualObject instanceof InternalCollection) {
+                int size = ((InternalCollection) actualObject).size();
+
+                if (size == 0) {
+                    throw new NakedAssertionFailedError(expected(message) + " '" + fieldName
+                            + "' collection to contain one or more elements, but it was empty");
+                }
+            } else if (actualObject == null) {
+                throw new NakedAssertionFailedError(expected(message) + " field to be " + actualObject + " but it was empty");
+            }
+        } else {
+            Naked expectedObject = testView.getForObject();
+
+            if (actualObject == null) {
+                if (expectedObject == null)
+                    throw new NakedAssertionFailedError(expected(message) + expectedObject + "  is an empty field");
+            } else if (actualObject instanceof InternalCollection) {
+                if (((InternalCollection) actualObject).contains((NakedObject) expectedObject)) {
+                    throw new NakedAssertionFailedError(expected(message) + " '" + fieldName + "' collection does contain "
+                            + expectedObject);
+                }
+            } else if (actualObject.equals(expectedObject)) {
+                throw new NakedAssertionFailedError(expected(message) + " object of " + expectedObject + " does contain "
+                        + actualObject);
+            }
+        }
+    }
+
+    /**
+     * Check that the specified field does not contain the expected object (as
+     * represented by the specifed view. If it does contain the expected object
+     * the test fails.
+     * 
+     * @group assert
+     */
+    public void assertFieldDoesNotContain(final String fieldName, final TestObject testView) {
+        assertFieldDoesNotContain(null, fieldName, testView);
     }
 
     public void assertFieldExists(final String fieldName) {
@@ -408,6 +528,33 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         assertTrue("Field '" + fieldName + "' is invisible", canAccess);
     }
 
+    /**
+     * Test the named collection to determine no of Elements in contains If the
+     * value noOfElements does not match the test fails
+     */
+
+    public void assertNoOfElements(String collectionName, int noOfElements) {
+        int actualSize = getCollectionSize(collectionName);
+        if (actualSize != noOfElements) {
+            throw new NakedAssertionFailedError("Excepted " + collectionName + " to contain " + noOfElements
+                    + " instead it contained " + actualSize);
+        }
+    }
+
+    /**
+     * Test the named collection to check that it does not contain the provided
+     * number of Elements If the value noOfElements does match the Collection
+     * size the test fails
+     */
+
+    public void assertNoOfElementsNotEqual(String collectionName, int noOfElements) {
+        int actualSize = getCollectionSize(collectionName);
+        if (actualSize == noOfElements) {
+            throw new NakedAssertionFailedError("Excepted " + collectionName + " to contain " + noOfElements
+                    + " instead it contained " + actualSize);
+        }
+    }
+
     public void assertNotEmpty(final String fieldName) {
         assertNotEmpty(null, fieldName);
     }
@@ -422,11 +569,13 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         // TODO refactor to remove redundancy
         if (object instanceof NakedValue) {
             if (((NakedValue) object).isEmpty()) {
-                throw new NakedAssertionFailedError(expected(message) + " '" + fieldName + "' to contain something but it was empty");
+                throw new NakedAssertionFailedError(expected(message) + " '" + fieldName
+                        + "' to contain something but it was empty");
             }
         } else {
             if (object == null) {
-                throw new NakedAssertionFailedError(expected(message) + " '" + fieldName + "' to contain something but it was empty");
+                throw new NakedAssertionFailedError(expected(message) + " '" + fieldName
+                        + "' to contain something but it was empty");
             }
         }
     }
@@ -452,8 +601,8 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
      */
     public void assertTitleEquals(final String message, final String expectedTitle) {
         if (!getTitle().equals(expectedTitle)) {
-            throw new NakedAssertionFailedError(expected(message) + " title of " + getForObject() + " as '" + expectedTitle + "' but got '" + getTitle()
-                    + "'");
+            throw new NakedAssertionFailedError(expected(message) + " title of " + getForObject() + " as '" + expectedTitle
+                    + "' but got '" + getTitle() + "'");
         }
     }
 
@@ -504,8 +653,8 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         NakedObject obj = (NakedObject) object.getForObject();
 
         if (association.getType() != null && !obj.getSpecification().isOfType(association.getType())) {
-            throw new IllegalActionError("Can't drop a " + object.getForObject().getSpecification().getShortName() + " on to the " + fieldName
-                    + " field (which accepts " + association.getType() + ")");
+            throw new IllegalActionError("Can't drop a " + object.getForObject().getSpecification().getShortName()
+                    + " on to the " + fieldName + " field (which accepts " + association.getType() + ")");
         }
 
         association.setAssociation((NakedObject) getForObject(), obj);
@@ -598,7 +747,8 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     }
 
     private FieldSpecification fieldFor(final String fieldName) {
-        FieldSpecification att = (FieldSpecification) ((NakedObject) getForObject()).getSpecification().getField(simpleName(fieldName));
+        FieldSpecification att = (FieldSpecification) ((NakedObject) getForObject()).getSpecification().getField(
+                simpleName(fieldName));
         if (att == null) {
             throw new NakedAssertionFailedError("No field called '" + fieldName + "' in " + getForObject().getClass().getName());
         } else {
@@ -646,7 +796,8 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
             for (int i = 0; i < noParameters; i++) {
                 parameterList += (i > 0 ? ", " : "") + parameterClasses[i];
             }
-            throw new NakedAssertionFailedError("Can't find action '" + name + "' with parameters (" + parameterList + ") on a " + targetName);
+            throw new NakedAssertionFailedError("Can't find action '" + name + "' with parameters (" + parameterList + ") on a "
+                    + targetName);
         }
     }
 
@@ -685,6 +836,16 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         return factory.createTestObject(session, object);
     }
 
+    private int getCollectionSize(String collectionName) {
+        Naked object = getField(collectionName).getForObject();
+        if (object instanceof InternalCollection) {
+            InternalCollection col = (InternalCollection) object;
+            return col.size();
+        } else {
+            throw new NakedAssertionFailedError(collectionName + " is not a collection");
+        }
+    }
+
     public TestNaked getField(final String fieldName) {
         FieldSpecification field = fieldFor(fieldName);
         assertFieldVisible(fieldName, field);
@@ -703,14 +864,14 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     public TestObject getField(final String fieldName, final String title) {
         FieldSpecification field = fieldFor(fieldName);
         assertFieldVisible(fieldName, field);
-        
+
         Naked object = getField(fieldName).getForObject();
         if (!(object instanceof InternalCollection)) {
             throw new IllegalActionError(
                     "getField(String, String) only allows an object to be selected from an InternalCollection");
         }
 
-        Enumeration e = ((NakedCollection)object).elements();
+        Enumeration e = ((NakedCollection) object).elements();
         NakedObject selectedObject = null;
         int noElements = 0;
         while (e.hasMoreElements()) {
@@ -819,6 +980,26 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
             parameterObjects[i] = (Naked) parameters[i].getForObject();
         }
         return parameterObjects;
+    }
+
+    private TestNaked retrieveField(String fieldName) {
+        FieldSpecification field = fieldFor(fieldName);
+        assertFieldVisible(fieldName, field);
+
+        TestNaked object = getField(fieldName);
+        return object;
+
+    }
+
+    /**
+     * Check that the specified field contains the expected value. If it does
+     * not contain the expected value the test fails.
+     * 
+     * @group assert
+     */
+
+    private Naked retrieveNakedField(String fieldName) {
+        return retrieveField(fieldName).getForObject();
     }
 
     private String simpleName(final String name) {

@@ -19,7 +19,11 @@ public interface TestObjectFactory {
 
     TestValue createParamerTestValue(NakedValue value);
 
-    Documentor getDocumentor(String string);
+    void testStarting(String className, String methodName);
+
+    void testEnding();
+
+    Documentor getDocumentor();
 }
 
 /*

@@ -2,7 +2,7 @@ package org.nakedobjects.xat;
 
 
 public abstract class AbstractDocumentor implements Documentor {
-    private boolean isGenerating = false;
+    private boolean isGenerating = true;
     
     public boolean isGenerating() {
         return isGenerating;

@@ -12,7 +12,6 @@ import java.util.Vector;
 
 public class TimingDocumentor extends AbstractDocumentor {
     private final String directory;
-    private boolean isList = false;
     private final Vector timings = new Vector(250, 250);
   
     public TimingDocumentor(final String directory) {

@@ -1,4 +1,4 @@
-package org.nakedobjects.xat.html;
+package org.nakedobjects.xat;
 
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
@@ -20,38 +20,27 @@ import java.util.Hashtable;
 
 
 
-public class HtmlTestObjectFactory implements TestObjectFactory {
-    private static HtmlDocumentor documentor;
-
+public class NonDocumentingTestObjectFactory implements TestObjectFactory {
     public TestClass createTestClass(Session session, NakedClass cls) {
-        return new HtmlTestClass(new TestClassImpl(session, cls, this), documentor);
+        return new TestClassImpl(session, cls, this);
     }
 
     public TestObject createTestObject(Session session, NakedObject object) {
-        return new HtmlTestObject(new TestObjectImpl(session, object, this), documentor);
+        return new TestObjectImpl(session, object, this);
     }
 
     public TestObject createTestObject(Session session, NakedObject field, Hashtable viewCache) {
-        return new HtmlTestObject(new TestObjectImpl(session, field, viewCache, this), documentor);
+        return new TestObjectImpl(session, field, viewCache, this);
     }
 
     public TestValue createTestValue(NakedObject parent, ValueFieldSpecification field) {
-        return new HtmlTestValue(new TestValueImpl(parent, field));
+        return new TestValueImpl(parent, field);
     }
 
     public void testStarting(String className, String methodName) {
-        String name = className.substring(className.lastIndexOf('.') + 1);
-        documentor.open(className, name);
-        documentor.title(methodName);
     }
 
     public void testEnding() {
-        documentor.doc("<hr>");
-    }
-
-    protected void finalize() throws Throwable {
-        documentor.close();
-        super.finalize();
     }
 
     public TestValue createParamerTestValue(NakedValue value) {
@@ -59,10 +48,7 @@ public class HtmlTestObjectFactory implements TestObjectFactory {
     }
 
     public Documentor getDocumentor() {
-        if (documentor == null) {
-            documentor = new HtmlDocumentor("tmp/");
-        }
-       return documentor;
+        return new NullDocumentor();
     }
 }
 
