@@ -28,7 +28,7 @@ public class Transfer {
         if (isPosted()) {
             about.unusable("Transaction already posted");
         } else {
-            about.unusableOnCondition(amount.doubleValue() == 0.0, "An amount must be specified");
+            about.unusableOnCondition(amount.floatValue() == 0.0, "An amount must be specified");
 
             if (fromAccount != null) {
                 about.unusableOnCondition(!fromAccount.canWithdraw(this), "Not enough funds in account");
@@ -67,7 +67,7 @@ public class Transfer {
         date.today();
   
         // if overdrawn then rollback
-        if (getFromAccount().getBalance().doubleValue() < 0) { throw new TransactionException(); }
+        if (getFromAccount().getBalance().floatValue() < 0) { throw new TransactionException(); }
 
  //       objectChanged();
     }
@@ -97,7 +97,7 @@ public class Transfer {
         return amount;
     }
 
-    public Date getDate() {
+    public Date dateValue() {
         return date;
     }
 

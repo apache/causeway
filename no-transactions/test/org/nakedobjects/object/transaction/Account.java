@@ -36,7 +36,7 @@ public class Account {
     }
 
     public boolean canWithdraw(Transfer transfer) {
-        return getBalance().doubleValue() - transfer.getAmount().doubleValue() >= 0.0;
+        return getBalance().floatValue() - transfer.getAmount().floatValue() >= 0.0;
     }
 
     public void deposit(Transfer transfer) {
