@@ -19,7 +19,10 @@ import org.nakedobjects.reflector.java.value.TextStringAdapter;
 
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 public class JavaReflectorFactory extends ReflectorFactory {
+    private final static Logger LOG = Logger.getLogger(JavaReflectorFactory.class);
     private JavaObjectFactory objectFactory;
     
     public Reflector createReflector(String className) throws ReflectionException {
@@ -53,6 +56,13 @@ public class JavaReflectorFactory extends ReflectorFactory {
     public void setObjectFactory(JavaObjectFactory objectFactory) {
         this.objectFactory = objectFactory;
     }
+    
+
+    protected void finalize() throws Throwable {
+        super.finalize();
+        LOG.info("finalizing reflector factory " + this);
+    }
+
 
 }
 

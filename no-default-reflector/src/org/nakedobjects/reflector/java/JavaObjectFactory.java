@@ -9,7 +9,11 @@ import org.nakedobjects.object.reflect.ReflectionException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.apache.log4j.Logger;
+
 public class JavaObjectFactory implements ObjectFactory {
+    private static final Logger LOG = Logger.getLogger(JavaObjectFactory.class);
+
     private BusinessObjectContainer container;
     
     public JavaObjectFactory() {}
@@ -81,6 +85,11 @@ public class JavaObjectFactory implements ObjectFactory {
                 throw new ReflectionException(targetException);
             }
         }
+    }
+
+    protected void finalize() throws Throwable {
+        super.finalize();
+        LOG.info("finalizing java business object container " + this);
     }
 }
 

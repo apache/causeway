@@ -36,7 +36,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 
 public class JavaReflector implements Reflector {
@@ -45,7 +45,7 @@ public class JavaReflector implements Reflector {
     private static final String ABOUT_PREFIX = "about";
     private static final String ABOUT_FIELD_DEFAULT = "aboutFieldDefault";
     private static final String GET_PREFIX = "get";
-    private final static Category LOG = Category.getInstance(JavaReflector.class);
+    private final static Logger LOG = Logger.getLogger(JavaReflector.class);
 
     /**
      * Returns the name of a Java entity without any prefix. A prefix is defined
@@ -887,6 +887,13 @@ public class JavaReflector implements Reflector {
 		*/
 		return superclass.getName();
     }
+    
+
+    protected void finalize() throws Throwable {
+        super.finalize();
+        LOG.info("finalizing reflector " + this);
+    }
+
 }
 
 /*
