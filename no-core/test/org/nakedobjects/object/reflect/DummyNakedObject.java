@@ -1,17 +1,18 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.security.Session;
 
-class DummyNakedObject implements NakedObject {
+public class DummyNakedObject implements NakedObject {
+
+    private DummyNakedObjectSpecification spec;
 
     public DummyNakedObject() {
         super();
@@ -75,13 +76,10 @@ class DummyNakedObject implements NakedObject {
         return null;
     }
 
-    public void parseTextEntry(OneToOneAssociation specification, String text) throws TextEntryParseException,
-            InvalidEntryException {}
-
     public void copyObject(Naked object) {}
 
     public NakedObjectSpecification getSpecification() {
-        return null;
+        return spec;
     }
 
     public boolean isSameAs(Naked object) {
@@ -153,6 +151,9 @@ class DummyNakedObject implements NakedObject {
     public NakedValue getValue(OneToOneAssociation field) {
         return null;
     }
+
+    public void setupSpecification(DummyNakedObjectSpecification spec) {
+        this.spec = spec;}
 
 }
 

@@ -12,7 +12,6 @@ import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.OidGenerator;
 import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.UpdateNotifier;
-import org.nakedobjects.object.defaults.AbstractUserContext;
 import org.nakedobjects.object.defaults.LocalObjectManager;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
@@ -30,7 +29,6 @@ import java.util.Vector;
 public class Standalone extends NakedObjectsContainer implements ObjectViewingMechanismListener {
     public static final String OBJECT_STORE = "object-store";
     private static final String REFLECTOR_FACTORY = "reflector";
-    private static final String USER_CONTEXT = "context";
     private static final String VIEWING_MECHANISM = "viewer";
 
     public static void main(String[] args) throws ConfigurationException {
@@ -86,7 +84,7 @@ public class Standalone extends NakedObjectsContainer implements ObjectViewingMe
                 NakedObjectStore.class);
         OidGenerator oidGenerator = (OidGenerator) ComponentLoader.loadComponent("oidgenerator", SimpleOidGenerator.class,
                 OidGenerator.class);
-        ObjectFactory objectFactory = (ObjectFactory) ComponentLoader.loadComponent("object-factory", ObjectFactory.class);;
+        ObjectFactory objectFactory = (ObjectFactory) ComponentLoader.loadComponent("object-factory", ObjectFactory.class);
         LocalObjectManager objectManager = new LocalObjectManager(objectStore, updateNotifier, oidGenerator, objectFactory);
         objectManager.init();
         return objectManager;
@@ -96,10 +94,6 @@ public class Standalone extends NakedObjectsContainer implements ObjectViewingMe
 
     private ReflectorFactory installReflectorFactory() throws ConfigurationException, ComponentException {
         return (ReflectorFactory) ComponentLoader.loadComponent(REFLECTOR_FACTORY, ReflectorFactory.class);
-    }
-
-    private AbstractUserContext installUserContext() throws ConfigurationException, ComponentException {
-        return (AbstractUserContext) ComponentLoader.loadComponent(USER_CONTEXT, AbstractUserContext.class);
     }
 
     private ObjectViewingMechanism installViewer() throws ConfigurationException, ComponentException {

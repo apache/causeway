@@ -1,34 +1,39 @@
 package org.nakedobjects.persistence.file;
-import org.nakedobjects.object.NakedObjectStore;
-import org.nakedobjects.object.ObjectStoreException;
 
+import org.nakedobjects.object.DummyNakedObjectSpecification;
+import org.nakedobjects.object.defaults.SerialOid;
 
-public class XmlOjectStoreInstancesTest extends NakedObjectStoreInstancesTestCase {
-	public XmlOjectStoreInstancesTest(String name) {
-		super(name);
-	}
+import java.util.Enumeration;
 
-	public static void main(String[] args) {
-		junit.textui.TestRunner.run(XmlOjectStoreInstancesTest.class);
-	}
+import junit.framework.TestCase;
 
-	public NakedObjectStore installObjectStore() throws ObjectStoreException {
-		NakedObjectStore objectStore = new XmlObjectStore("tmp/tests");
+public class ObjectDataTest extends TestCase {
 
-		return objectStore;
-	}
-	
-	protected void setUp() throws Exception {
-	    XmlDataManager.clearTestDirectory();
-	    
-	    super.setUp();
+    public static void main(String[] args) {
+        junit.textui.TestRunner.run(ObjectDataTest.class);
     }
+    
+    public void testValueField() {
+        DummyNakedObjectSpecification type = new DummyNakedObjectSpecification();
+        ObjectData objectData = new ObjectData(type, new SerialOid(13));
+        
+        assertEquals(null, objectData.get("name"));
+       objectData.set("name", "value");
+        assertEquals("value", objectData.get("name"));
+        
+        Enumeration e = objectData.fields();
+        e.nextElement();
+        assertFalse(e.hasMoreElements());
+        
+    }
+
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2005  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -48,3 +53,4 @@ The authors can be contacted via www.nakedobjects.org (the
 registered address of Naked Objects Group is Kingsway House, 123 Goldworth
 Road, Woking GU21 1NR, UK).
 */
+
