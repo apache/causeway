@@ -1,5 +1,8 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.container.configuration.ComponentException;
+import org.nakedobjects.container.configuration.ConfigurationException;
+
 
 
 public abstract class NakedObjectStoreAdvancedTestCase extends NakedObjectStoreTestCase {
@@ -17,11 +20,6 @@ public abstract class NakedObjectStoreAdvancedTestCase extends NakedObjectStoreT
     public NakedObjectStoreAdvancedTestCase(String name) {
         super(name);
     }
-
-    public void testNothing() {}
-    /*
-public void testNothing() {}
-    /*
 
     protected void initialiseObjects() throws Exception {
         // classes
@@ -73,7 +71,6 @@ public void testNothing() {}
         objectStore.createObject(team.getMembers());
     }
 
-    /*
     public void testHangingReference() throws Exception {
         restartObjectStore();
 
@@ -150,210 +147,6 @@ public void testNothing() {}
         assertEquals(people[1].getName(), person.getName());
         assertEquals(people[1].getSalary(), person.getSalary());
     }
-
-
-	/*
-	public void testMakeAssociatedObjectsPersistent() throws Exception{
-		Role role = new Role();
-		role.name.setValue("worker");
-		role.person = new Person();
-		
-		objectManager.makePersistent(role);
-		
-		assertNotNull(role.getOid());
-		assertNotNull(role.person.getOid());
-		
-		assertEquals(people.length + 1, objectStore.numberOfInstances(personPattern));
-		
-		Vector v = objectStore.getInstances(personPattern);
-		assertEquals(people.length + 1, v.size());
-		assertEquals(role.person, v.lastElement());	
-	}
-
-
-	public void testMakePersistentPersistsAssociation() throws Exception {
-		Role role = new Role();
-		role.person = new Person();
-		objectManager.makePersistent(role);
-		
-		Role role2 = (Role) objectManager.getObject(role.getOid());
-		assertEquals(role.person, role2.person);
-	}
-
-	public void testMakePersistentSetsAssociatesOid() throws Exception {
-		Role role = new Role();
-		role.person = new Person();
-		objectManager.makePersistent(role);
-		assertNotNull(role.person.getOid());
-	}
-
-	public void testMakePersistentSetsOid() throws Exception {
-		Role role = new Role();
-		objectManager.makePersistent(role);
-		assertNotNull(role.getOid());
-	}
-
-	public void testObjectLifecyle() throws ObjectStoreException {
-		Role role = new Role();
-		role.getName().setValue("Leader");
-		assertFalse("Object is not persistent", role.isPersistent());
-		assertFalse("Object has no oid", role.getOid() != null);
-		assertFalse("Object is not resolved", role.isResolved());
-	
-		Person person = new Person();
-		role.person = person;
-		person.getName().setValue("Billy");
-	
-		objectStore.createObject(role);
-	
-		Object oid1 = role.getOid();
-		//Object oid2 = e1.getMulitpleAssociations().getOid();
-	
-		assertTrue("Object is now persistent", role.isPersistent());
-		assertTrue("Object now has an oid", role.getOid() != null);
-		assertTrue("Object now is resolved", role.isResolved());
-		assertTrue("Associated object is also persistent", person.isPersistent());
-		assertTrue("Associated object also has an oid", person.getOid() != null);
-		assertTrue("Associated object is also resolved", person.isResolved());
-	
-		assertTrue("cached object must be same object wherever used", role == objectStore.getObject(oid1));
-	
-		// retrieve from storage
-		Role read1 = (Role) objectStore.getObject(oid1);
-	
-		assertEquals("read object is same", role, read1);
-		assertEquals("value fields are the same", role.name, read1.name);
-		assertEquals("object fields are the same", role.person, read1.person);
-	
-		assertTrue("after get, field should be resolved", read1.getPerson().isResolved());
-		assertEquals("referenced objects can now be used", role.person.getName(), read1.person.getName());
-	
-		// change object
-		read1.person = null;
-		updateNotifier.clearExpected();
-		updateNotifier.addExpectedBroadcastObject(role);
-		objectStore.save(read1);
-		updateNotifier.verify();
-		assertNull(read1.getPerson());
-	
-		Role read2 = (Role) objectStore.getObject(oid1);
-		assertNull(read2.getPerson());
-	
-		read2 = (Role) objectStore.getObject(oid1);
-	
-		objectStore.destroyObject(oid1);
-	
-		try {
-			objectStore.getObject(oid1);
-			fail("Object should not be available after destroy");
-		} catch (ObjectNotFoundException e) {
-			;
-		}
-	
-		updateNotifier.verify();
-	}
-
-
-	public void testObjectLifecyle2() throws ObjectStoreException {
-		Role e1 = new Role();
-		assertFalse("Object is not persistent", e1.isPersistent());
-		assertFalse("Object has no oid", e1.getOid() != null);
-		assertFalse("Object is not resolved", e1.isResolved());
-	
-		objectStore.createObject(e1);
-	
-		Object oid1 = e1.getOid();
-		//Object oid2 = e1.getMulitpleAssociations().getOid();
-	
-		assertTrue("Object is now persistent", e1.isPersistent());
-		assertTrue("Object now has an oid", e1.getOid() != null);
-		assertTrue("Object now is resolved", e1.isResolved());
-		
-		
-		Person ae1 = new Person();
-		ae1.getName().setValue("Billy");
-	
-		objectStore.createObject(ae1);
-		
-		assertTrue("Associated object is also persistent", ae1.isPersistent());
-		assertTrue("Associated object also has an oid", ae1.getOid() != null);
-		assertTrue("Associated object is also resolved", ae1.isResolved());
-	
-		assertTrue("cached object must be same object wherever used", e1 == objectStore.getObject(oid1));
-	
-		e1.getName().setValue("Bart");
-		e1.person = ae1;
-		
-		objectStore.save(e1);
-		
-		// retrieve from storage
-		Role read1 = (Role) objectStore.getObject(oid1);
-	
-		assertEquals("read object is same", e1, read1);
-		assertEquals("value fields are the same", e1.name, read1.name);
-		assertEquals("object fields are the same", e1.person, read1.person);
-	
-		assertTrue("after get, field should be resolved", read1.getPerson().isResolved());
-		assertEquals("referenced objects can now be used", e1.person.getName(), read1.person.getName());
-	
-		// change object
-		read1.person = null;
-		updateNotifier.clearExpected();
-		updateNotifier.addExpectedBroadcastObject(e1);
-		objectStore.save(read1);
-		updateNotifier.verify();
-		assertNull(read1.getPerson());
-	
-		Role read2 = (Role) objectStore.getObject(oid1);
-		assertNull(read2.getPerson());
-	
-		read2 = (Role) objectStore.getObject(oid1);
-	
-		objectStore.destroyObject(oid1);
-	
-		try {
-			objectStore.getObject(oid1);
-			fail("Object should not be available after destroy");
-		} catch (ObjectNotFoundException e) {
-			;
-		}
-	
-		updateNotifier.verify();
-	}
-	
-	
-	public void testRecursion() throws Exception {
-		Node base = new Node();
-		Node level1 = new Node();
-		Node level2 = new Node();
-		Node level3 = new Node();
-
-		base.getParentNodes().add(level1);
-		level1.getParentNodes().add(level2);
-		level2.getParentNodes().add(level3);
-
-		objectStore.makePersistent(base);
-
-		assertTrue("base object should be persistent", base.isPersistent());
-		assertTrue("base object's parents collection should be persistent", base.parents.isPersistent());
-		assertTrue("base object's children collection should be persistent", base.children.isPersistent());
-		assertTrue("contained object #1 should be persistent", level1.isPersistent());
-		assertTrue("contained object #2 should be persistent", level2.isPersistent());
-		assertTrue("contained object #3 should be persistent", level3.isPersistent());
-		
-		objectStore.restart();
-
-		InstanceCollection ic = new InstanceCollection(Node.class);
-		ic.first();
-
-		// read the object back in
-		//		BasicExample2 readObject = (BasicExample2) objectStore.getObject(headOid);
-		//		MultipleAssociationExample readObject = (MultipleAssociationExample)
-		// objectStore.getObject(headOid);
-		//    	readObject.resolve();
-	}
-
-*/
 }
 
 /*

@@ -132,7 +132,7 @@ public class DatePeriod extends AbstractNakedValue {
     }
 
     public void restoreString(String data) {
-        if (data.equals("NULL")) {
+        if (data == null || data.equals("NULL")) {
             clear();
         } else {
             int split = data.indexOf('~');

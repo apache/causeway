@@ -15,6 +15,11 @@ import org.nakedobjects.object.defaults.SerialOid;
 import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 import org.nakedobjects.object.system.TestClock;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import junit.framework.TestCase;
 
 import org.apache.log4j.BasicConfigurator;
@@ -22,10 +27,10 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 
-public class NakedObjectMementoTest extends TestCase {
+public class MementoTest extends TestCase {
 
     public static void main(String[] args) {
-        junit.textui.TestRunner.run(NakedObjectMementoTest.class);
+        junit.textui.TestRunner.run(MementoTest.class);
     }
 
     private MockObjectManager originatingManager;
@@ -83,7 +88,7 @@ public class NakedObjectMementoTest extends TestCase {
         super.tearDown();
     }
     
-    public void testManyReferencesInRecreated() {
+    public void testManyReferencesInRecreated() throws Exception {
         Memento mem = mementoTransfer(team);
 
         Person expected = new Person();
@@ -101,7 +106,7 @@ public class NakedObjectMementoTest extends TestCase {
         assertSame(expected, recreated);
     }
 
-    public void testManyReferencesInRecreatedWithNewAssociatedInstances() {
+    public void testManyReferencesInRecreatedWithNewAssociatedInstances() throws Exception {
         Memento mem = mementoTransfer(team);
         Team t2 = (Team) mem.recreateObject(loadedObjects, context);
 
@@ -119,7 +124,7 @@ public class NakedObjectMementoTest extends TestCase {
         assertEquals(person2.getOid(), recreated.getOid());
     }
 
-    public void testReferenceInRecreated() {
+    public void testReferenceInRecreated() throws Exception {
         Memento mem = mementoTransfer(role);
 
         Person expected = new Person();
@@ -135,7 +140,7 @@ public class NakedObjectMementoTest extends TestCase {
         assertSame(expected, p2);
     }
 
-    public void testReferenceInRecreatedWithNewAssociatedInstances() {
+    public void testReferenceInRecreatedWithNewAssociatedInstances() throws Exception {
         Memento mem = mementoTransfer(role);
 
         Role r2 = (Role) mem.recreateObject(loadedObjects, context);
@@ -144,7 +149,7 @@ public class NakedObjectMementoTest extends TestCase {
         assertEquals(person2.getOid(), recreated.getOid());
     }
 
-    public void testValuesInRecreatedObject() {
+    public void testValuesInRecreatedObject() throws Exception {
         Memento mem = mementoTransfer(person);
         
         Person p2 = (Person) mem.recreateObject(loadedObjects, context);
@@ -153,17 +158,21 @@ public class NakedObjectMementoTest extends TestCase {
         assertEquals(person.getOid(), p2.getOid());
     }
     
-    private Memento mementoTransfer(NakedObject object) {
+    private Memento mementoTransfer(NakedObject object) throws Exception {
         Memento mem = new Memento(object);
-        BinaryTransferableWriter data = new BinaryTransferableWriter();
-        mem.writeData(data);
-        TransferableReader data2 = new BinaryTransferableReader(data.getBinaryData());
-        Memento mem2 = new Memento();
-        mem2.restore(data2);
-        return mem2;
+        
+        ByteArrayOutputStream baos;
+        ObjectOutputStream oos = new ObjectOutputStream(baos = new ByteArrayOutputStream());
+        oos.writeObject(mem);
+        oos.close();
+        byte[] data = baos.toByteArray();
+        oos.close();
+        
+        ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data));
+        return (Memento) ois.readObject();
     }
 
-    public void testReferencesInRecreated2() {
+    public void testReferencesInRecreated2() throws Exception {
         Memento mem = mementoTransfer(role);
 
         Role r2 = (Role) mem.recreateObject(loadedObjects, context);

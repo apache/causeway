@@ -118,22 +118,6 @@ public class TextString extends AbstractNakedValue {
 
     /**
        Sets this object text to be same as the specified text.
-       @deprecated replaced by setValue
-     */
-    public void setText(String text) {
-        setValue(text);
-    }
-
-    /**
-       Sets this object text to be same as the specified text.
-       @deprecated replaced by setValue
-     */
-    public void setText(TextString text) {
-        setValue(text);
-    }
-
-    /**
-       Sets this object text to be same as the specified text.
      */
     public void setValue(String text) {
         if (text == null) {
@@ -249,7 +233,7 @@ public class TextString extends AbstractNakedValue {
 	}
 
     public void restoreString(String data) {
-    	if(data == null || data.equals("NULL")) {
+    	if(data == null) {
     		clear();
     	} else {
 	        text = data;
@@ -258,7 +242,7 @@ public class TextString extends AbstractNakedValue {
     }
 
     public String saveString() {
-        return text;
+        return isEmpty() ? "NULL" : text;
     }
 
     /**

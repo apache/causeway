@@ -198,6 +198,20 @@ public class Time extends Magnitude {
         return (date == null) ? null : date;
     }
 
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Time)) {
+            return false;
+        }
+        Time object = (Time) obj;
+        if (object.isEmpty() && isEmpty()) {
+            return true;
+        }
+        return object.date.equals(date);
+    }
+    
     /**
      * @deprecated replaced by dateValue
      * @see #dateValue
@@ -309,7 +323,7 @@ public class Time extends Magnitude {
     }
 
     public void restoreString(String data) {
-        if (data.equals("NULL")) {
+        if (data == null || data.equals("NULL")) {
             clear();
         } else {
             int hour = Integer.valueOf(data.substring(0, 2)).intValue();

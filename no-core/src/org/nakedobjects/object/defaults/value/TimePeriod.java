@@ -154,7 +154,7 @@ public class TimePeriod extends AbstractNakedValue {
     }
 
     public void restoreString(String data) {
-        if (data.equals("NULL")) {
+        if (data == null || data.equals("NULL")) {
             clear();
         } else {
             start.restoreString(data.substring(0, 3));

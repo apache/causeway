@@ -326,7 +326,7 @@ public class WholeNumber extends Magnitude {
     }
 
 	public void restoreString(String data) {
-		if(data.equals("NULL")) {
+		if(data == null || data.equals("NULL")) {
 			clear();
 		} else {
 			setValue(Integer.valueOf(data).intValue());
@@ -334,7 +334,7 @@ public class WholeNumber extends Magnitude {
 	}
 
 	public String saveString() {
-		return String.valueOf(intValue());
+		return isEmpty() ? null : String.valueOf(intValue());
 	}
 
     protected Logger getLogger() { return logger; }

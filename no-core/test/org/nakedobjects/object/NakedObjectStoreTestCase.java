@@ -3,7 +3,9 @@ package org.nakedobjects.object;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
+import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.defaults.SerialOid;
+import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 import org.nakedobjects.object.system.TestClock;
 
 import org.apache.log4j.BasicConfigurator;
@@ -39,8 +41,11 @@ public abstract class NakedObjectStoreTestCase extends NakedObjectTestCase {
         LOG.debug("test setup");
 
         new TestClock();
-        NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
         
+        new NakedObjectSpecificationLoaderImpl();
+        NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
+        NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
+
         manager = MockObjectManager.setup();
          
         context = new NakedObjectContext(manager);

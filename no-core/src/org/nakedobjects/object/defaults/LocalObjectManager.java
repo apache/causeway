@@ -37,14 +37,14 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     private NakedObjectStore objectStore;
     private OidGenerator oidGenerator;
 
-    public LocalObjectManager(NakedObjectStore objectStore, UpdateNotifier notifier, OidGenerator oidGenerator) throws ConfigurationException,
-            ComponentException {
+    public LocalObjectManager(NakedObjectStore objectStore, UpdateNotifier notifier, OidGenerator oidGenerator)
+            throws ConfigurationException, ComponentException {
         this.objectStore = objectStore;
         this.notifier = notifier;
         this.oidGenerator = oidGenerator;
-         context = new NakedObjectContext(this);
+        context = new NakedObjectContext(this);
     }
-    
+
     public void abortTransaction() {
         try {
             objectStore.abortTransaction();
@@ -127,28 +127,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         return context;
     }
 
-    protected NakedObject[] getInstances(NakedObjectSpecification cls) {
-        LOG.debug("getInstances of " + cls);
-        try {
-            NakedObject[] instances = objectStore.getInstances(cls, false);
-            setInstancesContext(instances);
-            return instances;
-        } catch (ObjectStoreException e) {
-            throw new NakedObjectRuntimeException(e);
-        }
-    }
-
-    protected NakedObject[] getInstances(NakedObjectSpecification cls, String term) throws UnsupportedFindException {
-        LOG.debug("getInstances of " + cls + " with term " + term);
-        try {
-            NakedObject[] instances = objectStore.getInstances(cls, term, false);
-            setInstancesContext(instances);
-            return instances;
-        } catch (ObjectStoreException e) {
-            throw new NakedObjectRuntimeException(e);
-        }
-    }
-
     /**
      * Gets the instances that match the specified pattern. The object store
      * should create a vector and add to it those instances held by the
@@ -172,6 +150,28 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
             throw new NakedObjectRuntimeException(e);
         }
 
+    }
+
+    protected NakedObject[] getInstances(NakedObjectSpecification cls) {
+        LOG.debug("getInstances of " + cls);
+        try {
+            NakedObject[] instances = objectStore.getInstances(cls, false);
+            setInstancesContext(instances);
+            return instances;
+        } catch (ObjectStoreException e) {
+            throw new NakedObjectRuntimeException(e);
+        }
+    }
+
+    protected NakedObject[] getInstances(NakedObjectSpecification cls, String term) throws UnsupportedFindException {
+        LOG.debug("getInstances of " + cls + " with term " + term);
+        try {
+            NakedObject[] instances = objectStore.getInstances(cls, term, false);
+            setInstancesContext(instances);
+            return instances;
+        } catch (ObjectStoreException e) {
+            throw new NakedObjectRuntimeException(e);
+        }
     }
 
     public NakedClass getNakedClass(NakedObjectSpecification nakedClass) {
@@ -223,7 +223,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
      * @return the requested naked object
      * @param oid
      *                       of the object to be retrieved
-      */
+     */
     public NakedObject getObject(Oid oid, NakedObjectSpecification hint) {
         LOG.debug("getObject " + oid);
         try {
@@ -270,6 +270,10 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         } catch (ObjectStoreException e) {
             throw new StartupException(e);
         }
+    }
+
+    private boolean isPersistent(NakedObject object) {
+        return object.getOid() != null;
     }
 
     /**
@@ -357,10 +361,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         objectStore.getLoadedObjects().loaded(object);
     }
 
-    private boolean isPersistent(NakedObject object) {
-        return object.getOid() != null;
-    }
-
     /**
      * A count of the number of instances matching the specified pattern.
      */
@@ -407,7 +407,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
      * <method>getObject </method> above.
      */
     public void resolve(NakedObject object) {
-        if (object.isResolved() || ! isPersistent(object)) {
+        if (object.isResolved() || !isPersistent(object)) {
             return;
         }
 
@@ -433,7 +433,8 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         LOG.debug("serialNumber " + sequence);
 
         try {
-            NakedObject[] instances = objectStore.getInstances(NakedObjectSpecificationLoader.getInstance().loadSpecification(Sequence.class.getName()), false);
+            NakedObject[] instances = objectStore.getInstances(NakedObjectSpecificationLoader.getInstance().loadSpecification(
+                    Sequence.class.getName()), false);
             Sequence number;
 
             for (int i = 0, len = instances.length; i < len; i++) {

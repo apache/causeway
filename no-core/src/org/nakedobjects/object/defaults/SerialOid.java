@@ -12,12 +12,12 @@ public class SerialOid implements Oid {
     public SerialOid(long serialNo) {
         this.serialNo = serialNo;
     }
-
-    public SerialOid(TransferableReader data) {
-        serialNo = data.readLong();
+    
+    public SerialOid(TransferableReader reader) {
+        serialNo = reader.readInt();
     }
 
-    public boolean equals(Object obj) {
+     public boolean equals(Object obj) {
         if (obj == this) {
             return true;
         }
@@ -27,11 +27,7 @@ public class SerialOid implements Oid {
         return false;
     }
 
-    public void writeData(TransferableWriter data) {
-        data.writeLong(serialNo);
-    }
-
-    public long getSerialNo() {
+     public long getSerialNo() {
         return serialNo;
     }
 
@@ -41,6 +37,10 @@ public class SerialOid implements Oid {
 
     public String toString() {
         return "OID#" + Long.toHexString(serialNo).toUpperCase();
+    }
+
+    public void writeData(TransferableWriter writer) {
+        writer.writeLong(serialNo);
     }
 }
 

@@ -80,11 +80,15 @@ public class SerialNumber extends Magnitude {
     }
 
     public void restoreString(String data) {
-        setValue(Integer.valueOf(data).intValue());
+        if(data == null || data.equals(("NULL"))) {
+            clear();
+        } else {
+            setValue(Integer.valueOf(data).intValue());
+        }
     }
 
     public String saveString() {
-        return String.valueOf(longValue());
+        return isEmpty() ? "NULL" : String.valueOf(longValue());
     }
 
     public void setValue(int number) {

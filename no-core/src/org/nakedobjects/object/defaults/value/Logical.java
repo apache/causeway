@@ -1,27 +1,3 @@
-/*
-    Naked Objects - a framework that exposes behaviourally complete
-    business objects directly to the user.
-    Copyright (C) 2000 - 2003  Naked Objects Group Ltd
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-    The authors can be contacted via www.nakedobjects.org (the
-    registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-    Road, Woking GU21 1NR, UK).
-*/
-
 package org.nakedobjects.object.defaults.value;
 
 import org.nakedobjects.object.Naked;
@@ -36,14 +12,14 @@ import org.nakedobjects.object.defaults.Title;
  * </p>
  */
 public class Logical extends AbstractNakedValue {
-	private static final long serialVersionUID = 1L;
-    public final static String TRUE = "true";
     public final static String FALSE = "false";
+    private static final long serialVersionUID = 1L;
+    public final static String TRUE = "true";
     private boolean flag;
     private boolean isNull;
 
     /**
-     Creates a Logical value set to false.
+     * Creates a Logical value set to false.
      */
     public Logical() {
         this(false);
@@ -51,7 +27,7 @@ public class Logical extends AbstractNakedValue {
     }
 
     /**
-     Creates a Logical value set to the specified value.
+     * Creates a Logical value set to the specified value.
      */
     public Logical(boolean flag) {
         this.flag = flag;
@@ -68,12 +44,25 @@ public class Logical extends AbstractNakedValue {
 
     public void copyObject(Naked object) {
         if (!(object instanceof Logical)) {
-            throw new IllegalArgumentException(
-                "Can only copy the value of  a Logical object");
+            throw new IllegalArgumentException("Can only copy the value of  a Logical object");
         }
 
         isNull = ((Logical) object).isNull;
         flag = ((Logical) object).flag;
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Logical)) {
+            return false;
+        }
+        Logical object = (Logical) obj;
+        if (object.isEmpty() && isEmpty()) {
+            return true;
+        }
+        return object.flag == flag;
     }
 
     public String getObjectHelpText() {
@@ -85,7 +74,9 @@ public class Logical extends AbstractNakedValue {
     }
 
     /**
-     * Compares the flags if specified object is a <code>Logical</code> object else returns false.
+     * Compares the flags if specified object is a <code>Logical</code> object
+     * else returns false.
+     * 
      * @see org.nakedobjects.object.Naked#isSameAs(Naked)
      */
     public boolean isSameAs(Naked object) {
@@ -97,7 +88,7 @@ public class Logical extends AbstractNakedValue {
     }
 
     /**
-     Returns true is this object is representing a true state.
+     * Returns true is this object is representing a true state.
      */
     public boolean isSet() {
         return flag;
@@ -118,14 +109,30 @@ public class Logical extends AbstractNakedValue {
     }
 
     /**
-     Resets the objects state to false.
+     * Resets the objects state to false.
      */
     public void reset() {
         flag = false;
     }
 
+    public void restoreString(String data) {
+        if (data == null || data.equals("NULL")) {
+            clear();
+        } else {
+            setValue(data.equals("true"));
+        }
+    }
+
+    public String saveString() {
+        if (isEmpty()) {
+            return "NULL";
+        } else {
+            return isSet() ? "true" : "false";
+        }
+    }
+
     /**
-     Sets the objects state to true.
+     * Sets the objects state to true.
      */
     public void set() {
         flag = true;
@@ -142,20 +149,28 @@ public class Logical extends AbstractNakedValue {
     public Title title() {
         return new Title(isEmpty() ? "" : (flag ? "TRUE" : "FALSE"));
     }
-
-    public void restoreString(String data) {
-        if (data.equals("NULL")) {
-            clear();
-        } else {
-            setValue(data.equals("true"));
-        }
-    }
-
-    public String saveString() {
-        if (isEmpty()) {
-            return "NULL";
-        } else {
-            return isSet() ? "true" : "false";
-        }
-    }
 }
+
+/*
+ * Naked Objects - a framework that exposes behaviourally complete business
+ * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * Ltd
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * The authors can be contacted via www.nakedobjects.org (the registered address
+ * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
+ * 1NR, UK).
+ */

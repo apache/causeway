@@ -87,6 +87,20 @@ public class Money extends Magnitude { //implements java.io.Externalizable {
         return amount;
     }
 
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Money)) {
+            return false;
+        }
+        Money object = (Money) obj;
+        if (object.isEmpty() && isEmpty()) {
+            return true;
+        }
+        return object.amount == amount;
+    }
+
     /**
      Returns this value as an float.
      */
@@ -224,7 +238,7 @@ public class Money extends Magnitude { //implements java.io.Externalizable {
     }
 
     public void restoreString(String data) {
-        if (data.equals("NULL")) {
+        if (data == null || data.equals("NULL")) {
             clear();
         } else {
             setValue(Double.valueOf(data).doubleValue());

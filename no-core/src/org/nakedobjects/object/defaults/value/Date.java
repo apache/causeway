@@ -269,8 +269,8 @@ public class Date extends Magnitude {
                 DateFormat[] formats = new DateFormat[] { LONG_FORMAT, MEDIUM_FORMAT, SHORT_FORMAT, ISO_LONG, ISO_SHORT };
 
                 for (int i = 0; i < formats.length; i++) {
-                    System.out.println("parsing date " + dateString + " as format "
-                            + formats[i].format(new java.util.Date(101, 3, 12)) + " for " + Locale.getDefault());
+                  //  System.out.println("parsing date " + dateString + " as format "
+                      //      + formats[i].format(new java.util.Date(101, 3, 12)) + " for " + Locale.getDefault());
                     try {
                         cal.setTime(formats[i].parse(dateString));
 

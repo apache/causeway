@@ -88,7 +88,7 @@ public class Color extends Magnitude {
     }
 
     public void restoreString(String data) {
-        if(data.equals("NULL")) {
+        if(data == null || data.equals("NULL")) {
             clear();
         } else {
             setValue(Integer.valueOf(data).intValue());

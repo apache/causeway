@@ -2,7 +2,9 @@ package org.nakedobjects.object;
 
 import org.nakedobjects.object.io.Transferable;
 
-public interface Oid extends Transferable {
+import java.io.Serializable;
+
+public interface Oid extends Transferable, Serializable {
 
 }
 

@@ -354,7 +354,7 @@ public class DateTime extends Magnitude {
     }
 
     public void restoreString(String data) {
-        if (data.equals("NULL")) {
+        if (data == null || data.equals("NULL")) {
             clear();
         } else {
             int year = Integer.valueOf(data.substring(0, 4)).intValue();

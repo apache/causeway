@@ -370,7 +370,13 @@ public abstract class AbstractNakedObject implements NakedObject {
     }
 
     public String titleString() {
-        return title().toString();
+        Title title = title();
+        if (title == null) {
+            LOG.warn("Title is null in " + this);
+            return "NULL";
+        } else {
+            return title.toString();
+        }
     }
     
     /**

@@ -76,7 +76,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
      * Creates a finder object with no references or values.
      * @return NakedObject
      */
-    public NakedObject createFinder() {
+    public NakedObject createPattern() {
         NakedObject finder = (NakedObject) acquireInstance();
         FieldSpecification[] fields = getFields();
         for (int fld = 0; fld < fields.length; fld++) {

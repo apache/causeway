@@ -1,5 +1,9 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.container.configuration.ComponentException;
+import org.nakedobjects.container.configuration.ConfigurationException;
+import org.nakedobjects.object.defaults.SimpleNakedClass;
+
 
 
 public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStoreTestCase {
@@ -16,7 +20,7 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
 
     
     public void testNothing() {}
-/*
+
     protected void initialiseObjects() throws Exception {
         // classes
         personClassName = Person.class.getName();
@@ -128,7 +132,6 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
         assertEquals(nc, nc2);
         assertEquals(personClassName, nc2.getName());
     }
-    */
 }
 
 /*

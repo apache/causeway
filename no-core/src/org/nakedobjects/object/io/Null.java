@@ -1,6 +1,8 @@
 package org.nakedobjects.object.io;
 
-class Null implements Transferable {
+import java.io.Serializable;
+
+class Null implements Transferable, Serializable {
 
     public Null() {}
 

@@ -2,7 +2,9 @@ package org.nakedobjects.object.io;
 
 import org.nakedobjects.object.Oid;
 
-class Data implements Transferable {
+import java.io.Serializable;
+
+class Data implements Transferable, Serializable {
     private final static long serialVersionUID = 1L;
     final String className;
     final Oid oid;

@@ -19,10 +19,9 @@ import java.util.Date;
  * </p>
  */
 public class TimeStamp extends Magnitude {
-	private static final long serialVersionUID = 1L;
 	// TODO check the ISO representations
     private static final DateFormat ISO_LONG = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-    private static final DateFormat ISO_SHORT = new SimpleDateFormat("yyyyMMdd'T'HHmmssSSS");
+   // private static final DateFormat ISO_SHORT = new SimpleDateFormat("yyyyMMdd'T'HHmmssSSS");
 
  
     private transient DateFormat format = ISO_LONG;
@@ -150,7 +149,7 @@ public class TimeStamp extends Magnitude {
     }
 
     public void restoreString(String data) {
-        if (data.equals("NULL")) {
+        if (data == null || data.equals("NULL")) {
             clear();
         } else {
             int year = Integer.valueOf(data.substring(0, 4)).intValue();
