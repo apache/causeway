@@ -51,6 +51,14 @@ public class TextStringAdapter extends AbstractNakedValue implements StringValue
     public int getMaximumLength() {
         return adaptee.getMaximumLength();
     }
+
+    public String stringValue() {
+        return adaptee.stringValue();
+    }
+
+    public void setValue(String value) {
+        adaptee.setValue(value);
+    }
 }
 
 

@@ -3,6 +3,9 @@ package org.nakedobjects.object.value;
 import org.nakedobjects.object.NakedValue;
 
 public interface StringValue extends NakedValue {
+    String stringValue();
+    
+      void setValue(String value);
 
 }
 
