@@ -1,3 +1,4 @@
 classes
 build
 junit*.properties
+*.timer.log

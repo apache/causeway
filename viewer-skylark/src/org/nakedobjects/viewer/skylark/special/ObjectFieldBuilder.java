@@ -27,7 +27,7 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.core.AbstractViewBuilder;
 import org.nakedobjects.viewer.skylark.core.CompositeObjectView;
-import org.nakedobjects.viewer.skylark.util.ErrorView;
+import org.nakedobjects.viewer.skylark.util.FieldErrorView;
 
 import org.apache.log4j.Logger;
 
@@ -74,7 +74,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
 				}
             } catch (NakedObjectDefinitionException e) {
                 LOG.error("Invalid field", e);
-                view.addView(new ErrorView(e.getMessage()));
+                view.addView(new FieldErrorView(e.getMessage()));
             }
        }
     }
@@ -117,7 +117,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
                 }
             } catch (NakedObjectDefinitionException e) {
                 LOG.error("Invalid field", e);
-                view.addView(new ErrorView(e.getMessage()));
+                view.addView(new FieldErrorView(e.getMessage()));
             }
 
     		fld++;
