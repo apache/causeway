@@ -5,7 +5,7 @@ import org.nakedobjects.io.Transferable;
 import org.nakedobjects.io.BinaryTransferableWriter;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectRuntimeException;
@@ -113,7 +113,7 @@ public class CacheObjectStore implements NakedObjectStore {
         }
     }
 
-    public void createNakedClass(NakedClassSpec cls) throws ObjectStoreException {
+    public void createNakedClass(NakedClass cls) throws ObjectStoreException {
         String className = cls.getName().stringValue();
         if(objectSets.containsKey(className)) {
             throw new NakedObjectRuntimeException("Class already created: " + cls);
@@ -231,7 +231,7 @@ public class CacheObjectStore implements NakedObjectStore {
         }
     }
     
-    public NakedClassSpec getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
+    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
         NakedObjectSpecification nc = instances(name).getNakedClass();
         if(nc == null) {
             throw new ObjectNotFoundException();

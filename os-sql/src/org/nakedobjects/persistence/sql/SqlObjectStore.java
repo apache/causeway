@@ -2,7 +2,7 @@ package org.nakedobjects.persistence.sql;
 
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
@@ -29,14 +29,14 @@ public final class SqlObjectStore implements NakedObjectStore {
     private DatabaseConnectorPool connectionPool;
     private Hashtable transactionOrientedConnections;
 
-    public NakedClassSpec getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
+    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
         DatabaseConnector connection = getDatabaseConnector();
-        NakedClassSpec cls = mapperLookup.getNakedClassMapper(connection).getNakedClass(connection, name);
+        NakedClass cls = mapperLookup.getNakedClassMapper(connection).getNakedClass(connection, name);
         releaseConnectionIfNotInTransaction(connection);
         return cls;
     }
     
-    public void createNakedClass(NakedClassSpec cls) throws ObjectStoreException {
+    public void createNakedClass(NakedClass cls) throws ObjectStoreException {
         DatabaseConnector connection = getDatabaseConnector();
         mapperLookup.getNakedClassMapper(connection).createNakedClass(connection, cls);
         releaseConnectionIfNotInTransaction(connection);

@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.core;
 
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.reflect.ActionSpecification;
@@ -106,8 +106,8 @@ public abstract class ObjectView extends AbstractView {
 
     private ActionSpecification dropAction(NakedObject source, NakedObject target) {
         ActionSpecification action;
-        if(target instanceof NakedClassSpec) {
-            NakedObjectSpecification forNakedClass = ((NakedClassSpec) target).forNakedClass();
+        if(target instanceof NakedClass) {
+            NakedObjectSpecification forNakedClass = ((NakedClass) target).forNakedClass();
             action = forNakedClass.getClassAction(ActionSpecification.USER, null, new NakedObjectSpecification[] {source.getSpecification()});
         } else {
             action = target.getSpecification().getObjectAction(ActionSpecification.USER, null, new NakedObjectSpecification[] {source.getSpecification()});

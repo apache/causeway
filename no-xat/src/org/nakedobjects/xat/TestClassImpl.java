@@ -2,7 +2,7 @@ package org.nakedobjects.xat;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
@@ -21,10 +21,10 @@ public class TestClassImpl implements TestClass {
     public static void init(NakedObjectStore objectStore) {}
 
     private NakedObjectContext context;
-    private NakedClassSpec nakedClass;
+    private NakedClass nakedClass;
     private final TestObjectFactory factory;
 
-    public TestClassImpl(NakedObjectContext context, NakedClassSpec cls, TestObjectFactory factory) {
+    public TestClassImpl(NakedObjectContext context, NakedClass cls, TestObjectFactory factory) {
         this.context = context;
         nakedClass = cls;
         this.factory = factory;
@@ -37,7 +37,7 @@ public class TestClassImpl implements TestClass {
      * though more than one match might occur.
      */
     public TestObject findInstance(String title) {
-        NakedCollection c = instances((NakedClassSpec) getForObject());
+        NakedCollection c = instances((NakedClass) getForObject());
         Enumeration e = c.elements();
 
         while (e.hasMoreElements()) {
@@ -65,13 +65,13 @@ public class TestClassImpl implements TestClass {
      * Get the instances of this class.
      */
     public TestObject instances() {
-        NakedClassSpec nakedClass = (NakedClassSpec) getForObject();
-        NakedCollection instances = instances((NakedClassSpec) getForObject());
+        NakedClass nakedClass = (NakedClass) getForObject();
+        NakedCollection instances = instances((NakedClass) getForObject());
         if (instances.size() == 0) { throw new IllegalActionError("Find must find at least one object"); }
         return factory.createTestObject(context, instances);
     }
 
-    private InstanceCollection instances(NakedClassSpec cls) {
+    private InstanceCollection instances(NakedClass cls) {
         NakedObjectContext context = NakedObjectContext.getDefaultContext();
         InstanceCollection instances = context.getObjectManager().allInstances(cls.forNakedClass());
         instances.first();
@@ -116,7 +116,7 @@ public class TestClassImpl implements TestClass {
          return factory.createTestObject(context, object);
     }
 
-    private NakedObject newInstance(NakedClassSpec cls) {
+    private NakedObject newInstance(NakedClass cls) {
         NakedObject object;
 
         try {

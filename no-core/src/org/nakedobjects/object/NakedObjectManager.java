@@ -129,7 +129,7 @@ public interface NakedObjectManager {
 
     InstanceCollection findInstances(NakedObject pattern);
     
-    NakedClassSpec getNakedClass(NakedObjectSpecification nakedClass);
+    NakedClass getNakedClass(NakedObjectSpecification nakedClass);
     
     void shutdown();
 

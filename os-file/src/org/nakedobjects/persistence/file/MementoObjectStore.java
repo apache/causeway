@@ -3,7 +3,7 @@ package org.nakedobjects.persistence.file;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectStore;
@@ -28,7 +28,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
     private static final Logger LOG = Logger.getLogger(MementoObjectStore.class);
     private DataManager dataManager;
     private LoadedObjects loadedObjects;
-    private static final NakedObjectSpecification NAKED_CLASS_CLASS = NakedObjectSpecification.getNakedClass(NakedClassSpec.class);
+    private static final NakedObjectSpecification NAKED_CLASS_CLASS = NakedObjectSpecification.getNakedClass(NakedClass.class);
 
     public MementoObjectStore(DataManager manager) {
         this.dataManager = manager;
@@ -41,7 +41,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
         return NakedObjectSpecification.getNakedClass(type);
     }
 
-    public void createNakedClass(NakedClassSpec cls) throws ObjectStoreException {
+    public void createNakedClass(NakedClass cls) throws ObjectStoreException {
         createObject(cls);
     }
 
@@ -168,10 +168,10 @@ public abstract class MementoObjectStore implements NakedObjectStore {
         return loadedObjects;
     }
 
-    public NakedClassSpec getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
+    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
         NakedObject[] instances = getInstances(NAKED_CLASS_CLASS, false);
         for (int i = 0, len = instances.length; i < len; i++) {
-           NakedClassSpec cls = (NakedClassSpec) instances[i];
+           NakedClass cls = (NakedClass) instances[i];
            if(cls.getName().isSameAs(name)) {
                return cls;
            }

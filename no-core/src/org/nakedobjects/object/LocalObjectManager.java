@@ -61,7 +61,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     private void createNakedClassSpec(NakedObject object) throws ObjectStoreException {
-        objectStore.createNakedClass((NakedClassSpec) object);
+        objectStore.createNakedClass((NakedClass) object);
     }
 
     private void createObject(NakedObject object) throws ObjectStoreException {
@@ -154,16 +154,16 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
     }
 
-    public NakedClassSpec getNakedClass(NakedObjectSpecification nakedClass) {
+    public NakedClass getNakedClass(NakedObjectSpecification nakedClass) {
         if (nakedClasses.contains(nakedClass)) {
-            return (NakedClassSpec) nakedClasses.get(nakedClass);
+            return (NakedClass) nakedClasses.get(nakedClass);
         }
 
-        NakedClassSpec spec;
+        NakedClass spec;
         try {
             spec = objectStore.getNakedClass(nakedClass.getFullName());
         } catch (ObjectNotFoundException e) {
-            spec = new NakedClassSpec(nakedClass.getFullName());
+            spec = new NakedClass(nakedClass.getFullName());
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
@@ -328,7 +328,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         }
 
         try {
-            if (object instanceof NakedClassSpec) {
+            if (object instanceof NakedClass) {
                 createNakedClassSpec(object);
             } else {
                 createObject(object);

@@ -2,7 +2,7 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
@@ -54,9 +54,9 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
         Location location = drag.getTargetLocation();
 
         View newView;
-        if (source instanceof NakedClassSpec) {
+        if (source instanceof NakedClass) {
             LOG.info("new " + getSpecification().getName() + " instance");
-            newView = newInstance(((NakedClassSpec) source).forNakedClass(), !drag.isCtrl());
+            newView = newInstance(((NakedClass) source).forNakedClass(), !drag.isCtrl());
         } else {
             if (drag.isShift()) {
                 newView = ViewFactory.getViewFactory().createOpenRootView(source);

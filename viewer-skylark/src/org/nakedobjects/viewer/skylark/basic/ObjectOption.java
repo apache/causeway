@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.FastFinder;
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.collection.InstanceCollection;
 import org.nakedobjects.object.reflect.ActionSpecification;
@@ -23,7 +23,7 @@ public class ObjectOption {
             }
 
             boolean isPersistent = object.getOid() != null;
-            if (!(object instanceof NakedClassSpec) && !(object instanceof InstanceCollection) && isPersistent) {
+            if (!(object instanceof NakedClass) && !(object instanceof InstanceCollection) && isPersistent) {
                 options.add(MenuOptionSet.EXPLORATION, new DestroyObjectOption());
             }
         }

@@ -16,7 +16,7 @@ public abstract class AbstractUserContext extends AbstractNakedObject {
     	return "user, classes, objects";
     }
     	
-	private final InternalCollection classes = new InternalCollection(NakedClassSpec.class, this);
+	private final InternalCollection classes = new InternalCollection(NakedClass.class, this);
     private final InternalCollection objects = new InternalCollection(NakedObject.class, this);
 	private User user;
     
@@ -32,18 +32,18 @@ public abstract class AbstractUserContext extends AbstractNakedObject {
     	about.modifiableOnlyByRole(Role.SYSADMIN);
     }
     
-    protected NakedClassSpec addClass(Class class1) {
+    protected NakedClass addClass(Class class1) {
         LOG.info("Added class " + class1 + " to " + this);
 		NakedObjectSpecification nc = NakedObjectSpecification.getNakedClass(class1.getName());
-		NakedClassSpec nakedClass = getObjectManager().getNakedClass(nc);
+		NakedClass nakedClass = getObjectManager().getNakedClass(nc);
         classes.add(nakedClass);
         return nakedClass;
 	}
 	
-	protected NakedClassSpec addClass(String className) {
+	protected NakedClass addClass(String className) {
 	     LOG.info("Added class " + className + " to " + this);
 	    NakedObjectSpecification nc = NakedObjectSpecification.getNakedClass(className);
-	    NakedClassSpec nakedClass = getObjectManager().getNakedClass(nc);
+	    NakedClass nakedClass = getObjectManager().getNakedClass(nc);
 	    getObjectManager().makePersistent(nakedClass);
         classes.add(nakedClass);
         return nakedClass;

@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark.core;
 
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
@@ -118,7 +118,7 @@ public class DebugView implements DebugInfo {
             LOG.debug("Class details for " + nc);
             //       if(! (object instanceof NakedClass || object instanceof
             // InternalCollection)) {
-            if (!(object instanceof NakedClassSpec || object instanceof InstanceCollection)) {
+            if (!(object instanceof NakedClass || object instanceof InstanceCollection)) {
                 info.append(nc.debugInterface());
             }
         }

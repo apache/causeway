@@ -237,7 +237,7 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
         return  collection;
    }
 
-    public abstract NakedClassSpec getNakedClass(NakedObjectSpecification nakedClass);
+    public abstract NakedClass getNakedClass(NakedObjectSpecification nakedClass);
 
 
 }

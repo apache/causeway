@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.util;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.utility.DebugInfo;
@@ -211,7 +211,7 @@ public class ViewFactory implements DebugInfo {
     }
 
     public ViewSpecification getIconizedRootViewSpecification(NakedObject object) {
-    	if(object instanceof NakedClassSpec) {
+    	if(object instanceof NakedClass) {
     	    if(workspaceClassIconSpecification == null) {
                 LOG.error("missing workspace class icon specification; using fallback");
                 return fallback;

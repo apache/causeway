@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.collection.InstanceCollection;
 import org.nakedobjects.object.reflect.ActionSpecification;
@@ -27,7 +27,7 @@ public class ClassIconBackground extends AbstractViewDecorator {
 	
 	public void secondClick(Click click) {
 		NakedObject object = ((ObjectContent) getContent()).getObject();
-		NakedClassSpec nc = ((NakedClassSpec) object);
+		NakedClass nc = ((NakedClass) object);
 		ActionSpecification action = nc.getSpecification().getObjectAction(ActionSpecification.USER, "Instances");
 		InstanceCollection instances = (InstanceCollection) action.execute(object);
 		View view = ViewFactory.getViewFactory().createOpenRootView(instances);
@@ -37,7 +37,7 @@ public class ClassIconBackground extends AbstractViewDecorator {
 	
 	public void menuOptions(MenuOptionSet options) {
     	NakedObject object = ((ObjectContent) getContent()).getObject();
-		NakedClassSpec cls = ((NakedClassSpec) object);
+		NakedClass cls = ((NakedClass) object);
 		ClassOption.menuOptions(cls.forNakedClass(), options);
 	}
 }

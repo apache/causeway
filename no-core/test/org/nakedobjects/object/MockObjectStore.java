@@ -40,7 +40,7 @@ public class MockObjectStore implements NakedObjectStore {
         getObject = object;
     }
 
-    public void createNakedClass(NakedClassSpec cls) throws ObjectStoreException {}
+    public void createNakedClass(NakedClass cls) throws ObjectStoreException {}
 
     public void createObject(NakedObject object) throws ObjectStoreException {
         actions.addElement("createObject " + object);
@@ -92,7 +92,7 @@ public class MockObjectStore implements NakedObjectStore {
         return mockLoadedObjects;
     }
 
-    public NakedClassSpec getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
+    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
         throw new NotImplementedException("Getting naked class " + name);
     }
 

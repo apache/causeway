@@ -1,7 +1,7 @@
 package org.nakedobjects.persistence.sql.auto;
 
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.Oid;
@@ -33,7 +33,7 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
     	nameColumn = params.getString(PREFIX + "column.name", "name");
 	}
     
-    public void createNakedClass(DatabaseConnector connector, NakedClassSpec cls) throws SqlObjectStoreException {
+    public void createNakedClass(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException {
         LOG.debug("saving naked class: " + cls);
         String statement = "insert into " + table + " (" + idColumn + ", " + nameColumn +
 			") values (" + primaryKey(cls.getOid())
@@ -42,7 +42,7 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
         cls.setResolved();
     }
 
-    public NakedClassSpec getNakedClass(DatabaseConnector connector, String name) throws ObjectNotFoundException, SqlObjectStoreException {
+    public NakedClass getNakedClass(DatabaseConnector connector, String name) throws ObjectNotFoundException, SqlObjectStoreException {
         LOG.debug("loading naked class: " + name);
         String statement = "select " + idColumn + ", " + nameColumn + " from " + table + 
 		" where " + nameColumn + " = '" + name + "'";
@@ -54,10 +54,10 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
             if(loadedObjects.isLoaded(oid)) {
                 LOG.debug("  class already loaded   " + oid);
     	        rs.close();
-                return (NakedClassSpec) loadedObjects.getLoadedObject(oid);
+                return (NakedClass) loadedObjects.getLoadedObject(oid);
             } else {
-                NakedClassSpec instance;
-                instance = new NakedClassSpec();
+                NakedClass instance;
+                instance = new NakedClass();
                 instance.setOid(oid);
                 instance.getName().setValue(rs.getString(nameColumn));
                 instance.setResolved();
@@ -99,7 +99,7 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
 	}
 
 	public void resolve(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
-	    NakedClassSpec cls = (NakedClassSpec) object;
+	    NakedClass cls = (NakedClass) object;
 	    String columns = nameColumn;
 	    String id = primaryKey(object.getOid());
 	    

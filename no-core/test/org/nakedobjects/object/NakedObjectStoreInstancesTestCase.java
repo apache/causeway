@@ -110,22 +110,22 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
     }
     
     public void testClass() throws Exception {
-        NakedClassSpec nc = new NakedClassSpec(personClassName);
+        NakedClass nc = new NakedClass(personClassName);
         nc.setContext(context);
         nc.setOid(nextOid());
         objectStore.createNakedClass(nc);
         
-        NakedClassSpec nc2 = objectStore.getNakedClass(personClassName);
+        NakedClass nc2 = objectStore.getNakedClass(personClassName);
         assertEquals(nc, nc2);
         assertEquals(personClassName, nc2.getName());
     }
     
     public void testClassAsObjects() throws Exception {
-       NakedClassSpec nc = new NakedClassSpec(personClassName);
+       NakedClass nc = new NakedClass(personClassName);
         nc.setOid(nextOid());
         objectStore.createNakedClass(nc);
         
-        NakedClassSpec nc2 = (NakedClassSpec) objectStore.getObject(nc.getOid(), nc.getSpecification());
+        NakedClass nc2 = (NakedClass) objectStore.getObject(nc.getOid(), nc.getSpecification());
         assertEquals(nc, nc2);
         assertEquals(personClassName, nc2.getName());
     }

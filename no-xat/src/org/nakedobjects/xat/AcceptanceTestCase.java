@@ -4,7 +4,7 @@ import org.nakedobjects.exploration.ExplorationFixture;
 import org.nakedobjects.exploration.ExplorationSetUp;
 import org.nakedobjects.object.LocalObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedValue;
@@ -115,7 +115,7 @@ public abstract class AcceptanceTestCase extends TestCase {
 	        for (int i = 0; i < cls.length; i++) {
 	            NakedObjectSpecification nc = NakedObjectSpecification.getNakedClass(cls[i]);
 	            
-	            NakedClassSpec spec = new NakedClassSpec(cls[i]);
+	            NakedClass spec = new NakedClass(cls[i]);
 	            spec.setContext(con);
 	            spec.setNakedClass(nc);
 	            

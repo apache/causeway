@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.metal;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.collection.InstanceCollection;
 import org.nakedobjects.utility.Configuration;
@@ -26,7 +26,7 @@ public class ClassIcon extends ObjectView {
     public static class Specification implements ViewSpecification {
 
 		public boolean canDisplay(Naked object) {
-			return object instanceof NakedClassSpec;
+			return object instanceof NakedClass;
 		}
 
         public View createView(Content content, ViewAxis axis) {
@@ -131,7 +131,7 @@ public class ClassIcon extends ObjectView {
     
     public void secondClick(Click click) {
 		NakedObject object = ((ObjectContent) getContent()).getObject();
-		NakedClassSpec nc = ((NakedClassSpec) object);
+		NakedClass nc = ((NakedClass) object);
 		/*Action action = nc.getNakedClass().getObjectAction(Action.USER, "Instances");
 		InstanceCollection instances = (InstanceCollection) action.execute(object);
 		*/

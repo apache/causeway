@@ -78,7 +78,7 @@ public class MockObjectManager extends AbstractNakedObjectManager {
         throw new NotImplementedException();
     }
 
-    public NakedClassSpec getNakedClass(NakedObjectSpecification nakedClass) {
+    public NakedClass getNakedClass(NakedObjectSpecification nakedClass) {
         throw new NotImplementedException();
     }
     

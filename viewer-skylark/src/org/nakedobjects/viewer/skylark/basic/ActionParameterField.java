@@ -2,7 +2,7 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
@@ -37,7 +37,7 @@ public class ActionParameterField extends AbstractView {
     private boolean canDrop(ContentDrag drag) {
         NakedObject dragSource = ((ObjectContent) drag.getSourceContent()).getObject();
         
-        if (dragSource instanceof NakedClassSpec) {
+        if (dragSource instanceof NakedClass) {
             return false;
         } else {
             NakedObjectSpecification targetType = ((ObjectParameter) getContent()).getNakedClass();

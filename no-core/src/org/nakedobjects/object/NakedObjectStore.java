@@ -32,7 +32,7 @@ public interface NakedObjectStore extends DebugInfo {
      */
     public void createObject(NakedObject object) throws ObjectStoreException;
 
-    public void createNakedClass(NakedClassSpec cls) throws ObjectStoreException;
+    public void createNakedClass(NakedClass cls) throws ObjectStoreException;
 
     
     /**
@@ -101,7 +101,7 @@ public interface NakedObjectStore extends DebugInfo {
      */
     NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectStoreException;
 
-    NakedClassSpec getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException;
+    NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException;
 
     /**
      * Checks whether there are any instances of the specified type. The object

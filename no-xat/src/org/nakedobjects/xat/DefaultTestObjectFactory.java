@@ -1,6 +1,6 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedValue;
@@ -12,7 +12,7 @@ import java.util.Hashtable;
 public class DefaultTestObjectFactory implements TestObjectFactory{
     Documentor documentor = new NullDocumentor();
     
-    public TestClass createTestClass(NakedObjectContext context, NakedClassSpec cls) {
+    public TestClass createTestClass(NakedObjectContext context, NakedClass cls) {
         return new TestClassImpl(context, cls, this);
 }
     

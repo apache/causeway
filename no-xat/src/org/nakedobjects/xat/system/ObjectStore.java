@@ -3,7 +3,7 @@ package org.nakedobjects.xat.system;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectStore;
@@ -40,7 +40,7 @@ public class ObjectStore implements NakedObjectStore {
         save(object);
     }
 
-    public void createNakedClass(NakedClassSpec cls) throws ObjectStoreException {
+    public void createNakedClass(NakedClass cls) throws ObjectStoreException {
         LOG.debug("createClass " + cls);
         cls.setResolved();
         classes.put(cls.getName().stringValue(), cls);
@@ -128,8 +128,8 @@ public class ObjectStore implements NakedObjectStore {
         if (pattern == null) { throw new NullPointerException(); }
 
         Vector instances = new Vector();
-        if (pattern instanceof NakedClassSpec) {
-            NakedObjectSpecification forNakedClass = ((NakedClassSpec) pattern).forNakedClass();
+        if (pattern instanceof NakedClass) {
+            NakedObjectSpecification forNakedClass = ((NakedClass) pattern).forNakedClass();
             Enumeration objects = elements(forNakedClass);
 
             String name = forNakedClass.getFullName();
@@ -137,7 +137,7 @@ public class ObjectStore implements NakedObjectStore {
             while (objects.hasMoreElements()) {
                 NakedObject object = (NakedObject) objects.nextElement();
 
-                if (object instanceof NakedClassSpec && ((NakedClassSpec) object).getName().isSameAs(name)) {
+                if (object instanceof NakedClass && ((NakedClass) object).getName().isSameAs(name)) {
                     instances.addElement(object);
                 }
             }
@@ -174,8 +174,8 @@ public class ObjectStore implements NakedObjectStore {
         throw new ObjectNotFoundException(oid);
     }
 
-    public NakedClassSpec getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
-        NakedClassSpec nc = (NakedClassSpec) classes.get(name);
+    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
+        NakedClass nc = (NakedClass) classes.get(name);
         if(nc == null) {
             throw new ObjectNotFoundException();
         } else {
@@ -277,7 +277,7 @@ public class ObjectStore implements NakedObjectStore {
 
     public void save(NakedObject object) throws ObjectStoreException {
         LOG.debug("save " + object);
-        if (object instanceof NakedClassSpec) { 
+        if (object instanceof NakedClass) { 
             throw new ObjectStoreException("Can't make changes to a NakedClass object"); 
         }
         Hashtable persistentObjectVector = instancesFor(object.getSpecification());

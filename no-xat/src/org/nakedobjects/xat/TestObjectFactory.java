@@ -1,6 +1,6 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedValue;
@@ -9,7 +9,7 @@ import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import java.util.Hashtable;
 
 public interface TestObjectFactory {
-    TestClass createTestClass(NakedObjectContext context, NakedClassSpec cls);
+    TestClass createTestClass(NakedObjectContext context, NakedClass cls);
     
     TestObject createTestObject(NakedObjectContext context, NakedObject object);
 

@@ -1,6 +1,6 @@
 package org.nakedobjects.xat.html;
 
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.xat.TestClass;
 import org.nakedobjects.xat.TestClassDecorator;
@@ -24,7 +24,7 @@ public class HtmlTestClass extends TestClassDecorator {
     }
 
     public TestObject instances() {
-        NakedClassSpec nakedClass = (NakedClassSpec) getForObject();
+        NakedClass nakedClass = (NakedClass) getForObject();
         String className = nakedClass.getFullName();
         String shortName = className.substring(className.lastIndexOf(".") + 1);
 
@@ -37,7 +37,7 @@ public class HtmlTestClass extends TestClassDecorator {
     }
 
     public TestObject newInstance() {
-        String className = ((NakedClassSpec) getForObject()).getPluralName();
+        String className = ((NakedClass) getForObject()).getPluralName();
         doc.doc("Create a new " + className + " instance: ");
         TestObject instance = super.newInstance();
         NakedObject object = (NakedObject) instance.getForObject();

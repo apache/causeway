@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
@@ -154,7 +154,7 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
 						
 					} else {
 						NakedObject object = ((ObjectContent) v.getContent()).getObject();
-						if(object instanceof NakedClassSpec) {
+						if(object instanceof NakedClass) {
 							v.setLocation(new Location(xClass, yClass));
 							yClass += componentSize.getHeight() + 6;
 							

@@ -1,6 +1,6 @@
 package org.nakedobjects.xat.html;
 
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedValue;
@@ -21,7 +21,7 @@ import java.util.Hashtable;
 public class HtmlTestObjectFactory implements TestObjectFactory{
     private static HtmlDocumentor documentor;
     
-    public TestClass createTestClass(NakedObjectContext context, NakedClassSpec cls) {
+    public TestClass createTestClass(NakedObjectContext context, NakedClass cls) {
         return new HtmlTestClass(new TestClassImpl(context, cls, this), documentor);
 }
     

@@ -8,8 +8,8 @@ import org.nakedobjects.utility.Configuration;
 
 import org.apache.log4j.Logger;
 
-public class NakedClassSpec extends AbstractNakedObject {
-    private final static Logger LOG = Logger.getLogger(NakedClassSpec.class);
+public class NakedClass extends AbstractNakedObject {
+    private final static Logger LOG = Logger.getLogger(NakedClass.class);
     private final TextString className = new TextString();
     private NakedObjectSpecification nakedClass;
     private boolean createPersistentInstances;
@@ -18,12 +18,12 @@ public class NakedClassSpec extends AbstractNakedObject {
        	createPersistentInstances = Configuration.getInstance().getBoolean("nakedclass.create-persistent", true);    
     }
 
-    public NakedClassSpec(String name) {
+    public NakedClass(String name) {
         nakedClass = NakedObjectSpecification.getNakedClass(name);
         className.setValue(name);
     }
     
-    public NakedClassSpec() {}
+    public NakedClass() {}
     
     public String getIconName() {
         return forNakedClass().getShortName();

@@ -2,7 +2,7 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.reflect.AssociateCommand;
@@ -45,7 +45,7 @@ public class EmptyField extends AbstractView {
     private boolean canDrop(ContentDrag drag) {
         NakedObject dragSource = ((ObjectContent) drag.getSourceContent()).getObject();
         
-        if (dragSource instanceof NakedClassSpec) {
+        if (dragSource instanceof NakedClass) {
             return true;
         } else {
            NakedObjectSpecification targetType =((OneToOneField) getContent()).getField().getType();
@@ -143,8 +143,8 @@ public class EmptyField extends AbstractView {
             NakedObject associatedObject;
             OneToOneAssociationSpecification field = getEmptyField();      
             LOG.debug("drop " + source + " on " + field + "/" + target);
-            if (source instanceof NakedClassSpec) {
-                associatedObject = ((NakedClassSpec) source).actionNewInstance();
+            if (source instanceof NakedClass) {
+                associatedObject = ((NakedClass) source).actionNewInstance();
             } else {
                 associatedObject = source;
             }

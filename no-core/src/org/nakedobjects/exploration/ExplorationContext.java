@@ -1,7 +1,7 @@
 package org.nakedobjects.exploration;
 
 import org.nakedobjects.object.AbstractUserContext;
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.Title;
 import org.nakedobjects.object.collection.InstanceCollection;
 import org.nakedobjects.object.value.TextString;
@@ -22,7 +22,7 @@ public class ExplorationContext extends AbstractUserContext  {
         return name.title();
     }
 
-	protected NakedClassSpec addClass(String className) {
+	protected NakedClass addClass(String className) {
 	    return super.addClass(className);
 	}
 }

@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedClassSpec;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Permission;
@@ -16,10 +16,10 @@ import org.nakedobjects.viewer.skylark.Workspace;
 
 public class ClassOption extends MenuOption {
 	private ActionSpecification action;
-	private NakedClassSpec classSpec;
+	private NakedClass classSpec;
 	
 	public static void menuOptions(NakedObjectSpecification nakedClass, MenuOptionSet menuOptionSet) {
-	    NakedClassSpec classSpec = Session.getSession().getContext().getObjectManager().getNakedClass(nakedClass);
+	    NakedClass classSpec = Session.getSession().getContext().getObjectManager().getNakedClass(nakedClass);
         
 	    
 		ActionSpecification[] actions;
@@ -54,7 +54,7 @@ public class ClassOption extends MenuOption {
 		}
 	}
 
-	private static void addOption(NakedClassSpec cls, MenuOptionSet menuOptionSet, ActionSpecification action, int type) {
+	private static void addOption(NakedClass cls, MenuOptionSet menuOptionSet, ActionSpecification action, int type) {
 		About about = action.getAbout(Session.getSession().getContext(), cls);
 
 		if(about.canAccess().isAllowed()) {
@@ -71,7 +71,7 @@ public class ClassOption extends MenuOption {
 	}
 		
 
-	public ClassOption(NakedClassSpec classSpec, String name, ActionSpecification action) {
+	public ClassOption(NakedClass classSpec, String name, ActionSpecification action) {
 		super(name);
 		this.classSpec = classSpec;
 		this.action = action;
