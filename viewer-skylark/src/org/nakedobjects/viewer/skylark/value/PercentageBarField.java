@@ -42,7 +42,7 @@ public class PercentageBarField extends AbstractField {
     private Percentage entry = new Percentage();
     
     public void drag(InternalDrag drag) {
-        float x = drag.getLocation().getX() - 2;
+        float x = drag.getRelativeLocation().getX() - 2;
         setValue(x);
     }
 

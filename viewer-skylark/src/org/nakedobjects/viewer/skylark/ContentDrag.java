@@ -122,6 +122,11 @@ public class ContentDrag extends Drag {
         return getSourceView().getContent();
     }
 
+
+    public View getSourceView() {
+        return view;
+    }
+
     /**
      * Returns the current target view.
      */
@@ -129,7 +134,7 @@ public class ContentDrag extends Drag {
 		return target;
 	}
     
-    public void move(int x, int y) {
+    public void subtract(int x, int y) {
   //      mouseLocation.move(x, y);
     }
     

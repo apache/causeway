@@ -31,15 +31,12 @@ public class ViewResizeOutline extends AbstractView {
     public ViewResizeOutline(InternalDrag drag, View forView, int direction) {
     	super(forView.getContent(), null, null);
     	this.direction = direction;
-    	
- /*   	Location offset = drag.getSourceLocation();
-    	Location location = drag.getSourceLocationWithinViewer();
-    	location.translate(-offset.getX(), -offset.getY());
-   */ 	
-    	setLocation(forView.getLocation());
+ 
+    	Logger.getLogger(getClass()).debug("drag outline for " + forView);
+    	setLocation(forView.getAbsoluteLocation());
     	setSize(forView.getSize());
     	
-    	Logger.getLogger(getClass()).debug("drag outline intial size " + getSize() +  "  " + forView.getSize());
+    	Logger.getLogger(getClass()).debug("drag outline initial size " + getSize() +  "  " + forView.getSize());
     	
     	origin = getBounds();
     	
@@ -85,7 +82,7 @@ public class ViewResizeOutline extends AbstractView {
 		}
     }
     
-    public void adjust(InternalDrag drag) {
+    public void adjust(InternalDrag drag) {        
     	switch (direction) {
 			case ViewResizeOutline.TOP :
 				extendUpward(drag);
@@ -135,7 +132,7 @@ public class ViewResizeOutline extends AbstractView {
 
     private void extendDownward(InternalDrag drag) {
 		markDamaged();
-		int height = drag.getLocation().getY();
+		int height = drag.getRelativeLocation().getY();
 		int width = getSize().getWidth();
 		setSize(new Size(width, height));
 		markDamaged();
@@ -144,14 +141,14 @@ public class ViewResizeOutline extends AbstractView {
     private void extendRight(InternalDrag drag) {
 		markDamaged();
 		int height = getSize().getHeight();
-		int width = drag.getLocation().getX();
+		int width = drag.getRelativeLocation().getX();
 		setSize(new Size(width, height));
 		markDamaged();
 	}
 
 	private void extendLeft(InternalDrag drag) {
 		markDamaged();
-		int difference = drag.offset().getDeltaX();
+		int difference = drag.totalMovement().getDeltaX();
 
 		Bounds bounds = new Bounds(origin);
 		bounds.extendHeight(difference);
@@ -163,7 +160,7 @@ public class ViewResizeOutline extends AbstractView {
 	
 	private void extendUpward(InternalDrag drag) {
 		markDamaged();
-		int difference = drag.offset().getDeltaY();
+		int difference = drag.totalMovement().getDeltaY();
 
 		Bounds bounds = new Bounds(origin);
 		bounds.extendHeight(difference);
@@ -175,7 +172,7 @@ public class ViewResizeOutline extends AbstractView {
 	
 	private void moveUpDown(InternalDrag drag) {
 		markDamaged();
-		int difference = drag.offset().getDeltaY();
+		int difference = drag.totalMovement().getDeltaY();
 		
 		Bounds bounds = new Bounds(origin);
 		bounds.translate(0, -difference);
@@ -194,9 +191,7 @@ public class ViewResizeOutline extends AbstractView {
         super.draw(canvas);
 
         Size s = getSize();
-        
-    	Logger.getLogger(getClass()).debug("drag outline size " + getSize());
-
+    	Logger.getLogger(getClass()).debug("drag outline size " + s);
         for (int i = 0; i < thickness; i++) {
 	        canvas.drawRectangle(i, i, s.getWidth() - i * 2 - 1, s.getHeight() - i * 2 - 1, Style.PRIMARY2);
 		}

@@ -76,6 +76,11 @@ public class ViewDrag extends Drag {
         }
     }
     
+
+    public View getSourceView() {
+        return view;
+    }
+
     private void updateDraggingLocation() {
         LOG.debug("mouse location  " + mouseLocation);
         Location viewLocation = new Location(mouseLocation);
@@ -94,7 +99,7 @@ public class ViewDrag extends Drag {
 		return "ViewDrag [" + super.toString() + "]";
 	}
 
-    public void move(int x, int y) {}
+    public void subtract(int x, int y) {}
 
     void updateLocationWithinViewer(Location mouseLocation, View target, Location locationInTarget) {
         this.mouseLocation = mouseLocation;

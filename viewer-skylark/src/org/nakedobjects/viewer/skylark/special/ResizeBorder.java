@@ -55,9 +55,10 @@ public class ResizeBorder extends AbstractBorder {
 
     public View dragFrom(InternalDrag drag) {
         if(isOnBorder()) {
-	        direction = onBorder(drag.getLocation());
+	        direction = onBorder(drag.getRelativeLocation());
 	        if (direction > 0) {
-	            ViewResizeOutline outline = new ViewResizeOutline(drag, getView(), direction);
+	            ViewResizeOutline outline;
+                outline = new ViewResizeOutline(drag, getView(), direction);
 	            getViewManager().setOverlayView(outline);
 	            outline.markDamaged();
 	            return outline;
@@ -130,13 +131,6 @@ public class ResizeBorder extends AbstractBorder {
 
     private int onBorder(Location at) {
         Bounds area = contentArea();
- /*       Size size = getSize();
-        int width = size.getWidth();
-        int height = size.getHeight();
-       boolean right = at.getX() >= width - BORDER_WIDTH;
-        boolean bottom = at.getY() >= height - BORDER_WIDTH;
-        
-     */   
         boolean right = at.getX() >= area.getWidth();
         boolean bottom = at.getY() >= area.getHeight();
         

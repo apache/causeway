@@ -2,13 +2,13 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
-import org.nakedobjects.viewer.skylark.Drag;
+import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Style;
 
 public class DragContentIcon extends IconView {
 	private final int thickness = 1;
 
-	public DragContentIcon(Drag drag) {
+	public DragContentIcon(ContentDrag drag) {
     	super(drag.getSourceView().getContent(), null, null, Style.LABEL);
     	setSize(getRequiredSize());
     }

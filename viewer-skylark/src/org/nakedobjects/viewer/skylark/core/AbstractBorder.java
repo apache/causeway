@@ -34,33 +34,33 @@ public class AbstractBorder extends AbstractViewDecorator {
     }
 
     public void drag(InternalDrag drag) {
-        drag.move(-getLeft(), -getTop());
+        drag.subtract(getLeft(), getTop());
         super.drag(drag);
     }
 
     public void dragCancel(InternalDrag drag) {
-        drag.move(-getLeft(), -getTop());
+        drag.subtract(getLeft(), getTop());
         super.dragCancel(drag);
     }
 
     public View dragFrom(InternalDrag drag) {
-        drag.move(-getLeft(), -getTop());
+        drag.subtract(getLeft(), getTop());
 
         return super.dragFrom(drag);
     }
 
     public void dragIn(ContentDrag drag) {
-        drag.move(-getLeft(), -getTop());
+        drag.subtract(getLeft(), getTop());
         super.dragIn(drag);
     }
 
     public void dragOut(ContentDrag drag) {
-        drag.move(-getLeft(), -getTop());
+        drag.subtract(getLeft(), getTop());
         super.dragOut(drag);
     }
 
     public void dragTo(InternalDrag drag) {
-        drag.move(-getLeft(), -getTop());
+        drag.subtract(getLeft(), getTop());
         super.dragTo(drag);
     }
 
@@ -70,17 +70,17 @@ public class AbstractBorder extends AbstractViewDecorator {
     }
 
     public void drop(ContentDrag drag) {
-        drag.move(-getLeft(), -getTop());
+        drag.subtract(getLeft(), getTop());
         super.drop(drag);
     }
 
     public void drop(ViewDrag drag) {
-        drag.move(-getLeft(), -getTop());
+        drag.subtract(getLeft(), getTop());
         super.drop(drag);
     }
 
     public void firstClick(Click click) {
-        click.move(-getLeft(), -getTop());
+        click.subtract(getLeft(), getTop());
         wrappedView.firstClick(click);
     }
 
@@ -194,36 +194,36 @@ public class AbstractBorder extends AbstractViewDecorator {
     }
 
     public View pickup(ContentDrag drag) {
-        drag.move(-getLeft(), -getTop());
+        drag.subtract(getLeft(), getTop());
 
         return super.pickup(drag);
     }
 
     public View pickup(ViewDrag drag) {
-        drag.move(-getLeft(), -getTop());
+        drag.subtract(getLeft(), getTop());
 
         return super.pickup(drag);
     }
 
     public void secondClick(Click click) {
-        click.move(-getLeft(), -getTop());
+        click.subtract(getLeft(), getTop());
         wrappedView.secondClick(click);
     }
     
 	public void setRequiredSize(Size size) {
         Size wrappedSize = new Size(size);
-        wrappedSize.extend(-getLeft() - getRight(), -getTop() - getBottom());
+        wrappedSize.contract(getLeft() + getRight(), getTop() + getBottom());
         wrappedView.setRequiredSize(wrappedSize);
 	}
 	
     public void setSize(Size size) {
         Size wrappedViewSize = new Size(size);
-        wrappedViewSize.extend(-getLeft() - getRight(), -getTop() - getBottom());
+        wrappedViewSize.contract(getLeft() + getRight(), getTop() + getBottom());
         wrappedView.setSize(wrappedViewSize);
     }
 
     public void thirdClick(Click click) {
-        click.move(-getLeft(), -getTop());
+        click.subtract(getLeft(), getTop());
         wrappedView.thirdClick(click);
     }
 
@@ -232,7 +232,7 @@ public class AbstractBorder extends AbstractViewDecorator {
         Bounds bounds = new Bounds(getLeft(), getTop(), size.getWidth(), size.getHeight());
 
         if (bounds.contains(mouseLocation)) {
-            mouseLocation.move(-getLeft(), -getTop());
+            mouseLocation.subtract(getLeft(), getTop());
 
             return wrappedView.viewAreaType(mouseLocation);
         } else {

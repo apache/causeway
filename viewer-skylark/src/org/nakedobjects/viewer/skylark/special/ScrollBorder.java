@@ -133,7 +133,7 @@ public class ScrollBorder extends AbstractBorder {
     }
 
     private void addOffset(Location location) {
-        location.translate(offset());
+        location.add(offset());
     }
 
     /**
@@ -191,7 +191,7 @@ public class ScrollBorder extends AbstractBorder {
     }
 
     private void addOffset(Click click) {
-        click.move(offset());
+        click.add(offset());
     }
 
     private Offset offset() {
@@ -203,8 +203,8 @@ public class ScrollBorder extends AbstractBorder {
 
     public View dragFrom(InternalDrag drag) {
         Bounds contents = contentArea();
-        int x = drag.getLocation().getX();
-        int y = drag.getLocation().getY();
+        int x = drag.getRelativeLocation().getX(); // -  getView().getPadding().getLeft();
+        int y = drag.getRelativeLocation().getY(); // -  getView().getPadding().getTop();
 
         dragOffset = -1;
         if (x >= contents.getWidth()) {
@@ -222,21 +222,21 @@ public class ScrollBorder extends AbstractBorder {
             return null;
 
         } else {
-            drag.move(offset());
+            drag.add(offset());
             return super.dragFrom(drag);
         }
     }
 
     public void drag(InternalDrag drag) {
         if (dragOffset == -1) {
-            drag.move(offset());
+            drag.add(offset());
             super.drag(drag);
         } else {
             if (verticalDrag) {
-                int y = drag.getLocation().getY();
+                int y = drag.getRelativeLocation().getY(); // -  getView().getPadding().getTop();
                 setVerticalPostion(y - dragOffset);
             } else {
-                int x = drag.getLocation().getX();
+                int x = drag.getRelativeLocation().getX(); // -  getView().getPadding().getLeft();
                 setHorizontalPostion(x - dragOffset);
             }
         }

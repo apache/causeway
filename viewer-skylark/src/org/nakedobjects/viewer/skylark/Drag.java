@@ -4,12 +4,6 @@ package org.nakedobjects.viewer.skylark;
  * Details a drag event - from drag start to drop,
  */
 public abstract class Drag extends PointerEvent {
-    /*
-    private Offset offset;
-    protected final Location sourceLocationWithinView;
-    private final Location pointerLocation;
-    private Location locationInTarget;
-*/
     /**
      * Creates a new drag event object.
      * 
@@ -24,12 +18,7 @@ public abstract class Drag extends PointerEvent {
      */
     protected Drag(View source, Location locationWithinViewer, Location location, int mods) {
         super(source, location, mods);
-  /*
-        sourceLocationWithinView = location;
-         locationInTarget = new Location(location);
-        pointerLocation = new Location(locationWithinViewer);
-        */
-    }
+     }
 
     /**
      * Indicates the drag has been cancelled; no action should be taken.
@@ -47,72 +36,21 @@ public abstract class Drag extends PointerEvent {
      *  
      */
     protected abstract void end();
-    
-    /*
-    public Offset getOffset() {
-        return offset;
-    }
-
-    /**
-     * Returns the original location of the pointer within the source view,
-     * i.e., where the mouse button was pressed. This location remains constant
-     * througout the term of the extended drag event.
-     * /
-    public Location getSourceLocation() {
-        return sourceLocationWithinView;
-    }
-
-    /**
-     * Returns the view that the mouse was originally over, i.e., the view under
-     * the mouse when its button was pressed.
-     */
-    public View getSourceView() {
-        return view;
-    }
-
-    /**
-     * The current location of the pointer within the target view. This location
-     * changes as the drag progresses.
-     * /
-    public Location getTargetLocation() {
-        return locationInTarget;
-    }
-
-    public Location getPointerLocation() {
-        return pointerLocation;
-    }
-
-    /**
-     * The view currently under the mouse as it is dragging. The returned view
-     * will change as the drag progresses over different views.
-     * /
-    public abstract View getTargetView();
-
+ 
     /**
      * Translate the location of this event by the specified offset.
      */
-    public abstract void move(int x, int y);
+    public abstract void subtract(int x, int y);
 
-    public void move(Offset offset) {
-        move(offset.getDeltaX(), offset.getDeltaY());
+    public void add(Offset offset) {
+        subtract(-offset.getDeltaX(), -offset.getDeltaY());
     }
-    /*
-    public void setOffset(Offset offset) {
-        this.offset = offset;
-    }
-    /*
 
     /**
      * Updates the location with the viewer to reflect the mouse pointer's
      * position.
       */
     abstract void updateLocationWithinViewer(Location locationInViewer, View target, Location locationInTarget);
-    /*{
-        pointerLocation.x = locationInViewer.getX();
-        pointerLocation.y = locationInViewer.getY();
-        this.locationInTarget = locationInTarget;
-    }
-    */
 }
 
 /*

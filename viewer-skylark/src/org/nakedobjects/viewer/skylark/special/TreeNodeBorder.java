@@ -10,6 +10,7 @@ import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
+import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -25,6 +26,7 @@ import org.nakedobjects.viewer.skylark.basic.IconGraphic;
 import org.nakedobjects.viewer.skylark.basic.ObjectTitleText;
 import org.nakedobjects.viewer.skylark.basic.TitleText;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
+import org.nakedobjects.viewer.skylark.core.AbstractView;
 
 public class TreeNodeBorder extends AbstractBorder {
 	private static final int BOX_PADDING = 2;
@@ -115,6 +117,10 @@ public class TreeNodeBorder extends AbstractBorder {
 		x += icon.getSize().getWidth();
 		text.draw(canvas, x, baseline);
 		
+        if(AbstractView.DEBUG) {
+            canvas.drawRectangle(getSize(), Color.DEBUG1);
+        }
+        
 		// components
 		super.draw(canvas);
 	}

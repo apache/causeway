@@ -98,10 +98,10 @@ public class Location {
         move(offset.getDeltaX(), offset.getDeltaY());
     }
 
-    public Offset offsetFrom(Location workspaceLocation) {
+    public Offset offsetFrom(Location location) {
         
         Offset offset;
-        offset = new Offset(x - workspaceLocation.x, y - workspaceLocation.y);
+        offset = new Offset(x - location.x, y - location.y);
         return offset;
     }
 
@@ -115,5 +115,13 @@ public class Location {
 
     public void add(Offset offset) {
         move(offset.getDeltaX(), offset.getDeltaY());
+    }
+
+    public void subtract(int x, int y) {
+        move(-x, -y);    
+    }
+
+    public void add(int x, int y) {
+        move(x, y);        
     }
 }

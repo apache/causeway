@@ -498,14 +498,14 @@ public class TextField extends AbstractField {
          
         } else {
             if (canChangeValue()) {
-                selection.extendTo(drag.getLocation());
+                selection.extendTo(drag.getRelativeLocation());
                 markDamaged();
             }
         }
     }
 
     public View dragFrom(InternalDrag drag) {
-        Location at = drag.getLocation();
+        Location at = drag.getRelativeLocation();
 
         if (isOnResize(at)) {
             isResizing = true;
@@ -537,7 +537,7 @@ public class TextField extends AbstractField {
     }
 
     public void dragTo(InternalDrag drag) {
-        Location at = drag.getLocation();
+        Location at = drag.getRelativeLocation();
 
         if (isResizing) {
             isResizing = false;

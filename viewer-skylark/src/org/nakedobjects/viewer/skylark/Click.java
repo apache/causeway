@@ -63,16 +63,16 @@ public class Click extends PointerEvent {
     /**
      * Translate the location of this event by the specified offset.
      */
-    public void move(int x, int y) {
-        locationWithinView.move(x, y);
+    public void subtract(int x, int y) {
+        locationWithinView.subtract(x, -y);
     }
 
     public String toString() {
         return "Click [type=" + type + "," + super.toString() + "]";
     }
 
-    public void move(Offset offset) {
-        move(offset.getDeltaX(), offset.getDeltaY());
+    public void add(Offset offset) {
+        locationWithinView.add(offset.getDeltaX(), offset.getDeltaY());
     }
 }
 

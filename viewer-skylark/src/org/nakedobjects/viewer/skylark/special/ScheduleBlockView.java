@@ -75,7 +75,7 @@ public class ScheduleBlockView extends ObjectView {
 	}
     
     public View dragFrom(InternalDrag drag) {
-	    Location location = drag.getLocation();
+	    Location location = drag.getRelativeLocation();
 		int direction;
 		
 		if(location.getY() <= 8) {
@@ -117,7 +117,7 @@ public class ScheduleBlockView extends ObjectView {
 		// TODO this fails when the layout decorator is itself decorated (e.g. by a WindowBorder!
 		ScheduleLayout layout = (ScheduleLayout) getParent().getSpecification();
        	
-		Location location = drag.getLocation();
+		Location location = drag.getRelativeLocation();
 		location.move(0, -getView().getLocation().getY());
 		int top = drag.getDragOverlay().getLocation().getY() - location.getY();
        	int bottom = top + drag.getDragOverlay().getSize().getHeight();

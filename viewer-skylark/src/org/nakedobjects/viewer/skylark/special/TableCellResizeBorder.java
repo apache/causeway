@@ -58,7 +58,7 @@ public class TableCellResizeBorder extends AbstractBorder {
 		FieldSpecification[] fields = axis.getFields();
 		for (int i = 0; i < fields.length; i++) {
 			if(fields[i] == field) {
-				int width = drag.getLocation().getX();
+				int width = drag.getRelativeLocation().getX();
 				axis.setWidth(i, width);
 				axis.invalidateLayout();
 				break;

@@ -146,8 +146,6 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 	    }
 
 	    private void drag(MouseEvent me) {
-//	        spy.reset();
-//	       	spy.setAction("Mouse dragged " + me);
 	    	mouseDetails(me, false);
 	    	
 		    View target = currentlyIdentifiedView;
@@ -156,8 +154,9 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 	       	spy.addAction("  target " + target + " " + mouseLocationWithinView);
       	
 			drag.updateLocationWithinViewer(mouseLocation, target, mouseLocationWithinView);
+			spy.addAction("before drag " + drag);
 			drag.drag();
-			spy.addAction("drag " + drag);
+			spy.addAction("after drag  " + drag);
 			
 			if(viewer.getOverlayView() == target) {
 				LOG.error("drag identified over overlay!!!! " + target);
@@ -177,7 +176,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 	       	viewer.setLiveDebugPositionInformation("mouse dragged ", mouseLocation, locationInView, previouslyIdentifiedView);
 
 	       	ViewAreaType type = previouslyIdentifiedView.viewAreaType(new Location(locationInView));
-	       	spy.addAction("drag start " + type);
+	       	spy.addAction("Drag start " + type + ": " + mouseLocation);
 			
 			
 			if (type == ViewAreaType.INTERNAL) {
@@ -337,7 +336,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 
 	            View target = currentlyIdentifiedView;
 	            
-	        	viewer.setLiveDebugPositionInformation("Mouse released ", mouseLocation, mouseLocationWithinView, drag.getSourceView());
+	        	viewer.setLiveDebugPositionInformation("Mouse released ", mouseLocation, mouseLocationWithinView, currentlyIdentifiedView);
 
 
 				drag.updateLocationWithinViewer(mouseLocation, target, mouseLocationWithinView);
