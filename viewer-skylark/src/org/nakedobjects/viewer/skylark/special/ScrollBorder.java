@@ -4,9 +4,12 @@ import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
+import org.nakedobjects.viewer.skylark.Drag;
+import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Offset;
+import org.nakedobjects.viewer.skylark.SimpleInternalDrag;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
@@ -54,29 +57,28 @@ public class ScrollBorder extends AbstractBorder {
     public void draw(Canvas canvas) {
          Bounds contents = contentArea();
 
-       // Color color = isOnBorder() ? Style.PRIMARY1 : Style.PRIMARY2;
-         Color color = Style.PRIMARY1;
-        if(horizontalScrollPosition > 0 || horizontalVisibleAmount != contents.getWidth()) {
+        Color color = isOnBorder() ? Style.PRIMARY1 : Style.PRIMARY2;
+        if(horizontalScrollPosition > 0 || horizontalVisibleAmount < contents.getWidth()) {
             canvas.drawSolidRectangle(0, contents.getHeight() + 1, contents.getWidth(),
                     SCROLLBAR_WIDTH - 2, Style.SECONDARY3);
             canvas.drawSolidRectangle(horizontalScrollPosition, contents.getHeight() + 1, horizontalVisibleAmount,
                     SCROLLBAR_WIDTH - 3, color);
             canvas.drawRectangle(horizontalScrollPosition, contents.getHeight() + 1, horizontalVisibleAmount,
                     SCROLLBAR_WIDTH - 3, Style.SECONDARY1);
+	        canvas.drawRectangle(0, contents.getHeight(), contents.getWidth(),
+	                SCROLLBAR_WIDTH - 1, Style.SECONDARY2);
         }
-        canvas.drawRectangle(0, contents.getHeight(), contents.getWidth(),
-                SCROLLBAR_WIDTH - 1, Style.SECONDARY2);
-        
-        if(verticalScrollPosition > 0 || verticalVisibleAmount != contents.getHeight()) {
+
+        if(verticalScrollPosition > 0 || verticalVisibleAmount < contents.getHeight()) {
             canvas.drawSolidRectangle(contents.getWidth() + 1, 0, 
                     SCROLLBAR_WIDTH - 2, contents.getHeight(),  Style.SECONDARY3);
             canvas.drawSolidRectangle(contents.getWidth() + 1, verticalScrollPosition, 
                     SCROLLBAR_WIDTH - 3, verticalVisibleAmount,             color);
             canvas.drawRectangle(contents.getWidth() + 1, verticalScrollPosition, 
                     SCROLLBAR_WIDTH - 3, verticalVisibleAmount,  Style.SECONDARY1);
+	        canvas.drawRectangle(contents.getWidth(), 0, 
+	                SCROLLBAR_WIDTH - 1, contents.getHeight(),  Style.SECONDARY2);
         }
-        canvas.drawRectangle(contents.getWidth(), 0, 
-                SCROLLBAR_WIDTH - 1, contents.getHeight(),  Style.SECONDARY2);
 
         Offset offset = offset();
         canvas.setClip(offset.getDeltaX(), offset.getDeltaY(), contents.getWidth(), contents.getHeight());
@@ -97,14 +99,14 @@ public class ScrollBorder extends AbstractBorder {
 
         int displayHeight = displayArea.getHeight();
         int contentHeight = Math.max(displayHeight, contentSize.getHeight());
-        verticalVisibleAmount = displayHeight * displayHeight / contentHeight;
+        verticalVisibleAmount = displayHeight * displayHeight / (contentHeight - SCROLLBAR_WIDTH);
         verticalMinimum = 0;
         verticalMaximum = displayHeight - verticalVisibleAmount;
  //       verticalScrollPosition = (int) (verticalScrollPosition * verticalRatio);
 
         int displayWidth = displayArea.getWidth();
         int contentWidth = Math.max(displayWidth, contentSize.getWidth());
-        horizontalVisibleAmount = displayWidth * displayWidth / contentWidth;
+        horizontalVisibleAmount = displayWidth * displayWidth / (contentWidth - SCROLLBAR_WIDTH);
         horizontalMinimum = 0;
         horizontalMaximum = displayWidth - horizontalVisibleAmount;
         
@@ -145,9 +147,8 @@ public class ScrollBorder extends AbstractBorder {
      * that side.
      */
     public void secondClick(Click click) {
-        click.subtract(offset());
-        int x = click.getMouseLocationRelativeToView().getX();
-        int y = click.getMouseLocationRelativeToView().getY();
+        int x = click.getLocation().getX();
+        int y = click.getLocation().getY();
 
         Bounds contents = contentArea();
         if (x >= contents.getWidth()) {
@@ -157,15 +158,14 @@ public class ScrollBorder extends AbstractBorder {
             int position = (x < contents.getWidth() / 2) ? horizontalMinimum : horizontalMaximum;
             setHorizontalPostion(position);
         } else {
-            addOffset(click);
-            super.firstClick(click);
+            click.add(offset());
+            super.secondClick(click);
         }
     }
 
     public void firstClick(Click click) {
-        click.subtract(offset());
-        int x = click.getMouseLocationRelativeToView().getX();
-        int y = click.getMouseLocationRelativeToView().getY();
+         int x = click.getLocation().getX();
+        int y = click.getLocation().getY();
 
         Bounds contents = contentArea();
         if (x >= contents.getWidth()) {
@@ -191,13 +191,9 @@ public class ScrollBorder extends AbstractBorder {
             }
 
         } else {
-            addOffset(click);
+            click.add(offset());
             super.firstClick(click);
         }
-    }
-
-    private void addOffset(Click click) {
-        click.add(offset());
     }
 
     private Offset offset() {
@@ -207,11 +203,10 @@ public class ScrollBorder extends AbstractBorder {
         return new Offset(x, y);
     }
 
-    public View dragFrom(InternalDrag drag) {
-        Offset offset = offset();
-        drag.subtract(offset);
-        int x = drag.getMouseLocationRelativeToView().getX();
-        int y = drag.getMouseLocationRelativeToView().getY();
+    public Drag dragStart(DragStart drag) {
+        Location location = drag.getLocation();
+        int x = location.getX();
+        int y = location.getY();
 
         Bounds contents = contentArea();
         dragOffset = -1;
@@ -220,18 +215,19 @@ public class ScrollBorder extends AbstractBorder {
                 dragOffset = y - verticalScrollPosition;
                 verticalDrag = true;
             }
-            return null;
+            return new SimpleInternalDrag(this, location);
 
         } else if (y >= contents.getHeight()) {
             if (x > horizontalScrollPosition && x < horizontalScrollPosition + horizontalVisibleAmount) {
                 dragOffset = x - horizontalScrollPosition;
                 verticalDrag = false;
             }
-            return null;
+            return new SimpleInternalDrag(this, location);
 
         } else {
-  //          drag.add(offset());
-            return super.dragFrom(drag);
+            Offset offset = offset();
+            drag.add(offset);
+            return super.dragStart(drag);
         }
     }
 
@@ -240,12 +236,11 @@ public class ScrollBorder extends AbstractBorder {
 //            drag.add(offset());
             super.drag(drag);
         } else {
-           // drag.subtract(offset());
             if (verticalDrag) {
-                int y = drag.getMouseLocationRelativeToView().getY(); // -  getView().getPadding().getTop();
+                int y = drag.getLocation().getY(); // -  getView().getPadding().getTop();
                 setVerticalPostion(y - dragOffset);
             } else {
-                int x = drag.getMouseLocationRelativeToView().getX(); // -  getView().getPadding().getLeft();
+                int x = drag.getLocation().getX(); // -  getView().getPadding().getLeft();
                 setHorizontalPostion(x - dragOffset);
             }
         }

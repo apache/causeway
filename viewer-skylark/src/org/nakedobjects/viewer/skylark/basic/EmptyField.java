@@ -112,7 +112,7 @@ public class EmptyField extends AbstractView {
             color = Style.SECONDARY1;
         }
 
-        int iconHeight = (style.getAscent() * 125) / 100;
+        int iconHeight = (style.getHeight() * 120) / 100;
         int iconWidth = (iconHeight * 80) / 100;
         int containerHeight = getSize().getHeight();
         int iconCentre = containerHeight / 2;
@@ -138,8 +138,7 @@ public class EmptyField extends AbstractView {
     public void drop(ContentDrag drag) {
         if (canDrop(drag)) {
 	        NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
-	        View dragSource = drag.getSourceView();
-            NakedObject source = ((ObjectContent) dragSource.getContent()).getObject();
+            NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
             
             NakedObject associatedObject;
             OneToOneAssociationSpecification field = getEmptyField();      
@@ -176,7 +175,14 @@ public class EmptyField extends AbstractView {
     }
 
     public Size getRequiredSize() {
-    	Size size = new Size(120, 30);
+        Size size = new Size(0,0);
+        int iconHeight = (style.getHeight() * 120) / 100;
+        size.extendWidth((iconHeight * 80) / 100);
+        size.extendWidth(HPADDING * 2);
+        size.extendWidth(style.stringWidth(name()));
+
+        size.setHeight(iconHeight);
+        size.extendHeight(VPADDING * 2);
         return size;
     }
 
@@ -221,9 +227,9 @@ public class EmptyField extends AbstractView {
     	public View createView(Content content, ViewAxis axis) {
     		EmptyField emptyField = new EmptyField(content, this, axis);
     	    if(((OneToOneField) content).isLookup()) {
-    	        return new LookupBorder(emptyField);
+    	        return new ObjectBorder(new LookupBorder(emptyField));
     	    } else {
-    	        return emptyField;
+    	        return new ObjectBorder(emptyField);
     	    }
     	}
 

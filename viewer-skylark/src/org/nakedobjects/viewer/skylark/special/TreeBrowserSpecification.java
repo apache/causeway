@@ -5,9 +5,11 @@ import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
+import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.Identifier;
 import org.nakedobjects.viewer.skylark.basic.WindowBorder;
 
@@ -45,10 +47,12 @@ public class TreeBrowserSpecification implements ViewSpecification {
 	        rootNode = objectCompositeNode.createView(content, axis);
 	        frame.setSelectedNode(rootNode);
 	    }
-        //ResizeBorder leftPane = new ResizeBorder(new ScrollBorder(rootNode));
-		View
-		leftPane = rootNode;
+		View leftPane = rootNode;
         frame.initLeftPane(leftPane);
+        
+        Size size = leftPane.getRequiredSize();
+        size.setWidth(220);
+        leftPane.setRequiredSize(size);
         
         return view;
     }

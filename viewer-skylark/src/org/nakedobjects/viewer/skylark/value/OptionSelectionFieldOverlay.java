@@ -52,7 +52,7 @@ public class OptionSelectionFieldOverlay extends AbstractView implements View {
 	}
 	
 	public void firstClick(Click click) {
-		int y = click.getMouseLocationRelativeToView().getY() - VPADDING;
+		int y = click.getLocation().getY() - VPADDING;
 		int row = y / rowHeight;
 		field.set(options[row]);
 		dispose();

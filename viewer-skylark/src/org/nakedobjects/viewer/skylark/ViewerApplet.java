@@ -50,7 +50,6 @@ public class ViewerApplet extends Applet implements RenderingArea {
         } catch (SecurityException e1) {
             e1.printStackTrace();
         } catch (NoSuchMethodException ignore) {
-            ;
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

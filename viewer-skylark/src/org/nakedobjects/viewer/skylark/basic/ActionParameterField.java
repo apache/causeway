@@ -1,9 +1,9 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
@@ -11,7 +11,6 @@ import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.Text;
@@ -22,11 +21,8 @@ import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.special.LookupBorder;
 import org.nakedobjects.viewer.skylark.special.ObjectParameter;
 
-import org.apache.log4j.Logger;
-
 
 public class ActionParameterField extends AbstractView {
-	private static final Logger LOG = Logger.getLogger(ActionParameterField.class);
 	private static Text style = Style.NORMAL;
     
 	public ActionParameterField(Content content, ViewSpecification specification, ViewAxis axis) {
@@ -111,9 +107,8 @@ public class ActionParameterField extends AbstractView {
 
     public void drop(ContentDrag drag) {
         if (canDrop(drag)) {
-	        View dragSource = drag.getSourceView();
             ObjectParameter parameterContent = ((ObjectParameter) getContent());
-            parameterContent.setObject(((ObjectContent) dragSource.getContent()).getObject());
+            parameterContent.setObject(((ObjectContent) drag.getSourceContent()).getObject());
             
             View replacement;           
             replacement = new SubviewIconSpecification().createView(getContent(), getViewAxis());

@@ -3,6 +3,8 @@ package org.nakedobjects.viewer.skylark.special;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
+import org.nakedobjects.viewer.skylark.Drag;
+import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Size;
@@ -15,15 +17,13 @@ import org.apache.log4j.Logger;
 
 
 public class ResizeBorder extends AbstractBorder {
-    private static final int BORDER_WIDTH = 5;
+    private static final int BORDER_WIDTH = 3;
     private Size resize;
     private int direction;
 
     public ResizeBorder(View view) {
         super(view);
         bottom = right = BORDER_WIDTH;
-        
-        resize = new Size(200, 200);
     }
 
     protected void debugDetails(StringBuffer b) {
@@ -35,7 +35,7 @@ public class ResizeBorder extends AbstractBorder {
         Size size = getSize();
         int width = size.getWidth();
         int height = size.getHeight();
-        Color color = isOnBorder() && getState().isViewIdentified() ? Style.INVALID : Style.PRIMARY3;
+        Color color = Style.SECONDARY2;
         for (int i = 0; i < BORDER_WIDTH; i++) {
             int y = height - BORDER_WIDTH + i;
             canvas.drawLine(0, y, width - 1, y, color);
@@ -54,35 +54,30 @@ public class ResizeBorder extends AbstractBorder {
         return super.viewAreaType(mouseLocation);
     }
 
-    public View dragFrom(InternalDrag drag) {
-        if(isOnBorder()) {
-	        direction = onBorder(drag.getMouseLocationRelativeToView());
+    
+    public Drag dragStart(DragStart drag) {
+        Location location = drag.getLocation();
+        if(overBorder(location)) {
+	        direction = onBorder(location);
 	        if (direction > 0) {
-	            ViewResizeOutline outline;
-                outline = new ViewResizeOutline(drag, getView(), direction);
-	            getViewManager().setOverlayView(outline);
-	            outline.markDamaged();
-	            return outline;
+	            return new ResizeDrag(this, new Bounds(getAbsoluteLocation(), getView().getSize()), direction);
 	        }
 	        return null;
         } else {
-            return super.dragFrom(drag);
+            return super.dragStart(drag);
         }
     }
 
     public void drag(InternalDrag drag) {
-        ViewResizeOutline outline = ((ViewResizeOutline) drag.getDragOverlay());
-        if(outline != null) {
-                   outline.markDamaged();
-                   outline.adjust(drag);
-        } else {
+        ViewResizeOutline outline = ((ViewResizeOutline) drag.getOverlay());
+        if(outline == null) {
             super.drag(drag);
-        }
+        }		
     }
 
     public void dragTo(InternalDrag drag) {
         getViewManager().showDefaultCursor();
-        ViewResizeOutline outline = ((ViewResizeOutline) drag.getDragOverlay());
+        ViewResizeOutline outline = ((ViewResizeOutline) drag.getOverlay());
         if(outline != null) {
             getView().setRequiredSize(outline.getSize());
             Logger.getLogger(getClass()).debug("resizing view " + resize);
@@ -93,10 +88,13 @@ public class ResizeBorder extends AbstractBorder {
     }
     
     public Size getRequiredSize() {
- //       if(resize == null) {
- //           resize = wrappedView.getRequiredSize();
- //       }
-        return new Size(resize);
+        if(resize == null ) {
+            Size size = wrappedView.getRequiredSize();
+            size.extend(getLeft() + getRight(), getTop() + getBottom());
+            return size;
+        } else {
+            return new Size(resize);
+        }
     }
     
     public void setRequiredSize(Size size) {
@@ -109,15 +107,15 @@ public class ResizeBorder extends AbstractBorder {
      */
     public void mouseMoved(Location at) {
         switch (onBorder(at)) {
-        case ViewResizeOutline.RIGHT:
+        case ResizeDrag.RIGHT:
             getViewManager().showResizeRightCursor();
             break;
 
-        case ViewResizeOutline.BOTTOM:
+        case ResizeDrag.BOTTOM:
             getViewManager().showResizeDownCursor();
             break;
 
-        case ViewResizeOutline.BOTTOM_RIGHT:
+        case ResizeDrag.BOTTOM_RIGHT:
             getViewManager().showResizeDownRightCursor();
             break;
 
@@ -140,11 +138,11 @@ public class ResizeBorder extends AbstractBorder {
         
         final int status;
         if(right && bottom) {
-            status = ViewResizeOutline.BOTTOM_RIGHT;
+            status = ResizeDrag.BOTTOM_RIGHT;
         } else if(right) {
-            status = ViewResizeOutline.RIGHT;
+            status = ResizeDrag.RIGHT;
         } else if(bottom) {
-            status = ViewResizeOutline.BOTTOM;
+            status = ResizeDrag.BOTTOM;
         } else {
             status = 0;
         }

@@ -43,6 +43,10 @@ public class TableColumnAxis implements ViewAxis {
 		rowHeaderOffet = Math.max(rowHeaderOffet, offset + 5);
 	}
 	
+	public void setOffset(int offset) {
+	    rowHeaderOffet = offset;
+	}
+	
 	public void setRoot(View view) {
 		table = view;
 	}
@@ -54,6 +58,34 @@ public class TableColumnAxis implements ViewAxis {
 		}
 		table.invalidateLayout();
 	}
+	
+	/**
+	 * Returns 0 for left side of first column, 1 for right side of first column, 2 for right side of second column, etc.
+	 * 
+	 * If no column border is identified then returns -1.
+	 */
+	public int getColumnBorderAt(int xPosition) {
+	    int width = getHeaderOffset();
+	    for (int i = 0, cols = getColumnCount(); i < cols; i++) {
+            if(xPosition >= width - 1 && xPosition <= width + 1) {
+                return i;
+            }
+            width += getColumnWidth(i);
+        }
+        if(xPosition >= width - 1 && xPosition <= width + 1) {
+            return getColumnCount();
+        }
+
+	    return -1;
+	}
+
+    public int getLeftEdge(int resizeColumn) {
+        int width = getHeaderOffset();
+	    for (int i = 0, cols = getColumnCount(); i < resizeColumn && i < cols; i++) {
+            width += getColumnWidth(i);
+        }
+	    return width;
+    }
 }
 
 

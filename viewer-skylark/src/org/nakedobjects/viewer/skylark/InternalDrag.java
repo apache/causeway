@@ -1,108 +1,15 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.utility.NotImplementedException;
 
 
 /**
  * Details a drag event that is internal to view.
  */
-public class InternalDrag extends Drag {
-
-    static InternalDrag create(View source, Location mouseLocation, int modifiers) {
-       return new InternalDrag(source, mouseLocation, modifiers);
-    }
-    
-    private final Location absoluteViewLocation;
-    private final View dragOverlay;
-    private final Location mouseLocation;
-    private final Location originalMouseLocation;
-
+public abstract class InternalDrag extends Drag {
     /**
-     * Creates a new drag event. The source view has its pickup(), and then,
-     * exited() methods called on it. The view returned by the pickup method
-     * becomes this event overlay view, which is moved continuously so that it
-     * tracks the pointer,
-     * @param source
-     *                       the view over which the pointer was when this event started
-     * @param mouseLocation
-     *                       the location within the viewer (the Frame/Applet/Window etc)
-     * @param modifiers
-     *                       the button and key modifiers (@see java.awt.event.MouseEvent)
+     * Gets the location of the pointer relative to the view.
      */
-    private InternalDrag(View source, Location mouseLocation, int modifiers) {
-        super(source, modifiers);
-        this.mouseLocation = new Location(mouseLocation);
-        originalMouseLocation = new Location(mouseLocation);
-        absoluteViewLocation = source.getAbsoluteLocation();
-        dragOverlay = source.dragFrom(this);
-    }
-
-    protected void cancel() {
-        view.dragCancel(this);
-    }
-
-    protected void drag() {
-        view.drag(this);
-    }
-
-    protected void end() {
-        view.dragTo(this);
-    }
-
-    /**
-     * Returns the view that is shown in the overlay to provide feedback about
-     * the drag actions..
-     */
-    public View getDragOverlay() {
-        return dragOverlay;
-    }
-
-    public Location getMouseLocation() {
-        return mouseLocation;
-    }
-
-    public Location getMouseLocationRelativeToView() {
-        Location location = new Location(mouseLocation);
-        location.subtract(absoluteViewLocation);
-        return location;
-    }
-
-    /**
-     * Offset from the location of the mouse when the drag started.
-     */
-    public Offset getOffset() {
-        return mouseLocation.offsetFrom(originalMouseLocation);
-    }
-
-    public View getView() {
-        return view;
-    }
-
-    public void subtract(int x, int y) {
-        mouseLocation.subtract(x, y);
-    }
-
-    public String toString() {
-        return "InternalDrag [location=" + mouseLocation + ",relative=" + getMouseLocationRelativeToView() + ",offset="
-                + absoluteViewLocation + "," + super.toString() + "]";
-    }
-
-    // TODO remove
-    public Offset totalMovement() {
-        throw new NotImplementedException();
-        //        return new Offset(originalLocationWithinView.getX() -
-        // mouseLocation.getX(), originalLocationWithinView.getY() -
-        // mouseLocation.getY());
-    }
-
-    void update(Location mouseLocation, View target) {
-        this.mouseLocation.x = mouseLocation.x;
-        this.mouseLocation.y = mouseLocation.y;
-    }
-
-    public void subtract(Offset offset) {
-        subtract(offset.getDeltaX(), offset.getDeltaY());
-    }
+    public abstract Location getLocation();
 }
 
 /*

@@ -3,15 +3,16 @@ package org.nakedobjects.viewer.skylark.core;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Style;
-import org.nakedobjects.viewer.skylark.ViewDrag;
+import org.nakedobjects.viewer.skylark.View;
 
 
 public class DragViewOutline extends AbstractView {
     private int thickness = 5;
 
-    public DragViewOutline(ViewDrag drag) {
-        super(drag.getSourceView().getContent(), null, null);
-        setSize(drag.getSourceView().getSize());
+    public DragViewOutline(View view) {
+        super(view.getContent(), null, null);
+        setSize(view.getSize());
+        setLocation(view.getAbsoluteLocation());
     }
 
     public void draw(Canvas canvas) {

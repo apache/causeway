@@ -52,7 +52,7 @@ public abstract class AbstractField extends AbstractView {
      * Indicates the start of a drag within this view's bounds. By default does
      * nothing.
      */
-    public View dragFrom(InternalDrag drag) {
+    public View dragFrom(Location location) {
         return null;
     }
 

@@ -114,13 +114,13 @@ public class Viewer {
     public void init(RenderingArea renderingArea, ObjectViewingMechanismListener listener) throws ConfigurationException,
             ComponentException {
         doubleBuffering = Configuration.getInstance().getBoolean(PROPERTY_BASE + "doublebuffering", true);
-        
+
         /*
          * background = (Background)
          * ComponentLoader.loadComponent(PARAMETER_BASE + "background",
          * Background.class);
          */
-        this.renderingArea = renderingArea; 
+        this.renderingArea = renderingArea;
         this.listener = listener;
         spy = new InteractionSpy();
         new ViewerAssistant(this, updateNotifier, spy);
@@ -134,7 +134,7 @@ public class Viewer {
         renderingArea.addKeyListener(interactionHandler);
 
         setupViewFactory();
-        if(Configuration.getInstance().getBoolean(PROPERTY_BASE + "debugstatus", false)) {
+        if (Configuration.getInstance().getBoolean(PROPERTY_BASE + "debugstatus", false)) {
             spy.open();
         }
     }
@@ -232,7 +232,7 @@ public class Viewer {
     }
 
     public void setShowDeveloperStatus(boolean showDeveloperStatus) {
-        if(spy.isVisible()) {
+        if (spy.isVisible()) {
             spy.close();
         } else {
             spy.open();
@@ -260,11 +260,9 @@ public class Viewer {
         }
     }
 
-    protected void popupMenu(Click click, View over) {
-        ViewAreaType type = click.getViewAreaType();
-        Location at = click.getMouseLocation();
-        // TODO make sure this offset is constant
-        boolean forView = type == ViewAreaType.VIEW;
+    protected void popupMenu(View over, Click click) {
+        Location at = click.getLocation();
+        boolean forView = rootView.viewAreaType(new Location(click.getLocation())) == ViewAreaType.VIEW;
 
         forView = (click.isCtrl() && !click.isShift()) ^ forView;
         boolean includeExploration = click.isShift() || explorationMode;
@@ -369,8 +367,8 @@ public class Viewer {
     }
 
     public void start() {
-  //      sizeChange();
-   //     repaint();
+    //      sizeChange();
+    //     repaint();
     }
 
     public void sizeChange() {
@@ -402,12 +400,12 @@ public class Viewer {
         me.translatePoint(-insets.left, -insets.top);
     }
 
-    public View identifyView(Location locationWithinViewer, boolean includeOverlay) {
-        if (includeOverlay && overlayView != null && overlayView.getBounds().contains(locationWithinViewer)) {
-             locationWithinViewer.move(-overlayView.getLocation().getX(), -overlayView.getLocation().getY());
-            return overlayView.identify(locationWithinViewer);
+    public View identifyView(Location location, boolean includeOverlay) {
+        if (includeOverlay && onOverlay(location)) {
+            location.subtract(overlayView.getLocation());
+            return overlayView.identify(location);
         } else {
-            return rootView.identify(locationWithinViewer);
+            return rootView.identify(location);
         }
     }
 
@@ -416,13 +414,106 @@ public class Viewer {
         Insets in = renderingArea.getInsets();
         bounds.contract(in.left + in.right, in.top + in.bottom);
         bounds.contract(0, statusBarHeight);
-        
+
         Bounds d = view.getBounds();
-        
-        if( bounds.limitBounds(d)) {
-	        view.setLocation(d.getLocation());
-	        view.setSize(d.getSize());
-	        view.invalidateLayout();
+
+        if (bounds.limitBounds(d)) {
+            view.setLocation(d.getLocation());
+            view.setSize(d.getSize());
+            view.invalidateLayout();
+        }
+    }
+
+    public void mouseMoved(Location location) {
+        if (onOverlay(location)) {
+            location.subtract(overlayView.getLocation());
+            overlayView.mouseMoved(location);
+        } else {
+            rootView.mouseMoved(location);
+        }
+    }
+
+    private boolean onOverlay(Location mouse) {
+        return overlayView != null && overlayView.getBounds().contains(mouse);
+    }
+
+    public void firstClick(Click click) {
+        if (onOverlay(click.getLocation())) {
+            click.subtract(overlayView.getLocation());
+            overlayView.firstClick(click);
+        } else {
+            rootView.firstClick(click);
+        }
+    }
+
+    public void secondClick(Click click) {
+        if (onOverlay(click.getLocation())) {
+            click.subtract(overlayView.getLocation());
+            overlayView.secondClick(click);
+        } else {
+            rootView.secondClick(click);
+        }
+    }
+
+    public void thirdClick(Click click) {
+        if (onOverlay(click.getLocation())) {
+            click.subtract(overlayView.getLocation());
+            overlayView.thirdClick(click);
+        } else {
+            rootView.thirdClick(click);
+        }
+    }
+
+    public ViewAreaType viewAreaType(Location location) {
+        if (onOverlay(location)) {
+            location.subtract(overlayView.getLocation());
+            return overlayView.viewAreaType(location);
+        } else {
+            return rootView.viewAreaType(location);
+        }
+    }
+ 
+    public View dragFrom(Location location) {    
+        if (onOverlay(location)) {
+            location.subtract(overlayView.getLocation());
+            return overlayView.dragFrom(location);
+        } else {
+            return rootView.dragFrom(location);
+        }
+    }
+    
+    public View pickupContent(Location location) {    
+        if (onOverlay(location)) {
+            location.subtract(overlayView.getLocation());
+            return overlayView.pickupContent(location);
+        } else {
+            return rootView.pickupContent(location);
+        }
+    }
+
+    
+    public View pickupView(Location location) {    
+        if (onOverlay(location)) {
+            location.subtract(overlayView.getLocation());
+            return overlayView.pickupView(location);
+        } else {
+            return rootView.pickupView(location);
+        }
+    }
+    
+    public void showDefaultCursor() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    }
+
+    InteractionSpy getSpy() {
+        return spy;
+    }
+
+    public Drag dragStart(DragStart start) {
+        if (onOverlay(start.getLocation())) {
+            return null;
+        } else {
+            return rootView.dragStart(start);
         }
     }
 }

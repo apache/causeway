@@ -1,39 +1,68 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.viewer.skylark.Canvas;
-import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
+import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.ViewState;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
-import org.nakedobjects.viewer.skylark.core.DebugOption;
 
-public class DebugBorder extends AbstractBorder {
-	public DebugBorder(View wrappedView) {
+public class ObjectBorder extends AbstractBorder {
+	public ObjectBorder(View wrappedView) {
+		this(1, wrappedView);
+	}
+	
+	public ObjectBorder(int size, View wrappedView) {
 		super(wrappedView);
 		
-		bottom = Style.DEBUG.getHeight();
+		top = size;
+		left = size;
+		bottom = size;
+		right = size;
 	}
 
 	protected void debugDetails(StringBuffer b) {
-		b.append("DebugBorder");
+		b.append("ObjectBorder " + top + " pixels\n");
     }
-    
+	
+	public void entered() {
+		getState().setObjectIdentified();
+		getState().setViewIdentified();
+		wrappedView.entered();
+		markDamaged();
+	}
+	
+	public void exited() {
+		getState().clearObjectIdentified();
+		getState().clearViewIdentified();
+		wrappedView.exited();
+		markDamaged();
+	}
+	
 	public void draw(Canvas canvas) {
-		String debug = getView() + " " + getState();
-		int baseline = wrappedView.getSize().getHeight() + Style.DEBUG.getAscent();
-		Color color = Color.DEBUG1;
-		canvas.drawText(debug, 0, baseline, color, Style.DEBUG);
+		Color color = null;
+		ViewState state = getState();
+        if(state.canDrop()) {
+		    color = Style.VALID;
+		} else if(state.cantDrop()) {
+            color = Style.INVALID;
+		} else if(state.isObjectIdentified()) {
+            color = Style.SECONDARY2;
+		}
 		
+		if(color != null) {
+			Size s  = getSize();
+			int width = s.getWidth();
+			for (int i = 0; i < left; i++) {
+				canvas.drawRectangle(i, i, width - 2 * i - 1, s.getHeight() - 2 * i - 1, color);
+			}
+		}
 		super.draw(canvas);
 	}
 	
 	public String toString() {
-		return wrappedView.toString() + "/DebugBorder";
-	}
-	
-	public void firstClick(Click click) {
-		new DebugOption().execute(getWorkspace(), getView(), click.getLocation());
+		return wrappedView.toString() + "/SimpleBorder";
 	}
 }
 

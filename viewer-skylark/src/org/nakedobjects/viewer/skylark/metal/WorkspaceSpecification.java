@@ -23,9 +23,9 @@ public class WorkspaceSpecification implements org.nakedobjects.viewer.skylark.s
 			View workspace;
 			NakedObject root = ((ObjectContent) content).getObject();
 			if(root instanceof UserContext) {
-				workspace = new WindowBorder(new UserContextWorkspace(content, this, axis));
+				workspace = new WindowBorder(new UserContextWorkspace(content, this, axis), false);
 			} else {
-				workspace = new WindowBorder(new LineBorder(5, new DefaultWorkspace(content, this, axis)));
+				workspace = new WindowBorder(new LineBorder(5, new DefaultWorkspace(content, this, axis)), false);
 			}
 			return workspace;
 		}

@@ -11,11 +11,14 @@ import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.Drag;
+import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.Shape;
+import org.nakedobjects.viewer.skylark.SimpleInternalDrag;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.Text;
@@ -23,9 +26,10 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
+import org.nakedobjects.viewer.skylark.basic.LabelAxis;
 import org.nakedobjects.viewer.skylark.basic.SimpleIdentifier;
 import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
-import org.nakedobjects.viewer.skylark.special.ViewResizeOutline;
+import org.nakedobjects.viewer.skylark.special.ResizeDrag;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -491,58 +495,53 @@ public class TextField extends AbstractField {
     }
 
     public void drag(InternalDrag drag) {
-        if (isResizing) {
-    		ViewResizeOutline outline = ((ViewResizeOutline) drag.getDragOverlay());
-    		outline.markDamaged();
-    		outline.adjust(drag);
-         
-        } else {
+        if (!isResizing) {
             if (canChangeValue()) {
-                selection.extendTo(drag.getMouseLocationRelativeToView());
+                selection.extendTo(drag.getLocation());
                 markDamaged();
             }
         }
     }
 
-    public View dragFrom(InternalDrag drag) {
-        Location at = drag.getMouseLocationRelativeToView();
-
+    public Drag dragStart(DragStart drag) {
+        Location at = drag.getLocation();
+        
+        Size size = getView().getSize();
+        Location anchor = getView().getAbsoluteLocation();
+        ViewAxis axis = getViewAxis();
+        if(axis instanceof LabelAxis) {
+            int width = ((LabelAxis) axis).getWidth();
+            size.contractWidth(width);
+            anchor.add(width, 0);
+        }
+        
         if (isOnResize(at)) {
             isResizing = true;
             
-           /*
-            * TODO need to adjust overlay position to accomodate padding caused by the label
-            int left = 0;
-            ViewAxis axis = getViewAxis();
-            if(axis instanceof LabelAxis) {
-                left = ((LabelAxis) axis).getWidth()
-            }
-            */
-            
-    		ViewResizeOutline outline = new ViewResizeOutline(drag, getView(), ViewResizeOutline.BOTTOM_RIGHT);
-    		getViewManager().setOverlayView(outline);
-    		outline.markDamaged();
-    		return outline;
+            return new ResizeDrag(this, new Bounds(anchor, size), ResizeDrag.BOTTOM_RIGHT, new Size(80, lineHeight()), null);
         } else {
             if (canChangeValue()) {
                 isResizing = false;
                 cursor.cursorAt(at);
                 resetSelection();
+                return new SimpleInternalDrag(this, anchor);
             }
         }
-
+        
         markDamaged();
-
+        
         return null;
     }
-
+    
     public void dragTo(InternalDrag drag) {
-        Location at = drag.getMouseLocationRelativeToView();
 
         if (isResizing) {
             isResizing = false;
             getViewManager().showTextCursor();
-
+            
+	        Location at = drag.getLocation();
+   
+	        // TODO this adjustment shoud be done in drag - so can be seen whilst dragging
             int lines = Math.max(1, at.getY() / lineHeight());
             setNoLines(lines);
 
@@ -551,8 +550,8 @@ public class TextField extends AbstractField {
             LOG.debug(lines + " x " + width);
 
             invalidateLayout();
-            //  validateLayout();
         } else {
+	        Location at = drag.getLocation();
             if (canChangeValue()) {
                 selection.extendTo(at);
                 markDamaged();
@@ -748,7 +747,7 @@ public class TextField extends AbstractField {
      */
     public void firstClick(Click click) {
         if (canChangeValue()) {
-            Location at = click.getMouseLocationRelativeToView();
+            Location at = click.getLocation();
             cursor.cursorAt(at);
             resetSelection();
             markDamaged();

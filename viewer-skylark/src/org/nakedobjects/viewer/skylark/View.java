@@ -24,6 +24,8 @@ public interface View extends Cloneable {
      */
     boolean canFocus();
 
+    boolean contains(View view);
+
     String debugDetails();
 
     /**
@@ -40,7 +42,7 @@ public interface View extends Cloneable {
 
     void dragCancel(InternalDrag drag);
 
-    View dragFrom(InternalDrag drag);
+    View dragFrom(Location location);
 
     /**
      * Called as the content being dragged is dragged into this view. This only
@@ -55,6 +57,8 @@ public interface View extends Cloneable {
      * themselves are being dragged.
      */
     void dragOut(ContentDrag drag);
+
+    Drag dragStart(DragStart drag);
 
     /**
      * Called as the drag ends within and without this view. This only occurs
@@ -229,10 +233,10 @@ public interface View extends Cloneable {
      * Called as the mouse is moved around within this view. Does nothing;
      * should be overriden when needed.
      * 
-     * @param at
+     * @param location
      *                       the position relative to the top-left of this view
      */
-    void mouseMoved(Location at);
+    void mouseMoved(Location location);
 
     /**
      * Called when an action generates a result, allowing this view to decide
@@ -246,12 +250,12 @@ public interface View extends Cloneable {
     /**
      * Called as the drag of this view's content starts.
      */
-    View pickup(ContentDrag drag);
+    View pickupContent(Location location);
 
     /**
      * Called as the drag of this view starts.
      */
-    View pickup(ViewDrag drag);
+    View pickupView(Location location);
 
     void print(Canvas canvas);
 

@@ -67,7 +67,7 @@ public class ColorField extends AbstractField {
 
     public void firstClick(Click click) {
         View overlay = new ColorFieldOverlay(this);
-        Location location = click.getMouseLocation();
+        Location location = click.getLocation();
         // TODO offset by constant amount
         location.move(10, 10);
 		overlay.setLocation(location);

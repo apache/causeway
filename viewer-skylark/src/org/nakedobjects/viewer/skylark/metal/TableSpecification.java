@@ -7,7 +7,7 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 public class TableSpecification extends org.nakedobjects.viewer.skylark.special.TableSpecification {
 
     public View createView(Content content, ViewAxis axis) {
-        return new WindowBorder(super.createView(content, axis));
+        return new WindowBorder(super.createView(content, axis), true);
     }
 	
     public String getName() {

@@ -127,13 +127,15 @@ public class TreeNodeBorder extends AbstractBorder {
 	}
     
 	public void firstClick(Click click) {
-		int x = click.getMouseLocationRelativeToView().getX();
-		int y = click.getMouseLocationRelativeToView().getY();
+		int x = click.getLocation().getX();
+		int y = click.getLocation().getY();
 		if(((TreeNodeSpecification) getSpecification()).canOpen(getContent()) && x >= BOX_X_OFFSET && x <= BOX_X_OFFSET + BOX_SIZE && y >= (top - BOX_SIZE) / 2 && y <= (top + BOX_SIZE) / 2) {
 			View newView = replaceWithSpecification.createView(getContent(), getViewAxis());
 			getParent().replaceView(getView(), newView);
-		} else if(x > left) {
+		} else if(y < top && x > left) {
 			((TreeBrowserFrame) getViewAxis()).setSelectedNode(getView());
+		} else {
+		    super.firstClick(click);
 		}
 	}
 	

@@ -15,6 +15,11 @@ public class Offset {
         this.dy = dy;
     }
 
+    public Offset(Location location) {
+        this.dx = location.getX();
+        this.dy = location.getY();
+    }
+
     public int getDeltaX() {
         return dx;
     }

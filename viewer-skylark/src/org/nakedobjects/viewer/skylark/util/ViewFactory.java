@@ -101,10 +101,6 @@ public class ViewFactory implements DebugInfo {
         return v.elements();
     }
 
-    public View createContentDragIcon(ContentDrag drag) {
-    	return  new DragContentIcon(drag);
-    }
-
 	public View createIconizedRootView(NakedObject object) {
         ViewSpecification spec = getIconizedRootViewSpecification(object);
         View view = createRootView(object, spec);

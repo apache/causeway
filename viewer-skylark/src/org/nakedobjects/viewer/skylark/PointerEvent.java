@@ -6,17 +6,14 @@ import java.awt.event.InputEvent;
  * Details an event involving the pointer, such as a click or drag.
  */
 public abstract class PointerEvent {
-    protected final int mods;
- 	protected final View view;
+    protected int mods;
 
  	/**
  	 * Creates a new pointer event object.
- 	 * @param view	the view over which the pointer was when this event occurred
  	 * @param mods  the button and key modifiers (@see java.awt.event.MouseEvent)
  	 */
-    PointerEvent(View view, int mods) {
+    PointerEvent(int mods) {
         this.mods = mods;
-        this.view = view;
     }
 
     /**
@@ -72,7 +69,7 @@ public abstract class PointerEvent {
         String buttons = (isButton1() ? "^" : "-") + (isButton2() ? "^" : "-") + (isButton3() ? "^" : "-");
         String modifiers = (isShift() ? "S" : "-") + (isAlt() ? "A" : "-") + (isCtrl() ? "C" : "-");
 
-        return "buttons=" + buttons + ",modifiers=" + modifiers + ",view=" + view;
+        return "buttons=" + buttons + ",modifiers=" + modifiers;
     }
 }
 

@@ -68,7 +68,6 @@ public class TableRowSpecification extends AbstractCompositeViewSpecification {
         }
 
         public View decorateSubview(View cell) {
-//            return new TableCellResizeBorder(cell);
             return cell;
         }
     }
@@ -76,7 +75,6 @@ public class TableRowSpecification extends AbstractCompositeViewSpecification {
 
 
 class RowBorder extends AbstractBorder {
-    private static final int HANDLE_WIDTH = 20;
     private int baseline;
     private IconGraphic icon;
     private TitleText title;
@@ -88,11 +86,13 @@ class RowBorder extends AbstractBorder {
         title = new ObjectTitleText(this, Style.NORMAL);
         baseline = icon.getBaseline();
 
-        left = icon.getSize().getWidth() + HPADDING + title.getSize().getWidth();
+        left = requiredTitleWidth();
         
         ((TableColumnAxis) wrappedRow.getViewAxis()).ensureOffset(left);
+    }
 
-        right = HANDLE_WIDTH;
+    protected int requiredTitleWidth() {
+        return icon.getSize().getWidth() + HPADDING + title.getSize().getWidth();
     }
 
     protected int getLeft() {
@@ -105,18 +105,14 @@ class RowBorder extends AbstractBorder {
 
     public void draw(Canvas canvas) {
         int bl = getBaseline();
-        icon.draw(canvas, 1, bl);
-        title.draw(canvas, icon.getSize().getWidth() + HPADDING, bl);
+        
+        int width = ((TableColumnAxis) getViewAxis()).getHeaderOffset();
+        Canvas subcanvas = canvas.createSubcanvas(0,0, width, getSize().getHeight());
+        icon.draw(subcanvas, 1, bl);
+        title.draw(subcanvas, icon.getSize().getWidth() + HPADDING, bl);
+        
         int y = getSize().getHeight() - 1;
         canvas.drawLine(0, y, getSize().getWidth(), y, Style.SECONDARY2);
-         
- /*
-        int l = getLeft() - 1;
-        canvas.drawLine(0, 0, l, 0, Style.SECONDARY2);
-        canvas.drawLine(l, 0, l, getSize().getHeight(), Style.SECONDARY2);
-        l--;
-        canvas.drawLine(l, 0, l, getSize().getHeight(), Style.SECONDARY2);
-     */
         
         // components
        super.draw(canvas);

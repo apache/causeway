@@ -83,7 +83,7 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
                 workspace.removeView(view);
             }
         };
-        return new WindowBorder(new ButtonBorder(actions, super.createView(content, new LabelAxis())));
+        return new WindowBorder(new ButtonBorder(actions, super.createView(content, new LabelAxis())), false);
     }
     
 	public String getName() {

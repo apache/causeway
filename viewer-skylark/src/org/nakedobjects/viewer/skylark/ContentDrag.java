@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.apache.log4j.Logger;
 
 
 /**
@@ -8,19 +7,14 @@ import org.apache.log4j.Logger;
  * itself).
  */
 public class ContentDrag extends Drag {
-    private static final Logger LOG = Logger.getLogger(ContentDrag.class);
-
-    public static ContentDrag create(View source, Location mouseLocation, int modifiers) {
-        ContentDrag drag = new ContentDrag(source, mouseLocation, modifiers);
-
-        return drag.dragging == null ? null : drag;
-    }
-
-    private final View dragging;
-    private Location mouseLocation;
+    private final View dragView;
+    private Location location;
     private View previousTarget;
+    private final Content sourceContent;
     private View target;
     private final Workspace workspace;
+    private Location offset;
+    private final View source;
 
     /**
      * Creates a new drag event. The source view has its pickup(), and then,
@@ -30,84 +24,93 @@ public class ContentDrag extends Drag {
      * 
      * @param source
      *                       the view over which the pointer was when this event started
-     * @param mouseLocation
-     *                       the location within the viewer (the Frame/Applet/Window etc)
-     * @param modifiers
-     *                       the button and key modifiers (@see java.awt.event.MouseEvent)
      */
-    private ContentDrag(View source, Location mouseLocation, int modifiers) {
-        super(source, modifiers);
-
-        workspace = source.getWorkspace();
-        dragging = source.pickup(this);
-        if (dragging != null) {
-            source.exited();
-            LOG.debug("pickup " + this);
-            this.mouseLocation = mouseLocation;
-            setDraggingLocation();
-            source.getViewManager().setOverlayView(dragging);
-            source.getViewManager().showHandCursor();
+    public ContentDrag(View source, Location offset, View dragView) {
+        if(dragView == null) {
+            throw new IllegalArgumentException();
         }
+        workspace = source.getWorkspace();
+        sourceContent = source.getContent();
+        this.dragView = dragView;
+        this.offset = offset;
+        this.source = source.getView();
     }
 
     /**
      * Cancels drag by calling dragOut() on the current target, and changes the
      * cursor back to the default.
      */
-    protected void cancel() {
+    protected void cancel(Viewer viewer) {
         if (target != null) {
             target.dragOut(this);
         }
-        getSourceView().getViewManager().clearOverlayView(dragging);
-        getSourceView().getViewManager().showDefaultCursor();
+        viewer.clearOverlayView();
+        viewer.showDefaultCursor();
     }
 
-    protected void drag() {
-        if (dragging != null) {
-            dragging.markDamaged();
-            setDraggingLocation();
-            dragging.markDamaged();
+    protected void drag(Viewer viewer, Location location, int mods) {
+        this.location = location;
+        target = viewer.identifyView(new Location(location), false);
+        this.mods = mods;
+   
+        
+        if (dragView != null) {
+            dragView.markDamaged();
+            Location location1 = new Location(this.location);
+            location1.subtract(offset);
+            dragView.setLocation(location1);
+            workspace.limitBounds(dragView);
+            dragView.markDamaged();
         }
 
         if (target != previousTarget) {
             if (previousTarget != null) {
-                LOG.debug("drag out " + previousTarget);
+                viewer.getSpy().addAction("drag out " + previousTarget);
                 previousTarget.dragOut(this);
                 previousTarget = null;
             }
 
-            LOG.debug("drag in " + target);
+            viewer.getSpy().addAction("drag in " + target);
             target.dragIn(this);
             previousTarget = target;
         }
+    
     }
 
     /**
      * Ends the drag by calling drop() on the current target, and changes the
      * cursor back to the default.
      */
-    protected void end() {
-        LOG.debug("drop on " + target);
+    protected void end(Viewer viewer) {
+        viewer.getSpy().addAction("drop on " + target);
         target.drop(this);
-        getSourceView().getViewManager().clearOverlayView(dragging);
-        getSourceView().getViewManager().showDefaultCursor();
+        viewer.clearOverlayView();
+        viewer.showDefaultCursor();
     }
 
+    public View getOverlay() {
+        return dragView;
+    }
+
+    public View getSource() {
+        return source;
+    }
+    
     /**
      * Returns the Content object from the source view.
      */
     public Content getSourceContent() {
-        return getSourceView().getContent();
-    }
-
-    public View getSourceView() {
-        return view;
+        return sourceContent;
     }
 
     public Location getTargetLocation() {
-        Location location = new Location(mouseLocation);
+        Location location = new Location(this.location);
         location.subtract(target.getAbsoluteLocation());
         return location;
+    }
+    
+    public Location getOffset() {
+        return offset;
     }
 
     /**
@@ -117,27 +120,13 @@ public class ContentDrag extends Drag {
         return target;
     }
 
-    private void setDraggingLocation() {
-        Location location = new Location(mouseLocation);
-        dragging.setLocation(location);
-        workspace.limitBounds(dragging);
-    }
-
-    public void subtract(int x, int y) {
-    //      mouseLocation.move(x, y);
-    }
-
     public String toString() {
         return "ContentDrag [" + super.toString() + "]";
     }
 
-    /**
-     * Captures the latest pointer information (target and location).
-     */
-    protected void update(Location mouseLocation, View target) {
-        this.mouseLocation = mouseLocation;
-        this.target = target;
-    }
+    protected void start(Viewer viewer) {}
+
+    public void subtract(int left, int top) {}
 }
 
 /*

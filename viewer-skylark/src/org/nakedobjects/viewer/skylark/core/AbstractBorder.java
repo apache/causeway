@@ -4,7 +4,8 @@ import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.ContentDrag;
-import org.nakedobjects.viewer.skylark.InternalDrag;
+import org.nakedobjects.viewer.skylark.Drag;
+import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
@@ -32,20 +33,10 @@ public class AbstractBorder extends AbstractViewDecorator {
         //return new Bounds(getLeft(), getTop(), wrappedView.getSize().getWidth(), wrappedView.getSize().getHeight());
     }
 
-    public void drag(InternalDrag drag) {
-        drag.subtract(getLeft(), getTop());
-        super.drag(drag);
-    }
+    public View dragFrom(Location location) {
+        location.subtract(getLeft(), getTop());
 
-    public void dragCancel(InternalDrag drag) {
-        drag.subtract(getLeft(), getTop());
-        super.dragCancel(drag);
-    }
-
-    public View dragFrom(InternalDrag drag) {
-        drag.subtract(getLeft(), getTop());
-
-        return super.dragFrom(drag);
+        return super.dragFrom(location);
     }
 
     public void dragIn(ContentDrag drag) {
@@ -58,11 +49,11 @@ public class AbstractBorder extends AbstractViewDecorator {
         super.dragOut(drag);
     }
 
-    public void dragTo(InternalDrag drag) {
+    public Drag dragStart(DragStart drag) {
         drag.subtract(getLeft(), getTop());
-        super.dragTo(drag);
+        return super.dragStart(drag);
     }
-
+    
     public void draw(Canvas canvas) {
         canvas.reduce(getLeft(), getTop(), getRight(), getBottom());
         wrappedView.draw(canvas);
@@ -177,16 +168,18 @@ public class AbstractBorder extends AbstractViewDecorator {
         super.exited();
     }
 
-    public View pickup(ContentDrag drag) {
-        drag.subtract(getLeft(), getTop());
-
-        return super.pickup(drag);
+    public View pickupContent(Location location) {
+        location.subtract(getLeft(), getTop());
+        return super.pickupContent(location);
     }
 
-    public View pickup(ViewDrag drag) {
-        drag.subtract(getLeft(), getTop());
-
-        return super.pickup(drag);
+    public View pickupView(Location location) {
+        if(overBorder(location)) {
+            return  new DragViewOutline(getView());
+        } else {
+	        location.subtract(getLeft(), getTop());
+	        return super.pickupView(location);
+        }
     }
 
     public void secondClick(Click click) {

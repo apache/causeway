@@ -2,11 +2,16 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
-import org.nakedobjects.viewer.skylark.ContentDrag;
+import org.nakedobjects.viewer.skylark.Drag;
+import org.nakedobjects.viewer.skylark.DragStart;
+import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.ViewDrag;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
+import org.nakedobjects.viewer.skylark.core.DragViewOutline;
 
 public class SimpleBorder extends AbstractBorder {
 	private int handleWidth = 14;
@@ -28,12 +33,17 @@ public class SimpleBorder extends AbstractBorder {
 		b.append("SimpleBorder " + top + " pixels\n");
     	b.append("           handle " + handleWidth + " pixels");
     }
-   
-	public void dragIn(ContentDrag drag) {
-		wrappedView.dragIn(drag);
-	    markDamaged();
-	}
-
+    
+    public Drag dragStart(DragStart drag) {
+        if(overBorder(drag.getLocation())) {
+            Location location = drag.getLocation();
+            DragViewOutline dragOverlay = new DragViewOutline(getView());
+            return new ViewDrag(this, new Offset(location.getX(), location.getY()), dragOverlay);
+        } else {
+            return super.dragStart(drag);
+        }
+    }
+	
 	public void entered() {
 		getState().setObjectIdentified();
 		getState().setViewIdentified();

@@ -7,7 +7,7 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 
 public class SubviewIconSpecification extends IconSpecification {
 	public View createView(Content content, ViewAxis axis) {
-		return new SimpleBorder(1, new IconView(content, this, axis, Style.NORMAL));
+		return new ObjectBorder(new IconView(content, this, axis, Style.NORMAL));
     }
 }
 

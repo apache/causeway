@@ -11,7 +11,6 @@ import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
-import org.nakedobjects.viewer.skylark.ViewDrag;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
@@ -75,11 +74,14 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     }
 
     public Size getRequiredSize() {
-        Size size = left.getRequiredSize();
+        Size size = new Size();
+        
+        if(left != null) {
+            size = left.getRequiredSize();
+        }
         size.ensureWidth(225);
         size.extend(getPadding());
         size.extendWidth(5);
-
         if (right != null) {
             Size rightSize = right.getRequiredSize();
             size.ensureHeight(rightSize.getHeight());
@@ -105,18 +107,16 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     }
 
     public void layout() {
-        left.layout();
-        if (right != null) {
-            right.layout();
-        }
- 
        if (invalidLayout) {
+           left.layout();
+	        if (right != null) {
+	            right.layout();
+	        }
             Bounds workspaceLimit = getWorkspace().getBounds();
             workspaceLimit.contract(getWorkspace().getPadding());
             Size rightPanelRequiredSize = (right == null) ? new Size() : right.getRequiredSize();
             Size leftPanelRequiredSize = left.getRequiredSize();
-            leftPanelRequiredSize.setWidth(225);
-            
+             
             Bounds subviews = new Bounds(leftPanelRequiredSize);
             subviews.extendWidth(rightPanelRequiredSize.getWidth());
             subviews.ensureHeight(rightPanelRequiredSize.getHeight());
@@ -127,7 +127,6 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
                 }
             }
             
-        
             leftPanelRequiredSize.setHeight(subviews.getHeight());
             left.setSize(leftPanelRequiredSize);
             
@@ -140,39 +139,22 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
                 right.layout();
             }
             invalidLayout = false;
-
-           /* 
-            
-            
-            
-           Size treeBrowserSize = left.getRequiredSize();
-           
-            if (right != null) {
-                right.layout();
-                right.setSize(right.getRequiredSize());
-                treeBrowserSize.ensureHeight(right.getSize().getHeight());
-            }
-
-            left.layout();
-            left.setRequiredSize(treeBrowserSize);
-            left.setSize(left.getRequiredSize());
-           
-            if (right != null) {
-                right.setLocation(new Location(rightViewOffet(), 0));       
-                right.layout();
-            }
-            
-            invalidLayout = false;
-            */
         }
     }
 
+    
+    protected View subviewFor(Location location) {
+        if(left.getBounds().contains(location)) {
+           return  left;
+        } else if(right != null && right.getBounds().contains(location)) {
+            return right;
+        } else {
+            return null;
+        }
+    }
+ 
     private int rightViewOffet() {
         return left.getSize().getWidth() + 5;
-    }
-
-    public View pickup(ViewDrag drag) {
-        return super.pickup(drag);
     }
 
     public void replaceView(View toReplace, View replacement) {
@@ -193,25 +175,8 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     }
 
     void initLeftPane(View view) {
-        left = new ScrollBorder(view);
- //       left = new ResizeBorder(new ScrollBorder(view));
+        left = new ResizeBorder(new ScrollBorder(view));
         left.setParent(getView());
-    }
-
-    public View identify(Location location) {
-        getViewManager().getSpy().addTrace(this, "mouse location within browser frame", location);         
-        
-        if (left != null && left.getBounds().contains(location)) {
-            getViewManager().getSpy().addTrace("--> subview: " + left);
-            return left.identify(location);
-        }
-        if (right != null && right.getBounds().contains(location)) {
-            getViewManager().getSpy().addTrace("--> subview: " + right);
-            location.add(-rightViewOffet(), 0);
-            return right.identify(location);
-        }
-
-        return getView();
     }
 
     private void showInRightPane(View view) {

@@ -4,10 +4,8 @@ package org.nakedobjects.viewer.skylark;
  * Describes a mouse click event.
  */
 public class Click extends PointerEvent {
-    private final Location locationWithinView;
-    private final Location mouseLocation;
-    private final Location workspaceOffset;
- 	private final ViewAreaType type;
+    private final Location location;
+    private Location locationWithinViewer;
 
     /**
      * Creates a new click event object.
@@ -21,73 +19,41 @@ public class Click extends PointerEvent {
      *                       java.awt.event.MouseEvent)
      */
     public Click(View source, Location mouseLocation, int modifiers) {
-        super(source, modifiers);
+        super(modifiers);
 
-        this.mouseLocation = new Location(mouseLocation);
-        locationWithinView = new Location(mouseLocation);
-        locationWithinView.subtract(source.getAbsoluteLocation());
-
-        View parent = source.getParent();
-        if(parent == null || parent.getWorkspace() == null) {
-            workspaceOffset = new Location(0, 0);
-        } else {
-	        View viewsWorkspace = parent.getWorkspace().getView();
-	        workspaceOffset = viewsWorkspace.getAbsoluteLocation();
-	        Padding padding = viewsWorkspace.getPadding();
-            workspaceOffset.move(padding.getLeft(), padding.getTop());
-        }
-        
-        this.type = view.viewAreaType(new Location(locationWithinView));
+        this.location = new Location(mouseLocation);
+        this.locationWithinViewer = new Location(mouseLocation);
     }
 
-    /** 
-     * Returns the area type for the event.
-     */
-    public ViewAreaType getViewAreaType() {
-    	return type;
-    }
-
-    /**
-     * Returns the location of the mouse, within the view that was clicked on.
-     */
-    public Location getMouseLocationRelativeToView() {
-        return locationWithinView;
-    }
-
-    public Location getMouseLocation() {
-        return mouseLocation;
-    }
-    
-    public Location getLocationWithinWorkspace() {
-        Location location = new Location(mouseLocation);
-        location.subtract(workspaceOffset);
+    public Location getLocation() {
         return location;
     }
-
-    /**
-     * Returns the view that clicked on.
-     */
-    public View getView() {
-        return view;
+    
+    public Location getLocationWithinViewer() {
+        return locationWithinViewer;
     }
 
     /**
      * Translate the location of this event by the specified offset.
      */
     public void subtract(int x, int y) {
-        locationWithinView.subtract(x, y);
+        location.subtract(x, y);
     }
 
     public String toString() {
-        return "Click [type=" + type + "," + super.toString() + "]";
+        return "Click [location=" + location + "," + super.toString() + "]";
     }
 
     public void add(Offset offset) {
-        locationWithinView.add(offset.getDeltaX(), offset.getDeltaY());
+        location.add(offset.getDeltaX(), offset.getDeltaY());
     }
 
     public void subtract(Offset offset) {
         subtract(offset.getDeltaX(), offset.getDeltaY());
+    }
+
+    public void subtract(Location location) {
+        subtract(location.getX(), location.getY());
     }
 }
 

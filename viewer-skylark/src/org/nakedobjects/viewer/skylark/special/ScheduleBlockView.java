@@ -12,7 +12,6 @@ import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
-import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
@@ -73,9 +72,8 @@ public class ScheduleBlockView extends ObjectView {
 
     	return mouseLocation.getX() > objectBoundary ? ViewAreaType.INTERNAL : ViewAreaType.CONTENT;
 	}
-    
-    public View dragFrom(InternalDrag drag) {
-	    Location location = drag.getMouseLocationRelativeToView();
+    /*
+    public View dragFrom(Location location) {
 		int direction;
 		
 		if(location.getY() <= 8) {
@@ -87,7 +85,7 @@ public class ScheduleBlockView extends ObjectView {
 		}
 		
 		// TODO this should be done via static method that creates and displays overlay
-	    ViewResizeOutline outlineView =new ViewResizeOutline(drag, this, direction);
+	    ViewResizeOutline outlineView =new ViewResizeOutline(this, direction);
 	    
 //	    outlineView.setLocation(getView().getLocationWithinViewer());
 //	    outlineView.setSize(getView().getSize());
@@ -96,6 +94,7 @@ public class ScheduleBlockView extends ObjectView {
 		LOG.debug("drag view start " + location);
 		return outlineView;
 	}
+    */
     
     public void dragTo(InternalDrag drag) {
     	NakedObject object = ((ObjectContent) getContent()).getObject();
@@ -107,8 +106,7 @@ public class ScheduleBlockView extends ObjectView {
 	}
     
     public void drag(InternalDrag drag) {
-       	ViewResizeOutline outlineView = (ViewResizeOutline) drag.getDragOverlay();
-    	outlineView.adjust(drag);
+       	ViewResizeOutline outlineView = (ViewResizeOutline) drag.getOverlay();
 		outlineView.setDisplay(calculate(drag).title().toString());
   	}
 
@@ -116,10 +114,10 @@ public class ScheduleBlockView extends ObjectView {
 		// TODO this fails when the layout decorator is itself decorated (e.g. by a WindowBorder!
 		ScheduleLayout layout = (ScheduleLayout) getParent().getSpecification();
        	
-		Location location = drag.getMouseLocationRelativeToView();
+		Location location = drag.getLocation();
 		location.move(0, -getView().getLocation().getY());
-		int top = drag.getDragOverlay().getLocation().getY() - location.getY();
-       	int bottom = top + drag.getDragOverlay().getSize().getHeight();
+		int top = drag.getOverlay().getLocation().getY() - location.getY();
+       	int bottom = top + drag.getOverlay().getSize().getHeight();
        	
        	LOG.debug(top + " " + bottom);
        	

@@ -6,6 +6,8 @@ import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.ClassAbout;
+import org.nakedobjects.object.defaults.FastFinder;
+import org.nakedobjects.object.defaults.SimpleNakedClass;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
@@ -22,6 +24,7 @@ import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.basic.ClassOption;
 import org.nakedobjects.viewer.skylark.basic.ClassTitleText;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
+import org.nakedobjects.viewer.skylark.basic.ObjectBorder;
 import org.nakedobjects.viewer.skylark.core.ObjectView;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
@@ -35,7 +38,7 @@ public class ClassIcon extends ObjectView {
 		}
 
         public View createView(Content content, ViewAxis axis) {
-    		return new ClassIcon(content, this, axis);
+    		return new ObjectBorder(new ClassIcon(content, this, axis));
         }
 
 		public String getName() {
@@ -58,7 +61,6 @@ public class ClassIcon extends ObjectView {
     private IconGraphic iconSelected;
     private IconGraphic icon;
     private final ClassTitleText title;
-    private boolean identified;
 
     public ClassIcon(final Content content, ViewSpecification specification, ViewAxis axis) {
         super(content, specification, axis);
@@ -74,14 +76,12 @@ public class ClassIcon extends ObjectView {
 
     public void exited() {
         icon = iconUnselected;
-        identified = false;
         markDamaged();
         super.exited();
     }
     
     public void entered() {
         icon = iconSelected;
-        identified = true;
         markDamaged();
         super.entered();
     }
@@ -92,11 +92,7 @@ public class ClassIcon extends ObjectView {
         if(DEBUG) {
             canvas.drawRectangle(getSize(), Color.DEBUG1);
         }
-        
-        if(identified) {
-            canvas.drawRectangle(getSize(), Style.SECONDARY2);
-        }
-        
+       
         int x = 0;
         int y = icon.getBaseline();
         icon.draw(canvas, x, y);
@@ -125,15 +121,28 @@ public class ClassIcon extends ObjectView {
     
     public void secondClick(Click click) {
         ClassAbout classAbout = getNakedClass().forNakedClass().getClassAbout();
-        if(classAbout == null || classAbout.canAccess().isAllowed()) {
-	        NakedCollection instances = getNakedClass().allInstances();
-			View view = ViewFactory.getViewFactory().createOpenRootView(instances);
-			Location location = click.getLocationWithinWorkspace();
-			location.move(15, -30);
-            view.setLocation(location);
-			getWorkspace().addView(view);
+            if (classAbout == null || classAbout.canAccess().isAllowed()) {
+            View view = null;
+            if (click.isCtrl()) {
+                NakedCollection instances = getNakedClass().allInstances();
+                view = ViewFactory.getViewFactory().createOpenRootView(instances);
+            } else {
+                if (getNakedClass() instanceof SimpleNakedClass) {
+
+                    FastFinder finder = ((SimpleNakedClass) getNakedClass()).actionFind();
+                    view = ViewFactory.getViewFactory().createOpenRootView(finder);
+                }
+            }
+
+            if (view != null) {
+                Location location = getView().getAbsoluteLocation();
+                location.subtract(getWorkspace().getAbsoluteLocation());
+                location.add(getSize().getWidth() + 10, 0);
+                view.setLocation(location);
+                getWorkspace().addView(view);
+            }
         }
-	}
+    }
     
     private NakedClass getNakedClass()
     {

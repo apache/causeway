@@ -14,7 +14,6 @@ import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
-import org.nakedobjects.viewer.skylark.ViewDrag;
 
 import java.util.Vector;
 
@@ -127,26 +126,6 @@ public class CompositeObjectView extends ObjectView {
         return v;
     }
 
-    public View identify(final Location location) {
-        getViewManager().getSpy().addTrace(this, "mouse location within view", location);
-        getViewManager().getSpy().addTrace(this, "view's location within parent", getLocation());
-
-        View views[] = getSubviews();
-        for (int i = views.length - 1; i >= 0; i--) {
-            View subview = views[i];
-            if (subview.getBounds().contains(location)) {
-                location.move(-subview.getLocation().getX(), -subview.getLocation().getY());
-                getViewManager().getSpy().addTrace(this, "mouse location within subview", location);
-                getViewManager().getSpy().addTrace("--> subview: " + subview);
-                return subview.identify(location);
-            }
-        }
-
-        getViewManager().getSpy().addTrace("----");
-        getViewManager().getSpy().addTrace(this, "mouse location identified within composite view", this);
-        return getView();
-    }
-
     public void invalidateContent() {
         buildInvalid = true;
         invalidateLayout();
@@ -184,8 +163,18 @@ public class CompositeObjectView extends ObjectView {
         }
     }
 
-    public View pickup(ViewDrag drag) {
-        return canDragView ? super.pickup(drag) : null;
+    protected View subviewFor(Location location) {
+        View views[] = getSubviews();
+        for (int i = views.length - 1; i >= 0; i--) {
+            if (views[i].getBounds().contains(location)) {
+                return views[i];
+            }
+        }
+        return null;
+    }
+    
+    public View pickupView(Location location) {
+        return canDragView ? super.pickupView(location) : null;
     }
 
     public void removeView(View view) {
@@ -233,10 +222,15 @@ public class CompositeObjectView extends ObjectView {
         //invalidateLayout();
     }
 
-    public ViewAreaType viewAreaType(Location mouseLocation) {
-        boolean overTitle = new Bounds(5, 0, Style.TITLE.stringWidth(title()), 24).contains(mouseLocation);
-
-        return overTitle ? ViewAreaType.CONTENT : ViewAreaType.VIEW;
+    public ViewAreaType viewAreaType(Location location) {
+        View subview = subviewFor(location);
+        if(subview == null) {
+            boolean overTitle = new Bounds(5, 0, Style.TITLE.stringWidth(title()), 24).contains(location);
+            return overTitle ? ViewAreaType.CONTENT : ViewAreaType.VIEW;
+        } else {
+            location.subtract(subview.getLocation());
+            return subview.viewAreaType(location);
+        }
     }
 }
 

@@ -1,11 +1,8 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
-import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
-import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 
 import org.apache.log4j.Logger;
@@ -13,179 +10,12 @@ import org.apache.log4j.Logger;
 
 
 public class ViewResizeOutline extends AbstractView {
-    public static final int TOP = 1;
-    public static final int BOTTOM = 2;
-    public static final int LEFT = 3;
-    public static final int RIGHT = 4;
-    public static final int TOP_LEFT = 5;
-    public static final int TOP_RIGHT = 6;
-    public static final int BOTTOM_LEFT = 7;
-    public static final int BOTTOM_RIGHT = 8;
-    public static final int CENTER = 9;
-    
     private final int thickness = 1;
-	private final int direction;
-	private final Bounds origin;
 	private String label = "";
-    
-    public ViewResizeOutline(InternalDrag drag, View forView, int direction) {
-    	super(forView.getContent(), null, null);
-    	this.direction = direction;
  
-    	Logger.getLogger(getClass()).debug("drag outline for " + forView);
-    	setLocation(forView.getAbsoluteLocation());
-    	setSize(forView.getSize());
-    	
-    	Logger.getLogger(getClass()).debug("drag outline initial size " + getSize() +  "  " + forView.getSize());
-    	
-    	origin = getBounds();
-    	
-    	switch (direction) {
-			case TOP:
-		    	getViewManager().showResizeUpCursor();
-				break;
-				
-			case BOTTOM:
-		    	getViewManager().showResizeDownCursor();
-				break;
-				
-			case LEFT:
-		    	getViewManager().showResizeLeftCursor();
-				break;
-				
-			case RIGHT:
-		    	getViewManager().showResizeRightCursor();
-				break;
-				
-			case TOP_LEFT:
-		    	getViewManager().showResizeUpLeftCursor();
-				break;
-				
-			case TOP_RIGHT:
-		    	getViewManager().showResizeUpRightCursor();
-				break;
-				
-			case BOTTOM_LEFT:
-		    	getViewManager().showResizeDownLeftCursor();
-				break;
-				
-			case BOTTOM_RIGHT:
-		    	getViewManager().showResizeDownRightCursor();
-				break;
-				
-			case CENTER:
-		    	getViewManager().showMoveCursor();
-				break;
-				
-			default :
-				break;
-		}
+    protected ViewResizeOutline() {
+        super(null, null, null);
     }
-    
-    public void adjust(InternalDrag drag) {        
-    	switch (direction) {
-			case ViewResizeOutline.TOP :
-				extendUpward(drag);
-				break;
-
-			case ViewResizeOutline.BOTTOM :
-				extendDownward(drag);
-				break;
-
-			case ViewResizeOutline.LEFT :
-				extendLeft(drag);
-				break;
-
-			case ViewResizeOutline.RIGHT :
-				extendRight(drag);
-				break;
-
-			case ViewResizeOutline.TOP_RIGHT :
-				extendRight(drag);
-				extendUpward(drag);
-				break;
-
-			case ViewResizeOutline.BOTTOM_RIGHT :
-				extendRight(drag);
-				extendDownward(drag);
-				break;
-
-			case ViewResizeOutline.TOP_LEFT :
-				extendLeft(drag);
-				extendUpward(drag);
-				break;
-
-			case ViewResizeOutline.BOTTOM_LEFT :
-				extendLeft(drag);
-				extendDownward(drag);
-				break;
-
-			case ViewResizeOutline.CENTER :
-				moveUpDown(drag);
-				break;
-
-			default :
-				break;
-		}
- 	}
-
-
-    private void extendDownward(InternalDrag drag) {
-		markDamaged();
-		int height = drag.getMouseLocationRelativeToView().getY();
-		int width = getSize().getWidth();
-		setSize(new Size(width, height));
-		markDamaged();
-	}
-
-    private void extendRight(InternalDrag drag) {
-		markDamaged();
-		int height = getSize().getHeight();
-		int width = drag.getMouseLocationRelativeToView().getX();
-		setSize(new Size(width, height));
-		markDamaged();
-	}
-
-	private void extendLeft(InternalDrag drag) {
-		markDamaged();
-		int difference = drag.totalMovement().getDeltaX();
-
-		Bounds bounds = new Bounds(origin);
-		bounds.extendHeight(difference);
-		bounds.translate(-difference, 0);
-		setBounds(bounds);
-
-		markDamaged();
-	}
-	
-	private void extendUpward(InternalDrag drag) {
-		markDamaged();
-		int difference = drag.totalMovement().getDeltaY();
-
-		Bounds bounds = new Bounds(origin);
-		bounds.extendHeight(difference);
-		bounds.translate(0, -difference);
-		setBounds(bounds);
-
-		markDamaged();
-	}
-	
-	private void moveUpDown(InternalDrag drag) {
-		markDamaged();
-		int difference = drag.totalMovement().getDeltaY();
-		
-		Bounds bounds = new Bounds(origin);
-		bounds.translate(0, -difference);
-		setBounds(bounds);
-		
-		markDamaged();
-	}
-
-
-    public void dispose() {
-    	getViewManager().showArrowCursor();
-		super.dispose();
-	}
 
 	public void draw(Canvas canvas) {
         super.draw(canvas);
@@ -197,14 +27,16 @@ public class ViewResizeOutline extends AbstractView {
 		}
         canvas.drawText(label, 2, 16, Style.PRIMARY2, Style.NORMAL);
     }
-    
-	public int getDirection() {
-		return direction;
-	}
 
 	public void setDisplay(String label) {
 		this.label = label == null ? "" : label;
 	}
+	
+    public void dispose() {
+    	getViewManager().showArrowCursor();
+		super.dispose();
+	}
+
 }
 
 /*

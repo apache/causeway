@@ -13,8 +13,6 @@ public interface Workspace extends View {
     
     void raise(View view);
 
-    void removeOtherRootViews(View view);
-
     void removeViewsFor(NakedObject object);
  }
 /*

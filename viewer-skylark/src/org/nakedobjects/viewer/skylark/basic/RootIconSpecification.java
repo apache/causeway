@@ -8,14 +8,13 @@ import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
-import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.core.AbstractViewDecorator;
 
 public class RootIconSpecification extends IconSpecification {
 	public View createView(Content content, ViewAxis axis) {
-		return new SimpleBorder(1, new CloseIcon(new IconView(content, this, axis, Style.NORMAL)));
+		return new CloseIcon(new IconView(content, this, axis, Style.NORMAL));
     }
 }
 
@@ -25,12 +24,8 @@ class CloseIcon extends AbstractViewDecorator {
     }
     
     public void secondClick(Click click) {
-        if(click.getViewAreaType() == ViewAreaType.VIEW) {
-            openIcon();
-        } else {
-            super.secondClick(click);
-        }
-    }
+        openIcon();
+     }
     
     private void openIcon() {
         closeIcon();

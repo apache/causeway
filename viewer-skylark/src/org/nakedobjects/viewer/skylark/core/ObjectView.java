@@ -10,16 +10,23 @@ import org.nakedobjects.object.control.defaults.AbstractPermission;
 import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.Assert;
+import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
+import org.nakedobjects.viewer.skylark.Drag;
+import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.viewer.skylark.Offset;
+import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
+import org.nakedobjects.viewer.skylark.ViewDrag;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
+import org.nakedobjects.viewer.skylark.basic.DragContentIcon;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 
@@ -28,8 +35,7 @@ public abstract class ObjectView extends AbstractView {
         super(content, design, axis);
 
         if (!(content instanceof ObjectContent)) {
-            throw new IllegalArgumentException(
-                "Content must be ObjectContent or AssociateContent: " + content);
+            throw new IllegalArgumentException("Content must be ObjectContent or AssociateContent: " + content);
         }
 
         getViewManager().addToNotificationList(this);
@@ -39,14 +45,11 @@ public abstract class ObjectView extends AbstractView {
         getViewManager().removeFromNotificationList(this);
         super.dispose();
     }
-    
+
     public void dragIn(ContentDrag drag) {
         NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
-
         NakedObject target = getObject();
-
-        ActionSpecification action = dropAction(source, target); //object.getNakedClass().getObjectAction(Action.USER, null, new NakedClass[] {source.getNakedClass()});
-
+        ActionSpecification action = dropAction(source, target);
         if (action != null) {
             About about = action.getAbout(ClientSession.getSession(), target, source);
 
@@ -54,8 +57,7 @@ public abstract class ObjectView extends AbstractView {
                 getViewManager().setStatus(about.getDescription());
                 getState().setCanDrop();
             } else {
-                getViewManager().setStatus(about.getDescription() + ": " +
-                    about.canUse().getReason());
+                getViewManager().setStatus(about.getDescription() + ": " + about.canUse().getReason());
                 getState().setCantDrop();
             }
         } else {
@@ -64,16 +66,32 @@ public abstract class ObjectView extends AbstractView {
         }
         markDamaged();
     }
-    
+
     public void dragOut(ContentDrag drag) {
         getState().clearObjectIdentified();
         markDamaged();
     }
 
+    public Drag dragStart(DragStart drag) {
+        View subview = subviewFor(drag.getLocation());
+        if (subview != null) {
+            drag.subtract(subview.getLocation());
+            return subview.dragStart(drag);
+        } else {
+            if (drag.isCtrl()) {
+                View dragOverlay = new DragViewOutline(getView());
+                return new ViewDrag(this, new Offset(drag.getLocation()), dragOverlay);
+            } else {
+                View dragOverlay = new DragContentIcon(getContent());
+                return new ContentDrag(this, drag.getLocation(), dragOverlay);
+            }
+        }
+    }
+
     /**
-     * Called when a dragged object is dropped onto this view.  The default
-     * behaviour implemented here calls the action method on the target, passing the
-     * source object in as the only parameter.
+     * Called when a dragged object is dropped onto this view. The default
+     * behaviour implemented here calls the action method on the target, passing
+     * the source object in as the only parameter.
      */
     public void drop(ContentDrag drag) {
         Assert.assertTrue(drag.getSourceContent() instanceof ObjectContent);
@@ -85,9 +103,8 @@ public abstract class ObjectView extends AbstractView {
         Assert.assertNotNull(target);
 
         ActionSpecification action = dropAction(source, target);
-        
-        if ((action != null) &&
-                action.getAbout(ClientSession.getSession(), target, source).canUse().isAllowed()) {
+
+        if ((action != null) && action.getAbout(ClientSession.getSession(), target, source).canUse().isAllowed()) {
             NakedObject result = action.execute(target, source);
 
             if (result != null) {
@@ -104,31 +121,42 @@ public abstract class ObjectView extends AbstractView {
 
     private ActionSpecification dropAction(NakedObject source, NakedObject target) {
         ActionSpecification action;
-        if(target instanceof NakedClass) {
+        if (target instanceof NakedClass) {
             NakedObjectSpecification forNakedClass = ((NakedClass) target).forNakedClass();
-            action = forNakedClass.getClassAction(ActionSpecification.USER, null, new NakedObjectSpecification[] {source.getSpecification()});
+            action = forNakedClass.getClassAction(ActionSpecification.USER, null, new NakedObjectSpecification[] { source
+                    .getSpecification() });
         } else {
-            action = target.getSpecification().getObjectAction(ActionSpecification.USER, null, new NakedObjectSpecification[] {source.getSpecification()});
+            action = target.getSpecification().getObjectAction(ActionSpecification.USER, null,
+                    new NakedObjectSpecification[] { source.getSpecification() });
         }
         return action;
+    }
+
+    public void firstClick(Click click) {
+        View subview = subviewFor(click.getLocation());
+        if (subview != null) {
+            click.subtract(subview.getLocation());
+            subview.firstClick(click);
+        } else {
+            if (click.isButton2() || click.isButton1() && click.isAlt()) {
+                View view = ViewFactory.getViewFactory().createOpenRootView(getObject());
+                Size size = view.getRequiredSize();
+                view.setSize(size);
+                Location location = new Location(click.getLocationWithinViewer());
+                location.subtract(size.getWidth() / 2, size.getHeight() / 2);
+                view.setLocation(location);
+                getViewManager().setOverlayView(view);
+            }
+        }
     }
 
     protected NakedObject getObject() {
         return ((ObjectContent) getContent()).getObject();
     }
 
-    public View pickup(ContentDrag drag) {
-        View dragView;
-        dragView = ViewFactory.getViewFactory().createContentDragIcon(drag);
-        getViewManager().setOverlayView(dragView);
-        return dragView;
-    }
-
     public void viewMenuOptions(MenuOptionSet options) {
-        super.viewMenuOptions(options);
- 
-        if(getObject() instanceof UserContext) {
-        options.add(MenuOptionSet.VIEW, new MenuOption("New Workspace") {
+        if (getObject() instanceof UserContext) {
+            options.add(MenuOptionSet.VIEW, new MenuOption("New Workspace") {
                 public Permission disabled(View component) {
                     return AbstractPermission.allow(getObject() instanceof UserContext);
                 }
@@ -142,9 +170,10 @@ public abstract class ObjectView extends AbstractView {
                 }
             });
         }
+
+        super.viewMenuOptions(options);
     }
 }
-
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business

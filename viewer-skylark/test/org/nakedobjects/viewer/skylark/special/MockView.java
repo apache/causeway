@@ -7,6 +7,8 @@ import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
+import org.nakedobjects.viewer.skylark.Drag;
+import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
@@ -23,7 +25,6 @@ import org.nakedobjects.viewer.skylark.Workspace;
 
 public class MockView implements View
 {
-
     public void addView(View view) {}
 
     public boolean canChangeValue() {
@@ -44,7 +45,7 @@ public class MockView implements View
 
     public void dragCancel(InternalDrag drag) {}
 
-    public View dragFrom(InternalDrag drag) {
+    public View dragFrom(Location location) {
         return null;
     }
 
@@ -166,11 +167,11 @@ public class MockView implements View
 
     public void objectActionResult(Naked result, Location at) {}
 
-    public View pickup(ContentDrag drag) {
+    public View pickupContent(Location location) {
         return null;
     }
 
-    public View pickup(ViewDrag drag) {
+    public View pickupView(Location location) {
         return null;
     }
 
@@ -208,11 +209,15 @@ public class MockView implements View
         return null;
     }
 
-    public Location getLocationWithinViewer() {
+    public Location getAbsoluteLocation() {
         return null;
     }
 
-    public Location getAbsoluteLocation() {
+    public boolean contains(View view) {
+        return false;
+    }
+S
+    public Drag dragStart(DragStart drag) {
         return null;
     }
 }

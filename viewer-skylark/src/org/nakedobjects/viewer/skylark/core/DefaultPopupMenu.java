@@ -127,7 +127,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
 
     public void firstClick(Click click) {
         if(click.isButton1()) {
-	    	mouseMoved(click.getMouseLocationRelativeToView());
+	    	mouseMoved(click.getLocation());
 	        invoke();
         }
     }
@@ -237,6 +237,10 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
 			invoke();
 
 		} else if (keyCode == KeyEvent.VK_UP) {
+		    if(optionIdentified == 0) {
+		        optionIdentified = items.length;
+		    }
+		    
 			for(int i = optionIdentified - 1; i >= 0; i--) {
 				if(items[i].isBlank) {
 					continue;
@@ -247,8 +251,12 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
 				setOption(i);
 				break;
 			}
-
+			
 		} else if (keyCode == KeyEvent.VK_DOWN) {
+		    if(optionIdentified == items.length - 1) {
+		        optionIdentified = -1;
+		    }
+
 			for(int i = optionIdentified + 1; i < items.length; i++) {
 				if(items[i].isBlank) {
 					continue;

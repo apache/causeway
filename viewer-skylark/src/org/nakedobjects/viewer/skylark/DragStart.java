@@ -1,27 +1,29 @@
-package org.nakedobjects.viewer.skylark.basic;
+package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.viewer.skylark.Bounds;
-import org.nakedobjects.viewer.skylark.Canvas;
-import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.Style;
+public class DragStart extends PointerEvent {
+    private final Location location;
 
-public class DragContentIcon extends IconView {
-	private final int thickness = 1;
-
-	public DragContentIcon(Content content) {
-    	super(content, null, null, Style.LABEL);
-    	setSize(getRequiredSize());
+    public DragStart(Location location, int mods) {
+        super(mods);
+        this.location = location;
     }
 
- 	public void draw(Canvas canvas) {
-        super.draw(canvas);
-
-        Bounds r = getBounds();
-        
-        for (int i = 0; i < thickness; i++) {
-	        canvas.drawRectangle(i, i, r.getWidth() - i * 2 - 1, r.getHeight() - i * 2 - 1, Style.SECONDARY1);
-		}
+    public Location getLocation() {
+        return location;
     }
+
+    public void subtract(Location location) {
+        this.location.subtract(location);
+    }
+
+    public void subtract(int x, int y) {
+        location.subtract(x,y);
+    }
+
+    public void add(Offset offset) {
+        location.add(offset);
+    }
+    
 }
 
 

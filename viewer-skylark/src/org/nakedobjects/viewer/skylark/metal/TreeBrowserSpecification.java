@@ -11,7 +11,7 @@ public class TreeBrowserSpecification extends org.nakedobjects.viewer.skylark.sp
     }
 
     protected View addBorder(View frame) {
-        return new WindowBorder(frame);
+        return new WindowBorder(frame, false);
     }
     
     public boolean canDisplay(Naked object) {

@@ -43,8 +43,8 @@ class ColorFieldOverlay extends AbstractView implements View {
 	}
 	
 	public void firstClick(Click click) {
-		int x = click.getMouseLocationRelativeToView().getX();
-		int y = click.getMouseLocationRelativeToView().getY();
+		int x = click.getLocation().getX();
+		int y = click.getLocation().getY();
 		int color = colors[y / ROW_HEIGHT * COLUMNS + x / COLUMN_WIDTH];
 		field.setColor(color);
 		dispose();

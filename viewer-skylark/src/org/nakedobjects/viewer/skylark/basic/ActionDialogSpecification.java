@@ -34,7 +34,7 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
                 new ExecuteAndCloseAction(),
                 new CloseAction(),
         };
-        return new WindowBorder(new ButtonBorder(actions, super.createView(content, new LabelAxis())));
+        return new WindowBorder(new ButtonBorder(actions, super.createView(content, new LabelAxis())), false);
     }
     
     private static class  CloseAction extends ButtonAction {

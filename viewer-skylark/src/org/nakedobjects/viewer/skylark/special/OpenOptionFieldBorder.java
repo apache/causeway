@@ -11,6 +11,8 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
 
 public abstract class OpenOptionFieldBorder extends AbstractBorder {
+    private boolean over;
+
     public OpenOptionFieldBorder(View wrappedView) {
         super(wrappedView);
         right = 16;
@@ -18,9 +20,9 @@ public abstract class OpenOptionFieldBorder extends AbstractBorder {
 
     public void draw(Canvas canvas) {
         Size size = getSize();
-        int x = size.getWidth() - right;
+        int x = size.getWidth() - right + 5;
         int y = (size.getHeight() - 6) / 2;
-        Color color = canChangeValue() ? Style.PRIMARY2 : Style.SECONDARY1;
+        Color color = over ?  Style.SECONDARY1 : Style.PRIMARY2;
 
         Shape triangle = new Shape(0, 0);
         triangle.addVertex(5, 6);
@@ -34,13 +36,29 @@ public abstract class OpenOptionFieldBorder extends AbstractBorder {
     public void mouseMoved(Location at) {
         if(at.getX() >= getSize().getWidth() - right) {
             getViewManager().showArrowCursor();
+            if(!over) {
+                markDamaged();
+            }
+            over = true;
         } else {
+            if(over) {
+                markDamaged();
+            }
+            over = false;
             super.mouseMoved(at);
         }
     }
 
+    public void exited() {
+        if(over) {
+            markDamaged();
+        }
+        over = false;
+       super.exited();
+    }
+    
     public void firstClick(Click click) {
-        float x = click.getMouseLocationRelativeToView().getX() - 2;
+        float x = click.getLocation().getX() - 2;
         float boundary = getSize().getWidth() - right;
         if (x >= boundary) {
             View overlay = createOverlay();

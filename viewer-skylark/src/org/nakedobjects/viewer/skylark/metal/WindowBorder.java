@@ -3,15 +3,25 @@ package org.nakedobjects.viewer.skylark.metal;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
+import org.nakedobjects.viewer.skylark.Drag;
+import org.nakedobjects.viewer.skylark.DragStart;
+import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.ViewAreaType;
+import org.nakedobjects.viewer.skylark.ViewDrag;
+import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
 import org.nakedobjects.viewer.skylark.basic.ObjectTitleText;
 import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
 import org.nakedobjects.viewer.skylark.basic.TitleText;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
+import org.nakedobjects.viewer.skylark.core.DragViewOutline;
+import org.nakedobjects.viewer.skylark.special.ResizeBorder;
+import org.nakedobjects.viewer.skylark.special.ScrollBorder;
 
 public class WindowBorder extends AbstractBorder {
 	private final static Text TITLE_STYLE = Style.TITLE;
@@ -25,12 +35,12 @@ public class WindowBorder extends AbstractBorder {
 	private IconGraphic icon;
 	private TitleText text;
 	
-	public WindowBorder(View wrappedView) {
-		super(wrappedView);
+	public WindowBorder(View wrappedView, boolean scrollable) {
+		super(scrollable ? new ResizeBorder(new ScrollBorder(wrappedView)) : wrappedView);
 		
 		icon = new IconGraphic(this, TITLE_STYLE);
 		text = new ObjectTitleText(this, TITLE_STYLE);
-		titlebarHeight = icon.getSize().getHeight();
+		titlebarHeight = icon.getSize().getHeight() + 1;
 
 		left = LINE_THICKNESS;
 		right = LINE_THICKNESS;
@@ -44,6 +54,19 @@ public class WindowBorder extends AbstractBorder {
         b.append("WindowBorder " + left + " pixels\n");
     	b.append("           titlebar " + (top - titlebarHeight) + " pixels");
     	super.debugDetails(b);
+    }
+    
+    public Drag dragStart(DragStart drag) {
+        if(overBorder(drag.getLocation())) {
+            if(viewAreaType(drag.getLocation()) == ViewAreaType.CONTENT) {
+                return super.dragStart(drag);
+            } 
+            Location location = drag.getLocation();
+            DragViewOutline dragOverlay = new DragViewOutline(getView());
+            return new ViewDrag(this, new Offset(location.getX(), location.getY()), dragOverlay);
+        } else {
+            return super.dragStart(drag);
+        }
     }
 	
 	public void draw(Canvas canvas) {
@@ -78,9 +101,9 @@ public class WindowBorder extends AbstractBorder {
 		canvas.drawLine(16, height - 2, width - 14, height - 2, Style.PRIMARY1);
 		
 		// icon & title
-		icon.draw(canvas, x, baseline + 1);
+		icon.draw(canvas, x, baseline);
 		x += icon.getSize().getWidth();
-		text.draw(canvas, x, baseline + 1);
+		text.draw(canvas, x, baseline);
 
 		// window buttons
 		x = width - right - 3 * (BUTTON_WIDTH + padding) - 1;
@@ -89,13 +112,13 @@ public class WindowBorder extends AbstractBorder {
 		int h = BUTTON_HEIGHT - 1;
 		canvas.drawRectangle(x + 1, y + 1, w, h, Style.WHITE);
 		canvas.drawRectangle(x, y, w, h, Style.BLACK);
-		canvas.drawLine(x + 5, y + 9,  x + 10, y + 9, Style.BLACK);
-		canvas.drawLine(x + 5, y + 10,  x + 11, y + 10, Style.BLACK);
+		canvas.drawLine(x + 3, y + 9,  x + 8, y + 9, Style.BLACK);
+		canvas.drawLine(x + 3, y + 10,  x + 8, y + 10, Style.BLACK);
 
 		x += BUTTON_WIDTH + padding;
 		canvas.drawRectangle(x + 1, y + 1, w, h, Style.WHITE);
 		canvas.drawRectangle(x, y, w, h, Style.SECONDARY1);
-		canvas.drawRectangle(x + 2, y + 2,  8, 8, Style.SECONDARY2);
+		canvas.drawRectangle(x + 3, y + 2,  8, 8, Style.SECONDARY2);
 		canvas.drawLine(x + 3, y + 3,  x + 10, y + 3, Style.SECONDARY2);
 
 		// close button
@@ -114,7 +137,7 @@ public class WindowBorder extends AbstractBorder {
 	
     public void firstClick(Click click) {
         Bounds bounds = new Bounds(getSize().getWidth() - right - 3 * (BUTTON_WIDTH + padding) - 1, LINE_THICKNESS + padding, BUTTON_WIDTH, BUTTON_WIDTH);
-        if(bounds.contains(click.getMouseLocationRelativeToView())) {
+        if(bounds.contains(click.getLocation())) {
             View iconView = new RootIconSpecification().createView(getContent(), null);
             iconView.setLocation(getView().getLocation());
             getWorkspace().removeView(getView());
@@ -124,9 +147,18 @@ public class WindowBorder extends AbstractBorder {
 
         bounds.translate(BUTTON_WIDTH + padding, 0);
         bounds.translate(BUTTON_WIDTH + padding, 0);
-        if(bounds.contains(click.getMouseLocationRelativeToView())) {
+        if(bounds.contains(click.getLocation())) {
             dispose();
             return;
+        }
+        
+        Workspace workspace = getWorkspace();
+        if (workspace != null) {
+            if (click.isButton2() || (click.isButton1() && click.isShift())) {
+                workspace.lower(getView());
+            } else if (click.isButton1() || (click.isButton2() && click.isShift())) {
+                workspace.raise(getView());
+            }
         }
         
         super.firstClick(click);
@@ -144,17 +176,15 @@ public class WindowBorder extends AbstractBorder {
 		return size;
 	}
 	
-	public void secondClick(Click click) {
- /*       if(click.getViewAreaType() == ViewAreaType.VIEW) {
-            View iconView = new RootIconSpecification().createView(getContent(), null);
-            iconView.setLocation(getView().getLocation());
-            getWorkspace().removeView(getView());
-            getWorkspace().addView(iconView);
-        } else {
-            
-        }
-        */
-	    super.secondClick(click);
+	public ViewAreaType viewAreaType(Location mouseLocation) {
+	    Bounds title = new Bounds(new Location(), icon.getSize());
+	    title.extendWidth(left);
+	    title.extendWidth(text.getSize().getWidth());
+	    if(title.contains(mouseLocation)) {
+	        return ViewAreaType.CONTENT;
+	    } else {
+	        return super.viewAreaType(mouseLocation);
+	    }
     }
 
  	public String toString() {

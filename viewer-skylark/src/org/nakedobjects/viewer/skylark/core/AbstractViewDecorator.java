@@ -7,6 +7,8 @@ import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
+import org.nakedobjects.viewer.skylark.Drag;
+import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
@@ -72,8 +74,8 @@ public class AbstractViewDecorator implements View {
 		wrappedView.dragCancel(drag);
 	}
 
-	public View dragFrom(InternalDrag drag) {
-		return wrappedView.dragFrom(drag);
+	public View dragFrom(Location location) {
+		return wrappedView.dragFrom(location);
 	}
 
 	public void dragIn(ContentDrag drag) {
@@ -84,6 +86,10 @@ public class AbstractViewDecorator implements View {
 		wrappedView.dragOut(drag);
 	}
 
+	public Drag dragStart(DragStart drag) {
+        return wrappedView.dragStart(drag);
+    }
+	
 	public void dragTo(InternalDrag drag) {
 		wrappedView.dragTo(drag);		
 	}
@@ -244,12 +250,12 @@ public class AbstractViewDecorator implements View {
 		wrappedView.objectActionResult(result, at);
 	}
 
-	public View pickup(ContentDrag drag) {
-		return wrappedView.pickup(drag);
+	public View pickupContent(Location location) {
+		return wrappedView.pickupContent(location);
 	}
 	
-	public View pickup(ViewDrag drag) {
-		return wrappedView.pickup(drag);
+	public View pickupView(Location location) {
+		return wrappedView.pickupView(location);
 	}
 
 	public void print(Canvas canvas) {
@@ -319,6 +325,10 @@ public class AbstractViewDecorator implements View {
 
     public Location getAbsoluteLocation() {
         return wrappedView.getAbsoluteLocation();
+    }
+
+    public boolean contains(View view) {
+        return wrappedView.contains(view);
     }
     
 }

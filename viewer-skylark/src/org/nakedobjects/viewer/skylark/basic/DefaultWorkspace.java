@@ -55,7 +55,7 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
         NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
  
         View newView;
-        if (source instanceof NakedClass) {
+        if (source instanceof NakedClass && drag.isCtrl()) {
             NakedObjectSpecification spec = ((NakedClass) source).forNakedClass();
             ClassAbout classAbout = spec.getClassAbout();
             if(classAbout != null && classAbout.canUse().isVetoed()) {
@@ -69,6 +69,16 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
                 newView = ViewFactory.getViewFactory().createOpenRootView(source);
             } else {
                 // place object onto desktop as icon
+                //getSubviews();
+                View icon = drag.getSource();
+                if(! icon.getSpecification().isOpen() && contains(icon)) {
+                    icon.markDamaged();
+                    Location at = drag.getTargetLocation();
+                    at.translate(drag.getOffset());
+                    icon.setLocation(at);
+                    icon.markDamaged();
+                    return;
+                }
                 newView = ViewFactory.getViewFactory().createIconizedRootView(source);
             }
         }
@@ -158,16 +168,9 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
         if (views.contains(view)) {
             views.removeElement(view);
             views.insertElementAt(view, 0);
+            markDamaged();
         }
     }
-
-    /*
-     * public void menuOptions(MenuOptionSet options) {
-     * super.menuOptions(options);
-     * 
-     * 
-     * options.setColor(Style.WORKSPACE_MENU); }
-     */
 
     private View newInstance(NakedObjectSpecification cls, boolean openAView) {
         NakedObject object =  getObject().getContext().getObjectManager().createInstance(cls);
@@ -180,12 +183,8 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
         if (views.contains(view)) {
             views.removeElement(view);
             views.addElement(view);
+            markDamaged();
         }
-    }
-
-    public void removeOtherRootViews(View view) {
-    // TODO Auto-generated method stub
-
     }
 
     public void removeView(View view) {

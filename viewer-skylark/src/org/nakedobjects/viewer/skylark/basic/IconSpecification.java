@@ -27,7 +27,8 @@ public abstract class IconSpecification implements ViewSpecification {
 	}
 	
 	public View createView(Content content, ViewAxis axis) {
-		return new SimpleBorder(1, new CloseIcon(new IconView(content, this, axis, Style.NORMAL)));
+		return new ObjectBorder(new CloseIcon(new IconView(content, this, axis, Style.NORMAL)));
+//		return new SimpleBorder(1, new CloseIcon(new IconView(content, this, axis, Style.NORMAL)));
     }
 
 	public String getName() {
