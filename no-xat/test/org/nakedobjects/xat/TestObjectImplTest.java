@@ -43,6 +43,7 @@ public class TestObjectImplTest extends TestCase {
         
         targetObject = new TestObjectExample();
         targetObject.setContext(context);
+     context = null; //tmp
         TestObjectFactory factory = new DefaultTestObjectFactory();
         target = factory.createTestObject(context, targetObject);
         

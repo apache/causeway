@@ -10,6 +10,7 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.NotPersistableException;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Oid;
@@ -291,7 +292,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         LOG.debug("makePersistent " + object);
 
         if (isPersistent(object)) {
-            throw new IllegalArgumentException();
+            throw new NotPersistableException("Object already persistent");
         }
 
         object.setOid(createOid(object));

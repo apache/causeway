@@ -16,7 +16,9 @@ import org.nakedobjects.object.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.defaults.TransientObjectStore;
 import org.nakedobjects.object.exploration.ExplorationFixture;
 import org.nakedobjects.object.exploration.ExplorationSetUp;
+import org.nakedobjects.object.security.Role;
 import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.security.User;
 import org.nakedobjects.xat.html.HtmlTestObjectFactory;
 
 import java.util.Hashtable;
@@ -29,12 +31,13 @@ import org.apache.log4j.LogManager;
 
 public abstract class AcceptanceTestCase extends TestCase {
     private Hashtable classes = new Hashtable();
-    private NakedObjectContext context;
     private Documentor documentor;
     private LocalObjectManager objectManager;
     private TestObjectFactory testObjectFactory;
     private ExplorationSetUp explorationSetUp;
 
+    public AcceptanceTestCase() {}
+    
     public AcceptanceTestCase(String name) {
         super(name);
      }
@@ -55,10 +58,6 @@ public abstract class AcceptanceTestCase extends TestCase {
 
     private void docln(String string) {
         documentor.docln(string);
-    }
-
-    private void flush() {
-        documentor.flush();
     }
 
     protected TestClass getTestClass(String name) {
@@ -101,8 +100,9 @@ public abstract class AcceptanceTestCase extends TestCase {
         
         try {        
 	        NakedObjectContext con = new NakedObjectContext(objectManager);
+	        Session.getSession().setSecurityContext(con);
+
 	        explorationSetUp = new ExplorationSetUp(con);
-	        setUpFixture();
 	        setUpFixtures();
 	       
 	        // TODO replace dynamically
@@ -121,10 +121,17 @@ public abstract class AcceptanceTestCase extends TestCase {
 	            spec.setContext(con);
 	            spec.setNakedClass(nc);
 	            
-	            TestClass view = testObjectFactory.createTestClass(context, spec);
+	            TestClass view = testObjectFactory.createTestClass(con, spec);
 	
 	            classes.put(nc.getFullName().toLowerCase(), view);
 	        }
+
+	        if(con.getUser() == null) {
+             User user = new User("exploration user");
+            user.setContext(con);
+            user.getRoles().add(new Role("explorer"));
+            con.setUser(user);
+        }
         } catch(Exception e) {
             // If an exception is thrown in setUp then tearDown is not called, hence object manager is
             // left running, but shouldn't be.
@@ -133,6 +140,7 @@ public abstract class AcceptanceTestCase extends TestCase {
             
             throw e;
         }
+        
         
     }
 
@@ -144,8 +152,6 @@ public abstract class AcceptanceTestCase extends TestCase {
         OidGenerator oidGenerator = new SimpleOidGenerator();     
         return new LocalObjectManager(nos, new NullUpdateNotifier(), oidGenerator);
     }
-
-    protected void setUpFixture() {};
 
     protected abstract void setUpFixtures();
 

@@ -392,7 +392,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         AssociationSpecification association = (AssociationSpecification) fieldFor(fieldName);
         NakedObject obj = (NakedObject) object.getForObject();
 
-        if (association.getType() != null && !association.getType().isOfType(obj.getSpecification())) {
+        if (association.getType() != null && !obj.getSpecification().isOfType(association.getType())) {
             throw new IllegalActionError("Can't drop a " + object.getForObject().getSpecification().getShortName() + " on to the " + fieldName
                     + " field (which accepts " + association.getType() + ")");
         }

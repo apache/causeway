@@ -247,6 +247,7 @@ public abstract class AbstractNakedObject implements NakedObject {
 
      public NakedObjectContext getContext() {
         Assert.assertTrue("must have a context: " + this, context != null);
+//		 if(context == null) context = NakedObjectContext.getDefaultContext();
         return context;
     }
 
