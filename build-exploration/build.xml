@@ -10,6 +10,7 @@
 
 	<property file="build.properties" />
 	<property name="distribution" value="exploration" />
+	<property name="example-class" value="org.nakedobjects.example.ecs.exploration.EcsExploration" />
 
 	
 	&common;

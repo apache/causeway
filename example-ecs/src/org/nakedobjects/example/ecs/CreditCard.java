@@ -38,6 +38,7 @@ public class CreditCard implements PaymentMethod {
     
     public void aboutExpires(FieldAbout about, TextString value) {
        // validity.cannotBeEmpty();
+        
         if (value == null || value.isEmpty()) {
             about.invalid("Cannot be empty");
         } else {

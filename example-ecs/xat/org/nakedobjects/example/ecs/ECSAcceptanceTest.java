@@ -289,6 +289,9 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
         TestObject creditCard = getTestClass(CreditCard.class.getName()).newInstance();
         creditCard.assertFieldEntryInvalid("expires", "0/12"); // expected 'nn/nn'
         
+        creditCard.assertFieldDoesNotContain("expires", "0/12");
+        
+        
         try {
             creditCard.fieldEntry("expires", "0/12"); // expected 'nn/nn'
             fail();

@@ -122,7 +122,7 @@ public class MockObjectStore implements NakedObjectStore {
         actions.clear();
     }
 
-    public void resolve(NakedObject object) {
+    public void resolveImmediately(NakedObject object) {
     }
 
     public void setupInstancesCount(int i) {

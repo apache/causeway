@@ -426,7 +426,7 @@ public class CacheObjectStore implements NakedObjectStore {
         }
     }
 
-    public void resolve(NakedObject object) {}
+    public void resolveImmediately(NakedObject object) {}
 
     public void save(NakedObject object) throws ObjectStoreException {
         writeJournal("save", new Memento(object));

@@ -10,6 +10,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Vector;
@@ -125,7 +126,7 @@ public class MockObjectManager extends AbstractNakedObjectManager {
         actions.removeAllElements();
     }
 
-    public void resolve(NakedObject object) {}
+    public void resolveImmediately(NakedObject object) {}
 
     public long serialNumber(String sequence) {
         actions.addElement("serial number");
@@ -150,6 +151,8 @@ public class MockObjectManager extends AbstractNakedObjectManager {
     }
 
     public void saveChanges() {}
+
+    public void resolveEagerly(NakedObject object, NakedObjectField field) {}
 }
 
 /*

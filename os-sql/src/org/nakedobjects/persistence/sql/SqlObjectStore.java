@@ -138,7 +138,7 @@ public final class SqlObjectStore implements NakedObjectStore {
         return number;
     }
 
-    public void resolve(NakedObject object) throws ObjectStoreException {
+    public void resolveImmediately(NakedObject object) throws ObjectStoreException {
         DatabaseConnector connection = getDatabaseConnector();
        mapperLookup.getMapper(connection, object).resolve(connection, object);
         releaseConnectionIfNotInTransaction(connection);

@@ -65,10 +65,10 @@
 		<!-- distribution directories -->
 		<property name="dist.dir" value="build/dist" />
 		<property name="release.dir" value="release" />
-		<property name="dist.images.dir" value="${dist.dir}/images" />
-		<property name="dist.test.dir" value="${dist.dir}/test" />
+		<property name="dist.images.dir" value="${dist.dir}/resources/images" />
+		<property name="dist.test.dir" value="${dist.dir}/doc/test" />
 		<property name="dist.example.dir" value="${dist.dir}/example" />
-		<property name="dist.api.dir" value="${dist.dir}/api" />
+		<property name="dist.api.dir" value="${dist.dir}/doc/api" />
 
 
 		<mkdir dir="${build.dir}" />
@@ -186,6 +186,7 @@
 		</junit>
 
 		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${dist.dir}/lib" />
 
 		<mkdir dir="${build.dir}/tmp" />
 		<junitreport tofile="${build.dir}/tmp/combined.xml">
@@ -213,31 +214,49 @@
 		</javadoc>
 
 		<!-- create jars -->
-		<jar jarfile="${dist.dir}/nakedobjects.jar">
+		<jar jarfile="${dist.dir}/lib/nakedobjects.jar">
 			<fileset dir="${build.classes.src}" />
+			<fileset dir="${build.src.dir}">
+				<include name="images/*" />
+			</fileset>
 		</jar>
 
-		<jar jarfile="${dist.dir}/${distribution}-test.jar">
+		<jar jarfile="${dist.dir}/lib/${distribution}-test.jar">
 			<fileset dir="${build.classes.test}" />
 		</jar>
 
-		<jar jarfile="${dist.dir}/${distribution}-src.jar">
+		<jar jarfile="${dist.dir}/resources/${distribution}-src.jar">
 			<fileset dir="${build.src.dir}" />
 		</jar>
 
-		<jar jarfile="${dist.dir}/examples.jar">
+		<jar jarfile="${dist.dir}/lib/examples.jar">
 			<fileset dir="${build.classes.example}" />
+			<fileset dir="${build.example.dir}">
+				<include name="images/*"/>
+			</fileset>
+
+			<manifest>
+      			<attribute name="version" value="${build.version}"/>
+				<attribute name="Main-Class" value="${example-class}"/>
+				<attribute name="Class-Path" value="./nakedobjects.jar ./log4j-1.2.6.jar"/>
+    		</manifest>	
 		</jar>
 
 		<mkdir dir="${dist.example.dir}"/>
 		<copy todir="${dist.example.dir}">
 			<fileset dir="${build.example.dir}"/>
 		</copy>
+
+		<copy todir="${dist.dir}/lib/">
+			<fileset file="../lib/junit*.jar"/>
+			<fileset file="../lib/log4j*.jar"/>
+		</copy>
 		
 		<!-- produce release zip -->
 		<mkdir dir="${release.dir}" />
-		<zip zipfile="${release.dir}/nakedobjects-${distribution}-${build.id}.zip"
-		     basedir="${dist.dir}" />
+		<zip zipfile="${release.dir}/nakedobjects-${distribution}-${build.id}.zip">
+			<zipfileset dir="${dist.dir}" prefix="nakedobjects-${distribution}-${build.id}"/>
+		</zip>
 
 		<fail if="failure" message="Tests failed" />
 

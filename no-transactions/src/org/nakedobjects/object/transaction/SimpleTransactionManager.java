@@ -148,11 +148,11 @@ public class SimpleTransactionManager extends LocalObjectManager implements Tran
         }
      }
 
-    public void resolve(NakedObject object) {
+    public void resolveImmediately(NakedObject object) {
         log("resolve - " + object);
         Transaction transaction = getTransaction();
         if(transaction == null) {
-	        super.resolve(object);
+	        super.resolveImmediately(object);
         } else {
             transaction.resolve(object,  getObjectStore().getLoadedObjects().getLoadedObject(object.getOid()));
         }
