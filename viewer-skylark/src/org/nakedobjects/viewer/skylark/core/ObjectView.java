@@ -94,6 +94,7 @@ public abstract class ObjectView extends AbstractView {
         Assert.assertTrue(drag.getSourceContent() instanceof ObjectContent);
 
         Naked result = getContent().drop(drag.getSourceContent());
+        getParent().invalidateContent();
         if (result != null) {
             View view = getWorkspace().createSubviewFor(result, false);
             Location location = new Location();
