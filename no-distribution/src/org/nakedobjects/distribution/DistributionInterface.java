@@ -8,8 +8,6 @@ public interface DistributionInterface {
     // TODO network failure could occur - should throw exception
     Serializable execute(Request clientRequest);
 
-    //    public Serializable send(Request request);
-
     void init();
 
     void shutdown();

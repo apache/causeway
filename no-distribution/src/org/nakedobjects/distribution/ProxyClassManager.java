@@ -1,19 +1,30 @@
 package org.nakedobjects.distribution;
 
+import org.nakedobjects.distribution.reflect.ProxyClassLoader;
 import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedClassLoader;
+import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.utility.NotImplementedException;
 
 
-public class ProxyClassManager {
+public class ProxyClassManager extends NakedClassManager {
+	private DistributionInterface connection;
+	
     protected void createClass(NakedClass nc) throws ObjectStoreException {
         throw new NakedObjectRuntimeException();
     }
 
+    protected NakedClassLoader installClassLoader() {
+		return new ProxyClassLoader();
+	}
+
+
     protected NakedClass loadClass(String name) throws ObjectStoreException, ObjectNotFoundException {
-        throw new NotImplementedException();
+    	LoadClassRequest request = new LoadClassRequest(name);
+    	request.sendRequest();
+    	return request.getNakedClass();
     }
 
     protected boolean accessRemotely() {

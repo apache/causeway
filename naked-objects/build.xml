@@ -17,13 +17,11 @@
 				
 		<jar jarfile="exploration/exploration.jar">
 			<zipfileset src="../no-core/build/release/no-core.jar"/>
-			<zipfileset src="../no-containers/build/release/no-containers.jar"/>
 			<zipfileset src="../viewer-skylark/build/release/viewer-skylark.jar"/>
 		</jar>
 				
 		<jar jarfile="exploration/exploration-src.jar">
 			<zipfileset src="../no-core/build/release/no-core-src.jar"/>
-			<zipfileset src="../no-containers/build/release/no-containers-src.jar"/>
 			<zipfileset src="../viewer-skylark/build/release/viewer-skylark-src.jar"/>
 		</jar>
 				
@@ -66,7 +64,7 @@
 	<target name="all-components">
 		<antcall target="core"/>
 		<antcall target="no-distribution"/>
-		<antcall target="no-containers"/>
+		<!-- antcall target="no-containers"/-->
 		<antcall target="os-cache"/>
 		<antcall target="os-file"/>
 		<antcall target="os-sql"/>

@@ -1,11 +1,16 @@
 package org.nakedobjects.distribution;
 
+import java.util.Vector;
+
+import org.apache.log4j.Logger;
 import org.nakedobjects.distribution.client.DestroyObjectRequest;
-import org.nakedobjects.distribution.client.GetInstancesRequest;
+import org.nakedobjects.distribution.client.GetInstancesForCriteria;
+import org.nakedobjects.distribution.client.GetInstancesForPattern;
+import org.nakedobjects.distribution.client.GetInstancesOfClass;
 import org.nakedobjects.distribution.client.GetObjectRequest;
-import org.nakedobjects.distribution.client.HasInstancesRequest;
+import org.nakedobjects.distribution.client.HasInstances;
 import org.nakedobjects.distribution.client.MakePersistentRequest;
-import org.nakedobjects.distribution.client.NumberOfInstancesRequest;
+import org.nakedobjects.distribution.client.NumberOfInstances;
 import org.nakedobjects.distribution.client.ResolveRequest;
 import org.nakedobjects.distribution.client.SerialNumberRequest;
 import org.nakedobjects.object.LoadedObjects;
@@ -21,28 +26,20 @@ import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.utility.Log;
 import org.nakedobjects.utility.NotImplementedException;
 
-import java.io.Serializable;
-import java.util.Vector;
-
-import org.apache.log4j.Logger;
-
 
 public final class ProxyObjectManager extends NakedObjectManager {
     final static Logger LOG = Logger.getLogger(ProxyObjectManager.class);
-    private DistributionInterface connection;
     private Log log;
     private UpdateNotifier notifier;
     private LoadedObjects loadedObjects;
 
-    public ProxyObjectManager(UpdateNotifier notifier, DistributionInterface connection) {
+    public ProxyObjectManager(UpdateNotifier notifier) {
         this.notifier = notifier;
-
-         this.connection = connection;
-        connection.init();
-        
         loadedObjects = new LoadedObjects();
-        
         new ProxyClassManager();
+        
+		Request.init(this);
+
     }
 
     public void abortTransaction() {
@@ -60,23 +57,19 @@ public final class ProxyObjectManager extends NakedObjectManager {
     }
     
     public void endTransaction() {
-        throw new NakedObjectRuntimeException();
+    	LOG.debug("transactions IGNORED in proxy");
     }
 
     public Vector getInstances(NakedClass cls) {
-        return new GetInstancesRequest(cls).getElements(loadedObjects);
+        return new GetInstancesOfClass(cls).getElements(loadedObjects);
     }
     
     public Vector getInstances(NakedClass cls, String criteria) {
-        throw new NotImplementedException();
+        return new GetInstancesForCriteria(cls, criteria).getElements(loadedObjects);
     }
     
    public Vector getInstances(NakedObject pattern) {
-        if (pattern == null) {
-            throw new NullPointerException();
-        }
-        
-        return new GetInstancesRequest(pattern).getElements(loadedObjects);
+        return new GetInstancesForPattern(pattern).getElements(loadedObjects);
     }
     
     public synchronized NakedObject getObject(Object oid, NakedClass hint) {
@@ -101,11 +94,10 @@ public final class ProxyObjectManager extends NakedObjectManager {
 
     public boolean hasInstances(NakedClass cls) {
     	LOG.debug("hasInstances of " + cls);
-        return new HasInstancesRequest(cls).hasInstances();
+        return new HasInstances(cls).hasInstances();
     }
 
     public void init() {
-        Request.init(this, loadedObjects);
     }
     
     protected void log() {
@@ -128,7 +120,7 @@ public final class ProxyObjectManager extends NakedObjectManager {
 
     public int numberOfInstances(NakedClass cls) {
     	LOG.debug("numberOfInstance of " + cls);
-        return new NumberOfInstancesRequest(cls).size();
+        return new NumberOfInstances(cls).size();
     }
 
     public void objectChanged(NakedObject object) {
@@ -152,13 +144,6 @@ public final class ProxyObjectManager extends NakedObjectManager {
 
     }
 
-    protected Serializable send(Request request) {
-        LOG.debug("send request " + request);
-        Serializable response = connection.execute(request);
-        LOG.debug("response to request " + request + " ~ " + (response == null ? "EMPTY RESPONSE" : response));
-		return response;
-    }
-
     public long serialNumber(String id) {
     	LOG.debug("serialNumber " + id);
         try {
@@ -171,12 +156,11 @@ public final class ProxyObjectManager extends NakedObjectManager {
     }
 
      public void shutdown() {
-        connection.shutdown();
         super.shutdown();
     }
 
     public void startTransaction() {
-        throw new NakedObjectRuntimeException();
+    	LOG.debug("transactions IGNORED in proxy");
     }
 	
     public LoadedObjects getLoadedObjects() {

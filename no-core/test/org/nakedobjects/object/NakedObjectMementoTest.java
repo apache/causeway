@@ -49,6 +49,11 @@ public class NakedObjectMementoTest extends TestCase {
         role.setPerson(person2);
     }
 
+    protected void tearDown() throws Exception {
+        manager.shutdown();
+        super.tearDown();
+    }
+    
     public void testManyReferencesInRecreated() {
         NakedObjectMemento mem = new NakedObjectMemento(team);
 

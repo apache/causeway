@@ -1,22 +1,26 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.reflect.Field;
 import org.nakedobjects.object.reflect.Value;
+import org.nakedobjects.security.Session;
 
 public class ValueContent implements FieldContent {
     private final Value field;
-	private NakedValue object;
+	private NakedObject parent;
+	private NakedValue value;
 	
-	public ValueContent(NakedValue object, Value field) {
-		this.object = object;
+	public ValueContent(NakedObject parent, NakedValue value, Value field) {
+	    this.parent = parent;
+		this.value = value;
 		this.field = field;
 	}
 
 	public String debugDetails() {
 		String type = getClass().getName();
 		type = type.substring(type.lastIndexOf('.') + 1);
-		return type + "\n" + "  object: " + object + "\n" +  "  field:" + field + "\n";  
+		return type + "\n" + "  object: " + value + "\n" +  "  field:" + field + "\n";  
 	}
 	
 	public Field getField() {
@@ -27,23 +31,24 @@ public class ValueContent implements FieldContent {
 		return field;
 	}
 
-	public String getFieldName() {
-		return field.getName();
+	public String getFieldLabel() {
+	    return field.getLabel(Session.getSession().getSecurityContext(), parent);
+		//return field.getName();
 	}
 	
 	public NakedValue getValue() {
-		return object;
+		return value;
 	}
 
 	public void menuOptions(MenuOptionSet options) {
 	}
 	
 	public String toString() {
-		return object + "/"  + field;
+		return value + "/"  + field;
 	}
 
     public void updateDerivedValue(NakedValue object) {
-        this.object = object;
+        this.value = object;
     }
 }
 

@@ -13,13 +13,12 @@ import java.util.Hashtable;
 
 
 public class TestObjectFactory {
-    private static TestObjectFactory instance;
     private static HtmlDocumentor documentor;
+    private static TestObjectFactory instance;
     
     public static TestObjectFactory  getInstance() {
         if(instance == null) {
             instance = new TestObjectFactory();
-            
         }
         return instance;
     }
@@ -31,13 +30,13 @@ public class TestObjectFactory {
     protected TestObject createTestObject(SecurityContext context, NakedObject object) {
         return new HtmlTestObject(new TestObjectImpl(context, object), documentor);
     }
+
+    public TestObject createTestObject(SecurityContext context, NakedObject field, Hashtable viewCache) {
+        return new HtmlTestObject(new TestObjectImpl(context, field, viewCache), documentor);
+    }
     
     protected TestValue createTestValue(NakedValue value) {	
         return new HtmlTestValue(new TestValueImpl(value));
-    }
-
-    public TestObject createTestObject(SecurityContext context, NakedObject field, Hashtable contents) {
-        return new HtmlTestObject(new TestObjectImpl(context, field, contents), documentor);
     }
 
     public HtmlDocumentor getDocumentor(String name) {

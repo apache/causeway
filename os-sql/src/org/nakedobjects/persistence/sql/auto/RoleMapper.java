@@ -76,6 +76,7 @@ public class RoleMapper extends NameBasedMapper {
 		    }
 		    instances.addElement(instance);
 		}
+        rs.close();
 		return instances;
 	}
 

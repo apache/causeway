@@ -1,13 +1,10 @@
 package org.nakedobjects.example.ecs;
 
+import org.nakedobjects.AbstractExplorationFixture;
+import org.nakedobjects.object.value.Date;
 import org.nakedobjects.object.value.TextString;
-import org.nakedobjects.utility.ComponentException;
-import org.nakedobjects.utility.ConfigurationException;
 import org.nakedobjects.xat.AcceptanceTestCase;
-import org.nakedobjects.xat.TestClass;
 import org.nakedobjects.xat.TestObject;
-
-import java.util.Locale;
 
 
 
@@ -21,72 +18,33 @@ public class ECSAcceptanceTest extends AcceptanceTestCase {
         super(name);
     }
 
-    private void setupCities() {
-        nextStep("Create a new instance of City for each city where the service is being offered.");
 
-        TestClass cities = getTestClass("Cities");
-        TestObject boston = cities.newInstance();
-
-        boston.fieldEntry("Name", "Boston");
-        boston.assertTitleEquals("Boston");
-
-
-        //
-        nextStep();
-
-        TestObject newYork = cities.newInstance();
-
-        newYork.fieldEntry("Name", "New York");
-        newYork.assertTitleEquals("New York");
-
-
-        //
-        nextStep();
-
-        TestObject chicago = cities.newInstance();
-
-        chicago.fieldEntry("Name", "Chicago");
-        chicago.assertTitleEquals("Chicago");
-
-
-        //
-        nextStep();
-
-        TestObject washington = cities.newInstance();
-
-        washington.fieldEntry("Name", "Washington");
-        washington.assertTitleEquals("Washington");
-
-
-        //
-        nextStep();
-
-        TestObject philadelphia = cities.newInstance();
-
-        philadelphia.fieldEntry("Name", "Philadelphia");
-        philadelphia.assertTitleEquals("Philadelphia");
-    }
-
-    public void setUp() throws ConfigurationException, ComponentException {
-        super.setUp();
-        
-    	Locale.setDefault(Locale.US);
-        registerClass(Booking.class);
-        registerClass(City.class);
-        registerClass(Customer.class);
-        registerClass(Location.class);
-        registerClass(CreditCard.class);
-        registerClass(Telephone.class);
-
-        setupCities();
-    }
-
-    public void testAardvark() {
-        startDocumenting();
-        testBasicBooking();
-    }
-    
-
+     protected void setUpFixture() {
+         addFixture(new AbstractExplorationFixture() {
+             public void install() {
+                 registerClass(Booking.class);
+                 registerClass(City.class);
+                 registerClass(Customer.class);
+                 registerClass(Location.class);
+                 registerClass(CreditCard.class);
+                 registerClass(Telephone.class);
+                 
+                 createCity("Boston");
+                 createCity("New York");
+                 createCity("Chicago");
+                 createCity("Washington");
+                 createCity("Philadelphia");
+                 
+                 getClock().setDate(2001, 12, 14);
+             }
+             
+             private void createCity(String name) {
+                 City city = (City) createInstance(City.class);
+                 city.getName().setValue(name);
+             }
+         } );
+     }
+     
     public void testBasicBooking() {
         subtitle("Set up the new booking");
         
@@ -127,9 +85,11 @@ public class ECSAcceptanceTest extends AcceptanceTestCase {
 
         //
         nextStep("Specify when to pick up.");
-        booking.fieldEntry("Date", "Dec 16, 2001");
+        booking.fieldEntry("Date", "+2");
         booking.fieldEntry("Time", "2:30:00 PM");
 
+        booking.assertFieldContains("Date", new Date(2001, 12, 16));
+        
 
         //
         nextStep("Specify the  payment method.");
@@ -201,7 +161,7 @@ public class ECSAcceptanceTest extends AcceptanceTestCase {
 
         booking.associate("Contact Telephone", mobile);
         nextStep("Specify when to be picked up.");
-        booking.fieldEntry("Date", "Jan  8, 2001");
+        booking.fieldEntry("Date", "2001-1-8");
         booking.fieldEntry("Time", "7:00:00 AM");
         booking.assertFieldContains("Payment Method", 
                                  (TestObject) customer.getField(

@@ -18,6 +18,7 @@ public class NakedClassTests extends TestCase {
 
     private MockReflector reflector;
     private NakedClass nakedClass;
+    private MockObjectManager manager;
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(new TestSuite(NakedClassTests.class));
@@ -40,7 +41,7 @@ public class NakedClassTests extends TestCase {
     protected void setUp() {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
-        MockObjectManager manager = MockObjectManager.setup();
+        manager = MockObjectManager.setup();
         manager.setupAddClass(Role.class);
         manager.setupAddClass(GenericTestObject.class);
         manager.setupAddClass(ContactTestObject.class);
@@ -61,6 +62,11 @@ public class NakedClassTests extends TestCase {
         nakedClass.init(reflector, NakedObject.class.getName(), fields, null, null);
     }
 
+    protected void tearDown() throws Exception {
+        manager.shutdown();
+        super.tearDown();
+    }
+    
     public void testAcquireInstance() {
         NakedObject acquire = new Person();
         reflector.setupAcquireInstance(acquire);
@@ -88,9 +94,9 @@ public class NakedClassTests extends TestCase {
 
        ExpectationSet exp = new ExpectationSet("field names");
 
-        exp.addExpected("One");
-        exp.addExpected("Two");
-        exp.addExpected("Three");
+        exp.addExpected("one");
+        exp.addExpected("two");
+        exp.addExpected("three");
 
         for (int i = 0; i < actions.length; i++) {
             exp.addActual(actions[i].getName());
@@ -108,19 +114,19 @@ public class NakedClassTests extends TestCase {
         assertNotNull(actions[0]);
         ExpectationSet exp = new ExpectationSet("action names");
 
-        exp.addExpected("Is Contact");
-        exp.addExpected("Address");
-        exp.addExpected("Favourite");
-        exp.addExpected("Name");
-        exp.addExpected("Worth");
+        exp.addExpected("iscontact");
+        exp.addExpected("address");
+        exp.addExpected("favourite");
+        exp.addExpected("name");
+        exp.addExpected("worth");
 
         com.mockobjects.ExpectationList exp2 = new com.mockobjects.ExpectationList("ordered action names");
 
-        exp2.addExpected("Name");
-        exp2.addExpected("Address");
-        exp2.addExpected("Worth");
-        exp2.addExpected("Is Contact");
-        exp2.addExpected("Favourite");
+        exp2.addExpected("name");
+        exp2.addExpected("address");
+        exp2.addExpected("worth");
+        exp2.addExpected("iscontact");
+        exp2.addExpected("favourite");
 
         for (int i = 0; i < actions.length; i++) {
             exp.addActual(actions[i].getName());
@@ -136,7 +142,7 @@ public class NakedClassTests extends TestCase {
         NakedClass[] params = new NakedClass[] { nakedClass(ContactTestObject.class) };
         Action action = targetClass.getClassAction(Action.USER, params);
         assertNotNull(action);
-        assertEquals("Accept Contact", action.getName());
+        assertEquals("acceptcontact", action.getName());
         assertEquals(Action.USER, action.getType());
         assertEquals(null, action.returns());
         
@@ -148,9 +154,9 @@ public class NakedClassTests extends TestCase {
         NakedClass c = nakedClass(ContactTestObject.class);
         Action[] actions = c.getClassActions(Action.USER);
         ExpectationSet exp = new ExpectationSet("action names");
-        exp.addExpected("Class Op");
-        exp.addExpected("Do Whatever");
-        exp.addExpected("Example");
+        exp.addExpected("classop");
+        exp.addExpected("dowhatever");
+        exp.addExpected("example");
 
         for (int i = 0; i < actions.length; i++) {
             assertNotNull(actions[i]);
@@ -163,9 +169,8 @@ public class NakedClassTests extends TestCase {
         NakedClass c = nakedClass(ContactTestObject.class);
         Action[] actions = c.getObjectActions(Action.EXPLORATION);
         ExpectationSet exp = new ExpectationSet("action names");
-        exp.addExpected("Clone");
-        exp.addExpected("Class");
-        exp.addExpected("Make Persistent");
+        exp.addExpected("clone");
+        exp.addExpected("class");
 
         for (int i = 0; i < actions.length; i++) {
             exp.addActual(actions[i].getName());
@@ -180,14 +185,15 @@ public class NakedClassTests extends TestCase {
 
         ExpectationSet exp = new ExpectationSet("action names");
         // 1 param actions
-        exp.addExpected("Add Contact");
-        exp.addExpected("Renew");
+        exp.addExpected("addcontact");
+        exp.addExpected("renew");
 
         // 0 param actions
-        exp.addExpected("Create Invoice");
-        exp.addExpected("Duplicate");
-        exp.addExpected("Set Up");
-        exp.addExpected("Reset Worth");
+        exp.addExpected("createinvoice");
+        exp.addExpected("duplicate");
+        exp.addExpected("setup");
+        exp.addExpected("resetworth");
+        exp.addExpected("persist");
 
         for (int i = 0; i < actions.length; i++) {
             exp.addActual(actions[i].getName());
@@ -207,8 +213,8 @@ public class NakedClassTests extends TestCase {
         NakedClass c = nakedClass(GenericTestObject.class);
         com.mockobjects.ExpectationList exp2 = new com.mockobjects.ExpectationList("ordered names");
 
-        exp2.addExpected("Customer");
-        exp2.addExpected("Products");
+        exp2.addExpected("customer");
+        exp2.addExpected("products");
         Field[] attributes = c.getFields();
 
         for (int i = 0; i < attributes.length; i++) {
@@ -222,12 +228,12 @@ public class NakedClassTests extends TestCase {
         Field[] actions = c.getFields();
 
         for (int i = 0; i < actions.length; i++) {
-            if (actions[i].getName().equals("Name")) {
+            if (actions[i].getName().equals("name")) {
                 Field att = actions[i];
 
                 assertEquals(true, att.isValue());
                 assertEquals(TextString.class, att.getType());
-                assertEquals("Name", att.getName());
+                assertEquals("name", att.getName());
                 return;
             }
         }

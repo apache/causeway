@@ -96,6 +96,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
             LOG.debug("  instance  " + instance);
             instances.addElement(instance);
         }
+        rs.close();
         return instances;
     }
 
@@ -112,6 +113,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
             LOG.debug("  instance  " + instance);
             instances.addElement(instance);
         }
+        rs.close();
 
         return instances;
 
@@ -149,6 +151,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
             LOG.debug("  element  " + element);
             collection.added(element);
         }
+        rs.close();
         collection.setResolved();
     }
 
@@ -201,7 +204,9 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
                 }
             }
             object.setResolved();
+	        rs.close();
         } else {
+	        rs.close();
             throw new ObjectStoreException("Unable to load data for " + id + " from " + table);
         }
     }

@@ -1,17 +1,25 @@
 package org.nakedobjects;
 
 import org.nakedobjects.object.AbstractUserContext;
+import org.nakedobjects.object.Title;
 import org.nakedobjects.object.collection.InstanceCollection;
+import org.nakedobjects.object.value.TextString;
 
 public class ExplorationContext extends AbstractUserContext  {
-    InstanceCollection users;
+    private InstanceCollection users;
+    private final TextString name = new TextString();
     
     public void setUpUsers(InstanceCollection users) {
         this.users = users;
     }
-
     
+    public TextString getName() {
+        return name;
+    }
     
+    public Title title() {
+        return name.title();
+    }
 }
 
 

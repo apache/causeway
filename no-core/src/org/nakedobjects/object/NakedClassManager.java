@@ -25,11 +25,15 @@ public abstract class NakedClassManager implements DebugInfo {
         if (instance != null) { throw new NakedObjectRuntimeException("NakedClassManager already created: " + instance); }
 
         instance = this;
-        classLoader = new NakedClassLoader();
+        classLoader = installClassLoader();
         classes.put("org.nakedobjects.object.NakedClass", NakedClass.SELF);
     }
 
-    protected abstract boolean accessRemotely();
+    protected NakedClassLoader installClassLoader() {
+		return new NakedClassLoader();
+	}
+
+	protected abstract boolean accessRemotely();
 
     protected abstract void createClass(NakedClass nc) throws ObjectStoreException;
 
@@ -100,6 +104,7 @@ public abstract class NakedClassManager implements DebugInfo {
     public void shutdown() {
         instance = null;
     }
+
 }
 
 /*

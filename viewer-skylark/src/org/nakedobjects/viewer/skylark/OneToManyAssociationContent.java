@@ -3,14 +3,17 @@ package org.nakedobjects.viewer.skylark;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.Field;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.security.Session;
 import org.nakedobjects.viewer.skylark.basic.RemoveOneToManyAssociationOption;
 
 public class OneToManyAssociationContent extends ObjectContent implements FieldContent {
 	private static final UserAction REMOVE_ASSOCIATION = new RemoveOneToManyAssociationOption();
-	private OneToManyAssociation association;
+    private final NakedObject parent;
+	private final OneToManyAssociation association;
 
-	public OneToManyAssociationContent(NakedObject object, OneToManyAssociation association) {
+	public OneToManyAssociationContent(NakedObject parent, NakedObject object, OneToManyAssociation association) {
 		super(object);
+        this.parent = parent;
 		this.association = association;
 	}
 	
@@ -26,8 +29,12 @@ public class OneToManyAssociationContent extends ObjectContent implements FieldC
 		return association;
 	}
 
-	public String getFieldName() {
-		return association.getName();
+	public NakedObject getParent() {
+        return parent;
+    }
+	
+	public String getFieldLabel() {
+		return association.getLabel(Session.getSession().getSecurityContext(), parent);
 	}
 	
 	public void menuOptions(MenuOptionSet options) {

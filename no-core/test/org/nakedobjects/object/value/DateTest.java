@@ -4,6 +4,10 @@ import junit.framework.TestCase;
 
 public class DateTest extends TestCase {
 
+    protected void setUp() throws Exception {
+        Date.setClock(new TestClock());
+    }
+    
     public void testSaveRestore() throws Exception {
     	Date date1 = new Date();
     	date1.parse("2003-1-4");
@@ -25,6 +29,29 @@ public class DateTest extends TestCase {
     	assertEquals(date1.dateValue(), date2.dateValue());
     	assertTrue(date2.isEmpty());
     }
+    
+
+    public void testNew() {
+        Date expected = new Date(2003, 8, 17);
+        Date actual = new Date();
+        assertEquals(expected, actual);
+    }
+    
+    public void testToday() {
+        Date expected = new Date(2003, 8, 17);
+        Date actual = new Date(2000, 1, 1);
+        actual.today();
+        assertEquals(expected, actual);
+    }
+    
+    
+    public void testReset() {
+        Date expected = new Date(2003, 8, 17);
+        Date actual = new Date(2000, 1, 1);
+        actual.reset();
+        assertEquals(expected, actual);
+    }
+
 }
 
 

@@ -25,7 +25,6 @@
 package org.nakedobjects.object.value;
 
 import org.nakedobjects.Clock;
-import org.nakedobjects.SystemClock;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.Title;
 import org.nakedobjects.object.ValueParseException;
@@ -132,14 +131,19 @@ public class Date extends Magnitude {
       fireValueChanged();
    }
 
+   public boolean equals(Object obj) {
+       if(obj instanceof Date) {
+           Date d = (Date) obj;
+           return d.date.equals(date);
+       }
+	    return super.equals(obj);
+   }
+   
    public void copyObject(Naked object) {
       if (!(object instanceof Date)) {
          throw new IllegalArgumentException("Can only copy the value of  a Date object");
       }
-
-//      date = ((Date) object).date;
-//      isNull = ((Date) object).isNull;
-		setValue( (Date)object );
+      setValue( (Date)object );
    }
 
     /**
@@ -305,9 +309,7 @@ public java.util.Date dateValue() {
     * @see org.nakedobjects.object.NakedValue#reset()
     */
    public void reset() {
-//      date = new java.util.Date();
-//      isNull = false;
-	  setValue(new java.util.Date());
+       today();
    }
 
    public boolean sameDayAs(Date as) {
@@ -350,7 +352,6 @@ public java.util.Date dateValue() {
 
       Calendar cal = Calendar.getInstance();
       clearTime(cal);
-
       cal.set(year, month - 1, day);
       set(cal);
    }
@@ -443,15 +444,16 @@ public java.util.Date dateValue() {
 	/**
 	 * Sets this date value to todays date
 	 */
-	public void today() {
-	     Calendar cal = Calendar.getInstance();
-
-	     long time = clock.getTime();
-	     cal.setTimeInMillis(time);
-	      
-	      clearTime(cal);
-		set(cal);
-	}
+    public void today() {
+        Calendar cal = Calendar.getInstance();
+        
+        long time = clock.getTime();
+        java.util.Date d = new java.util.Date(time);
+        cal.setTime(d);
+        
+        clearTime(cal);
+        set(cal);
+    }
 
     public Logger getLogger() { return logger; }
     private final static Logger logger = Logger.getLogger(Date.class);

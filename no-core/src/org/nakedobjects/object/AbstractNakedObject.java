@@ -90,7 +90,9 @@ public abstract class AbstractNakedObject implements NakedObject {
 	}
 */
 	public void aboutActionPersist(ActionAbout about) {
-		about.unusableOnCondition(isPersistent(), "Only non-persistent objects can be made persistent");
+	    if(isPersistent()) {
+	        about.invisible();
+	    }
 	}
 
     /**
@@ -181,6 +183,10 @@ public abstract class AbstractNakedObject implements NakedObject {
         return null;
     }
 
+    protected ObjectContext getContext() {
+        return ObjectContext.getInstance();
+    }
+    
     /**
        Returns the short class name looking at the getFullClassName() result and
        passes back all the text after the last period/dot.

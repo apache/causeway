@@ -58,6 +58,11 @@ public class InstanceCollection extends TypedCollection {
     	return new InstanceCollection(cls);
     }
 
+    public static InstanceCollection findInstances(String className, String term) {
+        NakedClass cls = NakedClassManager.getInstance().getNakedClass(className);
+        return findInstances(cls, term);
+    }
+    
     public static InstanceCollection findInstances(NakedClass cls, String term) {
     	Vector elements;
     	try {

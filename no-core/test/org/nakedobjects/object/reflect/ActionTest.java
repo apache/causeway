@@ -18,7 +18,8 @@ import org.apache.log4j.LogManager;
 
 
 public class ActionTest extends NakedObjectTestCase {
-    private static final String DISOLVE_ACTION = "Reduce Headcount";
+    private static final String DISOLVE_ACTION_NAME = "reduceheadcount";
+    private static final String DISOLVE_ACTION_LABEL = "Reduce Headcount";
 	private Team object;
 	private Action action;
     private MockObjectManager manager;
@@ -42,20 +43,25 @@ public class ActionTest extends NakedObjectTestCase {
         object = new Team();
         NakedClass c = object.getNakedClass();
         
-        action = (Action) c.getObjectAction(Action.USER, DISOLVE_ACTION);
+        action = (Action) c.getObjectAction(Action.USER, DISOLVE_ACTION_NAME);
     }
     
+    protected void tearDown() throws Exception {
+        manager.shutdown();
+        super.tearDown();
+    }
+
     public void testReturnType() {
     	assertTrue(action.hasReturn());
     	assertEquals(Person.class.getName(), action.returns().fullName());
     }
     	
     public void testName() {
-    	assertEquals(DISOLVE_ACTION, action.getName());
+    	assertEquals(DISOLVE_ACTION_NAME, action.getName());
     }
     
     public void testLabel() {
-    	assertEquals(DISOLVE_ACTION, action.getLabel(new SecurityContext(), object));
+    	assertEquals(DISOLVE_ACTION_LABEL, action.getLabel(new SecurityContext(), object));
     }
     
     public void testAction() {

@@ -21,7 +21,7 @@ public class ExplorationClock extends SystemClock {
         if (time == null) {
             return super.getTime();
         } else {
-            return time.getTimeInMillis();
+            return time.getTime().getTime();
         }
     }
 

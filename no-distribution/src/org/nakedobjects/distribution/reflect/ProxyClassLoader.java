@@ -14,7 +14,7 @@ import org.nakedobjects.object.reflect.ValueIf;
 import org.apache.log4j.Logger;
 
 
-class ProxyClassLoader extends NakedClassLoader {
+public class ProxyClassLoader extends NakedClassLoader {
     private static final Logger LOG = Logger.getLogger(ProxyClassLoader.class);
 
     protected Action createAction(ActionDelegate localDelegate) {

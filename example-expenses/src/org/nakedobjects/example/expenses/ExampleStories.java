@@ -1,4 +1,5 @@
 package org.nakedobjects.example.expenses;
+import org.nakedobjects.AbstractExplorationFixture;
 import org.nakedobjects.object.value.Money;
 import org.nakedobjects.utility.ComponentException;
 import org.nakedobjects.utility.ConfigurationException;
@@ -13,7 +14,7 @@ public class ExampleStories extends AcceptanceTestCase {
 		super(name);
 	}
 
-	private void story1() {
+	public  void test1() {
 		subtitle("Make claim for new employee");
 
 		nextStep("Set up employee");
@@ -23,7 +24,7 @@ public class ExampleStories extends AcceptanceTestCase {
 		nextStep("Set up project");
 		TestObject ait = getTestClass("Projects").newInstance();
 		ait.fieldEntry("Name", "AIT phone system");
-		robert.invokeAction("Projects", ait);
+		robert.associate("Projects", ait);
 		
 		nextStep("Create claim for employee");
 		TestObject claim = getTestClass("Claims").invokeAction("New Claim", robert);
@@ -31,14 +32,20 @@ public class ExampleStories extends AcceptanceTestCase {
 	}
 
 
-	public void setUp() {
-		Locale.setDefault(Locale.US);
-		registerClass(Employee.class);
-		registerClass(Claim.class);
-		registerClass(Expense.class);
-		registerClass(Project.class);
-
+	public void setUpFixture() {
+	    addFixture(new AbstractExplorationFixture() {
+	       public void install() {
+	           Locale.setDefault(Locale.US);
+	           registerClass(Employee.class);
+	           registerClass(Claim.class);
+	           registerClass(Expense.class);
+	           registerClass(Project.class);    
+	       }
+	    });
+		
 	}
+	
+	
 
 	public static void main(String[] args) throws ConfigurationException, ComponentException {
         junit.textui.TestRunner.run(ExampleStories.class);

@@ -50,6 +50,7 @@ public abstract class NakedObjectStoreTestCase extends NakedObjectTestCase {
 
     protected void tearDown() throws Exception {
         LOG.debug("test finished");
+        manager.shutdown();
         try {
             shutdownObjectStore();
         } catch (Exception e) {

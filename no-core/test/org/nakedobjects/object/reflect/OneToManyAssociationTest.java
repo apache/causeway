@@ -17,10 +17,12 @@ import org.nakedobjects.security.SecurityContext;
 
 
 public class OneToManyAssociationTest extends NakedObjectTestCase {
-    private static final String MEMBERS_FIELD = "Members";
+    private static final String MEMBERS_FIELD_LABEL = "Members";
+    private static final String MEMBERS_FIELD_NAME = "members";
 	private Team object;
 	private OneToManyAssociation collectionField;
 	private Person elements[];
+    private MockObjectManager manager;
 	
     public OneToManyAssociationTest(String name) {
         super(name);
@@ -33,7 +35,7 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     public void setUp()  throws ObjectStoreException {
     	LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
-    	MockObjectManager manager = MockObjectManager.setup();
+    	manager = MockObjectManager.setup();
     	manager.setupAddClass(NakedObject.class);
     	manager.setupAddClass(Team.class);
 		
@@ -44,7 +46,12 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
 		}
         NakedClass c = object.getNakedClass();
         
-        collectionField = (OneToManyAssociation) c.getField(MEMBERS_FIELD);
+        collectionField = (OneToManyAssociation) c.getField(MEMBERS_FIELD_NAME);
+    }
+    
+    protected void tearDown() throws Exception {
+        manager.shutdown();
+        super.tearDown();
     }
 
     public void testType() {
@@ -71,11 +78,11 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     }     	
     
     public void testName() {
-    	assertEquals(MEMBERS_FIELD, collectionField.getName());
+    	assertEquals(MEMBERS_FIELD_NAME, collectionField.getName());
     }
     
     public void testLabel() {
-    	assertEquals(MEMBERS_FIELD, collectionField.getLabel(new SecurityContext(), object));
+    	assertEquals(MEMBERS_FIELD_LABEL, collectionField.getLabel(new SecurityContext(), object));
     }
     
     public void testAbout() {

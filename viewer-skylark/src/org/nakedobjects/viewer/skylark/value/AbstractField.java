@@ -223,14 +223,7 @@ public abstract class AbstractField extends AbstractView {
     }
     
     protected void parseEntry(final String entryText) throws InvalidEntryException {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
-        try {
+         try {
 	        NakedObject parent = ((ObjectContent) getParent().getContent()).getObject();
 	        getObjectField().parseAndSave(parent, entryText);
 	        getState().setValid();

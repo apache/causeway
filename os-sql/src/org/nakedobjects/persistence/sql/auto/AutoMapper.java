@@ -12,6 +12,7 @@ import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.Value;
 import org.nakedobjects.object.value.Date;
+import org.nakedobjects.object.value.Time;
 import org.nakedobjects.object.value.TimeStamp;
 import org.nakedobjects.persistence.sql.ObjectMapper;
 import org.nakedobjects.persistence.sql.Results;
@@ -90,11 +91,11 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
         	LOG.debug("  instance  " + instance);
         	instances.addElement(instance);
         	if(!instance.isResolved()) {
-//					LOG.debug(" - setting resolved " + instance);
         		instance.setResolved();
         	}
         	count++;
         }
+        rs.close();
 
 		return instances;
 	}
@@ -143,6 +144,7 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 	    } else {
 	        throw new ObjectStoreException("Unable to load data from " + table +  " with id " + primaryKey);
 	    }
+        rs.close();
 	}
 
 	public void loadData(NakedObject object, Results rs) throws ObjectStoreException {
@@ -151,13 +153,18 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 				String val = rs.getString(columnNames[i]);
 				
 				if(val != null && ((Value) fields[i]).getType() == TimeStamp.class) {
-					// convert date to yyyymmdd
+					// convert date to yyyymmddhhmm
 					val = val.substring(0,4) + val.substring(5,7) + val.substring(8,10) + val.substring(11,13) + val.substring(14,16) + val.substring(17,19);
 				}
 
 				if(val != null && ((Value) fields[i]).getType() == Date.class) {
 					// convert date to yyyymmdd
 					val = val.substring(0,4) + val.substring(5,7) + val.substring(8,10);
+				}
+
+				if(val != null && ((Value) fields[i]).getType() == Time.class) {
+					// convert date to hhmm
+					val = val.substring(14,16) + val.substring(17,19);
 				}
 
 				val = val == null ? "NULL" : val;
@@ -168,9 +175,13 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 						fields[i].getType().getName());
 				int associatedId = rs.getInt(columnNames[i]);
 				if(associatedId != 0) {
-//							 TODO determine which OID type to create
-					NakedObject reference = loadObject(associatedCls, new SqlOid(associatedId, associatedCls.fullName()));
-					((OneToOneAssociation) fields[i]).initData(object, reference);
+				    if(associatedCls.isAbstract()) {
+				        LOG.warn("NOT DEALING WITH POLYMORPHIC ASSOCIATIONS");
+				    } else {
+	//							 TODO determine which OID type to create
+						NakedObject reference = loadObject(associatedCls, new SqlOid(associatedId, associatedCls.fullName()));
+						((OneToOneAssociation) fields[i]).initData(object, reference);
+				    }
 				}
 
 			} else {

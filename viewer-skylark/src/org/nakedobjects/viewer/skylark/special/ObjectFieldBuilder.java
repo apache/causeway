@@ -5,6 +5,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.reflect.Field;
@@ -59,7 +60,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
             Field field = flds[f];
 			Naked value = field.get(object);
 			
-			Content content = createContent(value, field);
+			Content content = createContent(object, value, field);
 			View fieldView = subviewDesign.createSubview(content, view.getViewAxis());
 			if(fieldView != null) {
 				view.addView(decorateSubview(fieldView));
@@ -99,7 +100,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
     			boolean changeToNull = value == null && existing != null;
 				boolean changedFromNull = value != null && existing == null;
 				if(changeToNull || changedFromNull) {
-					View fieldView =	subviewDesign.createSubview(createContent(value, field), view.getViewAxis());
+					View fieldView =	subviewDesign.createSubview(createContent(object, value, field), view.getViewAxis());
 					if(fieldView != null) {
 						view.replaceView(subview, decorateSubview(fieldView));
 					}
@@ -109,20 +110,22 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         }
     }
 
-	private Content createContent(Naked object, Field field) {
+	private Content createContent(NakedObject parent, Naked object, Field field) {
 		if(field == null) {
 			throw new NullPointerException();
 		}
 		
 		Content content;
 		if(object instanceof InternalCollection) {
-			content = new InternalCollectionContent((InternalCollection) object, (OneToManyAssociation) field);
+			content = new InternalCollectionContent(parent, (InternalCollection) object, (OneToManyAssociation) field);
 	    } else if(object instanceof NakedObject) {
-			content = new OneToOneContent((NakedObject) object, (OneToOneAssociation) field);
+			content = new OneToOneContent(parent, (NakedObject) object, (OneToOneAssociation) field);
 	    } else if(object instanceof NakedValue) { 
-			content = new ValueContent((NakedValue) object, (Value) field);  
+			content = new ValueContent(parent, (NakedValue) object, (Value) field);  
+	    } else if(object == null) {
+			content = new OneToOneContent(parent, null, (OneToOneAssociation) field);
 	    } else {
-			content = new OneToOneContent(null, (OneToOneAssociation) field);
+	        throw new NakedObjectRuntimeException();
 	    }
 	
 		return content;

@@ -7,8 +7,8 @@ import org.apache.log4j.LogManager;
 
 
 public final class LocalObjectManagerTest extends NakedObjectTestCase {
-	private static NakedObjectManager objectManager;
-	private static MockObjectStore objectStore;
+	private NakedObjectManager objectManager;
+	private MockObjectStore objectStore;
 	
 	public LocalObjectManagerTest(String name) {
 		super(name);
@@ -17,16 +17,19 @@ public final class LocalObjectManagerTest extends NakedObjectTestCase {
 	protected void setUp() throws Exception {
 	    LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
-		try {
-            objectManager = NakedObjectManager.getInstance();
-        } catch (IllegalStateException alreadySetUp) {
-			MockUpdateNotifier updateNotifier = new MockUpdateNotifier();
-			objectStore = new MockObjectStore();
-			objectManager = new LocalObjectManager(objectStore, updateNotifier);
-            objectManager.init();
-        }
-		super.setUp();
+		MockUpdateNotifier updateNotifier = new MockUpdateNotifier();
+		objectStore = new MockObjectStore();
+		objectManager = new LocalObjectManager(objectStore, updateNotifier);
+        objectManager.init();
+
+        super.setUp();
 	}
+	
+	protected void tearDown() throws Exception {
+	    objectManager.shutdown();
+	    objectStore.shutdown();
+	    super.tearDown();
+    }
 
 	public void testGetInstances() throws Exception {
 	    NakedClass nc = new NakedClass();

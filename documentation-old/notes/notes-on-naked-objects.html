@@ -68,10 +68,26 @@ when reflection is set up for full proxying.<br>
 <p>The JavaValue class reflectively calls the necessary get, about and
 valid methods in the underlying NakedObject classes.<br>
 </p>
-<p><br>
+<h2>Application Context</h2>
+<p>In this section we look at how an application runs within the
+framework.&nbsp; Normally this is through the Naked Objects container,
+which takes care of all the necessary configuration.&nbsp; When run
+outside of this container, and probably within some other container, it
+is necessary to do this work yourself.<br>
 </p>
-<p><br>
+<h3>Client<br>
+</h3>
+<p>A client needs the following:-<br>
 </p>
+<ol>
+  <li>An object manager and object store</li>
+  <li>An object viewer</li>
+  <li>A session, and hence a security context</li>
+  <li>A mechanism to forward requests to a server.</li>
+  <li>A root object for the user to work with - normally UserContext<br>
+  </li>
+</ol>
+<br>
 <p><br>
 </p>
 <p><br>

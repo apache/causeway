@@ -5,6 +5,11 @@ import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.collection.InstanceCollection;
+import org.nakedobjects.security.SecurityContext;
+import org.nakedobjects.security.Session;
+import org.nakedobjects.security.User;
 
 import java.util.Vector;
 
@@ -15,11 +20,11 @@ public class ExplorationSetUp {
      private ExplorationFixture fixture;
     private Vector newInstances = new Vector();
     
-    
     private ExplorationClock clock;
     private NakedClassManager classManager;
     private NakedObjectManager objectManager;
     private Vector classes;
+    private String user;
     
     public void init(Vector fixtures, NakedClassManager classManager, NakedObjectManager objectManager, ExplorationClock clock) {
         this.classManager = classManager;
@@ -43,6 +48,8 @@ public class ExplorationSetUp {
                 objectManager.makePersistent(object);
             }
         }
+        
+        loginUser();
     }
 
     private void addInstance(NakedObject object) {
@@ -116,7 +123,23 @@ public class ExplorationSetUp {
         return classNames;
     }
     
+    public void setUser(String name) {
+        this.user = name;
+    }
 
+    private void loginUser() {
+        Session.initSession();
+        if(user != null) {
+	        NakedClass cls = NakedClassManager.getInstance().getNakedClass(User.class.getName());
+	        InstanceCollection coll = InstanceCollection.findInstances(cls, user);
+	        if(coll.size() == 0) {
+	            throw new NakedObjectRuntimeException("No user " + user);
+	        }
+	        User user = (User) coll.elements().nextElement();
+	        Session.setLoggedOn(new SecurityContext(null, user));
+        }
+    }
+    
 
 }
 

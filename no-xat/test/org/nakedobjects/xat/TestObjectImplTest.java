@@ -17,6 +17,7 @@ public class TestObjectImplTest extends TestCase {
 
     private TestObjectImpl testObject;
     private TestObjectExample object;
+    private MockObjectManager om;
 
     public static void main(String[] args) {}
 
@@ -24,14 +25,21 @@ public class TestObjectImplTest extends TestCase {
         BasicConfigurator.configure();
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        MockObjectManager om = MockObjectManager.setup();
+        om = MockObjectManager.setup();
         om.setupAddClass(NakedObject.class);
         om.setupAddClass(TestObjectExample.class);
 
+        Session.initSession();
         SecurityContext context = Session.getSession().getSecurityContext();
         object = new TestObjectExample();
 
         testObject = new TestObjectImpl(context, object);
+    }
+    
+    protected void tearDown() throws Exception {
+        Session.getSession().shutdown();
+        om.shutdown();
+        super.tearDown();
     }
 
     public void testAssertActionVisible() {

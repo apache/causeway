@@ -35,7 +35,9 @@ class TableHeader extends AbstractBorder {
         int x = axis.getOffset();
         for (int i = 0; i < fields.length; i++) {
             Field field = fields[i];
-            canvas.drawText(field.getName(), x, y, Style.SECONDARY1, Style.LABEL);
+            
+            String label = field.getLabel();
+            canvas.drawText(label, x, y, Style.SECONDARY1, Style.LABEL);
             x += widths[i];
         }
 

@@ -65,7 +65,8 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
         		if(field == null) {
         			elementContent = new ObjectContent(element);
         		} else {
-        			elementContent = new OneToManyAssociationContent(element, field);
+        		    NakedObject parent = ((InternalCollectionContent) content).getParent();
+        			elementContent = new OneToManyAssociationContent(parent, element, field);
         		}
         		elementView = subviewDesign.createSubview(elementContent, view.getViewAxis());
         	}

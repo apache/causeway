@@ -1,12 +1,14 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.utility.StartupException;
+
 
 public interface OidGenerator {
 	Object next();
 
 	String name();
 	
-	void init();
+	void init() throws StartupException;
 	
 	void shutdown();
 }

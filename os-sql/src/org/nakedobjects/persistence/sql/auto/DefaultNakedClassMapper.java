@@ -56,6 +56,7 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
             LOG.debug("  instance  " + oid);
             if(loadedObjects.isLoaded(oid)) {
                 LOG.debug("  class already loaded   " + oid);
+    	        rs.close();
                 return (NakedClass) loadedObjects.getLoadedObject(oid);
             } else {
                 NakedClass instance;
@@ -65,9 +66,11 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
                 instance.getReflector().setValue(rs.getString(reflectorColumn));
                 instance.setResolved();
                 loadedObjects.loaded(instance);
+		        rs.close();
                 return instance;
             }
         } else {
+	        rs.close();
             throw new ObjectNotFoundException(name);
         }
     }
@@ -113,7 +116,9 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
 	        String reflectorName = rs.getString(reflectorColumn);
 	        cls.getName().restoreString(className);
 	        cls.getReflector().restoreString(reflectorName);
+	        rs.close();
 	    } else {
+	        rs.close();
 	        throw new ObjectStoreException("Unable to load data for " + id + " from " + table);
 	    }
 	}

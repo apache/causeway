@@ -1,5 +1,6 @@
 package org.nakedobjects.object.value;
 
+import org.nakedobjects.SystemClock;
 import org.nakedobjects.object.ValueParseException;
 
 import java.util.Locale;
@@ -19,6 +20,9 @@ public class TimePeriodTest extends TestCase {
     protected void setUp() throws Exception {
 		Locale.setDefault(Locale.UK);
    	
+		Time.setClock(new SystemClock());
+		
+
         tp1 = new TimePeriod();
         tp2 = new TimePeriod();
         tp3 = new TimePeriod();

@@ -100,6 +100,9 @@ public class JavaReflector implements Reflector {
      * </pre>
      */
     protected static String naturalName(String javaName) {
+        return javaName;
+        
+        /*            
         int pos = 0;
 
         // find first upper case character
@@ -108,8 +111,9 @@ public class JavaReflector implements Reflector {
         }
 
         if (pos == javaName.length()) {
-            return "invalid name";
+            return "invalid name; no leading keyword before a capital lwttwe";
         } else {
+            
             StringBuffer s = new StringBuffer(javaName.length() - pos); // remove
                                                                                               // is/get/set
 
@@ -128,6 +132,7 @@ public class JavaReflector implements Reflector {
 
             return s.toString();
         }
+            */
     }
 
     /**
@@ -217,7 +222,7 @@ public class JavaReflector implements Reflector {
 
     public NakedObject acquireInstance() {
         if (Modifier.isAbstract(cls.getModifiers())) {
-            throw new IllegalStateException("Handling of abstract naked classes is not yet supported");
+            throw new IllegalStateException("Handling of abstract naked classes is not yet supported: " + cls);
         } else {
             try {
                 return (NakedObject) cls.newInstance();
@@ -482,6 +487,10 @@ public class JavaReflector implements Reflector {
      */
     public boolean isCollection() {
         return NakedCollection.class.isAssignableFrom(cls);
+    }
+    
+    public boolean isAbstract() {
+        return Modifier.isAbstract(cls.getModifiers());
     }
 
     String[] names(Vector methods) {

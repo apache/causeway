@@ -135,7 +135,7 @@ public class EmptyField extends AbstractView {
                 associatedObject = source;
             }
             
-            OneToOneContent content = new OneToOneContent(associatedObject, field);
+            OneToOneContent content = new OneToOneContent(target, associatedObject, field);
  //           View iconView = ViewFactory.getViewFactory().createIconizedSubview(content);
  //           getParent().replaceView(getView(), iconView);
             field.setAssociation(target, associatedObject);

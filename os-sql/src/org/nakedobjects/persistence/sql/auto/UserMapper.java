@@ -39,7 +39,7 @@ public class UserMapper extends NameBasedMapper {
 	}
 
 	public Vector getInstances(NakedClass cls) throws ObjectStoreException {
-		String statement = "select " + table + " from " + table;
+		String statement = "select " + columns + " from " + table;
 		return getInstances(statement);
 	}
 
@@ -74,6 +74,7 @@ public class UserMapper extends NameBasedMapper {
 		    }
 		    instances.addElement(user);
 		}
+        rs.close();
 		return instances;
 	}
 
@@ -110,6 +111,7 @@ public class UserMapper extends NameBasedMapper {
 		Results rs = db.select("select * from " + table + " where id = " + key);
 		rs.next();
         loadUser(rs, user);
+        rs.close();
 	}
 
 	public void save(NakedObject object) throws ObjectStoreException {

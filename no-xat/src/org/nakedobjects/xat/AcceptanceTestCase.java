@@ -8,19 +8,15 @@ import org.nakedobjects.object.LocalObjectManager;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedObjectManager;
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NullUpdateNotifier;
 import org.nakedobjects.object.TransientObjectStore;
-import org.nakedobjects.object.collection.InstanceCollection;
 import org.nakedobjects.object.value.Date;
 import org.nakedobjects.object.value.Time;
 import org.nakedobjects.object.value.TimeStamp;
 import org.nakedobjects.security.SecurityContext;
 import org.nakedobjects.security.Session;
 import org.nakedobjects.security.User;
-import org.nakedobjects.utility.ComponentException;
-import org.nakedobjects.utility.ConfigurationException;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Hashtable;
@@ -66,7 +62,7 @@ public abstract class AcceptanceTestCase extends TestCase implements MutableCont
     }
 
     protected TestClass getTestClass(String name) {
-        TestClass view = (TestClass) classes.get(name);
+        TestClass view = (TestClass) classes.get(name.toLowerCase());
 
         if (view == null) {
             throw new IllegalArgumentException("Invalid class name " + name);
@@ -89,45 +85,49 @@ public abstract class AcceptanceTestCase extends TestCase implements MutableCont
         NakedClass nc = NakedClassManager.getInstance().getNakedClass(className);
         TestClass view = TestObjectFactory.getInstance().createTestClass(context, nc);
 
-        classes.put(nc.getPluralName(), view);
+        classes.put(nc.fullName().toLowerCase(), view);
     }
     
     public void addFixture(ExplorationFixture fixture) {
         fixtures.addElement(fixture);
     }
 
-    protected void setUp() throws ConfigurationException, ComponentException {
+    protected void setUp() throws Exception {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
         NakedObjectStore nos;
         nos = new TransientObjectStore();
-
         objectManager = new LocalObjectManager(nos, new NullUpdateNotifier());
-
-        // TODO ensure logon
-        Session.initSession();
         
-        context = Session.getSession().getSecurityContext();
-
-        
-        clock = new ExplorationClock();
-        Date.setClock(clock);
-        Time.setClock(clock);
-        TimeStamp.setClock(clock);
-        
-        ExplorationSetUp fs = new ExplorationSetUp();
-        fs.init(fixtures, NakedClassManager.getInstance(), objectManager, clock);
-
-        documentor = TestObjectFactory.getInstance().getDocumentor(getName().substring(4));
-        
-        String[] cls = fs.getClasses();
-        for (int i = 0; i < cls.length; i++) {
-            NakedClass nc = NakedClassManager.getInstance().getNakedClass(cls[i]);
-            TestClass view = TestObjectFactory.getInstance().createTestClass(context, nc);
-
-            classes.put(nc.getPluralName(), view);
+        try {
+	        clock = new ExplorationClock();
+	        Date.setClock(clock);
+	        Time.setClock(clock);
+	        TimeStamp.setClock(clock);
+	        
+	        setUpFixture();
+	        ExplorationSetUp fs = new ExplorationSetUp();
+	        fs.init(fixtures, NakedClassManager.getInstance(), objectManager, clock);
+	        
+	        documentor = TestObjectFactory.getInstance().getDocumentor(getName().substring(4));
+	        
+	        String[] cls = fs.getClasses();
+	        for (int i = 0; i < cls.length; i++) {
+	            NakedClass nc = NakedClassManager.getInstance().getNakedClass(cls[i]);
+	            TestClass view = TestObjectFactory.getInstance().createTestClass(context, nc);
+	
+	            classes.put(nc.fullName().toLowerCase(), view);
+	        }
+        } catch(Exception e) {
+            // If an exception is thrown in setUp the tear is not called, hence object manager is
+            // left running, but shouldn't be.
+            NakedObjectManager.getInstance().shutdown();
+            
+            throw e;
         }
         
     }
+    
+    protected abstract void setUpFixture();
 
     protected void startDocumenting() {
         documentor.start();
@@ -191,18 +191,6 @@ public abstract class AcceptanceTestCase extends TestCase implements MutableCont
         return objectManager;
     }
 
-    
-    public void setUser(String name) {
-        Session.logoff();
-        NakedClass cls = NakedClassManager.getInstance().getNakedClass(User.class.getName());
-        InstanceCollection coll = InstanceCollection.findInstances(cls, name);
-        if(coll.size() == 0) {
-            throw new NakedObjectRuntimeException("No user " + name);
-        }
-        User user = (User) coll.elements().nextElement();
-        Session.setLoggedOn(new SecurityContext(null, user));
-    }
-    
     public void setUser(User user) {
         throw new NotImplementedException();
     }

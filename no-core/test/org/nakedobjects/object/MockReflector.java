@@ -51,6 +51,10 @@ public class MockReflector implements Reflector {
         return false;
     }
 
+    public boolean isAbstract() {
+        return false;
+    }
+    
     public String pluralName() {
         return null;
     }

@@ -3,18 +3,21 @@ package org.nakedobjects.viewer.skylark;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.Field;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.security.Session;
 import org.nakedobjects.viewer.skylark.basic.RemoveOneToOneAssociationOption;
 
 public class OneToOneContent extends ObjectContent implements FieldContent {
 	private static final UserAction REMOVE_ASSOCIATION = new RemoveOneToOneAssociationOption();
-	private OneToOneAssociation association;
+    private final NakedObject parent;
+	private final OneToOneAssociation association;
 
 	public String debugDetails() {
 		return super.debugDetails() +  "  field:" + association + "\n";  
 	}
 
-	public OneToOneContent(NakedObject object, OneToOneAssociation association) {
+	public OneToOneContent(NakedObject parent, NakedObject object, OneToOneAssociation association) {
 		super(object);
+        this.parent = parent;
 		this.association = association;
 	}
 
@@ -26,8 +29,12 @@ public class OneToOneContent extends ObjectContent implements FieldContent {
 		return association;
 	}
 	
-	public String getFieldName() {
-		return association.getName();
+	public NakedObject getParent() {
+	    return parent;
+	}
+	
+	public String getFieldLabel() {
+		return association.getLabel(Session.getSession().getSecurityContext(), parent);
 	}
 	
 	public void menuOptions(MenuOptionSet options) {

@@ -5,13 +5,11 @@ import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.security.Certificate;
 import org.nakedobjects.security.SecurityContext;
 
-import java.io.Serializable;
-
 
 public interface RequestContext {
  //   public abstract void broadcastObjectChanged(NakedObject object, NakedObjectManager objectStore);
 
-   public abstract Serializable execute(Request request, String client);
+//   public abstract Serializable execute(Request request, String client);
 
     public abstract NakedObjectManager getObjectManager();
 

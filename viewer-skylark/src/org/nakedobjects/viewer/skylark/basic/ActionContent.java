@@ -16,10 +16,7 @@ public class ActionContent extends ObjectContent {
     public String debugDetails() {
         return super.debugDetails() + "  action: " + action + "\n";
     }
-/*
-    public void menuOptions(MenuOptionSet options) {
-    }
-*/
+
     public Action getAction() {
         return action;
     }

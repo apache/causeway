@@ -57,6 +57,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 			LOG.debug("  element  " + element);
 			collection.added(element);
 		}
+        rs.close();
 		collection.setResolved();
 	}
 

@@ -13,11 +13,7 @@ public class MockObjectManager extends NakedObjectManager {
 
     public static MockObjectManager setup() {
         MockObjectManager manager;
-        try {
-            manager = (MockObjectManager) getInstance();
-        } catch (IllegalStateException e) {
-            manager = new MockObjectManager();
-        }
+        manager = new MockObjectManager();
         classManager = MockClassManager.setup();
         manager.reset();
         return manager;
@@ -117,7 +113,10 @@ public class MockObjectManager extends NakedObjectManager {
         throw new NotImplementedException();
     }
 
-    public void shutdown() {}
+    public void shutdown() {
+        classManager.shutdown();
+        super.shutdown();
+    }
 
     public void startTransaction() {
         actions.addElement("start transaction");

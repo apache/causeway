@@ -115,7 +115,7 @@ public class TitleText {
 
     protected String title() {
         if(content instanceof InternalCollectionContent) {
-	        return ((InternalCollectionContent) content).getFieldName();
+	        return ((InternalCollectionContent) content).getFieldLabel();
         } else {
 	        NakedObject object = content.getObject();
 	        Title title = object.title();

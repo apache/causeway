@@ -15,7 +15,7 @@ import org.nakedobjects.viewer.skylark.basic.RootWorkspaceBuilder;
 import org.nakedobjects.viewer.skylark.basic.UserContextWorkspace;
 
 
-// taken from WorkspaceSpecification.java in org.nakedobjects.viewer.skylark.special
+// taken from RootWorkspaceSpecification.java in org.nakedobjects.viewer.skylark.special
 public class WorkspaceSpecification implements org.nakedobjects.viewer.skylark.special.WorkspaceSpecification {
 	RootWorkspaceBuilder builder = new RootWorkspaceBuilder();
 	

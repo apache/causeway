@@ -12,7 +12,6 @@ import org.nakedobjects.viewer.skylark.basic.FindFirstOption;
 import org.nakedobjects.viewer.skylark.basic.ImmediateObjectOption;
 
 public class ObjectContent implements Content {
-
     private final NakedObject object;
 
     public ObjectContent(NakedObject object) {

@@ -98,7 +98,7 @@ public class TypeMapper {
     		if(ts.equals("NULL")) {
     			return ts;
     		}
-        	String dbts = ts.substring(8,10) + ":" + ts.substring(10,12);
+        	String dbts = ts.substring(0,2) + ":" + ts.substring(2,4);
         	return "'" + dbts + "'";
         }
 

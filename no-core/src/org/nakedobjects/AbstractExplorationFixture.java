@@ -21,6 +21,18 @@ public abstract class AbstractExplorationFixture implements ExplorationFixture {
     protected final NakedObject createInstance(String className) {
         return container.createInstance(className);
     }
+    
+    protected void resetClock() {
+        getContainer().resetClock();
+    }
+
+    public void setTime(int hour, int minute) {
+        getContainer().setTime(hour, minute);
+    }
+
+    public void setDate(int year, int month, int day) {
+        getContainer().setDate(year, month, day);
+    }
 
     protected ExplorationSetUp getContainer() {
         return container;
@@ -80,6 +92,12 @@ public abstract class AbstractExplorationFixture implements ExplorationFixture {
         
         return user;
     }
+    
+    public void setUser(String name) {
+        getContainer().setUser(name);
+     }
+    
+
 }
 
 /*

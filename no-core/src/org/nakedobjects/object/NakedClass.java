@@ -252,13 +252,17 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
     }
     
     private Action getAction(Action[] availableActions, Action.Type type, String name, NakedClass[] parameters) {
-   	outer:
-    	    for (int i = 0; i < availableActions.length; i++) {
-    	        Action action = availableActions[i];
-    	        if (action.getType().equals(type)) {
-    	            String cname = action.getName();
-                    if(name == null || cname.equals(name)) {
-    	                if(action.parameters().length == parameters.length) {
+        if(name == null) {
+           return null;
+        }
+        
+        String searchName = searchName(name);  
+        outer:
+            for (int i = 0; i < availableActions.length; i++) {
+                Action action = availableActions[i];
+                if (action.getType().equals(type)) {
+                    if(action.getName().equals(searchName)) {
+                        if(action.parameters().length == parameters.length) {
     	                    for (int j = 0; j < parameters.length; j++) {
     	                        if(action.parameters()[j] != parameters[j]) {
     	                            continue outer;
@@ -321,15 +325,29 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
     }
 
     public Field getField(String name) {
+        String searchName = searchName(name);
+        
         reflector();
     	for (int i = 0; i < fields.length; i++) {
-            if (fields[i].getName().equals(name)) {
+            if (fields[i].getName().equals(searchName)) {
                 return fields[i];
             }
         }
 
         throw new NakedClassException("No field called " + name + " in " +
             getSingularName());
+    }
+
+    private String searchName(String name) {
+        StringBuffer searchName;
+        searchName = new StringBuffer(name.length());
+        for(int c = 0, len = name.length(); c < len; c++) {
+           char  ch = name.charAt(c);
+            if(ch != ' ') {
+               searchName.append(Character.toLowerCase(ch));
+            }
+        }
+        return searchName.toString();
     }
 
     public Field[] getFields() {
@@ -503,11 +521,11 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
     private Reflector reflector() {
 		if(reflector == null) {
 			if(getName().isEmpty() && getReflector().isEmpty()) {
-				throw new  NakedObjectRuntimeException("No class name or reflector class specified: " + this);
+				throw new  NakedObjectRuntimeException("No class name and reflector class name specified: " + this);
 			} else if(getName().isEmpty()) {
-				throw new  NakedObjectRuntimeException("No naked class specified: " + this);
+				throw new  NakedObjectRuntimeException("No naked class name specified: " + this);
 			} else if(getReflector().isEmpty()) {
-				throw new  NakedObjectRuntimeException("No reflector class specified: " + this);
+				throw new  NakedObjectRuntimeException("No reflector class name specified: " + this);
 			}
 			
 	    	NakedClassManager.getInstance().reflect(this);
@@ -580,6 +598,11 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
             classes.copyInto(classesArray);
             return classesArray;
         }
+    }
+
+
+    public boolean isAbstract() {
+        return reflector.isAbstract();
     }
 
     

@@ -85,7 +85,7 @@ public abstract class JavaMember {
         }
 
         public String getName() {
-            return name;
+            return null;
         }
         
         public String debug() {

@@ -2,19 +2,30 @@ package org.nakedobjects.distribution;
 
 import java.io.Serializable;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * Deals with requests from a client, by getting the Request object to invoke
  * its generateResonse() method, and returning that response.
  */
-public abstract class RequestHandler {
-    public Serializable execute(Request request, String client, RequestContext server) {
-        request.generateResponse(server);
+public class RequestHandler {
+ 	private static final Logger LOG = Logger.getLogger(RequestHandler.class);
+	private RequestContext context;
+
+ 	public RequestHandler(RequestContext context) {
+ 		this.context = context;
+ 	}
+ 	
+ 	public final Serializable execute(Request request, String client) {
+        request.generateResponse(context);
         log(client, request, request.getResponse());
         return request.getResponse();
     }
-
-    protected abstract void log(String client, Request request, Serializable response);
+	
+	protected void log(String client, Request request, Serializable response) {
+		LOG.info("Request from " + client + ",  " + request + " ~ " + response);
+	}
 }
 
 /*

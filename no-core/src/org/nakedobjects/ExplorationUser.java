@@ -22,6 +22,10 @@ public class ExplorationUser extends AbstractNakedObject {
         Session.setLoggedOn(new SecurityContext(null, user));
     }
 
+    public String getIconName() {
+        return "User";
+    }
+    
     public Title title() {
         return getUser().title();
     }

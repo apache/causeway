@@ -9,9 +9,9 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectStore;
+import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.TransientObjectStore;
 import org.nakedobjects.object.collection.InstanceCollection;
-import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.value.Date;
 import org.nakedobjects.object.value.Time;
 import org.nakedobjects.object.value.TimeStamp;
@@ -159,12 +159,12 @@ public abstract class Exploration {
     }
 
     /** @deprecated */
-        public void registerClass(Class cls) {
+	public void registerClass(Class cls) {
         registerClass(cls.getName());
     }
 
         /** @deprecated */
-           public void registerClass(String className) {
+    public void registerClass(String className) {
         NakedClass nc = NakedClassManager.getInstance().getNakedClass(className);
         context.getClasses().add(nc);
     }
@@ -173,7 +173,7 @@ public abstract class Exploration {
         fixtures.addElement(fixture);
     }
     
-    protected abstract void setUp();
+    protected abstract void setUpFixture();
 
     private void setUpExploration() {
         clock = new ExplorationClock();
@@ -181,8 +181,7 @@ public abstract class Exploration {
         Time.setClock(clock);
         TimeStamp.setClock(clock);
         
-        setUp();
-        
+        setUpFixture();
         ExplorationSetUp fs = new ExplorationSetUp();
         fs.init(fixtures, NakedClassManager.getInstance(), objectManager, clock);
         
@@ -226,6 +225,9 @@ public abstract class Exploration {
         LOG.debug("locale is " + Locale.getDefault());
     }
 
+    /**
+     * Set up 
+     */
     private User setUpUsers() {
         NakedClass userClass = classManager().getNakedClass(User.class.getName());
 
@@ -238,19 +240,21 @@ public abstract class Exploration {
 
             user = new User(name);
             user.getRoles().add(new Role("explorer"));
-            user.makePersistent();
+            //user.makePersistent();
 
             context = new ExplorationContext();
-   //         context.getName().setValue(name);
-            context.makePersistent();
+            context.getName().setValue(name);
             context.associateUser(user);
+
+            objectManager.makePersistent(context);
 
             NakedClassList set = new NakedClassList();
             classSet(set);
             set.setContext(context);
         } else {
-            InstanceCollection users = InstanceCollection.findInstances(new User(name));
+            InstanceCollection users = InstanceCollection.findInstances(User.class.getName(), name);
             user = (User) users.elements().nextElement();
+            context = (ExplorationContext) user.getRootObject();
         }
 
         return user;
@@ -269,42 +273,59 @@ public abstract class Exploration {
         showSplash();
         setUpLocale();
 
-        NakedObjectStore objectstore = (NakedObjectStore) ComponentLoader.loadComponent(OBJECT_STORE, TransientObjectStore.class,
+        NakedObjectStore objectStore = (NakedObjectStore) ComponentLoader.loadComponent(OBJECT_STORE, TransientObjectStore.class,
                 NakedObjectStore.class);
 
         ObjectViewingMechanism viewer = (ObjectViewingMechanism) ComponentLoader.loadComponent(VIEWING_MECHANISM,
                 ObjectViewingMechanism.class);
 
-        objectManager = new LocalObjectManager(objectstore, viewer.getUpdateNotifier());
-        objectManager.init();
-
-        User user = setUpUsers();
-
-        setUpExploration();
-
-        Session.initSession();
-        SecurityContext context = new SecurityContext(null, user);
-
-        //User user = context.getUser();
-        NakedObject rootObject = user.getRootObject();
-        if (rootObject == null) {
-            LOG.warn("User had no root context, a default one has been assigned");
-            // TODO create a ExplorationContext that list the users, and allow
-            // them to be changed between
-            rootObject = new DefaultUserContext();
-            rootObject.created();
-            objectManager.makePersistent(rootObject);
-            user.setRootObject(rootObject);
-            ((DefaultUserContext) rootObject).setUser(user);
+        objectManager = new LocalObjectManager(objectStore, viewer.getUpdateNotifier());
+        
+        try {
+            objectManager.init();
+            
+            User user = setUpUsers();
+            
+            setUpExploration();
+            
+            //        Session.initSession();
+            SecurityContext context = new SecurityContext(null, user);
+            
+            //User user = context.getUser();
+            NakedObject rootObject = user.getRootObject();
+            if (rootObject == null) {
+                LOG.warn("User had no root context, a default one has been assigned");
+                // TODO create a ExplorationContext that list the users, and allow
+                // them to be changed between
+                rootObject = new DefaultUserContext();
+                rootObject.created();
+                objectManager.makePersistent(rootObject);
+                user.setRootObject(rootObject);
+                ((DefaultUserContext) rootObject).setUser(user);
+            }
+            
+            String name = this.getClass().getName();
+            name = name.substring(name.lastIndexOf('.') + 1);
+            
+            viewer.setTitle(name);
+            viewer.init(rootObject);
+            
+            viewer.start();
+        } catch( StartupException e) {
+            if(objectStore == null) {
+                try {
+                    objectStore.shutdown();
+                } catch (ObjectStoreException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            
+            if(objectManager == null) {
+                objectManager.shutdown();
+            }
+            
+            throw e;
         }
-
-        String name = this.getClass().getName();
-        name = name.substring(name.lastIndexOf('.') + 1);
-
-        viewer.setTitle(name);
-        viewer.init(rootObject);
-
-        viewer.start();
     }
 
     

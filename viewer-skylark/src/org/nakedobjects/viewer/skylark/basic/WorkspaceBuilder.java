@@ -47,7 +47,7 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
 					Naked attribute = field.get(object);
 					
 					
-					if(field.getName().equals("Classes") && attribute instanceof InternalCollection) {
+					if(field.getName().equals("classes") && attribute instanceof InternalCollection) {
 						Enumeration elements = ((InternalCollection) attribute).elements();
 						while (elements.hasMoreElements()) {
 							NakedObject cls = (NakedObject) elements.nextElement();
@@ -55,7 +55,7 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
 							view.addView(classIcon);
 						}
 						
-					} else if(field.getName().equals("Objects") && attribute instanceof InternalCollection) {
+					} else if(field.getName().equals("objects") && attribute instanceof InternalCollection) {
 							Enumeration elements = ((InternalCollection) attribute).elements();
 							while (elements.hasMoreElements()) {
 								NakedObject obj = (NakedObject) elements.nextElement();
@@ -72,24 +72,24 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
 						
 						if(attribute instanceof NakedCollection) {
 							InternalCollectionContent content;
-							content = new InternalCollectionContent((InternalCollection) attribute, (OneToManyAssociation) field);
+							content = new InternalCollectionContent(object, (InternalCollection) attribute, (OneToManyAssociation) field);
 							specification = internalList;
 							fieldView =specification.createView(content, axis);
 						
 						} else if(attribute instanceof NakedObject) {
 							OneToOneContent content;
-							content = new OneToOneContent((NakedObject) attribute, (OneToOneAssociation) field);
+							content = new OneToOneContent(object, (NakedObject) attribute, (OneToOneAssociation) field);
 							specification = factory.getIconizedSubViewSpecification(content);
 							fieldView =specification.createView(content, axis);
 						
 						} else if(attribute instanceof NakedValue) { 
 							ValueContent content;
-							content = new ValueContent((NakedValue) attribute, (Value) field);  
+							content = new ValueContent(object, (NakedValue) attribute, (Value) field);  
 							specification = factory.getValueFieldSpecification(content);
 							fieldView =specification.createView(content, axis);
 							
 						} else {
-							OneToOneContent content = new OneToOneContent(null, (OneToOneAssociation) field);
+							OneToOneContent content = new OneToOneContent(object, null, (OneToOneAssociation) field);
 							specification = factory.getEmptyFieldSpecification();
 							fieldView =specification.createView(content, axis);
 						}

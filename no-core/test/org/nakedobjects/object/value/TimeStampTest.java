@@ -3,6 +3,12 @@ package org.nakedobjects.object.value;
 import junit.framework.TestCase;
 
 public class TimeStampTest extends TestCase {
+    
+    protected void setUp() throws Exception {
+        super.setUp();
+        
+        TimeStamp.setClock(new TestClock());
+    }
 
     public void testSaveRestore() throws Exception {
     	TimeStamp timeStamp1 = new TimeStamp();
@@ -24,6 +30,19 @@ public class TimeStampTest extends TestCase {
     	timeStamp2.restoreString(timeStamp1.saveString());
     	assertEquals(timeStamp1.longValue(), timeStamp2.longValue());
     	assertTrue(timeStamp2.isEmpty());
+    }
+
+    public void testNew() {
+        TimeStamp expected = new TimeStamp(2003, 8, 17, 21, 30, 25);
+        TimeStamp actual = new TimeStamp();
+        assertEquals(expected, actual);
+    }
+    
+    public void testNow() {
+        TimeStamp expected = new TimeStamp(2003, 8, 17, 21, 30, 25);
+        TimeStamp actual = new TimeStamp();
+        actual.reset();
+        assertEquals(expected, actual);
     }
 }
 

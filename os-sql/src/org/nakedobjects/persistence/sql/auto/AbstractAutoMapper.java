@@ -21,8 +21,11 @@ import org.nakedobjects.utility.NotImplementedException;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 
 public abstract class AbstractAutoMapper extends AbstractObjectMapper {
+    private static final Logger LOG = Logger.getLogger(AbstractAutoMapper.class);
 	protected Field collectionFields[];
 	protected CollectionMapper collectionMappers[];
 	protected String columnNames[];
@@ -60,6 +63,8 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 		} else {
 			setupSpecifiedMapping(nakedClass, configParameters, parameterBase);
 		}
+		
+		LOG.info("Table mapping: " + table +  " " + idColumn + " (" + columnList() + ")");
 	}
 
 	protected String columnList() {
@@ -114,8 +119,9 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 	}
 
 	private int findMatchingField(String fieldName) throws SqlObjectStoreException {
+	    String searchName = fieldName.toLowerCase();
 		for (int i = 0; i < fields.length; i++) {
-			if (fieldName(fields[i]).equals(fieldMapper.getColumnName(fieldName))) {
+			if (fieldName(fields[i]).equals(fieldMapper.getColumnName(searchName))) {
 				return i;
 			}
 		}

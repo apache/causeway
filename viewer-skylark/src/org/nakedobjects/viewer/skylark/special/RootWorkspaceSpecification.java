@@ -39,7 +39,7 @@ public class RootWorkspaceSpecification implements WorkspaceSpecification {
 	}
 	
 	public String getName() {
-		return "Workspace";
+		return "Root Workspace";
 	}
 
 	public boolean isOpen() {

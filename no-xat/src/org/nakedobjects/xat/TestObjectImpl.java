@@ -35,24 +35,24 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         fields = new Hashtable();
 
         if (object != null) {
+            viewCache.put(object, this);
+            
             Field[] a = object.getNakedClass().getFields();
 
             for (int i = 0; i < a.length; i++) {
                 Field att = a[i];
 
                 if (att instanceof Association) {
-                    NakedObject attribute = (NakedObject) a[i].get(object);
-
                     TestObject associatedView = null;
 
-                    if (null != attribute) { // if object is not null,
-                        // use
-                        // the view cache
-                        associatedView = (TestObject) viewCache.get(attribute);
+                    NakedObject associate = (NakedObject) a[i].get(object);
+                    if (null != associate) { 
+                        // if object is not null, use the view in the cache
+                        associatedView = (TestObject) viewCache.get(associate);
                     }
 
                     if (null == associatedView) {
-                        associatedView = factory().createTestObject(context, attribute, viewCache);
+                        associatedView = factory().createTestObject(context, associate, viewCache);
                         // this puts it into the viewCache
                     }
 

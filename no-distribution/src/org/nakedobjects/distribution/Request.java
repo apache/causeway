@@ -1,18 +1,23 @@
 package org.nakedobjects.distribution;
 
+import org.apache.log4j.Logger;
 import org.nakedobjects.object.LoadedObjects;
 
 import java.io.Serializable;
 
 
 public abstract class Request implements Serializable {
-    private static int nextId = 0;
-    private static ProxyObjectManager client;
-    private static LoadedObjects loadedObjects;
+	private final static Logger LOG = Logger.getLogger(Request.class);
+	private static int nextId = 0;
+	private static DistributionInterface connection;
+	private static ProxyObjectManager proxyObjectManager;
     
-    public static void init(ProxyObjectManager client, LoadedObjects loadedObjects) {
-        Request.client = client;
-        Request.loadedObjects = loadedObjects;
+    public static void init(DistributionInterface conn) {
+    	Request.connection = conn;
+    }
+    
+    public static void init(ProxyObjectManager proxyObjectManager) {
+        Request.proxyObjectManager = proxyObjectManager;
     }
     
     protected final int id;
@@ -33,11 +38,13 @@ public abstract class Request implements Serializable {
     }
     
     protected void sendRequest() {
-        response = client.send(this);
+    	LOG.debug("send request " + this);
+    	response = connection.execute(this);
+    	LOG.debug("response " + (response == null ? "EMPTY RESPONSE" : response) + ", for request " + this);
     }
     
     protected LoadedObjects getLoadedObjects() {
-        return loadedObjects;
+        return proxyObjectManager.getLoadedObjects();
     }
 }
 

@@ -71,7 +71,7 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 			LOG.debug("  element  " + element.getOid());
 			collection.added(element);
 		}
-//		collection.setResolved();
+		rs.close();
 	}
 
 	public void saveInternalCollection(NakedObject parent) throws ObjectStoreException {

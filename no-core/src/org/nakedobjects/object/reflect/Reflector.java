@@ -34,6 +34,8 @@ public interface Reflector {
     String singularName();
 
     String getSuperclass();
+
+    boolean isAbstract();
 }
 
 /*

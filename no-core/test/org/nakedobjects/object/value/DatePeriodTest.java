@@ -1,5 +1,6 @@
 package org.nakedobjects.object.value;
 
+import org.nakedobjects.SystemClock;
 import org.nakedobjects.object.ValueParseException;
 
 import java.util.Locale;
@@ -18,6 +19,8 @@ public class DatePeriodTest extends TestCase {
 	protected void setUp() throws Exception {
 		Locale.setDefault(Locale.UK);
 
+		Date.setClock(new SystemClock());
+		
 		mayJul = new DatePeriod();
 		mayJul.getStart().setValue(2003,5,1);
 		mayJul.getEnd().setValue(2003,7,31);
