@@ -93,6 +93,10 @@ public class DummyInternalCollection implements InternalCollection {
         return null;
     }
 
+    public Enumeration oids() {
+        return null;
+    }
+
 }
 
 

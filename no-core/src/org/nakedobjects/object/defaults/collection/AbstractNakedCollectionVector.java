@@ -75,7 +75,7 @@ public abstract class AbstractNakedCollectionVector extends AbstractNakedObject 
      * Returns true if the logical collection contains the specified object.
      */
     public boolean contains(NakedObject object) {
-        if(object == null) {
+        if (object == null) {
             throw new IllegalArgumentException("null is not a valid element for a collection");
         }
         resolve();
@@ -85,7 +85,7 @@ public abstract class AbstractNakedCollectionVector extends AbstractNakedObject 
     public NakedObject elementAt(int index) {
         return (NakedObject) elements.elementAt(index);
     }
-    
+
     /**
      * Return all elements in this collection
      */
@@ -104,7 +104,6 @@ public abstract class AbstractNakedCollectionVector extends AbstractNakedObject 
                 return next;
             }
         };
-
     }
 
     public boolean isEmpty() {
@@ -130,6 +129,27 @@ public abstract class AbstractNakedCollectionVector extends AbstractNakedObject 
             return true;
         }
         return false;
+    }
+
+    /**
+     * Return all the OIDs of all elements in this collection. The elements do
+     * not need to be resolved to do this (though the collection does)
+     */
+    public Enumeration oids() {
+        resolve();
+        return new Enumeration() {
+            Enumeration e = elements.elements();
+
+            public boolean hasMoreElements() {
+                return e.hasMoreElements();
+            }
+
+            public Object nextElement() {
+                Object next = e.nextElement();
+                return ((NakedObject) next).getOid();
+            }
+        };
+
     }
 
     public void remove(NakedObject object) {
