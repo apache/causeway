@@ -1,12 +1,12 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
+import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.basic.ActionParameter;
 
 
 public class LookupBorder extends OpenOptionFieldBorder {
@@ -25,10 +25,11 @@ public class LookupBorder extends OpenOptionFieldBorder {
         Content content = getContent();
         if(content instanceof OneToOneField) {
             OneToOneField oneToOneField = ((OneToOneField) content);
-            About about = ((OneToOneAssociationSpecification) oneToOneField.getField()).getAbout(ClientSession.getSession(), oneToOneField.getParent(), null);
+            Hint about = oneToOneField.getParent().getHint(ClientSession.getSession(), oneToOneField.getField(), null);
+            //About about = ((OneToOneAssociation) oneToOneField.getField()).getAbout(ClientSession.getSession(), oneToOneField.getParent(), null);
             oneToOneField.getParent();
             return about.canUse().isAllowed();
-        } else if(content instanceof ObjectParameter) {
+        } else if(content instanceof ActionParameter) {
             return true;
         } else {
             return false;
@@ -39,7 +40,7 @@ public class LookupBorder extends OpenOptionFieldBorder {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

@@ -1,6 +1,6 @@
 package org.nakedobjects.persistence.sql2;
 
-import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedObjectStoreInstancesTestCase;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
@@ -17,7 +17,7 @@ public class ObjectStoreAdvancedTest extends NakedObjectStoreInstancesTestCase {
     }
 
     protected NakedObjectStore installObjectStore() throws Exception {
-        Configuration.installConfiguration("sqlos-testing.properties");
+        ConfigurationFactory.installConfiguration("sqlos-testing.properties");
         SqlObjectStore os = new SqlObjectStore();
         return os;
     }
@@ -34,7 +34,7 @@ public class ObjectStoreAdvancedTest extends NakedObjectStoreInstancesTestCase {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2004 Naked Objects Group Ltd
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the

@@ -1,14 +1,18 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.object.defaults.value.Date;
-import org.nakedobjects.object.defaults.value.TextString;
+import org.nakedobjects.application.value.Date;
+import org.nakedobjects.application.value.TextString;
+import org.nakedobjects.application.value.Time;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.exploration.AbstractExplorationFixture;
-import org.nakedobjects.xat.AcceptanceTestCase;
+import org.nakedobjects.xat.TestClass;
+import org.nakedobjects.xat.TestNaked;
 import org.nakedobjects.xat.TestObject;
+import org.nakedobjects.xat.TestValue;
 
 
 
-public class ECSAcceptanceTest extends AcceptanceTestCase {
+public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
 
     public static void main(java.lang.String[] args) {
         junit.textui.TestRunner.run(ECSAcceptanceTest.class);
@@ -40,10 +44,21 @@ public class ECSAcceptanceTest extends AcceptanceTestCase {
              
              private void createCity(String name) {
                  City city = (City) createInstance(City.class);
-                 city.getName().setValue(name);
+                 city.setName(name);
              }
          } );
      }
+     
+     public void testCity() {
+         TestObject city = getTestClass(City.class.getName()).newInstance();
+         city.fieldEntry("name", "London");
+  //       city.fieldEntry("date opened", "23-10-03");
+  //       city.fieldEntry("population", "8000000");
+         
+         city.assertNotEmpty("name");
+         city.assertFieldContains("name", "London");
+     }
+     
      
     public void testBasicBooking() {
         subtitle("Set up the new booking");
@@ -88,6 +103,7 @@ public class ECSAcceptanceTest extends AcceptanceTestCase {
         booking.fieldEntry("Date", "+2");
         booking.fieldEntry("Time", "2:30:00 PM");
 
+        booking.assertFieldContains("Time", new Time(14, 30));
         booking.assertFieldContains("Date", new Date(2001, 12, 16));
         
 
@@ -120,7 +136,7 @@ public class ECSAcceptanceTest extends AcceptanceTestCase {
         //
         nextStep("Check it is available.");
         booking.invokeAction("Check Availability");
-        booking.assertFieldContains("Status", new TextString("Available"));
+        booking.assertFieldContains("Status", "Available");
 
 
         //
@@ -176,24 +192,113 @@ public class ECSAcceptanceTest extends AcceptanceTestCase {
         booking.assertFieldContains("Status", "Confirmed");
     }
     
+    public void testOtherMethods() {
+        testBasicBooking();
+         // end of setup
+        
+         TestObject customer = getTestClass(Customer.class.getName()).findInstance("Pawson");
+         customer.assertFieldContains("Last Name", "Pawson");
+         customer.fieldEntry("Last Name", "Lawson");
+         customer.assertFieldDoesNotContain("Last Name", "Pawson");
+         
+         TestObject paymentMethod = (TestObject) customer.getField("Preferred Payment Method");
+         customer.assertFieldContains("Preferred Payment Method", paymentMethod);
+         customer.assertFieldContains("Preferred Payment Method", paymentMethod.getTitle());
+         customer.assertFieldContains("Preferred Payment Method", paymentMethod.getForObject().getObject());
+
+         NakedObject original = paymentMethod.getForObject();
+         
+         TestObject newCard = getTestClass(CreditCard.class.getName()).newInstance();
+          customer.clearAssociation("Preferred Payment Method");
+          customer.associate("Preferred Payment Method", newCard);
+          
+          customer.assertFieldDoesNotContain("Preferred Payment Method", original.titleString());
+          customer.assertFieldDoesNotContain("Preferred Payment Method", original);
+         
+    }
+    
+    public void testCantParse() {
+        TestObject booking = getTestClass(Booking.class.getName()).newInstance();
+        booking.assertFieldEntryCantParse("Date", "22-xxx-03");
+    }
+    
+    
+    public void testInvalidEntry() {
+        TestObject creditCard = getTestClass(CreditCard.class.getName()).newInstance();
+        creditCard.assertFieldEntryInvalid("expires", "12/12");
+    }
+
+    
+    public void testFieldExists() {
+        TestObject creditCard = getTestClass(CreditCard.class.getName()).newInstance();
+        creditCard.assertFieldExists("expires");
+        
+        TestObject customer = getTestClass(Customer.class.getName()).newInstance();
+        customer.assertFieldExists("bookings");
+    }
+    
+    public void testTitles() {
+        testBasicBooking();
+        // end of setup
+       
+        TestObject customer = getTestClass(Customer.class.getName()).findInstance("Pawson");
+        customer.assertTitleEquals("Richard Pawson");
+    }
+    
     public void testNewMethods() {
        testBasicBooking();
         // end of setup
        
         TestObject customer = getTestClass(Customer.class.getName()).findInstance("Pawson");
 
-        customer.assertNotEmpty("First Name");
-        customer.fieldEntry("First Name", "");
-        customer.assertEmpty("First Name");
-        
-        customer.assertFieldContains("Phone Numbers", "Mobile");
-        
         customer.assertFieldContainsType("First Name", "TextString");
         customer.assertFieldContainsType("Preferred Payment Method", "CreditCard");
         customer.assertFieldContainsType(null, "Phone Numbers", "Mobile", "Telephone");
         
+        customer.assertNotEmpty("First Name");
+        customer.fieldEntry("First Name", "");
+        customer.assertEmpty("First Name");
+
+        customer.assertNotEmpty("Preferred payment method");
+        customer.clearAssociation("Preferred payment method");
+        customer.assertEmpty("Preferred payment method");
+        
+
+        customer.assertFieldContains("Phone Numbers", "Mobile");
+        
         customer.invokeAction("New Booking");
     }
+    
+    public void testSingleParameterMethod() {
+       TestClass locationClass = getTestClass(Location.class.getName());
+       
+       TestObject city = getTestClass(City.class.getName()).newInstance();
+       TestObject location1 = locationClass.newInstance();
+       location1.associate("city", city);
+       TestObject location2 = locationClass.newInstance();
+       location2.associate("city", city);
+       
+       TestObject newObject = location1.invokeAction("new booking", location2);
+       newObject.assertFieldContains("pickup", location2);
+       newObject.assertFieldContains("dropoff", location1);
+       
+    }
+    
+    public void testValueParameterMethod() {
+        TestObject customer = getTestClass(Customer.class.getName()).newInstance();
+        TestObject location =  getTestClass(Location.class.getName()).newInstance();
+        TextString textEntry = new TextString("002");
+        TestValue value1 = createParameterTestValue(textEntry);
+        Date dateEntry = new Date(2001, 1, 23);
+        TestValue value2 = createParameterTestValue(dateEntry);
+        
+        TestObject booking = customer.invokeAction("create booking", new TestNaked[] {location, location, value1, value2});
+        customer.assertFieldContains("bookings", booking);
+        booking.assertFieldContains("pick up", location);
+        booking.assertFieldContains("reference", "002");
+        booking.assertFieldContains("date", "Jan 23, 2001");
+    }
+    
 /*
     public void story3ReturnBooking() {
         story("A Return Booking");
@@ -329,7 +434,7 @@ public class ECSAcceptanceTest extends AcceptanceTestCase {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

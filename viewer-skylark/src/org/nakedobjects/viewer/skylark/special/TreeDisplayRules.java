@@ -1,11 +1,10 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.Lookup;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Allow;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.UserAction;
@@ -31,7 +30,7 @@ public class TreeDisplayRules {
                 return showCollectionsOnly ? "Show collections only" : "Show all references";
             }
 
-            public Permission disabled(View view) {
+            public Consent disabled(View view) {
                 return Allow.DEFAULT;
             }
 
@@ -47,7 +46,7 @@ public class TreeDisplayRules {
     }
 
     public static boolean canDisplay(Naked object) {
-		boolean lookupView = (object instanceof Lookup);
+		boolean lookupView = object != null && object.getSpecification().isLookup();
 		boolean showNonCollections = !TreeDisplayRules.isCollectionsOnly();
         boolean objectView = object instanceof NakedObject && showNonCollections ;
         boolean collectionView = object instanceof NakedCollection;
@@ -57,7 +56,7 @@ public class TreeDisplayRules {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

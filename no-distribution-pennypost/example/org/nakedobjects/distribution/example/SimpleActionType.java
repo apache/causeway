@@ -1,9 +1,9 @@
 package org.nakedobjects.distribution.example;
 
 import org.nakedobjects.distribution.ActionType;
-import org.nakedobjects.distribution.client.reflect.NotExpectedException;
-import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.object.reflect.ActionSpecification.Type;
+import org.nakedobjects.distribution.NotExpectedException;
+import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.Action.Type;
 
 
 public class SimpleActionType implements ActionType {
@@ -15,10 +15,10 @@ public class SimpleActionType implements ActionType {
     }
 
     public Type getType() {
-        Type[] types = new Type[] { ActionSpecification.DEBUG, ActionSpecification.EXPLORATION, ActionSpecification.USER };
+        Type[] types = new Type[] { Action.DEBUG, Action.EXPLORATION, Action.USER };
         for (int i = 0; i < types.length; i++) {
-            if (type.equals(ActionSpecification.DEBUG.toString())) {
-                return ActionSpecification.DEBUG;
+            if (type.equals(Action.DEBUG.toString())) {
+                return Action.DEBUG;
             }
         }
         throw new NotExpectedException("Invalid type: " + type);
@@ -27,7 +27,7 @@ public class SimpleActionType implements ActionType {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

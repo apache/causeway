@@ -3,7 +3,6 @@ package org.nakedobjects.distribution;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.security.Certificate;
-import org.nakedobjects.object.security.SecurityContext;
 
 
 public interface RequestContext {
@@ -34,7 +33,7 @@ public interface RequestContext {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2003 Naked Objects Group Ltd
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the

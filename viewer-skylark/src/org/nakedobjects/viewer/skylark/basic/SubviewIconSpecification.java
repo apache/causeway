@@ -1,8 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.Lookup;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Style;
@@ -11,12 +9,11 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.special.LookupBorder;
 
 public class SubviewIconSpecification extends IconSpecification {
-    private static final NakedObjectSpecification LOOKUP = NakedObjectSpecificationLoader.getInstance().loadSpecification(Lookup.class);
 
     public View createView(Content content, ViewAxis axis) {
 	    ObjectContent c = (ObjectContent) content;
-	    NakedObjectSpecification type = c.getType();
-        if(type != null && type.isOfType(LOOKUP) || c instanceof Lookup) {
+	    NakedObjectSpecification type = c.getSpecification();
+        if(type != null && type.isLookup()) {
 	        return new ObjectBorder(new LookupBorder(new IconView(content, this, axis, Style.NORMAL)));
 	    } else {
 	        return new ObjectBorder(new IconView(content, this, axis, Style.NORMAL));
@@ -29,7 +26,7 @@ public class SubviewIconSpecification extends IconSpecification {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,26 +1,29 @@
 package org.nakedobjects.xat;
 
 
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.ValueParseException;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.reflect.PojoAdapter;
 
 
 public class ParameterValueImpl implements TestValue {
-    private NakedValue value;
+  //  private NakedObject value;
 
-    public ParameterValueImpl(NakedValue object) {
-        setForObject(object);
+    private Object object;
+
+    public ParameterValueImpl(Object object) {
+   //     setForObject(object);
+        this.object = object;
     }
 
     public void fieldEntry(String value) {
+        throw new NakedObjectRuntimeException();
         // TODO run validation first
-         try {
-            this.value.parse(value);
+        /* try {
+            this.value.parseTextEntry(value);
         } catch (ValueParseException e) {
             throw new IllegalActionError("Field value " + value + " could not be parsed in " + getForObject());
-        }
+        }*/
     }
 
     /**
@@ -30,23 +33,21 @@ public class ParameterValueImpl implements TestValue {
         return getForObject().titleString().toString();
     }
 
-    public Naked getForObject() {
-        return value;
+    public NakedObject getForObject() {
+        return PojoAdapter.createAdapter(object);
+ //       return PojoAdapter.createAdapter(value);
     }
 
-    public void setForObject(Naked value) {
-        this.value = (NakedValue) value;
-    }
-    
-    public NakedObjectSpecification getSpecification() {
-        return value.getSpecification();
+    public void setForObject(NakedObject value) {
+        throw new NakedObjectRuntimeException();
+        //this.value =value;
     }
 }
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

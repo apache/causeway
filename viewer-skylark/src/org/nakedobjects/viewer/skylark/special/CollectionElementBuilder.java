@@ -1,15 +1,15 @@
 package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
+import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.CollectionElement;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.OneToManyFieldElement;
 import org.nakedobjects.viewer.skylark.OneToManyField;
+import org.nakedobjects.viewer.skylark.OneToManyFieldElement;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.core.AbstractViewBuilder;
@@ -37,7 +37,7 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
 
 		Content content = view.getContent();
 		//NakedCollection collection = (NakedCollection) ((ObjectContent) content).getObject();
-		OneToManyAssociationSpecification field = (OneToManyAssociationSpecification) (content instanceof OneToManyField ? ((OneToManyField) content).getField() : null);
+		OneToManyAssociation field = (OneToManyAssociation) (content instanceof OneToManyField ? ((OneToManyField) content).getField() : null);
 
         LOG.debug("rebuild view " + view + " for " + content);
 
@@ -46,8 +46,10 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
         if(showAll) {
             elements = collectionContent.allElements();
         } else {
-            CollectionDisplayIterator iterator = collectionContent.getIterator();
-            elements = iterator.displayElements();
+            //CollectionDisplayIterator iterator = collectionContent.getIterator();
+            //elements = iterator.displayElements();
+            
+            elements = collectionContent.allElements();
         }
          
         /*
@@ -100,7 +102,7 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,10 +1,11 @@
 package org.nakedobjects.example.library;
 
-import org.nakedobjects.container.exploration.Exploration;
+import org.nakedobjects.example.exploration.DefaultExploration;
+import org.nakedobjects.object.defaults.AbstractUserContext;
 import org.nakedobjects.object.exploration.AbstractExplorationFixture;
 
 
-public class LibraryExploration extends Exploration {
+public class LibraryExploration extends DefaultExploration {
 
     protected void setUpFixtures() {
         addFixture(new AbstractExplorationFixture() {
@@ -18,5 +19,9 @@ public class LibraryExploration extends Exploration {
 
     public static void main(String[] args) {
         new LibraryExploration();
+    }
+
+    protected AbstractUserContext applicationContext() {
+        return null;
     }
 }

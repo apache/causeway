@@ -4,15 +4,16 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.UserContext;
-import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.AbstractPermission;
-import org.nakedobjects.object.control.defaults.Allow;
-import org.nakedobjects.object.control.defaults.Veto;
-import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.object.reflect.AssociationSpecification;
-import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.control.AbstractConsent;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.NakedObjectAssociation;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.security.ClientSession;
+import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
@@ -35,8 +36,12 @@ import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.DragContentIcon;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
+import org.apache.log4j.Logger;
+
 
 public abstract class ObjectView extends AbstractView {
+    private static final Logger LOG = Logger.getLogger(ObjectView.class);
+    
     public ObjectView(Content content, ViewSpecification design, ViewAxis axis) {
         super(content, design, axis);
 
@@ -47,10 +52,11 @@ public abstract class ObjectView extends AbstractView {
         getViewManager().addToNotificationList(this);
     }
 
-    private Permission canDrop(NakedObject source, NakedObject target) {
-        ActionSpecification action = dropAction(source, target);
+    private Consent canDrop(NakedObject source, NakedObject target) {
+        Action action = dropAction(source, target);
+        Session session = ClientSession.getSession();
         if (action != null) {
-            About about = action.getAbout(ClientSession.getSession(), target, source);
+            Hint about = target.getHint(session, action, new NakedObject[] {source});
             return about.canUse();
 
         } else {
@@ -58,11 +64,12 @@ public abstract class ObjectView extends AbstractView {
                 return new Veto("Can't set field in persistent object with reference to non-persistent object");
 
             } else {
-                FieldSpecification[] fields = target.getSpecification().getVisibleFields(target, ClientSession.getSession());
+                NakedObjectField[] fields = target.getSpecification().getVisibleFields(target, session);
                 for (int i = 0; i < fields.length; i++) {
-                    if (source.getSpecification().isOfType(fields[i].getType())
-                            && ((AssociationSpecification) fields[i]).get(target) == null) {
-                        return new Allow("Set field " + fields[i].getLabel());
+                    if (source.getSpecification().isOfType(fields[i].getSpecification())) {
+                        if(target.getField(fields[i]) == null) {
+                            return new Allow("Set field " + target.getLabel(session, fields[i]));
+                        }
                     }
                 }
                 return new Veto("No empty field accepting object of type " + source.getSpecification().getSingularName());
@@ -79,7 +86,7 @@ public abstract class ObjectView extends AbstractView {
     public void dragIn(ContentDrag drag) {
         NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
         NakedObject target = getObject();
-        Permission perm = canDrop(source, target);
+        Consent perm = canDrop(source, target);
         if (perm.isAllowed()) {
             getViewManager().setStatus(perm.getReason());
             getState().setCanDrop();
@@ -137,10 +144,10 @@ public abstract class ObjectView extends AbstractView {
         Assert.assertNotNull(target);
 
         if (canDrop(source, target).isAllowed()) {
-            ActionSpecification action = dropAction(source, target);
+            Action action = dropAction(source, target);
 
-            if ((action != null) && action.getAbout(ClientSession.getSession(), target, source).canUse().isAllowed()) {
-                NakedObject result = action.execute(target, source);
+            if ((action != null) && target.getHint(ClientSession.getSession(), action, new NakedObject[] {source}).canUse().isAllowed()) {
+                NakedObject result = target.execute(action, new NakedObject[] {source});
 
                 if (result != null) {
                     View view = ViewFactory.getViewFactory().createOpenRootView(result);
@@ -152,11 +159,11 @@ public abstract class ObjectView extends AbstractView {
 
                 markDamaged();
             } else {
-                FieldSpecification[] fields = target.getSpecification().getVisibleFields(target, ClientSession.getSession());
+                NakedObjectField[] fields = target.getSpecification().getVisibleFields(target, ClientSession.getSession());
                 for (int i = 0; i < fields.length; i++) {
-                    if (source.getSpecification().isOfType(fields[i].getType())
-                            && ((AssociationSpecification) fields[i]).get(target) == null) {
-                        ((AssociationSpecification) fields[i]).setAssociation(target, source);
+                    if (source.getSpecification().isOfType(fields[i].getSpecification())
+                            && target.getField(fields[i]) == null) {
+                        target.setAssociation(((NakedObjectAssociation) fields[i]), source);
                         invalidateContent();
                         break;
                     }
@@ -165,14 +172,14 @@ public abstract class ObjectView extends AbstractView {
         }
     }
 
-    private ActionSpecification dropAction(NakedObject source, NakedObject target) {
-        ActionSpecification action;
-        if (target instanceof NakedClass) {
-            NakedObjectSpecification forNakedClass = ((NakedClass) target).forNakedClass();
-            action = forNakedClass.getClassAction(ActionSpecification.USER, null, new NakedObjectSpecification[] { source
+    private Action dropAction(NakedObject source, NakedObject target) {
+        Action action;
+        if (target.getObject() instanceof NakedClass) {
+            NakedObjectSpecification forNakedClass = ((NakedClass) target.getObject()).forObjectType();
+            action = forNakedClass.getClassAction(Action.USER, null, new NakedObjectSpecification[] { source
                     .getSpecification() });
         } else {
-            action = target.getSpecification().getObjectAction(ActionSpecification.USER, null,
+            action = target.getSpecification().getObjectAction(Action.USER, null,
                     new NakedObjectSpecification[] { source.getSpecification() });
         }
         return action;
@@ -211,12 +218,24 @@ public abstract class ObjectView extends AbstractView {
             getWorkspace().addOpenViewFor(getObject(), location);
         }
     }
+    
+    public void menuOptions(MenuOptionSet options) {
+        if (!getObject().isPersistent()) {
+            options.add(MenuOptionSet.OBJECT, new MenuOption("Make Persistent") {
+                public void execute(Workspace workspace, View view, Location at) {
+                    getObject().getContext().getObjectManager().makePersistent(getObject());
+                }
+            });
+        }
+
+        super.menuOptions(options);
+    }
 
     public void viewMenuOptions(MenuOptionSet options) {
         if (getObject() instanceof UserContext) {
             options.add(MenuOptionSet.VIEW, new MenuOption("New Workspace") {
-                public Permission disabled(View component) {
-                    return AbstractPermission.allow(getObject() instanceof UserContext);
+                public Consent disabled(View component) {
+                    return AbstractConsent.allow(getObject() instanceof UserContext);
                 }
 
                 public void execute(Workspace workspace, View view, Location at) {
@@ -228,14 +247,52 @@ public abstract class ObjectView extends AbstractView {
                 }
             });
         }
+        
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Class") {
+            public void execute(Workspace workspace, View view, Location at) {
+	 /* TODO reimplement
+                return getObjectManager().getNakedClass(getObject().getSpecification());
+                */
+            }
+        });
+
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Clone") {
+            public void execute(Workspace workspace, View view, Location at) {
+                /* TODO reimplement
+                AbstractNakedObject clone = (AbstractNakedObject) createInstance(getClass());
+    	        clone.copyObject(this);
+    	        clone.objectChanged();
+    	        
+    	        ViewFactory.getViewFactory().createInnerWorkspace(clone);
+                newWorkspace.setLocation(at);
+                getWorkspace().addView(newWorkspace);
+                newWorkspace.markDamaged();
+                */
+            }
+        });
+
 
         super.viewMenuOptions(options);
     }
+    
+    public void updateView() {
+        if(getObject().isViewDirty()) {
+            LOG.debug("object changed; view updated: " + getView());
+            getView().refresh();
+            getObject().clearViewDirty();
+        }
+        super.updateView();
+    }
+    
+    public String toString() {
+       return super.toString() + ": " + getObject(); 
+    }
+
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

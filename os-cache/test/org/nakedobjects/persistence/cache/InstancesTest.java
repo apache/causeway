@@ -45,7 +45,7 @@ public class InstancesTest extends TestCase {
         new TestClock();
         new NakedObjectSpecificationLoaderImpl();
         NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
-        NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
+        NakedObjectSpecificationLoaderImpl.setReflectorFactory(new InternalReflectorFactory());
         
         
         NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(Person.class.getName());
@@ -150,7 +150,7 @@ public class InstancesTest extends TestCase {
         ins = new Instances(nc, loaded);
        
         Role r = new Role();
-        r.setPerson(p1);
+        r.setReferencedObject(p1);
         r.setOid(new SerialOid(6));
         ins.create(r);
         
@@ -211,7 +211,7 @@ public class InstancesTest extends TestCase {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2004 Naked Objects Group Ltd
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the

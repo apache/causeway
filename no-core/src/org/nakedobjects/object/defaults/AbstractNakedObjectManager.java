@@ -5,24 +5,39 @@ import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.NakedObjectStore;
+import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
+import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.utility.DebugInfo;
-
-import org.apache.log4j.Logger;
 
 
 public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObjectManager {
-    private static final Logger LOG = Logger.getLogger(AbstractNakedObjectManager.class);
-
+    protected ObjectFactory factory;
     public abstract void abortTransaction();
+    
+    public AbstractNakedObjectManager() {}
+    
+    public AbstractNakedObjectManager(final ObjectFactory factory) {
+        this.factory = factory;
+    }
+    
+    public void setFactory(ObjectFactory factory) {
+        this.factory = factory;
+    }
+    
+	/**
+	 * Expose as a .NET property
+	 * @property
+	 */
+	public void set_Factory(ObjectFactory factory) {
+		setFactory(factory);
+	}
 
     public TypedNakedCollection allInstances(NakedObjectSpecification specification) {
         return allInstances(specification, false);
@@ -35,7 +50,7 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
     public TypedNakedCollection allInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
         NakedObject[] instances = getInstances(specification, includeSubclasses);
         TypedNakedCollection collection = new InstanceCollectionVector(specification, instances);
-        collection.setContext(getContext());
+ //       collection.setContext(getContext());
         return collection;
     }
 
@@ -45,6 +60,12 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
     }
 
     public NakedObject createInstance(NakedObjectSpecification specification) {
+       Object object = factory.createObject(specification);
+       NakedObject nakedObject = PojoAdapter.createAdapter(object);
+       makePersistent(nakedObject);
+       return nakedObject;
+       
+      /* 
         NakedObject object;
         try {
             object = (NakedObject) specification.acquireInstance();
@@ -53,11 +74,12 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
             object.created();
             objectChanged(object);
         } catch (NakedObjectRuntimeException e) {
-            object = getContext().getObjectManager().generatorError("Failed to create instance of " + specification, e);
+            object = PojoAdapter.createAdapter(getContext().getObjectManager().generatorError("Failed to create instance of " + specification, e));
 
             LOG.error("Failed to create instance of " + specification, e);
         }
         return object;
+        */
     }
 
     /**
@@ -73,12 +95,8 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
     public abstract Oid createOid(NakedObject object);
 
     public NakedObject createTransientInstance(NakedObjectSpecification nc) {
-        if (nc == null) {
-            throw new RuntimeException("Invalid type to create " + nc.getFullName());
-        }
-        NakedObject object = (NakedObject) nc.acquireInstance();
-        object.created();
-        return object;
+        Object object = factory.createObject(nc);
+        return PojoAdapter.createAdapter(object);
     }
 
     public NakedObject createTransientInstance(String className) {
@@ -94,7 +112,7 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
         NakedObject[] instances = getInstances(pattern, includeSubclasses);
         NakedObjectSpecification specification = pattern.getSpecification();
         TypedNakedCollection collection = new InstanceCollectionVector(specification, instances);
-        collection.setContext(getContext());
+//        collection.setContext(getContext());
         return collection;
     }
 
@@ -105,7 +123,7 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
     public TypedNakedCollection findInstances(NakedObjectSpecification specification, String searchTerm, boolean includeSubclasses) {
         NakedObject[] instances = getInstances(specification, searchTerm, includeSubclasses);
         TypedNakedCollection collection = new InstanceCollectionVector(specification, instances);
-        collection.setContext(getContext());
+//        collection.setContext(getContext());
         return collection;
     }
     
@@ -118,7 +136,7 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
         NakedObject[] instances = getInstances(criteria, includeSubclasses);
         NakedObjectSpecification specification = criteria.getSpecification();
         TypedNakedCollection collection = new InstanceCollectionVector(specification, instances);
-        collection.setContext(getContext());
+//        collection.setContext(getContext());
         return collection;
     }
 
@@ -139,7 +157,6 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
 
     public String getDebugData() {
         StringBuffer data = new StringBuffer();
-        data.append("Using object store " + getObjectStore());
         data.append('\n');
         data.append('\n');
         return data.toString();
@@ -173,14 +190,11 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
         return getObject(object.getOid(), object.getSpecification());
     }
 
-    /** @deprecated provided to make the method in AbstractNakedObject work */
-    public abstract NakedObjectStore getObjectStore();
-
     public void shutdown() {}
 }
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

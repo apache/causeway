@@ -3,21 +3,19 @@ package org.nakedobjects.object.exploration;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.defaults.AbstractUserContext;
-import org.nakedobjects.object.defaults.Title;
-import org.nakedobjects.object.defaults.value.TextString;
 
 public class ExplorationContext extends AbstractUserContext  {
-    private final TextString name = new TextString();
+    private String name;
     
     public void setUpUsers(NakedCollection users) {
     }
     
-    public TextString getName() {
+    public String getName() {
         return name;
     }
     
-    public Title title() {
-        return name.title();
+    public String titleString() {
+        return name;
     }
 
 	public NakedClass addClass(String className) {
@@ -29,7 +27,7 @@ public class ExplorationContext extends AbstractUserContext  {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -2,7 +2,6 @@ package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.OneToOneField;
-import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -21,14 +20,14 @@ public class TreeBrowserFormSpecification extends AbstractCompositeViewSpecifica
 		public View createSubview(Content content, ViewAxis axis) {
 			ViewFactory factory = ViewFactory.getViewFactory();
 			
-			if(content instanceof ValueField) { 
-				ViewSpecification specification = factory.getValueFieldSpecification((ValueContent) content);
-				return specification.createView(content, axis);
-			} else if(content instanceof OneToOneField) { 
-				ViewSpecification specification = factory.getIconizedSubViewSpecification((OneToOneField) content);
-				return specification.createView(content, axis);
-			}
-			
+			if (content instanceof OneToOneField) {
+                ViewSpecification specification = factory.getIconizedSubViewSpecification((OneToOneField) content);
+                return specification.createView(content, axis);
+            } else if (content instanceof ValueField) {
+                ViewSpecification specification = factory.getValueFieldSpecification((ValueField) content);
+                return specification.createView(content, axis);
+            }
+
 			return null;
 		}
 		
@@ -51,7 +50,7 @@ public class TreeBrowserFormSpecification extends AbstractCompositeViewSpecifica
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

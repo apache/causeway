@@ -7,7 +7,7 @@ import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectStore;
+import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.utility.NotImplementedException;
@@ -18,18 +18,21 @@ import junit.framework.Assert;
 
 
 public class MockObjectManager extends AbstractNakedObjectManager {
+    
+    public MockObjectManager(ObjectFactory factory) {
+        super(factory);
+    }
+
     public static MockObjectManager setup() {
         MockObjectManager manager;
-        manager = new MockObjectManager();
+        manager = new MockObjectManager(new MockObjectFactory());
         manager.reset();
         return manager;
     }
 
     private Vector actions = new Vector();
     
-    public MockObjectManager() {
-    }
-
+    
     public void abortTransaction() {
         throw new NotImplementedException();
     }
@@ -95,10 +98,6 @@ public class MockObjectManager extends AbstractNakedObjectManager {
         throw new NotImplementedException();
     }
     
-    public NakedObjectStore getObjectStore() {
-        throw new NotImplementedException();
-    }
-
     public boolean hasInstances(NakedObjectSpecification cls) {
         throw new NotImplementedException();
     }
@@ -148,11 +147,13 @@ public class MockObjectManager extends AbstractNakedObjectManager {
     protected NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) {
         return null;
     }
+
+    public void saveChanges() {}
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2004 Naked Objects Group Ltd
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the

@@ -1,16 +1,17 @@
 
 package org.nakedobjects.object.transaction;
 
-import org.nakedobjects.object.InternalCollection;
+import Title;
+
 import org.nakedobjects.object.TransactionException;
 import org.nakedobjects.object.control.FieldAbout;
-import org.nakedobjects.object.defaults.AbstractNakedObject;
-import org.nakedobjects.object.defaults.Title;
 import org.nakedobjects.object.defaults.value.Money;
 import org.nakedobjects.object.defaults.value.TextString;
 
+import java.util.Vector;
 
-public class Account extends AbstractNakedObject {
+
+public class Account {
     private static final long serialVersionUID = 1L;
 
     public static String fieldOrder() {
@@ -19,14 +20,15 @@ public class Account extends AbstractNakedObject {
 
     public final Money balance = new Money();
     public final TextString name = new TextString();
-    public final InternalCollection transfers = createInternalCollection(Transfer.class);
+    public final Vector transfers = new Vector();
 
     public void aboutTransactions(FieldAbout about, Transfer element, boolean add) {
         about.unmodifiable("Transactions are only added by the system");
     }
 
     public Transfer actionCreateTransactionFrom(Account fromAccount) {
-        Transfer t = (Transfer) createInstance(Transfer.class);
+        Transfer t = new Transfer();
+        t.created();
         t.setFromAccount(fromAccount);
         t.setToAccount(this);
 
@@ -50,12 +52,22 @@ public class Account extends AbstractNakedObject {
         return name;
     }
 
-    public InternalCollection getTransfers() {
+    public Vector getTransfers() {
         return transfers;
+    }
+    
+    public void addToTransfers(Transfer transfer) {
+        transfers.addElement(transfer);
+        // objectChanged();
+    }
+    
+    public void removeFromTransfers(Transfer transfer) {
+        transfers.removeElement(transfer);
+        // objectChanged();
     }
 
     public Title title() {
-        return getName().title().append(getBalance());
+        return getName().title().append(getBalance().titleString());
     }
 
     public void withdraw(Transfer transfer) throws TransactionException {
@@ -70,7 +82,7 @@ public class Account extends AbstractNakedObject {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

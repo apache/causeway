@@ -1,44 +1,31 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.container.configuration.ComponentException;
 import org.nakedobjects.container.configuration.ComponentLoader;
 import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.container.configuration.ConfigurationException;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.NakedObjectStore;
-import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.OidGenerator;
-import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.defaults.LocalObjectManager;
-import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
-import org.nakedobjects.object.defaults.NullUpdateNotifier;
-import org.nakedobjects.object.defaults.SimpleNakedClass;
-import org.nakedobjects.object.defaults.SimpleOidGenerator;
-import org.nakedobjects.object.defaults.TransientObjectStore;
 import org.nakedobjects.object.exploration.ExplorationFixture;
 import org.nakedobjects.object.exploration.ExplorationSetUp;
-import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 import org.nakedobjects.object.security.ClientSession;
-import org.nakedobjects.object.security.Role;
 import org.nakedobjects.object.security.Session;
-import org.nakedobjects.object.security.User;
 
 import java.util.Hashtable;
 
 import junit.framework.TestCase;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 
 public abstract class AcceptanceTestCase extends TestCase {
     private static final String TEST_OBJECT_FACTORY = "test-object-factory";
-    private static final String REFLECTOR_FACTORY = "reflector";
+ //  private static final String REFLECTOR_FACTORY = "reflector";
     private Hashtable classes = new Hashtable();
     private Documentor documentor;
     private LocalObjectManager objectManager;
@@ -77,7 +64,7 @@ public abstract class AcceptanceTestCase extends TestCase {
         explorationSetUp.addFixture(fixture);
     }
 
-    public TestValue createParameterTestValue(NakedValue value) {
+    public TestValue createParameterTestValue(Object value) {
         return testObjectFactory.createParamerTestValue(value);
     }
     
@@ -90,8 +77,14 @@ public abstract class AcceptanceTestCase extends TestCase {
     }
 
     protected void setUp() throws Exception {
-        LogManager.getLoggerRepository().setThreshold(Level.ERROR);
+        BasicConfigurator.configure();
+        LogManager.getRootLogger().setLevel(Level.ERROR);
+        ConfigurationFactory.setConfiguration(new Configuration("xat.properties"));
+        PropertyConfigurator.configure(ConfigurationFactory.getConfiguration().getProperties("log4j"));
+        
+        Logger.getLogger(AcceptanceTestCase.class).debug("XAT Logging enabled - new test: " + getName());
 
+        
         /*
          * TODO Refactor
          * 
@@ -102,20 +95,26 @@ public abstract class AcceptanceTestCase extends TestCase {
          * 
          * These need to be provide differently for different runs of the tests.
          */
+        
+        /*
+        ReflectorFactory reflectorFactory = loadReflector();
+        objectManager = createObjectManager(reflectorFactory.getObjectFactory());
+ //       reflectorFactory.setObjectManager(objectManager);
 
-        loadReflector();
-        objectManager = createObjectManager();
-
+ //       objectManager.setFactory(objectFactory);
+        
         try {
+            explorationSetUp = (ExplorationSetUp) ComponentLoader.loadComponent("exploration-setup", ExplorationSetUp.class);
             NakedObjectContext context = new NakedObjectContext(objectManager);
+            explorationSetUp.setContext(context);
             Session session = ClientSession.getSession();
 
-            explorationSetUp = new ExplorationSetUp(context);
-            setUpFixtures();
+
+            new NakedObjectSpecificationLoaderImpl();
+*/
 
             if (testObjectFactory == null) {
-                Configuration.installConfiguration("xat.properties");
-                testObjectFactory = (TestObjectFactory) ComponentLoader.loadComponent(TEST_OBJECT_FACTORY,
+                 testObjectFactory = (TestObjectFactory) ComponentLoader.loadComponent(TEST_OBJECT_FACTORY,
                         NonDocumentingTestObjectFactory.class, TestObjectFactory.class);
             }
             documentor = testObjectFactory.getDocumentor();
@@ -123,53 +122,51 @@ public abstract class AcceptanceTestCase extends TestCase {
             String className = getClass().getName();
             String methodName = getName().substring(4);
             testObjectFactory.testStarting(className, methodName);
+        
 
-            new NakedObjectSpecificationLoaderImpl();
-
+        explorationSetUp = explorationSetup();
+        ClientSession.setSession(new Session());
+        Session session = ClientSession.getSession();
+        
+        setUpFixtures(); 
+            
+        try{
             explorationSetUp.installFixtures();
             String[] cls = explorationSetUp.getClasses();
             for (int i = 0; i < cls.length; i++) {
                 NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(cls[i]);
-
-                NakedClass spec = new SimpleNakedClass(cls[i]);
-                spec.setContext(context);
-                spec.setNakedClass(nc);
-
+                NakedClass spec = new NakedClass(cls[i]);
                 TestClass view = testObjectFactory.createTestClass(session, spec);
-
                 classes.put(nc.getFullName().toLowerCase(), view);
-            }
-
-            if (session.getUser() == null) {
-                User user = new User("exploration user");
-                user.setContext(context);
-                user.getRoles().add(new Role("explorer"));
-                session.setUser(user);
             }
         } catch (Exception e) {
             // If an exception is thrown in setUp then tearDown is not called,
             // hence object manager is left running, but shouldn't be.
             e.printStackTrace();
             objectManager.shutdown();
-
             throw e;
         }
     }
 
-    protected void loadReflector() throws ConfigurationException, ComponentException {
+    protected abstract ExplorationSetUp explorationSetup();
+
+    /*
+    protected ReflectorFactory loadReflector() throws ConfigurationException, ComponentException {
         NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
         
-        ReflectorFactory reflectorFactory = (ReflectorFactory) ComponentLoader.loadComponent(REFLECTOR_FACTORY, JavaReflectorFactory.class, ReflectorFactory.class);
+        ReflectorFactory reflectorFactory = (ReflectorFactory) ComponentLoader.loadComponent(REFLECTOR_FACTORY, ReflectorFactory.class);
         NakedObjectSpecificationImpl.setReflectorFactory(reflectorFactory);    
+        
+        return reflectorFactory;
     }
     
-    protected LocalObjectManager createObjectManager() throws ConfigurationException, ComponentException {
+    protected LocalObjectManager createObjectManager( ObjectFactory objectFactory) throws ConfigurationException, ComponentException {
         NakedObjectStore nos;
         nos = new TransientObjectStore();
         OidGenerator oidGenerator = new SimpleOidGenerator();
-        return new LocalObjectManager(nos, new NullUpdateNotifier(), oidGenerator);
+       return new LocalObjectManager(nos, new NullUpdateNotifier(), oidGenerator, objectFactory);
     }
-
+*/
     protected abstract void setUpFixtures();
 
     protected void startDocumenting() {
@@ -201,11 +198,11 @@ public abstract class AcceptanceTestCase extends TestCase {
         startDocumenting();
         nextStep(text);
     }
-
+/*
     public void setTestObjectFactory(TestObjectFactory testObjectFactory) {
         this.testObjectFactory = testObjectFactory;
     }
-
+*/
     protected void stopDocumenting() {
         documentor.stop();
     }
@@ -218,7 +215,7 @@ public abstract class AcceptanceTestCase extends TestCase {
     }
 
     protected void tearDown() throws Exception {
-        objectManager.shutdown();
+//        objectManager.shutdown();
         ClientSession.end();
         testObjectFactory.testEnding();
         documentor.stop();
@@ -234,7 +231,7 @@ public abstract class AcceptanceTestCase extends TestCase {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

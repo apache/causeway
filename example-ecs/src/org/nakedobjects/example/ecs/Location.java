@@ -1,18 +1,20 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.object.control.ActionAbout;
-import org.nakedobjects.object.defaults.AbstractNakedObject;
-import org.nakedobjects.object.defaults.Title;
-import org.nakedobjects.object.defaults.value.TextString;
+import org.nakedobjects.application.BusinessObjectContainer;
+import org.nakedobjects.application.Title;
+import org.nakedobjects.application.control.ActionAbout;
+import org.nakedobjects.application.control.FieldAbout;
+import org.nakedobjects.application.value.TextString;
 
 
-public class Location extends AbstractNakedObject {
-    private static final long serialVersionUID = 1L;
+public class Location {
     private final TextString streetAddress;
     private final TextString knownAs;
     private City city;
     private Customer customer;
-
+    private boolean isDirty;
+    private transient BusinessObjectContainer container;
+    
     public Location() {
         streetAddress = new TextString();
         knownAs = new TextString();
@@ -26,35 +28,44 @@ public class Location extends AbstractNakedObject {
         boolean sameCity = getCity() != null && location != null && getCity().equals(location.getCity());
 
         about.unusableOnCondition(! sameCity, "Locations must be in the same city");
-        about.changeNameIfUsable("New booking from " + Title.title(location) + 
+        about.changeNameIfUsable("New booking from " + location + 
                                 " to " + title());
     }
 
     public Booking actionNewBooking(Location location) {
-        Booking booking = (Booking) createInstance(Booking.class);
+        Booking booking = (Booking) container.createTransientInstance(Booking.class);
         Customer customer = location.getCustomer();
 
         booking.setPickUp(location);
         booking.setDropOff(this);
+        booking.setCity(location.getCity());
+
+        container.makePersistent(booking);
 
         if (customer != null) {
-            booking.setCustomer(customer);
+            booking.associateCustomer(customer);
             booking.setPaymentMethod(customer.getPreferredPaymentMethod());
         }
-
-        booking.setCity(location.getCity());
 
         return booking;
     }
 
+    public void aboutCity(FieldAbout  about, City city) {
+        about.setName("City for this location");
+   //     about.unmodifiable();
+    }
+    
+    public void setContainer(BusinessObjectContainer container) {
+        this.container = container;
+    }
+    
     public City getCity() {
-        resolve(city);
-
+        container.resolve(city);
         return city;
     }
 
     public Customer getCustomer() {
-        resolve(customer);
+        container.resolve(customer);
 
         return customer;
     }
@@ -69,13 +80,33 @@ public class Location extends AbstractNakedObject {
 
     public void setCity(City newCity) {
         city = newCity;
-        objectChanged();
+        isDirty = true;
     }
 
+    public boolean isDirty() {
+        return isDirty;
+    }
+    
+    public void clearDirty() {
+        isDirty = false;
+    }
+    
+    public void markDirty() {
+        isDirty = true;
+    }
+    
+    public void associateCustomer(Customer newCustomer) {
+        newCustomer.addToLocations(this);
+    }
+    
+    public void dissociateCustomer(Customer newCustomer) {
+        newCustomer.removeFromLocations(this);
+    }
+    
     public void setCustomer(Customer newCustomer) {
         customer = newCustomer;
-        objectChanged();
-    }
+        isDirty = true;
+   }
 
     public Title title() {
         if (knownAs.isEmpty()) {
@@ -89,7 +120,7 @@ public class Location extends AbstractNakedObject {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

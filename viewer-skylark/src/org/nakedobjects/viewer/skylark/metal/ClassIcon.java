@@ -5,9 +5,9 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.control.ClassAbout;
+import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.FastFinder;
-import org.nakedobjects.object.defaults.SimpleNakedClass;
+import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
@@ -34,7 +34,7 @@ public class ClassIcon extends ObjectView {
     public static class Specification implements ViewSpecification {
 
 		public boolean canDisplay(Naked object) {
-			return object instanceof NakedClass;
+			return object.getObject() instanceof  NakedClass;
 		}
 
         public View createView(Content content, ViewAxis axis) {
@@ -120,17 +120,17 @@ public class ClassIcon extends ObjectView {
     }
     
     public void secondClick(Click click) {
-        ClassAbout classAbout = getNakedClass().forNakedClass().getClassAbout();
+        Hint classAbout = getNakedClass().forObjectType().getClassAbout();
             if (classAbout == null || classAbout.canAccess().isAllowed()) {
             View view = null;
             if (click.isCtrl()) {
                 NakedCollection instances = getNakedClass().allInstances();
                 view = ViewFactory.getViewFactory().createOpenRootView(instances);
             } else {
-                if (getNakedClass() instanceof SimpleNakedClass) {
+                if (getNakedClass() instanceof NakedClass) {
 
-                    FastFinder finder = ((SimpleNakedClass) getNakedClass()).actionFind();
-                    view = ViewFactory.getViewFactory().createOpenRootView(finder);
+                    FastFinder finder = ((NakedClass) getNakedClass()).actionFind();
+                    view = ViewFactory.getViewFactory().createOpenRootView(PojoAdapter.createAdapter(finder));
                 }
             }
 
@@ -147,11 +147,11 @@ public class ClassIcon extends ObjectView {
     private NakedClass getNakedClass()
     {
         NakedObject object = ((ObjectContent) getContent()).getObject();
-		return ((NakedClass) object);
+		return (NakedClass) object.getObject();
     }
     
     public void menuOptions(MenuOptionSet options) {
-        NakedObjectSpecification spec = getNakedClass().forNakedClass();
+        NakedObjectSpecification spec = getNakedClass().forObjectType();
         ClassOption.menuOptions(spec, options);
         options.setColor(Style.CONTENT_MENU);
     }
@@ -165,7 +165,7 @@ public class ClassIcon extends ObjectView {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

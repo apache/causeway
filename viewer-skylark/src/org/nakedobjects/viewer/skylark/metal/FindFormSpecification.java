@@ -2,10 +2,10 @@ package org.nakedobjects.viewer.skylark.metal;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.FastFinder;
-import org.nakedobjects.object.reflect.ActionSpecification;
+import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
@@ -13,7 +13,6 @@ import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.ValueContent;
-import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
@@ -27,7 +26,7 @@ import org.nakedobjects.viewer.skylark.special.SubviewSpec;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 public class FindFormSpecification  extends AbstractCompositeViewSpecification {
-	protected About about;
+	protected Hint about;
 
     private static class DataFormSubviews implements SubviewSpec {
 		public View createSubview(Content content, ViewAxis axis) {
@@ -35,8 +34,8 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
 			
 			if(content instanceof OneToManyField) {
 				return null;
-	        }  else if(content instanceof ValueField) { 
-				ViewSpecification specification = factory.getValueFieldSpecification((ValueContent) content);
+	        } else if (content instanceof ValueContent) {
+	            ViewSpecification specification = factory.getValueFieldSpecification((ValueContent) content);
 				return specification.createView(content, axis);
 			}  else if(content instanceof ObjectContent) {
 			    ViewSpecification spec = factory.getIconizedSubViewSpecification((ObjectContent) content);
@@ -57,23 +56,23 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
 
     public boolean canDisplay(Naked object) {
         // use this view for a finder
-        return super.canDisplay(object) && (object instanceof FastFinder);
+        return super.canDisplay(object) && (object.getObject() instanceof FastFinder);
     }
 	
     public View createView(Content content, ViewAxis axis) {
         UserAction[] actions = new UserAction[2];
         actions[0] = new ButtonAction("Find") {
-            public Permission disabled(View view) {
+            public Consent disabled(View view) {
                 NakedObject target = ((ObjectContent) view.getContent()).getObject();
-                ActionSpecification action = target.getSpecification().getObjectAction(ActionSpecification.USER, "Find");
-                About about = action.getAbout(ClientSession.getSession(), target);
+                Action action = target.getSpecification().getObjectAction(Action.USER, "Find");
+                Hint about = target.getHint(ClientSession.getSession(), action, null);
                 return about.canUse();
             }
             
             public void execute(Workspace workspace, View view, Location at) {
                 NakedObject target = ((ObjectContent) view.getContent()).getObject();
-                ActionSpecification action = target.getSpecification().getObjectAction(ActionSpecification.USER, "Find");
-                NakedObject result = action.execute(target);
+                Action action = target.getSpecification().getObjectAction(Action.USER, "Find");
+                NakedObject result = target.execute(action, null);
                 at.move(30, 60);
                 workspace.addOpenViewFor(result, at);
             }
@@ -95,7 +94,7 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,16 +1,14 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.Aggregated;
-import org.nakedobjects.object.Lookup;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Allow;
-import org.nakedobjects.object.control.defaults.Veto;
-import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.basic.ClassOption;
 import org.nakedobjects.viewer.skylark.basic.ObjectOption;
@@ -21,17 +19,17 @@ public class OneToOneField extends ObjectField implements ObjectContent {
     private static final UserAction REMOVE_ASSOCIATION = new RemoveOneToOneAssociationOption();
     private final NakedObject object;
 
-    public OneToOneField(NakedObject parent, NakedObject object, OneToOneAssociationSpecification association) {
+    public OneToOneField(NakedObject parent, NakedObject object, OneToOneAssociation association) {
         super(parent, association);
         this.object = object;
     }
 
-    public Permission canClear() {
+    public Consent canClear() {
         NakedObject parentObject = getParent();
-        OneToOneAssociationSpecification association = getOneToOneAssociation();
+        OneToOneAssociation association = getOneToOneAssociation();
         NakedObject associatedObject = getObject();
-        About about = association.getAbout(ClientSession.getSession(), parentObject, associatedObject);
-        Permission edit = about.canUse();
+        Hint about = parentObject.getHint(ClientSession.getSession(), association, associatedObject);
+        Consent edit = about.canUse();
         if (edit.isAllowed()) {
             String status = "Clear the association to this object from '" + parentObject.titleString() + "'";
             return new Allow(status);
@@ -40,11 +38,11 @@ public class OneToOneField extends ObjectField implements ObjectContent {
         }
     }
     
-    public Permission canSet(NakedObject object) {
-        if (object instanceof NakedClass) {
+    public Consent canSet(NakedObject object) {
+        if (object.getObject() instanceof NakedClass) {
             return new Allow();
         } else {
-            NakedObjectSpecification targetType = getOneToOneAssociation().getType();
+            NakedObjectSpecification targetType = getOneToOneAssociation().getSpecification();
             NakedObjectSpecification sourceType = object.getSpecification();
             if (!sourceType.isOfType(targetType)) {
                 return new Veto("Can only drop objects of type " + targetType.getSingularName());
@@ -61,41 +59,41 @@ public class OneToOneField extends ObjectField implements ObjectContent {
                 }
             }
 
-            Permission perm = getOneToOneAssociation().getAbout(ClientSession.getSession(), getParent(), object).canUse();
+            Consent perm = getParent().getHint(ClientSession.getSession(), getOneToOneAssociation(), object).canUse();
             return perm;
         }
 
     }
     
     public void clear() {
-        getOneToOneAssociation().clearAssociation(getParent(), object);
+        getParent().clear(getOneToOneAssociation(), object);
+//        getOneToOneAssociation().clearAssociation(getParent(), object);
     }
 
     public String debugDetails() {
-        return super.debugDetails() + "  object:" + object + "\n";
+        return super.debugDetails() + "  object:    " + object + "\n" + "  parent:    " + getParent() + "\n";
     }
 
     public NakedObject getObject() {
         return object;
     }
 
-    private OneToOneAssociationSpecification getOneToOneAssociation() {
-        return (OneToOneAssociationSpecification) getField();
+    private OneToOneAssociation getOneToOneAssociation() {
+        return (OneToOneAssociation) getField();
     }
 
-    public NakedObjectSpecification getType() {
-        return getOneToOneAssociation().getType();
+    public NakedObjectSpecification getSpecification() {
+        return getOneToOneAssociation().getSpecification();
     }
 
     public boolean isLookup() {
-        NakedObjectSpecification lookup = NakedObjectSpecificationLoader.getInstance().loadSpecification(Lookup.class);
-        return getOneToOneAssociation().getType().isOfType(lookup);
+        return getOneToOneAssociation().getSpecification().isLookup();
     }
 
     public void menuOptions(MenuOptionSet options) {
         super.menuOptions(options);
         if(getObject() == null) {
-            ClassOption.menuOptions(getOneToOneAssociation().getType(), options);
+            ClassOption.menuOptions(getOneToOneAssociation().getSpecification(), options);
         } else {
             ObjectOption.menuOptions(object, options);
             options.add(MenuOptionSet.OBJECT, REMOVE_ASSOCIATION);
@@ -104,14 +102,14 @@ public class OneToOneField extends ObjectField implements ObjectContent {
 
     public void setObject(NakedObject object) {
         NakedObject associatedObject;
-        if (object instanceof NakedClass) {
-            associatedObject = ((NakedClass) object).newInstance();
+        if (object.getObject() instanceof NakedClass) {
+            associatedObject = ((NakedClass) object.getObject()).newInstance();
         } else {
             associatedObject = object;
         }
 
  //       getViewManager().getUndoStack().add(new AssociateCommand(target, associatedObject, field));
-        getOneToOneAssociation().setAssociation(getParent(), associatedObject);
+        getParent().setAssociation(getOneToOneAssociation(), associatedObject);
     }
 
     public String toString() {
@@ -126,7 +124,7 @@ public class OneToOneField extends ObjectField implements ObjectContent {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

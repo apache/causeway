@@ -1,28 +1,25 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.InvalidEntryException;
-import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.TextEntryParseException;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.security.Session;
 
 public interface ValueContent extends Content {
-	NakedValue getValue();
 
-    /**
-     * Determines if the user is able to change the held value.
-     */
-	boolean canChangeValue();
-	
-	void menuOptions(MenuOptionSet options);
-	
-	void parseEntry(final String entryText) throws InvalidEntryException;
-	
-	 void refresh();
+    void parseEntry(String entryText) throws TextEntryParseException, InvalidEntryException;
+
+    Hint getValueHint(Session session, String entryText);
+    
+    NakedObject getObject();
 }
 
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,5 +1,11 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.NakedObjectAssociation;
+import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.security.Session;
+
 
 
 /**
@@ -17,7 +23,6 @@ package org.nakedobjects.object;
  * </ul>
  * 
  * @see org.nakedobjects.object.NakedObject - reference objects
- * @see org.nakedobjects.object.NakedValue - value objects
  */
 public interface Naked {
 
@@ -43,11 +48,29 @@ public interface Naked {
     boolean isSameAs(Naked object);
 
     String titleString();
+    
+    Object getObject();
+
+    abstract void clear(NakedObjectAssociation specification, NakedObject ref);
+    
+    boolean canAccess(Session session, NakedObjectField specification);
+    
+    boolean canAccess(Session session, Action action);
+
+    abstract boolean canUse(Session session, NakedObjectField field);
+    
+
+    NakedObject execute(Action action, Naked[] parameters);
+    
+    Hint getHint(Session session, Action action, Naked[] parameters);
+    
+    Hint getHint(Session session, NakedObjectField field, NakedObject value);
+
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2003 Naked Objects Group Ltd
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General License as published by the Free Software Foundation; either version 2 of the

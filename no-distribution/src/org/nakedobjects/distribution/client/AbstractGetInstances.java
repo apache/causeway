@@ -1,14 +1,14 @@
 package org.nakedobjects.distribution.client;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
 import org.nakedobjects.distribution.ObjectProxy;
 import org.nakedobjects.distribution.Request;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.ObjectNotFoundException;
+
+import java.util.Enumeration;
+import java.util.Vector;
 
 
 public abstract class AbstractGetInstances extends Request {
@@ -44,7 +44,7 @@ public abstract class AbstractGetInstances extends Request {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

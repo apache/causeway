@@ -1,31 +1,30 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.object.InstancesCriteria;
+import org.nakedobjects.object.LoadedObjects;
+import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedCollection;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectStore;
+import org.nakedobjects.object.ObjectNotFoundException;
+import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.UnsupportedFindException;
+import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.utility.Debug;
+
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
 import org.apache.log4j.Category;
 
-import org.nakedobjects.object.InstancesCriteria;
-import org.nakedobjects.object.LoadedObjects;
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectStore;
-import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.ObjectNotFoundException;
-import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.UnsupportedFindException;
-import org.nakedobjects.object.reflect.FieldSpecification;
-
 
 public class TransientObjectStore implements NakedObjectStore {
     private final static Category LOG = Category.getInstance(TransientObjectStore.class);
     private final Hashtable classes;
-    private final LoadedObjects loaded;
+    private LoadedObjects loaded;
     /*
      * The objects need to store in a repeatable sequence so the elements and instances method
      * return the same data for any repeated call, and so that one subset of instances follows on
@@ -34,7 +33,7 @@ public class TransientObjectStore implements NakedObjectStore {
     private final Vector persistentObjectVector;
 
     public TransientObjectStore() {
-        loaded = new LoadedObjectsHashtable();
+//        loaded = new LoadedObjectsHashtable();
         persistentObjectVector = new Vector();
         classes = new Hashtable(30);
     }
@@ -46,10 +45,10 @@ public class TransientObjectStore implements NakedObjectStore {
         save(object);
     }
 
-    public void createNakedClass(NakedClass cls) throws ObjectStoreException {
+    public void createNakedClass(NakedObject cls) throws ObjectStoreException {
         LOG.debug("createClass " + cls);
  //       cls.setResolved();
-        classes.put(cls.getName(), cls);
+        classes.put(((NakedClass) cls.getObject()).getName(), cls);
         persistentObjectVector.addElement(cls);
     }
     
@@ -67,9 +66,30 @@ public class TransientObjectStore implements NakedObjectStore {
     }
 
     public String getDebugData() {
-        return persistentObjectVector.toString();
+        StringBuffer data = new StringBuffer();
+        data.append("Objects\n");
+        data.append("----------\n");
+        Enumeration e = persistentObjectVector.elements();
+        while (e.hasMoreElements()) {
+            data.append(e.nextElement());
+            data.append('\n');
+        }
+        
+        data.append("\n\nObjects\n");
+        data.append("----------\n");
+        Vector dump = new Vector();
+        e = persistentObjectVector.elements();
+        while (e.hasMoreElements()) {
+            NakedObject object = (NakedObject) e.nextElement();
+            data.append(object);
+            data.append(debugGraph(object, "name???", 0, dump));
+            data.append('\n');
+        }
+
+        return data.toString();
     }
 
+    
     public String getDebugTitle() {
         return name();
     }
@@ -150,7 +170,7 @@ public class TransientObjectStore implements NakedObjectStore {
             while (objects.hasMoreElements()) {
                 NakedObject object = (NakedObject) objects.nextElement();
 
-                if (object instanceof NakedClass && ((NakedClass) object).getName().equals(name)) {
+                if (object.getObject() instanceof NakedClass && ((NakedClass) object.getObject()).getName().equals(name)) {
                     instances.addElement(object);
                 }
             }
@@ -188,10 +208,11 @@ public class TransientObjectStore implements NakedObjectStore {
     }
 
     public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
-        NakedClass nc = (NakedClass) classes.get(name);
-        if(nc == null) {
+        NakedObject object = (NakedObject) classes.get(name);
+        if(object == null) {
             throw new ObjectNotFoundException();
         } else {
+	        NakedClass nc = (NakedClass) object.getObject();
             return nc;
         }
     }
@@ -215,10 +236,10 @@ public class TransientObjectStore implements NakedObjectStore {
     private boolean matchesPattern(NakedObject pattern, NakedObject instance) {
         NakedObject object = instance;
         NakedObjectSpecification nc = object.getSpecification();
-        FieldSpecification[] fields = nc.getFields();
+        NakedObjectField[] fields = nc.getFields();
 
         for (int f = 0; f < fields.length; f++) {
-            FieldSpecification fld = fields[f];
+            NakedObjectField fld = fields[f];
 
             // are ignoring internal collections - these probably should be considered
             // ignore derived fields - there is no way to set up these fields
@@ -228,11 +249,11 @@ public class TransientObjectStore implements NakedObjectStore {
 
             if (fld.isValue()) {
                 // find the objects
-                NakedValue reqd = (NakedValue) fld.get(pattern);
-                NakedValue search = (NakedValue) fld.get(object);
+                NakedObject reqd = pattern.getField(fld);
+                NakedObject search = object.getField(fld);
 
                 // if pattern contains empty value then it matches anything
-                if (reqd.isEmpty()) {
+                if (reqd.isEmpty(fld)) {
                     continue;
                 }
 
@@ -244,8 +265,8 @@ public class TransientObjectStore implements NakedObjectStore {
                 if (s.indexOf(r) == -1) { return false; }
             } else {
                 // find the objects
-                Naked reqd = fld.get(pattern);
-                Naked search = fld.get(object);
+                NakedObject reqd = pattern.getField(fld);
+                NakedObject search = object.getField(fld);
 
                 // if pattern contains null reference then it matches anything
                 if (reqd == null) {
@@ -290,7 +311,7 @@ public class TransientObjectStore implements NakedObjectStore {
 
     public void save(NakedObject object) throws ObjectStoreException {
         LOG.debug("save " + object);
-        if (object instanceof NakedClass) { 
+        if (object.getObject() instanceof NakedClass) { 
             throw new ObjectStoreException("Can't make changes to a NakedClass object"); 
         }
         if (!persistentObjectVector.contains(object)) {
@@ -348,18 +369,115 @@ public class TransientObjectStore implements NakedObjectStore {
      * if (oid == null) { save((NakedObject) fieldContent); } } } } }
      */
 
-    public void setObjectManager(NakedObjectManager manager) {}
-
+    public void setLoadedObjects(LoadedObjects loaded) {
+        this.loaded = loaded;
+    }
+    
+    /**
+	 * Expose as a .NET property
+	 * @property
+	 */
+    public void set_LoadedObjects(LoadedObjects loaded) {
+        this.loaded = loaded;
+    }
+    
     public void shutdown() throws ObjectStoreException {}
 
     public void startTransaction() {
         LOG.debug("start transaction");
     }
+
+    private String debugCollectionGraph(NakedCollection collection, String name, int level,
+        Vector recursiveElements) {
+        StringBuffer s = new StringBuffer();
+    
+        //	indent(s, level - 1);
+        if (recursiveElements.contains(collection)) {
+            s.append("*\n");
+        } else {
+            //		s.append("\n");
+            recursiveElements.addElement(collection);
+    
+            Enumeration e = ((NakedCollection) collection).elements();
+    
+            while (e.hasMoreElements()) {
+                indent(s, level);
+    
+                NakedObject element = ((NakedObject) e.nextElement());
+    
+                s.append(element);
+                s.append(debugGraph(element, name, level + 1, recursiveElements));
+            }
+        }
+    
+        return s.toString();
+    }
+
+    public String debugGraph(NakedObject object, String name, int level, Vector recursiveElements) {
+        if (level > 3) {
+            return "...\n"; // only go 3 levels?
+        }
+    
+        if (recursiveElements == null) {
+            recursiveElements = new Vector(25, 10);
+        }
+    
+        if (object instanceof NakedCollection) {
+            return "\n" +
+            debugCollectionGraph((NakedCollection) object, name, level, recursiveElements);
+        } else {
+            return "\n" + debugObjectGraph(object, name, level, recursiveElements);
+        }
+    }
+
+    private String debugObjectGraph(NakedObject object, String name, int level,
+        Vector recursiveElements) {
+        StringBuffer s = new StringBuffer();
+    
+        recursiveElements.addElement(object);
+    
+        // work through all its fields
+        NakedObjectField[] fields;
+        
+        fields = object.getSpecification().getFields();
+    
+        for (int i = 0; i < fields.length; i++) {
+            NakedObjectField field = fields[i];
+            Object obj = object.getField(field);
+    
+            name = field.getName();
+            indent(s, level);
+    
+             if (obj instanceof NakedObject) {
+                if (recursiveElements.contains(obj)) {
+                    s.append(name + ": " + obj + "*\n");
+                } else {
+                    s.append(name + ": " + obj);
+                    s.append(debugGraph((NakedObject) obj, name, level + 1, recursiveElements));
+                }
+            } else {
+                s.append(name + ": " + obj);
+                s.append("\n");
+            }
+        }
+    
+        return s.toString();
+    }
+    
+
+    private void indent(StringBuffer s, int level) {
+        for (int indent = 0; indent < level; indent++) {
+            s.append(Debug.indentString(4) + "|");
+        }
+
+        s.append(Debug.indentString(4) + "+--");
+    }
+    
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2003 Naked Objects Group Ltd
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the

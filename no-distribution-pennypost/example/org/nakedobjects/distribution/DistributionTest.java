@@ -9,8 +9,8 @@ import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
-import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
-import org.nakedobjects.object.system.TestClock;
+import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
+import org.nakedobjects.reflector.java.reflect.JavaReflectorFactory;
 
 import junit.framework.TestCase;
 
@@ -27,9 +27,8 @@ public class DistributionTest extends TestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-    
-        new TestClock();
-    
+        
+        new NakedObjectSpecificationLoaderImpl();
         NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
         NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
         
@@ -60,7 +59,7 @@ public class DistributionTest extends TestCase {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

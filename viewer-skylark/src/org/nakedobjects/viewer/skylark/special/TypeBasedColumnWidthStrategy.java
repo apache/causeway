@@ -3,12 +3,7 @@ package org.nakedobjects.viewer.skylark.special;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.defaults.value.Date;
-import org.nakedobjects.object.defaults.value.DateTime;
-import org.nakedobjects.object.defaults.value.Logical;
-import org.nakedobjects.object.defaults.value.TextString;
-import org.nakedobjects.object.defaults.value.Time;
-import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.NakedObjectField;
 
 import java.util.Hashtable;
 
@@ -19,29 +14,30 @@ public class TypeBasedColumnWidthStrategy implements ColumnWidthStrategy {
     private Hashtable types = new Hashtable();
 
     public TypeBasedColumnWidthStrategy() {
+/*
         NakedObjectSpecificationLoader loader = NakedObjectSpecificationLoader.getInstance();
-
         addWidth(loader.loadSpecification(Logical.class), 25);
         addWidth(loader.loadSpecification(Date.class), 65);
         addWidth(loader.loadSpecification(Time.class), 38);
         addWidth(loader.loadSpecification(DateTime.class), 100);
         addWidth(loader.loadSpecification(TextString.class), 80);
-    }
+ */
+        }
 
     public void addWidth(NakedObjectSpecification specification, int width) {
         types.put(specification, new Integer(width));
     }
 
-    public int getMaximumWidth(int i, FieldSpecification specification) {
+    public int getMaximumWidth(int i, NakedObjectField specification) {
         return 0;
     }
 
-    public int getMinimumWidth(int i, FieldSpecification specification) {
+    public int getMinimumWidth(int i, NakedObjectField specification) {
         return 15;
     }
 
-    public int getPreferredWidth(int i, FieldSpecification specification) {
-        NakedObjectSpecification type = specification.getType();
+    public int getPreferredWidth(int i, NakedObjectField specification) {
+        NakedObjectSpecification type = specification.getSpecification();
         if (type == null) {
             return 200;
         }
@@ -58,7 +54,7 @@ public class TypeBasedColumnWidthStrategy implements ColumnWidthStrategy {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

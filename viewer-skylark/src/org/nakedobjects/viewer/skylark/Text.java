@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -16,7 +17,7 @@ public class Text {
     private Frame fontMetricsComponent = new Frame();
 
     protected Text(String propertyName, String defaultFont) {
-        Configuration cfg = Configuration.getInstance();
+        Configuration cfg = ConfigurationFactory.getConfiguration();
         font = cfg.getFont(PROPERTY_STEM + propertyName, Font.decode(defaultFont));
         LOG.info("font " + propertyName + " loaded as " + font);
 
@@ -63,7 +64,7 @@ public class Text {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.NakedObjectField;
 
 public class DefaultColumnWidthStrategy implements ColumnWidthStrategy {
 
@@ -24,15 +24,15 @@ public class DefaultColumnWidthStrategy implements ColumnWidthStrategy {
         this.maximum = maximum;
     }
 
-    public int getMinimumWidth(int i, FieldSpecification specification) {
+    public int getMinimumWidth(int i, NakedObjectField specification) {
         return minimum;
     }
 
-    public int getPreferredWidth(int i, FieldSpecification specification) {
+    public int getPreferredWidth(int i, NakedObjectField specification) {
         return preferred;
     }
 
-    public int getMaximumWidth(int i, FieldSpecification specification) {
+    public int getMaximumWidth(int i, NakedObjectField specification) {
         return maximum;
     }
 }
@@ -41,7 +41,7 @@ public class DefaultColumnWidthStrategy implements ColumnWidthStrategy {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

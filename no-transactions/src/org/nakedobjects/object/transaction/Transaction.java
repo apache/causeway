@@ -152,11 +152,11 @@ public class Transaction {
             for (int i = 0; i < fields.length; i++) {
                 FieldSpecification field = fields[i];
                 if (field instanceof OneToOneAssociationSpecification) {
-                    NakedObject proxyAssociate = (NakedObject) ((OneToOneAssociationSpecification) field).get(newObject);
+                    NakedObject proxyAssociate = newObject.getField((OneToOneAssociationSpecification) field);
                     if(proxyAssociate != null) {
                         Object associateOid = proxyAssociate.getOid();
                         NakedObject associate = store.getLoadedObjects().getLoadedObject(associateOid);
-                        ((OneToOneAssociationSpecification) field).initData(newObject, associate);
+                        newObject.setValue((OneToOneAssociationSpecification) field, associate);
                     }
                 } else if (field instanceof OneToManyAssociationSpecification) {
                     // TODO complete
@@ -250,8 +250,8 @@ public class Transaction {
             } else if (field instanceof OneToManyAssociationSpecification) {
                 OneToManyAssociationSpecification association = (OneToManyAssociationSpecification) field;
 
-                InternalCollection proxyCollection = (InternalCollection) association.get(proxy);
-                InternalCollection publicCollection = (InternalCollection) association.get(original);
+                InternalCollection proxyCollection = (InternalCollection) proxy.getField(association);
+                InternalCollection publicCollection = (InternalCollection) original.getField(association);
 
                 publicCollection.removeAll();
 
@@ -276,23 +276,23 @@ public class Transaction {
      * Sets up the proxy object to have proxty association.
      */
     private void copyToField(OneToOneAssociationSpecification association, NakedObject source, NakedObject proxy) {
-        NakedObject associatedObject = (NakedObject) association.get(source);
+        NakedObject associatedObject = (NakedObject) source.getField(association);
         if (associatedObject == null) {
-            association.clear(proxy);
+            proxy.clear(association);
             log("  copy: " + "null -> " + association.getName());
         } else {
 	        NakedObjectSpecification cls;
             cls = associatedObject.getSpecification();
             NakedObject associateCopy = (NakedObject) cls.acquireInstance();
             associateCopy.setOid(associatedObject.getOid());
-            association.initData(proxy, associateCopy);
+            proxy.setValue(association, associateCopy);
             log("  copy: " + associateCopy + " -> " + association.getName());
         }
     }
     
     private void copyToField(ValueFieldSpecification valueField, NakedObject source, NakedObject proxy) {
-        NakedValue value = (NakedValue) valueField.get(source);
-        valueField.restoreValue(proxy, value.saveString());
+        NakedValue value = (NakedValue) source.getField(valueField);
+        valueField.restoreValue(proxy, value.asEncodedString());
         log("  copy: " + value + " -> " + valueField.getName());
     }
     
@@ -300,8 +300,8 @@ public class Transaction {
      * Sets up the proxy object to have proxy elements.
      */
     private void copyToField(OneToManyAssociationSpecification association, NakedObject source, NakedObject proxy) {
-        NakedCollection collectionOriginal = (NakedCollection) association.get(source);
-        NakedCollection collectionCopy = (NakedCollection) association.get(proxy);
+        NakedCollection collectionOriginal = (NakedCollection) source.getField(association);
+        NakedCollection collectionCopy = (NakedCollection) proxy.getField(association);
         
         if (collectionCopy.getOid() == null) {
             collectionCopy.setOid(collectionOriginal.getOid());
@@ -438,7 +438,7 @@ public class Transaction {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

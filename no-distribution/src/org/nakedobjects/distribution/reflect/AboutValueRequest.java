@@ -6,9 +6,8 @@ import org.nakedobjects.distribution.RequestContext;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import org.nakedobjects.object.reflect.ValueField;
-import org.nakedobjects.object.security.SecurityContext;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import org.nakedobjects.utility.NotImplementedException;
 
 
@@ -35,7 +34,7 @@ public class AboutValueRequest extends ObjectRequest {
             NakedObject object = getObject(server.getLoadedObjects());
             ValueFieldSpecification field = (ValueFieldSpecification) object.getSpecification().getField(fieldName);
 
-            response = (field == null) ? null : field.getAbout(context, object);
+            response = (field == null) ? null : object.getHint(context, field, null);
         } catch (ObjectStoreException e) {
             response = e;
         }
@@ -49,7 +48,7 @@ public class AboutValueRequest extends ObjectRequest {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

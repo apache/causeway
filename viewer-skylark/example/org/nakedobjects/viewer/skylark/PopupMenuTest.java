@@ -1,10 +1,12 @@
 
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Allow;
-import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.DefaultPopupMenu;
 
@@ -105,6 +107,9 @@ public class PopupMenuTest extends TestCase {
 	}
 
 	protected void setUp() throws Exception {
+	    ConfigurationFactory.setConfiguration(new Configuration());
+		new ViewerAssistant().setViewer(new Viewer());
+		
 		popup = new MockPopup();
 		view = new MockView(null);
 		popup.init(view, view, new Location(0,0), true, false, false);
@@ -177,7 +182,7 @@ public class PopupMenuTest extends TestCase {
 			return null;
 		}
 
-		public View makeView(Naked object, FieldSpecification field) throws CloneNotSupportedException {
+		public View makeView(Naked object, NakedObjectField field) throws CloneNotSupportedException {
 			return null;
 		}
 	}
@@ -195,7 +200,7 @@ public class PopupMenuTest extends TestCase {
 			return name;
 		}
 
-		public Permission disabled(View view) {
+		public Consent disabled(View view) {
 			return new Allow("status " + name);
 		}
 
@@ -211,7 +216,7 @@ public class PopupMenuTest extends TestCase {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it

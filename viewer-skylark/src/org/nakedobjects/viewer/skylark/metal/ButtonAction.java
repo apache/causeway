@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Allow;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
 
@@ -22,7 +22,7 @@ public abstract class ButtonAction implements UserAction {
         return null;
     }
 
-    public Permission disabled(View view) {
+    public Consent disabled(View view) {
         return Allow.DEFAULT;
     }
 }
@@ -31,7 +31,7 @@ public abstract class ButtonAction implements UserAction {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.core;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
@@ -279,7 +279,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
     public void keyTyped(char keyCode) {
     }
 
-    public View makeView(Naked object, FieldSpecification field) throws CloneNotSupportedException {
+    public View makeView(Naked object, NakedObjectField field) throws CloneNotSupportedException {
         throw new RuntimeException();
     }
 
@@ -342,7 +342,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

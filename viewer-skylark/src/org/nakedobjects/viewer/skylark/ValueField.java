@@ -2,75 +2,60 @@ package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.reflect.ValueFieldSpecification;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.TextEntryParseException;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.security.ClientSession;
+import org.nakedobjects.object.security.Session;
 
 
 public class ValueField extends ObjectField implements ValueContent {
-    private NakedValue value;
+    private final NakedObject object;
 
-    public ValueField(NakedObject parent, NakedValue value, ValueFieldSpecification field) {
-        super(parent, field);
-        this.value = value;
+    public ValueField(NakedObject parent, NakedObject object, OneToOneAssociation association) {
+        super(parent, association);
+        this.object = object;
     }
-
-    public boolean canChangeValue() {
-        ValueFieldSpecification objectField = getValueField();
-        boolean persistent = !objectField.isDerived();
-        boolean fieldReadable = objectField.getAbout(ClientSession.getSession(), getParent()).canUse().isAllowed();
-        boolean objectEditable = getValue().userChangeable();
-
-        return persistent && fieldReadable && objectEditable;
+    
+    public NakedObject getObject() {
+        return object;
     }
 
     public String debugDetails() {
-        return super.debugDetails() + "  object:" + value + "\n";
+        return super.debugDetails() + "  object:    " + object + "\n" + "  parent:    " + getParent() + "\n";
     }
 
-    public NakedValue getValue() {
-        return value;
+    private OneToOneAssociation getOneToOneAssociation() {
+        return (OneToOneAssociation) getField();
     }
 
-    public ValueFieldSpecification getValueField() {
-        return (ValueFieldSpecification) getField();
-    }
-
-    public void menuOptions(MenuOptionSet options) {}
-
-    public void parseEntry(final String entryText) throws InvalidEntryException {
-        try {
-            NakedObject parent = getParent();
-            // getViewManager().getUndoStack().add(new SetValueCommand(parent,
-            // getObjectField()));
-            getValueField().parseAndSave(parent, entryText);
-            // getState().setValid();
-        } catch (InvalidEntryException e) {
-            // getState().setInvalid();
-            throw e;
-        }
-    }
-
-    public void refresh() {
-        ValueFieldSpecification field = getValueField();
-
-        if (field.isDerived()) {
-            getValue().copyObject(field.get(getParent()));
-        }
+    public NakedObjectSpecification getSpecification() {
+        return getOneToOneAssociation().getSpecification();
     }
 
     public String toString() {
-        return value + "/" + getField();
+        return getValue() + "/" + getField();
     }
 
-    public void updateDerivedValue(NakedValue object) {
-        this.value = object;
+    private String getValue() {
+        return null;
+    }
+
+    public void parseEntry(String entryText) throws TextEntryParseException, InvalidEntryException {
+        getParent().parseTextEntry(getOneToOneAssociation(), entryText);
+    }
+
+    public Hint getValueHint(Session session, String entryText) {
+        NakedObject example = (NakedObject) getSpecification().acquireInstance();
+        return getParent().getHint(ClientSession.getSession(), (NakedObjectField) getField(), example);
     }
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

@@ -1,7 +1,6 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObject;
 
 
 public class TestValueDecorator implements TestValue {
@@ -15,7 +14,7 @@ public class TestValueDecorator implements TestValue {
         wrappedObject.fieldEntry(value);
     }
 
-    public Naked getForObject() {
+    public NakedObject getForObject() {
         return wrappedObject.getForObject();
     }
 
@@ -23,19 +22,15 @@ public class TestValueDecorator implements TestValue {
         return wrappedObject.getTitle();
     }
 
-    public void setForObject(Naked object) {
+    public void setForObject(NakedObject object) {
         wrappedObject.setForObject(object);
-    }
-    
-    public NakedObjectSpecification getSpecification() {
-        return wrappedObject.getSpecification();
     }
 
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

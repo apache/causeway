@@ -1,7 +1,7 @@
 
 package org.nakedobjects.distribution.duplex;
 
-import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 
 
 class DuplexParameters {
@@ -10,7 +10,7 @@ class DuplexParameters {
 	private String duplexHost;
 	
 	DuplexParameters() {
-        Configuration params = Configuration.getInstance();
+        ConfigurationFactory params = ConfigurationFactory.getConfiguration();
 
         duplexPort = params.getInteger("connection.duplex.port", 1099);
     	duplexHost = params.getString("connection.duplex.host", "localhost");
@@ -33,7 +33,7 @@ class DuplexParameters {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

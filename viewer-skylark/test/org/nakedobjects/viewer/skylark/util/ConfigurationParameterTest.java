@@ -1,14 +1,15 @@
 package org.nakedobjects.viewer.skylark.util;
 
+import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
+
 import java.util.Properties;
+
+import junit.framework.TestCase;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
-
-import org.nakedobjects.container.configuration.Configuration;
-
-import junit.framework.TestCase;
 
 
 public class ConfigurationParameterTest extends TestCase {
@@ -25,7 +26,10 @@ public class ConfigurationParameterTest extends TestCase {
     protected void setUp() throws Exception {
         BasicConfigurator.configure();
         LogManager.getRootLogger().setLevel(Level.OFF);
-        params = Configuration.getInstance();
+        
+       	ConfigurationFactory.setConfiguration(new Configuration());
+
+        params = ConfigurationFactory.getConfiguration();
         Properties p = new Properties();
         p.put("nakedobjects.bool", "on");
         p.put("nakedobjects.str", "string");
@@ -76,7 +80,7 @@ public class ConfigurationParameterTest extends TestCase {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

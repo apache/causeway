@@ -2,21 +2,19 @@
 
 package org.nakedobjects.example.expenses;
 
+import org.nakedobjects.application.Title;
+import org.nakedobjects.application.control.ActionAbout;
+import org.nakedobjects.application.control.FieldAbout;
+import org.nakedobjects.application.value.Money;
+import org.nakedobjects.application.value.TextString;
 import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.object.control.ActionAbout;
-import org.nakedobjects.object.control.FieldAbout;
-import org.nakedobjects.object.defaults.AbstractNakedObject;
-import org.nakedobjects.object.defaults.Title;
-import org.nakedobjects.object.defaults.value.Money;
-import org.nakedobjects.object.defaults.value.TextString;
 
 
-public class Expense extends AbstractNakedObject {
+public class Expense extends BaseObject {
     private static final String AUTHORISED = "Authorised";
     private static final String OPEN = "Open";
     private static final String DISALLOWED = "Disallowed";
-//    private static final String[] STATUS_LIST = { OPEN, AUTHORISED, "Denied" };
-    private final TextString description;
+   private final TextString description;
     private final Money amount;
     private final TextString status;
     private Claim claim;
@@ -38,7 +36,7 @@ public class Expense extends AbstractNakedObject {
     }
 
     public Title title() {
-        return description.title().append(amount).append(" -", getStatus());
+        return description.title().append(amount.titleString()).append(" -", getStatus().titleString());
     }
 
 	public String toString() {
@@ -148,7 +146,7 @@ public class Expense extends AbstractNakedObject {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

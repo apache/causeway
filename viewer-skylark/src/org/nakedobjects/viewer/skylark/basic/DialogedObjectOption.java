@@ -2,10 +2,10 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Allow;
-import org.nakedobjects.object.reflect.ActionSpecification;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Location;
@@ -20,15 +20,15 @@ import org.nakedobjects.viewer.skylark.Workspace;
 class DialogedObjectOption extends MenuOption {
     private ActionDialogSpecification dialogSpec = new ActionDialogSpecification();
     
-    public static DialogedObjectOption createOption(ActionSpecification action, NakedObject object) {
+    public static DialogedObjectOption createOption(Action action, NakedObject object) {
         int paramCount = action.getParameterCount();
         Assert.assertTrue("Only for actions taking one or more params", paramCount > 0);
-    	About about = action.getAbout(ClientSession.getSession(), object, action.parameterStubs());
+    	Hint about = object.getHint(ClientSession.getSession(), action, action.parameterStubs());
     	if(about.canAccess().isVetoed()) {
     		return null;
     	}
 
-    	String label =  action.getLabel(ClientSession.getSession(), object) + "...";
+    	String label =  object.getLabel(ClientSession.getSession(), action) + "...";
     	/*
     	 String label =  action.getLabel(ClientSession.getSession(), object) + " (";
     	NakedObjectSpecification[] parameters = action.parameters();
@@ -43,20 +43,20 @@ class DialogedObjectOption extends MenuOption {
     	return option;
     }
 	
-	private final ActionSpecification action;
+	private final Action action;
 	private final NakedObject object ;
 	
-	private DialogedObjectOption(final String name, final ActionSpecification action, NakedObject object) {
+	private DialogedObjectOption(final String name, final Action action, NakedObject object) {
 		super(name);
 		this.action = action;
 		this.object = object;
 	}
 
-    public Permission disabled(View view) {
+    public Consent disabled(View view) {
         Naked[] parameterValues;
         parameterValues = action.parameterStubs();        
         
-		About about = action.getAbout(ClientSession.getSession(), object, parameterValues);
+		Hint about = object.getHint(ClientSession.getSession(), action, parameterValues);
         // ignore the details from the About about useablility this will be
         // checked in the dialog
         String description = about.getDescription();
@@ -82,7 +82,7 @@ class DialogedObjectOption extends MenuOption {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

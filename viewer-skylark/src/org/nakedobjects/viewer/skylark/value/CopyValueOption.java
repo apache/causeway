@@ -1,17 +1,17 @@
 package org.nakedobjects.viewer.skylark.value;
 
 
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-
-import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Allow;
-import org.nakedobjects.object.control.defaults.Veto;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
+
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 
 
 public class CopyValueOption extends AbstractValueOption {
@@ -19,10 +19,10 @@ public class CopyValueOption extends AbstractValueOption {
         super("Copy");
     }
 
-    public Permission disabled(View view) {
-    	NakedValue value = getValue(view);
+    public Consent disabled(View view) {
+    	NakedObject value = getValue(view);
     	
-    	if(value.isEmpty() || value.titleString().equals("")) {
+    	if(isEmpty(view)) {
     		return new Veto("Field is empty");
     	} else {
 			return new Allow("Copy value " + value.titleString() + " to clipboard");
@@ -44,7 +44,7 @@ public class CopyValueOption extends AbstractValueOption {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,7 +1,6 @@
 
 package org.nakedobjects.persistence.file;
 
-import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ObjectStoreException;
@@ -45,7 +44,8 @@ public class XmlDataManager extends DataManager {
             this.directory.mkdirs();
         }
         
-		charset = Configuration.getInstance().getString(ENCODING_PROPERTY, DEFAULT_ENCODING);
+    	charset = DEFAULT_ENCODING;
+    	//charset = ConfigurationFactory.getConfiguration().getString(ENCODING_PROPERTY, DEFAULT_ENCODING);
     }
 
     protected static void clearTestDirectory() {
@@ -121,8 +121,9 @@ public class XmlDataManager extends DataManager {
                 } else if (entry instanceof ReferenceVector) {
                 	ReferenceVector references = (ReferenceVector) entry;
                 	xml.append("  <multiple-association field=\"" + field + "\" ");
-                	xml.append("ref=\"" + encodedOid(references.getOid()) + "\">\n");
-                	
+ //               	xml.append("ref=\"" + encodedOid(references.getOid()) + "\">\n");
+                   	xml.append(">\n");
+                               	
                 	for (int i = 0; i < references.size(); i++) {
                 		Object oid = references.elementAt(i);
                 		xml.append("    <element ");
@@ -224,8 +225,8 @@ public class XmlDataManager extends DataManager {
         } catch (IOException e) {
             throw new NakedObjectRuntimeException("Error reading XML file", e);
         } catch (SAXParseException e) {
-            throw new NakedObjectRuntimeException("Parse error: " + e.getMessage() + " (" +
-                file(fileName) + ")");
+            throw new NakedObjectRuntimeException("Error while parsing: " + e.getMessage() + " in " +
+                file(fileName) + ")", e);
         } catch (SAXException e) {
             throw new NakedObjectRuntimeException("?? Error parsing XML file " + file(fileName) + " " +
                 e.getClass(), e.getException());
@@ -305,8 +306,8 @@ public class XmlDataManager extends DataManager {
                     object.addElement(fieldName, new SerialOid(id));
                 } else if (tagName.equals("multiple-association")) {
                 	fieldName = attrs.getValue("field");
-                	long id = Long.valueOf(attrs.getValue("ref"), 16).longValue();
-                    SerialOid internalCollection = new SerialOid(id);
+ //               	long id = Long.valueOf(attrs.getValue("ref"), 16).longValue();
+                    SerialOid internalCollection = null; //new SerialOid(id);
                     object.initCollection(internalCollection, fieldName);
                 }
             } else if (collection != null) {
@@ -413,7 +414,7 @@ public class XmlDataManager extends DataManager {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

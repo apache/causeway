@@ -2,7 +2,6 @@ package org.nakedobjects.persistence.file;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
-import org.nakedobjects.persistence.file.InMemoryDataManager;
 
 public class InMemoryDataManagerTest extends DataManagerTestCase {
 	public static void main(String[] args) {
@@ -20,7 +19,7 @@ public class InMemoryDataManagerTest extends DataManagerTestCase {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,18 +1,19 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.object.defaults.AbstractNakedObject;
-import org.nakedobjects.object.defaults.Title;
-import org.nakedobjects.object.defaults.value.TextString;
+import org.nakedobjects.application.Title;
+import org.nakedobjects.application.value.Logical;
+import org.nakedobjects.application.value.TextString;
 
 
-public class Telephone extends AbstractNakedObject {
-    private static final long serialVersionUID = 1L;
+public class Telephone {
     private final TextString number;
     private final TextString knownAs;
-
+    private final Logical temporary;
+    
     public Telephone() {
         number = new TextString();
         knownAs = new TextString();
+        temporary = new Logical();
     }
 
     public final TextString getKnownAs() {
@@ -21,6 +22,10 @@ public class Telephone extends AbstractNakedObject {
 
     public final TextString getNumber() {
         return number;
+    }
+    
+    public final Logical getTemporary() {
+        return temporary;
     }
 
     public Title title() {
@@ -35,7 +40,7 @@ public class Telephone extends AbstractNakedObject {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

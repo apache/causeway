@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 
 
 public class Color {
@@ -23,7 +23,7 @@ public class Color {
 
     Color(String propertyName, String defaultColor) {
         this.name = propertyName;
-        color = Configuration.getInstance().getColor(PROPERTY_STEM + propertyName,
+        color = ConfigurationFactory.getConfiguration().getColor(PROPERTY_STEM + propertyName,
                 java.awt.Color.decode(defaultColor));
     }
 
@@ -48,7 +48,7 @@ public class Color {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,6 +1,6 @@
 package org.nakedobjects.persistence.sql.auto;
 
-import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
@@ -47,7 +47,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 		nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(nakedClassName);
 		typeMapper = ValueMapperLookup.getInstance();
 
-		Configuration configParameters = Configuration.getInstance();
+		ConfigurationFactory configParameters = ConfigurationFactory.getConfiguration();
 
 		table = configParameters.getString(parameterBase + "table");
 		if (table == null) {
@@ -91,9 +91,9 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 				String type;
 				if (field instanceof ValueFieldSpecification) {
 					ValueMapperLookup mappers = ValueMapperLookup.getInstance();
-					ValueMapper mapper = mappers.mapperFor(fields[f].getType());
+					ValueMapper mapper = mappers.mapperFor(fields[f].getSpecification());
 					if (mapper == null) {
-						throw new SqlObjectStoreException("No type specified for " + fields[f].getType().getFullName());
+						throw new SqlObjectStoreException("No type specified for " + fields[f].getSpecification().getFullName());
 					}
 					type = mapper.columnType();
 				} else if (field instanceof OneToOneAssociationSpecification) {
@@ -156,7 +156,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 		return !connection.hasTable(table);
 	}
 
-	private void setupFullMapping(String nakedClassName, Configuration configParameters, String parameterBase) throws SqlObjectStoreException {
+	private void setupFullMapping(String nakedClassName, ConfigurationFactory configParameters, String parameterBase) throws SqlObjectStoreException {
 		FieldSpecification[] allFields = nakedClass.getFields();
 
 		int simpleFieldCount = 0;
@@ -226,7 +226,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 		}
 	}
 
-	private void setupSpecifiedMapping(NakedObjectSpecification nakedClass, Configuration configParameters, String parameterBase) throws SqlObjectStoreException {
+	private void setupSpecifiedMapping(NakedObjectSpecification nakedClass, ConfigurationFactory configParameters, String parameterBase) throws SqlObjectStoreException {
 		Properties columnMappings = configParameters.getProperties(parameterBase + "column");
 		int columnsSize = columnMappings.size();
 		columnNames = new String[columnsSize];
@@ -287,7 +287,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 			if (fieldValue == null) {
 				sb.append("NULL");
 			} else if (fields[i].isValue()) {
-				ValueMapper mapper = typeMapper.mapperFor(fields[i].getType());
+				ValueMapper mapper = typeMapper.mapperFor(fields[i].getSpecification());
                 sb.append(mapper.valueAsDBString((NakedValue) fieldValue));
 			} else {
 				NakedObject ref = (NakedObject) fieldValue;

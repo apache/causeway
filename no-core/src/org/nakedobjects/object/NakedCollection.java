@@ -2,38 +2,8 @@ package org.nakedobjects.object;
 
 import java.util.Enumeration;
 
-import org.nakedobjects.object.control.Permission;
-
 
 public interface NakedCollection extends NakedObject {
-
-    /**
-     * adds <code>object</code> to the collection and notifies all views that
-     * the collection has changed.
-     */
-    void add(NakedObject object);
-
-    void addAll(NakedCollection coll);
-
-    void added(NakedObject object);
-
-    /**
-     * Vetos the addition to this collection if the object being added requests
-     * it. Returns the result of <code>canAddTo()</code> called on the object
-     * reference. Also disallows the addition of itself. By default a collection
-     * can be added to another collection (but not to itself). Any type of
-     * object which wishes to restrict its placement in a collection should
-     * override this method.
-     */
-    Permission canAdd(NakedObject object);
-
-    /**
-     * Vetos the removal from this collection if the object being removed
-     * requests it. Returns the result of <code>canRemoveFrom()</code> called
-     * on the object reference.
-     */
-    Permission canRemove(NakedObject object);
-
     /**
      * Returns true if the logical collection contains the specified object.
      */
@@ -55,29 +25,18 @@ public interface NakedCollection extends NakedObject {
     public Enumeration oids();
 
     /**
-     * removes <code>object</code> from the collection and notifies all views
-     * that the collection has changed.
-     */
-    void remove(NakedObject element);
-
-    /**
-     * Removes all objects from the collection.
-     */
-    public void removeAll();
-
-    void removed(NakedObject element);
-
-    /**
      * Return a NakedCollection of objects which match the specified pattern
      * from within the current collection
      */
 
     int size();
+    
+    void clear();
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

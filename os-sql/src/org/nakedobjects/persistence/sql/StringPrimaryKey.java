@@ -5,6 +5,7 @@ import org.nakedobjects.object.io.TransferableWriter;
 
 
 
+
 public class StringPrimaryKey implements PrimaryKey{
 	private final String primaryKey;
 

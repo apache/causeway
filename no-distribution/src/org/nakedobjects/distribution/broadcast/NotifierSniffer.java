@@ -1,7 +1,7 @@
 
 package org.nakedobjects.distribution.broadcast;
 
-import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.distribution.ObjectUpdateMessage;
 
@@ -78,7 +78,7 @@ public class NotifierSniffer {
         }
 
         if (new java.io.File(config).exists()) {
-            Configuration.getInstance().load(config);
+            ConfigurationFactory.getConfiguration().load(config);
         } else {
             System.out.println("No configuration file found or loaded.");
         }
@@ -91,7 +91,7 @@ public class NotifierSniffer {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

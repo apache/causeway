@@ -1,9 +1,8 @@
 package org.nakedobjects.distribution.client;
 
 import org.nakedobjects.distribution.RequestContext;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedClNakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectSpecification;
 
 
 public class GetInstancesOfClass extends AbstractGetInstances {
@@ -27,7 +26,7 @@ public class GetInstancesOfClass extends AbstractGetInstances {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

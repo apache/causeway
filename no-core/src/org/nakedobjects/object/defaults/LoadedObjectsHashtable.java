@@ -2,24 +2,35 @@ package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.ResolveException;
 import org.nakedobjects.utility.Assert;
 
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 public class LoadedObjectsHashtable implements LoadedObjects {
     private Hashtable loaded = new Hashtable();
     
-    public NakedObject getLoadedObject(Object oid) {
+    public NakedObject getLoadedObject(Oid oid) {
+        if(oid == null) {
+            throw new IllegalArgumentException("OID is null");
+        }   
         return (NakedObject) loaded.get(oid);
     }
 
-    public boolean isLoaded(Object oid) {
+    public boolean isLoaded(Oid oid) {
+        if(oid == null) {
+            throw new IllegalArgumentException("OID is null");
+        }
         return loaded.containsKey(oid);
     }
 
     public void loaded(NakedObject object) throws ResolveException {
-        Object oid = object.getOid();
+        Oid oid = object.getOid();
+        if(oid == null) {
+            throw new IllegalArgumentException("OID is null");
+        }
         Assert.assertFalse("cannot add as loaded object; oid already present", isLoaded(oid));
         Assert.assertFalse("cannot add as loaded object; object already present, but with a different oid", loaded.contains(object));
         loaded.put(oid, object);
@@ -29,13 +40,35 @@ public class LoadedObjectsHashtable implements LoadedObjects {
         Assert.assertTrue("cannot unload object as it is not loaded", loaded.contains(object));
         loaded.remove(object.getOid());
     }
+
+    public Enumeration dirtyObjects() {
+        return new Enumeration() {
+            Enumeration allObjects = loaded.elements();
+            private NakedObject dirtyObject;
+
+            public boolean hasMoreElements() {
+                while (allObjects.hasMoreElements()) {
+                    NakedObject object = (NakedObject) allObjects.nextElement();
+                    if (object.isPersistDirty()) {
+                        dirtyObject = object;
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            public Object nextElement() {
+                return dirtyObject;
+            }
+        };
+    }
 }
 
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -2,8 +2,6 @@ package org.nakedobjects.xat.html;
 
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.xat.Documentor;
 import org.nakedobjects.xat.ParameterValueImpl;
@@ -13,7 +11,6 @@ import org.nakedobjects.xat.TestObject;
 import org.nakedobjects.xat.TestObjectFactory;
 import org.nakedobjects.xat.TestObjectImpl;
 import org.nakedobjects.xat.TestValue;
-import org.nakedobjects.xat.TestValueImpl;
 
 import java.util.Hashtable;
 
@@ -35,10 +32,6 @@ public class HtmlTestObjectFactory implements TestObjectFactory {
         return new HtmlTestObject(new TestObjectImpl(session, field, viewCache, this), documentor);
     }
 
-    public TestValue createTestValue(NakedObject parent, ValueFieldSpecification field) {
-        return new HtmlTestValue(new TestValueImpl(parent, field));
-    }
-
     public void testStarting(String className, String methodName) {
         String name = className.substring(className.lastIndexOf('.') + 1);
         documentor.open(className, name);
@@ -54,7 +47,7 @@ public class HtmlTestObjectFactory implements TestObjectFactory {
         super.finalize();
     }
 
-    public TestValue createParamerTestValue(NakedValue value) {
+    public TestValue createParamerTestValue(Object value) {
         return new ParameterValueImpl(value);
     }
 
@@ -68,7 +61,7 @@ public class HtmlTestObjectFactory implements TestObjectFactory {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

@@ -4,14 +4,12 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
-import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.reflect.MemberSpecification;
-import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
-import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
-import org.nakedobjects.object.reflect.ValueFieldSpecification;
+import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.reflect.NakedObjectMember;
+import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.Debug;
@@ -54,7 +52,7 @@ public class DebugView implements DebugInfo {
         Content content = view.getContent();
         info.append("CONTENT\n");
         info.append("------\n");
-        info.append("Content:      " + (content == null ? "none" : content.debugDetails()) + "\n");
+        info.append("Content:     " + (content == null ? "none" : content.debugDetails()) + "\n");
 
         if(content instanceof ObjectContent) {
         	NakedObject object = ((ObjectContent) content).getObject();
@@ -75,19 +73,16 @@ public class DebugView implements DebugInfo {
         StringBuffer text = new StringBuffer();
 
         if (object != null) {
-            FieldSpecification[] fields = object.getSpecification().getVisibleFields(object, ClientSession.getSession());
+            NakedObjectField[] fields = object.getSpecification().getVisibleFields(object, ClientSession.getSession());
             Session session = ClientSession.getSession();
             for (int i = 0; i < fields.length; i++) {
                 //text.append(" " + attributes[i].toString() + "\n");
-                if (fields[i] instanceof ValueFieldSpecification) {
-                    ValueFieldSpecification f = (ValueFieldSpecification) fields[i];
-                    debugAboutDetail(text, f, f.getAbout(session, (NakedObject) object));
-                } else if (fields[i] instanceof OneToManyAssociationSpecification) {
-                    OneToManyAssociationSpecification f = (OneToManyAssociationSpecification) fields[i];
-                    debugAboutDetail(text, f, f.getAbout(session, (NakedObject) object));
-                } else if (fields[i] instanceof OneToOneAssociationSpecification) {
-                    OneToOneAssociationSpecification f = (OneToOneAssociationSpecification) fields[i];
-                    debugAboutDetail(text, f, f.getAbout(session, (NakedObject) object, null));
+                if (fields[i] instanceof OneToManyAssociation) {
+                    OneToManyAssociation f = (OneToManyAssociation) fields[i];
+                    debugAboutDetail(text, f, f.getHint(session, (NakedObject) object));
+                } else if (fields[i] instanceof OneToOneAssociation) {
+                    OneToOneAssociation f = (OneToOneAssociation) fields[i];
+                    debugAboutDetail(text, f, object.getHint(session, f, null));
                 }
             }
  		}
@@ -96,7 +91,7 @@ public class DebugView implements DebugInfo {
         return text.toString();
     }
 
-    private void debugAboutDetail(StringBuffer text, MemberSpecification member, About about) {
+    private void debugAboutDetail(StringBuffer text, NakedObjectMember member, Hint about) {
         text.append("    " + member.toString() + "\n");
 
         String desc = about.getDescription();
@@ -114,11 +109,7 @@ public class DebugView implements DebugInfo {
 
 
     public String getDebugTitle() {
-        if (view == null) {
-            return "Debug";
-        } else {
-            return "Debug: " + view + "/" + view.getContent();
-        }
+        return "Debug: " + view + view == null ? "" : ("/" + view.getContent());
     }
 
     public String debugGraph(NakedObject object, String name, int level, Vector recursiveElements) {
@@ -170,7 +161,7 @@ public class DebugView implements DebugInfo {
             NakedObjectSpecification spec = object.getSpecification();
             info.append("Class:        " + spec + "\n");
             LOG.debug("Class details for " + spec);
-            if (!(object instanceof NakedClass || object instanceof InstanceCollectionVector)) {
+            if (!(object.getObject() instanceof NakedClass || object.getObject() instanceof InstanceCollectionVector)) {
                 info.append(spec.debugInterface());
             }
         }
@@ -242,28 +233,18 @@ public class DebugView implements DebugInfo {
         recursiveElements.addElement(object);
 
         // work through all its fields
-        FieldSpecification[] fields;
+        NakedObjectField[] fields;
         
         fields = object.getSpecification().getVisibleFields(object, ClientSession.getSession());
 
         for (int i = 0; i < fields.length; i++) {
-            FieldSpecification field = fields[i];
-            Object obj = field.get(object);
+            NakedObjectField field = fields[i];
+            Object obj = object.getField(field);
 
             name = field.getName();
             indent(s, level);
 
-            if (obj instanceof NakedValue) {
-                s.append(name + ": "); // name
-
-                if (obj == null) {
-                    s.append("unitialised - error");
-                    s.append("\n");
-                } else {
-                    s.append(((NakedValue) obj).titleString());
-                    s.append("\n");
-                }
-            } else if (obj instanceof NakedObject) {
+             if (obj instanceof NakedObject) {
                 if (recursiveElements.contains(obj)) {
                     s.append(name + ": " + obj + "*\n");
                 } else {
@@ -292,7 +273,7 @@ public class DebugView implements DebugInfo {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

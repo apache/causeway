@@ -2,14 +2,14 @@ package org.nakedobjects.persistence.sql;
 
 import org.nakedobjects.container.configuration.ComponentException;
 import org.nakedobjects.container.configuration.ComponentLoader;
-import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.persistence.sql.auto.AutoMapper;
@@ -106,7 +106,7 @@ public class ObjectMapperLookup {
             throw new ComponentException("Failed to set up class mapper", e);
         }
 */
-        Properties properties = Configuration.getInstance().getPropertySubset(BASE_NAME + ".mapper");
+        Properties properties = ConfigurationFactory.getConfiguration().getPropertySubset(BASE_NAME + ".mapper");
         Enumeration e = properties.keys();
         while (e.hasMoreElements()) {
             String className = (String) e.nextElement();
@@ -143,7 +143,7 @@ public class ObjectMapperLookup {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

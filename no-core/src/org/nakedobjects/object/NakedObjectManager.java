@@ -93,7 +93,7 @@ public interface NakedObjectManager {
      * </variable> and return <code>true</code> if there are, or
      * <code>false</code> if there are not.
      */
-    boolean hasInstances(NakedObjectSpecification cls);
+    boolean hasInstances(NakedObjectSpecification specification);
 
     /**
      * Initialize the object store so that calls to this object store access
@@ -126,7 +126,7 @@ public interface NakedObjectManager {
     /**
      * A count of the number of instances matching the specified pattern.
      */
-    int numberOfInstances(NakedObjectSpecification cls);
+    int numberOfInstances(NakedObjectSpecification specification);
 
     /**
      * Persists the specified object's state. Essentially the data held by the
@@ -137,7 +137,7 @@ public interface NakedObjectManager {
      * AbstractObjectStore </class> by calling its <method>broadcastObjectUpdate
      * </method> method.
      */
-    void objectChanged(NakedObject object);
+ //   void objectChanged(NakedObject object);
 
     /**
      * Re-initialises the fields of an object. This method should return
@@ -161,11 +161,13 @@ public interface NakedObjectManager {
 
     void startTransaction();
 
+    void saveChanges();
+
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

@@ -1,53 +1,30 @@
-/*
-    Naked Objects - a framework that exposes behaviourally complete
-    business objects directly to the user.
-    Copyright (C) 2000 - 2003  Naked Objects Group Ltd
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-    The authors can be contacted via www.nakedobjects.org (the
-    registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-    Road, Woking GU21 1NR, UK).
-*/
 
 package org.nakedobjects.example.expenses;
 
+import org.nakedobjects.application.value.Money;
+import org.nakedobjects.application.value.TextString;
+
 import java.util.Enumeration;
-
-import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.defaults.AbstractNakedObject;
-import org.nakedobjects.object.defaults.Title;
-import org.nakedobjects.object.defaults.value.Money;
-import org.nakedobjects.object.defaults.value.TextString;
+import java.util.Vector;
 
 
-public class Account extends AbstractNakedObject {
+public class Account extends BaseObject {
     private final TextString accountNumber;
-    private final InternalCollection outStandingClaims;
-    private final InternalCollection claims;
-    private final InternalCollection payments;
+    private final Vector outStandingClaims;
+    private final Vector claims;
+    private final Vector payments;
 
     public Account() {
         accountNumber = new TextString();
-        outStandingClaims = createInternalCollection(Claim.class);
-        claims = createInternalCollection(Claim.class);
-        payments = createInternalCollection(Payment.class);
+        outStandingClaims = new Vector();
+        claims = new Vector();
+        payments = new Vector();
     }
 
-    public Title title() {
-        return new Title(getAccountNumber(), "New Account");
+    public String titleString() {
+       TextString account = getAccountNumber();
+        return account.isEmpty() ? account.titleString() : "New Account";
     }
 
     public Money deriveBalance() {
@@ -69,24 +46,55 @@ public class Account extends AbstractNakedObject {
         return balance;
     }
 
-    public InternalCollection getClaims() {
+    public Vector getClaims() {
         return claims;
     }
 
-    public InternalCollection getPayments() {
+    public void addToClaims(Claim claim) {
+        claims.addElement(claim);
+        objectChanged();
+    }
+
+    public void  removeFromClaims(Claim claim) {
+        claims.removeElement(claim);
+        objectChanged();
+    }
+    
+    public Vector getPayments() {
         return payments;
+    }
+
+    public void addToPayments(Payment payment) {
+        payments.addElement(payment);
+        objectChanged();
+    }
+
+    public void  removeFromPayments(Payment payment) {
+        payments.removeElement(payment);
+        objectChanged();
     }
 
     public TextString getAccountNumber() {
         return accountNumber;
     }
 
-    public InternalCollection getOutStandingClaims() {
+    public Vector getOutStandingClaims() {
         return outStandingClaims;
     }
 
+    public void addToOutStandingClaims(Claim claim) {
+        outStandingClaims.addElement(claim);
+        objectChanged();
+    }
+
+    public void  removeFromOutStandingClaims(Claim claim) {
+        outStandingClaims.removeElement(claim);
+        objectChanged();
+    }
+    
+ 
     public void actionBalanceAccount() {
-        Payment newPayment = (Payment) createInstance(Payment.class);
+        Payment newPayment = new Payment();
         newPayment.getPaymentAmount().setValue(deriveBalance());
         getPayments().add(newPayment);
 
@@ -105,10 +113,33 @@ public class Account extends AbstractNakedObject {
     }
 
     public Payment actionGenerateAdvance() {
-        Payment newPayment = (Payment) createInstance(Payment.class);
-
+        Payment newPayment = new Payment();
         getPayments().add(newPayment);
-
         return newPayment;
     }
 }
+
+
+/*
+Naked Objects - a framework that exposes behaviourally complete
+business objects directly to the user.
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+The authors can be contacted via www.nakedobjects.org (the
+registered address of Naked Objects Group is Kingsway House, 123 Goldworth
+Road, Woking GU21 1NR, UK).
+*/

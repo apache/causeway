@@ -17,21 +17,11 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 
 
-/**
- * Holds the available properties for this Naked Objects session.
- */
-public final class Configuration {
-    private static Configuration instance = new Configuration();
+public class Configuration {
     private static final Logger LOG = Logger.getLogger(Configuration.class);
     private static final String PREFIX = "nakedobjects.";
 
-    /**
-     * Returns the singleton that is to be used to access the properties.
-     */
-    public final static Configuration getInstance() {
-        return instance;
-    }
-
+    /*
     public static void installConfiguration(String resource) throws ConfigurationException {
         Properties p = loadProperties(resource);
         getInstance().load(p);
@@ -41,12 +31,14 @@ public final class Configuration {
         Properties p = loadProperties(resource);
         getInstance().load(p);
     }
-
+*/
     public static Properties loadProperties(String resource) throws ConfigurationException {
 
         try {
-            URL url = Configuration.class.getResource(resource);
-            if (url == null) { throw new ConfigurationException("Configuration resource not found: " + resource); }
+            URL url = ConfigurationFactory.class.getResource(resource);
+            if (url == null) {
+                throw new ConfigurationException("Configuration resource not found: " + resource);
+            }
             return loadProperties(url);
 
         } catch (ConfigurationException e) {
@@ -85,12 +77,18 @@ public final class Configuration {
         } finally {
             try {
                 in.close();
-            } catch (IOException ignore) {
-            }
+            } catch (IOException ignore) {}
         }
     }
 
     private Properties p = new Properties();
+
+    public Configuration() {}
+
+    public Configuration(String file) throws ConfigurationException {
+        Properties p = loadProperties(file);
+        load(p);
+    }
 
     /**
      * Adds a key-value pair to this set of properties
@@ -107,114 +105,123 @@ public final class Configuration {
     }
 
     /**
-     * Gets the boolean value for the specified name where no value or 'on' will result in true
-     * being returned; anything gives false. If no boolean property is specified with this name then
-     * false is returned.
+     * Gets the boolean value for the specified name where no value or 'on' will
+     * result in true being returned; anything gives false. If no boolean
+     * property is specified with this name then false is returned.
      * 
      * @param name
-     *                   the property name
+     *                       the property name
      */
     public boolean getBoolean(String name) {
         return getBoolean(name, false);
     }
 
     /**
-     * Gets the boolean value for the specified name. If no property is specified with this name
-     * then the specified default boolean value is returned.
+     * Gets the boolean value for the specified name. If no property is
+     * specified with this name then the specified default boolean value is
+     * returned.
      * 
      * @param name
-     *                   the property name
+     *                       the property name
      * @param defaultValue
-     *                   the value to use as a default
+     *                       the value to use as a default
      */
     public boolean getBoolean(String name, boolean defaultValue) {
         String value = getProperty(name);
 
-        if (value == null) { return defaultValue; }
+        if (value == null) {
+            return defaultValue;
+        }
 
         return value.equals("on") || value.equals("yes") || value.equals("true") || value.equals("");
     }
 
     /**
-     * Gets the color for the specified name. If no color property is specified with this name then
-     * null is returned.
+     * Gets the color for the specified name. If no color property is specified
+     * with this name then null is returned.
      * 
      * @param name
-     *                   the property name
+     *                       the property name
      */
     public Color getColor(String name) {
         return getColor(name, null);
     }
 
     /**
-     * Gets the color for the specified name. If no color property is specified with this name then
-     * the specified default color is returned.
+     * Gets the color for the specified name. If no color property is specified
+     * with this name then the specified default color is returned.
      * 
      * @param name
-     *                   the property name
+     *                       the property name
      * @param defaultValue
-     *                   the value to use as a default
+     *                       the value to use as a default
      */
     public Color getColor(String name, Color defaultValue) {
         String color = getProperty(name);
 
-        if (color == null) { return defaultValue; }
+        if (color == null) {
+            return defaultValue;
+        }
 
         return Color.decode(color);
     }
 
     /**
-     * Gets the font for the specified name. If no font property is specified with this name then
-     * null is returned.
+     * Gets the font for the specified name. If no font property is specified
+     * with this name then null is returned.
      * 
      * @param name
-     *                   the property name
+     *                       the property name
      */
     public Font getFont(String name) {
         return getFont(name, null);
     }
 
     /**
-     * Gets the font for the specified name. If no font property is specified with this name then
-     * the specified default font is returned.
+     * Gets the font for the specified name. If no font property is specified
+     * with this name then the specified default font is returned.
      * 
      * @param name
-     *                   the property name
+     *                       the property name
      * @param defaultValue
-     *                   the color to use as a default
+     *                       the color to use as a default
      */
     public Font getFont(String name, Font defaultValue) {
         String font = getProperty(name);
 
-        if (font == null) { return defaultValue; }
+        if (font == null) {
+            return defaultValue;
+        }
 
         return Font.decode(font);
     }
 
     /**
-     * Gets the number value for the specified name. If no property is specified with this name then
-     * 0 is returned.
+     * Gets the number value for the specified name. If no property is specified
+     * with this name then 0 is returned.
      * 
      * @param name
-     *                   the property name
+     *                       the property name
      */
     public int getInteger(String name) {
         return getInteger(name, 0);
     }
 
     /**
-     * Gets the nimber value for the specified name. If no property is specified with this name then
-     * the specified default number value is returned.
+     * Gets the nimber value for the specified name. If no property is specified
+     * with this name then the specified default number value is returned.
      * 
      * @param name
-     *                   the property name
+     *                       the property name
      * @param defaultValue
-     *                   the value to use as a default
+     *                       the value to use as a default
      */
     public int getInteger(String name, int defaultValue) {
         String value = getProperty(name);
 
-        if (value == null) { return defaultValue; }
+        if (value == null) {
+            return defaultValue;
+        }
 
         return Integer.valueOf(value).intValue();
     }
@@ -244,8 +251,9 @@ public final class Configuration {
 
     private String getProperty(String name, String defaultValue) {
         String key = fullName(name);
-        if (key.indexOf("..") >= 0) { throw new NakedObjectRuntimeException("property names should not have '..' within them: "
-                + name); }
+        if (key.indexOf("..") >= 0) {
+            throw new NakedObjectRuntimeException("property names should not have '..' within them: " + name);
+        }
         String property = p.getProperty(key, defaultValue);
         LOG.debug("property: " + key + " =  <" + property + ">");
         return property;
@@ -269,9 +277,9 @@ public final class Configuration {
         return modifiedProperties;
     }
 
-     /**
-     * Returns the configuration property with the specified name. If there is no matching property
-     * then null is returned.
+    /**
+     * Returns the configuration property with the specified name. If there is
+     * no matching property then null is returned.
      */
     public String getString(String name) {
         return getProperty(name);
@@ -320,21 +328,25 @@ public final class Configuration {
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2003 Naked Objects Group Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
+ * Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU General Public License along with this program; if
- * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- * 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
- * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address
+ * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
+ * 1NR, UK).
  */

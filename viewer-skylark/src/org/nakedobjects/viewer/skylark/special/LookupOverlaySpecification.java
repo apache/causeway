@@ -35,7 +35,7 @@ class LookupOverlaySpecification extends AbstractCompositeViewSpecification impl
 
     public View createView(final Content content, final ViewAxis axis) {
         ObjectContent field = (ObjectContent) content;
-        NakedObjectSpecification type = field.getType();
+        NakedObjectSpecification type = field.getSpecification();
         NakedObjectManager manager = NakedObjectContext.getDefaultContext().getObjectManager();
         RootCollection instanceContent = new RootCollection(manager.allInstances(type, true));
         return new PlainBackground(new LineBorder(2, new ScrollBorder(super.createView(instanceContent, axis))));
@@ -48,7 +48,7 @@ class LookupOverlaySpecification extends AbstractCompositeViewSpecification impl
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

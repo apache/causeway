@@ -334,6 +334,10 @@ public class AbstractViewDecorator implements View {
     public void limitBoundsWithin(Bounds bounds) {
         wrappedView.limitBoundsWithin(bounds);    
     }
+
+    public void updateView() {
+        wrappedView.updateView();
+    }
     
 }
 
@@ -341,7 +345,7 @@ public class AbstractViewDecorator implements View {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

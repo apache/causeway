@@ -22,7 +22,7 @@ public class ViewerFrame extends Frame implements RenderingArea, ObjectViewingMe
     private static final int WIDTH = 800;
     private static final int Y = 10;
     private static final int X = 50;
-    private final Viewer viewer;
+    private Viewer viewer;
  
     /**
      * Creates a bordered frame.
@@ -93,9 +93,9 @@ public class ViewerFrame extends Frame implements RenderingArea, ObjectViewingMe
 
     public void start() {
         setBounds(X, Y, WIDTH, HEIGHT);
-		show();
         viewer.start();
         viewer.sizeChange();
+    	show();
     }
 
     /**
@@ -107,13 +107,34 @@ public class ViewerFrame extends Frame implements RenderingArea, ObjectViewingMe
     public void update(Graphics g) {
         viewer.paint(g);
     }
+    
+    public void setViewer(Viewer viewer) {
+        this.viewer = viewer;
+    }
+    
+    /**
+	 * Expose as a .NET property
+	 * @property
+	 */
+    public void set_Viewer(Viewer viewer) {
+        this.viewer = viewer;
+    }
+    
+    /**
+	 * Expose as a .NET property
+	 * @property
+	 */
+	public void set_Title(String title) {
+		setTitle(title);
+	}
+
 }
 
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -4,16 +4,15 @@ package org.nakedobjects.distribution.reflect;
 import org.nakedobjects.distribution.ObjectProxy;
 import org.nakedobjects.distribution.ObjectRequest;
 import org.nakedobjects.distribution.RequestContext;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.ActionSpecification.Type;
 import org.nakedobjects.object.security.Certificate;
-import org.nakedobjects.object.security.SecurityContext;
 
 
 public class AboutActionRequest extends ObjectRequest {
@@ -59,7 +58,7 @@ public class AboutActionRequest extends ObjectRequest {
             ActionSpecification action = object.getSpecification().getObjectAction(actionType, actionName, parameterTypes);
    
             SecurityContext context = server.getSecurityContext(certificate);
-			response = (action == null) ? null : action.getAbout(context, object, parameters);
+			response = (action == null) ? null : object.getHint(context, action, parameters);
         } catch (ObjectStoreException e) {
             response = e;
         }
@@ -81,7 +80,7 @@ public class AboutActionRequest extends ObjectRequest {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,15 +1,14 @@
 package org.nakedobjects.distribution.reflect;
 
-import org.apache.log4j.Category;
-
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionSpecification.Type;
-import org.nakedobjects.object.security.SecurityContext;
+
+import org.apache.log4j.Category;
 
 
 public class RemoteAction implements Action {
@@ -45,7 +44,7 @@ public class RemoteAction implements Action {
 	            return null;
 	        }
         } else {
-        	return local.getAbout(context, object, parameters);
+        	return local.getHint(context, object, parameters);
         }
     }
 
@@ -77,7 +76,7 @@ public class RemoteAction implements Action {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -32,7 +32,6 @@ public class NameConvertor {
 			}
 			labelBuffer.append(ch);
         }
-
         return labelBuffer.toString();
     }
 
@@ -45,7 +44,6 @@ public class NameConvertor {
         } else {
             pluralName = name + 's';
         }
-
         return pluralName;
     }
 
@@ -55,7 +53,7 @@ public class NameConvertor {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

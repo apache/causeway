@@ -15,8 +15,8 @@ public class ClassIconGraphic extends IconGraphic {
     }
 
     protected Image iconPicture(NakedObject object) {
-        final NakedClass cls = (NakedClass) object;
-        final NakedObjectSpecification spec = cls.forNakedClass();
+        final NakedClass cls = (NakedClass) object.getObject();
+        final NakedObjectSpecification spec = cls.forObjectType();
         Image icon = loadIcon(spec, "_class");
         if(icon == null) {
             icon = loadIcon(spec, "");
@@ -27,7 +27,7 @@ public class ClassIconGraphic extends IconGraphic {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

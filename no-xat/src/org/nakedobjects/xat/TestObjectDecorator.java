@@ -1,9 +1,7 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.reflect.ActionSpecification;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.reflect.Action;
 
 
 public abstract class TestObjectDecorator implements TestObject {
@@ -81,7 +79,7 @@ public abstract class TestObjectDecorator implements TestObject {
         wrappedObject.assertEmpty(message, fieldName);
     }
 
-    public void assertFieldContains(String fieldName, NakedValue expectedValue) {
+    public void assertFieldContains(String fieldName, Object expectedValue) {
         wrappedObject.assertFieldContains(fieldName, expectedValue);
     }
 
@@ -89,7 +87,7 @@ public abstract class TestObjectDecorator implements TestObject {
         wrappedObject.assertFieldContains(fieldName, expectedValue);
     }
 
-    public void assertFieldContains(String message, String fieldName, NakedValue expectedValue) {
+    public void assertFieldContains(String message, String fieldName, Object expectedValue) {
         wrappedObject.assertFieldContains(message, fieldName, expectedValue);
     }
 
@@ -117,7 +115,7 @@ public abstract class TestObjectDecorator implements TestObject {
         wrappedObject.assertFieldContainsType(message, fieldName, title, expectedType);
     }
 
-    public void assertFieldDoesNotContain(String fieldName, NakedValue testValue) {
+    public void assertFieldDoesNotContain(String fieldName, NakedObject testValue) {
         wrappedObject.assertFieldDoesNotContain(fieldName, testValue);
     }
 
@@ -125,7 +123,7 @@ public abstract class TestObjectDecorator implements TestObject {
         wrappedObject.assertFieldDoesNotContain(fieldName, testValue);
     }
 
-    public void assertFieldDoesNotContain(String message, String fieldName, NakedValue testValue) {
+    public void assertFieldDoesNotContain(String message, String fieldName, NakedObject testValue) {
         wrappedObject.assertFieldDoesNotContain(message, fieldName, testValue);
     }
 
@@ -217,7 +215,7 @@ public abstract class TestObjectDecorator implements TestObject {
         wrappedObject.fieldEntry(name, value);
     }
 
-    public ActionSpecification getAction(String name) {
+    public Action getAction(String name) {
         return wrappedObject.getAction(name);
     }
 
@@ -237,7 +235,7 @@ public abstract class TestObjectDecorator implements TestObject {
         return wrappedObject.getFieldTitle(field);
     }
 
-    public Naked getForObject() {
+    public NakedObject getForObject() {
         return wrappedObject.getForObject();
     }
 
@@ -257,7 +255,7 @@ public abstract class TestObjectDecorator implements TestObject {
         return wrappedObject.invokeAction(name, parameter);
     }
 
-    public void setForObject(Naked object) {
+    public void setForObject(NakedObject object) {
         wrappedObject.setForObject(object);
     }
 
@@ -304,15 +302,11 @@ public abstract class TestObjectDecorator implements TestObject {
     public void assertLastElementInField(String fieldName, TestObject expected) {
         wrappedObject.assertLastElementInField(fieldName, expected);
     }
-    
-    public NakedObjectSpecification getSpecification() {
-        return wrappedObject.getSpecification();
-    }
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

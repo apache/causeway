@@ -2,9 +2,8 @@ package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.MockOid;
-import org.nakedobjects.object.Person;
-import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
-import org.nakedobjects.object.system.TestClock;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.reflect.PojoAdapter;
 
 import junit.framework.TestCase;
 
@@ -18,11 +17,9 @@ public class LoadedObjectsTest extends TestCase {
     }
 
     protected void setUp() throws Exception {
-        new TestClock();
-
         new NakedObjectSpecificationLoaderImpl();
     	NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
-    	NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
+  //  	NakedObjectSpecificationImpl.setReflectorFactory(new InternalReflectorFactory());
 
         lookup = new LoadedObjectsHashtable();
         oid = new MockOid(1);
@@ -33,7 +30,7 @@ public class LoadedObjectsTest extends TestCase {
     }
     
     public void testLoaded() {
-        Person person = new Person();
+        NakedObject person = PojoAdapter.createAdapter(new LoadedObject());
         person.setOid(oid);
         lookup.loaded(person);
 
@@ -41,7 +38,7 @@ public class LoadedObjectsTest extends TestCase {
     }
     
     public void testUnloaded() {
-        Person person = new Person();
+        NakedObject person = PojoAdapter.createAdapter(new LoadedObject());
         person.setOid(oid);
         lookup.loaded(person);
         lookup.unloaded(person);
@@ -54,7 +51,7 @@ public class LoadedObjectsTest extends TestCase {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

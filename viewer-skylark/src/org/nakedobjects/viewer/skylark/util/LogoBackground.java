@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark.util;
 
 import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.viewer.skylark.Background;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Image;
@@ -19,7 +20,7 @@ public class LogoBackground implements Background {
     private Size logoSize;
 
     public LogoBackground() {
-        Configuration cp = Configuration.getInstance();
+        Configuration cp = ConfigurationFactory.getConfiguration();
         String fileName = cp.getString(PARAMETER_BASE + "image", "logo.gif");
         logo = ImageFactory.getInstance().createImage(fileName);
 
@@ -55,7 +56,7 @@ public class LogoBackground implements Background {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

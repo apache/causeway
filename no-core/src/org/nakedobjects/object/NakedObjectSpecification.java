@@ -1,8 +1,9 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.control.ClassAbout;
-import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.reflect.ObjectTitle;
 import org.nakedobjects.object.security.Session;
 
 
@@ -12,20 +13,18 @@ public interface NakedObjectSpecification {
      on the Class object returned using the getJavaType method).
      */
     Naked acquireInstance();
-
-    NakedObject createPattern();
     
-    ClassAbout getClassAbout();
+    Hint getClassAbout();
 
-    ActionSpecification getClassAction(ActionSpecification.Type type, String name);
+    Action getClassAction(Action.Type type, String name);
 
-    ActionSpecification getClassAction(ActionSpecification.Type type, String name, NakedObjectSpecification[] parameters);
+    Action getClassAction(Action.Type type, String name, NakedObjectSpecification[] parameters);
 
-    ActionSpecification[] getClassActions(ActionSpecification.Type type);
+    Action[] getClassActions(Action.Type type);
 
-    FieldSpecification getField(String name);
+    NakedObjectField getField(String name);
 
-    FieldSpecification[] getFields();
+    NakedObjectField[] getFields();
 
     /**
      Returns the name of the NakedClass.  This is the fully qualified name of the Class object that
@@ -33,11 +32,11 @@ public interface NakedObjectSpecification {
      */
     String getFullName();
 
-    ActionSpecification getObjectAction(ActionSpecification.Type type, String name);
+    Action getObjectAction(Action.Type type, String name);
 
-    ActionSpecification getObjectAction(ActionSpecification.Type type, String name, NakedObjectSpecification[] parameters);
+    Action getObjectAction(Action.Type type, String name, NakedObjectSpecification[] parameters);
 
-    ActionSpecification[] getObjectActions(ActionSpecification.Type type);
+    Action[] getObjectActions(Action.Type type);
 
     /**
      Returns the short name (with spacing) for this object in a pluralised form.  The plural from is obtained from the defining classes
@@ -57,14 +56,9 @@ public interface NakedObjectSpecification {
      */
     String getSingularName();
 
-    FieldSpecification[] getVisibleFields(NakedObject object, Session session);
+    NakedObjectField[] getVisibleFields(NakedObject object, Session session);
 
     boolean hasSubclasses();
-
-    /**
-     Returns true if this NakedClass represents a collection -  of, or subclassed from, NakedCollection.
-     */
-    boolean isCollection();
 
     /**
      * Determines if this class respresents the same class, or a subclass, of the specified class. 
@@ -77,6 +71,8 @@ public interface NakedObjectSpecification {
     
     NakedObjectSpecification[] subclasses();
 
+    boolean isLookup();
+
     boolean isAbstract();
 
     boolean isPartOf();
@@ -86,12 +82,22 @@ public interface NakedObjectSpecification {
     boolean isObject();
 
     String debugInterface();
+    
+    ObjectTitle getTitle();
+
+    boolean isParsable();
+
+    boolean isDirty(NakedObject object);
+
+    void clearDirty(NakedObject object);
+
+    void markDirty(NakedObject object);
 }
 
 /*
  Naked Objects - a framework that exposes behaviourally complete
  business objects directly to the user.
- Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+ Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

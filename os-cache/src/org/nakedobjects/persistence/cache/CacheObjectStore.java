@@ -1,6 +1,6 @@
 package org.nakedobjects.persistence.cache;
 
-import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedClass;
@@ -65,7 +65,7 @@ public class CacheObjectStore implements NakedObjectStore {
     }
 
     public CacheObjectStore() {
-        String dir = Configuration.getInstance().getString("cache-object-store.directory", "tmp/cache-data");
+        String dir = ConfigurationFactory.getConfiguration().getString("cache-object-store.directory", "tmp/cache-data");
         setDirectory(dir);
     }
 
@@ -124,7 +124,7 @@ public class CacheObjectStore implements NakedObjectStore {
         }
     }
 
-    public void createNakedClass(NakedClass cls) throws ObjectStoreException {
+    public void createNakedClass(NakedObject cls) throws ObjectStoreException {
         String className = cls.getName();
         if(objectSets.containsKey(className)) {
             throw new NakedObjectRuntimeException("Class already created: " + cls);
@@ -508,7 +508,7 @@ public class CacheObjectStore implements NakedObjectStore {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2003 Naked Objects Group Ltd
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the

@@ -1,5 +1,6 @@
 package org.nakedobjects.object;
 
+import java.util.Enumeration;
 import java.util.Vector;
 
 import junit.framework.Assert;
@@ -9,7 +10,7 @@ public class MockLoadedObjects implements LoadedObjects {
     private boolean isLoaded;
     private Vector loadedObjects;
     
-    public NakedObject getLoadedObject(Object oid) {
+    public NakedObject getLoadedObject(Oid oid) {
         if(loadedObjects == null) {
             Assert.fail("No loaded objects");
         }
@@ -21,7 +22,7 @@ public class MockLoadedObjects implements LoadedObjects {
         return loadedObject;
     }
 
-    public boolean isLoaded(Object oid) {
+    public boolean isLoaded(Oid oid) {
         return isLoaded;
     }
 
@@ -54,12 +55,16 @@ public class MockLoadedObjects implements LoadedObjects {
 			return;
 		Assert.fail("action " + i + " expected: <" + expected + "> but was: <" +actual + ">");
     }
+
+    public Enumeration dirtyObjects() {
+        return null;
+    }
 }
 
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2004 Naked Objects Group Ltd
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the

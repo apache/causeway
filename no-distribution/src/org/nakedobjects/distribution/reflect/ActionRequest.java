@@ -5,15 +5,14 @@ import org.nakedobjects.distribution.ObjectProxy;
 import org.nakedobjects.distribution.ObjectRequest;
 import org.nakedobjects.distribution.RequestContext;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedClNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
 import org.nakedobjects.object.io.Memento;
-import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.ActionSpecification.Type;
 
 import java.util.Enumeration;
@@ -80,7 +79,7 @@ public class ActionRequest extends ObjectRequest {
             }
             
             ActionSpecification action = object.getSpecification().getObjectAction(actionType, actionName, parameterTypes);
-            NakedObject result = action.execute(object, parameters);
+            NakedObject result = object.execute(action, parameters);
 
             
             if(result == null) {
@@ -120,7 +119,7 @@ public class ActionRequest extends ObjectRequest {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

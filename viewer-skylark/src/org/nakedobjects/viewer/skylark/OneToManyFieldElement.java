@@ -1,11 +1,11 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Allow;
-import org.nakedobjects.object.control.defaults.Veto;
-import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 import org.nakedobjects.viewer.skylark.basic.RemoveOneToManyAssociationOption;
@@ -21,7 +21,7 @@ public class OneToManyFieldElement extends ObjectField implements ObjectContent 
 	        return element;
 	    }
 
-	public OneToManyFieldElement(NakedObject parent, NakedObject element, OneToManyAssociationSpecification association) {
+	public OneToManyFieldElement(NakedObject parent, NakedObject element, OneToManyAssociation association) {
 		super(parent, association);
 	        this.element = element;
 	}
@@ -30,8 +30,8 @@ public class OneToManyFieldElement extends ObjectField implements ObjectContent 
 		return super.debugDetails() +  "  element:" + element + "\n";  
 	}
 	
-	private OneToManyAssociationSpecification getOneToManyAssociation() {
-		return (OneToManyAssociationSpecification) getField();
+	private OneToManyAssociation getOneToManyAssociation() {
+		return (OneToManyAssociation) getField();
 	}
 
 	public void menuOptions(MenuOptionSet options) {
@@ -46,7 +46,7 @@ public class OneToManyFieldElement extends ObjectField implements ObjectContent 
 	
 	public void clear() {
     	NakedObject parentObject = getParent();
-		OneToManyAssociationSpecification association = getOneToManyAssociation();
+		OneToManyAssociation association = getOneToManyAssociation();
         NakedObject associatedObject = getObject();
         LOG.debug("Remove " + associatedObject + " from " + parentObject);
         association.clearAssociation(parentObject, associatedObject);
@@ -62,12 +62,12 @@ public class OneToManyFieldElement extends ObjectField implements ObjectContent 
         
 	}
 
-    public Permission canClear() {
+    public Consent canClear() {
     	NakedObject parentObject = getParent();
-		OneToManyAssociationSpecification association = getOneToManyAssociation();
+		OneToManyAssociation association = getOneToManyAssociation();
         NakedObject associatedObject = getObject();
-        About about = association.getAbout(ClientSession.getSession(), parentObject, associatedObject, false);
-        Permission edit = about.canUse();
+        Hint about = association.getHint(ClientSession.getSession(), parentObject, associatedObject, false);
+        Consent edit = about.canUse();
         if (edit.isAllowed()) {
             String status = "Clear the association to this object from '" + parentObject.titleString() + "'";
             return new Allow(status);
@@ -76,7 +76,7 @@ public class OneToManyFieldElement extends ObjectField implements ObjectContent 
         }
     }
     
-    public Permission canSet(NakedObject dragSource) {
+    public Consent canSet(NakedObject dragSource) {
         return Veto.DEFAULT; 
    }
     
@@ -88,7 +88,7 @@ public class OneToManyFieldElement extends ObjectField implements ObjectContent 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

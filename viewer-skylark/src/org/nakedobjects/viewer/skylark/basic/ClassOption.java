@@ -1,36 +1,36 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.reflect.ActionSpecification;
+import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 
 
 public class ClassOption {
     public static void menuOptions(NakedObjectSpecification specificaton, MenuOptionSet menuOptionSet) {
-        NakedClass nakedClass = NakedObjectContext.getDefaultContext().getObjectManager().getNakedClass(specificaton);
+        PojoAdapter nakedClass = PojoAdapter.createAdapter(NakedObjectContext.getDefaultContext().getObjectManager().getNakedClass(specificaton));
         
-        ActionSpecification[] actions;
-        actions = specificaton.getClassActions(ActionSpecification.USER);
+        Action[] actions;
+        actions = specificaton.getClassActions(Action.USER);
         for (int i = 0; i < actions.length; i++) {
             addOption(nakedClass, menuOptionSet, actions[i], MenuOptionSet.OBJECT);
         }
         
-        actions = nakedClass.getSpecification().getObjectActions(ActionSpecification.USER);
+        actions = nakedClass.getSpecification().getObjectActions(Action.USER);
         for (int i = 0; i < actions.length; i++) {
             addOption(nakedClass, menuOptionSet, actions[i], MenuOptionSet.OBJECT);
         }
         
-        actions = specificaton.getClassActions(ActionSpecification.EXPLORATION);
+        actions = specificaton.getClassActions(Action.EXPLORATION);
         if (actions.length > 0) {
             for (int i = 0; i < actions.length; i++) {
                 addOption(nakedClass, menuOptionSet, actions[i], MenuOptionSet.EXPLORATION);
             }
         }
         
-        actions = nakedClass.getSpecification().getObjectActions(ActionSpecification.EXPLORATION);
+        actions = nakedClass.getSpecification().getObjectActions(Action.EXPLORATION);
         if (actions.length > 0) {
             for (int i = 0; i < actions.length; i++) {
                 addOption(nakedClass, menuOptionSet, actions[i], MenuOptionSet.EXPLORATION);
@@ -38,7 +38,7 @@ public class ClassOption {
         }
     }
     
-    private static void addOption(NakedClass cls, MenuOptionSet menuOptionSet, ActionSpecification action, int type) {
+    private static void addOption(PojoAdapter cls, MenuOptionSet menuOptionSet, Action action, int type) {
         MenuOption option;
         if (action.parameters().length == 0) {
             option = ImmediateObjectOption.createOption(action, cls);
@@ -54,7 +54,7 @@ public class ClassOption {
 /*
  Naked Objects - a framework that exposes behaviourally complete
  business objects directly to the user.
- Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+ Copyright (C) 2000 - 2005  Naked Objects Group Ltd
  
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

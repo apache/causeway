@@ -1,6 +1,16 @@
 
 package org.nakedobjects.object;
 
+import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.NakedObjectAssociation;
+import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.ActionParameterSet;
+import org.nakedobjects.object.security.Session;
+
+
+
 
 /**
  * Definition of an naked reference object.
@@ -25,6 +35,8 @@ public interface NakedObject extends Naked {
 
     String getIconName();
 
+    Object getObject();
+    
     /**
      * The objects unique id. This id allows the object to added to, stored by,
      * and retrieved from the object store.
@@ -37,6 +49,8 @@ public interface NakedObject extends Naked {
      */
     boolean isResolved();
 
+    boolean isParsable();
+    
     /**
      * Returns true when the object is persistent.
      */
@@ -55,11 +69,46 @@ public interface NakedObject extends Naked {
     NakedObjectContext getContext();
     
     void setContext(NakedObjectContext context);
+
+    boolean isEmpty(NakedObjectField field);
+
+    void clear(OneToOneAssociation specification);
+
+    NakedObject getField(NakedObjectField field);
+
+    void setAssociation(NakedObjectAssociation field, NakedObject associatedObject);
+    
+    void initAssociation(NakedObjectAssociation field, NakedObject associatedObject);
+
+   void setValue(OneToOneAssociation field, Object object);
+   
+   void initValue(OneToOneAssociation field, Object object);
+
+    String getLabel(Session session, NakedObjectField field);
+
+    String getLabel(Session session, Action action);
+
+    void parseTextEntry(OneToOneAssociation specification, String text) throws TextEntryParseException, InvalidEntryException;
+
+    void initOneToManyAssociation(OneToManyAssociation association, NakedObject[] instances);
+
+    void markDirty();
+    
+    void clearViewDirty();
+    
+    boolean isViewDirty();
+    
+    boolean isPersistDirty();
+    
+    ActionParameterSet getParameters(Session session, Action action, NakedObjectSpecification[] parameterTypes);
+
+    void clearPersistDirty();
+
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

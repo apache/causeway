@@ -3,8 +3,9 @@ package org.nakedobjects.xat;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.object.reflect.NakedObjectSpecificationException;
+import org.nakedobjects.object.NakedObjectSpecificationException;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NameConvertor;
 import org.nakedobjects.object.security.Session;
 
@@ -20,14 +21,14 @@ abstract class AbstractTestObject {
         this.factory = factory;
     }
     
-    public abstract Naked getForObject();
+    public abstract NakedObject getForObject();
       
     /**
      Return the title sting from the object this mock is showing
      */
     public abstract String getTitle();
     
-    public abstract void setForObject(Naked object);
+    public abstract void setForObject(NakedObject object);
 
     
 
@@ -37,16 +38,16 @@ abstract class AbstractTestObject {
      * a menu item.
      */
     public TestObject invokeAction(final String name) {
-        ActionSpecification action = getAction(name);
+        Action action = getAction(name);
         assertActionUsable(name, action, new TestNaked[0]);
         assertActionVisible(name, action, new TestNaked[0]);
 
-        NakedObject result = action.execute((NakedObject) getForObject());
+        NakedObject result = getForObject().execute(action, null);
         return ((result == null) ? null : factory.createTestObject(session, result));
     }
 
     public TestObject invokeAction(final String name, final TestNaked[] parameters) {
-        ActionSpecification action = getAction(simpleName(name), parameters);
+        Action action = getAction(simpleName(name), parameters);
         assertActionUsable(name, action, parameters);
         assertActionVisible(name, action, parameters);
 
@@ -57,7 +58,7 @@ abstract class AbstractTestObject {
         allowed = action.getAbout(session, (NakedObject) getForObject(), parameterObjects).canAccess().isAllowed();
         assertTrue("action '" + name + "' is invisible", allowed);
 */
-        NakedObject result = action.execute((NakedObject) getForObject(), parameterObjects);
+        NakedObject result = getForObject().execute(action, parameterObjects);
         if (result == null) {
             return null;
         } else {
@@ -104,8 +105,8 @@ abstract class AbstractTestObject {
         assertActionInvisible(name, getAction(name), new TestNaked[0]);
     }
 
-    private void assertActionInvisible(String name, ActionSpecification action, TestNaked[] parameters) {
-        boolean vetoed = action.getAbout(session, (NakedObject) getForObject(), nakedObjects(parameters)).canAccess().isVetoed();
+    private void assertActionInvisible(String name, Action action, TestNaked[] parameters) {
+        boolean vetoed = getForObject().getHint(session, action, nakedObjects(parameters)).canAccess().isVetoed();
         Assert.assertTrue("action '" + name + "' is visible", vetoed);
     }
 
@@ -121,9 +122,9 @@ abstract class AbstractTestObject {
         assertActionUnusable(name, getAction(name), new TestNaked[0]);
     }
 
-    private void assertActionUnusable(String name, ActionSpecification action, TestNaked[] parameters) {
+    private void assertActionUnusable(String name, Action action, TestNaked[] parameters) {
         Naked[] parameterObjects = nakedObjects(parameters);
-        boolean vetoed = action.getAbout(session, (NakedObject) getForObject(), parameterObjects).canUse().isVetoed();
+        boolean vetoed = getForObject().getHint(session, action, parameterObjects).canUse().isVetoed();
         Assert.assertTrue("action '" + name + "' is usable", vetoed);
     }
 
@@ -139,10 +140,11 @@ abstract class AbstractTestObject {
         assertActionUsable(name, getAction(name), new TestNaked[0]);
     }
 
-    protected void assertActionUsable(String name, ActionSpecification action, final TestNaked[] parameters) {
+    protected void assertActionUsable(String name, Action action, final TestNaked[] parameters) {
         Naked[] paramaterObjects = nakedObjects(parameters);
-        boolean allowed = action.getAbout(session, (NakedObject) getForObject(), paramaterObjects).canUse().isAllowed();
-        assertTrue("action '" + name + "' is unusable", allowed);
+        Consent canUse = getForObject().getHint(session, action, paramaterObjects).canUse();
+        boolean allowed = canUse.isAllowed();
+        assertTrue("action '" + name + "' is unusable: " + canUse.getReason(), allowed);
     }
 
     public void assertActionUsable(String name, TestNaked[] parameters) {
@@ -157,8 +159,8 @@ abstract class AbstractTestObject {
         assertActionVisible(name, getAction(name), new TestNaked[0]);
     }
 
-    protected void assertActionVisible(String name, ActionSpecification action, TestNaked[] parameters) {
-        boolean allowed = action.getAbout(session, (NakedObject) getForObject(), nakedObjects(parameters)).canAccess()
+    protected void assertActionVisible(String name, Action action, TestNaked[] parameters) {
+        boolean allowed = getForObject().getHint(session, action, nakedObjects(parameters)).canAccess()
                 .isAllowed();
         assertTrue("action '" + name + "' is invisible", allowed);
     }
@@ -177,8 +179,8 @@ abstract class AbstractTestObject {
         assertActionVisible(name, new TestNaked[] {parameter});
     }
 
-    public ActionSpecification getAction(final String name) {
-        ActionSpecification action = null;
+    public Action getAction(final String name) {
+        Action action = null;
     
         try {
             NakedObjectSpecification nakedClass = ((NakedObject) getForObject()).getSpecification();
@@ -192,25 +194,25 @@ abstract class AbstractTestObject {
         return action;
     }
 
-    protected abstract ActionSpecification getAction(NakedObjectSpecification spec, final String name);
+    protected abstract Action getAction(NakedObjectSpecification specification, final String name);
 
-    public ActionSpecification getAction(final String name, final TestNaked[] parameters) {
-   //     final Naked[] parameterObjects = nakedObjects(parameters);
+    public Action getAction(final String name, final TestNaked[] parameters) {
+        final Naked[] parameterObjects = nakedObjects(parameters);
         final int noParameters = parameters.length;
         final NakedObjectSpecification[] parameterClasses = new NakedObjectSpecification[noParameters];
         for (int i = 0; i < noParameters; i++) {
-            parameterClasses[i] = parameters[i].getSpecification();
+            parameterClasses[i] = parameterObjects[i].getSpecification();
         }
     
         try {
             NakedObjectSpecification nakedClass = ((NakedObject) getForObject()).getSpecification();
-            ActionSpecification action = getAction(nakedClass, name, parameterClasses);
+            Action action = getAction(nakedClass, name, parameterClasses);
             if (action == null) {
                 String parameterList = "";
                 for (int i = 0; i < noParameters; i++) {
                     parameterList += (i > 0 ? ", " : "") + parameterClasses[i].getFullName();
                 }
-                throw new NakedAssertionFailedError("Method not found: " + name + "(" + parameterList + ")");
+                throw new NakedAssertionFailedError("Method not found: " + name + "(" + parameterList + ") in " + nakedClass.getFullName());
             }
             return action;
         } catch (NakedObjectSpecificationException e) {
@@ -224,7 +226,7 @@ abstract class AbstractTestObject {
         }
     }
 
-    protected abstract ActionSpecification getAction(NakedObjectSpecification nakedClass, final String name, final NakedObjectSpecification[] parameterClasses);
+    protected abstract Action getAction(NakedObjectSpecification nakedClass, final String name, final NakedObjectSpecification[] parameterClasses);
        
     protected Naked[] nakedObjects(TestNaked[] parameters) {
         Naked[] parameterObjects = new Naked[parameters.length];
@@ -243,7 +245,7 @@ abstract class AbstractTestObject {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

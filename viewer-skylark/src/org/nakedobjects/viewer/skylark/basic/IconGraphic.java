@@ -116,7 +116,7 @@ public class IconGraphic {
      */
     protected Image iconPicture(final NakedObject object) {
         // work through class, and superclass, names of the object
-        NakedObjectSpecification specification = object instanceof NakedClass ? ((NakedClass) object).forNakedClass() : object
+        NakedObjectSpecification specification = object.getObject() instanceof NakedClass ? ((NakedClass) object.getObject()).forObjectType() : object
                 .getSpecification();
         return loadIcon(specification, "");
     }
@@ -150,7 +150,7 @@ public class IconGraphic {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

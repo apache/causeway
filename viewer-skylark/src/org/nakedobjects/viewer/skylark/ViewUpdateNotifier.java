@@ -1,10 +1,5 @@
 package org.nakedobjects.viewer.skylark;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-
-import org.apache.log4j.Logger;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
@@ -12,6 +7,12 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.UpdateNotifier;
 import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.utility.NotImplementedException;
+
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import org.apache.log4j.Logger;
 
 
 public class ViewUpdateNotifier implements UpdateNotifier, DebugInfo {
@@ -33,8 +34,9 @@ public class ViewUpdateNotifier implements UpdateNotifier, DebugInfo {
                     views.put(object, viewsToNotify);
                 }
 
-                if (viewsToNotify.contains(view)) { throw new NakedObjectRuntimeException(view
-                        + " already being notified"); }
+                if (viewsToNotify.contains(view)) {
+                    throw new NakedObjectRuntimeException(view + " already being notified");
+                }
                 viewsToNotify.addElement(view);
                 LOG.debug("Added " + view + " to observers for " + object);
             }
@@ -108,18 +110,32 @@ public class ViewUpdateNotifier implements UpdateNotifier, DebugInfo {
                     LOG.debug("Removed observer list for " + object);
                 }
             } else {
-                throw new NakedObjectRuntimeException("Tried to remove a non-existant view " + view
-                        + " from observers for " + object);
+                throw new NakedObjectRuntimeException("Tried to remove a non-existant view " + view + " from observers for "
+                        + object);
             }
         }
     }
 
     public void shutdown() {}
-}
 
+    public void checkViewsForUpdates() {
+        Enumeration objects = views.keys();
+        while (objects.hasMoreElements()) {
+            NakedObject object = (NakedObject) objects.nextElement();
+            if (object.isViewDirty()) {
+                Enumeration e = ((Vector) views.get(object)).elements();
+                while (e.hasMoreElements()) {
+                    View view = (View) e.nextElement();
+                    view.invalidateContent();
+                }
+                object.clearViewDirty();
+            }
+        }
+    }
+}
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

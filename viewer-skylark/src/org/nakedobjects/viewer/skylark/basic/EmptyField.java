@@ -1,11 +1,9 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.Lookup;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
@@ -28,16 +26,15 @@ import org.nakedobjects.viewer.skylark.util.ImageFactory;
 public class EmptyField extends AbstractView {
 
     public static class Specification implements ViewSpecification {
-        private static final NakedObjectSpecification LOOKUP = NakedObjectSpecificationLoader.getInstance().loadSpecification(Lookup.class);
-
         public boolean canDisplay(Naked object) {
             return object == null;
         }
 
         public View createView(Content content, ViewAxis axis) {
             EmptyField emptyField = new EmptyField(content, this, axis);
-            NakedObjectSpecification contentType = content.getType();
-            if(contentType.isOfType(LOOKUP)) {
+            NakedObjectSpecification contentType = content.getSpecification();
+            if(contentType.isLookup()) {
+//            if (((ObjectContent) content).getObject() instanceof Lookup) {
                 return new ObjectBorder(new LookupBorder(emptyField));
             } else {
                 return new ObjectBorder(emptyField);
@@ -74,14 +71,14 @@ public class EmptyField extends AbstractView {
         }
     }
 
-    private Permission canDrop(NakedObject dragSource) {
+    private Consent canDrop(NakedObject dragSource) {
         ObjectContent content = (ObjectContent) getContent();
         return content.canSet(dragSource);
     }
 
     public void dragIn(ContentDrag drag) {
         NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
-        Permission perm = canDrop(source);
+        Consent perm = canDrop(source);
         if (perm.getReason() != null) {
             getViewManager().setStatus(perm.getReason());
         }
@@ -175,7 +172,7 @@ public class EmptyField extends AbstractView {
     }
 
     private String name() {
-        return ((ObjectContent) getContent()).getType().getSingularName();
+        return ((ObjectContent) getContent()).getSpecification().getSingularName();
     }
 
     /**
@@ -211,7 +208,7 @@ public class EmptyField extends AbstractView {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

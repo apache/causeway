@@ -7,8 +7,8 @@ import org.nakedobjects.distribution.RequestContext;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 
 
 public class DissociateRequest extends ObjectRequest {
@@ -40,7 +40,7 @@ public class DissociateRequest extends ObjectRequest {
             if (att == null) {
                 throw new IllegalStateException("DeleteElementMessage has invalid Field: " + name);
             }
-            ((OneToOneAssociationSpecification) att).clearAssociation(object, value.recreateObject(server.getLoadedObjects()));
+            object.clear(att, value.recreateObject(server.getLoadedObjects()));
         } catch (ObjectStoreException e) {
             response = e;
         }
@@ -54,7 +54,7 @@ public class DissociateRequest extends ObjectRequest {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

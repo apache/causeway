@@ -43,10 +43,10 @@ public class AssociateRequest extends ObjectRequest {
             // set value
             if (value == null) {
                 //	store.setObjectAttribute(object, field, null);
-                field.setAssociation(object, null);
+                object.setAssociation(field, null);
             } else {
                 //	store.setObjectAttribute(object, field, store.getObject(value));
-                field.setAssociation(object, value.recreateObject(server.getLoadedObjects()));
+                object.setAssociation(field, value.recreateObject(server.getLoadedObjects()));
             }
         } catch (ObjectStoreException e) {
             response = e;
@@ -61,7 +61,7 @@ public class AssociateRequest extends ObjectRequest {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

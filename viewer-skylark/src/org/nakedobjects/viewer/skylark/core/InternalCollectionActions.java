@@ -3,10 +3,10 @@ package org.nakedobjects.viewer.skylark.core;
 import org.nakedobjects.object.Aggregated;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Veto;
-import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -22,7 +22,7 @@ public class InternalCollectionActions extends CollectionActions {
     public void dragIn(ContentDrag drag) {
         NakedObject object = ((ObjectContent) drag.getSourceContent()).getObject();
         NakedObject parent = ((ObjectContent) getParent().getContent()).getObject();
-        Permission perm = canDrop(parent, object);
+        Consent perm = canDrop(parent, object);
         if (perm.isVetoed()) {
             getState().setCantDrop();
             getViewManager().setStatus(perm.getReason());
@@ -31,8 +31,8 @@ public class InternalCollectionActions extends CollectionActions {
         }
     }
 
-    private Permission canDrop(NakedObject parent, NakedObject object) {
-        InternalCollection collection = (InternalCollection) getAssociation().get(parent);
+    private Consent canDrop(NakedObject parent, NakedObject object) {
+        InternalCollection collection = (InternalCollection) parent.getField(getAssociation());
         if(!object.getSpecification().isOfType(collection.getElementSpecification())) {
             return new Veto("Only objects of type " + collection.getElementSpecification().getSingularName() + " are allowed in this collection");
         }
@@ -45,7 +45,7 @@ public class InternalCollectionActions extends CollectionActions {
                 return new Veto("Object is already associated with another object: " + aggregated.parent());
             }
         }
-        About about = getAssociation().getAbout(ClientSession.getSession(), parent, object, true);
+        Hint about = getAssociation().getHint(ClientSession.getSession(), parent, object, true);
         return about.canUse();
     }
 
@@ -58,17 +58,17 @@ public class InternalCollectionActions extends CollectionActions {
     public void drop(ContentDrag drag) {
         NakedObject object = ((ObjectContent) drag.getSourceContent()).getObject();
         NakedObject parent = ((ObjectContent) getParent().getContent()).getObject();
-        Permission perm = canDrop(parent, object);
+        Consent perm = canDrop(parent, object);
         if (perm.isAllowed()) {
-	        getAssociation().setAssociation(parent, object);
+	        parent.setAssociation(getAssociation(), object);
 	        layout();
         }
     }
 
 
-    private OneToManyAssociationSpecification getAssociation() {
+    private OneToManyAssociation getAssociation() {
         OneToManyField content = (OneToManyField) getContent();
-        return (OneToManyAssociationSpecification) content.getField();
+        return (OneToManyAssociation) content.getField();
     }
     
     public String toString() {
@@ -80,7 +80,7 @@ public class InternalCollectionActions extends CollectionActions {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -2,15 +2,15 @@ package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.security.ClientSession;
 
 
 public abstract class ObjectField implements Content, FieldContent {
-    private final FieldSpecification field;
+    private final NakedObjectField field;
     private final NakedObject parent;
 
-    public ObjectField(NakedObject parent, FieldSpecification field) {
+    public ObjectField(NakedObject parent, NakedObjectField field) {
         this.parent = parent;
         this.field = field;
     }
@@ -18,23 +18,23 @@ public abstract class ObjectField implements Content, FieldContent {
     public String debugDetails() {
         String type = getClass().getName();
         type = type.substring(type.lastIndexOf('.') + 1);
-        return type + "\n" + "  field:" + getField() + "\n";
+        return type + "\n" + "  field:     " + getField() + "\n";
     }
 
-    public FieldSpecification getField() {
+    public NakedObjectField getField() {
         return field;
     }
 
     public final String getName() {
-        return field.getLabel(ClientSession.getSession(), parent);
+        return parent.getLabel(ClientSession.getSession(), field);
     }
 
     public NakedObject getParent() {
         return parent;
     }
 
-    public NakedObjectSpecification getType() {
-        return field.getType();
+    public NakedObjectSpecification getSpecification() {
+        return field.getSpecification();
     }
 
     public void menuOptions(MenuOptionSet options) {}
@@ -43,7 +43,7 @@ public abstract class ObjectField implements Content, FieldContent {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

@@ -3,8 +3,8 @@ package org.nakedobjects.viewer.skylark;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Veto;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 
 
@@ -15,11 +15,11 @@ public class RootObject implements ObjectContent {
         this.object = object;
     }
 
-    public Permission canClear() {
+    public Consent canClear() {
         return Veto.DEFAULT;
     }
 
-    public Permission canSet(NakedObject dragSource) {
+    public Consent canSet(NakedObject dragSource) {
         return Veto.DEFAULT;
     }
 
@@ -41,7 +41,7 @@ public class RootObject implements ObjectContent {
         return object;
     }
 
-    public NakedObjectSpecification getType() {
+    public NakedObjectSpecification getSpecification() {
         return object.getSpecification();
     }
 
@@ -60,7 +60,7 @@ public class RootObject implements ObjectContent {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

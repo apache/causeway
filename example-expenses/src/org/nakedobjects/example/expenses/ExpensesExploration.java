@@ -1,16 +1,15 @@
-
 package org.nakedobjects.example.expenses;
 
-import org.nakedobjects.container.exploration.Exploration;
-import org.nakedobjects.object.exploration.AbstractExplorationFixture;
-import org.nakedobjects.object.security.User;
+import org.nakedobjects.application.control.User;
+import org.nakedobjects.example.exploration.DefaultExploration;
+import org.nakedobjects.example.exploration.JavaAbstractExplorationFixture;
 
 
-public class ExpensesExploration extends Exploration {
+public class ExpensesExploration extends DefaultExploration {
     static String configFile;
 
     public void setUpFixtures() {
-        addFixture(new AbstractExplorationFixture() {
+        addFixture(new JavaAbstractExplorationFixture() {
 
             public void install() {
                 registerClass(Employee.class);
@@ -18,44 +17,42 @@ public class ExpensesExploration extends Exploration {
                 registerClass(Expense.class);
                 registerClass(Claim.class);
 
-                if (needsInstances(Employee.class)) {
-                    User user = (User) createInstance(User.class);
-                    user.getName().setValue("expenses");
-                    ExpensesContext context = new ExpensesContext();
-                    context.created();
-                    context.associateUser(user);
+                User user = new User();
+                user.getName().setValue("expenses");
+                ExpensesContext context = new ExpensesContext();
+                context.created();
+                //   context.associateUser(user);
 
-                    Employee newUser;
+                Employee newUser;
 
-                    newUser = (Employee) createInstance(Employee.class);
-                    newUser.getFirstName().setValue("Jeff");
-                    newUser.getSurname().setValue("Swords");
+                newUser = (Employee) createInstance(Employee.class);
+                newUser.getFirstName().setValue("Jeff");
+                newUser.getSurname().setValue("Swords");
 
-                    newUser = (Employee) createInstance(Employee.class);
-                    newUser.getFirstName().setValue("Dawn");
-                    newUser.getSurname().setValue("Behan");
+                newUser = (Employee) createInstance(Employee.class);
+                newUser.getFirstName().setValue("Dawn");
+                newUser.getSurname().setValue("Behan");
 
-                    newUser = (Employee) createInstance(Employee.class);
-                    newUser.getFirstName().setValue("Enda");
-                    newUser.getSurname().setValue("Brady");
+                newUser = (Employee) createInstance(Employee.class);
+                newUser.getFirstName().setValue("Enda");
+                newUser.getSurname().setValue("Brady");
 
-                    newUser.getAccount().getAccountNumber().setValue("3324531");
+                newUser.getAccount().getAccountNumber().setValue("3324531");
 
-                    Project newProject;
+                Project newProject;
 
-                    newProject = (Project) createInstance(Project.class);
-                    newProject.getName().setValue("Rural");
+                newProject = (Project) createInstance(Project.class);
+                newProject.getName().setValue("Rural");
 
-                    newUser.associateProjects(newProject);
+                newUser.addToProjects(newProject);
 
-                    newProject = (Project) createInstance(Project.class);
-                    newProject.getName().setValue("Irish Life");
+                newProject = (Project) createInstance(Project.class);
+                newProject.getName().setValue("Irish Life");
 
-                    newUser.associateProjects(newProject);
+                newUser.addToProjects(newProject);
 
-                    newProject = (Project) createInstance(Project.class);
-                    newProject.getName().setValue("AIA");
-                }
+                newProject = (Project) createInstance(Project.class);
+                newProject.getName().setValue("AIA");
             }
         });
 
@@ -78,7 +75,7 @@ public class ExpensesExploration extends Exploration {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

@@ -1,10 +1,9 @@
 package org.nakedobjects.viewer.skylark.value;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.ValueContent;
+import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 
 
@@ -17,23 +16,29 @@ public abstract class AbstractValueOption extends MenuOption {
 		super(name);
 	}
 	
-    protected NakedValue getValue(View view) {
-		ValueContent vc = (ValueContent) view.getContent();
-        NakedValue value = vc.getValue();
+    protected NakedObject getValue(View view) {
+		ValueField vc = (ValueField) view.getContent();
+        NakedObject value = vc.getObject();
 		return value;
 	}
 
 	protected void updateParent(View view) {
        NakedObject valueObject = ((ObjectContent) view.getParent().getParent().getContent()).getObject();
-       valueObject.getContext().getObjectManager().objectChanged(valueObject);
+      // valueObject.getContext().getObjectManager().objectChanged(valueObject);
+       valueObject.getContext().getObjectManager().saveChanges();
     }
+	
+	protected boolean isEmpty(View view) {
+	    ValueField vc = (ValueField) view.getContent();
+        return vc.getParent().isEmpty(vc.getField());
+	}
 }
 
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

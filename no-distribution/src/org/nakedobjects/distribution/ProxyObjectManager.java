@@ -26,7 +26,6 @@ import org.nakedobjects.object.UpdateNotifier;
 import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
 import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
 import org.nakedobjects.object.io.Memento;
-import org.nakedobjects.system.Log;
 import org.nakedobjects.utility.NotImplementedException;
 
 import org.apache.log4j.Logger;
@@ -98,14 +97,6 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         throw new NotImplementedException();
     }
     
-    /**
-     * @deprecated
-     */
-    public NakedObjectStore getObjectStore() {
-		throw new NotImplementedException();
-	}
-
-
     public boolean hasInstances(NakedObjectSpecification cls) {
     	LOG.debug("hasInstances of " + cls);
         return new HasInstances(cls).hasInstances();
@@ -189,7 +180,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

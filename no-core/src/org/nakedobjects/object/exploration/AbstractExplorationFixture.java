@@ -1,18 +1,15 @@
 package org.nakedobjects.object.exploration;
 
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.security.Role;
-import org.nakedobjects.object.security.User;
 
 
 public abstract class AbstractExplorationFixture implements ExplorationFixture {
     private ExplorationSetUp container;
     
-    protected final NakedObject createInstance(Class type) {
+    protected final Object createInstance(Class type) {
         return container.createInstance(type);
     }
 
-    protected final NakedObject createInstance(String className) {
+    protected final Object createInstance(String className) {
         return container.createInstance(className);
     }
     
@@ -32,26 +29,14 @@ public abstract class AbstractExplorationFixture implements ExplorationFixture {
         return container;
     }
 
-    /**
-     * @deprecated use needsInstances
-     */
-    protected final boolean hasNoInstances(Class cls) {
-        return container.needsInstances(cls);
-    }
-
-    /**
-     * @deprecated use needsInstances
-     */
-    protected final boolean hasNoInstances(String className) {
-        return container.needsInstances(className);
-    }
-
+    /** @deprecated */
     protected final boolean needsInstances(Class cls) {
-        return container.needsInstances(cls);
+        return true;
     }
 
+    /** @deprecated */
     protected final boolean needsInstances(String className) {
-        return container.needsInstances(className);
+        return true;
     }
 
     protected void registerClass(Class cls) {
@@ -65,7 +50,7 @@ public abstract class AbstractExplorationFixture implements ExplorationFixture {
     public void setContainer(ExplorationSetUp container) {
         this.container = container;
     }
-
+/*
     protected void addRole(Role role, User user) {
         user.getRoles().add(role);
     }
@@ -90,13 +75,13 @@ public abstract class AbstractExplorationFixture implements ExplorationFixture {
     public void setUser(String name) {
         getContainer().setUser(name);
      }
-    
+    */
 
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

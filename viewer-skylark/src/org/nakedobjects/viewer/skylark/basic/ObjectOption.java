@@ -4,8 +4,8 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.FastFinder;
 import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
-import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.object.reflect.ActionSpecification.Type;
+import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 
@@ -14,23 +14,23 @@ public class ObjectOption {
 
     public static void menuOptions(NakedObject object, MenuOptionSet options) {
         if (object != null) {
-            if (object instanceof FastFinder) {
+            if (object.getObject() instanceof FastFinder) {
                 options.add(MenuOptionSet.OBJECT, new FindFirstOption());
                 options.add(MenuOptionSet.OBJECT, new FindAllOption());
             } else {
-                menuOption(object, options, ActionSpecification.USER, MenuOptionSet.OBJECT);
-                menuOption(object, options, ActionSpecification.EXPLORATION, MenuOptionSet.EXPLORATION);
+                menuOption(object, options, Action.USER, MenuOptionSet.OBJECT);
+                menuOption(object, options, Action.EXPLORATION, MenuOptionSet.EXPLORATION);
             }
 
             boolean isPersistent = object.getOid() != null;
-            if (!(object instanceof NakedClass) && !(object instanceof InstanceCollectionVector) && isPersistent) {
+            if (!(object.getObject() instanceof NakedClass) && !(object.getObject() instanceof InstanceCollectionVector) && isPersistent) {
                 options.add(MenuOptionSet.DEBUG, new DestroyObjectOption());
             }
         }
     }
 
     private static void menuOption(NakedObject object, MenuOptionSet menuOptionSet, Type actionType, int menuSection) {
-        ActionSpecification[] actions = object.getSpecification().getObjectActions(actionType);
+        Action[] actions = object.getSpecification().getObjectActions(actionType);
 
         for (int i = 0; i < actions.length; i++) {
             MenuOption option;
@@ -49,7 +49,7 @@ public class ObjectOption {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

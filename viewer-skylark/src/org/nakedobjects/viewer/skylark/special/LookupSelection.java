@@ -45,6 +45,7 @@ class LookupSelection extends AbstractViewDecorator {
         LookupAxis axis = (LookupAxis) getViewAxis();
         NakedObject lookup = ((ObjectContent) getContent()).getObject();
         axis.getContent().setObject(lookup);
+        axis.getParentView().updateView();
         axis.getParentView().invalidateContent();
         getParent().dispose();
     }
@@ -58,7 +59,7 @@ class LookupSelection extends AbstractViewDecorator {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

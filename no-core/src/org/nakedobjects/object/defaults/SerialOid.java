@@ -2,8 +2,6 @@ package org.nakedobjects.object.defaults;
 
 
 import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.io.TransferableReader;
-import org.nakedobjects.object.io.TransferableWriter;
 
 
 public class SerialOid implements Oid {
@@ -13,11 +11,7 @@ public class SerialOid implements Oid {
         this.serialNo = serialNo;
     }
     
-    public SerialOid(TransferableReader reader) {
-        serialNo = reader.readInt();
-    }
-
-     public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (obj == this) {
             return true;
         }
@@ -38,16 +32,12 @@ public class SerialOid implements Oid {
     public String toString() {
         return "OID#" + Long.toHexString(serialNo).toUpperCase();
     }
-
-    public void writeData(TransferableWriter writer) {
-        writer.writeLong(serialNo);
-    }
 }
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

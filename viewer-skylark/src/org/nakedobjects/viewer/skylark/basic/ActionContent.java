@@ -1,12 +1,15 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Veto;
-import org.nakedobjects.object.reflect.ActionSpecification;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.ActionParameterSet;
+import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -16,21 +19,69 @@ import org.nakedobjects.viewer.skylark.ObjectContent;
  * Links an action on an object to a view.
  */
 public class ActionContent implements ObjectContent {
-    private final ActionSpecification action;
-    private final ParameterSet parameterSet;
+    private final Action action;
+    private final ActionParameter[] parameters;
+    //   private final ParameterSet parameterSet;
     private final NakedObject target;
 
-    public ActionContent(NakedObject target, ActionSpecification action) {
+    public ActionContent(NakedObject target, Action action) {
         this.target = target;
         this.action = action;
-        parameterSet = new ParameterSet(action, target, this);
+
+        int numberParameters = action.parameters().length;
+        ActionParameterSet parameterHints = target.getParameters(ClientSession.getSession(), action, action.parameters());
+        String[] labels;
+        Object[] defaultValues;
+        if (parameterHints != null) {
+            labels = parameterHints.getParameterLabels();
+            defaultValues = parameterHints.getDefaultParameterValues();
+        } else {
+            labels = new String[numberParameters];
+            defaultValues = new Naked[numberParameters];
+        }
+
+        Naked[] parameterValues;
+
+        NakedObjectSpecification[] types;
+        Naked[] values;
+        types = action.parameters();
+        values = new Naked[types.length];
+        for (int i = 0; i < types.length; i++) {
+            if (types[i].isValue()) {
+                values[i] = types[i].acquireInstance();
+            } else {
+                values[i] = null;
+            }
+        }
+
+        parameterValues = new Naked[types.length];
+        for (int i = 0; i < parameterValues.length; i++) {
+            parameterValues[i] = values[i];
+        }
+
+        // parameterSet = new ParameterSet(action);
+        //parameterValues = parameterSet.getParameterValues();
+        parameters = new ActionParameter[numberParameters];
+
+        for (int i = 0; i < numberParameters; i++) {
+            // change name using the hint
+            NakedObjectSpecification type = types[i];
+            String label = labels[i] == null ? type.getShortName() : labels[i];
+            Object value = defaultValues[i] == null ? parameterValues[i] : PojoAdapter.createAdapter(defaultValues[i]);
+
+            if (type.isValue()) {
+                parameters[i] = new ValueParameter(label, (Naked) value, type, this, i);
+            } else {
+                parameters[i] = new ObjectParameter(label, (Naked) value, type, this, i);
+            }
+        }
     }
 
-    public Permission canClear() {
+    public Consent canClear() {
         return Veto.DEFAULT;
     }
 
-    public Permission canSet(NakedObject dragSource) {
+    public Consent canSet(NakedObject dragSource) {
         return Veto.DEFAULT;
     }
 
@@ -39,31 +90,48 @@ public class ActionContent implements ObjectContent {
     }
 
     public String debugDetails() {
+        String parameterSet = "";
+        for (int i = 0; i < parameters.length; i++) {
+            ActionParameter element = parameters[i];
+            parameterSet += element;
+        }
         return "ActionContent\n  action: " + action + "\n  object: " + target + "\n  parameters: " + parameterSet;
     }
 
-    public Permission disabled() {
-        About about = action.getAbout(ClientSession.getSession(), target, parameterSet.getParameterValues());
+    public Consent disabled() {
+        Hint about = target.getHint(ClientSession.getSession(), action, parameterValues());
         return about.canUse();
     }
 
+    private Naked[] parameterValues() {
+        Naked[] objects = new Naked[parameters.length];
+        for (int i = 0; i < parameters.length; i++) {
+            objects[i] = parameters[i].getNaked();
+        }
+        return objects;
+    }
+
+    public Naked getParameteValue(int index) {
+        return parameters[index].getNaked();
+    }
+
     public NakedObject execute() {
-        return action.execute(target, parameterSet.getParameterValues());
+        return target.execute(action, parameterValues());
     }
 
     public String getName() {
-        return action.getLabel(ClientSession.getSession(), target);
+        return target.getLabel(ClientSession.getSession(), action);
     }
 
     public NakedObject getObject() {
         return target;
     }
 
-    public ParameterSet getParameterSet() {
-        return parameterSet;
+    public ActionParameter getParameter(int index) {
+        return parameters[index];
     }
 
-    public NakedObjectSpecification getType() {
+    public NakedObjectSpecification getSpecification() {
         return target.getSpecification();
     }
 
@@ -73,11 +141,15 @@ public class ActionContent implements ObjectContent {
         throw new NakedObjectRuntimeException("Invalid call");
     }
 
+    public int getNoParameters() {
+        return parameters.length;
+    }
+
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

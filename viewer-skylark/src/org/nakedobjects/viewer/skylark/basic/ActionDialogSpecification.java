@@ -2,12 +2,11 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.ValueContent;
-import org.nakedobjects.viewer.skylark.ValueParameter;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
@@ -16,8 +15,6 @@ import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.metal.ButtonAction;
 import org.nakedobjects.viewer.skylark.metal.ButtonBorder;
 import org.nakedobjects.viewer.skylark.metal.WindowBorder;
-import org.nakedobjects.viewer.skylark.special.ActionFieldBuilder;
-import org.nakedobjects.viewer.skylark.special.ObjectParameter;
 import org.nakedobjects.viewer.skylark.special.StackLayout;
 import org.nakedobjects.viewer.skylark.special.SubviewSpec;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
@@ -57,7 +54,7 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
             super(name);
         }
 
-        public Permission disabled(View view) {
+        public Consent disabled(View view) {
             ActionContent actionContent = ((ActionContent) view.getContent());
             return actionContent.disabled();
         }
@@ -66,8 +63,9 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
             ActionContent actionContent = ((ActionContent) view.getContent());
             NakedObject result = actionContent.execute();
             NakedObject actionObject = actionContent.getObject();
-            if(! (actionObject instanceof NakedClass)) {
-                actionObject.getContext().getObjectManager().objectChanged(actionObject);
+            if(! (actionObject.getObject() instanceof NakedClass)) {
+                //actionObject.getContext().getObjectManager().objectChanged(actionObject);
+                actionObject.getContext().getObjectManager().saveChanges();
             }
             if(result != null) {
 	            move(at);
@@ -95,19 +93,26 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
     }
     
     private static class DialogFormSubviews implements SubviewSpec {
-
+        
         public View createSubview(Content content, ViewAxis axis) {
-            if(content instanceof ObjectParameter) {
-                if(((ObjectParameter) content).getObject() == null) {
-                    return (new EmptyField.Specification()).createView(content, axis);
-                } else {
-                    return new SubviewIconSpecification().createView(content, axis);
-                }
-            } else if(content instanceof ValueParameter) {
+            if (content instanceof ValueParameter) {
                 ViewFactory factory = ViewFactory.getViewFactory();
                 ViewSpecification specification = factory.getValueFieldSpecification((ValueContent) content);
                 return specification.createView(content, axis);
+            } else if (content instanceof ObjectParameter) {
+                ObjectParameter parameterContent = (ObjectParameter) content;
+                if (parameterContent.getObject() == null) {
+                    return (new EmptyField.Specification()).createView(content, axis);
+                } else {
+                    //return new SubviewIconSpecification().createView(content,
+                    // axis);
+
+                    ViewFactory factory = ViewFactory.getViewFactory();
+                    ViewSpecification specification = factory.getIconizedSubViewSpecification(parameterContent);
+                    return specification.createView(content, axis);
+                }
             }
+            
             return null;
         }
 
@@ -124,7 +129,7 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

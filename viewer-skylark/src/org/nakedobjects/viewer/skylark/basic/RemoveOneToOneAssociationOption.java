@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.OneToOneField;
@@ -13,7 +13,7 @@ public class RemoveOneToOneAssociationOption extends MenuOption {
         super("Clear association");
     }
 
-    public Permission disabled(View view) {
+    public Consent disabled(View view) {
         OneToOneField content = ((OneToOneField) view.getContent());
         return content.canClear();
     }
@@ -29,7 +29,7 @@ public class RemoveOneToOneAssociationOption extends MenuOption {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

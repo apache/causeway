@@ -2,30 +2,34 @@ package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.control.ActionAbout;
-import org.nakedobjects.object.control.FieldAbout;
-import org.nakedobjects.object.defaults.value.TextString;
+import org.nakedobjects.object.reflect.internal.InternalAbout;
 
 
-public class FastFinder extends AbstractNakedObject {
-	private final TextString term = new TextString();
+public class FastFinder implements InternalNakedObject {
 	private NakedObjectSpecification forClass;
+	private String term;
+    private NakedObjectManager objectManager;
 	
 	public String getIconName() {
 		return forClass.getShortName();
 	}
 
-	public TextString getTerm() {
+	public String getTerm() {
 		return term;
 	}
 	
-	public void aboutActionFind(ActionAbout about) {
-		about.unusableOnCondition(term.isEmpty(), "Search term needed");
+	public void setTerm(String term) {
+        this.term = term;
+    }
+	
+	public void aboutActionFind(InternalAbout about) {
+		about.unusableOnCondition(term == null || term.trim().length() == 0, "Search term needed");
 	}
 	
 	public NakedObject actionFind() {
-		NakedCollection instances = getObjectManager().findInstances(forClass, term.stringValue(), true);
+		NakedCollection instances = objectManager.findInstances(forClass, term, true);
 		if(instances.size() == 1) { 
 			return (NakedObject) instances.elements().nextElement();
 		} else {
@@ -33,24 +37,24 @@ public class FastFinder extends AbstractNakedObject {
 		}
 	}
 	
-	public void aboutFromClass(FieldAbout about) {
-		about.unmodifiable();
-	}
+	public void setObjectManager(NakedObjectManager objectManager) {
+        this.objectManager = objectManager;
+    }
 	
-	public NakedObjectSpecification getFromClass() {
-		return forClass;
+	public void aboutFromClass(InternalAbout about) {
+		about.unusable();
 	}
 	
 	public void setFromClass(NakedObjectSpecification nakedClass) {
 		this.forClass = nakedClass;
 	}
 	
-	public boolean isFinder() {
-		return false;
-	}
+	public NakedObjectSpecification getForClass() {
+        return forClass;
+    }
 	
-	public Title title() {
-		return new Title("Search for '").concat(term).concat("'");
+	public String titleString() {
+		return "Search for '" + term + "'";
 	}
 
 }

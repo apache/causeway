@@ -1,11 +1,10 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.Lookup;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.AssociationSpecification;
-import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.NakedObjectAssociation;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -29,9 +28,9 @@ class TreeLeafNodeSpecification implements ViewSpecification, TreeNodeSpecificat
 		if(object instanceof NakedCollection) {
 			return ((NakedCollection) object).size() > 0;
 		} else {
-			FieldSpecification[] fields = object.getSpecification().getVisibleFields(object, ClientSession.getSession());
+			NakedObjectField[] fields = object.getSpecification().getVisibleFields(object, ClientSession.getSession());
 			for (int i = 0; i < fields.length; i++) {
-				if(fields[i] instanceof AssociationSpecification && !(object instanceof Lookup)) {
+				if(fields[i] instanceof NakedObjectAssociation && !(object.getSpecification().isLookup())) {
 					return true;
 				}
 			}
@@ -79,7 +78,7 @@ class TreeLeafNode extends ObjectView {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -2,3 +2,5 @@
 classes
 build
 *.timer.log
+nakedobjects.log*
+tmp

@@ -1,40 +1,33 @@
 package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.ReflectionFactory;
+import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.reflect.OneToManyPeer;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
+import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
-import org.nakedobjects.object.reflect.ValueField;
-import org.nakedobjects.object.reflect.ValueFieldSpecification;
 
 
 public class LocalReflectionFactory implements ReflectionFactory {
-    public ActionSpecification createAction(Action action) {
-        return new ActionSpecification(action.getName(), action);
+    public Action createAction(ActionPeer action) {
+        return new Action(action.getName(), action);
     }
 
-    public FieldSpecification createField(OneToManyAssociation local) {
-        return new OneToManyAssociationSpecification(local.getName(), local.getType(), local);
+    public NakedObjectField createField(OneToManyPeer local) {
+        return new OneToManyAssociation(local.getName(), local.getType(), local);
     }
 
-    public FieldSpecification createField(OneToOneAssociation local) {
-        return new OneToOneAssociationSpecification(local.getName(), local.getType(), local);
+    public NakedObjectField createField(OneToOnePeer local) {
+        return new OneToOneAssociation(local.getName(), local.getType(), local);
 
     }
-
-    public FieldSpecification createField(ValueField local) {
-        return new ValueFieldSpecification(local.getName(), local.getType(), local);
-    }
-
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

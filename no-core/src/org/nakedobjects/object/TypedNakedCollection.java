@@ -1,5 +1,7 @@
 package org.nakedobjects.object;
 
+import java.util.Enumeration;
+
 
 /**
  * A typed collection will only hold objects of the specified type.
@@ -9,12 +11,35 @@ public interface TypedNakedCollection extends NakedCollection {
      * The type of object that can be stored in this collection.
      */
     NakedObjectSpecification getElementSpecification();
+    
+    NakedObject elementAt(int index);
+
+    
+    /**
+     * Return all elements in this collection
+     */
+    Enumeration elements();
+
+//    boolean isEmpty();
+
+    /**
+     * Return all the OIDs of all elements in this collection. The elements do
+     * not need to be resolved to do this (though the collection does)
+     */
+//    public Enumeration oids();
+
+    /**
+     * Return a NakedCollection of objects which match the specified pattern
+     * from within the current collection
+     */
+
+    int size();
 }
 
 /*
  Naked Objects - a framework that exposes behaviourally complete
  business objects directly to the user.
- Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+ Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

@@ -1,9 +1,6 @@
 package org.nakedobjects.object;
 
 
-import org.nakedobjects.object.reflect.AssociationSpecification;
-import org.nakedobjects.object.system.TestClock;
-
 import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
@@ -18,16 +15,16 @@ public abstract class NakedObjectTestCase extends TestCase {
     
     public NakedObjectTestCase() {}
 
-    public static void assertEquals(String name, String expected, NakedValue value) {
+/*    public static void assertEquals(String name, String expected, NakedObject value) {
         assertEquals(name, expected, value.titleString().toString());
     }
 
-    public static void assertEquals(String expected, NakedValue value) {
+    public static void assertEquals(String expected, NakedObject value) {
         assertEquals(expected, value.titleString().toString());
     }
 
-    public static void assertEquals(NakedValue expected, NakedValue value) {
-    	assertEquals(expected.titleString().toString(), value.titleString().toString());
+    public static void assertEquals(NakedObject expected, NakedObject value) {
+    	assertEquals(expected.titleString(), value.titleString());
     }
 
     protected AssociationSpecification findAssocation(String attributeName, NakedObject forObject) {
@@ -35,11 +32,10 @@ public abstract class NakedObjectTestCase extends TestCase {
 
         return (AssociationSpecification) c.getField(attributeName);
     }
-    
+    */
     protected void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
-    	new MockNakedObjectSpecificationLoader();
-		new TestClock();
+ //   	new MockNakedObjectSpecificationLoader();
     }
 }
 
@@ -47,7 +43,7 @@ public abstract class NakedObjectTestCase extends TestCase {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

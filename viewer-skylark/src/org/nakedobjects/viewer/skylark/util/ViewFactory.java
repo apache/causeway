@@ -4,20 +4,18 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.RootCollection;
 import org.nakedobjects.viewer.skylark.RootObject;
 import org.nakedobjects.viewer.skylark.ValueContent;
-import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
-import org.nakedobjects.viewer.skylark.basic.DragContentIcon;
+import org.nakedobjects.viewer.skylark.metal.TextFieldSpecification;
 
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -232,7 +230,7 @@ public class ViewFactory implements DebugInfo {
     }
 
     public ViewSpecification getIconizedRootViewSpecification(NakedObject object) {
-    	if(object instanceof NakedClass) {
+    	if(object.getObject() instanceof NakedClass) {
     	    if(workspaceClassIconSpecification == null) {
                 LOG.error("missing workspace class icon specification; using fallback");
                 return fallback;
@@ -248,13 +246,19 @@ public class ViewFactory implements DebugInfo {
     }
 
     public ViewSpecification getIconizedSubViewSpecification(ObjectContent content) {
-    	if(content.getObject() == null) {
+    	//    NakedObject object = ((ObjectContent) content).getObject();
+    	 //   if((object != null && object.getObject() instanceof BusinessValue) || content.getType().getFullName() != "") {
+ 
+    	    if(content.getObject() == null) {
     	    return getEmptyFieldSpecification();
     	} else {
     	    if(subviewIconSpecification == null) {
                 LOG.error("missing sub view icon specification; using fallback");
                 return fallback;
             }
+    	    
+    	    
+    	    
     	    return ensureView(subviewIconSpecification);
     	}
     }
@@ -270,10 +274,22 @@ public class ViewFactory implements DebugInfo {
     }
 
     public ViewSpecification getValueFieldSpecification(ValueContent content) {
-    	NakedValue value = content.getValue();
+    	NakedObject object = content.getObject();
     	
-       	return defaultViewSpecification(valueFields, value);
-    }
+   	    if(object == null || object.getObject() instanceof String || object.getObject() instanceof Date) {
+   	        return new TextFieldSpecification();
+   	    }
+	 
+        return defaultViewSpecification(valueFields, object);
+	    
+	    /*
+    	if(object == null || object.getObject() != object) {
+    	    return new TextFieldSpecification();
+    	} else {
+    	    return defaultViewSpecification(valueFields, object);
+    	}
+   */
+	    }
 
     public Enumeration openRootViews(Content forContent, View replacingView) {
         if (forContent instanceof ObjectContent) {
@@ -296,15 +312,15 @@ public class ViewFactory implements DebugInfo {
     }
 
     public Enumeration valueViews(Content forContent, View replacingView) {
-
-        if(forContent instanceof ValueField) {
-            if (forContent instanceof ValueField) {
+/*
+        if(forContent. instanceof ValueFieldContent) {
+            if (forContent instanceof ValueFieldContent) {
                	NakedValue value = ((ValueContent) forContent).getValue();
 
                	return ViewSpecifications(valueFields, value);
               }
         }
-
+*/
         return new Vector().elements();
     }
 
@@ -325,7 +341,7 @@ public class ViewFactory implements DebugInfo {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

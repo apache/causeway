@@ -1,11 +1,10 @@
 package org.nakedobjects.viewer.skylark.value;
 
 import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.AbstractPermission;
-import org.nakedobjects.object.defaults.value.MultilineTextString;
+import org.nakedobjects.object.control.AbstractConsent;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
@@ -29,6 +28,7 @@ import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.LabelAxis;
 import org.nakedobjects.viewer.skylark.basic.SimpleIdentifier;
 import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
+import org.nakedobjects.viewer.skylark.core.BackgroundTask;
 import org.nakedobjects.viewer.skylark.special.ResizeDrag;
 
 import java.awt.Toolkit;
@@ -396,13 +396,13 @@ public class TextField extends AbstractField {
         this.showLines = showLines;
         setMaxTextWidth(25);
 
-        NakedValue value = getValue();
+        NakedObject value = getValue();
         cursor = new CursorPosition(0, 0);
         selection = new Selection();
         textContent = new TextFieldContent(this);
-        multiline = value instanceof MultilineTextString;
+        multiline = false; //value instanceof MultilineTextString;
         noDisplayLines = multiline ? MULTILINE_FIELD_SIZE : 1;
-        textContent.setText(value.titleString());
+        textContent.setText(value == null ? "" : value.titleString());
         cursor.home();
         displayFromLine = 0;
         displayToLine = noDisplayLines - 1;
@@ -683,8 +683,15 @@ public class TextField extends AbstractField {
     }
 
     public void editComplete() {
-        if (canChangeValue()) {
-            initiateSave();
+        if (canChangeValue() && !isSaved) {
+            isSaved = true;
+            run(new BackgroundTask() {
+                protected void execute() {
+                    save();
+                    getParent().updateView();
+                    invalidateLayout();
+                }
+            });
         }      
     }
     
@@ -692,19 +699,21 @@ public class TextField extends AbstractField {
         String entry = textContent.getText();
         
         // do nothing if entry is same as the value object
-        if (!entry.equals(getValue().titleString())) {
-            LOG.debug("Field edited: \'" + entry + "\' to replace \'" + getValue().titleString() + "\'");
+        NakedObject value = getValue();
+        if (!entry.equals(value == null ? "" : value.titleString())) {
+            LOG.debug("Field edited: \'" + entry + "\' to replace \'" + (value == null ? "" : value.titleString()) + "\'");
             
             try {
                 parseEntry(entry.toString());
                 invalidReason = null;
-                isSaved = true;
+  //              isSaved = true;
                 getViewManager().getSpy().addAction("VALID ENTRY: " + entry);
                 getState().setValid();
                 markDamaged();
                 //getParent().invalidateLayout();
             } catch (NakedObjectRuntimeException e) {
                 invalidReason = "UPDATE FAILURE: " + e.getMessage();
+                LOG.error(invalidReason, e);
                 getViewManager().setStatus(invalidReason);
                 getState().setOutOfSynch();
                 markDamaged();
@@ -1022,8 +1031,8 @@ public class TextField extends AbstractField {
                 refresh();
             }
             
-            public Permission disabled(View component) {
-                return AbstractPermission.allow(invalidReason != null);
+            public Consent disabled(View component) {
+                return AbstractConsent.allow(invalidReason != null);
             }
         });
         super.menuOptions(options);
@@ -1071,8 +1080,13 @@ public class TextField extends AbstractField {
 
     public void refresh() {
         super.refresh();
-        String value = getValueContent().getValue().titleString();
-        textContent.setText(value);
+        NakedObject object = getValueContent().getObject();
+        if(object == null) {
+            textContent.setText("");
+        } else {
+	        String value = object.titleString();
+	        textContent.setText(value);
+        }
     }
 
     private void resetSelection() {
@@ -1120,7 +1134,7 @@ public class TextField extends AbstractField {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2003 Naked Objects Group Ltd
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the

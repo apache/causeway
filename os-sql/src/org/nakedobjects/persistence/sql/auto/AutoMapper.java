@@ -1,6 +1,6 @@
 package org.nakedobjects.persistence.sql.auto;
 
-import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
@@ -31,7 +31,7 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 	public AutoMapper(String nakedClassName, String parameterBase) throws SqlObjectStoreException {
 		super(nakedClassName, parameterBase);
 		
-		Configuration configParameters = Configuration.getInstance();
+		ConfigurationFactory configParameters = ConfigurationFactory.getConfiguration();
 
 		instancesWhereClause = configParameters.getString(parameterBase + "find");
 		if(instancesWhereClause == null) {
@@ -152,10 +152,10 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 	public void loadData(NakedObject object, Results rs) throws SqlObjectStoreException {
 		for (int i = 0; i < fields.length; i++) {
 			if (fields[i] instanceof ValueFieldSpecification) {
-				ValueMapper mapper = ValueMapperLookup.getInstance().mapperFor(fields[i].getType());
+				ValueMapper mapper = ValueMapperLookup.getInstance().mapperFor(fields[i].getSpecification());
 				mapper.setFromDBColumn(columnNames[i], fields[i], object, rs);
 			} else if (fields[i] instanceof OneToOneAssociationSpecification) {
-				NakedObjectSpecification associatedCls = fields[i].getType();
+				NakedObjectSpecification associatedCls = fields[i].getSpecification();
 				
 				Oid oid = recreateOid(rs, associatedCls, columnNames[i]);
 				if (oid != null) {
@@ -163,7 +163,7 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 				        LOG.warn("NOT DEALING WITH POLYMORPHIC ASSOCIATIONS");
 				    } else {
 				        NakedObject reference = loadObject(associatedCls, oid);
-				        ((OneToOneAssociationSpecification) fields[i]).initData(object, reference);
+				        object.setValue((OneToOneAssociationSpecification) fields[i], reference);
 				    }
 				}
 			} else {
@@ -197,7 +197,7 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 					assignments.append(primaryKey(oid));
 				}
 			} else if (fieldValue instanceof NakedValue) {
-			    ValueMapper mapper = typeMapper.mapperFor(fields[i].getType());
+			    ValueMapper mapper = typeMapper.mapperFor(fields[i].getSpecification());
 				assignments.append(mapper.valueAsDBString((NakedValue) fieldValue));
 			} else {
 				assignments.append("NULL");
@@ -229,7 +229,7 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option) any

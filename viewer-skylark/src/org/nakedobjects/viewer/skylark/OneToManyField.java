@@ -1,52 +1,43 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Veto;
-import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
-import org.nakedobjects.viewer.skylark.special.CollectionDisplayIterator;
-import org.nakedobjects.viewer.skylark.special.CollectionIterator;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.object.reflect.OneToManyAssociation;
 
 import java.util.Enumeration;
 
 
 public class OneToManyField extends ObjectField implements CollectionContent {
     private final NakedCollection collection;
-    private CollectionDisplayIterator iterator;
 
-    public OneToManyField(NakedObject parent, NakedObject object, OneToManyAssociationSpecification association) {
+    public OneToManyField(NakedObject parent, NakedObject object, OneToManyAssociation association) {
         super(parent, association);
         this.collection = (NakedCollection) object;
     }
 
     public Enumeration allElements() {
+//        return getParent().getFieldElements(getOneToManyAssociation());
         return getCollection().elements();
     }
 
     public String debugDetails() {
-        return super.debugDetails() + "  object:" + collection + "\n";
+        return super.debugDetails() + "  object: collection\n";
     }
 
     public NakedCollection getCollection() {
-        return (InternalCollection) getObject();
-    }
-
-    public CollectionDisplayIterator getIterator() {
-        if (iterator == null) {
-            iterator = new CollectionIterator(collection);
-        }
-        return iterator;
+        return (NakedCollection) getObject();
     }
 
     public NakedObject getObject() {
         return collection;
+//        return getParent().getField(getOneToManyAssociation());
     }
 
-    public OneToManyAssociationSpecification getOneToManyAssociation() {
-        return (OneToManyAssociationSpecification) getField();
+    public OneToManyAssociation getOneToManyAssociation() {
+        return (OneToManyAssociation) getField();
     }
 
     public String toString() {
@@ -62,18 +53,18 @@ public class OneToManyField extends ObjectField implements CollectionContent {
         throw new NakedObjectRuntimeException("Invalid call");    
     }
 
-    public Permission canClear() {
+    public Consent canClear() {
         return Veto.DEFAULT;
     }
     
-    public Permission canSet(NakedObject dragSource) {
+    public Consent canSet(NakedObject dragSource) {
         return Veto.DEFAULT;
     }
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

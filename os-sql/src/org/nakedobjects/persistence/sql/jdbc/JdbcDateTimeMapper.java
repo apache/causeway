@@ -12,7 +12,7 @@ import org.nakedobjects.persistence.sql.ValueMapper;
 public class JdbcDateTimeMapper implements ValueMapper {
 
     public String valueAsDBString(NakedValue value) throws SqlObjectStoreException {
-        String ts = value.saveString();
+        String ts = value.asEncodedString();
         if (ts.equals("NULL")) { return ts; }
         String dbts = ts.substring(0, 4) + "-" + ts.substring(4, 6) + "-" + ts.substring(6, 8) + " " + ts.substring(8, 10) + ":"
                 + ts.substring(10, 12);
@@ -39,7 +39,7 @@ public class JdbcDateTimeMapper implements ValueMapper {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

@@ -1,25 +1,62 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.object.control.Validity;
-import org.nakedobjects.object.defaults.Title;
-import org.nakedobjects.object.defaults.value.TextString;
+import org.nakedobjects.application.Title;
+import org.nakedobjects.application.control.ClassAbout;
+import org.nakedobjects.application.control.FieldAbout;
+import org.nakedobjects.application.control.Validity;
+import org.nakedobjects.application.value.Color;
+import org.nakedobjects.application.value.TextString;
 
 
 public class CreditCard extends PaymentMethod {
-    private static final long serialVersionUID = 1L;
     private final TextString nameOnCard;
     private final TextString number;
     private final TextString expires;
-
-    public CreditCard() {
+    private final Color color;
+    
+    public static void aboutCreditCard(ClassAbout about) {
+        about.instancesUnavailable();
+    }
+    
+     public CreditCard() {
         expires = new TextString();
         nameOnCard = new TextString();
         number = new TextString();
+        color = new Color();
     }
 
     public final TextString getExpires() {
         return expires;
     }
+    
+    public Color getColor() {
+        return color;
+    }
+    
+    public void aboutExpires(FieldAbout about, TextString value) {
+       // validity.cannotBeEmpty();
+        if (value == null || value.isEmpty()) {
+            about.unmodifiable("Cannot be empty");
+        } else {
+            String s = value.stringValue().trim();
+            boolean valid = true;
+            if (s.length() == 5) {
+                valid &= Character.isDigit(s.charAt(0));
+                valid &= Character.isDigit(s.charAt(1));
+                valid &= '/' == s.charAt(2);
+                valid &= Character.isDigit(s.charAt(3));
+                valid &= Character.isDigit(s.charAt(4));
+            } else {
+                valid = false;
+            }
+            // validity.invalidOnCondition(!valid, "date must be MM/YY e.g.
+            // 03/05");
+            if (!valid) {
+                about.unmodifiable("date must be MM/YY e.g. 03/05");
+            }
+        }
+    }
+    
     
     public void validExpires(Validity validity) {
         validity.cannotBeEmpty();
@@ -60,12 +97,22 @@ public class CreditCard extends PaymentMethod {
     	if(getNumber().isEmpty()) {
     		return new Title();
     	} else {
-    	
-        String num = getNumber().stringValue();
-        int pos = Math.max(0, num.length() - 5);
-
-        return new Title("*****************".substring(0, pos)).concat(
-                       num.substring(pos));
+	    	
+	        String num = getNumber().stringValue();
+	        int pos = Math.max(0, num.length() - 5);
+	
+	        return new Title("*****************".substring(0, pos)).concat(
+	                       num.substring(pos));
+    	}
+    }
+    
+    public String titleString() {
+    	if(getNumber().isEmpty()) {
+    		return "";
+    	} else {
+	        String num = getNumber().stringValue();
+	        int pos = Math.max(0, num.length() - 5);
+	        return "*****************".substring(0, pos) + num.substring(pos);
     	}
     }
 }
@@ -73,7 +120,7 @@ public class CreditCard extends PaymentMethod {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

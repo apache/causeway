@@ -2,6 +2,7 @@ import org.nakedobjects.example.library.Book;
 import org.nakedobjects.example.library.Loan;
 import org.nakedobjects.example.library.Member;
 import org.nakedobjects.object.exploration.AbstractExplorationFixture;
+import org.nakedobjects.object.exploration.ExplorationSetUp;
 import org.nakedobjects.xat.AcceptanceTestCase;
 import org.nakedobjects.xat.TestObject;
 
@@ -108,13 +109,17 @@ public class LibraryTest extends AcceptanceTestCase {
             }
         });
     }
+
+    protected ExplorationSetUp explorationSetup() {
+        return null;
+    }
 }
 
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

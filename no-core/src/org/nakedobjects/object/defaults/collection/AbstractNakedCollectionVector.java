@@ -3,7 +3,7 @@ package org.nakedobjects.object.defaults.collection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.defaults.AbstractNakedObject;
 import org.nakedobjects.utility.NotImplementedException;
 
@@ -38,7 +38,7 @@ public abstract class AbstractNakedCollectionVector extends AbstractNakedObject 
         resolve();
         if (canAdd(object).isAllowed()) {
             elements.addElement(object);
-            objectChanged();
+    //        objectChanged();
         }
     }
 
@@ -60,16 +60,16 @@ public abstract class AbstractNakedCollectionVector extends AbstractNakedObject 
             NakedObject obj = (NakedObject) enum.nextElement();
             this.add(obj);
         }
-        this.objectChanged();
+ //       this.objectChanged();
     }
 
     public void added(NakedObject object) {
         elements.addElement(object);
     }
 
-    public abstract Permission canAdd(NakedObject object);
+    public abstract Consent canAdd(NakedObject object);
 
-    public abstract Permission canRemove(NakedObject object);
+    public abstract Consent canRemove(NakedObject object);
 
     /**
      * Returns true if the logical collection contains the specified object.
@@ -158,7 +158,7 @@ public abstract class AbstractNakedCollectionVector extends AbstractNakedObject 
         }
         resolve();
         elements.removeElement(object);
-        objectChanged();
+  //      objectChanged();
     }
 
     /**
@@ -210,7 +210,7 @@ public abstract class AbstractNakedCollectionVector extends AbstractNakedObject 
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

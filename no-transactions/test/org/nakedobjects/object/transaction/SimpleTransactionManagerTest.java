@@ -123,11 +123,11 @@ public class SimpleTransactionManagerTest extends TestCase {
 
         // transaction 7
         ActionSpecification actionApplyFail = transfer1.getSpecification().getObjectAction(ActionSpecification.USER, "Apply But Fail");
-        actionApplyFail.execute(transfer1);
+        transfer1.execute(actionApplyFail, null);
         
         // transaction 8
         ActionSpecification actionApply = transfer1.getSpecification().getObjectAction(ActionSpecification.USER, "Apply");
-        actionApply.execute(transfer1);
+        transfer1.execute(actionApplyFail, null);
 
         // transaction 9
         Transfer transfer2 = (Transfer) action.execute(personal, new NakedObject[] { saving });
@@ -138,8 +138,7 @@ public class SimpleTransactionManagerTest extends TestCase {
 
         // transaction 11
         actionApply = transfer2.getSpecification().getObjectAction(ActionSpecification.USER, "Apply");
-        actionApply.execute(transfer2);
-   
+        transfer2.execute(actionApply, null);   
      }
 
     public void testIsolationInCreate() {
@@ -245,7 +244,7 @@ public class SimpleTransactionManagerTest extends TestCase {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

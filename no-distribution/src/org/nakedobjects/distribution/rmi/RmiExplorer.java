@@ -1,7 +1,7 @@
 /*
 	Naked Objects - a framework that exposes behaviourally complete
 	business objects directly to the user.
-	Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+	Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ import org.nakedobjects.utility.Configuration;
 
 public class RmiExplorer {
 	public static void main(String[] args) throws Exception {
-		Configuration.getInstance().load("explorer.properties");
+		ConfigurationFactory.getConfiguration().load("explorer.properties");
 /**/		
 		RmiParameters rmiParam = new RmiParameters();
 		String url = rmiParam.server();

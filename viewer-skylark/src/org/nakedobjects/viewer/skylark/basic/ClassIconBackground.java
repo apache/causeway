@@ -1,9 +1,9 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
-import org.nakedobjects.object.reflect.ActionSpecification;
+import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
@@ -27,9 +27,8 @@ public class ClassIconBackground extends AbstractViewDecorator {
 	
 	public void secondClick(Click click) {
 		NakedObject object = ((ObjectContent) getContent()).getObject();
-		NakedClass nc = ((NakedClass) object);
-		ActionSpecification action = nc.getSpecification().getObjectAction(ActionSpecification.USER, "Instances");
-		InstanceCollectionVector instances = (InstanceCollectionVector) action.execute(object);
+		Action action = object.getSpecification().getObjectAction(Action.USER, "Instances");
+		NakedCollection instances = (NakedCollection) object.execute(action, null);
 		View view = ViewFactory.getViewFactory().createOpenRootView(instances);
 		view.setLocation(click.getLocation());
 		getWorkspace().addView(view);
@@ -37,8 +36,8 @@ public class ClassIconBackground extends AbstractViewDecorator {
 	
 	public void menuOptions(MenuOptionSet options) {
     	NakedObject object = ((ObjectContent) getContent()).getObject();
-		NakedClass cls = ((NakedClass) object);
-		ClassOption.menuOptions(cls.forNakedClass(), options);
+		NakedClass cls = (NakedClass) object.getObject();
+		ClassOption.menuOptions(cls.forObjectType(), options);
 	}
 }
 
@@ -46,7 +45,7 @@ public class ClassIconBackground extends AbstractViewDecorator {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

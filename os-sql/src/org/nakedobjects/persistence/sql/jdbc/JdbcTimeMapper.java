@@ -15,7 +15,7 @@ public class JdbcTimeMapper implements ValueMapper {
         // converting to milliseconds
         //return "'" + new java.sql.Time(((Time) value).longValue() *
         // 1000).toString() + "'";
-        String ts = value.saveString();
+        String ts = value.asEncodedString();
         if (ts.equals("NULL")) { return ts; }
         String dbts = ts.substring(0, 2) + ":" + ts.substring(2, 4);
         return "'" + dbts + "'";
@@ -40,7 +40,7 @@ public class JdbcTimeMapper implements ValueMapper {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

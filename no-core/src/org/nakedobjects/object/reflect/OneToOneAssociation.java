@@ -1,37 +1,105 @@
 package org.nakedobjects.object.reflect;
 
+import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.TextEntryParseException;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.security.Session;
 
 
-public interface OneToOneAssociation extends Member {
-
-	void clearAssociation(NakedObject inObject, NakedObject associate);
-
-	About getAbout(Session session, NakedObject object, NakedObject value);
-
-	NakedObject getAssociation(NakedObject inObject);
+public class OneToOneAssociation extends NakedObjectAssociation {
+	private final OneToOnePeer reflectiveAdapter;
 	
-	NakedObjectSpecification getType();
+    public OneToOneAssociation(String name, NakedObjectSpecification type, OneToOnePeer association) {
+        super(name, type);
+        this.reflectiveAdapter = association;
+    }
+    
+    protected boolean canAccess(Session session, NakedObject object) {
+    	return getHint(session, object, null).canAccess().isAllowed();
+    }
+    
+    protected boolean canUse(Session session, NakedObject object) {
+    	return getHint(session, object, null).canUse().isAllowed();
+    }
+    
+    protected void clear(NakedObject inObject) {
+    	Naked associate = get(inObject);
+    	if(associate != null) {
+    		clearAssociation(inObject, (NakedObject) associate);
+    	}
+    }
 
-	boolean hasAbout();
+    protected void clearAssociation(NakedObject inObject, NakedObject associate) {
+        if (associate == null) {
+            throw new NullPointerException("Must specify the item to remove/dissociate");
+        }
+    	reflectiveAdapter.clearAssociation(inObject, associate);
+    }
 
-	boolean hasAddMethod();
+	protected Naked get(NakedObject fromObject) {
+		return reflectiveAdapter.getAssociation(fromObject);
+	}
+    
+    protected Hint getHint(Session session, NakedObject object, NakedObject value) {
+        if(hasHint()) {
+            return reflectiveAdapter.getHint(session, object, value);
+        } else {
+            return new DefaultHint();
+//            return new DefaultHint(getName());
+        }
+    }
 
-	void initData(NakedObject inObject, Object associate);
+    protected String getLabel(Session session, NakedObject object) {
+      	Hint about = getHint(session, object, (NakedObject) get(object));
 
-	boolean isDerived();
+        return getLabel(about);
+    }
 
-	void setAssociation(NakedObject inObject, NakedObject associate);
+	public boolean hasHint() {
+		return reflectiveAdapter.hasHint();
+	}
+
+	protected void setValue(NakedObject inObject, Object associate) {
+    	reflectiveAdapter.setValue(inObject, associate);
+	}
+
+	protected void initValue(NakedObject inObject, Object associate) {
+    	reflectiveAdapter.initValue(inObject, associate);
+	}
+
+	public boolean isDerived() {
+		return reflectiveAdapter.isDerived();
+	}
+
+	protected void setAssociation(NakedObject inObject, NakedObject associate) {
+    	reflectiveAdapter.setAssociation(inObject, associate);
+    }
+
+	protected void initAssociation(NakedObject inObject, NakedObject associate) {
+    	reflectiveAdapter.initAssociation(inObject, associate);
+    }
+	
+    public String toString() {
+        return "OneToOne " + (isValue() ? "VALUE" : "OBJECT") + " [" + super.toString() + ",type=" + getSpecification().getShortName() + "]";
+    }
+
+    protected void parseTextEntry(NakedObject inObject, String text) throws TextEntryParseException, InvalidEntryException {
+        reflectiveAdapter.parseTextEntry(inObject, text);    
+    }
+    
+    public boolean isEmpty(NakedObject inObject) {
+        return reflectiveAdapter.isEmpty(inObject);
+    }
 }
-
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

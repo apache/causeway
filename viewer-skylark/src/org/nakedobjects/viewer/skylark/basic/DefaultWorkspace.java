@@ -2,14 +2,13 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.control.ClassAbout;
-import org.nakedobjects.object.defaults.collection.ArbitraryCollectionVector;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
@@ -27,6 +26,8 @@ import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.CompositeObjectView;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
+
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
@@ -54,9 +55,9 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
         NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
  
         View newView;
-        if (source instanceof NakedClass && drag.isCtrl()) {
-            NakedObjectSpecification spec = ((NakedClass) source).forNakedClass();
-            ClassAbout classAbout = spec.getClassAbout();
+        if (source.getObject() instanceof NakedClass && drag.isCtrl()) {
+            NakedObjectSpecification spec = ((NakedClass) source).forObjectType();
+            Hint classAbout = spec.getClassAbout();
             if(classAbout != null && classAbout.canUse().isVetoed()) {
                 return;
             }
@@ -170,7 +171,7 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
 
         for (int i = 0; i < views.length; i++) {
             View view = views[i];
-            if (((ObjectContent) view.getContent()) == object) {
+            if (((ObjectContent) view.getContent()).getObject() == object) {
                 view.dispose();
             }
         }
@@ -203,15 +204,16 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
         options.add(MenuOptionSet.OBJECT, new MenuOption("Naked Classes...") {
             public void execute(Workspace workspace, View view, Location at) {
                 NakedObjectSpecification[] specs = NakedObjectSpecificationLoader.getInstance().getAllSpecifications();
-                NakedCollection classCollection = new ArbitraryCollectionVector("Naked Classes");
+                //ArbitraryCollectionVector classCollection = new ArbitraryCollectionVector("Naked Classes");
+                Vector classCollection = new Vector();
                 NakedObjectManager objectManager = NakedObjectContext.getDefaultContext().getObjectManager();
                 for (int i = 0; i < specs.length; i++) {
                     NakedObjectSpecification cls = specs[i];
                     if(cls.isObject()) {
-                        classCollection.add(objectManager.getNakedClass(cls));
+                        classCollection.addElement(PojoAdapter.createAdapter(objectManager.getNakedClass(cls)));
                     }
                 }
-                View classesView = ViewFactory.getViewFactory().createOpenRootView(classCollection);
+                View classesView = ViewFactory.getViewFactory().createOpenRootView(PojoAdapter.createAdapter(classCollection));
                 classesView.setLocation(at);
                 addView(classesView);
             }
@@ -281,7 +283,7 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

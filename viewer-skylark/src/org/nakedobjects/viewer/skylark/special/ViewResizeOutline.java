@@ -5,8 +5,6 @@ import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 
-import org.apache.log4j.Logger;
-
 
 
 public class ViewResizeOutline extends AbstractView {
@@ -42,7 +40,7 @@ public class ViewResizeOutline extends AbstractView {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

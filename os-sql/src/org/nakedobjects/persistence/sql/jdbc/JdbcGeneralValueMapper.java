@@ -20,7 +20,7 @@ public class JdbcGeneralValueMapper implements ValueMapper {
        	if(value == null) {
     		return "NULL";
     	} else {
-    		String ts = value.saveString();
+    		String ts = value.asEncodedString();
     		if(ts == null || ts.equals("NULL")) {
     			return "NULL";
     		}
@@ -47,7 +47,7 @@ public class JdbcGeneralValueMapper implements ValueMapper {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

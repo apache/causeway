@@ -2,10 +2,11 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Allow;
-import org.nakedobjects.object.reflect.ActionSpecification;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Location;
@@ -21,14 +22,14 @@ import org.apache.log4j.Logger;
  */
 class ImmediateObjectOption extends MenuOption {
 
-    public static ImmediateObjectOption createOption(ActionSpecification action, NakedObject object) {
+    public static ImmediateObjectOption createOption(Action action, NakedObject object) {
     	Assert.assertTrue("Only suitable for 0 param methods", action.parameters().length == 0);
         
-        About about = action.getAbout(ClientSession.getSession(), object);
+        Hint about = object.getHint(ClientSession.getSession(), action, null);
     	if(about.canAccess().isVetoed()) {
     		return null;
     	}
-    	String labelName =  action.getLabel(ClientSession.getSession(), object);
+    	String labelName =  object.getLabel(ClientSession.getSession(), action);
     	ImmediateObjectOption option = new ImmediateObjectOption(labelName, object, action);
     
     	// if method returns something then add ... to indicate a new window is shown
@@ -38,17 +39,17 @@ class ImmediateObjectOption extends MenuOption {
     	return option;
     }
 	
-	private final ActionSpecification action;
+	private final Action action;
 	private final NakedObject object;
 	
-	private ImmediateObjectOption(String name, NakedObject object, ActionSpecification action) {
+	private ImmediateObjectOption(String name, NakedObject object, Action action) {
 		super(name);
         this.object = object;
         this.action = action;
 	}
 
-    public Permission disabled(View view) {
-		About about = action.getAbout(ClientSession.getSession(), object);
+    public Consent disabled(View view) {
+		Hint about = object.getHint(ClientSession.getSession(), action, null);
 		if(about.canUse().isAllowed()) {
 			String description = about.getDescription();
 			if(action.hasReturn()) {
@@ -63,15 +64,18 @@ class ImmediateObjectOption extends MenuOption {
     public void execute(Workspace workspace, View view, Location at) {
         NakedObject returnedObject;
         try {
-	        returnedObject = action.execute(object);
+	        returnedObject = object.execute(action, null);
 	    } catch (Exception e) {
-        	returnedObject =object.getContext().getObjectManager().generatorError("System error",e);
+        	returnedObject = PojoAdapter.createAdapter(object.getContext().getObjectManager().generatorError("System error",e));
         }
         if (returnedObject != null) {
             if(returnedObject instanceof NakedError) {
                 Logger.getLogger(getClass()).error(((NakedError)returnedObject));
                 workspace.addOpenViewFor(returnedObject, at);
             } else {
+                if(!(returnedObject instanceof NakedObject)) {
+                    returnedObject = PojoAdapter.createAdapter(returnedObject);
+                }
                 view.objectActionResult(returnedObject, at);
             }
         }
@@ -85,7 +89,7 @@ class ImmediateObjectOption extends MenuOption {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

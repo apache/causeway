@@ -1,7 +1,6 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedCollection;
-import org.nakedobjects.viewer.skylark.special.CollectionDisplayIterator;
 
 import java.util.Enumeration;
 
@@ -9,15 +8,13 @@ public interface CollectionContent extends ObjectContent {
     NakedCollection getCollection();
     
     Enumeration allElements();
-    
-    CollectionDisplayIterator getIterator();
 }
 
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

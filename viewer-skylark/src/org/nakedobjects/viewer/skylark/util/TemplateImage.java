@@ -1,5 +1,8 @@
 package org.nakedobjects.viewer.skylark.util;
 
+import org.nakedobjects.viewer.skylark.Color;
+import org.nakedobjects.viewer.skylark.Image;
+
 import java.awt.Canvas;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
@@ -7,8 +10,6 @@ import java.awt.image.FilteredImageSource;
 import java.awt.image.RGBImageFilter;
 
 import org.apache.log4j.Logger;
-import org.nakedobjects.viewer.skylark.Color;
-import org.nakedobjects.viewer.skylark.Image;
 
 
 /**
@@ -92,7 +93,7 @@ class TemplateImage {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

@@ -2,22 +2,20 @@ package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.container.configuration.ComponentException;
 import org.nakedobjects.container.configuration.ComponentLoader;
-import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationException;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.UpdateNotifier;
+import org.nakedobjects.utility.DebugFrame;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.basic.ClassIconSpecification;
 import org.nakedobjects.viewer.skylark.basic.EmptyField;
 import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
 import org.nakedobjects.viewer.skylark.basic.SubviewIconSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
-import org.nakedobjects.viewer.skylark.core.DebugFrame;
 import org.nakedobjects.viewer.skylark.core.DefaultPopupMenu;
-import org.nakedobjects.viewer.skylark.special.BarchartSpecification;
 import org.nakedobjects.viewer.skylark.special.DataFormSpecification;
 import org.nakedobjects.viewer.skylark.special.FormSpecification;
-import org.nakedobjects.viewer.skylark.special.GridSpecification;
 import org.nakedobjects.viewer.skylark.special.InnerWorkspaceSpecification;
 import org.nakedobjects.viewer.skylark.special.ListSpecification;
 import org.nakedobjects.viewer.skylark.special.RootWorkspaceSpecification;
@@ -25,12 +23,7 @@ import org.nakedobjects.viewer.skylark.special.TableSpecification;
 import org.nakedobjects.viewer.skylark.special.TreeBrowserSpecification;
 import org.nakedobjects.viewer.skylark.special.WorkspaceSpecification;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
-import org.nakedobjects.viewer.skylark.value.CheckboxField;
-import org.nakedobjects.viewer.skylark.value.ColorField;
-import org.nakedobjects.viewer.skylark.value.OptionSelectionField;
-import org.nakedobjects.viewer.skylark.value.PercentageBarField;
 import org.nakedobjects.viewer.skylark.value.TextField;
-import org.nakedobjects.viewer.skylark.value.TimePeriodBarField;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -61,7 +54,7 @@ public class Viewer {
     private boolean explorationMode;
     private ObjectViewingMechanismListener listener;
 
-    private ViewUpdateNotifier updateNotifier = new ViewUpdateNotifier();
+    private ViewUpdateNotifier updateNotifier;
     private View keyboardFocus;
     private View windowFocus;
     private Size internalDisplaySize;
@@ -70,6 +63,11 @@ public class Viewer {
     private Bounds statusBarArea;
     private InteractionSpy spy;
 
+    public Viewer() {
+        doubleBuffering = ConfigurationFactory.getConfiguration().getBoolean(PROPERTY_BASE + "doublebuffering", true);
+    
+    }
+    
     public void markDamaged(Bounds bounds) {
         spy.addDamagedArea(bounds);
         synchronized (this) {
@@ -114,8 +112,7 @@ public class Viewer {
 
     public void init(RenderingArea renderingArea, ObjectViewingMechanismListener listener) throws ConfigurationException,
             ComponentException {
-        doubleBuffering = Configuration.getInstance().getBoolean(PROPERTY_BASE + "doublebuffering", true);
-
+ 
         /*
          * background = (Background)
          * ComponentLoader.loadComponent(PARAMETER_BASE + "background",
@@ -123,27 +120,16 @@ public class Viewer {
          */
         this.renderingArea = renderingArea;
         this.listener = listener;
+        
         spy = new InteractionSpy();
         new ViewerAssistant(this, updateNotifier, spy);
 
-        popup = new DefaultPopupMenu();
-        explorationMode = Configuration.getInstance().getBoolean(PROPERTY_BASE + "show-exploration");
-
-        InteractionHandler interactionHandler = new InteractionHandler(this, spy);
-        renderingArea.addMouseMotionListener(interactionHandler);
-        renderingArea.addMouseListener(interactionHandler);
-        renderingArea.addKeyListener(interactionHandler);
-
-        setupViewFactory();
-        if (Configuration.getInstance().getBoolean(PROPERTY_BASE + "debugstatus", false)) {
-            spy.open();
-        }
     }
 
     public void setRootView(View rootView) {
         this.rootView = rootView;
         rootView.invalidateContent();
-    }
+     }
 
     public void paint(Graphics g) {
         redrawCount++;
@@ -219,6 +205,7 @@ public class Viewer {
     }
 
     void repaint() {
+        updateNotifier.checkViewsForUpdates();
         rootView.layout();
         if (redrawArea != null) {
             Bounds area;
@@ -313,23 +300,24 @@ public class Viewer {
 
         LOG.debug("Setting up default views (provided by the framework)");
 
+/*
         viewFactory.addValueFieldSpecification(loadSpecification("field.color", ColorField.Specification.class));
         viewFactory.addValueFieldSpecification(loadSpecification("field.checkbox", CheckboxField.Specification.class));
         viewFactory.addValueFieldSpecification(loadSpecification("field.option", OptionSelectionField.Specification.class));
         viewFactory.addValueFieldSpecification(loadSpecification("field.percentage", PercentageBarField.Specification.class));
         viewFactory.addValueFieldSpecification(loadSpecification("field.timeperiod", TimePeriodBarField.Specification.class));
+*/
         viewFactory.addValueFieldSpecification(loadSpecification("field.text", TextField.Specification.class));
-
         viewFactory.addRootWorkspaceSpecification(new org.nakedobjects.viewer.skylark.metal.WorkspaceSpecification());
         viewFactory.addWorkspaceSpecification(new InnerWorkspaceSpecification());
 
-        if (Configuration.getInstance().getBoolean(SPECIFICATION_BASE + "defaults", true)) {
+        if (ConfigurationFactory.getConfiguration().getBoolean(SPECIFICATION_BASE + "defaults", true)) {
             viewFactory.addCompositeRootViewSpecification(new FormSpecification());
             viewFactory.addCompositeRootViewSpecification(new DataFormSpecification());
             viewFactory.addCompositeRootViewSpecification(new ListSpecification());
             viewFactory.addCompositeRootViewSpecification(new TableSpecification());
-            viewFactory.addCompositeRootViewSpecification(new BarchartSpecification());
-            viewFactory.addCompositeRootViewSpecification(new GridSpecification());
+//            viewFactory.addCompositeRootViewSpecification(new BarchartSpecification());
+//           viewFactory.addCompositeRootViewSpecification(new GridSpecification());
             viewFactory.addCompositeRootViewSpecification(new TreeBrowserSpecification());
         }
 
@@ -339,7 +327,7 @@ public class Viewer {
         viewFactory.addObjectIconSpecification(loadSpecification("icon.object", RootIconSpecification.class));
         viewFactory.addClassIconSpecification(loadSpecification("icon.class", ClassIconSpecification.class));
 
-        String viewParams = Configuration.getInstance().getString(SPECIFICATION_BASE + "view");
+        String viewParams = ConfigurationFactory.getConfiguration().getString(SPECIFICATION_BASE + "view");
 
         if (viewParams != null) {
             StringTokenizer st = new StringTokenizer(viewParams, ",");
@@ -380,8 +368,36 @@ public class Viewer {
     }
 
     public void start() {
-    //      sizeChange();
+//        spy = new InteractionSpy();
+//        new ViewerAssistant(this, updateNotifier, spy);
+
+        popup = new DefaultPopupMenu();
+        explorationMode = ConfigurationFactory.getConfiguration().getBoolean(PROPERTY_BASE + "show-exploration");
+
+        InteractionHandler interactionHandler = new InteractionHandler(this, spy);
+        renderingArea.addMouseMotionListener(interactionHandler);
+        renderingArea.addMouseListener(interactionHandler);
+        renderingArea.addKeyListener(interactionHandler);
+
+        try {
+            setupViewFactory();
+        } catch (ConfigurationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ComponentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        if (ConfigurationFactory.getConfiguration().getBoolean(PROPERTY_BASE + "debugstatus", false)) {
+            spy.open();
+        }
+
+   //
+   //      sizeChange();
     //     repaint();
+        
+ //       insets = renderingArea.getInsets();
     }
 
     public void sizeChange() {
@@ -529,11 +545,51 @@ public class Viewer {
         bounds.contract(0, statusBarHeight);
         return bounds;
     }
+    
+    public void setRenderingArea(RenderingArea renderingArea) {
+        this.renderingArea = renderingArea;
+    }
+    
+    /**
+	 * Expose as a .NET property
+	 * @property
+	 */
+    public void set_RenderingArea(RenderingArea renderingArea) {
+        this.renderingArea = renderingArea;
+    }
+    
+    public void setListener(ObjectViewingMechanismListener listener) {
+        this.listener = listener;
+    }
+    
+    public void setSpy(InteractionSpy spy) {
+        this.spy = spy;
+    }
+    
+    /**
+	 * Expose as a .NET property
+	 * @property
+	 */
+    public void set_Spy(InteractionSpy spy) {
+        this.spy = spy;
+    }
+
+    public void setUpdateNotifier(ViewUpdateNotifier updateNotifier) {
+        this.updateNotifier = updateNotifier;
+    }
+
+    /**
+	 * Expose as a .NET property
+	 * @property
+	 */
+    public void set_UpdateNotifier(ViewUpdateNotifier updateNotifier) {
+        this.updateNotifier = updateNotifier;
+    }
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

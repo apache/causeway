@@ -1,27 +1,24 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.reflect.ActionSpecification;
+import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.ValueField;
+import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.reflect.OneToManyPeer;
+import org.nakedobjects.object.reflect.OneToOnePeer;
 
 
 public interface ReflectionFactory {
-    ActionSpecification createAction(Action action);
+    Action createAction(ActionPeer action);
 
-    FieldSpecification createField(OneToManyAssociation local);
+    NakedObjectField createField(OneToManyPeer local);
 
-    FieldSpecification createField(OneToOneAssociation local);
-
-    FieldSpecification createField(ValueField local);
+    NakedObjectField createField(OneToOnePeer local);
 }
 
 /*
  Naked Objects - a framework that exposes behaviourally complete
  business objects directly to the user.
- Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+ Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

@@ -1,9 +1,9 @@
 package org.nakedobjects.viewer.skylark;
 
 public class UiConfiguration {
-    private static final Configuration configuration = new org.nakedobjects.viewer.skylark.configuration.DefaultUiConfiguration();
+    private static final GuiConfiguration configuration = new org.nakedobjects.viewer.skylark.configuration.DefaultUiConfiguration();
     
-    public static Configuration getInstance() {
+    public static GuiConfiguration getInstance() {
         return configuration;
     }
 }
@@ -12,7 +12,7 @@ public class UiConfiguration {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,10 +1,12 @@
 package org.nakedobjects.viewer.skylark.value;
 
-import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Allow;
-import org.nakedobjects.object.control.defaults.Veto;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
@@ -14,12 +16,11 @@ public class ClearValueOption extends AbstractValueOption {
         super("Clear");
     }
 
-    public Permission disabled(View view) {
-        NakedValue value = getValue(view);
-
+    public Consent disabled(View view) {
+        NakedObject value = getValue(view);
         if (!view.canChangeValue()) {
             return new Veto("Field cannot be edited");
-        } else if (value.isEmpty() || value.titleString().equals("")) {
+        } else if (isEmpty(view)) {
             return new Veto("Field is already empty");
         } else {
             return new Allow("Clear value " + value.titleString());
@@ -27,7 +28,8 @@ public class ClearValueOption extends AbstractValueOption {
     }
 
     public void execute(Workspace frame, View view, Location at) {
-        getValue(view).clear();
+        OneToOneField vc = (OneToOneField) view.getContent();        
+        vc.getParent().clear((OneToOneAssociation) vc.getField());
         updateParent(view);
     }
 
@@ -38,7 +40,7 @@ public class ClearValueOption extends AbstractValueOption {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

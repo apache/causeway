@@ -3,8 +3,8 @@ package org.nakedobjects.viewer.skylark.metal;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.defaults.Error;
+import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.viewer.skylark.Canvas;
-import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -24,7 +24,7 @@ import java.util.StringTokenizer;
 public class NakedErrorViewSpecification implements ViewSpecification {
 
     public boolean canDisplay(Naked object) {
-        return object instanceof NakedError;
+        return object instanceof PojoAdapter && ((PojoAdapter) object).getObject() instanceof NakedError;
     }
 
     public String getName() {
@@ -59,18 +59,20 @@ class ErrorView extends AbstractView {
        size.extendHeight(Style.TITLE.getHeight());
        size.extendHeight(30);
 
-       Error error = (Error) ((ObjectContent) getContent()).getObject();
+       Error error = (Error) ((PojoAdapter) ((ObjectContent) getContent()).getObject()).getObject();
        
-       size.ensureWidth(Style.NORMAL.stringWidth(error.getError().stringValue()));
+       size.ensureWidth(Style.NORMAL.stringWidth(error.getError()));
        size.extendHeight(Style.NORMAL.getHeight());
        size.extendHeight(30);
        
-       size.ensureWidth(Style.NORMAL.stringWidth(error.getException().stringValue()));
+       if(error.getException() != null) {
+           size.ensureWidth(Style.NORMAL.stringWidth(error.getException()));
+       }
        size.extendHeight(Style.NORMAL.getHeight());
        size.extendHeight(30);
 
 
-       String trace = error.getTrace().stringValue();
+       String trace = error.getTrace();
         StringTokenizer st = new StringTokenizer(trace, "\n\r");
         while (st.hasMoreTokens()) {
             String line = st.nextToken();
@@ -95,22 +97,23 @@ class ErrorView extends AbstractView {
 
         left = 20;
         top += Style.TITLE.getHeight();
-        Color color = Style.PRIMARY1;
-        canvas.drawText("ERROR", left, top, color, Style.TITLE);
+        canvas.drawText("ERROR", left, top, Style.INVALID, Style.TITLE);
         
-        Error error = (Error) ((ObjectContent) getContent()).getObject();
+        Error error = (Error) ((PojoAdapter) ((ObjectContent) getContent()).getObject()).getObject();
         top += 30;
-        canvas.drawText(error.getError().stringValue() ,left, top, color, Style.NORMAL);
+        canvas.drawText(error.getError() ,left, top, Style.INVALID, Style.NORMAL);
 
+        if(error.getException() != null) {
+	        top += 30;
+	        canvas.drawText(error.getException(),left, top, Style.INVALID, Style.NORMAL);
+        }
+        
         top += 30;
-        canvas.drawText(error.getException().stringValue(),left, top, color, Style.NORMAL);
-
-        top += 30;
-        String trace = error.getTrace().stringValue();
+        String trace = error.getTrace();
         StringTokenizer st = new StringTokenizer(trace, "\n\r");
         while (st.hasMoreTokens()) {
             String line = st.nextToken();
-            canvas.drawText(line,left + (line.startsWith("\t") ? 20 : 00), top, color, Style.NORMAL);
+            canvas.drawText(line,left + (line.startsWith("\t") ? 20 : 00), top, Style.INVALID, Style.NORMAL);
             top += Style.NORMAL.getHeight();
         }
         
@@ -124,7 +127,7 @@ class ErrorView extends AbstractView {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

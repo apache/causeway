@@ -1,37 +1,25 @@
 package org.nakedobjects.object.exploration;
 
-import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.security.ClientSession;
-import org.nakedobjects.object.security.User;
 
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
-public class ExplorationSetUp {
+public abstract class ExplorationSetUp {
     private static final Logger LOG = Logger.getLogger(ExplorationSetUp.class);
     
-    private ExplorationClock clock;
     private NakedObjectManager objectManager;
     private Vector classes;
-    private String user;
     private NakedObjectContext context;
     private Vector fixtures;
     private Vector newInstances = new Vector();
     
-    public ExplorationSetUp(NakedObjectContext context) {
-        this.context = context;
-
-        this.clock = ExplorationClock.initialize();
-        
-        this.objectManager = context.getObjectManager();
-
+    public ExplorationSetUp() {
         classes = new Vector();
         fixtures = new Vector();
     }
@@ -50,11 +38,19 @@ public class ExplorationSetUp {
 
             boolean notPersistent = object.getOid() == null;
             if (notPersistent) {
-                objectManager.makePersistent(object);
+                getObjectManager().makePersistent(object);
             }
         }
         
-        setInitialUser();
+ //       setInitialUser();
+    }
+    
+    private NakedObjectManager getObjectManager() {
+        if(objectManager == null) {
+            objectManager = context.getObjectManager();
+        }
+        
+        return objectManager;
     }
 
     private void addInstance(NakedObject object) {
@@ -66,9 +62,9 @@ public class ExplorationSetUp {
      * Helper method to create an instance of the given type. Provided for
      * exploration programs that need to set up instances.
      */
-    protected final NakedObject createInstance(Class type) {
+    protected final Object createInstance(Class type) {
         NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(type.getName());
-        if (nc == null) { return objectManager.generatorError("Could not create an object of class " + type, null); }
+        if (nc == null) { getObjectManager().generatorError("Could not create an object of class " + type, null); }
         return createInstance(nc);
     }
 
@@ -76,47 +72,17 @@ public class ExplorationSetUp {
      * Helper method to create an instance of the given type. Provided for
      * exploration programs that need to set up instances.
      */
-    protected final NakedObject createInstance(String className) {
+    protected final Object createInstance(String className) {
         NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
-        if (nc == null) { return objectManager.generatorError("Could not create an object of class " + className, null); }
+        if (nc == null) { return getObjectManager().generatorError("Could not create an object of class " + className, null); }
         return createInstance(nc);
     }
 
-    private NakedObject createInstance(NakedObjectSpecification nc) {
-        NakedObject object = (NakedObject) nc.acquireInstance();
+    private Object createInstance(NakedObjectSpecification nc) {
+        NakedObject object = getObjectManager().createTransientInstance(nc);
         object.setContext(context);
-        object.created();
         addInstance(object);
-        return object;
-    }
-
-    /**
-     * Convenience method provided for subclasses, indicating whether there are
-     * any instances of the specified class
-     */
-    protected final boolean needsInstances(Class cls) {
-        return needsInstances(cls.getName());
-    }
-
-    /**
-     * Convenience method provided for subclasses, indicating whether there are
-     * any instances of the specified class
-     */
-    protected final boolean needsInstances(String className) {
-        return !objectManager.hasInstances(NakedObjectSpecificationLoader.getInstance().loadSpecification(className));
-    }
-
-    
-    public void resetClock() {
-        clock.reset();
-    }
-
-    public void setTime(int hour, int minute) {
-        clock.setTime(hour, minute);
-    }
-
-    public void setDate(int year, int month, int day) {
-        clock.setDate(year, month, day);
+        return object.getObject();
     }
 
     public void registerClass(String className) {
@@ -129,25 +95,19 @@ public class ExplorationSetUp {
         classes.copyInto(classNames);
         return classNames;
     }
-    
-    public void setUser(String name) {
-        this.user = name;
-    }
-
-    private void setInitialUser() {
-        if(user != null) {
-	        NakedObjectSpecification cls = NakedObjectSpecificationLoader.getInstance().loadSpecification(User.class.getName());
-	        NakedCollection coll = objectManager.findInstances(cls, user, true);
-	        if(coll.size() == 0) {
-	            throw new NakedObjectRuntimeException("No user " + user);
-	        }
-	        User user = (User) coll.elements().nextElement();
-	        ClientSession.getSession().setUser(user);
-        }
-    }
 
     public void addFixture(ExplorationFixture fixture) {
         fixtures.addElement(fixture);
+    }
+
+    public abstract void resetClock() ;
+
+    public abstract void setTime(int hour, int minute);
+
+    public abstract  void setDate(int year, int month, int day) ;
+
+    public void setContext(NakedObjectContext context) {
+        this.context = context;
     }
     
 
@@ -157,7 +117,7 @@ public class ExplorationSetUp {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,10 +1,10 @@
 package org.nakedobjects.persistence.file;
 
-import java.util.Hashtable;
-import java.util.Vector;
-
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.defaults.SerialOid;
+
+import java.util.Hashtable;
+import java.util.Vector;
 
 
 public class InMemoryDataManager extends DataManager {
@@ -99,7 +99,7 @@ public class InMemoryDataManager extends DataManager {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2003 Naked Objects Group Ltd
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the

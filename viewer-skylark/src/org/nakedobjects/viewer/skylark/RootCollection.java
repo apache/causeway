@@ -4,18 +4,15 @@ import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Veto;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.NotImplementedException;
-import org.nakedobjects.viewer.skylark.special.CollectionDisplayIterator;
-import org.nakedobjects.viewer.skylark.special.CollectionIterator;
 
 import java.util.Enumeration;
 
 
 public class RootCollection implements CollectionContent {
     private final NakedCollection collection;
-    private CollectionDisplayIterator iterator;
 
     public RootCollection(NakedCollection collection) {
         this.collection = collection;
@@ -39,13 +36,6 @@ public class RootCollection implements CollectionContent {
         return collection;
     }
 
-    public CollectionDisplayIterator getIterator() {
-        if (iterator == null) {
-            iterator = new CollectionIterator(collection);
-        }
-        return iterator;
-    }
-
     public NakedObject getObject() {
         return collection;
     }
@@ -60,17 +50,17 @@ public class RootCollection implements CollectionContent {
         return "" + collection;
     }
 
-    public Permission canSet(NakedObject dragSource) {
+    public Consent canSet(NakedObject dragSource) {
         return Veto.DEFAULT;    }
 
-    public Permission canClear() {
+    public Consent canClear() {
         return Veto.DEFAULT;    }
 
     public String getName() {
         return "";
     }
     
-    public NakedObjectSpecification getType() {
+    public NakedObjectSpecification getSpecification() {
         throw new NotImplementedException();
     }
     
@@ -78,7 +68,7 @@ public class RootCollection implements CollectionContent {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

@@ -1,8 +1,8 @@
 package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.ValueContent;
-import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
@@ -18,7 +18,7 @@ public class DataFormSpecification extends AbstractCompositeViewSpecification {
         public View createSubview(Content content, ViewAxis axis) {
             ViewFactory factory = ViewFactory.getViewFactory();
 
-            if (content instanceof ValueField) {
+            if (content instanceof ValueContent) {
                 ViewSpecification specification = factory.getValueFieldSpecification((ValueContent) content);
                 return specification.createView(content, axis);
             }
@@ -31,7 +31,7 @@ public class DataFormSpecification extends AbstractCompositeViewSpecification {
         }
 
         public boolean isContentShown(Content content) {
-            return content instanceof ValueField;
+            return content instanceof ObjectContent && ((ObjectContent) content).getSpecification().isValue();
         }
     }
 
@@ -50,7 +50,7 @@ public class DataFormSpecification extends AbstractCompositeViewSpecification {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

@@ -1,9 +1,9 @@
 package org.nakedobjects.viewer.skylark;
 
+import junit.framework.TestCase;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-
-import junit.framework.TestCase;
 
 
 public class BoundsTest extends TestCase {
@@ -219,7 +219,7 @@ public class BoundsTest extends TestCase {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

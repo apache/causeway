@@ -4,9 +4,9 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.TypedNakedCollection;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Allow;
-import org.nakedobjects.object.control.defaults.Veto;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Veto;
 
 
 public abstract class AbstractTypedNakedCollectionVector extends AbstractNakedCollectionVector implements TypedNakedCollection {
@@ -29,7 +29,7 @@ public abstract class AbstractTypedNakedCollectionVector extends AbstractNakedCo
      * Object are allowed if they: are of the type specified; and are not
      * already part of the collection.
      */
-    public Permission canAdd(NakedObject object) {
+    public Consent canAdd(NakedObject object) {
         if (contains(object)) {
             return new Veto("Collection cannot have duplicate objects");
         }
@@ -46,7 +46,7 @@ public abstract class AbstractTypedNakedCollectionVector extends AbstractNakedCo
      * collection. Object are allowed to be removed if they are part of the
      * collection.
      */
-    public Permission canRemove(NakedObject object) {
+    public Consent canRemove(NakedObject object) {
         if (contains(object)) {
             return Allow.DEFAULT;
         }
@@ -64,7 +64,7 @@ public abstract class AbstractTypedNakedCollectionVector extends AbstractNakedCo
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

@@ -1,21 +1,20 @@
 package org.nakedobjects.example.library;
 
-import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.NakedCollection;
-import org.nakedobjects.object.control.ActionAbout;
-import org.nakedobjects.object.control.FieldAbout;
-import org.nakedobjects.object.control.State;
-import org.nakedobjects.object.control.defaults.SimpleState;
-import org.nakedobjects.object.defaults.AbstractNakedObject;
-import org.nakedobjects.object.defaults.Title;
-import org.nakedobjects.object.defaults.collection.ArbitraryCollectionVector;
-import org.nakedobjects.object.defaults.value.Date;
-import org.nakedobjects.object.defaults.value.Logical;
-import org.nakedobjects.object.defaults.value.MultilineTextString;
-import org.nakedobjects.object.defaults.value.TextString;
+import org.nakedobjects.application.BusinessObjectContainer;
+import org.nakedobjects.application.Title;
+import org.nakedobjects.application.control.ActionAbout;
+import org.nakedobjects.application.control.FieldAbout;
+import org.nakedobjects.application.control.State;
+import org.nakedobjects.application.value.Date;
+import org.nakedobjects.application.value.Logical;
+import org.nakedobjects.application.value.MultilineTextString;
+import org.nakedobjects.application.value.SimpleState;
+import org.nakedobjects.application.value.TextString;
+
+import java.util.Vector;
 
 
-public class Member extends AbstractNakedObject {
+public class Member extends BaseObject {
 	private final TextString name = new TextString();
 	private final MultilineTextString address = new MultilineTextString();
 	private final TextString phone = new TextString(); 
@@ -24,7 +23,7 @@ public class Member extends AbstractNakedObject {
 	private final TextString code = new TextString();
 	private final Date joined = new Date();
 	
-	private final InternalCollection loans = createInternalCollection(Loan.class);
+	private final Vector loans = new Vector();
 	
 	static final State NEW = new SimpleState(1, "New member");
 	static final State VERIFIED = new SimpleState(2, "Verified");
@@ -32,6 +31,10 @@ public class Member extends AbstractNakedObject {
 	
 	private State state = new SimpleState(new State[] {NEW, VERIFIED, EXPIRED});
 	
+	   public void setContainer(BusinessObjectContainer container) {
+	        this.container = container;
+	    }
+
 	public static String fieldOrder() {
 		return "name, junior, address, phone, email, loans, status";
 	}
@@ -51,7 +54,7 @@ public class Member extends AbstractNakedObject {
 	}
 	
 	public Loan actionLoan(Book book) {
-		Loan loan = (Loan) createInstance(Loan.class);
+		Loan loan = (Loan) container.createInstance(Loan.class);
 		loan.associateBook(book);
 		loan.associateLentTo(this);
 		return loan;
@@ -60,7 +63,7 @@ public class Member extends AbstractNakedObject {
 	public void created() {
 		state.changeTo(NEW);
 		junior.reset();
-		code.setValue("M" + getObjectManager().serialNumber("members"));
+		code.setValue("M" + container.serialNumber("members"));
 	}
 	
 	public Title title() {
@@ -90,16 +93,8 @@ public class Member extends AbstractNakedObject {
 		about.unmodifiableOnCondition(add, "no adding loans by the user");
 		about.modifiableOnlyByRole(Roles.ADMIN);
 	}
-	
-	public NakedCollection actionTestCollections() 
-	{
-		NakedCollection coll = new ArbitraryCollectionVector();
-		coll.add(this);
-		coll.addAll(getLoans());
-		return coll; 
-	}
-	
-	public InternalCollection getLoans() {
+
+	public Vector getLoans() {
 		return loans;
 	}
 	
@@ -138,7 +133,7 @@ public class Member extends AbstractNakedObject {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

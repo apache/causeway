@@ -1,13 +1,14 @@
 package org.nakedobjects.viewer.skylark.value;
 
+import org.nakedobjects.utility.NotImplementedException;
+import org.nakedobjects.viewer.skylark.value.TextField.CursorPosition;
+import org.nakedobjects.viewer.skylark.value.TextField.Selection;
+
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.apache.log4j.Category;
-import org.nakedobjects.utility.NotImplementedException;
-import org.nakedobjects.viewer.skylark.value.TextField.CursorPosition;
-import org.nakedobjects.viewer.skylark.value.TextField.Selection;
 
 
 class TextFieldContent {
@@ -158,7 +159,7 @@ class TextFieldContent {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,7 +1,7 @@
 /*
         Naked Objects - a framework that exposes behaviourally complete
         business objects directly to the user.
-        Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+        Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
         This program is free software; you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -23,14 +23,14 @@
 */
 package org.nakedobjects.distribution.duplex;
 
+import org.nakedobjects.distribution.ObjectUpdateMessage;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.net.SocketException;
 
 import org.apache.log4j.Logger;
-
-import org.nakedobjects.distribution.ObjectUpdateMessage;
 
 
 final class ClientUpdateReceiver implements Runnable {

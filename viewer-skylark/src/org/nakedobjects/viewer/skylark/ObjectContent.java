@@ -1,14 +1,14 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.Consent;
 
 
 public interface ObjectContent extends Content {
 
-    Permission canClear();
+    Consent canClear();
 
-    Permission canSet(NakedObject dragSource);
+    Consent canSet(NakedObject dragSource);
 
     void clear();
 
@@ -21,7 +21,7 @@ public interface ObjectContent extends Content {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

@@ -4,7 +4,7 @@ import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
@@ -31,14 +31,14 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
         NakedObject object = ((ObjectContent) view.getContent()).getObject();
 
         if (object != null && view.getSubviews().length == 0) {
-            FieldSpecification[] flds = object.getSpecification().getVisibleFields(object, ClientSession.getSession());
+            NakedObjectField[] flds = object.getSpecification().getVisibleFields(object, ClientSession.getSession());
             ViewFactory factory = ViewFactory.getViewFactory();
 
             for (int f = 0; f < flds.length; f++) {
-                FieldSpecification field = flds[f];
-                Naked attribute = field.get(object);
+                NakedObjectField field = flds[f];
+                Naked attribute = object.getField(field);
 
-                if (field.getName().equals("classes") && attribute instanceof InternalCollection) {
+                if (field.getName().equals("classes") && field.isCollection()) {
                     Enumeration elements = ((InternalCollection) attribute).elements();
                     while (elements.hasMoreElements()) {
                         NakedObject cls = (NakedObject) elements.nextElement();
@@ -47,7 +47,7 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
                         view.addView(classIcon);
                     }
 
-                } else if (field.getName().equals("objects") && attribute instanceof InternalCollection) {
+                } else if (field.getName().equals("objects") && field.isCollection()) {
                     Enumeration elements = ((InternalCollection) attribute).elements();
                     while (elements.hasMoreElements()) {
                         NakedObject obj = (NakedObject) elements.nextElement();
@@ -107,7 +107,7 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
 
                 } else {
                     NakedObject object = ((ObjectContent) v.getContent()).getObject();
-                    if (object instanceof NakedClass) {
+                    if (object.getObject() instanceof NakedClass) {
                         if (yClass + height > maxHeight) {
                             yClass = PADDING;
                             xClass += maxClassWidth + PADDING;
@@ -138,7 +138,7 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

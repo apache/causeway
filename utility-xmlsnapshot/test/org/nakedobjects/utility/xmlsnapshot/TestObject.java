@@ -1,23 +1,19 @@
 package org.nakedobjects.utility.xmlsnapshot;
 
-import org.nakedobjects.object.MockNakedObject;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.defaults.value.TextString;
 
-public class TestObject extends MockNakedObject {
-    private final TextString name = new TextString();
+public class TestObject {
+    private String name;
     
-    public TextString getName() {
+    public String getName() {
         return name;
     }
     
-    public NakedObjectSpecification getSpecification() {
-        return NakedObjectSpecificationLoader.getInstance().loadSpecification(TestObject.class);
+    public void setName(String name) {
+        this.name = name;
     }
     
-    public String titleString() {
-        return name.stringValue();
+     public String titleString() {
+        return name;
     }
 }
 
@@ -25,7 +21,7 @@ public class TestObject extends MockNakedObject {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

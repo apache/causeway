@@ -1,7 +1,7 @@
 /*
     Naked Objects - a framework that exposes behaviourally complete
     business objects directly to the user.
-    Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+    Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,10 +25,10 @@ package org.nakedobjects.distribution.reflect;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.security.SecurityContext;
 
 import org.apache.log4j.Category;
 
@@ -46,7 +46,7 @@ public class RemoteOneToOneAssociation implements OneToOneAssociation {
 		if(inObject.isPersistent() && fullProxy) {
             throw new NotExpectedException();
         } else {
-        	return local.getAbout(context, inObject, associate);
+        	return local.getHint(context, inObject, associate);
         }
     }
 
@@ -102,17 +102,13 @@ public class RemoteOneToOneAssociation implements OneToOneAssociation {
 	public boolean hasAbout() {
 		return local.hasAbout();
 	}
-	
-	public boolean hasAddMethod() {
-		return local.hasAddMethod();
-	}
 
 	public String getName() {
 		return local.getName();
 	}
 
-	public Class getType() {
-		return local.getType();
+	public NakedObjectSpecification getType() {
+		return local.getSpecification();
 	}
 
 	public void initData(NakedObject inObject, Object associate) {

@@ -1,22 +1,24 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.security.User;
+import org.nakedobjects.object.defaults.InternalNakedObject;
+
+import java.util.Vector;
 
 
-public interface UserContext extends NakedObject {
-    InternalCollection getClasses();
+public interface UserContext extends InternalNakedObject {
+    Vector getClasses();
 
-    InternalCollection getObjects();
+    Vector getObjects();
 
-    User getUser();
+//    User getUser();
 
-    void setUser(User user);
+//    void setUser(User user);
 }
 
 /*
  Naked Objects - a framework that exposes behaviourally complete
  business objects directly to the user.
- Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+ Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

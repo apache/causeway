@@ -6,10 +6,10 @@ import org.nakedobjects.object.Oid;
 
 public interface DistributionInterface {
 
-    AboutData aboutAction(SessionId sessionId, ObjectReference target, ActionType actionType, String actionName,
+    HintData actionHint(SessionId sessionId, ObjectReference target, ActionType actionType, String actionName,
             ParameterSet parameters);
 
-    AboutData aboutValue(SessionId sessionId, ObjectReference target, String fieldName);
+    HintData valueHint(SessionId sessionId, ObjectReference target, String fieldName);
 
     void associateObject(SessionId sessionId, ObjectReference target, String fieldName, ObjectReference associate);
 
@@ -44,11 +44,13 @@ public interface DistributionInterface {
             throws RemoteException;
 
     long serialNumber(SessionId sessionId, String name);
+
+    void clearValue(SessionId securityToken, ObjectReference objectReference, String name);
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

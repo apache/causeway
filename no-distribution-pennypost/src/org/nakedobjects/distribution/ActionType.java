@@ -1,11 +1,11 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.reflect.ActionSpecification.Type;
+import org.nakedobjects.object.reflect.Action.Type;
 
 /**
  * Data object detailing the type of action.  The types being User, Exploration, Debug etc.
  * 
- * @see org.nakedobjects.object.reflect.ActionSpecification
+ * @see org.nakedobjects.object.reflect.Action
  */
 public interface ActionType {
     Type getType();
@@ -15,7 +15,7 @@ public interface ActionType {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

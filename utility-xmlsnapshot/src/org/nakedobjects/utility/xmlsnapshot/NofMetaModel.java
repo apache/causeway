@@ -1,9 +1,7 @@
 package org.nakedobjects.utility.xmlsnapshot;
 
 import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.Oid;
-
-import java.util.Enumeration;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -164,6 +162,8 @@ final class NofMetaModel {
         setAttribute(element, "type", prefix + ":" + fullyQualifiedClassName);
         setAttribute(element, "size", "" + collection.size());
         if (addOids) {
+            throw new NakedObjectRuntimeException();
+            /*
             Element oidsElement = appendElement(element, "oids");
             for (Enumeration e = collection.oids(); e.hasMoreElements();) {
                 Oid oid = (Oid) e.nextElement();
@@ -171,6 +171,7 @@ final class NofMetaModel {
                 oid.writeData(dtw);
                 dtw.close();
             }
+            */
         }
     }
 
@@ -178,7 +179,7 @@ final class NofMetaModel {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

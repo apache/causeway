@@ -1,8 +1,8 @@
 package org.nakedobjects.distribution.example;
 
 
-import org.nakedobjects.distribution.AboutData;
 import org.nakedobjects.distribution.ActionType;
+import org.nakedobjects.distribution.HintData;
 import org.nakedobjects.distribution.InstanceSet;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ObjectReference;
@@ -14,15 +14,15 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.UnsupportedFindException;
-import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.reflect.ActionSpecification.Type;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
 
 public class SimpleRemoteObjectFactory implements RemoteObjectFactory {
     private long sessionId = 99L;
 
-    public AboutData createAboutData(About about) {
-        return new SimpleAboutData(about);
+    public HintData createAboutData(Hint hint) {
+        return new SimpleAboutData(hint);
     }
 
     public ActionType createActionType(Type type) {
@@ -67,7 +67,7 @@ public class SimpleRemoteObjectFactory implements RemoteObjectFactory {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

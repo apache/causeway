@@ -1,15 +1,15 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 
 
 public interface View extends Cloneable {
     /** Horizontal padding (||) between two components */
-    public static final int HPADDING = Configuration.getInstance().getInteger(Viewer.PROPERTY_BASE + "hpadding", 2);
+    public static final int HPADDING = ConfigurationFactory.getConfiguration().getInteger(Viewer.PROPERTY_BASE + "hpadding", 2);
     /** Vertical padding (=) between two components */
-    public static final int VPADDING = Configuration.getInstance().getInteger(Viewer.PROPERTY_BASE + "vpadding", 2);
+    public static final int VPADDING = ConfigurationFactory.getConfiguration().getInteger(Viewer.PROPERTY_BASE + "vpadding", 2);
 
     void addView(View view);
 
@@ -317,11 +317,13 @@ public interface View extends Cloneable {
      *                 is targeting what is being represented
      */
     ViewAreaType viewAreaType(Location mouseLocation);
+
+    void updateView();
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

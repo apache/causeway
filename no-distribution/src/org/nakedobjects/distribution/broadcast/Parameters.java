@@ -1,7 +1,7 @@
 
 package org.nakedobjects.distribution.broadcast;
 
-import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 
 
 class Parameters {
@@ -28,7 +28,7 @@ class Parameters {
     private final int UpdateTtl;
 
     Parameters() {
-        Configuration params = Configuration.getInstance();
+        ConfigurationFactory params = ConfigurationFactory.getConfiguration();
 
         host = params.getString(REQUEST_ADDRESS);
 
@@ -75,7 +75,7 @@ class Parameters {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General private License as published by

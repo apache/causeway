@@ -1,12 +1,12 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
@@ -61,19 +61,24 @@ public class InternalCollectionBorder extends AbstractBorder {
 	public void menuOptions(MenuOptionSet options) {
         super.menuOptions(options);
         
+        NakedObjectSpecification nakedClass = ((OneToManyField) getContent()).getSpecification();
+        /*
         InternalCollection collection = (InternalCollection) ((OneToManyField) getContent()).getCollection();
         NakedObjectSpecification nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(collection.getElementSpecification().getFullName());
-        
+        */
         ClassOption.menuOptions(nakedClass, options);
     }
 	
     public void objectActionResult(Naked result, Location at) {
         // same as in TreeNodeBorder
         OneToManyField internalCollectionContent = (OneToManyField) getContent();
-        OneToManyAssociationSpecification field = (OneToManyAssociationSpecification) internalCollectionContent.getField();
+        OneToManyAssociation field = (OneToManyAssociation) internalCollectionContent.getField();
         NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
-        if(field.canAssociate(target, (NakedObject) result)) {
-        	field.setAssociation(target, (NakedObject) result);
+        
+        Hint about = target.getHint(ClientSession.getSession(), field, (NakedObject) result);
+        if(about.canUse().isAllowed()) {
+//        if(field.canAssociate(target, (NakedObject) result)) {
+        	target.setAssociation(field, (NakedObject) result);
         }
         super.objectActionResult(result, at);
     }
@@ -87,7 +92,7 @@ public class InternalCollectionBorder extends AbstractBorder {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

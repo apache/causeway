@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Allow;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
 
 
 /**
@@ -42,7 +42,7 @@ public abstract class MenuOption implements UserAction {
         return description;
     }
 
-    public Permission disabled(View component) {
+    public Consent disabled(View component) {
         return Allow.DEFAULT;
     }
 
@@ -56,7 +56,7 @@ public abstract class MenuOption implements UserAction {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

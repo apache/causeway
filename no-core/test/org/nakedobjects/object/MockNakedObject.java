@@ -1,16 +1,28 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.NakedObjectAssociation;
+import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.ActionParameterSet;
+import org.nakedobjects.object.security.Session;
+
 
 
 public class MockNakedObject implements NakedObject {
 
+    public Object getObject() {
+        return this;
+    }
+    
     private NakedObjectContext context;
 
     public void created() {}
 
     public void deleted() {}
 
-    public void destroy() throws ObjectStoreException {}
 
     public String getIconName() {
         return null;
@@ -32,15 +44,9 @@ public class MockNakedObject implements NakedObject {
         return false;
     }
 
-    public void objectChanged() {}
-
-    public void resolve() {}
-
     public void setOid(Oid oid) {}
 
     public void setResolved() {}
-
-    public void makeFinder() {}
 
     public NakedObjectContext getContext() {
         return context;
@@ -52,16 +58,8 @@ public class MockNakedObject implements NakedObject {
 
     public void copyObject(Naked object) {}
 
-    public String getClassName() {
-        return null;
-    }
-
     public NakedObjectSpecification getSpecification() {
         return new DummyNakedObjectSpecification();//NakedObjectSpecification.getSpecification(MockNakedObject.class);
-    }
-
-    public String getShortClassName() {
-        return null;
     }
 
     public boolean isEmpty() {
@@ -76,13 +74,91 @@ public class MockNakedObject implements NakedObject {
         return null;
     }
 
+    public boolean isEmpty(NakedObjectField field) {
+        return false;
+    }
+
+    public void clear(OneToOneAssociation specification) {}
+
+    public NakedObject getField(NakedObjectField field) {
+        return null;
+    }
+
+    public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {}
+
+    public void setValue(OneToOneAssociation field, Object object) {}
+
+    public String getLabel(Session session, NakedObjectField field) {
+        return null;
+    }
+
+    public String getLabel(Session session, Action action) {
+        return null;
+    }
+
+    public void parseTextEntry(OneToOneAssociation specification, String text) throws TextEntryParseException, InvalidEntryException {}
+
+    public void clear(NakedObjectAssociation specification, NakedObject ref) {}
+
+    public boolean canAccess(Session session, NakedObjectField specification) {
+        return false;
+    }
+
+    public boolean canAccess(Session session, Action action) {
+        return false;
+    }
+
+    public boolean canUse(Session session, NakedObjectField field) {
+        return false;
+    }
+
+    public NakedObject execute(Action action, Naked[] parameters) {
+        return null;
+    }
+
+    public Hint getHint(Session session, Action action, Naked[] parameters) {
+        return null;
+    }
+
+    public Hint getHint(Session session, NakedObjectField field, NakedObject value) {
+        return null;
+    }
+
+    public boolean isParsable() {
+        return false;
+    }
+
+    public void initAssociation(NakedObjectAssociation field, NakedObject associatedObject) {}
+
+    public void initValue(OneToOneAssociation field, Object object) {}
+
+    public void initOneToManyAssociation(OneToManyAssociation association, NakedObject[] instances) {}
+
+    public void markDirty() {}
+
+    public void clearViewDirty() {}
+
+    public boolean isViewDirty() {
+        return false;
+    }
+
+    public ActionParameterSet getParameters(Session session, Action action, NakedObjectSpecification[] parameterTypes) {
+        return null;
+    }
+
+    public boolean isPersistDirty() {
+        return false;
+    }
+
+    public void clearPersistDirty() {}
+
 }
 
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

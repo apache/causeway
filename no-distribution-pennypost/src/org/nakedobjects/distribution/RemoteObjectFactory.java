@@ -5,8 +5,8 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.UnsupportedFindException;
-import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.reflect.ActionSpecification.Type;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
 
 public interface RemoteObjectFactory {
@@ -21,7 +21,7 @@ public interface RemoteObjectFactory {
 
     public ObjectReference createObjectReference(Oid oid, String className);
 
-    AboutData createAboutData(About about);
+    HintData createAboutData(Hint about);
 
     ObjectData createObjectData(NakedObject object);
 
@@ -36,7 +36,7 @@ public interface RemoteObjectFactory {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -5,8 +5,8 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.collection.AbstractTypedNakedCollectionVector;
-import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
+import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
@@ -43,7 +43,7 @@ public class TableSpecification extends AbstractCompositeViewSpecification imple
         NakedObjectSpecification elementSpecification = NakedObjectSpecificationLoader.getInstance().loadSpecification(
                 coll.getElementSpecification().getFullName());
         NakedObject exampleObject = (NakedObject) elementSpecification.acquireInstance();
-        FieldSpecification[] viewFields = elementSpecification.getVisibleFields(exampleObject, ClientSession.getSession());
+        NakedObjectField[] viewFields = elementSpecification.getVisibleFields(exampleObject, ClientSession.getSession());
         TableAxis tableAxis = new TableAxis(tableFields(viewFields), exampleObject);
         tableAxis.setupColumnWidths(new TypeBasedColumnWidthStrategy());
 
@@ -52,16 +52,16 @@ public class TableSpecification extends AbstractCompositeViewSpecification imple
         return table;
     }
 
-    private FieldSpecification[]  tableFields(FieldSpecification[] viewFields) {
-        FieldSpecification[] tableFields = new FieldSpecification[viewFields.length];
+    private NakedObjectField[]  tableFields(NakedObjectField[] viewFields) {
+        NakedObjectField[] tableFields = new NakedObjectField[viewFields.length];
         int c = 0;
         for (int i = 0; i < viewFields.length; i++) {
-            if(!(viewFields[i] instanceof OneToManyAssociationSpecification)) {
+            if(!(viewFields[i] instanceof OneToManyAssociation)) {
                 tableFields[c++] = viewFields[i];
             }
         }            
 
-        FieldSpecification[] results = new FieldSpecification[c];
+        NakedObjectField[] results = new NakedObjectField[c];
         System.arraycopy(tableFields, 0, results, 0, c);
         return results;
     }
@@ -85,7 +85,7 @@ public class TableSpecification extends AbstractCompositeViewSpecification imple
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

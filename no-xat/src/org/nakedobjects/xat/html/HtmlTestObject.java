@@ -3,7 +3,6 @@ package org.nakedobjects.xat.html;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.xat.TestNaked;
 import org.nakedobjects.xat.TestObject;
 import org.nakedobjects.xat.TestObjectDecorator;
@@ -43,7 +42,7 @@ public class HtmlTestObject extends TestObjectDecorator {
         }
     }
 
-    public void assertFieldContains(String message, String fieldName, NakedValue expectedValue) {
+    public void assertFieldContains(String message, String fieldName, Object expectedValue) {
         super.assertFieldContains(message, fieldName, expectedValue);
         doc("<p>Note that the field <em>" + fieldName + "</em> in the " + doc.objectString(getForObject()) + " is now set to '"
                 + getField(fieldName).getForObject().titleString() + "'.");
@@ -70,7 +69,7 @@ public class HtmlTestObject extends TestObjectDecorator {
         }
     }
 
-    public void assertFieldDoesNotContain(String message, String fieldName, NakedValue expectedValue) {
+    public void assertFieldDoesNotContain(String message, String fieldName, NakedObject expectedValue) {
         super.assertFieldDoesNotContain(message, fieldName, expectedValue);
         doc("<p>Note that the field <em>" + fieldName + "</em> in the " + doc.objectString(getForObject())
                 + " does not contain '" + getField(fieldName).getForObject().titleString() + "'.");
@@ -161,7 +160,7 @@ public class HtmlTestObject extends TestObjectDecorator {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

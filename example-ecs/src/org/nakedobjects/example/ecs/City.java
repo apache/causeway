@@ -1,79 +1,109 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.object.control.ClassAbout;
-import org.nakedobjects.object.control.FieldAbout;
-import org.nakedobjects.object.defaults.AbstractNakedObject;
-import org.nakedobjects.object.defaults.Title;
-import org.nakedobjects.object.defaults.value.TextString;
-import org.nakedobjects.object.security.Role;
+import org.nakedobjects.application.BusinessObjectContainer;
+import org.nakedobjects.application.InstancesCriteria;
+import org.nakedobjects.application.Lookup;
+import org.nakedobjects.application.Title;
+import org.nakedobjects.application.TitledObject;
+import org.nakedobjects.application.UnsupportedFindException;
+import org.nakedobjects.application.control.FieldAbout;
+
+import java.util.Date;
+import java.util.Vector;
 
 
-public class City extends AbstractNakedObject {
-    private static final long serialVersionUID = 1L;
-    private final TextString name;
+public class City implements Lookup, TitledObject {
+    private String name;
+    private Date dateOpened;
+//    private float population;
+    private transient BusinessObjectContainer container;
 
-    public City() {
-        name = new TextString();
+    public Vector actionLocationsForCity() throws UnsupportedFindException {
+        InstancesCriteria criteria = new InstancesCriteria() {
+        };
+        return container.findInstances(criteria, false);
     }
 
-    public static void aboutCity(ClassAbout about) {
-        about.uninstantiable("We have enough cities already");
+     public void setContainer(BusinessObjectContainer container) {
+        this.container = container;
     }
-
+    
     public Location actionNewLocation() {
-        Location loc = (Location) createInstance(Location.class);
-
+        Location loc = (Location) container.createInstance(Location.class);
         loc.setCity(this);
-
-        return loc;
-    }
-
-    public Location actionNewLocation(Customer customer) {
-        Location loc = (Location) createInstance(Location.class);
-
-        loc.setCity(this);
-        loc.setCustomer(customer);
-
         return loc;
     }
 
     public void aboutName(FieldAbout about) {
-    	about.modifiableOnlyByRole(Role.SYSADMIN);
+    //   	about.modifiableOnlyByRole(Role.SYSADMIN);
     }
-    
-    public final TextString getName() {
+
+    public final String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public static String pluralName() {
         return "Cities";
     }
 
+    public String toString() {
+        return name;
+    }
+/*
+    public float getPopulation() {
+        return population;
+    }
+
+    public void setPopulation(float population) {
+        this.population = population;
+    }
+    */
+
+    public Date getDateOpened() {
+        return dateOpened;
+    }
+
+    public void setDateOpened(Date dateOpened) {
+        this.dateOpened = dateOpened;
+    }
+    
+    public String lookupDescription() {
+        return null;
+    }
+
+    public boolean isSelected(String text) {
+        return false;
+    }
+
     public Title title() {
-        return name.title();
+        return new Title(name);
     }
 }
 
 /*
-Naked Objects - a framework that exposes behaviourally complete
-business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-The authors can be contacted via www.nakedobjects.org (the
-registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-Road, Woking GU21 1NR, UK).
-*/
+ * Naked Objects - a framework that exposes behaviourally complete business
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
+ * Ltd
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * The authors can be contacted via www.nakedobjects.org (the registered address
+ * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
+ * 1NR, UK).
+ */

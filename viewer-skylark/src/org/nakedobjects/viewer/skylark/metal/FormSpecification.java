@@ -7,11 +7,9 @@ import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.ValueContent;
-import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
-import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.FieldLabel;
 import org.nakedobjects.viewer.skylark.basic.LabelAxis;
 import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
@@ -40,7 +38,7 @@ public class FormSpecification extends AbstractCompositeViewSpecification implem
 
         if (content instanceof OneToManyField) {
             spec = internalList;
-        } else if (content instanceof ValueField) {
+        } else if (content instanceof ValueContent) {
             spec = factory.getValueFieldSpecification((ValueContent) content);
         } else if (content instanceof ObjectContent) {
             spec = factory.getIconizedSubViewSpecification((ObjectContent) content);
@@ -67,7 +65,7 @@ public class FormSpecification extends AbstractCompositeViewSpecification implem
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

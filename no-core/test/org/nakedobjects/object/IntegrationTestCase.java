@@ -4,14 +4,12 @@ import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
-import org.nakedobjects.object.reflect.AssociationSpecification;
-import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
-import org.nakedobjects.object.system.TestClock;
+import org.nakedobjects.object.reflect.NakedObjectAssociation;
+
+import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
-
-import junit.framework.TestCase;
 
 public class IntegrationTestCase extends TestCase {
     protected MockObjectManager manager;
@@ -21,11 +19,10 @@ public class IntegrationTestCase extends TestCase {
         super.setUp();
 
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
-        new TestClock();
         manager = MockObjectManager.setup();
         new NakedObjectSpecificationLoaderImpl();
         NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
-        NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
+//        NakedObjectSpecificationImpl.setReflectorFactory(new InternalReflectorFactory());
         context = new NakedObjectContext(manager);
     }
     
@@ -35,22 +32,22 @@ public class IntegrationTestCase extends TestCase {
     }
     
 
-    public static void assertEquals(String name, String expected, NakedValue value) {
+    public static void assertEquals(String name, String expected, NakedObject value) {
         assertEquals(name, expected, value.titleString().toString());
     }
 
-    public static void assertEquals(String expected, NakedValue value) {
+    public static void assertEquals(String expected, NakedObject value) {
         assertEquals(expected, value.titleString().toString());
     }
 
-    public static void assertEquals(NakedValue expected, NakedValue value) {
+    public static void assertEquals(NakedObject expected, NakedObject value) {
     	assertEquals(expected.titleString().toString(), value.titleString().toString());
     }
 
-    protected AssociationSpecification findAssocation(String attributeName, NakedObject forObject) {
+    protected NakedObjectAssociation findAssocation(String attributeName, NakedObject forObject) {
         NakedObjectSpecification c = forObject.getSpecification();
 
-        return (AssociationSpecification) c.getField(attributeName);
+        return (NakedObjectAssociation) c.getField(attributeName);
     }
 }
 
@@ -58,7 +55,7 @@ public class IntegrationTestCase extends TestCase {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

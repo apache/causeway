@@ -1,7 +1,6 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedClNakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.io.TransferableReader;
 import org.nakedobjects.object.io.TransferableWriter;

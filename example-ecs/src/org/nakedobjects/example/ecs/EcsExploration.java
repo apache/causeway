@@ -1,22 +1,27 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.container.exploration.Exploration;
+import org.nakedobjects.example.exploration.DefaultExploration;
+import org.nakedobjects.object.defaults.AbstractUserContext;
 
 
-public class EcsExploration extends Exploration {
-
-    public void setUpFixtures() {
-        addFixture(new EcsFixture());
-    }
+public class EcsExploration extends DefaultExploration {
 
     public static void main(String[] args) {
         new EcsExploration();
+    }
+
+    protected AbstractUserContext applicationContext() {
+        return new EcsContext();
+    }
+
+    public void setUpFixtures() {
+        addFixture(new EcsFixture());
     }
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

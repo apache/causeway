@@ -1,11 +1,12 @@
+import org.nakedobjects.application.value.Money;
 import org.nakedobjects.container.configuration.ComponentException;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.example.expenses.Claim;
 import org.nakedobjects.example.expenses.Employee;
 import org.nakedobjects.example.expenses.Expense;
 import org.nakedobjects.example.expenses.Project;
-import org.nakedobjects.object.defaults.value.Money;
 import org.nakedobjects.object.exploration.AbstractExplorationFixture;
+import org.nakedobjects.object.exploration.ExplorationSetUp;
 import org.nakedobjects.xat.AcceptanceTestCase;
 import org.nakedobjects.xat.TestObject;
 
@@ -53,12 +54,16 @@ public class ExampleStories extends AcceptanceTestCase {
 	public static void main(String[] args) throws ConfigurationException, ComponentException {
         junit.textui.TestRunner.run(ExampleStories.class);
 	}
+
+    protected ExplorationSetUp explorationSetup() {
+        return null;
+    }
 }
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,28 +1,30 @@
 package org.nakedobjects.object.defaults;
 
-import org.nakedobjects.object.defaults.value.TextString;
-
 
 public class DefaultUserContext extends AbstractUserContext {
     public static String fieldOrder() {
     	return "name, " + AbstractUserContext.fieldOrder();
     }
 
-    private TextString name = new TextString();
+    private String name;
 	
-	public TextString getName() {
+	public String getName() {
 		return name;
 	}
 	
-	public Title title() {
-		return name.title();
+	public void setName(String name) {
+        this.name = name;
+    }
+	
+	public String titleString() {
+	    return getName();
 	}
 }
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,7 +1,8 @@
 package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.control.ClassAbout;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.control.Hint;
 
 
 public interface Reflector {
@@ -10,22 +11,17 @@ public interface Reflector {
 
     Naked acquireInstance();
 
-    Action[] actions(boolean forClass);
+    ActionPeer[] actions(boolean forClass);
 
     String[] actionSortOrder();
 
-    ClassAbout classAbout();
+    Hint classHint();
 
     String[] classActionSortOrder();
     
-    Member[] fields();
+    FieldPeer[] fields();
 
     String[] fieldSortOrder();
-
-    /**
-     Returns true if this NakedClass represents a collection -  of, or subclassed from, NakedCollection.
-     */
-    boolean isCollection();
     
     /**
      * The natural language (eg english, spanish) name in the plural form - for a number of objects of this type.
@@ -65,12 +61,22 @@ public interface Reflector {
     boolean isObject();
 
     boolean isPartOf();
+    
+    ObjectTitle title();
+
+    boolean isLookup();
+    
+    boolean isDirty(NakedObject object);
+
+    void clearDirty(NakedObject object2);
+
+    void markDirty(NakedObject object2);
 }
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,20 +1,17 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.object.exploration.AbstractExplorationFixture;
-import org.nakedobjects.object.exploration.ExplorationUser;
-import org.nakedobjects.object.security.Role;
-import org.nakedobjects.object.security.User;
+import org.nakedobjects.application.control.Role;
+import org.nakedobjects.application.control.User;
+import org.nakedobjects.example.exploration.ExplorationUser;
+import org.nakedobjects.example.exploration.JavaAbstractExplorationFixture;
 
-public class EcsFixture extends AbstractExplorationFixture {
+public class EcsFixture extends JavaAbstractExplorationFixture {
 
     public void install() {
         setupClasses();  
         setupClock();
-        if (needsInstances(City.class)) {
-            City[] cities = setupCities();
-
-            setupObjects(cities);    
-        }    
+        City[] cities = setupCities();
+        setupObjects(cities);    
         setUsers();
         resetClock();
     }
@@ -37,33 +34,55 @@ public class EcsFixture extends AbstractExplorationFixture {
         newCustomer.getFirstName().setValue("Richard");
         newCustomer.getLastName().setValue("Pawson");
 
-        Location l = new Location();
+        Location l = (Location) createInstance(Location.class);
         l.setCity(cities[1]);
         l.getKnownAs().setValue("Home");
         l.getStreetAddress().setValue("433 Pine St.");
-        newCustomer.associateLocations(l);
+        newCustomer.addToLocations(l);
 
-        l = new Location();
+        l = (Location) createInstance(Location.class);
         l.setCity(cities[1]);
         l.getKnownAs().setValue("Office");
         l.getStreetAddress().setValue("944 Main St, Cambridge");
-        newCustomer.associateLocations(l);
+        newCustomer.addToLocations(l);
 
-        l = new Location();
+        l = (Location) createInstance(Location.class);
         l.setCity(cities[0]);
-        l.getKnownAs().setValue("Headquaters");
+        l.getKnownAs().setValue("QIC Headquaters");
         l.getStreetAddress().setValue("285 Park Avenue");
-        newCustomer.associateLocations(l);
+        newCustomer.addToLocations(l);
 
-        Telephone t = new Telephone();
+        l = (Location) createInstance(Location.class);
+        l.setCity(cities[0]);
+//        l.getKnownAs().setValue("PPO Headquaters");
+        l.getStreetAddress().setValue("234 E 42nd Street");
+        newCustomer.addToLocations(l);
+
+        l = (Location) createInstance(Location.class);
+        l.setCity(cities[0]);
+        l.getKnownAs().setValue("JFK Airport, BA Terminal");
+        newCustomer.addToLocations(l);
+
+        Telephone t = (Telephone) createInstance(Telephone.class);
         t.getKnownAs().setValue("Home");
         t.getNumber().setValue("617/211 2899");
-        newCustomer.getPhoneNumbers().add(t);
+        newCustomer.getPhoneNumbers().addElement(t);
 
-        t = new Telephone();
+        t = (Telephone) createInstance(Telephone.class);
         t.getKnownAs().setValue("Office");
         t.getNumber().setValue("617/353 9828");
-        newCustomer.getPhoneNumbers().add(t);
+        newCustomer.getPhoneNumbers().addElement(t);
+
+        t = (Telephone) createInstance(Telephone.class);
+        t.getKnownAs().setValue("Mobile");
+        t.getNumber().setValue("8777662671");
+        newCustomer.getPhoneNumbers().addElement(t);
+        
+        CreditCard cc = (CreditCard) createInstance(CreditCard.class);
+        cc.getNumber().setValue("4525365234232233");
+        cc.getExpires().setValue("12/06");
+        cc.getNameOnCard().setValue("MR R Pawson");
+        newCustomer.setPreferredPaymentMethod(cc);
 
         newCustomer = (Customer) createInstance(Customer.class);
         newCustomer.getFirstName().setValue("Robert");
@@ -73,38 +92,38 @@ public class EcsFixture extends AbstractExplorationFixture {
         booking.associateCustomer(newCustomer);
   //          booking.getTime().setValue(14, 50);
 
-        l = new Location();
+        l = (Location) createInstance(Location.class);
         l.setCity(cities[5]);
         l.getKnownAs().setValue("Home");
         l.getStreetAddress().setValue("1112 Condor St, Carlton Park");
-        newCustomer.associateLocations(l);
+        newCustomer.addToLocations(l);
         booking.setPickUp(l);
 
-        l = new Location();
+        l = (Location) createInstance(Location.class);
         l.setCity(cities[5]);
         l.getKnownAs().setValue("Office");
         l.getStreetAddress().setValue("299 Union St");
-        newCustomer.associateLocations(l);
+        newCustomer.addToLocations(l);
 
-        l = new Location();
+        l = (Location) createInstance(Location.class);
         l.setCity(cities[0]);
         l.getKnownAs().setValue("Headquaters");
         l.getStreetAddress().setValue("285 Park Avenue");
-        newCustomer.associateLocations(l);
+        newCustomer.addToLocations(l);
         booking.setDropOff(l);
 
-        t = new Telephone();
+        t = (Telephone) createInstance(Telephone.class);
         t.getKnownAs().setValue("Home");
         t.getNumber().setValue("206/545 8444");
-        newCustomer.getPhoneNumbers().add(t);
+        newCustomer.getPhoneNumbers().addElement(t);
         booking.setContactTelephone(t);
 
-        t = new Telephone();
+        t = (Telephone) createInstance(Telephone.class);
         t.getKnownAs().setValue("Office");
         t.getNumber().setValue("206/234 443");
-        newCustomer.getPhoneNumbers().add(t);
+        newCustomer.getPhoneNumbers().addElement(t);
 
-        CreditCard cc = new CreditCard();
+        cc = (CreditCard) createInstance(CreditCard.class);
         cc.getNumber().setValue("773829889938221");
         cc.getExpires().setValue("10/04");
         cc.getNameOnCard().setValue("MR R MATTHEWS");
@@ -121,7 +140,7 @@ public class EcsFixture extends AbstractExplorationFixture {
 
         for (int i = 0; i < cityNames.length; i++) {
             cities[i] = (City) createInstance(City.class);
-            cities[i].getName().setValue(cityNames[i]);
+            cities[i].setName(cityNames[i]);
         }
         return cities;
     }
@@ -150,7 +169,7 @@ public class EcsFixture extends AbstractExplorationFixture {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

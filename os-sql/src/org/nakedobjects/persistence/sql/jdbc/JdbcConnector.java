@@ -1,6 +1,6 @@
 package org.nakedobjects.persistence.sql.jdbc;
 
-import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.persistence.sql.AbstractDatabaseConnector;
 import org.nakedobjects.persistence.sql.Results;
@@ -52,7 +52,7 @@ public class JdbcConnector extends AbstractDatabaseConnector {
 
     public void open() throws SqlObjectStoreException {
         try {
-            Configuration params = Configuration.getInstance();
+            ConfigurationFactory params = ConfigurationFactory.getConfiguration();
             String BASE = "sql-object-store.jdbc.";
             String driver = params.getString(BASE + "driver");
             String url = params.getString(BASE + "connection");
@@ -246,7 +246,7 @@ public class JdbcConnector extends AbstractDatabaseConnector {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

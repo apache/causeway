@@ -2,8 +2,6 @@ package org.nakedobjects.xat;
 
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import org.nakedobjects.object.security.Session;
 
 import java.util.Hashtable;
@@ -15,21 +13,19 @@ public interface TestObjectFactory {
 
     TestObject createTestObject(Session session, NakedObject field, Hashtable viewCache);
     
-    TestValue createTestValue(NakedObject parent, ValueFieldSpecification field);
-
-    TestValue createParamerTestValue(NakedValue value);
-
     void testStarting(String className, String methodName);
 
     void testEnding();
 
     Documentor getDocumentor();
+
+    TestValue createParamerTestValue(Object value);
 }
 
 /*
  Naked Objects - a framework that exposes behaviourally complete
  business objects directly to the user.
- Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+ Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

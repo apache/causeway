@@ -1,7 +1,9 @@
 package org.nakedobjects.viewer.skylark.value;
 
 import org.nakedobjects.object.InvalidEntryException;
-import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
@@ -34,7 +36,7 @@ public abstract class AbstractField extends AbstractView {
     }
 
     public boolean canChangeValue() {
-        return getValueContent().canChangeValue();
+        return true; //getValueContent().canChangeValue();
     }
     
     /**
@@ -119,8 +121,8 @@ public abstract class AbstractField extends AbstractView {
         throw new NotImplementedException();
     }
 
-    public final NakedValue getValue() {
-        return ((ValueContent) getContent()).getValue();
+    public final NakedObject getValue() {
+        return ((ValueContent) getContent()).getObject();
     }
 
     public boolean hasFocus() {
@@ -159,7 +161,6 @@ public abstract class AbstractField extends AbstractView {
 
     public void menuOptions(MenuOptionSet options) {
         options.add(MenuOptionSet.OBJECT, new ClearValueOption());
-        options.add(MenuOptionSet.OBJECT, new DefaultValueOption());
         options.add(MenuOptionSet.OBJECT, new CopyValueOption());
         options.add(MenuOptionSet.OBJECT, new PasteValueOption());
         if (getView().getSpecification().isReplaceable()) {
@@ -174,6 +175,7 @@ public abstract class AbstractField extends AbstractView {
         run(new BackgroundTask() {
             protected void execute() {
                 save();
+                getParent().updateView();
                 invalidateLayout();
             }
         });
@@ -181,17 +183,22 @@ public abstract class AbstractField extends AbstractView {
 
     protected abstract void save();
 
-    protected void saveValue(NakedValue value) throws InvalidEntryException {
+    protected void saveValue(NakedObject value) throws InvalidEntryException {
         parseEntry(value.titleString());
     }
 
     protected void parseEntry(String entryText) throws InvalidEntryException {
-        getValueContent().parseEntry(entryText);
+        ValueContent valueContent = getValueContent();
+        Hint about = valueContent.getValueHint(ClientSession.getSession(), entryText);
+        if(about.canUse().isVetoed()) {
+            throw new InvalidEntryException(about.canUse().getReason());
+        }
+        valueContent.parseEntry(entryText);
     }
 
     public String toString() {
         String cls = getClass().getName();
-        NakedValue value = null;
+        NakedObject value = null;
 
         try {
             value = getValue();
@@ -218,13 +225,13 @@ public abstract class AbstractField extends AbstractView {
     }
     
     public void refresh() {
-        getValueContent().refresh();
+       //getValueContent().refresh();
     }
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

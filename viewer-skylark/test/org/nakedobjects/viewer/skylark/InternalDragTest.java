@@ -1,8 +1,8 @@
 package org.nakedobjects.viewer.skylark;
 
-import junit.framework.TestCase;
-
 import org.nakedobjects.viewer.skylark.core.AbstractView;
+
+import junit.framework.TestCase;
 
 public class InternalDragTest extends TestCase {
 	public static void main(String[] args) {
@@ -35,7 +35,7 @@ public class InternalDragTest extends TestCase {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,23 +1,20 @@
 package org.nakedobjects.persistence.file;
 
+import org.nakedobjects.object.InternalCollection;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.defaults.SerialOid;
+
 import java.util.Enumeration;
 import java.util.Hashtable;
-
-import org.apache.log4j.Logger;
-
-import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.defaults.SerialOid;
 
 
 /**
  * A logical collection of elements of a specified type
  */
 public class ObjectData extends Data {
-    private static final Logger LOG = Logger.getLogger(ObjectData.class);
-   private Hashtable fields;
+    private Hashtable fields;
 
     public ObjectData(NakedObjectSpecification type, SerialOid oid) {
         super(type, oid);
@@ -37,26 +34,16 @@ public class ObjectData extends Data {
         }
     }
 
-    void saveValue(String fieldName, NakedValue nakedValue) {
-    	if(nakedValue.isEmpty()) {
+    void saveValue(String fieldName, boolean isEmpty, String encodedString) {
+    	if(isEmpty) {
     		fields.remove(fieldName);
     	} else {
-    		fields.put(fieldName, nakedValue.saveString());
+    		fields.put(fieldName,encodedString);
     	}
    }
     
     public void set(String fieldName, String value) {
         fields.put(fieldName, value);
-    }
-
-    void restoreValue(String fieldName, NakedValue value) {
-		String readValue = (String) fields.get(fieldName);
-		LOG.debug("setting field " + fieldName + " with '" + readValue + "'");
-		if(readValue == null) {
-			value.clear();	
-		} else {
-			value.restoreString(readValue);
-		}
     }
 
 	public Object get(String fieldName) {
@@ -78,7 +65,7 @@ public class ObjectData extends Data {
     
     void addElement(String fieldName, SerialOid elementOid) {
         if (!fields.containsKey(fieldName)) {
-        	throw new RuntimeException();
+        	throw new NakedObjectRuntimeException("Field " + fieldName + " not found  in hashtable");
         }
 
         ReferenceVector v = (ReferenceVector) fields.get(fieldName);
@@ -93,11 +80,6 @@ public class ObjectData extends Data {
         return fields.keys();
     }
     
-    void addValue(NakedValue fieldContent, String fieldName) {
-    //	LOG.debug("adding value field " + fieldName +" " + fieldContent);
-    	saveValue(fieldName, fieldContent);
-    }
-
     void addAssociation(NakedObject fieldContent, String fieldName, boolean ensurePersistent) {
     	boolean notAlreadyPersistent = fieldContent != null && fieldContent.getOid() == null;
         if (ensurePersistent && notAlreadyPersistent) {
@@ -108,10 +90,10 @@ public class ObjectData extends Data {
     }
 
     void addInternalCollection(InternalCollection collection, String fieldName, boolean ensurePersistent) {
-    	if (ensurePersistent && collection != null && collection.getOid() == null) {
+    /*	if (ensurePersistent && collection != null && collection.getOid() == null) {
     		throw new IllegalStateException("Cannot save a collection that is not persistent: " + collection);
     	}
-    	
+    	*/
     	SerialOid coid = (SerialOid) collection.getOid();
     	//Enumeration e = collection.elements();
     	
@@ -148,7 +130,7 @@ public class ObjectData extends Data {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

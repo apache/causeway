@@ -1,17 +1,17 @@
 package example.utility.xmlsnapshot;
 
-import org.nakedobjects.object.defaults.AbstractNakedObject;
+import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.utility.xmlsnapshot.DomSerializer;
 import org.nakedobjects.utility.xmlsnapshot.DomSerializerCrimson;
 import org.nakedobjects.utility.xmlsnapshot.XmlSnapshot;
 
 import org.w3c.dom.Element;
 
-public class Snapshot extends AbstractNakedObject {
-    // fields exclude for clarity
+public class Snapshot {
+    // fields excluded for clarity
 
     public void actionCreateSnapshot() {
-        XmlSnapshot builder = new XmlSnapshot(this);
+        XmlSnapshot builder = new XmlSnapshot(PojoAdapter.createAdapter(this));
         builder.include("fieldname/fieldname");
         Element e = builder.getXmlElement();
         
@@ -27,7 +27,7 @@ public class Snapshot extends AbstractNakedObject {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

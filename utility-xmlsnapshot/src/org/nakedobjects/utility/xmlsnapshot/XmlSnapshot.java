@@ -5,12 +5,11 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.reflect.NakedObjectSpecificationException;
-import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
-import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
-import org.nakedobjects.object.reflect.ValueFieldSpecification;
+import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.reflect.OneToOneAssociation;
 
 import java.util.Enumeration;
 import java.util.StringTokenizer;
@@ -239,10 +238,10 @@ public final class XmlSnapshot {
 
 		nofMeta.setAttributesForClass(element, oidOrHashCode(object).toString());
 
-		FieldSpecification[] fields = nos.getFields();
+		NakedObjectField[] fields = nos.getFields();
 eachField:
 		for (int i = 0; i < fields.length; i++) {
-			FieldSpecification field = fields[i];
+		    NakedObjectField field = fields[i];
 			String fieldName = field.getName();
 
 			// Skip field if we have seen the name already
@@ -268,18 +267,18 @@ eachPreviousField:
 			
 			Element xsdFieldElement = null;
 
-			if (field instanceof ValueFieldSpecification) {
+			if (field.isValue()) {
 
 				// skip fields of type XmlValue
-				if (field.getType() != null &&
-					field.getType().getFullName() != null &&
-					field.getType().getFullName().endsWith("XmlValue")) {
+				if (field.getSpecification() != null &&
+					field.getSpecification().getFullName() != null &&
+					field.getSpecification().getFullName().endsWith("XmlValue")) {
 					continue eachField;
 				}
 
 			
-				ValueFieldSpecification valueFieldSpec = ((ValueFieldSpecification) field);
-				Naked value = valueFieldSpec.get(object);
+				OneToOneAssociation valueFieldSpec = ((OneToOneAssociation) field);
+				Naked value = object.getField(valueFieldSpec);
 				Element xmlValueElement = xmlFieldElement; // more meaningful locally scoped name
 
 				// a null value would be a programming error, but we protect against it anyway
@@ -302,11 +301,11 @@ eachPreviousField:
 				// XSD
 				xsdFieldElement = schema.createXsElementForNofValue(xsElement, xmlValueElement);
 
-			} else if (field instanceof OneToOneAssociationSpecification) {
+			} else if (field instanceof OneToOneAssociation) {
 
-				OneToOneAssociationSpecification oneToOneAssocSpec = ((OneToOneAssociationSpecification) field);
-				NakedObject referencedNakedObject = (NakedObject) oneToOneAssocSpec.get(object);
-				String fullyQualifiedClassName = oneToOneAssocSpec.getType().getFullName();
+				OneToOneAssociation oneToOneAssocSpec = ((OneToOneAssociation) field);
+				NakedObject referencedNakedObject = object.getField(oneToOneAssocSpec);
+				String fullyQualifiedClassName = oneToOneAssocSpec.getSpecification().getFullName();
 				Element xmlReferenceElement = xmlFieldElement; // more meaningful locally scoped name
 
 				// XML
@@ -323,9 +322,9 @@ eachPreviousField:
 				xsdFieldElement = schema.createXsElementForNofReference(xsElement, xmlReferenceElement);
 
 
-			} else if (field instanceof OneToManyAssociationSpecification) {
+			} else if (field instanceof OneToManyAssociation) {
 
-				OneToManyAssociationSpecification oneToManyAssociation = (OneToManyAssociationSpecification) field;
+				OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
 				InternalCollection collection = (InternalCollection) oneToManyAssociation.get(object);
 				String fullyQualifiedClassName = collection.getElementSpecification().getFullName();
 				Element xmlCollectionElement = xmlFieldElement; // more meaningful locally scoped name
@@ -452,7 +451,7 @@ eachPreviousField:
         
 		// locate the field in the object's class
 		NakedObjectSpecification nos = object.getSpecification();
-		FieldSpecification field = null;
+		NakedObjectField field = null;
 		try {
 			// HACK: really want a NakedObjectSpecification.hasField method to check first.
 			field = nos.getField(fieldName);
@@ -477,12 +476,12 @@ eachPreviousField:
 
 		Place fieldPlace = new Place(object, xmlFieldElement);
 
-		if (field instanceof ValueFieldSpecification) {
+		if (field.isValue()) {
 			return false;
             
-		} else if (field instanceof OneToOneAssociationSpecification) {
-			OneToOneAssociationSpecification oneToOneAssociation = ((OneToOneAssociationSpecification) field);
-			NakedObject referencedObject = (NakedObject) oneToOneAssociation.get(fieldPlace.getObject());
+		} else if (field instanceof OneToOneAssociation) {
+			OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
+			NakedObject referencedObject = fieldPlace.getObject().getField(oneToOneAssociation);
 
 			if (referencedObject == null) {
 				return true; // not a failure if the reference was null
@@ -490,9 +489,9 @@ eachPreviousField:
 
 			return appendXmlThenIncludeRemaining(fieldPlace, referencedObject, fieldNames, annotation);
         
-		} else if (field instanceof OneToManyAssociationSpecification) {
-			OneToManyAssociationSpecification oneToManyAssociation = (OneToManyAssociationSpecification) field;
-			InternalCollection collection = (InternalCollection) oneToManyAssociation.get(fieldPlace.getObject());
+		} else if (field instanceof OneToManyAssociation) {
+			OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
+			InternalCollection collection = (InternalCollection) fieldPlace.getObject().getField(oneToManyAssociation);
             
 			boolean allFieldsNavigated = true;
 			for (int i = 0; i < collection.size(); i++) {
@@ -580,10 +579,14 @@ eachPreviousField:
 		if (oid == null) {
 			return ""+object.hashCode();
 		}
+		
+		throw new NakedObjectRuntimeException();
+		/*
 		InlineTransferableWriter itw = new InlineTransferableWriter();
 		oid.writeData(itw);
 		itw.close();
 		return itw.toString();
+		*/
 	}
 
 
@@ -592,7 +595,7 @@ eachPreviousField:
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

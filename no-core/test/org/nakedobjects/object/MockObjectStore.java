@@ -39,7 +39,7 @@ public class MockObjectStore implements NakedObjectStore {
         getObject = object;
     }
 
-    public void createNakedClass(NakedClass cls) throws ObjectStoreException {}
+    public void createNakedClass(NakedObject cls) throws ObjectStoreException {}
 
     public void createObject(NakedObject object) throws ObjectStoreException {
         actions.addElement("createObject " + object);
@@ -169,7 +169,7 @@ public class MockObjectStore implements NakedObjectStore {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2004 Naked Objects Group Ltd
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the

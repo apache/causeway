@@ -3,18 +3,17 @@ package org.nakedobjects.xat.system;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectStore;
-import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
-import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.NakedObjectField;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -42,11 +41,12 @@ public class ObjectStore implements NakedObjectStore {
         save(object);
     }
 
-    public void createNakedClass(NakedClass cls) throws ObjectStoreException {
+    public void createNakedClass(NakedObject cls) throws ObjectStoreException {
         LOG.debug("createClass " + cls);
         cls.setResolved();
-        classes.put(cls.getName(), cls);
-        Hashtable persistentObjectVector = instancesFor(cls.forNakedClass());
+        NakedClass nakedClass = ((NakedClass) cls.getObject());
+        classes.put(nakedClass.getFullName(), cls);
+        Hashtable persistentObjectVector = instancesFor(nakedClass.forObjectType());
         persistentObjectVector.put(cls.getOid(), cls);
     }
     
@@ -136,7 +136,7 @@ public class ObjectStore implements NakedObjectStore {
 
         Vector instances = new Vector();
         if (pattern instanceof NakedClass) {
-            NakedObjectSpecification forNakedClass = ((NakedClass) pattern).forNakedClass();
+            NakedObjectSpecification forNakedClass = ((NakedClass) pattern).forObjectType();
             Enumeration objects = elements(forNakedClass);
 
             String name = forNakedClass.getFullName();
@@ -209,10 +209,10 @@ public class ObjectStore implements NakedObjectStore {
     private boolean matchesPattern(NakedObject pattern, NakedObject instance) {
         NakedObject object = instance;
         NakedObjectSpecification nc = object.getSpecification();
-        FieldSpecification[] fields = nc.getFields();
+        NakedObjectField[] fields = nc.getFields();
 
         for (int f = 0; f < fields.length; f++) {
-            FieldSpecification fld = fields[f];
+            NakedObjectField fld = fields[f];
 
             // are ignoring internal collections - these probably should be considered
             // ignore derived fields - there is no way to set up these fields
@@ -222,11 +222,11 @@ public class ObjectStore implements NakedObjectStore {
 
             if (fld.isValue()) {
                 // find the objects
-                NakedValue reqd = (NakedValue) fld.get(pattern);
-                NakedValue search = (NakedValue) fld.get(object);
+                NakedObject reqd = pattern.getField(fld);
+                NakedObject search = object.getField(fld);
 
                 // if pattern contains empty value then it matches anything
-                if (reqd.isEmpty()) {
+                if (reqd.isEmpty(fld)) {
                     continue;
                 }
 
@@ -238,8 +238,8 @@ public class ObjectStore implements NakedObjectStore {
                 if (s.indexOf(r) == -1) { return false; }
             } else {
                 // find the objects
-                Naked reqd = fld.get(pattern);
-                Naked search = fld.get(object);
+                NakedObject reqd = pattern.getField(fld);
+                Naked search = object.getField(fld);
 
                 // if pattern contains null reference then it matches anything
                 if (reqd == null) {
@@ -305,7 +305,7 @@ public class ObjectStore implements NakedObjectStore {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2003 Naked Objects Group Ltd
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the

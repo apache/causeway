@@ -16,6 +16,7 @@ import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectStore;
+import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.TypedNakedCollection;
@@ -56,9 +57,10 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         this.context = context;
     }
     
-    public ProxyObjectManager(UpdateNotifier notifier, LoadedObjects loadedObjects) {
+    public ProxyObjectManager(UpdateNotifier notifier, LoadedObjects loadedObjects, ObjectFactory objectFactory) {
+        super(objectFactory);
         this.notifier = notifier;
-       this.loadedObjects = loadedObjects;
+        this.loadedObjects = loadedObjects;
     }
 
     public void abortTransaction() {
@@ -130,13 +132,6 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
              	throw new ObjectNotFoundException(e.getRemoteMessage());
             }
         }
-    }
-
-    /**
-     * @deprecated
-     */
-    public NakedObjectStore getObjectStore() {
-        throw new NotImplementedException();
     }
 
     public boolean hasInstances(NakedObjectSpecification cls) {
@@ -245,7 +240,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option) any

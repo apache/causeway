@@ -104,6 +104,7 @@
 
 
 
+
 		<!-- other projects -->
 		<antcall target="copy"/>
 		<!-- end copy other projects -->
@@ -200,7 +201,7 @@
 		<!-- generate javadocs -->
 		<javadoc destDir="${dist.api.dir}"
 		         windowtitle="Naked Objects ${distribution} API version ${build.version}"
-		         additionalparam="-breakiterator -tag group -tag testpackage -tag testcase -tag testkind -tag testfamily -tag testsetup -tag testedclass">
+		         additionalparam="-breakiterator -tag group -tag testpackage -tag testcase -tag testkind -tag testfamily -tag testsetup -tag testedclass -tag property">
 
 			<classpath refid="libs.external" />
 

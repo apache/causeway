@@ -1,15 +1,15 @@
 package org.nakedobjects.distribution.reflect;
 
 import org.nakedobjects.object.ReflectionFactory;
-import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.ValueFieldSpecification;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.object.reflect.ValueField;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
 
 import org.apache.log4j.Logger;
 
@@ -24,28 +24,28 @@ public class ProxyReflectionFactory implements ReflectionFactory  {
 
     public FieldSpecification createField(OneToManyAssociation local) {
         OneToManyAssociation oneToManyDelegate = new RemoteOneToManyAssociation(local);
-        OneToManyAssociationSpecification association = new OneToManyAssociationSpecification(oneToManyDelegate.getName(), oneToManyDelegate.getType(),
+        OneToManyAssociationSpecification association = new OneToManyAssociationSpecification(oneToManyDelegate.getName(), oneToManyDelegate.getSpecification(),
                 oneToManyDelegate);
         return association;
     }
 
     public FieldSpecification createField(OneToOneAssociation local) {
         OneToOneAssociation oneToOneDelegate = new RemoteOneToOneAssociation(local);
-        OneToOneAssociationSpecification association = new OneToOneAssociationSpecification(oneToOneDelegate.getName(), oneToOneDelegate.getType(),
+        OneToOneAssociationSpecification association = new OneToOneAssociationSpecification(oneToOneDelegate.getName(), oneToOneDelegate.getSpecification(),
                 oneToOneDelegate);
         return association;
     }
 
     public FieldSpecification createField(ValueField local) {
         ValueField valueDelegate = new RemoteValue(local);
-        return new ValueFieldSpecification(valueDelegate.getName(), valueDelegate.getType(), valueDelegate);
+        return new ValueFieldSpecification(valueDelegate.getName(), valueDelegate.getSpecification(), valueDelegate);
     }
 
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

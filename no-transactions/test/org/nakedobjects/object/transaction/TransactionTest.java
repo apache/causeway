@@ -9,7 +9,6 @@ import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.Person;
 import org.nakedobjects.object.Role;
 import org.nakedobjects.object.Team;
-import org.nakedobjects.object.defaults.MockObjectManager;
 
 import java.util.Vector;
 
@@ -48,8 +47,6 @@ public class TransactionTest extends TestCase {
 
         LogManager.getRootLogger().setLevel(Level.OFF);
 
-        MockObjectManager manager = MockObjectManager.setup();
-       
         tm = new MockTransactionManager();
         t = new Transaction(tm);
 
@@ -154,11 +151,11 @@ public class TransactionTest extends TestCase {
         person.getName().setValue(personName);
 
         role.getName().setValue(roleName);
-        role.setPerson(person);
+        role.setReferencedObject(person);
 
         Role transactionRole = (Role) t.getObject(roleOid, role);
         assertTrue(transactionRole.isResolved());
-        Person transactionPerson = transactionRole.getPerson();
+        Person transactionPerson = transactionRole.getReferencedObject();
         assertFalse(transactionPerson.isResolved());
 
         assertEquals(person, transactionPerson);
@@ -197,7 +194,7 @@ public class TransactionTest extends TestCase {
 
         assertEquals("same oid", role.getOid(), transactionRole.getOid());
         assertFalse("but different instance", role == transactionRole);
-        assertNull(transactionRole.getPerson());
+        assertNull(transactionRole.getReferencedObject());
     }
 
     public void testIsolatedObjectWithOneToManyAssociation() {
@@ -302,15 +299,15 @@ public class TransactionTest extends TestCase {
         Role transactionalRole  = (Role) t.getObject(roleOid, role);
         Person transactionalPerson = (Person) t.getObject(personOid, person);
         
-        transactionalRole.setPerson(transactionalPerson);
+        transactionalRole.setReferencedObject(transactionalPerson);
         
         t.prepareSave(transactionalRole);
         
-        loadedObjects.setupLoadedObjects(new NakedObject[] {role, person});
+        loadedObjects.setupLoadedObjects(new NakedObject[] {role, referencedObject});
                
         t.commit(objectStore);
         
-        assertEquals(transactionalRole.getPerson(), role.getPerson());
+        assertEquals(transactionalRole.getReferencedObject(), role.getReferencedObject());
     }
     
     public void testTransactionIsolation3() {
@@ -321,7 +318,7 @@ public class TransactionTest extends TestCase {
         
         t.prepareSave(transactionalTeam);
         
-        loadedObjects.setupLoadedObjects(new NakedObject[] {team, person});
+        loadedObjects.setupLoadedObjects(new NakedObject[] {team, referencedObject});
         
         t.commit(objectStore);
         
@@ -334,7 +331,7 @@ public class TransactionTest extends TestCase {
         r.setOid(roleOid);
         
         Person transactionPerson = (Person) t.getObject(personOid, person);
-        r.setPerson(transactionPerson);	// new object being setup with ref to proxy
+        r.setReferencedObject(transactionPerson);	// new object being setup with ref to proxy
 
         t.prepareCreate(r);
         
@@ -342,13 +339,13 @@ public class TransactionTest extends TestCase {
         
         t.commit(objectStore);
         
-        assertSame("reference should be to persistent object and not the proxy", person, r.getPerson());
+        assertSame("reference should be to persistent object and not the proxy", person, r.getReferencedObject());
     }
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

@@ -1,12 +1,12 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.TypedNakedCollection;
-import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
@@ -44,8 +44,7 @@ public class TreeNodeBorder extends AbstractBorder {
 		replaceWithSpecification = replaceWith;
 		
 		if(getContent() instanceof OneToManyField) {
-		    InternalCollection collection = ((InternalCollection) ((OneToManyField) getContent()).getObject());
-            String type = collection.getElementSpecification().getFullName();
+            String type =  ((OneToManyField) getContent()).getSpecification().getFullName();
             final NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(type);
 		    icon = new IconGraphic(this, LABEL_STYLE) {
 		        protected String iconName(NakedObject object) {
@@ -171,8 +170,9 @@ public class TreeNodeBorder extends AbstractBorder {
  	
 	public void menuOptions(MenuOptionSet options) {
 	    if(getContent() instanceof OneToManyField) {
-	       	TypedNakedCollection collection = (TypedNakedCollection) ((OneToManyField) getContent()).getCollection();
-	        NakedObjectSpecification nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(collection.getElementSpecification().getFullName());
+	        NakedObjectSpecification nakedClass = ((OneToManyField) getContent()).getSpecification();
+	       	//TypedNakedCollection collection = (TypedNakedCollection) ((OneToManyField) getContent()).getCollection();
+	       // NakedObjectSpecification nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(collection.getElementSpecification().getFullName());
 	        
 	        ClassOption.menuOptions(nakedClass, options);
 	        
@@ -186,10 +186,13 @@ public class TreeNodeBorder extends AbstractBorder {
         if(getContent() instanceof OneToManyField) {
 	        // same as InternalCollectionBorder
             OneToManyField internalCollectionContent = (OneToManyField) getContent();
-            OneToManyAssociationSpecification field = (OneToManyAssociationSpecification) internalCollectionContent.getField();
+            OneToManyAssociation field = (OneToManyAssociation) internalCollectionContent.getField();
             NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
-             if(field.canAssociate(target, (NakedObject) result)) {
-	        	field.setAssociation(target, (NakedObject) result);
+
+            Hint about = target.getHint(ClientSession.getSession(), field, (NakedObject) result);
+            if(about.canUse().isAllowed()) {
+//	          if(field.canAssociate(target, (NakedObject) result)) {
+	        	target.setAssociation(field, (NakedObject) result);
             }
         } 
         super.objectActionResult(result, at);
@@ -213,7 +216,7 @@ public class TreeNodeBorder extends AbstractBorder {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -3,24 +3,21 @@ package org.nakedobjects.persistence.file;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedObjectStore;
-import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.UnsupportedFindException;
-import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
 import org.nakedobjects.object.defaults.SerialOid;
-import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
-import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
+import org.nakedobjects.object.reflect.NakedObjectAssociation;
+import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.reflect.OneToOneAssociation;
 
 import org.apache.log4j.Logger;
 
@@ -31,22 +28,25 @@ import org.apache.log4j.Logger;
  */
 public abstract class MementoObjectStore implements NakedObjectStore {
     private static final Logger LOG = Logger.getLogger(MementoObjectStore.class);
-    private static final NakedObjectSpecification NAKED_CLASS_SPEC = NakedObjectSpecificationLoader.getInstance().loadSpecification(NakedClass.class);
+//    private static final NakedObjectSpecification NAKED_CLASS_SPEC = NakedObjectSpecificationLoader.getInstance().loadSpecification(NakedClass.class);
     private DataManager dataManager;
     private LoadedObjects loadedObjects;
 
     public MementoObjectStore(DataManager manager) {
         this.dataManager = manager;
-        loadedObjects = new LoadedObjectsHashtable();
     }
 
+    public void setLoadedObjects(LoadedObjects loadedObjects) {
+        this.loadedObjects = loadedObjects;
+    }
+    
     public void abortTransaction() {}
 
     private NakedObjectSpecification classFor(String type) {
         return NakedObjectSpecificationLoader.getInstance().loadSpecification(type);
     }
 
-    public void createNakedClass(NakedClass cls) throws ObjectStoreException {
+    public void createNakedClass(NakedObject cls) throws ObjectStoreException {
         createObject(cls);
     }
 
@@ -62,7 +62,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
         ObjectData data;
         data = new ObjectData(object.getSpecification(), (SerialOid) object.getOid());
 
-        FieldSpecification[] fields = object.getSpecification().getFields();
+        NakedObjectField[] fields = object.getSpecification().getFields();
 
         for (int i = 0; i < fields.length; i++) {
             if (fields[i].isDerived()) {
@@ -70,15 +70,16 @@ public abstract class MementoObjectStore implements NakedObjectStore {
                 continue;
             }
 
-            Naked fieldContent = (Naked) fields[i].get(object);
+            NakedObject field = object.getField(fields[i]);
+            NakedObject fieldContent = field;
             String fieldName = fields[i].getName();
 
             if (fieldContent instanceof InternalCollection) {
                 data.addInternalCollection((InternalCollection) fieldContent, fieldName, ensurePersistent);
-            } else if (fieldContent instanceof NakedValue) {
-                data.addValue((NakedValue) fieldContent, fieldName);
+            } else if (fields[i].isValue()) {
+                data.saveValue(fieldName, object.isEmpty(fields[i]), field == null ? null : field.getObject().toString());
             } else {
-                data.addAssociation((NakedObject) fieldContent, fieldName, ensurePersistent);
+                data.addAssociation(fieldContent, fieldName, ensurePersistent);
             }
         }
 
@@ -201,14 +202,14 @@ public abstract class MementoObjectStore implements NakedObjectStore {
     }
 
     public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
-        NakedObject[] instances = getInstances(NAKED_CLASS_SPEC, true);
+ /*       NakedObject[] instances = getInstances(NAKED_CLASS_SPEC, true);
         for (int i = 0, len = instances.length; i < len; i++) {
            NakedClass cls = (NakedClass) instances[i];
            if(cls.getName().equals(name)) {
                return cls;
            }
         }
-
+*/
         throw new ObjectNotFoundException();
     }
 
@@ -239,18 +240,18 @@ public abstract class MementoObjectStore implements NakedObjectStore {
     public void init() throws ObjectStoreException {}
 
     private void initObject(NakedObject object, ObjectData data) throws ObjectStoreException {
-        FieldSpecification[] fields = object.getSpecification().getFields();
+        NakedObjectField[] fields = object.getSpecification().getFields();
 
         for (int i = 0; i < fields.length; i++) {
-            FieldSpecification field = fields[i];
+            NakedObjectField field = fields[i];
 
             if (field.isDerived()) {
                 continue;
             }
 
             if (field.isValue()) {
-                data.restoreValue(field.getName(), (NakedValue) field.get(object));
-            } else if (field instanceof OneToManyAssociationSpecification) {
+                object.setValue((OneToOneAssociation) field, data.get(field.getName()));
+            } else if (field instanceof OneToManyAssociation) {
                 /*
                  * The internal collection is already a part of the object, and therefore cannot be
                  * recreated, but its oid must be set
@@ -258,23 +259,12 @@ public abstract class MementoObjectStore implements NakedObjectStore {
                 ReferenceVector refs = (ReferenceVector) data.get(field.getName());
 
                 if (refs != null) {
-                    InternalCollection collection = (InternalCollection) field.get(object);
-                    SerialOid oid = refs.getOid();
-                    LOG.debug("setting collection " + field + "; assigning " + oid + " to " + collection);
-                    if(oid == null) {
-                        throw new NakedObjectRuntimeException("Oid does not exist for " + collection);
-                    }
-                    
-                    if(collection.getOid() == null) {
-                        collection.setOid(oid);
-                    }
-                    
                     for (int j = 0; j < refs.size(); j++) {
                         try {
                             if (loadedObjects.isLoaded(refs.elementAt(j))) {
-                                collection.added(loadedObjects.getLoadedObject(refs.elementAt(j)));
+                                object.initAssociation((NakedObjectAssociation) field, loadedObjects.getLoadedObject(refs.elementAt(j)));
                             } else {
-                                collection.added(getObject(refs.elementAt(j), null));
+                                object.initAssociation((NakedObjectAssociation) field, getObject(refs.elementAt(j), null));
                             }
                         } catch (ObjectNotFoundException e) {
                             // TODO Auto-generated catch block
@@ -290,7 +280,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
                     if (loadedObjects.isLoaded(reference)) {
                         NakedObject loadedObject = loadedObjects.getLoadedObject(reference);
                         LOG.debug("using loaded object " + loadedObject);
-                        ((OneToOneAssociationSpecification) field).initData(object, loadedObject);
+                        object.initAssociation((OneToOneAssociation) field, loadedObject);
                     } else {
                         Oid oid = reference;
                         NakedObject fieldObject;
@@ -299,7 +289,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
                         if (fieldData != null) {
                             fieldObject = (NakedObject) classFor(fieldData.getClassName()).acquireInstance();
                         } else {
-                            fieldObject = (NakedObject) field.getType().acquireInstance();
+                            fieldObject = (NakedObject) field.getSpecification().acquireInstance();
                         }
 
                         fieldObject.setOid(oid);
@@ -309,7 +299,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
                         }
 
                         loadedObjects.loaded(fieldObject);
-                        ((OneToOneAssociationSpecification) field).initData(object, fieldObject);
+                        object.initAssociation((OneToOneAssociation) field, fieldObject);
                     }
                 }
             }

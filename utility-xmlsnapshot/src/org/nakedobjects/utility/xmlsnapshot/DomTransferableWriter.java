@@ -1,5 +1,6 @@
 package org.nakedobjects.utility.xmlsnapshot;
 
+
 import org.nakedobjects.object.io.Transferable;
 import org.nakedobjects.object.io.TransferableWriter;
 

@@ -7,8 +7,8 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.io.Memento;
-import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 
 
 public class GetAssociationRequest extends ObjectRequest {
@@ -28,7 +28,7 @@ public class GetAssociationRequest extends ObjectRequest {
             if (association == null) {
                 throw new NakedObjectRuntimeException("ObjectAttributeMessage has invalid Field: " + name);
             }
-            response = new Memento((NakedObject) association.get(object));
+            response = new Memento(object.getField(association));
         } catch (ObjectStoreException e) {
             response = e;
         }
@@ -47,7 +47,7 @@ public class GetAssociationRequest extends ObjectRequest {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

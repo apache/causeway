@@ -1,25 +1,25 @@
 package org.nakedobjects.distribution.example;
 
-import org.nakedobjects.distribution.AboutData;
-import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Allow;
-import org.nakedobjects.object.control.defaults.Veto;
+import org.nakedobjects.distribution.HintData;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Veto;
 
-public class SimpleAboutData implements AboutData {
+public class SimpleAboutData implements HintData {
     private SimpleAbout serializableAbout;
 
-    public SimpleAboutData(About about) {
+    public SimpleAboutData(Hint about) {
        serializableAbout = new SimpleAbout(about);
     }
     
-    public About recreateAbout() {
+    public Hint recreateHint() {
         return serializableAbout;
     }
 
 }
 
-class SimpleAbout implements About {
+class SimpleAbout implements Hint {
     private String name;
     private String description;
     private String canAccessReason;
@@ -28,18 +28,18 @@ class SimpleAbout implements About {
     private boolean canUseAllowed;
 
     
-    public SimpleAbout(About about) {
-        Permission canAccess = about.canAccess();
+    public SimpleAbout(Hint about) {
+        Consent canAccess = about.canAccess();
         canAccessAllowed = canAccess.isAllowed();
         canAccessReason = canAccess.getReason();
-        Permission canUse = about.canUse();
+        Consent canUse = about.canUse();
         canUseAllowed = canUse.isAllowed();
         canUseReason = canUse.getReason();
         name = about.getName();
         description = about.getDescription();
     }
 
-    public Permission canAccess() {
+    public Consent canAccess() {
       if(canAccessAllowed) {
           return new Allow(canAccessReason);
       } else {
@@ -47,7 +47,7 @@ class SimpleAbout implements About {
       }
     }
 
-    public Permission canUse() {
+    public Consent canUse() {
         if(canUseAllowed) {
             return new Allow(canUseReason);
         } else {
@@ -72,7 +72,7 @@ class SimpleAbout implements About {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

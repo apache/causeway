@@ -14,12 +14,12 @@ import org.nakedobjects.viewer.skylark.core.AbstractViewDecorator;
 
 public class RootIconSpecification extends IconSpecification {
 	public View createView(Content content, ViewAxis axis) {
-		return new CloseIcon(new IconView(content, this, axis, Style.NORMAL));
+		return new IconOpenAction(new IconView(content, this, axis, Style.NORMAL));
     }
 }
 
-class CloseIcon extends AbstractViewDecorator {
-    protected CloseIcon(View wrappedView) {
+class IconOpenAction extends AbstractViewDecorator {
+    protected IconOpenAction(View wrappedView) {
         super(wrappedView);
     }
     
@@ -54,7 +54,7 @@ class CloseIcon extends AbstractViewDecorator {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

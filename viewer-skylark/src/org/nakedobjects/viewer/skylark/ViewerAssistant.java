@@ -1,12 +1,12 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.AbstractPermission;
-import org.nakedobjects.object.reflect.UndoStack;
+import org.nakedobjects.object.control.AbstractConsent;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.security.ClientSession;
+import org.nakedobjects.object.undo.UndoStack;
+import org.nakedobjects.utility.DebugFrame;
+import org.nakedobjects.utility.InfoDebugFrame;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
-import org.nakedobjects.viewer.skylark.core.DebugFrame;
-import org.nakedobjects.viewer.skylark.core.InfoDebugFrame;
 import org.nakedobjects.viewer.skylark.core.OverlayDebugFrame;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
@@ -25,10 +25,50 @@ public class ViewerAssistant {
         return instance;
     }
 
-    private final ViewUpdateNotifier updateNotifier;
-    private final Viewer viewer;
+    private ViewUpdateNotifier updateNotifier;
+    private Viewer viewer;
     private final UndoStack undoStack = new UndoStack();
-    private final InteractionSpy debugFrame;
+    private InteractionSpy debugFrame;
+    
+    public ViewerAssistant() {
+        instance = this;    
+    }
+    
+    public void setUpdateNotifier(ViewUpdateNotifier updateNotifier) {
+        this.updateNotifier = updateNotifier;
+    }
+    
+	/**
+	 * Expose as a .NET property
+	 * @property
+	 */
+    public void set_UpdateNotifier(ViewUpdateNotifier updateNotifier) {
+        this.updateNotifier = updateNotifier;
+    }
+    
+    public void setViewer(Viewer viewer) {
+        this.viewer = viewer;
+    }
+    
+	/**
+	 * Expose as a .NET property
+	 * @property
+	 */
+    public void set_Viewer(Viewer viewer) {
+        this.viewer = viewer;
+    }
+    
+    public void setDebugFrame(InteractionSpy debugFrame) {
+        this.debugFrame = debugFrame;
+    }
+    
+    /**
+	 * Expose as a .NET property
+	 * @property
+	 */
+    public void set_DebugFrame(InteractionSpy debugFrame) {
+        this.debugFrame = debugFrame;
+    }
     
     protected ViewerAssistant(Viewer topView,
         ViewUpdateNotifier updateNotifier, InteractionSpy debugFrame) {
@@ -64,8 +104,8 @@ public class ViewerAssistant {
 
     private MenuOption loggingOption(String name, final Level level) {
         return new MenuOption("Log " + level + " " + name + "...") {
-                public Permission disabled(View component) {
-                    return AbstractPermission.allow(LogManager.getRootLogger().getLevel() != level);
+                public Consent disabled(View component) {
+                    return AbstractConsent.allow(LogManager.getRootLogger().getLevel() != level);
                 }
 
                 public void execute(Workspace workspace, View view, Location at) {
@@ -238,7 +278,7 @@ public class ViewerAssistant {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

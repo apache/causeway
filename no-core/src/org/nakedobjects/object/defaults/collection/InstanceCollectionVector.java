@@ -1,30 +1,56 @@
 package org.nakedobjects.object.defaults.collection;
 
+import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Veto;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.TextEntryParseException;
+import org.nakedobjects.object.TypedNakedCollection;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.NakedObjectAssociation;
+import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.ActionParameterSet;
+import org.nakedobjects.object.security.Session;
+import org.nakedobjects.utility.UnexpectedCallException;
 
+import java.util.Enumeration;
 import java.util.Vector;
 
 
-public class InstanceCollectionVector extends AbstractTypedNakedCollectionVector{
+public class InstanceCollectionVector implements TypedNakedCollection {
 
-    public InstanceCollectionVector(NakedObjectSpecification cls, NakedObject[] instances) {
-        super(cls.getFullName());
+    private String name;
+    private Vector elements;
+    private NakedObjectSpecification specification;
+    private NakedObjectSpecification elementSpecification;
 
+    public InstanceCollectionVector(NakedObjectSpecification elementSpecification, NakedObject[] instances) {
+//        super(cls.getFullName());
+        this.elementSpecification = elementSpecification;
+        name = elementSpecification.getPluralName();
+        
         int size = instances.length;
         elements = new Vector(size);
         for (int i = 0; i < size; i++) {
             elements.addElement(instances[i]);
         }
+        
+        
     }
 
     /**
      * Returns a veto. The user should not be able to add instannces to the set
      * of instances
      */
-    public Permission canAdd(NakedObject object) {
+    public Consent canAdd(NakedObject object) {
         return Veto.DEFAULT;
     }
 
@@ -32,7 +58,7 @@ public class InstanceCollectionVector extends AbstractTypedNakedCollectionVector
      * Returns a veto. The user should not be able to remove instannces to the
      * set of instances
      */
-    public Permission canRemove(NakedObject object) {
+    public Consent canRemove(NakedObject object) {
         return Veto.DEFAULT;
     }
 
@@ -55,13 +81,177 @@ public class InstanceCollectionVector extends AbstractTypedNakedCollectionVector
     public void resolve() {}
 
     public String titleString() {
-        return getElementSpecification().getPluralName() + "(" + size() + ")";
+//        return getElementSpecification().getPluralName() + "(" + size() + ")";
+        return name + "(" + size() + ")";
     }
+
+    public int size() {
+        return elements.size();
+    }
+
+    public void clear(OneToOneAssociation specification) {}
+
+    public NakedObject getField(NakedObjectField field) {
+        return null;
+    }
+
+    public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {}
+
+    public void initAssociation(NakedObjectAssociation field, NakedObject associatedObject) {}
+    
+    public void setValue(OneToOneAssociation field, Object object) {}
+
+    public void initValue(OneToOneAssociation field, Object object) {}
+    
+    public String getLabel(Session session, NakedObjectField field) {
+        return null;
+    }
+
+    public String getLabel(Session session, Action action) {
+        return null;
+    }
+
+    public Enumeration getFieldElements(NakedObjectAssociation oneToManyAssociation) {
+        return null;
+    }
+
+    public void clear() {}
+    
+    public void clear(NakedObjectAssociation specification, NakedObject ref) {}
+
+    public boolean canAccess(Session session, NakedObjectField specification) {
+        return false;
+    }
+
+    public boolean canAccess(Session session, Action action) {
+        return false;
+    }
+
+    public boolean canUse(Session session, NakedObjectField field) {
+        return false;
+    }
+
+    public NakedObject execute(Action action, Naked[] parameters) {
+        return null;
+    }
+
+    public Hint getHint(Session session, Action action, Naked[] parameters) {
+        return null;
+    }
+
+    public Hint getHint(Session session, NakedObjectField field, NakedObject value) {
+        return null;
+    }
+
+    public NakedObjectSpecification getElementSpecification() {
+        return elementSpecification;
+    }
+
+    public boolean contains(NakedObject object) {
+        return false;
+    }
+
+    public Enumeration elements() {
+        return elements.elements();
+    }
+
+    public boolean isEmpty() {
+        return false;
+    }
+
+    public Enumeration oids() {
+        return null;
+    }
+
+    public void created() {}
+
+    public void deleted() {}
+
+    public String getIconName() {
+        return null;
+    }
+
+    public Object getObject() {
+        return null;
+    }
+
+    public Oid getOid() {
+        return null;
+    }
+
+    public boolean isResolved() {
+        return false;
+    }
+
+    public void setOid(Oid oid) {}
+
+    public void setResolved() {}
+
+    public NakedObjectContext getContext() {
+        return null;
+    }
+
+    public void setContext(NakedObjectContext context) {}
+
+    public boolean isEmpty(NakedObjectField field) {
+        return false;
+    }
+
+    public void parseTextEntry(OneToOneAssociation specification, String text) throws TextEntryParseException, InvalidEntryException {}
+
+    public void copyObject(Naked object) {}
+
+    public NakedObjectSpecification getSpecification() {
+        if(specification == null) {
+            specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(this.getClass());
+        }
+        return specification;
+    }
+    
+    public boolean isSameAs(Naked object) {
+        return false;
+    }
+
+    public boolean isParsable() {
+        return false;
+    }
+
+    public void initOneToManyAssociation(OneToManyAssociation association, NakedObject[] instances) {}
+
+    public void markDirty() {}
+
+    public void clearViewDirty() {}
+
+    public boolean isViewDirty() {
+        return false;
+    }
+
+    public ActionParameterSet getParameters(Session session, Action action, NakedObjectSpecification[] parameterTypes) {
+        throw new UnexpectedCallException();
+    }
+
+    public boolean isPersistDirty() {
+        return false;
+    }
+
+    public void clearPersistDirty() {}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

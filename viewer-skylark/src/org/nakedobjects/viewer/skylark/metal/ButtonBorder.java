@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
@@ -114,7 +114,7 @@ public class ButtonBorder extends AbstractBorder {
         if(button !=  -1) {
             UserAction action = actions[button];
 	        getViewManager().setStatus("");
-            Permission disabled = action.disabled(getView());
+            Consent disabled = action.disabled(getView());
             if(disabled.isVetoed()) {
                 getViewManager().setStatus(disabled.getReason());
             }
@@ -152,7 +152,7 @@ public class ButtonBorder extends AbstractBorder {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

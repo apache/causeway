@@ -1,12 +1,13 @@
 package org.nakedobjects.viewer.skylark.core;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 
 public abstract class AbstractFieldSpecification implements ViewSpecification {
 	    public boolean canDisplay(Naked object) {
-    	return object instanceof NakedValue;
+    	//return object instanceof NakedValue;
+	        return object instanceof NakedObject; // && ((NakedObject) object).getObject() instanceof BusinessValue;
 	}
 
 	public boolean isOpen() {
@@ -25,7 +26,7 @@ public abstract class AbstractFieldSpecification implements ViewSpecification {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

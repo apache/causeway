@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.Consent;
 
 
 public interface UserAction {
@@ -8,7 +8,7 @@ public interface UserAction {
     /**
      * Indicate that this action is disabled
      */
-    Permission disabled(View view);
+    Consent disabled(View view);
 
     /**
      * Invoke this action.
@@ -28,7 +28,7 @@ public interface UserAction {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

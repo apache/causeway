@@ -3,9 +3,9 @@ package org.nakedobjects.viewer.skylark.core;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Allow;
-import org.nakedobjects.object.reflect.UndoStack;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.undo.UndoStack;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
@@ -407,7 +407,7 @@ public abstract class AbstractView implements View {
         if (!undoStack.isEmpty()) {
             options.add(MenuOptionSet.VIEW, new MenuOption("Undo " + undoStack.getNameOfUndo()) {
 
-                public Permission disabled(View component) {
+                public Consent disabled(View component) {
                     return new Allow(undoStack.descriptionOfUndo());
                 }
 
@@ -579,6 +579,8 @@ public abstract class AbstractView implements View {
 
     public void update(NakedObject object) {}
 
+    public void updateView() {}
+
     public ViewAreaType viewAreaType(Location location) {
         View subview = subviewFor(location);
         if (subview != null) {
@@ -633,7 +635,7 @@ public abstract class AbstractView implements View {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

@@ -1,7 +1,7 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.reflect.ActionSpecification;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.reflect.Action;
 
 
 public interface TestObject extends TestNaked {
@@ -72,7 +72,7 @@ public interface TestObject extends TestNaked {
 
     void assertEmpty(String message, String fieldName);
 
-    void assertFieldContains(String fieldName, NakedValue expected);
+    void assertFieldContains(String fieldName, Object expected);
 
     /**
      * Check that the specified field contains the expected value. If it does
@@ -101,7 +101,7 @@ public interface TestObject extends TestNaked {
     
     
     
-    void assertFieldContains(String message, String fieldName, NakedValue expected);
+    void assertFieldContains(String message, String fieldName, Object expected);
 
     /**
      * Check that the specified field contains the expected value. If it does
@@ -138,7 +138,7 @@ public interface TestObject extends TestNaked {
 
     void assertFieldContainsType(String message, String fieldName, String title, String expected);
 
-    void assertFieldDoesNotContain(String fieldName, NakedValue expected);
+    void assertFieldDoesNotContain(String fieldName, NakedObject expected);
 
     /*
      * Start of Field Not Contains /** Check that the specified field contains
@@ -147,7 +147,7 @@ public interface TestObject extends TestNaked {
      */
     void assertFieldDoesNotContain(String fieldName, String expected);
 
-    void assertFieldDoesNotContain(String message, String fieldName, NakedValue expected);
+    void assertFieldDoesNotContain(String message, String fieldName, NakedObject expected);
 
     /**
      * Check that the specified field contains the expected value. If it does
@@ -261,7 +261,7 @@ public interface TestObject extends TestNaked {
      */
     void fieldEntry(String name, String value);
 
-    ActionSpecification getAction(String name);
+    Action getAction(String name);
 
     /**
      * Returns the view, from within this collection, that has the specified
@@ -324,7 +324,7 @@ public interface TestObject extends TestNaked {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

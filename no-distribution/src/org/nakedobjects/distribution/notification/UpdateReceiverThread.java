@@ -3,7 +3,6 @@ package org.nakedobjects.distribution.notification;
 
 import org.nakedobjects.distribution.ObjectUpdateMessage;
 import org.nakedobjects.distribution.ProxyObjectManager;
-import org.nakedobjects.distribution.server.ConnectionToServer;
 
 import org.apache.log4j.Category;
 
@@ -66,7 +65,7 @@ public class UpdateReceiverThread extends Thread {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -3,6 +3,7 @@ package org.nakedobjects.object.defaults;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.OidGenerator;
+import org.nakedobjects.utility.StartupException;
 
 import java.util.Date;
 
@@ -11,11 +12,7 @@ import java.util.Date;
  * Generates OIDs based on the system clock.
  */
 public class TimeBasedOidGenerator implements OidGenerator {
-    private long next;
-
-    public void init() {
-        next = new Date().getTime();
-    }
+    private long next = new Date().getTime();
 
     public String name() {
         return "Simple OID Generator";
@@ -26,11 +23,13 @@ public class TimeBasedOidGenerator implements OidGenerator {
     }
 
     public void shutdown() {}
+
+    public void init() throws StartupException {}
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2003 Naked Objects Group Ltd
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the

@@ -1,27 +1,25 @@
 package org.nakedobjects.example.expenses;
 
+import org.nakedobjects.application.Title;
+import org.nakedobjects.application.control.ActionAbout;
+import org.nakedobjects.application.control.FieldAbout;
+import org.nakedobjects.application.value.Case;
+import org.nakedobjects.application.value.Money;
+import org.nakedobjects.application.value.TextString;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectContext;
+
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.object.control.ActionAbout;
-import org.nakedobjects.object.control.FieldAbout;
-import org.nakedobjects.object.defaults.AbstractNakedObject;
-import org.nakedobjects.object.defaults.Title;
-import org.nakedobjects.object.defaults.value.Case;
-import org.nakedobjects.object.defaults.value.Money;
-import org.nakedobjects.object.defaults.value.TextString;
 
-
-public class Claim extends AbstractNakedObject {
+public class Claim extends BaseObject {
 	private Employee claimant;
-	private final InternalCollection expenseItems;
+	private final Vector expenseItems;
 	private final TextString status;
 
 	public Claim() {
-		expenseItems = createInternalCollection(Expense.class);
+		expenseItems = new Vector();
 		status = new TextString();
 	}
 
@@ -36,13 +34,22 @@ public class Claim extends AbstractNakedObject {
 
 	public Employee getClaimant() {
 		resolve(claimant);
-
 		return claimant;
 	}
 
-	public InternalCollection getExpenses() {
+	public Vector getExpenses() {
 		return expenseItems;
 	}
+	
+    public void addToExpenses(Expense expense) {
+        expenseItems.addElement(expense);
+        objectChanged();
+    }
+
+    public void  removeFromPayments(Expense expense) {
+        expenseItems.removeElement(expense);
+        objectChanged();
+    }
 
 	public static Claim actionNewClaim(Employee forEmployee) {
 		Claim newClaim = (Claim) NakedObjectContext.getDefaultContext().createInstance(Claim.class);
@@ -94,7 +101,7 @@ public class Claim extends AbstractNakedObject {
 
 			if (expense.isValid()) {
 				if (newClaim == null) {
-					newClaim = (Claim) createInstance(Claim.class);
+					newClaim = new Claim();
 				}
 
 				unauthorisedExpenses.addElement(expense);
@@ -121,7 +128,7 @@ public class Claim extends AbstractNakedObject {
 
 	// RCM added
 	public Expense actionNewExpenseItem(Project forProject) {
-		Expense newExpenseItem = (Expense) createInstance(Expense.class);
+		Expense newExpenseItem = new Expense();
 		associateExpenses(newExpenseItem);
 		newExpenseItem.setProject(forProject);
 
@@ -129,7 +136,7 @@ public class Claim extends AbstractNakedObject {
 	}
 
 	public void actionPayClaim() {
-		Payment newPayment = (Payment) createInstance(Payment.class);
+		Payment newPayment = new Payment();
 		getClaimant().getAccount().getPayments().add(newPayment);
 		newPayment.getPaymentAmount().setValue(deriveTotal());
 		newPayment.setClaim(this);
@@ -178,7 +185,7 @@ public class Claim extends AbstractNakedObject {
 		if ((claimant == null) && (deriveTotal() == null)) {
 			return new Title("New Claim");
 		} else {
-			return new Title(getClaimant()).append(deriveTotal()).append(getStatus());
+			return new Title(getClaimant().title().toString()).append(deriveTotal().titleString()).append(getStatus().titleString());
 		}
 	}
 
@@ -190,7 +197,7 @@ public class Claim extends AbstractNakedObject {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

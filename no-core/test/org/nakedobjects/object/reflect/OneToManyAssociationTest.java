@@ -1,21 +1,15 @@
 package org.nakedobjects.object.reflect;
 
 
-import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.DummyNakedObjectSpecification;
+import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedCollection;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.Person;
-import org.nakedobjects.object.Team;
-import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.MockObjectManager;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
-import org.nakedobjects.object.defaults.collection.InternalCollectionVector;
-import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
+import org.nakedobjects.object.control.DefaultHint;
+import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.security.Session;
-import org.nakedobjects.object.system.TestClock;
 
 import junit.framework.TestSuite;
 
@@ -24,13 +18,14 @@ import org.apache.log4j.LogManager;
 
 
 public class OneToManyAssociationTest extends NakedObjectTestCase {
-    private static final String MEMBERS_FIELD_LABEL = "Members";
-    private static final String MEMBERS_FIELD_NAME = "members";
-	private Team object;
-	private OneToManyAssociationSpecification collectionField;
-	private Person elements[];
-    private MockObjectManager manager;
+    private static final String FIELD_LABEL = "Members";
+    private static final String FIELD_NAME = "members";
+	private NakedObject nakedObject;
+	private NakedObject associate;
+	private OneToManyAssociation association;
     private Session session;
+    private DummyNakedObjectSpecification type;
+    private MockOneToManyAssociation associationDelegate;
 	
     public OneToManyAssociationTest(String name) {
         super(name);
@@ -43,73 +38,127 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     public void setUp()  throws ObjectStoreException {
     	LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
-    	manager = MockObjectManager.setup();
-    	new NakedObjectSpecificationLoaderImpl();
-    	NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
-    	NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
-    	new TestClock();
-    	
        	session = new Session();
-
-		object = new Team();
-		object.setNakedClass(NakedObjectSpecificationLoader.getInstance().loadSpecification(object.getClass()));
-		object.setContext(manager.getContext());
-        elements = new Person[3];
-        for (int i = 0; i < elements.length; i++) {
-			elements[i] = new Person();
-		}
-        NakedObjectSpecification c = object.getSpecification();
+       	nakedObject = new DummyNakedObject();
+        associate = new DummyNakedObject();
         
-        collectionField = (OneToManyAssociationSpecification) c.getField(MEMBERS_FIELD_NAME);
+        type = new DummyNakedObjectSpecification();
+        associationDelegate = new MockOneToManyAssociation();
+        association = new OneToManyAssociation(FIELD_NAME, type, associationDelegate);
     }
     
-    protected void tearDown() throws Exception {
-        manager.shutdown();
-        super.tearDown();
-    }
-
     public void testType() {
-    	assertEquals(Person.class.getName(), collectionField.getType().getFullName());
+    	assertEquals(type, association.getSpecification());
     }
     	
     public void testSet() {
-    	for (int i = 0; i < elements.length; i++) {
-    		collectionField.setAssociation(object, elements[i]);
-    	}
- 
-    	InternalCollection collection = object.getMembers();
-    	assertEquals(elements.length, collection.size());
-    	for (int i = 0; i < elements.length; i++) {
-    		assertEquals(elements[i], collection.elementAt(i));
-    	}
+        association.setAssociation(nakedObject, associate);
+        associationDelegate.assertAction(0, "add " + nakedObject);
+        associationDelegate.assertAction(1, "add " + associate);
     }     	
     
-    public void testRemove() {
-    }     	
+    public void testClear() {
+        association.clearAssociation(nakedObject, associate);
+        associationDelegate.assertAction(0, "remove " + nakedObject);
+        associationDelegate.assertAction(1, "remove " + associate);
+ }     	
     
+    public void testClearWithNull() {
+        try {
+        association.clearAssociation(nakedObject, null);
+        fail();
+        } catch (IllegalArgumentException expected) {
+        }
+        associationDelegate.assertActions(0);
+ }     	
+
+    
+    public void testSetWithNull() {
+        try {
+        association.setAssociation(nakedObject, null);
+        fail();
+        } catch (IllegalArgumentException expected) {
+        }
+        associationDelegate.assertActions(0);
+ }     	
+
+
     public void testGet() {
-    	assertTrue( collectionField.get(object).isSameAs(new InternalCollectionVector(Person.class, object)));
+        NakedCollection collection = new DummyNakedCollection();
+        associationDelegate.getCollection = collection;
+        Naked returnedObject = association.get(nakedObject);
+        assertEquals(collection, returnedObject);
     }     	
     
     public void testName() {
-    	assertEquals(MEMBERS_FIELD_NAME, collectionField.getName());
+    	assertEquals(FIELD_NAME, association.getName());
     }
     
     public void testLabel() {
-    	assertEquals(MEMBERS_FIELD_LABEL, collectionField.getLabel(session, object));
+        assertEquals(FIELD_NAME, association.getLabel(session, nakedObject));
+
+        associationDelegate.label = FIELD_LABEL;
+        associationDelegate.hasAbout = true;
+        assertEquals(FIELD_LABEL, association.getLabel(session, nakedObject));
+   }
+    
+    public void testAboutForSet() {
+        assertFalse(association.hasHint());
+
+        Hint about = association.getHint(new Session(), nakedObject, associate, true);
+       assertNull(associationDelegate.about);
+       assertTrue(about instanceof DefaultHint);
+       associationDelegate.assertActions(0);
+
+       associationDelegate.hasAbout = true;
+       assertTrue(association.hasHint());
+
+       about = association.getHint(new Session(), nakedObject, associate, true);
+       assertEquals(associationDelegate.about, about);
+       associationDelegate.assertAction(0, "about " + nakedObject);
+       associationDelegate.assertAction(1, "about " + associate);
+       associationDelegate.assertAction(2, "about " + true);
     }
     
-    public void testAbout() {
-    	assertTrue(collectionField.hasAbout());
+    
+    public void testAboutForClear() {
+        assertFalse(association.hasHint());
 
-    	assertNotNull(collectionField.getAbout(session, object));
+        Hint about = association.getHint(new Session(), nakedObject, associate, false);
+       assertNull(associationDelegate.about);
+       assertTrue(about instanceof DefaultHint);
+       associationDelegate.assertActions(0);
+
+       associationDelegate.hasAbout = true;
+       assertTrue(association.hasHint());
+
+       about = association.getHint(new Session(), nakedObject, associate, false);
+       assertEquals(associationDelegate.about, about);
+       associationDelegate.assertAction(0, "about " + nakedObject);
+       associationDelegate.assertAction(1, "about " + associate);
+       associationDelegate.assertAction(2, "about " + false);
     }
+
+    public void testFullAbout() {
+        assertFalse(association.hasHint());
+
+        Hint about = association.getHint(new Session(), nakedObject);
+       assertNull(associationDelegate.about);
+       assertTrue(about instanceof DefaultHint);
+
+       associationDelegate.hasAbout = true;
+       assertTrue(association.hasHint());
+
+       about = association.getHint(new Session(), nakedObject);
+       assertEquals(associationDelegate.about, about);
+    }
+
 }
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

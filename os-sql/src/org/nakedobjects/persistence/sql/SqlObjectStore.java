@@ -6,11 +6,11 @@ import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.ObjectStoreException;
@@ -38,7 +38,7 @@ public final class SqlObjectStore implements NakedObjectStore {
         return cls;
     }
     
-    public void createNakedClass(NakedClass cls) throws ObjectStoreException {
+    public void createNakedClass(NakedObject cls) throws ObjectStoreException {
         DatabaseConnector connection = getDatabaseConnector();
         mapperLookup.getNakedClassMapper(connection).createNakedClass(connection, cls);
         releaseConnectionIfNotInTransaction(connection);
@@ -216,7 +216,7 @@ public final class SqlObjectStore implements NakedObjectStore {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

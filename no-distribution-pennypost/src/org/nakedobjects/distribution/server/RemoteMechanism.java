@@ -1,8 +1,8 @@
 package org.nakedobjects.distribution.server;
 
-import org.nakedobjects.distribution.AboutData;
 import org.nakedobjects.distribution.ActionType;
 import org.nakedobjects.distribution.DistributionInterface;
+import org.nakedobjects.distribution.HintData;
 import org.nakedobjects.distribution.InstanceSet;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ObjectReference;
@@ -10,7 +10,6 @@ import org.nakedobjects.distribution.ParameterSet;
 import org.nakedobjects.distribution.RemoteException;
 import org.nakedobjects.distribution.RemoteObjectFactory;
 import org.nakedobjects.distribution.SessionId;
-import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
@@ -21,11 +20,11 @@ import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.UnsupportedFindException;
-import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.object.reflect.AssociationSpecification;
-import org.nakedobjects.object.reflect.ValueFieldSpecification;
-import org.nakedobjects.object.reflect.ActionSpecification.Type;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.NakedObjectAssociation;
+import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.Action.Type;
 
 
 public class RemoteMechanism implements DistributionInterface{
@@ -38,14 +37,14 @@ public class RemoteMechanism implements DistributionInterface{
         this.factory = factory;
     }
 
-    public AboutData aboutValue(final SessionId token, final ObjectReference reference, final String fieldName) {
+    public HintData valueHint(final SessionId token, final ObjectReference reference, final String fieldName) {
         NakedObject inObject = getObject(reference);
-        ValueFieldSpecification value = (ValueFieldSpecification) inObject.getSpecification().getField(fieldName);
-        About about = value.getAbout(token.getSession(), inObject);
+        OneToOneAssociation value = (OneToOneAssociation) inObject.getSpecification().getField(fieldName);
+        Hint about = inObject.getHint(token.getSession(), value, null);
         return factory.createAboutData(about);
     }
 
-    public AboutData aboutAction(SessionId securityToken, ObjectReference target, final ActionType actionType, String actionName, ParameterSet parameterSet) {
+    public HintData actionHint(SessionId securityToken, ObjectReference target, final ActionType actionType, String actionName, ParameterSet parameterSet) {
         NakedObject object = target.getObject(objectManager);
         Naked[] parameters = parameterSet.recreateParameters(object.getContext());
         NakedObjectSpecification[] parameterClasses = new NakedObjectSpecification[parameters.length];
@@ -53,8 +52,8 @@ public class RemoteMechanism implements DistributionInterface{
             parameterClasses[i] = parameters[i].getSpecification();
         }
         Type type = actionType.getType();
-        ActionSpecification action = (ActionSpecification) object.getSpecification().getObjectAction(type, actionName, parameterClasses);
-        About about = action.getAbout(securityToken.getSession(), object);
+        Action action = (Action) object.getSpecification().getObjectAction(type, actionName, parameterClasses);
+        Hint about = object.getHint(securityToken.getSession(), action, null);
         return factory.createAboutData(about);
     }
 
@@ -65,8 +64,8 @@ public class RemoteMechanism implements DistributionInterface{
     public void associateObject(final SessionId token, final ObjectReference target, final String fieldName, final ObjectReference associate) {
         NakedObject inObject = getObject(target);
         NakedObject object = getObject(associate);
-        AssociationSpecification association = (AssociationSpecification) inObject.getSpecification().getField(fieldName);
-        association.setAssociation(inObject, object);
+        NakedObjectAssociation association = (NakedObjectAssociation) inObject.getSpecification().getField(fieldName);
+        inObject.setAssociation(association, object);
     }
 
     public void destroyObject(final SessionId token, final ObjectReference target) {
@@ -77,8 +76,8 @@ public class RemoteMechanism implements DistributionInterface{
     public void dissociateObject(final SessionId token, final ObjectReference target, final String fieldName, final ObjectReference associate) {
         NakedObject inObject = getObject(target);
         NakedObject object = getObject(associate);
-        AssociationSpecification association = (AssociationSpecification) inObject.getSpecification().getField(fieldName);
-        association.setAssociation(inObject, object);
+        NakedObjectAssociation association = (NakedObjectAssociation) inObject.getSpecification().getField(fieldName);
+        inObject.setAssociation(association, object);
     }
 
     public ObjectData executeAction(final SessionId token, final ObjectReference target, final ActionType actionType, final String actionName, ParameterSet parameterSet) {
@@ -89,15 +88,15 @@ public class RemoteMechanism implements DistributionInterface{
             parameterClasses[i] = parameters[i].getSpecification();
         }
         Type type = actionType.getType();
-        ActionSpecification action = (ActionSpecification) object.getSpecification().getObjectAction(type, actionName, parameterClasses);
-        NakedObject result = action.execute(object, parameters);
+        Action action = (Action) object.getSpecification().getObjectAction(type, actionName, parameterClasses);
+        NakedObject result = object.execute(action, parameters);
         return factory.createObjectData(result);
     }
 
     public ObjectData getAssociation(final SessionId token, final ObjectReference target, final String fieldName) {
         NakedObject inObject = getObject(target);
-        AssociationSpecification association = (AssociationSpecification) inObject.getSpecification().getField(fieldName);
-        NakedObject object = (NakedObject) association.get(inObject);
+        NakedObjectAssociation association = (NakedObjectAssociation) inObject.getSpecification().getField(fieldName);
+        NakedObject object = inObject.getField(association);
         return factory.createObjectData(object);
     }
 
@@ -160,13 +159,19 @@ public class RemoteMechanism implements DistributionInterface{
     }
 
     public void saveValue(final SessionId token, final ObjectReference target, final String fieldName, final String encodedValue) throws RemoteException {
-        try {
+     // try {
 	        NakedObject inObject = getObject(target);
-	        ValueFieldSpecification value = (ValueFieldSpecification) inObject.getSpecification().getField(fieldName);
-            value.saveEncoded(inObject, encodedValue);
-        } catch (InvalidEntryException e) {
+	        OneToOneAssociation value = (OneToOneAssociation) inObject.getSpecification().getField(fieldName);
+            inObject.setValue(value, encodedValue);
+       /* } catch (InvalidEntryException e) {
             throw new RemoteException(e);
-        }
+        }*/
+    }
+
+    public void clearValue(final SessionId token, final ObjectReference target, final String fieldName) {
+        NakedObject inObject = getObject(target);
+        OneToOneAssociation value = (OneToOneAssociation) inObject.getSpecification().getField(fieldName);
+        inObject.clear(value);
     }
 
     public long serialNumber(final SessionId token, String name) {
@@ -185,12 +190,11 @@ public class RemoteMechanism implements DistributionInterface{
         NakedObjectSpecification nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(name);
         return objectManager.getNakedClass(nakedClass);
     }
-
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

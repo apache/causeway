@@ -1,13 +1,14 @@
 package org.nakedobjects.viewer.skylark.configuration;
 
-import org.nakedobjects.viewer.skylark.Configuration;
+import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.viewer.skylark.Viewer;
 
 
-public class DefaultUiConfiguration implements Configuration {
+public class DefaultUiConfiguration implements org.nakedobjects.viewer.skylark.GuiConfiguration {
     private final static int CLASS_ICON_SIZE = 85;
     private final static String CLASS_ICON_SIZE_PARAM = Viewer.PROPERTY_BASE + "class-icon-size";
-    private static final org.nakedobjects.container.configuration.Configuration configurationFile;
+    private static final Configuration configurationFile;
     private static final String FALLBACK_IMAGE = "Unknown.gif";
     private final static String FALLBACK_PARAM = Viewer.PROPERTY_BASE + "fallback-image";
     private final static String IMAGE_DIRECTORY = "images/";
@@ -15,7 +16,7 @@ public class DefaultUiConfiguration implements Configuration {
     public static final String PROPERTY_BASE = "viewer.skylark.";
     private static final String SPECIFICATION_BASE = PROPERTY_BASE + "specification.";
     static {
-        configurationFile = org.nakedobjects.container.configuration.Configuration.getInstance();
+        configurationFile = ConfigurationFactory.getConfiguration();
     }
 
     public boolean alsoLoadImageAsFiles() {
@@ -38,7 +39,7 @@ public class DefaultUiConfiguration implements Configuration {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

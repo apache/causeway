@@ -1,19 +1,13 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.LoadedObjects;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedClNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.ResolveException;
-import org.nakedobjects.object.io.BinaryTransferableReader;
-import org.nakedobjects.object.io.BinaryTransferableWriter;
-import org.nakedobjects.object.io.Transferable;
-import org.nakedobjects.object.io.TransferableReader;
-import org.nakedobjects.object.io.TransferableWriter;
 
 import java.io.Serializable;
 
@@ -104,7 +98,7 @@ public class ObjectProxy implements Serializable {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,53 +1,57 @@
 package org.nakedobjects.object;
-import org.nakedobjects.object.control.ClassAbout;
-import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.reflect.ActionSpecification.Type;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.reflect.ObjectTitle;
+import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
 
 public class DummyNakedObjectSpecification implements NakedObjectSpecification {
 
+    public String fullName;
+    public NakedObjectField[] fields;
+    
     public Naked acquireInstance() {
         return null;
     }
 
-    public ClassAbout getClassAbout() {
+    public Hint getClassAbout() {
         return null;
     }
 
-    public ActionSpecification getClassAction(Type type, String name) {
+    public Action getClassAction(Type type, String name) {
         return null;
     }
 
-    public ActionSpecification getClassAction(Type type, String name, NakedObjectSpecification[] parameters) {
+    public Action getClassAction(Type type, String name, NakedObjectSpecification[] parameters) {
         return null;
     }
 
-    public ActionSpecification[] getClassActions(Type type) {
+    public Action[] getClassActions(Type type) {
         return null;
     }
 
-    public FieldSpecification getField(String name) {
+    public NakedObjectField getField(String name) {
         return null;
     }
 
-    public FieldSpecification[] getFields() {
-        return null;
+    public NakedObjectField[] getFields() {
+        return fields;
     }
 
     public String getFullName() {
+        return fullName;
+    }
+
+    public Action getObjectAction(Type type, String name) {
         return null;
     }
 
-    public ActionSpecification getObjectAction(Type type, String name) {
+    public Action getObjectAction(Type type, String name, NakedObjectSpecification[] parameters) {
         return null;
     }
 
-    public ActionSpecification getObjectAction(Type type, String name, NakedObjectSpecification[] parameters) {
-        return null;
-    }
-
-    public ActionSpecification[] getObjectActions(Type type) {
+    public Action[] getObjectActions(Type type) {
         return null;
     }
 
@@ -63,7 +67,7 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         return null;
     }
 
-    public FieldSpecification[] getVisibleFields(NakedObject object, Session session) {
+    public NakedObjectField[] getVisibleFields(NakedObject object, Session session) {
         return null;
     }
 
@@ -114,13 +118,37 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     public NakedObjectSpecification[] interfaces() {
         return null;
     }
+
+    public boolean isLookup() {
+        return false;
+    }
+
+    public ObjectTitle getTitle() {
+        return new ObjectTitle() {
+
+            public String title(NakedObject object) {
+                return "";
+            }};
+    }
+
+    public boolean isParsable() {
+        return false;
+    }
+
+    public boolean isDirty(NakedObject object) {
+        return false;
+    }
+
+    public void clearDirty(NakedObject object) {}
+
+    public void markDirty(NakedObject object) {}
 }
 
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

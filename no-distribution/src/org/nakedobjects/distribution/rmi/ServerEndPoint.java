@@ -1,7 +1,7 @@
 /*
         Naked Objects - a framework that exposes behaviourally complete
         business objects directly to the user.
-        Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+        Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
         This program is free software; you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -23,6 +23,11 @@
 */
 package org.nakedobjects.distribution.rmi;
 
+import org.nakedobjects.container.configuration.ComponentException;
+import org.nakedobjects.distribution.ObjectUpdateMessage;
+import org.nakedobjects.distribution.RequestContext;
+import org.nakedobjects.object.UpdateNotifier;
+
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -30,12 +35,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
 import org.apache.log4j.Logger;
-
-import org.nakedobjects.distribution.ObjectUpdateMessage;
-import org.nakedobjects.distribution.RequestContext;
-import org.nakedobjects.distribution.server.ConnectionFromClient;
-import org.nakedobjects.object.UpdateNotifier;
-import org.nakedobjects.utility.ComponentException;
 
 
 public class ServerEndPoint implements ConnectionFromClient {

@@ -1,16 +1,23 @@
 package org.nakedobjects.object.security;
 
+import org.nakedobjects.object.NakedObjectRuntimeException;
+
 public class ClientSession {
     // for each client JVm there is one user
     private static Session session;
 
     public static Session getSession() {
         if (session == null) {
-            session = new Session();
+            throw new NakedObjectRuntimeException();
+//            session = new Session();
         }
         return session;
     }
 
+    public static void setSession(Session session) {
+        ClientSession.session = session;
+    }
+    
     public static void end() {
         session = null;
     }
@@ -20,7 +27,7 @@ public class ClientSession {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under
