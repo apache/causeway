@@ -49,6 +49,8 @@ public class SimpleFieldAbout extends AbstractAbout implements FieldAbout {
         }
     }
 
+    private boolean isPersistent = true;
+
     public SimpleFieldAbout(Session session, NakedObject object) {
         super(session, object);
     }
@@ -63,6 +65,10 @@ public class SimpleFieldAbout extends AbstractAbout implements FieldAbout {
 
     public void invisibleToUsers(User[] users) {
         super.invisibleToUsers(users);
+    }
+
+    public boolean isPersistent() {
+        return isPersistent;
     }
 
     public void modifiableOnlyByRole(Role role) {
@@ -87,6 +93,10 @@ public class SimpleFieldAbout extends AbstractAbout implements FieldAbout {
 
     public void modifiableOnlyInStates(State[] states) {
         super.usableOnlyInStates(states);
+    }
+
+    public void nonPersistent() {
+        isPersistent = false;
     }
 
     public void unmodifiable() {
@@ -132,7 +142,6 @@ public class SimpleFieldAbout extends AbstractAbout implements FieldAbout {
     public void visibleOnlyToUsers(User[] users) {
         super.visibleOnlyToUsers(users);
     }
-
 }
 
 /*
