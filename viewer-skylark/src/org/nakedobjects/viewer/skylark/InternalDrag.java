@@ -2,47 +2,42 @@ package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.utility.NotImplementedException;
 
+
 /**
  * Details a drag event that is internal to view.
  */
 public class InternalDrag extends Drag {
 
-    public static InternalDrag create(View source, Location locationWithinViewer, Location locationWithinView, int modifiers) {
-        InternalDrag drag = new InternalDrag(source, locationWithinViewer, locationWithinView, modifiers);
-
-        return drag;
+    static InternalDrag create(View source, Location mouseLocation, int modifiers) {
+       return new InternalDrag(source, mouseLocation, modifiers);
     }
-
+    
+    private final Location absoluteViewLocation;
+    private final View dragOverlay;
     private final Location mouseLocation;
     private final Location originalMouseLocation;
-    private final Location viewOffset;
- 
-    private final View overlay;
 
     /**
      * Creates a new drag event. The source view has its pickup(), and then,
      * exited() methods called on it. The view returned by the pickup method
      * becomes this event overlay view, which is moved continuously so that it
      * tracks the pointer,
-     * 
      * @param source
      *                       the view over which the pointer was when this event started
      * @param mouseLocation
      *                       the location within the viewer (the Frame/Applet/Window etc)
-     * @param locationWithinView
-     *                       the location within the specified view
      * @param modifiers
      *                       the button and key modifiers (@see java.awt.event.MouseEvent)
      */
-    private InternalDrag(View source, Location mouseLocation, Location locationWithinView, int modifiers) {
-        super(source, mouseLocation, locationWithinView, modifiers);
+    private InternalDrag(View source, Location mouseLocation, int modifiers) {
+        super(source, modifiers);
         this.mouseLocation = new Location(mouseLocation);
-        this.originalMouseLocation = new Location(mouseLocation);
-        viewOffset = source.getAbsoluteLocation();
-        overlay = source.dragFrom(this);
+        originalMouseLocation = new Location(mouseLocation);
+        absoluteViewLocation = source.getAbsoluteLocation();
+        dragOverlay = source.dragFrom(this);
     }
 
-    public void cancel() {
+    protected void cancel() {
         view.dragCancel(this);
     }
 
@@ -59,24 +54,24 @@ public class InternalDrag extends Drag {
      * the drag actions..
      */
     public View getDragOverlay() {
-        return overlay;
+        return dragOverlay;
     }
 
     public Location getMouseLocation() {
         return mouseLocation;
     }
-    
+
+    public Location getMouseLocationRelativeToView() {
+        Location location = new Location(mouseLocation);
+        location.subtract(absoluteViewLocation);
+        return location;
+    }
+
     /**
      * Offset from the location of the mouse when the drag started.
      */
     public Offset getOffset() {
         return mouseLocation.offsetFrom(originalMouseLocation);
-    }
-    
-    public Location getRelativeLocation() {
-        Location location = new Location(mouseLocation);
-        location.subtract(viewOffset);
-        return location;
     }
 
     public View getView() {
@@ -88,16 +83,19 @@ public class InternalDrag extends Drag {
     }
 
     public String toString() {
-        return "InternalDrag [location=" + mouseLocation + ",relative=" + getRelativeLocation() + ",offset=" + viewOffset + "," + super.toString() + "]";
+        return "InternalDrag [location=" + mouseLocation + ",relative=" + getMouseLocationRelativeToView() + ",offset="
+                + absoluteViewLocation + "," + super.toString() + "]";
     }
 
     // TODO remove
     public Offset totalMovement() {
         throw new NotImplementedException();
-//        return new Offset(originalLocationWithinView.getX() - mouseLocation.getX(), originalLocationWithinView.getY() - mouseLocation.getY());
+        //        return new Offset(originalLocationWithinView.getX() -
+        // mouseLocation.getX(), originalLocationWithinView.getY() -
+        // mouseLocation.getY());
     }
 
-    void updateLocationWithinViewer(Location mouseLocation, View target, Location locationWithinView) {
+    void update(Location mouseLocation, View target) {
         this.mouseLocation.x = mouseLocation.x;
         this.mouseLocation.y = mouseLocation.y;
     }

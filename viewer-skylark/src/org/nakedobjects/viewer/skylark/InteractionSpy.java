@@ -7,7 +7,6 @@ import java.awt.event.WindowEvent;
 
 
 public class InteractionSpy {
-
     private class SpyFrame extends Frame {
         public SpyFrame() {
             super("View/Interaction Spy");
@@ -88,6 +87,7 @@ public class InteractionSpy {
 
     public void reset() {
         if (isVisible) {
+            event++;
             traceIndex = 0;
             actionCount = 8;
             damagedArea = "";
@@ -116,13 +116,6 @@ public class InteractionSpy {
         if (isVisible) {
             set(0, "Down at", downAt);
         }
-    }
-
-    public void setEvent(int event) {
-        if (isVisible) {
-            this.event = event;
-        }
-
     }
 
     public void setLocationInView(Location internalLocation) {

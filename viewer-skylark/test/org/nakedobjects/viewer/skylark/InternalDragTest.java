@@ -11,12 +11,12 @@ public class InternalDragTest extends TestCase {
 	
 	public void testDragStart() {
 		MockView view = new MockView(null);
-		InternalDrag id = InternalDrag.create(view, new Location(100, 110), new Location(20, 25), 0);
+		InternalDrag id = InternalDrag.create(view, new Location(100, 110), 0);
 		assertEquals(id, view.dragFromCall);		
-		assertEquals(new Location(70, 50), id.getRelativeLocation());
+		assertEquals(new Location(70, 50), id.getMouseLocationRelativeToView());
 		
-		id.updateLocationWithinViewer(new Location(110, 130), view, null);
-		assertEquals(new Location(80, 70), id.getRelativeLocation());
+		id.update(new Location(110, 130), view);
+		assertEquals(new Location(80, 70), id.getMouseLocationRelativeToView());
 		
 		assertEquals(new Offset(10, 20), id.getOffset());
 	}

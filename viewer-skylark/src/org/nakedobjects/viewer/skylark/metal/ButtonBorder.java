@@ -61,7 +61,7 @@ public class ButtonBorder extends AbstractBorder {
     
     
     public void firstClick(Click click) {
-        UserAction action = overButton(click.getLocation());
+        UserAction action = overButton(click.getMouseLocationRelativeToView());
         if(action == null) {
 	        super.firstClick(click);
         } else {
@@ -72,7 +72,7 @@ public class ButtonBorder extends AbstractBorder {
     }
     
     public void secondClick(Click click) {
-        UserAction action = overButton(click.getLocation());
+        UserAction action = overButton(click.getMouseLocationRelativeToView());
         if(action == null) {
 	        super.secondClick(click);
         }
@@ -80,7 +80,7 @@ public class ButtonBorder extends AbstractBorder {
    
     
     public void thirdClick(Click click) {
-        UserAction action = overButton(click.getLocation());
+        UserAction action = overButton(click.getMouseLocationRelativeToView());
         if(action == null) {
 	        super.thirdClick(click);
         }

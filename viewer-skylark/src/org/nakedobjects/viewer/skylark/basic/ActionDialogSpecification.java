@@ -102,10 +102,8 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
 	            return view;
             } else if(content instanceof ValueParameter) {
                 ViewFactory factory = ViewFactory.getViewFactory();
-
                 ViewSpecification specification = factory.getValueFieldSpecification((ValueContent) content);
                 return specification.createView(content, axis);
-               	//return new TextField.Specification().createView(content, axis);
             }
             return null;
         }

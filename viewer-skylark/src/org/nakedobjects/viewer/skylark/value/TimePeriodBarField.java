@@ -44,7 +44,7 @@ public class TimePeriodBarField extends AbstractField {
     }
 
     public void drag(InternalDrag drag) {
-        float x = drag.getRelativeLocation().getX() - 2;
+        float x = drag.getMouseLocationRelativeToView().getX() - 2;
         float max = getSize().getWidth() - 4;
 
         if ((x >= 0) && (x <= max)) {

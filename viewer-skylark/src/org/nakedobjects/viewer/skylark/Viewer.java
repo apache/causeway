@@ -402,10 +402,10 @@ public class Viewer {
         me.translatePoint(-insets.left, -insets.top);
     }
 
-    public IdentifiedView identifyView(Location locationWithinViewer, boolean includeOverlay) {
+    public View identifyView(Location locationWithinViewer, boolean includeOverlay) {
         if (includeOverlay && overlayView != null && overlayView.getBounds().contains(locationWithinViewer)) {
-            locationWithinViewer.move(-overlayView.getLocation().getX(), -overlayView.getLocation().getY());
-            return new IdentifiedView(overlayView, locationWithinViewer, locationWithinViewer);
+             locationWithinViewer.move(-overlayView.getLocation().getX(), -overlayView.getLocation().getY());
+            return overlayView.identify(locationWithinViewer, new Offset(0, 0));
         } else {
             return rootView.identify(locationWithinViewer, new Offset(0, 0));
         }

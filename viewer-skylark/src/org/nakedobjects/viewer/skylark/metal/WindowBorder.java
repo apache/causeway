@@ -114,7 +114,7 @@ public class WindowBorder extends AbstractBorder {
 	
     public void firstClick(Click click) {
         Bounds bounds = new Bounds(getSize().getWidth() - right - 3 * (BUTTON_WIDTH + padding) - 1, LINE_THICKNESS + padding, BUTTON_WIDTH, BUTTON_WIDTH);
-        if(bounds.contains(click.getLocation())) {
+        if(bounds.contains(click.getMouseLocationRelativeToView())) {
             View iconView = new RootIconSpecification().createView(getContent(), null);
             iconView.setLocation(getView().getLocation());
             getWorkspace().removeView(getView());
@@ -124,7 +124,7 @@ public class WindowBorder extends AbstractBorder {
 
         bounds.translate(BUTTON_WIDTH + padding, 0);
         bounds.translate(BUTTON_WIDTH + padding, 0);
-        if(bounds.contains(click.getLocation())) {
+        if(bounds.contains(click.getMouseLocationRelativeToView())) {
             dispose();
             return;
         }

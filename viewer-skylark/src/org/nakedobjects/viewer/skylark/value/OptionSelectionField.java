@@ -3,6 +3,7 @@ package org.nakedobjects.viewer.skylark.value;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.defaults.value.Option;
+import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.View;
@@ -10,6 +11,7 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.basic.SimpleIdentifier;
 import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
+import org.nakedobjects.viewer.skylark.special.OpenOptionFieldBorder;
 
 public class OptionSelectionField extends TextField {
 
@@ -53,6 +55,24 @@ public class OptionSelectionField extends TextField {
             e.printStackTrace();
         }
     }
+}
+
+class OptionSelectionFieldBorder extends OpenOptionFieldBorder {
+
+    public OptionSelectionFieldBorder(OptionSelectionField wrappedView) {
+        super(wrappedView);
+    }
+
+    protected View createOverlay() {
+            return new OptionSelectionFieldOverlay((OptionSelectionField) wrappedView);
+    }
+    
+    public void firstClick(Click click) {
+        if (canChangeValue()) {
+            super.firstClick(click);
+        }
+    }
+
 }
 
 /*

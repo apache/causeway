@@ -127,7 +127,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
 
     public void firstClick(Click click) {
         if(click.isButton1()) {
-	    	mouseMoved(click.getLocation());
+	    	mouseMoved(click.getMouseLocationRelativeToView());
 	        invoke();
         }
     }

@@ -74,21 +74,23 @@ public class DebugView implements DebugInfo {
     private String dumpObjectMethods(NakedObject object) {
         StringBuffer text = new StringBuffer();
 
-        FieldSpecification[] fields = object.getSpecification().getVisibleFields(object, ClientSession.getSession());
-        Session session = ClientSession.getSession();
- 		for (int i = 0; i < fields.length; i++) {
-            //text.append("    " + attributes[i].toString() + "\n");
-            if (fields[i] instanceof ValueFieldSpecification) {
-                ValueFieldSpecification f = (ValueFieldSpecification) fields[i];
-                debugAboutDetail(text, f, f.getAbout(session, (NakedObject) object));
-            } else if (fields[i] instanceof OneToManyAssociationSpecification) {
-                OneToManyAssociationSpecification f = (OneToManyAssociationSpecification) fields[i];
-                debugAboutDetail(text, f, f.getAbout(session, (NakedObject) object));
-            } else if (fields[i] instanceof OneToOneAssociationSpecification) {
-                OneToOneAssociationSpecification f = (OneToOneAssociationSpecification) fields[i];
-                debugAboutDetail(text, f, f.getAbout(session, (NakedObject) object, null));
+        if (object != null) {
+            FieldSpecification[] fields = object.getSpecification().getVisibleFields(object, ClientSession.getSession());
+            Session session = ClientSession.getSession();
+            for (int i = 0; i < fields.length; i++) {
+                //text.append(" " + attributes[i].toString() + "\n");
+                if (fields[i] instanceof ValueFieldSpecification) {
+                    ValueFieldSpecification f = (ValueFieldSpecification) fields[i];
+                    debugAboutDetail(text, f, f.getAbout(session, (NakedObject) object));
+                } else if (fields[i] instanceof OneToManyAssociationSpecification) {
+                    OneToManyAssociationSpecification f = (OneToManyAssociationSpecification) fields[i];
+                    debugAboutDetail(text, f, f.getAbout(session, (NakedObject) object));
+                } else if (fields[i] instanceof OneToOneAssociationSpecification) {
+                    OneToOneAssociationSpecification f = (OneToOneAssociationSpecification) fields[i];
+                    debugAboutDetail(text, f, f.getAbout(session, (NakedObject) object, null));
+                }
             }
-        }
+ 		}
         
 
         return text.toString();
@@ -135,12 +137,14 @@ public class DebugView implements DebugInfo {
     public String dumpGraph(NakedObject object) {
         StringBuffer info = new StringBuffer();
 
-        // object details - exploded/recursive
-        info.append("GRAPH\n");
-        info.append("------\n");
-        info.append(object);
-        info.append(debugGraph(object, object.getSpecification().getShortName(), 0, new Vector()));
-
+        if (object != null) {
+            // object details - exploded/recursive
+            info.append("GRAPH\n");
+            info.append("------\n");
+            info.append(object);
+            info.append(debugGraph(object, object.getSpecification().getShortName(), 0, new Vector()));
+        }
+        
         return info.toString();
     }
 

@@ -7,26 +7,16 @@ import java.awt.event.InputEvent;
  */
 public abstract class PointerEvent {
     protected final int mods;
- 	protected final ViewAreaType type;
  	protected final View view;
 
  	/**
  	 * Creates a new pointer event object.
  	 * @param view	the view over which the pointer was when this event occurred
- 	 * @param locationWithinView  the location within the specified view
  	 * @param mods  the button and key modifiers (@see java.awt.event.MouseEvent)
  	 */
-    PointerEvent(View view, Location locationWithinView, int mods) {
+    PointerEvent(View view, int mods) {
         this.mods = mods;
         this.view = view;
-        this.type = view.viewAreaType(new Location(locationWithinView));
-    }
-
-    /** 
-     * Returns the area type for the event.
-     */
-    public ViewAreaType getViewAreaType() {
-    	return type;
     }
 
     /**

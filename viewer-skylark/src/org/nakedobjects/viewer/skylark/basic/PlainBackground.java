@@ -1,41 +1,32 @@
-package org.nakedobjects.viewer.skylark;
+package org.nakedobjects.viewer.skylark.basic;
 
-public class IdentifiedView {
+import org.nakedobjects.viewer.skylark.Canvas;
+import org.nakedobjects.viewer.skylark.Color;
+import org.nakedobjects.viewer.skylark.Style;
+import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.core.AbstractViewDecorator;
 
-    private final View view;
-    private final Location mouseLocation;
-    private final Location viewLocation;
+public class PlainBackground extends AbstractViewDecorator {
+	private Color color;
 
-    public IdentifiedView(final View view, final Location mouseLocation, final Location viewLocation) {
-        this.view = view;
-        this.mouseLocation = mouseLocation;
-        this.viewLocation = viewLocation;
+    public PlainBackground(View wrappedView) {
+		super(wrappedView);	
+		color = Style.WHITE;
+	}
+
+    public PlainBackground(View wrappedView, Color color) {
+		super(wrappedView);	
+		this.color = color;
+	}
+	
+	public void draw(Canvas canvas) {
+		canvas.drawSolidRectangle(getSize(), color);
+		super.draw(canvas);
+	}
+	
+	public void setColor(Color color) {
+        this.color = color;
     }
-
-    public View getView() {
-        return view;
-    }
-
-    Location getMouseLocationWithinView() {
-        return mouseLocation;
-    }
-
-    Location getViewLocationWithinViewer() {
-        return viewLocation;
-    }
-
-    public void translate(final Location location) {
-        viewLocation.translate(location);
-    }
-
-    public void translate(int left, int top) {
-        viewLocation.move(left, top);
-    }
-
-    public void translate(Offset offset) {
-        viewLocation.translate(offset);
-    }
-    
 }
 
 

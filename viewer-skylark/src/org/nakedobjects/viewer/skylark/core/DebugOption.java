@@ -15,7 +15,7 @@ public class DebugOption extends MenuOption {
     }
 
     public void execute(Workspace workspace, View view, Location at) {
-        DebugFrame f = new DebugFrame();
+        InfoDebugFrame f = new InfoDebugFrame();
         f.setInfo(new DebugView(view));
         f.show(at.getX() + 50, at.getY() + 6);
     }

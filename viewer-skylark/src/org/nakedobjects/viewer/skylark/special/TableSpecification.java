@@ -11,7 +11,6 @@ import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.IdentifiedView;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -55,14 +54,14 @@ class TableBorder extends AbstractBorder {
         return wrappedView.toString() + "/TableHeader";
     }
     
-    public IdentifiedView identify(Location locationWithinView, Offset offset) {
+    public View identify(Location locationWithinView, Offset offset) {
         Location l = new Location(locationWithinView);
         l.add(offset);
         getViewManager().getSpy().addTrace("1- Identify over column " + locationWithinView);
         getViewManager().getSpy().addTrace("2- Identify over column " + l);
         if(isOverColumnBorder(l)) {
             getViewManager().getSpy().addAction("Identified over column ");
-           return new IdentifiedView(this, l, locationWithinView);
+           return getView();
         }
         return super.identify(locationWithinView, offset);
     }
@@ -97,8 +96,8 @@ class TableBorder extends AbstractBorder {
 	}
 
 	public View dragFrom(InternalDrag drag) {
-	    if(isOverColumnBorder(drag.getRelativeLocation())) {
-	        resizeColumn = getColumnAt(drag.getRelativeLocation().getX());
+	    if(isOverColumnBorder(drag.getMouseLocationRelativeToView())) {
+	        resizeColumn = getColumnAt(drag.getMouseLocationRelativeToView().getX());
 	        
 	        return new ViewResizeOutline(drag, this, ViewResizeOutline.RIGHT);
 	    } else {
@@ -115,7 +114,7 @@ class TableBorder extends AbstractBorder {
             totalWidth += axis.getColumnWidth(i);
         }
 	    
-	    int newWidth = drag.getRelativeLocation().getX() - totalWidth;
+	    int newWidth = drag.getMouseLocationRelativeToView().getX() - totalWidth;
 		getViewManager().getSpy().addAction("Resize column to " + newWidth);
 	    axis.setWidth(resizeColumn, newWidth);
 	    

@@ -186,7 +186,7 @@ public interface View extends Cloneable {
 
     boolean hasFocus();
 
-    IdentifiedView identify(Location locationWithinViewer, Offset offset);
+    View identify(Location mouseLocation, Offset offset);
 
     void invalidateContent();
 

@@ -12,7 +12,6 @@ import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
-import org.nakedobjects.viewer.skylark.IdentifiedView;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
@@ -364,16 +363,16 @@ public abstract class AbstractView implements View {
           return getView();
     }
 
-    public IdentifiedView identify2(Location location) {
+    public View identify2(Location location) {
         getViewManager().getSpy().addTrace(this, "mouse location within node view", location);
         getViewManager().getSpy().addTrace("----");
-        return new IdentifiedView(getView(), location, getLocation());
+        return getView();
     }
 
-    public IdentifiedView identify(Location locationWithinView, Offset offset) {
-      getViewManager().getSpy().addTrace(this, "mouse location within node view", locationWithinView);
+    public View identify(Location mouseLocation, Offset offset) {
+      getViewManager().getSpy().addTrace(this, "mouse location within node view", mouseLocation);
       getViewManager().getSpy().addTrace("----");
-      return new IdentifiedView(getView(), locationWithinView, getLocation());
+      return getView();
   }
 
 

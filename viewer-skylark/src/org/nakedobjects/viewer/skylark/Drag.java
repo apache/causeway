@@ -6,24 +6,19 @@ package org.nakedobjects.viewer.skylark;
 public abstract class Drag extends PointerEvent {
     /**
      * Creates a new drag event object.
-     * 
      * @param source
      *                       the view over which the pointer was when this event started
-     * @param locationWithinViewer
-     *                       the location within the viewer (the Frame/Applet/Window etc)
-     * @param location
-     *                       the location within the specified view
      * @param mods
      *                       the button and key modifiers (@see java.awt.event.MouseEvent)
      */
-    protected Drag(View source, Location locationWithinViewer, Location location, int mods) {
-        super(source, location, mods);
+    protected Drag(View source, int mods) {
+        super(source, mods);
      }
 
     /**
      * Indicates the drag has been cancelled; no action should be taken.
      */
-    public abstract void cancel();
+    protected abstract void cancel();
 
     /**
      * Indicates that the drag state has changed.
@@ -50,7 +45,7 @@ public abstract class Drag extends PointerEvent {
      * Updates the location with the viewer to reflect the mouse pointer's
      * position.
       */
-    abstract void updateLocationWithinViewer(Location locationInViewer, View target, Location locationInTarget);
+    abstract void update(Location mouseLocation, View target);
 }
 
 /*

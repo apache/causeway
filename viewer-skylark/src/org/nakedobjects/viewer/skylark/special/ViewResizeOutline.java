@@ -132,7 +132,7 @@ public class ViewResizeOutline extends AbstractView {
 
     private void extendDownward(InternalDrag drag) {
 		markDamaged();
-		int height = drag.getRelativeLocation().getY();
+		int height = drag.getMouseLocationRelativeToView().getY();
 		int width = getSize().getWidth();
 		setSize(new Size(width, height));
 		markDamaged();
@@ -141,7 +141,7 @@ public class ViewResizeOutline extends AbstractView {
     private void extendRight(InternalDrag drag) {
 		markDamaged();
 		int height = getSize().getHeight();
-		int width = drag.getRelativeLocation().getX();
+		int width = drag.getMouseLocationRelativeToView().getX();
 		setSize(new Size(width, height));
 		markDamaged();
 	}

@@ -4,7 +4,6 @@ import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
-import org.nakedobjects.viewer.skylark.IdentifiedView;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Offset;
@@ -147,8 +146,8 @@ public class ScrollBorder extends AbstractBorder {
      */
     public void secondClick(Click click) {
         Bounds contents = contentArea();
-        int x = click.getLocation().getX();
-        int y = click.getLocation().getY();
+        int x = click.getMouseLocationRelativeToView().getX();
+        int y = click.getMouseLocationRelativeToView().getY();
 
         if (x >= contents.getWidth()) {
             int position = (y < contents.getHeight() / 2) ? verticalMinimum : verticalMaximum;
@@ -164,8 +163,8 @@ public class ScrollBorder extends AbstractBorder {
 
     public void firstClick(Click click) {
         Bounds contents = contentArea();
-        int x = click.getLocation().getX();
-        int y = click.getLocation().getY();
+        int x = click.getMouseLocationRelativeToView().getX();
+        int y = click.getMouseLocationRelativeToView().getY();
 
         if (x >= contents.getWidth()) {
             if (click.isButton2()) {
@@ -208,8 +207,8 @@ public class ScrollBorder extends AbstractBorder {
 
     public View dragFrom(InternalDrag drag) {
         Bounds contents = contentArea();
-        int x = drag.getRelativeLocation().getX(); // -  getView().getPadding().getLeft();
-        int y = drag.getRelativeLocation().getY(); // -  getView().getPadding().getTop();
+        int x = drag.getMouseLocationRelativeToView().getX(); // -  getView().getPadding().getLeft();
+        int y = drag.getMouseLocationRelativeToView().getY(); // -  getView().getPadding().getTop();
 
         dragOffset = -1;
         if (x >= contents.getWidth()) {
@@ -238,16 +237,16 @@ public class ScrollBorder extends AbstractBorder {
             super.drag(drag);
         } else {
             if (verticalDrag) {
-                int y = drag.getRelativeLocation().getY(); // -  getView().getPadding().getTop();
+                int y = drag.getMouseLocationRelativeToView().getY(); // -  getView().getPadding().getTop();
                 setVerticalPostion(y - dragOffset);
             } else {
-                int x = drag.getRelativeLocation().getX(); // -  getView().getPadding().getLeft();
+                int x = drag.getMouseLocationRelativeToView().getX(); // -  getView().getPadding().getLeft();
                 setHorizontalPostion(x - dragOffset);
             }
         }
     }
 
-    public IdentifiedView identify(Location locationWithinViewer, Offset offset) {
+    public View identify(Location locationWithinViewer, Offset offset) {
         Location locationWithinBorder = new Location(locationWithinViewer);
         locationWithinBorder.translate(offset);
         getViewManager().getSpy().addTrace(this, "mouse location within border", locationWithinBorder);
@@ -255,7 +254,7 @@ public class ScrollBorder extends AbstractBorder {
 
        if(overBorder(locationWithinBorder)) {
             getViewManager().getSpy().addTrace(this, "over border area", contentArea());
-            return new IdentifiedView(getView(), locationWithinViewer, getLocation());
+            return getView();
         } else {
             offset.add(-left, -top);
 	        offset.add(offset().getDeltaX(), offset().getDeltaY());

@@ -1,8 +1,5 @@
 package org.nakedobjects.viewer.skylark.core;
 
-import java.util.Vector;
-
-import org.apache.log4j.Logger;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.Bounds;
@@ -10,7 +7,6 @@ import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.IdentifiedView;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Padding;
@@ -20,6 +16,10 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewDrag;
+
+import java.util.Vector;
+
+import org.apache.log4j.Logger;
 
 
 public class CompositeObjectView extends ObjectView {
@@ -128,7 +128,7 @@ public class CompositeObjectView extends ObjectView {
         return v;
     }
 
-    public IdentifiedView identify(final Location location, Offset offset) {
+    public View identify(final Location location, Offset offset) {
         getViewManager().getSpy().addTrace(this, "mouse location within view", location);
         getViewManager().getSpy().addTrace(this, "view location within parent", getLocation());
 
@@ -145,22 +145,14 @@ public class CompositeObjectView extends ObjectView {
                 locationWithinContent.move(-subview.getLocation().getX(), -subview.getLocation().getY());
                 getViewManager().getSpy().addTrace(this, "mouse location within subview", locationWithinContent);
                 getViewManager().getSpy().addTrace("--> subview: " + subview);
-                IdentifiedView identified = subview.identify(locationWithinContent, new Offset(0, 0));
-                identified.translate(getLocation());
-
-                getViewManager().getSpy().addTrace("....");
-               Padding padding = getView().getPadding();
-                getViewManager().getSpy().addTrace(this, "offset by (parent location)", getLocation());
-                identified.translate(padding.getLeft(), padding.getTop());
-                getViewManager().getSpy().addTrace(this, "offset by (parent padding)", padding);
-
+                View identified = subview.identify(locationWithinContent, new Offset(0, 0));
                 return identified;
             }
         }
 
         getViewManager().getSpy().addTrace("----");
         getViewManager().getSpy().addTrace(this, "mouse location within composite view", location);
-        return new IdentifiedView(getView(), location, getLocation());
+        return getView();
     }
 
     public void invalidateContent() {

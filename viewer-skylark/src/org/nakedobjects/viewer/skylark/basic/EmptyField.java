@@ -23,6 +23,7 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
+import org.nakedobjects.viewer.skylark.special.LookupBorder;
 
 import org.apache.log4j.Logger;
 
@@ -48,7 +49,7 @@ public class EmptyField extends AbstractView {
         if (dragSource instanceof NakedClass) {
             return true;
         } else {
-           NakedObjectSpecification targetType =((OneToOneField) getContent()).getField().getType();
+           NakedObjectSpecification targetType = forSpecification(); //((OneToOneField) getContent()).getField().getType();
            NakedObject parent = ((ObjectContent) getParent().getContent()).getObject();
             
             NakedObjectSpecification sourceType = dragSource.getSpecification();
@@ -159,9 +160,8 @@ public class EmptyField extends AbstractView {
         }
     }
 
-    private NakedObjectSpecification forNakedClass() {
-        OneToOneAssociationSpecification field = getEmptyField();
-        return field.getType();
+    private NakedObjectSpecification forSpecification() {
+        return getEmptyField().getType();
     }
 
     /**
@@ -176,38 +176,9 @@ public class EmptyField extends AbstractView {
     }
 
     public Size getRequiredSize() {
-    	Size size = new Size(140, 23);
+    	Size size = new Size(120, 30);
         return size;
     }
-
-    public boolean indicatesForView(Location mouseLocation) {
-        return true;
-    }
-
-    protected void init(NakedObject object) {
-        if (object != null) {
-            throw new IllegalArgumentException(
-                "An EmptyField view must be created with a null object");
-        }
-    }
-
-    /**
-     * An empty field is an icon.
-     */
-    public boolean isOpen() {
-        return false;
-    }
-
-    /**
-     * An empty field should not be replaced by another view.
-     */
-    public boolean isReplaceable() {
-        return false;
-    }
-    
-    protected boolean shaded() {
-		return true;
-	}
 
     private String name() {
         OneToOneAssociationSpecification field = getEmptyField();
@@ -215,7 +186,7 @@ public class EmptyField extends AbstractView {
         if (field == null) {
             return "";
         } else {
-            return forNakedClass().getSingularName();
+            return forSpecification().getSingularName();
         }
     }
 
@@ -237,7 +208,7 @@ public class EmptyField extends AbstractView {
 	}
 
     public void menuOptions(MenuOptionSet options) {
-        ClassOption.menuOptions(forNakedClass(), options);
+        ClassOption.menuOptions(forSpecification(), options);
         
         options.setColor(Style.CONTENT_MENU);
     }
@@ -248,7 +219,12 @@ public class EmptyField extends AbstractView {
     	}
 
     	public View createView(Content content, ViewAxis axis) {
-    		return new EmptyField(content, this, axis);
+    		EmptyField emptyField = new EmptyField(content, this, axis);
+    	    if(((OneToOneField) content).isLookup()) {
+    	        return new LookupBorder(emptyField);
+    	    } else {
+    	        return emptyField;
+    	    }
     	}
 
     	public boolean isOpen() {

@@ -2,14 +2,15 @@ package org.nakedobjects.viewer.skylark.metal;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.defaults.value.Option;
+import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.basic.SimpleIdentifier;
 import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
+import org.nakedobjects.viewer.skylark.special.OpenOptionFieldBorder;
 import org.nakedobjects.viewer.skylark.value.OptionSelectionField;
-import org.nakedobjects.viewer.skylark.value.OptionSelectionFieldBorder;
-import org.nakedobjects.viewer.skylark.value.TextFieldBorder;
+import org.nakedobjects.viewer.skylark.value.OptionSelectionFieldOverlay;
 
 
 
@@ -19,11 +20,29 @@ public class OptionFieldSpecification extends AbstractFieldSpecification {
     }
     
     public View createView(Content content, ViewAxis axis) {
-        return new SimpleIdentifier(new TextFieldBorder(new OptionSelectionFieldBorder(new OptionSelectionField(content, this, axis))));
+        return new SimpleIdentifier(new OptionSelectionFieldBorder(new OptionSelectionField(content, this, axis)));
     }
 
     public String getName() {
         return "Drop down list";
+    }
+}
+
+
+class OptionSelectionFieldBorder extends OpenOptionFieldBorder {
+
+    public OptionSelectionFieldBorder(OptionSelectionField wrappedView) {
+        super(wrappedView);
+    }
+
+    protected View createOverlay() {
+            return new OptionSelectionFieldOverlay((OptionSelectionField) wrappedView);
+    }
+    
+    public void firstClick(Click click) {
+            if (canChangeValue()) {
+                super.firstClick(click);
+            }
     }
 }
 

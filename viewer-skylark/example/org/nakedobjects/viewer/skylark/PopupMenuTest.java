@@ -23,7 +23,7 @@ public class PopupMenuTest extends TestCase {
 	}
 
 	private Click click(int x, int y) {
-		return new Click(popup, new Location(x, y), new Location(), InputEvent.BUTTON1_MASK);
+		return new Click(popup, new Location(x, y), InputEvent.BUTTON1_MASK);
 	}
 
 	public void testClickFirstOption() {

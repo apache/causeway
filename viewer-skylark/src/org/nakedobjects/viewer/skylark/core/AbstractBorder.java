@@ -4,7 +4,6 @@ import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.ContentDrag;
-import org.nakedobjects.viewer.skylark.IdentifiedView;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Offset;
@@ -148,36 +147,22 @@ public class AbstractBorder extends AbstractViewDecorator {
         return onBorder;
     }
     
-    public IdentifiedView identify(Location locationWithinViewer, Offset offset) {
-        Location locationWithinBorder = new Location(locationWithinViewer);
+    public View identify(Location mouseLocation, Offset offset) {
+        Location locationWithinBorder = new Location(mouseLocation);
         locationWithinBorder.translate(offset);
         getViewManager().getSpy().addTrace(this, "mouse location within border", locationWithinBorder);
         getViewManager().getSpy().addTrace(this, "non border area", contentArea());
 
        if(overBorder(locationWithinBorder)) {
             getViewManager().getSpy().addTrace(this, "over border area", contentArea());
-            return new IdentifiedView(getView(), locationWithinViewer, getLocation());
+            return getView();
         } else {
             offset.add(-getLeft(), -getTop());
-            return  super.identify(locationWithinViewer, offset);
+            return  super.identify(mouseLocation, offset);
         }
         
     }
 
-/*    public IdentifiedView identify2(Location location) {
-        getViewManager().getSpy().trace(this, "mouse location within border", location);
-        getViewManager().getSpy().trace(this, "non border area", contentArea());
-
-       if(overBorder(location)) {
-           getViewManager().getSpy().trace(this, "in border ", contentArea());
-           return new IdentifiedView(getView(), location, getLocation());
-       } else {
-           location.move(-left, -top);
-           return wrappedView.identify2(location);
-       }
-    }
-
-*/
     public void mouseMoved(Location at) {
         boolean on = overBorder(at);
         if (onBorder != on) {

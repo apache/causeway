@@ -1,4 +1,4 @@
-package org.nakedobjects.viewer.skylark.value;
+package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
@@ -10,8 +10,8 @@ import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
 
-public class OptionSelectionFieldBorder extends AbstractBorder {
-    public OptionSelectionFieldBorder(OptionSelectionField wrappedView) {
+public abstract class OpenOptionFieldBorder extends AbstractBorder {
+    public OpenOptionFieldBorder(View wrappedView) {
         super(wrappedView);
         right = 16;
     }
@@ -40,30 +40,27 @@ public class OptionSelectionFieldBorder extends AbstractBorder {
     }
 
     public void firstClick(Click click) {
-        if (canChangeValue()) {
-            float x = click.getLocation().getX() - 2;
-            float boundary = getSize().getWidth() - right;
-            if (x >= boundary) {
-                View overlay = new OptionSelectionFieldOverlay((OptionSelectionField) wrappedView);
+        float x = click.getMouseLocationRelativeToView().getX() - 2;
+        float boundary = getSize().getWidth() - right;
+        if (x >= boundary) {
+            View overlay = createOverlay();
 
-                Size size = overlay.getRequiredSize();
-                overlay.setSize(size);
+            Size size = overlay.getRequiredSize();
+            size.ensureWidth(getSize().getWidth());
+            overlay.setSize(size);
 
-                Location location = click.getMouseLocation();
-                // TODO offset by constant amount
-                overlay.setLocation(location);
+            Location location = getAbsoluteLocation();
+            location.add(getView().getPadding().getLeft(), getSize().getHeight());
+            overlay.setLocation(location);
 
-                overlay.markDamaged();
-                getViewManager().setOverlayView(overlay);
-
-                /*
-                 * view.setLocation(delegate.getLocationWithinViewer());
-                 * view.setSize(new Size(getView().getSize().getWidth(), 100));
-                 * view.markDamaged(); getViewManager().setOverlayView(view);
-                 */
-            }
+            overlay.markDamaged();
+            getViewManager().setOverlayView(overlay);
+            
+            overlay.layout();
         }
     }
+
+    protected abstract View createOverlay();
 }
 
 /*

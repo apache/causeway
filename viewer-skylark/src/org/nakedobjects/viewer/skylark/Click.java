@@ -7,26 +7,28 @@ public class Click extends PointerEvent {
     private final Location locationWithinView;
     private final Location mouseLocation;
     private final Location workspaceOffset;
+ 	private final ViewAreaType type;
 
     /**
      * Creates a new click event object.
      * 
      * @param source
      *                       the view over which the pointer was when this click occurred
-     * @param locationWithinView
-     *                       the location within the specified view
+     * @param mouseLocation
+     *                       the location of the mouse relative to the viewer
      * @param modifiers
      *                       the button and key held down during the click (@see
      *                       java.awt.event.MouseEvent)
      */
-    public Click(View source, Location locationWithinView, Location mouseLocation, int modifiers) {
-        super(source, locationWithinView, modifiers);
+    public Click(View source, Location mouseLocation, int modifiers) {
+        super(source, modifiers);
 
-        this.locationWithinView = new Location(locationWithinView);
         this.mouseLocation = new Location(mouseLocation);
+        locationWithinView = new Location(mouseLocation);
+        locationWithinView.subtract(source.getAbsoluteLocation());
 
         View parent = source.getParent();
-        if(parent == null) {
+        if(parent == null || parent.getWorkspace() == null) {
             workspaceOffset = new Location(0, 0);
         } else {
 	        View viewsWorkspace = parent.getWorkspace().getView();
@@ -34,12 +36,21 @@ public class Click extends PointerEvent {
 	        Padding padding = viewsWorkspace.getPadding();
             workspaceOffset.move(padding.getLeft(), padding.getTop());
         }
+        
+        this.type = view.viewAreaType(new Location(locationWithinView));
+    }
+
+    /** 
+     * Returns the area type for the event.
+     */
+    public ViewAreaType getViewAreaType() {
+    	return type;
     }
 
     /**
      * Returns the location of the mouse, within the view that was clicked on.
      */
-    public Location getLocation() {
+    public Location getMouseLocationRelativeToView() {
         return locationWithinView;
     }
 

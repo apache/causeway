@@ -56,7 +56,7 @@ public class ResizeBorder extends AbstractBorder {
 
     public View dragFrom(InternalDrag drag) {
         if(isOnBorder()) {
-	        direction = onBorder(drag.getRelativeLocation());
+	        direction = onBorder(drag.getMouseLocationRelativeToView());
 	        if (direction > 0) {
 	            ViewResizeOutline outline;
                 outline = new ViewResizeOutline(drag, getView(), direction);

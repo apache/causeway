@@ -5,7 +5,6 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.IdentifiedView;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Offset;
@@ -197,7 +196,7 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
         left.setParent(getView());
     }
 
-    public IdentifiedView identify(Location location, Offset offset) {
+    public View identify(Location location, Offset offset) {
         getViewManager().getSpy().addTrace(this, "mouse location within browser frame", location);   
   
         Location locationWithinContent = new Location(location);
@@ -216,7 +215,7 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
             return right.identify(locationWithinContent, new Offset(-rightViewOffet(), 0));
         }
 
-        return new IdentifiedView(getView(), location, getLocation());
+        return getView();
     }
 
     private void showInRightPane(View view) {

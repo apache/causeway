@@ -80,6 +80,8 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
 		}
 		
 		if(layoutInvalid) {
+	//	    layoutInvalid = false;
+		    
 			Size size = view.getSize();
 			size.contract(view.getPadding());
 			

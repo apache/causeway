@@ -1,6 +1,9 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.object.Lookup;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 import org.nakedobjects.viewer.skylark.basic.RemoveOneToOneAssociationOption;
@@ -36,6 +39,11 @@ public class OneToOneField extends ObjectField implements ObjectContent {
 
     public String toString() {
         return getObject() + "/" + getField();
+    }
+
+    public boolean isLookup() {
+        NakedObjectSpecification lookup = NakedObjectSpecificationLoader.getInstance().loadSpecification(Lookup.class);
+        return getOneToOneAssociation().getType().isOfType(lookup);
     }
 }
 

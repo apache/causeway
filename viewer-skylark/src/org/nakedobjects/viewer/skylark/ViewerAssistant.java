@@ -6,6 +6,8 @@ import org.nakedobjects.object.reflect.UndoStack;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.DebugFrame;
+import org.nakedobjects.viewer.skylark.core.InfoDebugFrame;
+import org.nakedobjects.viewer.skylark.core.OverlayDebugFrame;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 import java.awt.Cursor;
@@ -100,18 +102,26 @@ public class ViewerAssistant {
         options.add(MenuOptionSet.DEBUG,
             new MenuOption("Vew context details...") {
                 public void execute(Workspace frame, View view, Location at) {
-                    DebugFrame f = new DebugFrame();
+                    InfoDebugFrame f = new InfoDebugFrame();
                     f.setInfo(ClientSession.getSession());
+                    f.show(at.x + 50, frame.getBounds().y + 6);
+                }
+            });
+
+        options.add(MenuOptionSet.DEBUG,
+            new MenuOption("List prototypes...") {
+                public void execute(Workspace frame, View view, Location at) {
+                    InfoDebugFrame f = new InfoDebugFrame();
+                    f.setInfo(ViewFactory.getViewFactory());
                     f.show(at.x + 50, frame.getBounds().y + 6);
                 }
             });
 
 
         options.add(MenuOptionSet.DEBUG,
-            new MenuOption("List prototypes...") {
+            new MenuOption("Debug overlay...") {
                 public void execute(Workspace frame, View view, Location at) {
-                    DebugFrame f = new DebugFrame();
-                    f.setInfo(ViewFactory.getViewFactory());
+                    DebugFrame f = new OverlayDebugFrame(viewer);
                     f.show(at.x + 50, frame.getBounds().y + 6);
                 }
             });
@@ -119,7 +129,7 @@ public class ViewerAssistant {
         options.add(MenuOptionSet.DEBUG,
                 new MenuOption("List notification receivers...") {
                     public void execute(Workspace frame, View view, Location at) {
-                        DebugFrame f = new DebugFrame();
+                        InfoDebugFrame f = new InfoDebugFrame();
                         f.setInfo(updateNotifier);
                         f.show(at.x + 50, frame.getBounds().y + 6);
                     }
@@ -132,10 +142,11 @@ public class ViewerAssistant {
             }
         });
         
+        options.add(MenuOptionSet.DEBUG, loggingOption("Off", Level.OFF));
         options.add(MenuOptionSet.DEBUG, loggingOption("Error", Level.ERROR));
+        options.add(MenuOptionSet.DEBUG, loggingOption("Warn", Level.WARN));
         options.add(MenuOptionSet.DEBUG, loggingOption("Info", Level.INFO));
         options.add(MenuOptionSet.DEBUG, loggingOption("Debug", Level.DEBUG));
-        options.add(MenuOptionSet.DEBUG, loggingOption("Off", Level.OFF));
     }
 
     public void removeFromNotificationList(View view) {

@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 

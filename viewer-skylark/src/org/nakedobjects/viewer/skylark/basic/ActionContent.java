@@ -4,6 +4,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.security.ClientSession;
@@ -29,18 +30,36 @@ public class ActionContent implements ObjectContent {
         
         parameterTypes = action.parameters();
         parameterValues = new Naked[parameterTypes.length];
-        parameters = new ActionField[parameterTypes.length];
         for (int i = 0; i < parameterTypes.length; i++) {
-            
-            String label = parameterTypes[i].getShortName();
-            
             if(parameterTypes[i].isValue()) {
-                Naked parameterValue = parameterTypes[i].acquireInstance();
-                parameterValues[i]  = parameterValue;
-                parameters[i] = new ValueParameter(label, parameterValue);
+                parameterValues[i]  = parameterTypes[i].acquireInstance();
            } else {
                parameterValues[i]  = null;
-               parameters[i] = new ObjectParameter(label, null, parameterTypes[i]);
+            }
+        }
+       
+        About about = action.getAbout(ClientSession.getSession(), target, parameterValues);
+        String[] labels;
+        Naked[] defaultValues;
+        if(about instanceof ActionAbout) {
+	        ActionAbout a = (ActionAbout) about; 
+            labels = a.getParameterLabels();
+            defaultValues = a.getDefaultParameterValues();
+        } else {
+            labels = new String[parameterTypes.length];
+            defaultValues = new Naked[parameterTypes.length];
+        }
+        
+        parameters = new ActionField[parameterTypes.length];
+        for (int i = 0; i < parameterTypes.length; i++) {
+            // change name using the about
+            String label = labels[i] == null ? parameterTypes[i].getShortName() : labels[i];
+            Naked value = defaultValues[i] == null ? parameterValues[i] : defaultValues[i];
+            
+            if(parameterTypes[i].isValue()) {
+                parameters[i] = new ValueParameter(label, value);
+           } else {
+               parameters[i] = new ObjectParameter(label, value, parameterTypes[i]);
             }
         }
     }

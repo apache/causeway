@@ -20,7 +20,7 @@ import org.nakedobjects.viewer.skylark.Style;
  * A specialised frame for displaying the details of an object and its display
  * mechanisms.
  */
-public class DebugFrame extends Frame {
+public abstract class DebugFrame extends Frame {
     private static Vector frames = new Vector();
 
     /**
@@ -40,11 +40,9 @@ public class DebugFrame extends Frame {
     }
 
     private TextArea field;
-    private DebugInfo strategy;
 
     public DebugFrame() {
         frames.addElement(this);
-        //setBackground(Style.APPLICATION_BACKGROUND.getAwtColor());
         setLayout(new BorderLayout(7, 7));
 
         addWindowListener(new WindowAdapter() {
@@ -69,7 +67,6 @@ public class DebugFrame extends Frame {
         add(buttons, BorderLayout.SOUTH);
 
         // add buttons
-        // ...
         Button b = new java.awt.Button("Refresh");
         b.setFont(font);
 
@@ -129,21 +126,17 @@ public class DebugFrame extends Frame {
     }
 
     public void refresh() {
-        setTitle(strategy.getDebugTitle());
-        field.setText(strategy.getDebugData());
+        DebugInfo info = getInfo();
+        if(info != null) {
+	        setTitle(info.getDebugTitle());
+	        field.setText(info.getDebugData());
+        }
     }
+
+    protected abstract DebugInfo getInfo();
 
     void setField(java.awt.TextArea newField) {
         field = newField;
-    }
-
-    /**
-     * set the display strategy to use to display the information.
-     * 
-     * @param view
-     */
-    public void setInfo(DebugInfo view) {
-        strategy = view;
     }
 
     /**

@@ -33,7 +33,7 @@ public class DebugBorder extends AbstractBorder {
 	}
 	
 	public void firstClick(Click click) {
-		new DebugOption().execute(getWorkspace(), getView(), click.getLocation());
+		new DebugOption().execute(getWorkspace(), getView(), click.getMouseLocationRelativeToView());
 	}
 }
 
