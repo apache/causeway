@@ -12,7 +12,6 @@ import org.nakedobjects.object.TransactionException;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.defaults.SimpleActionAbout;
 import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.ReflectionErrorDialog;
 import org.nakedobjects.object.reflect.ActionSpecification.Type;
 import org.nakedobjects.object.security.Session;
 

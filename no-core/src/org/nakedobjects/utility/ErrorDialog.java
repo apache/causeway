@@ -1,4 +1,4 @@
-package org.nakedobjects.object.reflect;
+package org.nakedobjects.utility;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
@@ -10,12 +10,37 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.StringTokenizer;
 
+
+public abstract class ErrorDialog extends Frame {
+
+    public ErrorDialog(final String title) {
+        super(title);
+        setLayout(new BorderLayout());
+        setBounds(100, 200, 600, 400);
+    }
+    
+    public void show(final String message, final String text) {
+        add(new MessagePanel(message, text), BorderLayout.CENTER);
+        Button button = new Button("OK");
+        button.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+        add(button, BorderLayout.SOUTH);
+
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                dispose();
+            }
+        });
+        show();
+    }
+
+}
 
 class MessagePanel extends Panel {
     private final String message;
@@ -43,48 +68,6 @@ class MessagePanel extends Panel {
             g.drawString(line, x, y);
             y += lineHeight;
         }
-    }
-
-}
-
-/**
- * Error dialog to be shown when method fails when being called reflectively.
- */
-
-public class ReflectionErrorDialog extends Frame {
-
-    public ReflectionErrorDialog(final String message, final InvocationTargetException exception) {
-        super("Exception");
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            exception.getTargetException().printStackTrace(new PrintStream(baos));
-            String stackTrace;
-            stackTrace = baos.toString();
-            baos.close();
-
-            setLayout(new BorderLayout());
-            setBounds(100, 200, 600, 400);
-
-            add(new MessagePanel(message, stackTrace), BorderLayout.CENTER);
-            Button button = new Button("OK");
-            button.addActionListener(new ActionListener() {
-
-                public void actionPerformed(ActionEvent e) {
-                    dispose();
-                }
-            });
-            add(button, BorderLayout.SOUTH);
-
-            addWindowListener(new WindowAdapter() {
-                public void windowClosing(WindowEvent e) {
-                   dispose();
-                }
-            });
-            show();
-        } catch (IOException ex) {
-            //LOG.error(ex);
-        }
-
     }
 
 }

@@ -1,11 +1,9 @@
 package org.nakedobjects.object.reflect.defaults;
 
 
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.control.defaults.Allow;
-import org.nakedobjects.object.reflect.ReflectionErrorDialog;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

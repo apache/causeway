@@ -6,7 +6,6 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.reflect.ReflectionErrorDialog;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
