@@ -71,11 +71,11 @@ public class ViewUpdateNotifier implements UpdateNotifier, DebugInfo {
         Enumeration f = views.keys();
 
         while (f.hasMoreElements()) {
-            Object oid = f.nextElement();
+            Object object = f.nextElement();
 
-            Vector viewsToNotify = (Vector) views.get(oid);
+            Vector viewsToNotify = (Vector) views.get(object);
             Enumeration e = viewsToNotify.elements();
-            buf.append("Views for " + oid + " \n");
+            buf.append("Views for " + object + " \n");
 
             while (e.hasMoreElements()) {
                 View view = (View) e.nextElement();

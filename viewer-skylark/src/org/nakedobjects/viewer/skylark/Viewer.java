@@ -223,6 +223,9 @@ public class Viewer {
 	    Canvas c = new Canvas(bufferGraphics, r.x, r.y, r.width, r.height);
 	    // Canvas c = new Canvas(bufferGraphics, 0, 0, w, h);
 	    
+	    //paint icons
+	    
+	    
 	    // paint views
 	    if(rootView != null) {
 	        rootView.draw(c.createSubcanvas(rootView.getBounds()));

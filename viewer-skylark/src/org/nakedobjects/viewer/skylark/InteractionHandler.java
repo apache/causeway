@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark;
 
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -131,9 +132,12 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 	        viewer.translate(me);
 	        mouseLocation = new Location(me.getPoint());
 
-	        if (canDrag) { // checked to ensure that dragging over a view doesn't start a drag - it should only start when already over a view.
+	        if (canDrag) { 
+	            // checked to ensure that dragging over a view doesn't start a 
+	            // drag - it should only start when already over a view.
 
-	            if (drag == null) { // no drag in progress yet
+	            if (drag == null) { 
+	                // no drag in progress yet
 	                dragStart(me);
 	                redraw();
 	            } else {
@@ -152,11 +156,16 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 			if(viewer.getOverlayView() == target) {
 				LOG.error("drag identified over overlay!!!! " + target);
 			}
+		    LOG.debug("drag " + me.getPoint());
 
 		}
 
 
 		private void dragStart(MouseEvent me) {
+		    if(! isOverThreshold(downAt, me.getPoint())) {
+		        return;
+		    }
+		    
 			Location relative = new Location(downAt);
 			View identified = identifiedView;
 		    LOG.debug("down at " + downAt);
@@ -174,7 +183,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 			} else {
 			    saveCurrentFieldEntry();
 
-			    LOG.debug("pickup " + type + ": " + identified);
+			    LOG.debug("pickup " + type + ": " + identified + " " + downAt);
 
 			    if (type == ViewAreaType.VIEW) {
 			    	drag = ViewDrag.create(identified, downAt, relative, me.getModifiers());
@@ -188,8 +197,20 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 	        }
 		}
 
-
 		/**
+		 * Returns true when the point is outside the area around the downAt location
+		 */
+		private boolean isOverThreshold(Location downAt2, Point point) {
+		    int xDown = downAt2.x;
+		    int yDown = downAt2.y;
+		    int x = point.x;
+		    int y = point.y;
+		    
+            int threshold = 4;
+            return x > xDown + threshold || x < xDown - threshold || y > yDown + threshold || y < yDown -threshold ;
+        }
+
+        /**
 	     * event ignored
 	     * @see java.awt.event.MouseListener#mouseEntered(MouseEvent)
 	     */
