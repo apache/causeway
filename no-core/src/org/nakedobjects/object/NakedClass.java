@@ -27,7 +27,7 @@ public class NakedClass implements InternalNakedObject {
 
     //    public NakedClass() {}
 
-    public void aboutActionFind(InternalAbout about) {
+    public void aboutaboutExplorationActionFind(InternalAbout about) {
         about.setDescription("Get a simple finder object to start searches within the " + getSingularName() + " instances");
         about.setName("Find " + getPluralName());
         about.unusableOnCondition(!getObjectManager().hasInstances(forObjectType()), "No instances available to find");
@@ -57,7 +57,7 @@ public class NakedClass implements InternalNakedObject {
         }
     }
 
-    public FastFinder actionFind() {
+    public FastFinder explorationActionFind() {
         FastFinder find = new FastFinder();
         find.setObjectManager(getObjectManager());
         find.setFromClass(forObjectType());
