@@ -14,13 +14,14 @@ import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
 import org.nakedobjects.viewer.skylark.basic.SubviewIconSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.DefaultPopupMenu;
+import org.nakedobjects.viewer.skylark.metal.ClassIcon;
+import org.nakedobjects.viewer.skylark.metal.FormSpecification;
+import org.nakedobjects.viewer.skylark.metal.ListSpecification;
+import org.nakedobjects.viewer.skylark.metal.TableSpecification;
+import org.nakedobjects.viewer.skylark.metal.TreeBrowserSpecification;
 import org.nakedobjects.viewer.skylark.special.DataFormSpecification;
-import org.nakedobjects.viewer.skylark.special.FormSpecification;
 import org.nakedobjects.viewer.skylark.special.InnerWorkspaceSpecification;
-import org.nakedobjects.viewer.skylark.special.ListSpecification;
 import org.nakedobjects.viewer.skylark.special.RootWorkspaceSpecification;
-import org.nakedobjects.viewer.skylark.special.TableSpecification;
-import org.nakedobjects.viewer.skylark.special.TreeBrowserSpecification;
 import org.nakedobjects.viewer.skylark.special.WorkspaceSpecification;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
 import org.nakedobjects.viewer.skylark.value.CheckboxField;
@@ -339,7 +340,7 @@ public class Viewer {
 
         viewFactory.addSubviewIconSpecification(loadSpecification("icon.subview", SubviewIconSpecification.class));
         viewFactory.addObjectIconSpecification(loadSpecification("icon.object", RootIconSpecification.class));
-        viewFactory.addClassIconSpecification(loadSpecification("icon.class", ClassIconSpecification.class));
+        viewFactory.addClassIconSpecification(loadSpecification("icon.class", ClassIcon.Specification.class));
 
         String viewParams = ConfigurationFactory.getConfiguration().getString(SPECIFICATION_BASE + "view");
 

@@ -30,7 +30,7 @@ public class MockObjectStore implements NakedObjectStore {
     }
 
     public void assertAction(int i, String expected) {
-        Assert.assertTrue(actions.size() > i);
+        Assert.assertTrue("invalid action number " + i, actions.size() > i);
         String actual = (String) actions.elementAt(i);
         
 		if (expected == null && actual == null)
@@ -52,7 +52,7 @@ public class MockObjectStore implements NakedObjectStore {
 
 
     public void endTransaction() {
-        actions.addElement("abortTransaction");
+        actions.addElement("endTransaction");
     }
 
     public Vector getActions() {
@@ -150,7 +150,7 @@ public class MockObjectStore implements NakedObjectStore {
     }
 
     public void startTransaction() {
-        actions.addElement("abortTransaction");
+        actions.addElement("startTransaction");
     }
 
     public NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
@@ -163,9 +163,16 @@ public class MockObjectStore implements NakedObjectStore {
         return null;
     }
 
-    public DestroyObjectCommand createDestroyObjectCommand(NakedObject object) {
-        actions.addElement("destroyObject " + object.getOid());
-        return null;
+    public DestroyObjectCommand createDestroyObjectCommand(final NakedObject object) {
+        actions.addElement("destroyObject " + object);
+        return new DestroyObjectCommand() {
+
+            public void execute() throws ObjectStoreException {}
+        
+            public String toString() {
+                return "DestroyObjectCommand " + object.toString();
+            }
+        };
     }
 
     public SaveObjectCommand createSaveObjectCommand(NakedObject object) {
@@ -173,7 +180,11 @@ public class MockObjectStore implements NakedObjectStore {
         return null;
     }
 
-    public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException {}
+    public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException {
+        for (int i = 0; i < commands.length; i++) {
+            actions.addElement("run " + commands[i]);
+        }
+    }
 }
 
 /*

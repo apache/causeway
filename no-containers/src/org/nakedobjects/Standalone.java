@@ -85,7 +85,11 @@ public class Standalone extends NakedObjectsContainer implements ObjectViewingMe
         OidGenerator oidGenerator = (OidGenerator) ComponentLoader.loadComponent("oidgenerator", SimpleOidGenerator.class,
                 OidGenerator.class);
         ObjectFactory objectFactory = (ObjectFactory) ComponentLoader.loadComponent("object-factory", ObjectFactory.class);
-        LocalObjectManager objectManager = new LocalObjectManager(objectStore, updateNotifier, oidGenerator, objectFactory);
+        LocalObjectManager objectManager = new LocalObjectManager();
+        objectManager.setObjectStore(objectStore);
+        objectManager.setNotifier(updateNotifier); 
+        objectManager.setOidGenerator(oidGenerator);
+        objectManager.setObjectFactory(objectFactory);
         objectManager.init();
         return objectManager;
     }

@@ -35,7 +35,7 @@ public class MockNakedObjectSpecificationLoader extends NakedObjectSpecification
         throw new NotImplementedException();
     }
 
-    public void addSpec(Object spec) {
+    public void addSpec(NakedObjectSpecification spec) {
         specs.addElement(spec);
     }
 

@@ -6,10 +6,11 @@ import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.TypedNakedCollection;
+import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.utility.StartupException;
 
 
-public interface NakedObjectManager {
+public interface NakedObjectManager extends DebugInfo {
     void abortTransaction();
 
     TypedNakedCollection allInstances(NakedObjectSpecification nakedClass);

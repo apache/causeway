@@ -1,27 +1,31 @@
-package org.nakedobjects.object.exploration;
+package org.nakedobjects.object.persistence.defaults;
 
-import org.nakedobjects.object.fixture.Fixture;
+import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.persistence.OidGenerator;
+import org.nakedobjects.utility.StartupException;
 
-interface ExplorationFixture extends Fixture {
-    //void install();
+public class MockOidGenerator implements OidGenerator {
 
-    /**
-	 * Set the container for this fixture.
-	 *
-	 * <p>
-	 * From the point-of-view of the framework, it knows nothing about the
-	 * Container, so we just use Object.  Most applications that need to use
-	 * a container will use an implementation of this interface that downcasts
-	 * the Container into an application-specific type.
-	 */
-    void setContainer(Object container);
+    public Oid next(Naked object) {
+        return new Oid() {};
+    }
+
+    public String name() {
+        return null;
+    }
+
+    public void init() throws StartupException {}
+
+    public void shutdown() {}
+
 }
 
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2005  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -91,6 +91,10 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
          city.assertFieldContains("NAME", "London");
      }
      
+     public void testFindInstance() {
+         TestObject city = getTestClass(City.class.getName()).findInstance("Boston");
+         city.assertFieldContains("name", "Boston");
+     }
      
     public void testBasicBooking() {
         subtitle("Set up the new booking");

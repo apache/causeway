@@ -6,7 +6,7 @@ import org.nakedobjects.viewer.skylark.Viewer;
 
 
 public class DefaultUiConfiguration implements org.nakedobjects.viewer.skylark.GuiConfiguration {
-    private final static int CLASS_ICON_SIZE = 85;
+    private final static int CLASS_ICON_SIZE = 34;
     private final static String CLASS_ICON_SIZE_PARAM = Viewer.PROPERTY_BASE + "class-icon-size";
     private static final Configuration configurationFile;
     private static final String FALLBACK_IMAGE = "Unknown.gif";

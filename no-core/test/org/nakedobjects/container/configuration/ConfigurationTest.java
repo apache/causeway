@@ -1,7 +1,4 @@
-package org.nakedobjects.viewer.skylark.util;
-
-import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.container.configuration.ConfigurationFactory;
+package org.nakedobjects.container.configuration;
 
 import java.util.Properties;
 
@@ -12,69 +9,70 @@ import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 
 
-public class ConfigurationParameterTest extends TestCase {
+public class ConfigurationTest extends TestCase {
+    private Configuration configuration;
 
     public static void main(String[] args) {
-        junit.textui.TestRunner.run(ConfigurationParameterTest.class);
+        junit.textui.TestRunner.run(ConfigurationTest.class);
     }
-    private Configuration params;
 
-    public ConfigurationParameterTest(String name) {
+
+    public ConfigurationTest(String name) {
         super(name);
     }
 
     protected void setUp() throws Exception {
         BasicConfigurator.configure();
         LogManager.getRootLogger().setLevel(Level.OFF);
-        
-       	ConfigurationFactory.setConfiguration(new Configuration());
 
-        params = ConfigurationFactory.getConfiguration();
+        ConfigurationFactory.setConfiguration(new Configuration());
+
+        configuration = new Configuration();
         Properties p = new Properties();
         p.put("nakedobjects.bool", "on");
         p.put("nakedobjects.str", "string");
         p.put("nakedobjects.group.one", "1");
         p.put("nakedobjects.group.two", "2");
-        params.load(p);
+        configuration.add(p);
     }
 
     public void testBoolean() {
-        assertEquals(true, params.getBoolean("bool"));
+        assertEquals(true, configuration.getBoolean("bool"));
     }
 
     public void testHas() {
-        assertTrue(params.hasProperty("str"));
-        assertFalse(params.hasProperty("none"));
+        assertTrue(configuration.hasProperty("str"));
+        assertFalse(configuration.hasProperty("none"));
     }
 
     public void testMissingString() {
-        assertEquals(null, params.getString("none"));
+        assertEquals(null, configuration.getString("none"));
     }
 
     public void testMissingStringWithDefault() {
-        assertEquals("default", params.getString("none", "default"));
-    }
-
-    public void testPropertySubset() {
-        Properties p = params.getPropertySubset("group");
-        assertTrue(p.containsKey("one"));
-        assertTrue(p.containsKey("two"));
-        assertEquals(2, p.size());
+        assertEquals("default", configuration.getString("none", "default"));
     }
 
     public void testPropertiesWithPrefix() {
-        Properties p = params.getProperties("nakedobjects.group");
+        Properties p = configuration.getProperties("nakedobjects.group");
         assertTrue(p.containsKey("nakedobjects.group.one"));
         assertTrue(p.containsKey("nakedobjects.group.two"));
         assertEquals(2, p.size());
     }
 
+    public void testPropertySubset() {
+        Properties p = configuration.getProperties("nakedobjects.group.", "nakedobjects.group.");
+        assertTrue(p.containsKey("one"));
+        assertTrue(p.containsKey("two"));
+        assertEquals(2, p.size());
+    }
+
     public void testString() {
-        assertEquals("string", params.getString("str"));
+        assertEquals("string", configuration.getString("str"));
     }
 
     public void testStringWithDefault() {
-        assertEquals("string", params.getString("str", "default"));
+        assertEquals("string", configuration.getString("str", "default"));
     }
 }
 

@@ -18,6 +18,8 @@ import org.nakedobjects.object.security.Session;
 
 public class TestNakedObject implements NakedObject {
 
+    private NakedObjectSpecification specification;
+
     public TestNakedObject() {
         super();
     }
@@ -79,9 +81,13 @@ public class TestNakedObject implements NakedObject {
     public void copyObject(Naked object) {}
 
     public NakedObjectSpecification getSpecification() {
-        return null;
+        return specification;
     }
 
+    public void setupSpecification(NakedObjectSpecification specification) {
+        this.specification = specification;
+    }
+    
     public boolean isSameAs(Naked object) {
         return false;
     }

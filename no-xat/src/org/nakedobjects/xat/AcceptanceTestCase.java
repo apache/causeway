@@ -3,6 +3,7 @@ package org.nakedobjects.xat;
 import org.nakedobjects.container.configuration.ComponentLoader;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
+import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
@@ -79,7 +80,7 @@ public abstract class AcceptanceTestCase extends TestCase {
     protected void setUp() throws Exception {
         File f = new File("xat.properties");
         if(f.exists()) {
-            ConfigurationFactory.setConfiguration(new Configuration(f.getAbsolutePath(), true));
+            ConfigurationFactory.setConfiguration(new Configuration(new ConfigurationPropertiesLoader(f.getAbsolutePath(), true)));
         } else {
             ConfigurationFactory.setConfiguration(new Configuration());
         }

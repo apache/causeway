@@ -1,7 +1,5 @@
 package org.nakedobjects.object.persistence.defaults;
 
-import org.nakedobjects.container.configuration.ComponentException;
-import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
@@ -10,9 +8,9 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.UpdateNotifier;
 import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
+import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.NotPersistableException;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
@@ -44,7 +42,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     
  
     public LocalObjectManager() {}
-
+/*
     public LocalObjectManager(NakedObjectStore objectStore, UpdateNotifier notifier, OidGenerator oidGenerator,
             ObjectFactory factory) throws ConfigurationException, ComponentException {
         super(factory);
@@ -52,7 +50,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         this.notifier = notifier;
         this.oidGenerator = oidGenerator;
     }
-
+*/
     public void abortTransaction() {
         try {
             getTransaction().abort();
@@ -63,6 +61,9 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     private Transaction getTransaction() {
+        if(transaction == null) {
+            throw new TransactionException("No transaction started");
+        }
         return transaction;
     }
     
@@ -112,7 +113,8 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     public void destroyObject(NakedObject object) {
         LOG.debug("destroyObject " + object);
 
-        getTransaction().addCommand(objectStore.createDestroyObjectCommand(object));
+        DestroyObjectCommand command = objectStore.createDestroyObjectCommand(object);
+        getTransaction().addCommand(command);
         object.deleted();
         clear(object);
 
@@ -123,7 +125,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
     public void endTransaction() {
         try {
-            getTransaction().end(objectStore, notifier);
+            getTransaction().commit(objectStore, notifier);
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
@@ -324,7 +326,8 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
             object.setResolved();
         }
 
-        NakedObjectField[] fields = object.getSpecification().getFields();
+        NakedObjectSpecification specification = object.getSpecification();
+        NakedObjectField[] fields = specification.getFields();
 
         for (int i = 0; i < fields.length; i++) {
             NakedObjectField field = fields[i];
@@ -496,14 +499,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     public void startTransaction() {
-        try {
-            transaction = new Transaction();
-            getTransaction().start();
-            objectStore.startTransaction();
-        } catch (ObjectStoreException e) {
-            throw new NakedObjectRuntimeException(e);
-        }
-
+        transaction = new Transaction();
     }
 
     public String toString() {

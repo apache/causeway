@@ -3,11 +3,11 @@ package org.nakedobjects.object.transaction;
 
 import Title;
 
-import org.nakedobjects.object.TransactionException;
 import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.defaults.value.Date;
 import org.nakedobjects.object.defaults.value.Money;
+import org.nakedobjects.object.persistence.defaults.TransactionException;
 
 import java.util.Vector;
 

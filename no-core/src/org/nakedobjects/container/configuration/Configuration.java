@@ -4,13 +4,6 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -19,84 +12,38 @@ import org.apache.log4j.Logger;
 
 public class Configuration {
     private static final Logger LOG = Logger.getLogger(Configuration.class);
-    private static final String PREFIX = "nakedobjects.";
-
-    public static Properties loadProperties(String resource, boolean mustLoadFile) throws ConfigurationException {
-
-        try {
-            URL url = ConfigurationFactory.class.getResource(resource);
-            if (url == null) {
-                if(mustLoadFile) {
-                    throw new ConfigurationException("Configuration resource not found: " + resource);
-                } else {
-                    return new Properties();
-                }
-            }
-            return loadProperties(url, mustLoadFile);
-
-        } catch (ConfigurationException e) {
-            try {
-                // try as if it is a file name
-                URL url = new URL("file:///" + new File(resource).getAbsolutePath());
-
-                return loadProperties(url, mustLoadFile);
-            } catch (SecurityException ee) {
-                throw new ConfigurationException("Access not granted to configuration resource: " + resource);
-            } catch (MalformedURLException ee) {
-                throw new ConfigurationException("Configuration resource not found: " + resource);
-            }
-        }
-    }
-
-    public static Properties loadProperties(URL resource, boolean mustLoadFile) throws ConfigurationException {
-        InputStream in;
-
-        try {
-            URLConnection connection = resource.openConnection();
-            in = connection.getInputStream();
-        } catch (FileNotFoundException e) {
-            if(mustLoadFile) {
-                throw new ConfigurationException("Could not find configuration resource: " + resource);
-            } else {
-                return new Properties();
-            }
-        } catch (IOException e) {
-            throw new ConfigurationException("Error reading configuration resource: " + resource, e);
-        }
-
-        try {
-            Properties p = new Properties();
-            p.load(in);
-
-            return p;
-        } catch (IOException e) {
-            throw new ConfigurationException("Error reading properties" + e.getMessage());
-        } finally {
-            try {
-                in.close();
-            } catch (IOException ignore) {}
-        }
-    }
-
-    private Properties p = new Properties();
+    public static final String PREFIX = "nakedobjects.";    
+    private final Properties p = new Properties();
 
     public Configuration() {}
 
-    public Configuration(String file, boolean mustLoadFile) throws ConfigurationException {
-        Properties p = loadProperties(file, mustLoadFile);
-        load(p);
+    public Configuration(ConfigurationPropertiesLoader loader) {
+        add(loader.getProperties());
+    }
+
+    /**
+     * Add the properties from an existing Properties object.
+     */
+    public void add(Properties properties) {
+        Enumeration e = properties.propertyNames();
+
+        while (e.hasMoreElements()) {
+            String name = (String) e.nextElement();
+
+            p.put(name, properties.getProperty(name));
+        }
     }
 
     /**
      * Adds a key-value pair to this set of properties
-     * 
-     * @param key
-     * @param value
      */
     public void add(String key, String value) {
         p.put(key, value);
     }
-
+    
+    /**
+     * @deprecated
+     */
     public String fullName(String name) {
         return PREFIX + name;
     }
@@ -226,21 +173,28 @@ public class Configuration {
     /**
      * Gets the set of properties with the specified prefix
      */
-    public Properties getProperties(String prefix) {
+    public Properties getProperties(String withPrefix) {
+        return getProperties(withPrefix, "");
+    }
+
+    /**
+     * Gets the set of properties with the specified prefix
+     */
+    public Properties getProperties(String withPrefix, String stripPrefix) {
+        int prefixLength = stripPrefix.length();            
+        
         Properties pp = new Properties();
-
         Enumeration e = p.keys();
-
         while (e.hasMoreElements()) {
             String key = (String) e.nextElement();
-
-            if (key.startsWith(prefix)) {
-                pp.put(key, p.get(key));
+            if (key.startsWith(withPrefix)) {
+                String modifiedKey = key.substring(prefixLength);
+                pp.put(modifiedKey, p.get(key));
             }
         }
-
         return pp;
     }
+
 
     private String getProperty(String name) {
         return getProperty(name, null);
@@ -255,7 +209,7 @@ public class Configuration {
         LOG.debug("property: " + key + " =  <" + property + ">");
         return property;
     }
-
+/*
     public Properties getPropertySubset(String prefix) {
         prefix = PREFIX + prefix + ".";
         Properties p = getProperties(prefix);
@@ -273,6 +227,7 @@ public class Configuration {
 
         return modifiedProperties;
     }
+*/
 
     /**
      * Returns the configuration property with the specified name. If there is
@@ -289,34 +244,6 @@ public class Configuration {
     public boolean hasProperty(String name) {
         String key = fullName(name);
         return p.containsKey(key);
-    }
-
-    /**
-     * Loads the properties from an existing Properties object.
-     */
-    public void load(Properties properties) {
-        Enumeration e = properties.propertyNames();
-
-        while (e.hasMoreElements()) {
-            String name = (String) e.nextElement();
-
-            p.put(name, properties.getProperty(name));
-        }
-    }
-
-    public void load(String resource) throws ConfigurationException {
-        Properties p = loadProperties(resource, false);
-        load(p);
-    }
-
-    /**
-     * Loads the properties via a URL
-     * 
-     * @throws ConfigurationException
-     */
-    public void load(URL resource) throws ConfigurationException {
-        Properties p = loadProperties(resource, false);
-        load(p);
     }
 
     public String toString() {

@@ -4,6 +4,7 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
+import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.example.ecs.fixtures.EcsFixture;
 import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
@@ -40,7 +41,7 @@ public class EcsStandalone {
     public static void main(String[] args) throws ConfigurationException {
         BasicConfigurator.configure();
 
-        Configuration configuration = new Configuration(DEFAULT_CONFIG, false);
+        Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(DEFAULT_CONFIG, false));
         NakedObjects.setConfiguration(configuration);
         
         ConfigurationFactory.setConfiguration(configuration);

@@ -44,6 +44,9 @@ public class Customer {
             about.setParameter(0, getLocations().firstElement());
         }
 
+        text.toString();
+        date.toString();
+        
         about.setParameter(2, "Name", new TextString("#23"));
     }
 

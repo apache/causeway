@@ -1,7 +1,6 @@
 package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.UpdateNotifier;
 import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.ObjectStoreException;
@@ -17,45 +16,52 @@ public class Transaction {
     private static final Logger LOG = Logger.getLogger(Transaction.class);
     private final Vector toNotify = new Vector();
     private final Vector transactionCommands = new Vector();
+    private boolean complete;
 
+    public Transaction() {
+        LOG.debug("new transaction" + this);
+    }
+    
     public void abort() {
         LOG.debug("abort transaction" + this);
+        if(complete) {
+            throw new TransactionException("Transaction already complete; cannot abort");
+        }
+        complete = true;
     }
 
     void addCommand(PersistenceCommand command) {
-        if (transactionCommands == null) {
-            throw new NakedObjectRuntimeException("No transaction in progress");
-        }
         LOG.debug("add command " + command);
         transactionCommands.addElement(command);
     }
 
-    public void addNotify(NakedObject object) {
+    void addNotify(NakedObject object) {
         LOG.debug("add notification for " + object);
         toNotify.addElement(object);
     }
 
-    public void end(NakedObjectStore objectStore, UpdateNotifier notifier) throws ObjectStoreException {
-        LOG.debug("end transaction" + this);
+    public void commit(NakedObjectStore objectStore, UpdateNotifier notifier) throws ObjectStoreException {
+        LOG.debug("commit transaction" + this);
+        if(complete) {
+            throw new TransactionException("Transaction already complete; cannot commit");
+        }
+        complete = true;
+        
         PersistenceCommand[] commands = new PersistenceCommand[transactionCommands.size()];
         transactionCommands.copyInto(commands);
-        objectStore.runTransaction(commands);
-        objectStore.endTransaction();
-
+        if(commands.length > 0) {
+	        objectStore.startTransaction();
+	        objectStore.runTransaction(commands);
+	        objectStore.endTransaction();
+        }
+        
         NakedObject object;
         for (Enumeration e = toNotify.elements(); e.hasMoreElements();) {
             object = (NakedObject) e.nextElement();
             LOG.debug("broadcastObjectUpdate " + object);
             notifier.broadcastObjectChanged(object);
         }
-        toNotify.removeAllElements();
     }
-
-    public void start() {
-        LOG.debug("start transaction" + this);
-        transactionCommands.removeAllElements();
-    }
-
 }
 
 /*

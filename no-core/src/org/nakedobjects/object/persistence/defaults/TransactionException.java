@@ -1,26 +1,18 @@
-package org.nakedobjects.object.exploration;
 
-import org.nakedobjects.object.fixture.FixtureBuilder;
-import org.nakedobjects.utility.UnexpectedCallException;
+package org.nakedobjects.object.persistence.defaults;
 
+public class TransactionException extends RuntimeException {
 
+    public TransactionException() {
+        super();
 
-public abstract class AbstractExplorationFixture implements ExplorationFixture {
-    private Object container;
-
-    protected Object getContainer() {
-        return container;
     }
 
-    public void setContainer(Object container) {
-        this.container = container;
+    public TransactionException(String s) {
+        super(s);
+
     }
 
-    public FixtureBuilder getBuilder() {
-        throw new UnexpectedCallException();
-    }
-
-    public void setBuilder(FixtureBuilder builder) {}
 }
 
 /*

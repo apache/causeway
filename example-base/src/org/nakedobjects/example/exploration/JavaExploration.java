@@ -2,9 +2,8 @@ package org.nakedobjects.example.exploration;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
@@ -38,7 +37,7 @@ import org.apache.log4j.PropertyConfigurator;
 public class JavaExploration {
     private static final String DEFAULT_CONFIG = "nakedobjects.properties";
     private static final Logger LOG = Logger.getLogger(JavaExploration.class);
-    private static final String SHOW_EXPLORATION_OPTIONS = "viewer.lightweight.show-exploration";
+    private static final String SHOW_EXPLORATION_OPTIONS = "nakedobjects.viewer.skylark.show-exploration";
 
     private SplashWindow splash;
     private JavaFixtureBuilder builder;
@@ -46,11 +45,12 @@ public class JavaExploration {
  //   private ExplorationFixture explorationFixture;
 
     public JavaExploration() {
-        try {
-            Properties p = Configuration.loadProperties("log4j.properties", false);
-            PropertyConfigurator.configure(p);
-        } catch (ConfigurationException e) {
+        ConfigurationPropertiesLoader loadedProperties = new ConfigurationPropertiesLoader("log4j.properties", false);
+        Properties p = loadedProperties.getProperties();
+        if (p.size() == 0) {
             BasicConfigurator.configure();
+        } else {
+            PropertyConfigurator.configure(p);
         }
         Logger.getRootLogger().setLevel(Level.WARN);
 
@@ -59,9 +59,10 @@ public class JavaExploration {
             String name = this.getClass().getName();
             name = name.substring(name.lastIndexOf('.') + 1);
 
-            ConfigurationFactory.setConfiguration(new Configuration(DEFAULT_CONFIG, false));
-            if (ConfigurationFactory.getConfiguration().getString(SHOW_EXPLORATION_OPTIONS) == null) {
-                ConfigurationFactory.getConfiguration().add(SHOW_EXPLORATION_OPTIONS, "yes");
+            Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(DEFAULT_CONFIG, false));
+            ConfigurationFactory.setConfiguration(configuration);
+            if (configuration.getString(SHOW_EXPLORATION_OPTIONS) == null) {
+                configuration.add(SHOW_EXPLORATION_OPTIONS, "yes");
             }
             PropertyConfigurator.configure(ConfigurationFactory.getConfiguration().getProperties("log4j"));
 
@@ -123,8 +124,6 @@ public class JavaExploration {
             builder = new JavaFixtureBuilder();
 //            explorationFixture = new ExplorationFixture(builder);
  //           builder.addFixture(explorationFixture);
-        } catch (ConfigurationException e) {
-            throw new NakedObjectRuntimeException(e);
         } finally {
             if (splash != null) {
                 splash.removeAfterDelay(4);

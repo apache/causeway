@@ -1,11 +1,14 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.undo.UndoStack;
 import org.nakedobjects.utility.DebugFrame;
 import org.nakedobjects.utility.InfoDebugFrame;
+import org.nakedobjects.utility.StartupException;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.OverlayDebugFrame;
 
@@ -168,7 +171,25 @@ public class ViewerAssistant {
         options.add(MenuOptionSet.DEBUG,
                 new MenuOption("Restart object manager") {
                     public void execute(Workspace workspace, View view, Location at) {
-                        
+                        try {
+	                        NakedObjectManager om = NakedObjects.getObjectManager();
+	                        om.shutdown();
+                            om.init();
+                        } catch (StartupException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+
+        options.add(MenuOptionSet.DEBUG,
+                new MenuOption("Debug object manager") {
+                    public void execute(Workspace workspace, View view, Location at) {
+                        NakedObjectManager om = NakedObjects.getObjectManager();
+                        InfoDebugFrame f = new InfoDebugFrame();
+                        f.setInfo(om);
+                        f.show(at.x + 50, workspace.getBounds().y + 6);                   
                     }
                 });
 

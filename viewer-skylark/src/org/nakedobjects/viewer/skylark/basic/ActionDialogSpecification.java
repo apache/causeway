@@ -26,7 +26,7 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
 
     private static class CloseAction extends ButtonAction {
         public CloseAction() {
-            super("Close");
+            super("Cancel");
         }
 
         public void execute(Workspace workspace, View view, Location at) {

@@ -14,10 +14,9 @@ import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
 import org.nakedobjects.object.reflect.PojoAdapter;
-import org.nakedobjects.utility.DebugInfo;
 
 
-public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObjectManager {
+public abstract class AbstractNakedObjectManager implements NakedObjectManager {
     protected ObjectFactory objectFactory;
     public abstract void abortTransaction();
     

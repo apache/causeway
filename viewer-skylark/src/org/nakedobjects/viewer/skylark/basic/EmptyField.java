@@ -184,7 +184,9 @@ public class EmptyField extends AbstractView {
      */
     public void objectActionResult(Naked result, Location at) {
         NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
-        setField(target, (NakedObject) result);
+        if(result instanceof NakedObject) {
+            setField(target, (NakedObject) result);
+        }
         super.objectActionResult(result, at);
     }
 
