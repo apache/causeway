@@ -64,6 +64,19 @@ public abstract class AbstractNakedValue {
     
     public void clearViewDirty() {}
 
+    /**
+     * The default minumum length is zero characters.
+     */
+    public int getMinumumLength() {
+        return 0;
+    }
+    
+    /**
+     * There is no default maximum length for this value (returns 0).
+     */
+    public int getMaximumLength() {
+        return 0;
+    }
 }
 
 

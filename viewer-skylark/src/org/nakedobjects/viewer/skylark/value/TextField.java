@@ -391,6 +391,8 @@ public class TextField extends AbstractField {
     private Selection selection;
     private TextFieldContent textContent;
     private boolean showLines;
+    private final int maximumLength;
+    private final int minumumLength;
 
     public TextField(Content content, ViewSpecification specification, ViewAxis axis, boolean showLines) {
         super(content, specification, axis);
@@ -398,6 +400,8 @@ public class TextField extends AbstractField {
         setMaxTextWidth(25);
 
         NakedValue value = getValue();
+        maximumLength = value.getMaximumLength();
+        minumumLength = value.getMinumumLength();
         cursor = new CursorPosition(0, 0);
         selection = new Selection();
         textContent = new TextFieldContent(this);
@@ -708,26 +712,34 @@ public class TextField extends AbstractField {
         if (!entry.equals(value == null ? "" : value.titleString())) {
             LOG.debug("Field edited: \'" + entry + "\' to replace \'" + (value == null ? "" : value.titleString()) + "\'");
             
-            try {
-                parseEntry(entry.toString());
-                invalidReason = null;
-  //              isSaved = true;
-                getViewManager().getSpy().addAction("VALID ENTRY: " + entry);
-                getState().setValid();
-                markDamaged();
-                getParent().invalidateContent();
-                //getParent().invalidateLayout();
-            } catch (NakedObjectRuntimeException e) {
-                invalidReason = "UPDATE FAILURE: " + e.getMessage();
-                LOG.error(invalidReason, e);
-                getViewManager().setStatus(invalidReason);
-                getState().setOutOfSynch();
-                markDamaged();
-          } catch (InvalidEntryException e) {
-                invalidReason = "INVALID ENTRY: " + e.getMessage();
+            if(entry.length() < minumumLength) {
+                invalidReason = "Entry not long enough, must be at least " + minumumLength + " characters";
+                LOG.error(invalidReason);
                 getViewManager().setStatus(invalidReason);
                 getState().setInvalid();
                 markDamaged();
+            } else {
+	            try {
+	                parseEntry(entry.toString());
+	                invalidReason = null;
+	  //              isSaved = true;
+	                getViewManager().getSpy().addAction("VALID ENTRY: " + entry);
+	                getState().setValid();
+	                markDamaged();
+	                getParent().invalidateContent();
+	                //getParent().invalidateLayout();
+	            } catch (NakedObjectRuntimeException e) {
+	                invalidReason = "UPDATE FAILURE: " + e.getMessage();
+	                LOG.error(invalidReason, e);
+	                getViewManager().setStatus(invalidReason);
+	                getState().setOutOfSynch();
+	                markDamaged();
+	          } catch (InvalidEntryException e) {
+	                invalidReason = "INVALID ENTRY: " + e.getMessage();
+	                getViewManager().setStatus(invalidReason);
+	                getState().setInvalid();
+	                markDamaged();
+	            }
             }
         }
     }
@@ -807,14 +819,26 @@ public class TextField extends AbstractField {
     }
 
     private void insert(char character) {
-        insert("" + character);
-        selection.resetTo(cursor);
+        if(withinMaximum(1)) {
+	        insert("" + character);
+	        selection.resetTo(cursor);
+        } else {
+            getViewManager().setStatus("Entry can be no longer than " + maximumLength + " characters");
+        }
+    }
+
+    private boolean withinMaximum(int characters) {
+        return maximumLength == 0 || textContent.getText().length() + characters <= maximumLength;
     }
 
     private void insert(String characters) {
-        textContent.insert(cursor, characters);
-        cursor.moveForward(characters.length());
-        isSaved = false;
+        if(withinMaximum(characters.length())) {
+	        textContent.insert(cursor, characters);
+	        cursor.moveForward(characters.length());
+	        isSaved = false;
+        } else {
+            getViewManager().setStatus("Entry can be no longer than " + maximumLength + " characters");
+        }
     }
 
     public boolean isIdentified() {
