@@ -1,0 +1,82 @@
+/*
+	Naked Objects - a framework that exposes behaviourally complete
+	business objects directly to the user.
+	Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+	The authors can be contacted via www.nakedobjects.org (the
+	registered address of Naked Objects Group is Kingsway House, 123 Goldworth
+	Road, Woking GU21 1NR, UK).
+*/
+
+package org.nakedobjects.example.library;
+
+import org.nakedobjects.object.control.FieldAbout;
+import org.nakedobjects.object.defaults.AbstractNakedObject;
+import org.nakedobjects.object.defaults.Title;
+import org.nakedobjects.object.defaults.value.TextString;
+
+
+public class Book extends AbstractNakedObject {
+	private final TextString title = new TextString();   
+	private final TextString author = new TextString();   
+	private final TextString code = new TextString();
+	private Loan onLoan;
+	
+	public static String fieldOrder() {
+		return "title, author, code, on loan";
+	}
+	
+	public void aboutFieldDefault(FieldAbout about) {
+		about.modifiableOnlyByRole(Roles.ADMIN);
+	}
+	
+	public Title title() {
+		return title.title().append(code);
+	}
+	
+	public TextString getAuthor() {
+		return author;
+	}
+
+	public TextString getCode() {
+		return code;
+	}
+
+	public TextString getTitle() {
+		return title;
+	}
+
+	public Loan getOnLoan() {
+		resolve(onLoan);
+		return onLoan;
+	}
+
+	public void setOnLoan(Loan loan) {
+		onLoan = loan;
+		objectChanged();
+	}
+	
+	public void associateOnLoan(Loan loan) {
+		loan.associateBook(this);
+	}
+	
+	public void dissociateOnLoan(Loan loan) {
+		loan.dissociateBook(this);
+	}
+	
+	
+}
