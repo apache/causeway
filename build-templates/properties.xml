@@ -23,8 +23,9 @@
 	</path>
 
 	<property name="no-core.release.dir" location="../no-core/build/release"/>
-<!--
+
+	<!-- need to exists for targets.xml -->
 	<path id="libs.internal">
 	</path>
--->
+
 
