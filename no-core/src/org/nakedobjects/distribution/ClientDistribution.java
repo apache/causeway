@@ -7,6 +7,8 @@ import org.nakedobjects.object.security.Session;
 
 public interface ClientDistribution {
 
+    void abortTransaction(Session session);
+
     ObjectData[] allInstances(Session session, String fullName, boolean includeSubclasses);
 
     void clearAssociation(Session session, String fieldIdentifier, Oid objectOid, String objectType, Oid associateOid,
@@ -14,15 +16,17 @@ public interface ClientDistribution {
 
     void destroyObject(Session session, Oid oid, String type);
 
-    ObjectData executeAction(Session session, String actionType, String actionIdentifier, String[] parameterTypes,
-            Oid objectOid, String objectType, ObjectData[] parameters);
+    void endTransaction(Session session);
+
+    ObjectData executeAction(Session session, String actionType, String actionIdentifier, String[] parameterTypes, Oid objectOid,
+            String objectType, ObjectData[] parameters);
 
     ObjectData[] findInstances(Session session, String fullName, String criteria, boolean includeSubclasses);
 
     Hint getActionHint(Session session, String actionType, String actionIdentifier, String[] parameterTypes, Oid objectOid,
             String objectType, ObjectData[] parameters);
 
- //   NakedClass getNakedClass(String fullName);
+    //   NakedClass getNakedClass(String fullName);
 
     ObjectData getObject(Session session, Oid oid, String fullName);
 
@@ -36,6 +40,8 @@ public interface ClientDistribution {
             String associateType);
 
     void setValue(Session session, String fieldIdentifier, Oid objectOid, String objectType, Object associate);
+
+    void startTransaction(Session session);
 
 }
 

@@ -1,12 +1,12 @@
 package org.nakedobjects.distribution;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.control.DefaultHint;
@@ -27,10 +27,6 @@ public class ServerDistribution implements ClientDistribution {
     private ObjectDataFactory objectDataFactory;
     private ObjectFactory objectFactory;
     private LocalObjectManager objectManager;
-
-    public ServerDistribution() {
-    //     objectDataFactory = new DefaultObjectDataFactory();
-    }
 
     public ObjectData[] allInstances(Session session, String fullName, boolean includeSubclasses) {
         TypedNakedCollection instances = objectManager.allInstances(getSpecification(fullName), includeSubclasses);
@@ -111,7 +107,7 @@ public class ServerDistribution implements ClientDistribution {
     }
 
     private NakedObjectSpecification getSpecification(String fullName) {
-        return NakedObjectSpecificationLoader.getInstance().loadSpecification(fullName);
+        return NakedObjects.getSpecificationLoader().loadSpecification(fullName);
     }
 
     public boolean hasInstances(Session session, String fullName) {
@@ -211,6 +207,18 @@ public class ServerDistribution implements ClientDistribution {
             throw new NakedObjectRuntimeException();
         }
         inObject.setValue(association, associate);
+    }
+
+    public void abortTransaction(Session session) {
+        objectManager.abortTransaction();
+    }
+
+    public void endTransaction(Session session) {
+        objectManager.endTransaction();
+    }
+
+    public void startTransaction(Session session) {
+        objectManager.startTransaction();
     }
 
 }

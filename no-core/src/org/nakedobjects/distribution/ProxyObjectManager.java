@@ -31,7 +31,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     private Session session;
 
     public void abortTransaction() {
-        LOG.debug("transactions (abort) IGNORED in proxy");
+        connection.abortTransaction(session);
     }
 
     public TypedNakedCollection allInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
@@ -68,8 +68,8 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     }
 
     public void endTransaction() {
-        LOG.debug("transactions (end) IGNORED in proxy");
-    }
+        connection.endTransaction(session);
+      }
 
     public TypedNakedCollection findInstances(NakedObject pattern, boolean includeSubclasses) throws UnsupportedFindException {
         throw new NotImplementedException("distribution version of this method has been removed");
@@ -225,7 +225,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     }
 
     public void startTransaction() {
-        LOG.debug("transactions (start) IGNORED in proxy");
+       connection.startTransaction(session);
     }
 
     public void resolveEagerly(NakedObject object, NakedObjectField field) {}
