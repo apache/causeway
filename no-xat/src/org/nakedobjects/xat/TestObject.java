@@ -72,15 +72,36 @@ public interface TestObject extends TestNaked {
 
     void assertEmpty(String message, String fieldName);
 
-    void assertFieldContains(String fieldName, NakedValue expectedValue);
+    void assertFieldContains(String fieldName, NakedValue expected);
 
     /**
      * Check that the specified field contains the expected value. If it does
      * not contain the expected value the test fails.
      */
-    void assertFieldContains(String fieldName, String expectedValue);
+    void assertFieldContains(String fieldName, String expected);
 
-    void assertFieldContains(String message, String fieldName, NakedValue expectedValue);
+    
+    
+    void assertFirstElementInField(String message, String fieldName, String expected);
+    
+    void assertFirstElementInField(String message, String fieldName, TestObject expected);
+    
+    void assertFirstElementInField(String fieldName, TestObject expected);
+
+    void assertFirstElementInField(String fieldName, String expected);
+
+    
+    void assertLastElementInField(String message, String fieldName, TestObject expected);
+    
+    void assertLastElementInField(String message, String fieldName, String expected);
+    
+    void assertLastElementInField(String fieldName, String expected);
+    
+    void assertLastElementInField(String fieldName, TestObject expected);
+    
+    
+    
+    void assertFieldContains(String message, String fieldName, NakedValue expected);
 
     /**
      * Check that the specified field contains the expected value. If it does
@@ -90,7 +111,7 @@ public interface TestObject extends TestNaked {
      *                       text to add to the failure message, which is displayed after a
      *                       failure.
      */
-    void assertFieldContains(String message, String fieldName, String expectedValue);
+    void assertFieldContains(String message, String fieldName, String expected);
 
     /**
      * Check that the specified field contains the expected object (as
@@ -102,31 +123,31 @@ public interface TestObject extends TestNaked {
      *                       failure.
      * @group assert
      */
-    void assertFieldContains(String message, String fieldName, TestObject expectedView);
+    void assertFieldContains(String message, String fieldName, TestObject expected);
 
     /**
      * Check that the specified field contains the expected object (as
      * represented by the specifed view. If it does not contain the expected
      * object the test fails.
      */
-    void assertFieldContains(String fieldName, TestObject expectedView);
+    void assertFieldContains(String fieldName, TestObject expected);
 
-    void assertFieldContainsType(String fieldName, String expectedType);
+    void assertFieldContainsType(String fieldName, String expected);
 
-    void assertFieldContainsType(String message, String fieldName, String expectedType);
+    void assertFieldContainsType(String message, String fieldName, String expected);
 
-    void assertFieldContainsType(String message, String fieldName, String title, String expectedType);
+    void assertFieldContainsType(String message, String fieldName, String title, String expected);
 
-    void assertFieldDoesNotContain(String fieldName, NakedValue testValue);
+    void assertFieldDoesNotContain(String fieldName, NakedValue expected);
 
     /*
      * Start of Field Not Contains /** Check that the specified field contains
      * the expected value. If it does not contain the expected value the test
      * fails.
      */
-    void assertFieldDoesNotContain(String fieldName, String testValue);
+    void assertFieldDoesNotContain(String fieldName, String expected);
 
-    void assertFieldDoesNotContain(String message, String fieldName, NakedValue testValue);
+    void assertFieldDoesNotContain(String message, String fieldName, NakedValue expected);
 
     /**
      * Check that the specified field contains the expected value. If it does
@@ -136,7 +157,7 @@ public interface TestObject extends TestNaked {
      *                       text to add to the failure message, which is displayed after a
      *                       failure.
      */
-    void assertFieldDoesNotContain(String message, String fieldName, String testValue);
+    void assertFieldDoesNotContain(String message, String fieldName, String expected);
 
     /**
      * Check that the specified field contains the expected object (as
@@ -148,14 +169,14 @@ public interface TestObject extends TestNaked {
      *                       failure.
      * @group assert
      */
-    void assertFieldDoesNotContain(String message, String fieldName, TestObject testView);
+    void assertFieldDoesNotContain(String message, String fieldName, TestObject expected);
 
     /**
      * Check that the specified field contains the expected object (as
      * represented by the specifed view. If it does not contain the expected
      * object the test fails.
      */
-    void assertFieldDoesNotContain(String fieldName, TestObject testView);
+    void assertFieldDoesNotContain(String fieldName, TestObject expected);
 
     void assertFieldExists(String fieldName);
 
@@ -191,9 +212,9 @@ public interface TestObject extends TestNaked {
      */
     void assertTitleEquals(String message, String expectedTitle);
 
-    void assertType(String expectedType);
+    void assertType(String expected);
 
-    void assertType(String message, String expectedType);
+    void assertType(String message, String expected);
 
     public void assertFieldEntryInvalid(String fieldName, String value);
     
@@ -286,13 +307,13 @@ public interface TestObject extends TestNaked {
      * Test the named field by calling fieldEntry with the specifed value and
      * then check the value stored is the same.
      */
-    void testField(String fieldName, String expectedValue);
+    void testField(String fieldName, String expected);
 
     /**
      * Test the named field by calling fieldEntry with the set value and then
      * check the value stored against the expected value.
      */
-    void testField(String fieldName, String setValue, String expectedValue);
+    void testField(String fieldName, String setValue, String expected);
 
     /**
      * Test the named field by calling fieldEntry with the set value and then

@@ -271,6 +271,38 @@ public abstract class TestObjectDecorator implements TestObject {
     public void testField(String fieldName, TestObject expectedObject) {
         wrappedObject.testField(fieldName, expectedObject);
     }
+
+    public void assertFirstElementInField(String message, String fieldName, String expected) {
+        wrappedObject.assertFirstElementInField(message, fieldName, expected);
+    }
+
+    public void assertFirstElementInField(String message, String fieldName, TestObject expected) {
+        wrappedObject.assertFirstElementInField(message, fieldName, expected);
+    }
+
+    public void assertFirstElementInField(String fieldName, TestObject expected) {
+        wrappedObject.assertFirstElementInField(fieldName, expected);
+    }
+
+    public void assertFirstElementInField(String fieldName, String expected) {
+        wrappedObject.assertFirstElementInField(fieldName, expected);
+    }
+
+    public void assertLastElementInField(String message, String fieldName, TestObject expected) {
+        wrappedObject.assertLastElementInField(message, fieldName, expected);
+    }
+
+    public void assertLastElementInField(String message, String fieldName, String expected) {
+        wrappedObject.assertLastElementInField(message, fieldName, expected);
+    }
+
+    public void assertLastElementInField(String fieldName, String expected) {
+        wrappedObject.assertLastElementInField(fieldName, expected);
+    }
+
+    public void assertLastElementInField(String fieldName, TestObject expected) {
+        wrappedObject.assertLastElementInField(fieldName, expected);
+    }
 }
 
 /*

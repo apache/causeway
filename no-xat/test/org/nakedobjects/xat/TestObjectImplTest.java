@@ -24,7 +24,9 @@ public class TestObjectImplTest extends TestCase {
 
     public static void main(String[] args) {}
 
-    private TestElement elementTwo;
+    private TestObject elementOne;
+    private TestObject elementThree;
+
     private TestNaked[] multipleParameters;
     private MockObjectManager om;
     private TestObject singleParameter;
@@ -59,8 +61,14 @@ public class TestObjectImplTest extends TestCase {
         TestValue valueParameter = factory.createParamerTestValue(new TextString("a value"));
         multipleParameters = new TestNaked[] { singleParameter, parameter2, valueParameter };
 
-        targetObject.getCollection().add(new TestElement("one"));
-        targetObject.getCollection().add(elementTwo = new TestElement("two"));
+        TestElement element = new TestElement("one");
+        targetObject.getCollection().add(element);
+        elementOne = factory.createTestObject(session, element);
+        element = new TestElement("two");
+        targetObject.getCollection().add(element);
+        element = new TestElement("three");
+        targetObject.getCollection().add(element);
+        elementThree = factory.createTestObject(session, element);
     }
 
     protected void tearDown() throws Exception {
@@ -117,18 +125,18 @@ public class TestObjectImplTest extends TestCase {
         } catch (NakedAssertionFailedError expected) {}
     }
 
-    public void testAssertFieldEntryNotParseable() {
-        target.assertFieldEntryCantParse("amount", "xxx");
-        try {
-            target.assertFieldEntryCantParse("amount", "-3.0");
-            fail();
-        } catch (NakedAssertionFailedError expected) {}
-    }
-
     public void testAssertFieldEntryInvalid() {
         target.assertFieldEntryInvalid("amount", "-3.0");
         try {
             target.assertFieldEntryInvalid("amount", "7.0");
+            fail();
+        } catch (NakedAssertionFailedError expected) {}
+    }
+
+    public void testAssertFieldEntryNotParseable() {
+        target.assertFieldEntryCantParse("amount", "xxx");
+        try {
+            target.assertFieldEntryCantParse("amount", "-3.0");
             fail();
         } catch (NakedAssertionFailedError expected) {}
     }
@@ -170,6 +178,38 @@ public class TestObjectImplTest extends TestCase {
         target.assertFieldVisible("One Modifiable");
         try {
             target.assertFieldVisible("Three Invisible");
+            fail();
+        } catch (NakedAssertionFailedError expected) {}
+    }
+
+    public void testAssertFirstElementInField() {
+        target.assertFirstElementInField("collection", elementOne);
+        try {
+            target.assertFirstElementInField("collection", elementThree);
+            fail();
+        } catch (NakedAssertionFailedError expected) {}
+    }
+
+    public void testAssertFirstElementInFieldByTitle() {
+        target.assertFirstElementInField("collection", "one");
+        try {
+            target.assertFirstElementInField("collection", "thtree");
+            fail();
+        } catch (NakedAssertionFailedError expected) {}
+    }
+
+    public void testAssertLastElementInField() {
+        target.assertLastElementInField("collection", elementThree);
+        try {
+            target.assertLastElementInField("collection", elementOne);
+            fail();
+        } catch (NakedAssertionFailedError expected) {}
+    }
+
+    public void testAssertLasttElementInFieldByTitle() {
+        target.assertLastElementInField("collection", "three");
+        try {
+            target.assertLastElementInField("collection", "one");
             fail();
         } catch (NakedAssertionFailedError expected) {}
     }
@@ -255,9 +295,9 @@ public class TestObjectImplTest extends TestCase {
     }
 
     public void testGetFieldElement() {
-        TestObject fld = target.getField("collection", "two");
+        TestObject fld = target.getField("collection", "three");
 
-        assertEquals(elementTwo, fld.getForObject());
+        assertEquals(elementThree, fld);
     }
 
     public void testInvalidFieldEntry() {
