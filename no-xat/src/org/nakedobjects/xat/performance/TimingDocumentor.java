@@ -1,5 +1,6 @@
 package org.nakedobjects.xat.performance;
 
+import org.nakedobjects.utility.Profiler;
 import org.nakedobjects.xat.AbstractDocumentor;
 
 import java.io.File;
@@ -16,7 +17,7 @@ public class TimingDocumentor extends AbstractDocumentor {
   
     public TimingDocumentor(final String directory) {
         this.directory = directory;
-        Timer.reset();
+        Profiler.reset();
     }
 
     public void close() {
@@ -29,7 +30,7 @@ public class TimingDocumentor extends AbstractDocumentor {
 
     public void flush() {}
 
-    public void record(Timer timer) {
+    public void record(Profiler timer) {
        // System.out.println(timer);
         timings.addElement(timer);
     }
@@ -46,7 +47,7 @@ public class TimingDocumentor extends AbstractDocumentor {
                     new FileOutputStream(new File(directory , "timing"+ "-xat.data"))));
             
             for (int i = 0, max = timings.size(); i < max; i++) {
-                Timer timer = (Timer) timings.elementAt(i);
+                Profiler timer = (Profiler) timings.elementAt(i);
                 writer.println(timer.logRecord());
             }
         } catch (IOException e) {

@@ -1,24 +1,32 @@
 package org.nakedobjects.xat.performance;
 
 import org.nakedobjects.utility.Profiler;
-import org.nakedobjects.xat.TestValue;
-import org.nakedobjects.xat.TestValueDecorator;
 
-public class TimingTestValue extends TestValueDecorator {
-    private final TimingDocumentor doc;
+/**
+ * A mechanism for adding delays to user actions.
+ */
+public class Delay extends Profiler {
 
-    public TimingTestValue(final TestValue wrappedObject, final TimingDocumentor documentor) {
-        super(wrappedObject);
-        this.doc = documentor;
+    public Delay(String name) {
+        super(name);
+    }
+
+    private static boolean addDelay = false;
+
+
+    public static void setAddDelay(boolean on) {
+        addDelay = on;
     }
     
-    public void fieldEntry(String value) {
-        Profiler timer = new Profiler("Field entry " + value);
-        Delay.userDelay(4, 8);
-        timer.start();
-        super.fieldEntry(value);
-        timer.stop();
-        doc.record(timer);
+    public static void userDelay(int min, int max) {
+        if(addDelay) {
+            int delay = min * 1000 + (int)((max - min) * Math.random() * 1000);
+            try {
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

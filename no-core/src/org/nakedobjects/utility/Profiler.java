@@ -1,11 +1,10 @@
-package org.nakedobjects.xat.performance;
+package org.nakedobjects.utility;
 
 import java.util.Hashtable;
 
 
-public class Timer {
+public class Profiler {
     private final static String DELIMITER = "\t";
-    private static boolean addDelay = false;
     private static long creationTime;
     private static long memoryBase;
     private static int nextId = 0;
@@ -23,9 +22,9 @@ public class Timer {
         memoryBase = memory();
     }
 
-    public Timer(final String name) {
+    public Profiler(final String name) {
         this.name = name;
-        synchronized (Timer.class) {
+        synchronized (Profiler.class) {
             id = nextId++;
         }
         Thread t = Thread.currentThread();
@@ -83,20 +82,6 @@ public class Timer {
         return getTimeInMilliseconds() + "ms - " + name;
     }
 
-    public void userDelay(int min, int max) {
-        if(addDelay) {
-	        int delay = min * 1000 + (int)((max - min) * Math.random() * 1000);
-	        try {
-	            Thread.sleep(delay);
-	        } catch (InterruptedException e) {
-	            e.printStackTrace();
-	        }
-        }
-    }
-
-    public static void setAddDelay(boolean on) {
-        addDelay = on;
-    }
 }
 
 /*

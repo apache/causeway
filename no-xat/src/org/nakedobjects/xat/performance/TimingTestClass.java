@@ -1,7 +1,9 @@
 package org.nakedobjects.xat.performance;
 
+import org.nakedobjects.utility.Profiler;
 import org.nakedobjects.xat.TestClass;
 import org.nakedobjects.xat.TestClassDecorator;
+import org.nakedobjects.xat.TestCollection;
 import org.nakedobjects.xat.TestNaked;
 import org.nakedobjects.xat.TestObject;
 
@@ -15,8 +17,8 @@ public class TimingTestClass extends TestClassDecorator {
     }
 
     public TestObject findInstance(final String title) {
-        Timer timer = new Timer("Find instance of " + getTitle());
-        timer.userDelay(4, 8);
+        Profiler timer = new Profiler("Find instance of " + getTitle());
+        Delay.userDelay(4, 8);
         timer.start();
         TestObject result = super.findInstance(title);
         timer.stop();
@@ -25,8 +27,8 @@ public class TimingTestClass extends TestClassDecorator {
     }
 
     public TestObject newInstance() {
-        Timer timer = new Timer("New instance of " + getTitle());
-        timer.userDelay(4, 8);
+        Profiler timer = new Profiler("New instance of " + getTitle());
+        Delay.userDelay(4, 8);
         timer.start();
         TestObject instance = super.newInstance();
         instance.getForNaked();
@@ -44,14 +46,26 @@ public class TimingTestClass extends TestClassDecorator {
             parameterList.append(parameters[i].getTitle());
         }
 
-        Timer timer = new Timer("class action '" + name + "' with " + parameterList);
-        timer.userDelay(4, 8);
+        Profiler timer = new Profiler("class action '" + name + "' with " + parameterList);
+        Delay.userDelay(4, 8);
         timer.start();
         TestObject result = super.invokeAction(name, parameters);
         timer.stop();
         doc.record(timer);
         return result;
     }
+    
+    public TestCollection instances() {
+        Profiler timer = new Profiler("Instances of " + getTitle());
+        Delay.userDelay(4, 8);
+        timer.start();
+       TestCollection instance = super.instances();
+        timer.stop();
+        doc.record(timer);
+        return instance;
+    }
+    
+    
 }
 
 /*

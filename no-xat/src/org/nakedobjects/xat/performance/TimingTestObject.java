@@ -1,5 +1,6 @@
 package org.nakedobjects.xat.performance;
 
+import org.nakedobjects.utility.Profiler;
 import org.nakedobjects.xat.TestNaked;
 import org.nakedobjects.xat.TestObject;
 import org.nakedobjects.xat.TestObjectDecorator;
@@ -13,38 +14,54 @@ public class TimingTestObject extends TestObjectDecorator {
         this.doc = documentor;
     }
 
-    
     public void associate(final String fieldName, final TestObject draggedView) {
-        Timer timer = new Timer("associate " + draggedView.getTitle() + " in " + fieldName);
-        timer.userDelay(4, 8);
-        timer.start();
+        Profiler timer = start("associate " + draggedView.getTitle() + " in " + fieldName);
         super.associate(fieldName, draggedView);
-        timer.stop();
-        doc.record(timer);
+        stop(timer);
+    }
+
+    public void clearAssociation(String fieldName) {
+        Profiler timer = start("clear " + fieldName);
+        super.clearAssociation(fieldName);
+        stop(timer);
+    }
+
+    public void clearAssociation(String fieldName, String title) {
+        Profiler timer = start("clear " + fieldName);
+        super.clearAssociation(fieldName, title);
+        stop(timer);
     }
 
     public void fieldEntry(final String fieldName, final String value) {
-        Timer timer = new Timer("field entry '" + value + "' into " + fieldName);
-        timer.userDelay(4, 8);
-        timer.start();
+        Profiler timer = start("field entry '" + value + "' into " + fieldName);
         super.fieldEntry(fieldName, value);
-        timer.stop();
-        doc.record(timer);
+        stop(timer);
     }
-    
+
     public TestObject invokeAction(final String name, final TestNaked[] parameters) {
         String parameterList = "";
         for (int i = 0, l = parameters.length; i < l; i++) {
             parameterList += (i > 0 ? "," : "") + parameters[i].getTitle();
         }
-        Timer timer = new Timer("action '" + name + "' with " + parameters);
-        timer.userDelay(2, 4);
-        timer.start();
+        Profiler timer = start("action '" + name + "' with " + parameters);
         TestObject result = super.invokeAction(name, parameters);
-        timer.stop();
-        doc.record(timer);
+        stop(timer);
         return result;
     }
+
+    private Profiler start(String name) {
+        Profiler profile = new Profiler(name);
+        Delay.userDelay(4, 8);
+        profile.start();
+        return profile;
+    }
+
+    private void stop(Profiler profiler) {
+        profiler.stop();
+        doc.record(profiler);
+    }
+    
+    
 }
 
 /*
