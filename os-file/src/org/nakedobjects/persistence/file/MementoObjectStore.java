@@ -149,7 +149,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
         
         NakedObject[] array = new NakedObject[count];
         System.arraycopy(instances, 0, array, 0, count);
-        return instances;
+        return array;
     }
 
     public NakedObject[] getInstances(NakedObjectSpecification cls, String pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
@@ -303,7 +303,11 @@ public abstract class MementoObjectStore implements NakedObjectStore {
 
     public void resolve(NakedObject object) throws ObjectStoreException {
         ObjectData data = (ObjectData) dataManager.loadData((SerialOid) object.getOid());
-        initObject(object, data);
+        if(data == null) {
+            LOG.warn("Not able to read in data - during resolve - for " + object);
+        } else {
+            initObject(object, data);
+        }
     }
 
     public void save(NakedObject object) throws ObjectStoreException {

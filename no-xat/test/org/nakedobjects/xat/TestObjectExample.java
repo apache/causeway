@@ -122,12 +122,23 @@ public class TestObjectExample extends AbstractNakedObject {
     }
 
     public TestObjectExample getSixInvisible() {
-   //     throw new NakedAssertionFailedError();
-        return null;
-    }
+             return null;
+         }
+    
+    public TestObjectExample getSevenUnusable() {
+             return null;
+         }
 
     public void setSixInvisible(TestObjectExample e) {
         throw new NakedAssertionFailedError();
+    }
+    
+    public void aboutSevenUnusable(FieldAbout about, TestObjectExample e) {
+        about.unmodifiable();
+    }
+    
+    public void setSevenUnusable(TestObjectExample e) {
+        throw new NakedAssertionFailedError("Invalid associate call");      
     }
 
     public void aboutSixInvisible(FieldAbout about, TestObjectExample e) {

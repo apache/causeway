@@ -217,6 +217,11 @@ public class TestObjectImplTest extends TestCase {
     public void testAssociate() {
         target.associate("Four Default", singleParameter);
         assertEquals(singleParameter.toString(), targetObject.result());
+        
+        try {
+	        target.associate("Seven Unusable", singleParameter);
+	        fail();
+        } catch (NakedAssertionFailedError expected) {}
     }
 
     public void testCantAssociate() {

@@ -101,7 +101,7 @@ public class ObjectData extends Data {
     void addAssociation(NakedObject fieldContent, String fieldName, boolean ensurePersistent) {
     	boolean notAlreadyPersistent = fieldContent != null && fieldContent.getOid() == null;
         if (ensurePersistent && notAlreadyPersistent) {
-    		throw new IllegalStateException("Cannot save an object that is not persistent");
+    		throw new IllegalStateException("Cannot save an object that is not persistent: " + fieldContent);
     	}
     //	LOG.debug("adding reference field " + fieldName +" " + fieldContent);		
     	set(fieldName, fieldContent == null ? null : fieldContent.getOid());

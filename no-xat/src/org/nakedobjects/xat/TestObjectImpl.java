@@ -5,9 +5,11 @@ import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ValueParseException;
+import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.AssociationSpecification;
 import org.nakedobjects.object.reflect.FieldSpecification;
@@ -83,10 +85,8 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         }
     }
 
-    public void assertActionExists(final String name, final TestObject parameter) {
-        if (getAction(name, new TestNaked[] { parameter }) == null) {
-            throw new NakedAssertionFailedError("Field '" + name + "' is not found in " + getForObject());
-        }
+    public void assertActionExists(final String name, final TestNaked parameter) {
+        assertActionExists(name, new TestNaked[] {parameter});
     }
 
     public void assertActionInvisible(String name) {
@@ -102,9 +102,8 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         assertActionInvisible(name, getAction(name, parameters), parameters);
     }
 
-    public void assertActionInvisible(String name, TestObject parameter) {
-        TestNaked[] parameters = new TestNaked[] { parameter };
-        assertActionInvisible(name, getAction(name, parameters), parameters);
+    public void assertActionInvisible(String name, TestNaked parameter) {
+        assertActionInvisible(name, new TestNaked[] {parameter});
     }
 
     public void assertActionUnusable(String name) {
@@ -121,9 +120,8 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         assertActionUnusable(name, getAction(name, parameters), parameters);
     }
 
-    public void assertActionUnusable(String name, TestObject parameter) {
-        TestNaked[] parameters = new TestNaked[] { parameter };
-        assertActionUnusable(name, getAction(name, parameters), parameters);
+    public void assertActionUnusable(String name, TestNaked parameter) {
+        assertActionUnusable(name, new TestNaked[] {parameter});
     }
 
     public void assertActionUsable(String name) {
@@ -140,9 +138,8 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         assertActionUsable(name, getAction(name, parameters), parameters);
     }
 
-    public void assertActionUsable(String name, TestObject parameter) {
-        TestNaked[] parameters = new TestNaked[] { parameter };
-        assertActionUsable(name, getAction(name, parameters), parameters);
+    public void assertActionUsable(String name, TestNaked parameter) {
+        assertActionUsable(name, new TestNaked[] {parameter});
     }
 
     public void assertActionVisible(String name) {
@@ -159,8 +156,8 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         assertActionVisible(name, getAction(name, parameters), parameters);
     }
 
-    public void assertActionVisible(String name, TestObject parameter) {
-        assertActionVisible(name, getAction(name, new TestNaked[] { parameter }), new TestNaked[] { parameter });
+    public void assertActionVisible(String name, TestNaked parameter) {
+        assertActionVisible(name, new TestNaked[] {parameter});
     }
 
     public void assertEmpty(final String fieldName) {
@@ -547,17 +544,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
     private void assertFieldModifiable(String fieldName, FieldSpecification field) {
         boolean canAccess = field.canUse(session, (NakedObject) getForObject());
-        assertTrue("Field '" + fieldName + "' is unmodifiable for " + session.getUser(), canAccess);
-    }
-
-    /**
-     * Check that a field exists with the specified name, and it is read-only.
-     * If it does not exist, or is writable, the test fails.
-     * 
-     * @deprecated
-     */
-    public void assertFieldReadOnly(final String fieldName) {
-        assertFieldUnmodifiable(fieldName);
+        assertTrue("Field '" + fieldName + "' is unmodifiable for user " + session.getUser(), canAccess);
     }
 
     public void assertFieldUnmodifiable(final String fieldName) {
@@ -752,7 +739,8 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         FieldSpecification field = fieldFor(fieldName);
         assertFieldVisible(fieldName, field);
         assertFieldModifiable(fieldName, field);
-
+        assertEmpty(fieldName);
+        
         TestNaked targetField = getField(fieldName);
 
         if (targetField instanceof TestValue) {
@@ -770,8 +758,26 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
             throw new IllegalActionError("Can't drop a " + object.getForObject().getSpecification().getShortName()
                     + " on to the " + fieldName + " field (which accepts " + association.getType() + ")");
         }
-
-        association.setAssociation((NakedObject) getForObject(), obj);
+        
+        NakedObject nakedObject = (NakedObject) getForObject();
+        About about;
+        if(association instanceof OneToOneAssociationSpecification) {
+            about = ((OneToOneAssociationSpecification) association).getAbout(session, nakedObject, obj);
+        } else if(association instanceof OneToOneAssociationSpecification) {
+            about = ((OneToManyAssociationSpecification) association).getAbout(session, nakedObject, obj, true);
+        } else {
+            throw new NakedObjectRuntimeException();
+        }
+        
+        if(about.canAccess().isVetoed()) {
+            throw new IllegalActionError("Cannot access the field " + field);
+        }
+        
+        if(about.canUse().isVetoed()) {
+            throw new IllegalActionError("Cannot associate " + obj + " in the field " + field + " within " + nakedObject + ": " + about.canUse().getReason());
+        }
+        
+        association.setAssociation(nakedObject, obj);
     }
 
     /**
@@ -1067,14 +1073,16 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
     public TestObject invokeAction(final String name, final TestNaked[] parameters) {
         ActionSpecification action = getAction(simpleName(name), parameters);
+        assertActionUsable(name, action, parameters);
+        assertActionVisible(name, action, parameters);
 
         Naked[] parameterObjects = nakedObjects(parameters);
-        boolean allowed = action.getAbout(session, (NakedObject) getForObject(), parameterObjects).canUse().isAllowed();
+/*        boolean allowed = action.getAbout(session, (NakedObject) getForObject(), parameterObjects).canUse().isAllowed();
         assertTrue("action '" + name + "' is unusable", allowed);
 
         allowed = action.getAbout(session, (NakedObject) getForObject(), parameterObjects).canAccess().isAllowed();
         assertTrue("action '" + name + "' is invisible", allowed);
-
+*/
         NakedObject result = action.execute((NakedObject) getForObject(), parameterObjects);
         if (result == null) {
             return null;
@@ -1090,22 +1098,8 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
      * returned object, if any is returned, from the invoked <code>action</code>
      * method is returned by this method.
      */
-    public TestObject invokeAction(final String name, final TestObject parameter) {
-        ActionSpecification action = getAction(name, new TestNaked[] { parameter });
-
-        NakedObject dropObject = (NakedObject) parameter.getForObject();
-        boolean allowed = action.getAbout(session, (NakedObject) getForObject(), dropObject).canUse().isAllowed();
-        assertTrue("action '" + name + "' is unusable", allowed);
-
-        allowed = action.getAbout(session, (NakedObject) getForObject(), dropObject).canAccess().isAllowed();
-        assertTrue("action '" + name + "' is invisible", allowed);
-
-        NakedObject result = action.execute((NakedObject) getForObject(), dropObject);
-        if (result == null) {
-            return null;
-        } else {
-            return factory.createTestObject(session, result);
-        }
+    public TestObject invokeAction(final String name, final TestNaked parameter) {
+        return invokeAction(name, new TestNaked[] {parameter});
     }
 
     private Naked[] nakedObjects(TestNaked[] parameters) {

@@ -1,5 +1,8 @@
 package org.nakedobjects.persistence.sql;
 
+import org.nakedobjects.object.io.TransferableReader;
+import org.nakedobjects.object.io.TransferableWriter;
+
 
 
 public class StringPrimaryKey implements PrimaryKey{
@@ -7,6 +10,10 @@ public class StringPrimaryKey implements PrimaryKey{
 
 	public StringPrimaryKey(String primaryKey) {
 		this.primaryKey = primaryKey;
+	}
+	
+	public StringPrimaryKey(TransferableReader reader) {
+	    primaryKey = reader.readString();
 	}
 
 	public boolean equals(Object obj) {
@@ -33,4 +40,8 @@ public class StringPrimaryKey implements PrimaryKey{
     public String toString() {
 		return "" + primaryKey;
 	}
+
+    public void writeData(TransferableWriter writer) {
+        writer.writeString(primaryKey);
+    }
 }

@@ -1,8 +1,10 @@
 package org.nakedobjects.persistence.sql;
 
+import org.nakedobjects.object.io.Transferable;
+
 import java.io.Serializable;
 
-public interface PrimaryKey extends Serializable {
+public interface PrimaryKey extends Transferable, Serializable {
 
     public String stringValue();
 }

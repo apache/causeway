@@ -4,6 +4,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.xat.TestNaked;
 import org.nakedobjects.xat.TestObject;
 import org.nakedobjects.xat.TestObjectDecorator;
 import org.nakedobjects.xat.TestValue;
@@ -25,7 +26,7 @@ public class HtmlTestObject extends TestObjectDecorator {
         doc("</strong> is not currently available. ");
     }
 
-    public void assertActionUsable(String name, TestObject parameter) {
+    public void assertActionUsable(String name, TestNaked parameter) {
         super.assertActionUsable(name, parameter);
         doc("note that it can't be dropped onto the ");
         doc(doc.objectString(getForObject()) + ". ");
@@ -140,7 +141,7 @@ public class HtmlTestObject extends TestObjectDecorator {
         return result;
     }
 
-    public TestObject invokeAction(String name, TestObject parameter) {
+    public TestObject invokeAction(String name, TestNaked parameter) {
         doc("drop it onto the ");
         doc(doc.objectString(this.getForObject()));
         TestObject result = super.invokeAction(name, parameter);

@@ -10,7 +10,7 @@ public interface TestObject extends TestNaked {
 
     public void assertActionExists(String name, TestNaked[] parameters);
 
-    public void assertActionExists(String name, TestObject parameter);
+    public void assertActionExists(String name, TestNaked parameter);
 
     /**
      * Check that the specified object menu item is currently invisible. If it
@@ -24,7 +24,7 @@ public interface TestObject extends TestNaked {
      * Check that the specified object menu item is currently invisible. If it
      * is visible the test fails.
      */
-    void assertActionInvisible(String name, TestObject parameter);
+    void assertActionInvisible(String name, TestNaked parameter);
 
     /**
      * Check that the specified object menu item is currently disabled. If it is
@@ -38,7 +38,7 @@ public interface TestObject extends TestNaked {
      * Check that dragged object cannot be dropped on this object. If it can be
      * dropped the test fails.
      */
-    void assertActionUnusable(String name, TestObject parameter);
+    void assertActionUnusable(String name, TestNaked parameter);
 
     /**
      * Check that the specified object menu item is currently available. If it
@@ -52,7 +52,7 @@ public interface TestObject extends TestNaked {
      * Check that dragged object can be dropped on this object. If it cannot be
      * dropped the test fails.
      */
-    void assertActionUsable(String name, TestObject parameter);
+    void assertActionUsable(String name, TestNaked parameter);
 
     /**
      * Check that the specified object menu item is currently visible. If it is
@@ -66,7 +66,7 @@ public interface TestObject extends TestNaked {
      * Check that the specified object menu item is currently visible. If it is
      * invisible the test fails.
      */
-    void assertActionVisible(String name, TestObject parameter);
+    void assertActionVisible(String name, TestNaked parameter);
 
     void assertEmpty(String fieldName);
 
@@ -301,7 +301,7 @@ public interface TestObject extends TestNaked {
      * 
      * @group action
      */
-    TestObject invokeAction(String name, TestObject parameter);
+    TestObject invokeAction(String name, TestNaked parameter);
 
     /**
      * Test the named field by calling fieldEntry with the specifed value and

@@ -20,7 +20,7 @@ public abstract class TestObjectDecorator implements TestObject {
         wrappedObject.assertActionExists(name, parameters);
     }
 
-    public void assertActionExists(String name, TestObject parameter) {
+    public void assertActionExists(String name, TestNaked parameter) {
         wrappedObject.assertActionExists(name, parameter);
     }
 
@@ -32,7 +32,7 @@ public abstract class TestObjectDecorator implements TestObject {
         wrappedObject.assertActionInvisible(name, parameters);
     }
 
-    public void assertActionInvisible(String name, TestObject parameter) {
+    public void assertActionInvisible(String name, TestNaked parameter) {
         wrappedObject.assertActionInvisible(name, parameter);
     }
 
@@ -44,7 +44,7 @@ public abstract class TestObjectDecorator implements TestObject {
         wrappedObject.assertActionUnusable(name, parameters);
     }
 
-    public void assertActionUnusable(String name, TestObject parameter) {
+    public void assertActionUnusable(String name, TestNaked parameter) {
         wrappedObject.assertActionUnusable(name, parameter);
     }
 
@@ -56,7 +56,7 @@ public abstract class TestObjectDecorator implements TestObject {
         wrappedObject.assertActionUsable(name, parameters);
     }
 
-    public void assertActionUsable(String name, TestObject parameter) {
+    public void assertActionUsable(String name, TestNaked parameter) {
         wrappedObject.assertActionUsable(name, parameter);
     }
 
@@ -68,7 +68,7 @@ public abstract class TestObjectDecorator implements TestObject {
         wrappedObject.assertActionVisible(name, parameters);
     }
 
-    public void assertActionVisible(String name, TestObject parameter) {
+    public void assertActionVisible(String name, TestNaked parameter) {
         wrappedObject.assertActionVisible(name, parameter);
     }
 
@@ -252,7 +252,7 @@ public abstract class TestObjectDecorator implements TestObject {
         return wrappedObject.invokeAction(name, parameters);
     }
 
-    public TestObject invokeAction(String name, TestObject parameter) {
+    public TestObject invokeAction(String name, TestNaked parameter) {
         return wrappedObject.invokeAction(name, parameter);
     }
 

@@ -5,11 +5,6 @@ import org.apache.log4j.LogManager;
 import org.nakedobjects.persistence.file.InMemoryDataManager;
 
 public class InMemoryDataManagerTest extends DataManagerTestCase {
-
-	public InMemoryDataManagerTest(String name) {
-		super(name);
-	}
-
 	public static void main(String[] args) {
  
  		junit.textui.TestRunner.run(DataManagerTestCase.class);

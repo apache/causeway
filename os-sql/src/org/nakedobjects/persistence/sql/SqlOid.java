@@ -1,6 +1,7 @@
 package org.nakedobjects.persistence.sql;
 
 import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.io.TransferableReader;
 import org.nakedobjects.object.io.TransferableWriter;
 
 
@@ -11,6 +12,11 @@ public final class SqlOid implements Oid {
 	public SqlOid(String className, PrimaryKey primaryKey) {
 		this.className = className;
 		this.primaryKey = primaryKey;
+	}
+
+	public SqlOid(TransferableReader reader) {
+		this.className = reader.readString();
+		this.primaryKey = (PrimaryKey) reader.readObject();
 	}
 
 	public String getClassName() {
@@ -47,5 +53,8 @@ public final class SqlOid implements Oid {
 		return "DOID#" + primaryKey + "/" + className;
 	}
 
-    public void writeData(TransferableWriter writer) {}
+    public void writeData(TransferableWriter writer) {
+        writer.writeString(className);
+        writer.writeObject(primaryKey);
+    }
 }
