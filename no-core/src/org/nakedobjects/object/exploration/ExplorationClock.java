@@ -1,9 +1,5 @@
 package org.nakedobjects.object.exploration;
 
-import org.nakedobjects.object.defaults.value.Date;
-import org.nakedobjects.object.defaults.value.DateTime;
-import org.nakedobjects.object.defaults.value.Time;
-import org.nakedobjects.object.defaults.value.TimeStamp;
 import org.nakedobjects.system.SystemClock;
 
 import java.util.Calendar;
@@ -22,13 +18,6 @@ import java.util.Calendar;
 
 public class ExplorationClock extends SystemClock {
     private Calendar time = null;
-
-    public ExplorationClock() {
-        Date.setClock(this);
-        Time.setClock(this);
-        DateTime.setClock(this);
-        TimeStamp.setClock(this);
-    }
 
     public static  ExplorationClock initialize() {
         ExplorationClock clock = new ExplorationClock();
