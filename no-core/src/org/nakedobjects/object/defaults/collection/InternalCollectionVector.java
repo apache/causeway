@@ -65,7 +65,7 @@ public class InternalCollectionVector extends AbstractTypedNakedCollectionVector
 	public String toString() {
         StringBuffer s = new StringBuffer();
 
-        s.append("InternalCollection");
+        s.append("InternalCollectionVector");
         s.append(" [state=");
 
         // Persistent/transient & Resolved or not

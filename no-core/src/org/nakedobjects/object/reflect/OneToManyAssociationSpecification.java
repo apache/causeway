@@ -1,6 +1,7 @@
 package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.About;
@@ -71,6 +72,15 @@ public class OneToManyAssociationSpecification extends AssociationSpecification 
 
     public String toString() {
         return "OneToMany [" + super.toString() + "]";
+    }
+
+    public boolean canAssociate(NakedObject target, NakedObject element) {
+        if(element.getSpecification().isOfType(getType())) {
+            return true;
+        }
+
+        NakedCollection collection = (NakedCollection) get(target);
+        return collection.canAdd(element).isAllowed();
     }
 }
 

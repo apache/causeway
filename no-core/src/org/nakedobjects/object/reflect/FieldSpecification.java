@@ -6,7 +6,7 @@ import org.nakedobjects.object.NakedObject;
 
 
 public abstract class FieldSpecification extends MemberSpecification {
-    private NakedObjectSpecification type;
+    private final NakedObjectSpecification type;
     
     public FieldSpecification(String name, NakedObjectSpecification type) {
         super(name);
