@@ -32,6 +32,49 @@ public class DateAdapter extends AbstractNakedValue implements DateValue {
     public DateAdapter(Date date) {
         this.date = date;
     }
+    
+    public byte[] asEncodedString() {
+        if (date == null) {
+            return "NULL".getBytes();
+        } else {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            StringBuffer data = new StringBuffer(8);
+            String year = String.valueOf(cal.get(Calendar.YEAR));
+            data.append("0000".substring(0, 4 - year.length()));
+            data.append(year);
+
+            int month = cal.get(Calendar.MONTH) + 1;
+            data.append((month <= 9) ? "0" : "");
+            data.append(month);
+
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            data.append((day <= 9) ? "0" : "");
+            data.append(day);
+
+            return data.toString().getBytes();
+        }
+    }
+    
+    public Date dateValue() {
+        return new Date(date.getTime());
+    }
+  
+    public String getIconName() {
+        return "date";
+    }
+
+    public Object getObject() {
+        return date;
+    }
+    
+    public Oid getOid() {
+        return null;
+    }
+   
+    public String getValueClass() {
+        return Date.class.getName();
+    }
 
     public void parseTextEntry(String entry) throws InvalidEntryException {
         if(entry == null) {
@@ -60,29 +103,6 @@ public class DateAdapter extends AbstractNakedValue implements DateValue {
             }
         }
     }
-    
-    public byte[] asEncodedString() {
-        if (date == null) {
-            return "NULL".getBytes();
-        } else {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-            StringBuffer data = new StringBuffer(8);
-            String year = String.valueOf(cal.get(Calendar.YEAR));
-            data.append("0000".substring(0, 4 - year.length()));
-            data.append(year);
-
-            int month = cal.get(Calendar.MONTH) + 1;
-            data.append((month <= 9) ? "0" : "");
-            data.append(month);
-
-            int day = cal.get(Calendar.DAY_OF_MONTH);
-            data.append((day <= 9) ? "0" : "");
-            data.append(day);
-
-            return data.toString().getBytes();
-        }
-    }
 
     public void restoreFromEncodedString(byte[] data) {
         String text = new String(data);
@@ -106,32 +126,18 @@ public class DateAdapter extends AbstractNakedValue implements DateValue {
             date = cal.getTime();
         }
     }
-
-    public Object getObject() {
-        return date;
-    }
     
-    public Oid getOid() {
-        return null;
+    public void setValue(Date date) {
+        this.date = new Date(date.getTime());
     }
-  
-    public String getIconName() {
-        return "date";
+
+    public String titleString() {
+        return date == null ? "" : MEDIUM_FORMAT.format(date);
     }
     
     public String toString() {
         return "POJO DataAdapter: " + date;
     }
-
-    public String titleString() {
-        return date == null ? "" : MEDIUM_FORMAT.format(date);
-
-    }
-   
-    public String getValueClass() {
-        return Date.class.getName();
-    }
-    
 }
 
 

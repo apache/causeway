@@ -2,8 +2,12 @@ package org.nakedobjects.object.value;
 
 import org.nakedobjects.object.NakedValue;
 
-public interface DateValue extends NakedValue {
+import java.util.Date;
 
+public interface DateValue extends NakedValue {
+    Date dateValue();
+    
+    void setValue(Date date);
 }
 
 
