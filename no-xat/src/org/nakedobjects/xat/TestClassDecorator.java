@@ -30,16 +30,80 @@ public class TestClassDecorator implements TestClass {
         return wrappedObject.invokeAction(name);
     }
 
-    public TestObject invokeAction(String name, TestObject parameter) {
-        return wrappedObject.invokeAction(name, parameter);
-    }
-
     public TestObject newInstance() {
         return wrappedObject.newInstance();
     }
 
     public void setForObject(Naked object) {
         wrappedObject.setForObject(object);
+    }
+
+    public void assertActionExists(String name) {
+        wrappedObject.assertActionExists(name);
+    }
+
+    public void assertActionExists(String name, TestNaked[] parameters) {
+        wrappedObject.assertActionExists(name, parameters);
+    }
+
+    public void assertActionExists(String name, TestNaked parameter) {
+        wrappedObject.assertActionExists(name, parameter);
+    }
+
+    public void assertActionInvisible(String name) {
+        wrappedObject.assertActionInvisible(name);
+    }
+
+    public void assertActionInvisible(String name, TestNaked[] parameters) {
+        wrappedObject.assertActionInvisible(name, parameters);
+    }
+
+    public void assertActionInvisible(String name, TestNaked parameter) {
+        wrappedObject.assertActionInvisible(name, parameter);
+    }
+
+    public void assertActionUnusable(String name) {
+        wrappedObject.assertActionUnusable(name);
+    }
+
+    public void assertActionUnusable(String name, TestNaked[] parameters) {
+        wrappedObject.assertActionUnusable(name, parameters);
+    }
+
+    public void assertActionUnusable(String name, TestNaked parameter) {
+        wrappedObject.assertActionUnusable(name, parameter);
+    }
+
+    public void assertActionUsable(String name) {
+        wrappedObject.assertActionUsable(name);
+    }
+
+    public void assertActionUsable(String name, TestNaked[] parameters) {
+        wrappedObject.assertActionUsable(name, parameters);
+    }
+
+    public void assertActionUsable(String name, TestNaked parameter) {
+        wrappedObject.assertActionUsable(name, parameter);
+    }
+
+    public void assertActionVisible(String name) {
+        wrappedObject.assertActionVisible(name);
+    }
+
+    public void assertActionVisible(String name, TestNaked[] parameters) {
+        wrappedObject.assertActionVisible(name, parameters);
+    }
+
+    public void assertActionVisible(String name, TestNaked parameter) {
+        wrappedObject.assertActionVisible(name, parameter);
+    }
+
+    public TestObject invokeAction(String name, TestNaked[] parameters) {
+        return wrappedObject.invokeAction(name, parameters);
+    }
+
+    public TestObject invokeAction(String name, TestNaked parameter) {
+        return wrappedObject.invokeAction(name, parameter);
     }
 
 }

@@ -2,12 +2,13 @@ package org.nakedobjects.xat;
 
 
 import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ValueParseException;
 import org.nakedobjects.object.reflect.ValueFieldSpecification;
 
 
-public class TestValueImpl extends AbstractTestObject implements TestValue {
+public class TestValueImpl implements TestValue {
     private final NakedObject parent;
     private final ValueFieldSpecification value;
     
@@ -20,7 +21,6 @@ public class TestValueImpl extends AbstractTestObject implements TestValue {
     public void fieldEntry(String value) {
          try {
              this.value.parseAndSave(parent, value);
- //           ((NakedValue) getForObject()).parse(value);
         } catch (ValueParseException e) {
             throw new IllegalActionError("Field value '" + value + "' could not be parsed in field " + this.value.getName());
         } catch (InvalidEntryException e) {
@@ -33,6 +33,13 @@ public class TestValueImpl extends AbstractTestObject implements TestValue {
      */
     public String getTitle() {
         return getForObject().titleString().toString();
+    }
+
+    public Naked getForObject() {
+        return value.get(parent);
+    }
+
+    public void setForObject(Naked object) {
     }
 }
 

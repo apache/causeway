@@ -16,14 +16,98 @@ public interface TestClass extends TestNaked {
      */
     TestObject instances();
 
-    TestObject invokeAction(String name);
-
-    TestObject invokeAction(String name, TestObject parameter);
-
     /**
      * Creates a new instance of this class.
      */
     TestObject newInstance();
+    
+    
+    
+    
+
+    public void assertActionExists(String name);
+
+    public void assertActionExists(String name, TestNaked[] parameters);
+
+    public void assertActionExists(String name, TestNaked parameter);
+
+    /**
+     * Check that the specified object menu item is currently invisible. If it
+     * is visible the test fails.
+     */
+    void assertActionInvisible(String name);
+
+    void assertActionInvisible(String name, TestNaked[] parameters);
+
+    /**
+     * Check that the specified object menu item is currently invisible. If it
+     * is visible the test fails.
+     */
+    void assertActionInvisible(String name, TestNaked parameter);
+
+    /**
+     * Check that the specified object menu item is currently disabled. If it is
+     * enabled the test fails.
+     */
+    void assertActionUnusable(String name);
+
+    void assertActionUnusable(String name, TestNaked[] parameters);
+
+    /**
+     * Check that dragged object cannot be dropped on this object. If it can be
+     * dropped the test fails.
+     */
+    void assertActionUnusable(String name, TestNaked parameter);
+
+    /**
+     * Check that the specified object menu item is currently available. If it
+     * is disabled the test fails.
+     */
+    void assertActionUsable(String name);
+
+    void assertActionUsable(String name, TestNaked[] parameter);
+
+    /**
+     * Check that dragged object can be dropped on this object. If it cannot be
+     * dropped the test fails.
+     */
+    void assertActionUsable(String name, TestNaked parameter);
+
+    /**
+     * Check that the specified object menu item is currently visible. If it is
+     * invisible the test fails.
+     */
+    void assertActionVisible(String name);
+
+    void assertActionVisible(String name, TestNaked[] parameters);
+
+    /**
+     * Check that the specified object menu item is currently visible. If it is
+     * invisible the test fails.
+     */
+    void assertActionVisible(String name, TestNaked parameter);
+
+
+    /**
+     * Invokes this object's zero-parameter action method of the the given name.
+     * This mimicks the right-clicking on an object and subsequent selection of
+     * a menu item.
+      */
+    TestObject invokeAction(String name);
+
+    TestObject invokeAction(String name, TestNaked[] parameter);
+
+    /**
+     * Drop the specified view (object) onto this object and invoke the
+     * corresponding <code>action</code> method. A new view representing the
+     * returned object, if any is returned, from the invoked <code>action</code>
+     * method is returned by this method.
+     * 
+     * @group action
+     */
+    TestObject invokeAction(String name, TestNaked parameter);
+
+
 }
 
 /*

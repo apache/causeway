@@ -14,18 +14,15 @@ import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.security.Session;
 
 
-public class TestClassImpl implements TestClass {
+public class TestClassImpl extends AbstractTestObject implements TestClass {
 
     public static void init(NakedObjectStore objectStore) {}
 
-    private Session session;
     private NakedClass nakedClass;
-    private final TestObjectFactory factory;
 
     public TestClassImpl(Session session, NakedClass cls, TestObjectFactory factory) {
-        this.session = session;
-        nakedClass = cls;
-        this.factory = factory;
+        super(session, factory);
+         nakedClass = cls;
     }
 
     /**
@@ -70,39 +67,6 @@ public class TestClassImpl implements TestClass {
         }
     }
 
-    public TestObject invokeAction(final String name) {
-        ActionSpecification action = nakedClass.forNakedClass().getClassAction(ActionSpecification.USER, name);
-
-        if (action == null) {
-            throw new IllegalActionError("No action " + name + " on the " + nakedClass.getPluralName() + " class.");
-        }
-        NakedObject result = action.execute(nakedClass);
-
-        if (result == null) {
-            return null;
-        } else {
-            return factory.createTestObject(session, result);
-        }
-    }
-
-    public TestObject invokeAction(final String name, TestObject parameter) {
-        NakedObject dropObject = (NakedObject) parameter.getForObject();
-        ActionSpecification action = nakedClass.forNakedClass().getClassAction(ActionSpecification.USER, name,
-                new NakedObjectSpecification[] { dropObject.getSpecification() });
-
-        if (action == null) {
-            throw new IllegalActionError("Can't drop a " + parameter.getForObject().getSpecification().getShortName() + " (for "
-                    + name + ") on the " + nakedClass.getPluralName() + " class.");
-        }
-        NakedObject result = action.execute(nakedClass, dropObject);
-
-        if (result == null) {
-            return null;
-        } else {
-            return factory.createTestObject(session, result);
-        }
-    }
-
     /**
      * Creates a new instance of this class.
      */
@@ -138,7 +102,157 @@ public class TestClassImpl implements TestClass {
     public void setForObject(Naked object) {
         throw new NakedObjectRuntimeException();
     }
+  
+    protected ActionSpecification getAction(NakedObjectSpecification nakedClass, String name) {
+        return nakedClass.getClassAction(ActionSpecification.USER, name);
+    }
+    
+    protected ActionSpecification getAction(NakedObjectSpecification nakedClass, String name,
+            NakedObjectSpecification[] parameterClasses) {
+        return nakedClass.getClassAction(ActionSpecification.USER, simpleName(name), parameterClasses);}
 
+    
+    /*
+    
+
+    public void assertActionExists(final String name) {
+        if (getAction(name) == null) {
+            throw new NakedAssertionFailedError("Field '" + name + "' is not found in " + getForObject());
+        }
+    }
+
+    public void assertActionExists(final String name, final TestNaked[] parameters) {
+        if (getAction(name, parameters) == null) {
+            throw new NakedAssertionFailedError("Field '" + name + "' is not found in " + getForObject());
+        }
+    }
+
+    public void assertActionExists(final String name, final TestNaked parameter) {
+        assertActionExists(name, new TestNaked[] {parameter});
+    }
+
+    public void assertActionInvisible(String name) {
+        assertActionInvisible(name, getAction(name), new TestNaked[0]);
+    }
+
+    private void assertActionInvisible(String name, ActionSpecification action, TestNaked[] parameters) {
+        boolean vetoed = action.getAbout(session, (NakedObject) getForObject(), nakedObjects(parameters)).canAccess().isVetoed();
+        Assert.assertTrue("action '" + name + "' is visible", vetoed);
+    }
+
+    public void assertActionInvisible(String name, TestNaked[] parameters) {
+        assertActionInvisible(name, getAction(name, parameters), parameters);
+    }
+
+    public void assertActionInvisible(String name, TestNaked parameter) {
+        assertActionInvisible(name, new TestNaked[] {parameter});
+    }
+
+    public void assertActionUnusable(String name) {
+        assertActionUnusable(name, getAction(name), new TestNaked[0]);
+    }
+
+    private void assertActionUnusable(String name, ActionSpecification action, TestNaked[] parameters) {
+        Naked[] parameterObjects = nakedObjects(parameters);
+        boolean vetoed = action.getAbout(session, (NakedObject) getForObject(), parameterObjects).canUse().isVetoed();
+        Assert.assertTrue("action '" + name + "' is usable", vetoed);
+    }
+
+    public void assertActionUnusable(String name, TestNaked[] parameters) {
+        assertActionUnusable(name, getAction(name, parameters), parameters);
+    }
+
+    public void assertActionUnusable(String name, TestNaked parameter) {
+        assertActionUnusable(name, new TestNaked[] {parameter});
+    }
+
+    public void assertActionUsable(String name) {
+        assertActionUsable(name, getAction(name), new TestNaked[0]);
+    }
+
+    private void assertActionUsable(String name, ActionSpecification action, final TestNaked[] parameters) {
+        Naked[] paramaterObjects = nakedObjects(parameters);
+        boolean allowed = action.getAbout(session, (NakedObject) getForObject(), paramaterObjects).canUse().isAllowed();
+        assertTrue("action '" + name + "' is unusable", allowed);
+    }
+
+    public void assertActionUsable(String name, TestNaked[] parameters) {
+        assertActionUsable(name, getAction(name, parameters), parameters);
+    }
+
+    public void assertActionUsable(String name, TestNaked parameter) {
+        assertActionUsable(name, new TestNaked[] {parameter});
+    }
+
+    public void assertActionVisible(String name) {
+        assertActionVisible(name, getAction(name), new TestNaked[0]);
+    }
+
+    private void assertActionVisible(String name, ActionSpecification action, TestNaked[] parameters) {
+        boolean allowed = action.getAbout(session, (NakedObject) getForObject(), nakedObjects(parameters)).canAccess()
+                .isAllowed();
+        assertTrue("action '" + name + "' is invisible", allowed);
+    }
+
+    public void assertActionVisible(String name, TestNaked[] parameters) {
+        assertActionVisible(name, getAction(name, parameters), parameters);
+    }
+
+    public void assertActionVisible(String name, TestNaked parameter) {
+        assertActionVisible(name, new TestNaked[] {parameter});
+    }
+
+    
+    
+    
+    
+    
+
+    public ActionSpecification getAction(final String name) {
+        ActionSpecification action = null;
+
+        try {
+            NakedObjectSpecification nakedClass = ((NakedObject) getForObject()).getSpecification();
+            action = nakedClass.getObjectAction(ActionSpecification.USER, name);
+        } catch (NakedObjectSpecificationException e) {
+            throw new NakedAssertionFailedError(e.getMessage());
+        }
+        if (action == null) {
+            throw new NakedAssertionFailedError("Method not found: " + name);
+        }
+        return action;
+    }
+
+    public ActionSpecification getAction(final String name, final TestNaked[] parameters) {
+        final Naked[] parameterObjects = nakedObjects(parameters);
+        final int noParameters = parameters.length;
+        final NakedObjectSpecification[] parameterClasses = new NakedObjectSpecification[noParameters];
+        for (int i = 0; i < noParameters; i++) {
+            parameterClasses[i] = parameterObjects[i].getSpecification();
+        }
+
+        try {
+            NakedObjectSpecification nakedClass = ((NakedObject) getForObject()).getSpecification();
+            ActionSpecification action = nakedClass.getObjectAction(ActionSpecification.USER, simpleName(name), parameterClasses);
+            if (action == null) {
+                String parameterList = "";
+                for (int i = 0; i < noParameters; i++) {
+                    parameterList += (i > 0 ? ", " : "") + parameterClasses[i].getFullName();
+                }
+                throw new NakedAssertionFailedError("Method not found: " + name + "(" + parameterList + ")");
+            }
+            return action;
+        } catch (NakedObjectSpecificationException e) {
+            String targetName = getForObject().getSpecification().getShortName();
+            String parameterList = "";
+            for (int i = 0; i < noParameters; i++) {
+                parameterList += (i > 0 ? ", " : "") + parameterClasses[i];
+            }
+            throw new NakedAssertionFailedError("Can't find action '" + name + "' with parameters (" + parameterList + ") on a "
+                    + targetName);
+        }
+    }
+*/
 }
 
 /*

@@ -1,11 +1,13 @@
 package org.nakedobjects.xat;
 
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ValueParseException;
 
 
-public class ParameterValueImpl extends AbstractTestObject implements TestValue {
+public class ParameterValueImpl implements TestValue {
+    private NakedValue value;
 
     public ParameterValueImpl(NakedValue object) {
         setForObject(object);
@@ -14,7 +16,7 @@ public class ParameterValueImpl extends AbstractTestObject implements TestValue 
     public void fieldEntry(String value) {
         // TODO run validation first
          try {
-            ((NakedValue) getForObject()).parse(value);
+            this.value.parse(value);
         } catch (ValueParseException e) {
             throw new IllegalActionError("Field value " + value + " could not be parsed in " + getForObject());
         }
@@ -25,6 +27,14 @@ public class ParameterValueImpl extends AbstractTestObject implements TestValue 
      */
     public String getTitle() {
         return getForObject().titleString().toString();
+    }
+
+    public Naked getForObject() {
+        return value;
+    }
+
+    public void setForObject(Naked value) {
+        this.value = (NakedValue) value;
     }
 }
 
