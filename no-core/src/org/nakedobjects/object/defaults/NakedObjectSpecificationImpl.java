@@ -29,7 +29,6 @@ import org.apache.log4j.Logger;
 
 
 public final class NakedObjectSpecificationImpl implements NakedObjectSpecification {
-
     private class SubclassList {
         private Vector classes = new Vector();
 
@@ -353,8 +352,9 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         NakedObjectField[] viewFields = new NakedObjectField[fields.length];
         int v = 0;
         for (int i = 0; i < fields.length; i++) {
-            boolean useField = object.canAccess(session, fields[i]);
-
+           // boolean useField = object.canAccess(session, fields[i]);
+            boolean useField = object.getHint(session, fields[i], null).canAccess().isAllowed();
+            
             if (useField) {
                 viewFields[v++] = fields[i];
             }
@@ -589,6 +589,13 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
 
         return s.toString();
     }
+    
+
+    protected void finalize() throws Throwable {
+        super.finalize();
+        LOG.info("finalizing specification " + this);
+    }
+
 }
 
 /*
