@@ -10,7 +10,7 @@ import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.TransactionException;
 import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.control.ActionAbout;
+import org.nakedobjects.object.control.defaults.SimpleActionAbout;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionSpecification.Type;
 import org.nakedobjects.object.security.Session;
@@ -123,7 +123,7 @@ public class JavaAction extends JavaMember implements Action {
 
         try {
             About about;
-            about = new ActionAbout(session, object);
+            about = new SimpleActionAbout(session, object);
 
             if (aboutMethod.getName().equals("aboutActionDefault")) {
                 aboutMethod.invoke(object, new Object[] { about });

@@ -25,8 +25,6 @@
 package org.nakedobjects.object;
 
 
-import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.defaults.AbstractNakedObject;
 import org.nakedobjects.object.defaults.Title;
 import org.nakedobjects.object.defaults.value.TextString;
@@ -35,9 +33,6 @@ import org.nakedobjects.object.defaults.value.WholeNumber;
 
 public abstract class Employer extends AbstractNakedObject {
     private static final long serialVersionUID = 3L;
-    public About aboutCompanyName() {
-        return FieldAbout.READ_ONLY;
-    }
 
     public Employee actionCheck(Employee employee) {
         if (getEmployees().contains(employee)) {

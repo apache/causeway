@@ -3,7 +3,7 @@ package org.nakedobjects.object.defaults.collection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.object.control.defaults.Veto;
 
 import java.util.Vector;
 

@@ -8,8 +8,7 @@ public class MockLoadedObjects implements LoadedObjects {
     private Vector actions = new Vector();
     private boolean isLoaded;
     private Vector loadedObjects;
-    private Object oid;
-
+    
     public NakedObject getLoadedObject(Object oid) {
         if(loadedObjects == null) {
             Assert.fail("No loaded objects");

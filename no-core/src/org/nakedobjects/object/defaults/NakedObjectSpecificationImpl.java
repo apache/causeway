@@ -203,13 +203,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
     }
  
     public final About getClassAbout() {
-        About about = classAbout();
-
-        if (about != null) {
-            return about;
-        } else {
-        	return ClassAbout.INSTANTIABLE;
-        }
+        return null;
     }
 
     public ActionSpecification getClassAction(ActionSpecification.Type type, String name) {

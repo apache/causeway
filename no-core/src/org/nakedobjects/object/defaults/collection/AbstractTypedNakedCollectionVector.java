@@ -4,9 +4,9 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.TypedNakedCollection;
-import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.object.control.defaults.Allow;
+import org.nakedobjects.object.control.defaults.Veto;
 
 
 public abstract class AbstractTypedNakedCollectionVector extends AbstractNakedCollectionVector implements TypedNakedCollection {

@@ -1,6 +1,10 @@
-package org.nakedobjects.object.control;
+package org.nakedobjects.object.control.defaults;
 
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.State;
+import org.nakedobjects.object.control.StatefulObject;
 import org.nakedobjects.object.security.Role;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.object.security.User;
@@ -77,7 +81,7 @@ public abstract class AbstractAbout implements About {
     }
     
     public Permission canAccess() {
-    	return Permission.allow(isAccessible);
+    	return AbstractPermission.allow(isAccessible);
     }
 
     public Permission canUse() {
@@ -104,11 +108,9 @@ public abstract class AbstractAbout implements About {
         return name;
     }
 
-    protected AbstractAbout invisible() {
+    protected void invisible() {
     	concatDebug("unconditionally invisible");
     	vetoAccess();
-
-        return this;
     }
 
     private void concatDebug(String string) {
@@ -116,16 +118,14 @@ public abstract class AbstractAbout implements About {
 		debug.append(string);
 	}
 
-	protected AbstractAbout invisibleToUser(User user) {
+	protected void invisibleToUser(User user) {
 		concatDebug("Invisible to user " + user);
         if (session.getUser() == user) {
             vetoAccess();
         }
-
-        return this;
     }
 
-    protected AbstractAbout invisibleToUsers(User[] users) {
+    protected void invisibleToUsers(User[] users) {
     	concatDebug("Invisible to users ");
     	for (int i = 0; i < users.length; ++i) {
     		debug.append(i > 0 ? ". " : "" + users[i].getName());
@@ -137,8 +137,6 @@ public abstract class AbstractAbout implements About {
             	break;
             }
         }
-
-        return this;
     }
 
     public void setDescription(String description) {
@@ -157,22 +155,18 @@ public abstract class AbstractAbout implements About {
     }
 
     //	Absolute methods
-    protected AbstractAbout unusable(String reason) {
+    protected void unusable(String reason) {
     	concatDebug("Unconditionally unusable");
         vetoUse(reason);
-
-        return this;
     }
 
-    protected AbstractAbout unusableByUser(User user) {
+    protected void unusableByUser(User user) {
         if (session.getUser() == user) {
             vetoUse("Not available to current user");
         }
-
-        return this;
     }
 
-    protected AbstractAbout unusableByUsers(User[] users) {
+    protected void unusableByUsers(User[] users) {
         boolean validUser = true;
 
         for (int i = 0; i < users.length; ++i) {
@@ -185,20 +179,16 @@ public abstract class AbstractAbout implements About {
         if (!validUser) {
             vetoUse("Not available to current user");
         }
-
-        return this;
     }
 
-    protected AbstractAbout unusableInState(State state) {
+    protected void unusableInState(State state) {
     	concatDebug("Unusable in state " + state);
     	if (stateIsSameAs(state)) {
             vetoUse("Unusable when object is in its current State");
         }
-
-        return this;
     }
 
-    protected AbstractAbout unusableInStates(State[] states) {
+    protected void unusableInStates(State[] states) {
         boolean inUsableState = true;
         String listOfValidStates = new String();
 
@@ -220,31 +210,25 @@ public abstract class AbstractAbout implements About {
             vetoUse("Unusable when object is in any of these states: " +
                 listOfValidStates);
         }
-
-        return this;
     }
 
     //	Business logic methods
-    protected AbstractAbout unusableOnCondition(boolean conditionMet,
+    protected void unusableOnCondition(boolean conditionMet,
     	String reasonNotMet) {
     	concatDebug("Conditionally unusable " + reasonNotMet);
     	if (conditionMet) {
             vetoUse(reasonNotMet);
         }
-
-        return this;
     }
 
-    protected AbstractAbout usableOnlyByRole(Role role) {
+    protected void usableOnlyByRole(Role role) {
     	concatDebug("Usable only for role " + role.getName());
     	if (!currentUserHasRole(role)) {
             vetoUse("User does not have the appropriate role");
         }
-
-        return this;
     }
 
-    protected AbstractAbout usableOnlyByRoles(Role[] roles) {
+    protected void usableOnlyByRoles(Role[] roles) {
         boolean validRole = false;
 
         for (int i = 0; i < roles.length; ++i) {
@@ -258,19 +242,15 @@ public abstract class AbstractAbout implements About {
         if (!validRole) {
             vetoUse("User does not have the appropriate role");
         }
-
-        return this;
     }
 
-    protected AbstractAbout usableOnlyByUser(User user) {
+    protected void usableOnlyByUser(User user) {
         if (session.getUser() != user) {
             vetoUse("Not available to current user");
         }
-
-        return this;
     }
 
-    protected AbstractAbout usableOnlyByUsers(User[] users) {
+    protected void usableOnlyByUsers(User[] users) {
         boolean validUser = false;
 
         for (int i = 0; i < users.length; ++i) {
@@ -284,21 +264,17 @@ public abstract class AbstractAbout implements About {
         if (!validUser) {
             vetoUse("Not available to current user");
         }
-
-        return this;
     }
 
     //	State based methods
-    protected AbstractAbout usableOnlyInState(State state) {
+    protected void usableOnlyInState(State state) {
         if (!stateIsSameAs(state)) {
             vetoUse("Usable only when object is in the state: " +
                 state.titleString());
         }
-
-        return this;
     }
 
-    protected AbstractAbout usableOnlyInStates(State[] states) {
+    protected void usableOnlyInStates(State[] states) {
         boolean inUsableState = false;
         StringBuffer listOfValidStates = new StringBuffer();
 
@@ -317,8 +293,6 @@ public abstract class AbstractAbout implements About {
             vetoUse("Usable only when object is in any of these states: " +
                 listOfValidStates);
         }
-
-        return this;
     }
 
     protected void vetoAccess() {
@@ -336,11 +310,11 @@ public abstract class AbstractAbout implements About {
     }
 
     //	Role based methods
-    protected AbstractAbout visibleOnlyToRole(Role role) {
-    	return visibleOnlyToRoles(new Role[] {role});
+    protected void visibleOnlyToRole(Role role) {
+    	visibleOnlyToRoles(new Role[] {role});
     }
 
-    protected AbstractAbout visibleOnlyToRoles(Role[] roles) {
+    protected void visibleOnlyToRoles(Role[] roles) {
     	concatDebug("Visible only to roles ");
     	
     	boolean validRole = false;
@@ -357,28 +331,25 @@ public abstract class AbstractAbout implements About {
         if (!validRole) {
             vetoAccess();
         }
-
-        return this;
     }
 
     //	User based methods
-    protected AbstractAbout visibleOnlyToUser(User user) {
-        return visibleOnlyToUsers(new User[] {user});
+    protected void visibleOnlyToUser(User user) {
+        visibleOnlyToUsers(new User[] {user});
     }
 
-    protected AbstractAbout visibleOnlyToUsers(User[] users) {
+    protected void visibleOnlyToUsers(User[] users) {
         for (int i = 0; i < users.length; ++i) {
         	if(users[i] == null) {
         		continue;
         	}
         	
         	if(session.isCurrentUser(users[i])) {
-        		return this;
+        		return;
         	}
         }
 
         vetoAccess();
-        return this;
     }
 }
 

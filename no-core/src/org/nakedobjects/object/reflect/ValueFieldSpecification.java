@@ -9,6 +9,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Validity;
+import org.nakedobjects.object.control.defaults.SimpleValidity;
 import org.nakedobjects.object.security.Session;
 
 
@@ -54,7 +55,7 @@ public class ValueFieldSpecification extends FieldSpecification {
     
         String originalValue = value.titleString().toString();
         delegatedTo.parseValue(value, textEntry);
-        Validity validity = new Validity(value, getLabel(null, inObject));
+        Validity validity = new SimpleValidity(value, getLabel(null, inObject));
         delegatedTo.isValid(inObject, validity);
         if(validity.isValid()) {  
             delegatedTo.saveValue(inObject, value.saveString());

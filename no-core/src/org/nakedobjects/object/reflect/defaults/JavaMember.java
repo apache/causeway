@@ -2,8 +2,8 @@ package org.nakedobjects.object.reflect.defaults;
 
 
 import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.defaults.Allow;
 
 import java.lang.reflect.Method;
 

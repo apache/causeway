@@ -10,6 +10,7 @@ import org.nakedobjects.object.ValueParseException;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.control.Validity;
+import org.nakedobjects.object.control.defaults.SimpleFieldAbout;
 import org.nakedobjects.object.reflect.NakedObjectApplicationException;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.ValueField;
@@ -36,7 +37,7 @@ public class JavaValueField extends JavaField implements ValueField {
             Method aboutMethod = getAboutMethod();
             
             try {
-                FieldAbout about = new FieldAbout(session, object);
+                FieldAbout about = new SimpleFieldAbout(session, object);
                 aboutMethod.invoke(object, new Object[] { about });
                 return about; 
             } catch (InvocationTargetException e) {

@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.FieldAbout;
+import org.nakedobjects.object.control.defaults.SimpleFieldAbout;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.security.Session;
 
@@ -34,7 +35,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOneAssoci
 		
 		Class parameter = setMethod.getParameterTypes()[0];
 		if(associate != null && !parameter.isAssignableFrom(associate.getClass())) {
-			FieldAbout about = new FieldAbout(session, object);
+			FieldAbout about = new SimpleFieldAbout(session, object);
 			about.unmodifiable("Invalid type: field must be set with a " + NakedObjectSpecificationLoader.getInstance().loadSpecification(parameter.getName()));
 			return about;
 		}
@@ -44,7 +45,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOneAssoci
         }
 
         try {
-        		FieldAbout about = new FieldAbout(session, object);
+        		FieldAbout about = new SimpleFieldAbout(session, object);
         		Object[] parameters;
                 if(aboutMethod.getParameterTypes().length == 2) {
         		    parameters = new Object[] { about, associate };

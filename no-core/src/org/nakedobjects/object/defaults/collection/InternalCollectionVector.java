@@ -5,7 +5,7 @@ import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.object.control.defaults.Veto;
 import org.nakedobjects.object.defaults.Title;
 
 

@@ -1,69 +1,39 @@
 package org.nakedobjects.object.control;
 
-import org.nakedobjects.object.NakedValue;
+public interface Validity {
+    void cannotBeEmpty();
 
+    String getReason();
 
-public class Validity {
-    private String fieldName;
-    private StringBuffer unusableReason;
-    private NakedValue value;
+    void invalid(String reason);
 
-    public Validity(NakedValue value, String fieldName) {
-        this.value = value;
-        this.fieldName = fieldName;
-    }
+    void invalidOnCondition(boolean condition, String reason);
 
-    public void cannotBeEmpty() {
-        invalidOnCondition(value.isEmpty(), fieldName + " must have a value");
-    }
+    void invalidUnlessCondition(boolean condition, String reason);
 
-    public String getReason() {
-        return unusableReason.toString();
-    }
-
-    public void invalid(String reason) {
-        if (unusableReason == null) {
-            unusableReason = new StringBuffer();
-        } else {
-            unusableReason.append("; ");
-        }
-
-        unusableReason.append(reason);
-    }
-
-    public void invalidOnCondition(boolean condition, String reason) {
-        if (condition) {
-            invalid(reason);
-        }
-    }
-
-    public void invalidUnlessCondition(boolean condition, String reason) {
-        if (!condition) {
-            invalid(reason);
-        }
-    }
-
-    public boolean isValid() {
-        return unusableReason == null;
-    }
+    boolean isValid();
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2004 Naked Objects Group Ltd
- * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with this program; if
- * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- * 02111-1307 USA
- * 
- * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
- * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
+ Naked Objects - a framework that exposes behaviourally complete
+ business objects directly to the user.
+ Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+ The authors can be contacted via www.nakedobjects.org (the
+ registered address of Naked Objects Group is Kingsway House, 123 Goldworth
+ Road, Woking GU21 1NR, UK).
  */

@@ -1,48 +1,41 @@
-package org.nakedobjects.object.control;
+package org.nakedobjects.object.control.defaults;
 
-import org.nakedobjects.object.security.Role;
-import org.nakedobjects.object.security.User;
+/**
+ * An instance of this type is used to allow something.
+ */
+public class Allow extends AbstractPermission {
 
+    /**
+     * An Allow object with no reason.
+     */
+    public final static Allow DEFAULT = new Allow();
 
-public interface ActionAbout extends About {
-    void changeNameIfUsable(String name);
+    public Allow() {
+        super();
+    }
 
-    void invisible();
+    public Allow(String reason) {
+        super(reason);
+    }
 
-    void invisibleToUser(User user);
+    /**
+     * Returns true.
+     */
+    public final boolean isAllowed() {
+        return true;
+    }
 
-    void invisibleToUsers(User[] users);
-
-    void setDescription(String string);
-
-    void setName(String string);
-
-    void unusable();
-
-    void unusable(String reason);
-
-    void unusableInState(State state);
-
-    void unusableInStates(State[] states);
-
-    void unusableOnCondition(boolean conditionMet, String reasonNotMet);
-
-    void usableOnlyInState(State state);
-
-    void usableOnlyInStates(State[] states);
-
-    void visibleOnlyToRole(Role role);
-
-    void visibleOnlyToRoles(Role[] roles);
-
-    void visibleOnlyToUser(User user);
-
-    void visibleOnlyToUsers(User[] users);
+    /**
+     * Returns false.
+     */
+    public final boolean isVetoed() {
+        return false;
+    }
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

@@ -7,10 +7,10 @@ import org.nakedobjects.object.security.Session;
 /**
  An About for contolling the use of fields within a NakedObject.
  */
-public class ClassAbout extends AbstractAbout {
+public class ClassAbout {
 
     public ClassAbout(Session session, NakedObject object) {
-        super(session, object);
+     //   super(session, object);
     }
 
     /**

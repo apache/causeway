@@ -10,7 +10,6 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NotPersistableException;
 import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.defaults.value.TextString;
 
@@ -62,24 +61,7 @@ public class SimpleNakedClass extends AbstractNakedObject implements NakedClass 
     public void aboutActionNewInstance(ActionAbout about) {
        	about.setDescription("Create a new " + getSingularName() + " instance");
     	about.setName("New " + getSingularName());
-  // TODO Refactor  	about.unusableOnCondition(! getClassAbout().canUse().isAllowed(), "????");
      }
-
-    public About aboutExplorationActionClass() {
-        return ActionAbout.DISABLE;
-    }
-
-    public About aboutExplorationActionClone() {
-        return ActionAbout.DISABLE;
-    }
-
-    public About aboutExplorationActionDestroyObject() {
-        return ActionAbout.DISABLE;
-    }
-
-    public About aboutExplorationActionMakePersistent() {
-        return ActionAbout.DISABLE;
-    }
 
 	public FastFinder actionFind() {
 		FastFinder find = new FastFinder();

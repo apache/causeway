@@ -25,8 +25,6 @@
 package org.nakedobjects.object;
 
 
-import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.defaults.AbstractNakedObject;
 import org.nakedobjects.object.defaults.Title;
 
@@ -49,10 +47,6 @@ public class GenericTestObject extends AbstractNakedObject {
     }
     private ContactTestObject customer;
     private final InternalCollection products = createInternalCollection(ProductTestObject.class);
-
-     public About aboutActionTest() {
-        return ActionAbout.enable(customer != null);
-    }
 
     public NakedObject actionTest() {
         return customer;

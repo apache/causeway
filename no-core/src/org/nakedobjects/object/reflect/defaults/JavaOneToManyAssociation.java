@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.FieldAbout;
+import org.nakedobjects.object.control.defaults.SimpleFieldAbout;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.security.Session;
 
@@ -57,7 +58,7 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyAsso
         if (hasAbout()) {
             Method aboutMethod = getAboutMethod();
             try {
-                FieldAbout about = new FieldAbout(session, object);
+                FieldAbout about = new SimpleFieldAbout(session, object);
                 Object[] parameters;
                 if (aboutMethod.getParameterTypes().length == 3) {
                     parameters = new Object[] { about, element, new Boolean(add) };

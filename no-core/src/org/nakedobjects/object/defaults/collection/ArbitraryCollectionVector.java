@@ -3,7 +3,8 @@ package org.nakedobjects.object.defaults.collection;
 import org.nakedobjects.object.ArbitraryNakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.object.control.defaults.AbstractPermission;
+import org.nakedobjects.object.control.defaults.Veto;
 import org.nakedobjects.object.defaults.value.TextString;
 
 
@@ -26,12 +27,12 @@ public class ArbitraryCollectionVector extends AbstractNakedCollectionVector imp
         if (object == this) {
             return new Veto("Cannot add self");
         } else {
-            return Permission.create(!contains(object), "", "Cannot add a duplicate object");
+            return AbstractPermission.create(!contains(object), "", "Cannot add a duplicate object");
         }
     }
 
     public Permission canRemove(NakedObject object) {
-        return Permission.create(contains(object), "", "Object is not in collection");
+        return AbstractPermission.create(contains(object), "", "Object is not in collection");
     }
 
     public TextString getName() {

@@ -1,48 +1,38 @@
-package org.nakedobjects.object.control;
+package org.nakedobjects.object.control.defaults;
 
-import org.nakedobjects.object.security.Role;
-import org.nakedobjects.object.security.User;
+public class Veto extends AbstractPermission {
 
+    /**
+     * An Veto object with no reason.
+     */
+    public final static Veto DEFAULT = new Veto();
 
-public interface ActionAbout extends About {
-    void changeNameIfUsable(String name);
+    public Veto() {
+        super();
+    }
 
-    void invisible();
+    public Veto(String reason) {
+        super(reason);
+    }
 
-    void invisibleToUser(User user);
+    /**
+     * Returns false.
+     */
+    public final boolean isAllowed() {
+        return false;
+    }
 
-    void invisibleToUsers(User[] users);
-
-    void setDescription(String string);
-
-    void setName(String string);
-
-    void unusable();
-
-    void unusable(String reason);
-
-    void unusableInState(State state);
-
-    void unusableInStates(State[] states);
-
-    void unusableOnCondition(boolean conditionMet, String reasonNotMet);
-
-    void usableOnlyInState(State state);
-
-    void usableOnlyInStates(State[] states);
-
-    void visibleOnlyToRole(Role role);
-
-    void visibleOnlyToRoles(Role[] roles);
-
-    void visibleOnlyToUser(User user);
-
-    void visibleOnlyToUsers(User[] users);
+    /**
+     * Returns true.
+     */
+    public final boolean isVetoed() {
+        return true;
+    }
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under
