@@ -1,0 +1,54 @@
+
+==== Components ====
+
+
+**ConfigurationFactory** - place to get the Configuration object
+
+**Configuration** - configuration lookup mechanism; provides configuration values give a name
+
+**AboutNakedObjects** - details the version , date and build ID of the framework
+
+**SplashWindow** - splash window for use during start up
+
+**JavaBusinessObjectContainer** - the container for the business object within the application to be used with the framework
+
+
+**UpdateNotifier**
+
+**LoadedObjects**
+
+**ObjectFactory** - takes care of creating the business objects, and injecting in any components by the business objects
+-each reflector provides this
+
+**ObjectStore**
+
+**OidGenerator**
+
+**NakedObjectManager** - manages the instances and lifecycle of the naked objects within the framework
+- a proxy version is used for distribution
+
+**NakedObjectSpecificationLoader** - mechanism to load up NakedObjectSpecifications for each class of business object
+
+**ReflectionFactory** - creates Action, OneToOneAssociation, and OneToManyAssociation objects with a series of decorated adapters that take care of accesing the business object, distribution requests over the network, apply securiity checks, adding help, localisation, etc.
+
+**ReflectorFactory** - investigate what properties and method a business object has available and provides the mechanisms to access those methods.  
+
+**NakedObjectContext** - to be removed?
+
+**ClientDistribution**
+
+**Server Distribution**
+
+
+**NakedClass** - an internal representation of a business object class
+
+**ApplicationContext** - an internal naked object providing a set of classes and objects that makes up an application
+
+**ViewerFrame** - GUI only - a frame for the viewer
+**Viewer** - a grahical viewer
+**InteractionSpy**
+**ViewerAssistant**
+
+
+Exploration
+ExplorationSetup

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE project [
+	<!ENTITY properties SYSTEM "file:../build-templates/properties.xml">
+	<!ENTITY targets SYSTEM "file:../build-templates/targets.xml">
+]>
+
+<project name="Naked Object Containers" default="all" basedir=".">
+	<description>Prevalyer style object store that journals all changes to the objects, and captures a snapshot
+		at shutdown.</description>
+
+	&properties;
+
+	<property name="component" value="no-containers"/>
+	
+	<!-- classpath -->
+	<path id="libs.internal">
+		<fileset dir="${no-core.release.dir}">
+			<include name="no-core.jar"/>
+			<include name="no-core-test.jar"/>
+		</fileset>
+		<!--fileset dir="../no-distribution/build/release">
+			<include name="no-distribution.jar"/>
+			<include name="no-distribution-test.jar"/>
+		</fileset-->
+	</path>
+
+	&targets;	
+</project>
+
+
