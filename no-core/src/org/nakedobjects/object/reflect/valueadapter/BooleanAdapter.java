@@ -2,9 +2,10 @@ package org.nakedobjects.object.reflect.valueadapter;
 
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.value.BooleanValue;
 
-public class BooleanPrimitiveAdapter extends AbstractNakedValue implements BooleanValue {
+public class BooleanAdapter extends AbstractNakedValue implements BooleanValue {
     private boolean flag;
     
     public boolean isSet() {
@@ -31,7 +32,7 @@ public class BooleanPrimitiveAdapter extends AbstractNakedValue implements Boole
         } else if("false".startsWith(text.toLowerCase())) {
             reset();
         } else {
-            throw new InvalidEntryException();
+            throw new TextEntryParseException();
         }
     }
 
