@@ -27,7 +27,7 @@ public class GetInstancesForCriteria extends AbstractGetInstances {
 		
 		Vector instances;
 		try {
-			instances = objectManager.getInstances(cls, pattern);
+			instances = objectManager.getInstances(cls, pattern, null);
 			setInstances(instances);
 		} catch (UnsupportedFindException e) {
 			response = e;

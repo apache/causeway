@@ -24,9 +24,17 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
 
     public abstract void abortTransaction();
 
-    public TypedNakedCollection allInstances(NakedObjectSpecification nakedClass, boolean includeSubclasses) {
-        NakedObject[] instances = getInstances(nakedClass, includeSubclasses);
-        TypedNakedCollection collection = new InstanceCollectionVector(nakedClass, instances);
+    public TypedNakedCollection allInstances(NakedObjectSpecification specification) {
+        return allInstances(specification, false);
+    }
+    
+    public TypedNakedCollection allInstances(String className) {
+        return allInstances(className, false);
+    }
+    
+    public TypedNakedCollection allInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
+        NakedObject[] instances = getInstances(specification, includeSubclasses);
+        TypedNakedCollection collection = new InstanceCollectionVector(specification, instances);
         collection.setContext(getContext());
         return collection;
     }
@@ -36,18 +44,18 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
         return allInstances(cls, includeSubclasses);
     }
 
-    public NakedObject createInstance(NakedObjectSpecification nakedClass) {
+    public NakedObject createInstance(NakedObjectSpecification specification) {
         NakedObject object;
         try {
-            object = (NakedObject) nakedClass.acquireInstance();
+            object = (NakedObject) specification.acquireInstance();
             object.setContext(getContext());
             makePersistent(object);
             object.created();
             objectChanged(object);
         } catch (NakedObjectRuntimeException e) {
-            object = getContext().getObjectManager().generatorError("Failed to create instance of " + nakedClass, e);
+            object = getContext().getObjectManager().generatorError("Failed to create instance of " + specification, e);
 
-            LOG.error("Failed to create instance of " + nakedClass, e);
+            LOG.error("Failed to create instance of " + specification, e);
         }
         return object;
     }
@@ -84,19 +92,19 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
     
     public TypedNakedCollection findInstances(NakedObject pattern, boolean includeSubclasses) {
         NakedObject[] instances = getInstances(pattern, includeSubclasses);
-        NakedObjectSpecification nakedClass = pattern.getSpecification();
-        TypedNakedCollection collection = new InstanceCollectionVector(nakedClass, instances);
+        NakedObjectSpecification specification = pattern.getSpecification();
+        TypedNakedCollection collection = new InstanceCollectionVector(specification, instances);
         collection.setContext(getContext());
         return collection;
     }
 
-    public TypedNakedCollection findInstances(NakedObjectSpecification nakedClass, String searchTerm) {
-        return findInstances(nakedClass, searchTerm, false);
+    public TypedNakedCollection findInstances(NakedObjectSpecification specification, String searchTerm) {
+        return findInstances(specification, searchTerm, false);
     }
     
-    public TypedNakedCollection findInstances(NakedObjectSpecification nakedClass, String searchTerm, boolean includeSubclasses) {
-        NakedObject[] instances = getInstances(nakedClass, searchTerm, includeSubclasses);
-        TypedNakedCollection collection = new InstanceCollectionVector(nakedClass, instances);
+    public TypedNakedCollection findInstances(NakedObjectSpecification specification, String searchTerm, boolean includeSubclasses) {
+        NakedObject[] instances = getInstances(specification, searchTerm, includeSubclasses);
+        TypedNakedCollection collection = new InstanceCollectionVector(specification, instances);
         collection.setContext(getContext());
         return collection;
     }
@@ -108,12 +116,16 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
     public TypedNakedCollection findInstances(InstancesCriteria criteria, boolean includeSubclasses)
             throws UnsupportedFindException {
         NakedObject[] instances = getInstances(criteria, includeSubclasses);
-        NakedObjectSpecification nakedClass = criteria.getSpecification();
-        TypedNakedCollection collection = new InstanceCollectionVector(nakedClass, instances);
+        NakedObjectSpecification specification = criteria.getSpecification();
+        TypedNakedCollection collection = new InstanceCollectionVector(specification, instances);
         collection.setContext(getContext());
         return collection;
     }
 
+    public TypedNakedCollection findInstances(String className, String searchTerm) throws UnsupportedFindException {
+        return findInstances(className, searchTerm, false);
+    }
+    
     public TypedNakedCollection findInstances(String className, String searchTerm, boolean includeSubclasses) throws UnsupportedFindException {
         NakedObjectSpecification cls = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
         return findInstances(cls, searchTerm, includeSubclasses);
@@ -166,7 +178,6 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
 
     public void shutdown() {}
 }
-
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
  * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group

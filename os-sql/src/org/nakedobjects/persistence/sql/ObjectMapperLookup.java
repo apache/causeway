@@ -6,6 +6,7 @@ import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
@@ -24,7 +25,7 @@ import org.apache.log4j.Logger;
 
 public class ObjectMapperLookup {
     private static final Logger LOG = Logger.getLogger(ObjectMapperLookup.class);
-    private static final NakedObjectSpecification nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(NakedObjectSpecification.class.getName());
+    private static final NakedObjectSpecification nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(NakedClass.class.getName());
     private final Hashtable mappers = new Hashtable();
     private final LoadedObjects loadedObjects;
     private ObjectMapperFactory mapperFactory;
@@ -98,13 +99,13 @@ public class ObjectMapperLookup {
     public void init() throws ConfigurationException, ComponentException, SqlObjectStoreException {
         String BASE_NAME = SqlObjectStore.BASE_NAME;
         
-        try {
+/*        try {
             setNakedClassMapper((NakedClassMapper) ComponentLoader.loadComponent(BASE_NAME + ".class-mapper",
                     NakedClassMapper.class));
         } catch (ObjectStoreException e) {
             throw new ComponentException("Failed to set up class mapper", e);
         }
-
+*/
         Properties properties = Configuration.getInstance().getPropertySubset(BASE_NAME + ".mapper");
         Enumeration e = properties.keys();
         while (e.hasMoreElements()) {

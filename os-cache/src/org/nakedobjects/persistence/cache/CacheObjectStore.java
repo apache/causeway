@@ -1,5 +1,6 @@
 package org.nakedobjects.persistence.cache;
 
+import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedClass;
@@ -41,7 +42,7 @@ import org.apache.log4j.Category;
 // TODO empty naked values won't work properly (i think)
 public class CacheObjectStore implements NakedObjectStore {
     private final static Category LOG = Category.getInstance(CacheObjectStore.class);
-    private String directoryPath = "tmp/";
+    private String directoryPath = "tmp/test-cache";
     private ObjectOutputStream journal;
     private String journalFilename = "journal";
     private String PADDING = "00000000";
@@ -52,6 +53,10 @@ public class CacheObjectStore implements NakedObjectStore {
     private Hashtable objectSets;
 
     CacheObjectStore(String directory) {
+        setDirectory(directory);
+    }
+    
+    public void setDirectory(String directory) {
         File dir = new File(directory);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -59,7 +64,10 @@ public class CacheObjectStore implements NakedObjectStore {
         directoryPath = directory;
     }
 
-    public CacheObjectStore() {}
+    public CacheObjectStore() {
+        String dir = Configuration.getInstance().getString("cache-object-store.directory", "tmp/cache-data");
+        setDirectory(dir);
+    }
 
     public void abortTransaction() {}
 
@@ -244,9 +252,14 @@ public class CacheObjectStore implements NakedObjectStore {
     }
     
     public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
-//        Instances instances = instances(NakedClass.class.getName());
-
-        throw new NotImplementedException();
+        Enumeration instances = instances(NakedClass.class.getName()).instances();
+        while(instances.hasMoreElements()) {
+            NakedClass instance = (NakedClass) instances.nextElement();
+            if(instance.getFullName().equals(name)) {
+                return instance;
+            }
+        }
+        return null;
     }
 
     public boolean hasInstances(NakedObjectSpecification cls, boolean includeSubclasses) {

@@ -26,7 +26,7 @@ public class GetInstancesForPattern extends AbstractGetInstances {
 		NakedObjectManager objectManager = context.getObjectManager();
 		Vector instances;
 		try {
-			instances = objectManager.getInstances(pattern);
+			instances = objectManager.getInstances(pattern, null);
 			setInstances(instances);
 		} catch (UnsupportedFindException e) {
 			response = e;

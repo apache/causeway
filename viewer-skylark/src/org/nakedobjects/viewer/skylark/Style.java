@@ -13,7 +13,7 @@ public class Style {
     public static final Color DISABLED_MENU = new Color("menu.disabled", "#666666");
 
     public static final Color IDENTIFIED = new Color("identified", "#0099ff");
-    public static final Color INVALID = new Color("invalid", "#990000");
+    public static final Color INVALID = new Color("invalid", "#bb6666");
     public static final Text LABEL = new Text("label", "SansSerif--10");
     public static final Text MENU = new Text("menu", "SansSerif--12");
     public static final Text NORMAL = new Text("normal", "SansSerif--12");

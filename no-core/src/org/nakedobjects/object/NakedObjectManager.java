@@ -6,7 +6,11 @@ import org.nakedobjects.utility.StartupException;
 public interface NakedObjectManager {
     void abortTransaction();
 
-    TypedNakedCollection allInstances(NakedObjectSpecification nakedClass, boolean includeSubclasses);
+    TypedNakedCollection allInstances(NakedObjectSpecification nakedClass);
+
+    TypedNakedCollection allInstances(String className);
+
+   TypedNakedCollection allInstances(NakedObjectSpecification nakedClass, boolean includeSubclasses);
 
     TypedNakedCollection allInstances(String className, boolean includeSubclasses);
 
@@ -33,13 +37,19 @@ public interface NakedObjectManager {
 
     void endTransaction();
 
+    TypedNakedCollection findInstances(NakedObject pattern);
+
     TypedNakedCollection findInstances(NakedObject pattern, boolean includeSubclasses);
 
+    TypedNakedCollection findInstances(NakedObjectSpecification nakedClass, String searchTerm);
+    
     TypedNakedCollection findInstances(NakedObjectSpecification nakedClass, String searchTerm, boolean includeSubclasses);
 
     TypedNakedCollection findInstances(InstancesCriteria criteria, boolean includeSubclasses) throws UnsupportedFindException;
 
     TypedNakedCollection findInstances(String className, String searchTerm, boolean includeSubclasses) throws UnsupportedFindException;
+
+    TypedNakedCollection findInstances(String className, String searchTerm) throws UnsupportedFindException;
 
     NakedClass getNakedClass(NakedObjectSpecification specification);
 
