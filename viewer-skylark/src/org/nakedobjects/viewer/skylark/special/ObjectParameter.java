@@ -2,7 +2,9 @@ package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.defaults.AbstractPermission;
 import org.nakedobjects.object.control.defaults.Allow;
 import org.nakedobjects.viewer.skylark.ActionParameter;
 import org.nakedobjects.viewer.skylark.Location;
@@ -16,10 +18,12 @@ import org.nakedobjects.viewer.skylark.basic.ActionContent;
 
 public class ObjectParameter extends ActionParameter implements ObjectContent {
     private final NakedObject object;
+    private final NakedObjectSpecification type;
 
-    public ObjectParameter(String name, Naked naked, ActionContent content, int parameter) {
+    public ObjectParameter(String name, Naked naked, ActionContent content, NakedObjectSpecification type, int parameter) {
         super(name, content, parameter);
         object = (NakedObject) naked;
+        this.type = type;
     }
 
     public Permission canClear() {
@@ -27,7 +31,8 @@ public class ObjectParameter extends ActionParameter implements ObjectContent {
     }
 
     public Permission canSet(NakedObject dragSource) {
-        return Allow.DEFAULT;
+        boolean correctType = dragSource.getSpecification().isOfType(type);
+        return AbstractPermission.allow(correctType);
     }
 
     public void clear() {

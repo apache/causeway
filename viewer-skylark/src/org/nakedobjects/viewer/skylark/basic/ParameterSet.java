@@ -57,7 +57,7 @@ public class ParameterSet {
             if (type(i).isValue()) {
                 parameters[i] = new ValueParameter(label, values[i], parent, i);
             } else {
-                parameters[i] = new ObjectParameter(label, values[i], parent, i);
+                parameters[i] = new ObjectParameter(label, values[i], parent, action.parameters()[i], i);
             }
         }
 

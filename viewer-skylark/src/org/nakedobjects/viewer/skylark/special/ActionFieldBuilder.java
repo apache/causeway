@@ -87,7 +87,7 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
                     ObjectParameter parameter = (ObjectParameter) subview.getContent();
                     String label = parameter.getName();
 
-                    ObjectParameter pa = new ObjectParameter(label, value, actionContent, i);
+                    ObjectParameter pa = new ObjectParameter(label, value, actionContent, actionContent.getParameterSet().type(i), i);
                     View fieldView = createFieldView(view, pa);
                     view.replaceView(subview, decorateSubview(new LabelBorder(label, fieldView)));
                 }
