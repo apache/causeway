@@ -379,7 +379,7 @@ public class Time extends Magnitude {
     }
 
     public void setValue(Time time) {
-        if (time == null) {
+        if (time == null || time.date == null) {
             date = null;
         } else {
             this.date = new Date(time.date.getTime());
