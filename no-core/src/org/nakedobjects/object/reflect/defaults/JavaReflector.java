@@ -7,7 +7,6 @@ import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.control.ClassAbout;
 import org.nakedobjects.object.control.FieldAbout;
