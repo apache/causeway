@@ -16,11 +16,11 @@ public class SimpleClassAbout extends AbstractAbout implements ClassAbout {
         super(session, object);
     }
 
-    public void uninstantiatable() {
+    public void uninstantiable() {
         super.unusable("");
     }
 
-    public void uninstantiatable(String reason) {
+    public void uninstantiable(String reason) {
         super.unusable(reason);
     }
 

@@ -5,9 +5,9 @@ import org.nakedobjects.object.security.User;
 
 
 public interface ClassAbout extends About {
-    void uninstantiatable();
+    void uninstantiable();
 
-    void uninstantiatable(String reason);
+    void uninstantiable(String reason);
 
     void instantiableOnlyByRole(Role role);
 
