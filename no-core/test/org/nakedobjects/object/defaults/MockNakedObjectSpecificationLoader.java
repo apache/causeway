@@ -1,5 +1,6 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.utility.NotImplementedException;
@@ -14,16 +15,19 @@ public class MockNakedObjectSpecificationLoader extends NakedObjectSpecification
     }
 
     public NakedObjectSpecification loadSpecification(String name) {
-        return nextSpec();
+        return nextSpec(name);
     }
 
     public NakedObjectSpecification loadSpecification(Class cls) {
-        return nextSpec();
+        return nextSpec(cls.getName());
     }
 
-    private NakedObjectSpecification nextSpec() {
+    private NakedObjectSpecification nextSpec(String name) {
+        if(specs.isEmpty()) {
+            throw new NakedObjectRuntimeException("No spec for " + name);
+        }
         NakedObjectSpecification object = (NakedObjectSpecification) specs.firstElement();
-  //      specs.removeElementAt(0);
+        specs.removeElementAt(0);
         return object;
     }
 
