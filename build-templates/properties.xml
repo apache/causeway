@@ -1,0 +1,27 @@
+	<property file="../naked-objects/build.properties"/>
+
+	<property name="build.version" value="0_0_0"/>
+	<property name="zip.dir" value="."/>
+
+	<!-- distribution directories -->
+	<property name="dist.dir" value="dist"/>
+	<property name="dist.src.dir" value="${dist.dir}/src"/>
+	<property name="dist.lib.dir" value="${dist.dir}/lib"/>
+	<property name="dist.doc.dir" value="${dist.dir}/docs"/>
+	<property name="dist.conf.dir" value="${dist.dir}/conf"/>
+	<property name="dist.icon.dir" value="${dist.dir}/icon-library"/>
+	<property name="dist.example.dir" value="${dist.dir}/examples"/>
+	<!-- allow compliation for Java 1.2 & with debug -->
+	<property name="compile.debug" value="no"/>
+	<property name="compile.target" value="1.1"/>
+
+	<!-- classpath -->
+	<path id="libs.external">
+		<fileset dir="../lib">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<path id="libs.internal">
+	</path>
+
