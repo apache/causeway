@@ -3,3 +3,4 @@ exploration
 enterprise
 tmp
 development
+*.timer.log

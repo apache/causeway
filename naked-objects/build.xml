@@ -7,6 +7,8 @@
 	&properties;
 	
 	<property name="docs.javadocs.disable" value="true"/>
+	<property name="release" value="../../nakedobjects-release"/>
+	
 	<path id="libs.external">
 		<fileset dir="../lib">
 			<include name="**/*.jar"/>
@@ -113,7 +115,7 @@
 				docs
 				-->
 
-		<zip zipfile="../release/nakedobjects-xp-${build.id}.zip" basedir="exploration"/>
+		<zip zipfile="${release}/nakedobjects-xp-${build.id}.zip" basedir="exploration"/>
 	</target>
 	
 	
@@ -253,7 +255,7 @@
 				docs
 				-->
 
-		<zip zipfile="../release/nakedobjects-ep-${build.id}.zip" basedir="enterprise"/>
+		<zip zipfile="${release}/nakedobjects-ep-${build.id}.zip" basedir="enterprise"/>
 	</target>
 	
 	
@@ -330,14 +332,14 @@
 				docs
 				-->
 
-		<zip zipfile="../release/nakedobjects-dp-${build.id}.zip" basedir="development"/>
+		<zip zipfile="${release}/nakedobjects-dp-${build.id}.zip" basedir="development"/>
 	</target>
 	
 
 	<target name="source-distribution">
 		<echo>Create source distribution</echo>
 		
-		<zip zipfile="../release/nakedobjects-source-${build.id}.zip">
+		<zip zipfile="${release}/nakedobjects-source-${build.id}.zip">
 			<zipfileset dir="../build-templates/" prefix="build-templates">
 			</zipfileset>
 
