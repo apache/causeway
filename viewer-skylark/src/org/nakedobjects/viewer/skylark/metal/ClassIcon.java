@@ -5,6 +5,7 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.control.ClassAbout;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
@@ -115,10 +116,13 @@ public class ClassIcon extends ObjectView {
     }
     
     public void secondClick(Click click) {
-        NakedCollection instances = getNakedClass().allInstances();
-		View view = ViewFactory.getViewFactory().createOpenRootView(instances);
-		view.setLocation(click.getLocationWithinViewer());
-		getWorkspace().addView(view);
+        ClassAbout classAbout = getNakedClass().forNakedClass().getClassAbout();
+        if(classAbout == null || classAbout.canAccess().isAllowed()) {
+	        NakedCollection instances = getNakedClass().allInstances();
+			View view = ViewFactory.getViewFactory().createOpenRootView(instances);
+			view.setLocation(click.getLocationWithinViewer());
+			getWorkspace().addView(view);
+        }
 	}
     
     private NakedClass getNakedClass()
