@@ -21,32 +21,25 @@ public class Configuration {
     private static final Logger LOG = Logger.getLogger(Configuration.class);
     private static final String PREFIX = "nakedobjects.";
 
-    /*
-    public static void installConfiguration(String resource) throws ConfigurationException {
-        Properties p = loadProperties(resource);
-        getInstance().load(p);
-    }
-
-    public static void installConfiguration(URL resource) throws ConfigurationException {
-        Properties p = loadProperties(resource);
-        getInstance().load(p);
-    }
-*/
-    public static Properties loadProperties(String resource) throws ConfigurationException {
+    public static Properties loadProperties(String resource, boolean mustLoadFile) throws ConfigurationException {
 
         try {
             URL url = ConfigurationFactory.class.getResource(resource);
             if (url == null) {
-                throw new ConfigurationException("Configuration resource not found: " + resource);
+                if(mustLoadFile) {
+                    throw new ConfigurationException("Configuration resource not found: " + resource);
+                } else {
+                    return new Properties();
+                }
             }
-            return loadProperties(url);
+            return loadProperties(url, mustLoadFile);
 
         } catch (ConfigurationException e) {
             try {
                 // try as if it is a file name
                 URL url = new URL("file:///" + new File(resource).getAbsolutePath());
 
-                return loadProperties(url);
+                return loadProperties(url, mustLoadFile);
             } catch (SecurityException ee) {
                 throw new ConfigurationException("Access not granted to configuration resource: " + resource);
             } catch (MalformedURLException ee) {
@@ -55,14 +48,18 @@ public class Configuration {
         }
     }
 
-    public static Properties loadProperties(URL resource) throws ConfigurationException {
+    public static Properties loadProperties(URL resource, boolean mustLoadFile) throws ConfigurationException {
         InputStream in;
 
         try {
             URLConnection connection = resource.openConnection();
             in = connection.getInputStream();
         } catch (FileNotFoundException e) {
-            throw new ConfigurationException("Could not find configuration resource: " + resource);
+            if(mustLoadFile) {
+                throw new ConfigurationException("Could not find configuration resource: " + resource);
+            } else {
+                return new Properties();
+            }
         } catch (IOException e) {
             throw new ConfigurationException("Error reading configuration resource: " + resource, e);
         }
@@ -85,8 +82,8 @@ public class Configuration {
 
     public Configuration() {}
 
-    public Configuration(String file) throws ConfigurationException {
-        Properties p = loadProperties(file);
+    public Configuration(String file, boolean mustLoadFile) throws ConfigurationException {
+        Properties p = loadProperties(file, mustLoadFile);
         load(p);
     }
 
@@ -308,7 +305,7 @@ public class Configuration {
     }
 
     public void load(String resource) throws ConfigurationException {
-        Properties p = loadProperties(resource);
+        Properties p = loadProperties(resource, false);
         load(p);
     }
 
@@ -318,7 +315,7 @@ public class Configuration {
      * @throws ConfigurationException
      */
     public void load(URL resource) throws ConfigurationException {
-        Properties p = loadProperties(resource);
+        Properties p = loadProperties(resource, false);
         load(p);
     }
 

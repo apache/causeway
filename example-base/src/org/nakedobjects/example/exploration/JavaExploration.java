@@ -47,7 +47,7 @@ public class JavaExploration {
 
     public JavaExploration() {
         try {
-            Properties p = Configuration.loadProperties("log4j.properties");
+            Properties p = Configuration.loadProperties("log4j.properties", false);
             PropertyConfigurator.configure(p);
         } catch (ConfigurationException e) {
             BasicConfigurator.configure();
@@ -59,7 +59,7 @@ public class JavaExploration {
             String name = this.getClass().getName();
             name = name.substring(name.lastIndexOf('.') + 1);
 
-            ConfigurationFactory.setConfiguration(new Configuration(DEFAULT_CONFIG));
+            ConfigurationFactory.setConfiguration(new Configuration(DEFAULT_CONFIG, false));
             if (ConfigurationFactory.getConfiguration().getString(SHOW_EXPLORATION_OPTIONS) == null) {
                 ConfigurationFactory.getConfiguration().add(SHOW_EXPLORATION_OPTIONS, "yes");
             }

@@ -24,7 +24,7 @@ public abstract class NakedObjectsContainer {
 
     protected NakedObjectsContainer() {
         try {
-        	Properties p = Configuration.loadProperties("log4j.properties");
+        	Properties p = Configuration.loadProperties("log4j.properties", false);
             PropertyConfigurator.configure(p);
         } catch(ConfigurationException e) {
             BasicConfigurator.configure();

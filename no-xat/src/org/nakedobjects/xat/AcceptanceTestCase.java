@@ -15,7 +15,6 @@ import org.nakedobjects.object.security.Session;
 
 import java.io.File;
 import java.util.Hashtable;
-import java.util.Locale;
 import java.util.Properties;
 
 import junit.framework.TestCase;
@@ -80,7 +79,7 @@ public abstract class AcceptanceTestCase extends TestCase {
     protected void setUp() throws Exception {
         File f = new File("xat.properties");
         if(f.exists()) {
-            ConfigurationFactory.setConfiguration(new Configuration(f.getAbsolutePath()));
+            ConfigurationFactory.setConfiguration(new Configuration(f.getAbsolutePath(), true));
         } else {
             ConfigurationFactory.setConfiguration(new Configuration());
         }

@@ -40,7 +40,7 @@ public class EcsStandalone {
     public static void main(String[] args) throws ConfigurationException {
         BasicConfigurator.configure();
 
-        Configuration configuration = new Configuration(DEFAULT_CONFIG);
+        Configuration configuration = new Configuration(DEFAULT_CONFIG, false);
         NakedObjects.setConfiguration(configuration);
         
         ConfigurationFactory.setConfiguration(configuration);
