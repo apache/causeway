@@ -379,8 +379,8 @@ public class LocalObjectManager extends NakedObjectManager {
 
     public void shutdown() {
         try {
-            objectStore.shutdown();
             oidGenerator.shutdown();
+            objectStore.shutdown();
             NakedClassManager.getInstance().shutdown();
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);

@@ -1,18 +1,18 @@
 package org.nakedobjects.object.reflect;
 
 
-import junit.framework.TestSuite;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
 import org.nakedobjects.object.MockObjectManager;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectTestCase;
-import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Person;
 import org.nakedobjects.object.Role;
 import org.nakedobjects.security.SecurityContext;
+
+import junit.framework.TestSuite;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 
 
 public class AssociationTest extends NakedObjectTestCase {
@@ -31,8 +31,9 @@ public class AssociationTest extends NakedObjectTestCase {
         junit.textui.TestRunner.run(new TestSuite(AssociationTest.class));
     }
 
-    public void setUp()  throws ObjectStoreException {
+    public void setUp()  throws Exception {
     	LogManager.getLoggerRepository().setThreshold(Level.OFF);
+    	super.setUp();
     	
     	manager = MockObjectManager.setup();
     	manager.setupAddClass(NakedObject.class);

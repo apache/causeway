@@ -13,9 +13,6 @@ public class TestClock implements Clock {
         c.set(Calendar.DAY_OF_MONTH, 17);
         
         return c.getTime().getTime();
-        
-        
-//        return new java.util.Date(2003, 7, 17, 21, 30, 25).getTime();
     }
 
 }

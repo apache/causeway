@@ -1,6 +1,5 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.MockObjectManager;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.collection.InternalCollection;
@@ -45,13 +44,13 @@ public class TestObjectImplTest extends TestCase {
         SecurityContext context = Session.getSession().getSecurityContext();
         
         targetObject = new TestObjectExample();
-        target = new TestObjectImpl(context, targetObject);
+        TestObjectFactory factory = new DefaultTestObjectFactory();
+        target = factory.createTestObject(context, targetObject);
         
-        singleParameter = new TestObjectImpl(context, new TestObjectExample());
-        TestObjectImpl parameter2 = new TestObjectImpl(context, new TestObjectExample());
-        //TestValueImpl valueParameter = new TestValueImpl(new TextString("six"));
-		TestValue valueParameter = TestObjectFactory.getInstance().createParamerTestValue(new TextString("a value"));
-        multipleParameters = new TestNaked[] {singleParameter, parameter2, valueParameter};
+        singleParameter = factory.createTestObject(context, new TestObjectExample());
+        TestObject parameter2 = factory.createTestObject(context, new TestObjectExample());
+		TestValue valueParameter = factory.createParamerTestValue(new TextString("a value"));
+       multipleParameters = new TestNaked[] {singleParameter, parameter2, valueParameter};
         
         targetObject.getCollection().add(elementOne = new TestElement("one"));
         targetObject.getCollection().add(elementTwo = new TestElement("two"));

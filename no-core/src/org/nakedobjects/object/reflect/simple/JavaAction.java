@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.TransactionException;
 import org.nakedobjects.object.control.About;
@@ -73,12 +74,18 @@ public class JavaAction extends JavaMember implements ActionDelegate {
             objectManager.endTransaction();
             if (result != null && result instanceof NakedObject) { return (NakedObject) result; }
         } catch (InvocationTargetException e) {
-        	if(e.getTargetException() instanceof TransactionException) {
+            e.fillInStackTrace();
+            
+            if(e.getTargetException() instanceof TransactionException) {
         	    LOG.info("TransactionException thrown while executing " + actionMethod + " " + e.getTargetException().getMessage());
+	            objectManager.abortTransaction();
         	} else {
-	            LOG.error("Exception executing " + actionMethod + "; aborted", e.getTargetException());
+	            String error = "Exception executing " + actionMethod + "; aborted";
+	        	LOG.error(error);
+	        	throw new NakedObjectRuntimeException(error, e.getTargetException());
         	}
-            objectManager.abortTransaction();
+        	
+            
         } catch (IllegalAccessException e) {
             LOG.error("Illegal access of " + actionMethod, e);
             objectManager.abortTransaction();

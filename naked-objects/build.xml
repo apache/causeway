@@ -28,13 +28,13 @@
 	<target name="release-rebuild" depends="new-release-number">
 		<echo>Release rebuild distributions</echo>
 
-		<antcall target="create-all-distributions">
+		<antcall target="-create-all-distributions">
 			<param name="build.id" value="B${build.number}"/>
 			<param name="target" value="all"/>
 		</antcall>
 	</target>
 	
-	<target name="create-all-distributions" depends="all-components">
+	<target name="-create-all-distributions" depends="-build-core">
 		<antcall target="exploration-distribution"/>
 		<antcall target="dotnet-distribution"/>
 		<antcall target="enterprise-distribution"/>
@@ -92,7 +92,57 @@
 	
 	
 	<target name="dotnet-distribution">	
-		<echo>Create exploration distribution</echo>
+		<echo>Create exploration distribution in: ${dotnet.dir}</echo>
+		
+		<delete dir="${dotnet.dir}"/>
+		
+		<mkdir dir="${dotnet.dir}"/>
+
+		
+		<!-- TODO create the project file listing all the files to include in the compilation -->
+	
+		<copy todir="${dotnet.dir}">
+			<fileset dir="../no-core/build/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+
+		<copy todir="${dotnet.dir}">
+			<fileset dir="../no-xat/build/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+
+		<copy todir="${dotnet.dir}">
+			<fileset dir="../no-distribution-2/build/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+
+		<copy todir="${dotnet.dir}">
+			<fileset dir="../example-ecs/build/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+
+		<copy todir="${dotnet.dir}">
+			<fileset dir="../os-sql/build/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+
+		<copy todir="${dotnet.dir}">
+			<fileset dir="../viewer-skylark/build/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+
+		<copy todir="${dotnet.dir}">
+			<fileset dir="../utility-xmlsnapshot/build/src">
+				<include name="**/*.java" />
+				<exclude name="**/DomSerializerJaxp.java" />
+			</fileset>
+		</copy>
 	</target>
 	
 	
@@ -163,10 +213,11 @@
 	
 	<target name="source-distribution">
 		<echo>Create source distribution</echo>
+		
+		
 	</target>
 
-	<target name="all-components">
-		<!--property name="build.id" value="${build.type}${build.number}"/-->
+	<target name="-build-core">
 		<echo>build id: ${build.id}</echo>
 		
 		<mkdir dir="exploration"/>
@@ -174,7 +225,7 @@
 		<mkdir dir="exploration/images"/>
 
 		<antcall target="-core"/>
-		<!-- antcall target="-no-distribution"/-->
+		<antcall target="-no-distribution"/>
 		<!-- antcall target="-no-containers"/-->
 		<antcall target="-os-cache"/>
 		<antcall target="-os-file"/>
@@ -213,7 +264,7 @@
 	</target>
 
 	<target name="-no-distribution" >
-		<ant dir="../no-distribution" target="${target}" inheritAll="false"/>
+		<ant dir="../no-distribution-2" target="${target}" inheritAll="false"/>
 	</target>
 
 	<target name="-no-containers" >
@@ -232,60 +283,6 @@
 		<ant dir="../utility-xmlsnapshot" target="${target}" inheritAll="false"/>
 	</target>
 
-		
-	<target name="dotnet-copy">
-		<delete dir="${dotnet.dir}"/>
-		
-		<mkdir dir="${dotnet.dir}"/>
-
-		
-		<!-- TODO create the project file listing all the files to include in the compilation -->
-	
-		<copy todir="${dotnet.dir}">
-			<fileset dir="../no-core/src">
-				<include name="**/*.java" />
-			</fileset>
-		</copy>
-
-		<copy todir="${dotnet.dir}">
-			<fileset dir="../no-xat/src">
-				<include name="**/*.java" />
-			</fileset>
-		</copy>
-
-		<copy todir="${dotnet.dir}">
-			<fileset dir="../no-distribution/src">
-				<include name="**/*.java" />
-			</fileset>
-		</copy>
-
-		<copy todir="${dotnet.dir}">
-			<fileset dir="../example-ecs/src">
-				<include name="**/*.java" />
-			</fileset>
-		</copy>
-
-		<copy todir="${dotnet.dir}">
-			<fileset dir="../os-sql/src">
-				<include name="**/*.java" />
-			</fileset>
-		</copy>
-
-		<copy todir="${dotnet.dir}">
-			<fileset dir="../viewer-skylark/src">
-				<include name="**/*.java" />
-			</fileset>
-		</copy>
-
-		<copy todir="${dotnet.dir}">
-			<fileset dir="../utility-xmlsnapshot/src">
-				<include name="**/*.java" />
-				<exclude name="**/DomSerializerJaxp.java" />
-			</fileset>
-		</copy>
-
-	</target>
-	
 
 </project>
 

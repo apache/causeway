@@ -18,7 +18,10 @@ import org.nakedobjects.object.value.TimeStamp;
 import org.nakedobjects.security.SecurityContext;
 import org.nakedobjects.security.Session;
 import org.nakedobjects.security.User;
+import org.nakedobjects.utility.ComponentException;
+import org.nakedobjects.utility.ConfigurationException;
 import org.nakedobjects.utility.NotImplementedException;
+import org.nakedobjects.xat.html.HtmlTestObjectFactory;
 
 import java.util.Hashtable;
 import java.util.Locale;
@@ -37,6 +40,7 @@ public abstract class AcceptanceTestCase extends TestCase implements MutableCont
     private ExplorationClock clock;
     private LocalObjectManager objectManager;
     private Vector fixtures = new Vector();
+    private TestObjectFactory testObjectFactory;
 
     public AcceptanceTestCase(String name) {
         super(name);
@@ -84,7 +88,7 @@ public abstract class AcceptanceTestCase extends TestCase implements MutableCont
     /** @deprecated */
     public void registerClass(String className) {
         NakedClass nc = NakedClassManager.getInstance().getNakedClass(className);
-        TestClass view = TestObjectFactory.getInstance().createTestClass(context, nc);
+        TestClass view = testObjectFactory.createTestClass(context, nc);
 
         classes.put(nc.fullName().toLowerCase(), view);
     }
@@ -94,37 +98,42 @@ public abstract class AcceptanceTestCase extends TestCase implements MutableCont
     }
 
     public TestValue createParameterTestValue(NakedValue value) {
-        return TestObjectFactory.getInstance().createParamerTestValue(value);    
+        return testObjectFactory.createParamerTestValue(value);    
     }
     
     protected void setUp() throws Exception {
-        LogManager.getLoggerRepository().setThreshold(Level.OFF);
+        LogManager.getLoggerRepository().setThreshold(Level.ERROR);
         clock = new ExplorationClock();
         Date.setClock(clock);
         Time.setClock(clock);
         TimeStamp.setClock(clock);
 
-        NakedObjectStore nos;
-        nos = new TransientObjectStore();
-        objectManager = new LocalObjectManager(nos, new NullUpdateNotifier());
+        
+        objectManager = createObjectManager();
         
         try {        
 	        setUpFixture();
 	        ExplorationSetUp fs = new ExplorationSetUp();
 	        fs.init(fixtures, NakedClassManager.getInstance(), objectManager, clock);
 	        
-	        documentor = TestObjectFactory.getInstance().getDocumentor(getName().substring(4));
+	        // TODO replace dynamically
+	        if(testObjectFactory == null) {
+	            testObjectFactory = new HtmlTestObjectFactory();
+	        }
+	        
+	        documentor =testObjectFactory.getDocumentor(getName().substring(4));
 	        
 	        String[] cls = fs.getClasses();
 	        for (int i = 0; i < cls.length; i++) {
 	            NakedClass nc = NakedClassManager.getInstance().getNakedClass(cls[i]);
-	            TestClass view = TestObjectFactory.getInstance().createTestClass(context, nc);
+	            TestClass view = testObjectFactory.createTestClass(context, nc);
 	
 	            classes.put(nc.fullName().toLowerCase(), view);
 	        }
         } catch(Exception e) {
             // If an exception is thrown in setUp the tear is not called, hence object manager is
             // left running, but shouldn't be.
+            e.printStackTrace();
             NakedObjectManager.getInstance().shutdown();
             
             throw e;
@@ -132,6 +141,12 @@ public abstract class AcceptanceTestCase extends TestCase implements MutableCont
         
     }
     
+    protected LocalObjectManager createObjectManager() throws ConfigurationException, ComponentException {
+        NakedObjectStore nos;
+        nos = new TransientObjectStore();
+        return new LocalObjectManager(nos, new NullUpdateNotifier());
+    }
+
     protected abstract void setUpFixture();
 
     protected void startDocumenting() {
@@ -200,6 +215,10 @@ public abstract class AcceptanceTestCase extends TestCase implements MutableCont
         throw new NotImplementedException();
     }
 
+    public void setTestObjectFactory(TestObjectFactory testObjectFactory) {
+        this.testObjectFactory = testObjectFactory;
+    }
+    
     public NakedClassManager getClassManager() {
         throw new NotImplementedException();
     }

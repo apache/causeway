@@ -49,7 +49,7 @@ public class NakedClassLoader {
             cons = reflectorClass.getConstructor(new Class[] { String.class });
             try {
                 reflector = (Reflector) cons.newInstance(new Object[] { nakedObjectClassName });
-            } catch (InvocationTargetException e) {
+            } catch (InvocationTargetException e) {               
                 if (e.getTargetException() instanceof ClassNotFoundException) {
                     throw (ClassNotFoundException) e.getTargetException();
                 } else {
@@ -58,17 +58,17 @@ public class NakedClassLoader {
                 }
             }
         } catch (InstantiationException e) {
-            throw new NakedObjectRuntimeException("", e);
+            throw new NakedObjectRuntimeException("Failed to instantiate class: " + cls, e);
         } catch (IllegalAccessException e) {
-            throw new NakedObjectRuntimeException("", e);
+            throw new NakedObjectRuntimeException("Unable to access class or constructor: " + cls, e);
         } catch (SecurityException e) {
             throw new NakedObjectRuntimeException("", e);
         } catch (NoSuchMethodException e) {
-            throw new NakedObjectRuntimeException("", e);
+            throw new NakedObjectRuntimeException("No default constructor in " + cls, e);
         } catch (IllegalArgumentException e) {
-            throw new NakedObjectRuntimeException("", e);
+            throw new NakedObjectRuntimeException(e.getMessage(), e);
         } catch (ClassNotFoundException e) {
-            throw new NakedObjectRuntimeException("", e);
+            throw new NakedObjectRuntimeException("Class not found: " + cls, e);
         }
 
         String nakedClassName = nakedObjectClassName;

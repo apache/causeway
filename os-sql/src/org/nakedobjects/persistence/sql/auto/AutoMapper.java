@@ -208,7 +208,7 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 		int updateCount = connector.update(statement);
 		
 		if(updateCount == 0) {
-			throw new NakedObjectRuntimeException(new NakedObjectRuntimeException()); 
+			throw new NakedObjectRuntimeException(new NakedObjectRuntimeException("No update: " + statement)); 
 			//TODO replace with new ConcurrencyException();
 		}
 		

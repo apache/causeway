@@ -21,21 +21,23 @@ public class JdbcTimestampMapper implements ValueMapper {
 
     public void setFromDBColumn(String columnName, Field field, NakedObject object, Results rs) throws SqlObjectStoreException {
         String val = rs.getString(columnName);
-
-        int length = val.length();
         
-        // convert date to yyyymmddhhmmssmmm
-        val = val.substring(0, 4) + val.substring(5, 7) + val.substring(8, 10) + val.substring(11, 13) + val.substring(14, 16)
-        		+ val.substring(17, 19) + val.substring(20, length);
-
-        if (length < 21) {
-            val = val + "000";
-        } else if (length < 22) {
-            val = val + "00";
-        } else if (length < 23) {
-            val = val + "0";
+        if(val != null) {
+	        int length = val.length();
+	        
+	        // convert date to yyyymmddhhmmssmmm
+	        val = val.substring(0, 4) + val.substring(5, 7) + val.substring(8, 10) + val.substring(11, 13) + val.substring(14, 16)
+	        		+ val.substring(17, 19) + val.substring(20, length);
+	
+	        if (length < 21) {
+	            val = val + "000";
+	        } else if (length < 22) {
+	            val = val + "00";
+	        } else if (length < 23) {
+	            val = val + "0";
+	        }
         }
-     
+        
         val = val == null ? "NULL" : val;
 
         ((Value) field).restoreValue(object, val);

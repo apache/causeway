@@ -38,10 +38,9 @@ public interface NakedValue extends Naked {
     public void reset();
 
     /**
-     * Takes a storage string and uses it reinstate this value object to its previous state/
-     * 
-     * @param data
-     * @see #parse(String)
+     * Takes a storage string and uses it reinstate this value object to its previous state.
+  
+     *      * @see #parse(String)
      */
     public void restoreString(String data);
 

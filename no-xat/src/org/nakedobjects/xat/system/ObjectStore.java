@@ -1,15 +1,26 @@
-package org.nakedobjects.object;
+package org.nakedobjects.xat.system;
+
+import org.nakedobjects.object.LoadedObjects;
+import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectStore;
+import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.ObjectNotFoundException;
+import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.UnsupportedFindException;
+import org.nakedobjects.object.reflect.Field;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
 import org.apache.log4j.Category;
-import org.nakedobjects.object.reflect.Field;
 
 
-public class TransientObjectStore implements NakedObjectStore {
-    private final static Category LOG = Category.getInstance(TransientObjectStore.class);
+public class ObjectStore implements NakedObjectStore {
+    private final static Category LOG = Category.getInstance(ObjectStore.class);
     private final Hashtable classes;
     private final LoadedObjects loaded;
     /*
@@ -17,11 +28,13 @@ public class TransientObjectStore implements NakedObjectStore {
      * return the same data for any repeated call, and so that one subset of instances follows on
      * the previous. This is done by keeping the objects in the order that they where created.
      */
-    private final Vector persistentObjectVector;
+ //   private final Vector persistentObjectVector;
+    	private final Hashtable objectInstances;
 
-    public TransientObjectStore() {
+    public ObjectStore() {
         loaded = new LoadedObjects();
-        persistentObjectVector = new Vector();
+//        persistentObjectVector = new Vector();
+        objectInstances = new Hashtable();
         classes = new Hashtable(30);
     }
 
@@ -36,15 +49,28 @@ public class TransientObjectStore implements NakedObjectStore {
         LOG.debug("createClass " + cls);
         cls.setResolved();
         classes.put(cls.fullName(), cls);
-        persistentObjectVector.addElement(cls);
+        Hashtable persistentObjectVector = instancesFor(cls);
+        persistentObjectVector.put(cls.getOid(), cls);
     }
     
-    public void destroyObject(NakedObject object) throws ObjectStoreException {
-        LOG.info("Delete requested on '" + object + "'");
-        persistentObjectVector.removeElement(object);
+    private Hashtable instancesFor(NakedClass cls) {
+        if(objectInstances.containsKey(cls)) {
+            return (Hashtable) objectInstances.get(cls);
+        } else {
+            Hashtable instances = new Hashtable();
+            objectInstances.put(cls, instances);
+            return instances;
+        }
     }
 
-    private Enumeration elements() {
+    public void destroyObject(NakedObject object) throws ObjectStoreException {
+        LOG.info("Delete requested on '" + object + "'");
+        Hashtable persistentObjectVector = instancesFor(object.getNakedClass());
+        persistentObjectVector.remove(object.getOid());
+    }
+
+    private Enumeration elements(NakedClass nakedClass) {
+        Hashtable persistentObjectVector = instancesFor(nakedClass);
         return persistentObjectVector.elements();
     }
 
@@ -53,7 +79,7 @@ public class TransientObjectStore implements NakedObjectStore {
     }
 
     public String getDebugData() {
-        return persistentObjectVector.toString();
+        return ""; //persistentObjectVector.toString();
     }
 
     public String getDebugTitle() {
@@ -62,7 +88,7 @@ public class TransientObjectStore implements NakedObjectStore {
 
     public Vector getInstances(NakedClass cls, boolean includeSubclasses) {
         Vector instances = new Vector();
-        Enumeration objects = elements();
+        Enumeration objects = elements(cls);
 
         while (objects.hasMoreElements()) {
             NakedObject object = (NakedObject) objects.nextElement();
@@ -97,7 +123,7 @@ public class TransientObjectStore implements NakedObjectStore {
         Vector instances = new Vector();
         if (pattern instanceof NakedClass) {
             //            NakedClass requiredType = pattern.getNakedClass();
-            Enumeration objects = elements();
+            Enumeration objects = elements((NakedClass) pattern);
 
             String name = ((NakedClass) pattern).fullName();
 
@@ -110,7 +136,7 @@ public class TransientObjectStore implements NakedObjectStore {
             }
         } else {
             NakedClass requiredType = pattern.getNakedClass();
-            Enumeration objects = elements();
+            Enumeration objects = elements(requiredType);
 
             while (objects.hasMoreElements()) {
                 NakedObject object = (NakedObject) objects.nextElement();
@@ -130,7 +156,7 @@ public class TransientObjectStore implements NakedObjectStore {
 
     public NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, ObjectStoreException {
         LOG.debug("getObject " + oid);
-        Enumeration e = elements();
+        Enumeration e = elements(hint);
         while (e.hasMoreElements()) {
             NakedObject instance = (NakedObject) e.nextElement();
             if (instance.getOid().equals(oid)) {
@@ -151,7 +177,7 @@ public class TransientObjectStore implements NakedObjectStore {
     }
     
     public boolean hasInstances(NakedClass cls, boolean includeSubclasses) {
-        Enumeration e = elements();
+        Enumeration e = elements(cls);
 
         while (e.hasMoreElements()) {
             NakedObject data = (NakedObject) e.nextElement();
@@ -222,7 +248,7 @@ public class TransientObjectStore implements NakedObjectStore {
 
     public int numberOfInstances(NakedClass cls, boolean includedSubclasses) {
         int noInstances = 0;
-        Enumeration e = elements();
+        Enumeration e = elements(cls);
 
         while (e.hasMoreElements()) {
             NakedObject data = (NakedObject) e.nextElement();
@@ -247,60 +273,12 @@ public class TransientObjectStore implements NakedObjectStore {
         if (object instanceof NakedClass) { 
             throw new ObjectStoreException("Can't make changes to a NakedClass object"); 
         }
-        if (!persistentObjectVector.contains(object)) {
-            persistentObjectVector.addElement(object);
-        }
+        Hashtable persistentObjectVector = instancesFor(object.getNakedClass());
+        Object oid = object.getOid();
+  //      if (!persistentObjectVector.containsKey(oid)) {
+            persistentObjectVector.put(oid, object);
+   //     }
     }
-
-    /*
-     * public void save(NakedObject object) throws NonPersistentObjectException,
-     * ObjectStoreException { LOG.debug("save " + object); if(object instanceof NakedCollection) {
-     * NakedCollection collection = (NakedCollection) object; saveCollection(collection); } else {
-     * saveObject(object); } }
-     * 
-     * private void saveCollection(NakedCollection collection) throws ObjectStoreException {
-     * LOG.debug("Save collectiton "+collection);
-     * 
-     * if (!collection.isPersistent()) { collection.setOid(newOid()); LOG.debug("Non persistent,
-     * assigned oid "+ collection.getOid()); collection.setResolved();
-     * persistentObjectVector.addElement(collection); }
-     * 
-     * Enumeration e = collection.elements();
-     * 
-     * while (e.hasMoreElements()) { NakedObject element = (NakedObject) e.nextElement();
-     * LOG.debug("adding element " + element); if(element.getOid() == null) { save(element); } } }
-     * 
-     * 
-     * private void saveObject(NakedObject object) throws ObjectStoreException { LOG.debug("Save
-     * object "+ object);
-     * 
-     * if (!object.isPersistent()) { object.setOid(newOid()); LOG.debug("Non persistent, assigned
-     * oid "+ object.getOid()); object.setResolved(); persistentObjectVector.addElement(object); }
-     * 
-     * loaded(object);
-     * 
-     * Field[] fields = object.getNakedClass().getFields();
-     * 
-     * for (int i = 0; i < fields.length; i++) { if (fields[i].isDerived()) { // don't persist
-     * derived fields continue; }
-     * 
-     * Naked fieldContent = (Naked) fields[i].get(object); String fieldName = fields[i].getName();
-     * 
-     * if (fieldContent instanceof InternalCollection) { InternalCollection collection =
-     * (InternalCollection) fieldContent; if (!((InternalCollection) fieldContent).isPersistent()) {
-     * ((InternalCollection) fieldContent).setOid(newOid()); LOG.debug("Non persistent internal
-     * collection, assigned oid "+ object.getOid()); ((InternalCollection)
-     * fieldContent).setResolved(); }
-     * 
-     * Enumeration e = collection.elements();
-     * 
-     * while (e.hasMoreElements()) { NakedObject element = (NakedObject) e.nextElement();
-     * LOG.debug("adding element to internal collection field " + fieldName +" " + element); Object
-     * oid = element.getOid(); if (oid == null) { save(element); } } } else if (fieldContent
-     * instanceof NakedValue) { // ignore } else { LOG.debug("adding reference field " + fieldName +" " +
-     * fieldContent); if(fieldContent != null) { Object oid = ((NakedObject) fieldContent).getOid();
-     * if (oid == null) { save((NakedObject) fieldContent); } } } } }
-     */
 
     public void setObjectManager(NakedObjectManager manager) {}
 

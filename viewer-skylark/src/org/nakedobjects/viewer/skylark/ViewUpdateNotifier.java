@@ -51,7 +51,7 @@ public class ViewUpdateNotifier implements UpdateNotifier, DebugInfo {
         Vector viewsToNotify = (Vector) views.get(object);
 
         if (viewsToNotify == null || viewsToNotify.size() == 0) {
-            LOG.warn("No views to update for " + object);
+            LOG.debug("No views to update for " + object);
         } else {
             for (int i = 0; i < viewsToNotify.size(); i++) {
                 View view = (View) viewsToNotify.elementAt(i);

@@ -300,6 +300,9 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
         TimeStamp lastActivity = ((AbstractNakedObject) object).getLastActivity();
         ValueMapper mapper = typeMapper.mapperFor(TimeStamp.class);
         String dateString =  mapper.valueAsDBString(lastActivity);
+        if(dateString.equals("NULL")) {
+            return (and ? " and " +  lastActivityColumn + " is NULL" : "");
+        }
         return (and ? " and " : "") +  lastActivityColumn + " = " + dateString;
     }
 }

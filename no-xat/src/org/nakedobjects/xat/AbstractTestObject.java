@@ -10,10 +10,6 @@ abstract class AbstractTestObject {
      */
     private Naked forObject;
 
-    TestObjectFactory factory() {
-        return TestObjectFactory.getInstance();
-    }
-
     /**
      Return  the object this mock is showing
      */

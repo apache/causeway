@@ -27,6 +27,12 @@ public class AboutNakedObjects {
     public static String getCopyrightNotice() {
         return select("%COPYRIGHT_NOTICE%", "Copyright Naked Objects Group");
     }
+    
+    public static void main(String[] args) {
+        System.out.println(getName() + " version " + getVersion());
+        System.out.println("Build: " + getBuildId());
+        System.out.println(getCopyrightNotice());
+    }
 }
 
 

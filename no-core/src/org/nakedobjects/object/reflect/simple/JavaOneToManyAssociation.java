@@ -1,9 +1,5 @@
 package org.nakedobjects.object.reflect.simple;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import org.apache.log4j.Category;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
@@ -13,129 +9,133 @@ import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.reflect.OneToManyAssociationIF;
 import org.nakedobjects.security.SecurityContext;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import org.apache.log4j.Category;
+
 
 public class JavaOneToManyAssociation extends JavaAssociation implements OneToManyAssociationIF {
-	private final static Category LOG = Category.getInstance(JavaOneToManyAssociation.class);
+    private final static Category LOG = Category.getInstance(JavaOneToManyAssociation.class);
 
-	public JavaOneToManyAssociation(String name, Class type, Method get,
-        Method add, Method remove, Method about) {
+    public JavaOneToManyAssociation(String name, Class type, Method get, Method add, Method remove, Method about) {
         super(name, type, get, add, remove, about);
     }
 
     public void addAssociation(NakedObject inObject, NakedObject associate) {
-             LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
+        LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
 
-            NakedObjectManager objectManager = NakedObjectManager.getInstance();
-            objectManager.startTransaction();
+        NakedObjectManager objectManager = NakedObjectManager.getInstance();
+        objectManager.startTransaction();
 
-            if (addMethod == null) {
-                ((NakedCollection) get(inObject)).add((NakedObject) associate);
-            } else {
-                try {
-                    addMethod.invoke(inObject, new Object[] { associate });
-                } catch (IllegalArgumentException e) {
-                    throw new IllegalArgumentException("set method expects a " +
-                        getType().getName() + " object; not a " + associate.getClass().getName() +
-                        ", " + e.getMessage());
-                } catch (InvocationTargetException e) {
-                    LOG.error("Exception executing " + addMethod, e.getTargetException());
-                    throw (RuntimeException) e.getTargetException();
-                } catch (IllegalAccessException ignore) {
-                    LOG.error("Illegal access of " + addMethod, ignore);
-                    throw new RuntimeException(ignore.getMessage());
-                }
+        if (addMethod == null) {
+            ((NakedCollection) get(inObject)).add((NakedObject) associate);
+        } else {
+            try {
+                addMethod.invoke(inObject, new Object[] { associate });
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("set method expects a " + getType().getName() + " object; not a "
+                        + associate.getClass().getName() + ", " + e.getMessage());
+            } catch (InvocationTargetException e) {
+                LOG.error("Exception executing " + addMethod, e.getTargetException());
+                throw (RuntimeException) e.getTargetException();
+            } catch (IllegalAccessException ignore) {
+                LOG.error("Illegal access of " + addMethod, ignore);
+                throw new RuntimeException(ignore.getMessage());
             }
+        }
 
-            objectManager.endTransaction();
-        
+        objectManager.endTransaction();
+
     }
-	
+
     public About getAbout(SecurityContext context, NakedObject object, NakedObject element, boolean add) {
-    	if (hasAbout()) {
-    			Method aboutMethod = getAboutMethod();
-    			try {
-    					FieldAbout about = new FieldAbout(context, object);  
-						Object[] parameters;
-		                if(aboutMethod.getParameterTypes().length == 3) {
-		        		    parameters = new Object[] { about, element, new Boolean(add)};
-		        		} else {
-		        		    // default about
-		        		    parameters = new Object[] { about };
-		        		}
-		    		    aboutMethod.invoke(object, parameters);
-    					return about;
-    			} catch (InvocationTargetException e) {
-    				LOG.error("Exception executing " + aboutMethod, e.getTargetException());
-    			} catch (IllegalAccessException ignore) {
-    				LOG.error("Illegal access of " + aboutMethod, ignore);
-    			}
-    			return null;
-    	} else {
-    		return new DefaultAbout();
-    	}
+        if (hasAbout()) {
+            Method aboutMethod = getAboutMethod();
+            try {
+                FieldAbout about = new FieldAbout(context, object);
+                Object[] parameters;
+                if (aboutMethod.getParameterTypes().length == 3) {
+                    parameters = new Object[] { about, element, new Boolean(add) };
+                } else {
+                    // default about
+                    parameters = new Object[] { about };
+                }
+                aboutMethod.invoke(object, parameters);
+                return about;
+            } catch (InvocationTargetException e) {
+               LOG.error("Exception executing " + aboutMethod, e.getTargetException());
+            } catch (IllegalAccessException ignore) {
+                LOG.error("Illegal access of " + aboutMethod, ignore);
+            }
+            return null;
+        } else {
+            return new DefaultAbout();
+        }
     }
 
-	public NakedCollection getAssociations(NakedObject fromObject) {
-		return (NakedCollection) get(fromObject);
-	}
+    public NakedCollection getAssociations(NakedObject fromObject) {
+        return (NakedCollection) get(fromObject);
+    }
 
-	public void removeAllAssociations(NakedObject inObject) {
-		((InternalCollection) get(inObject)).removeAll();
-	}
-    
+    public void removeAllAssociations(NakedObject inObject) {
+        ((InternalCollection) get(inObject)).removeAll();
+    }
+
     /**
-		Remove an associated object (the element) from the specified NakedObject in the association field represented by this object.
+     * Remove an associated object (the element) from the specified NakedObject
+     * in the association field represented by this object.
      */
     public void removeAssociation(NakedObject inObject, NakedObject associate) {
-         LOG.debug("local clear association " + associate + " from field " + getName() + " in " + inObject);
+        LOG.debug("local clear association " + associate + " from field " + getName() + " in " + inObject);
 
-             if (removeMethod == null) {
-				((InternalCollection) get(inObject)).remove(associate);
-            } else {
-                try {
-                    removeMethod.invoke(inObject, new Object[] { associate });
-                } catch (IllegalArgumentException e) {
-                    throw new IllegalArgumentException("remove method expects a " +
-                        getType().getName() + " object; not a " + associate.getClass().getName());
-                } catch (InvocationTargetException e) {
-                    LOG.error("Exception executing " + addMethod, e.getTargetException());
-                    throw (RuntimeException) e.getTargetException();
-                } catch (IllegalAccessException ignore) {
-                    LOG.error("Illegal access of " + addMethod, ignore);
-                    throw new RuntimeException(ignore.getMessage());
-                }
+        if (removeMethod == null) {
+            ((InternalCollection) get(inObject)).remove(associate);
+        } else {
+            try {
+                removeMethod.invoke(inObject, new Object[] { associate });
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("remove method expects a " + getType().getName() + " object; not a "
+                        + associate.getClass().getName());
+            } catch (InvocationTargetException e) {
+                LOG.error("Exception executing " + addMethod, e.getTargetException());
+                throw (RuntimeException) e.getTargetException();
+            } catch (IllegalAccessException ignore) {
+                LOG.error("Illegal access of " + addMethod, ignore);
+                throw new RuntimeException(ignore.getMessage());
             }
+        }
     }
 
     public String toString() {
-        String methods = (getMethod == null ? "" : "GET") +
-            (addMethod == null ? "" : " ADD") + (removeMethod == null ? "" : " REMOVE");
+        String methods = (getMethod == null ? "" : "GET") + (addMethod == null ? "" : " ADD")
+                + (removeMethod == null ? "" : " REMOVE");
 
-        return "OneToManyAssociation [name=\"" + getName() + "\", method=" + getMethod +
-        ",about=" + getAboutMethod() + ", methods=" + methods + ", type=" + getType() + " ]";
+        return "OneToManyAssociation [name=\"" + getName() + "\", method=" + getMethod + ",about=" + getAboutMethod()
+                + ", methods=" + methods + ", type=" + getType() + " ]";
     }
 }
 
 /*
-Naked Objects - a framework that exposes behaviourally complete
-business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-The authors can be contacted via www.nakedobjects.org (the
-registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-Road, Woking GU21 1NR, UK).
-*/
+ * Naked Objects - a framework that exposes behaviourally complete business
+ * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * Ltd
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * The authors can be contacted via www.nakedobjects.org (the registered address
+ * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
+ * 1NR, UK).
+ */

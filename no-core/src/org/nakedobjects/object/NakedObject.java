@@ -5,14 +5,6 @@ package org.nakedobjects.object;
  * Definition of an naked reference object.
  * <p>
  * A basic implementation is provided by AbstractNakedObject.
- * </p>
- * <p>
- * A naked reference object must do the following:-
- * </p>
- * <ul>
- * <li></li>
- * <li></li>
- * </ul>
  * 
  * @see org.nakedobjects.object.AbstractNakedObject
  */

@@ -1,7 +1,6 @@
 package org.nakedobjects.xat;
 
 import org.nakedobjects.object.AbstractNakedObject;
-import org.nakedobjects.object.Title;
 import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.control.FieldAbout;

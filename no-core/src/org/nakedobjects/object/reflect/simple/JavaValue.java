@@ -32,18 +32,18 @@ public class JavaValue extends JavaField implements ValueIf {
     public About getAbout(SecurityContext context, NakedObject object) {
         if (hasAbout()) {
             Method aboutMethod = getAboutMethod();
-
+            
             try {
-            	FieldAbout about = new FieldAbout(context, object);
-				aboutMethod.invoke(object, new Object[] { about });
-				return about; 
+                FieldAbout about = new FieldAbout(context, object);
+                aboutMethod.invoke(object, new Object[] { about });
+                return about; 
             } catch (InvocationTargetException e) {
                 LOG.error("Exception executing " + aboutMethod,
-                    e.getTargetException());
+                e.getTargetException());
             } catch (IllegalAccessException ignore) {
                 LOG.error("Illegal access of " + aboutMethod, ignore);
             }
-
+            
             return null;
         } else {
             return new DefaultAbout();
@@ -59,7 +59,7 @@ public class JavaValue extends JavaField implements ValueIf {
     	if(nakedValue == null) {
     		throw new ReflectionException("Value field '" + getName() + "' not set up in " + inObject);
     	}
-        LOG.debug("restoreValue() " + getName() + " " + inObject + "/" + encodedValue);
+        LOG.debug("restoreValue() " + getName() + " in " + inObject + "/" + encodedValue);
         nakedValue.restoreString(encodedValue);
     }
 

@@ -1,37 +1,31 @@
 package org.nakedobjects.xat;
 
+class NullDocumentor implements Documentor {
 
-import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.ValueParseException;
+    public void close() {}
 
+    public void doc(String text) {}
 
-public class ParameterValueImpl extends AbstractTestObject implements TestValue {
+    public void docln(String text) {}
 
-    public ParameterValueImpl(NakedValue object) {
-        setForObject(object);
-    }
+    public void flush() {}
 
-    public void fieldEntry(String value) {
-        // TODO run validation first
-         try {
-            ((NakedValue) getForObject()).parse(value);
-        } catch (ValueParseException e) {
-            throw new IllegalActionError("Field value " + value + " could not be parsed in " + getForObject());
-        }
-    }
+    public void start() {}
 
-    /**
-     returns the title of the object as a String
-     */
-    public String getTitle() {
-        return getForObject().title().toString();
-    }
+    public void stop() {}
+
+    public void step(String string) {}
+
+    public void subtitle(String text) {}
+
+    public void title(String text) {}
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

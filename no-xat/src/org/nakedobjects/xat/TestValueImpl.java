@@ -8,7 +8,7 @@ import org.nakedobjects.object.ValueParseException;
 import org.nakedobjects.object.reflect.Value;
 
 
-class TestValueImpl extends AbstractTestObject implements TestValue {
+public class TestValueImpl extends AbstractTestObject implements TestValue {
     private final NakedObject parent;
     private final Value value;
     
@@ -21,7 +21,7 @@ class TestValueImpl extends AbstractTestObject implements TestValue {
     public void fieldEntry(String value) {
          try {
              this.value.parseAndSave(parent, value);
-            ((NakedValue) getForObject()).parse(value);
+ //           ((NakedValue) getForObject()).parse(value);
         } catch (ValueParseException e) {
             throw new IllegalActionError("Field value '" + value + "' could not be parsed in field " + this.value.getName());
         } catch (InvalidEntryException e) {

@@ -1,9 +1,6 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.SystemClock;
 import org.nakedobjects.object.reflect.simple.JavaReflector;
-import org.nakedobjects.object.value.Date;
-import org.nakedobjects.object.value.TimeStamp;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Hashtable;
@@ -27,9 +24,6 @@ public class MockClassManager extends NakedClassManager {
     }
 
     public static MockClassManager setup() {   
-        Date.setClock(new SystemClock());
-        TimeStamp.setClock(new SystemClock());
-        
         MockClassManager manager;
         try {
             manager = (MockClassManager) getInstance();

@@ -1,19 +1,19 @@
 package org.nakedobjects.object.collection;
 
-import java.util.Enumeration;
-
-import junit.framework.TestSuite;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
 import org.nakedobjects.object.ConcreteEmployee;
 import org.nakedobjects.object.ConcreteEmployer;
 import org.nakedobjects.object.Employee;
 import org.nakedobjects.object.Employer;
 import org.nakedobjects.object.MockObjectManager;
 import org.nakedobjects.object.NakedObjectTestCase;
-import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.reflect.Association;
+
+import java.util.Enumeration;
+
+import junit.framework.TestSuite;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 
 import com.mockobjects.ExpectationSet;
 
@@ -35,9 +35,10 @@ public class NakedObjectCollectionAttributeTest
                 new TestSuite(NakedObjectCollectionAttributeTest.class));
     }
 
-    public void setUp() throws ObjectStoreException {
+    protected void setUp() throws Exception {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
-
+        super.setUp();
+        
         manager = MockObjectManager.setup();
         manager.setupAddClass(ConcreteEmployer.class);
         manager.setupAddClass(ConcreteEmployee.class);

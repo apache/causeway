@@ -1,18 +1,19 @@
 package org.nakedobjects.object.reflect.simple;
 
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import org.apache.log4j.Logger;
 import org.nakedobjects.object.CompositePart;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import org.apache.log4j.Logger;
+
 
 public abstract class JavaField extends JavaMember {
-    final static Logger LOG = Logger.getLogger(JavaAction.class);
+    final static Logger LOG = Logger.getLogger(JavaField.class);
 
     protected final Method getMethod;
 
@@ -30,7 +31,7 @@ public abstract class JavaField extends JavaMember {
        try {
            return (Naked) getMethod.invoke(fromObject, new Object[0]);
        } catch (InvocationTargetException e) {
-           LOG.error("Exception executing " + getMethod, e.getTargetException());
+            LOG.error("Exception executing " + getMethod, e.getTargetException());
        } catch (IllegalAccessException ignore) {
            LOG.error("Illegal access of " + getMethod, ignore);
        }

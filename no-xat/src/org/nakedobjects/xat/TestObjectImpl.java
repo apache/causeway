@@ -26,13 +26,15 @@ import junit.framework.Assert;
 public class TestObjectImpl extends AbstractTestObject implements TestObject {
     private SecurityContext context;
     private Hashtable fields;
+    private TestObjectFactory factory;
 
-    public TestObjectImpl(final SecurityContext context, final NakedObject object) {
-        this(context, object, new Hashtable());
+    public TestObjectImpl(final SecurityContext context, final NakedObject object, final TestObjectFactory factory) {
+        this(context, object, new Hashtable(), factory);
     }
 
-    public TestObjectImpl(final SecurityContext context, final NakedObject object, final Hashtable viewCache) {
+    public TestObjectImpl(final SecurityContext context, final NakedObject object, final Hashtable viewCache, final TestObjectFactory factory) {
         this.context = context;
+        this.factory = factory;
         setForObject(object);
         fields = new Hashtable();
 
@@ -54,13 +56,13 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
                     }
 
                     if (null == associatedView) {
-                        associatedView = factory().createTestObject(context, associate, viewCache);
+                        associatedView = factory.createTestObject(context, associate, viewCache);
                         // this puts it into the viewCache
                     }
 
                     fields.put(a[i].getName(), associatedView);
                 } else {
-                    fields.put(att.getName(), factory().createTestValue(object, (Value) att));
+                    fields.put(att.getName(), factory.createTestValue(object, (Value) att));
                 }
             }
         }
@@ -543,7 +545,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
             throw new IllegalActionError("selectByTitle must select only one object within " + collection);
         }
 
-        return factory().createTestObject(context, object);
+        return factory.createTestObject(context, object);
     }
 
     public TestNaked getField(final String fieldName) {
@@ -589,7 +591,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
                     + "' within it");
         }
 
-        return factory().createTestObject(context, selectedObject);
+        return factory.createTestObject(context, selectedObject);
     }
 
     /**
@@ -628,7 +630,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         assertActionVisible(name, action, new TestNaked[0]);
 
         NakedObject result = action.execute((NakedObject) getForObject());
-        return ((result == null) ? null : factory().createTestObject(context, result));
+        return ((result == null) ? null : factory.createTestObject(context, result));
     }
 
     /**
@@ -651,7 +653,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         if (result == null) {
             return null;
         } else {
-            return factory().createTestObject(context, result);
+            return factory.createTestObject(context, result);
         }
     }
 
@@ -848,7 +850,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         if (result == null) {
             return null;
         } else {
-            return factory().createTestObject(context, result);
+            return factory.createTestObject(context, result);
         }
 
     }

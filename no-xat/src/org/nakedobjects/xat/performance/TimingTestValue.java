@@ -1,37 +1,21 @@
-package org.nakedobjects.xat;
+package org.nakedobjects.xat.performance;
 
+import org.nakedobjects.xat.TestValue;
+import org.nakedobjects.xat.TestValueDecorator;
 
-import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.ValueParseException;
+public class TimingTestValue extends TestValueDecorator {
 
-
-public class ParameterValueImpl extends AbstractTestObject implements TestValue {
-
-    public ParameterValueImpl(NakedValue object) {
-        setForObject(object);
+    public TimingTestValue(TestValue wrappedObject) {
+        super(wrappedObject);
     }
 
-    public void fieldEntry(String value) {
-        // TODO run validation first
-         try {
-            ((NakedValue) getForObject()).parse(value);
-        } catch (ValueParseException e) {
-            throw new IllegalActionError("Field value " + value + " could not be parsed in " + getForObject());
-        }
-    }
-
-    /**
-     returns the title of the object as a String
-     */
-    public String getTitle() {
-        return getForObject().title().toString();
-    }
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -50,11 +50,11 @@ public class ECSAcceptanceTest extends AcceptanceTestCase {
         
         nextStep();
 
-        TestObject booking = getTestClass("Bookings").newInstance();
+        TestObject booking = getTestClass(Booking.class.getName()).newInstance();
 
         nextStep("Specify the city that the booking is for");
 
-        TestObject city = getTestClass("Cities").findInstance("New York");
+        TestObject city = getTestClass(City.class.getName()).findInstance("New York");
 
         booking.associate("City", city);
 
@@ -62,7 +62,7 @@ public class ECSAcceptanceTest extends AcceptanceTestCase {
         //
         nextStep("As this is for a new customer one should be specified rather than looked up");
 
-        TestObject customer = getTestClass("Customers").newInstance();
+        TestObject customer = getTestClass(Customer.class.getName()).newInstance();
 
         booking.associate("Customer", customer);
         customer.fieldEntry("First Name", "Richard");
@@ -141,7 +141,7 @@ public class ECSAcceptanceTest extends AcceptanceTestCase {
         
         firstStep("Retrieve the customer object.");
         
-        TestObject customer = getTestClass("Customers").findInstance("Pawson");
+        TestObject customer = getTestClass(Customer.class.getName()).findInstance("Pawson");
 
         nextStep("Create a booking for this customer.");
 
@@ -181,7 +181,7 @@ public class ECSAcceptanceTest extends AcceptanceTestCase {
         testBasicBooking();
         // end of setup
        
-        TestObject customer = getTestClass("Customers").findInstance("Pawson");
+        TestObject customer = getTestClass(Customer.class.getName()).findInstance("Pawson");
 
         customer.assertNotEmpty("First Name");
         customer.fieldEntry("First Name", "");

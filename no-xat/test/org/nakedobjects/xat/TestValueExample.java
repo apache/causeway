@@ -1,37 +1,21 @@
 package org.nakedobjects.xat;
 
+import org.nakedobjects.object.AbstractNakedObject;
+import org.nakedobjects.object.value.Date;
 
-import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.ValueParseException;
-
-
-public class ParameterValueImpl extends AbstractTestObject implements TestValue {
-
-    public ParameterValueImpl(NakedValue object) {
-        setForObject(object);
-    }
-
-    public void fieldEntry(String value) {
-        // TODO run validation first
-         try {
-            ((NakedValue) getForObject()).parse(value);
-        } catch (ValueParseException e) {
-            throw new IllegalActionError("Field value " + value + " could not be parsed in " + getForObject());
-        }
-    }
-
-    /**
-     returns the title of the object as a String
-     */
-    public String getTitle() {
-        return getForObject().title().toString();
+public class TestValueExample extends AbstractNakedObject {
+    private Date date = new Date();
+    
+    public Date getDate() {
+        return date;
     }
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
