@@ -46,7 +46,12 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
     
     public void abortTransaction() {
-    //objectStore.abortTransaction();
+        try {
+            objectStore.abortTransaction();
+        } catch (ObjectStoreException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -442,6 +447,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
             }
 
             number = new Sequence();
+            number.setNakedClass(NakedObjectSpecificationLoader.getInstance().loadSpecification(Sequence.class));
             number.created();
             number.getName().setValue(sequence);
             makePersistent(number);
