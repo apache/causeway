@@ -1,5 +1,18 @@
 package org.nakedobjects.utility.xmlsnapshot;
 
+import org.nakedobjects.object.InternalCollection;
+import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.NakedObjectSpecificationException;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
+
+import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -8,18 +21,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
-import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.reflect.NakedObjectSpecificationException;
-import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
-import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
-import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
@@ -50,20 +54,24 @@ public final class XmlSnapshot {
 	private static final Logger LOG = Logger.getLogger(XmlSnapshot.class);
 
 	/**
-	 * not serialized into Snapshot
+	 * TODO: lastactivity is skipped because it is in transition (?) from 
+	 * residing in AbstractNakedObject and BusinessObject.
+	 * 
+	 * (The problem is that in .NET the getLastActivity() is not shown as a
+	 * property but is in the meta-model).  Having a deriveLastActivity()
+	 * caused two fields of the same name to be listed.
 	 */
-	private static final String[] SKIP_FIELDS = new String[] {"rawxml", "rawxsd", "rawxsl" , "lastactivity" };
+	private static final String[] SKIP_FIELDS = new String[] {"lastactivity" };
     
 	private final Place rootPlace;
 
 	private final NofMetaModel nofMeta;
 	private final Helper helper;
 
-
-	
 	
 	private final Document xmlDocument;
 	private final Document xsdDocument;
+	private boolean topLevelElementWritten = false;
 	
 	/**
 	* root element of {@link #xmlDocument}
@@ -83,20 +91,30 @@ public final class XmlSnapshot {
 
 	private final XsMetaModel xsMeta;
 
+	private final boolean addOids;
+
 	
 	
 	/**
 	 * Start a snapshot at the root object, using own namespace manager.
 	 */
 	public XmlSnapshot(final NakedObject rootObject) {
-		this(rootObject, new XmlSchema());
+		this(rootObject, false);
+	}
+
+	/**
+	 * Start a snapshot at the root object, using own namespace manager.
+	 */
+	public XmlSnapshot(final NakedObject rootObject, final boolean addOids) {
+		this(rootObject, new XmlSchema(), addOids);
 	}
 
 	/**
 	 * Start a snapshot at the root object, using supplied namespace manager.
 	 */
-	public XmlSnapshot(final NakedObject rootObject, final XmlSchema schema) {
+	public XmlSnapshot(final NakedObject rootObject, final XmlSchema schema, final boolean addOids) {
 
+		this.addOids = addOids;
 		this.nofMeta = new NofMetaModel();
 		this.xsMeta = new XsMetaModel();
 		this.helper = new Helper();
@@ -199,7 +217,7 @@ public final class XmlSnapshot {
 		Element childElement = childPlace.getXmlElement();
 		Element childXsElement = childPlace.getXsdElement();
 
-		addElementIfNotPresent(parentElement, childElement);
+		childElement = mergeTree(parentElement, childElement);
 		schema.addXsElementIfNotPresent(parentXsElement, childXsElement);
 
 		return childElement;
@@ -211,8 +229,11 @@ public final class XmlSnapshot {
 
 		NakedObjectSpecification nos = object.getSpecification();
 
-		Element element = schema.createElement(getXmlDocument(), nos.getShortName(), nos.getFullName());
-		Element xsElement = schema.createXsElementForNofClass(getXsdDocument(), element);
+		Element element = schema.createElement(getXmlDocument(), nos.getShortName(), nos.getFullName(), nos.getSingularName(), nos.getPluralName());
+		nofMeta.appendNofTitle(element, object.titleString());
+		
+		Element xsElement = schema.createXsElementForNofClass(getXsdDocument(), element, topLevelElementWritten);
+		topLevelElementWritten = true; // hack: every element in the XSD schema apart from first needs minimum cardinality setting.
 
 		Place place = new Place(object, element);
 
@@ -223,14 +244,23 @@ eachField:
 		for (int i = 0; i < fields.length; i++) {
 			FieldSpecification field = fields[i];
 			String fieldName = field.getName();
-			// skip fields that contain Raw XML
-			// TODO: change this to be based on value type instead.
-eachSkipField:
-			for(int j=0; j<SKIP_FIELDS.length; j++) {
-				if (fieldName.equals(SKIP_FIELDS[j])) {
+
+			// Skip field if we have seen the name already
+			// This is a workaround for getLastActivity().  This method exists
+			// in AbstractNakedObject, but is not (at some level) being picked up
+			// by the dot-net reflector as a property.  On the other hand it does
+			// exist as a field in the meta model (NakedObjectSpecification).
+			//
+			// Now, to re-expose the lastactivity field for .Net, a deriveLastActivity()
+			// has been added to BusinessObject.  This caused another field of the
+			// same name, ultimately breaking the XSD.
+eachPreviousField:
+			for(int j=0; j<i; j++) {
+				if (fieldName.equals(fields[i])) {
 					continue eachField;
 				}
 			}
+
 			Element xmlFieldElement =
 				getXmlDocument().createElementNS(schema.getUri(), // scoped by namespace of class of containing object
 									schema.getPrefix() + ":" + fieldName);
@@ -240,6 +270,14 @@ eachSkipField:
 
 			if (field instanceof ValueFieldSpecification) {
 
+				// skip fields of type XmlValue
+				if (field.getType() != null &&
+					field.getType().getFullName() != null &&
+					field.getType().getFullName().endsWith("XmlValue")) {
+					continue eachField;
+				}
+
+			
 				ValueFieldSpecification valueFieldSpec = ((ValueFieldSpecification) field);
 				Naked value = valueFieldSpec.get(object);
 				Element xmlValueElement = xmlFieldElement; // more meaningful locally scoped name
@@ -293,7 +331,7 @@ eachSkipField:
 				Element xmlCollectionElement = xmlFieldElement; // more meaningful locally scoped name
 
 				// XML
-				nofMeta.setNofCollection(xmlCollectionElement, schema.getPrefix(), fullyQualifiedClassName, collection.size());
+				nofMeta.setNofCollection(xmlCollectionElement, schema.getPrefix(), fullyQualifiedClassName, collection, addOids);
 
 				// XSD
 				xsdFieldElement = schema.createXsElementForNofCollection(xsElement, xmlCollectionElement);
@@ -308,7 +346,7 @@ eachSkipField:
 			}
 			
 			// XML
-			xmlFieldElement = addElementIfNotPresent(element, xmlFieldElement);
+			xmlFieldElement = mergeTree(element, xmlFieldElement);
 
 			// XSD
 			if (xsdFieldElement != null) {
@@ -424,11 +462,12 @@ eachSkipField:
         
 
 		// locate the corresponding XML element
-		NodeList xmlFieldElements = xmlElement.getElementsByTagNameNS("*", field.getName());
-		if (xmlFieldElements.getLength() != 1) {
+		// (the corresponding XSD element will later be attached to xmlElement as its userData)
+		Vector xmlFieldElements = elementsUnder(xmlElement, field.getName());
+		if (xmlFieldElements.size() != 1) {
 			return false;
 		}
-		Element xmlFieldElement =  (Element)xmlFieldElements.item(0);
+		Element xmlFieldElement =  (Element)xmlFieldElements.elementAt(0);
             
 		if (fieldNames.size() == 0 && annotation != null) {
 			// nothing left in the path, so we will apply the annotation now
@@ -436,10 +475,6 @@ eachSkipField:
 		}
         
 
-		// locate the corresponding XSD element
-//		Element xsdFieldElement = getXsdElement(xmlFieldElement);
-
-       
 		Place fieldPlace = new Place(object, xmlFieldElement);
 
 		if (field instanceof ValueFieldSpecification) {
@@ -447,7 +482,7 @@ eachSkipField:
             
 		} else if (field instanceof OneToOneAssociationSpecification) {
 			OneToOneAssociationSpecification oneToOneAssociation = ((OneToOneAssociationSpecification) field);
-			NakedObject referencedObject = (NakedObject) oneToOneAssociation.get(fieldPlace.getObject()); // cast to ANO rather than NO because haven't (yet) put toXml() onto NO interface.
+			NakedObject referencedObject = (NakedObject) oneToOneAssociation.get(fieldPlace.getObject());
 
 			if (referencedObject == null) {
 				return true; // not a failure if the reference was null
@@ -461,9 +496,7 @@ eachSkipField:
             
 			boolean allFieldsNavigated = true;
 			for (int i = 0; i < collection.size(); i++) {
-                
-				NakedObject referencedObject = (NakedObject) collection.elementAt(i); // cast because haven't (yet) put toXml() on the NO interface, only on ANO.
-
+				NakedObject referencedObject = (NakedObject) collection.elementAt(i);
 				allFieldsNavigated = allFieldsNavigated && appendXmlThenIncludeRemaining(fieldPlace, referencedObject, fieldNames, annotation);
 			}
 			return allFieldsNavigated;
@@ -480,26 +513,77 @@ eachSkipField:
 		return includeField(referencedPlace, fieldNames, annotation);
 	}
 
-	private Element addElementIfNotPresent(final Element parentElement, final Element childElement) {
+	/**
+	 * Merges the tree of Elements whose root is <code>childElement</code> underneath
+	 * the <code>parentElement</code>.
+	 * 
+	 * If the <code>parentElement</code> already has an element that matches the
+	 * <code>childElement</code>, then recursively attaches the grandchildren instead.
+	 * 
+	 * The element returned will be either the supplied <code>childElement</code>, or
+	 * an existing child element if one already existed under <code>parentElement</code>.
+	 */
+	private Element mergeTree(final Element parentElement, final Element childElement) {
 
+		String childElementOid = nofMeta.getAttribute(childElement, "oid");
+		if (childElementOid != null) {
 
-		// before we add the child element, check to see if it is already there
-		NodeList existingElements = parentElement.getElementsByTagNameNS("*" /* childElement.getNamespaceURI() */,
-			                        childElement.getLocalName());
-		if (existingElements.getLength() == 1) {
-			Element possibleMatch = (Element) existingElements.item(0);
-			String childElementOid = nofMeta.getAttribute(childElement, "oid");
-			String possibleMatchOid = nofMeta.getAttribute(possibleMatch, "oid");
-			if (childElementOid != null && possibleMatchOid != null && childElementOid.equals(possibleMatchOid)) {
-				return possibleMatch;
+			// before we add the child element, check to see if it is already there
+			Vector existingChildElements = elementsUnder(parentElement, childElement.getLocalName());
+			for(Enumeration childEnum = existingChildElements.elements(); childEnum.hasMoreElements(); ) {
+				Element possibleMatchingElement = (Element)childEnum.nextElement();
+
+				String possibleMatchOid = nofMeta.getAttribute(possibleMatchingElement, "oid");
+				if ( possibleMatchOid == null ||
+					!possibleMatchOid.equals(childElementOid)) {
+					continue;
+				}
+
+				// match: transfer the children of the child (grandchildren) to the
+				// already existing matching child
+				Element existingChildElement = possibleMatchingElement;
+				Vector grandchildrenElements = elementsUnder(childElement, "*");
+				for(Enumeration grandchildEnum = grandchildrenElements.elements(); grandchildEnum.hasMoreElements(); ) {
+					Element grandchildElement = (Element)grandchildEnum.nextElement();
+					childElement.removeChild(grandchildElement);
+					
+					mergeTree(existingChildElement, grandchildElement);
+				}
+				return existingChildElement;
 			}
 		}
+
+		
 		parentElement.appendChild(childElement);
 		return childElement;
 	}
 
+	private Vector elementsUnder(final Element parentElement, final String localName) {
+		Vector v = new Vector();
+		NodeList existingNodes = parentElement.getChildNodes();
+		for(int i=0; i<existingNodes.getLength(); i++) {
+			Node node = existingNodes.item(i);
+			if (!(node instanceof Element)) {
+				continue;
+			}
+			Element element = (Element)node;
+			if (localName.equals("*") ||
+				element.getLocalName().equals(localName) ) {
+				v.addElement(element);
+			}
+		}		
+		return v;
+	}
+
 	private String oidOrHashCode(final NakedObject object) {
-		return (object.getOid() != null)? object.getOid().toString() : ""+object.hashCode();	
+		Oid oid = object.getOid();
+		if (oid == null) {
+			return ""+object.hashCode();
+		}
+		InlineTransferableWriter itw = new InlineTransferableWriter();
+		oid.writeData(itw);
+		itw.close();
+		return itw.toString();
 	}
 
 

@@ -3,8 +3,7 @@ package example.utility.xmlsnapshot;
 import org.nakedobjects.object.defaults.AbstractNakedObject;
 import org.nakedobjects.utility.xmlsnapshot.DomSerializer;
 import org.nakedobjects.utility.xmlsnapshot.DomSerializerCrimson;
-import org.nakedobjects.utility.xmlsnapshot.NamespaceManager;
-import org.nakedobjects.utility.xmlsnapshot.SnapshotBuilder;
+import org.nakedobjects.utility.xmlsnapshot.XmlSnapshot;
 
 import org.w3c.dom.Element;
 
@@ -12,10 +11,9 @@ public class Snapshot extends AbstractNakedObject {
     // fields exclude for clarity
 
     public void actionCreateSnapshot() {
-        NamespaceManager namespaces = new NamespaceManager();
-        SnapshotBuilder builder = new SnapshotBuilder(this);
+        XmlSnapshot builder = new XmlSnapshot(this);
         builder.include("fieldname/fieldname");
-        Element e = builder.toXml();
+        Element e = builder.getXmlElement();
         
         DomSerializer serializer = new DomSerializerCrimson();
         String xml = serializer.serialize(e);

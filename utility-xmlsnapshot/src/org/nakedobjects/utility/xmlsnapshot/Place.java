@@ -1,7 +1,8 @@
 package org.nakedobjects.utility.xmlsnapshot;
 
-import org.apache.crimson.tree.ElementNode2;
 import org.nakedobjects.object.NakedObject;
+
+import org.apache.crimson.tree.ElementNode2;
 import org.w3c.dom.Element;
 
 

@@ -84,8 +84,15 @@ public final class XsMetaModel {
 	}
 
 	Element createXsElementElement(final Document xsdDoc, final String className) {
+		return createXsElementElement(xsdDoc, className, true);
+	}																							  
+
+	Element createXsElementElement(final Document xsdDoc, final String className, boolean includeCardinality) {
 		Element xsElementElement = createXsElement(xsdDoc, "element");
 		xsElementElement.setAttribute("name", className);
+		if (includeCardinality) {
+			setXsCardinality(xsElementElement, 0, Integer.MAX_VALUE);
+		}
 		return xsElementElement;																							  
 	}																							  
 

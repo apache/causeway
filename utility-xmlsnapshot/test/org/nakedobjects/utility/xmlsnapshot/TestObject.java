@@ -1,6 +1,8 @@
 package org.nakedobjects.utility.xmlsnapshot;
 
 import org.nakedobjects.object.MockNakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.value.TextString;
 
 public class TestObject extends MockNakedObject {
@@ -8,6 +10,10 @@ public class TestObject extends MockNakedObject {
     
     public TextString getName() {
         return name;
+    }
+    
+    public NakedObjectSpecification getSpecification() {
+        return NakedObjectSpecificationLoader.getInstance().loadSpecification(TestObject.class);
     }
     
     public String titleString() {

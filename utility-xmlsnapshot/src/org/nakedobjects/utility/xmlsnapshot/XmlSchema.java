@@ -120,10 +120,12 @@ public final class XmlSchema
 	 * create the element.  The element is not parented but to avoid an error can only be added
 	 * as a child of another element in the same doc.
 	 */
-	Element createElement(final Document doc, final String localName, final String fullyQualifiedClassName) 
+	Element createElement(final Document doc, final String localName, final String fullyQualifiedClassName, final String singularName, final String pluralName) 
 	{
 		Element element = doc.createElementNS(getUri(), getPrefix() + ":" + localName);
 		element.setAttributeNS(NofMetaModel.NOF_METAMODEL_NS_URI, "nof:fqn", fullyQualifiedClassName);
+		element.setAttributeNS(NofMetaModel.NOF_METAMODEL_NS_URI, "nof:singular", singularName);
+		element.setAttributeNS(NofMetaModel.NOF_METAMODEL_NS_URI, "nof:plural", pluralName);
 		nofMeta.addNamespace(element); // good a place as any
 
 		addNamespace(element, getPrefix(), getUri());
@@ -152,7 +154,7 @@ public final class XmlSchema
 	 * Creates an &lt;xs:element&gt; element defining the presence of the named element
 	 * representing a class
 	 */ 
-	Element createXsElementForNofClass(final Document xsdDoc, final Element element) {
+	Element createXsElementForNofClass(final Document xsdDoc, final Element element, final boolean addCardinality) {
 		
 		// gather details from XML element
 		String localName = element.getLocalName();
@@ -160,10 +162,8 @@ public final class XmlSchema
 		//	<xs:element name="AO11ConfirmAnimalRegistration">
 		//		<xs:complexType>
 		//			<xs:sequence>
-		//			  <xs:any namespace="##other"
-		//                    minOccurs="0"
-		//			          maxOccurs="unbounded"
-		//			          processContents="lax" />
+		//             <xs:element ref="nof:title"/>
+		//             <!-- placeholder -->
 		//			</xs:sequence>
 		//			<xs:attribute ref="nof:feature"
 		//			              default="class"/>
@@ -175,16 +175,25 @@ public final class XmlSchema
   
 		// xs:element/@name="class name"
 		// add to XML schema as a global attribute
-		Element xsElementForNofClassElement = xsMeta.createXsElementElement(xsdDoc, localName);
+		Element xsElementForNofClassElement = xsMeta.createXsElementElement(xsdDoc, localName, addCardinality);
 
 		// xs:element/xs:complexType
 		// xs:element/xs:complexType/xs:sequence
 		Element xsComplexTypeElement = xsMeta.complexTypeFor(xsElementForNofClassElement);
 		Element xsSequenceElement = xsMeta.sequenceFor(xsComplexTypeElement);
 
+		// xs:element/xs:complexType/xs:sequence/xs:element ref="nof:title"
+		Element xsTitleElement = xsMeta.createXsElement(helper.docFor(xsSequenceElement), "element");
+		xsTitleElement.setAttribute("ref", NofMetaModel.NOF_METAMODEL_NS_PREFIX + ":" + "title");
+		xsSequenceElement.appendChild(xsTitleElement);
+		xsMeta.setXsCardinality(xsTitleElement, 0, 1);
+
+		// xs:element/xs:complexType/xs:attribute ...
 		xsMeta.addXsNofFeatureAttributeElements(xsComplexTypeElement, "class");
 		xsMeta.addXsNofAttribute(xsComplexTypeElement, "oid");
 		xsMeta.addXsNofAttribute(xsComplexTypeElement, "fqn");
+		xsMeta.addXsNofAttribute(xsComplexTypeElement, "singular");
+		xsMeta.addXsNofAttribute(xsComplexTypeElement, "plural");
 		xsMeta.addXsNofAttribute(xsComplexTypeElement, "annotation");
 
 		Place.setXsdElement(element, xsElementForNofClassElement);
@@ -261,8 +270,7 @@ public final class XmlSchema
 		//					<xs:complexType>
 		//						<xs:sequence>
 		//							<xs:element ref="nof:title" minOccurs="0"/>
-		//							<xs:sequence minOccurs="0" maxOccurs="1">
-		//							</xs:sequence>
+		//							<xs:sequence minOccurs="0" maxOccurs="1"/>
 		//						</xs:sequence>
 		//						<xs:attribute ref="nof:feature" fixed="reference"/>
 		//						<xs:attribute ref="nof:type" fixed="%%appX%%:%%type%%"/>
@@ -285,15 +293,14 @@ public final class XmlSchema
 		// xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence
 		Element xsFieldComplexTypeElement = xsMeta.complexTypeFor(xsFieldElementElement);
 		Element xsFieldSequenceElement = xsMeta.sequenceFor(xsFieldComplexTypeElement);
-		Element xsNofRefElementElement = xsMeta.createXsElement(helper.docFor(xsFieldSequenceElement), "element");
-		xsNofRefElementElement.setAttribute("ref", NofMetaModel.NOF_METAMODEL_NS_PREFIX + ":" + "title");
-		xsFieldSequenceElement.appendChild(xsNofRefElementElement);
 
 		// xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element ref="nof:title"
-		Element xsFieldTitleElement = xsNofRefElementElement;
+		Element xsFieldTitleElement = xsMeta.createXsElement(helper.docFor(xsFieldSequenceElement), "element");
+		xsFieldTitleElement.setAttribute("ref", NofMetaModel.NOF_METAMODEL_NS_PREFIX + ":" + "title");
+		xsFieldSequenceElement.appendChild(xsFieldTitleElement);
 		xsMeta.setXsCardinality(xsFieldTitleElement, 0, 1);
 
-		// xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:sequence
+		// xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:sequence   // placeholder
 		Element xsReferencedElementSequenceElement = xsMeta.sequenceFor(xsFieldSequenceElement);
 		xsMeta.setXsCardinality(xsReferencedElementSequenceElement, 0, 1);
 
@@ -320,8 +327,10 @@ public final class XmlSchema
 		//			<xs:sequence>
 		//				<xs:element name="%%field object%%">
 		//					<xs:complexType>
-		//						<xs:choice>
-		//						</xs:choice>
+		//						<xs:sequence>
+		//							<xs:element ref="nof:oids" minOccurs="0" maxOccurs="1"/>
+		//						    <!-- nested element definitions go here -->
+		//						</xs:sequence>
 		//						<xs:attribute ref="nof:feature" fixed="collection"/>
 		//						<xs:attribute ref="nof:type" fixed="%%appX%%:%%type%%"/>
 		//						<xs:attribute ref="nof:size"/>
@@ -342,8 +351,18 @@ public final class XmlSchema
 
 		// xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType
 		Element xsFieldComplexTypeElement = xsMeta.complexTypeFor(xsFieldElementElement);
-		Element xsFieldChoiceElement = xsMeta.choiceFor(xsFieldComplexTypeElement); // placeholder
-		xsMeta.setXsCardinality(xsFieldChoiceElement, 0, Integer.MAX_VALUE);
+		// xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence
+		Element xsFieldSequenceElement = xsMeta.sequenceFor(xsFieldComplexTypeElement);
+
+		// xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element ref="nof:oids"
+		Element xsFieldOidsElement = xsMeta.createXsElement(helper.docFor(xsFieldSequenceElement), "element");
+		xsFieldOidsElement.setAttribute("ref", NofMetaModel.NOF_METAMODEL_NS_PREFIX + ":" + "oids");
+		xsFieldSequenceElement.appendChild(xsFieldOidsElement);
+		xsMeta.setXsCardinality(xsFieldOidsElement, 0, 1);
+
+//		// xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:choice
+//		Element xsFieldChoiceElement = xsMeta.choiceFor(xsFieldComplexTypeElement); // placeholder
+//		xsMeta.setXsCardinality(xsFieldChoiceElement, 0, Integer.MAX_VALUE);
 
 //		Element xsFieldTitleElement = addXsNofRefElementElement(xsFieldSequenceElement, "title");
 
