@@ -181,14 +181,15 @@ public class TreeNodeBorder extends AbstractBorder {
 	
     public void objectActionResult(Naked result, Location at) {
         if(getContent() instanceof OneToManyField) {
-	        //      TODO same as InternalCollectionBorder
+	        // same as InternalCollectionBorder
             OneToManyField internalCollectionContent = (OneToManyField) getContent();
             OneToManyAssociationSpecification field = (OneToManyAssociationSpecification) internalCollectionContent.getField();
             NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
-        	field.setAssociation(target, (NakedObject) result);
-        } else {
-            super.objectActionResult(result, at);
-        }
+             if(field.canAssociate(target, (NakedObject) result)) {
+	        	field.setAssociation(target, (NakedObject) result);
+            }
+        } 
+        super.objectActionResult(result, at);
     }
 
 	public void entered() {

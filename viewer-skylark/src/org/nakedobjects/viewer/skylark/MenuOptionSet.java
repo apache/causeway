@@ -78,11 +78,11 @@ public class MenuOptionSet {
     }
 
     public String toString() {
-        StringBuffer sb = new StringBuffer("MenuOptionSet [\n");
+        StringBuffer sb = new StringBuffer("MenuOptionSet [");
         Vector v = getMenuOptions(true, true);
 
         for (int i = 0; i < v.size(); i++) {
-            sb.append("  element " + i + ". " + v.elementAt(i) + "\n");
+            sb.append( v.elementAt(i) + ",");
         }
 
         sb.append("]");

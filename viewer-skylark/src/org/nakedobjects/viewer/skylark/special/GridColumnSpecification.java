@@ -2,8 +2,8 @@ package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.InternalCollectionContent;
 import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
@@ -28,7 +28,7 @@ class GridColumnSpecification extends AbstractCompositeViewSpecification{
 
             ViewSpecification specification;
 
-            if (content instanceof InternalCollectionContent) {
+            if (content instanceof OneToManyField) {
                 specification = new ScheduleSpecification();
             } else if (content instanceof ValueField) {
                 specification = factory.getValueFieldSpecification((ValueContent) content);

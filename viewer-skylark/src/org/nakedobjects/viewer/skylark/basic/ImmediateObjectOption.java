@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Permission;
@@ -9,28 +10,26 @@ import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
-import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
+
+import org.apache.log4j.Logger;
 
 /**
    Options for an underlying object determined dynamically by looking for methods starting with action, veto and option for
    specifying the action, vetoing the option and giving the option an name respectively.
  */
-public class ImmediateObjectOption extends MenuOption {
+class ImmediateObjectOption extends MenuOption {
 
     public static ImmediateObjectOption createOption(ActionSpecification action, NakedObject object) {
     	Assert.assertTrue("Only suitable for 0 param methods", action.parameters().length == 0);
         
         About about = action.getAbout(ClientSession.getSession(), object);
-    
     	if(about.canAccess().isVetoed()) {
     		return null;
     	}
-    	
     	String labelName =  action.getLabel(ClientSession.getSession(), object);
-    	ImmediateObjectOption option = new ImmediateObjectOption(labelName);
-    	option.action = action;
+    	ImmediateObjectOption option = new ImmediateObjectOption(labelName, object, action);
     
     	// if method returns something then add ... to indicate a new window is shown
     	if (action.hasReturn()) {
@@ -39,16 +38,16 @@ public class ImmediateObjectOption extends MenuOption {
     	return option;
     }
 	
-	private ActionSpecification action;
-
-
-	private ImmediateObjectOption(String name) {
+	private final ActionSpecification action;
+	private final NakedObject object;
+	
+	private ImmediateObjectOption(String name, NakedObject object, ActionSpecification action) {
 		super(name);
+        this.object = object;
+        this.action = action;
 	}
 
     public Permission disabled(View view) {
-        NakedObject object = ((ObjectContent) view.getContent()).getObject();
-        
 		About about = action.getAbout(ClientSession.getSession(), object);
 		if(about.canUse().isAllowed()) {
 			String description = about.getDescription();
@@ -62,7 +61,6 @@ public class ImmediateObjectOption extends MenuOption {
     }
 
     public void execute(Workspace workspace, View view, Location at) {
-        NakedObject object =  ((ObjectContent) view.getContent()).getObject();
         NakedObject returnedObject;
         try {
 	        returnedObject = action.execute(object);
@@ -70,12 +68,17 @@ public class ImmediateObjectOption extends MenuOption {
         	returnedObject =object.getContext().getObjectManager().generatorError("System error",e);
         }
         if (returnedObject != null) {
-        	view.objectActionResult(returnedObject, at);
+            if(returnedObject instanceof NakedError) {
+                Logger.getLogger(getClass()).error(((NakedError)returnedObject));
+                workspace.addOpenViewFor(returnedObject, at);
+            } else {
+                view.objectActionResult(returnedObject, at);
+            }
         }
     }
 
     public String toString() {
-        return "ObjectOption for " + action;
+        return "ObjectOption for " + action.getName();
     }
 }
 

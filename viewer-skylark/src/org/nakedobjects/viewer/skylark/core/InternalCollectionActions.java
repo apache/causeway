@@ -6,8 +6,8 @@ import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.ContentDrag;
-import org.nakedobjects.viewer.skylark.InternalCollectionContent;
 import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.View;
 
 public class InternalCollectionActions extends CollectionActions {
@@ -18,14 +18,9 @@ public class InternalCollectionActions extends CollectionActions {
 
     public void dragIn(ContentDrag drag) {
         ObjectContent content = (ObjectContent) drag.getSourceContent();
-        
         NakedObject parent = ((ObjectContent) getParent().getContent()).getObject();
-        
-        About about = getAssociation().getAbout(
-                ClientSession.getSession(), parent, content.getObject(), true);
-
+        About about = getAssociation().getAbout(ClientSession.getSession(), parent, content.getObject(), true);
         Permission perm = about.canUse();
-        
         if (perm.isVetoed()) {
             getState().setCantDrop();
             getViewManager().setStatus(perm.getReason());
@@ -42,18 +37,14 @@ public class InternalCollectionActions extends CollectionActions {
 
     public void drop(ContentDrag drag) {
         ObjectContent content = (ObjectContent) drag.getSourceContent();
-      
         NakedObject parent = ((ObjectContent) getParent().getContent()).getObject();
-        
         getAssociation().setAssociation(parent, content.getObject());
-
         layout();
     }
 
 
     private OneToManyAssociationSpecification getAssociation() {
-        InternalCollectionContent content = (InternalCollectionContent) getContent();
-
+        OneToManyField content = (OneToManyField) getContent();
         return (OneToManyAssociationSpecification) content.getField();
     }
     

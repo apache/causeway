@@ -38,7 +38,7 @@ public class InteractionSpy {
     private int actionCount;
     private String damagedArea;
     private int event;
-    private String label[][] = new String[2][14];
+    private String label[][] = new String[2][16];
     private SpyFrame spy;
     private String[] trace = new String[30];
     private int traceIndex;

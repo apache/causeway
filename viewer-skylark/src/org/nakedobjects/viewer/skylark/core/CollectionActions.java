@@ -1,14 +1,11 @@
 package org.nakedobjects.viewer.skylark.core;
 
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.AbstractPermission;
 import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
-import org.nakedobjects.viewer.skylark.special.CollectionDisplayIterator;
 
 
 public class CollectionActions extends AbstractViewDecorator {
@@ -20,64 +17,13 @@ public class CollectionActions extends AbstractViewDecorator {
         b.append("CollectionActions");
     }
 
-    private CollectionDisplayIterator getCollection() {
-        CollectionContent content = (CollectionContent) getContent();
-
-        return content.getIterator();
-    }
-
     public void menuOptions(MenuOptionSet options) {
         super.menuOptions(options);
         options.add(MenuOptionSet.EXPLORATION, new MenuOption("Clear collection") {
             public void execute(Workspace workspace, View view, Location at) {
-            //			getCollection().removeAll();
+                ((CollectionContent) getContent()).getCollection().removeAll();
             }
         });
-
-        options.add(MenuOptionSet.VIEW, new MenuOption("First") {
-            public Permission disabled(View component) {
-                return AbstractPermission.allow(getCollection().hasPrevious());
-            }
-
-            public void execute(Workspace workspace, View view, Location at) {
-                getCollection().first();
-                invalidateContent();
-            }
-        });
-
-        options.add(MenuOptionSet.VIEW, new MenuOption("Next") {
-            public Permission disabled(View component) {
-                return AbstractPermission.allow(getCollection().hasNext());
-            }
-
-            public void execute(Workspace workspace, View view, Location at) {
-                getCollection().next();
-                invalidateContent();
-            }
-        });
-
-        options.add(MenuOptionSet.VIEW, new MenuOption("Previous") {
-            public Permission disabled(View component) {
-                return AbstractPermission.allow(getCollection().hasPrevious());
-            }
-
-            public void execute(Workspace workspace, View view, Location at) {
-                getCollection().previous();
-                invalidateContent();
-            }
-        });
-
-        options.add(MenuOptionSet.VIEW, new MenuOption("Last") {
-            public Permission disabled(View component) {
-                return AbstractPermission.allow(getCollection().hasNext());
-            }
-
-            public void execute(Workspace workspace, View view, Location at) {
-                getCollection().last();
-                invalidateContent();
-            }
-        });
-
     }
 
     public String toString() {

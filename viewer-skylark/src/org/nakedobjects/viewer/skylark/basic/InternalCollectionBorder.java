@@ -57,6 +57,7 @@ public class InternalCollectionBorder extends AbstractBorder {
 		super.draw(canvas);
 	}
 	
+	
 	public void menuOptions(MenuOptionSet options) {
         super.menuOptions(options);
         
@@ -67,14 +68,13 @@ public class InternalCollectionBorder extends AbstractBorder {
     }
 	
     public void objectActionResult(Naked result, Location at) {
+        // same as in TreeNodeBorder
         OneToManyField internalCollectionContent = (OneToManyField) getContent();
         OneToManyAssociationSpecification field = (OneToManyAssociationSpecification) internalCollectionContent.getField();
-        
-//        if(field.getType().isAssignableFrom(result.getClass())) {
-            NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
+        NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
+        if(field.canAssociate(target, (NakedObject) result)) {
         	field.setAssociation(target, (NakedObject) result);
- //       }
-
+        }
         super.objectActionResult(result, at);
     }
 

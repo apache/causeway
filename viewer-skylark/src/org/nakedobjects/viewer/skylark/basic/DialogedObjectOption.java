@@ -1,7 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.control.defaults.Allow;
@@ -10,7 +9,6 @@ import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
-import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
@@ -18,14 +16,13 @@ import org.nakedobjects.viewer.skylark.Workspace;
    Options for an underlying object determined dynamically by looking for methods starting with action, veto and option for
    specifying the action, vetoing the option and giving the option an name respectively.
  */
-public class DialogedObjectOption extends MenuOption {
+class DialogedObjectOption extends MenuOption {
     private ActionDialogSpecification dialogSpec = new ActionDialogSpecification();
     
     public static DialogedObjectOption createOption(ActionSpecification action, NakedObject object) {
         int paramCount = action.getParameterCount();
         Assert.assertTrue("Only for actions taking one or more params", paramCount > 0);
     	About about = action.getAbout(ClientSession.getSession(), object, new NakedObject[paramCount]);
-    
     	if(about.canAccess().isVetoed()) {
     		return null;
     	}
@@ -40,21 +37,21 @@ public class DialogedObjectOption extends MenuOption {
     	label += ")...";
         */
     	
-    	DialogedObjectOption option = new DialogedObjectOption(label, action);
+    	DialogedObjectOption option = new DialogedObjectOption(label, action, object);
     	
     	return option;
     }
 	
-	private ActionSpecification action;
-
-	private DialogedObjectOption(String name, ActionSpecification action) {
+	private final ActionSpecification action;
+	private final NakedObject object ;
+	
+	private DialogedObjectOption(final String name, final ActionSpecification action, NakedObject object) {
 		super(name);
 		this.action = action;
+		this.object = object;
 	}
 
     public Permission disabled(View view) {
-        NakedObject object = ((ObjectContent) view.getContent()).getObject();
-        
 		About about = action.getAbout(ClientSession.getSession(), object, new NakedObject[action
                 .getParameterCount()]);
         // ignore the details from the About about useablility this will be
@@ -67,7 +64,6 @@ public class DialogedObjectOption extends MenuOption {
     }
 
     public void execute(Workspace workspace, View view, Location at) {
-        NakedObject object = ((ObjectContent) view.getContent()).getObject();
         ActionContent content = new ActionContent(object, action);
         View dialog = dialogSpec.createView(content, null);
         dialog.setLocation(at);
