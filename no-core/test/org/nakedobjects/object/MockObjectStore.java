@@ -20,7 +20,6 @@ public class MockObjectStore implements NakedObjectStore {
         super();
     }
 
-
     public void assertAction(int i, String expected) {
         Assert.assertTrue(actions.size() > i);
         String actual = (String) actions.elementAt(i);
