@@ -109,7 +109,7 @@ public class ObjectData extends Data {
 
     void addInternalCollection(InternalCollection collection, String fieldName, boolean ensurePersistent) {
     	if (ensurePersistent && collection != null && collection.getOid() == null) {
-    		throw new IllegalStateException("Cannot save a collection that is not persistent");
+    		throw new IllegalStateException("Cannot save a collection that is not persistent: " + collection);
     	}
     	
     	SerialOid coid = (SerialOid) collection.getOid();

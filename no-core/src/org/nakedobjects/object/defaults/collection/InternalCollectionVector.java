@@ -27,7 +27,6 @@ public class InternalCollectionVector extends AbstractTypedNakedCollectionVector
     		throw new NullPointerException("Cannot add null");
     	}
         super.add(object);
- //       getObjectManager().objectChanged(((NakedObject) parent));
     }
    
 	public Permission canAdd(NakedObject object) {

@@ -260,7 +260,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
                     InternalCollection collection = (InternalCollection) field.get(object);
                     SerialOid oid = refs.getOid();
                     LOG.debug("setting collection " + field + "; assigning " + oid + " to " + collection);
-                    if(oid == null) {
+                    if(oid != null) {
                         collection.setOid(oid);
                     }
                     
@@ -345,9 +345,14 @@ public abstract class MementoObjectStore implements NakedObjectStore {
     public void save(NakedObject object) throws ObjectStoreException {
         LOG.debug("Save object " + object);
 
-        Data data = createObjectData(object, true);
-
-        dataManager.save(data);
+        if(object instanceof InternalCollection) {
+           NakedObject parent = ((InternalCollection) object).forParent();
+	        Data data = createObjectData(parent, true);	
+	        dataManager.save(data);
+        } else {
+	        Data data = createObjectData(object, true);	
+	        dataManager.save(data);
+        }
     }
 
     public void shutdown() throws ObjectStoreException {}
