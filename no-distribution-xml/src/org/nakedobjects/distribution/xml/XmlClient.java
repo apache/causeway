@@ -11,9 +11,7 @@ import org.nakedobjects.distribution.xml.request.MakePersistent;
 import org.nakedobjects.distribution.xml.request.SerialNumber;
 import org.nakedobjects.distribution.xml.request.SetAssociation;
 import org.nakedobjects.distribution.xml.request.SetValue;
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.control.Hint;
@@ -25,6 +23,7 @@ import com.thoughtworks.xstream.XStream;
 
 public class XmlClient implements ClientDistribution {
     private ClientConnection connection;
+    private LoadedObjects loadedObjects;
 
     public XmlClient() {
         connection = new ClientConnection();
@@ -47,8 +46,8 @@ public class XmlClient implements ClientDistribution {
         throw new NotImplementedException();
     }
 
-    public NakedObject executeAction(Session session, String actionType, String actionIdentifier, String[] parameterTypes,
-            Oid objectOid, String objectType, Naked[] parameters) {
+    public ObjectData executeAction(Session session, String actionType, String actionIdentifier, String[] parameterTypes,
+            Oid objectOid, String objectType, ObjectData[] parameters) {
         ExecuteAction request = new ExecuteAction(session, actionType, actionIdentifier, parameterTypes, objectOid, objectType,
                 parameters);
         remoteExecute(request);
@@ -62,13 +61,8 @@ public class XmlClient implements ClientDistribution {
     }
 
     public Hint getActionHint(Session session, String actionType, String actionIdentifier, String[] parameterTypes,
-            Oid objectOid, String objectType, Naked[] parameters) {
+            Oid objectOid, String objectType, ObjectData[] parameters) {
         throw new NotImplementedException();
-    }
-
-    public NakedClass getNakedClass(String fullName) {
-        return new NakedClass(fullName);
-        //     throw new NotImplementedException();
     }
 
     public ObjectData getObject(Session session, Oid oid, String fullName) {
@@ -102,6 +96,12 @@ public class XmlClient implements ClientDistribution {
                     + " & " + response.getId() + " respectively");
         }
         request.setResponse(response.getObject());
+        
+        ObjectData[] updates = response.getUpdates();
+        for (int i = 0; i < updates.length; i++) {
+            updates[i].update(loadedObjects);
+        }
+//        response.update();
     }
 
     public long serialNumber(Session session, String name) {
@@ -119,6 +119,10 @@ public class XmlClient implements ClientDistribution {
     public void setValue(Session session, String fieldIdentifier, Oid oid, String objectType, Object associate) {
         Request request = new SetValue(session, fieldIdentifier, oid, objectType, associate);
         remoteExecute(request);
+    }
+    
+    public void setLoadedObjects(LoadedObjects loadedObjects) {
+        this.loadedObjects = loadedObjects;
     }
 
 }

@@ -1,9 +1,11 @@
 package org.nakedobjects.distribution.xml;
 
+import org.nakedobjects.distribution.ObjectData;
+
 public class Response {
-    
     private int id;
     private Object object;
+    private ObjectData[] updates;
 
     public Response(Request request) {
         this.id = request.getId();
@@ -16,6 +18,14 @@ public class Response {
     
     public int getId() {
         return id;
+    }
+
+    public void setUpdates(ObjectData[] updates) {
+        this.updates = updates;
+    }
+
+    public ObjectData[] getUpdates() {
+        return updates;
     }
 }
 

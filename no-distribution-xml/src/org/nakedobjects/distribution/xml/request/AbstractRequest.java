@@ -1,9 +1,6 @@
 package org.nakedobjects.distribution.xml.request;
 
 import org.nakedobjects.distribution.xml.Request;
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.security.Session;
 
 
@@ -15,30 +12,6 @@ public abstract class AbstractRequest implements Request {
 
     public AbstractRequest(final Session session) {
         this.session = session;
-    }
-
-    protected PojoAdapter getNakedObject(ObjectTransferCarrier object) {
-        return PojoAdapter.createAdapter(object.getObject(), object.getOid());
-    }
-
-    protected Naked[] getNakedObjects(ObjectTransferCarrier[] parameters) {
-        Naked parametersOut[] = new Naked[parameters.length];
-        for (int i = 0; i < parametersOut.length; i++) {
-            parametersOut[i] = PojoAdapter.createAdapter(parameters[i].getObject(), parameters[i].getOid());
-        }
-        return parametersOut;
-    }
-
-    protected ObjectTransferCarrier  getObject(NakedObject object) {
-        return new ObjectTransferCarrier(object.getObject(), object.getOid());
-    }
-
-    protected ObjectTransferCarrier[] getObjects(Naked[] parameters) {
-        ObjectTransferCarrier parametersOut[] = new ObjectTransferCarrier[parameters.length];
-        for (int i = 0; i < parameters.length; i++) {
-            parametersOut[i] = getObject((NakedObject) parameters[i]);
-        }
-        return parametersOut;
     }
 
     public final void setResponse(Object response) {

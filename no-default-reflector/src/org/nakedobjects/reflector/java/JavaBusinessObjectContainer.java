@@ -101,7 +101,10 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
 
     public void resolve(Object object) {
 		if(object != null) {
-	        objectManger.resolve(PojoAdapter.createAdapter(object));
+	        PojoAdapter adapter = PojoAdapter.createAdapter(object);
+	        if(!adapter.isResolved()) {
+	            objectManger.resolve(adapter);
+	        }
 	    }
     }
 

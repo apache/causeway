@@ -1,8 +1,7 @@
 package org.nakedobjects.distribution.xml.request;
 
+import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ServerDistribution;
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.security.Session;
 
@@ -13,10 +12,10 @@ public class ExecuteAction extends AbstractRequest {
     private final String[] parameterTypes;
     private final Oid objectOid;
     private final String objectType;
-    private ObjectTransferCarrier[] parameters;
+    private ObjectData[] parameters;
 
     public ExecuteAction(Session session, String actionType, String actionIdentifier, String[] parameterTypes, Oid objectOid,
-            String objectType, Naked[] parameters) {
+            String objectType, ObjectData[] parameters) {
         super(session);
         this.actionType = actionType;
         this.actionIdentifier = actionIdentifier;
@@ -24,16 +23,16 @@ public class ExecuteAction extends AbstractRequest {
         this.objectOid = objectOid;
         this.objectType = objectType;
 
-        this.parameters = getObjects(parameters);
+        this.parameters = parameters;
     }
 
     public void execute(ServerDistribution sd) {
-        sd.executeAction(session, actionType, actionIdentifier, parameterTypes, objectOid, objectType,
-                getNakedObjects(this.parameters));
+        setResponse(sd.executeAction(session, actionType, actionIdentifier, parameterTypes, objectOid, objectType,
+                parameters));
     }
 
-    public NakedObject getActionResult() {
-        return null;
+    public ObjectData getActionResult() {
+        return (ObjectData) getResponse();
     }
 
 }
