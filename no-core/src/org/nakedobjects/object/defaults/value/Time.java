@@ -56,7 +56,7 @@ public class Time extends Magnitude {
 	}
 
     static {        	
-       timeZone = TimeZone.getTimeZone("GMT-0000");
+       timeZone = TimeZone.getTimeZone("GMT");
         SHORT_FORMAT.setTimeZone(timeZone);
         MEDIUM_FORMAT.setTimeZone(timeZone);
         LONG_FORMAT.setTimeZone(timeZone);
