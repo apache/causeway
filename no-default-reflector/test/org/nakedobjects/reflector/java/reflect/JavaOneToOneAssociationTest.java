@@ -10,6 +10,7 @@ import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 import org.nakedobjects.object.security.Session;
 
@@ -49,6 +50,7 @@ public class JavaOneToOneAssociationTest extends TestCase {
     	ConfigurationFactory.setConfiguration(new TestConfiguration());
     	
         objectWithOneToOneAssoications = new JavaObjectWithOneToOneAssociations();
+        PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
         PojoAdapter.setReflectorFactory(new NullReflectorFactory());
         nakedObject = PojoAdapter.createNOAdapter(objectWithOneToOneAssoications);
         

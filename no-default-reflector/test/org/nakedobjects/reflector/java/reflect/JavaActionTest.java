@@ -12,6 +12,7 @@ import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 
 import java.lang.reflect.Method;
@@ -41,7 +42,8 @@ public class JavaActionTest extends TestCase {
     	loader = new MockNakedObjectSpecificationLoader();
         
 		javaObject = new JavaActionTestObject();
-		PojoAdapter.setReflectorFactory(new NullReflectorFactory());
+    	PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
+    	PojoAdapter.setReflectorFactory(new NullReflectorFactory());
 		nakedObject = PojoAdapter.createNOAdapter(javaObject);
 
         Class cls = Class.forName(getClass().getName() + "Object");

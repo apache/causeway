@@ -4,6 +4,7 @@ import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.MockOid;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 
 import junit.framework.TestCase;
@@ -22,6 +23,7 @@ public class LoadedObjectsTest extends TestCase {
     	NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
   //  	NakedObjectSpecificationImpl.setReflectorFactory(new InternalReflectorFactory());
     	
+    	PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
     	PojoAdapter.setReflectorFactory(new NullReflectorFactory());
 		
         lookup = new LoadedObjectsHashtable();

@@ -11,6 +11,7 @@ import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 
 import java.lang.reflect.Method;
@@ -46,7 +47,8 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
     	ConfigurationFactory.setConfiguration(new TestConfiguration());
         
 		objectWithVector = new JavaObjectWithVector();
-		PojoAdapter.setReflectorFactory(new NullReflectorFactory());
+    	PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
+    	PojoAdapter.setReflectorFactory(new NullReflectorFactory());
 		nakedObject = PojoAdapter.createNOAdapter(objectWithVector);
         elements = new JavaReferencedObject[3];
         for (int i = 0; i < elements.length; i++) {

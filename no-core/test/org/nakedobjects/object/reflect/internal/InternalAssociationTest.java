@@ -8,6 +8,7 @@ import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.security.Session;
 
 import java.lang.reflect.Method;
@@ -48,6 +49,7 @@ public class InternalAssociationTest extends TestCase {
 		
     	session = new Session();
         objectWithOneToOneAssoications = new InternalObjectWithOneToOneAssociations();
+    	PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
         PojoAdapter.setReflectorFactory(new NullReflectorFactory());
         object = PojoAdapter.createNOAdapter(objectWithOneToOneAssoications);
         object.setContext(context);

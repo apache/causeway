@@ -10,6 +10,7 @@ import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 
 import java.lang.reflect.Method;
 import java.util.Vector;
@@ -41,11 +42,14 @@ public class InternalOneToManyAssociationTest extends NakedObjectTestCase {
         
         Logger.getRootLogger().setLevel(Level.OFF);
     	loader = new MockNakedObjectSpecificationLoader();
+    	
+  //  	PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
         
         spec = new DummyNakedObjectSpecification();
         loader.addSpec(spec);
         
 		objectWithVector = new InternalObjectWithVector();
+    	PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
 		PojoAdapter.setReflectorFactory(new NullReflectorFactory());
 		nakedObject = PojoAdapter.createNOAdapter(objectWithVector);
         elements = new InternalObjectForReferencing[3];

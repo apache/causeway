@@ -10,6 +10,7 @@ import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 
 import java.lang.reflect.Method;
@@ -45,7 +46,8 @@ public class JavaAssociationTest extends TestCase {
     	ConfigurationFactory.setConfiguration(new TestConfiguration());
         
         javaObjectWithOneToOneAssociations = new JavaObjectWithOneToOneAssociations();
-        PojoAdapter.setReflectorFactory(new NullReflectorFactory());
+    	PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
+    	PojoAdapter.setReflectorFactory(new NullReflectorFactory());
         nakedObjectHoldingObjectWithAssociations = PojoAdapter.createNOAdapter(javaObjectWithOneToOneAssociations);        
         
         Class cls = JavaObjectWithOneToOneAssociations.class;

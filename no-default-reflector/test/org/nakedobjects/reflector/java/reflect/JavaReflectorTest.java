@@ -9,6 +9,7 @@ import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.FieldPeer;
 import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 
 import junit.framework.TestCase;
@@ -36,6 +37,7 @@ public class JavaReflectorTest extends TestCase {
     	loader = new MockNakedObjectSpecificationLoader();     	
     	loader.addSpec(new DummyNakedObjectSpecification());
     	
+    	PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
     	PojoAdapter.setReflectorFactory(new NullReflectorFactory());
 		
     	objectFactory = new MockObjectFactory();
