@@ -2,10 +2,11 @@ package org.nakedobjects.distribution.example;
 
 import org.nakedobjects.distribution.ParameterSet;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObjectContext;
 
 public class SimpleParameterSet implements ParameterSet {
 
-    public Naked[] recreateParameters() {
+    public Naked[] recreateParameters(NakedObjectContext context) {
         return null;
     }
 

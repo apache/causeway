@@ -1,9 +1,10 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObjectContext;
 
 public interface ParameterSet {
-    Naked[] recreateParameters();
+    Naked[] recreateParameters(NakedObjectContext context);
 }
 
 

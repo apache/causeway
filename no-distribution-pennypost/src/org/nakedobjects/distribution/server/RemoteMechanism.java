@@ -46,12 +46,12 @@ public class RemoteMechanism implements DistributionInterface{
     }
 
     public AboutData aboutAction(SessionId securityToken, ObjectReference target, final ActionType actionType, String actionName, ParameterSet parameterSet) {
-        Naked[] parameters = parameterSet.recreateParameters();
+        NakedObject object = target.getObject(objectManager);
+        Naked[] parameters = parameterSet.recreateParameters(object.getContext());
         NakedObjectSpecification[] parameterClasses = new NakedObjectSpecification[parameters.length];
         for (int i = 0; i < parameterClasses.length; i++) {
             parameterClasses[i] = parameters[i].getSpecification();
         }
-        NakedObject object = target.getObject(objectManager);
         Type type = actionType.getType();
         ActionSpecification action = (ActionSpecification) object.getSpecification().getObjectAction(type, actionName, parameterClasses);
         About about = action.getAbout(securityToken.getSession(), object);
@@ -82,12 +82,12 @@ public class RemoteMechanism implements DistributionInterface{
     }
 
     public ObjectData executeAction(final SessionId token, final ObjectReference target, final ActionType actionType, final String actionName, ParameterSet parameterSet) {
-        Naked[] parameters = parameterSet.recreateParameters();
+        NakedObject object = target.getObject(objectManager);
+        Naked[] parameters = parameterSet.recreateParameters(object.getContext());
         NakedObjectSpecification[] parameterClasses = new NakedObjectSpecification[parameters.length];
         for (int i = 0; i < parameterClasses.length; i++) {
             parameterClasses[i] = parameters[i].getSpecification();
         }
-        NakedObject object = target.getObject(objectManager);
         Type type = actionType.getType();
         ActionSpecification action = (ActionSpecification) object.getSpecification().getObjectAction(type, actionName, parameterClasses);
         NakedObject result = action.execute(object, parameters);
