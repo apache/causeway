@@ -6,7 +6,6 @@ import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.UpdateNotifier;
-import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.basic.ClassIconSpecification;
 import org.nakedobjects.viewer.skylark.basic.EmptyField;
@@ -69,12 +68,14 @@ public class Viewer {
     private int statusBarHeight;
     private Bounds statusBarArea;
     private String developerStatus;
+    private String debugPosition;
 
  
 	
     static Location absoluteLocation(View view) {
 //    	Assert.assertEquals(view.getView(), view);
-    	
+    	return view.getLocationWithinViewer();
+    	/*
     	Location location = view.getLocation();
 		while((view = view.getParent()) != null) {
     		Location parentLocation = view.getLocation();
@@ -84,6 +85,7 @@ public class Viewer {
     	}
 
 		return location;
+    	*/
 	}
 
 	public void markDamaged(View view) {
@@ -128,16 +130,17 @@ public class Viewer {
 		if (includeOverlay && overlayView != null && overlayView.getBounds().contains(downAt)) {
 			return overlayView;
 		} else {
-			View identified = identifyView(rootView, downAt);
+		    //View identified = identifyView(rootView, downAt);
+		    View identified = rootView.identify(new Location(downAt));
 			return identified;
 		}
 	}
-
+/*
 	private View identifyView(View view, Location locationWithinParent) {
 	   	Assert.assertEquals(view.getView(), view);
 	    
 		Location location = new Location(locationWithinParent);
-//		LOG.debug("  checking " + view + " for " + location);
+		LOG.debug("  checking " + view + " for " + location);
 		Bounds bounds = view.getBounds();
 		if(bounds.contains(location)) {
 			Padding parentPadding = view.getPadding(); 
@@ -169,9 +172,17 @@ public class Viewer {
 			return null;
 		}
 	}
+	*/
 	
-	
-	public void init(RenderingArea renderingArea, NakedObject object, ObjectViewingMechanismListener listener) 
+	public void init(RenderingArea renderingArea, NakedObject object, ObjectViewingMechanismListener listener) throws ConfigurationException, ComponentException {
+		init(renderingArea, listener);
+
+		WorkspaceSpecification spec = (WorkspaceSpecification) ComponentLoader.loadComponent(SPECIFICATION_BASE + "root", RootWorkspaceSpecification.class, WorkspaceSpecification.class);
+		View view = spec.createView(new RootObject(object), null);
+		setRootView(view);
+}
+
+	public void init(RenderingArea renderingArea, ObjectViewingMechanismListener listener) 
 		throws ConfigurationException, ComponentException {
 	    doubleBuffering = Configuration.getInstance().getBoolean(PROPERTY_BASE +
                 "doublebuffering", true);
@@ -191,9 +202,10 @@ public class Viewer {
 		renderingArea.addKeyListener(interactionHandler);
 
 		setupViewFactory();
-		
-		WorkspaceSpecification spec = (WorkspaceSpecification) ComponentLoader.loadComponent(SPECIFICATION_BASE + "root", RootWorkspaceSpecification.class, WorkspaceSpecification.class);
-		rootView = spec.createView(new RootObject(object), null);
+	}
+	
+	public void setRootView(View rootView) {
+		this.rootView = rootView;
 		rootView.invalidateContent();
    }
 
@@ -257,7 +269,7 @@ public class Viewer {
     private void paintDeveloperStatus(Graphics bufferCanvas) {
         int top = internalDisplaySize.getHeight() - statusBarHeight * 2;
         bufferCanvas.setColor(new Color(0xe0, 0xe0, 0xe0));
-        paintStatus(bufferCanvas, top, developerStatus);
+        paintStatus(bufferCanvas, top, debugPosition + ": " + developerStatus);
     }
     
     private void paintStatus(Graphics bufferCanvas, int top, String text) {
@@ -323,11 +335,24 @@ public class Viewer {
     /**
      * Sets the status string and refreshes that part of the screen.
      */
-    public void setDeveloperStatus(String status) {
+    public void setLiveDebugMessage(String status) {
+        if(showDeveloperStatus) {
         if (!status.equals(this.developerStatus)) {
             this.developerStatus = status;
             LOG.debug("changed developer status " + status + " " + statusBarArea);
 	        renderingArea.repaint(statusBarArea.x, statusBarArea.y, statusBarArea.width, statusBarArea.height);
+        }
+        }
+    }
+    
+    public void setLiveDebugPositionInformation(String action, Location mouseLocation, View mouseOver) {
+        if(showDeveloperStatus) {
+            Location innerLocation = new Location(mouseLocation);
+            if(mouseOver != null) {
+            innerLocation.move(-mouseOver.getLocationWithinViewer().x, -mouseOver.getLocationWithinViewer().y);
+            }
+            debugPosition = action + " [" + mouseLocation + " " + innerLocation + " - " + mouseOver + "]";
+            renderingArea.repaint(statusBarArea.x, statusBarArea.y, statusBarArea.width, statusBarArea.height);
         }
     }
     
@@ -441,7 +466,7 @@ public class Viewer {
 
     public void start() {
 		sizeChange();
-        setDeveloperStatus("Viewer started " + this);
+        setLiveDebugMessage("Viewer started " + this);
 		repaint();
     }
     

@@ -268,6 +268,8 @@ public interface View extends Cloneable {
 
     void setParent(View view);
 
+    public void setRequiredSize(Size size);
+
     void setSize(Size size);
 
     void setView(View view);
@@ -290,6 +292,8 @@ public interface View extends Cloneable {
      * @return true if the user is targeting the view itself, false if the user is targeting what is being represented
      */
     ViewAreaType viewAreaType(Location mouseLocation);
+
+    View identify(Location location);
 }
 
 

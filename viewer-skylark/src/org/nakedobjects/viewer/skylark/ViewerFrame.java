@@ -55,7 +55,10 @@ public class ViewerFrame extends Frame implements RenderingArea, ObjectViewingMe
         } catch (SecurityException e1) {
             e1.printStackTrace();
         } catch (NoSuchMethodException ignore) {
-            ;
+            /*
+             * Ignore no such method exception as this method is only available, and 
+             * needed, in version 1.4 and later.
+             */
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

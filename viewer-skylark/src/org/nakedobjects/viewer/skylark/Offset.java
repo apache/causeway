@@ -10,6 +10,11 @@ public class Offset {
 		dy = locationInViewer.getY() - locationInView.getY();
 	}
 	
+    public Offset(int dx, int dy) {
+        this.dx = dx;
+        this.dy = dy;
+    }
+    
 	public int getDeltaX() {
 		return dx;
 	}

@@ -117,6 +117,7 @@ public abstract class AbstractView implements View {
         b.append("\nAxis:      " + getViewAxis());
         b.append("\nState:     " + getState());
         b.append("\nLocation:  " + getLocation());
+        b.append("\nAbsolute:  " + getLocationWithinViewer());
         if(specification == null) {
             b.append("\nSpec:      none");
         } else {
@@ -277,7 +278,18 @@ public abstract class AbstractView implements View {
     }
 
     public Location getLocationWithinViewer() {
-        return getViewManager().absoluteLocation(getView());
+     //   return getViewManager().absoluteLocation(getView());
+        if(getParent() != null) {
+	       Location location = getParent().getLocationWithinViewer();
+	       location.move(x, y);
+	       
+   		Padding padding = getParent().getPadding();
+		location.move(padding.getLeft(), padding.getTop());
+
+	        return location;
+        } else {
+            return getLocation();
+        }
     }
 
     public Padding getPadding() {
@@ -328,6 +340,11 @@ public abstract class AbstractView implements View {
 
     public boolean hasFocus() {
         return false;
+    }
+    
+    public View identify(Location location) {
+   //     LOG.debug("identifying self: " + this + " " + location + " in " + getBounds());
+        return getView();
     }
 
     /**
@@ -541,6 +558,8 @@ public abstract class AbstractView implements View {
         LOG.debug("set parent " + parent + " for " + this);
     }
 
+    public void setRequiredSize(Size size) {}
+    
     public void setSize(Size size) {
         width = size.getWidth();
         height = size.getHeight();
@@ -555,7 +574,7 @@ public abstract class AbstractView implements View {
 
     public String toString() {
         String name = getClass().getName();
-        return name.substring(name.lastIndexOf('.') + 1) + getId();
+        return name.substring(name.lastIndexOf('.') + 1) + getId() + " " + getContent();
     }
 
     public void update(NakedObject object) {

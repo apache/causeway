@@ -45,7 +45,7 @@ public class InternalDrag extends Drag {
 	 * @param source	the view over which the pointer was when this event started
  	 * @param locationWithinViewer  the location within the viewer (the Frame/Applet/Window etc)
  	 * @param location  the location within the specified view
- 	 * @param mods  the button and key modifiers (@see java.awt.event.MouseEvent)
+ 	 * @param modifiers  the button and key modifiers (@see java.awt.event.MouseEvent)
 	 */
     private InternalDrag(View source, Location locationWithinViewer, Location location, int modifiers) {
         super(source, locationWithinViewer, location, modifiers);
@@ -81,4 +81,9 @@ public class InternalDrag extends Drag {
 	public void cancel() {
 		getTargetView().dragCancel(this);
 	}
+
+
+    public void move(Offset offset) {
+        move(offset.getDeltaX(), offset.getDeltaY());
+    }
 }

@@ -127,6 +127,22 @@ public class CompositeObjectView extends ObjectView {
         return v;
     }
     
+    public View identify(Location location) {
+//        LOG.debug("checking composite " + this + " " + location);
+
+        location.move(-getBounds().getX(), -getBounds().getY());
+        
+        View views[] = getSubviews();
+        for (int i = views.length - 1; i >= 0; i--) {
+        //    LOG.debug("checking subview " + views[i] + " " + location);
+            View subview = views[i];
+            if(subview.getBounds().contains(location)) {
+                return subview.identify(location);
+            }
+        }
+        return getView();
+    }
+
     public void invalidateContent() {
        buildInvalid = true;
        invalidateLayout();

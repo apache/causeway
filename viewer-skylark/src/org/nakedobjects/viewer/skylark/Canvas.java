@@ -31,6 +31,11 @@ public class Canvas {
         return new Canvas(g, 0, 0, width, height);
     }
 
+    public void setClip(int x, int y, int width, int height) {
+        graphics.translate(-x, -y);
+        graphics.setClip(x, y, width, height); 
+    }
+    
     public void draw3DRectangle(int x, int y, int width, int height, boolean raised) {
         graphics.draw3DRect(x, y, width, height, raised);
     }

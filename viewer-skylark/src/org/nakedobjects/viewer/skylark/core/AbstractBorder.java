@@ -12,14 +12,23 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewDrag;
 
+import org.apache.log4j.Logger;
+
+
 public class AbstractBorder extends AbstractViewDecorator {
+    private static final Logger LOG = Logger.getLogger(AbstractBorder.class);
     protected int bottom;
     protected int left;
+    private boolean onBorder;
     protected int right;
     protected int top;
 
     protected AbstractBorder(View view) {
         super(view);
+    }
+
+    protected Bounds contentArea() {
+        return new Bounds(0, 0, getSize().getWidth() - right, getSize().getHeight() - bottom);
     }
 
     public void drag(InternalDrag drag) {
@@ -117,9 +126,38 @@ public class AbstractBorder extends AbstractViewDecorator {
         return top;
     }
 
+    protected boolean overBorder(Location mouseLocation) {
+        return !contentArea().contains(mouseLocation);
+    }
+
+    protected boolean overContent(Location mouseLocation) {
+        return contentArea().contains(mouseLocation);
+    }
+
+   public View identify(Location location) {
+        location.move(-getLeft(), -getTop());
+        return wrappedView.identify(location);
+    }
+    
+    protected boolean isOnBorder() {
+        return onBorder;
+    }
+
     public void mouseMoved(Location at) {
+        boolean on = overBorder(at);
+        if (onBorder != on) {
+            markDamaged();
+            onBorder = on;
+            LOG.debug("On border " + onBorder);
+        }
+
         at.move(-getLeft(), -getTop());
         wrappedView.mouseMoved(at);
+    }
+    
+    public void exited() {
+        onBorder = false;
+        super.exited();
     }
 
     public View pickup(ContentDrag drag) {
@@ -138,7 +176,13 @@ public class AbstractBorder extends AbstractViewDecorator {
         click.move(-getLeft(), -getTop());
         wrappedView.secondClick(click);
     }
-
+    
+	public void setRequiredSize(Size size) {
+        Size wrappedSize = new Size(size);
+        wrappedSize.extend(-getLeft() - getRight(), -getTop() - getBottom());
+        wrappedView.setRequiredSize(wrappedSize);
+	}
+	
     public void setSize(Size size) {
         Size wrappedViewSize = new Size(size);
         wrappedViewSize.extend(-getLeft() - getRight(), -getTop() - getBottom());
@@ -162,6 +206,7 @@ public class AbstractBorder extends AbstractViewDecorator {
             return ViewAreaType.VIEW;
         }
     }
+
 }
 
 /*

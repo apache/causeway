@@ -53,6 +53,10 @@ public class Click extends PointerEvent {
     public String toString() {
         return "Click [type=" + type + "," + super.toString() + "]";
     }
+
+    public void move(Offset offset) {
+        move(offset.getDeltaX(), offset.getDeltaY());
+    }
 }
 
 /*

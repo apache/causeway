@@ -204,6 +204,10 @@ public class AbstractViewDecorator implements View {
 		return wrappedView.hasFocus();
 	}
 
+	public View identify(Location location) {
+        return wrappedView.identify(location);
+    }
+	
 	public void invalidateContent() {
 		wrappedView.invalidateContent();
 	}
@@ -290,6 +294,10 @@ public class AbstractViewDecorator implements View {
 
 	public void setSize(Size size) {
 		wrappedView.setSize(size);
+	}
+	
+	public void setRequiredSize(Size size) {
+	    wrappedView.setRequiredSize(size);
 	}
 	
 	public void setView(View view) {

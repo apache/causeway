@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.special;
 
-
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.Bounds;
@@ -27,7 +26,7 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
 
     protected TreeBrowserFrame(Content content, ViewSpecification specification) {
         super(content, specification, null);
-        
+
         mainViewFormSpec = new TreeBrowserFormSpecification();
         mainViewTableSpec = new InternalTableSpecification();
     }
@@ -60,13 +59,13 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
         Canvas subCanvas = canvas.createSubcanvas(bounds);
         left.draw(subCanvas);
 
-    	int y1 = getPadding().getTop();
-    	int y2 = getSize().getHeight();
-          for (int i = 0; i < 3; i++) {
-        	int x = bounds.getWidth() + i;
-			canvas.drawLine(x, y1, x, y2, Style.SECONDARY2 );
-		}
-        
+        int y1 = getPadding().getTop();
+        int y2 = getSize().getHeight();
+        for (int i = 0; i < 3; i++) {
+            int x = bounds.getWidth() + i;
+            canvas.drawLine(x, y1, x, y2, Style.SECONDARY2);
+        }
+
         if (right != null) {
             bounds = right.getBounds();
             subCanvas = canvas.createSubcanvas(bounds);
@@ -78,7 +77,7 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
         Size size = left.getRequiredSize();
         size.extend(getPadding());
         size.extendWidth(5);
-        
+
         if (right != null) {
             Size rightSize = right.getRequiredSize();
             size.ensureHeight(rightSize.getHeight());
@@ -131,12 +130,11 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
             throw new NakedObjectRuntimeException();
         }
     }
-    
-    
+
     public void removeView(View view) {
-        if(view == left) {
+        if (view == left) {
             left = null;
-        } else if(view == right) {
+        } else if (view == right) {
             right = null;
         }
     }
@@ -144,6 +142,18 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     void initLeftPane(View view) {
         left = view;
         left.setParent(getView());
+    }
+
+    public View identify(Location location) {
+        location.move(-getBounds().getX(), -getBounds().getY());
+        if (left != null && left.getBounds().contains(location)) {
+            return left.identify(location);
+        }
+        if (right != null && right.getBounds().contains(location)) {
+            return right.identify(location);
+        }
+
+        return getView();
     }
 
     private void showInRightPane(View view) {
@@ -154,44 +164,43 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
 
     public void setSelectedNode(View view) {
         NakedObject object = ((ObjectContent) view.getContent()).getObject();
-        if(object != null) {
-	        if(mainViewFormSpec.canDisplay(object)) {
-		        selectedNode = view;
-		        showInRightPane(mainViewFormSpec.createView(view.getContent(), null));
-	        }
-	        if(mainViewTableSpec.canDisplay(object)) {
-		        selectedNode = view;
-		        showInRightPane(mainViewTableSpec.createView(view.getContent(), null));
-	        }
+        if (object != null) {
+            if (mainViewFormSpec.canDisplay(object)) {
+                selectedNode = view;
+                showInRightPane(mainViewFormSpec.createView(view.getContent(), null));
+            }
+            if (mainViewTableSpec.canDisplay(object)) {
+                selectedNode = view;
+                showInRightPane(mainViewTableSpec.createView(view.getContent(), null));
+            }
         }
-   }
+    }
 
     public String toString() {
         return "TreeBrowserFrame" + getId();
     }
 }
 
-
 /*
-Naked Objects - a framework that exposes behaviourally complete
-business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-The authors can be contacted via www.nakedobjects.org (the
-registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-Road, Woking GU21 1NR, UK).
-*/
+ * Naked Objects - a framework that exposes behaviourally complete business
+ * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * Ltd
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * The authors can be contacted via www.nakedobjects.org (the registered address
+ * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
+ * 1NR, UK).
+ */

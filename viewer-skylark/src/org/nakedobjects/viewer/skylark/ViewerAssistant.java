@@ -157,7 +157,7 @@ public class ViewerAssistant {
     }
     
     public void setDeveloperStatus(String status) {
-        viewer.setDeveloperStatus(status);
+        viewer.setLiveDebugMessage(status);
     }
     
     public void showArrowCursor() {

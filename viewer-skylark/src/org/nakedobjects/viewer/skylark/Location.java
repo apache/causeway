@@ -93,4 +93,8 @@ public class Location {
 	public void translate(Location offset) {
 		move(offset.x, offset.y);
 	}
+
+    public void translate(Offset offset) {
+        move(offset.getDeltaX(), offset.getDeltaY());
+    }
 }

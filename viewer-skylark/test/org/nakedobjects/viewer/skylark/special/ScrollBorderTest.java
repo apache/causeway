@@ -1,33 +1,28 @@
-package org.nakedobjects.viewer.skylark;
+package org.nakedobjects.viewer.skylark.special;
 
-import java.awt.Image;
+import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.Size;
+import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.ViewAreaType;
 
+import junit.framework.TestCase;
 
-public class Picture {
-    Image iconImage;
+public class ScrollBorderTest extends TestCase {
 
-    public Picture(Image iconImage) {
-        if (iconImage == null) {
-            throw new NullPointerException();
-        }
-
-        this.iconImage = iconImage;
+    public static void main(String[] args) {
+        junit.textui.TestRunner.run(ScrollBorderTest.class);
     }
 
-    public int getHeight() {
-        return iconImage.getHeight(null);
-    }
+    public void testScrollBar() {
+       View  view = new ScrollBorder(new MockView());
+       view.setSize(new Size(100, 200));
+       
+       ViewAreaType type = view.viewAreaType(new Location(20, 190));
+       assertEquals(ViewAreaType.INTERNAL, type);
+       
+       type = view.viewAreaType(new Location(95, 20));
+       assertEquals(ViewAreaType.INTERNAL, type);
 
-    public int getWidth() {
-        return iconImage.getWidth(null);
-    }
-
-    public Size getSize() {
-        return new Size(getWidth(), getHeight());
-    }
-    
-    Image getAwtImage() {
-        return iconImage;
     }
 }
 
@@ -35,7 +30,7 @@ public class Picture {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

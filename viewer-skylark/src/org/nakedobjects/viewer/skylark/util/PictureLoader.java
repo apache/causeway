@@ -130,7 +130,7 @@ class PictureLoader {
         final File file = new File(path);
 
         if (!file.exists()) {
-            LOG.debug("Could not find image file: " + file.getAbsolutePath());
+  //          LOG.debug("Could not find image file: " + file.getAbsolutePath());
 
             return null;
         } else {

@@ -23,8 +23,10 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
+import org.nakedobjects.viewer.skylark.basic.LabelAxis;
 import org.nakedobjects.viewer.skylark.basic.SimpleIdentifier;
 import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
+import org.nakedobjects.viewer.skylark.special.ViewResizeOutline;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -490,7 +492,12 @@ public class TextField extends AbstractField {
     }
 
     public void drag(InternalDrag drag) {
-        if (!isResizing) {
+        if (isResizing) {
+    		ViewResizeOutline outline = ((ViewResizeOutline) drag.getDragOverlay());
+    		outline.markDamaged();
+    		outline.adjust(drag);
+         
+        } else {
             if (canChangeValue()) {
                 selection.extendTo(drag.getTargetLocation());
                 markDamaged();
@@ -503,6 +510,20 @@ public class TextField extends AbstractField {
 
         if (isOnResize(at)) {
             isResizing = true;
+            
+           /*
+            * TODO need to adjust overlay position to accomodate padding caused by the label
+            int left = 0;
+            ViewAxis axis = getViewAxis();
+            if(axis instanceof LabelAxis) {
+                left = ((LabelAxis) axis).getWidth()
+            }
+            */
+            
+    		ViewResizeOutline outline = new ViewResizeOutline(drag, getView(), ViewResizeOutline.BOTTOM_RIGHT);
+    		getViewManager().setOverlayView(outline);
+    		outline.markDamaged();
+    		return outline;
         } else {
             if (canChangeValue()) {
                 isResizing = false;

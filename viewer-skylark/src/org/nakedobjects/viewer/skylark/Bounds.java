@@ -37,9 +37,9 @@ public class Bounds {
         this(0, 0, size.width, size.height);
     }
 
-    public boolean contains(Location mousePosition) {
-        int xp = mousePosition.getX();
-        int yp = mousePosition.getY();
+    public boolean contains(Location location) {
+        int xp = location.getX();
+        int yp = location.getY();
         int xMax = x + width;
         int yMax = y + height;
 

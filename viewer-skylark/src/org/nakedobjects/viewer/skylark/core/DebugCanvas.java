@@ -142,6 +142,11 @@ public class DebugCanvas extends Canvas {
 		indent();
 		buffer.append("Reduce by " + left + "/" + right + " " + top + "/" + bottom +  " (left/right top/bottom)");
 	}	
+	
+	public void setClip(int x, int y, int width, int height) {
+		indent();
+		buffer.append("Set clip " + x + "," + y + " +" + width+ "+" + height +  "");
+   }
 }
 
 /*
