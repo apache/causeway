@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+
+<project name="Naked Objects framework" default="all" basedir=".">
+
+	<description>
+	</description>
+
+	<target name="all">
+		<antcall target="all-components">
+			<param name="target" value="all"/>
+		</antcall>
+	</target>
+	
+	<target name="release-exploration">
+		<mkdir dir="exploration"/>
+		<mkdir dir="exploration/api"/>
+				
+		<jar jarfile="exploration/exploration.jar">
+			<zipfileset src="../no-core/build/release/no-core.jar"/>
+			<zipfileset src="../no-containers/build/release/no-containers.jar"/>
+			<zipfileset src="../viewer-skylark/build/release/viewer-skylark.jar"/>
+		</jar>
+				
+		<jar jarfile="exploration/exploration-src.jar">
+			<zipfileset src="../no-core/build/release/no-core-src.jar"/>
+			<zipfileset src="../no-containers/build/release/no-containers-src.jar"/>
+			<zipfileset src="../viewer-skylark/build/release/viewer-skylark-src.jar"/>
+		</jar>
+				
+		<javadoc 
+			destDir="exploration/api" 
+			windowtitle="Naked Objects Exploration API version ${build.version}" 
+			additionalparam="-breakiterator -tag group -tag testpackage -tag testcase -tag testkind -tag testfamily -tag testsetup -tag testedclass">
+
+			<package name="org.nakedobjects.*"/>
+			
+			<sourcepath location="../no-core/build/src" />
+			<sourcepath location="../example-ecs/build/src" />
+			<!-- is viewer doc necessary?? -->
+			<!-- sourcepath location="../viewer-skylark/build/src" /-->
+		</javadoc>
+		
+		<junitreport>
+			<fileset dir="../no-core/build/test-result"/>
+			<fileset dir="../no-containers/build/test-result"/>
+			<fileset dir="../example-ecs/build/test-result"/>
+			<fileset dir="../viewer-skylark/build/test-result"/>
+			<report format="frames" todir="exploration/tests"/>
+		</junitreport>
+
+		
+
+		<!-- copy in:
+				properties files
+				examples & example code in html
+				docs
+				-->
+	</target>
+	
+	<target name="all-components">
+		<antcall target="core"/>
+		<antcall target="no-distribution"/>
+		<antcall target="no-containers"/>
+		<antcall target="os-cache"/>
+		<antcall target="os-file"/>
+		<antcall target="os-mysql"/>
+		<!--antcall target="os-sql"/-->
+		<antcall target="xat-new"/>
+		<antcall target="viewer-skylark"/>
+	</target>
+	
+	<target name="core" >
+		<ant dir="../no-core" target="${target}" inheritAll="false"/>
+	</target>
+	
+	<target name="os-cache" >
+		<ant dir="../os-cache" target="${target}" inheritAll="false"/>
+	</target>
+	
+	<target name="xat-new" >
+		<ant dir="../xat-new" target="${target}" inheritAll="false"/>
+	</target>
+	
+	<target name="os-file" >
+		<ant dir="../os-file" target="${target}" inheritAll="false"/>
+	</target>
+	
+	<target name="os-mysql" >
+		<ant dir="../os-mysql" target="${target}" inheritAll="false"/>
+	</target>
+
+	<target name="os-sql" >
+		<ant dir="../os-sql" target="${target}" inheritAll="false"/>
+	</target>
+	
+	<target name="viewer-skylark" >
+		<ant dir="../viewer-skylark" target="${target}" inheritAll="false"/>
+	</target>
+	
+	<target name="no-distribution" >
+		<ant dir="../no-distribution" target="${target}" inheritAll="false"/>
+	</target>
+	
+	<target name="no-containers" >
+		<ant dir="../no-containers" target="${target}" inheritAll="false"/>
+	</target>
+	
+
+</project>
+
+
