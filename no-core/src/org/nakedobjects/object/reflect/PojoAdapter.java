@@ -219,18 +219,23 @@ public class PojoAdapter extends AbstractNakedObject {
     }
 
     public void setValue(OneToOneAssociation field, Object object) {
- //       markDirty();
         field.setValue(this, object);
     }
 
     public String titleString() {
         NakedObjectSpecification specification = getSpecification();
-        String title =  specification == null ? null : specification.getTitle().title(this);
-        if (title == null) {
-            return "A " + specification.getSingularName().toLowerCase();
+        String title;
+        if(isResolved()) {
+            title = specification == null ? null : specification.getTitle().title(this);
         } else {
-            return title;
+	        title =  specification == null ? null : specification.unresolvedTitle(this);
+            
         }
+	        if (title == null) {
+	            return "A " + specification.getSingularName().toLowerCase();
+	        } else {
+	            return title;
+	        }
     }
     
     public String toString() {
@@ -240,7 +245,7 @@ public class PojoAdapter extends AbstractNakedObject {
 
     protected void finalize() throws Throwable {
         super.finalize();
-        LOG.info("finalizing pojo " + this);
+        LOG.info("finalizing pojo: " + pojo);
     }
 
 }

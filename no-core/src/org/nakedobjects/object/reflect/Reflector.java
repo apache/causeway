@@ -78,6 +78,8 @@ public interface Reflector {
     String singularName();
 
     ObjectTitle title();
+
+    String unresolvedTitle(NakedObject pojo);
 }
 
 /*
