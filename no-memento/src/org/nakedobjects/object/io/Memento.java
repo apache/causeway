@@ -1,12 +1,12 @@
 package org.nakedobjects.object.io;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
@@ -81,7 +81,7 @@ public class Memento implements Transferable, Serializable {
         if (state == null) {
             return null;
         } else {
-            NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(state.className);
+            NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(state.className);
             NakedObject object = (NakedObject) nc.acquireInstance();
             object.setOid(state.oid);
             LOG.debug("Recreated object " + object.getOid());
@@ -96,7 +96,7 @@ public class Memento implements Transferable, Serializable {
             NakedObject ref;
             Oid oid = data.oid;
 
-            NakedObjectSpecification nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(data.className);
+            NakedObjectSpecification nakedClass = NakedObjects.getSpecificationLoader().loadSpecification(data.className);
             if (oid == null) {
                 ref = null;
             } else if (loadedObjects.isLoaded(oid)) {

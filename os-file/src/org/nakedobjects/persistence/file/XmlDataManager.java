@@ -1,8 +1,8 @@
 package org.nakedobjects.persistence.file;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.object.persistence.defaults.SerialOid;
@@ -90,12 +90,12 @@ public class XmlDataManager implements DataManager {
                 if (tagName.equals("naked-object")) {
                     String type = attrs.getValue("type");
                     long id = Long.valueOf(attrs.getValue("id"), 16).longValue();
-                    object = new ObjectData(NakedObjectSpecificationLoader.getInstance().loadSpecification(type), new SerialOid(
+                    object = new ObjectData(NakedObjects.getSpecificationLoader().loadSpecification(type), new SerialOid(
                             id));
                 } else if (tagName.equals("collection")) {
                     String type = attrs.getValue("type");
                     long id = Long.valueOf(attrs.getValue("id"), 16).longValue();
-                    collection = new CollectionData(NakedObjectSpecificationLoader.getInstance().loadSpecification(type),
+                    collection = new CollectionData(NakedObjects.getSpecificationLoader().loadSpecification(type),
                             new SerialOid(id));
                 } else {
                     throw new SAXException("Invalid data");

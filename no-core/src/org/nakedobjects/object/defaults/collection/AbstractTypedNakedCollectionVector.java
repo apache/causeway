@@ -1,8 +1,8 @@
 package org.nakedobjects.object.defaults.collection;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
@@ -13,7 +13,7 @@ public abstract class AbstractTypedNakedCollectionVector extends AbstractNakedCo
     private NakedObjectSpecification specification;
 
     public AbstractTypedNakedCollectionVector(Class type) {
-        this(NakedObjectSpecificationLoader.getInstance().loadSpecification(type));
+        this(NakedObjects.getSpecificationLoader().loadSpecification(type));
     }
 
     public AbstractTypedNakedCollectionVector(NakedObjectSpecification specification) {
@@ -21,7 +21,7 @@ public abstract class AbstractTypedNakedCollectionVector extends AbstractNakedCo
     }
 
     public AbstractTypedNakedCollectionVector(String typeName) {
-        this(NakedObjectSpecificationLoader.getInstance().loadSpecification(typeName));
+        this(NakedObjects.getSpecificationLoader().loadSpecification(typeName));
     }
 
     /**

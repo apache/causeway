@@ -1,12 +1,12 @@
 package org.nakedobjects.reflector.java.reflect;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.application.collection.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.OneToManyPeer;
@@ -193,7 +193,7 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
     return the object type, as a Class object, that the method returns.
     */
    public NakedObjectSpecification getType() {
-       return type == null ? NakedObjectSpecificationLoader.getInstance().loadSpecification(Object.class) : super.getType();
+       return type == null ? NakedObjects.getSpecificationLoader().loadSpecification(Object.class) : super.getType();
    }
    
 

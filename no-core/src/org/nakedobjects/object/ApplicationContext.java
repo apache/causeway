@@ -1,7 +1,6 @@
 package org.nakedobjects.object;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.ApplicationContext;
 import org.nakedobjects.object.defaults.InternalNakedObject;
 import org.nakedobjects.object.reflect.PojoAdapter;
 
@@ -27,7 +26,7 @@ public abstract class ApplicationContext implements InternalNakedObject {
 
     protected NakedClass addClass(String className) {
         LOG.info("Added class " + className + " to " + this);
-        NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
+        NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(className);
         NakedClass nakedClass = NakedObjects.getObjectManager().getNakedClass(nc);
         classes.addElement(nakedClass);
         return nakedClass;

@@ -1,9 +1,9 @@
 package org.nakedobjects.object.reflect.valueadapter;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.Oid;
@@ -18,7 +18,7 @@ public abstract class AbstractNakedValue implements NakedValue {
     // TODO this is same as NakedObjectSpec;  need a common superclass
     public NakedObjectSpecification getSpecification() {
         if(specification == null) {
-            specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(getValueClass());
+            specification = NakedObjects.getSpecificationLoader().loadSpecification(getValueClass());
         }
         return specification;
     }

@@ -1,8 +1,8 @@
 package org.nakedobjects.object.reflect.internal;
 
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 
 import java.lang.reflect.Method;
 
@@ -23,7 +23,7 @@ public abstract class InternalField extends InternalMember {
      return the object type, as a Class object, that the method returns.
      */
     public NakedObjectSpecification getType() {
-        return type == null ? null : NakedObjectSpecificationLoader.getInstance().loadSpecification(type);
+        return type == null ? null : NakedObjects.getSpecificationLoader().loadSpecification(type);
     }
     
     /**

@@ -1,5 +1,6 @@
 package org.nakedobjects.persistence.file;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
@@ -7,7 +8,6 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.persistence.CreateObjectCommand;
 import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.NakedObjectStore;
@@ -35,7 +35,7 @@ public class XmlObjectStore implements NakedObjectStore {
     public void abortTransaction() {}
 
     private NakedObjectSpecification classFor(String type) {
-        return NakedObjectSpecificationLoader.getInstance().loadSpecification(type);
+        return NakedObjects.getSpecificationLoader().loadSpecification(type);
     }
 
     private ObjectData createObjectData(NakedObject object, boolean ensurePersistent) {
@@ -73,7 +73,7 @@ public class XmlObjectStore implements NakedObjectStore {
             return loadedObjects.getLoadedObject(oid);
         } else {
             LOG.debug("Creating skeletal object of " + type + " " + oid);
-            NakedObjectSpecification cls = NakedObjectSpecificationLoader.getInstance().loadSpecification(type);
+            NakedObjectSpecification cls = NakedObjects.getSpecificationLoader().loadSpecification(type);
             NakedObject object = (NakedObject) cls.acquireInstance();
             object.setOid(oid);
 
@@ -319,6 +319,8 @@ public class XmlObjectStore implements NakedObjectStore {
         }
     }
 
+    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectStoreException {}
+    
     public void setDataManager(DataManager dataManager) {
         this.dataManager = dataManager;
     }

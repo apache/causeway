@@ -1,10 +1,10 @@
 package org.nakedobjects.object.defaults.collection;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.control.Consent;
@@ -197,7 +197,7 @@ public class InstanceCollectionVector implements TypedNakedCollection, InternalN
 
     public NakedObjectSpecification getSpecification() {
         if(specification == null) {
-            specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(this.getClass());
+            specification = NakedObjects.getSpecificationLoader().loadSpecification(this.getClass());
         }
         return specification;
     }

@@ -6,7 +6,6 @@ import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.NakedObjectManager;
@@ -126,7 +125,7 @@ public class InternalAction extends InternalMember implements ActionPeer {
     }
 
     private NakedObjectSpecification nakedClass(Class returnType) {
-        return NakedObjectSpecificationLoader.getInstance().loadSpecification(returnType.getName());
+        return NakedObjects.getSpecificationLoader().loadSpecification(returnType.getName());
     }
 
     public NakedObjectSpecification[] parameterTypes() {

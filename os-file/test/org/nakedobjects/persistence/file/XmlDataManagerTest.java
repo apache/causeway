@@ -1,9 +1,9 @@
 package org.nakedobjects.persistence.file;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
@@ -40,15 +40,17 @@ public class XmlDataManagerTest extends TestCase {
 		manager = new XmlDataManager("tmp/tests");
 
 		MockObjectManager.setup();
-        new NakedObjectSpecificationLoaderImpl();
+        NakedObjectSpecificationLoaderImpl specificationLoader = new NakedObjectSpecificationLoaderImpl();
         NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
-        NakedObjectSpecificationLoaderImpl.setReflectorFactory(new JavaReflectorFactory());
+        specificationLoader.setReflectorFactory(new JavaReflectorFactory());
 
+        NakedObjects.setSpecificationLoader(specificationLoader);
+        
         ConfigurationFactory.setConfiguration(new Configuration());
         
 		oids = new SerialOid[SIZE];
 		data = new ObjectData[SIZE];
-		NakedObjectSpecification type = NakedObjectSpecificationLoader.getInstance().loadSpecification(Role.class.getName());
+		NakedObjectSpecification type = NakedObjects.getSpecificationLoader().loadSpecification(Role.class.getName());
 		pattern = new ObjectData(type, null);
 		for (int i = 0; i < SIZE; i++) {
 			oids[i] = new SerialOid(i);
@@ -177,7 +179,7 @@ public class XmlDataManagerTest extends TestCase {
 	}
 	/*
 	public void testInsertValues() throws ObjectStoreException {
-		NakedObjectSpecification type = NakedObjectSpecificationLoader.getInstance().loadSpecification(ValueObjectExample.class.getName());
+		NakedObjectSpecification type = NakedObjects.getSpecificationLoader().loadSpecification(ValueObjectExample.class.getName());
 		SerialOid oid = new SerialOid(99);
 		ObjectData data =  new ObjectData(type, oid);
 
@@ -284,7 +286,7 @@ public class XmlDataManagerTest extends TestCase {
 	}
 
 	public void testSaveValues() throws ObjectStoreException {
-		NakedObjectSpecification type = NakedObjectSpecificationLoader.getInstance().loadSpecification(ValueObjectExample.class.getName());
+		NakedObjectSpecification type = NakedObjects.getSpecificationLoader().loadSpecification(ValueObjectExample.class.getName());
 		SerialOid oid = new SerialOid(99);
 		ObjectData data =  new ObjectData(type, oid);
 
@@ -399,7 +401,7 @@ public class XmlDataManagerTest extends TestCase {
 	*/
 	
 	private ObjectData createData(Class cls, long id) {
-		NakedObjectSpecification type = NakedObjectSpecificationLoader.getInstance().loadSpecification(cls.getName());
+		NakedObjectSpecification type = NakedObjects.getSpecificationLoader().loadSpecification(cls.getName());
 		SerialOid oid = new SerialOid(id);
 		return new ObjectData(type, oid);
 		

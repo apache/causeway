@@ -7,7 +7,6 @@ import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.fixture.Fixture;
 import org.nakedobjects.object.fixture.FixtureBuilder;
 import org.nakedobjects.object.reflect.PojoAdapter;
@@ -121,7 +120,7 @@ public abstract class AcceptanceTestCase extends TestCase {
             fixtureBuilder.installFixtures();
             String[] cls = fixtureBuilder.getClasses();
             for (int i = 0; i < cls.length; i++) {
-                NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(cls[i]);
+                NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(cls[i]);
                 NakedClass spec = new NakedClass(cls[i]);
                 TestClass view = testObjectFactory.createTestClass(session, spec);
                 classes.put(nc.getFullName().toLowerCase(), view);

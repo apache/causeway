@@ -1,10 +1,10 @@
 package org.nakedobjects.reflector.java.reflect;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.Action;
@@ -48,7 +48,7 @@ public class VectorCollectionAdapter implements InternalCollection {
         pojos.put(vector, this);
         
         Class t = type == null ? Object.class : type;
-        elementSpecification = NakedObjectSpecificationLoader.getInstance().loadSpecification(t);
+        elementSpecification = NakedObjects.getSpecificationLoader().loadSpecification(t);
     }
 
     public boolean contains(NakedObject object) {
@@ -105,7 +105,7 @@ public class VectorCollectionAdapter implements InternalCollection {
 
     public NakedObjectSpecification getSpecification() {
         if(specification == null) {
-            specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(getObject().getClass());
+            specification = NakedObjects.getSpecificationLoader().loadSpecification(getObject().getClass());
         }
         return specification;
     }

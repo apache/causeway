@@ -1,11 +1,11 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
@@ -54,7 +54,7 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
     }
 
     public TypedNakedCollection allInstances(String className, boolean includeSubclasses) {
-        NakedObjectSpecification cls = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
+        NakedObjectSpecification cls = NakedObjects.getSpecificationLoader().loadSpecification(className);
         return allInstances(cls, includeSubclasses);
     }
 
@@ -87,7 +87,7 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
      * contains.
      */
     public NakedObject createInstance(String className) {
-        NakedObjectSpecification cls = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
+        NakedObjectSpecification cls = NakedObjects.getSpecificationLoader().loadSpecification(className);
         return createInstance(cls);
     }
 
@@ -99,7 +99,7 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
     }
 
     public NakedObject createTransientInstance(String className) {
-        NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
+        NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(className);
         return createTransientInstance(nc);
     }
 
@@ -111,7 +111,6 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
         NakedObject[] instances = getInstances(pattern, includeSubclasses);
         NakedObjectSpecification specification = pattern.getSpecification();
         TypedNakedCollection collection = new InstanceCollectionVector(specification, instances);
-//        collection.setContext(getContext());
         return collection;
     }
 
@@ -122,7 +121,6 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
     public TypedNakedCollection findInstances(NakedObjectSpecification specification, String searchTerm, boolean includeSubclasses) {
         NakedObject[] instances = getInstances(specification, searchTerm, includeSubclasses);
         TypedNakedCollection collection = new InstanceCollectionVector(specification, instances);
-//        collection.setContext(getContext());
         return collection;
     }
     
@@ -135,7 +133,6 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
         NakedObject[] instances = getInstances(criteria, includeSubclasses);
         NakedObjectSpecification specification = criteria.getSpecification();
         TypedNakedCollection collection = new InstanceCollectionVector(specification, instances);
-//        collection.setContext(getContext());
         return collection;
     }
 
@@ -144,7 +141,7 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
     }
     
     public TypedNakedCollection findInstances(String className, String searchTerm, boolean includeSubclasses) throws UnsupportedFindException {
-        NakedObjectSpecification cls = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
+        NakedObjectSpecification cls = NakedObjects.getSpecificationLoader().loadSpecification(className);
         return findInstances(cls, searchTerm, includeSubclasses);
     }
 

@@ -28,14 +28,13 @@ import org.apache.log4j.Category;
 
 
 public class InternalReflector implements Reflector {
-    private static final String DERIVE_PREFIX = "derive";
-    private static final String SET_PREFIX = "set";
-    private static final String ABOUT_PREFIX = "about";
     private static final String ABOUT_FIELD_DEFAULT = "aboutFieldDefault";
+    private static final String ABOUT_PREFIX = "about";
+    private static final String DERIVE_PREFIX = "derive";
     private static final String GET_PREFIX = "get";
     private final static Category LOG = Category.getInstance(InternalReflector.class);
+    private static final String SET_PREFIX = "set";
 
-    
     /**
      * Invokes, by reflection, the Order method prefixed by the specified type
      * name. The returned string is tokenized - broken on the commas - and
@@ -53,21 +52,18 @@ public class InternalReflector implements Reflector {
                     int element = 0;
 
                     while (st.hasMoreTokens()) {
-                        a[element] =st.nextToken().trim();
+                        a[element] = st.nextToken().trim();
                         element++;
                     }
                     return a;
                 } else {
                     return null;
                 }
-                
+
             } else {
                 LOG.warn("Method " + aClass.getName() + "." + type + "Order() must be decared as static");
             }
-        } catch (NoSuchMethodException ignore) {
-        } catch (IllegalAccessException ignore) {
-        } catch (InvocationTargetException ignore) {
-        }
+        } catch (NoSuchMethodException ignore) {} catch (IllegalAccessException ignore) {} catch (InvocationTargetException ignore) {}
 
         return null;
     }
@@ -81,8 +77,8 @@ public class InternalReflector implements Reflector {
     }
 
     private Class cls;
-    private Method methods[];
     private Method defaultAboutFieldMethod;
+    private Method methods[];
 
     public InternalReflector(String name) throws ReflectionException {
         Class cls;
@@ -90,15 +86,16 @@ public class InternalReflector implements Reflector {
         try {
             cls = Class.forName(name);
 
-         } catch (ClassNotFoundException e) { 
-             throw new ReflectionException("Could not load class " + name, e);
-         }
+        } catch (ClassNotFoundException e) {
+            throw new ReflectionException("Could not load class " + name, e);
+        }
 
-         if(!InternalNakedObject.class.isAssignableFrom(cls) && !cls.getName().startsWith("java.")) {
-             throw new NakedObjectSpecificationException("Class must be InternalNakedObject: " + cls.getName());
-         }
-         if (!Modifier.isPublic(cls.getModifiers())) { throw new NakedObjectSpecificationException(
-                "A NakedObject class must be marked as public.  Error in " + cls); }
+        if (!InternalNakedObject.class.isAssignableFrom(cls) && !cls.getName().startsWith("java.")) {
+            throw new NakedObjectSpecificationException("Class must be InternalNakedObject: " + cls.getName());
+        }
+        if (!Modifier.isPublic(cls.getModifiers())) {
+            throw new NakedObjectSpecificationException("A NakedObject class must be marked as public.  Error in " + cls);
+        }
         this.cls = cls;
         methods = cls.getMethods();
     }
@@ -145,54 +142,47 @@ public class InternalReflector implements Reflector {
                     break;
                 }
             }
-            
+
             if (prefix == -1) {
                 continue;
             }
 
             /*
-            Class returnType = method.getReturnType();
-            boolean returnIsValid = returnType == void.class || NakedObject.class.isAssignableFrom(returnType);
+             * Class returnType = method.getReturnType(); boolean returnIsValid =
+             * returnType == void.class ||
+             * NakedObject.class.isAssignableFrom(returnType);
+             * 
+             * if(! returnIsValid) { LOG.warn("action method " + method + "
+             * ignored as return type is not of type Naked" ); continue; }
+             */
 
-            if(! returnIsValid) {
-                LOG.warn("action method " + method + " ignored as return type is not of type Naked" );
-                continue;
-            }
-            */
-            
             Class[] params = method.getParameterTypes();
             /*
-            boolean paramsAreValid = true;
-            for (int j = 0; j < params.length; j++) {
-                Class param = params[j];
-                if(! Naked.class.isAssignableFrom(param)) {
-                    paramsAreValid = false;
-                }
-            }
-
-            if(! paramsAreValid) {
-                LOG.warn("action method " + method + " ignored as not all parameters are of type Naked" );
-                continue;
-            }
-            */
+             * boolean paramsAreValid = true; for (int j = 0; j < params.length;
+             * j++) { Class param = params[j]; if(!
+             * Naked.class.isAssignableFrom(param)) { paramsAreValid = false; } }
+             * 
+             * if(! paramsAreValid) { LOG.warn("action method " + method + "
+             * ignored as not all parameters are of type Naked" ); continue; }
+             */
             validMethods.addElement(method);
-            
+
             LOG.debug("identified action " + method);
             String methodName = method.getName();
             methods[i] = null;
-            
+
             String name = methodName.substring(prefixes[prefix].length());
             Class[] longParams = new Class[params.length + 1];
             longParams[0] = InternalAbout.class;
             System.arraycopy(params, 0, longParams, 1, params.length);
-            String aboutName = "about" + methodName.substring(0,1).toUpperCase() + methodName.substring(1);
+            String aboutName = "about" + methodName.substring(0, 1).toUpperCase() + methodName.substring(1);
             Method aboutMethod = findMethod(forClass, aboutName, null, longParams);
             if (aboutMethod == null) {
                 aboutMethod = defaultAboutMethod;
             } else {
                 LOG.debug("  with about method " + aboutMethod);
             }
-            
+
             Action.Type action;
             action = new Action.Type[] { Action.USER, Action.EXPLORATION, Action.DEBUG }[prefix];
             ActionPeer local = createAction(method, name, aboutMethod, action);
@@ -202,27 +192,9 @@ public class InternalReflector implements Reflector {
         return convertToArray(actions);
     }
 
-    ActionPeer createAction(Method method, String name, Method aboutMethod, Action.Type action) {
-        return new InternalAction(name, action, method, aboutMethod);
-    }
-
     public String[] actionSortOrder() {
         LOG.debug("looking for action sort order");
         return readSortOrder(cls, "action");
-    }
-
-    public Hint classHint() {
-        LOG.debug("looking for class about");
-        try {
-            InternalAbout about = new InternalAbout();
-            cls.getMethod(ABOUT_PREFIX + shortName(), new Class[] {InternalAbout.class}).invoke(null, new Object[] {about});
-            return about; 
-        } catch (NoSuchMethodException ignore) {
-        } catch (IllegalAccessException ignore) {
-        } catch (InvocationTargetException ignore) {
-        }
-
-        return null;
     }
 
     public String[] classActionSortOrder() {
@@ -230,9 +202,22 @@ public class InternalReflector implements Reflector {
         return readSortOrder(cls, "classAction");
     }
 
+    public Hint classHint() {
+        LOG.debug("looking for class about");
+        try {
+            InternalAbout about = new InternalAbout();
+            cls.getMethod(ABOUT_PREFIX + shortName(), new Class[] { InternalAbout.class }).invoke(null, new Object[] { about });
+            return about;
+        } catch (NoSuchMethodException ignore) {} catch (IllegalAccessException ignore) {} catch (InvocationTargetException ignore) {}
+
+        return null;
+    }
+
     private String className() {
         return cls.getName();
     }
+
+    public void clearDirty(NakedObject object) {}
 
     private ActionPeer[] convertToArray(Vector actions) {
         ActionPeer results[] = new ActionPeer[actions.size()];
@@ -243,6 +228,10 @@ public class InternalReflector implements Reflector {
 
         }
         return (ActionPeer[]) results;
+    }
+
+    ActionPeer createAction(Method method, String name, Method aboutMethod, Action.Type action) {
+        return new InternalAction(name, action, method, aboutMethod);
     }
 
     private void derivedFields(Vector fields) {
@@ -262,47 +251,30 @@ public class InternalReflector implements Reflector {
             }
 
             // create Field
-          //  JavaValueField attribute = new JavaValueField(name, method.getReturnType(), method, null, aboutMethod, null, true);
-//            fields.addElement(attribute);
-            
-            InternalOneToOneAssociation association = new InternalOneToOneAssociation(name, method.getReturnType(), method,
-                    null, null, null, aboutMethod);
+            //  JavaValueField attribute = new JavaValueField(name,
+            // method.getReturnType(), method, null, aboutMethod, null, true);
+            //            fields.addElement(attribute);
+
+            InternalOneToOneAssociation association = new InternalOneToOneAssociation(name, method.getReturnType(), method, null,
+                    null, null, aboutMethod);
             fields.addElement(association);
 
         }
     }
 
-    public ObjectTitle title() {
-        Method titleMethod = findMethod(OBJECT, "titleString", String.class, null);
-  
-        if(titleMethod == null) {
-            titleMethod = findMethod(OBJECT, "title", String.class, null);
-        }
-    
-        if(titleMethod == null) {
-            return new ObjectTitle() {
-                public String title(NakedObject object) {
-                    return object.getObject().toString();
-                }
-                };
-        } else {
-            return new InternalObjectTitle(titleMethod);
-        }
-    }
-    
     public FieldPeer[] fields() {
         LOG.debug("looking for fields");
         Vector elements = new Vector();
 
         defaultAboutFieldMethod = findMethod(OBJECT, ABOUT_FIELD_DEFAULT, null, new Class[] { InternalAbout.class });
 
-  //     valueFields(elements, BusinessValue.class);
+        //     valueFields(elements, BusinessValue.class);
         valueFields(elements, String.class);
-  //      valueFields(elements, Float.class);
-  //      valueFields(elements, Boolean.class);
-  //      valueFields(elements, Integer.class);
+        //      valueFields(elements, Float.class);
+        //      valueFields(elements, Boolean.class);
+        //      valueFields(elements, Integer.class);
 
-//        primitiveFields(elements);
+        //        primitiveFields(elements);
         derivedFields(elements);
         oneToManyAssociationFields(elements);
         // need to find one-many first, so they are not mistaken as one-one
@@ -328,8 +300,8 @@ public class InternalReflector implements Reflector {
      * @param name
      * @param returnType
      * @param paramTypes
-     *                 the set of parameters the method should have, if null then is
-     *                 ignored
+     *                       the set of parameters the method should have, if null then is
+     *                       ignored
      * @return Method
      */
     private Method findMethod(boolean forClass, String name, Class returnType, Class[] paramTypes) {
@@ -417,35 +389,69 @@ public class InternalReflector implements Reflector {
     private Vector findPrefixedMethods(boolean forClass, String prefix, Class returnType, int paramCount) {
         return findPrefixedMethods(forClass, prefix, returnType, false, paramCount);
     }
-    
-    public boolean isLookup() {
-        return false;
+
+    public String fullName() {
+        return cls.getName();
     }
-    
-    public boolean isPersistable() {
-        return false;
+
+    public String[] getInterfaces() {
+        Class[] interfaces = cls.getInterfaces();
+        Class[] nakedInterfaces = new Class[interfaces.length];
+        int validInterfaces = 0;
+        for (int i = 0; i < interfaces.length; i++) {
+            //            if(Naked.class.isAssignableFrom(interfaces[i])) {
+            nakedInterfaces[validInterfaces++] = interfaces[i];
+            //            }
+        }
+
+        String[] interfaceNames = new String[validInterfaces];
+        for (int i = 0; i < validInterfaces; i++) {
+            interfaceNames[i] = nakedInterfaces[i].getName();
+        }
+
+        return interfaceNames;
     }
-    
+
+    public String getSuperclass() {
+        Class superclass = cls.getSuperclass();
+
+        if (superclass == null || superclass == Object.class) {
+            return null;
+        }
+
+        return superclass.getName();
+    }
+
     public boolean isAbstract() {
         return Modifier.isAbstract(cls.getModifiers());
-    }
-    
-    public boolean isObject() {
-        return NakedObject.class.isAssignableFrom(cls);
-    }
-    
-    public boolean isValue() {
-        return String.class.isAssignableFrom(cls) || Date.class.isAssignableFrom(cls);
     }
 
     public boolean isDirty(NakedObject object) {
         return false;
     }
-    
+
+    public boolean isLookup() {
+        return false;
+    }
+
+    public boolean isObject() {
+        return NakedObject.class.isAssignableFrom(cls);
+    }
+
     public boolean isPartOf() {
         return Aggregated.class.isAssignableFrom(cls);
     }
-    
+
+    public boolean isPersistable() {
+        return false;
+    }
+
+    public boolean isValue() {
+        return String.class.isAssignableFrom(cls) || Date.class.isAssignableFrom(cls);
+    }
+
+    public void markDirty(NakedObject object) {}
+
     String[] names(Vector methods) {
         String[] names = new String[methods.size()];
         Enumeration e = methods.elements();
@@ -469,7 +475,7 @@ public class InternalReflector implements Reflector {
      */
     private void oneToManyAssociationFields(Vector associations) {
         Vector v = findPrefixedMethods(OBJECT, GET_PREFIX, Vector.class, 0);
- 
+
         // create vector of multiRoles from all get methods
         Enumeration e = v.elements();
 
@@ -478,7 +484,8 @@ public class InternalReflector implements Reflector {
             LOG.debug("identified 1-many association method " + getMethod);
             String name = getMethod.getName().substring(GET_PREFIX.length());
 
-            Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { InternalAbout.class, null, boolean.class });
+            Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { InternalAbout.class, null,
+                    boolean.class });
             Class aboutType = (aboutMethod == null) ? null : aboutMethod.getParameterTypes()[1];
             if (aboutMethod == null) {
                 aboutMethod = defaultAboutFieldMethod;
@@ -501,10 +508,10 @@ public class InternalReflector implements Reflector {
                 removeMethod = findMethod(OBJECT, "dissociate" + name, void.class, null);
             }
 
-            if(addMethod == null || removeMethod == null) {
+            if (addMethod == null || removeMethod == null) {
                 LOG.error("There must be both add and remove methods for " + name + " in " + className());
             }
-            
+
             Class removeType = (removeMethod == null) ? null : removeMethod.getParameterTypes()[0];
             Class addType = (addMethod == null) ? null : addMethod.getParameterTypes()[0];
 
@@ -523,21 +530,22 @@ public class InternalReflector implements Reflector {
                         + "all deal with same type of object.  There are at least two different " + "types");
             }
 
-            associations
-                    .addElement(new InternalOneToManyAssociation(name, elementType, getMethod, addMethod, removeMethod, aboutMethod));
+            associations.addElement(new InternalOneToManyAssociation(name, elementType, getMethod, addMethod, removeMethod,
+                    aboutMethod));
         }
     }
 
     /**
      * Returns a vector of Association fields for all the get methods that use
      * NakedObjects.
+     * 
      * @throws ReflectionException
      * 
      * @see OneToOneAssociation
      */
     private void oneToOneAssociationFields(Vector associations) throws ReflectionException {
         Vector v = findPrefixedMethods(OBJECT, GET_PREFIX, Object.class, 0);
-  
+
         // create vector of roles from all get methods
         Enumeration e = v.elements();
 
@@ -592,16 +600,9 @@ public class InternalReflector implements Reflector {
     public String pluralName() {
         try {
             return (String) cls.getMethod("pluralName", new Class[0]).invoke(null, new Object[0]);
-        } catch (NoSuchMethodException ignore) {
-        } catch (IllegalAccessException ignore) {
-        } catch (InvocationTargetException ignore) {
-        }
+        } catch (NoSuchMethodException ignore) {} catch (IllegalAccessException ignore) {} catch (InvocationTargetException ignore) {}
 
         return null;
-    }
-
-    public String fullName() {
-       return cls.getName();
     }
 
     public String shortName() {
@@ -613,17 +614,36 @@ public class InternalReflector implements Reflector {
         try {
             Method method = cls.getMethod("singularName", new Class[0]);
             return (String) method.invoke(null, new Object[0]);
-        } catch (NoSuchMethodException ignore) {
-        } catch (IllegalAccessException ignore) {
-        } catch (InvocationTargetException ignore) {
-        }
+        } catch (NoSuchMethodException ignore) {} catch (IllegalAccessException ignore) {} catch (InvocationTargetException ignore) {}
 
         return null;
     }
 
+    public ObjectTitle title() {
+        Method titleMethod = findMethod(OBJECT, "titleString", String.class, null);
+
+        if (titleMethod == null) {
+            titleMethod = findMethod(OBJECT, "title", String.class, null);
+        }
+
+        if (titleMethod == null) {
+            return new ObjectTitle() {
+                public String title(NakedObject object) {
+                    return object.getObject().toString();
+                }
+            };
+        } else {
+            return new InternalObjectTitle(titleMethod);
+        }
+    }
+
+    public String unresolvedTitle(NakedObject pojo) {
+        return "no title";
+    }
+
     private Vector valueFields(Vector fields, Class type) {
         Vector v = findPrefixedMethods(OBJECT, GET_PREFIX, type, 0);
-        
+
         // create vector of attributes from all get methods
         Enumeration e = v.elements();
 
@@ -652,11 +672,11 @@ public class InternalReflector implements Reflector {
 
             // create Field
             LOG.info("Value " + name + " ->" + getMethod);
-           /*
-            ValueField attribute = createValueField(getMethod, setMethod, name, aboutMethod, validMethod);
-            fields.addElement(attribute);
-            */
-            
+            /*
+             * ValueField attribute = createValueField(getMethod, setMethod,
+             * name, aboutMethod, validMethod); fields.addElement(attribute);
+             */
+
             InternalOneToOneAssociation association = new InternalOneToOneAssociation(name, getMethod.getReturnType(), getMethod,
                     setMethod, null, null, aboutMethod);
             fields.addElement(association);
@@ -664,38 +684,6 @@ public class InternalReflector implements Reflector {
 
         return fields;
     }
-
-    public String[] getInterfaces() {
-        Class[] interfaces = cls.getInterfaces();
-        Class[] nakedInterfaces = new Class[interfaces.length];
-        int validInterfaces = 0;
-        for (int i = 0; i < interfaces.length; i++) {
-//            if(Naked.class.isAssignableFrom(interfaces[i])) {
-                nakedInterfaces[validInterfaces++] = interfaces[i];
-//            }
-        }
-        
-        String[] interfaceNames = new String[validInterfaces];
-        for (int i = 0; i < validInterfaces; i++) {
-            interfaceNames[i] = nakedInterfaces[i].getName();
-        }
-
-        return interfaceNames;
-    }
-    
-    public String getSuperclass() { 
-        Class superclass = cls.getSuperclass();
-        
-        if(superclass == null || superclass == Object.class) {
-            return null;
-        }
-        
-		return superclass.getName();
-    }
-
-    public void clearDirty(NakedObject object2) {}
-
-    public void markDirty(NakedObject object2) {}
 }
 
 /*

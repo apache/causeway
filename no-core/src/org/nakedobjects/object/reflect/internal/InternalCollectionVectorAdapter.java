@@ -1,11 +1,11 @@
 package org.nakedobjects.object.reflect.internal;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.Oid;
@@ -32,7 +32,7 @@ public class InternalCollectionVectorAdapter implements InternalCollection {
         this.collection = vector;
         
         Class t = type == null ? Object.class : type;
-        elementSpecification = NakedObjectSpecificationLoader.getInstance().loadSpecification(t);
+        elementSpecification = NakedObjects.getSpecificationLoader().loadSpecification(t);
     }
 
     public boolean contains(NakedObject object) {
@@ -107,7 +107,7 @@ public class InternalCollectionVectorAdapter implements InternalCollection {
 
     public NakedObjectSpecification getSpecification() {
         if(specification == null) {
-            specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(getObject().getClass());
+            specification = NakedObjects.getSpecificationLoader().loadSpecification(getObject().getClass());
         }
         return specification;
     }

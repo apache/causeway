@@ -1,12 +1,12 @@
 package org.nakedobjects.reflector.java.reflect;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.application.ValueParseException;
 import org.nakedobjects.application.valueholder.BusinessValueHolder;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
@@ -42,7 +42,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         if (associate != null && !parameter.isAssignableFrom(associate.getObject().getClass())) {
             SimpleFieldAbout about = new SimpleFieldAbout(session, object.getObject());
             about.unmodifiable("Invalid type: field must be set with a "
-                    + NakedObjectSpecificationLoader.getInstance().loadSpecification(parameter.getName()));
+                    + NakedObjects.getSpecificationLoader().loadSpecification(parameter.getName()));
             return about;
         }
 

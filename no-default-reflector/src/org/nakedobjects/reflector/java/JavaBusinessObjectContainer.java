@@ -1,11 +1,11 @@
 package org.nakedobjects.reflector.java;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.application.BusinessObjectContainer;
 import org.nakedobjects.application.InstancesCriteria;
 import org.nakedobjects.application.UnsupportedFindException;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapter;
@@ -83,7 +83,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     }
 
     private NakedObjectSpecification getSpecification(Class cls) {
-        return NakedObjectSpecificationLoader.getInstance().loadSpecification(cls);
+        return NakedObjects.getSpecificationLoader().loadSpecification(cls);
     }
 
     public boolean hasInstances(Class cls) {
@@ -133,7 +133,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
         }
 
         number = new Sequence();
-        //            number.setNakedClass(NakedObjectSpecificationLoader.getInstance().loadSpecification(Sequence.class));
+        //            number.setNakedClass(NakedObjects.getSpecificationLoader().loadSpecification(Sequence.class));
         number.getName().setValue(sequence);
         makePersistent(number);
         return number.getSerialNumber().longValue();

@@ -1,16 +1,6 @@
 package org.nakedobjects.object;
 
 public abstract class NakedObjectSpecificationLoader {
-    private static NakedObjectSpecificationLoader instance;
-
-    public static NakedObjectSpecificationLoader getInstance() {
-        return instance;
-    }
-    
-    protected NakedObjectSpecificationLoader() {
-        instance = this;
-    }
-    
     public abstract NakedObjectSpecification loadSpecification(String name);
     
     public abstract NakedObjectSpecification loadSpecification(Class cls);

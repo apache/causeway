@@ -15,15 +15,15 @@ import org.apache.log4j.Logger;
 
 public class NakedObjectSpecificationLoaderImpl extends NakedObjectSpecificationLoader {
     private final static Logger LOG = Logger.getLogger(NakedObjectSpecificationLoaderImpl.class);
-    private static Hashtable classes;
-    private static ReflectorFactory reflectorFactory;
+    private Hashtable classes;
+    private ReflectorFactory reflectorFactory;
 
     public NakedObjectSpecificationLoaderImpl() {
-        NakedObjectSpecificationLoaderImpl.classes = new Hashtable();    
+        classes = new Hashtable();    
     }
     
-    public static void setReflectorFactory(ReflectorFactory reflectorFactory) {
-        NakedObjectSpecificationLoaderImpl.reflectorFactory = reflectorFactory;
+    public void setReflectorFactory(ReflectorFactory reflectorFactory) {
+        this.reflectorFactory = reflectorFactory;
     }
 
     /**
@@ -31,8 +31,8 @@ public class NakedObjectSpecificationLoaderImpl extends NakedObjectSpecification
      * 
      * @property
      */
-    public static void set_ReflectorFactory(ReflectorFactory reflectorFactory) {
-        NakedObjectSpecificationLoaderImpl.reflectorFactory = reflectorFactory;
+    public void set_ReflectorFactory(ReflectorFactory reflectorFactory) {
+        this.reflectorFactory = reflectorFactory;
     }
 
     public NakedObjectSpecification loadSpecification(Class cls) {
@@ -88,7 +88,7 @@ public class NakedObjectSpecificationLoaderImpl extends NakedObjectSpecification
 
 
     protected void finalize() throws Throwable {
-//        classes = null;
+        classes = null;
         
         super.finalize();
         LOG.info("finalizing specification loader " + this);

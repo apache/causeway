@@ -1,9 +1,9 @@
 package org.nakedobjects.distribution;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
@@ -21,7 +21,7 @@ public class ObjectDataHelper {
         if (oid != null && loadedObjects.isLoaded(oid)) {
             object = loadedObjects.getLoadedObject(oid);
         } else {
-            NakedObjectSpecification specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(type);
+            NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
             object = (NakedObject) specification.acquireInstance();
             if (oid != null) {
                 object.setOid(oid);
@@ -78,7 +78,7 @@ public class ObjectDataHelper {
         if (oid != null && loadedObjects.isLoaded(oid)) {
             object = loadedObjects.getLoadedObject(oid);
         } else {
-            NakedObjectSpecification specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(type);
+            NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
             object = (NakedObject) specification.acquireInstance();
             if (oid != null) {
                 object.setOid(oid);

@@ -24,7 +24,7 @@ public class NakedClass implements InternalNakedObject {
     }
 
     public NakedClass(String name) {
-        specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(name);
+        specification = NakedObjects.getSpecificationLoader().loadSpecification(name);
         className = name;
     }
 
@@ -82,7 +82,7 @@ public class NakedClass implements InternalNakedObject {
             if (getName().length() == 0) {
                 throw new NakedObjectRuntimeException();
             }
-            specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(getName());
+            specification = NakedObjects.getSpecificationLoader().loadSpecification(getName());
         }
         return specification;
     }

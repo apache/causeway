@@ -1,10 +1,10 @@
 package org.nakedobjects.object.reflect.internal;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.DefaultHint;
@@ -42,7 +42,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
         Class parameter = getMethod.getReturnType();
 		if(associate != null && !parameter.isAssignableFrom(associate.getObject().getClass())) {
 			InternalAbout about = new InternalAbout();
-			//about.unmodifiable("Invalid type: field must be set with a " + NakedObjectSpecificationLoader.getInstance().loadSpecification(parameter.getName()));
+			//about.unmodifiable("Invalid type: field must be set with a " + NakedObjects.getSpecificationLoader().loadSpecification(parameter.getName()));
 			return about;
 		}
 
@@ -220,7 +220,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
              Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
             
             if(obj == null)  {
-                if(getType().isOfType(NakedObjectSpecificationLoader.getInstance().loadSpecification(String.class)) ) {
+                if(getType().isOfType(NakedObjects.getSpecificationLoader().loadSpecification(String.class)) ) {
                     return new StringAdapter("");
                 }
                 

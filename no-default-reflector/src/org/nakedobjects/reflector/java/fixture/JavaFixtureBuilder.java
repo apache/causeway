@@ -4,7 +4,6 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.application.system.ExplorationClock;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.fixture.Fixture;
 import org.nakedobjects.object.fixture.FixtureBuilder;
 import org.nakedobjects.object.persistence.NakedObjectManager;
@@ -65,7 +64,7 @@ public final class JavaFixtureBuilder extends FixtureBuilder {
      * exploration programs that need to set up instances.
      */
     public final Object createInstance(String className) {
-        NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
+        NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(className);
         if (nc == null) {
             NakedObjectManager objectManager = NakedObjects.getObjectManager();
             return objectManager.generatorError("Could not create an object of class " + className, null);
