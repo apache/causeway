@@ -9,6 +9,7 @@ import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.reflect.Field;
 import org.nakedobjects.persistence.sql.AbstractObjectMapper;
 import org.nakedobjects.persistence.sql.CollectionMapper;
+import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
 import org.nakedobjects.persistence.sql.SqlOid;
@@ -42,18 +43,18 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 		}
 	}
 
-	public boolean needsTables() throws SqlObjectStoreException {
-		return ! mapper.db.hasTable(table);
+	public boolean needsTables(DatabaseConnector connector) throws SqlObjectStoreException {
+		return ! connector.hasTable(table);
 	}
 	
-	public void createTables() throws SqlObjectStoreException {
+	public void createTables(DatabaseConnector connector) throws SqlObjectStoreException {
 		// TODO load in properties
 
 		String columns = parentColumn + " int, " + elementClassColumn + " varchar(255), " + elementIdColumn + " int";
-		mapper.db.update("create table " + table + " (" + columns + ")");
+		connector.update("create table " + table + " (" + columns + ")");
 	}
 
-	public void loadInternalCollection(NakedObject parent)
+	public void loadInternalCollection(DatabaseConnector connector, NakedObject parent)
 			throws ResolveException, SqlObjectStoreException {
 		InternalCollection collection = (InternalCollection) field.get(parent);
 		LOG.debug("Loading internal collection " + collection);
@@ -61,7 +62,7 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 		
 		String statement = "select " + elementIdColumn + "," + elementClassColumn + " from " + table + " where "
 				+ parentColumn + " = " + parentId;
-		Results rs = mapper.db.select(statement);
+		Results rs = connector.select(statement);
 		while (rs.next()) {
 			int id = rs.getInt(elementIdColumn);
 			String cls = rs.getString(elementClassColumn);
@@ -73,12 +74,12 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 		rs.close();
 	}
 
-	public void saveInternalCollection(NakedObject parent) throws SqlObjectStoreException {
+	public void saveInternalCollection(DatabaseConnector connector, NakedObject parent) throws SqlObjectStoreException {
 		InternalCollection collection = (InternalCollection) field.get(parent);
 		LOG.debug("Saving internal collection " + collection);
 		long parentId = mapper.primaryKey(parent.getOid());
 		
-		mapper.db.update("delete from " + table + " where " + parentColumn + " = " + parentId);
+		connector.update("delete from " + table + " where " + parentColumn + " = " + parentId);
 		
 		String columns = parentColumn + ", " + elementIdColumn + ", " + elementClassColumn;
 		int size = collection.size();
@@ -89,7 +90,7 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 			String cls = element.getNakedClass().fullName();
 			String values = parentId + "," + elementId + ", '" + cls + "'";
 			String statement = "insert into " + table + " (" + columns + ") values (" + values + ")";
-			mapper.db.update(statement);
+			connector.update(statement);
 		}
 	}
 

@@ -17,6 +17,7 @@ import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.Value;
 import org.nakedobjects.persistence.sql.AbstractObjectMapper;
+import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.ObjectMapper;
 import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
@@ -64,7 +65,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
     }
 
 
-    public void createObject(NakedObject object) throws SqlObjectStoreException {
+    public void createObject(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
         NakedClass cls = object.getNakedClass();
 
         String table = table(cls);
@@ -74,24 +75,24 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         String statement = "insert into " + table + " (ID, " + columns + ") values (" + id + values + ")";
 
         // one-to-many assoc are not persisted - see save
-        db.update(statement);
+        connector.update(statement);
     }
 
-    public void destroyObject(NakedObject object) throws SqlObjectStoreException {
+    public void destroyObject(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
         NakedClass cls = object.getNakedClass();
         String table = table(cls);
         long id = ((SimpleOid) object.getOid()).getSerialNo();
         String statement = "delete from " + table + " where id = " + id;
-        db.update(statement);
+        connector.update(statement);
     }
 
-    public Vector getInstances(NakedClass cls) throws SqlObjectStoreException {
+    public Vector getInstances(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException {
         Vector instances = new Vector();
 
         String table = table(cls);
         LOG.debug("loading instances from SQL " + table);
         String statement = "select id from " + table + " order by id";
-        Results rs = db.select(statement);
+        Results rs = connector.select(statement);
         while (rs.next()) {
             int id = rs.getInt("id"); 
             NakedObject instance = setupReference(loadedObjects, cls, id);
@@ -102,13 +103,13 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         return instances;
     }
 
-    public Vector getInstances(NakedClass cls, String pattern) throws SqlObjectStoreException, UnsupportedFindException {
+    public Vector getInstances(DatabaseConnector connector, NakedClass cls, String pattern) throws SqlObjectStoreException, UnsupportedFindException {
         Vector instances = new Vector();
 
        String table = table(cls);
         LOG.debug("loading instances from SQL " + table);
         String statement = "select id from " + table + " order by id";
-        Results rs = db.select(statement);
+        Results rs = connector.select(statement);
         while (rs.next()) {
             int id = rs.getInt("id"); 
             NakedObject instance = setupReference(loadedObjects, cls, id);
@@ -121,22 +122,22 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
 
     }
     
-    public Vector getInstances(NakedObject pattern) throws SqlObjectStoreException, UnsupportedFindException {
+    public Vector getInstances(DatabaseConnector connector, NakedObject pattern) throws SqlObjectStoreException, UnsupportedFindException {
         throw new UnsupportedFindException();
     }
 
-    public NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, SqlObjectStoreException {
+    public NakedObject getObject(DatabaseConnector connector, Object oid, NakedClass hint) throws ObjectNotFoundException, SqlObjectStoreException {
         NakedObject object = hint.acquireInstance();
         object.setOid(oid);
         loadedObjects.loaded(object);
         return object;
     }
 
-    public boolean hasInstances(NakedClass cls) throws SqlObjectStoreException {
-        return numberOfInstances(cls) > 0;
+    public boolean hasInstances(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException {
+        return numberOfInstances(connector, cls) > 0;
     }
 
-    private void loadInternalCollection(long id, Field field, InternalCollection collection) throws ResolveException, SqlObjectStoreException {
+    private void loadInternalCollection(DatabaseConnector connector, long id, Field field, InternalCollection collection) throws ResolveException, SqlObjectStoreException {
         NakedClass cls = collection.forParent().getNakedClass();
         NakedClass elementCls = NakedClassManager.getInstance().getNakedClass(collection.getType().getName());
 
@@ -145,7 +146,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         String a = field.getName().toLowerCase() + "_id";
         String b = table(cls) + "_id";
         String statement = "select " + a + " from " + table + " where " + b + " = " + id;
-        Results rs = db.select(statement);
+        Results rs = connector.select(statement);
         while(rs.next()) {
             int ref = rs.getInt(a);
             
@@ -170,14 +171,14 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         return element;
     }
 
-    public int numberOfInstances(NakedClass cls) throws SqlObjectStoreException {
+    public int numberOfInstances(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException {
         String table = table(cls);
         LOG.debug("counting instances in SQL " + table);
         String statement = "select count(*) from " + table;
-        return db.count(statement);
+        return connector.count(statement);
     }
 
-    public void resolve(NakedObject object) throws SqlObjectStoreException {
+    public void resolve(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
         NakedClass cls = object.getNakedClass();
         String table = table(cls);
         String columns = columns(cls);
@@ -185,14 +186,16 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         
         LOG.debug("loading data from SQL " + table + " for " + object);
         String statement = "select " + columns + " from " + table + " where id = " + id;
-        Results rs = db.select(statement);
+        Results rs = connector.select(statement);
         if (rs.next()) {
             Field[] fields = cls.getFields();
             for (int i = 0; i < fields.length; i++) {
                 if (fields[i].isDerived()) {
                     continue;
                 } else if (fields[i] instanceof OneToManyAssociation) {
-                    loadInternalCollection(id, fields[i], (InternalCollection) fields[i].get(object));
+                   DatabaseConnector connection = connector.getConnectionPool().acquire();
+                    loadInternalCollection(connection, id, fields[i], (InternalCollection) fields[i].get(object));
+                    connector.getConnectionPool().release(connection);
                 } else if (fields[i] instanceof Value) {
                     try {
                         ((Value) fields[i]).parseAndSave(object, rs.getString(columnName(fields[i])));
@@ -213,7 +216,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         }
     }
 
-    public void save(NakedObject object) throws SqlObjectStoreException {
+    public void save(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
         NakedClass cls = object.getNakedClass();
 
         String table = table(cls);
@@ -226,7 +229,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
             }
             Naked fieldValue = fields[i].get(object);
             if (fields[i] instanceof OneToManyAssociation) {
-                saveInternalCollection(fields[i], (InternalCollection) fieldValue);
+                saveInternalCollection(connector, fields[i], (InternalCollection) fieldValue);
             } else {
                 if (i > 0) {
                     sb.append(", ");
@@ -250,10 +253,10 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
 
         long id = ((SimpleOid) object.getOid()).getSerialNo();
         String statement = "update " + table + " set " + assignments + " where ID = " + id;
-        db.update(statement);
+        connector.update(statement);
     }
 
-    private void saveInternalCollection(Field field, InternalCollection collection) throws SqlObjectStoreException {
+    private void saveInternalCollection(DatabaseConnector connector, Field field, InternalCollection collection) throws SqlObjectStoreException {
         NakedClass cls = collection.forParent().getNakedClass();
 
         String table = table(cls) + "_" + field.getName().toLowerCase();
@@ -266,7 +269,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
             long elementId = ((SimpleOid) element.getOid()).getSerialNo();
             String values = parentId + ", " + elementId;
             String statement = "insert into " + table + " (" + columns + ") values (" + values + ")";
-            db.update(statement);
+            connector.update(statement);
         }
     }
 

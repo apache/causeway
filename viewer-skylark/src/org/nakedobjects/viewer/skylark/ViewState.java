@@ -1,15 +1,16 @@
 package org.nakedobjects.viewer.skylark;
 
 public class ViewState implements Cloneable {
-    private static final byte CAN_DROP = 0x08;
-    private static final byte CANT_DROP = 0x10;
-    private static final byte OBJECT_IDENTIFIED = 0x04;
-    private static final byte ROOT_VIEW_IDENTIFIED = 0x01;
-    private static final byte VIEW_IDENTIFIED = 0x02;
-    private static final byte INVALID = 0x40;
-    private static final byte ACTIVE = 0x20;
+    private static final short CAN_DROP = 0x08;
+    private static final short CANT_DROP = 0x10;
+    private static final short OBJECT_IDENTIFIED = 0x04;
+    private static final short ROOT_VIEW_IDENTIFIED = 0x01;
+    private static final short VIEW_IDENTIFIED = 0x02;
+    private static final short INVALID = 0x40;
+    private static final short ACTIVE = 0x20;
+    private static final short OUT_OF_SYNCH = 0x80;
     
-    private byte state;
+    private short state;
 
     public void setCanDrop() {
         state |= CAN_DROP;
@@ -88,7 +89,7 @@ public class ViewState implements Cloneable {
         return isFlagSet(ACTIVE);
     } 
     
-    private boolean isFlagSet(byte flag)  {
+    private boolean isFlagSet(short flag)  {
         return (state & flag) > 0;
     }
 
@@ -96,7 +97,7 @@ public class ViewState implements Cloneable {
         resetFlag(INVALID);
     }
     
-    private void setFlag(byte flag) {
+    private void setFlag(short flag) {
         state |= flag;
     }
 
@@ -104,13 +105,26 @@ public class ViewState implements Cloneable {
         setFlag(INVALID);
     }
     
-    private void resetFlag(byte flag) {
+    private void resetFlag(short flag) {
         state &= ~flag;    
     }
 
     public boolean isInvalid() {
         return isFlagSet(INVALID);
     }
+
+    public boolean isOutOfSynch() {
+        return isFlagSet(OUT_OF_SYNCH);
+    }
+    
+    public void setOutOfSynch() {
+        setFlag(OUT_OF_SYNCH);
+    }
+
+    public void clearOutOfSynch() {
+       resetFlag(OUT_OF_SYNCH);
+    }
+
 }
 
 /*

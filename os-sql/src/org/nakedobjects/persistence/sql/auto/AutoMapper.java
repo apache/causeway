@@ -13,6 +13,7 @@ import org.nakedobjects.object.reflect.Value;
 import org.nakedobjects.object.value.Date;
 import org.nakedobjects.object.value.Time;
 import org.nakedobjects.object.value.TimeStamp;
+import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.ObjectMapper;
 import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
@@ -40,41 +41,41 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 	}
 
 
-	public void createObject(NakedObject object) throws SqlObjectStoreException {
+	public void createObject(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
 		NakedClass cls = object.getNakedClass();
 		String values = values(cls, object);
 		if(dbCreatesId) {
 			String statement = "insert into " + table + " (" + columnList() + ") values (" + values + ")";
 
-			db.insert(statement, object.getOid());		
+			connector.insert(statement, object.getOid());		
 		} else {
 			long id = primaryKey(object.getOid());
 			String statement = "insert into " + table + " (" + idColumn + "," + columnList() + ") values (" + id + values
 					+ ")";
-			db.insert(statement);		
+			connector.insert(statement);		
 		}
 		for (int i = 0; i < collectionMappers.length; i++) {
-			collectionMappers[i].saveInternalCollection(object);
+			collectionMappers[i].saveInternalCollection(connector, object);
 		}		
 	}
 
 
-	public void destroyObject(NakedObject object) throws SqlObjectStoreException {
+	public void destroyObject(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
 		long id = primaryKey(object.getOid());
 		String statement = "delete from " + table + " where " + idColumn + " = " + id;
-		db.update(statement);
+		connector.update(statement);
 	}
 
-	public Vector getInstances(NakedClass cls) throws SqlObjectStoreException {
+	public Vector getInstances(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException {
 		String statement = "select * from " + table + " order by " + idColumn;
-		return loadInstances(cls, statement);
+		return loadInstances(connector, cls, statement);
 	}
 	
-	private Vector loadInstances(NakedClass cls, String selectStatment) throws SqlObjectStoreException {
+	private Vector loadInstances(DatabaseConnector connector, NakedClass cls, String selectStatment) throws SqlObjectStoreException {
 		LOG.debug("loading instances from SQL " + table);
 		Vector instances = new Vector();
 
-		Results rs = db.select(selectStatment);
+		Results rs = connector.select(selectStatment);
         int count = 0;
         while (rs.next() && count < MAX_INSTANCES) {
         	int id = rs.getInt(idColumn);
@@ -82,10 +83,11 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
         	
         	loadData(instance, rs);
         	
+        	DatabaseConnector secondConnector = connector.getConnectionPool().acquire();
         	for (int i = 0; i < collectionMappers.length; i++) {
-        		collectionMappers[i].loadInternalCollection(instance);
+        		collectionMappers[i].loadInternalCollection(secondConnector, instance);
         	}	
-
+        	connector.getConnectionPool().release(secondConnector);
 
         	LOG.debug("  instance  " + instance);
         	instances.addElement(instance);
@@ -99,33 +101,33 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 		return instances;
 	}
 
-	public Vector getInstances(NakedClass cls, String pattern) throws SqlObjectStoreException, UnsupportedFindException {
+	public Vector getInstances(DatabaseConnector connector, NakedClass cls, String pattern) throws SqlObjectStoreException, UnsupportedFindException {
 		String where = " where " + instancesWhereClause + pattern;
 		String statement = "select * from " + table + where + " order by " + idColumn;
-		return loadInstances(cls, statement);
+		return loadInstances(connector, cls, statement);
 	}
 
-	public Vector getInstances(NakedObject pattern) throws SqlObjectStoreException, UnsupportedFindException {
-		return getInstances(pattern.getNakedClass());
+	public Vector getInstances(DatabaseConnector connector, NakedObject pattern) throws SqlObjectStoreException, UnsupportedFindException {
+		return getInstances(connector, pattern.getNakedClass());
 		//throw new UnsupportedFindException();
 	}
 
-	public NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, SqlObjectStoreException {
+	public NakedObject getObject(DatabaseConnector connector, Object oid, NakedClass hint) throws ObjectNotFoundException, SqlObjectStoreException {
 		return loadObject(nakedClass, oid);
 	}
 
-	public boolean hasInstances(NakedClass cls) throws SqlObjectStoreException {
-		return numberOfInstances(cls) > 0;
+	public boolean hasInstances(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException {
+		return numberOfInstances(connector, cls) > 0;
 	}
 
 
-	public int numberOfInstances(NakedClass cls) throws SqlObjectStoreException {
+	public int numberOfInstances(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException {
 		LOG.debug("counting instances in SQL " + table);
 		String statement = "select count(*) from " + table;
-		return db.count(statement);
+		return connector.count(statement);
 	}
 	
-	public void resolve(NakedObject object) throws SqlObjectStoreException {
+	public void resolve(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
 	    NakedClass cls = object.getNakedClass();
 	    String columns = columnList();
 	    long primaryKey = primaryKey(object.getOid());
@@ -133,17 +135,18 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 	    LOG.debug("loading data from SQL " + table + " for " + object);
 	    String statement = "select " + columns + " from " + table + " where " + idColumn + "=" + primaryKey;
 	    
-	    Results rs = db.select(statement);
+	    Results rs = connector.select(statement);
 	    if (rs.next()) {
 	        loadData(object, rs);
+	        rs.close();
 	        
 	        for (int i = 0; i < collectionMappers.length; i++) {
-	            collectionMappers[i].loadInternalCollection(object);
+	            collectionMappers[i].loadInternalCollection(connector, object);
 	        }	
 	    } else {
+	        rs.close();
 	        throw new SqlObjectStoreException("Unable to load data from " + table +  " with id " + primaryKey);
 	    }
-        rs.close();
 	}
 
 	public void loadData(NakedObject object, Results rs) throws SqlObjectStoreException {
@@ -190,7 +193,7 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 	}
 
 
-	public void save(NakedObject object) throws SqlObjectStoreException {
+	public void save(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
 		NakedClass cls = object.getNakedClass();
 
 		StringBuffer assignments = new StringBuffer();
@@ -218,16 +221,21 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 		}
 
 		long id = primaryKey(object.getOid());
-		String statement = "update " + table + " set " + assignments + " where " + idColumn + "=" + id;
-		db.update(statement);
+		String statement = "update " + table + " set " + assignments + " where " + idColumn + "=" + id + updateWhereClause();
+		connector.update(statement);
 		
 		// TODO update collections - hange only when needed rather than reinserting from scratch
 		for (int i = 0; i < collectionMappers.length; i++) {
-			collectionMappers[i].saveInternalCollection(object);
+			collectionMappers[i].saveInternalCollection(connector, object);
 		}		
 	}
 
-	public String toString() {
+	protected String updateWhereClause() {
+        return "";
+    }
+
+
+    public String toString() {
 		return "AutoMapper [table=" + table + ",id=" + idColumn + ",noColumns=" + fields.length + ",nakedClass="
 				+ nakedClass.fullName() + "]";
 	}

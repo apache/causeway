@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.SimpleOid;
 import org.nakedobjects.object.UnsupportedFindException;
+import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
 import org.nakedobjects.security.User;
@@ -19,7 +20,7 @@ public class UserMapper extends NameBasedMapper {
 	private static final Logger LOG = Logger.getLogger(UserMapper.class);
 	private static final String table = "no_user";
 
-	public void createObject(NakedObject object) throws SqlObjectStoreException {
+	public void createObject(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
 		User user = (User) object;
 		long id = primaryKey(user.getOid());
 		NakedObject rootObject = user.getRootObject();
@@ -29,29 +30,29 @@ public class UserMapper extends NameBasedMapper {
 			rootObjectId = String.valueOf(primaryKey(rootObject.getOid()));
 			rootObjectClass = "'" + rootObject.getNakedClass().fullName() + "'";
 		}
-		db.update("Insert into " + table + " (" + columns + ") values ('" + user.getName().stringValue() + "', " + id
+		connector.update("Insert into " + table + " (" + columns + ") values ('" + user.getName().stringValue() + "', " + id
 				+ ", " + rootObjectId + ", " + rootObjectClass + ")");
 	}
 
-	protected void createTables() throws SqlObjectStoreException {
-		db.update("create table " + table
+	protected void createTables(DatabaseConnector connector) throws SqlObjectStoreException {
+	    connector.update("create table " + table
 				+ " (id INTEGER, name VARCHAR(255), root_class VARCHAR(255), root_object INTEGER)");
 	}
 
-	public Vector getInstances(NakedClass cls) throws SqlObjectStoreException {
+	public Vector getInstances(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException {
 		String statement = "select " + columns + " from " + table;
-		return getInstances(statement);
+		return getInstances(connector, statement);
 	}
 
-	public Vector getInstances(NakedObject pattern) throws SqlObjectStoreException, UnsupportedFindException {
+	public Vector getInstances(DatabaseConnector connector, NakedObject pattern) throws SqlObjectStoreException, UnsupportedFindException {
 		LOG.debug("loading user: " + pattern);
 		String statement = "select " + columns + " from " + table + " where name = '"
 				+ ((User) pattern).getName().stringValue() + "'";
-		return getInstances(statement);
+		return getInstances(connector, statement);
 	}
 
-	private Vector getInstances(String statement) throws SqlObjectStoreException {
-		Results rs = db.select(statement);
+	private Vector getInstances(DatabaseConnector connector, String statement) throws SqlObjectStoreException {
+		Results rs = connector.select(statement);
 		NakedObjectManager manager = NakedObjectManager.getInstance();
 		Vector instances = new Vector();
 
@@ -101,20 +102,20 @@ public class UserMapper extends NameBasedMapper {
 		}
 	}
 
-	protected boolean needsTables() throws SqlObjectStoreException {
-		return !db.hasTable(table);
+	protected boolean needsTables(DatabaseConnector connector) throws SqlObjectStoreException {
+		return !connector.hasTable(table);
 	}
 
-	public void resolve(NakedObject object) throws SqlObjectStoreException {
+	public void resolve(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
 		User user = (User) object;
 		long key = primaryKey(user.getOid());
-		Results rs = db.select("select * from " + table + " where id = " + key);
+		Results rs = connector.select("select * from " + table + " where id = " + key);
 		rs.next();
         loadUser(rs, user);
         rs.close();
 	}
 
-	public void save(NakedObject object) throws SqlObjectStoreException {
+	public void save(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
 		User user = (User) object;
 		NakedObject rootObject = user.getRootObject();
 		String rootObjectId = "NULL";
@@ -123,7 +124,7 @@ public class UserMapper extends NameBasedMapper {
 			rootObjectId = String.valueOf(primaryKey(rootObject.getOid()));
 			rootObjectClass = "'" + rootObject.getNakedClass().fullName() + "'";
 		}
-		db.update("update " + table + " set name='" + user.getName().stringValue() + "', root_object=" + rootObjectId
+		connector.update("update " + table + " set name='" + user.getName().stringValue() + "', root_object=" + rootObjectId
 				+ ", root_class=" + rootObjectClass + " where id = " + primaryKey(user.getOid()));
 	}
 

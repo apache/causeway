@@ -16,6 +16,7 @@ public class EcsContext extends AbstractUserContext {
 		addClass(Telephone.class);
 		addClass(Booking.class);
 		addClass(Location.class);
+		addClass(CreditCard.class);
 
 		InstanceCollection coll = InstanceCollection.allInstances(City.class.getName());
 		getCities().addAll(coll);

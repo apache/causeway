@@ -5,9 +5,9 @@ import org.nakedobjects.object.ObjectNotFoundException;
 
 
 public interface NakedClassMapper extends ObjectMapper {
-    void createNakedClass(NakedClass cls) throws SqlObjectStoreException;
+    void createNakedClass(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException;
 
-    NakedClass getNakedClass(String name) throws ObjectNotFoundException, SqlObjectStoreException;
+    NakedClass getNakedClass(DatabaseConnector connector, String name) throws ObjectNotFoundException, SqlObjectStoreException;
 }
 
 /*

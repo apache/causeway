@@ -3,7 +3,6 @@ package org.nakedobjects.persistence.sql;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.OidGenerator;
-import org.nakedobjects.persistence.sql.jdbc.JdbcConnector;
 import org.nakedobjects.utility.ComponentLoader;
 import org.nakedobjects.utility.StartupException;
 
@@ -11,10 +10,11 @@ import org.nakedobjects.utility.StartupException;
 public class SqlOidGenerator implements OidGenerator {
 	private static final String BASE_NAME = "sql-object-store";
 	private long number;
+	private DatabaseConnectorFactory connectorFactory;
 
     public void init() throws StartupException {
-        DatabaseConnectorFactory connectorFactory = (DatabaseConnectorFactory) ComponentLoader.
-			loadComponent(BASE_NAME + ".connector", DatabaseConnectorFactory.class);
+	    connectorFactory = (DatabaseConnectorFactory) ComponentLoader.
+				loadComponent(BASE_NAME + ".connector", DatabaseConnectorFactory.class);
         DatabaseConnector db = connectorFactory.createConnector();
         try {
             db.open();
@@ -42,14 +42,19 @@ public class SqlOidGenerator implements OidGenerator {
     }
 
     public void shutdown() {
-        DatabaseConnector db;
-        db = new JdbcConnector();
-        try {
+         DatabaseConnector db = connectorFactory.createConnector();
+         try {
             db.open();
             db.update("update no_serial_id set number = " + number);
-            db.close();
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
+        } finally {
+            try {
+                db.close();
+            } catch (SqlObjectStoreException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
         }
     }
 }

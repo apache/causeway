@@ -5,6 +5,7 @@ import org.nakedobjects.object.ResolveException;
 import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.reflect.Field;
 import org.nakedobjects.persistence.sql.CollectionMapper;
+import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
 import org.nakedobjects.persistence.sql.SqlOid;
@@ -41,7 +42,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 		}
 	}
 
-	public void loadInternalCollection(NakedObject parent)
+	public void loadInternalCollection(DatabaseConnector connector, NakedObject parent)
 			throws ResolveException, SqlObjectStoreException {
 		InternalCollection collection = (InternalCollection) field.get(parent);
 		LOG.debug("Loading internal collection " + collection);
@@ -49,7 +50,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 		
 		String statement = "select " + elementIdColumn + "," + columnList() + " from " + table + " where "
 				+ parentColumn + " = " + parentId;
-		Results rs = db.select(statement);
+		Results rs = connector.select(statement);
 		while (rs.next()) {
 			int id = rs.getInt(elementIdColumn);
 			NakedObject element = loadObject(nakedClass, new SqlOid(id, nakedClass.fullName()));
@@ -60,12 +61,12 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 		collection.setResolved();
 	}
 
-	public void saveInternalCollection(NakedObject parent) throws SqlObjectStoreException {
+	public void saveInternalCollection(DatabaseConnector connector, NakedObject parent) throws SqlObjectStoreException {
 		InternalCollection collection = (InternalCollection) field.get(parent);
 		LOG.debug("Saving internal collection " + collection);
 		long parentId = primaryKey(parent.getOid());
 		
-		db.update("delete from " + table + " where " + parentColumn + " = " + parentId);
+		connector.update("delete from " + table + " where " + parentColumn + " = " + parentId);
 		
 		String columns = parentColumn + ", " + elementIdColumn;
 		int size = collection.size();
@@ -76,7 +77,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 			String cls = element.getNakedClass().fullName();
 			String values = parentId + "," + elementId + ", '" + cls + "'";
 			String statement = "insert into " + table + " (" + columns + ") values (" + values + ")";
-			db.update(statement);
+			connector.update(statement);
 		}
 	}
 

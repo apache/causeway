@@ -29,23 +29,23 @@ public class ObjectMapperLookup {
     private final LoadedObjects loadedObjects;
     private ObjectMapperFactory mapperFactory;
     private DatabaseConnectorPool connectionPool;
-    private Connection connection;
     
-    public ObjectMapperLookup(LoadedObjects loadedObjects, Connection connection) {
+    public ObjectMapperLookup(LoadedObjects loadedObjects) {
         Assert.assertNotNull(loadedObjects);
         this.loadedObjects = loadedObjects;
-        this.connection = connection;
     }
     
     public ObjectMapper getMapper(NakedClass cls) throws SqlObjectStoreException {
         ObjectMapper mapper = (ObjectMapper) mappers.get(cls);
         if (mapper == null) {
             AutoMapper autoMapper = (AutoMapper) mapperFactory.createMapper(cls.fullName(), SqlObjectStore.BASE_NAME + ".automapper.default");
-            autoMapper.startup(this, loadedObjects, connection);
-            if(autoMapper.needsTables()) {
-                autoMapper.createTables();
+            DatabaseConnector connection = connectionPool.acquire();
+            autoMapper.startup(connection, this, loadedObjects);
+            if(autoMapper.needsTables(connection)) {
+                autoMapper.createTables(connection);
             }
             mapper = autoMapper;
+            connectionPool.release(connection);
         }
         LOG.debug("  mapper for " + cls.getSingularName() + " -> " + mapper);
         if(mapper == null) {
@@ -85,7 +85,9 @@ public class ObjectMapperLookup {
 
     private void add(NakedClass cls, ObjectMapper mapper) throws SqlObjectStoreException {
 		LOG.debug("add mapper " + mapper + " for " + cls);
-        mapper.startup(this, loadedObjects, connection);
+		DatabaseConnector connection = connectionPool.acquire();
+        mapper.startup(connection, this, loadedObjects);
+        connectionPool.release(connection);
         mappers.put(cls, mapper);
 	}
 

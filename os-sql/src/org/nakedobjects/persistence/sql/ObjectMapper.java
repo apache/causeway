@@ -9,26 +9,21 @@ import org.nakedobjects.object.UnsupportedFindException;
 import java.util.Vector;
 
 public interface ObjectMapper {
-
-//    void endTransaction();
-//    void startTransaction();
-
-
-    void createObject(NakedObject object) throws SqlObjectStoreException;
-    void destroyObject(NakedObject object) throws SqlObjectStoreException;
-    void save(NakedObject object) throws SqlObjectStoreException;
-    NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, SqlObjectStoreException;
-    void resolve(NakedObject object) throws SqlObjectStoreException;
+    void createObject(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException;
+    void destroyObject(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException;
+    void save(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException;
+    NakedObject getObject(DatabaseConnector connector, Object oid, NakedClass hint) throws ObjectNotFoundException, SqlObjectStoreException;
+    void resolve(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException;
 
 
-    Vector getInstances(NakedClass cls) throws SqlObjectStoreException;
-    Vector getInstances(NakedClass cls, String pattern) throws SqlObjectStoreException, UnsupportedFindException;
-    Vector getInstances(NakedObject pattern) throws SqlObjectStoreException, UnsupportedFindException;
-    boolean hasInstances(NakedClass cls) throws SqlObjectStoreException;
-    int numberOfInstances(NakedClass cls) throws SqlObjectStoreException;
+    Vector getInstances(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException;
+    Vector getInstances(DatabaseConnector connector, NakedClass cls, String pattern) throws SqlObjectStoreException, UnsupportedFindException;
+    Vector getInstances(DatabaseConnector connector, NakedObject pattern) throws SqlObjectStoreException, UnsupportedFindException;
+    boolean hasInstances(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException;
+    int numberOfInstances(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException;
 
 
-    void startup(ObjectMapperLookup mappers, LoadedObjects loadedObjects, Connection connection) throws SqlObjectStoreException;
+    void startup(DatabaseConnector connector, ObjectMapperLookup mappers, LoadedObjects loadedObjects) throws SqlObjectStoreException;
     void shutdown() throws SqlObjectStoreException;
 }
 

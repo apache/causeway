@@ -244,7 +244,9 @@ public class TransientObjectStore implements NakedObjectStore {
 
     public void save(NakedObject object) throws ObjectStoreException {
         LOG.debug("save " + object);
-        if (object instanceof NakedClass) { throw new ObjectStoreException("Can't make changes to a NakedClass object"); }
+        if (object instanceof NakedClass) { 
+            throw new ObjectStoreException("Can't make changes to a NakedClass object"); 
+        }
         if (!persistentObjectVector.contains(object)) {
             persistentObjectVector.addElement(object);
         }

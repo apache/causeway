@@ -112,7 +112,13 @@ public class Transaction {
             store.endTransaction();
         }
         }catch(ObjectStoreException ose) {
-            store.abortTransaction();
+            try {
+                store.abortTransaction();
+                return;
+            } catch (ObjectStoreException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
         }
 
         // update the public objects with the changed states

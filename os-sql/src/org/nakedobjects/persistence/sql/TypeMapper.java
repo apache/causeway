@@ -132,9 +132,12 @@ public class TypeMapper {
             return String.valueOf(((SerialNumber) value).longValue());
         }
 
+        
 
-        //LOG.error("No suitable column type for" + type);
-        throw new SqlObjectStoreException("No suitable column type for" + type);
+  //      LOG.info("No suitable column type for" + type);
+        
+        return "'"  +value.saveString() + "'";
+        //throw new SqlObjectStoreException("No suitable column type for" + type);
     }
     
     /*

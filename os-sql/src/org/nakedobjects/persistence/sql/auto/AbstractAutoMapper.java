@@ -11,6 +11,7 @@ import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.Value;
 import org.nakedobjects.persistence.sql.AbstractObjectMapper;
 import org.nakedobjects.persistence.sql.CollectionMapper;
+import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.FieldNameMapper;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
 import org.nakedobjects.persistence.sql.TypeMapper;
@@ -77,8 +78,8 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 		return sb.toString();
 	}
 
-	public void createTables() throws SqlObjectStoreException {
-		if (!db.hasTable(table)) {
+	public void createTables(DatabaseConnector connection) throws SqlObjectStoreException {
+		if (!connection.hasTable(table)) {
 			StringBuffer columns = new StringBuffer();
 			TypeMapper types = TypeMapper.getInstance();
 			for (int f = 0; f < fields.length; f++) {
@@ -103,12 +104,12 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 			// TODO this needs to be modified for ReversedAutoAssociationMapper
 			columns.append(idColumn + " int");
 
-			db.update("create table " + table + " (" + columns + ")");
+			connection.update("create table " + table + " (" + columns + ")");
 
 		}
 		for (int i = 0; collectionMappers != null && i < collectionMappers.length; i++) {
-			if (collectionMappers[i].needsTables()) {
-				collectionMappers[i].createTables();
+			if (collectionMappers[i].needsTables(connection)) {
+				collectionMappers[i].createTables(connection);
 			}
 		}
 	}
@@ -139,13 +140,13 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 		return reference;
 	}
 
-	public boolean needsTables() throws SqlObjectStoreException {
+	public boolean needsTables(DatabaseConnector connection) throws SqlObjectStoreException {
 		for (int i = 0; collectionMappers != null && i < collectionMappers.length; i++) {
-			if (collectionMappers[i].needsTables()) {
+			if (collectionMappers[i].needsTables(connection)) {
 				return true;
 			}
 		}
-		return !db.hasTable(table);
+		return !connection.hasTable(table);
 	}
 
 	private void setupFullMapping(String nakedClassName, Configuration configParameters, String parameterBase) throws SqlObjectStoreException {

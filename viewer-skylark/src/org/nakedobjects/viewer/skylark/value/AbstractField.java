@@ -81,13 +81,17 @@ public abstract class AbstractField extends AbstractView {
 
     public void draw(Canvas canvas) {
         super.draw(canvas);
-
-        if(getState().isInvalid()) {
-            canvas.drawSolidRectangle(new Location(), getBounds().getSize(), Color.DEBUG3);
-        }
  
         if(getState().isActive()) {
             canvas.drawSolidRectangle(new Location(), getBounds().getSize(), Color.DEBUG2);
+        }
+
+        if(getState().isOutOfSynch()) {
+            canvas.drawSolidRectangle(new Location(), getBounds().getSize(), Color.DEBUG1);
+        }
+ 
+        if(getState().isInvalid()) {
+            canvas.drawSolidRectangle(new Location(), getBounds().getSize(), Color.DEBUG3);
         }
         
         // outline bounds

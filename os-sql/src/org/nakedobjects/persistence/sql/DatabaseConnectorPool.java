@@ -5,7 +5,7 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 
 public class DatabaseConnectorPool {
-    private static final Logger LOG = Logger.getLogger(SqlObjectStore.class);
+    private static final Logger LOG = Logger.getLogger(DatabaseConnectorPool.class);
     private static final int AVERAGE_POOL_SIZE = 5;
 
     private final DatabaseConnectorFactory factory;
@@ -16,18 +16,24 @@ public class DatabaseConnectorPool {
         this.factory = factory;
         connectorPool = new Vector();
         for (int i = 0; i < AVERAGE_POOL_SIZE; i++) {
-            DatabaseConnector connector = factory.createConnector();
-            connector.open();
-            connectorPool.addElement(connector);
+            newConnector();
         }
         LOG.info("Created an intial pool of " + AVERAGE_POOL_SIZE + " database connections");
     }
     
-    public DatabaseConnector acquire() {
+    private DatabaseConnector newConnector() throws SqlObjectStoreException {
+        DatabaseConnector connector = factory.createConnector();
+        connector.setConnectionPool(this);
+        connector.open();
+        connectorPool.addElement(connector);
+        return connector;
+    }
+
+    public DatabaseConnector acquire() throws SqlObjectStoreException {
         DatabaseConnector connector = findFreeConnector();
         if(connector == null) {
-            connector = factory.createConnector();
-            connectorPool.addElement(connector);
+            connector = newConnector();
+            connector.setUsed(true);
             LOG.info("Added an additional database connection; now contains " + connectorPool.size()+ " connections");
         }
         LOG.debug("acquired connection " + connector);

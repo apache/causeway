@@ -6,6 +6,7 @@ import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.value.TextString;
 import org.nakedobjects.persistence.sql.AbstractObjectMapper;
+import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.NakedClassMapper;
 import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
@@ -35,21 +36,21 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
     	reflectorColumn = params.getString(PREFIX + "column.reflector", "reflector");
 	}
     
-    public void createNakedClass(NakedClass cls) throws SqlObjectStoreException {
+    public void createNakedClass(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException {
         LOG.debug("saving naked class: " + cls);
         String statement = "insert into " + table + " (" + idColumn + ", " + nameColumn + ", " + reflectorColumn +
 			") values (" + primaryKey(cls.getOid())
                 + ",'" + cls.getName().stringValue() + "','" + cls.getReflector().stringValue() + "')";
-        db.update(statement);
+      	connector.update(statement);
         cls.setResolved();
     }
 
-    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, SqlObjectStoreException {
+    public NakedClass getNakedClass(DatabaseConnector connector, String name) throws ObjectNotFoundException, SqlObjectStoreException {
         LOG.debug("loading naked class: " + name);
         String statement = "select " + idColumn + ", " + nameColumn + ", " + reflectorColumn + " from " + table + 
 		" where " + nameColumn + " = '" + name + "'";
 
-        Results rs = db.select(statement);
+        Results rs = connector.select(statement);
         if(rs.next()) {
             int id = rs.getInt(idColumn);
             SqlOid oid = new SqlOid(id, NakedClass.class.getName());
@@ -75,34 +76,34 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
         }
     }
 
-    protected boolean needsTables() throws SqlObjectStoreException {
-        return !db.hasTable(table);
+    protected boolean needsTables(DatabaseConnector connector) throws SqlObjectStoreException {
+        return !connector.hasTable(table);
     }
 
-    protected void createTables() throws SqlObjectStoreException {
+    protected void createTables(DatabaseConnector connector) throws SqlObjectStoreException {
     	TypeMapper types = TypeMapper.getInstance();
-        db.update("create table " + table + " (" + idColumn + " " + types.id() + " NOT NULL UNIQUE, " + nameColumn 
+        connector.update("create table " + table + " (" + idColumn + " " + types.id() + " NOT NULL UNIQUE, " + nameColumn 
         	+ " "	+ types.typeFor(TextString.class.getName()) + " UNIQUE, " + reflectorColumn + " " + 
 			types.typeFor(TextString.class.getName()) + ")" );
     }
 
-	public void createObject(NakedObject object) throws SqlObjectStoreException {
+	public void createObject(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
 		throw new NotImplementedException();
 	}
 
-	public void destroyObject(NakedObject object) throws SqlObjectStoreException {
+	public void destroyObject(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
 		throw new NotImplementedException();
 	}
 
-	public void save(NakedObject object) throws SqlObjectStoreException {
+	public void save(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
 		throw new NotImplementedException();
 	}
 
-	public NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, SqlObjectStoreException {
+	public NakedObject getObject(DatabaseConnector connector, Object oid, NakedClass hint) throws ObjectNotFoundException, SqlObjectStoreException {
 		throw new NotImplementedException();
 	}
 
-	public void resolve(NakedObject object) throws SqlObjectStoreException {
+	public void resolve(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
 	    NakedClass cls = (NakedClass) object;
 	    String columns = nameColumn + "," + reflectorColumn;
 	    long id = primaryKey(object.getOid());
@@ -110,7 +111,7 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
 	    LOG.debug("loading data from SQL " + table + " for " + object);
 	    String statement = "select " + columns + " from " + table + " where " + idColumn + "=" + id;
 	    
-	    Results rs = db.select(statement);
+	    Results rs = connector.select(statement);
 	    if (rs.next()) {
 	        String className = rs.getString(nameColumn);
 	        String reflectorName = rs.getString(reflectorColumn);
@@ -123,23 +124,23 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
 	    }
 	}
 
-	public Vector getInstances(NakedClass cls) throws SqlObjectStoreException {
+	public Vector getInstances(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException {
 		throw new NotImplementedException();
 	}
 
-	public Vector getInstances(NakedClass cls, String pattern) throws SqlObjectStoreException, UnsupportedFindException {
+	public Vector getInstances(DatabaseConnector connector, NakedClass cls, String pattern) throws SqlObjectStoreException, UnsupportedFindException {
 		throw new NotImplementedException();
 	}
 
-	public Vector getInstances(NakedObject pattern) throws SqlObjectStoreException, UnsupportedFindException {
+	public Vector getInstances(DatabaseConnector connector, NakedObject pattern) throws SqlObjectStoreException, UnsupportedFindException {
 		throw new NotImplementedException();
 	}
 
-	public boolean hasInstances(NakedClass cls) throws SqlObjectStoreException {
+	public boolean hasInstances(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException {
 		throw new NotImplementedException();
 	}
 
-	public int numberOfInstances(NakedClass cls) throws SqlObjectStoreException {
+	public int numberOfInstances(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException {
 		throw new NotImplementedException();
 	}
 }

@@ -1,5 +1,11 @@
 package org.nakedobjects.persistence.sql.jdbc;
 
+import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.persistence.sql.AbstractDatabaseConnector;
+import org.nakedobjects.persistence.sql.Results;
+import org.nakedobjects.persistence.sql.SqlObjectStoreException;
+import org.nakedobjects.utility.Configuration;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,14 +13,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
-import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.persistence.sql.DatabaseConnector;
-import org.nakedobjects.persistence.sql.Results;
-import org.nakedobjects.persistence.sql.SqlObjectStoreException;
-import org.nakedobjects.utility.Configuration;
 
 
-public class JdbcConnector implements DatabaseConnector {
+public class JdbcConnector extends AbstractDatabaseConnector {
     private static final Logger LOG = Logger.getLogger(JdbcConnector.class);
     private Connection connection;
     private boolean isUsed;
@@ -22,6 +23,7 @@ public class JdbcConnector implements DatabaseConnector {
     public void close() throws SqlObjectStoreException {
         try {
             if(connection != null) {
+                LOG.debug("close");
                 connection.close();
             }
         } catch (SQLException e) {
@@ -217,17 +219,28 @@ public class JdbcConnector implements DatabaseConnector {
         }
 	}
 
-    public void setUsed(boolean isUsed) {
-        this.isUsed = isUsed;
-    }
-
-    public boolean isUsed() {
-        return isUsed;
-    }
-
-	public Connection getConnection() {
+    public Connection getConnection() {
 		return connection;
 	}
+
+    public void commit() throws SqlObjectStoreException {
+        try {
+            LOG.debug("commit");
+            connection.commit();
+        } catch (SQLException e) {
+            throw new SqlObjectStoreException("Commit error", e);
+        }
+    }
+
+    public void rollback() throws SqlObjectStoreException {
+        try {
+            LOG.debug("commit");
+            connection.rollback();
+        } catch (SQLException e) {
+            throw new SqlObjectStoreException("Rollback error", e);
+        }
+    }
+
 }
 
 /*

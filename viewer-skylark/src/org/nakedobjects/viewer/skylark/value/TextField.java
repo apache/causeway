@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark.value;
 
 import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.reflect.Value;
@@ -701,7 +702,12 @@ public class TextField extends AbstractField {
                 markDamaged();
                 getViewManager().setStatus("VALID ENTRY: " + entry);
                 //getParent().invalidateLayout();
-            } catch (InvalidEntryException e) {
+            } catch (NakedObjectRuntimeException e) {
+                invalidReason = "UPDATE FAILURE: " + e.getMessage();
+                getViewManager().setStatus(invalidReason);
+                getState().setOutOfSynch();
+                markDamaged();
+          } catch (InvalidEntryException e) {
                 invalidReason = "INVALID ENTRY: " + e.getMessage();
                 getViewManager().setStatus(invalidReason);
                 markDamaged();
@@ -1081,6 +1087,9 @@ public class TextField extends AbstractField {
                 markDamaged();
             }
 
+            getState().clearOutOfSynch();
+            getState().setValid();
+            
             inError = false;
             isSaved = true;
         }

@@ -6,11 +6,11 @@ import org.nakedobjects.object.ResolveException;
 
 public interface CollectionMapper {
 
-	public void loadInternalCollection(NakedObject parent) throws ResolveException, SqlObjectStoreException;
+	public void loadInternalCollection(DatabaseConnector connector, NakedObject parent) throws ResolveException, SqlObjectStoreException;
 
-	public void saveInternalCollection(NakedObject parent) throws SqlObjectStoreException;
+	public void saveInternalCollection(DatabaseConnector connector, NakedObject parent) throws SqlObjectStoreException;
 	
-	void createTables() throws SqlObjectStoreException ;
+	void createTables(DatabaseConnector connection) throws SqlObjectStoreException ;
 
-	boolean needsTables() throws SqlObjectStoreException;
+	boolean needsTables(DatabaseConnector connection) throws SqlObjectStoreException;
 }

@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.SimpleOid;
 import org.nakedobjects.object.UnsupportedFindException;
+import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
 import org.nakedobjects.security.Role;
@@ -20,37 +21,37 @@ public class RoleMapper extends NameBasedMapper {
 	private static final Logger LOG = Logger.getLogger(RoleMapper.class);
 	private static final String table = "no_role";
 
-	public void createObject(NakedObject object) throws SqlObjectStoreException {
+	public void createObject(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
 		Role user = (Role) object;
 		long id = primaryKey(user.getOid());
-		db.update("Insert into " + table + " (" + columns + ") values ('"
+		connector.update("Insert into " + table + " (" + columns + ") values ('"
 				+ user.getName().stringValue() + "', '"
 				+ user.getDescription().stringValue() + "'," + id + ")");
 	}
 
-	protected void createTables() throws SqlObjectStoreException {
-		db
+	protected void createTables(DatabaseConnector connector) throws SqlObjectStoreException {
+		connector
 				.update("create table "
 						+ table
 						+ " (id INTEGER, name VARCHAR(255), description VARCHAR(1024))");
 	}
 
-	public Vector getInstances(NakedClass cls) throws SqlObjectStoreException {
+	public Vector getInstances(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException {
 		String statement = "select " + columns + " from " + table;
-		return getInstances(statement);
+		return getInstances(connector, statement);
 	}
 
-	public Vector getInstances(NakedObject pattern)
+	public Vector getInstances(DatabaseConnector connector, NakedObject pattern)
 			throws SqlObjectStoreException, UnsupportedFindException {
 		LOG.debug("loading user: " + pattern);
 		String statement = "select " + columns + " from " + table
 				+ " where name = '" + ((Role) pattern).getName().stringValue()
 				+ "'";
-		return getInstances(statement);
+		return getInstances(connector, statement);
 	}
 
-	private Vector getInstances(String statement) throws SqlObjectStoreException {
-		Results rs = db.select(statement);
+	private Vector getInstances(DatabaseConnector connector, String statement) throws SqlObjectStoreException {
+		Results rs = connector.select(statement);
 		NakedObjectManager manager = NakedObjectManager.getInstance();
 		Vector instances = new Vector();
 
@@ -80,17 +81,17 @@ public class RoleMapper extends NameBasedMapper {
 		return instances;
 	}
 
-	protected boolean needsTables() throws SqlObjectStoreException {
-		return !db.hasTable(table);
+	protected boolean needsTables(DatabaseConnector connector) throws SqlObjectStoreException {
+		return !connector.hasTable(table);
 	}
 
-	public void resolve(NakedObject object) throws SqlObjectStoreException {
+	public void resolve(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
 		throw new NotImplementedException(object.toString());
 	}
 
-	public void save(NakedObject object) throws SqlObjectStoreException {
+	public void save(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
 		Role user = (Role) object;
-		db.update("update " + table + " set name='"
+		connector.update("update " + table + " set name='"
 				+ user.getName().stringValue() + "', description='"
 				+ user.getDescription().stringValue() + "' where id = "
 				+ ((SimpleOid) user.getOid()).getSerialNo());

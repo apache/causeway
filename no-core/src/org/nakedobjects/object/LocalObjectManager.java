@@ -1,8 +1,5 @@
 package org.nakedobjects.object;
 
-import java.util.Vector;
-
-import org.apache.log4j.Logger;
 import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.reflect.Field;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
@@ -11,6 +8,10 @@ import org.nakedobjects.utility.ComponentException;
 import org.nakedobjects.utility.ComponentLoader;
 import org.nakedobjects.utility.ConfigurationException;
 import org.nakedobjects.utility.StartupException;
+
+import java.util.Vector;
+
+import org.apache.log4j.Logger;
 
 
 public class LocalObjectManager extends NakedObjectManager {

@@ -9,7 +9,7 @@ import org.nakedobjects.utility.DebugInfo;
 
 public interface NakedObjectStore extends DebugInfo {
 
-    public void abortTransaction();
+    public void abortTransaction() throws ObjectStoreException;
 
     /**
      * Makes a naked object persistent. The specified object should be stored

@@ -1,46 +1,43 @@
 package org.nakedobjects.persistence.sql;
 
-public interface DatabaseConnector {
-    /* @deprecated 
-    Results callStoredProcedure(String name, Parameter[] parameters);
-*/
-    void close() throws SqlObjectStoreException;
+import org.apache.log4j.Logger;
 
-    int count(String sql) throws SqlObjectStoreException;
 
-    void delete(String sql) throws SqlObjectStoreException;
+public abstract class AbstractDatabaseConnector implements DatabaseConnector {
+    private static final Logger LOG = Logger.getLogger(AbstractDatabaseConnector.class);
+    private boolean isUsed;
 
-//    MultipleResults executeStoredProcedure(String name, Parameter[] parameters);
+    public final void setUsed(boolean isUsed) {
+        this.isUsed = isUsed;
+    }
 
-    boolean hasTable(String tableName) throws SqlObjectStoreException;
+    public final boolean isUsed() {
+        return isUsed;
+    }
 
-    void insert(String sql) throws SqlObjectStoreException;
-
-    void insert(String sql, Object oid) throws SqlObjectStoreException;
-
-    void open() throws SqlObjectStoreException;
-
-    Results select(String sql);
-
-    void update(String sql) throws SqlObjectStoreException;
+    private int transactionLevel = 0;
     
-    void setUsed(boolean isUsed);
+    public final  void startTransaction() {
+        transactionLevel ++;
+    }
+
+    public final void endTransaction() {
+        transactionLevel --;
+    }
+
+    public final boolean isTransactionComplete() {
+        return transactionLevel == 0;
+    }
     
-    boolean isUsed();
-
-    void commit() throws SqlObjectStoreException;
-
-    void rollback()  throws SqlObjectStoreException;
-
-    void startTransaction();
-
-    void endTransaction();
-
-    boolean isTransactionComplete();
-
-    void setConnectionPool(DatabaseConnectorPool pool) ;
+    private DatabaseConnectorPool pool;
     
-    DatabaseConnectorPool getConnectionPool();
+    public final void setConnectionPool(DatabaseConnectorPool pool) {
+        this.pool = pool;
+    }
+    
+    public final DatabaseConnectorPool getConnectionPool() {
+        return pool;
+    }
 }
 
 /*

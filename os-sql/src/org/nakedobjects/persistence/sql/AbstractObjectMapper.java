@@ -8,13 +8,12 @@ import org.apache.log4j.Logger;
 public abstract class AbstractObjectMapper {
 	private static final Logger LOG = Logger.getLogger(AbstractObjectMapper.class);
 	public LoadedObjects loadedObjects;
-    public Connection db;
 	private ObjectMapperLookup objectMapperLookup;
 
-	protected void createTables() throws SqlObjectStoreException {
+	protected void createTables(DatabaseConnector connector) throws SqlObjectStoreException {
 	}
 
-	protected boolean needsTables() throws SqlObjectStoreException {
+	protected boolean needsTables(DatabaseConnector connector) throws SqlObjectStoreException {
 		return false;
 	}
 
@@ -25,12 +24,11 @@ public abstract class AbstractObjectMapper {
 	public final void shutdown() throws SqlObjectStoreException {
 	}
 
-	public void startup(ObjectMapperLookup objectMapperLookup, LoadedObjects loaded, Connection db) throws SqlObjectStoreException {
+	public void startup(DatabaseConnector connector, ObjectMapperLookup objectMapperLookup, LoadedObjects loaded) throws SqlObjectStoreException {
 		this.objectMapperLookup = objectMapperLookup;
 		this.loadedObjects = loaded;
-		this.db = db;
-		if (needsTables()) {
-			createTables();
+		if (needsTables(connector)) {
+			createTables(connector);
 		}
 	}
 	
