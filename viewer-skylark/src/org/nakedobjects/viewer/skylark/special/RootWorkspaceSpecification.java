@@ -13,7 +13,6 @@ import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.DefaultWorkspace;
 import org.nakedobjects.viewer.skylark.basic.RootWorkspaceBuilder;
 import org.nakedobjects.viewer.skylark.basic.UserContextWorkspace;
-import org.nakedobjects.viewer.skylark.basic.WindowBorder;
 
 public class RootWorkspaceSpecification implements WorkspaceSpecification {
 	RootWorkspaceBuilder builder = new RootWorkspaceBuilder();
@@ -26,7 +25,7 @@ public class RootWorkspaceSpecification implements WorkspaceSpecification {
 			} else {
 				workspace = new DefaultWorkspace(content, this, axis);
 			}
-			return new WindowBorder(1, workspace);
+			return workspace;
 		}
 	
 

@@ -9,7 +9,7 @@ import org.nakedobjects.viewer.skylark.value.TextField;
 public class TextFieldSpecification extends AbstractFieldSpecification {
     public View createView(Content content, ViewAxis axis) {
 		//return new SimpleIdentifier(new TextFieldBorder(new TextField(content, this, axis, false)));
-        return new TextField(content, this, axis, false);
+        return new TextField(content, this, axis, true);
     }
     
     public String getName() {

@@ -31,6 +31,7 @@ public class AbstractBorder extends AbstractViewDecorator {
 
     protected Bounds contentArea() {
         return new Bounds(getLeft(), getTop(), getSize().getWidth() -getLeft() - getRight(), getSize().getHeight() - getTop() - getBottom());
+        //return new Bounds(getLeft(), getTop(), wrappedView.getSize().getWidth(), wrappedView.getSize().getHeight());
     }
 
     public void drag(InternalDrag drag) {
@@ -131,6 +132,7 @@ public class AbstractBorder extends AbstractViewDecorator {
 	protected void debugDetails(StringBuffer b) {
 	    super.debugDetails(b);
 	    
+		b.append("\n           border:  " + getTop() + "/" + getBottom() + " " + getLeft() + "/" + getRight() + " (top/bottom left/right)");
 		b.append("\n           contents:  " + contentArea());
 	}
 

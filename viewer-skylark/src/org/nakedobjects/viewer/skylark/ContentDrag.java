@@ -142,6 +142,13 @@ public class ContentDrag extends Drag {
     	return "ContentDrag [" + super.toString() + "]";
 	}
     
+    
+    public Location getTargetLocation() {
+        Location location = new Location(mouseLocation);
+        location.subtract(target.getAbsoluteLocation());
+        return location;
+    }
+    
     /**
      * Captures the latest pointer information (target and location).
      */

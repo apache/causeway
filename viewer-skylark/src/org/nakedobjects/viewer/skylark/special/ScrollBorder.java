@@ -55,10 +55,11 @@ public class ScrollBorder extends AbstractBorder {
     public void draw(Canvas canvas) {
          Bounds contents = contentArea();
 
-        Color color = isOnBorder() ? Style.SECONDARY1 : Style.SECONDARY2;
+       // Color color = isOnBorder() ? Style.PRIMARY1 : Style.PRIMARY2;
+         Color color = Style.PRIMARY1;
         if(horizontalScrollPosition > 0 || horizontalVisibleAmount != contents.getWidth()) {
             canvas.drawSolidRectangle(0, contents.getHeight() + 1, contents.getWidth(),
-                    SCROLLBAR_WIDTH - 2, Style.WHITE);
+                    SCROLLBAR_WIDTH - 2, Style.SECONDARY3);
             canvas.drawSolidRectangle(horizontalScrollPosition, contents.getHeight() + 1, horizontalVisibleAmount,
                     SCROLLBAR_WIDTH - 3, color);
             canvas.drawRectangle(horizontalScrollPosition, contents.getHeight() + 1, horizontalVisibleAmount,
@@ -69,10 +70,10 @@ public class ScrollBorder extends AbstractBorder {
         
         if(verticalScrollPosition > 0 || verticalVisibleAmount != contents.getHeight()) {
             canvas.drawSolidRectangle(contents.getWidth() + 1, 0, 
-                    SCROLLBAR_WIDTH - 2, contents.getHeight(),  Style.WHITE);
+                    SCROLLBAR_WIDTH - 2, contents.getHeight(),  Style.SECONDARY3);
             canvas.drawSolidRectangle(contents.getWidth() + 1, verticalScrollPosition, 
                     SCROLLBAR_WIDTH - 3, verticalVisibleAmount,             color);
-            canvas.drawSolidRectangle(contents.getWidth() + 1, verticalScrollPosition, 
+            canvas.drawRectangle(contents.getWidth() + 1, verticalScrollPosition, 
                     SCROLLBAR_WIDTH - 3, verticalVisibleAmount,  Style.SECONDARY1);
         }
         canvas.drawRectangle(contents.getWidth(), 0, 
@@ -82,11 +83,7 @@ public class ScrollBorder extends AbstractBorder {
         canvas.setClip(offset.getDeltaX(), offset.getDeltaY(), contents.getWidth(), contents.getHeight());
         super.draw(canvas);
     }
-
-    public Size getRequiredSize() {
-        return wrappedView.getRequiredSize();
-    }
-
+	
     public Size getSize() {
         return new Size(size);
     }

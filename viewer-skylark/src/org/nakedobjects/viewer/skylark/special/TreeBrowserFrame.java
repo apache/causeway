@@ -9,13 +9,13 @@ import org.nakedobjects.viewer.skylark.IdentifiedView;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Offset;
-import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewDrag;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
+import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 
 
@@ -106,7 +106,47 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     }
 
     public void layout() {
+        left.layout();
+        if (right != null) {
+            right.layout();
+        }
+        
+        // TODO set up sizes of frame, right hand pane, and left hand pane in one go.
         if (invalidLayout) {
+            Bounds workspaceLimit = getWorkspace().getBounds();
+            workspaceLimit.contract(getWorkspace().getPadding());
+            Size rightPanelRequiredSize = (right == null) ? new Size() : right.getRequiredSize();
+            Size leftPanelRequiredSize = left.getRequiredSize();
+            
+            Bounds subviews = new Bounds(leftPanelRequiredSize);
+            subviews.extendWidth(rightPanelRequiredSize.getWidth());
+            subviews.ensureHeight(rightPanelRequiredSize.getHeight());
+            
+            if(workspaceLimit.limitBounds(subviews)) {
+                // TODO change sizes
+                if (right != null) {
+                    rightPanelRequiredSize.setWidth(workspaceLimit.getWidth() - leftPanelRequiredSize.getWidth());
+                }
+            }
+            
+        
+            leftPanelRequiredSize.setHeight(subviews.getHeight());
+            left.setSize(leftPanelRequiredSize);
+            
+            left.layout();
+            if (right != null) {
+                right.setLocation(new Location(rightViewOffet(), 0));       
+                rightPanelRequiredSize.setHeight(subviews.getHeight());
+                right.setSize(rightPanelRequiredSize);
+                
+                right.layout();
+            }
+            invalidLayout = false;
+
+           /* 
+            
+            
+            
            Size treeBrowserSize = left.getRequiredSize();
            
             if (right != null) {
@@ -120,10 +160,12 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
             left.setSize(left.getRequiredSize());
            
             if (right != null) {
-                right.setLocation(new Location(rightViewOffet(), 0));
+                right.setLocation(new Location(rightViewOffet(), 0));       
+                right.layout();
             }
             
             invalidLayout = false;
+            */
         }
     }
 
@@ -183,6 +225,10 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     private void showInRightPane(View view) {
         right = view;
         right.setParent(getView());
+        Workspace workspace = this.getWorkspace();
+        if(workspace != null) {
+            workspace.limitBounds(this );
+        }
         invalidateLayout();
     }
 

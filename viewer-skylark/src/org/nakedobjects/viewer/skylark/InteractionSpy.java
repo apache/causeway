@@ -108,7 +108,7 @@ public class InteractionSpy {
     }
 
     public void show() {
-        spy.show();
+        // spy.show();
     }
 
     public void addTrace(String message) {

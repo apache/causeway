@@ -64,7 +64,7 @@ public class Click extends PointerEvent {
      * Translate the location of this event by the specified offset.
      */
     public void subtract(int x, int y) {
-        locationWithinView.subtract(x, -y);
+        locationWithinView.subtract(x, y);
     }
 
     public String toString() {

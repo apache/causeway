@@ -255,6 +255,7 @@ public class CompositeObjectView extends ObjectView {
             getView().setSize(size);
 
             builder.layout(getView());
+             
             layoutCount++;
             markDamaged();
         }
@@ -280,7 +281,6 @@ public class CompositeObjectView extends ObjectView {
                 toReplace.dispose();
                 replacement.setParent(getView());
                 replacement.setLocation(toReplace.getLocation());
-                limitBounds(replacement);
                 views.insertElementAt(replacement, i);
                 invalidateLayout();
 

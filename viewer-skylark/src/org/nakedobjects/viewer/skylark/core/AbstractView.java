@@ -419,6 +419,20 @@ public abstract class AbstractView implements View {
      * never extends outside the bounds of the containing open view
      */
     public void limitBounds(View view) {
+        
+        Bounds b = getBounds();
+        b.contract(getPadding());
+        
+        Bounds d = view.getBounds();
+        
+        if( b.limitBounds(d)) {
+	        view.setLocation(d.getLocation());
+	        view.setSize(d.getSize());
+	        view.invalidateLayout();
+        }
+        
+/*        
+        
         Location location = view.getLocation();
         Size size = view.getSize();
 
@@ -458,6 +472,23 @@ public abstract class AbstractView implements View {
         location.setX(viewLeft);
         location.setY(viewTop);
         view.setLocation(location);
+        
+        
+        
+        viewBottom = viewTop + size.getHeight();
+        viewRight = viewLeft + size.getWidth();
+        
+        if (viewRight > limitRight) {
+            view.setSize(new Size(wd.getWidth(), size.getHeight()));
+            view.invalidateLayout();
+        }
+
+        if (viewBottom > limitBottom) {
+           view.setSize(new Size(size.getWidth(),  wd.getHeight()));
+           view.invalidateLayout();
+        }
+        
+        */
     }
 
     public void markDamaged() {

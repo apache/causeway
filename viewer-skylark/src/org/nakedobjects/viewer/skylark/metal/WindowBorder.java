@@ -43,6 +43,7 @@ public class WindowBorder extends AbstractBorder {
     public void debugDetails(StringBuffer b) {
         b.append("WindowBorder " + left + " pixels\n");
     	b.append("           titlebar " + (top - titlebarHeight) + " pixels");
+    	super.debugDetails(b);
     }
 	
 	public void draw(Canvas canvas) {

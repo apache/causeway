@@ -90,14 +90,14 @@ public class ResizeBorder extends AbstractBorder {
             super.dragTo(drag);
         }
     }
-
+/*
     public Size getRequiredSize() {
-        if(resize == null) {
+ //       if(resize == null) {
             resize = wrappedView.getRequiredSize();
-        }
+ //       }
         return new Size(resize);
     }
-    
+   */ 
     public void setRequiredSize(Size size) {
         this.resize = size;
     }
@@ -134,8 +134,8 @@ public class ResizeBorder extends AbstractBorder {
 
     private int onBorder(Location at) {
         Bounds area = contentArea();
-        boolean right = at.getX() >= area.getWidth();
-        boolean bottom = at.getY() >= area.getHeight();
+        boolean right = at.getX() >= area.getWidth() && at.getX() <= area.getWidth() + getRight();
+        boolean bottom = at.getY() >= area.getHeight() && at.getY() <= area.getHeight() + getBottom();
         
         final int status;
         if(right && bottom) {

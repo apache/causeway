@@ -9,7 +9,6 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.special.CollectionElementBuilder;
-import org.nakedobjects.viewer.skylark.special.ResizeBorder;
 import org.nakedobjects.viewer.skylark.special.ScrollBorder;
 import org.nakedobjects.viewer.skylark.special.StackLayout;
 import org.nakedobjects.viewer.skylark.special.SubviewSpec;
@@ -22,7 +21,8 @@ public class ListSpecification extends AbstractCompositeViewSpecification implem
 	}
 	
     public View createView(Content content, ViewAxis axis) {
-        return new WindowBorder(new ResizeBorder(new ScrollBorder(super.createView(content, axis))));
+        return new WindowBorder(new ScrollBorder(super.createView(content, axis)));
+    //    return new WindowBorder(new ResizeBorder(new ScrollBorder(super.createView(content, axis))));
     }
 	
     public View createSubview(Content content, ViewAxis axis) {

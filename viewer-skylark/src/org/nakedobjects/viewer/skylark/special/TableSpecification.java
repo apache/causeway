@@ -84,8 +84,8 @@ public class TableSpecification extends AbstractCompositeViewSpecification imple
 
     public View createView(Content content, ViewAxis axis) {
         View table = super.createView(content, axis);
-        View view = new ResizeBorder(new ScrollBorder(table));
-//        view.setRequiredSize(table.getRequiredSize());
+        View view = new ScrollBorder(table);
+//        View view = new ResizeBorder(new ScrollBorder(table));
         return view;
     }
     

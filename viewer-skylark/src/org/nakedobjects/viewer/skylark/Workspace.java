@@ -9,6 +9,8 @@ public interface Workspace extends View {
 
     void lower(View view);
 
+    void limitBounds(View view);
+    
     void raise(View view);
 
     void removeOtherRootViews(View view);

@@ -5,7 +5,6 @@ import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
@@ -36,7 +35,8 @@ public class TreeBrowserSpecification implements ViewSpecification {
 
     public View createView(Content content, ViewAxis axis) {
         TreeBrowserFrame frame = new TreeBrowserFrame(content, this);
-		View view = addBorder(frame);
+ 
+        View view = addBorder(frame);
 		View rootNode;
 		axis = frame;
 		if(((ObjectContent) content).getObject() instanceof NakedCollection) {
@@ -45,9 +45,9 @@ public class TreeBrowserSpecification implements ViewSpecification {
 	        rootNode = objectCompositeNode.createView(content, axis);
 	        frame.setSelectedNode(rootNode);
 	    }
-        ResizeBorder leftPane = new ResizeBorder(new ScrollBorder(rootNode));
-        Size treeSize = new Size(200, 180);
-        leftPane.setRequiredSize(treeSize);
+        //ResizeBorder leftPane = new ResizeBorder(new ScrollBorder(rootNode));
+		View
+		leftPane = new ScrollBorder(rootNode);
         frame.initLeftPane(leftPane);
         
         return view;

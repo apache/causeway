@@ -30,12 +30,15 @@ public class DialogedObjectOption extends MenuOption {
     		return null;
     	}
 
-    	String label =  action.getLabel(ClientSession.getSession(), object) + " (";
+    	String label =  action.getLabel(ClientSession.getSession(), object) + "...";
+    	/*
+    	 String label =  action.getLabel(ClientSession.getSession(), object) + " (";
     	NakedObjectSpecification[] parameters = action.parameters();
     	for (int i = 0; i < parameters.length; i++) {
             label += (i > 0 ? ", " : "") + parameters[i].getShortName();
         }
     	label += ")...";
+        */
     	
     	DialogedObjectOption option = new DialogedObjectOption(label, action);
     	
