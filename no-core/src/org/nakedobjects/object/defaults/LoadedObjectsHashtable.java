@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 
 public class LoadedObjectsHashtable implements LoadedObjects {
     private static final Logger LOG = Logger.getLogger(LoadedObjectsHashtable.class);
-    private Hashtable loaded = new Hashtable();
+    protected final Hashtable loaded = new Hashtable();
     
     public LoadedObjectsHashtable() {
         LOG.info("create loaded object lookup " + hashCode());
@@ -87,7 +87,6 @@ public class LoadedObjectsHashtable implements LoadedObjects {
         super.finalize();
         LOG.info("finalizing loaded objects");
     }
-
 }
 
 
