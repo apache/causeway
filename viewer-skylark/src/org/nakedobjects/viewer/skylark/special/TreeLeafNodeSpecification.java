@@ -1,9 +1,9 @@
 package org.nakedobjects.viewer.skylark.special;
 
+import org.nakedobjects.object.Lookup;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.defaults.Lookup;
 import org.nakedobjects.object.reflect.AssociationSpecification;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.object.security.ClientSession;

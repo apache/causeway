@@ -1,5 +1,6 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.object.Lookup;
 import org.nakedobjects.object.defaults.value.TextString;
 
 
@@ -9,7 +10,7 @@ import org.nakedobjects.object.defaults.value.TextString;
  * class simply subclass this class, and extend if there is to be any additional
  * information (there normally isn't).
  */
-public class Lookup extends AbstractNakedObject {
+public class AbstractLookup extends AbstractNakedObject implements Lookup {
 	private final TextString description = new TextString();
 
 	public TextString getDescription() {
@@ -19,6 +20,13 @@ public class Lookup extends AbstractNakedObject {
 	public Title title() {
 		return description.title();
 	}
+
+	/**
+	 * Default implementation that matches any specified text.
+	 */
+    public boolean isSelected(String text) {
+        return true;
+    }
 }
 
 /*

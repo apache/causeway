@@ -1,11 +1,11 @@
 package org.nakedobjects.viewer.skylark.special;
 
+import org.nakedobjects.object.Lookup;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.control.defaults.Allow;
-import org.nakedobjects.object.defaults.Lookup;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.UserAction;
