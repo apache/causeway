@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE project [
+	<!ENTITY properties SYSTEM "file:../naked-objects/properties.xml">
+	<!ENTITY targets SYSTEM "file:../naked-objects/targets.xml">
+]>
+
+<project name="Naked Object Object Store for MySql" default="all" basedir=".">
+	<description>s</description>
+
+	&properties;
+
+	<property name="component" value="os-mysql"/>
+	
+	<!-- classpath -->
+	<path id="libs.internal">
+		<fileset dir="../no-core/build/release">
+			<include name="no-core.jar"/>
+			<include name="no-core-test.jar"/>
+		</fileset>
+	</path>
+
+	&targets;	
+</project>
+
+
