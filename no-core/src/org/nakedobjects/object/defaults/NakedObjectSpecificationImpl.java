@@ -67,7 +67,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         return reflector.acquireInstance();
     }
 
-    protected About classAbout() {
+    protected ClassAbout classAbout() {
         return reflector.classAbout();
     }
     

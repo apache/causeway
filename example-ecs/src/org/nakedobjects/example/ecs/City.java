@@ -1,6 +1,5 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ClassAbout;
 import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.defaults.AbstractNakedObject;
@@ -17,8 +16,8 @@ public class City extends AbstractNakedObject {
         name = new TextString();
     }
 
-    public static About aboutCity() {
-        return ClassAbout.UNINSTANTIABLE;
+    public static void aboutCity(ClassAbout about) {
+        about.uninstantiatable("We have enough cities already");
     }
 
     public Location actionNewLocation() {

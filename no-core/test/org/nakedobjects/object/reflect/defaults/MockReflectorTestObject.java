@@ -3,11 +3,17 @@ package org.nakedobjects.object.reflect.defaults;
 import org.nakedobjects.object.DummyNakedObject;
 import org.nakedobjects.object.DummyNakedValue;
 import org.nakedobjects.object.control.ActionAbout;
+import org.nakedobjects.object.control.ClassAbout;
 import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.control.Validity;
 
-public class DummyReflectorTestObject extends DummyNakedObject {
-
+public class MockReflectorTestObject extends DummyNakedObject {
+    static ClassAbout about;
+    
+    public static void aboutDummyReflectorTestObject(ClassAbout about) {
+        MockReflectorTestObject.about = about;
+    }
+    
     public static String pluralName() {
         return "Plural";
     }

@@ -3,6 +3,7 @@ package org.nakedobjects.object.reflect.defaults;
 import org.nakedobjects.object.ContactTestObject;
 import org.nakedobjects.object.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.control.ClassAbout;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.Member;
 import org.nakedobjects.object.reflect.NakedObjectSpecificationException;
@@ -29,7 +30,7 @@ public class JavaReflectorTest extends TestCase {
     	new MockNakedObjectSpecificationLoader();     	
         new TestClock();
     	
-        reflector = new MockJavaReflector(DummyReflectorTestObject.class.getName());
+        reflector = new MockJavaReflector(MockReflectorTestObject.class.getName());
     }
 
     public void testObjectActions() throws NakedObjectSpecificationException {
@@ -69,16 +70,22 @@ public class JavaReflectorTest extends TestCase {
     public void testAcquire() {
         Naked instance = reflector.acquireInstance();
         assertNotNull(instance);
-        assertTrue(instance instanceof DummyReflectorTestObject);
+        assertTrue(instance instanceof MockReflectorTestObject);
     }
     
    public void testShortName() {
-        assertEquals("DummyReflectorTestObject", reflector.shortName());
+        assertEquals("MockReflectorTestObject", reflector.shortName());
     }
 
     public void testPluralName() {
         assertEquals("Plural", reflector.pluralName());
     }
+
+    public void testClassAbout() {
+        ClassAbout about = reflector.classAbout();
+        assertEquals(about, MockReflectorTestObject.about);
+    }
+
 
     public void testSingularName() {
         assertEquals("Singular", reflector.singularName());

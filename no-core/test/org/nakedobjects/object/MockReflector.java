@@ -1,16 +1,13 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ClassAbout;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.Member;
 import org.nakedobjects.object.reflect.Reflector;
 
 public class MockReflector implements Reflector {
-
     private NakedObject acquireInstance;
-    private ClassAbout classAbout;
-
+ 
     public MockReflector() {
         super();
     }
@@ -31,8 +28,8 @@ public class MockReflector implements Reflector {
         return null;
     }
 
-    public About classAbout() {
-        return classAbout;
+    public ClassAbout classAbout() {
+        return null;
     }
 
     public String[] classActionSortOrder() {
@@ -65,10 +62,6 @@ public class MockReflector implements Reflector {
 
     public String singularName() {
         return null;
-    }
-
-    void setupClassAbout(ClassAbout about) {
-        classAbout = about;
     }
 
     public String getSuperclass() {

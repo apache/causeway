@@ -9,8 +9,10 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ActionAbout;
+import org.nakedobjects.object.control.ClassAbout;
 import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.control.Validity;
+import org.nakedobjects.object.control.defaults.SimpleClassAbout;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.Member;
@@ -237,10 +239,12 @@ public class JavaReflector implements Reflector {
         return readSortOrder(cls, "action");
     }
 
-    public About classAbout() {
+    public ClassAbout classAbout() {
         LOG.debug("looking for class about");
         try {
-            return (About) cls.getMethod(ABOUT_PREFIX + shortName(), new Class[0]).invoke(null, new Object[0]);
+            ClassAbout about = new SimpleClassAbout(null, null);
+            cls.getMethod(ABOUT_PREFIX + shortName(), new Class[] {ClassAbout.class}).invoke(null, new Object[] {about});
+            return about; 
         } catch (NoSuchMethodException ignore) {
         } catch (IllegalAccessException ignore) {
         } catch (InvocationTargetException ignore) {

@@ -1,7 +1,7 @@
 package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.control.ClassAbout;
 
 
 public interface Reflector {
@@ -14,7 +14,7 @@ public interface Reflector {
 
     String[] actionSortOrder();
 
-    About classAbout();
+    ClassAbout classAbout();
 
     String[] classActionSortOrder();
     
