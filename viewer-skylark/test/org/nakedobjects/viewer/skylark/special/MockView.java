@@ -216,7 +216,7 @@ public class MockView implements View
     public boolean contains(View view) {
         return false;
     }
-S
+
     public Drag dragStart(DragStart drag) {
         return null;
     }

@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <!DOCTYPE project [
 	<!ENTITY properties SYSTEM "file:../build-templates/properties.xml">
-	<!ENTITY common SYSTEM "file:../build-templates/common.xml">
+<!ENTITY common SYSTEM "file:../build-templates/common.xml">
 ]>
 
 <project name="Naked Objects framework - exploration edition"
          default="idebuild"
          basedir=".">
-	
+
 	<property name="distribution" value="exploration" />
 
 	
@@ -17,7 +17,7 @@
 		<copy todir="${build.src.dir}">
 			<fileset dir="../viewer-skylark/${src.dir}" />
 		</copy>
-		
+
 		<copy todir="${build.example.dir}">
 			<fileset dir="../example-ecs/${src.dir}">
 				<exclude name="**/*AcceptanceTest*" />
@@ -43,6 +43,47 @@
 			<fileset dir="../example-expenses/src/images" />
 			<fileset dir="../example-library/src/images" />
 		</copy>
+
+	</target>
+
+
+
+	<target name="changelog">
+
+		<cvschangelog cvsroot="pserver:rcm@81.168.57.193:/home/cvs"
+		              dir="../viewer-skylark/${src.dir}"
+		              destfile="changelog.xml" />
+	</target>
+
+
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: application                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="application">
+		<copy todir="build/dist" file="nakedobjects.properties" />
+
+		<jar destfile="build/dist/ecs-demo.jar">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Main-Class"
+				           value="org.nakedobjects.example.ecs.EcsExploration" />
+			</manifest>
+
+			<fileset dir="build/classes/src" />
+			<fileset dir="build/classes/example" />
+			<fileset dir="build/src">
+				<include name="images/*" />
+			</fileset>
+
+			<zipfileset src="../lib/log4j-1.2.6.jar" />
+
+			<fileset dir="../example-ecs">
+				<include name="nakedobjects.properties" />
+			</fileset>
+
+		</jar>
+
 
 	</target>
 
