@@ -18,14 +18,6 @@ public class OneToManyAssociation extends NakedObjectAssociation {
         this.reflectiveAdapter = association;
     }
 
-    public boolean canAccess(Session session, NakedObject object) {
-        return getHint(session, object, null, true).canAccess().isAllowed();
-    }
-
-    public boolean canUse(Session session, NakedObject object) {
-        return getHint(session, object, null, true).canUse().isAllowed();
-    }
-
     public void clearCollection(NakedObject inObject) {
         NakedObjectManager objectManager = NakedObjects.getObjectManager();
         try {

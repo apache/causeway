@@ -5,10 +5,8 @@ import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectTestCase;
-import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.object.security.Session;
@@ -79,21 +77,6 @@ public class ActionTest extends NakedObjectTestCase {
 
         actionDelegate.returnType = new DummyNakedObjectSpecification();
         assertTrue(action.hasReturn());
-    }
-
-    public void testIsVisible() {
-        NakedObject nakedObject = new DummyNakedObject();
-
-        actionDelegate.canAccess = new Veto();
-        actionDelegate.hasAbout = true;
-        assertFalse(action.canAccess(new Session(), nakedObject));
-
-        actionDelegate.canAccess = new Allow();
-        assertTrue(action.canAccess(new Session(), nakedObject));
-
-        actionDelegate.canAccess = new Veto();
-        actionDelegate.hasAbout = false;
-        assertTrue(action.canAccess(new Session(), nakedObject));
     }
 
     public void testLabel() {

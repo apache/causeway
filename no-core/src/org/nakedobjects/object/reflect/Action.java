@@ -74,14 +74,6 @@ public class Action extends NakedObjectMember {
         this.actionDelegate = actionDelegate;
     }
 
-    protected boolean canAccess(Session session, NakedObject object) {
-        return getHint(session, object, null).canAccess().isAllowed();
-    }
-
-    protected boolean canUse(Session session, NakedObject object) {
-        return getHint(session, object, null).canUse().isAllowed();
-    }
-
     protected Naked execute(final NakedObject object, final Naked[] parameters) {
         NakedObjectManager objectManager = NakedObjects.getObjectManager();
 

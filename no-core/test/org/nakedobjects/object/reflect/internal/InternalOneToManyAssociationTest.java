@@ -1,6 +1,7 @@
 package org.nakedobjects.object.reflect.internal;
 
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObject;
@@ -39,9 +40,8 @@ public class InternalOneToManyAssociationTest extends NakedObjectTestCase {
         
         Logger.getRootLogger().setLevel(Level.OFF);
     	loader = new MockNakedObjectSpecificationLoader();
+    	NakedObjects.setSpecificationLoader(loader);
     	
-  //  	PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
-        
         spec = new DummyNakedObjectSpecification();
         loader.addSpec(spec);
         

@@ -8,58 +8,58 @@ import org.nakedobjects.object.security.Session;
 
 
 public class AbstractOneToOnePeer implements OneToOnePeer {
-    private final OneToOnePeer local;
+    private final OneToOnePeer decorated;
 
     public AbstractOneToOnePeer(OneToOnePeer local) {
-        this.local = local;
+        this.decorated = local;
     }
 
     public void clearAssociation(NakedObject inObject, NakedObject associate) {
-        local.clearAssociation(inObject, associate);
+        decorated.clearAssociation(inObject, associate);
     }
 
     public Naked getAssociation(NakedObject inObject) {
-        return local.getAssociation(inObject);
+        return decorated.getAssociation(inObject);
     }
 
     public Hint getHint(Session session, NakedObject inObject, Naked associate) {
-        return local.getHint(session, inObject, associate);
+        return decorated.getHint(session, inObject, associate);
     }
 
     public String getName() {
-        return local.getName();
+        return decorated.getName();
     }
 
     public NakedObjectSpecification getType() {
-        return local.getType();
+        return decorated.getType();
     }
 
     public boolean hasHint() {
-        return local.hasHint();
+        return decorated.hasHint();
     }
 
     public void initAssociation(NakedObject inObject, NakedObject associate) {
-        local.initAssociation(inObject, associate);
+        decorated.initAssociation(inObject, associate);
     }
 
     public void initValue(NakedObject inObject, Object associate) {
-        local.initValue(inObject, associate);
+        decorated.initValue(inObject, associate);
     }
 
     public boolean isDerived() {
-        return local.isDerived();
+        return decorated.isDerived();
     }
 
     public boolean isEmpty(NakedObject inObject) {
-        return local.isEmpty(inObject);
+        return decorated.isEmpty(inObject);
     }
 
     public void setAssociation(NakedObject inObject, NakedObject associate) {
-        local.setAssociation(inObject, associate);
+        decorated.setAssociation(inObject, associate);
     }
 
     public void setValue(NakedObject inObject, Object associate) {
-        local.setValue(inObject, associate);
+        decorated.setValue(inObject, associate);
     }
 }
 

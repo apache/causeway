@@ -60,17 +60,7 @@ public interface Naked {
 
     Object getObject();
 
-    abstract void clearAssociation(NakedObjectAssociation specification, NakedObject ref);
-
-    /** @deprecated*/
-    boolean canAccess(Session session, NakedObjectField specification);
-    
-    /** @deprecated*/
-    boolean canAccess(Session session, Action action);
-
-    /** @deprecated*/
-    abstract boolean canUse(Session session, NakedObjectField field);
-    
+    abstract void clearAssociation(NakedObjectAssociation specification, NakedObject ref);   
 
     Naked execute(Action action, Naked[] parameters);
     

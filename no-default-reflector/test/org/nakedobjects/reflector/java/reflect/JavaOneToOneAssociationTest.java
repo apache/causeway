@@ -1,6 +1,7 @@
 package org.nakedobjects.reflector.java.reflect;
 
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
@@ -43,7 +44,8 @@ public class JavaOneToOneAssociationTest extends TestCase {
     	loader.addSpec(spec = new DummyNakedObjectSpecification());  // for String
         loader.addSpec(new DummyNakedObjectSpecification()); // for Date
         loader.addSpec(new DummyNakedObjectSpecification()); // for float
-            	
+    	NakedObjects.setSpecificationLoader(loader);
+
     	ConfigurationFactory.setConfiguration(new TestConfiguration());
     	
         objectWithOneToOneAssoications = new JavaObjectWithOneToOneAssociations();

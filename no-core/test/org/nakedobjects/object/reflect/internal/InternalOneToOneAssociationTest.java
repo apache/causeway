@@ -1,6 +1,7 @@
 package org.nakedobjects.object.reflect.internal;
 
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
@@ -41,6 +42,7 @@ public class InternalOneToOneAssociationTest extends TestCase {
         
         spec = new DummyNakedObjectSpecification();
         loader.addSpec(spec);
+        NakedObjects.setSpecificationLoader(loader);
         
     	session = new Session();
         objectWithOneToOneAssoications = new InternalObjectWithOneToOneAssociations();

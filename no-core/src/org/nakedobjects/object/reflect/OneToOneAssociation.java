@@ -19,14 +19,6 @@ public class OneToOneAssociation extends NakedObjectAssociation {
         this.reflectiveAdapter = association;
     }
 
-    protected boolean canAccess(Session session, NakedObject object) {
-        return getHint(session, object, null).canAccess().isAllowed();
-    }
-
-    protected boolean canUse(Session session, NakedObject object) {
-        return getHint(session, object, null).canUse().isAllowed();
-    }
-
     protected void clearValue(NakedObject inObject) {
         NakedValue associate = (NakedValue) get(inObject);
         if (associate != null) {

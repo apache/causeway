@@ -77,7 +77,7 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     }
 
     public String getSingularName() {
-        return null;
+        return "singular name";
     }
 
     public ObjectTitle getTitle() {

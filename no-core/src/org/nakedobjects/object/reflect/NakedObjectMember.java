@@ -20,12 +20,6 @@ public abstract class NakedObjectMember {
         this.name = NameConvertor.simpleName(name);
     }
 
-    /** @deprecated*/
-    protected abstract boolean canAccess(Session session, NakedObject object);
-
-    /** @deprecated*/
-    protected abstract boolean canUse(Session session, NakedObject object);
-
     public MemberIdentifier getIdentifier() {
         return identifier;
     }

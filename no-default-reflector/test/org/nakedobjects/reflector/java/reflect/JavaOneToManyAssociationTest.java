@@ -1,6 +1,7 @@
 package org.nakedobjects.reflector.java.reflect;
 
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.InternalCollection;
@@ -40,7 +41,8 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         
         Logger.getRootLogger().setLevel(Level.OFF);
     	loader = new MockNakedObjectSpecificationLoader();
-    	
+    	NakedObjects.setSpecificationLoader(loader);
+
     	ConfigurationFactory.setConfiguration(new TestConfiguration());
         
 		objectWithVector = new JavaObjectWithVector();

@@ -8,58 +8,58 @@ import org.nakedobjects.object.security.Session;
 
 
 public class AbstractOneToManyPeer implements OneToManyPeer {
-    private final OneToManyPeer local;
+    private final OneToManyPeer decorated;
 
     public AbstractOneToManyPeer(OneToManyPeer local) {
-        this.local = local;
+        this.decorated = local;
     }
 
     public void addAssociation(NakedObject inObject, NakedObject associate) {
-        local.addAssociation(inObject, associate);
+        decorated.addAssociation(inObject, associate);
     }
 
     public NakedCollection getAssociations(NakedObject inObject) {
-        return local.getAssociations(inObject);
+        return decorated.getAssociations(inObject);
     }
 
     public Hint getHint(Session session, NakedObject inObject, NakedObject associate, boolean add) {
-        return local.getHint(session, inObject, associate, add);
+        return decorated.getHint(session, inObject, associate, add);
     }
 
     public String getName() {
-        return local.getName();
+        return decorated.getName();
     }
 
     public NakedObjectSpecification getType() {
-        return local.getType();
+        return decorated.getType();
     }
 
     public boolean hasHint() {
-        return local.hasHint();
+        return decorated.hasHint();
     }
 
     public void initAssociation(NakedObject inObject, NakedObject associate) {
-        local.initAssociation(inObject, associate);
+        decorated.initAssociation(inObject, associate);
     }
 
     public void initOneToManyAssociation(NakedObject inObject, NakedObject[] instances) {
-        local.initOneToManyAssociation(inObject, instances);
+        decorated.initOneToManyAssociation(inObject, instances);
     }
 
     public boolean isDerived() {
-        return local.isDerived();
+        return decorated.isDerived();
     }
 
     public boolean isEmpty(NakedObject inObject) {
-        return local.isEmpty(inObject);
+        return decorated.isEmpty(inObject);
     }
 
     public void removeAllAssociations(NakedObject inObject) {
-        local.removeAllAssociations(inObject);
+        decorated.removeAllAssociations(inObject);
     }
 
     public void removeAssociation(NakedObject inObject, NakedObject associate) {
-        local.removeAssociation(inObject, associate);
+        decorated.removeAssociation(inObject, associate);
     }
 }
 

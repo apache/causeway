@@ -29,8 +29,7 @@ public class LocalObjectManagerTest extends TestCase {
         
         
         LocalObjectManager om = new LocalObjectManager();
-        MockObjectFactory of;
-        om.setObjectFactory(of = new MockObjectFactory());
+        om.setObjectFactory(new MockObjectFactory());
         
   //      om.createInstance(TestObject.class.getName());
     }

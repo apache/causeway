@@ -162,18 +162,6 @@ public class InternalCollectionVectorAdapter implements InternalCollection {
     
     public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
 
-    public boolean canAccess(Session session, NakedObjectField specification) {
-        return false;
-    }
-
-    public boolean canAccess(Session session, Action action) {
-        return false;
-    }
-
-    public boolean canUse(Session session, NakedObjectField field) {
-        return false;
-    }
-
     public Naked execute(Action action, Naked[] parameters) {
         return null;
     }

@@ -1,5 +1,6 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.reflect.NakedObjectField;
@@ -36,6 +37,8 @@ public class NakedObjectSpecificationImplTests extends TestCase {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
         MockNakedObjectSpecificationLoader specificationLoader = new MockNakedObjectSpecificationLoader();
+        NakedObjects.setSpecificationLoader(specificationLoader);
+
         NakedObjectSpecificationImpl.setReflectionFactory(new MockReflectionFactory());
 
         nakedObjectSpecification = new NakedObjectSpecificationImpl();
