@@ -3,21 +3,21 @@ package org.nakedobjects.viewer.skylark.basic;
 import org.nakedobjects.system.AboutNakedObjects;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
-import org.nakedobjects.viewer.skylark.Picture;
+import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
-import org.nakedobjects.viewer.skylark.util.PictureFactory;
+import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 public class AboutView extends AbstractView {
     private final int padding = 6;
-    private final Picture image;
+    private final Image image;
     private final int left;
     
     public AboutView() {
         super(null, null, null);
 
-        image = PictureFactory.getInstance().loadPicture(AboutNakedObjects.getImageName());
+        image = ImageFactory.getInstance().createImage(AboutNakedObjects.getImageName());
         if(showingImage()) {
             left = padding + image.getWidth() + padding;
         } else {

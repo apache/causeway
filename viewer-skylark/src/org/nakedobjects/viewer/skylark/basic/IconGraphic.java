@@ -5,13 +5,15 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
-import org.nakedobjects.viewer.skylark.Picture;
+import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
-import org.nakedobjects.viewer.skylark.util.PictureFactory;
+import org.nakedobjects.viewer.skylark.util.ImageFactory;
+
+import org.apache.log4j.Logger;
 
 
 /**
@@ -20,7 +22,8 @@ import org.nakedobjects.viewer.skylark.util.PictureFactory;
 public class IconGraphic {
     private ObjectContent content;
     private int iconHeight;
-    private Picture icon;
+    private Image icon;
+    private String lastIconName;
 
     public IconGraphic(View view, int height) {
         content = (ObjectContent) view.getContent();
@@ -32,7 +35,7 @@ public class IconGraphic {
     }
 
     public void draw(Canvas canvas, int x, int baseline) {
-        Picture icon = icon();
+        Image icon = icon();
 
         int xi = x + View.HPADDING;
         // TODO move down toward baseline
@@ -57,7 +60,7 @@ public class IconGraphic {
     public Size getSize() {
         int height = View.VPADDING + iconHeight + View.VPADDING;
 
-        Picture icon = icon();
+        Image icon = icon();
 
         int iconWidth;
         iconWidth = icon.getWidth();
@@ -67,20 +70,22 @@ public class IconGraphic {
         return new Size(width, height);
     }
 
-    private Picture icon() {
+    private Image icon() {
         final NakedObject object = content.getObject();
         final String iconName = iconName(object);
 
         /*
-         * If the grpahic based on a name provided by the object then the icon
+         * If the graphic is based on a name provided by the object then the icon
          * could be changed at any time, so we won't lazily load it.
          */
-        if (iconName == null && icon != null) {
+        if (icon != null && (iconName == null || iconName.equals(lastIconName))) {
             return icon;
         }
+        lastIconName = iconName;
 
         if (iconName != null) {
-            final Picture loadIcon = loadIcon(iconName);
+            Logger.getLogger(this.getClass()).debug("loading icon " + iconName);
+            final Image loadIcon = loadIcon(iconName);
             if (loadIcon != null) {
                 icon = loadIcon;
                 return loadIcon;
@@ -91,9 +96,9 @@ public class IconGraphic {
         return icon;
     }
 
-    protected Picture loadIcon(final NakedObjectSpecification specification, final String type) {
+    protected Image loadIcon(final NakedObjectSpecification specification, final String type) {
         String className = specification.getFullName().replace('.', '_') + type;
-        Picture loadIcon = loadIcon(className);
+        Image loadIcon = loadIcon(className);
         if (loadIcon == null) {
             className = specification.getShortName();
             loadIcon = loadIcon(className);
@@ -109,12 +114,12 @@ public class IconGraphic {
         return loadIcon;
     }
 
-    private Picture loadUnknownIcon() {
-        return PictureFactory.getInstance().loadUnknownIcon(iconHeight, null);
+    private Image loadUnknownIcon() {
+        return ImageFactory.getInstance().createFallbackIcon(iconHeight, null);
     }
 
-    private Picture loadIcon(final String iconName) {
-        return PictureFactory.getInstance().loadIcon(iconName, iconHeight, null);
+    private Image loadIcon(final String iconName) {
+        return ImageFactory.getInstance().createIcon(iconName, iconHeight, null);
     }
 
     /**
@@ -137,7 +142,7 @@ public class IconGraphic {
      * 
      * @see #iconName(NakedObject)
      */
-    protected Picture iconPicture(final NakedObject object) {
+    protected Image iconPicture(final NakedObject object) {
         // work through class, and superclass, names of the object
         NakedObjectSpecification specification = object instanceof NakedClass ? ((NakedClass) object).forNakedClass() : object.getSpecification();
         return loadIcon(specification, "");

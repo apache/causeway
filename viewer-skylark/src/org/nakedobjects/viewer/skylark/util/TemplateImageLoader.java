@@ -6,110 +6,84 @@ import java.awt.Canvas;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
-import java.awt.image.IndexColorModel;
-import java.awt.image.MemoryImageSource;
 import java.io.File;
 import java.net.URL;
 import java.util.Hashtable;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
 
-class PictureLoader {
+class TemplateImageLoader {
     private static final String[] EXTENSIONS = { "gif", "jpg", "jpeg", "png" };
-    private final static Logger LOG = Logger.getLogger(PictureLoader.class);
+    private final static Logger LOG = Logger.getLogger(TemplateImageLoader.class);
     private boolean alsoLoadAsFiles;
+    private final MediaTracker mt = new MediaTracker(new Canvas());
     /**
      * A keyed list of core images, one for each name, keyed by the image path.
      */
-    private Hashtable pictures = new Hashtable();
+    private Hashtable loadedImages = new Hashtable();
+    private Vector missingImages = new Vector();
 
-    private final MediaTracker mt = new MediaTracker(new Canvas());
-    private final Image unknownIconImage;
 
     /**
      * Creates a PictureLoader and loads a fallback icon.
      */
-    PictureLoader(final String pathForFallbackIcon) {
+    TemplateImageLoader() {
         alsoLoadAsFiles = UiConfiguration.getInstance().alsoLoadImageAsFiles();
-        Image im = load(pathForFallbackIcon);
-
-        if (im == null) {
-            unknownIconImage = createImage();
-
-            if (unknownIconImage != null) {
-                LOG.debug("Created 'unkown' image");
-            } else {
-                LOG.error("'unknown' image could not be created");
-            }
-        } else {
-            unknownIconImage = im;
-            LOG.debug("Loaded 'unkown' image");
-        }
     }
 
-    private Image createImage() {
-        byte[] pixels = new byte[128 * 128];
-        for (int i = 0; i < pixels.length; i++) {
-            pixels[i] = (byte) (i % 128);
-        }
+    /*
+     * private Image createImage() { byte[] pixels = new byte[128 * 128]; for
+     * (int i = 0; i < pixels.length; i++) { pixels[i] = (byte) (i % 128); }
+     * 
+     * byte[] r = new byte[] { 0, 127 }; byte[] g = new byte[] { 0, 127 };
+     * byte[] b = new byte[] { 0, 127 }; IndexColorModel colorModel = new
+     * IndexColorModel(1, 2, r, g, b);
+     * 
+     * Image image = Toolkit.getDefaultToolkit().createImage(new
+     * MemoryImageSource(128, 128, colorModel, pixels, 0, 128));
+     * 
+     * return image; }
+     */
 
-        byte[] r = new byte[] { 0, 127 };
-        byte[] g = new byte[] { 0, 127 };
-        byte[] b = new byte[] { 0, 127 };
-        IndexColorModel colorModel = new IndexColorModel(1, 2, r, g, b);
-
-        Image image = Toolkit.getDefaultToolkit().createImage(new MemoryImageSource(128, 128, colorModel, pixels, 0, 128));
-
-        return image;
-    }
-
-    PictureTemplate getUnknowIconPictureTemplate() {
-        String root = "unknown-image";
-        if (pictures.contains(root)) {
-            return (PictureTemplate) pictures.get(root);
-        }
-        
-        PictureTemplate template = PictureTemplate.create(unknownIconImage);
-        pictures.put(root, template);
-        return template;
-    }
-    
     /**
-     * Returns a picture template for the specifed picture (as specified by a path to a file or resource).
-     * If the path has no extension (.gif, .png etc) then all valid extensions are searched for.  
+     * Returns a picture template for the specifed picture (as specified by a
+     * path to a file or resource). If the path has no extension (.gif, .png
+     * etc) then all valid extensions are searched for.
      * 
      * This method attempts to load the image from the jar/zip file this class
      * was loaded from ie, your application, and then from the file system as a
      * file if can't be found as a resource. If neither method works the default
      * image is returned.
      * 
-     * @return returns a PictureTemplate for the specified image file, or null if none found.
+     * @return returns a PictureTemplate for the specified image file, or null
+     *                 if none found.
      */
-    PictureTemplate getPictureTemplate(final String path) {
-        if (path == null) {
-            throw new NullPointerException();
-        }
+    TemplateImage getTemplateImage(final String path) {
+        final int extensionAt = path.lastIndexOf('.');
+        final String root = extensionAt == -1 ? path : path.substring(0, extensionAt);
 
-        final int pos = path.lastIndexOf('.');
-        final String root = pos == -1 ? path : path.substring(0, pos);
+        if (loadedImages.contains(root)) {
+            return (TemplateImage) loadedImages.get(root);
 
-        if (pictures.contains(root)) {
-            return (PictureTemplate) pictures.get(root);
-
+        } else if(missingImages.contains(root)) {
+            return null;
+            
         } else {
             Image image = null;
-            if (pos >= 0) {
+            if (extensionAt >= 0) {
                 image = load(path);
-                return PictureTemplate.create(image);
+                return TemplateImage.create(image);
             } else {
                 for (int i = 0; i < EXTENSIONS.length; i++) {
                     image = load(root + "." + EXTENSIONS[i]);
                     if (image != null) {
-                        return PictureTemplate.create(image);
+                        return TemplateImage.create(image);
                     }
                 }
             }
+            missingImages.addElement(root);
             return null;
         }
     }
@@ -130,7 +104,8 @@ class PictureLoader {
         final File file = new File(path);
 
         if (!file.exists()) {
-  //          LOG.debug("Could not find image file: " + file.getAbsolutePath());
+            //          LOG.debug("Could not find image file: " +
+            // file.getAbsolutePath());
 
             return null;
         } else {
@@ -167,7 +142,7 @@ class PictureLoader {
      * from.
      */
     private Image loadAsResource(String path) {
-        URL url = PictureLoader.class.getResource("/" + path);
+        URL url = TemplateImageLoader.class.getResource("/" + path);
         if (url == null) {
             return null;
         }

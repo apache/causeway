@@ -3,7 +3,7 @@ package org.nakedobjects.viewer.skylark.metal;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.viewer.skylark.Picture;
+import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
@@ -15,10 +15,10 @@ public class InternalCollectionIconGraphic extends IconGraphic {
         super(view, text);
     }
 
-    protected Picture iconPicture(NakedObject object) {
+    protected Image iconPicture(NakedObject object) {
         final InternalCollection cls = (InternalCollection) object;
         final NakedObjectSpecification spec = cls.getElementSpecification();
-        Picture icon = loadIcon(spec, "");
+        Image icon = loadIcon(spec, "");
         if(icon == null) {
             icon = loadIcon(spec, "");
         }

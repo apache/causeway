@@ -1,12 +1,10 @@
 package org.nakedobjects.viewer.skylark;
 
-import java.awt.Image;
 
+public class Image {
+    java.awt.Image iconImage;
 
-public class Picture {
-    Image iconImage;
-
-    public Picture(Image iconImage) {
+    public Image(java.awt.Image iconImage) {
         if (iconImage == null) {
             throw new NullPointerException();
         }
@@ -26,7 +24,7 @@ public class Picture {
         return new Size(getWidth(), getHeight());
     }
     
-    Image getAwtImage() {
+    java.awt.Image getAwtImage() {
         return iconImage;
     }
 }

@@ -3,7 +3,7 @@ package org.nakedobjects.viewer.skylark.core;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
-import org.nakedobjects.viewer.skylark.Picture;
+import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Shape;
 import org.nakedobjects.viewer.skylark.Size;
@@ -71,12 +71,12 @@ public class DebugCanvas extends Canvas {
 		buffer.append("Rectangle (full) " + at.getX() + "," + at.getY() + " " + size.getWidth() + "x"  + size.getHeight() + " " + color);
 	}
 
-	public void drawIcon(Picture icon, int x, int y) {
+	public void drawIcon(Image icon, int x, int y) {
 		indent();
 		buffer.append("Icon " + x + "," + y + " " + icon.getWidth()+ "x"  + icon.getHeight());
 	}
 
-	public void drawIcon(Picture icon, int x, int y, int width, int height) {
+	public void drawIcon(Image icon, int x, int y, int width, int height) {
 		indent();
 		buffer.append("Icon " + x + "," + y + " " + width + "x"  + height);
 	}

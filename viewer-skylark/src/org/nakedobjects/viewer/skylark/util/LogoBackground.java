@@ -3,7 +3,7 @@ package org.nakedobjects.viewer.skylark.util;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.viewer.skylark.Background;
 import org.nakedobjects.viewer.skylark.Canvas;
-import org.nakedobjects.viewer.skylark.Picture;
+import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Viewer;
@@ -15,13 +15,13 @@ public class LogoBackground implements Background {
     private static final Logger LOG = Logger.getLogger(LogoBackground.class);
     private static final String PARAMETER_BASE = Viewer.PROPERTY_BASE + "logo-background.";
     private Location location;
-    private Picture logo;
+    private Image logo;
     private Size logoSize;
 
     public LogoBackground() {
         Configuration cp = Configuration.getInstance();
         String fileName = cp.getString(PARAMETER_BASE + "image", "logo.gif");
-        logo = PictureFactory.getInstance().loadPicture(fileName);
+        logo = ImageFactory.getInstance().createImage(fileName);
 
         if (logo == null) {
             LOG.warn("Logo image not found");

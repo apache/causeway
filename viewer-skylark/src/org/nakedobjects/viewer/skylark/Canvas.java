@@ -62,11 +62,11 @@ public class Canvas {
         drawSolidRectangle(0, 0, size.getWidth(), size.getHeight(), color);
     }
 
-    public void drawIcon(Picture icon, int x, int y) {
+    public void drawIcon(Image icon, int x, int y) {
         graphics.drawImage(icon.getAwtImage(), x, y, null);
     }
 
-    public void drawIcon(Picture icon, int x, int y, int width, int height) {
+    public void drawIcon(Image icon, int x, int y, int width, int height) {
         graphics.drawImage(icon.getAwtImage(), x, y, width, height, null);
     }
 

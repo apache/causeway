@@ -74,9 +74,9 @@ public abstract class CopyOfCanvas {
 
     public abstract void draw3DRectangle(int x, int y, int width, int height, boolean raised);
 
-    public abstract void drawIcon(Picture icon, int x, int y);
+    public abstract void drawIcon(Image icon, int x, int y);
 
-    public abstract void drawIcon(Picture icon, int x, int y, int width, int height);
+    public abstract void drawIcon(Image icon, int x, int y, int width, int height);
 
     public abstract void drawLine(int x, int y, int x2, int y2, Color color);
 
