@@ -17,7 +17,7 @@ public class City extends AbstractNakedObject {
     }
 
     public static void aboutCity(ClassAbout about) {
-        about.uninstantiatable("We have enough cities already");
+        about.uninstantiable("We have enough cities already");
     }
 
     public Location actionNewLocation() {
