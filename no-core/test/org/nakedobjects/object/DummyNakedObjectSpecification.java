@@ -27,10 +27,6 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         return null;
     }
 
-    public ActionSpecification[] getClassActions(Type type, int noParameters) {
-        return null;
-    }
-
     public FieldSpecification getField(String name) {
         return null;
     }
@@ -52,10 +48,6 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     }
 
     public ActionSpecification[] getObjectActions(Type type) {
-        return null;
-    }
-
-    public ActionSpecification[] getObjectActions(Type type, int noParameters) {
         return null;
     }
 

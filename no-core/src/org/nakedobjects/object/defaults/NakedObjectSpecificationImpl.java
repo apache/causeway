@@ -7,7 +7,6 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ReflectionFactory;
 import org.nakedobjects.object.ReflectorFactory;
-import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ClassAbout;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionSpecification;
@@ -222,10 +221,6 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         return getActions(classActions, type, -1);
     }
     
-    public ActionSpecification[] getClassActions(ActionSpecification.Type type, int noParameters) {
-        return getActions(classActions, type, noParameters);
-    }
-
     public FieldSpecification getField(String name) {
         String searchName = searchName(name);
         
@@ -271,10 +266,6 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         return getActions(objectActions, type, -1);
     }
     
-    public ActionSpecification[] getObjectActions(ActionSpecification.Type type, int noParameters) {
-    	return getActions(objectActions, type, noParameters);
-    }
-
     /**
     Returns the short name (with spacing) for this object in a pluralised form.  The plural from is obtained from the defining classes
     pluralName method, if it exists, or by adding 's', 'es', or 'ies dependending of the name's ending.

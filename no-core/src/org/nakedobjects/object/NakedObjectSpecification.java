@@ -21,8 +21,6 @@ public interface NakedObjectSpecification {
 
     ActionSpecification[] getClassActions(ActionSpecification.Type type);
 
-    ActionSpecification[] getClassActions(ActionSpecification.Type type, int noParameters);
-
     FieldSpecification getField(String name);
 
     FieldSpecification[] getFields();
@@ -38,8 +36,6 @@ public interface NakedObjectSpecification {
     ActionSpecification getObjectAction(ActionSpecification.Type type, String name, NakedObjectSpecification[] parameters);
 
     ActionSpecification[] getObjectActions(ActionSpecification.Type type);
-
-    ActionSpecification[] getObjectActions(ActionSpecification.Type type, int noParameters);
 
     /**
      Returns the short name (with spacing) for this object in a pluralised form.  The plural from is obtained from the defining classes
