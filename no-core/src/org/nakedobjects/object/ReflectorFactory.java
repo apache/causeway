@@ -8,11 +8,7 @@ public abstract class ReflectorFactory {
 
     public abstract ObjectFactory getObjectFactory();
 
-    public Naked createAdapter(Object pojo) {
-        return null;
-    }
-    
-//    public abstract void setObjectManager(NakedObjectManager objectManager);
+    public abstract Naked createAdapter(Object pojo) ;
 }
 
 

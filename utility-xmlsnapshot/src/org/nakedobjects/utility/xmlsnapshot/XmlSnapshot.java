@@ -451,11 +451,11 @@ public final class XmlSnapshot {
     }
 
     private String log(final String label, final NakedObject object) {
-        return log(label, object.titleString() + "[" + oidOrHashCode(object) + "]");
+        return log(label, (object == null? "(null)" : object.titleString() + "[" + oidOrHashCode(object) + "]"));
     }
 
     private String log(final String label, final Object object) {
-        return label + "='" + object.toString() + "'";
+        return (label  == null ? "?"     : label)+ "='" + (object == null ? "(null)": object.toString()) + "'";
     }
 
     /**
@@ -693,8 +693,7 @@ public final class XmlSnapshot {
         if (oid == null) {
             return "" + object.hashCode();
         }
-
-        throw new NakedObjectRuntimeException();
+        return oid.toString();
         /*
          * InlineTransferableWriter itw = new InlineTransferableWriter();
          * oid.writeData(itw); itw.close(); return itw.toString();

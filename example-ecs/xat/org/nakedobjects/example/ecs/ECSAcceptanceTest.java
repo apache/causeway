@@ -1,5 +1,6 @@
 package org.nakedobjects.example.ecs;
 
+import org.nakedobjects.application.system.ExplorationClock;
 import org.nakedobjects.application.value.Date;
 import org.nakedobjects.application.value.TextString;
 import org.nakedobjects.application.value.Time;
@@ -28,6 +29,8 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
      protected void setUpFixtures() {
          addFixture(new AbstractExplorationFixture() {
              public void install() {
+                 ExplorationClock clock = new ExplorationClock();
+                 
                  registerClass(Booking.class);
                  registerClass(City.class);
                  registerClass(Customer.class);
@@ -41,7 +44,9 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
                  createCity("Washington");
                  createCity("Philadelphia");
                  
-                 setDate(2001, 12, 14);
+                 clock.setDate(2001, 12, 14);
+                 
+                 
              }
              
              private void createCity(String name) {

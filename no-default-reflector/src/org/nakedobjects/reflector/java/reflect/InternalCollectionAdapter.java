@@ -1,25 +1,18 @@
 package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.ActionParameterSet;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
-import org.nakedobjects.utility.UnexpectedCallException;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -42,17 +35,6 @@ public class InternalCollectionAdapter implements InternalCollection {
         } else {
             nakedObject = new InternalCollectionAdapter(pojo, type);
         }
-        /*
-        if (oid != null) {
-            if (nakedObject.getOid() == null) {
-                nakedObject.setOid(oid);
-            } else {
-                if (!nakedObject.getOid().equals(oid)) {
-                    throw new NakedObjectRuntimeException("Different OID for same Pojo");
-                }
-            }
-        }
-        */
         
         return nakedObject;       
     }
@@ -92,10 +74,6 @@ public class InternalCollectionAdapter implements InternalCollection {
         };
     }
 
-    public boolean isEmpty(NakedObjectField field) {
-        return collection.isEmpty();
-    }
-
     public Enumeration oids() {
         throw new NotImplementedException();
     }
@@ -103,14 +81,6 @@ public class InternalCollectionAdapter implements InternalCollection {
     public int size() {
         return collection.size();
     }
-
-    
-    
-    
-    
-    public void created() {}
-
-    public void deleted() {}
 
     public String getIconName() {
         return null;
@@ -124,25 +94,11 @@ public class InternalCollectionAdapter implements InternalCollection {
         return oid;
     }
 
-    public boolean isResolved() {
-        return false;
-    }
-
-    public boolean isPersistent() {
-        return false;
-    }
-
     public void setOid(Oid oid) {
        this.oid = oid;
     }
 
     public void setResolved() {}
-
-    public NakedObjectContext getContext() {
-        return null;
-    }
-
-    public void setContext(NakedObjectContext context) {}
 
     public void copyObject(Naked object) {}
 
@@ -174,32 +130,6 @@ public class InternalCollectionAdapter implements InternalCollection {
 
     public boolean isAggregated() {
         return false;
-    }
-
-    public void clear(OneToOneAssociation specification) {}
-
-    public NakedObject getField(NakedObjectField field) {
-        return null;
-    }
-
-    public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {}
-
-    public void setValue(OneToOneAssociation field, Object object) {}
-
-    public void initValue(OneToOneAssociation field, Object object) {}
-    
-    public void initAssociation(NakedObjectAssociation field, NakedObject associatedObject) {}
-    
-    public String getLabel(Session session, NakedObjectField field) {
-        return null;
-    }
-
-    public String getLabel(Session session, Action action) {
-        return null;
-    }
-
-    public Enumeration getFieldElements(NakedObjectAssociation oneToManyAssociation) {
-        return null;
     }
 
     public void clear() {}
@@ -234,14 +164,6 @@ public class InternalCollectionAdapter implements InternalCollection {
         throw new NotImplementedException();
     }
 
-    public void parseTextEntry(OneToOneAssociation specification, String text) throws TextEntryParseException, InvalidEntryException {
-        throw new NotImplementedException();    
-    }
-
-    public boolean isParsable() {
-        return false;
-    }
-
     public String toString() {
         StringBuffer s = new StringBuffer();
 
@@ -260,15 +182,13 @@ public class InternalCollectionAdapter implements InternalCollection {
         }
 
         // title
-        if (isResolved()) {
-            s.append(" '");
-            try {
-                s.append(this.titleString());
-            } catch (NullPointerException e) {
-                s.append("no title");
-            }
-            s.append("'");
+        s.append(" '");
+        try {
+            s.append(this.titleString());
+        } catch (NullPointerException e) {
+            s.append("no title");
         }
+        s.append("'");
         s.append("]");
 
         s.append("  " + Long.toHexString(super.hashCode()).toUpperCase());
@@ -282,40 +202,7 @@ public class InternalCollectionAdapter implements InternalCollection {
     }
 
 
-
-    public void initOneToManyAssociation(OneToManyAssociation association, NakedObject[] instances) {}
-
-
-
-    public void markDirty() {}
-
-
-
     public void clearViewDirty() {}
-
-
-
-    public boolean isViewDirty() {
-        return false;
-    }
-
-
-
-    public ActionParameterSet getParameters(Session session, Action action, NakedObjectSpecification[] parameterTypes) {
-        throw new UnexpectedCallException();
-    }
-
-
-
-    public boolean isPersistDirty() {
-        return false;
-    }
-
-
-
-    public void clearPersistDirty() {}
-    
-
 
 }
 

@@ -26,6 +26,10 @@ public class PojoAdapter extends AbstractNakedObject {
         PojoAdapter.reflectorFactory = reflectorFactory;
     }
     
+    /**
+	 * Expose as a .Net property.
+	 * @property
+	 */
     public static void set_ReflectorFactory(ReflectorFactory reflectorFactory) {
         PojoAdapter.reflectorFactory = reflectorFactory;
     }
@@ -64,13 +68,17 @@ public class PojoAdapter extends AbstractNakedObject {
        return createAdapter(pojo, null);
     }
     
+    public PojoAdapter() {}
+    
     protected PojoAdapter(Object pojo) {
         this.pojo= pojo;
         pojos.put(pojo, this);
         
-        if(pojo.getClass().getName().endsWith("String")) {
+      /*
+         if(pojo.getClass().getName().endsWith("String")) {
             new RuntimeException().printStackTrace();
         }
+        */
     }
 
     public Object getObject() {
@@ -165,7 +173,7 @@ public class PojoAdapter extends AbstractNakedObject {
     }
 
     public boolean canUse(Session session, NakedObjectField field) {
-        return  field.canAccess(session, this);
+        return  field.canUse(session, this);
     }
 
     public Naked execute(Action action, Naked[] parameters) {

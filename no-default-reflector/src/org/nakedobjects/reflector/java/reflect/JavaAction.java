@@ -142,7 +142,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
                  //   if(parameters[i - 1] instanceof Naked) {
                   //      longParams[i] = parameters[i - 1];
                  //   } else {
-                        longParams[i] = parameters[i - 1] == null ? null : ((Naked) parameters[i - 1]).getObject();
+                        longParams[i] = parameters[i - 1] == null ? null : parameters[i - 1].getObject();
                   //  }
                 }
                 aboutMethod.invoke(object.getObject(), longParams);

@@ -29,10 +29,6 @@ public class CreditCard implements PaymentMethod {
         return expires;
     }
     
-    public void aboutColor(FieldAbout about, Color color) {
-        about.unmodifiable("Can't change colour");
-    }
-    
     public Color getColor() {
         return color;
     }
