@@ -1,7 +1,7 @@
 package org.nakedobjects.application;
 
 
-import org.nakedobjects.application.value.TextString;
+import org.nakedobjects.application.valueholder.TextString;
 import org.nakedobjects.object.system.TestClock;
 
 import junit.framework.TestCase;

@@ -2,7 +2,7 @@
 package org.nakedobjects.example.expenses;
 
 import org.nakedobjects.application.Title;
-import org.nakedobjects.application.value.Money;
+import org.nakedobjects.application.valueholder.Money;
 
 import java.util.Enumeration;
 import java.util.Vector;

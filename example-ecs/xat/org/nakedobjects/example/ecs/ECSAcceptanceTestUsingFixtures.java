@@ -1,7 +1,7 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.application.value.Date;
-import org.nakedobjects.application.value.Time;
+import org.nakedobjects.application.valueholder.Date;
+import org.nakedobjects.application.valueholder.Time;
 import org.nakedobjects.object.exploration.AbstractExplorationFixture;
 import org.nakedobjects.xat.TestObject;
 

@@ -7,8 +7,8 @@ import org.nakedobjects.application.control.ActionAbout;
 import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.application.control.State;
 import org.nakedobjects.application.control.StatefulObject;
-import org.nakedobjects.application.value.Date;
-import org.nakedobjects.application.value.SimpleState;
+import org.nakedobjects.application.valueholder.Date;
+import org.nakedobjects.application.valueholder.SimpleState;
 
 
 public class Loan extends BaseObject implements StatefulObject {

@@ -1,52 +1,23 @@
 package org.nakedobjects.application.value;
 
-import org.nakedobjects.application.Title;
-import org.nakedobjects.application.TitledObject;
-import org.nakedobjects.application.ValueParseException;
 
-public abstract class BusinessValue implements TitledObject {
-    
-    
+public abstract class BusinessValue {
     /** By default all values are changeable by the user */
 	public boolean userChangeable() {
 	    return true;
 	}
 
-	public abstract  boolean isEmpty();
-
-    public abstract boolean isSameAs(BusinessValue object);
+//    public abstract boolean isSameAs(BusinessValue object);
     
-    public String titleString() {
-        return title().toString();
-    }
-
-    public abstract Title title();
-    
-    /**
-     * Returns a string representation of this object.
-     * <p>
-     * The specification of this string representation is not fixed, but, at the
-     * time of writing, consists of <i>title [shortNakedClassName] </i>
-     * </p>
-     * 
-     * @return string representation of object.
-     */
-    public String toString() {
-        return titleString(); // + " [" + this.getClass().getName() + "]";
-    }
-    
-    public Object getValue() {
+/*    public Object getValue() {
         return this;
     }
-
     public abstract void parseUserEntry(String text) throws ValueParseException;
     
     public abstract void restoreFromEncodedString(String data);
 
     public abstract String asEncodedString();
-
-    public abstract void copyObject(BusinessValue object);
-
+*/
 }
 
 /*

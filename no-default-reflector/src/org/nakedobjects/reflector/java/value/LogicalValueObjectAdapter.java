@@ -1,6 +1,6 @@
 package org.nakedobjects.reflector.java.value;
 
-import org.nakedobjects.application.value.Logical;
+import org.nakedobjects.application.valueholder.Logical;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;

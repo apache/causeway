@@ -3,8 +3,8 @@
 package org.nakedobjects.example.expenses;
 
 import org.nakedobjects.application.Title;
-import org.nakedobjects.application.value.Date;
-import org.nakedobjects.application.value.Money;
+import org.nakedobjects.application.valueholder.Date;
+import org.nakedobjects.application.valueholder.Money;
 
 
 public class Payment extends BaseObject {

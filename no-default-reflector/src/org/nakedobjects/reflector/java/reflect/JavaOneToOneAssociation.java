@@ -2,7 +2,7 @@ package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.application.ValueParseException;
-import org.nakedobjects.application.value.BusinessValue;
+import org.nakedobjects.application.valueholder.BusinessValueHolder;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
@@ -84,11 +84,11 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
 
         try {
             if (setMethod == null) {
-                BusinessValue value = (BusinessValue) getMethod.invoke(inObject.getObject(), new Object[] {});
+                BusinessValueHolder value = (BusinessValueHolder) getMethod.invoke(inObject.getObject(), new Object[] {});
                 if(setValue instanceof String) {
 	                value.parseUserEntry((String) setValue);
-                } else if(setValue instanceof BusinessValue) {
-                    value.copyObject((BusinessValue) setValue);
+                } else if(setValue instanceof BusinessValueHolder) {
+                    value.copyObject((BusinessValueHolder) setValue);
                 }
                 
             } else {
@@ -239,7 +239,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         if (setMethod == null) {
             try {
                 Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
-                BusinessValue value = (BusinessValue) obj;
+                BusinessValueHolder value = (BusinessValueHolder) obj;
                 value.parseUserEntry(text);
                 fromObject.markDirty();
             } catch (InvocationTargetException e) {
@@ -267,8 +267,8 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
     public boolean isEmpty(NakedObject fromObject) {
         try {
             Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
-            if (obj instanceof BusinessValue) {
-                BusinessValue value = (BusinessValue) obj;
+            if (obj instanceof BusinessValueHolder) {
+                BusinessValueHolder value = (BusinessValueHolder) obj;
                 return value.isEmpty();
             } else {
                 return obj == null;

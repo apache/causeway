@@ -5,11 +5,11 @@ import org.nakedobjects.application.Title;
 import org.nakedobjects.application.control.ActionAbout;
 import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.application.control.State;
-import org.nakedobjects.application.value.Date;
-import org.nakedobjects.application.value.Logical;
-import org.nakedobjects.application.value.MultilineTextString;
-import org.nakedobjects.application.value.SimpleState;
-import org.nakedobjects.application.value.TextString;
+import org.nakedobjects.application.valueholder.Date;
+import org.nakedobjects.application.valueholder.Logical;
+import org.nakedobjects.application.valueholder.MultilineTextString;
+import org.nakedobjects.application.valueholder.SimpleState;
+import org.nakedobjects.application.valueholder.TextString;
 
 import java.util.Vector;
 

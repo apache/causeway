@@ -1,7 +1,7 @@
 package org.nakedobjects.reflector.java;
 
-import org.nakedobjects.application.value.SerialNumber;
-import org.nakedobjects.application.value.TextString;
+import org.nakedobjects.application.valueholder.SerialNumber;
+import org.nakedobjects.application.valueholder.TextString;
 
 public class Sequence {
     private TextString name = new TextString();

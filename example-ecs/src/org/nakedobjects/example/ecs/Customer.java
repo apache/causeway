@@ -3,9 +3,9 @@ package org.nakedobjects.example.ecs;
 import org.nakedobjects.application.BusinessObjectContainer;
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.control.ActionAbout;
-import org.nakedobjects.application.value.Date;
-import org.nakedobjects.application.value.Percentage;
-import org.nakedobjects.application.value.TextString;
+import org.nakedobjects.application.valueholder.Date;
+import org.nakedobjects.application.valueholder.Percentage;
+import org.nakedobjects.application.valueholder.TextString;
 
 import java.util.Vector;
 

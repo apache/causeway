@@ -2,8 +2,8 @@
 
 package org.nakedobjects.example.expenses;
 
-import org.nakedobjects.application.value.Money;
-import org.nakedobjects.application.value.TextString;
+import org.nakedobjects.application.valueholder.Money;
+import org.nakedobjects.application.valueholder.TextString;
 
 import java.util.Enumeration;
 import java.util.Vector;

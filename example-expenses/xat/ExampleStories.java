@@ -1,4 +1,4 @@
-import org.nakedobjects.application.value.Money;
+import org.nakedobjects.application.valueholder.Money;
 import org.nakedobjects.container.configuration.ComponentException;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.example.expenses.Claim;

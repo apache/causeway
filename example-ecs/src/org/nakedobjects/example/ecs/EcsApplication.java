@@ -1,6 +1,6 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.application.value.TextString;
+import org.nakedobjects.application.valueholder.TextString;
 import org.nakedobjects.object.NakedClass;
 
 import java.util.Vector;

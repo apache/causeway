@@ -3,7 +3,7 @@ package org.nakedobjects.example.library;
 
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.control.FieldAbout;
-import org.nakedobjects.application.value.TextString;
+import org.nakedobjects.application.valueholder.TextString;
 
 
 

@@ -5,10 +5,10 @@ import org.nakedobjects.application.Title;
 import org.nakedobjects.application.control.ActionAbout;
 import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.application.control.Validity;
-import org.nakedobjects.application.value.Date;
-import org.nakedobjects.application.value.Logical;
-import org.nakedobjects.application.value.TextString;
-import org.nakedobjects.application.value.Time;
+import org.nakedobjects.application.valueholder.Date;
+import org.nakedobjects.application.valueholder.Logical;
+import org.nakedobjects.application.valueholder.TextString;
+import org.nakedobjects.application.valueholder.Time;
 
 
 public class Booking {

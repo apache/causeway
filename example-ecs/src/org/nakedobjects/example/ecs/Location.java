@@ -4,8 +4,8 @@ import org.nakedobjects.application.BusinessObjectContainer;
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.control.ActionAbout;
 import org.nakedobjects.application.control.FieldAbout;
-import org.nakedobjects.application.value.Option;
-import org.nakedobjects.application.value.TextString;
+import org.nakedobjects.application.valueholder.Option;
+import org.nakedobjects.application.valueholder.TextString;
 
 
 public class Location {

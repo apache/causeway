@@ -1,10 +1,7 @@
 package org.nakedobjects.application.value;
 
 
-
 public abstract class Magnitude extends BusinessValue {
-	private static final long serialVersionUID = 1L;
-
     public boolean isBetween(Magnitude minMagnitude, Magnitude maxMagnitude) {
         return isGreaterThanOrEqualTo(minMagnitude) && 
                isLessThanOrEqualTo(maxMagnitude);
@@ -34,17 +31,6 @@ public abstract class Magnitude extends BusinessValue {
         return isLessThan(magnitude) ? this : magnitude;
     }
 
-    /**
-     * delegates the comparsion to the <code>isEqualTo</code> method if specified object is a <code>Magnitude</code> else returns false.
-     * @see #isSameAs(BusinessValue)
-     */
-    public final boolean isSameAs(BusinessValue object) {
-        if (object instanceof Magnitude) {
-            return isEqualTo((Magnitude) object);
-        } else {
-            return false;
-        }
-    }
 }
 
 

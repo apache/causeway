@@ -1,9 +1,10 @@
 package org.nakedobjects.reflector.java.reflect;
 
-import org.nakedobjects.application.value.BusinessValue;
-import org.nakedobjects.application.value.Color;
-import org.nakedobjects.application.value.Logical;
-import org.nakedobjects.application.value.TextString;
+import org.nakedobjects.application.value.IntegerNumber;
+import org.nakedobjects.application.valueholder.BusinessValueHolder;
+import org.nakedobjects.application.valueholder.Color;
+import org.nakedobjects.application.valueholder.Logical;
+import org.nakedobjects.application.valueholder.TextString;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.ReflectorFactory;
@@ -13,6 +14,7 @@ import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.value.BusinessValueAdapter;
 import org.nakedobjects.reflector.java.value.ColorValueObjectAdapter;
 import org.nakedobjects.reflector.java.value.LogicalValueObjectAdapter;
+import org.nakedobjects.reflector.java.value.IntegerNumberAdapter;
 import org.nakedobjects.reflector.java.value.TextStringAdapter;
 
 public class JavaReflectorFactory extends ReflectorFactory {
@@ -29,8 +31,10 @@ public class JavaReflectorFactory extends ReflectorFactory {
             return new LogicalValueObjectAdapter((Logical) object);
         } else if (object instanceof Color){
             return new ColorValueObjectAdapter((Color) object);
-        } else if (object instanceof BusinessValue ){
-            return new BusinessValueAdapter((BusinessValue) object);
+        } else if (object instanceof IntegerNumber){
+            return new IntegerNumberAdapter((IntegerNumber) object);
+        } else if (object instanceof BusinessValueHolder ){
+            return new BusinessValueAdapter((BusinessValueHolder) object);
          } else {
             return null;
         }

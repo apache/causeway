@@ -1,15 +1,15 @@
 package org.nakedobjects.reflector.java.value;
 
 import org.nakedobjects.application.ValueParseException;
-import org.nakedobjects.application.value.BusinessValue;
+import org.nakedobjects.application.valueholder.BusinessValueHolder;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;
 import org.nakedobjects.object.value.StringValue;
 
 public class BusinessValueAdapter extends AbstractNakedValue implements StringValue {
-    private final BusinessValue adaptee;
+    private final BusinessValueHolder adaptee;
     
-    public BusinessValueAdapter(final BusinessValue adaptee) {
+    public BusinessValueAdapter(final BusinessValueHolder adaptee) {
         this.adaptee = adaptee;
     }
     

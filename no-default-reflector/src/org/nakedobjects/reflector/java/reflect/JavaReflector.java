@@ -2,13 +2,14 @@ package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.application.Lookup;
 import org.nakedobjects.application.Title;
+import org.nakedobjects.application.collection.InternalCollection;
 import org.nakedobjects.application.control.ActionAbout;
 import org.nakedobjects.application.control.ClassAbout;
 import org.nakedobjects.application.control.FieldAbout;
-import org.nakedobjects.application.object.InternalCollection;
 import org.nakedobjects.application.value.BusinessValue;
-import org.nakedobjects.application.value.Logical;
-import org.nakedobjects.application.value.TextString;
+import org.nakedobjects.application.valueholder.BusinessValueHolder;
+import org.nakedobjects.application.valueholder.Logical;
+import org.nakedobjects.application.valueholder.TextString;
 import org.nakedobjects.object.Aggregated;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
@@ -351,15 +352,16 @@ public class JavaReflector implements Reflector {
     }
     
     public FieldPeer[] fields() {
-        if(cls.getName().startsWith("java.") || BusinessValue.class.isAssignableFrom(cls)) {
+        if(cls.getName().startsWith("java.") || BusinessValueHolder.class.isAssignableFrom(cls)) {
             return new FieldPeer[0];
         }
         
         LOG.debug("looking for fields for " + cls);
         Vector elements = new Vector();
         defaultAboutFieldMethod = findMethod(OBJECT, ABOUT_FIELD_DEFAULT, null, new Class[] { FieldAbout.class });
-        valueFields(elements, BusinessValue.class);
+        valueFields(elements, BusinessValueHolder.class);
  
+        valueFields(elements, BusinessValue.class);
         valueFields(elements, String.class);
         valueFields(elements, Date.class);
         valueFields(elements, float.class);
@@ -550,7 +552,7 @@ public class JavaReflector implements Reflector {
     }
     
     public boolean isValue() {
-        return BusinessValue.class.isAssignableFrom(cls) ;
+        return BusinessValueHolder.class.isAssignableFrom(cls) || BusinessValue.class.isAssignableFrom(cls) ;
     }
 
     public boolean isPartOf() {

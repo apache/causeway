@@ -2,8 +2,8 @@ package org.nakedobjects.application.control;
 
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.TitledObject;
-import org.nakedobjects.application.value.MultilineTextString;
-import org.nakedobjects.application.value.TextString;
+import org.nakedobjects.application.valueholder.MultilineTextString;
+import org.nakedobjects.application.valueholder.TextString;
 
 
 public final class Role implements TitledObject {

@@ -40,7 +40,7 @@ public abstract class NakedObjectField extends NakedObjectMember {
     public abstract boolean isEmpty(NakedObject adapter);
 
     public boolean isObject() {
-        return specification != null && specification.isObject();
+        return specification.isObject();
     }
 
     /**
@@ -48,11 +48,10 @@ public abstract class NakedObjectField extends NakedObjectMember {
      * @return boolean
      */
     public boolean isPart() {
-        return specification != null && specification.isPartOf();
+        return specification.isPartOf();
     }
     
     public boolean isValue() {
-        //return specification != null && specification.isValue();
         return  specification.isValue();
     }
 }

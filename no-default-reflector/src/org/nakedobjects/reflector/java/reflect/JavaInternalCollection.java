@@ -1,7 +1,7 @@
 package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.application.NakedObjectRuntimeException;
-import org.nakedobjects.application.object.InternalCollection;
+import org.nakedobjects.application.collection.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;

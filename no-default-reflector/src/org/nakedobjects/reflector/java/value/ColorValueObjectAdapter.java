@@ -1,6 +1,6 @@
 package org.nakedobjects.reflector.java.value;
 
-import org.nakedobjects.application.value.Color;
+import org.nakedobjects.application.valueholder.Color;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;

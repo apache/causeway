@@ -1,7 +1,7 @@
 package org.nakedobjects.example.expenses;
 
-import org.nakedobjects.application.value.Money;
-import org.nakedobjects.application.value.WholeNumber;
+import org.nakedobjects.application.valueholder.Money;
+import org.nakedobjects.application.valueholder.WholeNumber;
 
 
 public class Lodging extends Expense {

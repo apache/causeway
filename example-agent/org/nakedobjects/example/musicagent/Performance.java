@@ -1,9 +1,9 @@
 package org.nakedobjects.example.musicagent;
 
 import org.nakedobjects.application.Title;
-import org.nakedobjects.application.value.Date;
-import org.nakedobjects.application.value.TextString;
-import org.nakedobjects.application.value.Time;
+import org.nakedobjects.application.valueholder.Date;
+import org.nakedobjects.application.valueholder.TextString;
+import org.nakedobjects.application.valueholder.Time;
 
 import java.util.Vector;
 

@@ -4,8 +4,8 @@ import org.nakedobjects.application.Title;
 import org.nakedobjects.application.control.ClassAbout;
 import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.application.control.Validity;
-import org.nakedobjects.application.value.Color;
-import org.nakedobjects.application.value.TextString;
+import org.nakedobjects.application.valueholder.Color;
+import org.nakedobjects.application.valueholder.TextString;
 
 
 public class CreditCard implements PaymentMethod {

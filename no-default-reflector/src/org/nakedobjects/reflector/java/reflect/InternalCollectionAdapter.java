@@ -20,12 +20,12 @@ import java.util.Hashtable;
 public class InternalCollectionAdapter implements InternalCollection {
     protected static Hashtable pojos = new Hashtable();
     private NakedObjectSpecification specification;
-    private org.nakedobjects.application.object.InternalCollection collection;
+    private org.nakedobjects.application.collection.InternalCollection collection;
     private NakedObjectSpecification elementSpecification;
     private Oid oid;
 
 
-    public static Naked createAdapter(org.nakedobjects.application.object.InternalCollection pojo, Class type) {
+    public static Naked createAdapter(org.nakedobjects.application.collection.InternalCollection pojo, Class type) {
         if(pojo == null) {
             return null;
         }
@@ -41,7 +41,7 @@ public class InternalCollectionAdapter implements InternalCollection {
     
     
     
-    private InternalCollectionAdapter(org.nakedobjects.application.object.InternalCollection vector, Class type) {
+    private InternalCollectionAdapter(org.nakedobjects.application.collection.InternalCollection vector, Class type) {
         this.collection = vector;
         
         pojos.put(vector, this);

@@ -1,9 +1,9 @@
 package org.nakedobjects.example.ecs;
 
 import org.nakedobjects.application.system.ExplorationClock;
-import org.nakedobjects.application.value.Date;
-import org.nakedobjects.application.value.TextString;
-import org.nakedobjects.application.value.Time;
+import org.nakedobjects.application.valueholder.Date;
+import org.nakedobjects.application.valueholder.TextString;
+import org.nakedobjects.application.valueholder.Time;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.exploration.AbstractExplorationFixture;
 import org.nakedobjects.xat.IllegalActionError;

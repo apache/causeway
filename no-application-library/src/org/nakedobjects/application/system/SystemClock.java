@@ -1,9 +1,9 @@
 package org.nakedobjects.application.system;
 
-import org.nakedobjects.application.value.Date;
-import org.nakedobjects.application.value.DateTime;
-import org.nakedobjects.application.value.Time;
-import org.nakedobjects.application.value.TimeStamp;
+import org.nakedobjects.application.valueholder.Date;
+import org.nakedobjects.application.valueholder.DateTime;
+import org.nakedobjects.application.valueholder.Time;
+import org.nakedobjects.application.valueholder.TimeStamp;
 
 
 public class SystemClock implements Clock {

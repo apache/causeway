@@ -2,14 +2,17 @@ package org.nakedobjects.example.ecs;
 
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.control.FieldAbout;
-import org.nakedobjects.application.value.Logical;
-import org.nakedobjects.application.value.TextString;
+import org.nakedobjects.application.value.IntegerNumber;
+import org.nakedobjects.application.valueholder.Logical;
+import org.nakedobjects.application.valueholder.TextString;
 
 
 public class Telephone {
     private final TextString number;
     private final TextString knownAs;
     private final Logical temporary;
+    
+    private IntegerNumber ringCount;
     
     public Telephone() {
         number = new TextString();
@@ -44,6 +47,14 @@ public class Telephone {
         } else {
             return knownAs.title();
         }
+    }
+    
+    public IntegerNumber getRingCount() {
+        return ringCount;
+    }
+    
+    public void setRingCount(IntegerNumber ringCount) {
+        this.ringCount = ringCount;
     }
 }
 
