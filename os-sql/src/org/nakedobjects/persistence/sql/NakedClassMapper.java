@@ -1,35 +1,18 @@
-package org.nakedobjects.persistence.sql2;
+package org.nakedobjects.persistence.sql;
 
-import org.nakedobjects.object.NakedObjectStore;
-import org.nakedobjects.object.NakedObjectStoreInstancesTestCase;
-import org.nakedobjects.persistence.sql.DatabaseConnector;
-import org.nakedobjects.persistence.sql.SqlObjectStore;
-import org.nakedobjects.persistence.sql.jdbc.JdbcConnector;
-import org.nakedobjects.utility.Configuration;
+import org.nakedobjects.object.LoadedObjects;
+import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.ObjectStoreException;
 
 
-public class ObjectStoreAdvancedTest extends NakedObjectStoreInstancesTestCase {
+public interface NakedClassMapper extends ObjectMapper {
+    void createNakedClass(NakedClass cls) throws ObjectStoreException;
 
-    public static void main(String[] args) {}
+    NakedClass getNakedClass(String name) throws ObjectStoreException;
 
-    public ObjectStoreAdvancedTest(String name) {
-        super(name);
-    }
+    void shutdown() throws ObjectStoreException;
 
-    protected NakedObjectStore installObjectStore() throws Exception {
-        Configuration.installConfiguration("conf/sqlos2-testing.properties");
-        SqlObjectStore os = new SqlObjectStore();
-        return os;
-    }
-
-    protected void tearDown() throws Exception {
-        super.tearDown();
-
-        DatabaseConnector c = new JdbcConnector();
-        c.open();
-        c.update("delete from nakedclass");
-        c.update("delete from person");
-    }
+    void startup(LoadedObjects loadedObjects, DatabaseConnector db) throws ObjectStoreException;
 }
 
 /*

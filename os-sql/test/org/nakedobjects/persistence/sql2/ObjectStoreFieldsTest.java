@@ -2,7 +2,9 @@ package org.nakedobjects.persistence.sql2;
 
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedObjectStoreFieldsTestCase;
-import org.nakedobjects.persistence.sql2.mysql.Connector;
+import org.nakedobjects.persistence.sql.DatabaseConnector;
+import org.nakedobjects.persistence.sql.SqlObjectStore;
+import org.nakedobjects.persistence.sql.jdbc.JdbcConnector;
 import org.nakedobjects.utility.Configuration;
 
 
@@ -16,14 +18,14 @@ public class ObjectStoreFieldsTest extends NakedObjectStoreFieldsTestCase {
 
     protected NakedObjectStore installObjectStore() throws Exception {
         Configuration.installConfiguration("conf/sqlos2-testing.properties");
-        ObjectStore os = new ObjectStore();
+        SqlObjectStore os = new SqlObjectStore();
         return os;
     }
 
     protected void tearDown() throws Exception {
         super.tearDown();
 
-        Connector c = new Connector();
+        DatabaseConnector c = new JdbcConnector();
         c.open();
         c.update("delete from nakedclass");
         c.update("delete from person");
