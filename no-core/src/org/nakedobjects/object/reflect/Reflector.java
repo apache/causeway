@@ -1,6 +1,6 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.control.About;
 
 
@@ -8,7 +8,7 @@ public interface Reflector {
     public static final boolean CLASS = true;
     public static final boolean OBJECT = false;
 
-    NakedObject acquireInstance();
+    Naked acquireInstance();
 
     ActionDelegate[] actions(boolean forClass);
 
@@ -36,6 +36,10 @@ public interface Reflector {
     String getSuperclass();
 
     boolean isAbstract();
+
+    boolean isValue();
+
+    boolean isObject();
 }
 
 /*

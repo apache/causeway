@@ -52,16 +52,15 @@ public class DialogedObjectOption extends MenuOption {
     public Permission disabled(View view) {
         NakedObject object = ((ObjectContent) view.getContent()).getObject();
         
-		About about = action.getAbout(Session.getSession().getSecurityContext(), object, new NakedObject[action.getParameterCount()]);
-		if(about.canUse().isAllowed()) {
-			String description = about.getDescription();
-			if(action.hasReturn()) {
-				description += " returns a " + action.returns();
-			}
-			return new Allow(description);
-		} else {
-			return about.canUse();
-		}
+		About about = action.getAbout(Session.getSession().getSecurityContext(), object, new NakedObject[action
+                .getParameterCount()]);
+        // ignore the details from the About about useablility this will be
+        // checked in the dialog
+        String description = about.getDescription();
+        if (action.hasReturn()) {
+            description += " returns a " + action.returns();
+        }
+        return new Allow(description);
     }
 
     public void execute(Workspace workspace, View view, Location at) {

@@ -85,7 +85,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
         } else {
             LOG.debug("Creating skeletal object of " + type + " " + oid);
             NakedClass cls = NakedClassManager.getInstance().getNakedClass(type);
-            NakedObject object = cls.acquireInstance();
+            NakedObject object = (NakedObject) cls.acquireInstance();
             object.setOid(oid);
 
             return object;
@@ -196,7 +196,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
         if (data instanceof ObjectData) {
             object = recreateObject((ObjectData) data);
         } else if (data instanceof CollectionData) {
-            object = classFor(data.getClassName()).acquireInstance();
+            object = (NakedObject) classFor(data.getClassName()).acquireInstance();
         } else {
             throw new ObjectNotFoundException();
         }
@@ -263,9 +263,9 @@ public abstract class MementoObjectStore implements NakedObjectStore {
                         Data fieldData = (Data) dataManager.loadData((SimpleOid) oid);
 
                         if (fieldData != null) {
-                            fieldObject = classFor(fieldData.getClassName()).acquireInstance();
+                            fieldObject = (NakedObject) classFor(fieldData.getClassName()).acquireInstance();
                         } else {
-                            fieldObject = classFor(field.getType().getName()).acquireInstance();
+                            fieldObject = (NakedObject) classFor(field.getType().getName()).acquireInstance();
                         }
 
                         fieldObject.setOid(oid);
@@ -295,7 +295,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
         SimpleOid oid = data.getOid();
         if (loadedObjects.isLoaded(oid)) { return loadedObjects.getLoadedObject(oid); }
         NakedClass nc = classFor(data.getClassName());
-        NakedObject object = nc.acquireInstance();
+        NakedObject object = (NakedObject) nc.acquireInstance();
         LOG.debug("Recreating object " + nc.fullName() + "/" + oid);
         object.setOid(oid);
         loadedObjects.loaded(object);

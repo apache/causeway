@@ -111,14 +111,16 @@ public class DebugView implements DebugInfo {
         info.append("\n");
 
         // object interface
-        NakedClass nc = object.getNakedClass();
-        info.append("Class:        " + nc + "\n");
-        LOG.debug("Class details for " + nc);
- //       if(! (object instanceof NakedClass || object instanceof InternalCollection)) {
-        if(! (object instanceof InstanceCollection)) {
-        	info.append(nc.debugInterface());
+        if (object != null) {
+            NakedClass nc = object.getNakedClass();
+            info.append("Class:        " + nc + "\n");
+            LOG.debug("Class details for " + nc);
+            //       if(! (object instanceof NakedClass || object instanceof
+            // InternalCollection)) {
+            if (!(object instanceof InstanceCollection)) {
+                info.append(nc.debugInterface());
+            }
         }
-        
         return info.toString();
     }
 

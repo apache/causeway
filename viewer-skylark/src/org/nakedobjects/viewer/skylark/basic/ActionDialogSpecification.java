@@ -2,13 +2,11 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.security.Session;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.UserAction;
+import org.nakedobjects.viewer.skylark.ValueParameter;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.Workspace;
@@ -16,27 +14,31 @@ import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.metal.ButtonAction;
 import org.nakedobjects.viewer.skylark.metal.ButtonBorder;
 import org.nakedobjects.viewer.skylark.metal.WindowBorder;
-import org.nakedobjects.viewer.skylark.special.DialogFieldBuilder;
-import org.nakedobjects.viewer.skylark.special.ParameterContent;
+import org.nakedobjects.viewer.skylark.special.ActionFieldBuilder;
+import org.nakedobjects.viewer.skylark.special.ObjectParameter;
 import org.nakedobjects.viewer.skylark.special.StackLayout;
 import org.nakedobjects.viewer.skylark.special.SubviewSpec;
+import org.nakedobjects.viewer.skylark.util.ViewFactory;
+import org.nakedobjects.viewer.skylark.value.TextField;
 
 public class ActionDialogSpecification extends AbstractCompositeViewSpecification {
 
     public ActionDialogSpecification() {
-        builder = new StackLayout(new DialogFieldBuilder(new DialogFormSubviews()));
+        builder = new StackLayout(new ActionFieldBuilder(new DialogFormSubviews()));
     }
 
     public View createView(Content content, ViewAxis axis) {
-        UserAction[] actions = new UserAction[2];
-        actions[0] = new OKAction();
-        actions[1] = new CancelAction();
+        UserAction[] actions = new UserAction[] {
+                new ExecuteAction(),
+                new ExecuteAndCloseAction(),
+                new CloseAction(),
+        };
         return new WindowBorder(new ButtonBorder(actions, super.createView(content, new LabelAxis())));
     }
     
-    private static class  CancelAction extends ButtonAction {
-        public CancelAction() {
-            super("Cancel");
+    private static class  CloseAction extends ButtonAction {
+        public CloseAction() {
+            super("Close");
         }
         
         public void execute(Workspace workspace, View view, Location at) {
@@ -45,44 +47,56 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
     }
     
     
-    private static class  OKAction extends ButtonAction {
-        public OKAction() {
-            super("OK");
+    private static class  ExecuteAction extends ButtonAction {
+        public ExecuteAction() {
+            this("Execute");
         }
         
+        public ExecuteAction(String name) {
+            super(name);
+        }
+
         public Permission disabled(View view) {
             ActionContent actionContent = ((ActionContent) view.getContent());
-            NakedObject target = actionContent.getObject();
-            Action action = actionContent.getAction();
-            About about = action.getAbout(Session.getSession().getSecurityContext(), target);
-            return about.canUse();
+            return actionContent.disabled();
         }
         
         public void execute(Workspace workspace, View view, Location at) {
             ActionContent actionContent = ((ActionContent) view.getContent());
-            Action action = actionContent.getAction();
-            NakedObject target = actionContent.getObject();
-            
-            ParameterContent[] parameters = actionContent.getParameterContents();
-            NakedObject params[] = new NakedObject[parameters.length];
-            for (int i = 0; i < parameters.length; i++) {
-                params[i] = parameters[i].getObject();
-            }
-            
-            NakedObject result = action.execute(target, params);
-            at.move(30, 60);
+            NakedObject result = actionContent.execute();
+            move(at);
             workspace.addOpenViewFor(result, at);
+        }
+
+        protected void move(Location at) {
+            at.move(30, 60);
+        }
+    }
+    
+    private static class ExecuteAndCloseAction extends ExecuteAction {
+        public ExecuteAndCloseAction() {
+            super("Execute & Close");
+        }
+        
+        public void execute(Workspace workspace, View view, Location at) {
+            super.execute(workspace, view, at);
+            workspace.removeView(view);
+        }
+        
+        protected void move(Location at) {
         }
     }
     
     private static class DialogFormSubviews implements SubviewSpec {
 
         public View createSubview(Content content, ViewAxis axis) {
-            ParameterContent pc = (ParameterContent)content;
-            NakedClass nc = pc.getNakedClass();
-
-            View view = (new ActionParameterField.Specification()).createView(pc, axis);
-            return view;
+            if(content instanceof ObjectParameter) {
+	            View view = (new ActionParameterField.Specification()).createView(content, axis);
+	            return view;
+            } else if(content instanceof ValueParameter) {
+               	return new TextField.Specification().createView(content, axis);
+            }
+            return null;
         }
 
         public View decorateSubview(View view) {

@@ -45,6 +45,13 @@ public class InternalCollectionBorder extends AbstractBorder {
 		NakedCollection collection = (NakedCollection) content.getObject();
 		if(collection.size() == 0) {
 			canvas.drawText("empty", left, getBaseline(), Style.SECONDARY2, Style.NORMAL);
+		} else {
+		    int x = icon.getSize().getWidth() / 2;
+		    int x2 = x + 4;
+		    int y = icon.getSize().getHeight() + 1;
+		    int y2 = getSize().getHeight() - 5;
+		    canvas.drawLine(x, y, x, y2, Style.SECONDARY2);
+		    canvas.drawLine(x, y2, x2, y2, Style.SECONDARY2);
 		}
 		super.draw(canvas);
 	}

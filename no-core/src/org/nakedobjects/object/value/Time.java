@@ -1,7 +1,6 @@
 package org.nakedobjects.object.value;
 
 import org.nakedobjects.Clock;
-import org.nakedobjects.SystemClock;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.Title;

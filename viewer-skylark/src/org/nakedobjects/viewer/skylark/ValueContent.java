@@ -1,39 +1,21 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.Field;
-import org.nakedobjects.security.Session;
+import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.NakedValue;
 
-public abstract class AbstractFieldContent implements Content, FieldContent {
-    private final Field field;
-	private final NakedObject parent;
+public interface ValueContent extends Content {
+	NakedValue getValue();
 
-	public AbstractFieldContent(NakedObject parent, Field field) {
-	    this.parent = parent;
-	    this.field = field;
-	}
+    /**
+     * Determines if the user is able to change the held value.
+     */
+	boolean canChangeValue();
 	
-    public String debugDetails() {
-        String type = getClass().getName();
-        type = type.substring(type.lastIndexOf('.') + 1);
-        return type + "\n" +  "  field:" + getField() + "\n";
-    }
-
-    public void menuOptions(MenuOptionSet options) {}
-
-	public Field getField() {
-		return field;
-	}
-        
-	public NakedObject getParent() {
-	    return parent;
-	}
+	void menuOptions(MenuOptionSet options);
 	
-	public final String getFieldLabel() {
-	    return field.getLabel(Session.getSession().getSecurityContext(), parent);
-	}
-
-
+	void parseEntry(final String entryText) throws InvalidEntryException;
+	
+	 void refresh();
 }
 
 

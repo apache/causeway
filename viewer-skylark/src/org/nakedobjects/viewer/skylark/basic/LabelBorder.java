@@ -6,14 +6,13 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
 
 public class LabelBorder extends AbstractBorder {
-	private final static int PADDING = 4;
 	private String label;
 
 	public LabelBorder(String label, View wrappedView) {
 		super(wrappedView);
 		this.label = label + ":";
 		
-        int width = PADDING + Style.LABEL.stringWidth(this.label) + PADDING;
+        int width = HPADDING + Style.LABEL.stringWidth(this.label) + HPADDING;
 		if(getViewAxis() == null) {
 		    left = width;
 		} else {
@@ -34,7 +33,7 @@ public class LabelBorder extends AbstractBorder {
     }
 
 	public void draw(Canvas canvas) {
-		canvas.drawText(label, PADDING, wrappedView.getBaseline(), Style.PRIMARY1, Style.LABEL);
+		canvas.drawText(label, HPADDING, wrappedView.getBaseline(), Style.PRIMARY1, Style.LABEL);
 		super.draw(canvas);
 	}
 

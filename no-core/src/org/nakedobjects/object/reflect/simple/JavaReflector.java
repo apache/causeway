@@ -1,6 +1,7 @@
 package org.nakedobjects.object.reflect.simple;
 
 import org.nakedobjects.object.AbstractNakedObject;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
@@ -212,7 +213,7 @@ public class JavaReflector implements Reflector {
          * } catch (ClassNotFoundException e) { throw new
          * NakedObjectRuntimeException("Could not load class " + name); }
          */
-        if (!NakedObject.class.isAssignableFrom(cls)) { throw new NakedClassException("A naked object must be based on the "
+        if (!Naked.class.isAssignableFrom(cls)) { throw new NakedClassException("A naked object must be based on the "
                 + "NakedObject interface, this is not the case with " + cls); }
 
         if (!Modifier.isPublic(cls.getModifiers())) { throw new NakedClassException(
@@ -231,12 +232,12 @@ public class JavaReflector implements Reflector {
         methods = cls.getMethods();
     }
 
-    public NakedObject acquireInstance() {
+    public Naked acquireInstance() {
         if (Modifier.isAbstract(cls.getModifiers())) {
             throw new IllegalStateException("Handling of abstract naked classes is not yet supported: " + cls);
         } else {
             try {
-                return (NakedObject) cls.newInstance();
+                return (Naked) cls.newInstance();
             } catch (NoSuchMethodError ex) {
                 throw new NakedObjectRuntimeException("No accessible default constructor in " + className());
             } catch (IllegalAccessException e) {
@@ -504,6 +505,14 @@ public class JavaReflector implements Reflector {
     
     public boolean isAbstract() {
         return Modifier.isAbstract(cls.getModifiers());
+    }
+    
+    public boolean isObject() {
+        return NakedObject.class.isAssignableFrom(cls);
+    }
+    
+    public boolean isValue() {
+        return NakedValue.class.isAssignableFrom(cls);
     }
 
     String[] names(Vector methods) {

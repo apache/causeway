@@ -95,7 +95,7 @@ public abstract class Exploration {
     protected final NakedObject createInstance(Class type) {
         NakedClass nc = classManager().getNakedClass(type.getName());
         if (nc == null) { return new NakedError("Could not create an object of class " + type); }
-        NakedObject object = nc.acquireInstance();
+        NakedObject object = (NakedObject) nc.acquireInstance();
         object.created();
         addInstance(object);
         return object;
@@ -110,7 +110,7 @@ public abstract class Exploration {
     protected final NakedObject createInstance(String className) {
         NakedClass nc = classManager().getNakedClass(className);
         if (nc == null) { return new NakedError("Could not create an object of class " + className); }
-        NakedObject object = nc.acquireInstance();
+        NakedObject object = (NakedObject) nc.acquireInstance();
         object.created();
         addInstance(object);
         return object;

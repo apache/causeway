@@ -1,6 +1,6 @@
 package org.nakedobjects.object.value;
 
-public class Snapshot extends TextString {
+public class Snapshot extends MultilineTextString {
 
 }
 

@@ -1067,6 +1067,7 @@ public class TextField extends AbstractField {
         }
     }
 
+    /*
     public void refresh() {
         Value objectField = getObjectField();
         if(objectField.isDerived()) {
@@ -1094,7 +1095,8 @@ public class TextField extends AbstractField {
             isSaved = true;
         }
     }
-
+*/
+    
     private void resetSelection() {
         selection.resetTo(cursor);
     }

@@ -348,7 +348,9 @@ public class Viewer {
 		viewFactory.addValueFieldSpecification(loadSpecification("field.timeperiod", TimePeriodBarField.Specification.class));
 		viewFactory.addValueFieldSpecification(loadSpecification("field.text", TextField.Specification.class));
 
-        if(Configuration.getInstance().getBoolean(SPECIFICATION_BASE + "defaults", true)) {
+		viewFactory.addWorkspaceSpecification(new org.nakedobjects.viewer.skylark.metal.WorkspaceSpecification());
+        
+		if(Configuration.getInstance().getBoolean(SPECIFICATION_BASE + "defaults", true)) {
 			viewFactory.addCompositeRootViewSpecification(new FormSpecification());
 			viewFactory.addCompositeRootViewSpecification(new DataFormSpecification());
 			viewFactory.addCompositeRootViewSpecification(new ListSpecification());

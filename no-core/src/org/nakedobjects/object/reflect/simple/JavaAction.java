@@ -1,5 +1,6 @@
 package org.nakedobjects.object.reflect.simple;
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedError;
@@ -32,7 +33,7 @@ public class JavaAction extends JavaMember implements ActionDelegate {
         paramCount = action.getParameterTypes().length;
     }
 
-    public NakedObject execute(NakedObject object, NakedObject[] parameters) {
+    public NakedObject execute(NakedObject object, Naked[] parameters) {
         if (parameters.length != paramCount) {
             LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);
         }
@@ -55,9 +56,13 @@ public class JavaAction extends JavaMember implements ActionDelegate {
                 // persistent
 	            NakedObject transactionObject = objectManager.getObject(object);
 	            
-	            NakedObject[] transactionParameters = new NakedObject[parameters.length];
+	            Naked[] transactionParameters = new Naked[parameters.length];
 	            for (int i = 0; i < parameters.length; i++) {
-                    transactionParameters[i] = objectManager.getObject(parameters[i]);
+	                if(parameters[i] instanceof NakedObject) {
+	                    transactionParameters[i] = objectManager.getObject((NakedObject) parameters[i]);
+	                } else {
+	                    transactionParameters[i] = parameters[i];
+	                }
                 }
 	            
 	            result = actionMethod.invoke(transactionObject, transactionParameters);
@@ -99,7 +104,7 @@ public class JavaAction extends JavaMember implements ActionDelegate {
         
     }
 
-    public About getAbout(SecurityContext context, NakedObject object, NakedObject[] parameters) {
+    public About getAbout(SecurityContext context, NakedObject object, Naked[] parameters) {
         if (parameters.length != paramCount) {
             LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);
         }

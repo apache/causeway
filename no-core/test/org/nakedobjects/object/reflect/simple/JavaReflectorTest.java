@@ -32,6 +32,7 @@ import junit.framework.TestSuite;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.nakedobjects.object.ContactTestObject;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.ClassAbout;
 import org.nakedobjects.object.reflect.ActionDelegate;
@@ -206,7 +207,7 @@ public class JavaReflectorTest extends TestCase {
     
 
     public void testAcquire() {
-        NakedObject instance = c.acquireInstance();
+        Naked instance = c.acquireInstance();
         assertNotNull(instance);
         assertTrue(instance instanceof ContactTestObject);
     }

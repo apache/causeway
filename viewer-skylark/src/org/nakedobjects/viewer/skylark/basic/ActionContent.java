@@ -1,49 +1,90 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.security.Session;
+import org.nakedobjects.viewer.skylark.ActionField;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.special.ParameterContent;
+import org.nakedobjects.viewer.skylark.ValueParameter;
+import org.nakedobjects.viewer.skylark.special.ObjectParameter;
 
 /**
  * Links an action on an object to a view.
  */
 public class ActionContent implements ObjectContent {
     private final Action action;
-    private final NakedObject object;
-    private final ParameterContent[] parameterContents;
+    private final NakedObject target;
+    private final NakedClass[] parameterTypes;
+    private final Naked[] parameterValues;
+    private final ActionField[] parameters;
 
-    public ActionContent(NakedObject object, Action action) {
-        this.object = object;
+    public ActionContent(NakedObject target, Action action) {
+        this.target = target;
         this.action = action;
         
-        NakedClass[] parameters = action.parameters();
-        parameterContents = new ParameterContent[parameters.length];
-        for (int f = 0; f < parameters.length; f++) {
-            parameterContents[f]  = new ParameterContent(parameters[f]);
+        parameterTypes = action.parameters();
+        parameterValues = new Naked[parameterTypes.length];
+        parameters = new ActionField[parameterTypes.length];
+        for (int i = 0; i < parameterTypes.length; i++) {
+            
+            String label = parameterTypes[i].getShortName();
+            
+            if(parameterTypes[i].isValue()) {
+                Naked parameterValue = parameterTypes[i].acquireInstance();
+                parameterValues[i]  = parameterValue;
+                parameters[i] = new ValueParameter(label, parameterValue);
+           } else {
+               parameterValues[i]  = null;
+               parameters[i] = new ObjectParameter(label, null, parameterTypes[i]);
+            }
         }
     }
 
-    public ParameterContent[] getParameterContents() {
-        return parameterContents;
+    public NakedClass[] getParameterTypes() {
+        return parameterTypes;
+    }
+
+    public Naked[] getParameterValues() {
+         Naked[] parameterValues = new Naked[parameterTypes.length];
+     
+        for (int i = 0; i < parameterValues.length; i++) {
+            parameterValues[i] = parameters[i].getNaked();
+        }
+
+        return parameterValues;
     }
     
     public String debugDetails() {
-        return "  action: " + action + "\n  object: " + object;
-    }
-
-    public Action getAction() {
-        return action;
+        return "  action: " + action + "\n  object: " + target;
     }
 
     public void menuOptions(MenuOptionSet options) {}
 
-    public NakedObject getObject() {
-        return object;
+     public NakedObject execute() {
+       return action.execute(target, getParameterValues());
     }
 
+    public NakedObject getObject() {
+        return target;
+    }
+    
+    public Permission disabled() {
+         About about = action.getAbout(Session.getSession().getSecurityContext(), target, getParameterValues());
+        return about.canUse();
+    }
+
+    public String getLabel() {
+        return action.getLabel(Session.getSession().getSecurityContext(), target);
+    }
+
+    public ActionField[] getParameters() {
+        return parameters;
+    }
 }
 
 

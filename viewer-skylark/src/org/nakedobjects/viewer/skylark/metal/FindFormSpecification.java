@@ -12,6 +12,7 @@ import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.UserAction;
+import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -35,7 +36,7 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
 			if(content instanceof OneToManyField) {
 				return null;
 	        }  else if(content instanceof ValueField) { 
-				ViewSpecification specification = factory.getValueFieldSpecification((ValueField) content);
+				ViewSpecification specification = factory.getValueFieldSpecification((ValueContent) content);
 				return specification.createView(content, axis);
 			}  else if(content instanceof ObjectContent) {
 			    ViewSpecification spec = factory.getIconizedSubViewSpecification((ObjectContent) content);
@@ -77,7 +78,7 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
                 workspace.addOpenViewFor(result, at);
             }
         };
-        actions[1] = new ButtonAction("Cancel") {
+        actions[1] = new ButtonAction("Close") {
             public void execute(Workspace workspace, View view, Location at) {
                 workspace.removeView(view);
             }

@@ -91,7 +91,7 @@ public class UserMapper extends NameBasedMapper {
 				rootObject = loadedObjects.getLoadedObject(rootObjectOid);
 			} else {
 				NakedClass nc = NakedClassManager.getInstance().getNakedClass(rootObjectClass);
-				rootObject = nc.acquireInstance();
+				rootObject = (NakedObject) nc.acquireInstance();
 				rootObject.setOid(rootObjectOid);
 				loadedObjects.loaded(rootObject);
 			}

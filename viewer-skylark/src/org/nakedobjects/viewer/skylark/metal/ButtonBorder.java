@@ -1,8 +1,12 @@
 package org.nakedobjects.viewer.skylark.metal;
 
+import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
+import org.nakedobjects.viewer.skylark.ContentDrag;
+import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
@@ -58,8 +62,49 @@ public class ButtonBorder extends AbstractBorder {
     
     
     public void firstClick(Click click) {
-        int yy = click.getLocation().getY(); 
-        int xx = click.getLocation().getX();
+        UserAction action = overButton(click.getLocation());
+        if(action == null) {
+	        super.firstClick(click);
+        } else {
+	        if(action.disabled(getView()).isAllowed()) {
+	            action.execute(getWorkspace(), getView(), getLocation());
+	        }
+        }
+    }
+    
+    public Size getRequiredSize() {
+        Size size = super.getRequiredSize();
+        
+        int totalButtonWidth = BUTTON_SPACING;
+        for (int i = 0; i < actions.length; i++) {
+	        String text = actions[i].getName(getView());
+	        int buttonWidth = TEXT_PADDING + Style.NORMAL.stringWidth(text) + TEXT_PADDING;
+	        totalButtonWidth += BUTTON_SPACING + buttonWidth;
+        }
+        
+        size.ensureWidth(totalButtonWidth);
+        return size;
+    }
+    
+    public void mouseMoved(Location at) {
+        UserAction action = overButton(at);
+        if(action != null) {
+	        getViewManager().setStatus("");
+            Permission disabled = action.disabled(getView());
+            if(disabled.isVetoed()) {
+                getViewManager().setStatus(disabled.getReason());
+            }
+        }
+        super.mouseMoved(at);
+    }
+    
+    /**
+     * Finds the action button under the pointer; returning null if none.
+     * @param location
+     */
+    private UserAction overButton(Location location) {
+        int yy = location.getY(); 
+        int xx = location.getX();
         if(yy > getSize().getHeight() - bottom) {
             
             int width = getSize().getWidth();
@@ -69,18 +114,13 @@ public class ButtonBorder extends AbstractBorder {
             for (int i = 0; i < actions.length; i++) {
     	        String text = actions[i].getName(getView());
     	        int buttonWidth = TEXT_PADDING + Style.NORMAL.stringWidth(text) + TEXT_PADDING;
-
     	        if(xx > x && xx < x + buttonWidth && yy > y && yy < y + buttonHeight) {
-    	            if(actions[i].disabled(getView()).isAllowed()) {
-    	                actions[i].execute(getWorkspace(), getView(), getLocation());
-    	            }
-    	            return;
+    	            return actions[i];
                 }
-    	        
     	        x += BUTTON_SPACING + buttonWidth;
             }
         } 
-        super.firstClick(click);
+        return null;
     }
 }
 

@@ -4,6 +4,7 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.OneToManyField;
+import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -28,7 +29,7 @@ public class FormSpecification extends AbstractCompositeViewSpecification {
 			if(content instanceof OneToManyField) {
 				spec = internalList;
 	        } else if(content instanceof ValueField) { 
-	        	spec = factory.getValueFieldSpecification((ValueField) content);
+	        	spec = factory.getValueFieldSpecification((ValueContent) content);
 	        } else if(content instanceof ObjectContent) {
 	        	spec = factory.getIconizedSubViewSpecification((ObjectContent) content);
 	        } else {

@@ -2,6 +2,7 @@ package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.value.Percentage;
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -16,7 +17,7 @@ class BarSpecification extends AbstractCompositeViewSpecification {
 	
 	private static class DataFormSubviews implements SubviewSpec {
 		public View createSubview(Content content, ViewAxis axis) {
-			if(content instanceof ValueField && ((ValueField) content).getValue() instanceof Percentage) { 
+			if(content instanceof ValueField && ((ValueContent) content).getValue() instanceof Percentage) { 
 				ViewSpecification specification = new PercentageBarField.Specification();
 				return specification.createView(content, axis);
 			}

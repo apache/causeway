@@ -1,10 +1,15 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.object.reflect.SetValueCommand;
 import org.nakedobjects.object.reflect.Value;
+import org.nakedobjects.security.Session;
 
-public class ValueField extends AbstractFieldContent {
+public class ValueField extends ObjectField implements ValueContent{
 	private NakedValue value;
 	
 	public ValueField(NakedObject parent, NakedValue value, Value field) {
@@ -34,6 +39,38 @@ public class ValueField extends AbstractFieldContent {
     public void updateDerivedValue(NakedValue object) {
         this.value = object;
     }
+    
+    public boolean canChangeValue() {
+    	Value objectField = getValueField();
+        boolean persistent = !objectField.isDerived();
+        boolean fieldReadable = objectField.getAbout(Session.getSession().getSecurityContext(), getParent()).canUse().isAllowed();
+        boolean parentReadable = getParent().about().canUse().isAllowed();
+        boolean objectEditable = getValue().about().canUse().isAllowed();
+
+        return persistent && fieldReadable && parentReadable && objectEditable;
+    }
+    
+    public void parseEntry(final String entryText) throws InvalidEntryException {
+         try {
+	        NakedObject parent = getParent();
+	//        getViewManager().getUndoStack().add(new SetValueCommand(parent, getObjectField()));
+	        getValueField().parseAndSave(parent, entryText);
+	  //      getState().setValid();
+        } catch(InvalidEntryException e) {
+        //    getState().setInvalid();
+            throw e;
+        }
+    }
+
+    public void refresh() {
+        Value field = getValueField();
+
+        if (field.isDerived()) {
+            getValue().copyObject(field.get(getParent()));
+        }
+    }
+
+
 }
 
 

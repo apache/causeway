@@ -42,7 +42,7 @@ public class InternalList extends StandardList implements InternalView, ClassVie
             InternalCollection target = ((InternalCollection) getObject());
 
             if (source instanceof NakedClass && target.getType() != NakedClass.class) {
-                source = ((NakedClass) source).acquireInstance();
+                source = (NakedObject) ((NakedClass) source).acquireInstance();
 
                 try {
                     NakedObjectManager.getInstance().makePersistent(source);

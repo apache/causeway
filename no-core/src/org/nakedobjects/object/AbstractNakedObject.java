@@ -1,18 +1,16 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ActionAbout;
+import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.control.ObjectAbout;
 import org.nakedobjects.object.reflect.Field;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.Value;
-import org.nakedobjects.object.value.Snapshot;
+import org.nakedobjects.object.value.Date;
 import org.nakedobjects.object.value.TimeStamp;
 
 import org.apache.log4j.Logger;
-
 
 public abstract class AbstractNakedObject implements NakedObject {
     private static final Logger LOG = Logger.getLogger(AbstractNakedObject.class);
@@ -22,15 +20,16 @@ public abstract class AbstractNakedObject implements NakedObject {
     }
 
     /**
-	    A utility method for creating new objects in the context of the system - that is, it is added to the pool of
-	    objects the enterprise system contains.
-    */
+     * A utility method for creating new objects in the context of the system -
+     * that is, it is added to the pool of objects the enterprise system
+     * contains.
+     */
     protected static NakedObject createInstance(String className) {
         NakedClass cls = NakedClassManager.getInstance().getNakedClass(className);
         NakedObject object;
 
         try {
-            object = cls.acquireInstance();
+            object = (NakedObject) cls.acquireInstance();
 
             NakedObjectManager.getInstance().makePersistent(object);
             object.created();
@@ -42,11 +41,12 @@ public abstract class AbstractNakedObject implements NakedObject {
         }
 
         return object;
-	}
+    }
 
     /**
-       A utility method for creating new objects in the context of the system - that is, it is added to the pool of
-       objects the enterprise system contains.
+     * A utility method for creating new objects in the context of the system -
+     * that is, it is added to the pool of objects the enterprise system
+     * contains.
      */
     protected static NakedObject createTransientInstance(Class type) {
         return createTransientInstance(type.getName());
@@ -54,62 +54,76 @@ public abstract class AbstractNakedObject implements NakedObject {
 
     protected static NakedObject createTransientInstance(String className) {
         NakedClass nc = NakedClassManager.getInstance().getNakedClass(className);
-        
+
         if (nc == null) {
             throw new RuntimeException("Invalid type to create " + className);
         }
-       NakedObject object = nc.acquireInstance();
+        NakedObject object = (NakedObject) nc.acquireInstance();
 
         object.created();
 
         return object;
     }
 
-     /**
-       A utiltiy method for simplifying the resolving of an objects attribute.  Calls resolve()
-       on the secified object.  If the specified reference no action is done.
+    /**
+     * A utiltiy method for simplifying the resolving of an objects attribute.
+     * Calls resolve() on the secified object. If the specified reference no
+     * action is done.
      */
     public static void resolve(NakedObject object) {
         if (object != null) {
             object.resolve();
         }
     }
+
+    private Date dateCreated = new Date();
+
     private boolean isFinder = false;
     private transient boolean isResolved = false;
-    private Object oid;
-    private TimeStamp dateCreated  = new TimeStamp();
     private TimeStamp lastActivity = new TimeStamp();
-    
-    public TimeStamp getDateCreated() {
-    	return dateCreated;
+    private Object oid;
+
+    public AbstractNakedObject() {
+        lastActivity.clear();    
     }
     
-    public TimeStamp getLastActivity() {
-		return lastActivity;
-	}
-
     /**
-       Return a standard READ/WRITE About, specifically: ObjectAbout.READ_WRITE
-       @deprecated
+     * Return a standard READ/WRITE About, specifically: ObjectAbout.READ_WRITE
+     * 
+     * @deprecated
      */
     public About about() {
-    	return ObjectAbout.READ_WRITE;
+        return ObjectAbout.READ_WRITE;
     }
-/*
-	public void aboutExplorationActionClass(ActionAbout about) {
-		about.unusableOnCondition(this instanceof NakedClass) || this instanceof InstanceCollection);
-	}
-*/
-	public void aboutActionPersist(ActionAbout about) {
-	    if(isPersistent()) {
-	        about.invisible();
-	    }
-	}
 
+    /*
+     * public void aboutExplorationActionClass(ActionAbout about) {
+     * about.unusableOnCondition(this instanceof NakedClass) || this instanceof
+     * InstanceCollection); }
+     */
+    public void aboutActionPersist(ActionAbout about) {
+        if (isPersistent()) {
+            about.invisible();
+        }
+    }
+
+    public void aboutDateCreated(FieldAbout about) {
+        about.unmodifiable();
+    }
+
+    public void aboutLastActivity(FieldAbout about) {
+        about.invisible();
+    }
+
+    public NakedError actionPersist() {
+        makePersistent();
+        return null;
+    }
     /**
-       Copies the fields from the specified instance to the current instance.  Each NakedObject object reference
-       is copied across and values for each NakedValue object are copied across to the NakedValue objects in the current
-       instance.
+     * Copies the fields from the specified instance to the current instance.
+     * Each NakedObject object reference is copied across and values for each
+     * NakedValue object are copied across to the NakedValue objects in the
+     * current instance.
      */
     public void copyObject(Naked objectToCopy) {
         if (objectToCopy.getClass() != getClass()) {
@@ -132,17 +146,15 @@ public abstract class AbstractNakedObject implements NakedObject {
         }
     }
 
-	/**
-	 * hook method - fully specified in the interface
-	 */
-    public void created() {
-    }
+    /**
+     * hook method - fully specified in the interface
+     */
+    public void created() {}
 
-	/**
-	 * hook method, see interface description for further details
-	 */
-    public void deleted() {
-    }
+    /**
+     * hook method, see interface description for further details
+     */
+    public void deleted() {}
 
     /**
      */
@@ -153,7 +165,8 @@ public abstract class AbstractNakedObject implements NakedObject {
     }
 
     /**
-       An object will be deemed to be equal if it: is this object; or has the same OID.
+     * An object will be deemed to be equal if it: is this object; or has the
+     * same OID.
      */
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -178,7 +191,7 @@ public abstract class AbstractNakedObject implements NakedObject {
     }
 
     /**
-       Clones the current object.
+     * Clones the current object.
      */
     public AbstractNakedObject explorationActionClone() {
         AbstractNakedObject clone = (AbstractNakedObject) createInstance(getClass());
@@ -188,19 +201,47 @@ public abstract class AbstractNakedObject implements NakedObject {
 
         return clone;
     }
-    
-    public NakedError actionPersist() {
-    	makePersistent();
-        return null;
+
+    /**
+     * Returns the class name by getting the Class object fot this object and
+     * asks it for the name using getName()
+     */
+    public String getClassName() {
+        return this.getClass().getName();
     }
 
     protected ObjectContext getContext() {
         return ObjectContext.getInstance();
     }
-    
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
     /**
-       Returns the short class name looking at the getFullClassName() result and
-       passes back all the text after the last period/dot.
+     * Returns the String returned by getClassName()
+     * 
+     * @see #getClassName
+     */
+    public String getIconName() {
+        return getShortClassName();
+    }
+
+    public TimeStamp getLastActivity() {
+        return lastActivity;
+    }
+
+    public NakedClass getNakedClass() {
+        return NakedClassManager.getInstance().getNakedClass(getClass().getName());
+    }
+
+    public Object getOid() {
+        return oid;
+    }
+
+    /**
+     * Returns the short class name looking at the getFullClassName() result and
+     * passes back all the text after the last period/dot.
      */
     public String getShortClassName() {
         String name = getClassName();
@@ -212,29 +253,6 @@ public abstract class AbstractNakedObject implements NakedObject {
         return name.substring(name.lastIndexOf(".") + 1);
     }
 
-    /**
-       Returns the class name by getting the Class object fot this object and asks it for the name using  getName()
-     */
-    public String getClassName() {
-        return this.getClass().getName();
-    }
-
-    /**
-       Returns the String returned by getClassName()
-       @see #getClassName
-     */
-    public String getIconName() {
-        return getShortClassName();
-    }
-
-    public NakedClass getNakedClass() {
-        return NakedClassManager.getInstance().getNakedClass(getClass().getName());
-    }
-    
-    public Object getOid() {
-        return oid;
-    }
-
     public int hashCode() {
         if (getOid() == null) {
             return super.hashCode();
@@ -244,7 +262,7 @@ public abstract class AbstractNakedObject implements NakedObject {
     }
 
     /**
-       Returns false indicating that the object contains data.
+     * Returns false indicating that the object contains data.
      */
     public boolean isEmpty() {
         return false;
@@ -255,7 +273,7 @@ public abstract class AbstractNakedObject implements NakedObject {
     }
 
     /**
-       Returns true if this object has an OID set.
+     * Returns true if this object has an OID set.
      */
     public boolean isPersistent() {
         return getOid() != null;
@@ -266,7 +284,9 @@ public abstract class AbstractNakedObject implements NakedObject {
     }
 
     /**
-     * returns true if the specified object is this object, i.e. no content comparison is done.
+     * returns true if the specified object is this object, i.e. no content
+     * comparison is done.
+     * 
      * @see org.nakedobjects.object.NakedObject#isSameAs(Naked)
      */
     public boolean isSameAs(Naked object) {
@@ -289,7 +309,7 @@ public abstract class AbstractNakedObject implements NakedObject {
     }
 
     /**
-       Attempts to call <code>save</code> in the object store.
+     * Attempts to call <code>save</code> in the object store.
      */
     public void objectChanged() {
         LOG.debug("object changed " + this);
@@ -298,14 +318,14 @@ public abstract class AbstractNakedObject implements NakedObject {
             NakedObjectManager.getInstance().objectChanged(this);
         } else if (isFinder()) {
             // if a finder then update the listeners
-            
+
             //  need to update viewers somehow
         }
     }
 
     public synchronized void resolve() {
         if (!isResolved() && isPersistent()) {
-        	NakedObjectManager.getInstance().resolve(this);
+            NakedObjectManager.getInstance().resolve(this);
         }
     }
 
@@ -329,16 +349,16 @@ public abstract class AbstractNakedObject implements NakedObject {
         return new Summary();
     }
 
-	/**
-	 * every Naked Object is required to provide a <code>Title</code> by which 
-	 * it is identified to the end user.
-	 * <p>
-	 * Unless overridden, the <code>String</code> representation of this 
-	 * <code>Title</code> object is available through 
-	 * <code>contextualTitle()</code>.
-	 */
+    /**
+     * every Naked Object is required to provide a <code>Title</code> by which
+     * it is identified to the end user.
+     * <p>
+     * Unless overridden, the <code>String</code> representation of this
+     * <code>Title</code> object is available through
+     * <code>contextualTitle()</code>.
+     */
     public Title title() {
-    	return new Title();
+        return new Title();
     }
 
     public String toString() {
@@ -352,7 +372,7 @@ public abstract class AbstractNakedObject implements NakedObject {
         // Persistent/transient & Resolved or not
         s.append(isPersistent() ? "P" : (isFinder() ? "F" : "T"));
         s.append(isResolved ? "R" : "-");
-        
+
         // obect identifier
         if (oid != null) {
             s.append(":");
@@ -361,9 +381,8 @@ public abstract class AbstractNakedObject implements NakedObject {
             s.append(":-");
         }
 
-
         // title
-        if(isResolved()) {
+        if (isResolved()) {
             s.append(" '");
             try {
                 s.append(this.title());
@@ -375,61 +394,33 @@ public abstract class AbstractNakedObject implements NakedObject {
             s.append(" unresolved");
         }
         s.append("]");
-        
+
         s.append("  " + Long.toHexString(super.hashCode()).toUpperCase());
 
         return s.toString();
     }
-    
-    public Snapshot snapshot() {
-        Snapshot snapshot = new Snapshot();
-        snapshot(this, snapshot);
-        return snapshot;
-    }
-
-    private void snapshot(AbstractNakedObject object, Snapshot snapshot) {
-        NakedClass nc = object.getNakedClass();
-        StringBuffer str = new StringBuffer();
-        
-        Field[] fields = nc.getFields();
-        for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
-            if(field instanceof Value) {
-                str.append(((Value) field).get(object).title().toString());
-            } else if(field instanceof OneToOneAssociation) {
-                str.append(((OneToOneAssociation) field).get(object).title().toString());
-            } else if(field instanceof OneToManyAssociation) {
-                InternalCollection coll = (InternalCollection) ((OneToManyAssociation) field).get(object);
-                for (int j = 0; j < coll.size(); j++) {
-	                str.append(coll.elementAt(i).title().toString());
-                }
-            }
-            
-            str.append(",  ");
-        }
-    }
 }
 
 /*
-Naked Objects - a framework that exposes behaviourally complete
-business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-The authors can be contacted via www.nakedobjects.org (the
-registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-Road, Woking GU21 1NR, UK).
-*/
+ * Naked Objects - a framework that exposes behaviourally complete business
+ * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * Ltd
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * The authors can be contacted via www.nakedobjects.org (the registered address
+ * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
+ * 1NR, UK).
+ */

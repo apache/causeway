@@ -16,8 +16,10 @@ import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.FieldContent;
 import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.viewer.skylark.ObjectField;
 import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.OneToOneField;
+import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -57,39 +59,36 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
     }
 
     private void newBuild(View view, NakedObject object, Field[] flds) {
-       for (int f = 0; f < flds.length; f++) {
+        LOG.debug("build new view " + view + " for " + object);
+        for (int f = 0; f < flds.length; f++) {
             Field field = flds[f];
 			Naked value = field.get(object);
-			
-			Content content = createContent(object, value, field);
+			ObjectField content = createContent(object, value, field);
 			View fieldView = subviewDesign.createSubview(content, view.getViewAxis());
 			if(fieldView != null) {
 				view.addView(decorateSubview(fieldView));
 			}
-		
        }
     }
 
     private void updateBuild(View view, NakedObject object, Field[] flds) {
-    	View[] subviews = view.getSubviews();
+        LOG.debug("rebuild view " + view + " for " + object);
+
+        View[] subviews = view.getSubviews();
     	
     	int fld = 0;
     	
     	for (int i = 0; i < subviews.length; i++) {
             View subview = subviews[i];
-            
             while(((FieldContent) subview.getContent()).getField() != flds[fld]) {
                 fld++;
             }
-   
             Assert.assertTrue(fld < flds.length);
-            
             
             Field field = flds[fld];
             Naked value = field.get(object);
-    		
-    		if(value instanceof NakedValue) {
-    		    NakedValue existing = ((ValueField) subview.getContent()).getValue();
+            if(value instanceof NakedValue) {
+    		    NakedValue existing = ((ValueContent) subview.getContent()).getValue();
     			if(value != existing) {
     			    ((ValueField) subview.getContent()).updateDerivedValue((NakedValue) value);
     			}
@@ -111,20 +110,18 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         }
     }
 
-	private Content createContent(NakedObject parent, Naked object, Field field) {
+	private ObjectField createContent(NakedObject parent, Naked object, Field field) {
 		if(field == null) {
 			throw new NullPointerException();
 		}
 		
-		Content content;
+		ObjectField content;
 		if(object instanceof InternalCollection) {
 			content = new OneToManyField(parent, (InternalCollection) object, (OneToManyAssociation) field);
-	    } else if(object instanceof NakedObject) {
+	    } else if(object instanceof NakedObject || object == null) {
 			content = new OneToOneField(parent, (NakedObject) object, (OneToOneAssociation) field);
 	    } else if(object instanceof NakedValue) { 
 			content = new ValueField(parent, (NakedValue) object, (Value) field);  
-	    } else if(object == null) {
-			content = new OneToOneField(parent, null, (OneToOneAssociation) field);
 	    } else {
 	        throw new NakedObjectRuntimeException();
 	    }

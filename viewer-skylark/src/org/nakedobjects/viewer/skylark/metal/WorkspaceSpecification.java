@@ -21,8 +21,8 @@ public class WorkspaceSpecification implements org.nakedobjects.viewer.skylark.s
 	
 	public View createView(Content content, ViewAxis axis) {
 			Workspace workspace;
-			NakedObject contentType = ((ObjectContent) content).getObject();
-			if(contentType instanceof AbstractUserContext) {
+			NakedObject root = ((ObjectContent) content).getObject();
+			if(root instanceof AbstractUserContext) {
 				workspace = new UserContextWorkspace(content, this, axis);
 			} else {
 				workspace = new DefaultWorkspace(content, this, axis);

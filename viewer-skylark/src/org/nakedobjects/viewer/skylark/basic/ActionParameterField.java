@@ -17,7 +17,7 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
-import org.nakedobjects.viewer.skylark.special.ParameterContent;
+import org.nakedobjects.viewer.skylark.special.ObjectParameter;
 
 import org.apache.log4j.Logger;
 
@@ -28,7 +28,7 @@ public class ActionParameterField extends AbstractView {
     
 	public ActionParameterField(Content content, ViewSpecification specification, ViewAxis axis) {
 		super(content, specification, axis);
-		if(!(content instanceof ParameterContent)) {
+		if(!(content instanceof ObjectParameter)) {
 			throw new IllegalArgumentException("Content for EmptyField must be ParameterContent: " + content);
 		}
 	}
@@ -39,13 +39,13 @@ public class ActionParameterField extends AbstractView {
         if (source instanceof NakedClass) {
             return false;
         } else {
-            NakedClass nc = ((ParameterContent) getContent()).getNakedClass();
+            NakedClass nc = ((ObjectParameter) getContent()).getNakedClass();
             return nc.isOfType(source.getNakedClass());
         }
     }
     
     protected String iconName() {
-       String name = ((ParameterContent) getContent()).getNakedClass().fullName();
+       String name = ((ObjectParameter) getContent()).getNakedClass().fullName();
         
         String clsName = name;
         return clsName.substring(clsName.lastIndexOf('.') + 1);
@@ -106,12 +106,13 @@ public class ActionParameterField extends AbstractView {
     public void drop(ContentDrag drag) {
         if (canDrop(drag)) {
 	        View dragSource = drag.getSourceView();
-            ParameterContent parameterContent = ((ParameterContent) getContent());
+            ObjectParameter parameterContent = ((ObjectParameter) getContent());
             parameterContent.setObject(((ObjectContent) dragSource.getContent()).getObject());
             
             View replacement;           
             replacement = new SubviewIconSpecification().createView(getContent(), getViewAxis());
-            getParent().replaceView(this, replacement);
+            String label = parameterContent.getNakedClass().getShortName();
+            getParent().replaceView(getView(), new LabelBorder(label, replacement));
             markDamaged();
         }
     }
@@ -162,7 +163,7 @@ public class ActionParameterField extends AbstractView {
 	}
 
     private String name() {
-        String name = ((ParameterContent) getContent()).getNakedClass().fullName();
+        String name = ((ObjectParameter) getContent()).getNakedClass().getShortName();
         return name;
     }
 
@@ -171,7 +172,7 @@ public class ActionParameterField extends AbstractView {
 	}
 
     public void menuOptions(MenuOptionSet options) {
-        NakedClass nc = ((ParameterContent) getContent()).getNakedClass();
+        NakedClass nc = ((ObjectParameter) getContent()).getNakedClass();
         ClassOption.menuOptions(nc, options);
     }
     

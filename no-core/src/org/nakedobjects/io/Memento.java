@@ -1,100 +1,39 @@
-package org.nakedobjects.object;
+package org.nakedobjects.io;
 
+import org.nakedobjects.object.LoadedObjects;
+import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.reflect.Field;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.Value;
 
-import java.io.Serializable;
-import java.util.Hashtable;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
 
-public class NakedObjectMemento implements Serializable {
+public class Memento implements Transferable {
 
-    private static class Data implements Serializable {
-        private final static long serialVersionUID = 1L;
-        String className;
-        Object oid;
-
-        public Data(Object oid, String className) {
-            this.oid = oid;
-            this.className = className;
-        }
-
-        public String toString() {
-            return className + "/" + oid;
-        }
-    }
-
-    private static class InternalCollectionData extends Data {
-        private final static long serialVersionUID = 1L;
-        Data[] elements;
-
-        public InternalCollectionData(Object oid, String className, Data[] elements) {
-            super(oid, className);
-            this.elements = elements;
-        }
-
-        public String toString() {
-            StringBuffer str = new StringBuffer("(");
-            for (int i = 0; i < elements.length; i++) {
-                str.append((i > 0) ? "," : "");
-                str.append(elements[i]);
-            }
-            str.append(")");
-            return str.toString();
-        }
-    }
-
-    private static class ObjectData extends Data {
-        private static class Null implements Serializable {
-            private final static long serialVersionUID = 1L;
-
-            public String toString() {
-                return "NULL";
-            }
-        }
-
-        private final static Serializable NO_ENTRY = new Null();
-        private final static long serialVersionUID = 1L;
-        private Hashtable fields = new Hashtable();
-
-        public ObjectData(Object oid, String className) {
-            super(oid, className);
-        }
-
-        public void addField(String fieldName, Object entry) {
-            if (fields.containsKey(fieldName)) { throw new IllegalArgumentException("Field already entered " + fieldName); }
-            fields.put(fieldName, entry == null ? NO_ENTRY : entry);
-        }
-
-        public Object getEntry(String fieldName) {
-            Object entry = fields.get(fieldName);
-            return entry == null || entry.getClass() == NO_ENTRY.getClass() ? null : entry;
-        }
-
-        public String toString() {
-            return fields.toString();
-        }
-    }
-
-    private static final Logger LOG = Logger.getLogger(NakedObjectMemento.class);
-    private final static long serialVersionUID = 1L;
+    private static final Logger LOG = Logger.getLogger(Memento.class);
     private Data state;
 
     /**
-     * Creates a memento that hold the state for the specified object. This object is Serializable
-     * and can be passed over the network easily. Also for a persistent only the refernce Oids are
-     * held, avoiding the need for serializing the whole object graph.
+     * Creates a memento that hold the state for the specified object. This
+     * object is Serializable and can be passed over the network easily. Also
+     * for a persistent only the refernce Oids are held, avoiding the need for
+     * serializing the whole object graph.
      */
-    public NakedObjectMemento(NakedObject object) {
+    public Memento(NakedObject object) {
         state = object == null ? null : createData(object);
         LOG.debug("created memento for " + this);
     }
+
+    public Memento() {}
 
     private Data createData(NakedObject object) {
         if (object instanceof InternalCollection) {
@@ -145,7 +84,7 @@ public class NakedObjectMemento implements Serializable {
             return null;
         } else {
             NakedClass nc = NakedClassManager.getInstance().getNakedClass(state.className);
-            NakedObject object = nc.acquireInstance();
+            NakedObject object = (NakedObject) nc.acquireInstance();
             object.setOid(state.oid);
             LOG.debug("Recreated object " + object.getOid());
             updateNakedObject(object, objectManager);
@@ -165,7 +104,7 @@ public class NakedObjectMemento implements Serializable {
             } else if (objectManager.isLoaded(oid)) {
                 ref = objectManager.getLoadedObject(oid);
             } else {
-                ref = nakedClass.acquireInstance();
+                ref = (NakedObject) nakedClass.acquireInstance();
                 ref.setOid(oid);
                 objectManager.loaded(ref);
             }
@@ -179,12 +118,12 @@ public class NakedObjectMemento implements Serializable {
     }
 
     /**
-     * Updates the specified object (assuming it is the correct object for this memento) with the
-     * state held by this memento.
+     * Updates the specified object (assuming it is the correct object for this
+     * memento) with the state held by this memento.
      * 
      * @throws IllegalArgumentException
-     *                    if the memento was created from different logical object to the one specified
-     *                    (i.e. its oid differs).
+     *                       if the memento was created from different logical object to
+     *                       the one specified (i.e. its oid differs).
      */
     public void updateNakedObject(NakedObject object, LoadedObjects objectManager) {
         Object oid = object.getOid();
@@ -224,7 +163,7 @@ public class NakedObjectMemento implements Serializable {
             InternalCollectionData collectionData) {
         InternalCollection collection = (InternalCollection) field.get(object);
         if (collection.getOid() == null) {
-            collection.setOid(collectionData.oid);
+            collection.setOid(collectionData.getOid());
         }
 
         Vector original = new Vector();
@@ -274,24 +213,36 @@ public class NakedObjectMemento implements Serializable {
             nv.restoreString(value);
         }
     }
+
+    public void writeData(TransferableWriter data) {
+        data.writeObject(state);
+    }
+
+    public void restore(TransferableReader data) {
+        state = (Data) data.readObject();
+    }
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2003 Naked Objects Group Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business
+ * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU General Public License along with this program; if
- * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- * 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
- * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address
+ * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
+ * 1NR, UK).
  */

@@ -1,9 +1,9 @@
 package org.nakedobjects.persistence.cache;
 
+import org.nakedobjects.io.Memento;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectMemento;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 
 import java.io.IOException;
@@ -53,7 +53,7 @@ class Instances {
         int noInstances = oos.readInt();
         int size = 0;
         for (int i = 0; i < noInstances; i++) {
-            NakedObjectMemento memento = (NakedObjectMemento) oos.readObject();
+            Memento memento = (Memento) oos.readObject();
             LOG.debug("read 2: " + i + " " + memento);
 
             NakedObject object = loadedObjects.getLoadedObject(memento.getOid());
@@ -70,7 +70,7 @@ class Instances {
             Object oid = oos.readObject();
             LOG.debug("read 1: " + i + " " + cls.fullName() + "/" + oid);
 
-            NakedObject obj = cls.acquireInstance();
+            NakedObject obj = (NakedObject) cls.acquireInstance();
             obj.setOid(oid);
             preload(oid, obj);
             loadedObjects.loaded(obj);
@@ -104,7 +104,7 @@ class Instances {
         int i = 0;
         while (e.hasMoreElements()) {
             NakedObject object = (NakedObject) e.nextElement();
-            NakedObjectMemento memento = new NakedObjectMemento(object);
+            Memento memento = new Memento(object);
             LOG.debug("write 2: " + i++ + " " + cls.fullName() + "/" + memento);
             oos.writeObject(memento);
         }

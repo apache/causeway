@@ -13,6 +13,7 @@ import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
+import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -89,12 +90,12 @@ public class ColorField extends AbstractField {
   }
 
     org.nakedobjects.object.value.Color getColor() {
-        ValueField content = ((ValueField) getContent());
+        ValueContent content = ((ValueContent) getContent());
         org.nakedobjects.object.value.Color value = (org.nakedobjects.object.value.Color) content.getValue();
 
         return value;
     }
-
+/*
     public void refresh() {
         ValueField content = ((ValueField) getContent());
         Value field = content.getValueField();
@@ -104,7 +105,7 @@ public class ColorField extends AbstractField {
                     ((ObjectContent) getParent().getContent()).getObject()));
         }
     }
-
+*/
 	void setColor(int color) {
 	    this.color = color;
 	    initiateSave();

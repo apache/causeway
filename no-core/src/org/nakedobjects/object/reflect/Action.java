@@ -1,6 +1,8 @@
 package org.nakedobjects.object.reflect;
 
 import org.apache.log4j.Category;
+
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.About;
@@ -63,23 +65,23 @@ public class Action extends Member {
         return execute(object, new NakedObject[0]);
     }
 
-    public NakedObject execute(NakedObject object, NakedObject parameter1) {
-        return execute(object, new NakedObject[] { parameter1 });
+    public NakedObject execute(NakedObject object, Naked parameter1) {
+        return execute(object, new Naked[] { parameter1 });
     }
 
-    public NakedObject execute(NakedObject object, NakedObject[] parameters) {
+    public NakedObject execute(NakedObject object, Naked[] parameters) {
         return actionDelegate.execute(object, parameters);
     }
 
     public About getAbout(SecurityContext context, NakedObject object) {
-        return getAbout(context, object, new NakedObject[0]);
+        return getAbout(context, object, new Naked[0]);
     }
 
-    public About getAbout(SecurityContext context, NakedObject object, NakedObject parameter1) {
-        return getAbout(context, object, new NakedObject[] { parameter1 });
+    public About getAbout(SecurityContext context, NakedObject object, Naked parameter1) {
+        return getAbout(context, object, new Naked[] { parameter1 });
     }
 
-    public About getAbout(SecurityContext context, NakedObject object, NakedObject[] parameters) {
+    public About getAbout(SecurityContext context, NakedObject object, Naked[] parameters) {
         if (hasAbout()) {
             return actionDelegate.getAbout(context, object, parameters);
         } else {

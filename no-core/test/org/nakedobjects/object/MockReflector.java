@@ -19,7 +19,7 @@ public class MockReflector implements Reflector {
         acquireInstance = object;
     }
     
-    public NakedObject acquireInstance() {
+    public Naked acquireInstance() {
         return acquireInstance;
     }
 
@@ -73,6 +73,14 @@ public class MockReflector implements Reflector {
 
     public String getSuperclass() {
         return null;
+    }
+
+    public boolean isValue() {
+        return false;
+    }
+
+    public boolean isObject() {
+        return false;
     }
 
 }

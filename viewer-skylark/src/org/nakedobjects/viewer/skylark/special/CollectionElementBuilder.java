@@ -9,6 +9,7 @@ import org.nakedobjects.viewer.skylark.CollectionElement;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.viewer.skylark.OneToManyElement;
 import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -68,7 +69,7 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
         			elementContent = new CollectionElement(element);
         		} else {
         		    NakedObject parent = ((OneToManyField) content).getParent();
-        			elementContent = new OneToManyField(parent, element, field);
+        			elementContent = new OneToManyElement(parent, element, field);
         		}
         		elementView = subviewDesign.createSubview(elementContent, view.getViewAxis());
         	}
@@ -79,7 +80,7 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
 	public View createCompositeView(Content content, CompositeViewSpecification specification, ViewAxis axis) {
     	CompositeObjectView view = new CompositeObjectView(content, specification, axis);
     	view.setCanDragView(canDragView);
-		return content instanceof OneToManyField ? new InternalCollectionActions(view) : new CollectionActions(view);
+		return content instanceof OneToManyElement ? new InternalCollectionActions(view) : new CollectionActions(view);
     }
 
 	public void setCanDragView(boolean canDragView) {

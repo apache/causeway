@@ -29,7 +29,7 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
 
     public DefaultWorkspace(Content content, CompositeViewSpecification specification, ViewAxis axis) {
     	super(content, specification, axis);
-		requiredSize = new Size();
+		requiredSize = new Size(300, 200);
 	}
 
 	public void drop(ContentDrag drag) {

@@ -8,6 +8,7 @@ import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
+import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
@@ -93,28 +94,38 @@ public class ClassIcon extends ObjectView {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
+        if(DEBUG) {
+            canvas.drawRectangle(getSize(), Color.DEBUG1);
+        }
+        
         int x = 0;
         int y = icon.getBaseline();
         icon.draw(canvas, x, y);
-        x += iconUnselected.getSize().getWidth();
  
 		NakedObject object = ((ObjectContent) getContent()).getObject();
 		NakedClass nc = ((NakedClass) object);
 		String name = nc.getShortName();
 
 		int w = Style.CLASS.stringWidth(name);
-		int h = Style.CLASS.getAscent() + VPADDING;
-        canvas.drawText(name, getSize().getWidth() / 2 - w / 2, y + h, Style.BLACK, Style.CLASS);
+		int x2 = (w > icon.getSize().getWidth()) ? x : getSize().getWidth() / 2 - w / 2;
+		int y2 = icon.getSize().getHeight() + Style.CLASS.getAscent() + VPADDING;
+        canvas.drawText(name, x2, y2, Style.BLACK, Style.CLASS);
     }
 
     public int getBaseline() {
-        return iconUnselected.getBaseline();
+        return icon.getBaseline();
     }
 
     public Size getRequiredSize() {
-        Size size = iconUnselected.getSize();
-        int text = Style.CLASS.getHeight();
-        size.extendHeight(text  + VPADDING);
+        Size size = icon.getSize();
+        int textHeight = Style.CLASS.getHeight();
+        NakedObject object = ((ObjectContent) getContent()).getObject();
+        NakedClass nc = ((NakedClass) object);
+		String name = nc.getShortName();
+        int textWidth = Style.CLASS.stringWidth(name);
+        
+        size.extendHeight(VPADDING + textHeight  + VPADDING);
+        size.ensureWidth(textWidth);
         return size;
     }
 

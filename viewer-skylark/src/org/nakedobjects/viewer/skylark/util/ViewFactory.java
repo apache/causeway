@@ -14,6 +14,7 @@ import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.RootObject;
+import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
@@ -133,7 +134,6 @@ public class ViewFactory implements DebugInfo {
 
     public View createWorkspace(NakedObject workspace) {
         LOG.debug("creating workspace for " + workspace);
-
         View view = createView(workspaceSpecification, new RootObject(workspace));
 
         return view;
@@ -247,7 +247,7 @@ public class ViewFactory implements DebugInfo {
     	return defaultViewSpecification(subviews, content.getObject());
     }
 
-    public ViewSpecification getValueFieldSpecification(ValueField content) {
+    public ViewSpecification getValueFieldSpecification(ValueContent content) {
     	NakedValue value = content.getValue();
     	
        	return defaultViewSpecification(valueFields, value);
@@ -277,7 +277,7 @@ public class ViewFactory implements DebugInfo {
 
         if(forContent instanceof ValueField) {
             if (forContent instanceof ValueField) {
-               	NakedValue value = ((ValueField) forContent).getValue();
+               	NakedValue value = ((ValueContent) forContent).getValue();
 
                	return ViewSpecifications(valueFields, value);
               }

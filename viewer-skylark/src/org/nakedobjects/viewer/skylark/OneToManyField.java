@@ -3,12 +3,9 @@ package org.nakedobjects.viewer.skylark;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.viewer.skylark.basic.ObjectOption;
-import org.nakedobjects.viewer.skylark.basic.RemoveOneToManyAssociationOption;
 
-public class OneToManyField extends AbstractFieldContent implements ObjectContent {
-	private static final UserAction REMOVE_ASSOCIATION = new RemoveOneToManyAssociationOption();
-    private final NakedObject object;
+public class OneToManyField extends ObjectField implements ObjectContent {
+	private final NakedObject object;
 
 	   public NakedObject getObject() {
 	        return object;
@@ -27,12 +24,6 @@ public class OneToManyField extends AbstractFieldContent implements ObjectConten
 		return (OneToManyAssociation) getField();
 	}
 
-	public void menuOptions(MenuOptionSet options) {
-		super.menuOptions(options);
-		ObjectOption.menuOptions(object, options);
-		options.add(MenuOptionSet.OBJECT, REMOVE_ASSOCIATION);
-	}
-	
 	public String toString() {
 		return getObject() + "/" + getField();
 	}

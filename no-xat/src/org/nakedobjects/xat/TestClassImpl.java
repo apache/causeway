@@ -121,7 +121,7 @@ public class TestClassImpl implements TestClass {
         NakedObject object;
 
         try {
-            object = cls.acquireInstance();
+            object = (NakedObject) cls.acquireInstance();
 
             NakedObjectManager.getInstance().makePersistent(object); //makePersistent(object);
             object.created();

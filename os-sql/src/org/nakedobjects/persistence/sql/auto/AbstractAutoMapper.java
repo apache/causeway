@@ -139,7 +139,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 		if (loadedObjects.isLoaded(oid)) {
 			reference = loadedObjects.getLoadedObject(oid);
 		} else {
-			reference = nakedClass.acquireInstance();
+			reference = (NakedObject) nakedClass.acquireInstance();
 			reference.setOid(oid);
 			loadedObjects.loaded(reference);
 		}

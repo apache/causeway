@@ -37,13 +37,14 @@ public class IconGraphic {
         iconWidth = icon.getWidth();
 
         int xi = x + View.HPADDING;
-        int yi = baseline - getBaseline();  /// TODO move down toward baseline
+        int yi = baseline - getBaseline() + View.VPADDING;  /// TODO move down toward baseline
         canvas.drawIcon(icon, xi, yi);
 
         if (AbstractView.DEBUG) {
             Size size = getSize();
             canvas.drawRectangle(x, baseline - getBaseline(), size.getWidth() - 1, size.getHeight() - 1, Color.DEBUG3);
-            canvas.drawRectangle(xi, yi, iconWidth - 1, iconHeight - 1, Color.DEBUG3);
+            canvas.drawLine(0, getBaseline(), size.getWidth(), getBaseline(), Color.DEBUG3);
+ //           canvas.drawRectangle(xi, yi, iconWidth - 1, iconHeight - 1, Color.DEBUG3);
         }
     }
 

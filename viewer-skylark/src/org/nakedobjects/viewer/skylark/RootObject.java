@@ -4,7 +4,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 
 public class RootObject implements ObjectContent {
-
     private final NakedObject object;
 
     public RootObject(NakedObject object) {

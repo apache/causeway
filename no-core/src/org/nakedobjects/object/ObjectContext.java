@@ -30,7 +30,7 @@ public class ObjectContext {
         NakedObject object;
 
         try {
-            object = cls.acquireInstance();
+            object = (NakedObject) cls.acquireInstance();
 
             NakedObjectManager.getInstance().makePersistent(object);
             object.created();
@@ -58,7 +58,7 @@ public class ObjectContext {
         if (nc == null) {
             throw new RuntimeException("Invalid type to create " + className);
         }
-       NakedObject object = nc.acquireInstance();
+       NakedObject object = (NakedObject) nc.acquireInstance();
 
         object.created();
 

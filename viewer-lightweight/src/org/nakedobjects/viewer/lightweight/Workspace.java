@@ -582,7 +582,7 @@ public class Workspace extends AbstractView implements Background, DragTarget, P
         NakedObject object;
 
         try {
-            object = cls.acquireInstance();
+            object = (NakedObject) cls.acquireInstance();
 
             // TODO remove this, and replace with Save option for non-persistent objects
             NakedObjectManager.getInstance().makePersistent(object);

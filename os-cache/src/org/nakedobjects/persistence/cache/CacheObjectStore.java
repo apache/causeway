@@ -1,9 +1,11 @@
 package org.nakedobjects.persistence.cache;
 
+import org.nakedobjects.io.Memento;
+import org.nakedobjects.io.Transferable;
+import org.nakedobjects.io.BinaryTransferableWriter;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectMemento;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedValue;
@@ -22,7 +24,6 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -104,7 +105,7 @@ public class CacheObjectStore implements NakedObjectStore {
     public void createObject(NakedObject object) throws ObjectStoreException {
         NakedClass nakedClass = object.getNakedClass();
         if(!nakedClass.isCollection()) {
-	        writeJournal("create", new NakedObjectMemento(object));
+	        writeJournal("create", new Memento(object));
 	        instances(nakedClass).create(object);
         }
     }
@@ -114,7 +115,11 @@ public class CacheObjectStore implements NakedObjectStore {
         if(objectSets.containsKey(className)) {
             throw new NakedObjectRuntimeException("Class already created: " + cls);
         }
-        writeJournal("class", className + ":" + cls.getReflector().saveString() + ":" + cls.getOid());
+        BinaryTransferableWriter data = new BinaryTransferableWriter();
+        data.writeString(className);
+        data.writeString(cls.getReflector().saveString());
+        data.writeObject((Transferable) cls.getOid());
+        writeJournal("class", data);
         Instances index = new Instances(cls, loadedObjects);
         objectSets.put(className, index);
     }
@@ -136,14 +141,11 @@ public class CacheObjectStore implements NakedObjectStore {
             return (Instances) objectSets.get(className);
         } else {
             throw new ObjectNotFoundException();
-//            Instances index = new Instances((NakedClass) classes.get(className), loadedObjects);
-//           instances.put(className, index);
-//            return index;
         }
     }
 
     public void destroyObject(NakedObject object) {
-        writeJournal("delete", new NakedObjectMemento(object));
+        writeJournal("delete", new Memento(object));
         instances(object.getNakedClass()).remove(object);
     }
 
@@ -417,7 +419,7 @@ public class CacheObjectStore implements NakedObjectStore {
     public void resolve(NakedObject object) {}
 
     public void save(NakedObject object) throws ObjectStoreException {
-        writeJournal("save", new NakedObjectMemento(object));
+        writeJournal("save", new Memento(object));
     }
 
     private void saveSnapshot() throws ObjectStoreException {
@@ -490,11 +492,17 @@ public class CacheObjectStore implements NakedObjectStore {
 
     public void startTransaction() {}
 
-    private void writeJournal(String action, Serializable data) {
-        LOG.debug("Journal " + action + " - " + data);
+    private void writeJournal(String action, Memento object) {
+	    BinaryTransferableWriter writer = new BinaryTransferableWriter();
+	    object.writeData(writer);
+	    writeJournal(action, writer);
+    }
+    
+    private void writeJournal(String action, BinaryTransferableWriter writer) {
+        LOG.debug("Journal " + action + " - " + writer);
         try {
-            journal.writeObject(action);
-            journal.writeObject(data);
+            journal.writeUTF(action);
+            journal.write(writer.getBinaryData());
             journal.flush();
         } catch (IOException e) {
             e.printStackTrace();

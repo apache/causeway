@@ -30,7 +30,7 @@ public class ArbitraryList extends StandardList implements RootView {
         if (canAdd(source).isAllowed()) {
             //	     InternalCollection target = ((InternalCollection) getObject());
             if (source instanceof NakedClass) {
-                source = ((NakedClass) source).acquireInstance();
+                source = (NakedObject) ((NakedClass) source).acquireInstance();
 
                 try {
                     NakedObjectManager.getInstance().makePersistent(source);

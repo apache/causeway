@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.core;
 
-import org.apache.log4j.Logger;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.About;
@@ -13,12 +12,13 @@ import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
+
+import org.apache.log4j.Logger;
 
 
 public abstract class ObjectView extends AbstractView {
@@ -77,7 +77,7 @@ public abstract class ObjectView extends AbstractView {
         NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
         Assert.assertNotNull(source);
 
-        NakedObject target = ((ObjectContent) getContent()).getObject();
+        NakedObject target = getObject();
         Assert.assertNotNull(target);
 
         Action action = target.getNakedClass().getObjectAction(Action.USER, null, new NakedClass[] {source.getNakedClass()});
@@ -125,7 +125,7 @@ public abstract class ObjectView extends AbstractView {
                     newWorkspace = ViewFactory.getViewFactory().createWorkspace(getObject());
                     newWorkspace.setLocation(at);
                     getWorkspace().addView(newWorkspace);
-                    newWorkspace.setSize(new Size(200, 100));
+                 //   newWorkspace.setSize(new Size(200, 100));
                     newWorkspace.markDamaged();
                 }
             });

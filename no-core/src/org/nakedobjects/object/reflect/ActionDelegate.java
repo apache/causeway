@@ -1,5 +1,6 @@
 package org.nakedobjects.object.reflect;
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.About;
@@ -8,9 +9,9 @@ import org.nakedobjects.security.SecurityContext;
 
 public interface ActionDelegate extends MemberIf {
 
-    NakedObject execute(NakedObject object, NakedObject[] parameters);
+    NakedObject execute(NakedObject object, Naked[] parameters);
 
-    About getAbout(SecurityContext context, NakedObject object, NakedObject[] parameters);
+    About getAbout(SecurityContext context, NakedObject object, Naked[] parameters);
 
     int getParameterCount();
 

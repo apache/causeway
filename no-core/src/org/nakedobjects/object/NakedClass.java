@@ -102,7 +102,7 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
     Creates an object of the type represented by this object. This method only creates a java object (using newInstance
     on the Class object returned using the getJavaType method).
     */
-    public NakedObject acquireInstance() {
+    public Naked acquireInstance() {
     	LOG.debug("acquire instance of " + getShortName());
         return reflector().acquireInstance();
     }
@@ -135,7 +135,7 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
      * @return NakedObject
      */
     public NakedObject createFinder() {
-        NakedObject finder = acquireInstance();
+        NakedObject finder = (NakedObject) acquireInstance();
 
         finder.makeFinder();
 
@@ -159,7 +159,7 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
         }
 
         NakedObject object;
-        object = acquireInstance();
+        object = (NakedObject) acquireInstance();
         object.created();
 
         if(createPersistentInstances) {
@@ -204,18 +204,18 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
         }
 
         SecurityContext context = new SecurityContext();
-        NakedObject example = acquireInstance();//pattern();
+        Naked example = acquireInstance();//pattern();
 		for (int i = 0; i < fields.length; i++) {
             //text.append("    " + attributes[i].toString() + "\n");
             if (fields[i] instanceof Value) {
                 Value f = (Value) fields[i];
-                debugAboutDetail(text, f, f.getAbout(context, example));
+                debugAboutDetail(text, f, f.getAbout(context, (NakedObject) example));
             } else if (fields[i] instanceof OneToManyAssociation) {
                 OneToManyAssociation f = (OneToManyAssociation) fields[i];
-                debugAboutDetail(text, f, f.getAbout(context, example));
+                debugAboutDetail(text, f, f.getAbout(context, (NakedObject) example));
             } else if (fields[i] instanceof OneToOneAssociation) {
                 OneToOneAssociation f = (OneToOneAssociation) fields[i];
-                debugAboutDetail(text, f, f.getAbout(context, example, null));
+                debugAboutDetail(text, f, f.getAbout(context, (NakedObject) example, null));
             }
         }
         
@@ -229,7 +229,7 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
             Action action = objectActions[i];
             int paramCount = action.getParameterCount();
             NakedObject[] params = new NakedObject[paramCount];
-            debugAboutDetail(text, action, action.getAbout(context, example, params));
+            debugAboutDetail(text, action, action.getAbout(context, (NakedObject) example, params));
         }
 
         text.append("\n  Class Actions" + "\n");
@@ -242,7 +242,7 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
             Action action = classActions[i];
             int paramCount = action.getParameterCount();
             NakedObject[] params = new NakedObject[paramCount];
-            debugAboutDetail(text, classActions[i], action.getAbout(context, example));
+            debugAboutDetail(text, classActions[i], action.getAbout(context, (NakedObject) example));
         }
 
         // return as string
@@ -490,7 +490,11 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
 	    	LOG.debug("  Superclass " + superclass);
 	    	this.superclass.subclasses.addSubclass(this);
     	}
-    	this.fields = fields;
+    	if(isValue() && fields.length > 0) {
+    	    LOG.warn("Naked values cannot have fields, they will be ignored");
+    	} else {
+    	    this.fields = fields;
+    	}
     	this.objectActions = objectActions;
     	this.classActions = classActions;
     }
@@ -606,7 +610,15 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
         return reflector.isAbstract();
     }
 
-    
+    public boolean isValue() {
+        reflector();
+        return reflector.isValue();
+    }
+
+    public boolean isObject() {
+        reflector();
+        return reflector.isObject();
+    }    
 }
 
 /*

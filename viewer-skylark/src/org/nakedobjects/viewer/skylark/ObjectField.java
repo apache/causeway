@@ -1,39 +1,38 @@
-package org.nakedobjects.viewer.skylark.special;
+package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
-import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.security.Session;
 
+public abstract class ObjectField implements Content, FieldContent {
+    private final Field field;
+	private final NakedObject parent;
 
-public class ParameterContent implements ObjectContent {
-    private NakedClass parameterClass;
-    private NakedObject object;
-    
-    public ParameterContent(NakedClass parameter) {
-        super();
-        this.parameterClass = parameter;
-        object = null;
-    }
-    
-    public NakedClass getNakedClass() {
-        return parameterClass;
-    }
-
+	public ObjectField(NakedObject parent, Field field) {
+	    this.parent = parent;
+	    this.field = field;
+	}
+	
     public String debugDetails() {
-        return null;
+        String type = getClass().getName();
+        type = type.substring(type.lastIndexOf('.') + 1);
+        return type + "\n" +  "  field:" + getField() + "\n";
     }
 
-    public void menuOptions(MenuOptionSet options) {
-    }
+    public void menuOptions(MenuOptionSet options) {}
 
-    public NakedObject getObject() {
-        return object;
-    }
+	public Field getField() {
+		return field;
+	}
+        
+	public NakedObject getParent() {
+	    return parent;
+	}
+	
+	public final String getFieldLabel() {
+	    return field.getLabel(Session.getSession().getSecurityContext(), parent);
+	}
 
-    public void setObject(NakedObject object) {
-        this.object = object;
-    }
 
 }
 
