@@ -147,7 +147,7 @@ public final class SqlObjectStore implements NakedObjectStore {
     public void save(NakedObject object) throws ObjectStoreException {
         DatabaseConnector connection = getDatabaseConnector();
        if (object instanceof InternalCollection) {
-            object = ((InternalCollection) object).forParent();
+            object = ((InternalCollection) object).parent();
             LOG.debug("change to internal collection being persisted through parent");
 
             // TODO a better plan would be ask the mapper to save the collection

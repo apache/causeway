@@ -155,6 +155,8 @@
 		<patternset id="test.sources">
 			<include name="**/*Test.java" />
 			<include name="**/*Tests.java" />
+
+			<exclude name="**/All*Tests.java" />
 		</patternset>
 
 		<junit fork="yes"
@@ -199,7 +201,7 @@
 			<classpath refid="libs.external" />
 
 			<packageset dir="${build.src.dir}" defaultexcludes="yes">
-				<include name="org/nakedobjects/object/**" />
+				<include name="org/nakedobjects/**" />
 			</packageset>
 		</javadoc>
 

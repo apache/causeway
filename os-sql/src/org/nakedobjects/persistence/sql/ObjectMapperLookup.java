@@ -56,7 +56,7 @@ public class ObjectMapperLookup {
 
     public ObjectMapper getMapper(DatabaseConnector connection, NakedObject object) throws SqlObjectStoreException {
         if (object instanceof InternalCollection) {
-            object = ((InternalCollection) object).forParent();
+            object = ((InternalCollection) object).parent();
             return getMapper(connection, object.getSpecification());
         } else {
             return getMapper(connection, object.getSpecification());

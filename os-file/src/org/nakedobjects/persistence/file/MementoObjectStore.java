@@ -7,6 +7,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedObjectStore;
@@ -18,6 +19,7 @@ import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
 import org.nakedobjects.object.defaults.SerialOid;
 import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 
 import org.apache.log4j.Logger;
@@ -176,9 +178,8 @@ public abstract class MementoObjectStore implements NakedObjectStore {
                 instance = loadedObjects.getLoadedObject(oid);
             } else {
                 instance = (NakedObject) createSkeletalObject(oid, instanceData.getClassName());
-                instance.setContext(NakedObjectContext.getDefaultContext());
+//                instance.setContext(NakedObjectContext.getDefaultContext());
                 loadedObjects.loaded(instance);
-	//            instance.setResolved();
             }
             initObject(instance, instanceData);
             if(!instance.isResolved()) {
@@ -249,7 +250,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
 
             if (field.isValue()) {
                 data.restoreValue(field.getName(), (NakedValue) field.get(object));
-            } else if (field.isPart()) {
+            } else if (field instanceof OneToManyAssociationSpecification) {
                 /*
                  * The internal collection is already a part of the object, and therefore cannot be
                  * recreated, but its oid must be set
@@ -260,7 +261,11 @@ public abstract class MementoObjectStore implements NakedObjectStore {
                     InternalCollection collection = (InternalCollection) field.get(object);
                     SerialOid oid = refs.getOid();
                     LOG.debug("setting collection " + field + "; assigning " + oid + " to " + collection);
-                    if(oid != null) {
+                    if(oid == null) {
+                        throw new NakedObjectRuntimeException("Oid does not exist for " + collection);
+                    }
+                    
+                    if(collection.getOid() == null) {
                         collection.setOid(oid);
                     }
                     
@@ -346,7 +351,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
         LOG.debug("Save object " + object);
 
         if(object instanceof InternalCollection) {
-           NakedObject parent = ((InternalCollection) object).forParent();
+           NakedObject parent = ((InternalCollection) object).parent();
 	        Data data = createObjectData(parent, true);	
 	        dataManager.save(data);
         } else {

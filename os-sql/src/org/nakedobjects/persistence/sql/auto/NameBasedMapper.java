@@ -144,7 +144,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
     }
 
     private void loadInternalCollection(DatabaseConnector connector, String id, FieldSpecification field, InternalCollection collection) throws ResolveException, SqlObjectStoreException {
-        NakedObjectSpecification cls = collection.forParent().getSpecification();
+        NakedObjectSpecification cls = collection.parent().getSpecification();
         NakedObjectSpecification elementCls = NakedObjectSpecificationLoader.getInstance().loadSpecification(collection.getElementSpecification().getFullName());
 
         String table = table(cls) + "_" + field.getName().toLowerCase();
@@ -261,11 +261,11 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
     }
 
     private void saveInternalCollection(DatabaseConnector connector, FieldSpecification field, InternalCollection collection) throws SqlObjectStoreException {
-        NakedObjectSpecification cls = collection.forParent().getSpecification();
+        NakedObjectSpecification cls = collection.parent().getSpecification();
 
         String table = table(cls) + "_" + field.getName().toLowerCase();
 
-        long parentId = ((SerialOid) collection.forParent().getOid()).getSerialNo();
+        long parentId = ((SerialOid) collection.parent().getOid()).getSerialNo();
         int size = collection.size();
         for (int i = 0; i < size; i++) {
             NakedObject element = collection.elementAt(i);
