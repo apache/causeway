@@ -37,7 +37,7 @@ public class TestClassImpl implements TestClass {
     public TestObject findInstance(String title) {
         NakedObjectContext context = NakedObjectContext.getDefaultContext();
         NakedObjectSpecification type = ((NakedClass) getForObject()).forNakedClass();
-        TypedNakedCollection instances = context.getObjectManager().findInstances(type, title);
+        TypedNakedCollection instances = context.getObjectManager().findInstances(type, title, true);
         if (instances.size() == 0) {
             throw new IllegalActionError("No instance found with title " + title);
         } else {
@@ -62,7 +62,7 @@ public class TestClassImpl implements TestClass {
      */
     public TestObject instances() {
         NakedObjectContext context = NakedObjectContext.getDefaultContext();
-        NakedCollection instances = context.getObjectManager().allInstances(((NakedClass) getForObject()).forNakedClass());
+        NakedCollection instances = context.getObjectManager().allInstances(((NakedClass) getForObject()).forNakedClass(), false);
         if (instances.size() == 0) {
             throw new IllegalActionError("Find must find at least one object");
         } else {

@@ -1,5 +1,6 @@
 package org.nakedobjects.xat.system;
 
+import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -124,6 +125,11 @@ public class ObjectStore implements NakedObjectStore {
 	   	}
 	   	return toInstancesArray(instances);
 	}
+    
+    public NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) throws ObjectStoreException,
+            UnsupportedFindException {
+        throw new UnsupportedFindException();
+    }
     
 	public NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) {
         if (pattern == null) { throw new NullPointerException(); }
