@@ -94,7 +94,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
                 }
                 
             } else {
-                setMethod.invoke(inObject.getObject(), new Object[] { adaptValue((String) setValue) });
+                setMethod.invoke(inObject.getObject(), new Object[] { adaptValue(setValue == null ? null : setValue.toString()) });
             }
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + setMethod, e);

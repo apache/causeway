@@ -1,6 +1,7 @@
 package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.container.configuration.ConfigurationFactory;
+import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.control.Hint;
@@ -19,6 +20,7 @@ public class JavaReflectorTest extends TestCase {
 
     private MockJavaReflector reflector;
     private MockObjectFactory objectFactory;
+    private MockNakedObjectSpecificationLoader loader;
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(new TestSuite(JavaReflectorTest.class));
@@ -29,7 +31,8 @@ public class JavaReflectorTest extends TestCase {
         
        	ConfigurationFactory.setConfiguration(new TestConfiguration());
 
-    	new MockNakedObjectSpecificationLoader();     	
+    	loader = new MockNakedObjectSpecificationLoader();     	
+    	loader.addSpec(new DummyNakedObjectSpecification());
     	
     	objectFactory = new MockObjectFactory();
         reflector = new MockJavaReflector(JavaObjectForReflector.class.getName(), objectFactory);
@@ -96,6 +99,9 @@ public class JavaReflectorTest extends TestCase {
     }
 
     public void testFields() throws Exception {
+        loader.addSpec(new DummyNakedObjectSpecification()); // for Date
+        loader.addSpec(new DummyNakedObjectSpecification()); // for float
+        
         FieldPeer[] fields = reflector.fields();
         
         assertEquals(1, fields.length);

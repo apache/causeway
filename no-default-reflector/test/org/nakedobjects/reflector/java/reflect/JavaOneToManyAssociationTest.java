@@ -75,6 +75,9 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         NakedObjectContext context = new MockNakedObjectContext(MockObjectManager.setup());
         nakedObject.setContext(context);
 
+        spec = new DummyNakedObjectSpecification();
+        loader.addSpec(spec);
+        
         assertNull(objectWithVector.added);
         collectionField.addAssociation(nakedObject, nakedObjectAssoicate);
         assertEquals(associate, objectWithVector.added);
@@ -87,6 +90,9 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         JavaReferencedObject associate = new JavaReferencedObject();
         NakedObject nakedObjectAssoicate =PojoAdapter.createAdapter(associate);
         
+        spec = new DummyNakedObjectSpecification();
+        loader.addSpec(spec);
+        
         assertNull(objectWithVector.removed);
         collectionField.removeAssociation(nakedObject, nakedObjectAssoicate);
         assertEquals(associate, objectWithVector.removed);
@@ -94,6 +100,9 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
     
     public void testGet() {
         DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
+        loader.addSpec(spec);
+        
+        spec = new DummyNakedObjectSpecification();
         loader.addSpec(spec);
         
     	//objectWithVector.collection = new DummyInternalCollection();
