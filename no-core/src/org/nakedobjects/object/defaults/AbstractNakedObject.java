@@ -282,14 +282,6 @@ public abstract class AbstractNakedObject implements NakedObject {
         return oid;
     }
 
-    public int hashCode() {
-        if (getOid() == null) {
-            return super.hashCode();
-        } else {
-            return (37 * 17) + getOid().hashCode();
-        }
-    }
-
     /**
      * Returns false indicating that the object contains data.
      */
