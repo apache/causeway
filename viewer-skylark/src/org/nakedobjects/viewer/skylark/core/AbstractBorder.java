@@ -13,11 +13,8 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewDrag;
 
-import org.apache.log4j.Logger;
-
 
 public class AbstractBorder extends AbstractViewDecorator {
-    private static final Logger LOG = Logger.getLogger(AbstractBorder.class);
     protected int bottom;
     protected int left;
     private boolean onBorder;
@@ -156,7 +153,7 @@ public class AbstractBorder extends AbstractViewDecorator {
         if (onBorder != on) {
             markDamaged();
             onBorder = on;
-            LOG.debug("On border " + onBorder + " " + this);
+    //        LOG.debug("On border " + onBorder + " " + this);
         }
 
         at.move(-getLeft(), -getTop());

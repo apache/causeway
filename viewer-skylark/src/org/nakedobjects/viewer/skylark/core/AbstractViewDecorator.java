@@ -142,7 +142,7 @@ public class AbstractViewDecorator implements View {
 		return wrappedView.getBaseline();
 	}
 
-	public final Bounds getBounds() {
+	public Bounds getBounds() {
 		return new Bounds(getLocation(), getSize());
 	}
 
@@ -278,7 +278,7 @@ public class AbstractViewDecorator implements View {
 		wrappedView.secondClick(click);
 	}
 
-	public final void setBounds(Bounds bounds) {
+	public void setBounds(Bounds bounds) {
 		wrappedView.setBounds(bounds);
 	}
 

@@ -380,14 +380,11 @@ public abstract class AbstractView implements View {
      * never extends outside the bounds of the containing open view
      */
     public void limitBounds(View view) {
-        Bounds b = new Bounds(getSize());
-        b.contract(getPadding());
-
-        Bounds d = view.getBounds();
-
-        if (b.limitBounds(d)) {
-            view.setLocation(d.getLocation());
-            view.setSize(d.getSize());
+        Bounds contentBounds = view.getBounds();
+        Bounds containerBounds = new Bounds(getSize());
+        containerBounds.contract(getPadding());
+        if (containerBounds.limitBounds(contentBounds) && ! view.getBounds().equals(contentBounds)) {
+            view.setBounds(contentBounds);
             view.invalidateLayout();
         }
     }

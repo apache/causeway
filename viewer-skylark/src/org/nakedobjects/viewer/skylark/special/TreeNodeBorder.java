@@ -119,7 +119,7 @@ public class TreeNodeBorder extends AbstractBorder {
 		text.draw(canvas, x, baseline);
 		
         if(AbstractView.DEBUG) {
-            canvas.drawRectangle(getSize(), Color.DEBUG1);
+            canvas.drawRectangle(getSize(), Color.DEBUG_BASELINE);
         }
         
 		// components

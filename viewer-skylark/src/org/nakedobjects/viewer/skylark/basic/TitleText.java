@@ -75,8 +75,9 @@ public abstract class TitleText {
 
         if (AbstractView.DEBUG) {
         	int x2 = style.stringWidth(text) - 1;
-            canvas.drawRectangle(xt, yt - style.getAscent(), x2, style.getHeight() - 1, Color.DEBUG3);
-            canvas.drawLine(xt, yt, style.stringWidth(text) - 1, yt, Color.DEBUG3);
+            canvas.drawRectangle(xt, yt - style.getAscent(), x2, style.getHeight() - 1, Color.DEBUG_DRAW_BOUNDS);
+            canvas.drawLine(xt, yt - style.getAscent() - style.getHeight() / 2, xt +x2,  yt - style.getAscent() - style.getHeight() / 2, Color.DEBUG_DRAW_BOUNDS);
+           canvas.drawLine(xt, baseline, xt + x2, baseline, Color.DEBUG_BASELINE);
         }
     }
 

@@ -88,7 +88,16 @@ public class ScrollBorder extends AbstractBorder {
     public Size getSize() {
         return new Size(size);
     }
-
+    
+    public void setBounds(Bounds bounds) {
+        setLocation(bounds.getLocation());
+        setSize(getSize());
+    }
+    
+    public Bounds getBounds() {
+        return new Bounds(getLocation(), getSize());
+    }
+    
     public void setSize(Size size) {
         // TODO need to restore the offset after size change
   //      float verticalRatio = ((float) verticalScrollPosition) / contentArea().getHeight();

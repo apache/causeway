@@ -22,7 +22,7 @@ public class DebugBorder extends AbstractBorder {
 	public void draw(Canvas canvas) {
 		String debug = getView() + " " + getState();
 		int baseline = wrappedView.getSize().getHeight() + Style.DEBUG.getAscent();
-		Color color = Color.DEBUG1;
+		Color color = Color.DEBUG_BASELINE;
 		canvas.drawText(debug, 0, baseline, color, Style.DEBUG);
 		
 		super.draw(canvas);

@@ -27,7 +27,7 @@ public class RemoveOneToManyAssociationOption extends MenuOption {
 
     public Permission disabled(View view) {
         InternalCollection collection = (InternalCollection) ((ObjectContent) view.getParent().getContent()).getObject();
-    	NakedObject parentObject = collection.forParent();
+    	NakedObject parentObject = collection.parent();
 
 		// associated object
     	OneToManyElement content = (OneToManyElement) view.getContent();

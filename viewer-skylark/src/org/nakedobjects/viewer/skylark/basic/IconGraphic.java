@@ -42,8 +42,9 @@ public class IconGraphic {
 
         if (AbstractView.DEBUG) {
             Size size = getSize();
-            canvas.drawRectangle(x, baseline - getBaseline(), size.getWidth() - 1, size.getHeight() - 1, Color.DEBUG3);
-            canvas.drawLine(0, getBaseline(), size.getWidth(), getBaseline(), Color.DEBUG3);
+            canvas.drawRectangle(x, baseline - getBaseline(), size.getWidth() - 1, size.getHeight() - 1, Color.DEBUG_DRAW_BOUNDS);
+            canvas.drawLine(x, baseline - getBaseline() - size.getHeight() / 2, x + size.getWidth(), baseline - getBaseline() - size.getHeight() / 2, Color.DEBUG_DRAW_BOUNDS);
+            canvas.drawLine(x, baseline, x + size.getWidth(), baseline, Color.DEBUG_BASELINE);
         }
     }
 

@@ -14,7 +14,9 @@ import org.nakedobjects.object.reflect.AssociationSpecification;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.Assert;
+import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
+import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Drag;
@@ -45,6 +47,30 @@ public abstract class ObjectView extends AbstractView {
         getViewManager().addToNotificationList(this);
     }
 
+    private Permission canDrop(NakedObject source, NakedObject target) {
+        ActionSpecification action = dropAction(source, target);
+        if (action != null) {
+            About about = action.getAbout(ClientSession.getSession(), target, source);
+            return about.canUse();
+
+        } else {
+            if (target.getOid() != null && source.getOid() == null) {
+                return new Veto("Can't set field in persistent object with reference to non-persistent object");
+
+            } else {
+                FieldSpecification[] fields = target.getSpecification().getVisibleFields(target, ClientSession.getSession());
+                for (int i = 0; i < fields.length; i++) {
+                    if (source.getSpecification().isOfType(fields[i].getType())
+                            && ((AssociationSpecification) fields[i]).get(target) == null) {
+                        return new Allow("Set field " + fields[i].getLabel());
+                    }
+                }
+                return new Veto("No empty field accepting object of type " + source.getSpecification().getSingularName());
+
+            }
+        }
+    }
+
     public void dispose() {
         getViewManager().removeFromNotificationList(this);
         super.dispose();
@@ -62,29 +88,6 @@ public abstract class ObjectView extends AbstractView {
             getState().setCantDrop();
         }
         markDamaged();
-    }
-
-    private Permission canDrop(NakedObject source, NakedObject target) {
-         ActionSpecification action = dropAction(source, target);
-        if (action != null) {
-            About about = action.getAbout(ClientSession.getSession(), target, source);
-            return about.canUse();
-
-        } else {
-            if(target.getOid() != null && source.getOid() == null) {
-	            return new Veto("Can't set field in persistent object with reference to non-persistent object");
-	            
-            } else {
-	            FieldSpecification[] fields = target.getSpecification().getVisibleFields(target, ClientSession.getSession());       
-	            for (int i = 0; i < fields.length; i++) {
-	                if(source.getSpecification().isOfType(fields[i].getType()) && ((AssociationSpecification) fields[i]).get(target) == null) {
-	                    return new Allow("Set field " + fields[i].getLabel());
-	                }
-	            }
-	            return new Veto("No empty field accepting object of type " + source.getSpecification().getSingularName());
-	
-            }
-        }
     }
 
     public void dragOut(ContentDrag drag) {
@@ -108,6 +111,17 @@ public abstract class ObjectView extends AbstractView {
         }
     }
 
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
+
+        if (AbstractView.DEBUG) {
+            Size size = getSize();
+            canvas.drawRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, Color.DEBUG_VIEW_BOUNDS);
+            canvas.drawLine(0, size.getHeight() / 2, size.getWidth() - 1, size.getHeight() / 2, Color.DEBUG_VIEW_BOUNDS);
+            canvas.drawLine(0, getBaseline(), size.getWidth() - 1, getBaseline(), Color.DEBUG_BASELINE);
+        }
+    }
+
     /**
      * Called when a dragged object is dropped onto this view. The default
      * behaviour implemented here calls the action method on the target, passing
@@ -121,32 +135,33 @@ public abstract class ObjectView extends AbstractView {
 
         NakedObject target = getObject();
         Assert.assertNotNull(target);
-        
-        if(canDrop(source, target).isAllowed()) {
-        ActionSpecification action = dropAction(source, target);
 
-        if ((action != null) && action.getAbout(ClientSession.getSession(), target, source).canUse().isAllowed()) {
-            NakedObject result = action.execute(target, source);
+        if (canDrop(source, target).isAllowed()) {
+            ActionSpecification action = dropAction(source, target);
 
-            if (result != null) {
-                View view = ViewFactory.getViewFactory().createOpenRootView(result);
-                Location location = new Location();
-                location.move(10, 10);
-                view.setLocation(location);
-                getWorkspace().addView(view);
-            }
+            if ((action != null) && action.getAbout(ClientSession.getSession(), target, source).canUse().isAllowed()) {
+                NakedObject result = action.execute(target, source);
 
-            markDamaged();
-        } else {
-            FieldSpecification[] fields = target.getSpecification().getVisibleFields(target, ClientSession.getSession());
-            for (int i = 0; i < fields.length; i++) {
-                if(source.getSpecification().isOfType(fields[i].getType()) && ((AssociationSpecification) fields[i]).get(target) == null) {
-                    ((AssociationSpecification) fields[i]).setAssociation(target, source);
-                    invalidateContent();
-                    break;
+                if (result != null) {
+                    View view = ViewFactory.getViewFactory().createOpenRootView(result);
+                    Location location = new Location();
+                    location.move(10, 10);
+                    view.setLocation(location);
+                    getWorkspace().addView(view);
+                }
+
+                markDamaged();
+            } else {
+                FieldSpecification[] fields = target.getSpecification().getVisibleFields(target, ClientSession.getSession());
+                for (int i = 0; i < fields.length; i++) {
+                    if (source.getSpecification().isOfType(fields[i].getType())
+                            && ((AssociationSpecification) fields[i]).get(target) == null) {
+                        ((AssociationSpecification) fields[i]).setAssociation(target, source);
+                        invalidateContent();
+                        break;
+                    }
                 }
             }
-        }
         }
     }
 
@@ -191,12 +206,12 @@ public abstract class ObjectView extends AbstractView {
             click.subtract(subview.getLocation());
             subview.secondClick(click);
         } else {
-                Location location = getAbsoluteLocation();
-                location.translate(click.getLocation());
-                getWorkspace().addOpenViewFor(getObject(), location);
+            Location location = getAbsoluteLocation();
+            location.translate(click.getLocation());
+            getWorkspace().addOpenViewFor(getObject(), location);
         }
     }
-    
+
     public void viewMenuOptions(MenuOptionSet options) {
         if (getObject() instanceof UserContext) {
             options.add(MenuOptionSet.VIEW, new MenuOption("New Workspace") {

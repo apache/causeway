@@ -10,7 +10,7 @@ public class MenuOptionSet {
     public static final int EXPLORATION = 4;
     public static final int DEBUG = 5;
     private static final int LAST = DEBUG;
-    private Color backgroundColor = Color.DEBUG1;
+    private Color backgroundColor = Color.DEBUG_BASELINE;
     private Vector[] set = new Vector[LAST + 1];
     private boolean forView;
 

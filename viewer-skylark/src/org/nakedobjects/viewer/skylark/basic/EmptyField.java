@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.object.Aggregated;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
@@ -80,9 +81,7 @@ public class EmptyField extends AbstractView {
         if (dragSource instanceof NakedClass) {
             return new Allow();
         } else {
-            NakedObjectSpecification targetType = forSpecification(); //((OneToOneField)
-                                                                                                                               // getContent()).getField().getType();
-
+            NakedObjectSpecification targetType = forSpecification();
             NakedObjectSpecification sourceType = dragSource.getSpecification();
             if (!sourceType.isOfType(targetType)) {
                 return new Veto("Can only drop objects of type " + targetType.getSingularName());
@@ -90,6 +89,13 @@ public class EmptyField extends AbstractView {
 
             if (parent.getOid() != null && dragSource.getOid() == null) {
                 return new Veto("Can't drop a non-persistent into this persistent object");
+            }
+
+            if(dragSource instanceof Aggregated) {
+                Aggregated aggregated = ((Aggregated) dragSource);
+                if(aggregated.isAggregated() && aggregated.parent() != parent) {
+                    return new Veto("Object is already associated with another object: " + aggregated.parent());
+                }
             }
 
             Permission perm = getEmptyField().getAbout(ClientSession.getSession(), parent, dragSource).canUse();
@@ -117,7 +123,6 @@ public class EmptyField extends AbstractView {
 
     public void dragOut(ContentDrag drag) {
         getState().clearObjectIdentified();
-
         markDamaged();
     }
 
@@ -152,8 +157,9 @@ public class EmptyField extends AbstractView {
 
         if (AbstractView.DEBUG) {
             Size size = getSize();
-            canvas.drawRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, Color.DEBUG3);
-            canvas.drawLine(0, size.getHeight() / 2, size.getWidth() - 1, size.getHeight() / 2, Color.DEBUG3);
+            canvas.drawRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, Color.DEBUG_VIEW_BOUNDS);
+            canvas.drawLine(0, size.getHeight() / 2, size.getWidth() - 1, size.getHeight() / 2, Color.DEBUG_VIEW_BOUNDS);
+            canvas.drawLine(0, getBaseline(), size.getWidth() - 1, getBaseline(), Color.DEBUG_BASELINE);
         }
     }
 
@@ -190,12 +196,14 @@ public class EmptyField extends AbstractView {
      * @see View#getBaseline()
      */
     public int getBaseline() {
+        return style.getAscent() + VPADDING;
+/*
         int containerHeight = getSize().getHeight();
         int iconCentre = containerHeight / 2;
         int yt = iconCentre + (style.getAscent() / 2);
 
         return yt;
-    }
+*/    }
 
     private OneToOneAssociationSpecification getEmptyField() {
         return (OneToOneAssociationSpecification) ((OneToOneField) getContent()).getField();

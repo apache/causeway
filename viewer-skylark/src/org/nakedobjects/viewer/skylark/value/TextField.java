@@ -562,16 +562,7 @@ public class TextField extends AbstractField {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
-        if (DEBUG) {
-            Bounds r = getBounds();
-            canvas.drawRectangle(r.getSize(), Color.DEBUG2);
-            canvas.drawRectangle(HPADDING, VPADDING, r.getWidth() - HPADDING * 2 - 1, r.getHeight() - VPADDING * 2 - 1,
-                    Color.DEBUG2);
-            canvas.drawLine(0, r.getHeight() / 2, r.getWidth() - 1, r.getHeight() / 2, Color.DEBUG2);
-        }
-
         int width = getMaxWidth();
-
         drawHighlight(canvas, width);
         drawLines(canvas, width);
         drawText(canvas, width);

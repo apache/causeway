@@ -36,6 +36,7 @@ public class Style {
     public static final Color WHITE = new Color("white", "#ffffff");
 
     public static final Color WORKSPACE_MENU = new Color("menu.workspace", "#CCCCCC");
+    public static final Color OUT_OF_SYNCH = new Color("out-of-sync", "#662200");
 
     public static int defaultBaseline() {
         int iconSize = Style.NORMAL.getAscent() * 120 / 100;

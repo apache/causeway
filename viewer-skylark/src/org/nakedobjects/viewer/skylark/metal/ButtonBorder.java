@@ -49,7 +49,7 @@ public class ButtonBorder extends AbstractBorder {
 	        String text = actions[i].getName(getView());
 	        Color color = actions[i].disabled(getView()).isVetoed() ? Style.DISABLED_MENU : Style.BLACK;
 	        if(activeButton == i) {
-	            color = Color.DEBUG1;
+	            color = Color.DEBUG_BASELINE;
 	        }
 	        Color border = actions[i].disabled(getView()).isVetoed() ? Style.DISABLED_MENU : Style.SECONDARY2;
 	        int buttonWidth = TEXT_PADDING + Style.NORMAL.stringWidth(text) + TEXT_PADDING;

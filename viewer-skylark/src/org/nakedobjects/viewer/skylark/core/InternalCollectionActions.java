@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.core;
 
+import org.nakedobjects.object.Aggregated;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.About;
@@ -37,6 +38,12 @@ public class InternalCollectionActions extends CollectionActions {
         }
         if(parent.getOid() != null && object.getOid() == null) {
             return new Veto("Can't set field in persistent object with reference to non-persistent object");
+        }
+        if(object instanceof Aggregated) {
+            Aggregated aggregated = ((Aggregated) object);
+            if(aggregated.isAggregated() && aggregated.parent() != parent) {
+                return new Veto("Object is already associated with another object: " + aggregated.parent());
+            }
         }
         About about = getAssociation().getAbout(ClientSession.getSession(), parent, object, true);
         return about.canUse();

@@ -23,18 +23,50 @@ import org.nakedobjects.viewer.skylark.special.ObjectParameter;
 
 
 public class ActionParameterField extends AbstractView {
-	private static Text style = Style.NORMAL;
-    
-	public ActionParameterField(Content content, ViewSpecification specification, ViewAxis axis) {
-		super(content, specification, axis);
-		if(!(content instanceof ObjectParameter)) {
-			throw new IllegalArgumentException("Content for EmptyField must be ParameterContent: " + content);
-		}
-	}
-    
+
+    public static class Specification implements ViewSpecification {
+        public boolean canDisplay(Naked object) {
+            return object == null;
+        }
+
+        public View createView(Content content, ViewAxis axis) {
+            ActionParameterField emptyField = new ActionParameterField(content, this, axis);
+            if (((ObjectParameter) content).isLookup()) {
+                return new LookupBorder(emptyField);
+            } else {
+                return emptyField;
+            }
+
+        }
+
+        public String getName() {
+            return "empty field";
+        }
+
+        public boolean isOpen() {
+            return false;
+        }
+
+        public boolean isReplaceable() {
+            return true;
+        }
+
+        public boolean isSubView() {
+            return true;
+        }
+    }
+    private static Text style = Style.NORMAL;
+
+    public ActionParameterField(Content content, ViewSpecification specification, ViewAxis axis) {
+        super(content, specification, axis);
+        if (!(content instanceof ObjectParameter)) {
+            throw new IllegalArgumentException("Content for EmptyField must be ParameterContent: " + content);
+        }
+    }
+
     private boolean canDrop(ContentDrag drag) {
         NakedObject dragSource = ((ObjectContent) drag.getSourceContent()).getObject();
-        
+
         if (dragSource instanceof NakedClass) {
             return false;
         } else {
@@ -43,20 +75,7 @@ public class ActionParameterField extends AbstractView {
             return sourceType.isOfType(targetType);
         }
     }
-    
 
-    
-    protected String iconName() {
-       String name = ((ObjectParameter) getContent()).getNakedClass().getFullName();
-        
-        String clsName = name;
-        return clsName.substring(clsName.lastIndexOf('.') + 1);
-	}
-
-    public String toString() {
-		return "ActionParameterField" + getId();
-	}
-    
     public void dragIn(ContentDrag drag) {
         if (canDrop(drag)) {
             getState().setCanDrop();
@@ -64,6 +83,11 @@ public class ActionParameterField extends AbstractView {
             getState().setCantDrop();
         }
 
+        markDamaged();
+    }
+
+    public void dragOut(ContentDrag drag) {
+        getState().clearObjectIdentified();
         markDamaged();
     }
 
@@ -98,10 +122,8 @@ public class ActionParameterField extends AbstractView {
 
         if (AbstractView.DEBUG) {
             Size size = getSize();
-            canvas.drawRectangle(0, 0, size.getWidth() - 1,
-                size.getHeight() - 1, Color.DEBUG3);
-            canvas.drawLine(0, size.getHeight() / 2, size.getWidth() - 1,
-                size.getHeight() / 2, Color.DEBUG3);
+            canvas.drawRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, Color.DEBUG_VIEW_BOUNDS);
+            canvas.drawLine(0, size.getHeight() / 2, size.getWidth() - 1, size.getHeight() / 2, Color.DEBUG_VIEW_BOUNDS);
         }
     }
 
@@ -109,8 +131,8 @@ public class ActionParameterField extends AbstractView {
         if (canDrop(drag)) {
             ObjectParameter parameterContent = ((ObjectParameter) getContent());
             parameterContent.setObject(((ObjectContent) drag.getSourceContent()).getObject());
-            
-            View replacement;           
+
+            View replacement;
             replacement = new SubviewIconSpecification().createView(getContent(), getViewAxis());
             String label = parameterContent.getNakedClass().getShortName();
             getParent().replaceView(getView(), new LabelBorder(label, replacement));
@@ -130,8 +152,15 @@ public class ActionParameterField extends AbstractView {
     }
 
     public Size getRequiredSize() {
-    	Size size = new Size(140, 23);
+        Size size = new Size(140, 23);
         return size;
+    }
+
+    protected String iconName() {
+        String name = ((ObjectParameter) getContent()).getNakedClass().getFullName();
+
+        String clsName = name;
+        return clsName.substring(clsName.lastIndexOf('.') + 1);
     }
 
     public boolean indicatesForView(Location mouseLocation) {
@@ -140,8 +169,7 @@ public class ActionParameterField extends AbstractView {
 
     protected void init(NakedObject object) {
         if (object != null) {
-            throw new IllegalArgumentException(
-                "An EmptyField view must be created with a null object");
+            throw new IllegalArgumentException("An EmptyField view must be created with a null object");
         }
     }
 
@@ -158,79 +186,50 @@ public class ActionParameterField extends AbstractView {
     public boolean isReplaceable() {
         return false;
     }
-    
-    protected boolean shaded() {
-		return true;
-	}
+
+    public void menuOptions(MenuOptionSet options) {
+        NakedObjectSpecification nc = ((ObjectParameter) getContent()).getNakedClass();
+        ClassOption.menuOptions(nc, options);
+    }
 
     private String name() {
         String name = ((ObjectParameter) getContent()).getNakedClass().getShortName();
         return name;
     }
 
-    protected String  title() {
-		return  name();
-	}
-
-    public void menuOptions(MenuOptionSet options) {
-        NakedObjectSpecification nc = ((ObjectParameter) getContent()).getNakedClass();
-        ClassOption.menuOptions(nc, options);
+    protected boolean shaded() {
+        return true;
     }
-    
-    public static class Specification implements ViewSpecification {
-    	public boolean canDisplay(Naked object) {
-    		return object == null;
-    	}
 
-    	public View createView(Content content, ViewAxis axis) {
-    		ActionParameterField emptyField = new ActionParameterField(content, this, axis);
-    	    if(((ObjectParameter) content).isLookup()) {
-    	        return new LookupBorder(emptyField);
-    	    } else {
-    	        return emptyField;
-    	    }
+    protected String title() {
+        return name();
+    }
 
-    	}
-
-    	public boolean isOpen() {
-    		return false;
-    	}
-
-    	public boolean isReplaceable() {
-    		return true;
-    	}
-
-    	public String getName() {
-    		return "empty field";
-    	}
-
-    	public boolean isSubView() {
-    		return true;
-    	}
+    public String toString() {
+        return "ActionParameterField" + getId();
     }
 }
 
-
 /*
-    Naked Objects - a framework that exposes behaviourally complete
-    business objects directly to the user.
-    Copyright (C) 2000 - 2003  Naked Objects Group Ltd
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-    The authors can be contacted via www.nakedobjects.org (the
-    registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-    Road, Woking GU21 1NR, UK).
-*/
+ * Naked Objects - a framework that exposes behaviourally complete business
+ * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * Ltd
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * The authors can be contacted via www.nakedobjects.org (the registered address
+ * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
+ * 1NR, UK).
+ */

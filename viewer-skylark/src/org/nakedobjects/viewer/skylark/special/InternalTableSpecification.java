@@ -1,9 +1,18 @@
 package org.nakedobjects.viewer.skylark.special;
 
+import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.ViewAxis;
+
 
 public class InternalTableSpecification extends TableSpecification {
     public String getName() {
         return "Internal Table";
+    }
+    
+    public View createView(Content content, ViewAxis axis) {
+        View table = super.createView(content, axis);
+        return new ScrollBorder(table);
     }
 }
 

@@ -6,13 +6,6 @@ import org.nakedobjects.object.Naked;
  * Describes a view, and how it is built.
  */
 public interface ViewSpecification {
-    
-    
-    /* 
-     * Create a new view to this specification for the specified context.
-     * /
-    View createView(Content content);
-    */
     /**
      * Create a new veiw to this specification for the specified context, and using 
      * the specified axis if specified (which can be null).
