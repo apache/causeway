@@ -204,6 +204,10 @@ public class MockView implements View
 
     public void setRequiredSize(Size size) {}
 
+    public View subviewFor(Location location) {
+        return null;
+    }
+    
     public View identify(Location location) {
         return null;
     }

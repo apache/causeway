@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.ApplicationContext;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Size;

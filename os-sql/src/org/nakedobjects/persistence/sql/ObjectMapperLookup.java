@@ -25,7 +25,7 @@ import org.apache.log4j.Logger;
 
 public class ObjectMapperLookup {
     private static final Logger LOG = Logger.getLogger(ObjectMapperLookup.class);
-    private static final NakedObjectSpecification nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(NakedClass.class.getName());
+    private static final NakedObjectSpecification nakedClass = NakedObjects.getSpecificationLoader().loadSpecification(NakedClass.class.getName());
     private final Hashtable mappers = new Hashtable();
     private final LoadedObjects loadedObjects;
     private ObjectMapperFactory mapperFactory;
@@ -80,7 +80,7 @@ public class ObjectMapperLookup {
     }
 
     private void add(String className, ObjectMapper mapper) throws SqlObjectStoreException {
-        NakedObjectSpecification cls = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
+        NakedObjectSpecification cls = NakedObjects.getSpecificationLoader().loadSpecification(className);
         add(cls, mapper);
     }
 

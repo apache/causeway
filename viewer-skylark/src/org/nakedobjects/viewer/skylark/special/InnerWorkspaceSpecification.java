@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ApplicationContext;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;

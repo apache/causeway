@@ -51,7 +51,7 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
 
         Results rs = connector.select(statement);
         if(rs.next()) {
-            Oid oid = recreateOid(rs, NakedObjectSpecificationLoader.getInstance().loadSpecification(NakedObjectSpecification.class), idColumn);
+            Oid oid = recreateOid(rs, NakedObjects.getSpecificationLoader().loadSpecification(NakedObjectSpecification.class), idColumn);
             LOG.debug("  instance  " + oid);
             if(loadedObjects.isLoaded(oid)) {
                 LOG.debug("  class already loaded   " + oid);
@@ -80,7 +80,7 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
     protected void createTables(DatabaseConnector connector) throws SqlObjectStoreException {
     	ValueMapperLookup mappers = ValueMapperLookup.getInstance();
         connector.update("create table " + table + " (" + idColumn + " " + "INT NOT NULL UNIQUE, " + nameColumn 
-        	+ " "	+ mappers.mapperFor(NakedObjectSpecificationLoader.getInstance().loadSpecification(TextString.class)).columnType() + " UNIQUE" 
+        	+ " "	+ mappers.mapperFor(NakedObjects.getSpecificationLoader().loadSpecification(TextString.class)).columnType() + " UNIQUE" 
 			+ ")" );
     }
 

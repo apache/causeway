@@ -5,10 +5,10 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.viewer.skylark.Location;
 
+import junit.framework.TestCase;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-
-import junit.framework.TestCase;
 
 
 public class TextFieldContentTest extends TestCase {

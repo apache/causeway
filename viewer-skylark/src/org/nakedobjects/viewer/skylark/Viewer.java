@@ -8,7 +8,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.UpdateNotifier;
 import org.nakedobjects.utility.DebugFrame;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;
-import org.nakedobjects.viewer.skylark.basic.ClassIconSpecification;
 import org.nakedobjects.viewer.skylark.basic.EmptyField;
 import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
 import org.nakedobjects.viewer.skylark.basic.SubviewIconSpecification;

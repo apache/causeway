@@ -218,6 +218,10 @@ public class MockView implements View {
 
     public void setView(View view) {}
 
+    public View subviewFor(Location location) {
+        return null;
+    }
+    
     public void thirdClick(Click click) {}
 
     public void update(Naked object) {}

@@ -198,12 +198,7 @@ public class EmptyField extends AbstractView {
 
         if (canDrop(object).isAllowed()) {
             ((ObjectContent) getContent()).setObject(object);
-
             getParent().invalidateContent();
-            /*
-             * boolean isNotPersistent = parent.getOid() == null; if
-             * (isNotPersistent) { getParent().invalidateContent(); }
-             */
         }
     }
 

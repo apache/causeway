@@ -62,7 +62,7 @@ public class RoleMapper extends NameBasedMapper {
 		    if (loadedObjects.isLoaded(oid)) {
 		        instance = (Role) loadedObjects.getLoadedObject(oid);
 		    } else {
-		        instance = (Role) NakedObjectSpecificationLoader.getInstance().loadSpecification(Role.class.getName()).acquireInstance();
+		        instance = (Role) NakedObjects.getSpecificationLoader().loadSpecification(Role.class.getName()).acquireInstance();
 		        instance.setOid(oid);
 		        instance.getName().setValue(rs.getString("name"));
 		        instance.getDescription().setValue(

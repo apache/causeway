@@ -44,7 +44,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 	protected ValueMapperLookup typeMapper;
 
 	public AbstractAutoMapper(String nakedClassName, String parameterBase) throws SqlObjectStoreException {
-		nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(nakedClassName);
+		nakedClass = NakedObjects.getSpecificationLoader().loadSpecification(nakedClassName);
 		typeMapper = ValueMapperLookup.getInstance();
 
 		ConfigurationFactory configParameters = ConfigurationFactory.getConfiguration();
@@ -299,7 +299,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 
     protected String updateWhereClause(NakedObject object, boolean and) throws SqlObjectStoreException {
         TimeStamp lastActivity = ((AbstractNakedObject) object).getLastActivity();
-        ValueMapper mapper = typeMapper.mapperFor(NakedObjectSpecificationLoader.getInstance().loadSpecification(TimeStamp.class));
+        ValueMapper mapper = typeMapper.mapperFor(NakedObjects.getSpecificationLoader().loadSpecification(TimeStamp.class));
         String dateString =  mapper.valueAsDBString(lastActivity);
         if(dateString.equals("NULL")) {
             return (and ? " and " +  lastActivityColumn + " is NULL" : "");

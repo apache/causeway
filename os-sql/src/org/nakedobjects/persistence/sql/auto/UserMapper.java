@@ -63,7 +63,7 @@ public class UserMapper extends NameBasedMapper {
 		    if (loadedObjects.isLoaded(oid)) {
 		        user = (User) loadedObjects.getLoadedObject(oid);
 		    } else {
-		        user = (User) NakedObjectSpecificationLoader.getInstance().loadSpecification(User.class.getName()).acquireInstance();
+		        user = (User) NakedObjects.getSpecificationLoader().loadSpecification(User.class.getName()).acquireInstance();
 		        user.setOid(oid);
 		        
 		        loadUser(rs, user);
@@ -88,7 +88,7 @@ public class UserMapper extends NameBasedMapper {
 			if (loadedObjects.isLoaded(rootObjectOid)) {
 				rootObject = loadedObjects.getLoadedObject(rootObjectOid);
 			} else {
-				NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(rootObjectClass);
+				NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(rootObjectClass);
 				rootObject = (NakedObject) nc.acquireInstance();
 				rootObject.setOid(rootObjectOid);
 				loadedObjects.loaded(rootObject);
