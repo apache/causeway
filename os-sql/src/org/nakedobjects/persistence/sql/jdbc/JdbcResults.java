@@ -1,7 +1,7 @@
 package org.nakedobjects.persistence.sql.jdbc;
 
-import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.persistence.sql.Results;
+import org.nakedobjects.persistence.sql.SqlObjectStoreException;
 
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
@@ -17,43 +17,43 @@ public class JdbcResults implements Results {
         this.set = set;
     }
 
-    public void close() throws ObjectStoreException {
+    public void close() throws SqlObjectStoreException {
         try {
             set.close();
         } catch (SQLException e) {
-            throw new ObjectStoreException(e);
+            throw new SqlObjectStoreException(e);
         }
     }
 
-    public int getInt(String columnName) throws ObjectStoreException {
+    public int getInt(String columnName) throws SqlObjectStoreException {
         try {
             return set.getInt(columnName);
         } catch (SQLException e) {
-            throw new ObjectStoreException(e);
+            throw new SqlObjectStoreException(e);
         }
     }
 
-    public long getLong(String columnName) throws ObjectStoreException {
+    public long getLong(String columnName) throws SqlObjectStoreException {
         try {
             return set.getLong(columnName);
         } catch (SQLException e) {
-            throw new ObjectStoreException(e);
+            throw new SqlObjectStoreException(e);
         }
     }
 
-    public String getString(String columnName) throws ObjectStoreException {
+    public String getString(String columnName) throws SqlObjectStoreException {
         try {
             return set.getString(columnName);
         } catch (SQLException e) {
-            throw new ObjectStoreException(e);
+            throw new SqlObjectStoreException(e);
         }
     }
 
-    public boolean next() throws ObjectStoreException {
+    public boolean next() throws SqlObjectStoreException {
         try {
             return set.next();
         } catch (SQLException e) {
-            throw new ObjectStoreException(e);
+            throw new SqlObjectStoreException(e);
         }
     }
 

@@ -7,7 +7,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectNotFoundException;
-import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.Value;
@@ -41,7 +40,7 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 	}
 
 
-	public void createObject(NakedObject object) throws ObjectStoreException {
+	public void createObject(NakedObject object) throws SqlObjectStoreException {
 		NakedClass cls = object.getNakedClass();
 		String values = values(cls, object);
 		if(dbCreatesId) {
@@ -60,18 +59,18 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 	}
 
 
-	public void destroyObject(NakedObject object) throws ObjectStoreException {
+	public void destroyObject(NakedObject object) throws SqlObjectStoreException {
 		long id = primaryKey(object.getOid());
 		String statement = "delete from " + table + " where " + idColumn + " = " + id;
 		db.update(statement);
 	}
 
-	public Vector getInstances(NakedClass cls) throws ObjectStoreException {
+	public Vector getInstances(NakedClass cls) throws SqlObjectStoreException {
 		String statement = "select * from " + table + " order by " + idColumn;
 		return loadInstances(cls, statement);
 	}
 	
-	private Vector loadInstances(NakedClass cls, String selectStatment) throws ObjectStoreException {
+	private Vector loadInstances(NakedClass cls, String selectStatment) throws SqlObjectStoreException {
 		LOG.debug("loading instances from SQL " + table);
 		Vector instances = new Vector();
 
@@ -100,33 +99,33 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 		return instances;
 	}
 
-	public Vector getInstances(NakedClass cls, String pattern) throws ObjectStoreException, UnsupportedFindException {
+	public Vector getInstances(NakedClass cls, String pattern) throws SqlObjectStoreException, UnsupportedFindException {
 		String where = " where " + instancesWhereClause + pattern;
 		String statement = "select * from " + table + where + " order by " + idColumn;
 		return loadInstances(cls, statement);
 	}
 
-	public Vector getInstances(NakedObject pattern) throws ObjectStoreException, UnsupportedFindException {
+	public Vector getInstances(NakedObject pattern) throws SqlObjectStoreException, UnsupportedFindException {
 		return getInstances(pattern.getNakedClass());
 		//throw new UnsupportedFindException();
 	}
 
-	public NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, ObjectStoreException {
+	public NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, SqlObjectStoreException {
 		return loadObject(nakedClass, oid);
 	}
 
-	public boolean hasInstances(NakedClass cls) throws ObjectStoreException {
+	public boolean hasInstances(NakedClass cls) throws SqlObjectStoreException {
 		return numberOfInstances(cls) > 0;
 	}
 
 
-	public int numberOfInstances(NakedClass cls) throws ObjectStoreException {
+	public int numberOfInstances(NakedClass cls) throws SqlObjectStoreException {
 		LOG.debug("counting instances in SQL " + table);
 		String statement = "select count(*) from " + table;
 		return db.count(statement);
 	}
 	
-	public void resolve(NakedObject object) throws ObjectStoreException {
+	public void resolve(NakedObject object) throws SqlObjectStoreException {
 	    NakedClass cls = object.getNakedClass();
 	    String columns = columnList();
 	    long primaryKey = primaryKey(object.getOid());
@@ -142,12 +141,12 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 	            collectionMappers[i].loadInternalCollection(object);
 	        }	
 	    } else {
-	        throw new ObjectStoreException("Unable to load data from " + table +  " with id " + primaryKey);
+	        throw new SqlObjectStoreException("Unable to load data from " + table +  " with id " + primaryKey);
 	    }
         rs.close();
 	}
 
-	public void loadData(NakedObject object, Results rs) throws ObjectStoreException {
+	public void loadData(NakedObject object, Results rs) throws SqlObjectStoreException {
 		for (int i = 0; i < fields.length; i++) {
 			if (fields[i] instanceof Value) {
 				String val = rs.getString(columnNames[i]);
@@ -164,7 +163,7 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 
 				if(val != null && ((Value) fields[i]).getType() == Time.class) {
 					// convert date to hhmm
-					val = val.substring(14,16) + val.substring(17,19);
+					val = val.substring(11,13) + val.substring(14,16);
 				}
 
 				val = val == null ? "NULL" : val;
@@ -191,7 +190,7 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 	}
 
 
-	public void save(NakedObject object) throws ObjectStoreException {
+	public void save(NakedObject object) throws SqlObjectStoreException {
 		NakedClass cls = object.getNakedClass();
 
 		StringBuffer assignments = new StringBuffer();

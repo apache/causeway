@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.ResolveException;
 import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.reflect.Field;
@@ -43,11 +42,11 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 		}
 	}
 
-	public boolean needsTables() throws ObjectStoreException {
+	public boolean needsTables() throws SqlObjectStoreException {
 		return ! mapper.db.hasTable(table);
 	}
 	
-	public void createTables() throws ObjectStoreException {
+	public void createTables() throws SqlObjectStoreException {
 		// TODO load in properties
 
 		String columns = parentColumn + " int, " + elementClassColumn + " varchar(255), " + elementIdColumn + " int";
@@ -55,7 +54,7 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 	}
 
 	public void loadInternalCollection(NakedObject parent)
-			throws ResolveException, ObjectStoreException {
+			throws ResolveException, SqlObjectStoreException {
 		InternalCollection collection = (InternalCollection) field.get(parent);
 		LOG.debug("Loading internal collection " + collection);
 		long parentId = mapper.primaryKey(parent.getOid());
@@ -74,7 +73,7 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 		rs.close();
 	}
 
-	public void saveInternalCollection(NakedObject parent) throws ObjectStoreException {
+	public void saveInternalCollection(NakedObject parent) throws SqlObjectStoreException {
 		InternalCollection collection = (InternalCollection) field.get(parent);
 		LOG.debug("Saving internal collection " + collection);
 		long parentId = mapper.primaryKey(parent.getOid());

@@ -68,7 +68,14 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOneAssoci
 
         try {
         		FieldAbout about = new FieldAbout(context, object);
-				aboutMethod.invoke(object, new Object[] { about, associate });
+        		Object[] parameters;
+                if(aboutMethod.getParameterTypes().length == 2) {
+        		    parameters = new Object[] { about, associate };
+        		} else {
+        		    // default about
+        		    parameters = new Object[] { about };
+        		}
+    		    aboutMethod.invoke(object, parameters);
         		return about;
         } catch (InvocationTargetException e) {
             LOG.error("Exception executing " + aboutMethod, e.getTargetException());

@@ -8,7 +8,6 @@ import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectNotFoundException;
-import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.ResolveException;
 import org.nakedobjects.object.SimpleOid;
 import org.nakedobjects.object.UnsupportedFindException;
@@ -20,13 +19,16 @@ import org.nakedobjects.object.reflect.Value;
 import org.nakedobjects.persistence.sql.AbstractObjectMapper;
 import org.nakedobjects.persistence.sql.ObjectMapper;
 import org.nakedobjects.persistence.sql.Results;
+import org.nakedobjects.persistence.sql.SqlObjectStoreException;
 import org.nakedobjects.persistence.sql.TypeMapper;
 
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
-
+/**
+ * @deprecated
+ */
 public class NameBasedMapper extends AbstractObjectMapper implements ObjectMapper {
     private static final Logger LOG = Logger.getLogger(NameBasedMapper.class);
 	private TypeMapper typeMapper;
@@ -62,7 +64,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
     }
 
 
-    public void createObject(NakedObject object) throws ObjectStoreException {
+    public void createObject(NakedObject object) throws SqlObjectStoreException {
         NakedClass cls = object.getNakedClass();
 
         String table = table(cls);
@@ -75,7 +77,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         db.update(statement);
     }
 
-    public void destroyObject(NakedObject object) throws ObjectStoreException {
+    public void destroyObject(NakedObject object) throws SqlObjectStoreException {
         NakedClass cls = object.getNakedClass();
         String table = table(cls);
         long id = ((SimpleOid) object.getOid()).getSerialNo();
@@ -83,7 +85,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         db.update(statement);
     }
 
-    public Vector getInstances(NakedClass cls) throws ObjectStoreException {
+    public Vector getInstances(NakedClass cls) throws SqlObjectStoreException {
         Vector instances = new Vector();
 
         String table = table(cls);
@@ -100,7 +102,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         return instances;
     }
 
-    public Vector getInstances(NakedClass cls, String pattern) throws ObjectStoreException, UnsupportedFindException {
+    public Vector getInstances(NakedClass cls, String pattern) throws SqlObjectStoreException, UnsupportedFindException {
         Vector instances = new Vector();
 
        String table = table(cls);
@@ -119,22 +121,22 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
 
     }
     
-    public Vector getInstances(NakedObject pattern) throws ObjectStoreException, UnsupportedFindException {
+    public Vector getInstances(NakedObject pattern) throws SqlObjectStoreException, UnsupportedFindException {
         throw new UnsupportedFindException();
     }
 
-    public NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, ObjectStoreException {
+    public NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, SqlObjectStoreException {
         NakedObject object = hint.acquireInstance();
         object.setOid(oid);
         loadedObjects.loaded(object);
         return object;
     }
 
-    public boolean hasInstances(NakedClass cls) throws ObjectStoreException {
+    public boolean hasInstances(NakedClass cls) throws SqlObjectStoreException {
         return numberOfInstances(cls) > 0;
     }
 
-    private void loadInternalCollection(long id, Field field, InternalCollection collection) throws ResolveException, ObjectStoreException {
+    private void loadInternalCollection(long id, Field field, InternalCollection collection) throws ResolveException, SqlObjectStoreException {
         NakedClass cls = collection.forParent().getNakedClass();
         NakedClass elementCls = NakedClassManager.getInstance().getNakedClass(collection.getType().getName());
 
@@ -168,14 +170,14 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         return element;
     }
 
-    public int numberOfInstances(NakedClass cls) throws ObjectStoreException {
+    public int numberOfInstances(NakedClass cls) throws SqlObjectStoreException {
         String table = table(cls);
         LOG.debug("counting instances in SQL " + table);
         String statement = "select count(*) from " + table;
         return db.count(statement);
     }
 
-    public void resolve(NakedObject object) throws ObjectStoreException {
+    public void resolve(NakedObject object) throws SqlObjectStoreException {
         NakedClass cls = object.getNakedClass();
         String table = table(cls);
         String columns = columns(cls);
@@ -207,11 +209,11 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
 	        rs.close();
         } else {
 	        rs.close();
-            throw new ObjectStoreException("Unable to load data for " + id + " from " + table);
+            throw new SqlObjectStoreException("Unable to load data for " + id + " from " + table);
         }
     }
 
-    public void save(NakedObject object) throws ObjectStoreException {
+    public void save(NakedObject object) throws SqlObjectStoreException {
         NakedClass cls = object.getNakedClass();
 
         String table = table(cls);
@@ -251,7 +253,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         db.update(statement);
     }
 
-    private void saveInternalCollection(Field field, InternalCollection collection) throws ObjectStoreException {
+    private void saveInternalCollection(Field field, InternalCollection collection) throws SqlObjectStoreException {
         NakedClass cls = collection.forParent().getNakedClass();
 
         String table = table(cls) + "_" + field.getName().toLowerCase();

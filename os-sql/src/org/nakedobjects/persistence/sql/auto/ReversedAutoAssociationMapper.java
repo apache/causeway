@@ -1,7 +1,6 @@
 package org.nakedobjects.persistence.sql.auto;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.ResolveException;
 import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.reflect.Field;
@@ -43,7 +42,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 	}
 
 	public void loadInternalCollection(NakedObject parent)
-			throws ResolveException, ObjectStoreException {
+			throws ResolveException, SqlObjectStoreException {
 		InternalCollection collection = (InternalCollection) field.get(parent);
 		LOG.debug("Loading internal collection " + collection);
 		long parentId = primaryKey(parent.getOid());
@@ -61,7 +60,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 		collection.setResolved();
 	}
 
-	public void saveInternalCollection(NakedObject parent) throws ObjectStoreException {
+	public void saveInternalCollection(NakedObject parent) throws SqlObjectStoreException {
 		InternalCollection collection = (InternalCollection) field.get(parent);
 		LOG.debug("Saving internal collection " + collection);
 		long parentId = primaryKey(parent.getOid());

@@ -1,18 +1,13 @@
 package org.nakedobjects.persistence.sql;
 
-import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.ObjectNotFoundException;
 
 
 public interface NakedClassMapper extends ObjectMapper {
-    void createNakedClass(NakedClass cls) throws ObjectStoreException;
+    void createNakedClass(NakedClass cls) throws SqlObjectStoreException;
 
-    NakedClass getNakedClass(String name) throws ObjectStoreException;
-
-    void shutdown() throws ObjectStoreException;
-
-    void startup(LoadedObjects loadedObjects, DatabaseConnector db) throws ObjectStoreException;
+    NakedClass getNakedClass(String name) throws ObjectNotFoundException, SqlObjectStoreException;
 }
 
 /*

@@ -186,6 +186,7 @@ public class LocalObjectManager extends NakedObjectManager {
     public boolean hasInstances(NakedClass cls) {
         LOG.debug("hasInstances of " + cls);
         try {
+            cls.resolve();
             return objectStore.hasInstances(cls, false);
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);

@@ -1,19 +1,19 @@
 package org.nakedobjects.persistence.sql;
 
-import org.apache.log4j.Logger;
 import org.nakedobjects.object.LoadedObjects;
-import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.SimpleOid;
+
+import org.apache.log4j.Logger;
 
 public abstract class AbstractObjectMapper {
 	private static final Logger LOG = Logger.getLogger(AbstractObjectMapper.class);
-	public DatabaseConnector db;
 	public LoadedObjects loadedObjects;
+    public Connection db;
 
-	protected void createTables() throws ObjectStoreException {
+	protected void createTables() throws SqlObjectStoreException {
 	}
 
-	protected boolean needsTables() throws ObjectStoreException {
+	protected boolean needsTables() throws SqlObjectStoreException {
 		return false;
 	}
 
@@ -21,14 +21,12 @@ public abstract class AbstractObjectMapper {
 		return oid instanceof SqlOid ? ((SqlOid) oid).getPrimaryKey() : ((SimpleOid) oid).getSerialNo();
 	}
 
-	public final void shutdown() throws ObjectStoreException {
-		db.close();
+	public final void shutdown() throws SqlObjectStoreException {
 	}
 
-	public void startup(LoadedObjects loaded, DatabaseConnector db) throws ObjectStoreException {
+	public void startup(LoadedObjects loaded, Connection db) throws SqlObjectStoreException {
 		this.loadedObjects = loaded;
 		this.db = db;
-		db.open();
 		if (needsTables()) {
 			createTables();
 		}

@@ -3,12 +3,12 @@ package org.nakedobjects.persistence.sql.auto;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ObjectNotFoundException;
-import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.value.TextString;
 import org.nakedobjects.persistence.sql.AbstractObjectMapper;
 import org.nakedobjects.persistence.sql.NakedClassMapper;
 import org.nakedobjects.persistence.sql.Results;
+import org.nakedobjects.persistence.sql.SqlObjectStoreException;
 import org.nakedobjects.persistence.sql.SqlOid;
 import org.nakedobjects.persistence.sql.TypeMapper;
 import org.nakedobjects.utility.Configuration;
@@ -35,7 +35,7 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
     	reflectorColumn = params.getString(PREFIX + "column.reflector", "reflector");
 	}
     
-    public void createNakedClass(NakedClass cls) throws ObjectStoreException {
+    public void createNakedClass(NakedClass cls) throws SqlObjectStoreException {
         LOG.debug("saving naked class: " + cls);
         String statement = "insert into " + table + " (" + idColumn + ", " + nameColumn + ", " + reflectorColumn +
 			") values (" + primaryKey(cls.getOid())
@@ -44,7 +44,7 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
         cls.setResolved();
     }
 
-    public NakedClass getNakedClass(String name) throws ObjectStoreException {
+    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, SqlObjectStoreException {
         LOG.debug("loading naked class: " + name);
         String statement = "select " + idColumn + ", " + nameColumn + ", " + reflectorColumn + " from " + table + 
 		" where " + nameColumn + " = '" + name + "'";
@@ -75,34 +75,34 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
         }
     }
 
-    protected boolean needsTables() throws ObjectStoreException {
+    protected boolean needsTables() throws SqlObjectStoreException {
         return !db.hasTable(table);
     }
 
-    protected void createTables() throws ObjectStoreException {
+    protected void createTables() throws SqlObjectStoreException {
     	TypeMapper types = TypeMapper.getInstance();
         db.update("create table " + table + " (" + idColumn + " " + types.id() + " NOT NULL UNIQUE, " + nameColumn 
         	+ " "	+ types.typeFor(TextString.class.getName()) + " UNIQUE, " + reflectorColumn + " " + 
 			types.typeFor(TextString.class.getName()) + ")" );
     }
 
-	public void createObject(NakedObject object) throws ObjectStoreException {
+	public void createObject(NakedObject object) throws SqlObjectStoreException {
 		throw new NotImplementedException();
 	}
 
-	public void destroyObject(NakedObject object) throws ObjectStoreException {
+	public void destroyObject(NakedObject object) throws SqlObjectStoreException {
 		throw new NotImplementedException();
 	}
 
-	public void save(NakedObject object) throws ObjectStoreException {
+	public void save(NakedObject object) throws SqlObjectStoreException {
 		throw new NotImplementedException();
 	}
 
-	public NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, ObjectStoreException {
+	public NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, SqlObjectStoreException {
 		throw new NotImplementedException();
 	}
 
-	public void resolve(NakedObject object) throws ObjectStoreException {
+	public void resolve(NakedObject object) throws SqlObjectStoreException {
 	    NakedClass cls = (NakedClass) object;
 	    String columns = nameColumn + "," + reflectorColumn;
 	    long id = primaryKey(object.getOid());
@@ -119,27 +119,27 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
 	        rs.close();
 	    } else {
 	        rs.close();
-	        throw new ObjectStoreException("Unable to load data for " + id + " from " + table);
+	        throw new SqlObjectStoreException("Unable to load data for " + id + " from " + table);
 	    }
 	}
 
-	public Vector getInstances(NakedClass cls) throws ObjectStoreException {
+	public Vector getInstances(NakedClass cls) throws SqlObjectStoreException {
 		throw new NotImplementedException();
 	}
 
-	public Vector getInstances(NakedClass cls, String pattern) throws ObjectStoreException, UnsupportedFindException {
+	public Vector getInstances(NakedClass cls, String pattern) throws SqlObjectStoreException, UnsupportedFindException {
 		throw new NotImplementedException();
 	}
 
-	public Vector getInstances(NakedObject pattern) throws ObjectStoreException, UnsupportedFindException {
+	public Vector getInstances(NakedObject pattern) throws SqlObjectStoreException, UnsupportedFindException {
 		throw new NotImplementedException();
 	}
 
-	public boolean hasInstances(NakedClass cls) throws ObjectStoreException {
+	public boolean hasInstances(NakedClass cls) throws SqlObjectStoreException {
 		throw new NotImplementedException();
 	}
 
-	public int numberOfInstances(NakedClass cls) throws ObjectStoreException {
+	public int numberOfInstances(NakedClass cls) throws SqlObjectStoreException {
 		throw new NotImplementedException();
 	}
 }

@@ -1,19 +1,18 @@
 package org.nakedobjects.persistence.sql;
 
-import org.nakedobjects.object.ObjectStoreException;
 
 
 public interface Results {
 
-    void close() throws ObjectStoreException;
+    void close() throws SqlObjectStoreException;
 
-    int getInt(String columnName) throws ObjectStoreException;
+    int getInt(String columnName) throws SqlObjectStoreException;
 
-    long getLong(String columnName) throws ObjectStoreException;
+    long getLong(String columnName) throws SqlObjectStoreException;
 
-    String getString(String columnName) throws ObjectStoreException;
+    String getString(String columnName) throws SqlObjectStoreException;
 
-    boolean next() throws ObjectStoreException;
+    boolean next() throws SqlObjectStoreException;
 }
 
 /*

@@ -602,6 +602,7 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
 
 
     public boolean isAbstract() {
+        reflector();
         return reflector.isAbstract();
     }
 

@@ -29,6 +29,12 @@ import org.apache.log4j.Category;
 
 
 public class JavaReflector implements Reflector {
+    private static final String DERIVE_PREFIX = "derive";
+    private static final String SET_PREFIX = "set";
+    private static final String VALID_PREFIX = "valid";
+    private static final String ABOUT_PREFIX = "about";
+    private static final String ABOUT_FIELD_DEFAULT = "aboutFieldDefault";
+    private static final String GET_PREFIX = "get";
     private final static Category LOG = Category.getInstance(JavaReflector.class);
 
     /**
@@ -190,6 +196,7 @@ public class JavaReflector implements Reflector {
 
     private Class cls;
     private Method methods[];
+    private Method defaultAboutFieldMethod;
 
     public JavaReflector(String name) throws ClassNotFoundException {
         Class cls;
@@ -305,7 +312,7 @@ public class JavaReflector implements Reflector {
     public About classAbout() {
         LOG.debug("looking for class about");
         try {
-            return (About) cls.getMethod("about" + shortName(), new Class[0]).invoke(null, new Object[0]);
+            return (About) cls.getMethod(ABOUT_PREFIX + shortName(), new Class[0]).invoke(null, new Object[0]);
         } catch (NoSuchMethodException ignore) {
             ;
         } catch (IllegalAccessException ignore) {
@@ -338,7 +345,7 @@ public class JavaReflector implements Reflector {
     }
 
     private void derivedFields(Vector fields) {
-        Vector v = findPrefixedMethods(OBJECT, "derive", NakedValue.class, 0);
+        Vector v = findPrefixedMethods(OBJECT, DERIVE_PREFIX, NakedValue.class, 0);
 
         // create vector of derived values from all derive methods
         Enumeration e = v.elements();
@@ -348,9 +355,9 @@ public class JavaReflector implements Reflector {
             LOG.debug("identified derived value method " + method);
             String name = baseName(method.getName());
 
-            Method aboutMethod = findMethod(OBJECT, "about" + name, null, new Class[] { FieldAbout.class });
+            Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class });
             if (aboutMethod == null) {
-                aboutMethod = findMethod(OBJECT, "aboutFieldDefault", null, new Class[] { FieldAbout.class });
+                aboutMethod = defaultAboutFieldMethod;
             }
 
             // create Field
@@ -365,6 +372,8 @@ public class JavaReflector implements Reflector {
         LOG.debug("looking for fields");
         Vector elements = new Vector();
 
+        defaultAboutFieldMethod = findMethod(OBJECT, ABOUT_FIELD_DEFAULT, null, new Class[] { FieldAbout.class });
+        
         valueFields(elements);
         derivedFields(elements);
         oneToManyAssociationFields(elements);
@@ -515,9 +524,8 @@ public class JavaReflector implements Reflector {
      * @see OneToManyAssociation
      */
     private void oneToManyAssociationFields(Vector associations) {
-        Vector v = findPrefixedMethods(OBJECT, "get", InternalCollection.class, 0);
-        Method defaultAboutMethod = findMethod(OBJECT, "aboutFieldDefault", null, new Class[] { FieldAbout.class });
-
+        Vector v = findPrefixedMethods(OBJECT, GET_PREFIX, InternalCollection.class, 0);
+ 
         // create vector of multiRoles from all get methods
         Enumeration e = v.elements();
 
@@ -526,10 +534,10 @@ public class JavaReflector implements Reflector {
             LOG.debug("identified 1-many association method " + getMethod);
             String name = baseName(getMethod.getName());
 
-            Method aboutMethod = findMethod(OBJECT, "about" + name, null, new Class[] { FieldAbout.class, null, boolean.class });
+            Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class, null, boolean.class });
             Class aboutType = (aboutMethod == null) ? null : aboutMethod.getParameterTypes()[1];
             if (aboutMethod == null) {
-                aboutMethod = defaultAboutMethod;
+                aboutMethod = defaultAboutFieldMethod;
             }
 
             // look for corresponding add and remove methods
@@ -581,9 +589,8 @@ public class JavaReflector implements Reflector {
      * @see OneToOneAssociation
      */
     private void oneToOneAssociationFields(Vector associations) throws ReflectionException {
-        Vector v = findPrefixedMethods(OBJECT, "get", NakedObject.class, 0);
-        Method defaultAboutMethod = findMethod(OBJECT, "aboutFieldDefault", null, new Class[] { FieldAbout.class });
-
+        Vector v = findPrefixedMethods(OBJECT, GET_PREFIX, NakedObject.class, 0);
+  
         // create vector of roles from all get methods
         Enumeration e = v.elements();
 
@@ -600,10 +607,10 @@ public class JavaReflector implements Reflector {
             String name = baseName(getMethod.getName());
             Class[] params = new Class[] { getMethod.getReturnType() };
 
-            Method aboutMethod = findMethod(OBJECT, "about" + name, null, new Class[] { FieldAbout.class,
+            Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class,
                     getMethod.getReturnType() });
             if (aboutMethod == null) {
-                aboutMethod = defaultAboutMethod;
+                aboutMethod = defaultAboutFieldMethod;
             }
 
             // look for associate
@@ -621,7 +628,7 @@ public class JavaReflector implements Reflector {
             }
 
             // look for set set method
-            Method setMethod = findMethod(OBJECT, "set" + name, void.class, params);
+            Method setMethod = findMethod(OBJECT, SET_PREFIX + name, void.class, params);
 
             // look for .Net style 'set_' method if no Java style 'set' method
             if (setMethod == null) {
@@ -678,9 +685,8 @@ public class JavaReflector implements Reflector {
     }
 
     private Vector valueFields(Vector fields) {
-        Vector v = findPrefixedMethods(OBJECT, "get", NakedValue.class, 0);
-        Method defaultAboutMethod = findMethod(OBJECT, "aboutFieldDefault", null, new Class[] { FieldAbout.class });
-
+        Vector v = findPrefixedMethods(OBJECT, GET_PREFIX, NakedValue.class, 0);
+        
         // create vector of attributes from all get methods
         Enumeration e = v.elements();
 
@@ -689,17 +695,17 @@ public class JavaReflector implements Reflector {
             LOG.debug("identified value field method " + method);
             String name = baseName(method.getName());
 
-            Method aboutMethod = findMethod(OBJECT, "about" + name, null, new Class[] { FieldAbout.class });
+            Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class });
             if (aboutMethod == null) {
-                aboutMethod = defaultAboutMethod;
+                aboutMethod = defaultAboutFieldMethod;
             }
 
-            Method validMethod = findMethod(OBJECT, "valid" + name, null, new Class[] { Validity.class });
+            Method validMethod = findMethod(OBJECT, VALID_PREFIX + name, null, new Class[] { Validity.class });
 
             // check for invalid methods
             Class[] params = new Class[] { method.getReturnType() };
 
-            if ((findMethod(OBJECT, "set" + name, void.class, params) != null)
+            if ((findMethod(OBJECT, SET_PREFIX + name, void.class, params) != null)
                     || (findMethod(OBJECT, "set_" + name, void.class, params) != null)) {
                 LOG.error("The method set" + name + " is not needed for the NakedValue class " + className());
             }

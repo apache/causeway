@@ -1,10 +1,10 @@
 package org.nakedobjects.persistence.sql.jdbc;
 
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.Parameter;
 import org.nakedobjects.persistence.sql.Results;
+import org.nakedobjects.persistence.sql.SqlObjectStoreException;
 import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.utility.NotImplementedException;
 
@@ -20,18 +20,19 @@ import org.apache.log4j.Logger;
 public class JdbcConnector implements DatabaseConnector {
     private static final Logger LOG = Logger.getLogger(JdbcConnector.class);
     private Connection connection;
+    private boolean isUsed;
 
-    public void close() throws ObjectStoreException {
+    public void close() throws SqlObjectStoreException {
         try {
             if(connection != null) {
                 connection.close();
             }
         } catch (SQLException e) {
-            throw new ObjectStoreException("Failed to close", e);
+            throw new SqlObjectStoreException("Failed to close", e);
         }
     }
 
-    public int count(String sql) throws ObjectStoreException {
+    public int count(String sql) throws SqlObjectStoreException {
         LOG.debug("SQL: " + sql);
         PreparedStatement statement;
         try {
@@ -42,15 +43,15 @@ public class JdbcConnector implements DatabaseConnector {
             statement.close();
             return count;
         } catch (SQLException e) {
-            throw new ObjectStoreException("Failed count", e);
+            throw new SqlObjectStoreException("Failed count", e);
         }
     }
 
-    public void delete(String sql) throws ObjectStoreException {
+    public void delete(String sql) throws SqlObjectStoreException {
         update(sql);
     }
 
-    public void open() throws ObjectStoreException {
+    public void open() throws SqlObjectStoreException {
         try {
             Configuration params = Configuration.getInstance();
             String BASE = "sql-object-store.jdbc.";
@@ -60,16 +61,16 @@ public class JdbcConnector implements DatabaseConnector {
             String password = params.getString(BASE + "password");
 
             if(driver == null) {
-                throw new ObjectStoreException("No driver specified for database connection");
+                throw new SqlObjectStoreException("No driver specified for database connection");
             }
             if(url == null) {
-                throw new ObjectStoreException("No connection URL specified to database");
+                throw new SqlObjectStoreException("No connection URL specified to database");
             }
             if(user == null) {
-                throw new ObjectStoreException("No user specified for database connection");
+                throw new SqlObjectStoreException("No user specified for database connection");
             }
             if(password == null) {
-                throw new ObjectStoreException("No password specified for database connection");
+                throw new SqlObjectStoreException("No password specified for database connection");
             }
             
             Class.forName(driver);
@@ -77,13 +78,13 @@ public class JdbcConnector implements DatabaseConnector {
             connection = DriverManager.getConnection(url, user, password);
             
             if(connection == null) {
-               	throw new ObjectStoreException("No connection established to " + url);
+               	throw new SqlObjectStoreException("No connection established to " + url);
             }
     
         } catch (SQLException e) {
-            throw new ObjectStoreException("Failed to start", e);
+            throw new SqlObjectStoreException("Failed to start", e);
         } catch (ClassNotFoundException e) {
-            throw new ObjectStoreException("Could not find database driver", e);
+            throw new SqlObjectStoreException("Could not find database driver", e);
         }
     }
 
@@ -145,7 +146,7 @@ public class JdbcConnector implements DatabaseConnector {
         }   
     }
 
-    public void update(String sql) throws ObjectStoreException {
+    public void update(String sql) throws SqlObjectStoreException {
         LOG.debug("SQL: " + sql);
         PreparedStatement statement;
         try {
@@ -153,7 +154,7 @@ public class JdbcConnector implements DatabaseConnector {
             statement.executeUpdate();
             statement.close();
         } catch (SQLException e) {
-            throw new ObjectStoreException("SQL error", e);
+            throw new SqlObjectStoreException("SQL error", e);
         }
     }
 
@@ -161,7 +162,7 @@ public class JdbcConnector implements DatabaseConnector {
     
     
     
-    public boolean hasTable(String tableName) throws ObjectStoreException {
+    public boolean hasTable(String tableName) throws SqlObjectStoreException {
         try {
             ResultSet set = connection.getMetaData().getTables(null, null, tableName, null);
             if(set.next()) {
@@ -173,15 +174,15 @@ public class JdbcConnector implements DatabaseConnector {
                 return false;
             }
         } catch (SQLException e) {
-            throw new ObjectStoreException(e);
+            throw new SqlObjectStoreException(e);
         }
     }
 
-	public void insert(String sql) throws ObjectStoreException {
+	public void insert(String sql) throws SqlObjectStoreException {
 		update(sql);
 	}
 	
-	public void insert(String sql, Object oid) throws ObjectStoreException {
+	public void insert(String sql, Object oid) throws SqlObjectStoreException {
         LOG.debug("SQL: " + sql);
         PreparedStatement statement;
         try {
@@ -194,9 +195,17 @@ public class JdbcConnector implements DatabaseConnector {
             }
       */      statement.close();
         } catch (SQLException e) {
-            throw new ObjectStoreException("SQL error", e);
+            throw new SqlObjectStoreException("SQL error", e);
         }
 	}
+
+    public void setUsed(boolean isUsed) {
+        this.isUsed = isUsed;
+    }
+
+    public boolean isUsed() {
+        return isUsed;
+    }
 }
 
 /*

@@ -4,7 +4,6 @@ import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ObjectNotFoundException;
-import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.UnsupportedFindException;
 
 import java.util.Vector;
@@ -15,22 +14,22 @@ public interface ObjectMapper {
 //    void startTransaction();
 
 
-    void createObject(NakedObject object) throws ObjectStoreException;
-    void destroyObject(NakedObject object) throws ObjectStoreException;
-    void save(NakedObject object) throws ObjectStoreException;
-    NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, ObjectStoreException;
-    void resolve(NakedObject object) throws ObjectStoreException;
+    void createObject(NakedObject object) throws SqlObjectStoreException;
+    void destroyObject(NakedObject object) throws SqlObjectStoreException;
+    void save(NakedObject object) throws SqlObjectStoreException;
+    NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, SqlObjectStoreException;
+    void resolve(NakedObject object) throws SqlObjectStoreException;
 
 
-    Vector getInstances(NakedClass cls) throws ObjectStoreException;
-    Vector getInstances(NakedClass cls, String pattern) throws ObjectStoreException, UnsupportedFindException;
-    Vector getInstances(NakedObject pattern) throws ObjectStoreException, UnsupportedFindException;
-    boolean hasInstances(NakedClass cls) throws ObjectStoreException;
-    int numberOfInstances(NakedClass cls) throws ObjectStoreException;
+    Vector getInstances(NakedClass cls) throws SqlObjectStoreException;
+    Vector getInstances(NakedClass cls, String pattern) throws SqlObjectStoreException, UnsupportedFindException;
+    Vector getInstances(NakedObject pattern) throws SqlObjectStoreException, UnsupportedFindException;
+    boolean hasInstances(NakedClass cls) throws SqlObjectStoreException;
+    int numberOfInstances(NakedClass cls) throws SqlObjectStoreException;
 
 
-    void startup(LoadedObjects loadedObjects, DatabaseConnector connector) throws ObjectStoreException;
-    void shutdown() throws ObjectStoreException;
+    void startup(LoadedObjects loadedObjects, Connection connection) throws SqlObjectStoreException;
+    void shutdown() throws SqlObjectStoreException;
 }
 
 

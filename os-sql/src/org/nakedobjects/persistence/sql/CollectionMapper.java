@@ -1,17 +1,16 @@
 package org.nakedobjects.persistence.sql;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.ResolveException;
 
 
 public interface CollectionMapper {
 
-	public void loadInternalCollection(NakedObject parent) throws ResolveException, ObjectStoreException;
+	public void loadInternalCollection(NakedObject parent) throws ResolveException, SqlObjectStoreException;
 
-	public void saveInternalCollection(NakedObject parent) throws ObjectStoreException;
+	public void saveInternalCollection(NakedObject parent) throws SqlObjectStoreException;
 	
-	void createTables() throws ObjectStoreException ;
+	void createTables() throws SqlObjectStoreException ;
 
-	boolean needsTables() throws ObjectStoreException;
+	boolean needsTables() throws SqlObjectStoreException;
 }

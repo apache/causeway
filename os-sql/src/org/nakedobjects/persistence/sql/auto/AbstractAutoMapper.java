@@ -5,7 +5,6 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.reflect.Field;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
@@ -78,7 +77,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 		return sb.toString();
 	}
 
-	public void createTables() throws ObjectStoreException {
+	public void createTables() throws SqlObjectStoreException {
 		if (!db.hasTable(table)) {
 			StringBuffer columns = new StringBuffer();
 			TypeMapper types = TypeMapper.getInstance();
@@ -88,12 +87,12 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 				if (field instanceof Value) {
 					type = types.typeFor(fields[f].getType().getName());
 					if (type == null) {
-						throw new ObjectStoreException("No type specified for " + fields[f].getType().getName());
+						throw new SqlObjectStoreException("No type specified for " + fields[f].getType().getName());
 					}
 				} else if (field instanceof OneToOneAssociation) {
 					type = types.id();
 				} else {
-					throw new ObjectStoreException("Can't map field to column: " + field);
+					throw new SqlObjectStoreException("Can't map field to column: " + field);
 				}
 				columns.append(columnNames[f]);
 				columns.append(" ");
@@ -140,7 +139,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 		return reference;
 	}
 
-	public boolean needsTables() throws ObjectStoreException {
+	public boolean needsTables() throws SqlObjectStoreException {
 		for (int i = 0; collectionMappers != null && i < collectionMappers.length; i++) {
 			if (collectionMappers[i].needsTables()) {
 				return true;
@@ -255,7 +254,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 				+ nakedClass.fullName() + "]";
 	}
 
-	protected String values(NakedClass cls, NakedObject object) throws ObjectStoreException {
+	protected String values(NakedClass cls, NakedObject object) throws SqlObjectStoreException {
 		StringBuffer sb = new StringBuffer();
 		Field[] fields = cls.getFields();
 		for (int i = 0; i < fields.length; i++) {

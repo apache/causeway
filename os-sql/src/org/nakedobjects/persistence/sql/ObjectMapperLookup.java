@@ -7,11 +7,17 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.collection.InternalCollection;
+import org.nakedobjects.persistence.sql.auto.AutoMapper;
 import org.nakedobjects.utility.Assert;
+import org.nakedobjects.utility.ComponentException;
+import org.nakedobjects.utility.ComponentLoader;
+import org.nakedobjects.utility.Configuration;
+import org.nakedobjects.utility.ConfigurationException;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
@@ -21,19 +27,25 @@ public class ObjectMapperLookup {
     private static final NakedClass nakedClass = NakedClassManager.getInstance().getNakedClass(NakedClass.class.getName());
     private final Hashtable mappers = new Hashtable();
     private final LoadedObjects loadedObjects;
-    private ObjectMapper defaulMapper;
-    private final DatabaseConnectorFactory connectorFactory;
+    private ObjectMapperFactory mapperFactory;
+    private DatabaseConnectorPool connectionPool;
+    private Connection connection;
     
-    public ObjectMapperLookup(LoadedObjects loadedObjects, DatabaseConnectorFactory connectorFactory) {
+    public ObjectMapperLookup(LoadedObjects loadedObjects, Connection connection) {
         Assert.assertNotNull(loadedObjects);
         this.loadedObjects = loadedObjects;
-        this.connectorFactory = connectorFactory;
+        this.connection = connection;
     }
     
-    public ObjectMapper getMapper(NakedClass cls) {
+    public ObjectMapper getMapper(NakedClass cls) throws SqlObjectStoreException {
         ObjectMapper mapper = (ObjectMapper) mappers.get(cls);
         if (mapper == null) {
-            mapper = defaulMapper;
+            AutoMapper autoMapper = (AutoMapper) mapperFactory.createMapper(cls.fullName(), SqlObjectStore.BASE_NAME + ".automapper.default");
+            autoMapper.startup(loadedObjects, connection);
+            if(autoMapper.needsTables()) {
+                autoMapper.createTables();
+            }
+            mapper = autoMapper;
         }
         LOG.debug("  mapper for " + cls.getSingularName() + " -> " + mapper);
         if(mapper == null) {
@@ -42,7 +54,7 @@ public class ObjectMapperLookup {
         return mapper;
     }
 
-    public ObjectMapper getMapper(NakedObject object) {
+    public ObjectMapper getMapper(NakedObject object) throws SqlObjectStoreException {
         if (object instanceof InternalCollection) {
             object = ((InternalCollection) object).forParent();
             return getMapper(object.getNakedClass());
@@ -55,43 +67,65 @@ public class ObjectMapperLookup {
         throw new NotImplementedException("" + oid);
     }
 
-    public void setDefault(ObjectMapper mapper) throws ObjectStoreException {
-        LOG.debug("set default mapper " + mapper);
-        defaulMapper = mapper;
-        defaulMapper.startup(loadedObjects, connectorFactory.createConnector());
+    public void setMapperFactory(ObjectMapperFactory mapperFactory, DatabaseConnectorPool connectionPool) throws SqlObjectStoreException {
+        LOG.debug("set mapper factory" + mapperFactory);
+        this.mapperFactory = mapperFactory;
+        this.connectionPool = connectionPool;
     }
 
-    public void setNakedClassMapper(NakedClassMapper mapper) throws ObjectStoreException {
+    private void setNakedClassMapper(NakedClassMapper mapper) throws SqlObjectStoreException {
         LOG.debug("set naked class mapper " + mapper);
 		add(nakedClass, mapper);
     }
 
-    public void add(String className, ObjectMapper mapper) throws ObjectStoreException {
+    private void add(String className, ObjectMapper mapper) throws SqlObjectStoreException {
         NakedClass cls = NakedClassManager.getInstance().getNakedClass(className);
         add(cls, mapper);
     }
 
-    private void add(NakedClass cls, ObjectMapper mapper) throws ObjectStoreException {
+    private void add(NakedClass cls, ObjectMapper mapper) throws SqlObjectStoreException {
 		LOG.debug("add mapper " + mapper + " for " + cls);
-        mapper.startup(loadedObjects, connectorFactory.createConnector());
+        mapper.startup(loadedObjects, connection);
         mappers.put(cls, mapper);
 	}
 
-	public NakedClassMapper getNakedClassMapper() {
+	public NakedClassMapper getNakedClassMapper() throws SqlObjectStoreException {
         return (NakedClassMapper) getMapper(nakedClass);
     }
 
-    public void init() throws ObjectStoreException {
+    public void init() throws ConfigurationException, ComponentException, SqlObjectStoreException {
+        String BASE_NAME = SqlObjectStore.BASE_NAME;
+        
+        try {
+            setNakedClassMapper((NakedClassMapper) ComponentLoader.loadComponent(BASE_NAME + ".class-mapper",
+                    NakedClassMapper.class));
+        } catch (ObjectStoreException e) {
+            throw new ComponentException("Failed to set up class mapper", e);
+        }
+
+        Properties properties = Configuration.getInstance().getPropertySubset(BASE_NAME + ".mapper");
+        Enumeration e = properties.keys();
+        while (e.hasMoreElements()) {
+            String className = (String) e.nextElement();
+            String value = properties.getProperty(className);
+
+            if(value.startsWith("auto.")) {
+            	add(className, mapperFactory.createMapper(className, BASE_NAME + ".automapper." + value.substring(5) + "."));
+            } else  if(value.trim().equals("auto")) {
+            	add(className, mapperFactory.createMapper(className, BASE_NAME + ".automapper.default"));
+            } else {
+	            LOG.debug("mapper " + className + "=" + value);
+	
+	            try {
+	                add(className, (ObjectMapper) ComponentLoader.loadNamedComponent(value, ObjectMapper.class));
+	            } catch (ObjectStoreException ex) {
+	                throw new ComponentException("Failed to set up mapper for " + className, ex);
+	            }
+            }
+        }
     }
 
     public void shutdown() {
-        try {
-            if(defaulMapper != null) {
-                defaulMapper.shutdown();
-            }
-        } catch (ObjectStoreException e) {
-           LOG.error("Shutdown default mapper", e);
-        }
         Enumeration e = mappers.elements();
         while (e.hasMoreElements()) {
         	ObjectMapper mapper = (ObjectMapper) e.nextElement();

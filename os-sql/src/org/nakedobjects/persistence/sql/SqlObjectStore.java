@@ -12,37 +12,35 @@ import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.utility.ComponentException;
 import org.nakedobjects.utility.ComponentLoader;
 import org.nakedobjects.utility.ConfigurationException;
-import org.nakedobjects.utility.Configuration;
 
-import java.util.Enumeration;
-import java.util.Properties;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
 
 public final class SqlObjectStore implements NakedObjectStore {
-    private static final String BASE_NAME = "sql-object-store";
+    static final String BASE_NAME = "sql-object-store";
     private static final Logger LOG = Logger.getLogger(SqlObjectStore.class);
     private LoadedObjects loaded = new LoadedObjects();
-    private ObjectMapperLookup factory;
+    private ObjectMapperLookup mapperLookup;
+    private DatabaseConnectorPool connectorPool;
 
     public void abortTransaction() {}
 
     public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
-        return factory.getNakedClassMapper().getNakedClass(name);
+        return mapperLookup.getNakedClassMapper().getNakedClass(name);
     }
     
     public void createNakedClass(NakedClass cls) throws ObjectStoreException {
-        factory.getNakedClassMapper().createNakedClass(cls);
+        mapperLookup.getNakedClassMapper().createNakedClass(cls);
     }
     
     public void createObject(NakedObject object) throws ObjectStoreException {
-        factory.getMapper(object).createObject(object);
+        mapperLookup.getMapper(object).createObject(object);
     }
 
     public void destroyObject(NakedObject object) throws ObjectStoreException {
-        factory.getMapper(object).destroyObject(object);
+        mapperLookup.getMapper(object).destroyObject(object);
     }
 
     public void endTransaction() {}
@@ -56,19 +54,19 @@ public final class SqlObjectStore implements NakedObjectStore {
     }
 
     public Vector getInstances(NakedClass cls, boolean includeSubclasses) throws ObjectStoreException {
-        return factory.getMapper(cls).getInstances(cls);
+        return mapperLookup.getMapper(cls).getInstances(cls);
     }
 
     public Vector getInstances(NakedClass cls, String pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
-        return factory.getMapper(cls).getInstances(cls, pattern);
+        return mapperLookup.getMapper(cls).getInstances(cls, pattern);
     }
 
     public Vector getInstances(NakedObject pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
-        return factory.getMapper(pattern).getInstances(pattern);
+        return mapperLookup.getMapper(pattern).getInstances(pattern);
     }
 
     public NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, ObjectStoreException {
-        return factory.getMapper(hint).getObject(oid, hint);
+        return mapperLookup.getMapper(hint).getObject(oid, hint);
     }
 
     public LoadedObjects getLoadedObjects() {
@@ -76,53 +74,22 @@ public final class SqlObjectStore implements NakedObjectStore {
     }
     
     public boolean hasInstances(NakedClass cls, boolean includeSubclasses) throws ObjectStoreException {
-        return factory.getMapper(cls).hasInstances(cls);
+        return mapperLookup.getMapper(cls).hasInstances(cls);
     }
 
     public void init() throws ConfigurationException, ComponentException, ObjectStoreException {
-        ObjectMapperFactory mapperFactory = (ObjectMapperFactory) ComponentLoader.
-    			loadComponent(BASE_NAME + ".automapper", ObjectMapperFactory.class);
         DatabaseConnectorFactory connectorFactory = (DatabaseConnectorFactory) ComponentLoader.
         		loadComponent(BASE_NAME + ".connector", DatabaseConnectorFactory.class);
-        factory = new ObjectMapperLookup(loaded, connectorFactory);
-        factory.init();
+        connectorPool = new DatabaseConnectorPool(connectorFactory);
         
-        try {
-            factory.setDefault((ObjectMapper) ComponentLoader.loadComponent(BASE_NAME + ".default-mapper",
-                    ObjectMapper.class));
-        } catch (ObjectStoreException e) {
-            throw new ComponentException("Failed to set up default mapper", e);
-        }
+        ObjectMapperFactory mapperFactory = (ObjectMapperFactory) ComponentLoader.
+    			loadComponent(BASE_NAME + ".automapper", ObjectMapperFactory.class);
         
-        try {
-            factory.setNakedClassMapper((NakedClassMapper) ComponentLoader.loadComponent(BASE_NAME + ".class-mapper",
-                    NakedClassMapper.class));
-        } catch (ObjectStoreException e) {
-            throw new ComponentException("Failed to set up class mapper", e);
-        }
-
-        Properties properties = Configuration.getInstance().getPropertySubset(BASE_NAME + ".mapper");
-        Enumeration e = properties.keys();
-        while (e.hasMoreElements()) {
-            String key = (String) e.nextElement();
-            String value = properties.getProperty(key);
-
-            if(value.startsWith("auto.")) {
-            	factory.add(key, mapperFactory.createMapper(key, BASE_NAME + ".automapper." + value.substring(5) + "."));
-            } else  if(value.trim().equals("auto")) {
-            	factory.add(key, mapperFactory.createMapper(key, BASE_NAME + ".automapper.default"));
-            } else {
-	            LOG.debug("mapper " + key + "=" + value);
-	
-	            try {
-	                factory.add(key, (ObjectMapper) ComponentLoader.loadNamedComponent(value, ObjectMapper.class));
-	            } catch (ObjectStoreException ex) {
-	                throw new ComponentException("Failed to set up mapper for " + key, ex);
-	            }
-            }
-        }
+        Connection connection = new Connection(connectorPool);
+        mapperLookup = new ObjectMapperLookup(loaded, connection);
         
-        
+        mapperLookup.setMapperFactory(mapperFactory, connectorPool);
+        mapperLookup.init();
     }
 
     public String name() {
@@ -130,11 +97,11 @@ public final class SqlObjectStore implements NakedObjectStore {
     }
 
     public int numberOfInstances(NakedClass cls, boolean includedSubclasses) throws ObjectStoreException {
-        return factory.getMapper(cls).numberOfInstances(cls);
+        return mapperLookup.getMapper(cls).numberOfInstances(cls);
     }
 
     public void resolve(NakedObject object) throws ObjectStoreException {
-        factory.getMapper(object).resolve(object);
+        mapperLookup.getMapper(object).resolve(object);
     }
 
     public void save(NakedObject object) throws ObjectStoreException {
@@ -145,13 +112,14 @@ public final class SqlObjectStore implements NakedObjectStore {
             // TODO a better plan would be ask the mapper to save the collection
             // - saveCollection(parent, collection)
         }
-        factory.getMapper(object).save(object);
+        mapperLookup.getMapper(object).save(object);
     }
 
     public void setObjectManager(NakedObjectManager manager) {}
 
     public void shutdown() throws ObjectStoreException {
-        factory.shutdown();
+        mapperLookup.shutdown();
+        connectorPool.shutdown();
     }
 
     public void startTransaction() {}

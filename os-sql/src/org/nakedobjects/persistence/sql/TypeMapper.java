@@ -1,7 +1,6 @@
 package org.nakedobjects.persistence.sql;
 
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.reflect.Field;
 import org.nakedobjects.object.value.Date;
 import org.nakedobjects.object.value.FloatingPointNumber;
@@ -54,7 +53,7 @@ public class TypeMapper {
 		return (String) types.get(type);
 	}
 	
-    public String valueAsDBString(Field field, NakedValue value) throws ObjectStoreException {
+    public String valueAsDBString(Field field, NakedValue value) throws SqlObjectStoreException {
         Class type = field.getType();
 
         if (TextString.class.isAssignableFrom(type)) {
@@ -135,12 +134,12 @@ public class TypeMapper {
 
 
         //LOG.error("No suitable column type for" + type);
-        throw new ObjectStoreException("No suitable column type for" + type);
+        throw new SqlObjectStoreException("No suitable column type for" + type);
     }
     
     /*
     public void setFromDBColumn(Field field, NakedObject object, ResultSet result)
-    	throws ObjectStoreException {
+    	throws SqlObjectStoreException {
 	
 	String fieldName = columns[no];
 	
@@ -177,7 +176,7 @@ public class TypeMapper {
         }
     } catch (SQLException e) {
 //    	LOG.error("Error with results for " + fieldName, e);
-        throw new ObjectStoreException(e);
+        throw new SqlObjectStoreException(e);
     }
 }
 */

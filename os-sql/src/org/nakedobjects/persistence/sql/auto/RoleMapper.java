@@ -4,10 +4,10 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
-import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.SimpleOid;
 import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.persistence.sql.Results;
+import org.nakedobjects.persistence.sql.SqlObjectStoreException;
 import org.nakedobjects.security.Role;
 import org.nakedobjects.utility.NotImplementedException;
 
@@ -20,7 +20,7 @@ public class RoleMapper extends NameBasedMapper {
 	private static final Logger LOG = Logger.getLogger(RoleMapper.class);
 	private static final String table = "no_role";
 
-	public void createObject(NakedObject object) throws ObjectStoreException {
+	public void createObject(NakedObject object) throws SqlObjectStoreException {
 		Role user = (Role) object;
 		long id = primaryKey(user.getOid());
 		db.update("Insert into " + table + " (" + columns + ") values ('"
@@ -28,20 +28,20 @@ public class RoleMapper extends NameBasedMapper {
 				+ user.getDescription().stringValue() + "'," + id + ")");
 	}
 
-	protected void createTables() throws ObjectStoreException {
+	protected void createTables() throws SqlObjectStoreException {
 		db
 				.update("create table "
 						+ table
 						+ " (id INTEGER, name VARCHAR(255), description VARCHAR(1024))");
 	}
 
-	public Vector getInstances(NakedClass cls) throws ObjectStoreException {
+	public Vector getInstances(NakedClass cls) throws SqlObjectStoreException {
 		String statement = "select " + columns + " from " + table;
 		return getInstances(statement);
 	}
 
 	public Vector getInstances(NakedObject pattern)
-			throws ObjectStoreException, UnsupportedFindException {
+			throws SqlObjectStoreException, UnsupportedFindException {
 		LOG.debug("loading user: " + pattern);
 		String statement = "select " + columns + " from " + table
 				+ " where name = '" + ((Role) pattern).getName().stringValue()
@@ -49,7 +49,7 @@ public class RoleMapper extends NameBasedMapper {
 		return getInstances(statement);
 	}
 
-	private Vector getInstances(String statement) throws ObjectStoreException {
+	private Vector getInstances(String statement) throws SqlObjectStoreException {
 		Results rs = db.select(statement);
 		NakedObjectManager manager = NakedObjectManager.getInstance();
 		Vector instances = new Vector();
@@ -80,15 +80,15 @@ public class RoleMapper extends NameBasedMapper {
 		return instances;
 	}
 
-	protected boolean needsTables() throws ObjectStoreException {
+	protected boolean needsTables() throws SqlObjectStoreException {
 		return !db.hasTable(table);
 	}
 
-	public void resolve(NakedObject object) throws ObjectStoreException {
+	public void resolve(NakedObject object) throws SqlObjectStoreException {
 		throw new NotImplementedException(object.toString());
 	}
 
-	public void save(NakedObject object) throws ObjectStoreException {
+	public void save(NakedObject object) throws SqlObjectStoreException {
 		Role user = (Role) object;
 		db.update("update " + table + " set name='"
 				+ user.getName().stringValue() + "', description='"

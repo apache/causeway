@@ -55,7 +55,14 @@ public class JavaOneToManyAssociation extends JavaAssociation implements OneToMa
     			Method aboutMethod = getAboutMethod();
     			try {
     					FieldAbout about = new FieldAbout(context, object);  
-						aboutMethod.invoke(object, new Object[] { about, element, new Boolean(add)});
+						Object[] parameters;
+		                if(aboutMethod.getParameterTypes().length == 3) {
+		        		    parameters = new Object[] { about, element, new Boolean(add)};
+		        		} else {
+		        		    // default about
+		        		    parameters = new Object[] { about };
+		        		}
+		    		    aboutMethod.invoke(object, parameters);
     					return about;
     			} catch (InvocationTargetException e) {
     				LOG.error("Exception executing " + aboutMethod, e.getTargetException());

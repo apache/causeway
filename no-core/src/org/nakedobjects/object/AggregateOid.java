@@ -28,6 +28,8 @@ package org.nakedobjects.object;
 /**
  * 
  *  @author <a href="mailto:dslaughter@safeway.co.uk">Dave Slaughter</a>
+ * 
+ * @deprecated
  */
 public class AggregateOid implements java.io.Serializable {
     private final static long serialVersionUID = 1L;
