@@ -1,5 +1,6 @@
 package org.nakedobjects.persistence.cache;
 
+import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
@@ -171,9 +172,9 @@ public class CacheObjectStore implements NakedObjectStore {
         return null;
     }
 
-    public NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses) {
+    public NakedObject[] getInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
         Vector instances = new Vector();
-        Enumeration objects = instances(cls).instances();
+        Enumeration objects = instances(specification).instances();
         while (objects.hasMoreElements()) {
             NakedObject instance = (NakedObject) objects.nextElement();
             instances.addElement(instance);
@@ -182,6 +183,20 @@ public class CacheObjectStore implements NakedObjectStore {
         return toArray(instances);
     }
 
+    public NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) throws ObjectStoreException,
+            UnsupportedFindException {
+        Vector instances = new Vector();
+        Enumeration objects = instances(criteria.getSpecification()).instances();
+        while (objects.hasMoreElements()) {
+            NakedObject instance = (NakedObject) objects.nextElement();
+            if(criteria.matches(instance)) {
+                instances.addElement(instance);
+            }
+        }
+        
+        return toArray(instances);
+    }
+    
     private NakedObject[] toArray(Vector instances) {
         NakedObject[] instanceArray = new NakedObject[instances.size()];
         instances.copyInto(instanceArray);

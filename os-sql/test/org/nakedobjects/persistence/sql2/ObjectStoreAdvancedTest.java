@@ -17,7 +17,7 @@ public class ObjectStoreAdvancedTest extends NakedObjectStoreInstancesTestCase {
     }
 
     protected NakedObjectStore installObjectStore() throws Exception {
-        Configuration.installConfiguration("conf/sqlos2-testing.properties");
+        Configuration.installConfiguration("sqlos-testing.properties");
         SqlObjectStore os = new SqlObjectStore();
         return os;
     }

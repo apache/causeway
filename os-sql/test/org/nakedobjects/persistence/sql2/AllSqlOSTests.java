@@ -1,14 +1,20 @@
-package org.nakedobjects.persistence.file;
+package org.nakedobjects.persistence.sql2;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
-public class InMemoryObjectStore extends MementoObjectStore {
+public class AllSqlOSTests {
 
-	public InMemoryObjectStore() {
-		super(new InMemoryDataManager());
-	}
-	
-    public String name() {
-    	return "In Memory";
+    public static void main(String[] args) {}
+
+    public static Test suite() {
+        TestSuite suite = new TestSuite("Test for org.nakedobjects.persistence.sql2");
+        //$JUnit-BEGIN$
+        suite.addTestSuite(ObjectStoreInstancesTest.class);
+        suite.addTestSuite(ObjectStoreFieldsTest.class);
+        suite.addTestSuite(ObjectStoreAdvancedTest.class);
+        //$JUnit-END$
+        return suite;
     }
 }
 
@@ -16,7 +22,7 @@ public class InMemoryObjectStore extends MementoObjectStore {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,5 +1,6 @@
 package org.nakedobjects.persistence.file;
 
+import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
@@ -28,9 +29,9 @@ import org.apache.log4j.Logger;
  */
 public abstract class MementoObjectStore implements NakedObjectStore {
     private static final Logger LOG = Logger.getLogger(MementoObjectStore.class);
+    private static final NakedObjectSpecification NAKED_CLASS_SPEC = NakedObjectSpecificationLoader.getInstance().loadSpecification(NakedClass.class);
     private DataManager dataManager;
     private LoadedObjects loadedObjects;
-    private static final NakedObjectSpecification NAKED_CLASS_SPEC = NakedObjectSpecificationLoader.getInstance().loadSpecification(NakedClass.class);
 
     public MementoObjectStore(DataManager manager) {
         this.dataManager = manager;
@@ -112,6 +113,25 @@ public abstract class MementoObjectStore implements NakedObjectStore {
         return "MementoObjectStore";
     }
 
+    public NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) throws ObjectStoreException,
+            UnsupportedFindException {
+        throw new UnsupportedFindException();
+    }
+
+    public NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) throws ObjectStoreException {
+        LOG.debug("getInstances like " + pattern);
+        ObjectData patternData = createObjectData(pattern, false);
+        NakedObject[] instances = getInstances(patternData, null);
+        return instances;
+    }
+
+    private NakedObject[] getInstances(NakedObjectSpecification cls) throws ObjectStoreException {
+        LOG.debug("getInstances of " + cls);
+        ObjectData patternData = new ObjectData(cls, null);
+        NakedObject[] instances = getInstances(patternData, null);
+        return instances;
+    }
+    
     public NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses) throws ObjectStoreException {
         LOG.debug("getInstances of " + cls);
         if(includeSubclasses) {
@@ -132,10 +152,10 @@ public abstract class MementoObjectStore implements NakedObjectStore {
         }
     }
 
-    private NakedObject[] getInstances(NakedObjectSpecification cls) throws ObjectStoreException {
-        LOG.debug("getInstances of " + cls);
+    public NakedObject[] getInstances(NakedObjectSpecification cls, String pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
+        LOG.debug("getInstances like " + pattern);
         ObjectData patternData = new ObjectData(cls, null);
-        NakedObject[] instances = getInstances(patternData, null);
+        NakedObject[] instances = getInstances(patternData, pattern);
         return instances;
     }
 
@@ -158,9 +178,12 @@ public abstract class MementoObjectStore implements NakedObjectStore {
                 instance = (NakedObject) createSkeletalObject(oid, instanceData.getClassName());
                 instance.setContext(NakedObjectContext.getDefaultContext());
                 loadedObjects.loaded(instance);
-	            instance.setResolved();
+	//            instance.setResolved();
             }
             initObject(instance, instanceData);
+            if(!instance.isResolved()) {
+                instance.setResolved();
+            }
             
             if(title == null || instance.titleString().toLowerCase().indexOf(titlePattern) >= 0) {
                 instances[count++] = instance;
@@ -170,20 +193,6 @@ public abstract class MementoObjectStore implements NakedObjectStore {
         NakedObject[] array = new NakedObject[count];
         System.arraycopy(instances, 0, array, 0, count);
         return array;
-    }
-
-    public NakedObject[] getInstances(NakedObjectSpecification cls, String pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
-        LOG.debug("getInstances like " + pattern);
-        ObjectData patternData = new ObjectData(cls, null);
-        NakedObject[] instances = getInstances(patternData, pattern);
-        return instances;
-    }
-
-    public NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) throws ObjectStoreException {
-        LOG.debug("getInstances like " + pattern);
-        ObjectData patternData = createObjectData(pattern, false);
-        NakedObject[] instances = getInstances(patternData, null);
-        return instances;
     }
 
     public LoadedObjects getLoadedObjects() {
@@ -249,9 +258,12 @@ public abstract class MementoObjectStore implements NakedObjectStore {
 
                 if (refs != null) {
                     InternalCollection collection = (InternalCollection) field.get(object);
-                    LOG.debug("setting collection " + field + "; assigning " + refs.getOid() + " to " + collection);
-                    collection.setOid(refs.getOid());
-
+                    SerialOid oid = refs.getOid();
+                    LOG.debug("setting collection " + field + "; assigning " + oid + " to " + collection);
+                    if(oid == null) {
+                        collection.setOid(oid);
+                    }
+                    
                     for (int j = 0; j < refs.size(); j++) {
                         try {
                             if (loadedObjects.isLoaded(refs.elementAt(j))) {

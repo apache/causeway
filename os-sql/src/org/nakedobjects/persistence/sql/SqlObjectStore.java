@@ -3,6 +3,7 @@ package org.nakedobjects.persistence.sql;
 import org.nakedobjects.container.configuration.ComponentException;
 import org.nakedobjects.container.configuration.ComponentLoader;
 import org.nakedobjects.container.configuration.ConfigurationException;
+import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -89,6 +90,11 @@ public final class SqlObjectStore implements NakedObjectStore {
         NakedObject object = mapperLookup.getMapper(connection, hint).getObject(connection, oid, hint);
         releaseConnectionIfNotInTransaction(connection);
         return object;
+    }
+    
+    public NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) throws ObjectStoreException,
+            UnsupportedFindException {
+        throw new UnsupportedFindException();
     }
 
     public LoadedObjects getLoadedObjects() {

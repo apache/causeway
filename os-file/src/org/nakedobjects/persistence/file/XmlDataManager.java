@@ -2,6 +2,7 @@
 package org.nakedobjects.persistence.file;
 
 import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ObjectStoreException;
