@@ -131,7 +131,7 @@ public class ClassIcon extends ObjectView {
             } else {
                 if (getNakedClass() instanceof NakedClass) {
 
-                    FastFinder finder = getNakedClass().actionFind();
+                    FastFinder finder = getNakedClass().explorationActionFind();
                     object = PojoAdapter.createAdapter(finder);
                     //view = ViewFactory.getViewFactory().createOpenRootView(PojoAdapter.createAdapter(finder));
                 }
