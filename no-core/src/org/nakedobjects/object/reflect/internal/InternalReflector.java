@@ -185,7 +185,8 @@ public class InternalReflector implements Reflector {
             Class[] longParams = new Class[params.length + 1];
             longParams[0] = InternalAbout.class;
             System.arraycopy(params, 0, longParams, 1, params.length);
-            Method aboutMethod = findMethod(forClass, "aboutAction" + name, null, longParams);
+            String aboutName = "about" + methodName.substring(0,1).toUpperCase() + methodName.substring(1);
+            Method aboutMethod = findMethod(forClass, aboutName, null, longParams);
             if (aboutMethod == null) {
                 aboutMethod = defaultAboutMethod;
             } else {

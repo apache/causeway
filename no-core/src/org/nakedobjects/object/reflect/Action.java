@@ -219,8 +219,8 @@ public class Action extends NakedObjectMember {
         return sb.toString();
     }
 
-    public ActionParameterSet getParameters(Session session, NakedObject object, NakedObjectSpecification[] parameterTypes) {
-        return actionDelegate.getParameters(getIdentifier(), session, object, parameterTypes);
+    public ActionParameterSet getParameters(Session session, NakedObject object) {
+        return actionDelegate.getParameters(getIdentifier(), session, object, parameterStubs());
     }
 }
 

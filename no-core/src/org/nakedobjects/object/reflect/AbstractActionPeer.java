@@ -47,8 +47,8 @@ public abstract class AbstractActionPeer implements ActionPeer {
         return decorated.returnType();
     }
 
-    public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, NakedObjectSpecification[] parameterTypes) {
-        return decorated.getParameters(identifier, session, object, parameterTypes);
+    public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
+        return decorated.getParameters(identifier, session, object, parameters);
     }
 
 }

@@ -89,7 +89,7 @@ final class MockAction implements ActionPeer {
         Assert.assertEquals(expected, actions.elementAt(index));
     }
 
-    public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, NakedObjectSpecification[] parameterTypes) {
+    public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
         return null;
     }
 }

@@ -127,7 +127,7 @@ public class MockNakedObject implements NakedObject {
         return false;
     }
 
-    public ActionParameterSet getParameters(Session session, Action action, NakedObjectSpecification[] parameterTypes) {
+    public ActionParameterSet getParameters(Session session, Action action) {
         return null;
     }
 

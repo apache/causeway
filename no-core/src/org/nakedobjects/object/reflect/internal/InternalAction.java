@@ -144,7 +144,7 @@ public class InternalAction extends InternalMember implements ActionPeer {
         return hasReturn ? nakedClass(returnType) : null;
     }
 
-    public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, NakedObjectSpecification[] parameterTypes) {
+    public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
         throw new UnexpectedCallException();
     }
 }

@@ -135,8 +135,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
         return hasReturn ? nakedClass(returnType) : null;
     }
     
-    public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, NakedObjectSpecification[] parameterTypes) {
-        Naked[] parameters = new Naked[parameterTypes.length];
+    public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
         Hint hint= getHint(identifier, session, object, parameters);
         if(hint instanceof SimpleActionAbout) {
             SimpleActionAbout about = (SimpleActionAbout) hint;

@@ -66,7 +66,7 @@ public class MockAction implements ActionPeer {
         return aboutMethod;
     }
 
-    public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, NakedObjectSpecification[] parameterTypes) {
+    public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
         return null;
     }
 

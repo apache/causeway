@@ -24,7 +24,7 @@ public interface ActionPeer {
 
     NakedObjectSpecification returnType();
 
-    ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, NakedObjectSpecification[] parameterTypes);
+    ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters);
 }
 
 /*

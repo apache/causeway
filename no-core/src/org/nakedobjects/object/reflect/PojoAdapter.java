@@ -161,8 +161,8 @@ public class PojoAdapter extends AbstractNakedObject {
     }
     
     
-    public ActionParameterSet getParameters(Session session, Action action, NakedObjectSpecification[] parameterTypes) {
-        return action.getParameters(session, this, parameterTypes);
+    public ActionParameterSet getParameters(Session session, Action action) {
+        return action.getParameters(session, this);
     }
 
     public NakedValue getValue(OneToOneAssociation field) {

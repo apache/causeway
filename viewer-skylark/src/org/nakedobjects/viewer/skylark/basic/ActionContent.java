@@ -32,7 +32,7 @@ public class ActionContent extends ObjectContent {
         this.action = action;
 
         int numberParameters = action.parameters().length;
-        ActionParameterSet parameterHints = target.getParameters(ClientSession.getSession(), action, action.parameters());
+        ActionParameterSet parameterHints = target.getParameters(ClientSession.getSession(), action);
         String[] labels;
         Object[] defaultValues;
         if (parameterHints != null) {

@@ -50,7 +50,7 @@ public interface NakedObject extends Naked {
 
     String getLabel(Session session, NakedObjectField field);
 
-    ActionParameterSet getParameters(Session session, Action action, NakedObjectSpecification[] parameterTypes);
+    ActionParameterSet getParameters(Session session, Action action);
 
     NakedValue getValue(OneToOneAssociation field);
 
