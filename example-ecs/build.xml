@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE project [
-	<!ENTITY properties SYSTEM "file:../naked-objects/properties.xml">
-	<!ENTITY targets SYSTEM "file:../naked-objects/targets.xml">
+	<!ENTITY properties SYSTEM "file:../build-templates/properties.xml">
+	<!ENTITY targets SYSTEM "file:../build-templates/targets.xml">
 ]>
 
 <project name="Naked Object Example - ECS, a system for an Excutive Car Service" default="all" basedir=".">
@@ -13,11 +13,11 @@
 	
 	<!-- classpath -->
 	<path id="libs.internal">
-		<fileset dir="../no-core/build/release">
+		<fileset dir="${no-core.release.dir}">
 			<include name="no-core.jar"/>
 			<include name="no-core-test.jar"/>
 		</fileset>
-		<fileset dir="../no-xat/build/release">
+		<fileset dir="${no-xat.release.dir}">
 			<include name="no-xat.jar"/>
 			<include name="no-xat-test.jar"/>
 		</fileset>

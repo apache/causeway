@@ -23,6 +23,7 @@
 	</path>
 
 	<property name="no-core.release.dir" location="../no-core/build/release"/>
+	<property name="no-xat.release.dir" location="../no-xat/build/release"/>
 
 	<!-- need to exists for targets.xml -->
 	<path id="libs.internal">
