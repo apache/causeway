@@ -53,20 +53,23 @@ public class SimpleActionAbout extends AbstractAbout implements ActionAbout {
     }
 
     public void setParameter(int index, Naked defaultValue) {
-        if (index < 0 || index > defaultValues.length) {
+        if (index < 0 || index >= defaultValues.length) {
             throw new IllegalArgumentException("No parameter index " + index);
         }
         defaultValues[index] = defaultValue;
     }
 
     public void setParameter(int index, String label) {
-        if (index < 0 || index > defaultValues.length) {
+        if (index < 0 || index >= defaultValues.length) {
             throw new IllegalArgumentException("No parameter index " + index);
         }
         labels[index] = label;
     }
 
     public void setParameter(final int index, final String label, final Naked defaultValue) {
+        if (index < 0 || index >= defaultValues.length) {
+            throw new IllegalArgumentException("No parameter index " + index);
+        }
         setParameter(index, label);
         setParameter(index, defaultValue);
     }

@@ -2,6 +2,7 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ActionAbout;
@@ -28,10 +29,6 @@ public class ParameterSet {
             }
         }
         
-        
-        
-        
-
         Naked[] parameterValues = getParameterValues();
 
         About about = action.getAbout(ClientSession.getSession(), target, parameterValues);
@@ -64,7 +61,17 @@ public class ParameterSet {
     }
 
     public void clear(int parameter) {
+        checkParameterRange(parameter);
         values[parameter] = null;
+    }
+
+    private void checkParameterRange(int parameter) {
+        if(parameter < 0) {
+            throw new NakedObjectRuntimeException("Illegal parameter; must be positive");
+        }
+        if(parameter >= values.length) {
+            throw new NakedObjectRuntimeException("Illegal parameter; must be less than " + values.length);
+        }
     }
 
     public Naked[] getParameterValues() {
@@ -80,6 +87,7 @@ public class ParameterSet {
     }
 
     public void set(int parameter, NakedObject object) {
+        checkParameterRange(parameter);
         values[parameter] = object;
     }
 
