@@ -7,6 +7,7 @@ import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.DebugInfo;
 
 
@@ -36,11 +37,6 @@ public interface NakedObjectStore extends DebugInfo {
      */
     CreateObjectCommand createCreateObjectCommand(NakedObject object);
 
-    //   public void createObject(NakedObject object) throws ObjectStoreException;
-
-    //   public void createNakedClass(NakedObject cls) throws
-    // ObjectStoreException;
-
     /**
      * Removes the specified object from the object store. The specified
      * object's data should be removed from the persistence mechanism and, if it
@@ -59,8 +55,6 @@ public interface NakedObjectStore extends DebugInfo {
      */
     SaveObjectCommand createSaveObjectCommand(NakedObject object);
 
-    //    void destroyObject(NakedObject object) throws ObjectStoreException;
-
     public void endTransaction() throws ObjectStoreException;
 
     NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) throws ObjectStoreException,
@@ -76,8 +70,6 @@ public interface NakedObjectStore extends DebugInfo {
      * <para>2) have the same content as the pattern object where the pattern
      * object has values or references specified, i.e. empty value objects and
      * <code>null</code> references are to be ignored; </para>
-     * 
-     * @param includeSubclasses
      */
     NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) throws ObjectStoreException,
             UnsupportedFindException;
@@ -86,8 +78,6 @@ public interface NakedObjectStore extends DebugInfo {
 
     NakedObject[] getInstances(NakedObjectSpecification cls, String pattern, boolean includeSubclasses)
             throws ObjectStoreException, UnsupportedFindException;
-
-    //    void save(NakedObject object) throws ObjectStoreException;
 
     public LoadedObjects getLoadedObjects();
 
@@ -160,23 +150,23 @@ public interface NakedObjectStore extends DebugInfo {
 
     /**
      * A count of the number of instances matching the specified pattern.
-     * 
-     * @param includedSubclasses
-     *                       TODO
      */
     int numberOfInstances(NakedObjectSpecification cls, boolean includedSubclasses) throws ObjectStoreException;
 
     /**
-     * Re-initialises the fields of an object. This method should return
-     * immediately if the object's resolved flag (determined by calling
-     * <method>isResolved </method> on the object) is already set. If the object
-     * is unresolved then the object's missing data should be retreieved from
-     * the persistence mechanism and be used to set up the value objects and
-     * associations. The object should be set up in the same manner as in
-     * <method>getObject </method> above.
+     * Called by the resolveImmediately method in NakedObjectManager.
+     * 
+     * @see NakedObjectManager#resolveImmediately(NakedObject)
      */
     void resolveImmediately(NakedObject object) throws ObjectStoreException;
 
+    /**
+    * Called by the resolveEagerly method in NakedObjectManager.
+    * 
+    * @see NakedObjectManager#resolveEagerly(NakedObject, NakedObjectField)	
+    */
+    void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectStoreException;
+    
     public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException;
 
     public void shutdown() throws ObjectStoreException;

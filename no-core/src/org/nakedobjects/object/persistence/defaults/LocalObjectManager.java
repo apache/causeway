@@ -32,17 +32,17 @@ import org.apache.log4j.Logger;
 
 public class LocalObjectManager extends AbstractNakedObjectManager {
     private static final Logger LOG = Logger.getLogger(LocalObjectManager.class);
-    private final Hashtable nakedClasses = new Hashtable();
     private LoadedObjects loadedObjects;
+    private final Hashtable nakedClasses = new Hashtable();
     private UpdateNotifier notifier;
     private NakedObjectStore objectStore;
     private OidGenerator oidGenerator;
     private Transaction transaction;
-	    
-	public LocalObjectManager() {
-	    LOG.info("creating object manager");    
-	}
-    
+
+    public LocalObjectManager() {
+        LOG.info("creating object manager");
+    }
+
     public void abortTransaction() {
         try {
             getTransaction().abort();
@@ -52,13 +52,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         }
     }
 
-    private Transaction getTransaction() {
-        if(transaction == null) {
-            throw new TransactionException("No transaction started");
-        }
-        return transaction;
-    }
-    
     /**
      * Removes all the data from the specified object. All associations are set
      * to nulll; values have clear() call on them; and internal collections are
@@ -121,6 +114,11 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
+    }
+
+    protected void finalize() throws Throwable {
+        super.finalize();
+        LOG.info("finalizing object manager");
     }
 
     public String getDebugData() {
@@ -251,6 +249,13 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
+    }
+
+    private Transaction getTransaction() {
+        if (transaction == null) {
+            throw new TransactionException("No transaction started");
+        }
+        return transaction;
     }
 
     /**
@@ -387,15 +392,18 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
     }
 
-    /**
-     * Re-initialises the fields of an object. This method should return
-     * immediately if the object's resolved flag (determined by calling
-     * <method>isResolved </method> on the object) is already set. If the object
-     * is unresolved then the object's missing data should be retreieved from
-     * the persistence mechanism and be used to set up the value objects and
-     * associations. The object should be set up in the same manner as in
-     * <method>getObject </method> above.
-     */
+    public void resolveEagerly(NakedObject object, NakedObjectField field) {
+        if (object.isResolved() || !isPersistent(object)) {
+            return;
+        }
+        LOG.info("resolve-eagerly" + object + "/" + field);
+        try {
+            objectStore.resolveEagerly(object, field);
+        } catch (ObjectStoreException e) {
+            throw new NakedObjectRuntimeException(e);
+        }
+    }
+
     public void resolveImmediately(NakedObject object) {
         if (object.isResolved() || !isPersistent(object)) {
             return;
@@ -494,16 +502,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
     public String toString() {
         return "LocalObjectManager [objectStore=" + objectStore.name() + ",oidGenerator=" + oidGenerator.name() + "]";
-    }
-
-    public void resolveEagerly(NakedObject object, NakedObjectField field) {
-        
-    }
-
-
-    protected void finalize() throws Throwable {
-        super.finalize();
-        LOG.info("finalizing object manager");
     }
 
 }
