@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <title>Distribution</title>
+  </head>
+
+  <body>
+    <h1>Naked Object Extensible Distribution Mechanism</h1>
+
+    <h3>Client</h3>
+
+    <p>To set up a distribution mechanism for Naked Objects you need to create
+    implementations of the following interfaces, each which represents a type
+    of data that needs to be passed between the client and server:-</p>
+
+    <ul>
+      <li>AboutData</li>
+
+      <li>ActionType</li>
+
+      <li>ClassReference</li>
+
+      <li>InstanceSet</li>
+
+      <li>ObjectData</li>
+
+      <li>ObjectReference</li>
+
+      <li>ObjectUpdateMessage</li>
+
+      <li>OidData</li>
+
+      <li>ParameterSet</li>
+
+      <li>SecurityToken</li>
+    </ul>
+
+    <p>Also implement a factory (implementing the RemoteObjectFactory
+    interface) to generate each of the above data types.</p>
+
+    <p>Finally the requests from the Naked Objects client need to transfered
+    to the server through an implementation of the DistributionInterface
+    interface. Each method that is implemented makes use of the above data
+    objects so you are in complete control over what kind of data get passed
+    over the network. Note that some of the methods throw exceptions, and
+    these need to be propogated over the network and rethrown by the client
+    when necessary.</p>
+
+    <h3>Server</h3>
+
+    <p>The server must receive the requests from the client and then call the
+    corresponding method on the RemoteMechanism object to execute the request
+    on the server. Any response, or any thrown exception must be passed back
+    to the client.</p>
+
+    <p></p>
+  </body>
+</html>

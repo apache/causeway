@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="src" path="/no-core"/>
+	<classpathentry sourcepath="JUNIT_SRC" kind="var" path="JUNIT"/>
+	<classpathentry kind="var" path="LOG4J"/>
+	<classpathentry kind="src" path="example"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

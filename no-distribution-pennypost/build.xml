@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE project [
+	<!ENTITY properties SYSTEM "file:../build-templates/properties.xml">
+	<!ENTITY targets SYSTEM "file:../build-templates/targets.xml">
+]>
+
+<project name="" default="all" basedir=".">
+	<description></description>
+
+	&properties;
+
+	<property name="component" value="no-distribution"/>
+	
+	<!-- classpath -->
+	<path id="libs.internal">
+		<fileset dir="${no-core.release.dir}">
+			<include name="no-core.jar"/>
+			<include name="no-core-test.jar"/>
+		</fileset>
+	</path>
+
+	&targets;	
+</project>
+
+
