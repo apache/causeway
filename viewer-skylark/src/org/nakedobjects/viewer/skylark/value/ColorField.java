@@ -2,19 +2,15 @@ package org.nakedobjects.viewer.skylark.value;
 
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.defaults.value.Logical;
-import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.ValueContent;
-import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
@@ -71,7 +67,7 @@ public class ColorField extends AbstractField {
 
     public void firstClick(Click click) {
         View overlay = new ColorFieldOverlay(this);
-        Location location = click.getLocationWithinViewer();
+        Location location = click.getMouseLocation();
         // TODO offset by constant amount
         location.move(10, 10);
 		overlay.setLocation(location);

@@ -10,6 +10,7 @@ import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
@@ -120,7 +121,9 @@ public class ClassIcon extends ObjectView {
         if(classAbout == null || classAbout.canAccess().isAllowed()) {
 	        NakedCollection instances = getNakedClass().allInstances();
 			View view = ViewFactory.getViewFactory().createOpenRootView(instances);
-			view.setLocation(click.getLocationWithinViewer());
+			Location location = click.getLocationWithinWorkspace();
+			location.move(15, -30);
+            view.setLocation(location);
 			getWorkspace().addView(view);
         }
 	}
@@ -134,7 +137,6 @@ public class ClassIcon extends ObjectView {
     public void menuOptions(MenuOptionSet options) {
         NakedObjectSpecification spec = getNakedClass().forNakedClass();
         ClassOption.menuOptions(spec, options);
-        
         options.setColor(Style.CONTENT_MENU);
     }
 

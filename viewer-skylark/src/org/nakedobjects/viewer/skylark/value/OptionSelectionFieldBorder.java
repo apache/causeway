@@ -49,7 +49,7 @@ public class OptionSelectionFieldBorder extends AbstractBorder {
                 Size size = overlay.getRequiredSize();
                 overlay.setSize(size);
 
-                Location location = click.getLocationWithinViewer();
+                Location location = click.getMouseLocation();
                 // TODO offset by constant amount
                 overlay.setLocation(location);
 

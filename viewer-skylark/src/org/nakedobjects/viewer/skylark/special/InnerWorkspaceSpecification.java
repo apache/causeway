@@ -51,7 +51,7 @@ public class InnerWorkspaceSpecification implements WorkspaceSpecification {
 	}
 
 	public boolean canDisplay(Naked object) {
-		return object instanceof NakedObject;
+		return object instanceof UserContext;
 	}
 
 

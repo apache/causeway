@@ -211,13 +211,17 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
     public void invoke() {
     	int option = getOption();
 
-    	Location location = new Location(mouseAt);
-		location.move(30, 12);
+		Workspace workspace = getWorkspace();
 		Item item = items[option];
 
+		Location location = new Location(getAbsoluteLocation());
+    	location.subtract(workspace.getView().getAbsoluteLocation());
+    	Padding padding = workspace.getView().getPadding();
+        location.move(-padding.getLeft(), -padding.getTop());
+		location.move(30, 0);
+		
 		showStatus("Executing " + item);
 		dispose();
-		Workspace workspace = getWorkspace();
 		LOG.debug("execute " + item.name + " on " + forView + " in " + workspace);
 		if (!item.isBlank && item.action != null && item.action.disabled(forView).isAllowed()) {
 			item.action.execute(workspace, forView, location);

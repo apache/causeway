@@ -7,9 +7,7 @@ import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
-import org.nakedobjects.viewer.skylark.ViewDrag;
 
 public class UserContextWorkspace extends DefaultWorkspace {
 
@@ -24,10 +22,6 @@ public class UserContextWorkspace extends DefaultWorkspace {
 	protected UserContext getContext() {
         return (UserContext) getObject();
     }
-
-	public View pickup(ViewDrag drag) {
-	    return getParent() == null ? null : super.pickup(drag);
-	}
 	
 	public void drop(ContentDrag drag) {
 		super.drop(drag);

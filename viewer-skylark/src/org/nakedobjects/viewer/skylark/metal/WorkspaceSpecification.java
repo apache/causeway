@@ -55,7 +55,7 @@ public class WorkspaceSpecification implements org.nakedobjects.viewer.skylark.s
 	}
 
 	public boolean canDisplay(Naked object) {
-		return object instanceof NakedObject;
+		return object instanceof UserContext;
 	}
 }
 

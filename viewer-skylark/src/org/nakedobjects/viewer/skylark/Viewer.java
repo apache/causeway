@@ -296,7 +296,7 @@ public class Viewer {
     
     protected void popupMenu(Click click, View over) {
     	ViewAreaType type = click.getViewAreaType();
-    	Location at = click.getLocationWithinViewer();
+    	Location at = click.getMouseLocation();
     	// TODO make sure this offset is constant
     	boolean forView = type == ViewAreaType.VIEW;
     	
