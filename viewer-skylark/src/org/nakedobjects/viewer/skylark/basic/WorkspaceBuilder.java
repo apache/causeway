@@ -25,7 +25,7 @@ import org.apache.log4j.Logger;
 public class WorkspaceBuilder extends AbstractViewBuilder {
     private static final Logger LOG = Logger.getLogger(WorkspaceBuilder.class);
     private static final int PADDING = 10;
-    private static final Location ZERO = new Location(0, 0);
+    public static final Location UNPLACED = new Location(-1, -1);
 
     public void build(View view) {
         NakedObject object = ((ObjectContent) view.getContent()).getObject();
@@ -43,6 +43,7 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
                     while (elements.hasMoreElements()) {
                         NakedObject cls = (NakedObject) elements.nextElement();
                         View classIcon = factory.createIconizedRootView(cls);
+                        classIcon.setLocation(WorkspaceBuilder.UNPLACED);
                         view.addView(classIcon);
                     }
 
@@ -98,7 +99,7 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
             View v = views[i];
             Size componentSize = v.getRequiredSize();
             v.setSize(componentSize);
-            if (v.getLocation().equals(ZERO)) {
+            if (v.getLocation().equals(UNPLACED)) {
                 int height = componentSize.getHeight() + 6;
                 if (v.getSpecification().isOpen()) {
                     v.setLocation(new Location(xWindow, yWindow));

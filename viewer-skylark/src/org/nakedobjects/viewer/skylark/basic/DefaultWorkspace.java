@@ -165,7 +165,7 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
         super.layout();
         View[] subviews = getSubviews();
         for (int i = 0; i < subviews.length; i++) {
-	        limitBounds(subviews[i]);
+	        limitBounds(subviews[i].getView());
         }
     }
     
@@ -271,7 +271,7 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
                 for (int i = 0; i < views.length; i++) {
                     View v = views[i];
                     if (v.getSpecification().isOpen()) {
-                        v.setLocation(new Location(0, 0));
+                        v.setLocation(WorkspaceBuilder.UNPLACED);
                     }
                 }
 
@@ -287,7 +287,7 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
                 for (int i = 0; i < views.length; i++) {
                     View v = views[i];
                     if (!v.getSpecification().isOpen()) {
-                        v.setLocation(new Location(0, 0));
+                        v.setLocation(WorkspaceBuilder.UNPLACED);
                     }
                 }
 
@@ -301,7 +301,7 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
                 View views[] = getSubviews();
 
                 for (int i = 0; i < views.length; i++) {
-                    views[i].setLocation(new Location(0, 0));
+                    views[i].setLocation(WorkspaceBuilder.UNPLACED);
                 }
 
                 workspace.invalidateLayout();

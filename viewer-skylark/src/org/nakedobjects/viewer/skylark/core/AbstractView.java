@@ -382,7 +382,7 @@ public abstract class AbstractView implements View {
     public void limitBounds(View view) {
         Bounds contentBounds = view.getBounds();
         Bounds containerBounds = new Bounds(getSize());
-        containerBounds.contract(getPadding());
+ //       containerBounds.contract(getPadding());
         if (containerBounds.limitBounds(contentBounds) && ! view.getBounds().equals(contentBounds)) {
             view.setBounds(contentBounds);
             view.invalidateLayout();

@@ -253,6 +253,9 @@ public class Bounds {
             LOG.info("height outside limit, reducing height to " + viewTop);
         }
 
+        if(limited) {
+            LOG.info("limited " + toLimit);
+        }
         return limited;
     }
 

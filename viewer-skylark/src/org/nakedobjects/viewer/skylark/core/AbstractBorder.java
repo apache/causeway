@@ -196,6 +196,12 @@ public class AbstractBorder extends AbstractViewDecorator {
         wrappedView.setSize(wrappedViewSize);
     }
 
+    public void setBounds(Bounds bounds) {
+        Bounds wrappedViewBounds = new Bounds(bounds);
+        wrappedViewBounds.contract(getLeft() + getRight(), getTop() + getBottom());
+        wrappedView.setBounds(wrappedViewBounds);
+    }
+
     public void thirdClick(Click click) {
         click.subtract(getLeft(), getTop());
         wrappedView.thirdClick(click);

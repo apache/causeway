@@ -205,8 +205,7 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
             if (mainViewFormSpec.canDisplay(object)) {
                 selectedNode = view;
                 showInRightPane(mainViewFormSpec.createView(view.getContent(), null));
-            }
-            if (mainViewTableSpec.canDisplay(object)) {
+            } else if (mainViewTableSpec.canDisplay(object)) {
                 selectedNode = view;
                 showInRightPane(mainViewTableSpec.createView(view.getContent(), null));
             }

@@ -91,7 +91,7 @@ public class ScrollBorder extends AbstractBorder {
     
     public void setBounds(Bounds bounds) {
         setLocation(bounds.getLocation());
-        setSize(getSize());
+        setSize(bounds.getSize());
     }
     
     public Bounds getBounds() {
