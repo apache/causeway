@@ -1,25 +1,9 @@
 package org.nakedobjects.reflector.java.reflect;
 
+import org.nakedobjects.container.configuration.Configuration;
 
-import java.util.Vector;
+public class TestConfiguration extends Configuration {
 
-
-public class JavaObjectWithVector {
-    JavaReferencedObject added;
-    JavaReferencedObject removed;
-    Vector collection = new Vector();
-    
-    public Vector getMethod() {
-        return collection;
-    }
-    
-    public void addToMethod(JavaReferencedObject person) {
-        added = person;
-    }
-    
-    public void removeFromMethod(JavaReferencedObject person) {
-        removed = person;
-    }
 }
 
 

@@ -2,11 +2,12 @@ package org.nakedobjects.reflector.java.reflect;
 
 
 import org.nakedobjects.application.control.FieldAbout;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObjectContext;
-import org.nakedobjects.object.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapter;
 
@@ -36,6 +37,8 @@ public class JavaAssociationTest extends TestCase {
     	Logger.getRootLogger().setLevel(Level.OFF);
     	loader = new MockNakedObjectSpecificationLoader();
         
+        ConfigurationFactory.setConfiguration(new TestConfiguration());
+        
         javaObjectWithOneToOneAssociations = new JavaObjectWithOneToOneAssociations();
         nakedObjectHoldingObjectWithAssociations = PojoAdapter.createAdapter(javaObjectWithOneToOneAssociations);        
         
@@ -58,11 +61,14 @@ public class JavaAssociationTest extends TestCase {
 
     public void testType() {
         DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
-        loader.setupSpecification(spec);
+        loader.addSpec(spec);
     	assertEquals(spec, personField.getType());
     }
     	
     public void testSet() {
+        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
+        loader.addSpec(spec);
+        
         NakedObjectContext context = new MockNakedObjectContext(MockObjectManager.setup());
         nakedObjectHoldingObjectWithAssociations.setContext(context);
        
@@ -72,7 +78,10 @@ public class JavaAssociationTest extends TestCase {
     }     	
     
     public void testRemove() {
-    	javaObjectWithOneToOneAssociations.setReferencedObject(javaObjectForReferencing);
+        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
+        loader.addSpec(spec);
+        
+        javaObjectWithOneToOneAssociations.setReferencedObject(javaObjectForReferencing);
     	
     	assertNotNull(javaObjectWithOneToOneAssociations.getReferencedObject());
     	personField.clearAssociation(nakedObjectHoldingObjectWithAssociations, associate);
@@ -104,7 +113,7 @@ public class JavaAssociationTest extends TestCase {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

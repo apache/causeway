@@ -1,6 +1,6 @@
 package org.nakedobjects.reflector.java.reflect;
 
-import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 public abstract class JavaMember {
     private final static Logger LOG = Logger.getLogger(JavaMember.class);
-    private final static boolean STRICT = Configuration.getInstance().getBoolean("reflection.strict", true);
+    private final static boolean STRICT = ConfigurationFactory.getConfiguration().getBoolean("reflection.strict", true);
     private final String name;
     private Method aboutMethod;
 
@@ -34,7 +34,7 @@ public abstract class JavaMember {
         return name;
     }
 
-    protected void invocationException(String error, InvocationTargetException e) {
+    protected static void invocationException(String error, InvocationTargetException e) {
         LOG.error(error);
         if (STRICT) {
             new ReflectionErrorDialog(error, e);
@@ -51,7 +51,7 @@ public abstract class JavaMember {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

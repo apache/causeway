@@ -1,10 +1,13 @@
 package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.application.NakedObjectRuntimeException;
+import org.nakedobjects.application.object.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.OneToManyPeer;
@@ -13,18 +16,17 @@ import org.nakedobjects.reflector.java.control.SimpleFieldAbout;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Vector;
 
 import org.apache.log4j.Category;
 
 
-public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer {
-    private final static Category LOG = Category.getInstance(JavaOneToManyAssociation.class);
+public class JavaInternalCollection extends JavaField implements OneToManyPeer {
+    private final static Category LOG = Category.getInstance(JavaInternalCollection.class);
     private Method addMethod;
     private Method removeMethod;
     private Method clearMethod;
 
-    public JavaOneToManyAssociation(String name, Class type, Method get, Method add, Method remove, Method about) {
+    public JavaInternalCollection(String name, Class type, Method get, Method add, Method remove, Method about) {
         super(name, type, get, about, false);
         this.addMethod = add;
         this.removeMethod = remove;
@@ -38,7 +40,12 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
         objectManager.startTransaction();
 
         try {
-            addMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
+            if(addMethod != null) {
+                addMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
+            } else {
+                InternalCollection collection = (InternalCollection) getMethod.invoke(inObject.getObject(), new Object[0]);
+                collection.add(associate.getObject());
+            }
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("set method expects a " + getType().getFullName() + " object; not a "
                     + associate.getClass().getName() + ", " + e.getMessage());
@@ -53,17 +60,14 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
     }
     
     public void initAssociation(NakedObject inObject, NakedObject associate) {
-        LOG.debug("init association " + getName() + " in " + inObject + " with " + associate);
+        LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
         try {
-            Object obj = getMethod.invoke(inObject.getObject(), new Object[0]);
-            
-             if(obj instanceof Vector) {
-                 ((Vector) obj).addElement(associate.getObject());
-             } else {
-                 throw new NakedObjectRuntimeException();
-             }
-
-//            addMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
+            if(addMethod != null) {
+                addMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
+            } else {
+                InternalCollection collection = (InternalCollection) getMethod.invoke(inObject.getObject(), new Object[0]);
+                collection.add(associate.getObject());
+            }
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("set method expects a " + getType().getFullName() + " object; not a "
                     + associate.getClass().getName() + ", " + e.getMessage());
@@ -126,7 +130,12 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
             NakedObjectManager objectManager = inObject.getContext().getObjectManager();
             objectManager.startTransaction();
 
-            removeMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
+            if(removeMethod != null) {
+	            removeMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
+            } else {
+                InternalCollection collection = (InternalCollection) getMethod.invoke(inObject.getObject(), new Object[0]);
+                collection.remove(associate.getObject());
+            }
             
             objectManager.endTransaction();
         } catch (IllegalArgumentException e) {
@@ -151,16 +160,8 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
 
     private Naked get(NakedObject fromObject) {
         try {
-             Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
-            
-            if(obj == null)  {
-                  return null;
-             } else if(obj instanceof Vector) {
-                 return VectorCollectionAdapter.createAdapter((Vector) obj, type);
-             } else {
-                 throw new NakedObjectRuntimeException();
-             }
-             
+            InternalCollection collection = (InternalCollection) getMethod.invoke(fromObject.getObject(), new Object[0]);
+            return InternalCollectionAdapter.createAdapter(collection, type);
         } catch (InvocationTargetException e) {
              invocationException("Exception executing " + getMethod, e);
              throw new NakedObjectRuntimeException(e);
@@ -172,15 +173,8 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
    
     public boolean isEmpty(NakedObject fromObject) {
         try {
-            Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
-            
-            if(obj == null)  {
-                  return true;
-             } else if(obj instanceof Vector) {
-                 return ((Vector) obj).isEmpty();
-             } else {
-                 throw new NakedObjectRuntimeException();
-             }
+            InternalCollection collection = (InternalCollection) getMethod.invoke(fromObject.getObject(), new Object[0]);
+            return collection.isEmpty();
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + getMethod, e);
             throw new NakedObjectRuntimeException(e);
@@ -193,17 +187,11 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
 
     public void initOneToManyAssociation(NakedObject fromObject, NakedObject[] instances) {
         try {
-            Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
-           
-            if(obj instanceof Vector) {
-                ((Vector) obj).removeAllElements();
-                for (int i = 0; i < instances.length; i++) {
-	                ((Vector) obj).addElement(instances[i].getObject());
-                }
-            } else {
-                throw new NakedObjectRuntimeException();
+            InternalCollection collection = (InternalCollection) getMethod.invoke(fromObject.getObject(), new Object[0]);
+            collection.removeAllElements();
+            for (int i = 0; i < instances.length; i++) {
+                collection.add(instances[i].getObject());
             }
-            
        } catch (InvocationTargetException e) {
             LOG.error("Exception executing " + getMethod, e.getTargetException());
             throw new NakedObjectRuntimeException(e);
@@ -212,6 +200,15 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
            throw new NakedObjectRuntimeException(ignore);
        }
     }
+    
+    /**
+    return the object type, as a Class object, that the method returns.
+    */
+   public NakedObjectSpecification getType() {
+       return type == null ? NakedObjectSpecificationLoader.getInstance().loadSpecification(Object.class) : super.getType();
+   }
+   
+
 }
 
 /*

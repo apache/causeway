@@ -5,10 +5,12 @@ import org.nakedobjects.application.Title;
 import org.nakedobjects.application.control.ActionAbout;
 import org.nakedobjects.application.control.ClassAbout;
 import org.nakedobjects.application.control.FieldAbout;
+import org.nakedobjects.application.object.InternalCollection;
 import org.nakedobjects.application.value.BusinessValue;
 import org.nakedobjects.object.Aggregated;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
@@ -134,6 +136,9 @@ public class JavaReflector implements Reflector {
     private Method methods[];
     private Method defaultAboutFieldMethod;
     private final JavaObjectFactory objectFactory;
+    private Method isDirtyMethod;
+    private Method clearDirtyMethod;
+    private Method markDirtyMethod;
 
     public JavaReflector(String name, JavaObjectFactory objectFactory) throws ReflectionException {
         this.objectFactory = objectFactory;
@@ -150,6 +155,10 @@ public class JavaReflector implements Reflector {
                 "A NakedObject class must be marked as public.  Error in " + cls); }
         this.cls = cls;
         methods = cls.getMethods();
+        
+        isDirtyMethod = findMethod(false, "isDirty", boolean.class, new Class[0]);
+        clearDirtyMethod = findMethod(false, "clearDirty", void.class, new Class[0]);
+        markDirtyMethod = findMethod(false, "markDirty", void.class, new Class[0]);
     }
 
     public Naked acquireInstance() {
@@ -330,18 +339,23 @@ public class JavaReflector implements Reflector {
     }
     
     public FieldPeer[] fields() {
-        LOG.debug("looking for fields");
+        if(cls.getName().startsWith("java.") || BusinessValue.class.isAssignableFrom(cls)) {
+            return new FieldPeer[0];
+        }
+        
+        LOG.debug("looking for fields for " + cls);
         Vector elements = new Vector();
-
         defaultAboutFieldMethod = findMethod(OBJECT, ABOUT_FIELD_DEFAULT, null, new Class[] { FieldAbout.class });
+        valueFields(elements, BusinessValue.class);
+ 
+        valueFields(elements, String.class);
+        valueFields(elements, Date.class);
+        valueFields(elements, float.class);
 
-       valueFields(elements, BusinessValue.class);
- /*       valueFields(elements, String.class);
-        valueFields(elements, Float.class);
-*/
 //        primitiveFields(elements);
         derivedFields(elements);
         oneToManyAssociationFields(elements);
+        oneToManyAssociationFieldsInternalCollection(elements);
         // need to find one-many first, so they are not mistaken as one-one
         // associations
         oneToOneAssociationFields(elements);
@@ -463,13 +477,64 @@ public class JavaReflector implements Reflector {
         return Modifier.isAbstract(cls.getModifiers());
     }
     
+    public boolean isDirty(NakedObject object) {
+        if(isDirtyMethod == null) {
+            return false;
+        }
+        
+        try {
+            Boolean isDirty = (Boolean) isDirtyMethod.invoke(object.getObject(), new Object[0]);
+            return isDirty.booleanValue();
+        } catch (IllegalArgumentException e) {
+            throw new NakedObjectRuntimeException(e);
+        } catch (IllegalAccessException e) {
+            LOG.error("Illegal access of " + isDirtyMethod, e);
+            return false;
+        } catch (InvocationTargetException e) {
+            JavaMember.invocationException("Exception executing " + isDirtyMethod, e);
+            return false;
+        }
+    }
+    
+    public void clearDirty(NakedObject object) {
+        if(clearDirtyMethod == null) {
+            return;
+        }
+        
+        try {
+            clearDirtyMethod.invoke(object.getObject(), new Object[0]);
+        } catch (IllegalArgumentException e) {
+            throw new NakedObjectRuntimeException(e);
+        } catch (IllegalAccessException e) {
+            LOG.error("Illegal access of " + isDirtyMethod, e);
+        } catch (InvocationTargetException e) {
+            JavaMember.invocationException("Exception executing " + isDirtyMethod, e);
+        }
+    }
+    
+    
+    public void markDirty(NakedObject object) {
+        if(markDirtyMethod == null) {
+            return;
+        }
+        
+        try {
+            markDirtyMethod.invoke(object.getObject(), new Object[0]);
+        } catch (IllegalArgumentException e) {
+            throw new NakedObjectRuntimeException(e);
+        } catch (IllegalAccessException e) {
+            LOG.error("Illegal access of " + isDirtyMethod, e);
+        } catch (InvocationTargetException e) {
+            JavaMember.invocationException("Exception executing " + isDirtyMethod, e);
+        }
+    }
+    
     public boolean isObject() {
         return NakedObject.class.isAssignableFrom(cls);
     }
     
     public boolean isValue() {
-        //return NakedValue.class.isAssignableFrom(cls);
-        return String.class.isAssignableFrom(cls) || Date.class.isAssignableFrom(cls) || BusinessValue.class.isAssignableFrom(cls) ;
+        return BusinessValue.class.isAssignableFrom(cls) ;
     }
 
     public boolean isPartOf() {
@@ -559,6 +624,63 @@ public class JavaReflector implements Reflector {
 
             associations
                     .addElement(new JavaOneToManyAssociation(name, elementType, getMethod, addMethod, removeMethod, aboutMethod));
+        }
+    }
+
+    private void oneToManyAssociationFieldsInternalCollection(Vector associations) {
+        Vector v = findPrefixedMethods(OBJECT, GET_PREFIX, InternalCollection.class, 0);
+ 
+        // create vector of multiRoles from all get methods
+        Enumeration e = v.elements();
+
+        while (e.hasMoreElements()) {
+            Method getMethod = (Method) e.nextElement();
+            LOG.debug("identified 1-many association method " + getMethod);
+            String name = javaBaseName(getMethod.getName());
+
+            Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class, null, boolean.class });
+            Class aboutType = (aboutMethod == null) ? null : aboutMethod.getParameterTypes()[1];
+            if (aboutMethod == null) {
+                aboutMethod = defaultAboutFieldMethod;
+            }
+
+            // look for corresponding add and remove methods
+            Method addMethod = findMethod(OBJECT, "addTo" + name, void.class, null);
+            if (addMethod == null) {
+                addMethod = findMethod(OBJECT, "add" + name, void.class, null);
+            }
+            if (addMethod == null) {
+                addMethod = findMethod(OBJECT, "associate" + name, void.class, null);
+            }
+
+            Method removeMethod = findMethod(OBJECT, "removeFrom" + name, void.class, null);
+            if (removeMethod == null) {
+                removeMethod = findMethod(OBJECT, "remove" + name, void.class, null);
+            }
+            if (removeMethod == null) {
+                removeMethod = findMethod(OBJECT, "dissociate" + name, void.class, null);
+            }
+            
+            Class removeType = (removeMethod == null) ? null : removeMethod.getParameterTypes()[0];
+            Class addType = (addMethod == null) ? null : addMethod.getParameterTypes()[0];
+
+            /*
+             * The type of element can be ascertained if there is an
+             * add/associate method, otherwise it can not be determined until
+             * runtime.
+             */
+            Class elementType = (aboutType == null) ? null : aboutType;
+            elementType = (addType == null) ? elementType : addType;
+            elementType = (removeType == null) ? elementType : removeType;
+            
+            if (((aboutType != null) && (aboutType != elementType)) || ((addType != null) && (addType != elementType))
+                    || ((removeType != null) && (removeType != elementType))) {
+                LOG.error("The add/remove/associate/dissociate/about methods in " + className() + " must "
+                        + "all deal with same type of object.  There are at least two different " + "types");
+            }
+
+            associations
+                    .addElement(new JavaInternalCollection(name, elementType, getMethod, addMethod, removeMethod, aboutMethod));
         }
     }
 
@@ -734,7 +856,7 @@ public class JavaReflector implements Reflector {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

@@ -1,5 +1,6 @@
 package org.nakedobjects.reflector.java.reflect;
 
+import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
@@ -12,6 +13,7 @@ import org.nakedobjects.object.TransactionException;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.ActionPeer;
+import org.nakedobjects.object.reflect.ActionParameterSet;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
@@ -56,7 +58,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
                 // non-persistent
 	            Object[] executionParameters = new Object[parameters.length];
 	            for (int i = 0; i < parameters.length; i++) {
-	                executionParameters[i] = parameters[i].getObject();
+	                executionParameters[i] = parameters[i] == null ? null : parameters[i].getObject();
                 }
 
                 result = actionMethod.invoke(inObject.getObject(), executionParameters);
@@ -67,9 +69,9 @@ public class JavaAction extends JavaMember implements ActionPeer {
 	            Object[] transactionParameters = new Object[parameters.length];
 	            for (int i = 0; i < parameters.length; i++) {
 	                NakedObject parameter = (NakedObject) parameters[i];
-	                Oid parameterOid = parameter.getOid();
+	                Oid parameterOid = parameter == null ? null : parameter.getOid();
 	                parameter = parameterOid == null ? parameter : objectManager.getObject(parameterOid, parameter.getSpecification());
-	                transactionParameters[i] = parameter.getObject();
+	                transactionParameters[i] = parameter == null ? null : parameter.getObject();
                 }
 	            
 	            result = actionMethod.invoke(transactionObject.getObject(), transactionParameters);
@@ -78,7 +80,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
             LOG.debug(" action result " + result);
 
             objectManager.endTransaction();
-            if (result != null && result instanceof NakedObject) { return (NakedObject) result; }
+//            if (result != null && result instanceof NakedObject) { return (NakedObject) result; }
             if (result != null) { return PojoAdapter.createAdapter(result); }
 
         } catch (InvocationTargetException e) {
@@ -186,11 +188,24 @@ public class JavaAction extends JavaMember implements ActionPeer {
         boolean hasReturn = returnType != void.class && returnType != NakedError.class;
         return hasReturn ? nakedClass(returnType) : null;
     }
+    
+    public ActionParameterSet getParameters(Session session, NakedObject object, NakedObjectSpecification[] parameterTypes) {
+        Naked[] parameters = new Naked[parameterTypes.length];
+        Hint hint= getHint(session, object, parameters);
+        if(hint instanceof SimpleActionAbout) {
+            SimpleActionAbout about = (SimpleActionAbout) hint;
+            return new ActionParameterSet(about.getDefaultParameterValues(), about.getParameterLabels());
+        }  else if (hint instanceof DefaultHint) {
+            return null;
+        }else {
+            throw new NakedObjectRuntimeException();
+        }
+    }
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

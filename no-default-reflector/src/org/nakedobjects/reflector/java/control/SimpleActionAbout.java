@@ -1,6 +1,5 @@
 package org.nakedobjects.reflector.java.control;
 
-import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.application.control.ActionAbout;
 import org.nakedobjects.application.control.Role;
 import org.nakedobjects.application.control.State;
@@ -30,8 +29,7 @@ public class SimpleActionAbout extends AbstractAbout implements ActionAbout {
     }
 
     public Object[] getDefaultParameterValues() {
-        throw new NakedObjectRuntimeException();
-//        return defaultValues;
+        return defaultValues;
     }
 
     public String[] getParameterLabels() {
@@ -68,6 +66,7 @@ public class SimpleActionAbout extends AbstractAbout implements ActionAbout {
         if (index < 0 || index >= defaultValues.length) {
             throw new IllegalArgumentException("No parameter index " + index);
         }
+        labels[index] = label;
         defaultValues[index] = defaultValue;
     }
 
@@ -133,7 +132,7 @@ public class SimpleActionAbout extends AbstractAbout implements ActionAbout {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

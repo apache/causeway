@@ -2,10 +2,11 @@ package org.nakedobjects.reflector.java.reflect;
 
 
 import org.nakedobjects.application.control.FieldAbout;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObjectContext;
-import org.nakedobjects.object.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.security.Session;
@@ -39,6 +40,8 @@ public class JavaOneToOneAssociationTest extends TestCase {
     	Logger.getRootLogger().setLevel(Level.OFF);
     	loader = new MockNakedObjectSpecificationLoader();
         		
+    	ConfigurationFactory.setConfiguration(new TestConfiguration());
+    	
         objectWithOneToOneAssoications = new JavaObjectWithOneToOneAssociations();
         nakedObject = PojoAdapter.createAdapter(objectWithOneToOneAssoications);
         
@@ -55,11 +58,14 @@ public class JavaOneToOneAssociationTest extends TestCase {
 
     public void testType() {
         DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
-        loader.setupSpecification(spec);
+        loader.addSpec(spec);
     	assertEquals(spec, personField.getType());
     }
     	
     public void testSet() {
+        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
+        loader.addSpec(spec);
+        
         NakedObjectContext context = new MockNakedObjectContext(MockObjectManager.setup());
         nakedObject.setContext(context);
        
@@ -69,6 +75,9 @@ public class JavaOneToOneAssociationTest extends TestCase {
     }     	
     
     public void testRemove() {
+        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
+        loader.addSpec(spec);
+        
     	objectWithOneToOneAssoications.setReferencedObject(referencedObject);
     	
     	assertNotNull(objectWithOneToOneAssoications.getReferencedObject());
@@ -101,7 +110,7 @@ public class JavaOneToOneAssociationTest extends TestCase {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

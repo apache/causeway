@@ -1,12 +1,14 @@
 package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.application.control.ActionAbout;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
+import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObjectContext;
-import org.nakedobjects.object.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.PojoAdapter;
@@ -27,12 +29,15 @@ public class JavaActionTest extends TestCase {
     private JavaAction javaAction;
     private NakedObject nakedObject;
     private JavaActionTestObject javaObject;
+    private MockNakedObjectSpecificationLoader loader;
 
     protected void setUp() throws Exception {
         super.setUp();
         
+        ConfigurationFactory.setConfiguration(new TestConfiguration());
+        
        	Logger.getRootLogger().setLevel(Level.OFF);
-    	new MockNakedObjectSpecificationLoader();
+    	loader = new MockNakedObjectSpecificationLoader();
         
 		javaObject = new JavaActionTestObject();
 		nakedObject = PojoAdapter.createAdapter(javaObject);
@@ -51,6 +56,9 @@ public class JavaActionTest extends TestCase {
     }
 
     public void testAction() {
+        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
+        loader.addSpec(spec);
+        
         NakedObjectContext context = new MockNakedObjectContext(MockObjectManager.setup());
         nakedObject.setContext(context);
 
@@ -82,7 +90,7 @@ public class JavaActionTest extends TestCase {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

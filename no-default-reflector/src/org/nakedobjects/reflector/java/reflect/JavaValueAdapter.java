@@ -1,41 +1,16 @@
-package org.nakedobjects.reflector.java.exploration;
+package org.nakedobjects.reflector.java.reflect;
 
-import org.nakedobjects.application.Title;
-import org.nakedobjects.application.TitledObject;
-import org.nakedobjects.application.control.User;
-import org.nakedobjects.object.security.ClientSession;
-import org.nakedobjects.reflector.java.control.SimpleSession;
-
-
-public class ExplorationUser implements TitledObject{
-    private User user;
-    public User getUser() {
-   //     resolve(user);
-        return user;
-    }
-    public void setUser(User user) {
-        this.user = user;
-   //     objectChanged();
-    }
+public interface JavaValueAdapter {
+    Object parse(String entry);
     
-    public void actionChangeToThisUser() {
-        ((SimpleSession) ClientSession.getSession()).setUser(user);
-    }
-
-    public String getIconName() {
-        return "User";
-    }
-    
-    public Title title() {
-       return new Title(getUser());
-    }
+    String asString(Object value);
 }
 
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

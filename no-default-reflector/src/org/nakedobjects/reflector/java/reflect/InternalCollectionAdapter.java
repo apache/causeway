@@ -23,25 +23,24 @@ import org.nakedobjects.utility.UnexpectedCallException;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
 
-public class VectorCollectionAdapter implements InternalCollection {
+public class InternalCollectionAdapter implements InternalCollection {
     protected static Hashtable pojos = new Hashtable();
     private NakedObjectSpecification specification;
-    private Vector collection;
+    private org.nakedobjects.application.object.InternalCollection collection;
     private NakedObjectSpecification elementSpecification;
     private Oid oid;
 
 
-    public static Naked createAdapter(Vector pojo, Class type) {
+    public static Naked createAdapter(org.nakedobjects.application.object.InternalCollection pojo, Class type) {
         if(pojo == null) {
             return null;
         }
-        VectorCollectionAdapter nakedObject;
+        InternalCollectionAdapter nakedObject;
         if(false && pojos.containsKey(pojo)) {
-            nakedObject = (VectorCollectionAdapter) pojos.get(pojo);
+            nakedObject = (InternalCollectionAdapter) pojos.get(pojo);
         } else {
-            nakedObject = new VectorCollectionAdapter(pojo, type);
+            nakedObject = new InternalCollectionAdapter(pojo, type);
         }
         /*
         if (oid != null) {
@@ -60,7 +59,7 @@ public class VectorCollectionAdapter implements InternalCollection {
     
     
     
-    private VectorCollectionAdapter(Vector vector, Class type) {
+    private InternalCollectionAdapter(org.nakedobjects.application.object.InternalCollection vector, Class type) {
         this.collection = vector;
         
         pojos.put(vector, this);
@@ -163,6 +162,9 @@ public class VectorCollectionAdapter implements InternalCollection {
     }
     
     public NakedObjectSpecification getElementSpecification() {
+        if(elementSpecification == null) {
+            return NakedObjectSpecificationLoader.getInstance().loadSpecification(Object.class);
+        }
         return elementSpecification;
     }
 
@@ -243,7 +245,7 @@ public class VectorCollectionAdapter implements InternalCollection {
     public String toString() {
         StringBuffer s = new StringBuffer();
 
-        s.append("POJO (collection)");
+        s.append("POJO (collection) ");
         // datatype
         NakedObjectSpecification spec = getSpecification();
         s.append(spec == null ? getClass().getName() : spec.getShortName());
@@ -296,9 +298,6 @@ public class VectorCollectionAdapter implements InternalCollection {
     public boolean isViewDirty() {
         return false;
     }
-    
-    
-
 
 
 

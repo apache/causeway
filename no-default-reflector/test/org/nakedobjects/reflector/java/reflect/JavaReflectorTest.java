@@ -1,9 +1,10 @@
 package org.nakedobjects.reflector.java.reflect;
 
-import org.nakedobjects.object.MockNakedObjectSpecificationLoader;
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.FieldPeer;
 
@@ -26,6 +27,8 @@ public class JavaReflectorTest extends TestCase {
     protected void setUp() throws ClassNotFoundException {
     	LogManager.getLoggerRepository().setThreshold(Level.OFF);
         
+       	ConfigurationFactory.setConfiguration(new TestConfiguration());
+
     	new MockNakedObjectSpecificationLoader();     	
     	
     	objectFactory = new MockObjectFactory();
@@ -129,7 +132,7 @@ public class JavaReflectorTest extends TestCase {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,13 +1,14 @@
 package org.nakedobjects.reflector.java.reflect;
 
 
+import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.MockNakedObjectContext;
-import org.nakedobjects.object.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectTestCase;
+import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapter;
 
@@ -40,6 +41,8 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         
         Logger.getRootLogger().setLevel(Level.OFF);
     	loader = new MockNakedObjectSpecificationLoader();
+    	
+    	ConfigurationFactory.setConfiguration(new TestConfiguration());
         
 		objectWithVector = new JavaObjectWithVector();
 		nakedObject = PojoAdapter.createAdapter(objectWithVector);
@@ -58,11 +61,14 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
     
     public void testType() {
         DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
-        loader.setupSpecification(spec);
+        loader.addSpec(spec);
     	assertEquals(spec, collectionField.getType());
     }
     	
     public void testAdd() {
+        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
+        loader.addSpec(spec);
+        
         JavaReferencedObject associate = new JavaReferencedObject();
         NakedObject nakedObjectAssoicate =PojoAdapter.createAdapter(associate);
         
@@ -75,6 +81,9 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
     }     	
     
     public void testRemove() {
+        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
+        loader.addSpec(spec);
+        
         JavaReferencedObject associate = new JavaReferencedObject();
         NakedObject nakedObjectAssoicate =PojoAdapter.createAdapter(associate);
         
@@ -84,6 +93,9 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
     }     	
     
     public void testGet() {
+        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
+        loader.addSpec(spec);
+        
     	//objectWithVector.collection = new DummyInternalCollection();
     	assertNotNull(collectionField.getAssociations(nakedObject));
     	assertEquals(new Vector(), collectionField.getAssociations(nakedObject).getObject());
@@ -101,7 +113,7 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

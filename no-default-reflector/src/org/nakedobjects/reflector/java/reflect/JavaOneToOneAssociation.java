@@ -18,6 +18,8 @@ import org.nakedobjects.reflector.java.control.SimpleFieldAbout;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Date;
+import java.util.Hashtable;
 
 import org.apache.log4j.Category;
 
@@ -92,7 +94,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
                 }
                 
             } else {
-                setMethod.invoke(inObject.getObject(), new Object[] { setValue });
+                setMethod.invoke(inObject.getObject(), new Object[] { adaptValue((String) setValue) });
             }
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + setMethod, e);
@@ -105,7 +107,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
     }
 
     public void setValue(NakedObject inObject, Object setValue) {
-        LOG.debug("local setValue() " + inObject.getOid() + "/" + setValue);
+        LOG.debug("local setValue() " + inObject.getOid() + "/" + getName() + "/" + setValue);
 
         try {
             NakedObjectManager objectManager = inObject.getContext().getObjectManager();
@@ -241,6 +243,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
                 Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
                 BusinessValue value = (BusinessValue) obj;
                 value.parseUserEntry(text);
+                fromObject.markDirty();
             } catch (InvocationTargetException e) {
                 invocationException("Exception executing " + getMethod, e);
             } catch (IllegalAccessException ignore) {
@@ -252,7 +255,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
 
         } else {
             try {
-                setMethod.invoke(fromObject.getObject(), new Object[] { text });
+                setMethod.invoke(fromObject.getObject(), new Object[] { adaptValue(text) });
             } catch (InvocationTargetException e) {
                 invocationException("Exception executing " + setMethod, e);
             } catch (IllegalAccessException ignore) {
@@ -261,6 +264,21 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
             }
 
         }
+    }
+
+    private Hashtable adapters = new Hashtable();
+    {
+        adapters.put(NakedObjectSpecificationLoader.getInstance().loadSpecification(java.lang.String.class) , new StringAdapter());
+        adapters.put(NakedObjectSpecificationLoader.getInstance().loadSpecification(Date.class), new DateAdapter());
+        adapters.put(NakedObjectSpecificationLoader.getInstance().loadSpecification(float.class), new FloatAdapter());
+    }
+    
+    private Object adaptValue(String text) {
+        JavaValueAdapter adapter = (JavaValueAdapter) adapters.get(getType()); 
+        if(adapter == null) {
+            throw new NakedObjectRuntimeException("No adapter found for " + getType());
+        }
+        return adapter.parse(text);
     }
 
     public boolean isEmpty(NakedObject fromObject) {
@@ -284,7 +302,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

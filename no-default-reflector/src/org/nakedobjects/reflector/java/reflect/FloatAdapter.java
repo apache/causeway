@@ -1,24 +1,30 @@
 package org.nakedobjects.reflector.java.reflect;
 
+import org.nakedobjects.application.ValueParseException;
 
-import java.util.Vector;
+import java.text.NumberFormat;
+import java.text.ParseException;
 
+public class FloatAdapter implements JavaValueAdapter {
+    private static NumberFormat FORMAT = NumberFormat.getNumberInstance();
 
-public class JavaObjectWithVector {
-    JavaReferencedObject added;
-    JavaReferencedObject removed;
-    Vector collection = new Vector();
-    
-    public Vector getMethod() {
-        return collection;
+    public Object parse(String entry) {
+        if(entry == null) {
+            return null;
+        }
+        if (entry.trim().equals("")) {
+            return null;
+        } else {
+            try {
+                return new Float(FORMAT.parse(entry).floatValue());
+            } catch (ParseException e) {
+                throw new ValueParseException("Invalid number", e);
+            }
+        }
     }
     
-    public void addToMethod(JavaReferencedObject person) {
-        added = person;
-    }
-    
-    public void removeFromMethod(JavaReferencedObject person) {
-        removed = person;
+    public String asString(Object value) {
+        return  value == null ? "" : FORMAT.format(value);
     }
 }
 
