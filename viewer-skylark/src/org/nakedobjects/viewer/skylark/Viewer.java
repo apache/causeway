@@ -516,6 +516,13 @@ public class Viewer {
             return rootView.dragStart(start);
         }
     }
+    
+    public void saveCurrentFieldEntry() {
+         if (keyboardFocus != null) {
+            keyboardFocus.editComplete();
+            keyboardFocus.markDamaged();
+        }
+    }
 }
 
 /*

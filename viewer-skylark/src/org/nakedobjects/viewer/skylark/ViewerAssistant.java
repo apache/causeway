@@ -228,6 +228,10 @@ public class ViewerAssistant {
     public void limitBounds(View view) {
         viewer.limitBounds(view);
     }
+
+    public void saveCurrentFieldEntry() {
+        viewer.saveCurrentFieldEntry();
+    }
 }
 
 

@@ -54,6 +54,16 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
         super.dispose();
     }
 
+    public void invalidateContent() {
+        if(left != null) {
+            left.invalidateContent();
+        }
+        if(right != null) {
+            right.invalidateContent();
+        }
+        super.invalidateContent();
+    }
+    
     public void draw(Canvas canvas) {
         Bounds bounds = left.getBounds();
         Canvas subCanvas = canvas.createSubcanvas(bounds);

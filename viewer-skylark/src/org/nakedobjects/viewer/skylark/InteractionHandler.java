@@ -136,7 +136,6 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 
 
         if (click.isButton3() && viewer.getOverlayView() == null) {
-	        saveCurrentFieldEntry();
             if (previouslyIdentifiedView != null) {
                 spy.addAction(" popup " + downAt + " over " + previouslyIdentifiedView);
                 viewer.popupMenu(previouslyIdentifiedView, click);
@@ -319,17 +318,6 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 
     private void redraw() {
         viewer.repaint();
-    }
-
-    public void saveCurrentFieldEntry() {
-        View keyboardFocus = viewer.getFocus();
-
-        if (keyboardFocus != null) {
-            View focus = keyboardFocus;
-            keyboardFocus = null;
-            focus.editComplete();
-            focus.markDamaged();
-        }
     }
 }
 

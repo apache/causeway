@@ -182,6 +182,8 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
     public void init(View over, View parent, Location mouseAt, boolean type, boolean includeExploration, boolean includeDebug) {
         this.forView = over;
          
+        getViewManager().saveCurrentFieldEntry();
+
 		MenuOptionSet optionSet = new MenuOptionSet(type);
 		over.menuOptions(optionSet);
 		optionSet.add(MenuOptionSet.DEBUG, DEBUG_OPTION);

@@ -18,6 +18,7 @@ public class ButtonBorder extends AbstractBorder {
     private final int buttonSetWidth;
     private static final int TEXT_PADDING = 12;
     private static final int BUTTON_SPACING = 5;
+    private int activeButton = -1;
     
     public ButtonBorder(UserAction[] actions, View view) {
         super(view);
@@ -47,6 +48,9 @@ public class ButtonBorder extends AbstractBorder {
         for (int i = 0; i < actions.length; i++) {
 	        String text = actions[i].getName(getView());
 	        Color color = actions[i].disabled(getView()).isVetoed() ? Style.DISABLED_MENU : Style.BLACK;
+	        if(activeButton == i) {
+	            color = Color.DEBUG1;
+	        }
 	        Color border = actions[i].disabled(getView()).isVetoed() ? Style.DISABLED_MENU : Style.SECONDARY2;
 	        int buttonWidth = TEXT_PADDING + Style.NORMAL.stringWidth(text) + TEXT_PADDING;
 	        canvas.drawRectangle(x + 1, y + 1, buttonWidth - 1, buttonHeight, Style.WHITE);
@@ -61,28 +65,32 @@ public class ButtonBorder extends AbstractBorder {
     
     
     public void firstClick(Click click) {
-        UserAction action = overButton(click.getLocation());
-        if(action == null) {
+        int button = overButton(click.getLocation());
+        if(button == -1) {
 	        super.firstClick(click);
         } else {
+	        UserAction action = actions[button];
 	        if(action.disabled(getView()).isAllowed()) {
+	            activeButton = button;
+	            markDamaged();
+	            getViewManager().saveCurrentFieldEntry();
 	            action.execute(getWorkspace(), getView(), getLocation());
 	        }
         }
     }
     
     public void secondClick(Click click) {
-        UserAction action = overButton(click.getLocation());
-        if(action == null) {
+        int button = overButton(click.getLocation());
+        if(button == -1) {
 	        super.secondClick(click);
         }
     }
    
     
     public void thirdClick(Click click) {
-        UserAction action = overButton(click.getLocation());
-        if(action == null) {
-	        super.thirdClick(click);
+        int button = overButton(click.getLocation());
+        if(button == -1) {
+		        super.thirdClick(click);
         }
     }
     
@@ -102,8 +110,9 @@ public class ButtonBorder extends AbstractBorder {
     }
     
     public void mouseMoved(Location at) {
-        UserAction action = overButton(at);
-        if(action != null) {
+        int button = overButton(at);
+        if(button !=  -1) {
+            UserAction action = actions[button];
 	        getViewManager().setStatus("");
             Permission disabled = action.disabled(getView());
             if(disabled.isVetoed()) {
@@ -117,7 +126,7 @@ public class ButtonBorder extends AbstractBorder {
      * Finds the action button under the pointer; returning null if none.
      * @param location
      */
-    private UserAction overButton(Location location) {
+    private int overButton(Location location) {
         int yy = location.getY(); 
         int xx = location.getX();
         if(yy > getSize().getHeight() - bottom) {
@@ -130,12 +139,12 @@ public class ButtonBorder extends AbstractBorder {
     	        String text = actions[i].getName(getView());
     	        int buttonWidth = TEXT_PADDING + Style.NORMAL.stringWidth(text) + TEXT_PADDING;
     	        if(xx > x && xx < x + buttonWidth && yy > y && yy < y + buttonHeight) {
-    	            return actions[i];
+    	            return i;
                 }
     	        x += BUTTON_SPACING + buttonWidth;
             }
         } 
-        return null;
+        return -1;
     }
 }
 

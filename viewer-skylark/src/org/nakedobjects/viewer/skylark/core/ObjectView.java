@@ -8,6 +8,8 @@ import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.control.defaults.AbstractPermission;
 import org.nakedobjects.object.reflect.ActionSpecification;
+import org.nakedobjects.object.reflect.AssociationSpecification;
+import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Click;
@@ -63,6 +65,15 @@ public abstract class ObjectView extends AbstractView {
         } else {
             getViewManager().setStatus("");
             getState().setCantDrop();
+
+            FieldSpecification[] fields = target.getSpecification().getVisibleFields(target, ClientSession.getSession());       
+            for (int i = 0; i < fields.length; i++) {
+                if(source.getSpecification().isOfType(fields[i].getType()) && ((AssociationSpecification) fields[i]).get(target) == null) {
+                    getState().setCanDrop();
+                    getViewManager().setStatus("Set field " + fields[i].getLabel());
+                    break;
+                }
+            }
         }
         markDamaged();
     }
@@ -116,6 +127,15 @@ public abstract class ObjectView extends AbstractView {
             }
 
             markDamaged();
+        } else {
+            FieldSpecification[] fields = target.getSpecification().getVisibleFields(target, ClientSession.getSession());
+            for (int i = 0; i < fields.length; i++) {
+                if(source.getSpecification().isOfType(fields[i].getType()) && ((AssociationSpecification) fields[i]).get(target) == null) {
+                    ((AssociationSpecification) fields[i]).setAssociation(target, source);
+                    invalidateContent();
+                    break;
+                }
+            }
         }
     }
 

@@ -3,6 +3,7 @@ package org.nakedobjects.viewer.skylark.metal;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
+import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.Location;
@@ -14,6 +15,7 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewDrag;
 import org.nakedobjects.viewer.skylark.Workspace;
+import org.nakedobjects.viewer.skylark.basic.DragContentIcon;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
 import org.nakedobjects.viewer.skylark.basic.ObjectTitleText;
 import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
@@ -59,7 +61,8 @@ public class WindowBorder extends AbstractBorder {
     public Drag dragStart(DragStart drag) {
         if(overBorder(drag.getLocation())) {
             if(viewAreaType(drag.getLocation()) == ViewAreaType.CONTENT) {
-                return super.dragStart(drag);
+                View dragOverlay = new DragContentIcon(getContent());
+                return new ContentDrag(this, drag.getLocation(), dragOverlay);
             } 
             Location location = drag.getLocation();
             DragViewOutline dragOverlay = new DragViewOutline(getView());
