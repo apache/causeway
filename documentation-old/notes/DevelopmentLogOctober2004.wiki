@@ -1,3 +1,7 @@
+''''5th Nov 2004
+
+Spent most of today, and yesterday evening, working on scolling and resize borders.  Completed both in a demo, but ran into a problem when running with composite views.  Originally the IntegrationHandler/Viewer determined which view is under the pointer, but this does not work with the scrolling border as the actual view that is being show with the scroll are is offset.  Getting the IntegrationHandler/Viewer to deal with this peculiarity would mean that they need to know how scrolling works.  To resolve this the job of identifying the view under the cursor is now delegate to the views and passes down the hierachy of subview.  This way the ScrollBorder decorator can compensate for the offset. 
+
 '''' 2nd Nov. 2004
 
 Commented out the hashcode method in AbstractNakedObject class.  This fixed the non closeable view mentioned below.  Need to confirm that this will not affect any other parts of the system.

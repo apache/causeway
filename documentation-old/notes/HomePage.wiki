@@ -1,10 +1,64 @@
 SkylarkViewer
 DevelopmentLogOctober2004
 DsfaProject
-
+SkylarkGraphics
 ----
 '''Development Notes
 
 The problem with  transient-made-persistent not being able to be closed is caused by OIDs (see DevelopmentLogOctober2004).  Need to check that the object managers and loaded objects do not rely on such hash codes.
 
 http://nakedobjects.org
+
+----
+'''Images
+Images for objects are pick up by class name in the form of ClassName.extension.  The file names are case sensitive.
+
+ClassName is either the short form or the fully qualified name.
+
+Extensions currently supported are .gif, .jpg, .jpeg and .png.
+
+If no image is found for the current class using the above variations then the process is repeated using the name (both short and fully qualified) of the classes immediate superclass.  This process repeats util there are no more superclasses.
+
+'''Logging
+
+The dot net reflector is currently returning Naked as its superclass, and Naked's superclass is also Naked, so we go into a loop when trying to find images for classes.  Fixed this by returning a 'null' instead.
+
+Have managed to get errors from the Dot Net reflector, which get round the bug in J# where reflectively invoked method (using Java's reflection classes) are not working.  The type useful error message can be seen below.
+
+Object reference not set to an instance of an object.
+   at Officer.actionLogon() in C:\Documents and Settings\rcm\My Documents\sdm-exploration\src\bom\officer\Officer.vb:line 341
+
+
+
+Split the .net projects into three parts, so there is now a the core, a separate dot-net reflection mechanism, and some tests.  The tests are separate so that they can be compiled and run as a Windows application (so there output appears in the Visual Studio console), while the reflector compiles into a DLL.
+
+I have references these DLL directly from the exploration project so that after recompiling the framework the exploration will run without having to copy across the DLLs.
+
+Added an initial logging statement to record the version and build numbers in the log (taken from AboutNakedObjects).  I now recommend that logging is configured as below so that basic errors and warnings are shown to the user and full logging details are captured to file.
+
+ ## log4j
+ # apache's log4j is used to provide system logging.
+ ##
+ log4j.rootCategory=DEBUG, File, Console
+
+ log4j.logger.org.nakedobjects.viewer.skylark=WARN
+ log4j.logger.org.nakedobjects.viewer.skylark.value.TextField=WARN
+ log4j.logger.org.nakedobjects.viewer.skylark.value.TextFieldBlock=WARN
+ log4j.logger.org.nakedobjects.viewer.skylark.value.TextFieldContent=WARN
+
+	# The console appender
+	log4j.appender.Console=org.apache.log4j.ConsoleAppender
+	log4j.appender.Console.threshold=WARN
+	log4j.appender.Console.target=System.out
+	log4j.appender.Console.layout=org.apache.log4j.PatternLayout
+	log4j.appender.Console.layout.ConversionPattern=%-5r [%-20c{1}] %-5p  %m  -- %l%n
+	#log4j.appender.Console.layout.ConversionPattern=%d [%c{1}] %-5p  %m%n
+	#log4j.appender.Console.layout.ConversionPattern=%-4r %-5p [%t] %37c %3x - %m%n
+	
+	log4j.appender.File=org.apache.log4j.FileAppender
+	log4j.appender.File.file=nakedobjects.log
+	log4j.appender.File.layout=org.apache.log4j.PatternLayout
+	log4j.appender.File.layout.ConversionPattern=%d [%-20c{1}] %-5p  %m%n
+
+
+
