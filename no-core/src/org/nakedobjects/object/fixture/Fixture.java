@@ -1,26 +1,28 @@
-package org.nakedobjects.object;
+package org.nakedobjects.object.fixture;
 
-import org.nakedobjects.object.defaults.InternalNakedObject;
+public abstract class Fixture {
+    public final Object createInstance(Class cls) {
+        return createInstance(cls.getName());
+    }
 
-import java.util.Vector;
+    public final Object createInstance(String className) {
+        return getBuilder().createInstance(className);
+    }
 
+    protected abstract FixtureBuilder getBuilder();
 
-public interface UserContext extends InternalNakedObject {
-    void addToClasses(NakedClass cls);
+    public abstract void setBuilder(FixtureBuilder builder);        
+    
+    public abstract void install();
 
-    void addToObjects(NakedObject cls);
+    public final void registerClass(String className) {
+        getBuilder().registerClass(className);
+    }
 
-    void removeFromClasses(NakedClass cls);
+    public final void registerClass(Class cls) {
+        getBuilder().registerClass(cls.getName());
+    }
 
-    void removeFromObjects(NakedObject cls);
-
-    Vector getClasses();
-
-    Vector getObjects();
-
-    //    User getUser();
-
-    //    void setUser(User user);
 }
 
 /*

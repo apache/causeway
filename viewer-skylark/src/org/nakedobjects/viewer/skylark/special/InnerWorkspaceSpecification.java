@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.UserContext;
+import org.nakedobjects.object.ApplicationContext;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -20,7 +20,7 @@ public class InnerWorkspaceSpecification implements WorkspaceSpecification {
 	public View createView(Content content, ViewAxis axis) {
 			Workspace workspace;
 			NakedObject contentType = ((ObjectContent) content).getObject();
-			if(contentType instanceof UserContext) {
+			if(contentType instanceof ApplicationContext) {
 				workspace = new UserContextWorkspace(content, this, axis);
 			} else {
 				workspace = new DefaultWorkspace(content, this, axis);
@@ -50,7 +50,7 @@ public class InnerWorkspaceSpecification implements WorkspaceSpecification {
 	}
 
 	public boolean canDisplay(Content content) {
-		return content.getNaked() instanceof UserContext;
+		return content.getNaked() instanceof ApplicationContext;
 	}
 
 

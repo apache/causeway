@@ -1,5 +1,6 @@
-package org.nakedobjects.object.exploration;
+package org.nakedobjects.object.fixture;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
@@ -10,25 +11,21 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 
 
-public abstract class ExplorationSetUp {
-    private static final Logger LOG = Logger.getLogger(ExplorationSetUp.class);
+public abstract class FixtureBuilder {
+    private static final Logger LOG = Logger.getLogger(FixtureBuilder.class);
 
-    private NakedObjectManager objectManager;
-    private Vector classes;
-    private Vector fixtures;
+    private Vector classes = new Vector();
+    private Vector fixtures = new Vector();
     private Vector newInstances = new Vector();
 
-    public ExplorationSetUp() {
-        classes = new Vector();
-        fixtures = new Vector();
-    }
-
+    
     public void installFixtures() {
+        NakedObjectManager objectManager = NakedObjects.getObjectManager();
         objectManager.startTransaction();
 
         for (int i = 0, last = fixtures.size(); i < last; i++) {
-            ExplorationFixture fixture = (ExplorationFixture) fixtures.elementAt(i);
-            fixture.setContainer(this);
+            Fixture fixture = (Fixture) fixtures.elementAt(i);
+            fixture.setBuilder(this);
             fixture.install();
         }
 
@@ -47,56 +44,26 @@ public abstract class ExplorationSetUp {
         } catch (RuntimeException e) {
             objectManager.abortTransaction();
         }
-
-        //       setInitialUser();
     }
-
-/*    private NakedObjectManager getObjectManager() {
-        if (objectManager == null) {
-            objectManager = context.getObjectManager();
-        }
-
-        return objectManager;
-    }
-*/
     
-    
-    private void addInstance(NakedObject object) {
-        LOG.info("Adding " + object);
-        newInstances.addElement(object);
-    }
-
     /**
      * Helper method to create an instance of the given type. Provided for
      * exploration programs that need to set up instances.
      */
-    protected final Object createInstance(Class type) {
-        NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(type.getName());
-        if (nc == null) {
-            objectManager.generatorError("Could not create an object of class " + type, null);
-        }
-        return createInstance(nc);
-    }
-
-    /**
-     * Helper method to create an instance of the given type. Provided for
-     * exploration programs that need to set up instances.
-     */
-    protected final Object createInstance(String className) {
+    final Object createInstance(String className) {
         NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
         if (nc == null) {
+            NakedObjectManager objectManager = NakedObjects.getObjectManager();
             return objectManager.generatorError("Could not create an object of class " + className, null);
         }
-        return createInstance(nc);
-    }
-
-    private Object createInstance(NakedObjectSpecification nc) {
+        NakedObjectManager objectManager = NakedObjects.getObjectManager();
         NakedObject object = objectManager.createTransientInstance(nc);
-        addInstance(object);
+        LOG.info("Adding " + object);
+        newInstances.addElement(object);
         return object.getObject();
     }
 
-    public void registerClass(String className) {
+    final void registerClass(String className) {
         classes.addElement(className);
     }
 
@@ -106,23 +73,9 @@ public abstract class ExplorationSetUp {
         return classNames;
     }
 
-    public void addFixture(ExplorationFixture fixture) {
+    public void addFixture(Fixture fixture) {
         fixtures.addElement(fixture);
     }
-
-    public void setObjectManager(NakedObjectManager objectManager) {
-        this.objectManager = objectManager;
-    }
-    
-    /**
-     * Expose as a .NET property
-     * 
-     * @property
-     */
-    public void set_ObjectManager(NakedObjectManager objectManager) {
-        this.objectManager = objectManager;
-    }
-
 }
 
 /*

@@ -18,25 +18,25 @@ import org.nakedobjects.utility.DebugInfo;
 
 
 public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObjectManager {
-    protected ObjectFactory factory;
+    protected ObjectFactory objectFactory;
     public abstract void abortTransaction();
     
     public AbstractNakedObjectManager() {}
     
-    public AbstractNakedObjectManager(final ObjectFactory factory) {
-        this.factory = factory;
+    public AbstractNakedObjectManager(final ObjectFactory objectFactory) {
+        this.objectFactory = objectFactory;
     }
     
-    public void setFactory(ObjectFactory factory) {
-        this.factory = factory;
+    public void setObjectFactory(ObjectFactory objectFactory) {
+        this.objectFactory = objectFactory;
     }
     
 	/**
 	 * Expose as a .NET property
 	 * @property
 	 */
-	public void set_Factory(ObjectFactory factory) {
-		setFactory(factory);
+	public void set_ObjectFactory(ObjectFactory objectFactory) {
+		setObjectFactory(objectFactory);
 	}
 
     public TypedNakedCollection allInstances(NakedObjectSpecification specification) {
@@ -60,7 +60,7 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
     }
 
     public NakedObject createInstance(NakedObjectSpecification specification) {
-       Object object = factory.createObject(specification);
+       Object object = objectFactory.createObject(specification);
        NakedObject nakedObject = PojoAdapter.createNOAdapter(object);
        makePersistent(nakedObject);
        return nakedObject;
@@ -95,7 +95,7 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
     public abstract Oid createOid(Naked object);
 
     public NakedObject createTransientInstance(NakedObjectSpecification nc) {
-        Object object = factory.createObject(nc);
+        Object object = objectFactory.createObject(nc);
         return PojoAdapter.createNOAdapter(object);
     }
 

@@ -151,6 +151,7 @@
 
 			<classpath refid="libs.external" />
 			<classpath path="${build.classes.src}" />
+			<classpath path="${build.classes.example}"/>
 		</javac>
 
 		<!-- Run the tests -->
@@ -173,6 +174,7 @@
 			<classpath refid="libs.external" />
 			<classpath path="${build.classes.src}" />
 			<classpath path="${build.classes.test}" />
+			<classpath path="${build.classes.example}"/>
 
 			<formatter type="xml" />
 

@@ -5,7 +5,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.UserContext;
+import org.nakedobjects.object.ApplicationContext;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
@@ -107,10 +107,10 @@ public abstract class ObjectContent extends AbstractContent {
     public abstract NakedObject getObject();
 
     public void menuOptions(MenuOptionSet options) {
-        if (getObject() instanceof UserContext) {
+        if (getObject() instanceof ApplicationContext) {
             options.add(MenuOptionSet.VIEW, new MenuOption("New Workspace") {
                 public Consent disabled(View component) {
-                    return AbstractConsent.allow(getObject() instanceof UserContext);
+                    return AbstractConsent.allow(getObject() instanceof ApplicationContext);
                 }
 
                 public void execute(Workspace workspace, View view, Location at) {

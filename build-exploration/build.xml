@@ -8,7 +8,7 @@
          default="idebuild"
          basedir=".">
 
-	<property file="build.properties"/>
+	<property file="build.properties" />
 	<property name="distribution" value="exploration" />
 
 	
@@ -17,27 +17,23 @@
 	<target name="copy">
 		<copy todir="${build.src.dir}">
 			<fileset dir="../viewer-skylark/${src.dir}" />
-			<fileset dir="../no-exploration/${src.dir}" />
+			<fileset dir="../no-xat/${src.dir}" />
+			<fileset dir="../example-base/${src.dir}" />
 		</copy>
 
 		<copy todir="${build.example.dir}">
-			<fileset dir="../example-ecs/${src.dir}">
-				<exclude name="**/*AcceptanceTest*" />
-			</fileset>
-			<fileset dir="../example-expenses/${src.dir}">
-				<exclude name="**/*AcceptanceTest*" />
-			</fileset>
-			<fileset dir="../example-library/${src.dir}">
-				<exclude name="**/*AcceptanceTest*" />
-			</fileset>
+			<fileset dir="../example-ecs/${src.dir}"/>
+			<fileset dir="../example-expenses/${src.dir}"/>
+			<fileset dir="../example-library/${src.dir}"/>
 		</copy>
 
 		<copy todir="${build.test.dir}">
 			<fileset dir="../viewer-skylark/${test.dir}" />
-
-			<fileset dir="../example-ecs/${test.dir}" />
-			<!-- fileset dir="../example-expenses/${test.dir}" />
-			<fileset dir="../example-library/${test.dir}" /-->
+			<!-- fileset dir="../no-xat/${test.dir}" /-->
+			<!-- fileset dir="../example-base/${test.dir}" /-->
+			<fileset dir="../example-ecs/xat" />
+			<!-- fileset dir="../example-expenses/xat" /-->
+			<fileset dir="../example-library/xat" />
 		</copy>
 
 		<copy todir="${dist.images.dir}">
