@@ -189,7 +189,6 @@ public class JavaReflector implements Reflector {
             }
 
             String[] prefixes = { "action", "explorationAction", "debugAction" };
-            // TODO modify to find none 'action' prefixed method
             int prefix = -1;
             for (int j = 0; j < prefixes.length; j++) {
                 if (method.getName().startsWith(prefixes[j])) {
@@ -197,34 +196,55 @@ public class JavaReflector implements Reflector {
                     break;
                 }
             }
+            
+            if (prefix == -1) {
+                continue;
+            }
 
             Class returnType = method.getReturnType();
             boolean returnIsValid = returnType == void.class || NakedObject.class.isAssignableFrom(returnType);
 
-            if (prefix >= 0 && returnIsValid) {
-                validMethods.addElement(method);
-
-                LOG.debug("identified action " + method);
-                Class[] params = method.getParameterTypes();
-                String methodName = method.getName();
-                methods[i] = null;
-
-                String name = methodName.substring(prefixes[prefix].length());
-                Class[] longParams = new Class[params.length + 1];
-                longParams[0] = ActionAbout.class;
-                System.arraycopy(params, 0, longParams, 1, params.length);
-                Method aboutMethod = findMethod(forClass, "aboutAction" + name, null, longParams);
-                if (aboutMethod == null) {
-                    aboutMethod = defaultAboutMethod;
-                } else {
-                    LOG.debug("  with about method " + aboutMethod);
-                }
-
-                ActionSpecification.Type action;
-                action = new ActionSpecification.Type[] { ActionSpecification.USER, ActionSpecification.EXPLORATION, ActionSpecification.DEBUG }[prefix];
-                Action local = createAction(method, name, aboutMethod, action);
-                actions.addElement(local);
+            if(! returnIsValid) {
+                LOG.warn("action method " + method + " ignored as return type is not of type Naked" );
+                continue;
             }
+            
+            
+            boolean paramsAreValid = true;
+            Class[] params = method.getParameterTypes();
+            for (int j = 0; j < params.length; j++) {
+                Class param = params[j];
+                if(! Naked.class.isAssignableFrom(param)) {
+                    paramsAreValid = false;
+                }
+            }
+
+            if(! paramsAreValid) {
+                LOG.warn("action method " + method + " ignored as not all parameters are of type Naked" );
+                continue;
+            }
+            
+            validMethods.addElement(method);
+            
+            LOG.debug("identified action " + method);
+            String methodName = method.getName();
+            methods[i] = null;
+            
+            String name = methodName.substring(prefixes[prefix].length());
+            Class[] longParams = new Class[params.length + 1];
+            longParams[0] = ActionAbout.class;
+            System.arraycopy(params, 0, longParams, 1, params.length);
+            Method aboutMethod = findMethod(forClass, "aboutAction" + name, null, longParams);
+            if (aboutMethod == null) {
+                aboutMethod = defaultAboutMethod;
+            } else {
+                LOG.debug("  with about method " + aboutMethod);
+            }
+            
+            ActionSpecification.Type action;
+            action = new ActionSpecification.Type[] { ActionSpecification.USER, ActionSpecification.EXPLORATION, ActionSpecification.DEBUG }[prefix];
+            Action local = createAction(method, name, aboutMethod, action);
+            actions.addElement(local);
         }
 
         return convertToArray(actions);
