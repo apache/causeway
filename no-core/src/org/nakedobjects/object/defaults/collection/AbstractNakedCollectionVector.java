@@ -1,6 +1,5 @@
 package org.nakedobjects.object.defaults.collection;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
@@ -36,7 +35,6 @@ public abstract class AbstractNakedCollectionVector extends AbstractNakedObject 
         if (object == null) {
             throw new NullPointerException("Cannot add null");
         }
-        resolve();
         if (canAdd(object).isAllowed()) {
             elements.addElement(object);
     //        objectChanged();
@@ -52,7 +50,6 @@ public abstract class AbstractNakedCollectionVector extends AbstractNakedObject 
      * </p>
      */
     public void addAll(final NakedCollection collection) {
-        resolve();
         if (collection == null) {
             return;
         }
@@ -79,7 +76,6 @@ public abstract class AbstractNakedCollectionVector extends AbstractNakedObject 
         if (object == null) {
             throw new IllegalArgumentException("null is not a valid element for a collection");
         }
-        resolve();
         return elements.contains(object);
     }
 
@@ -91,7 +87,6 @@ public abstract class AbstractNakedCollectionVector extends AbstractNakedObject 
      * Return all elements in this collection
      */
     public Enumeration elements() {
-        resolve();
         return new Enumeration() {
             Enumeration e = elements.elements();
 
@@ -101,7 +96,7 @@ public abstract class AbstractNakedCollectionVector extends AbstractNakedObject 
 
             public Object nextElement() {
                 Object next = e.nextElement();
-                NakedObjects.getObjectManager().resolveImmediately((NakedObject) next);
+ //               NakedObjects.getObjectManager().resolveImmediately((NakedObject) next);
                 return next;
             }
         };
@@ -137,7 +132,6 @@ public abstract class AbstractNakedCollectionVector extends AbstractNakedObject 
      * not need to be resolved to do this (though the collection does)
      */
     public Enumeration oids() {
-        resolve();
         return new Enumeration() {
             Enumeration e = elements.elements();
 
@@ -157,7 +151,6 @@ public abstract class AbstractNakedCollectionVector extends AbstractNakedObject 
         if (object == null) {
             throw new NullPointerException("Cannot remove null");
         }
-        resolve();
         elements.removeElement(object);
   //      objectChanged();
     }
@@ -173,7 +166,6 @@ public abstract class AbstractNakedCollectionVector extends AbstractNakedObject 
      * </p>
      */
     public void removeAll() {
-        resolve();
         // create array holding references to all the objects in the
         // collection. Do it this way since not sure if can delete
         // through an Enumeration
