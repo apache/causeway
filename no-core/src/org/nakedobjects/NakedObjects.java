@@ -4,7 +4,7 @@ import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 
 public class NakedObjects {
-    private static NakedObjects singleton = new NakedObjects();
+    private final static NakedObjects singleton = new NakedObjects();
 
     public static Configuration getConfiguration() {
         return getInstance().configuration;
