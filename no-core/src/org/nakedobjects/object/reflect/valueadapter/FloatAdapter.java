@@ -11,13 +11,13 @@ import java.text.ParseException;
 public class FloatAdapter extends AbstractNakedValue implements FloatingPointValue {
     private static NumberFormat FORMAT = NumberFormat.getNumberInstance();
 
-    private double value;
+    private float value;
 
     public byte[] asEncodedString() {
         return null;
     }
 
-    public double doubleValue() {
+    public float floatValue() {
         return value;
     }
 
@@ -26,7 +26,7 @@ public class FloatAdapter extends AbstractNakedValue implements FloatingPointVal
     }
 
     public Object getObject() {
-        return new Double(value);
+        return new Float(value);
     }
 
     public void parseTextEntry(String entry) throws InvalidEntryException {
@@ -34,7 +34,7 @@ public class FloatAdapter extends AbstractNakedValue implements FloatingPointVal
             throw new InvalidEntryException();
         } else {
             try {
-                value = FORMAT.parse(entry).doubleValue();
+                value = FORMAT.parse(entry).floatValue();
             } catch (ParseException e) {
                 throw new TextEntryParseException("Invalid number", e);
             }
@@ -43,7 +43,7 @@ public class FloatAdapter extends AbstractNakedValue implements FloatingPointVal
 
     public void restoreFromEncodedString(byte[] data) {}
 
-    public void setValue(double value) {
+    public void setValue(float value) {
         this.value = value;
     }
 
