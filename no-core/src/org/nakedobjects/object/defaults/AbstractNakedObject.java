@@ -32,8 +32,8 @@ public abstract class AbstractNakedObject implements NakedObject {
      
 
      private void checkIsPojoDirty() {
-        boolean isDirty = getSpecification() == null ? false : getSpecification().isDirty(this);
-        if(isDirty) {
+        NakedObjectSpecification spec = getSpecification();
+        if(spec.isDirty(this)) {
             markDirty();
         }
      }
