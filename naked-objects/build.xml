@@ -63,7 +63,7 @@
 	
 	<target name="all-components">
 		<antcall target="core"/>
-		<antcall target="no-distribution"/>
+		<!-- antcall target="no-distribution"/-->
 		<!-- antcall target="no-containers"/-->
 		<antcall target="os-cache"/>
 		<antcall target="os-file"/>
@@ -72,6 +72,7 @@
 		<antcall target="viewer-skylark"/>
 		<antcall target="example-ecs"/>
 		<antcall target="example-expenses"/>
+		<antcall target="utility-xmlsnapshot"/>
 	</target>
 	
 	<target name="core" >
@@ -112,6 +113,10 @@
 	
 	<target name="example-expenses" >
 		<ant dir="../example-expenses" target="${target}" inheritAll="false"/>
+	</target>
+
+	<target name="utility-xmlsnapshot" >
+		<ant dir="../utility-xmlsnapshot" target="${target}" inheritAll="false"/>
 	</target>
 	
 
