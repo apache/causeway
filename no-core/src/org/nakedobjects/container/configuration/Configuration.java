@@ -86,7 +86,6 @@ public final class Configuration {
             try {
                 in.close();
             } catch (IOException ignore) {
-                ;
             }
         }
     }

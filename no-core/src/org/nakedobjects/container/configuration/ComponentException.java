@@ -5,8 +5,6 @@ import org.nakedobjects.utility.StartupException;
 
 
 public class ComponentException extends StartupException {
-	private Throwable cause;
-
     public ComponentException() {
         super();
     }
