@@ -38,6 +38,12 @@ public class DateTime extends Magnitude {
 	
 	public static void setClock(Clock clock) {
 	    DateTime.clock = clock;
+	    
+        ISO_LONG.setLenient(false);
+        ISO_SHORT.setLenient(false);
+        LONG_FORMAT.setLenient(false);
+        MEDIUM_FORMAT.setLenient(false);
+        SHORT_FORMAT.setLenient(false);
 	}
 
 
@@ -326,6 +332,7 @@ public class DateTime extends Magnitude {
         cal.set(Calendar.MONTH, month - 1);
         cal.set(Calendar.YEAR, year);
         cal.set(Calendar.HOUR_OF_DAY, hour);
+        cal.set(Calendar.HOUR, hour);
         cal.set(Calendar.MINUTE, minute);
         cal.set(Calendar.SECOND, second);
         cal.set(Calendar.MILLISECOND, 0);

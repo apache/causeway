@@ -54,11 +54,17 @@ public class Time extends Magnitude {
 
     static {
         timeZone = TimeZone.getTimeZone("GMT");
-        SHORT_FORMAT.setTimeZone(timeZone);
-        MEDIUM_FORMAT.setTimeZone(timeZone);
-        LONG_FORMAT.setTimeZone(timeZone);
         ISO_LONG.setTimeZone(timeZone);
         ISO_SHORT.setTimeZone(timeZone);
+        LONG_FORMAT.setTimeZone(timeZone);
+        MEDIUM_FORMAT.setTimeZone(timeZone);
+        SHORT_FORMAT.setTimeZone(timeZone);
+        
+        ISO_LONG.setLenient(false);
+        ISO_SHORT.setLenient(false);
+        LONG_FORMAT.setLenient(false);
+        MEDIUM_FORMAT.setLenient(false);
+        SHORT_FORMAT.setLenient(false);
 
         Calendar cal = Calendar.getInstance();
         cal.setTimeZone(timeZone);
