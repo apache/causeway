@@ -88,8 +88,7 @@ public class NakedObjectSpecificationLoaderImpl extends NakedObjectSpecification
 
 
     protected void finalize() throws Throwable {
-        classes = null;
-        reflectorFactory = null;
+//        classes = null;
         
         super.finalize();
         LOG.info("finalizing specification loader " + this);
