@@ -13,6 +13,8 @@ public interface NakedObjectSpecification {
      */
     Naked acquireInstance();
 
+    NakedObject createPattern();
+    
     ClassAbout getClassAbout();
 
     ActionSpecification getClassAction(ActionSpecification.Type type, String name);
