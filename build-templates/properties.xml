@@ -22,6 +22,9 @@
 		</fileset>
 	</path>
 
+	<property name="no-core.release.dir" location="../no-core/build/release"/>
+<!--
 	<path id="libs.internal">
 	</path>
+-->
 
