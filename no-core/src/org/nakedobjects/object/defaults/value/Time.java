@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 
@@ -44,21 +45,26 @@ public class Time extends Magnitude {
 	private static final DateFormat ISO_LONG = new SimpleDateFormat("HH:mm");
 	private static final DateFormat ISO_SHORT = new SimpleDateFormat("HHmm");
     private final static long zero;
-	private final static int zoneOffset;
 	public static final int MINUTE = 60;
 	public static final int HOUR = 60 * MINUTE;
 	public static final int DAY = 24 * HOUR;
 	private static Clock clock;
+    private static final TimeZone timeZone;
 	
 	public static void setClock(Clock clock) {
 	    Time.clock = clock;
 	}
 
-    static {
-   //     zoneOffset = TimeZone.getDefault().getRawOffset();
-        zoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
-        	
+    static {        	
+       timeZone = TimeZone.getTimeZone("GMT-0000");
+        SHORT_FORMAT.setTimeZone(timeZone);
+        MEDIUM_FORMAT.setTimeZone(timeZone);
+        LONG_FORMAT.setTimeZone(timeZone);
+        ISO_LONG.setTimeZone(timeZone);
+        ISO_SHORT.setTimeZone(timeZone);
+        
         Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(timeZone);
 		// set to 1-Jan-1970 00:00:00 (the epoch)
         cal.set(Calendar.MILLISECOND, 0);
         cal.set(Calendar.SECOND, 0);
@@ -69,10 +75,9 @@ public class Time extends Magnitude {
         cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.set(Calendar.MONTH, 0);
         cal.set(Calendar.YEAR, 1970);
-        zero = cal.getTime().getTime() - zoneOffset;
+        zero = cal.getTime().getTime();
         
         
-        LOG.info("Zone offset " + zoneOffset);
         LOG.info("Locale " + Locale.getDefault());
         LOG.info("Short fomat " + SHORT_FORMAT.format(new Date()));
         LOG.info("Medium fomat " + MEDIUM_FORMAT.format(new Date()));
@@ -128,6 +133,7 @@ public class Time extends Magnitude {
         }
 
         Calendar c = Calendar.getInstance();
+        c.setTimeZone(timeZone);
         c.setTime(date);
 
         return c;
@@ -168,6 +174,7 @@ public class Time extends Magnitude {
      */
     private Calendar createCalendar() {
         Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(timeZone);
 
         // clear all aspects of the time that are not used
         cal.set(Calendar.MILLISECOND, 0);
@@ -227,7 +234,7 @@ public class Time extends Magnitude {
      * The number of seconds since midnight.
      */
     public long longValue() {
-        return (date.getTime()  -  zoneOffset) / 1000;
+        return date.getTime() / 1000;
     }
 
     public void parse(String text) throws ValueParseException {
@@ -327,6 +334,7 @@ public class Time extends Magnitude {
         checkTime(hour, minute, 0);
 
         Calendar cal = createCalendar();
+        cal.setTimeZone(timeZone);
         cal.set(Calendar.HOUR_OF_DAY, hour);
         cal.set(Calendar.MINUTE, minute);
         set(cal);
