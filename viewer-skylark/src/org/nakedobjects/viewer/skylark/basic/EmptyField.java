@@ -167,7 +167,7 @@ public class EmptyField extends AbstractView {
     }
 
     private String name() {
-        return ((ObjectContent) getContent()).getName();
+        return ((ObjectContent) getContent()).getType().getSingularName();
     }
 
     /**
