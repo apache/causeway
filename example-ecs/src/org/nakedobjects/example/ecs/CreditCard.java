@@ -23,6 +23,9 @@ public class CreditCard implements PaymentMethod {
         nameOnCard = new TextString();
         number = new TextString();
         color = new Color();
+        
+        number.setMaximumLength(16);
+        expires.setMinimumLength(4);
     }
 
     public final TextString getExpires() {

@@ -391,8 +391,8 @@ public class TextField extends AbstractField {
     private Selection selection;
     private TextFieldContent textContent;
     private boolean showLines;
-    private final int maximumLength;
-    private final int minumumLength;
+    private int maximumLength = 0;
+    private int minumumLength = 0;
 
     public TextField(Content content, ViewSpecification specification, ViewAxis axis, boolean showLines) {
         super(content, specification, axis);
@@ -400,8 +400,10 @@ public class TextField extends AbstractField {
         setMaxTextWidth(25);
 
         NakedValue value = getValue();
-        maximumLength = value.getMaximumLength();
-        minumumLength = value.getMinumumLength();
+        if(value != null) {
+            maximumLength = value.getMaximumLength();
+            minumumLength = value.getMinumumLength();
+        }
         cursor = new CursorPosition(0, 0);
         selection = new Selection();
         textContent = new TextFieldContent(this);
@@ -1116,6 +1118,8 @@ public class TextField extends AbstractField {
         } else {
 	        String value = object.titleString();
 	        textContent.setText(value);
+	        maximumLength = object.getMaximumLength();
+	        minumumLength = object.getMinumumLength();
         }
     }
 

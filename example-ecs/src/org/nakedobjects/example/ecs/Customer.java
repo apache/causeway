@@ -64,7 +64,11 @@ public class Customer {
 
     
     public Vector actionLocations() {
-        return locations;
+        Vector v = new Vector();
+        for (int i = 0; i < locations.size(); i++) {
+	        v.addElement(locations.elementAt(i));
+        }
+       return v;
     }
 
     public Booking actionUsePaymentMethod(PaymentMethod method) {

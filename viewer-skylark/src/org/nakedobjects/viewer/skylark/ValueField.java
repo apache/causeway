@@ -3,7 +3,6 @@ package org.nakedobjects.viewer.skylark;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.TextEntryParseException;
@@ -75,21 +74,22 @@ public class ValueField extends ValueContent implements FieldContent {
     public Hint getValueHint(Session session, String entryText) {
         NakedValue example = (NakedValue) getSpecification().acquireInstance();
 
-        if (example == null) {
-            throw new NakedObjectRuntimeException("Can't create an instance of " + getSpecification());
+        if (example != null) {
+	        try {
+	            example.parseTextEntry(entryText);
+	        } catch (final InvalidEntryException e) {
+	            return new DefaultHint() {
+	                public Consent isValid() {
+	                    return new Veto(e.getMessage());
+	                }
+	            };
+	        }
+	        // TODO need the Value object to parse the entry string
+	        return getParent().getHint(ClientSession.getSession(), (NakedObjectField) getField(), example);
+        } else {
+           // throw new NakedObjectRuntimeException("Can't create an instance of " + getSpecification());
+            return new DefaultHint();
         }
-
-        try {
-            example.parseTextEntry(entryText);
-        } catch (final InvalidEntryException e) {
-            return new DefaultHint() {
-                public Consent isValid() {
-                    return new Veto(e.getMessage());
-                }
-            };
-        }
-        // TODO need the Value object to parse the entry string
-        return getParent().getHint(ClientSession.getSession(), (NakedObjectField) getField(), example);
     }
 
     public boolean isEmpty() {

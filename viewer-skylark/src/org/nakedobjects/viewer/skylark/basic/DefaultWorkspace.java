@@ -42,10 +42,10 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
     }
 
     public View addOpenViewFor(Naked object, Location at) {
-        return openViewFro(object, at, false);
+        return openViewFor(object, at, false);
     }
 
-    private View openViewFro(Naked object, Location at, boolean asIcon) {
+    private View openViewFor(Naked object, Location at, boolean asIcon) {
         View view = createSubviewFor(object, asIcon);
         view.setLocation(at);
         view.setSize(view.getRequiredSize());
@@ -54,7 +54,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
     }
 
     public View addIconFor(Naked object, Location at) {
-       return openViewFro(object, at, true);
+       return openViewFor(object, at, true);
     }
 
     public void drop(ContentDrag drag) {
