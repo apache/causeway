@@ -3,9 +3,9 @@ package org.nakedobjects.object.value;
 import org.nakedobjects.object.NakedValue;
 
 public interface FloatingPointValue extends NakedValue {
-    double doubleValue();
+    float floatValue();
   
-    void setValue(double value);
+    void setValue(float value);
 }
 
 
