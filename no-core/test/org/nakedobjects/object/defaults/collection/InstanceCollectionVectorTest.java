@@ -3,7 +3,6 @@ package org.nakedobjects.object.defaults.collection;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.DummyNakedObject;
 
 import junit.framework.TestCase;
 

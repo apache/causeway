@@ -29,7 +29,7 @@ public class NakedObjectSpecificationImplTests extends TestCase {
     /*
      * private NakedObjectSpecification nakedObjectSpecification(Class cls) {
      * return
-     * NakedObjectSpecificationLoader.getInstance().loadSpecification(cls.getName()); }
+     * NakedObjects.getSpecificationLoader().loadSpecification(cls.getName()); }
      */
 
     protected void setUp() {
@@ -290,7 +290,7 @@ public class NakedObjectSpecificationImplTests extends TestCase {
 
     }
     private NakedObjectSpecification nakedObjectSpecification(Class cls) {
-        return NakedObjectSpecificationLoader.getInstance().loadSpecification(cls.getName());
+        return NakedObjects.getSpecificationLoader().loadSpecification(cls.getName());
     }
 */
 }

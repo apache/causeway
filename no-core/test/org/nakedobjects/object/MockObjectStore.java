@@ -9,6 +9,7 @@ import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.PersistenceCommand;
 import org.nakedobjects.object.persistence.SaveObjectCommand;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Vector;
@@ -125,6 +126,8 @@ public class MockObjectStore implements NakedObjectStore {
     public void resolveImmediately(NakedObject object) {
     }
 
+    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectStoreException {}
+    
     public void setupInstancesCount(int i) {
         instanceCount = i;
     }

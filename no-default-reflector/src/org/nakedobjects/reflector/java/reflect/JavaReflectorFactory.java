@@ -13,8 +13,8 @@ import org.nakedobjects.object.reflect.Reflector;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.value.BusinessValueAdapter;
 import org.nakedobjects.reflector.java.value.ColorValueObjectAdapter;
-import org.nakedobjects.reflector.java.value.LogicalValueObjectAdapter;
 import org.nakedobjects.reflector.java.value.IntegerNumberAdapter;
+import org.nakedobjects.reflector.java.value.LogicalValueObjectAdapter;
 import org.nakedobjects.reflector.java.value.TextStringAdapter;
 
 import java.util.Vector;

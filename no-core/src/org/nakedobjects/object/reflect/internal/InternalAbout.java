@@ -1,9 +1,9 @@
 package org.nakedobjects.object.reflect.internal;
 
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
 
 

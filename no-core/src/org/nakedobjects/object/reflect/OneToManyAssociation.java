@@ -4,8 +4,8 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.DefaultHint;
+import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.security.Session;
 

@@ -3,20 +3,28 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.ObjectTitle;
+import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
 
+
 public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     private static int next = 100;
-    private final int id = next++;
-    public String fullName;
     public NakedObjectField[] fields;
+    public String fullName;
+    private final int id = next++;
     
     public Naked acquireInstance() {
         return null;
     }
 
-    public Hint getClassHint() {
+    public void clearDirty(NakedObject object) {}
+
+    public NakedObject createPattern() {
+        return null;
+    }
+
+    public String debugInterface() {
         return null;
     }
 
@@ -29,6 +37,10 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     }
 
     public Action[] getClassActions(Type type) {
+        return null;
+    }
+
+    public Hint getClassHint() {
         return null;
     }
 
@@ -68,62 +80,6 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         return null;
     }
 
-    public NakedObjectField[] getVisibleFields(NakedObject object, Session session) {
-        return null;
-    }
-
-    public boolean hasSubclasses() {
-        return false;
-    }
-
-    public boolean isCollection() {
-        return false;
-    }
-
-    public boolean isOfType(NakedObjectSpecification cls) {
-        return false;
-    }
-
-    public NakedObjectSpecification superclass() {
-        return null;
-    }
-
-    public NakedObjectSpecification[] subclasses() {
-        return null;
-    }
-
-    public boolean isAbstract() {
-        return false;
-    }
-
-    public boolean isPartOf() {
-        return false;
-    }
-
-    public boolean isValue() {
-        return false;
-    }
-
-    public boolean isObject() {
-        return false;
-    }
-
-    public String debugInterface() {
-        return null;
-    }
-
-    public NakedObject createPattern() {
-        return null;
-    }
-
-    public NakedObjectSpecification[] interfaces() {
-        return null;
-    }
-
-    public boolean isLookup() {
-        return false;
-    }
-
     public ObjectTitle getTitle() {
         return new ObjectTitle() {
 
@@ -132,7 +88,23 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
             }};
     }
 
-    public boolean isParsable() {
+    public NakedObjectField[] getVisibleFields(NakedObject object, Session session) {
+        return null;
+    }
+
+    public boolean hasSubclasses() {
+        return false;
+    }
+
+    public NakedObjectSpecification[] interfaces() {
+        return null;
+    }
+
+    public boolean isAbstract() {
+        return false;
+    }
+
+    public boolean isCollection() {
         return false;
     }
 
@@ -140,16 +112,50 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         return false;
     }
 
-    public void clearDirty(NakedObject object) {}
+    public boolean isLookup() {
+        return false;
+    }
+
+    public boolean isObject() {
+        return false;
+    }
+
+    public boolean isOfType(NakedObjectSpecification cls) {
+        return false;
+    }
+
+    public boolean isParsable() {
+        return false;
+    }
+
+    public boolean isPartOf() {
+        return false;
+    }
+
+    public boolean isPersistable() {
+        return false;
+    }
+
+    public boolean isValue() {
+        return false;
+    }
 
     public void markDirty(NakedObject object) {}
+
+    public NakedObjectSpecification[] subclasses() {
+        return null;
+    }
+
+    public NakedObjectSpecification superclass() {
+        return null;
+    }
     
     public String toString() {
         return "DummyNakedObjectSpecification" + id + " " + fullName;
     }
 
-    public boolean isPersistable() {
-        return false;
+    public String unresolvedTitle(PojoAdapter pojo) {
+        return null;
     }
 }
 

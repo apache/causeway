@@ -1,7 +1,7 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 
 
 public abstract class NakedObjectAssociation extends NakedObjectField {
