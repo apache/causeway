@@ -24,7 +24,7 @@ public abstract class AbstractUserContext extends AbstractNakedObject implements
     	
     // TODO - the fudge of specifying A concrete class instead of NakedClass get round a limition with NakedClass.isType()
 	private final InternalCollection classes = new InternalCollectionVector(SimpleNakedClass.class, this);
-    private final InternalCollection objects = new InternalCollectionVector(NakedObject.class, this);
+    private final InternalCollection objects = new InternalCollectionVector(AbstractNakedObject.class, this);
 	private User user;
     
     public void aboutClasses(FieldAbout about, NakedObject element, boolean add) {

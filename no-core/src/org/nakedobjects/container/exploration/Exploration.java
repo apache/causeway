@@ -149,6 +149,23 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
             }
             
             viewer.setTitle(name);
+            
+            /* for testing
+           DefaultUserContext root = new DefaultUserContext();
+           root.getName().setValue("Demo Context");
+           root.getObjects().add(rootObject); 
+           
+           
+           
+           ExplorationContext application2Context = new ExplorationContext();
+           application2Context.setContext(context);
+           application2Context.getName().setValue(name);
+           application2Context.associateUser(user);
+           root.getObjects().add(application2Context); 
+           
+           viewer.init(root, this);
+           */
+     
             viewer.init(rootObject, this);
             viewer.start();
 
