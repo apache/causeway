@@ -61,7 +61,7 @@
 
 	<property name="component" value="exploration"/>
 
-	<target name="idebuild" depends="clean, new-release-number, exploration-distribution">
+	<target name="idebuild" depends=" new-release-number, exploration-distribution">
 	</target>
 	
 	<target name="lundbuild" depends="-lundbuild-init, exploration-distribution">
@@ -173,7 +173,7 @@
 			<include name="**/*Tests.java" />
 		</patternset>
 
-		<junit fork="yes" printsummary="no" errorproperty="test-failed" failureproperty="test-failed" haltonfailure="no" dir="${test.run.dir}">
+		<junit fork="yes" printsummary="yes" errorproperty="test-failed" failureproperty="test-failed" haltonfailure="no" dir="${test.run.dir}">
 			<classpath refid="libs.external" />
 			<classpath path="${build.classes.src}" />
 			<classpath path="${build.classes.test}" />
@@ -236,7 +236,8 @@
 		<mkdir dir="release" />
 		<zip zipfile="release/nakedobjects-xp-${build.id}.zip" basedir="build/dist" />
 		
-		<fail unless="${test-failed}" message="Tests failed"/>
+		<echo>Test results ${test-failed}</echo>
+		<fail if="${test-failed}" message="Tests failed"/>
 
 	</target>
 
