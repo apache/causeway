@@ -59,6 +59,14 @@ public class Customer {
 
     }
 
+
+    public Booking actionUsePaymentMethod(PaymentMethod method) {
+        Booking booking = (Booking) container.createInstance(Booking.class);
+        booking.associateCustomer(this);
+        booking.setPaymentMethod(method);
+        return booking;
+    }
+
     public void actionMethodThatFails() {
         throw new RuntimeException("This is an error created by the application");
     }

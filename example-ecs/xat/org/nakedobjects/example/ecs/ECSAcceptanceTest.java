@@ -191,6 +191,7 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
         */
     }
 
+    
     public void testReuseBooking() {
         // setup
         testBasicBooking();
@@ -400,6 +401,15 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
         try{
             customer.getField("locations", "one");
         } catch(IllegalActionError expected){}
+    }
+    
+    public void testMethodWithAbstractParameter() {
+        TestObject customer = getTestClass(Customer.class.getName()).newInstance();
+        
+        
+        TestObject creditCard = getTestClass(CreditCard.class.getName()).newInstance();
+        
+        customer.assertActionExists("Use payment method", creditCard);
     }
     
     public void testValids() {

@@ -192,7 +192,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
                 if (action.getName().equals(searchName)) {
                     if (action.parameters().length == parameters.length) {
                         for (int j = 0; j < parameters.length; j++) {
-                            if (action.parameters()[j] != parameters[j]) {
+                            if (! parameters[j].isOfType(action.parameters()[j])) {
                                 continue outer;
                             }
                         }
