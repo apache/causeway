@@ -1,15 +1,14 @@
 package org.nakedobjects.object.transaction;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.MockObjectStore;
 import org.nakedobjects.object.MockUpdateNotifier;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
-import org.nakedobjects.object.reflect.ActionSpecification;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -100,7 +99,7 @@ public class SimpleTransactionManagerTest extends TestCase {
     public void test() {
         
         
-        NakedObjectSpecification accountClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(Account.class);
+        NakedObjectSpecification accountClass = NakedObjects.getSpecificationLoader().loadSpecification(Account.class);
         
         //      transaction 4
         objectManager.startTransaction();

@@ -5,9 +5,6 @@ import org.nakedobjects.object.MockLoadedObjects;
 import org.nakedobjects.object.MockObjectStore;
 import org.nakedobjects.object.MockOid;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.Person;
-import org.nakedobjects.object.Role;
-import org.nakedobjects.object.Team;
 import org.nakedobjects.object.persistence.Oid;
 
 import java.util.Vector;

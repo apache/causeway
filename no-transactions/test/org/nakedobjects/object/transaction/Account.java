@@ -1,11 +1,6 @@
 
 package org.nakedobjects.object.transaction;
 
-import Title;
-
-import org.nakedobjects.object.control.FieldAbout;
-import org.nakedobjects.object.defaults.value.Money;
-import org.nakedobjects.object.defaults.value.TextString;
 import org.nakedobjects.object.persistence.defaults.TransactionException;
 
 import java.util.Vector;
