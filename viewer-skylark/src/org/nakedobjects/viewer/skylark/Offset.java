@@ -29,6 +29,20 @@ public class Offset {
         return location;
     }
 
+    public boolean equals(Object obj) {
+        if(obj == this) {
+            return true;
+        }
+        
+        if(obj instanceof Offset) {
+            Offset offset;
+            offset = (Offset) obj;
+            return offset.dx == dx && offset.dy == dy;
+        }
+        
+        return false;
+    }
+    
     public String toString() {
         return "Offset " + dx + ", " + dy;
     }
