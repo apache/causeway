@@ -31,24 +31,23 @@ public class TimingTestClass extends TestClassDecorator {
         TestObject instance = super.newInstance();
         instance.getForNaked();
         timer.stop();
-       doc.record(timer);
+        doc.record(timer);
         return instance;
     }
-    
 
-    public TestNaked invokeAction(final String name, final TestNaked[] parameters) {
+    public TestObject invokeAction(final String name, final TestNaked[] parameters) {
         StringBuffer parameterList = new StringBuffer();
         for (int i = 0; i < parameters.length; i++) {
-            if(i > 0) {
+            if (i > 0) {
                 parameterList.append(", ");
             }
             parameterList.append(parameters[i].getTitle());
         }
-        
+
         Timer timer = new Timer("class action '" + name + "' with " + parameterList);
         timer.userDelay(4, 8);
-       timer.start();
-        TestNaked result = super.invokeAction(name, parameters);
+        timer.start();
+        TestObject result = super.invokeAction(name, parameters);
         timer.stop();
         doc.record(timer);
         return result;

@@ -87,7 +87,21 @@ public interface TestClass extends TestNaked {
      */
     void assertActionVisible(String name, TestNaked parameters);
 
-    TestNaked invokeAction(String name, TestNaked[] parameters);
+    /**
+     * @deprecated
+     */
+   TestObject invokeAction(String name);
+
+    /**
+     * @deprecated
+     */
+   TestObject invokeAction(String name, TestNaked parameter);
+
+   /**
+   * @deprecated
+   */
+    TestObject invokeAction(String name, TestNaked[] parameter);
+
 
     TestObject invokeActionReturnObject(String name, TestNaked[] parameters);
 

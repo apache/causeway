@@ -130,8 +130,8 @@ public class HtmlTestObject extends TestObjectDecorator {
         return result;
     }
 
-    public TestNaked invokeAction(String name, TestNaked[] parameters) {
-        TestNaked result = super.invokeAction(name, parameters);
+    public TestObject invokeAction(String name, TestNaked[] parameters) {
+        TestObject result = super.invokeAction(name, parameters);
         if(parameters.length == 1) {
             doc("drop it onto the ");
             doc(doc.objectString(this.getForNaked()));

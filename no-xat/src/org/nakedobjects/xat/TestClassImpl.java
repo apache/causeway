@@ -18,9 +18,6 @@ import org.nakedobjects.object.security.Session;
 
 
 public class TestClassImpl extends AbstractTestObject implements TestClass {
-
-    public static void init(NakedObjectStore objectStore) {}
-
     private NakedClass nakedClass;
 
     public TestClassImpl(Session session, NakedClass cls, TestObjectFactory factory) {

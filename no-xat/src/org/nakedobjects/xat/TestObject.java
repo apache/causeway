@@ -287,7 +287,7 @@ public interface TestObject extends TestNaked {
      * This mimicks the right-clicking on an object and subsequent selection of
      * a menu item.
      * 
-     * @deprecated
+     * @ deprecated
      */
    TestObject invokeAction(String name);
 
@@ -297,11 +297,14 @@ public interface TestObject extends TestNaked {
      * returned object, if any is returned, from the invoked <code>action</code>
      * method is returned by this method.
      * 
-     * @deprecated
+     * @ deprecated
      */
    TestObject invokeAction(String name, TestNaked parameter);
 
-    TestNaked invokeAction(String name, TestNaked[] parameter);
+   /**
+   * @ deprecated
+   */
+    TestObject invokeAction(String name, TestNaked[] parameter);
 
     TestObject invokeActionReturnObject(String string, TestNaked[] parameter);
 

@@ -42,7 +42,11 @@ abstract class AbstractTestObject {
         return (TestObject) invokeAction(name, new TestNaked[] {parameter} );
    }
   
-    public TestNaked invokeAction(final String name, final TestNaked[] parameters) {
+    public TestObject invokeAction(final String name, final TestNaked[] parameters) {
+        return (TestObject) newInvokeAction(name, parameters);
+    }
+    
+    private TestNaked newInvokeAction(final String name, final TestNaked[] parameters) {
         Action action = getAction(simpleName(name), parameters);
         assertActionUsable(name, action, parameters);
         assertActionVisible(name, action, parameters);
@@ -60,11 +64,11 @@ abstract class AbstractTestObject {
     }
 
     public TestCollection invokeActionReturnCollection(String name, TestNaked[] parameters) {
-        return (TestCollection) invokeAction(name, parameters);
+        return (TestCollection) newInvokeAction(name, parameters);
     }
 
     public TestObject invokeActionReturnObject(String name, TestNaked[] parameters) {
-        return (TestObject) invokeAction(name, parameters);
+        return (TestObject) newInvokeAction(name, parameters);
     }
 
     
