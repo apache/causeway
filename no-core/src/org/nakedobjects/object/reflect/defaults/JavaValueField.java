@@ -1,6 +1,8 @@
 package org.nakedobjects.object.reflect.defaults;
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectDefinitionException;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
@@ -52,6 +54,14 @@ public class JavaValueField extends JavaField implements ValueField {
 
     public NakedValue getValue(NakedObject fromObject) {
         return (NakedValue) get(fromObject);
+    }
+    
+    public Naked get(NakedObject fromObject) {
+        Naked value = super.get(fromObject);
+        if(value == null) {
+            throw new NakedObjectDefinitionException("Value field '" + getName() + "', in " + fromObject + ",must not return null");
+        }
+        return value;
     }
     
     public void restoreValue(NakedObject inObject, String encodedValue) {

@@ -1,5 +1,4 @@
 package org.nakedobjects.object;
-
 public class DummyNakedObject implements NakedObject {
 
     public void created() {}

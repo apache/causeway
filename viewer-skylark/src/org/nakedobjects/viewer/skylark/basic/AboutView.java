@@ -10,7 +10,6 @@ import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.util.PictureFactory;
 
 public class AboutView extends AbstractView {
-    private AboutNakedObjects about = new AboutNakedObjects();
     private final int padding = 6;
     private final Picture image;
     private final int left;
@@ -19,7 +18,11 @@ public class AboutView extends AbstractView {
         super(null, null, null);
 
         image = PictureFactory.getInstance().loadPicture(AboutNakedObjects.getImageName());
-        left = padding + image.getWidth() + padding;
+        if(showingImage()) {
+            left = padding + image.getWidth() + padding;
+        } else {
+            left = padding;
+        }
     }
 
     public void draw(Canvas canvas) {
@@ -29,7 +32,9 @@ public class AboutView extends AbstractView {
         canvas.drawSolidRectangle(size, Style.WHITE);
         canvas.drawRectangle(size, Style.SECONDARY1);
         
-        canvas.drawIcon(image, padding, padding);
+        if(showingImage()) {
+            canvas.drawIcon(image, padding, padding);
+        }
         int line = padding + Style.LABEL.getAscent();
         canvas.drawText(AboutNakedObjects.getName(), left, line, Style.BLACK, Style.TITLE);
         line += Style.TITLE.getHeight();
@@ -40,16 +45,23 @@ public class AboutView extends AbstractView {
         canvas.drawText(AboutNakedObjects.getCopyrightNotice(), left, line, Style.BLACK, Style.LABEL);
     }
     
+    private boolean showingImage() {
+        return image != null;
+    }
+
     public Size getRequiredSize() {
         int height = Style.TITLE.getAscent();
         height += Style.LABEL.getHeight();
         height += Style.LABEL.getHeight();
-         height = Math.max(height, image.getHeight());
         
         int width = Style.TITLE.stringWidth(AboutNakedObjects.getName());
         width = Math.max(width, Style.LABEL.stringWidth(AboutNakedObjects.getName()));
         width = Math.max(width, Style.LABEL.stringWidth(AboutNakedObjects.getCopyrightNotice()));
-        width = image.getWidth() + padding + width;
+        
+        if(showingImage()) {
+            height = Math.max(height, image.getHeight());
+	        width = image.getWidth() + padding + width;
+        }
         
         return new Size(padding + width + padding, padding + height + padding);
     }

@@ -2,11 +2,9 @@ package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.MockOid;
-import org.nakedobjects.object.NakedObjectSpecificationImpl;
-import org.nakedobjects.object.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.Person;
-import org.nakedobjects.object.defaults.value.TestClock;
 import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
+import org.nakedobjects.object.system.TestClock;
 
 import junit.framework.TestCase;
 

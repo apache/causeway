@@ -1,14 +1,14 @@
 package org.nakedobjects.persistence.file;
 
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.Role;
 import org.nakedobjects.object.ValueObjectExample;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
+import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
+import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.defaults.SerialOid;
 import org.nakedobjects.object.defaults.value.Date;
 import org.nakedobjects.object.defaults.value.DateTime;
@@ -18,12 +18,12 @@ import org.nakedobjects.object.defaults.value.Logical;
 import org.nakedobjects.object.defaults.value.Money;
 import org.nakedobjects.object.defaults.value.Option;
 import org.nakedobjects.object.defaults.value.Percentage;
-import org.nakedobjects.object.defaults.value.TestClock;
 import org.nakedobjects.object.defaults.value.TextString;
 import org.nakedobjects.object.defaults.value.Time;
 import org.nakedobjects.object.defaults.value.URLString;
 import org.nakedobjects.object.defaults.value.WholeNumber;
 import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
+import org.nakedobjects.object.system.TestClock;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;

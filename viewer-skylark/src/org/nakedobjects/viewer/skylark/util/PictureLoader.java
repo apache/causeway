@@ -70,7 +70,7 @@ class PictureLoader {
             return (PictureTemplate) pictures.get(root);
         }
         
-        PictureTemplate template = new PictureTemplate(unknownIconImage);
+        PictureTemplate template = PictureTemplate.create(unknownIconImage);
         pictures.put(root, template);
         return template;
     }
@@ -101,12 +101,12 @@ class PictureLoader {
             Image image = null;
             if (pos >= 0) {
                 image = load(path);
-                return new PictureTemplate(image);
+                return PictureTemplate.create(image);
             } else {
                 for (int i = 0; i < EXTENSIONS.length; i++) {
                     image = load(root + "." + EXTENSIONS[i]);
                     if (image != null) {
-                        return new PictureTemplate(image);
+                        return PictureTemplate.create(image);
                     }
                 }
             }

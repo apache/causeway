@@ -36,7 +36,6 @@ public abstract class JavaField extends JavaMember {
            LOG.error("Illegal access of " + getMethod, ignore);
            throw new NakedObjectRuntimeException(ignore);
        }
-//       return null;
    }
 
    /**

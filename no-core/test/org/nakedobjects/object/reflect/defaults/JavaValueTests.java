@@ -1,20 +1,25 @@
 package org.nakedobjects.object.reflect.defaults;
 
 
+import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.MockNakedObjectContext;
+import org.nakedobjects.object.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectDefinitionException;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.defaults.MockObjectManager;
-import org.nakedobjects.object.defaults.value.TestClock;
 import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.system.TestClock;
 
 import java.lang.reflect.Method;
 
 import junit.framework.TestSuite;
 
 import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 
 public class JavaValueTests extends NakedObjectTestCase {
@@ -22,8 +27,9 @@ public class JavaValueTests extends NakedObjectTestCase {
     
     private JavaValueField field;
     private MockValueTestObject object;
-    private MockObjectManager manager;
     private Session session;
+
+    private MockNakedObjectSpecificationLoader loader;
     
     public JavaValueTests(String name) {
         super(name);
@@ -34,16 +40,12 @@ public class JavaValueTests extends NakedObjectTestCase {
     }
 
     protected void setUp()  throws Exception {
-    	LogManager.getLoggerRepository().setThreshold(Level.OFF);
-
-    	manager = MockObjectManager.setup();
-    	new TestClock();
-    	
-       	session = new Session();
-
+       	Logger.getRootLogger().setLevel(Level.OFF);
+    	loader = new MockNakedObjectSpecificationLoader();
+		new TestClock();
+        
         object = new MockValueTestObject();
-        object.setContext(manager.getContext());
-       
+        
         Class cls = MockValueTestObject.class;
         Method get = cls.getDeclaredMethod("getValue", new Class[0]);
         Method about = cls.getDeclaredMethod("aboutValue", new Class[] {FieldAbout.class});
@@ -52,20 +54,24 @@ public class JavaValueTests extends NakedObjectTestCase {
      }
     
     protected void tearDown() throws Exception {
-        manager.shutdown();
-        super.tearDown();
+         super.tearDown();
     }
 
     public void testType() {
-    	assertEquals("org.nakedobjects.object.reflect.defaults.MockValue", field.getType().getFullName());
+        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
+        loader.setupSpecification(spec);
+    	assertEquals(spec, field.getType());
     }
     	
     public void testGetValue() {
-        Naked value = field.get(object);
-        assertNull(value);
+        try {
+            field.get(object);
+            fail("Expection expected when null value");
+        } catch (NakedObjectDefinitionException expected) {
+        }
         
         object.mockValue = new MockValue();
-        value = field.get(object);
+        Naked value = field.get(object);
         assertEquals(object.mockValue, value);
     }
     
@@ -78,6 +84,10 @@ public class JavaValueTests extends NakedObjectTestCase {
     public void testSave() throws InvalidEntryException {
         MockValue value = new MockValue();
         object.mockValue = value;
+        
+        NakedObjectContext context = new MockNakedObjectContext(new MockObjectManager());
+        object.setContext(context);
+        
      	field.saveValue(object, "Fred");
      	
      	assertEquals("Fred", value.saveValue);

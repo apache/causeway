@@ -1,4 +1,7 @@
-package org.nakedobjects.object;
+package org.nakedobjects.object.defaults;
+
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 
 import java.util.Enumeration;
 import java.util.Hashtable;

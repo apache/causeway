@@ -2,10 +2,10 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="src" path="example"/>
 	<classpathentry kind="var" path="JUNIT"/>
 	<classpathentry kind="var" path="MOCKOBJECTS"/>
 	<classpathentry kind="var" path="LOG4J"/>
+	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

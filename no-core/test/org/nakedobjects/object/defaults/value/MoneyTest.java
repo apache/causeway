@@ -1,8 +1,7 @@
 package org.nakedobjects.object.defaults.value;
 
-import junit.framework.TestCase;
 
-public class MoneyTest extends TestCase {
+public class MoneyTest extends ValueTestCase {
 
     public void testSaveRestore() throws Exception {
     	Money money1 = new Money();

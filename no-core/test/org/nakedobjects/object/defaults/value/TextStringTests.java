@@ -1,18 +1,9 @@
 package org.nakedobjects.object.defaults.value;
 
-import junit.framework.TestCase;
 
 
-public class TextStringTests extends TestCase {
-    /**
-     * Constructor for TextStringTests.
-     * @param name
-     */
-    public TextStringTests(String name) {
-        super(name);
-    }
-
-    public static void main(String[] args) {
+public class TextStringTests extends ValueTestCase {
+      public static void main(String[] args) {
         junit.textui.TestRunner.run(TextStringTests.class);
     }
 

@@ -11,7 +11,6 @@ import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.control.Validity;
-import org.nakedobjects.object.defaults.AbstractNakedObject;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.Member;
@@ -57,6 +56,7 @@ public class JavaReflector implements Reflector {
      *      isReady -&gt; Ready
      *      
      * </pre>
+     * 
      */
     protected static String javaBaseName(String javaName) {
         int pos = 0;
@@ -220,12 +220,16 @@ public class JavaReflector implements Reflector {
 
                 ActionSpecification.Type action;
                 action = new ActionSpecification.Type[] { ActionSpecification.USER, ActionSpecification.EXPLORATION, ActionSpecification.DEBUG }[prefix];
-                Action local = new JavaAction(name, action, method, aboutMethod);
+                Action local = createAction(method, name, aboutMethod, action);
                 actions.addElement(local);
             }
         }
 
         return convertToArray(actions);
+    }
+
+    Action createAction(Method method, String name, Method aboutMethod, ActionSpecification.Type action) {
+        return new JavaAction(name, action, method, aboutMethod);
     }
 
     public String[] actionSortOrder() {
@@ -651,16 +655,20 @@ public class JavaReflector implements Reflector {
         return fields;
     }
 
-    protected ValueField createValueField(Method method, String name, Method aboutMethod, Method validMethod) {
+    ValueField createValueField(Method method, String name, Method aboutMethod, Method validMethod) {
         return new JavaValueField(name, method.getReturnType(), method, aboutMethod, validMethod, false);
     }
 
     public String getSuperclass() {
         Class superclass = cls.getSuperclass();
-        if(superclass == AbstractNakedObject.class || superclass == Object.class) {
-            return NakedObject.class.getName();
+        
+        if(superclass == null) {
+            return null;
         }
-        return superclass == null ? null : superclass.getName();
+        
+        String naked = Naked.class.getName();
+		boolean isInstanceOfNaked = Naked.class.isAssignableFrom(superclass);
+		return  isInstanceOfNaked ? superclass.getName() : naked;
     }
 }
 

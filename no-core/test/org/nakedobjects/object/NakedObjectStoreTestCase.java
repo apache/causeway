@@ -2,8 +2,9 @@ package org.nakedobjects.object;
 
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
+import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.defaults.SerialOid;
-import org.nakedobjects.object.defaults.value.TestClock;
+import org.nakedobjects.object.system.TestClock;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;

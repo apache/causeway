@@ -1,8 +1,8 @@
 package org.nakedobjects.object;
 
 
-import org.nakedobjects.object.defaults.value.TestClock;
 import org.nakedobjects.object.reflect.AssociationSpecification;
+import org.nakedobjects.object.system.TestClock;
 
 import junit.framework.TestCase;
 
@@ -38,7 +38,8 @@ public abstract class NakedObjectTestCase extends TestCase {
     
     protected void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
-        new TestClock();
+    	new MockNakedObjectSpecificationLoader();
+		new TestClock();
     }
 }
 

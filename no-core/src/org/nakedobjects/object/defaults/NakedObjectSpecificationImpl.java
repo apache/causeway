@@ -1,5 +1,12 @@
-package org.nakedobjects.object;
+package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.ReflectionFactory;
+import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ClassAbout;
 import org.nakedobjects.object.reflect.Action;

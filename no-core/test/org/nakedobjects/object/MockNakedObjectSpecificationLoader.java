@@ -1,45 +1,25 @@
-package org.nakedobjects.object.reflect.defaults;
+package org.nakedobjects.object;
 
-import org.nakedobjects.object.DummyNakedObject;
-import org.nakedobjects.object.DummyNakedValue;
-import org.nakedobjects.object.control.ActionAbout;
-import org.nakedobjects.object.control.FieldAbout;
-import org.nakedobjects.object.control.Validity;
+public class MockNakedObjectSpecificationLoader extends NakedObjectSpecificationLoader {
 
-public class DummyReflectorTestObject extends DummyNakedObject {
+    private NakedObjectSpecification spec;
 
-    public static String pluralName() {
-        return "Plural";
-    }
-
-    public static String singularName() {
-        return "Singular";
+    public void setupSpecification(NakedObjectSpecification spec) {
+        this.spec = spec;
     }
     
-    public DummyNakedValue getValue() {
+    public NakedObjectSpecification loadSpecification(String name) {
+        return spec;
+    }
+
+    public NakedObjectSpecification loadSpecification(Class cls) {
+        return spec;
+    }
+
+    public NakedObjectSpecification[] getAllSpecifications() {
         return null;
     }
-    
-    public void aboutValue(FieldAbout about) {}
-    
-    public void validValue(Validity validity) {}
-    
-    public void actionMethodOne() {}
 
-    public void aboutActionMethodOne(ActionAbout about) {    }
-
-    public static String actionOrder() {
-        return "start, stop";
-    }
-
-    public static String classActionOrder() {
-        return "top, bottom";
-    }
-
-    
-    public static String fieldOrder() {
-        return "one, two ,three";
-    }
 }
 
 

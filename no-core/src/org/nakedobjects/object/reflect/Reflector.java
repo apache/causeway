@@ -47,6 +47,10 @@ public interface Reflector {
      */
    String singularName();
 
+   /**
+    * The name of this reflector's class's superclass.  Returns null if this reflector's class does not extend 
+    * a class that implements the Naked interface.
+    */
     String getSuperclass();
 
     boolean isAbstract();

@@ -25,9 +25,7 @@
 package org.nakedobjects.persistence.file;
 
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Role;
@@ -35,6 +33,8 @@ import org.nakedobjects.object.Team;
 import org.nakedobjects.object.ValueObjectExample;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
+import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
+import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.defaults.SerialOid;
 import org.nakedobjects.object.defaults.collection.ArbitraryCollectionVector;
 import org.nakedobjects.object.defaults.value.Date;

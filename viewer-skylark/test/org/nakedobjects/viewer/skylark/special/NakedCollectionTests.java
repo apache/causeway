@@ -1,12 +1,12 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Role;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
+import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.defaults.collection.ArbitraryCollectionVector;
-import org.nakedobjects.object.defaults.value.TestClock;
+import org.nakedobjects.object.system.TestClock;
 
 import java.util.Enumeration;
 

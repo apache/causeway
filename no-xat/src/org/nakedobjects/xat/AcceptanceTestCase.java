@@ -5,19 +5,21 @@ import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.OidGenerator;
 import org.nakedobjects.object.defaults.LocalObjectManager;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
+import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
+import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.defaults.NullUpdateNotifier;
 import org.nakedobjects.object.defaults.SimpleNakedClass;
 import org.nakedobjects.object.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.defaults.TransientObjectStore;
 import org.nakedobjects.object.exploration.ExplorationFixture;
 import org.nakedobjects.object.exploration.ExplorationSetUp;
+import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Role;
 import org.nakedobjects.object.security.Session;
@@ -94,7 +96,6 @@ public abstract class AcceptanceTestCase extends TestCase {
         try {        
 	        NakedObjectContext context = new NakedObjectContext(objectManager);
 	        Session session = ClientSession.getSession();
-//	        Session.getSession().setSecurityContext(con);
 
 	        explorationSetUp = new ExplorationSetUp(context);
 	        setUpFixtures();
@@ -105,6 +106,9 @@ public abstract class AcceptanceTestCase extends TestCase {
 	        }
 	        
 	        documentor = testObjectFactory.getDocumentor(getName().substring(4));
+	        
+	        new NakedObjectSpecificationLoaderImpl();
+	       
 	        
 	        explorationSetUp.installFixtures();
 	        String[] cls = explorationSetUp.getClasses();
@@ -140,6 +144,7 @@ public abstract class AcceptanceTestCase extends TestCase {
 
     protected LocalObjectManager createObjectManager() throws ConfigurationException, ComponentException {
 		NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
+		NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
 
         NakedObjectStore nos;
         nos = new TransientObjectStore();

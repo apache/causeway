@@ -1,22 +1,11 @@
 package org.nakedobjects.object.defaults.value;
 
-import org.nakedobjects.object.DummyNakedObjectSpecificationLoader;
-
-import junit.framework.TestCase;
 
 
-public class MultilineTextStringTests extends TestCase {
+public class MultilineTextStringTests extends ValueTestCase {
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(MultilineTextStringTests.class);
-    }
-
-    public MultilineTextStringTests(String name) {
-        super(name);
-    }
-
-    protected void setUp() throws Exception {
-        new DummyNakedObjectSpecificationLoader();
     }
 
     public void testInvalidCharacters() {

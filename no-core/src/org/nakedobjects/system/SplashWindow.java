@@ -111,41 +111,59 @@ public class SplashWindow extends Window implements Runnable {
         return image;
     }
 
-    private final int ascent;
     private int delay;
-    private final Font font;
+    private final Font labelFont;
     private final int height;
-    private final int lineHeight;
+    private final int labelLineHeight;
     private Image logo;
-    private final int PADDING = 7;
+    private final int PADDING = 9;
     private Frame parent;
     private final int width;
+    private Font titleFont;
 
     public SplashWindow() {
         super(new Frame());
         parent = (Frame) getParent();
         logo = loadImage(LOGO_FILE);
 
-        font = new Font("SansSerif", Font.PLAIN, 9);
-        FontMetrics fm = getFontMetrics(font);
-        lineHeight = (int) (fm.getHeight() * 1.05);
-        ascent = fm.getAscent();
+        labelFont = new Font("SansSerif", Font.PLAIN, 9);
+        titleFont = new Font("SansSerif", Font.BOLD, 24);
+        FontMetrics labelMetrics = getFontMetrics(labelFont);
+        FontMetrics titleMetrics = getFontMetrics(titleFont);
+        labelLineHeight = (int) (labelMetrics.getHeight() * 1.05);
+        
+        int width;
+        int height = PADDING;
+        if(logo == null) {
+            width = titleMetrics.stringWidth(AboutNakedObjects.getName());
+            height += titleMetrics.getHeight();
+        } else {
+	        width = logo.getWidth(this);
+	        height += logo.getHeight(this);
+      }
+        height += PADDING;
+        
+        width = Math.max(width, labelMetrics.stringWidth(AboutNakedObjects.getCopyrightNotice()));
+        height += labelLineHeight;
+            
+        width = Math.max(width, labelMetrics.stringWidth(AboutNakedObjects.getVersion()));
+        height += labelLineHeight;
 
-        int maxWidth = logo.getWidth(this);
-        maxWidth = Math.max(maxWidth, fm.stringWidth(AboutNakedObjects.getCopyrightNotice()));
-        maxWidth = Math.max(maxWidth, fm.stringWidth(AboutNakedObjects.getVersion()));
+        height += PADDING * 2;
 
-        width = PADDING + maxWidth + PADDING;
-        height = PADDING + logo.getHeight(this) + PADDING + lineHeight * 3 + PADDING;
-        Dimension screen = getToolkit().getScreenSize();
+        width = PADDING + width + PADDING;
         setSize(width, height);
 
+        this.height = height;
+        this.width = width;
+        
+        Dimension screen = getToolkit().getScreenSize();
         int x = (screen.width / 2) - (width / 2);
 
         if ((screen.width / screen.height) >= 2) {
             x = (screen.width / 4) - (width / 2);
         }
-
+        
         int y = (screen.height / 2) - (width / 2);
         setLocation(x, y);
         setBackground(Color.black);
@@ -155,35 +173,41 @@ public class SplashWindow extends Window implements Runnable {
     }
 
     public void paint(Graphics g) {
+        g.setColor(Color.white);
+        g.drawRect(0, 0, width - 1, height - 1);
+        
         if (logo != null) {
             g.drawImage(logo, PADDING, PADDING, this);
+        } else {
+	        g.setFont(titleFont);
+	        FontMetrics fm = g.getFontMetrics();
+	        String name= AboutNakedObjects.getName();
+	        g.drawString(name, PADDING, PADDING + fm.getAscent());
         }
-
-        g.setColor(Color.white);
-
-        g.setFont(font);
-
+        
+        g.setFont(labelFont);
         FontMetrics fm = g.getFontMetrics();
-        String copyrightNotice = AboutNakedObjects.getCopyrightNotice();
-        int left1 = width / 2 - fm.stringWidth(copyrightNotice) / 2;
-
-        String version = AboutNakedObjects.getVersion();
-        int left2 = width / 2 - fm.stringWidth(version) / 2;
+        
 
         String build = AboutNakedObjects.getBuildId();
         int left3 = width / 2 - fm.stringWidth(build) / 2;
+        int baseline3 = height - PADDING - fm.getDescent();        
+        
+        
+        String copyrightNotice = AboutNakedObjects.getCopyrightNotice();
+        int left1 = width / 2 - fm.stringWidth(copyrightNotice) / 2;
+        int baseline2 = baseline3 - fm.getHeight();        
+
+        String version = AboutNakedObjects.getVersion();
+        int left2 = width / 2 - fm.stringWidth(version) / 2;
+        int baseline1 = baseline2 - fm.getHeight();        
 
         int left = Math.min(left1, left2);
         left = Math.min(left, left3);
-        int line = height - PADDING - (3 * lineHeight) + ascent;
-
-        g.drawString(copyrightNotice, left, line);
-
-        line += lineHeight;
-        g.drawString(version, left, line);
-
-        line += lineHeight;
-        g.drawString(build, left, line);
+        
+        g.drawString(copyrightNotice, left, baseline1);
+        g.drawString(version, left, baseline2);
+        g.drawString(build, left, baseline3);
     }
 
     /**

@@ -1,6 +1,8 @@
 package org.nakedobjects.object.reflect.defaults;
 
+import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ValueField;
+import org.nakedobjects.object.reflect.ActionSpecification.Type;
 
 import java.lang.reflect.Method;
 
@@ -10,10 +12,13 @@ public class MockJavaReflector extends JavaReflector {
         super(name);
     }
     
-    protected ValueField createValueField(Method method, String name, Method aboutMethod, Method validMethod) {
-        return null;
+    ValueField createValueField(Method method, String name, Method aboutMethod, Method validMethod) {
+        return new MockValueField(method, name, aboutMethod, validMethod);
     }
 
+    Action createAction(Method method, String name, Method aboutMethod, Type action) {
+        return new MockAction(method, name, aboutMethod, action);
+    }
 }
 
 

@@ -22,7 +22,14 @@ class PictureTemplate {
     private Image image;
     private MediaTracker mt = new MediaTracker(new Canvas());
 
-    public PictureTemplate(Image image) {
+    public static PictureTemplate create(Image image) {
+		if(image == null) {
+			return null;
+		}
+        return new PictureTemplate(image);
+
+    }
+    private PictureTemplate(Image image) {
 		if(image == null) {
 			throw new NullPointerException();
 		}

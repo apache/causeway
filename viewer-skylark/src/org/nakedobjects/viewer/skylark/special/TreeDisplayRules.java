@@ -14,11 +14,14 @@ import org.nakedobjects.viewer.skylark.Workspace;
 
 
 public class TreeDisplayRules {
-    private static boolean showCollectionsOnly = true;
+    private static boolean showCollectionsOnly = false;
 
     private TreeDisplayRules() {}
 
     public static void menuOptions(MenuOptionSet options) {
+        // TODO fix and remove  following line
+        if(true) return;
+        
         UserAction option = new UserAction() {
             public void execute(Workspace workspace, View view, Location at) {
                 showCollectionsOnly = !showCollectionsOnly;

@@ -1,38 +1,9 @@
 package org.nakedobjects.object;
-public class DummyNakedValue implements NakedValue {
 
-    public boolean isEmpty() {
-        return false;
-    }
+public class MockNakedObjectContext extends NakedObjectContext {
 
-    public boolean userChangeable() {
-        return false;
-    }
-
-    public void clear() {}
-
-    public void parse(String text) throws ValueParseException {}
-
-    public void reset() {}
-
-    public void restoreString(String data) {}
-
-    public String saveString() {
-        return null;
-    }
-
-    public void copyObject(Naked object) {}
-
-    public NakedObjectSpecification getSpecification() {
-        return null;
-    }
-
-    public boolean isSameAs(Naked object) {
-        return false;
-    }
-
-    public String titleString() {
-        return null;
+    public MockNakedObjectContext(NakedObjectManager objectManager) {
+        super(objectManager);
     }
 
 }

@@ -39,7 +39,7 @@ public interface NakedObjectManager {
 
     TypedNakedCollection findInstances(String className, String searchTerm) throws UnsupportedFindException;
 
-    NakedClass getNakedClass(NakedObjectSpecification nakedClass);
+    NakedClass getNakedClass(NakedObjectSpecification specification);
 
     /**
      * Retrieves the object identified by the specified OID from the object

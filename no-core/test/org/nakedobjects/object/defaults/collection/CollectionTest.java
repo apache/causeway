@@ -6,77 +6,57 @@ import org.nakedobjects.object.ConcreteEmployee;
 import org.nakedobjects.object.ConcreteEmployer;
 import org.nakedobjects.object.Employee;
 import org.nakedobjects.object.Employer;
+import org.nakedobjects.object.IntegrationTestCase;
 import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.object.NakedObjectSpecificationImpl;
-import org.nakedobjects.object.NakedObjectSpecificationLoaderImpl;
-import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Person;
 import org.nakedobjects.object.Role;
 import org.nakedobjects.object.Team;
-import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.reflect.AssociationSpecification;
-import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 
 import java.util.Enumeration;
 
 import junit.framework.TestSuite;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-
 import com.mockobjects.ExpectationSet;
 
 
-public class CollectionIntegrationTest
-    extends NakedObjectTestCase {
+public class CollectionTest extends IntegrationTestCase {
     private Employer employer;
     private Employee e1;
     private Employee e2;
     private Employee e3;
-    private MockObjectManager manager;
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(
-                new TestSuite(CollectionIntegrationTest.class));
+                new TestSuite(CollectionTest.class));
     }
 
     protected void setUp() throws Exception {
-        LogManager.getLoggerRepository().setThreshold(Level.OFF);
         super.setUp();
-        
-        manager = MockObjectManager.setup();
-        new NakedObjectSpecificationLoaderImpl();
-        NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
-        NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
-    	
-        NakedObjectContext context = new NakedObjectContext(manager);
+
         employer = new ConcreteEmployer();
         employer.setContext(context);
         employer.getCompanyName().setValue("Disney");
         employer.makePersistent();
+        
         e1 = new ConcreteEmployee();
         e1.setContext(context);
         e1.getName().setValue("Mickey");
         e1.makePersistent();
+        
         e2 = new ConcreteEmployee();
         e2.setContext(context);
         e2.getName().setValue("Pluto");
         e2.makePersistent();
+        
         e3 = new ConcreteEmployee();
         e3.setContext(context);
         e3.getName().setValue("Minnie");
         e3.makePersistent();
     }
 
-    protected void tearDown() throws Exception {
-        manager.shutdown();
-        super.tearDown();
-    }
-    
-    public void testAddEmployees() {
+     public void testAddEmployees() {
         AssociationSpecification att = findAssocation("Employees", employer);
 
         // add an employee
@@ -125,21 +105,17 @@ public class CollectionIntegrationTest
         set2.verify();
     }
 
-    public void testCollectionObject() {
-        ArbitraryNakedCollection team = new ArbitraryCollectionVector(); //(ArbitraryCollection)e1.getObjectStore().newInstance(ArbitraryCollection.class);
-
+    public void testArbitraryCollectionVector() {
+        ArbitraryNakedCollection team = new ArbitraryCollectionVector(); 
         team.created();
 
-
-        //team.setType(Employee.class);
         team.add(e1);
         team.add(e2);
 
-        //	assertEquals(2, team.size());
+        assertEquals(2, team.size());
         AssociationSpecification association = findAssocation("Intra Company Team", employer);
 
         association.setAssociation(employer, team);
-
         assertEquals(team, employer.getIntraCompanyTeam());
     }
 
@@ -187,7 +163,7 @@ public class CollectionIntegrationTest
         set.verify();
     }
     
-    public void testElementsWithCaching() throws ObjectStoreException {
+    public void testLargeCollection() throws ObjectStoreException {
         ArbitraryNakedCollection collection = new ArbitraryCollectionVector();
         Role[] e = setupCollection(collection, 200);
         Enumeration enum = collection.elements();
@@ -202,27 +178,12 @@ public class CollectionIntegrationTest
         assertEquals(200, i);
     }
 
-    public void testElementsWithCaching2() throws ObjectStoreException {
-        ArbitraryNakedCollection collection = new ArbitraryCollectionVector();
-        Role[] e = setupCollection(collection, 2);
-        Enumeration enum = collection.elements();
-
-        int i = 0;
-
-        while (enum.hasMoreElements()) {
-            assertEquals(e[i], enum.nextElement());
-            i++;
-        }
-
-        assertEquals(2, i);
-    }
 
     /**
      *
      */
     public void testInternalCollection() throws ObjectStoreException {
         Team m = new Team();
-//        m.setContext(context);
 
         InternalCollection collection = m.getMembers();
 
@@ -246,10 +207,9 @@ public class CollectionIntegrationTest
 
         Role[] e = setupCollection(collection, 26);
 
-        //
         for (int i = 5; i < 11; i++) {
             collection.remove(e[i]);
-            assertTrue("removed BasicExample " + i, !collection.contains(e[i]));
+            assertFalse("removed BasicExample " + i, collection.contains(e[i]));
         }
     }
 
@@ -278,10 +238,7 @@ public class CollectionIntegrationTest
         set.verify();
     }
 
-    /**
-     *
-     */
-    public void testSize() throws ObjectStoreException {
+     public void testSize() throws ObjectStoreException {
         ArbitraryNakedCollection collection = new ArbitraryCollectionVector();
 
         setupCollection(collection, 26);
@@ -289,10 +246,7 @@ public class CollectionIntegrationTest
         assertEquals("26 elements added", 26, collection.size());
     }
 
-    /**
-     *
-     */
-    private Role[] setupCollection(ArbitraryNakedCollection collection, int size)
+     private Role[] setupCollection(ArbitraryNakedCollection collection, int size)
         throws ObjectStoreException {
 //        collection.setContext(context);
         
@@ -310,6 +264,34 @@ public class CollectionIntegrationTest
 
         return e;
     }
+     
+
+     public void testAddTwice() {
+         ArbitraryNakedCollection collection = new ArbitraryCollectionVector();
+         collection.add(e1);
+         collection.add(e1);
+         assertEquals(1, collection.size());
+     }
+
+     public void testElements() throws ObjectStoreException {
+         ArbitraryNakedCollection collection = new ArbitraryCollectionVector();
+         collection.add(e1);
+         collection.add(e2);
+         collection.add(e3);
+         
+         Enumeration elements = collection.elements();
+         Employee element = (Employee) elements.nextElement();
+         assertEquals(e1, element);
+         
+         element = (Employee) elements.nextElement();
+         assertEquals(e2, element);
+         
+         element = (Employee) elements.nextElement();
+         assertEquals(e3, element);
+         
+         assertFalse(elements.hasMoreElements());
+     }
+
 }
 
 

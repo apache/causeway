@@ -1,27 +1,18 @@
 package org.nakedobjects.object.reflect.defaults;
 
 import org.nakedobjects.object.ContactTestObject;
+import org.nakedobjects.object.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationImpl;
-import org.nakedobjects.object.NakedObjectSpecificationLoaderImpl;
-import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.value.TestClock;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.Member;
 import org.nakedobjects.object.reflect.NakedObjectSpecificationException;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.Reflector;
-
-import java.util.Vector;
+import org.nakedobjects.object.system.TestClock;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
-
-import com.mockobjects.ExpectationSet;
 
 
 public class JavaReflectorTest extends TestCase {
@@ -31,92 +22,25 @@ public class JavaReflectorTest extends TestCase {
     public static void main(String[] args) {
         junit.textui.TestRunner.run(new TestSuite(JavaReflectorTest.class));
     }
-
-    private String[] abouts(Member[] attributes) {
-    	Vector v = new Vector();
-    	
-    	for (int i = 0; i < attributes.length; i++) {
-    		Member att = attributes[i];
-    		
-    		if (att.hasAbout()) {
-    			v.addElement(att.getName());
-    		}
-    	}
-    	
-    	String[] names = new String[v.size()];
-    	
-    	v.copyInto(names);
-    	
-    	return names;
-    }
-
-    private String[] associates(Member[] fields) {
-        Vector v = new Vector();
-
-        for (int i = 0; i < fields.length; i++) {
-	
-        	Member member = fields[i];
-
-            if (member instanceof OneToOneAssociation && 
-                    ((OneToOneAssociation) member).hasAddMethod()) {
-                v.addElement(member.getName());
-            }
-        }
-
-        String[] names = new String[v.size()];
-
-        v.copyInto(names);
-
-        return names;
-    }
-
-    private String[] memberNames(Member[] attributes) {
-        String[] names = new String[attributes.length];
-        int i = 0;
-
-        for (int j = 0; j < attributes.length; j++) {
-            Member member = attributes[i];
-            names[i++] = member.getName();
-        }
-
-        return names;
-	}
-
-    private String[] objectAttributes(Member[] fields) {
-        Vector v = new Vector();
-        
-        for (int i = 0; i < fields.length; i++) {
-            if (fields[i] instanceof OneToOneAssociation) {
-                v.addElement(fields[i].getName());
-            }
-        }
-
-        String[] names = new String[v.size()];
-
-        v.copyInto(names);
-
-        return names;
-    }
-
+ 
     protected void setUp() throws ClassNotFoundException {
     	LogManager.getLoggerRepository().setThreshold(Level.OFF);
         
-    	new NakedObjectSpecificationLoaderImpl();
-    	NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
-    	NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
-     	
+    	new MockNakedObjectSpecificationLoader();     	
         new TestClock();
     	
         reflector = new MockJavaReflector(DummyReflectorTestObject.class.getName());
     }
 
-    /**
-     * 
-     */
     public void testObjectActions() throws NakedObjectSpecificationException {
-//         Action[] actions = reflector.actions(false);
-
-    }
+         Action[] actions = reflector.actions(false);
+         assertEquals(1, actions.length);
+         
+         MockAction member = (MockAction) actions[0];
+         assertEquals("MethodOne", member.getName());
+         assertEquals("actionMethodOne", member.getMethod().getName());
+         assertEquals("aboutActionMethodOne", member.getAboutMethod().getName());
+     }
     
     public void testFieldSortOrder() throws NakedObjectSpecificationException {
         String[] fields = reflector.fieldSortOrder();
@@ -165,11 +89,7 @@ public class JavaReflectorTest extends TestCase {
 //        Action[] actions = c.actions(Reflector.CLASS);
     }
 
-    /**
-     * @throws ClassNotFoundException
-     * 
-     */
-    public void testCreate() throws NakedObjectSpecificationException, ClassNotFoundException {
+    public void testCreate() throws Exception {
         new JavaReflector(ContactTestObject.class.getName());
 
         try {
@@ -179,14 +99,16 @@ public class JavaReflectorTest extends TestCase {
         }
     }
 
-    /**
-     * @throws ClassNotFoundException
-     * 
-     */
-    public void testFields() throws NakedObjectSpecificationException, ClassNotFoundException {
+    public void testFields() throws Exception {
         Member[] fields = reflector.fields();
         
         assertEquals(1, fields.length);
+        
+        MockValueField member = (MockValueField) fields[0];
+        assertEquals("Value", member.getName());
+        assertEquals("getValue", member.getMethod().getName());
+        assertEquals("aboutValue", member.getAboutMethod().getName());
+        assertEquals("validValue", member.getValidMethod().getName());
     }
 
     public void testNameManipulations() {

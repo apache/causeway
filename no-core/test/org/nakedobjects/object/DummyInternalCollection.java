@@ -1,5 +1,4 @@
 package org.nakedobjects.object;
-
 import org.nakedobjects.object.control.Permission;
 
 import java.util.Enumeration;

@@ -4,6 +4,7 @@ import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectDefinitionException;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
@@ -26,6 +27,7 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.core.AbstractViewBuilder;
 import org.nakedobjects.viewer.skylark.core.CompositeObjectView;
+import org.nakedobjects.viewer.skylark.util.ErrorView;
 
 import org.apache.log4j.Logger;
 
@@ -63,12 +65,17 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         LOG.debug("build new view " + view + " for " + object);
         for (int f = 0; f < flds.length; f++) {
             FieldSpecification field = flds[f];
-			Naked value = field.get(object);
-			ObjectField content = createContent(object, value, field);
-			View fieldView = subviewDesign.createSubview(content, view.getViewAxis());
-			if(fieldView != null) {
-				view.addView(decorateSubview(fieldView));
-			}
+            try {
+				Naked value = field.get(object);
+				ObjectField content = createContent(object, value, field);
+				View fieldView = subviewDesign.createSubview(content, view.getViewAxis());
+				if(fieldView != null) {
+					view.addView(decorateSubview(fieldView));
+				}
+            } catch (NakedObjectDefinitionException e) {
+                LOG.error("Invalid field", e);
+                view.addView(new ErrorView(e.getMessage()));
+            }
        }
     }
 
@@ -77,9 +84,9 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
 
         View[] subviews = view.getSubviews();
     	
-    	int fld = 0;
-    	
-    	for (int i = 0; i < subviews.length; i++) {
+        int fld = 0;
+        
+        for (int i = 0; i < subviews.length; i++) {
             View subview = subviews[i];
             while(((FieldContent) subview.getContent()).getField() != flds[fld]) {
                 fld++;
@@ -87,26 +94,32 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
             Assert.assertTrue(fld < flds.length);
             
             FieldSpecification field = flds[fld];
-            Naked value = field.get(object);
-            if(value instanceof NakedValue) {
-    		    NakedValue existing = ((ValueContent) subview.getContent()).getValue();
-    			if(value != existing) {
-    			    ((ValueField) subview.getContent()).updateDerivedValue((NakedValue) value);
-    			}
-    		    subview.refresh();
-    		} else if (value instanceof NakedCollection) {
-    		    subview.update((NakedObject) value);
-    		} else {
-    		    NakedObject existing = ((ObjectContent) subviews[i].getContent()).getObject();
-    			boolean changeToNull = value == null && existing != null;
-				boolean changedFromNull = value != null && existing == null;
-				if(changeToNull || changedFromNull) {
-					View fieldView =	subviewDesign.createSubview(createContent(object, value, field), view.getViewAxis());
-					if(fieldView != null) {
-						view.replaceView(subview, decorateSubview(fieldView));
-					}
-    			} 
-    		}
+            try {
+                Naked value = field.get(object);
+                if(value instanceof NakedValue) {
+                    NakedValue existing = ((ValueContent) subview.getContent()).getValue();
+                    if(value != existing) {
+                        ((ValueField) subview.getContent()).updateDerivedValue((NakedValue) value);
+                    }
+                    subview.refresh();
+                } else if (value instanceof NakedCollection) {
+                    subview.update((NakedObject) value);
+                } else {
+                    NakedObject existing = ((ObjectContent) subviews[i].getContent()).getObject();
+                    boolean changeToNull = value == null && existing != null;
+                    boolean changedFromNull = value != null && existing == null;
+                    if(changeToNull || changedFromNull) {
+                        View fieldView =	subviewDesign.createSubview(createContent(object, value, field), view.getViewAxis());
+                        if(fieldView != null) {
+                            view.replaceView(subview, decorateSubview(fieldView));
+                        }
+                    } 
+                }
+            } catch (NakedObjectDefinitionException e) {
+                LOG.error("Invalid field", e);
+                view.addView(new ErrorView(e.getMessage()));
+            }
+
     		fld++;
         }
     }

@@ -1,9 +1,14 @@
 package org.nakedobjects.object.reflect.defaults;
 
 
+import org.nakedobjects.object.DummyNakedObjectSpecification;
+import org.nakedobjects.object.MockNakedObjectContext;
+import org.nakedobjects.object.MockNakedObjectSpecificationLoader;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.system.TestClock;
 
 import java.lang.reflect.Method;
 
@@ -11,7 +16,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 
 public class JavaAssociationTest extends TestCase {
@@ -19,26 +24,26 @@ public class JavaAssociationTest extends TestCase {
 	private MockRole object;
 	private JavaOneToOneAssociation personField;
 	private MockPerson associate;
-    private MockObjectManager manager;
     private Session session;
+    private MockNakedObjectSpecificationLoader loader;
     
-    public JavaAssociationTest(String name) {
-        super(name);
-    }
-
     public static void main(String[] args) {
-        junit.textui.TestRunner.run(new TestSuite(JavaAssociationTest.class));
+        junit.textui.TestRunner.run(new TestSuite(JavaOneToOneAssociationTest.class));
     }
 
     protected void setUp()  throws Exception {
-    	LogManager.getLoggerRepository().setThreshold(Level.OFF);
     	super.setUp();
+
     	
-    	manager = MockObjectManager.setup();
+    	Logger.getRootLogger().setLevel(Level.OFF);
+    	loader = new MockNakedObjectSpecificationLoader();
+		new TestClock();
         
+		NakedObjectContext context = null;
+		
     	session = new Session();
         object = new MockRole();
-        object.setContext(manager.getContext());
+        object.setContext(context);
         
         Class cls = MockRole.class;
         Method get = cls.getDeclaredMethod("getPerson", new Class[0]);
@@ -50,16 +55,23 @@ public class JavaAssociationTest extends TestCase {
         associate = new MockPerson();
     }
 
+    
+
     protected void tearDown() throws Exception {
-        manager.shutdown();
+   //     manager.shutdown();
         super.tearDown();
     }
 
     public void testType() {
-    	assertEquals(MockPerson.class.getName(), personField.getType().getFullName());
+        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
+        loader.setupSpecification(spec);
+    	assertEquals(spec, personField.getType());
     }
     	
     public void testSet() {
+        NakedObjectContext context = new MockNakedObjectContext(new MockObjectManager());
+        object.setContext(context);
+       
      	personField.setAssociation(object, associate);
      	
      	assertEquals(associate, object.getPerson());

@@ -1,13 +1,8 @@
 package org.nakedobjects.object.defaults.value;
 
-import junit.framework.TestCase;
 
-public class DateTest extends TestCase {
+public class DateTest extends ValueTestCase {
 
-    protected void setUp() throws Exception {
-        Date.setClock(new TestClock());
-    }
-    
     public void testSaveRestore() throws Exception {
     	Date date1 = new Date();
     	date1.parse("2003-1-4");

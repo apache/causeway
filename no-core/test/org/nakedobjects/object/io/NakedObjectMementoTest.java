@@ -3,17 +3,17 @@ package org.nakedobjects.object.io;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.object.NakedObjectSpecificationImpl;
-import org.nakedobjects.object.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.Person;
 import org.nakedobjects.object.Role;
 import org.nakedobjects.object.Team;
 import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
+import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
+import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.defaults.SerialOid;
-import org.nakedobjects.object.defaults.value.TestClock;
 import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
+import org.nakedobjects.object.system.TestClock;
 
 import junit.framework.TestCase;
 

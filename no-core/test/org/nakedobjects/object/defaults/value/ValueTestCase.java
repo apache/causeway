@@ -1,40 +1,19 @@
-package org.nakedobjects.object;
-public class DummyNakedValue implements NakedValue {
+package org.nakedobjects.object.defaults.value;
 
-    public boolean isEmpty() {
-        return false;
+import org.nakedobjects.object.MockNakedObjectSpecificationLoader;
+import org.nakedobjects.object.system.TestClock;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
+import junit.framework.TestCase;
+
+public abstract class ValueTestCase extends TestCase {
+    protected void setUp() throws Exception {
+		Logger.getRootLogger().setLevel(Level.OFF);
+    	new MockNakedObjectSpecificationLoader();
+		new TestClock();
     }
-
-    public boolean userChangeable() {
-        return false;
-    }
-
-    public void clear() {}
-
-    public void parse(String text) throws ValueParseException {}
-
-    public void reset() {}
-
-    public void restoreString(String data) {}
-
-    public String saveString() {
-        return null;
-    }
-
-    public void copyObject(Naked object) {}
-
-    public NakedObjectSpecification getSpecification() {
-        return null;
-    }
-
-    public boolean isSameAs(Naked object) {
-        return false;
-    }
-
-    public String titleString() {
-        return null;
-    }
-
 }
 
 

@@ -1,47 +1,56 @@
-package org.nakedobjects.xat;
+package org.nakedobjects.object;
 
-import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
-import org.nakedobjects.object.defaults.value.Date;
-import org.nakedobjects.object.reflect.ValueFieldSpecification;
+import org.nakedobjects.object.reflect.AssociationSpecification;
 import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
+import org.nakedobjects.object.system.TestClock;
 
-public class TestValueImplTest extends NakedObjectTestCase {
-    private MockObjectManager om;
-    private NakedObjectContext context;
-    
-    public static void main(String[] args) {
-        junit.textui.TestRunner.run(TestValueImplTest.class);
-    }
-    
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+
+import junit.framework.TestCase;
+
+public class IntegrationTestCase extends TestCase {
+    protected MockObjectManager manager;
+    protected NakedObjectContext context;
+
     protected void setUp() throws Exception {
         super.setUp();
-        
-        om = MockObjectManager.setup();
+
+        LogManager.getLoggerRepository().setThreshold(Level.OFF);
+        new TestClock();
+        manager = MockObjectManager.setup();
         new NakedObjectSpecificationLoaderImpl();
         NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
         NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
-        context = new NakedObjectContext(om);
+        context = new NakedObjectContext(manager);
     }
     
-    public void test() {
-        TestValueExample parent = new TestValueExample();
-        parent.setContext(context);
-        ValueFieldSpecification fld = (ValueFieldSpecification) parent.getSpecification().getFields()[0]; 
-        TestValue value = new TestValueImpl(parent, fld);
-        value.fieldEntry("+2");
-        
-        assertEquals(new Date(2003,8,19), parent.getDate());
+    protected void tearDown() throws Exception {
+        manager.shutdown();
+        super.tearDown();
+    }
+    
+
+    public static void assertEquals(String name, String expected, NakedValue value) {
+        assertEquals(name, expected, value.titleString().toString());
     }
 
-    protected void tearDown() throws Exception {
-        super.tearDown();
-        
-        om.shutdown();
+    public static void assertEquals(String expected, NakedValue value) {
+        assertEquals(expected, value.titleString().toString());
+    }
+
+    public static void assertEquals(NakedValue expected, NakedValue value) {
+    	assertEquals(expected.titleString().toString(), value.titleString().toString());
+    }
+
+    protected AssociationSpecification findAssocation(String attributeName, NakedObject forObject) {
+        NakedObjectSpecification c = forObject.getSpecification();
+
+        return (AssociationSpecification) c.getField(attributeName);
     }
 }
 

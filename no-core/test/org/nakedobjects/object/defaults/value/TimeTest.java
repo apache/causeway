@@ -1,14 +1,9 @@
 package org.nakedobjects.object.defaults.value;
 
-import junit.framework.TestCase;
 
-public class TimeTest extends TestCase {
+public class TimeTest extends ValueTestCase {
 
-    protected void setUp() throws Exception {
-        new TestClock();
-    }
-    
-    public void testSaveRestore() throws Exception {
+      public void testSaveRestore() throws Exception {
     	Time time1 = new Time();
     	time1.parse("2003-1-4");
     	assertFalse(time1.isEmpty());

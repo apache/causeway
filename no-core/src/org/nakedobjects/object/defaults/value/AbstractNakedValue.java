@@ -7,12 +7,8 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.defaults.Title;
 
 public abstract class AbstractNakedValue implements NakedValue {
-    private final NakedObjectSpecification specification;
+    private NakedObjectSpecification specification;
     
-    public AbstractNakedValue() {
-        specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(this.getClass());
-    }
-
     /** By default all values are changeable by the user */
 	public boolean userChangeable() {
 	    return true;
@@ -38,8 +34,10 @@ public abstract class AbstractNakedValue implements NakedValue {
     }
 
     public NakedObjectSpecification getSpecification() {
+        if(specification == null) {
+            specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(this.getClass());
+        }
         return specification;
-//        return NakedClass.getNakedClass(getClass().getName());
     }
 
 

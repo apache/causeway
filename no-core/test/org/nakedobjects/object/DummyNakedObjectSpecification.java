@@ -1,5 +1,4 @@
 package org.nakedobjects.object;
-
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.FieldSpecification;

@@ -109,19 +109,18 @@ public abstract class AbstractNakedObject implements NakedObject {
     private TimeStamp lastActivity = new TimeStamp();
     private Oid oid;
     private NakedObjectContext context;
-    private NakedObjectSpecification nakedClass;
+    private NakedObjectSpecification specification;
     
     public void setContext(NakedObjectContext context) {
         this.context = context;
     }
     
     public void setNakedClass(NakedObjectSpecification nakedClass) {
-        this.nakedClass = nakedClass;
+        this.specification = nakedClass;
     }
     
     public AbstractNakedObject() {
         lastActivity.clear();
-        nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(this.getClass());
     }
 
     /*
@@ -269,7 +268,10 @@ public abstract class AbstractNakedObject implements NakedObject {
     }
 
     public NakedObjectSpecification getSpecification() {
-        return nakedClass;
+        if(specification == null) {
+            specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(this.getClass());
+        }
+        return specification;
     }
 
     protected NakedObjectManager getObjectManager() {
@@ -395,7 +397,8 @@ public abstract class AbstractNakedObject implements NakedObject {
         StringBuffer s = new StringBuffer();
 
         // datatype
-        s.append(getSpecification().getShortName());
+        NakedObjectSpecification spec = getSpecification();
+        s.append(spec == null ? getClass().getName() : spec.getShortName());
         s.append(" [");
 
         // type of object - EO, Primitive, Collection, with Status etc

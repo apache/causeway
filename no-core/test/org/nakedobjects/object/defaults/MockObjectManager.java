@@ -26,7 +26,7 @@ public class MockObjectManager extends AbstractNakedObjectManager {
 
     private Vector actions = new Vector();
     
-    private MockObjectManager() {
+    public MockObjectManager() {
     }
 
     public void abortTransaction() {

@@ -4,14 +4,8 @@ import org.nakedobjects.object.ValueParseException;
 
 import java.util.Locale;
 
-import junit.framework.TestCase;
-
-public class TimeTests extends TestCase {
+public class TimeTests extends ValueTestCase {
 	private Time t;
-
-	public TimeTests(String arg0) {
-		super(arg0);
-	}
 
 	public void testTimeConstructors() {
 		assertEquals("Two identically created objects", t.dateValue(), new Time(10, 40).dateValue());
@@ -111,12 +105,9 @@ public class TimeTests extends TestCase {
 	}
 
 	protected void setUp() throws Exception {
-		Locale.setDefault(Locale.UK);
-		
-        new TestClock();
-        
 		super.setUp();
-    	
+
+		Locale.setDefault(Locale.UK);
 		t = new Time(10, 40);
 	}
 

@@ -2,10 +2,12 @@ package org.nakedobjects.object;
 
 
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
+import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
+import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.defaults.Title;
-import org.nakedobjects.object.defaults.value.TestClock;
 import org.nakedobjects.object.defaults.value.TextString;
 import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
+import org.nakedobjects.object.system.TestClock;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

@@ -80,6 +80,9 @@ public class PictureFactory {
     public Picture loadPicture(String path) {
         final String directory = UiConfiguration.getInstance().imageDirectory();
         PictureTemplate template = loader.getPictureTemplate(directory + path);
+        if(template == null) {
+            return null;
+        }
         return template.getFullSizeImage();
     }
 

@@ -1,69 +1,70 @@
-package org.nakedobjects.object.reflect;
+package org.nakedobjects.object.reflect.defaults;
 
 
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectTestCase;
-import org.nakedobjects.object.Person;
-import org.nakedobjects.object.Role;
-import org.nakedobjects.object.defaults.LocalReflectionFactory;
+import org.nakedobjects.object.DummyNakedObjectSpecification;
+import org.nakedobjects.object.MockNakedObjectContext;
+import org.nakedobjects.object.MockNakedObjectSpecificationLoader;
+import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.defaults.MockObjectManager;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
-import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.system.TestClock;
 
+import java.lang.reflect.Method;
+
+import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 
-public class AssociationTest extends NakedObjectTestCase {
+public class JavaOneToOneAssociationTest extends TestCase {
     private static final String PERSON_FIELD_NAME = "person";
-    private static final String PERSON_FIELD_LABEL = "Person";
-	private Role object;
-	private OneToOneAssociationSpecification personField;
-	private Person associate;
-    private MockObjectManager manager;
+	private MockRole object;
+	private JavaOneToOneAssociation personField;
+	private MockPerson associate;
     private Session session;
+    private MockNakedObjectSpecificationLoader loader;
     
-    public AssociationTest(String name) {
-        super(name);
-    }
-
     public static void main(String[] args) {
-        junit.textui.TestRunner.run(new TestSuite(AssociationTest.class));
+        junit.textui.TestRunner.run(new TestSuite(JavaOneToOneAssociationTest.class));
     }
 
     protected void setUp()  throws Exception {
-    	LogManager.getLoggerRepository().setThreshold(Level.OFF);
     	super.setUp();
-    	
-    	manager = MockObjectManager.setup();
-    	new NakedObjectSpecificationLoaderImpl();
-    	NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
-    	NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
-          
-    	session = new Session();
-    	
-        object = new Role();
-        object.setContext(manager.getContext());
-        NakedObjectSpecification c = object.getSpecification();
-        personField = (OneToOneAssociationSpecification) c.getField(PERSON_FIELD_NAME);
-        
-        associate = new Person();
-    }
 
-    protected void tearDown() throws Exception {
-        manager.shutdown();
-        super.tearDown();
+    	
+    	Logger.getRootLogger().setLevel(Level.OFF);
+    	loader = new MockNakedObjectSpecificationLoader();
+		new TestClock();
+        
+		NakedObjectContext context = null;
+		
+    	session = new Session();
+        object = new MockRole();
+        object.setContext(context);
+        
+        Class cls = MockRole.class;
+        Method get = cls.getDeclaredMethod("getPerson", new Class[0]);
+        Method set = cls.getDeclaredMethod("setPerson", new Class[] {MockPerson.class});
+        Method about = cls.getDeclaredMethod("aboutPerson", new Class[] {FieldAbout.class, MockPerson.class});
+        
+        personField = new JavaOneToOneAssociation(PERSON_FIELD_NAME, MockPerson.class, get, set, null, null, about);
+        
+        associate = new MockPerson();
     }
 
     public void testType() {
-    	assertEquals(Person.class.getName(), personField.getType().getFullName());
+        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
+        loader.setupSpecification(spec);
+    	assertEquals(spec, personField.getType());
     }
     	
     public void testSet() {
+        NakedObjectContext context = new MockNakedObjectContext(new MockObjectManager());
+        object.setContext(context);
+       
      	personField.setAssociation(object, associate);
      	
      	assertEquals(associate, object.getPerson());
@@ -92,11 +93,7 @@ public class AssociationTest extends NakedObjectTestCase {
     public void testName() {
     	assertEquals(PERSON_FIELD_NAME, personField.getName());
     }
-    
-    public void testLabel() {
-    	assertEquals(PERSON_FIELD_LABEL, personField.getLabel(session, object));
-    }
-    
+     
     public void testAboutAssignment() {
     	assertTrue(personField.hasAbout());
 

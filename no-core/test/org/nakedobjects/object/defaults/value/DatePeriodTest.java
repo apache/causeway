@@ -1,33 +1,18 @@
 package org.nakedobjects.object.defaults.value;
 
-import org.nakedobjects.object.NakedObjectSpecificationImpl;
-import org.nakedobjects.object.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.ValueParseException;
-import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
-import org.nakedobjects.system.SystemClock;
 
 import java.util.Locale;
 
-import junit.framework.TestCase;
 
-
-public class DatePeriodTest extends TestCase {
+public class DatePeriodTest extends ValueTestCase {
 	
 	private DatePeriod mayJul, junAug, junJul, dp1, dp2;
 
-	public DatePeriodTest(String arg0) {
-		super(arg0);
-	}
-
 	protected void setUp() throws Exception {
-		Locale.setDefault(Locale.UK);
+	    super.setUp();
 
-    	new NakedObjectSpecificationLoaderImpl();
-    	NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
-    	NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
-	    	
-		Date.setClock(new SystemClock());
+	    Locale.setDefault(Locale.UK);
 		
 		mayJul = new DatePeriod();
 		mayJul.getStart().setValue(2003,5,1);

@@ -2,17 +2,21 @@ package org.nakedobjects.object.reflect.defaults;
 
 
 import org.nakedobjects.object.DummyInternalCollection;
+import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.InternalCollection;
+import org.nakedobjects.object.MockNakedObjectContext;
+import org.nakedobjects.object.MockNakedObjectSpecificationLoader;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.defaults.MockObjectManager;
-import org.nakedobjects.object.defaults.value.TestClock;
+import org.nakedobjects.object.system.TestClock;
 
 import java.lang.reflect.Method;
 
 import junit.framework.TestSuite;
 
 import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 
 public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
@@ -20,7 +24,7 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
  	private MockTeam object;
 	private JavaOneToManyAssociation collectionField;
 	private MockPerson elements[];
-    private MockObjectManager manager;
+    private MockNakedObjectSpecificationLoader loader;
 
     public JavaOneToManyAssociationTest(String name) {
         super(name);
@@ -31,13 +35,12 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
     }
 
     public void setUp()  throws Exception {
-    	LogManager.getLoggerRepository().setThreshold(Level.OFF);
-
-    	manager = MockObjectManager.setup();
-    	new TestClock();
-    	
+        
+        Logger.getRootLogger().setLevel(Level.OFF);
+    	loader = new MockNakedObjectSpecificationLoader();
+		new TestClock();
+        
 		object = new MockTeam();
-		object.setContext(manager.getContext());
         elements = new MockPerson[3];
         for (int i = 0; i < elements.length; i++) {
 			elements[i] = new MockPerson();
@@ -51,17 +54,18 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         collectionField = new JavaOneToManyAssociation(MEMBERS_FIELD_NAME, InternalCollection.class, get, add, remove, null);
     }
     
-    protected void tearDown() throws Exception {
-        manager.shutdown();
-        super.tearDown();
-    }
-
     public void testType() {
-    	assertEquals(InternalCollection.class.getName(), collectionField.getType().getFullName());
+        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
+        loader.setupSpecification(spec);
+    	assertEquals(spec, collectionField.getType());
     }
     	
     public void testAdd() {
         MockPerson associate = new MockPerson();
+
+        NakedObjectContext context = new MockNakedObjectContext(new MockObjectManager());
+        object.setContext(context);
+
         collectionField.addAssociation(object, associate);
         
         assertEquals(associate, object.added);

@@ -1,16 +1,10 @@
 package org.nakedobjects.object.defaults.value;
 
-import org.nakedobjects.object.DummyNakedObjectSpecificationLoader;
 
-import junit.framework.TestCase;
-
-public class DateTimeTest extends TestCase {
+public class DateTimeTest extends ValueTestCase {
     
     protected void setUp() throws Exception {
         super.setUp();
-        
-        new DummyNakedObjectSpecificationLoader();
-        new TestClock();
     }
 
     public void testSaveRestore() throws Exception {
