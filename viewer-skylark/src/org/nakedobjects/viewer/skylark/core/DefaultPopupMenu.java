@@ -1,9 +1,5 @@
 package org.nakedobjects.viewer.skylark.core;
 
-import java.awt.event.KeyEvent;
-import java.util.Vector;
-
-import org.apache.log4j.Logger;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.viewer.skylark.Canvas;
@@ -19,6 +15,11 @@ import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
+
+import java.awt.event.KeyEvent;
+import java.util.Vector;
+
+import org.apache.log4j.Logger;
 
 
 public class DefaultPopupMenu extends AbstractView implements PopupMenu {

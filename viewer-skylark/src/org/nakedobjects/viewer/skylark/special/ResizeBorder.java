@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 
 public class ResizeBorder extends AbstractBorder {
     private static final int BORDER_WIDTH = 5;
-    private Size resize = new Size(200, 100);
+    private Size resize;
     private int direction;
 
     public ResizeBorder(View view) {
@@ -92,6 +92,9 @@ public class ResizeBorder extends AbstractBorder {
     }
 
     public Size getRequiredSize() {
+        if(resize == null) {
+            resize = wrappedView.getRequiredSize();
+        }
         return new Size(resize);
     }
     

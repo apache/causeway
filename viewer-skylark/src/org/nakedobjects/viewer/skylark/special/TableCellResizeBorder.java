@@ -19,13 +19,17 @@ public class TableCellResizeBorder extends AbstractBorder {
 	}
 	
 	public void mouseMoved(Location at) {
-		int x = at.getX();
-		int boundary = boundary();
-		if(x >= boundary - 2 && x <= boundary + 2) {
+		if(isOverBorder(at)) {
 			getViewManager().showResizeRightCursor();
 		} else {
 			getViewManager().showDefaultCursor();
 		} 
+	}
+	
+	private boolean isOverBorder(Location at) {
+		int x = at.getX();
+		int boundary = boundary();
+		return x >= boundary && x <= boundary + 2;
 	}
 	
 	private int boundary() {
@@ -33,20 +37,22 @@ public class TableCellResizeBorder extends AbstractBorder {
 	}
 
 	public void draw(Canvas canvas) {
+		super.draw(canvas);
+
 		int x1 = 0;
 		int y1 = 0;
 		int x2 = getSize().getWidth() - 1;
-		int y2 = getSize().getHeight() - 1;
-		canvas.drawLine(x1, y2, x2, y2, Style.SECONDARY2);
+		int y2 = getSize().getHeight();
+		canvas.drawLine(x1, 0, x2, 0, Style.SECONDARY2);
 		canvas.drawLine(x2, y1, x2, y2, Style.SECONDARY2);
-
-		canvas.drawLine(boundary(), y1, boundary(), y2, Style.SECONDARY2);
-
-		super.draw(canvas);
 	}
 	
 	public View dragFrom(InternalDrag drag) {
-		return new ViewResizeOutline(drag, this, ViewResizeOutline.RIGHT);
+	    if(isOverBorder(drag.getMouseLocation())) {
+	        return new ViewResizeOutline(drag, this, ViewResizeOutline.RIGHT);
+	    } else {
+	        return super.dragFrom(drag);
+	    }
 	}
 	
 	public void dragTo(InternalDrag drag) {

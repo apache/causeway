@@ -17,6 +17,8 @@ import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
+import org.nakedobjects.viewer.skylark.basic.ObjectTitleText;
+import org.nakedobjects.viewer.skylark.basic.TitleText;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
 import org.nakedobjects.viewer.skylark.core.AbstractBuilderDecorator;
 import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
@@ -50,23 +52,23 @@ public class TableRowSpecification extends AbstractCompositeViewSpecification {
         public View createSubview(Content content, ViewAxis axis) {
             ViewFactory factory = ViewFactory.getViewFactory();
 
-            ViewSpecification spec;
+            ViewSpecification cellSpec;
 
             if (content instanceof OneToManyField) {
                 return null;
             } else if (content instanceof ValueField) {
-                spec = factory.getValueFieldSpecification((ValueContent) content);
+                cellSpec = factory.getValueFieldSpecification((ValueContent) content);
             } else if (content instanceof ObjectContent) {
-                spec = factory.getIconizedSubViewSpecification((ObjectContent) content);
+                cellSpec = factory.getIconizedSubViewSpecification((ObjectContent) content);
             } else {
                 throw new NakedObjectRuntimeException();
             }
 
-            return spec.createView(content, axis);
+            return cellSpec.createView(content, axis);
         }
 
-        public View decorateSubview(View view) {
-            return new TableCellResizeBorder(view);
+        public View decorateSubview(View cell) {
+            return new TableCellResizeBorder(cell);
         }
     }
 }
@@ -76,35 +78,46 @@ class RowBorder extends AbstractBorder {
     private static final int HANDLE_WIDTH = 20;
     private int baseline;
     private IconGraphic icon;
+    private TitleText title;
 
-    public RowBorder(View wrappedView) {
-        super(wrappedView);
+    public RowBorder(View wrappedRow) {
+        super(wrappedRow);
 
         icon = new IconGraphic(this, Style.NORMAL);
-
+        title = new ObjectTitleText(this, Style.NORMAL);
         baseline = icon.getBaseline();
 
-        left = icon.getSize().getWidth();
+        left = icon.getSize().getWidth() + HPADDING + title.getSize().getWidth();
         
-        ((TableColumnAxis) wrappedView.getViewAxis()).setOffset(left);
+        ((TableColumnAxis) wrappedRow.getViewAxis()).setOffset(left);
 
         right = HANDLE_WIDTH;
     }
 
+    protected int getLeft() {
+        return ((TableColumnAxis) wrappedView.getViewAxis()).getHeaderOffset();
+    }
+    
     public void debugDetails(StringBuffer b) {
         b.append("RowBorder " + left + " pixels");
     }
 
     public void draw(Canvas canvas) {
-        // icon & title
-        icon.draw(canvas, 1, baseline + 1);
-
+        int bl = getBaseline();
+        icon.draw(canvas, 1, bl);
+        title.draw(canvas, icon.getSize().getWidth() + HPADDING, bl);
+        int l = getLeft() - 1;
+        canvas.drawLine(0, 0, l, 0, Style.SECONDARY2);
+        canvas.drawLine(l, 0, l, getSize().getHeight(), Style.SECONDARY2);
+        l--;
+        canvas.drawLine(l, 0, l, getSize().getHeight(), Style.SECONDARY2);
+        
         // components
        super.draw(canvas);
     }
 
     public int getBaseline() {
-        return baseline + 1;
+        return baseline;
     }
 
     public String toString() {
@@ -128,40 +141,56 @@ class RowLayout extends AbstractBuilderDecorator {
         super(design);
     }
 
-    public Size getRequiredSize(View view) {
+    public Size getRequiredSize(View row) {
         int height = 0;
         int width = 0;
-        View[] views = view.getSubviews();
-        int[] widths = ((TableColumnAxis) view.getViewAxis()).getWidths();
+        View[] cells = row.getSubviews();
+        int[] widths = ((TableColumnAxis) row.getViewAxis()).getWidths();
 
-        for (int i = 0; i < views.length; i++) {
-            View v = views[i];
-            Size s = v.getRequiredSize();
-            height = Math.max(height, s.getHeight());
-            width += widths[i] + 4;
+        int maxBaseline = 0;
+        for (int i = 0; i < cells.length; i++) {
+            View cell = cells[i];
+            maxBaseline = Math.max(maxBaseline, cell.getBaseline());
+        }
+
+        for (int i = 0; i < cells.length; i++) {
+            View cell = cells[i];
+            Size s = cell.getRequiredSize();
+            int b = cell.getBaseline();
+            height = Math.max(height, s.getHeight()+ (b < maxBaseline ? maxBaseline - b: 0));
+            width += widths[i];
         }
 
         return new Size(width, height);
     }
 
-    public void layout(View view) {
+    public void layout(View row) {
         int x = 0;
         int y = 0;
-        View[] views = view.getSubviews();
-        int[] widths = ((TableColumnAxis) view.getViewAxis()).getWidths();
+        
+        View[] cells = row.getSubviews();
+        int[] widths = ((TableColumnAxis) row.getViewAxis()).getWidths();
 
-        for (int i = 0; i < views.length; i++) {
-            View v = views[i];
-            Size s = v.getRequiredSize();
+        int maxBaseline = 0;
+        for (int i = 0; i < cells.length; i++) {
+            View cell = cells[i];
+            maxBaseline = Math.max(maxBaseline, cell.getBaseline());
+        }
+        
+        for (int i = 0; i < cells.length; i++) {
+            View cell = cells[i];
+            Size s = cell.getRequiredSize();
+            int b = cell.getBaseline();
+            
             s.setWidth(widths[i]);
-            v.setSize(s);
-            v.setLocation(new Location(x, y));
-            x += s.getWidth() + 4;
+            cell.setSize(s);
+            cell.setLocation(new Location(x, y + (b < maxBaseline ? maxBaseline - b: 0)));
+            x += s.getWidth();
         }
 
-        Padding padding = view.getPadding();
+        Padding padding = row.getPadding();
         Size size = new Size(padding.getLeftRight(), y + padding.getTopBottom());
-        view.setSize(size);
+        row.setSize(size);
     }
 }
 

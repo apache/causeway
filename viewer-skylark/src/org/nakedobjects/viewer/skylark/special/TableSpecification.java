@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.collection.AbstractTypedNakedCollectionVector;
@@ -15,7 +16,6 @@ import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
-import org.nakedobjects.viewer.skylark.basic.WindowDecorator;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
 import org.nakedobjects.viewer.skylark.core.AbstractBuilderDecorator;
 import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
@@ -34,7 +34,7 @@ class TableHeader extends AbstractBorder {
         TableColumnAxis axis = ((TableColumnAxis) getViewAxis());
         FieldSpecification[] fields = axis.getFields();
         int[] widths = axis.getWidths();
-        int x = axis.getOffset();
+        int x = axis.getHeaderOffset();
         for (int i = 0; i < fields.length; i++) {
             FieldSpecification field = fields[i];
             
@@ -42,8 +42,11 @@ class TableHeader extends AbstractBorder {
             canvas.drawText(label, x, y, Style.SECONDARY1, Style.LABEL);
             x += widths[i];
         }
+        canvas.drawLine(0, top, x - 1, top, Style.SECONDARY2);
 
         super.draw(canvas);
+        
+        canvas.drawRectangle(0,0, getSize().getWidth() - 1, getSize().getHeight() - top - 1, Style.SECONDARY2);
     }
 
     public String toString() {
@@ -59,9 +62,10 @@ class TableHeaderBuilder extends AbstractBuilderDecorator {
 
     public View createCompositeView(Content content, CompositeViewSpecification specification, ViewAxis axis) {
         AbstractTypedNakedCollectionVector coll = (AbstractTypedNakedCollectionVector) ((ObjectContent) content).getObject();
-        FieldSpecification[] viewFields = NakedObjectSpecificationLoader.getInstance().loadSpecification(coll.getElementSpecification().getFullName()).getVisibleFields(
-                null, ClientSession.getSession());
-        TableColumnAxis tableAxis = new TableColumnAxis(viewFields, 100);
+        NakedObjectSpecification elementSpecification = NakedObjectSpecificationLoader.getInstance().loadSpecification(coll.getElementSpecification().getFullName());
+        NakedObject exampleObject = (NakedObject) elementSpecification.acquireInstance();
+        FieldSpecification[] viewFields = elementSpecification.getVisibleFields(exampleObject, ClientSession.getSession());
+        TableColumnAxis tableAxis = new TableColumnAxis(viewFields, 120);
 
         View view = wrappedBuilder.createCompositeView(content, specification, tableAxis);
 
@@ -75,9 +79,16 @@ public class TableSpecification extends AbstractCompositeViewSpecification imple
     private ViewSpecification rowSpecification = new TableRowSpecification();
 
     public TableSpecification() {
-        builder = new WindowDecorator(new TableHeaderBuilder(new StackLayout(new CollectionElementBuilder(this, true))));
+        builder = new TableHeaderBuilder(new StackLayout(new CollectionElementBuilder(this, true)));
     }
 
+    public View createView(Content content, ViewAxis axis) {
+        View table = super.createView(content, axis);
+        View view = new ResizeBorder(new ScrollBorder(table));
+//        view.setRequiredSize(table.getRequiredSize());
+        return view;
+    }
+    
     public boolean canDisplay(Naked object) {
         return object instanceof AbstractTypedNakedCollectionVector;
     }

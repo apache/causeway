@@ -53,30 +53,38 @@ public class ScrollBorder extends AbstractBorder {
     }
 
     public void draw(Canvas canvas) {
-        Size size = getSize();
-        int width = size.getWidth();
-        int height = size.getHeight();
-        Bounds contents = contentArea();
-
-        canvas.drawLine(0, contents.getHeight(), width, contents.getHeight(), Style.SECONDARY2);
-        canvas.drawLine(contents.getWidth(), 0, contents.getWidth(), height, Style.SECONDARY2);
+         Bounds contents = contentArea();
 
         Color color = isOnBorder() ? Style.SECONDARY1 : Style.SECONDARY2;
         if(horizontalScrollPosition > 0 || horizontalVisibleAmount != contents.getWidth()) {
-            canvas.drawSolidRectangle(horizontalScrollPosition, contents.getHeight() + 2, horizontalVisibleAmount,
-                SCROLLBAR_WIDTH - 3, color);
+            canvas.drawSolidRectangle(0, contents.getHeight() + 1, contents.getWidth(),
+                    SCROLLBAR_WIDTH - 2, Style.WHITE);
+            canvas.drawSolidRectangle(horizontalScrollPosition, contents.getHeight() + 1, horizontalVisibleAmount,
+                    SCROLLBAR_WIDTH - 3, color);
+            canvas.drawRectangle(horizontalScrollPosition, contents.getHeight() + 1, horizontalVisibleAmount,
+                    SCROLLBAR_WIDTH - 3, Style.SECONDARY1);
         }
+        canvas.drawRectangle(0, contents.getHeight(), contents.getWidth(),
+                SCROLLBAR_WIDTH - 1, Style.SECONDARY2);
+        
         if(verticalScrollPosition > 0 || verticalVisibleAmount != contents.getHeight()) {
-                   canvas.drawSolidRectangle(contents.getWidth() + 2, verticalScrollPosition, 
-                           SCROLLBAR_WIDTH - 3, verticalVisibleAmount,             color);
+            canvas.drawSolidRectangle(contents.getWidth() + 1, 0, 
+                    SCROLLBAR_WIDTH - 2, contents.getHeight(),  Style.WHITE);
+            canvas.drawSolidRectangle(contents.getWidth() + 1, verticalScrollPosition, 
+                    SCROLLBAR_WIDTH - 3, verticalVisibleAmount,             color);
+            canvas.drawSolidRectangle(contents.getWidth() + 1, verticalScrollPosition, 
+                    SCROLLBAR_WIDTH - 3, verticalVisibleAmount,  Style.SECONDARY1);
         }
+        canvas.drawRectangle(contents.getWidth(), 0, 
+                SCROLLBAR_WIDTH - 1, contents.getHeight(),  Style.SECONDARY2);
+
         Offset offset = offset();
         canvas.setClip(offset.getDeltaX(), offset.getDeltaY(), contents.getWidth(), contents.getHeight());
         super.draw(canvas);
     }
 
     public Size getRequiredSize() {
-        return new Size(100, 100);
+        return wrappedView.getRequiredSize();
     }
 
     public Size getSize() {

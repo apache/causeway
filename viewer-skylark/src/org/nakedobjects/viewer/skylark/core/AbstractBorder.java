@@ -30,7 +30,7 @@ public class AbstractBorder extends AbstractViewDecorator {
     }
 
     protected Bounds contentArea() {
-        return new Bounds(left, top, getSize().getWidth() -left - right, getSize().getHeight() - top - bottom);
+        return new Bounds(getLeft(), getTop(), getSize().getWidth() -getLeft() - getRight(), getSize().getHeight() - getTop() - getBottom());
     }
 
     public void drag(InternalDrag drag) {
@@ -156,7 +156,7 @@ public class AbstractBorder extends AbstractViewDecorator {
             getViewManager().getSpy().addTrace(this, "over border area", contentArea());
             return new IdentifiedView(getView(), locationWithinViewer, getLocation());
         } else {
-            offset.add(-left, -top);
+            offset.add(-getLeft(), -getTop());
             return  super.identify3(locationWithinViewer, offset);
         }
         

@@ -3,14 +3,13 @@ package org.nakedobjects.viewer.skylark.metal;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
-import org.nakedobjects.viewer.skylark.basic.SimpleIdentifier;
 import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
 import org.nakedobjects.viewer.skylark.value.TextField;
-import org.nakedobjects.viewer.skylark.value.TextFieldBorder;
 
 public class TextFieldSpecification extends AbstractFieldSpecification {
     public View createView(Content content, ViewAxis axis) {
-		return new SimpleIdentifier(new TextFieldBorder(new TextField(content, this, axis, false)));
+		//return new SimpleIdentifier(new TextFieldBorder(new TextField(content, this, axis, false)));
+        return new TextField(content, this, axis, false);
     }
     
     public String getName() {

@@ -26,7 +26,7 @@ public class TableColumnAxis implements ViewAxis {
 		return widths;
 	}
 
-	public int getOffset() {
+	public int getHeaderOffset() {
 		return rowHeaderOffet;
 	}
 	
