@@ -135,9 +135,6 @@ public class TimeTests extends ValueTestCase {
        assertTrue(t.isEmpty());
    }
        
-      public void testFail()
-      {fail();}
-      
     protected void setUp() throws Exception {
         super.setUp();
 

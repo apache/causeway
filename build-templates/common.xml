@@ -176,8 +176,6 @@
 			</batchtest>
 		</junit>
 
-		<echo>Test results ${failure}</echo>
-
 		<mkdir dir="${dist.dir}" />
 
 		<mkdir dir="${build.dir}/tmp" />
@@ -232,8 +230,7 @@
 		<zip zipfile="${release.dir}/nakedobjects-${distribution}-${build.id}.zip"
 		     basedir="${dist.dir}" />
 
-		<echo>Test results ${failure}</echo>
-		<fail if="${failure}" message="Tests failed" />
+		<fail if="failure" message="Tests failed" />
 
 	</target>
 
