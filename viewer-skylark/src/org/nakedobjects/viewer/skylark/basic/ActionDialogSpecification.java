@@ -1,12 +1,12 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.ValueContent;
-import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.ValueParameter;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -21,7 +21,6 @@ import org.nakedobjects.viewer.skylark.special.ObjectParameter;
 import org.nakedobjects.viewer.skylark.special.StackLayout;
 import org.nakedobjects.viewer.skylark.special.SubviewSpec;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
-import org.nakedobjects.viewer.skylark.value.TextField;
 
 public class ActionDialogSpecification extends AbstractCompositeViewSpecification {
 
@@ -67,7 +66,9 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
             ActionContent actionContent = ((ActionContent) view.getContent());
             NakedObject result = actionContent.execute();
             NakedObject actionObject = actionContent.getObject();
-            actionObject.getContext().getObjectManager().objectChanged(actionObject);
+            if(! (actionObject instanceof NakedClass)) {
+                actionObject.getContext().getObjectManager().objectChanged(actionObject);
+            }
             if(result != null) {
 	            move(at);
 	            workspace.addOpenViewFor(result, at);

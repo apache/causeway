@@ -26,19 +26,19 @@ public class ClassOption extends MenuOption {
 		ActionSpecification[] actions;
 		// TODO only need to display the object methods for the naked class (and not class method of the class
 		
-		actions = nakedClass.getClassActions(ActionSpecification.USER, 0);
+		actions = nakedClass.getClassActions(ActionSpecification.USER);
 
 		for (int i = 0; i < actions.length; i++) {
 			addOption(classSpec, menuOptionSet, actions[i], MenuOptionSet.OBJECT);
 		}
 
-		actions = classSpec.getSpecification().getObjectActions(ActionSpecification.USER, 0);
+		actions = classSpec.getSpecification().getObjectActions(ActionSpecification.USER);
 
 		for (int i = 0; i < actions.length; i++) {
 			addOption(classSpec, menuOptionSet, actions[i], MenuOptionSet.OBJECT);
 		}
 
-	actions = nakedClass.getClassActions(ActionSpecification.EXPLORATION, 0);
+	actions = nakedClass.getClassActions(ActionSpecification.EXPLORATION);
 
 		if (actions.length > 0) {
 			for (int i = 0; i < actions.length; i++) {
@@ -46,7 +46,7 @@ public class ClassOption extends MenuOption {
 			}
 		}
 		
-		actions = classSpec.getSpecification().getObjectActions(ActionSpecification.EXPLORATION, 0);
+		actions = classSpec.getSpecification().getObjectActions(ActionSpecification.EXPLORATION);
 
 		if (actions.length > 0) {
 			for (int i = 0; i < actions.length; i++) {
@@ -59,15 +59,15 @@ public class ClassOption extends MenuOption {
 		About about = action.getAbout(ClientSession.getSession(), cls);
 
 		if(about.canAccess().isAllowed()) {
-			String labelName =  action.getLabel(ClientSession.getSession(), cls);
-			ClassOption option = new ClassOption(cls, labelName, action);
-	
-			// if method returns something then add ... to indicate a new window is shown
-			if (action.hasReturn()) {
-				option.setName(labelName + "...");
-			}
-			
-			menuOptionSet.add(type, option);
+            MenuOption option;
+            if (action.parameters().length == 0) {
+                option = ImmediateObjectOption.createOption(action, cls);
+            } else {
+                option = DialogedObjectOption.createOption(action, cls);
+            }
+            if (option != null) {
+                menuOptionSet.add(type, option);
+            }
 		}
 	}
 		
