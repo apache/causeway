@@ -5,6 +5,7 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
+
 public class KeyboardManager {
 
     private final Viewer viewer;
@@ -14,7 +15,8 @@ public class KeyboardManager {
     }
 
     private View getFocus() {
-        return viewer.getFocus().getView();
+        View focus = viewer.getFocus();
+        return focus == null ? null : focus.getView();
     }
 
     public void pressed(int keyCode, int modifiers) {
@@ -22,7 +24,7 @@ public class KeyboardManager {
         if (keyboardFocus != null) {
             keyboardFocus.keyPressed(keyCode, modifiers);
         }
-        
+
         int action = 0;
         if (keyCode == KeyEvent.VK_TAB) {
             if ((modifiers & InputEvent.CTRL_MASK) == InputEvent.CTRL_MASK) {
@@ -39,22 +41,21 @@ public class KeyboardManager {
                 }
             }
         }
-        
-        
-        switch(action) {
-        case KeyboardAction.NEXT_VIEW: 
+
+        switch (action) {
+        case KeyboardAction.NEXT_VIEW:
             focusNextSubview(keyboardFocus);
             break;
-        case KeyboardAction.PREVIOUS_VIEW: 
+        case KeyboardAction.PREVIOUS_VIEW:
             focusPreviousSubview(keyboardFocus);
             break;
-        case KeyboardAction.NEXT_WINDOW: 
-        //    focusPreviousRootView(keyboardFocus);
+        case KeyboardAction.NEXT_WINDOW:
+            //    focusPreviousRootView(keyboardFocus);
             break;
-        case KeyboardAction.PREVIOUS_WINDOW: 
+        case KeyboardAction.PREVIOUS_WINDOW:
             focusNextRootView(keyboardFocus);
             break;
-            }
+        }
     }
 
     public void released(int keyCode, int modifiers) {
@@ -72,9 +73,6 @@ public class KeyboardManager {
             }
         }
     }
-
-    
-    
 
     private void focusNextRootView(View focus) {
         View[] views = focus.getParent().getSubviews();
@@ -101,8 +99,12 @@ public class KeyboardManager {
         throw new NakedObjectRuntimeException();
     }
 
-    private void focusNextSubview(View focus) {
-        View[] views = focus.getParent().getSubviews();
+private void focusNextSubview(View focus) {
+        View parent = focus.getParent();
+       if(parent == null) {
+           return;
+       }
+        View[] views = parent.getSubviews();
 
         for (int i = 0; i < views.length; i++) {
             if (views[i] == focus) {
@@ -124,9 +126,7 @@ public class KeyboardManager {
         }
 
         throw new NakedObjectRuntimeException();
-    }
-
-    private void focusPreviousSubview(View focus) {
+    }    private void focusPreviousSubview(View focus) {
         View[] views = focus.getParent().getSubviews();
 
         for (int i = 0; i < views.length; i++) {
@@ -150,7 +150,6 @@ public class KeyboardManager {
 
         throw new NakedObjectRuntimeException();
     }
-    
 
 }
 

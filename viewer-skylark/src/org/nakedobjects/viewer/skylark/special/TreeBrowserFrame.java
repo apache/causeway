@@ -20,6 +20,7 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     private ViewSpecification mainViewFormSpec;
     private ViewSpecification mainViewTableSpec;
     private boolean invalidLayout = true;
+    private int layoutCount = 0;
     private View left;
     private View right;
     private View selectedNode;
@@ -34,6 +35,8 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     public String debugDetails() {
         StringBuffer b = new StringBuffer();
         b.append(super.debugDetails());
+ //       b.append("\nBuilt:     " + (buildInvalid ? "no" : "yes") + ", " + buildCount + " builds");
+        b.append("\nLaid out:  " + (invalidLayout ? "no" : "yes") + ", " + layoutCount + " layouts");
         b.append("\nBrowser:   ");
         b.append(this);
         b.append("\n           left: " + left.getBounds() + " " + left + ": " + left.getContent() );
@@ -156,6 +159,7 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
                 
                 right.layout();
             }
+            layoutCount++;
             invalidLayout = false;
         }
     }

@@ -34,11 +34,9 @@ import org.apache.log4j.Logger;
 public class DefaultWorkspace extends CompositeObjectView implements Workspace {
     private static final Logger LOG = Logger.getLogger(AbstractView.class);
     protected Workspace newWorkspace;
-    private Size requiredSize;
 
     public DefaultWorkspace(Content content, CompositeViewSpecification specification, ViewAxis axis) {
         super(content, specification, axis);
-        requiredSize = new Size(300, 200);
     }
 
     public View addOpenViewFor(Naked object, Location at) {
@@ -112,16 +110,13 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
             view.markDamaged();
             Location newLocation = drag.getViewDropLocation();
             view.setLocation(newLocation);
+            view.limitBoundsWithin(getBounds());
             view.markDamaged();
         }
     }
 
     public Padding getPadding() {
         return new Padding();
-    }
-
-    public Size getRequiredSize() {
-        return new Size(requiredSize);
     }
 
     public Workspace getWorkspace() {
@@ -131,12 +126,14 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
     public void layout() {
         if(isLayoutInvalid()) {
             super.layout();
+            
             View[] subviews = getSubviews();
             Bounds bounds = new Bounds(getSize());
             for (int i = 0; i < subviews.length; i++) {
                 subviews[i].limitBoundsWithin(bounds);
-                //	        limitBounds(subviews[i].getView());
             }
+            
+            super.layout();
         }
     }
     

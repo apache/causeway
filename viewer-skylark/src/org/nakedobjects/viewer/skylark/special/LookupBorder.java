@@ -28,6 +28,8 @@ public class LookupBorder extends OpenOptionFieldBorder {
             About about = ((OneToOneAssociationSpecification) oneToOneField.getField()).getAbout(ClientSession.getSession(), oneToOneField.getParent(), null);
             oneToOneField.getParent();
             return about.canUse().isAllowed();
+        } else if(content instanceof ObjectParameter) {
+            return true;
         } else {
             return false;
         }

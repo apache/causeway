@@ -111,11 +111,11 @@ public class Canvas {
     }
 
     public void drawSolidRectangle(Location at, Size size, Color color) {
-        drawSolidRectangle(at.getX(), at.getY(), size.getWidth(), size.getHeight(), color);
+        drawSolidRectangle(at.getX(), at.getY(), size.getWidth() - 1, size.getHeight() - 1, color);
     }
 
     public void drawSolidRectangle(Size size, Color color) {
-        drawSolidRectangle(0, 0, size.getWidth(), size.getHeight(), color);
+        drawSolidRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, color);
     }
 
     public void drawSolidShape(Shape shape, Color color) {

@@ -162,7 +162,8 @@ public class CompositeObjectView extends ObjectView {
 
             layoutInvalid = false;
 
-            Size size = builder.getRequiredSize(getView());
+//            Size size = builder.getRequiredSize(getView());
+            Size size =getView().getRequiredSize();
             getView().setSize(size);
 
             builder.layout(getView());

@@ -9,6 +9,7 @@ import java.awt.event.MouseMotionListener;
 
 
 public class InteractionHandler implements MouseMotionListener, MouseListener, KeyListener {
+    private final static int THRESHOLD = 4;
     private boolean canDrag;
     /*
      * The location within the frame where the mouse button was pressed down.
@@ -18,7 +19,6 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     private View previouslyIdentifiedView;
     private InteractionSpy spy;
     private final Viewer viewer;
-
     private final KeyboardManager keyboardManager;
     
     InteractionHandler(Viewer viewer, InteractionSpy debugFrame) {
@@ -66,8 +66,8 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
         int x = dragged.x;
         int y = dragged.y;
 
-        int threshold = 4;
-        return x > xDown + threshold || x < xDown - threshold || y > yDown + threshold || y < yDown - threshold;
+        
+        return x > xDown + THRESHOLD || x < xDown - THRESHOLD || y > yDown + THRESHOLD || y < yDown - THRESHOLD;
     }
 
     /**

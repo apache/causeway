@@ -71,14 +71,12 @@ public abstract class OpenOptionFieldBorder extends AbstractBorder {
 	            size.ensureWidth(getSize().getWidth());
 	            overlay.setSize(size);
 	
-	            Location location = getAbsoluteLocation();
-	            location.add(getView().getPadding().getLeft(), getSize().getHeight());
+	            Location location = getView().getAbsoluteLocation();
+	            location.add(getView().getPadding().getLeft() - 1, getSize().getHeight() + 2);
 	            overlay.setLocation(location);
 	
-	            overlay.markDamaged();
-	            getViewManager().setOverlayView(overlay);
-	            
 	            overlay.layout();
+	            getViewManager().setOverlayView(overlay);
 	        }
         }
     }

@@ -23,6 +23,7 @@ class LookupSelection extends AbstractViewDecorator {
             Size s = getSize();
             canvas.drawSolidRectangle(s, color);
         }
+        canvas.offset(HPADDING, 0);
         super.draw(canvas);
     }
 
@@ -46,6 +47,12 @@ class LookupSelection extends AbstractViewDecorator {
         axis.getContent().setObject(lookup);
         axis.getParentView().invalidateContent();
         getParent().dispose();
+    }
+    
+    public Size getRequiredSize() {
+        Size size = super.getRequiredSize();
+        size.extendWidth(HPADDING * 2);
+        return size; 
     }
 }
 

@@ -82,7 +82,7 @@ public class ObjectBorder extends AbstractBorder {
 	}
 	
 	public String toString() {
-		return wrappedView.toString() + "/ObjectBorder";
+		return wrappedView.toString() + "/ObjectBorder [" + getSpecification() + "]";
 	}
 	
 	public Size getRequiredSize() {

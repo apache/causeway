@@ -1,11 +1,6 @@
 package org.nakedobjects.viewer.skylark.core;
 
-import org.nakedobjects.viewer.skylark.CollectionContent;
-import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.View;
-import org.nakedobjects.viewer.skylark.Workspace;
 
 
 public class CollectionActions extends AbstractViewDecorator {
@@ -15,15 +10,6 @@ public class CollectionActions extends AbstractViewDecorator {
 
     public void debugDetails(StringBuffer b) {
         b.append("CollectionActions");
-    }
-
-    public void menuOptions(MenuOptionSet options) {
-        super.menuOptions(options);
-        options.add(MenuOptionSet.EXPLORATION, new MenuOption("Clear collection") {
-            public void execute(Workspace workspace, View view, Location at) {
-                ((CollectionContent) getContent()).getCollection().removeAll();
-            }
-        });
     }
 
     public String toString() {

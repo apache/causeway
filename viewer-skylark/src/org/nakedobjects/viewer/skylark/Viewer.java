@@ -250,6 +250,7 @@ public class Viewer {
     public void setOverlayView(View view) {
         disposeOverlayView();
         overlayView = view;
+        view.limitBoundsWithin(rootView.getBounds());
         overlayView.markDamaged();
     }
 

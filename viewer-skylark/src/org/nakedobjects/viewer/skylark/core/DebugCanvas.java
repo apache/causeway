@@ -151,6 +151,11 @@ public class DebugCanvas extends Canvas {
 		indent();
 		buffer.append("Set clip " + x + "," + y + " +" + width+ "+" + height +  "");
    }
+	
+    public String toString() {
+        return "Canvas";
+    }
+
 }
 
 /*

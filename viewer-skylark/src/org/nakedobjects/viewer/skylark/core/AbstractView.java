@@ -347,10 +347,14 @@ public abstract class AbstractView implements View {
      */
     public void limitBoundsWithin(Bounds containerBounds) {
         Bounds contentBounds = getView().getBounds();
-        if (containerBounds.limitBounds(contentBounds) && ! getView().getBounds().equals(contentBounds)) {
+        if (containerBounds.limitBounds(contentBounds)) {
             getView().setBounds(contentBounds);
-            invalidateLayout();
         }
+        /*if (containerBounds.limitBounds(contentBounds) && ! getView().getBounds().equals(contentBounds)) {
+            getView().setBounds(contentBounds);
+//            invalidateLayout();
+        }
+        */
     }
 
 

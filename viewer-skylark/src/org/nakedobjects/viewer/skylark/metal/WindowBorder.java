@@ -209,7 +209,7 @@ public class WindowBorder extends AbstractBorder {
     }
 
  	public String toString() {
-		return wrappedView.toString() + "/WindowBorder [width=" + left + "]";
+		return wrappedView.toString() + "/WindowBorder [" + getSpecification() + "]";
 	}
 }
 
