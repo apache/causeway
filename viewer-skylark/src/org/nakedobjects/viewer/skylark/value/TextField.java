@@ -375,7 +375,6 @@ public class TextField extends AbstractField {
     private int displayToLine;
 
     private boolean identified;
-    private boolean inError; // true if the data is currently not valid
     private String invalidReason = null;
     private boolean isResizing;
     private boolean isSaved = true;
@@ -384,8 +383,8 @@ public class TextField extends AbstractField {
     private int noDisplayLines = 1; // number of lines to display
     private int resizeMarkerSize;
     private Selection selection;
-    private boolean showLines = true;
     private TextFieldContent textContent;
+    private boolean showLines;
 
     public TextField(Content content, ViewSpecification specification, ViewAxis axis, boolean showLines) {
         super(content, specification, axis);
@@ -403,7 +402,6 @@ public class TextField extends AbstractField {
         displayFromLine = 0;
         displayToLine = noDisplayLines - 1;
         alignDisplay(0);
-        inError = false;
         isSaved = true;
 
         resizeMarkerSize = lineHeight() * 3 / 5;
@@ -473,6 +471,7 @@ public class TextField extends AbstractField {
             cursor.left();
             selection.resetTo(cursor);
         }
+        isSaved = false;
     }
 
     /**
@@ -487,6 +486,7 @@ public class TextField extends AbstractField {
             textContent.deleteRight(cursor);
             markDamaged();
         }
+        isSaved = false;
     }
 
     public void drag(InternalDrag drag) {
@@ -599,8 +599,7 @@ public class TextField extends AbstractField {
     }
 
     private void drawLines(Canvas canvas, int width) {
-        if (showLines = true && canChangeValue()) {
-            int lineHeight = lineHeight();
+        if (showLines == true && canChangeValue()) {
             int baseline = 0;
 
             Color color = identified ? Style.IDENTIFIED : Style.SECONDARY2;
@@ -626,18 +625,14 @@ public class TextField extends AbstractField {
         Color textColor;
         int baseline = getBaseline();
 
-        if (inError) {
-            textColor = new Color(0x999900);
-        } else if (getState().isInvalid()) {
+        if (getState().isInvalid()) {
             textColor = Style.INVALID;
         } else if (hasFocus()) {
             if (isSaved) {
                 textColor = Style.PRIMARY1;
             } else {
-                textColor = Style.PRIMARY2;
+                textColor = Style.TEXT_EDIT;
             }
-        } else if (getParent().getState().isRootViewIdentified()) {
-            textColor = Style.PRIMARY3;
         } else {
             textColor = Style.BLACK;
         }

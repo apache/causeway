@@ -58,7 +58,6 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     public void draw(Canvas canvas) {
         Bounds bounds = left.getBounds();
         Canvas subCanvas = canvas.createSubcanvas(bounds);
-        subCanvas.drawSolidRectangle(bounds.getLocation(), bounds.getSize(), Style.PRIMARY3);
         left.draw(subCanvas);
 
     	int y1 = getPadding().getTop();
