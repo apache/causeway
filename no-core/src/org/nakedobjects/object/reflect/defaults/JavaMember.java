@@ -1,14 +1,20 @@
 package org.nakedobjects.object.reflect.defaults;
 
 
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.control.defaults.Allow;
+import org.nakedobjects.object.reflect.ReflectionErrorDialog;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import org.apache.log4j.Logger;
 
 
 public abstract class JavaMember {
+    private final static Logger LOG = Logger.getLogger(JavaMember.class);
     private final String name;
     private Method aboutMethod;
 
@@ -28,11 +34,24 @@ public abstract class JavaMember {
         return aboutMethod != null;
     }    
     
+    protected void invocationException(String error, InvocationTargetException e) {
+    	LOG.error(error);
+        if(JavaReflector.isStrict()) {
+            new ReflectionErrorDialog(error, e);
+            //throw new NakedObjectRuntimeException(error, e);
+         } else {
+         }
+        
+        if (e.getTargetException() instanceof RuntimeException) {
+            throw (RuntimeException) e.getTargetException();
+        } else {
+            throw new RuntimeException(e.getTargetException().getMessage());
+        }
+    }
+    
     public String getName() {
    		return name;
    }
-   
-
     
     // About to use if none has been coded in
     protected class DefaultAbout implements About {

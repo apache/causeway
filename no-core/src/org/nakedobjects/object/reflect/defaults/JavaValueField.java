@@ -41,8 +41,8 @@ public class JavaValueField extends JavaField implements ValueField {
                 aboutMethod.invoke(object, new Object[] { about });
                 return about; 
             } catch (InvocationTargetException e) {
-                LOG.error("Exception executing " + aboutMethod,
-                e.getTargetException());
+                invocationException("Exception executing " + aboutMethod, e);
+                return null;
             } catch (IllegalAccessException ignore) {
                 LOG.error("Illegal access of " + aboutMethod, ignore);
             }

@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.reflect.ReflectionErrorDialog;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -30,8 +31,8 @@ public abstract class JavaField extends JavaMember {
        try {
            return (Naked) getMethod.invoke(fromObject, new Object[0]);
        } catch (InvocationTargetException e) {
-            LOG.error("Exception executing " + getMethod, e.getTargetException());
-            throw new NakedObjectRuntimeException(e);
+            invocationException("Exception executing " + getMethod, e);
+            return null;
        } catch (IllegalAccessException ignore) {
            LOG.error("Illegal access of " + getMethod, ignore);
            throw new NakedObjectRuntimeException(ignore);

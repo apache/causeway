@@ -711,6 +711,10 @@ public class JavaReflector implements Reflector {
 		boolean isInstanceOfNaked = Naked.class.isAssignableFrom(superclass);
 		return  isInstanceOfNaked ? superclass.getName() : naked;
     }
+
+    public static boolean isStrict() {
+        return true;
+    }
 }
 
 /*

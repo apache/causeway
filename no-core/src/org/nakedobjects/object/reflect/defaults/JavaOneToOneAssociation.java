@@ -56,7 +56,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOneAssoci
     		    aboutMethod.invoke(object, parameters);
         		return about;
         } catch (InvocationTargetException e) {
-            LOG.error("Exception executing " + aboutMethod, e.getTargetException());
+            invocationException("Exception executing " + aboutMethod, e);
         } catch (IllegalAccessException ignore) {
             LOG.error("Illegal access of " + aboutMethod, ignore);
         }
@@ -90,13 +90,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOneAssoci
                 setMethod.invoke(inObject, new Object[] { setValue });
             }
         } catch (InvocationTargetException e) {
-            LOG.error("Exception executing " + setMethod, e.getTargetException());
-            
-            if (e.getTargetException() instanceof RuntimeException) {
-                throw (RuntimeException) e.getTargetException();
-            } else {
-                throw new RuntimeException(e.getTargetException().getMessage());
-            }
+            invocationException("Exception executing " + setMethod, e);
         } catch (IllegalAccessException ignore) {
             LOG.error("Illegal access of " + setMethod, ignore);
         }
@@ -115,8 +109,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOneAssoci
                 throw new IllegalArgumentException("set method expects a " + getType().getFullName() +
                     " object; not a " + associate.getClass().getName());
             } catch (InvocationTargetException e) {
-                LOG.error("Exception executing " + setMethod, e.getTargetException());
-                throw (RuntimeException) e.getTargetException();
+                invocationException("Exception executing " + setMethod, e);
             } catch (IllegalAccessException ignore) {
                 LOG.error("Illegal access of " + setMethod, ignore);
                 throw new RuntimeException(ignore.getMessage());
@@ -152,14 +145,9 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOneAssoci
                 throw new IllegalArgumentException(setMethod + " method doesn't expect a " +
                     associate.getClass().getName());
             } catch (InvocationTargetException e) {
-                LOG.error("Exception executing " + setMethod, e.getTargetException());
+                invocationException("Exception executing " + setMethod, e);
 
-                if (e.getTargetException() instanceof RuntimeException) {
-                    throw (RuntimeException) e.getTargetException();
-                } else {
-                    throw new RuntimeException(e.getTargetException().getMessage());
-                }
-            } catch (IllegalAccessException ignore) {
+             } catch (IllegalAccessException ignore) {
                 LOG.error("Illegal access of " + setMethod, ignore);
                 throw new RuntimeException(ignore.getMessage());
             }

@@ -12,6 +12,7 @@ import org.nakedobjects.object.TransactionException;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.defaults.SimpleActionAbout;
 import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.ReflectionErrorDialog;
 import org.nakedobjects.object.reflect.ActionSpecification.Type;
 import org.nakedobjects.object.security.Session;
 
@@ -78,12 +79,17 @@ public class JavaAction extends JavaMember implements Action {
             e.fillInStackTrace();
             
             if(e.getTargetException() instanceof TransactionException) {
-        	    LOG.info("TransactionException thrown while executing " + actionMethod + " " + e.getTargetException().getMessage());
 	            objectManager.abortTransaction();
+	            
+	            if(JavaReflector.isStrict()) {
+	                new ReflectionErrorDialog("Exception whilst reflectively getting about for " + getName() + " on " + inObject, e);
+	                throw new NakedObjectRuntimeException("Exception whilst reflectively getting about for " + getName() + " on " + inObject, e);
+	             } else {
+	        	    LOG.info("TransactionException thrown while executing " + actionMethod + " " + e.getTargetException().getMessage());
+	             }
+
         	} else {
-	            String error = "Exception executing " + actionMethod + "; aborted";
-	        	LOG.error(error);
-	        	throw new NakedObjectRuntimeException(error, e.getTargetException());
+	            invocationException("Exception executing " + actionMethod + "; aborted", e);
         	}
         	
             
@@ -140,10 +146,14 @@ public class JavaAction extends JavaMember implements Action {
             }
             return about;
         } catch (InvocationTargetException e) {
-            LOG.error("Exception executing " + aboutMethod, e.getTargetException());
-        } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + aboutMethod, ignore);
-        }
+            invocationException("Exception whilst reflectively getting about for " + getName() + " on " + object, e);
+        } catch (IllegalAccessException e) {
+            if(JavaReflector.isStrict()) {
+                throw new NakedObjectRuntimeException("Exception whilst reflectively getting about for " + getName() + " on " + object, e);
+            } else {
+                LOG.error("Illegal access of " + aboutMethod, e);
+            }
+       }
 
         return new DefaultAbout();
     }

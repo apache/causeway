@@ -42,8 +42,7 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyAsso
                 throw new IllegalArgumentException("set method expects a " + getType().getFullName() + " object; not a "
                         + associate.getClass().getName() + ", " + e.getMessage());
             } catch (InvocationTargetException e) {
-                LOG.error("Exception executing " + addMethod, e.getTargetException());
-                throw (RuntimeException) e.getTargetException();
+                invocationException("Exception executing " + addMethod, e);
             } catch (IllegalAccessException ignore) {
                 LOG.error("Illegal access of " + addMethod, ignore);
                 throw new RuntimeException(ignore.getMessage());
@@ -69,7 +68,7 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyAsso
                 aboutMethod.invoke(object, parameters);
                 return about;
             } catch (InvocationTargetException e) {
-               LOG.error("Exception executing " + aboutMethod, e.getTargetException());
+               invocationException("Exception executing " + aboutMethod, e);
             } catch (IllegalAccessException ignore) {
                 LOG.error("Illegal access of " + aboutMethod, ignore);
             }
@@ -103,8 +102,7 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyAsso
                 throw new IllegalArgumentException("remove method expects a " + getType().getFullName() + " object; not a "
                         + associate.getClass().getName());
             } catch (InvocationTargetException e) {
-                LOG.error("Exception executing " + addMethod, e.getTargetException());
-                throw (RuntimeException) e.getTargetException();
+                invocationException("Exception executing " + addMethod, e);
             } catch (IllegalAccessException ignore) {
                 LOG.error("Illegal access of " + addMethod, ignore);
                 throw new RuntimeException(ignore.getMessage());
