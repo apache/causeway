@@ -698,7 +698,7 @@ public class TextField extends AbstractField {
                 parseEntry(entry.toString());
                 invalidReason = null;
                 isSaved = true;
-                getViewManager().setStatus("VALID ENTRY: " + entry);
+                getViewManager().setDeveloperStatus("VALID ENTRY: " + entry);
                 getState().setValid();
                 markDamaged();
                 //getParent().invalidateLayout();
@@ -1068,36 +1068,12 @@ public class TextField extends AbstractField {
         }
     }
 
-    /*
     public void refresh() {
-        Value objectField = getObjectField();
-        if(objectField.isDerived()) {
-            NakedValue value = getValue();
-             textContent.setText(value.title().toString());
-
-        } else if (invalidReason == null) {
-            // TODO decide how to deal with updates that affect a field that is being edited
-            String text = getValue().title().toString();
-
-            if (!text.equals(textContent.getText())) {
-                LOG.debug("Refreshing '" + textContent.getText() + "' with '" + text + "'");
-                textContent.setText(text);
-                cursor.home();
-                displayFromLine = 0;
-                displayToLine = noDisplayLines - 1;
-                alignDisplay(0);
-                markDamaged();
-            }
-
-            getState().clearOutOfSynch();
-            getState().setValid();
-            
-            inError = false;
-            isSaved = true;
-        }
+        super.refresh();
+        String value = getValueContent().getValue().titleString();
+        textContent.setText(value);
     }
-*/
-    
+
     private void resetSelection() {
         selection.resetTo(cursor);
     }

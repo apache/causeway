@@ -28,6 +28,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
         boolean isBlank;
         boolean isDisabled;
         String name;
+        String description;
         String reason;
 
         Item() {
@@ -41,6 +42,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
                 isBlank = false;
                 this.action = action;
                 name = action.getName(view);
+                description = action.getDescription(view);
                 isDisabled = action.disabled(view).isVetoed();
                 reason = action.disabled(view).getReason();
             }
@@ -291,10 +293,13 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
     public void setOption(int option) {
     	if (option != optionIdentified) {
             optionIdentified = option;
-			if (items[optionIdentified].isBlank) {
+			Item item = items[optionIdentified];
+            if (item.isBlank) {
 				showStatus("");
+			} else if(item.reason == ""){
+				showStatus(item.description == null ? "" : item.description);
 			} else {
-				showStatus(items[optionIdentified].reason);
+			    showStatus(item.reason);
 			}
             markDamaged();
         }

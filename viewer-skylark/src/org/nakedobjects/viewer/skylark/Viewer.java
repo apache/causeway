@@ -55,9 +55,11 @@ public class Viewer {
 	private int redrawCount = 100000;
     private RenderingArea renderingArea;
     private View rootView;
-    private String status;
+    private String userStatus;
     private PopupMenu popup;
 	private boolean explorationMode;
+	private boolean showDeveloperStatus = Configuration.getInstance().getBoolean(PROPERTY_BASE +
+            "debugstatus", false);
 	private ObjectViewingMechanismListener listener;
     
 	private ViewUpdateNotifier updateNotifier = new ViewUpdateNotifier();
@@ -65,6 +67,8 @@ public class Viewer {
     private Size internalDisplaySize;
     private Insets insets;
     private int statusBarHeight;
+    private Bounds statusBarArea;
+    private String developerStatus;
 
  
 	
@@ -230,7 +234,10 @@ public class Viewer {
 	    }
 	    
 	    // paint status
-	    paintStatus(bufferGraphics);
+	    paintUserStatus(bufferGraphics);
+	    if(showDeveloperStatus) {
+	        paintDeveloperStatus(bufferGraphics);
+	    }
 	    
 	    // blat to screen
 	    if (doubleBuffering) {
@@ -244,20 +251,27 @@ public class Viewer {
 	    }
     }
 
-    private void paintStatus(Graphics bufferCanvas) {
+    private void paintDeveloperStatus(Graphics bufferCanvas) {
+        int top = internalDisplaySize.getHeight() - statusBarHeight * 2;
+        bufferCanvas.setColor(new Color(0xe0, 0xe0, 0xe0));
+        paintStatus(bufferCanvas, top, developerStatus);
+    }
+    
+    private void paintStatus(Graphics bufferCanvas, int top, String text) {
         bufferCanvas.setFont(Style.STATUS.getAwtFont());
-
-        int top = internalDisplaySize.getHeight() - statusBarHeight;
         int baseline = top + Style.STATUS.getAscent();
-
-        bufferCanvas.setColor(Color.lightGray);
         bufferCanvas.fillRect(0, top, internalDisplaySize.getWidth(), statusBarHeight);
         bufferCanvas.setColor(Color.darkGray);
         bufferCanvas.drawLine(0, top, internalDisplaySize.getWidth(), top);
-
-        if (status != null) {
-            bufferCanvas.drawString(status, 5, baseline);
+        if (text != null) {
+            bufferCanvas.drawString(text, 5, baseline);
         }
+    }
+    
+    private void paintUserStatus(Graphics bufferCanvas) {
+        int top = internalDisplaySize.getHeight() - statusBarHeight;
+        bufferCanvas.setColor(Color.lightGray);
+        paintStatus(bufferCanvas, top, userStatus);
     }
 
     void repaint() {
@@ -271,6 +285,15 @@ public class Viewer {
 	    	}
 	        renderingArea.repaint(area.x, area.y, area.width, area.height);
     	}
+    }
+    
+     public boolean isShowingDeveloperStatus() {
+        return showDeveloperStatus;
+    }
+     
+     public void setShowDeveloperStatus(boolean showDeveloperStatus) {
+        this.showDeveloperStatus = showDeveloperStatus;
+        sizeChange();
     }
 
     public void setCursor(Cursor cursor) {
@@ -287,14 +310,21 @@ public class Viewer {
      * Sets the status string and refreshes that part of the screen.
      */
     public void setStatus(String status) {
-        if (!status.equals(this.status)) {
-            this.status = status;
-
-            int statusBarHeight = 2 + Style.STATUS.getHeight() + 2;
-            int top = internalDisplaySize.getHeight() - statusBarHeight;
-
-            LOG.debug("show status " + status + " y=" + top);
-	        renderingArea.repaint(insets.left, insets.top + top, internalDisplaySize.getWidth(), statusBarHeight);
+        if (!status.equals(this.userStatus)) {
+            this.userStatus = status;
+            LOG.debug("changed user status " + status + " " + statusBarArea);
+	        renderingArea.repaint(statusBarArea.x, statusBarArea.y, statusBarArea.width, statusBarArea.height);
+        }
+    }
+    
+    /**
+     * Sets the status string and refreshes that part of the screen.
+     */
+    public void setDeveloperStatus(String status) {
+        if (!status.equals(this.developerStatus)) {
+            this.developerStatus = status;
+            LOG.debug("changed developer status " + status + " " + statusBarArea);
+	        renderingArea.repaint(statusBarArea.x, statusBarArea.y, statusBarArea.width, statusBarArea.height);
         }
     }
     
@@ -408,7 +438,7 @@ public class Viewer {
 
     public void start() {
 		sizeChange();
-        setStatus("Viewer started " + this);
+        setDeveloperStatus("Viewer started " + this);
 		repaint();
     }
     
@@ -423,7 +453,9 @@ public class Viewer {
 
 		Size rootViewSize = new Size(internalDisplaySize);
 		statusBarHeight = 2 + Style.STATUS.getHeight() + 2;
-		rootViewSize.contractHeight(statusBarHeight);
+		int totalBarHeight = statusBarHeight  * (showDeveloperStatus ? 2 : 1);
+        rootViewSize.contractHeight(totalBarHeight);
+		statusBarArea = new Bounds(insets.left, insets.top + rootViewSize.height, rootViewSize.width, totalBarHeight);
 		((WorkspaceSpecification) rootView.getSpecification()).setRequiredSize(rootViewSize);
 		rootView.invalidateLayout();
 		

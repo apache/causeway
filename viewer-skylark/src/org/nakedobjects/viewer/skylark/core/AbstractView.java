@@ -440,6 +440,12 @@ public abstract class AbstractView implements View {
             }
         }
 
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Refresh") {
+            public void execute(Workspace workspace, View view, Location at) {
+                refresh();
+            }
+        });
+        
         final UndoStack undoStack = getViewManager().getUndoStack();
             if (!undoStack.isEmpty()) {
                 options.add(MenuOptionSet.VIEW, new MenuOption("Undo " + undoStack.getNameOfUndo() ){
@@ -469,7 +475,7 @@ public abstract class AbstractView implements View {
         View dragView = new DragViewOutline(drag);
 
         LOG.debug("drag view start " + drag.getSourceLocation());
-        getViewManager().setStatus("Moving " + this);
+        getViewManager().setDeveloperStatus("Moving " + this);
 
         return dragView;
     }

@@ -146,9 +146,23 @@ public class Bounds {
         return y + height;
     }
     public boolean intersects(Bounds bounds) {
+        int tx1 = this.x;
+        int tx2 = this.x + this.width;
+        int ox1 = bounds.x;
+        int ox2 = bounds.x + bounds.width;
+       
+      //  tx1 < ox1 < tx2 || tx1 < ox2 < tx2
+        boolean xOverlap = (tx1 < ox1 && ox1 < tx2) || (tx1 < ox2 && ox1 < tx2) || (ox1 < tx1 && tx1 < ox2) || (ox1 < tx2 && tx1 < ox2);
+  
+        int ty1 = this.y;
+        int ty2 = this.y + this.height;
+        int oy1 = bounds.y;
+        int oy2 = bounds.y + bounds.height;     
+        boolean yOverlap = (ty1 < oy1 && oy1 < ty2) || (ty1 < oy2 && oy1 < ty2) || (oy1 < ty1 && ty1 < oy2) || (oy1 < ty2 && ty1 < oy2);
+        return xOverlap && yOverlap;
     	/*
     	LOG.debug(this);
-		LOG.debug(bounds + " " + ((bounds.getX2() < bounds.x || bounds.getX2() > x) &&
+		LOG.debug(bounds + " " + ((bounds.getX2() < bounds.y || bounds.getX2() > x) &&
 		(getX2() < x || getX2() > bounds.x) &&
 		(bounds.getY2() < bounds.y || bounds.getY2() > y) &&
 		(getY2() < y || getY2() > bounds.y)));
@@ -159,7 +173,7 @@ public class Bounds {
 			(getY2() < y || getY2() > bounds.y);
 			*/
     	
-    	return true;
+    //	return true;
     }
 
     public void setHeight(int height) {

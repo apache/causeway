@@ -78,6 +78,12 @@ public class ClassOption extends MenuOption {
 		this.action = action;
 	}
 	
+	public String getDescription(View view) {
+	    About about = action.getAbout(ClientSession.getSession(), classSpec);
+		return about.getDescription();
+	}
+
+
 	public final Permission disabled(View view) {
 			About about = action.getAbout(ClientSession.getSession(), classSpec);
 			return about.canUse();

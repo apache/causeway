@@ -80,7 +80,10 @@ public class TreeNodeBorder extends AbstractBorder {
 		boolean canOpen = isOpen || ((TreeNodeSpecification) getSpecification()).canOpen(getContent());
 		
 		if(((TreeBrowserFrame) getViewAxis()).getSelectedNode() == getView()) {
-			canvas.drawSolidRectangle(left, 0, getSize().getWidth() - left, top - 1, Style.PRIMARY2);
+			canvas.drawSolidRectangle(left, 0, getSize().getWidth() - left - 1, top - 1, Style.PRIMARY2);
+		}
+		if(getState().isObjectIdentified()) {
+		    canvas.drawRectangle(left, 0, getSize().getWidth() - left - 1, top - 1, Style.SECONDARY2);
 		}
 		
 		// lines
@@ -111,7 +114,7 @@ public class TreeNodeBorder extends AbstractBorder {
 		icon.draw(canvas, x, baseline);
 		x += icon.getSize().getWidth();
 		text.draw(canvas, x, baseline);
-
+		
 		// components
 		super.draw(canvas);
 	}
@@ -182,6 +185,17 @@ public class TreeNodeBorder extends AbstractBorder {
         }
     }
 
+	public void entered() {
+		super.entered();
+		getState().setObjectIdentified();
+		markDamaged();
+	}
+	
+	public void exited() {
+		super.exited();
+		getState().clearObjectIdentified();
+		markDamaged();
+	}
 
 }
 

@@ -224,5 +224,9 @@ public class PopupMenuTest extends TestCase {
 		public void execute(Workspace workspace, View view, Location at) {
 			executed = true;
 		}
+
+        public String getDescription(View view) {
+            return null;
+        }
 	}
 }

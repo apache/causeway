@@ -159,11 +159,12 @@ public abstract class AbstractField extends AbstractView {
         options.add(MenuOptionSet.OBJECT, new DefaultValueOption());
         options.add(MenuOptionSet.OBJECT, new CopyValueOption());
         options.add(MenuOptionSet.OBJECT, new PasteValueOption());
-        options.setColor(Style.VALUE_MENU);
         if (getView().getSpecification().isReplaceable()) {
             replaceOptions(ViewFactory.getViewFactory().valueViews(getContent(), this), options);
         }
 
+        super.menuOptions((options));
+        options.setColor(Style.VALUE_MENU);
     }
 
     protected final void initiateSave() {
@@ -214,7 +215,7 @@ public abstract class AbstractField extends AbstractView {
         return new Size(0, Style.defaultFieldHeight());
     }
     
-    public final void refresh() {
+    public void refresh() {
         getValueContent().refresh();
     }
 }

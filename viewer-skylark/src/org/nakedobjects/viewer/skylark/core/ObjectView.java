@@ -126,7 +126,7 @@ public abstract class ObjectView extends AbstractView {
 
     	getViewManager().setOverlayView(dragView);
         LOG.debug("drag object start " + drag.getSourceLocationWithinViewer());
-        getViewManager().setStatus("Dragging " + getContent());
+        getViewManager().setDeveloperStatus("Dragging " + getContent());
 
         return dragView;
     }

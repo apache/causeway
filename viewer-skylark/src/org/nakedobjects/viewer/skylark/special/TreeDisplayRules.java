@@ -34,6 +34,10 @@ public class TreeDisplayRules {
             public Permission disabled(View view) {
                 return Allow.DEFAULT;
             }
+
+            public String getDescription(View view) {
+                return "This option makes the system only show collections within the trees, and not single elements";
+            }
         };
         options.add(MenuOptionSet.VIEW, option);
     }

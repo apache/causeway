@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.reflect.UndoStack;
 import org.nakedobjects.object.security.ClientSession;
@@ -60,12 +61,11 @@ public class ViewerAssistant {
     private MenuOption loggingOption(String name, final Level level) {
         return new MenuOption("Log " + level + " " + name + "...") {
                 public Permission disabled(View component) {
-                    return Permission.allow(LogManager.getLoggerRepository()
-                                                      .getThreshold() != level);
+                    return Permission.allow(LogManager.getRootLogger().getLevel() != level);
                 }
 
                 public void execute(Workspace workspace, View view, Location at) {
-                    LogManager.getLoggerRepository().setThreshold(level);
+                    LogManager.getRootLogger().setLevel(level);
                 }
             };
     }
@@ -115,24 +115,28 @@ public class ViewerAssistant {
             });
 
         options.add(MenuOptionSet.DEBUG,
-            new MenuOption("List notification receivers...") {
-                public void execute(Workspace frame, View view, Location at) {
-                    DebugFrame f = new DebugFrame();
-                    f.setInfo(updateNotifier);
-                    f.show(at.x + 50, frame.getBounds().y + 6);
-                }
-            });
-
+                new MenuOption("List notification receivers...") {
+                    public void execute(Workspace frame, View view, Location at) {
+                        DebugFrame f = new DebugFrame();
+                        f.setInfo(updateNotifier);
+                        f.show(at.x + 50, frame.getBounds().y + 6);
+                    }
+                });
+        
+        String action = viewer.isShowingDeveloperStatus() ? "Hide" : "Show";
+        options.add(MenuOptionSet.DEBUG, new MenuOption(action + " developer status") {
+            public void execute(Workspace frame, View view, Location at) {
+                viewer.setShowDeveloperStatus(!viewer.isShowingDeveloperStatus());
+            }
+        });
+        
         /*
-        options.add(MenuOptionSet.DEBUG,
-            new MenuOption("Object store state...") {
-                public void execute(Workspace frame, View view, Location at) {
-                    DebugFrame f = new DebugFrame();
-                    f.setInfo(NakedObjectManager.getInstance());
-                    f.show(at.x + 50, frame.getBounds().y + 6);
-                }
-            });
-            */
+         * options.add(MenuOptionSet.DEBUG, new MenuOption("Object store
+         * state...") { public void execute(Workspace frame, View view, Location
+         * at) { DebugFrame f = new DebugFrame();
+         * f.setInfo(NakedObjectManager.getInstance()); f.show(at.x + 50,
+         * frame.getBounds().y + 6); } });
+         */
         
         options.add(MenuOptionSet.DEBUG, loggingOption("Error", Level.ERROR));
         options.add(MenuOptionSet.DEBUG, loggingOption("Info", Level.INFO));
@@ -150,6 +154,10 @@ public class ViewerAssistant {
 
     public void setStatus(String status) {
         viewer.setStatus(status);
+    }
+    
+    public void setDeveloperStatus(String status) {
+        viewer.setDeveloperStatus(status);
     }
     
     public void showArrowCursor() {

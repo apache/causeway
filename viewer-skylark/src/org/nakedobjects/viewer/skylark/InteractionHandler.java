@@ -220,6 +220,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 		        View mouseOver = viewer.identifyView(mouseLocation, true);
 		        
 		        if(mouseOver != null) {
+		        	viewer.setDeveloperStatus("Over " + mouseOver);
 		        	
 		        	if(identifiedView == null) {
 //		        		LOG.debug("no current identified view");

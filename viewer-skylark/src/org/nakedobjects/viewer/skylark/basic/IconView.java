@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Size;
@@ -45,6 +46,10 @@ public class IconView extends ObjectView {
 
     public String toString() {
         return "Icon" + getId();
+    }
+    
+    public void update(NakedObject object) {
+        getParent().invalidateLayout();
     }
 }
 /*

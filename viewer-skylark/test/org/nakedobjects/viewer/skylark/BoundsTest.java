@@ -95,6 +95,36 @@ public class BoundsTest extends TestCase {
         assertFalse(b.intersects(c));
     }
 
+    public void testXOverlapToLeft() {
+        Bounds c = new Bounds(1, 15, 5, 0);
+        assertTrue(b.intersects(c));
+    }
+    
+    public void testYOverlapToTop() {
+        Bounds c = new Bounds(10, 29, 0, 5);
+        assertTrue(b.intersects(c));
+    }
+    
+    public void testXNoOverlapToLeft() {
+        Bounds c = new Bounds(1, 15, 4, 0);
+        assertFalse(b.intersects(c));
+    }
+    
+    public void testXOverlapToRight() {
+        Bounds c = new Bounds(14, 15, 5, 0);
+        assertTrue(b.intersects(c));
+    }
+ 
+    public void testXNoOverlapToRight() {
+        Bounds c = new Bounds(15, 15, 5, 0);
+        assertFalse(b.intersects(c));
+    }
+    
+    public void testXOverlapInCenter() {
+        Bounds c = new Bounds(6, 15, 2, 0);
+        assertTrue(b.intersects(c));
+    }
+
 	public void testDownLeftIntersects() {
 		Bounds c = new Bounds(b);
 		c.translate(-5, -5);

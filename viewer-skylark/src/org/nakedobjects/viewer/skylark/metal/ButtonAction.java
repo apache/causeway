@@ -17,6 +17,10 @@ public abstract class ButtonAction implements UserAction {
     public String getName(View view) {
         return name;
     }
+    
+    public String getDescription(View view) {
+        return null;
+    }
 
     public Permission disabled(View view) {
         return Allow.DEFAULT;
