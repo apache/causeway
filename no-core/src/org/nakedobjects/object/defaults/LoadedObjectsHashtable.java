@@ -8,6 +8,7 @@ import org.nakedobjects.utility.Assert;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
@@ -49,6 +50,16 @@ public class LoadedObjectsHashtable implements LoadedObjects {
     }
 
     public Enumeration dirtyObjects() {
+        Enumeration allObjects = loaded.elements();
+        Vector v = new Vector();
+        while (allObjects.hasMoreElements()) {
+            NakedObject object = (NakedObject) allObjects.nextElement();
+            if (object.isPersistDirty()) {
+                v.addElement(object);
+            }
+        }
+        return v.elements();
+       /*
         return new Enumeration() {
             Enumeration allObjects = loaded.elements();
             private NakedObject dirtyObject;
@@ -68,6 +79,7 @@ public class LoadedObjectsHashtable implements LoadedObjects {
                 return dirtyObject;
             }
         };
+        */
     }
     
 
