@@ -40,6 +40,7 @@ import org.apache.log4j.Logger;
 
 
 public class JavaReflector implements Reflector {
+    private static final Object[] NO_PARAMETERS = new Object[0];
     private static final String DERIVE_PREFIX = "derive";
     private static final String SET_PREFIX = "set";
     private static final String ABOUT_PREFIX = "about";
@@ -104,7 +105,7 @@ public class JavaReflector implements Reflector {
             Method method = aClass.getMethod(type + "Order", new Class[0]);
 
             if (Modifier.isStatic(method.getModifiers())) {
-                String s = (String) method.invoke(null, new Object[0]);
+                String s = (String) method.invoke(null, NO_PARAMETERS);
                 if (s.trim().length() > 0) {
                     java.util.StringTokenizer st = new java.util.StringTokenizer(s, ",");
                     String[] a = new String[st.countTokens()];
@@ -516,7 +517,7 @@ public class JavaReflector implements Reflector {
         }
         
         try {
-            Boolean isDirty = (Boolean) isDirtyMethod.invoke(object.getObject(), new Object[0]);
+            Boolean isDirty = (Boolean) isDirtyMethod.invoke(object.getObject(), NO_PARAMETERS);
             return isDirty.booleanValue();
         } catch (IllegalArgumentException e) {
             throw new NakedObjectRuntimeException(e);
@@ -535,7 +536,7 @@ public class JavaReflector implements Reflector {
         }
         
         try {
-            clearDirtyMethod.invoke(object.getObject(), new Object[0]);
+            clearDirtyMethod.invoke(object.getObject(), NO_PARAMETERS);
         } catch (IllegalArgumentException e) {
             throw new NakedObjectRuntimeException(e);
         } catch (IllegalAccessException e) {
@@ -552,7 +553,7 @@ public class JavaReflector implements Reflector {
         }
         
         try {
-            markDirtyMethod.invoke(object.getObject(), new Object[0]);
+            markDirtyMethod.invoke(object.getObject(), NO_PARAMETERS);
         } catch (IllegalArgumentException e) {
             throw new NakedObjectRuntimeException(e);
         } catch (IllegalAccessException e) {
@@ -783,7 +784,7 @@ public class JavaReflector implements Reflector {
 
     public String pluralName() {
         try {
-            return (String) cls.getMethod("pluralName", new Class[0]).invoke(null, new Object[0]);
+            return (String) cls.getMethod("pluralName", new Class[0]).invoke(null, NO_PARAMETERS);
         } catch (NoSuchMethodException ignore) {
         } catch (IllegalAccessException ignore) {
         } catch (InvocationTargetException ignore) {
@@ -804,7 +805,7 @@ public class JavaReflector implements Reflector {
     public String singularName() {
         try {
             Method method = cls.getMethod("singularName", new Class[0]);
-            return (String) method.invoke(null, new Object[0]);
+            return (String) method.invoke(null, NO_PARAMETERS);
         } catch (NoSuchMethodException ignore) {
         } catch (IllegalAccessException ignore) {
         } catch (InvocationTargetException ignore) {
