@@ -1,15 +1,5 @@
 package org.nakedobjects.persistence.sql.jdbc;
 
-import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.persistence.sql.DatabaseConnector;
-import org.nakedobjects.persistence.sql.Parameter;
-import org.nakedobjects.persistence.sql.Results;
-import org.nakedobjects.persistence.sql.SqlObjectStoreException;
-import org.nakedobjects.persistence.sql.StoredProcedure;
-import org.nakedobjects.utility.Configuration;
-import org.nakedobjects.utility.NotImplementedException;
-
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -17,6 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
+import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.persistence.sql.DatabaseConnector;
+import org.nakedobjects.persistence.sql.Results;
+import org.nakedobjects.persistence.sql.SqlObjectStoreException;
+import org.nakedobjects.utility.Configuration;
 
 
 public class JdbcConnector implements DatabaseConnector {
@@ -89,7 +84,7 @@ public class JdbcConnector implements DatabaseConnector {
             throw new SqlObjectStoreException("Could not find database driver", e);
         }
     }
-
+/*
    public void executeStoredProcedure(StoredProcedure storedProcedure) {
        Parameter[] parameters = storedProcedure.getParameters();
     	StringBuffer sql = new StringBuffer("{call ");
@@ -156,7 +151,7 @@ public class JdbcConnector implements DatabaseConnector {
         }   
         
     }
-
+*/
 
      public Results select(String sql) {
         LOG.debug("SQL: " + sql);
@@ -229,6 +224,10 @@ public class JdbcConnector implements DatabaseConnector {
     public boolean isUsed() {
         return isUsed;
     }
+
+	public Connection getConnection() {
+		return connection;
+	}
 }
 
 /*

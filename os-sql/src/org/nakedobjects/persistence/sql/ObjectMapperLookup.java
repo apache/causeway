@@ -41,7 +41,7 @@ public class ObjectMapperLookup {
         ObjectMapper mapper = (ObjectMapper) mappers.get(cls);
         if (mapper == null) {
             AutoMapper autoMapper = (AutoMapper) mapperFactory.createMapper(cls.fullName(), SqlObjectStore.BASE_NAME + ".automapper.default");
-            autoMapper.startup(loadedObjects, connection);
+            autoMapper.startup(this, loadedObjects, connection);
             if(autoMapper.needsTables()) {
                 autoMapper.createTables();
             }
@@ -85,7 +85,7 @@ public class ObjectMapperLookup {
 
     private void add(NakedClass cls, ObjectMapper mapper) throws SqlObjectStoreException {
 		LOG.debug("add mapper " + mapper + " for " + cls);
-        mapper.startup(loadedObjects, connection);
+        mapper.startup(this, loadedObjects, connection);
         mappers.put(cls, mapper);
 	}
 

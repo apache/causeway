@@ -53,7 +53,7 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
     private Reflector reflector;
     private NakedClassList subclasses = new NakedClassList();
     private NakedClass superclass;
-	private boolean createPresistent;
+	private boolean createPersistentInstances;
 
 	public void aboutActionFind(ActionAbout about) throws ObjectStoreException {
 		about.setDescription("Get a finder object to start searches within the " + getSingularName() + " instances");
@@ -154,7 +154,7 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
      public NakedObject createInstance() {
         NakedObjectManager objectManager = NakedObjectManager.getInstance();
         
-        if(createPresistent) {
+        if(createPersistentInstances) {
         	objectManager.startTransaction();
         }
 
@@ -162,7 +162,7 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
         object = acquireInstance();
         object.created();
 
-        if(createPresistent) {
+        if(createPersistentInstances) {
 	        try {
 	            NakedObjectManager.getInstance().makePersistent(object);
 		        objectManager.endTransaction();
@@ -481,7 +481,7 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
     }
 
     void init(Reflector reflector, String superclass, Field[] fields, Action[] objectActions, Action[] classActions) {
-    	createPresistent = Configuration.getInstance().getBoolean("nakedclass.create-persistent", true);
+    	createPersistentInstances = Configuration.getInstance().getBoolean("nakedclass.create-persistent", true);
     	
         LOG.debug("NakedClass " + this);
     	this.reflector = reflector;

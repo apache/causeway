@@ -36,7 +36,7 @@ public class NakedObjectRuntimeException extends RuntimeException {
 		super(msg);
 	}
 	public NakedObjectRuntimeException(Throwable cause) {
-		this();
+		this(cause.getMessage());
 		this.cause = cause;
 	}
 

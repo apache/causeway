@@ -12,7 +12,7 @@ public abstract class NakedObjectException extends Exception {
 		super(msg);
 	}
 	public NakedObjectException(Throwable cause) {
-		this();
+		this(cause.getMessage());
 		this.cause = cause;
 	}
 

@@ -28,7 +28,7 @@ public interface ObjectMapper {
     int numberOfInstances(NakedClass cls) throws SqlObjectStoreException;
 
 
-    void startup(LoadedObjects loadedObjects, Connection connection) throws SqlObjectStoreException;
+    void startup(ObjectMapperLookup mappers, LoadedObjects loadedObjects, Connection connection) throws SqlObjectStoreException;
     void shutdown() throws SqlObjectStoreException;
 }
 

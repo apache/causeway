@@ -9,6 +9,7 @@ public abstract class AbstractObjectMapper {
 	private static final Logger LOG = Logger.getLogger(AbstractObjectMapper.class);
 	public LoadedObjects loadedObjects;
     public Connection db;
+	private ObjectMapperLookup objectMapperLookup;
 
 	protected void createTables() throws SqlObjectStoreException {
 	}
@@ -24,12 +25,17 @@ public abstract class AbstractObjectMapper {
 	public final void shutdown() throws SqlObjectStoreException {
 	}
 
-	public void startup(LoadedObjects loaded, Connection db) throws SqlObjectStoreException {
+	public void startup(ObjectMapperLookup objectMapperLookup, LoadedObjects loaded, Connection db) throws SqlObjectStoreException {
+		this.objectMapperLookup = objectMapperLookup;
 		this.loadedObjects = loaded;
 		this.db = db;
 		if (needsTables()) {
 			createTables();
 		}
+	}
+	
+	protected ObjectMapperLookup getObjectMapperLookup() {
+		return objectMapperLookup;
 	}
 }
 

@@ -1,16 +1,16 @@
 package org.nakedobjects.persistence.sql;
 
 public interface DatabaseConnector {
-    /** @deprecated */
+    /* @deprecated 
     Results callStoredProcedure(String name, Parameter[] parameters);
-
+*/
     void close() throws SqlObjectStoreException;
 
     int count(String sql) throws SqlObjectStoreException;
 
     void delete(String sql) throws SqlObjectStoreException;
 
-    MultipleResults executeStoredProcedure(String name, Parameter[] parameters);
+//    MultipleResults executeStoredProcedure(String name, Parameter[] parameters);
 
     boolean hasTable(String tableName) throws SqlObjectStoreException;
 

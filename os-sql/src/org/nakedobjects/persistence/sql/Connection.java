@@ -7,14 +7,14 @@ public final class Connection {
     public Connection(DatabaseConnectorPool connectionPool) {
         pool = connectionPool;
     }
-
+/*
     public Results callStoredProcedure(String name, Parameter[] parameters) {
         DatabaseConnector connection = pool.acquire();
         Results results = connection.callStoredProcedure(name, parameters);
         pool.release(connection);
         return results;
     }
-
+*/
     public int count(String sql) throws SqlObjectStoreException {
         DatabaseConnector connection = pool.acquire();
         int count = connection.count(sql);
@@ -28,13 +28,14 @@ public final class Connection {
         pool.release(connection);
     }
 
+    /*
     public MultipleResults executeStoredProcedure(String name, Parameter[] parameters) {
         DatabaseConnector connection = pool.acquire();
         MultipleResults results = connection.executeStoredProcedure(name, parameters);
         pool.release(connection);
         return results;
     }
-
+*/
     public boolean hasTable(String tableName) throws SqlObjectStoreException {
         DatabaseConnector connection = pool.acquire();
         boolean hasTable = connection.hasTable(tableName);
@@ -65,6 +66,14 @@ public final class Connection {
         DatabaseConnector connection = pool.acquire();
         connection.update(sql);
         pool.release(connection);    
+    }
+    
+    public DatabaseConnector acquire() {
+    	return pool.acquire();
+    }
+    
+    public void release(DatabaseConnector connector) {
+    	pool.release(connector);
     }
 }
 

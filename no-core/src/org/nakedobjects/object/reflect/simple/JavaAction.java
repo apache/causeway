@@ -42,8 +42,6 @@ public class JavaAction extends JavaMember implements ActionDelegate {
             LOG.debug("Action: invoke " + object + "." + getName());
             objectManager.startTransaction();
 
-            //Object result = actionMethod.invoke(object, parameters);
-
             /*
              * TODO the object that we are invoking this method on, and the
              * parameters, need to be part of the transaction, and not the same
@@ -73,14 +71,14 @@ public class JavaAction extends JavaMember implements ActionDelegate {
         	if(e.getTargetException() instanceof TransactionException) {
         	    LOG.info("TransactionException thrown while executing " + actionMethod + " " + e.getTargetException().getMessage());
         	} else {
-	            LOG.error("Exception executing " + actionMethod + "; aboted", e.getTargetException());
+	            LOG.error("Exception executing " + actionMethod + "; aborted", e.getTargetException());
         	}
             objectManager.abortTransaction();
         } catch (IllegalAccessException e) {
             LOG.error("Illegal access of " + actionMethod, e);
             objectManager.abortTransaction();
         } catch (ObjectNotFoundException e) {
-            LOG.error("None existing target or parameter used in " + actionMethod, e);
+            LOG.error("Non-existing target or parameter used in " + actionMethod, e);
             objectManager.abortTransaction();
         }
 
