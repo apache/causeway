@@ -1,12 +1,14 @@
-package org.nakedobjects.viewer.skylark;
+package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.Style;
+import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.ViewAxis;
 
-public interface FieldContent {
-
-	String getFieldLabel();
-	
-	Field getField();
+public class SubviewIconSpecification extends IconSpecification {
+	public View createView(Content content, ViewAxis axis) {
+		return new SimpleBorder(1, new IconView(content, this, axis, Style.NORMAL));
+    }
 }
 
 

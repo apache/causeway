@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.apache.log4j.Logger;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
@@ -16,14 +15,16 @@ import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.FieldContent;
-import org.nakedobjects.viewer.skylark.InternalCollectionContent;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.OneToOneContent;
-import org.nakedobjects.viewer.skylark.ValueContent;
+import org.nakedobjects.viewer.skylark.OneToManyField;
+import org.nakedobjects.viewer.skylark.OneToOneField;
+import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.core.AbstractViewBuilder;
 import org.nakedobjects.viewer.skylark.core.CompositeObjectView;
+
+import org.apache.log4j.Logger;
 
 
 public class ObjectFieldBuilder extends AbstractViewBuilder {
@@ -88,9 +89,9 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
             Naked value = field.get(object);
     		
     		if(value instanceof NakedValue) {
-    		    NakedValue existing = ((ValueContent) subview.getContent()).getValue();
+    		    NakedValue existing = ((ValueField) subview.getContent()).getValue();
     			if(value != existing) {
-    			    ((ValueContent) subview.getContent()).updateDerivedValue((NakedValue) value);
+    			    ((ValueField) subview.getContent()).updateDerivedValue((NakedValue) value);
     			}
     		    subview.refresh();
     		} else if (value instanceof NakedCollection) {
@@ -117,13 +118,13 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
 		
 		Content content;
 		if(object instanceof InternalCollection) {
-			content = new InternalCollectionContent(parent, (InternalCollection) object, (OneToManyAssociation) field);
+			content = new OneToManyField(parent, (InternalCollection) object, (OneToManyAssociation) field);
 	    } else if(object instanceof NakedObject) {
-			content = new OneToOneContent(parent, (NakedObject) object, (OneToOneAssociation) field);
+			content = new OneToOneField(parent, (NakedObject) object, (OneToOneAssociation) field);
 	    } else if(object instanceof NakedValue) { 
-			content = new ValueContent(parent, (NakedValue) object, (Value) field);  
+			content = new ValueField(parent, (NakedValue) object, (Value) field);  
 	    } else if(object == null) {
-			content = new OneToOneContent(parent, null, (OneToOneAssociation) field);
+			content = new OneToOneField(parent, null, (OneToOneAssociation) field);
 	    } else {
 	        throw new NakedObjectRuntimeException();
 	    }

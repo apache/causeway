@@ -90,7 +90,6 @@ public abstract class AbstractView implements View {
     }
 
     public boolean canChangeValue() {
-        // TODO Auto-generated method stub
         return false;
     }
 
@@ -100,8 +99,6 @@ public abstract class AbstractView implements View {
 
     /**
      * Returns debug details about this view.
-     * 
-     * @return String
      */
     public String debugDetails() {
         StringBuffer b = new StringBuffer();
@@ -120,10 +117,14 @@ public abstract class AbstractView implements View {
         b.append("\nAxis:      " + getViewAxis());
         b.append("\nState:     " + getState());
         b.append("\nLocation:  " + getLocation());
-        b.append("\nSpec:      " + specification.getName() + " (" + specification + ")");
-        b.append("\n           " + (specification.isOpen() ? "open" : "closed"));
-        b.append("\n           " + (specification.isReplaceable() ? "replaceable" : "non-replaceable"));
-        b.append("\n           " + (specification.isSubView() ? "subview" : "main view"));
+        if(specification == null) {
+            b.append("\nSpec:      none");
+        } else {
+            b.append("\nSpec:      " + specification.getName() + " (" + specification + ")");
+            b.append("\n           " + (specification.isOpen() ? "open" : "closed"));
+            b.append("\n           " + (specification.isReplaceable() ? "replaceable" : "non-replaceable"));
+            b.append("\n           " + (specification.isSubView() ? "subview" : "main view"));
+        }
         b.append("\n           " + (canFocus() ? "focusable" : "non-focusable"));
 
         b.append("\nParent:    ");
@@ -145,7 +146,6 @@ public abstract class AbstractView implements View {
     }
 
     public void drag(InternalDrag drag) {
-    // TODO Auto-generated method stub
     }
 
     public void dragCancel(InternalDrag drag) {
@@ -159,15 +159,12 @@ public abstract class AbstractView implements View {
     public void dragIn(ContentDrag drag) {}
 
     public void dragOut(ContentDrag drag) {
-    // TODO Auto-generated method stub
     }
 
     public void dragTo(InternalDrag drag) {
-    // TODO Auto-generated method stub
     }
 
     public void draw(Canvas canvas) {
-    // TODO Auto-generated method stub
     }
 
     public void drop(ContentDrag drag) {}
@@ -178,23 +175,18 @@ public abstract class AbstractView implements View {
     public void drop(ViewDrag drag) {}
 
     public void editComplete() {
-    // TODO Auto-generated method stub
     }
 
     public void entered() {
-    // TODO Auto-generated method stub
     }
 
     public void enteredSubview() {
-    // TODO Auto-generated method stub
     }
 
     public void exited() {
-    // TODO Auto-generated method stub
     }
 
     public void exitedSubview() {
-    // TODO Auto-generated method stub
     }
 
     public void firstClick(Click click) {
@@ -463,7 +455,6 @@ public abstract class AbstractView implements View {
     }
 
     public void mouseMoved(Location at) {
-    // TODO Auto-generated method stub
     }
 
     public void objectActionResult(Naked result, Location at) {
@@ -524,7 +515,6 @@ public abstract class AbstractView implements View {
     }
 
     public void secondClick(Click click) {
-    // TODO Auto-generated method stub
     }
 
     public void setBounds(Bounds bounds) {
@@ -555,7 +545,6 @@ public abstract class AbstractView implements View {
     }
 
     public void thirdClick(Click click) {
-    // TODO Auto-generated method stub
     }
 
     public String toString() {
@@ -564,7 +553,6 @@ public abstract class AbstractView implements View {
     }
 
     public void update(NakedObject object) {
-    // TODO Auto-generated method stub
     }
 
     public ViewAreaType viewAreaType(Location mouseLocation) {

@@ -10,7 +10,8 @@ import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.utility.ConfigurationException;
 import org.nakedobjects.viewer.skylark.basic.ClassIconSpecification;
 import org.nakedobjects.viewer.skylark.basic.EmptyField;
-import org.nakedobjects.viewer.skylark.basic.IconSpecification;
+import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
+import org.nakedobjects.viewer.skylark.basic.SubviewIconSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.DebugFrame;
 import org.nakedobjects.viewer.skylark.core.DefaultPopupMenu;
@@ -187,7 +188,7 @@ public class Viewer {
 		setupViewFactory();
 		
 		WorkspaceSpecification spec = (WorkspaceSpecification) ComponentLoader.loadComponent(SPECIFICATION_BASE + "root", RootWorkspaceSpecification.class, WorkspaceSpecification.class);
-		rootView = spec.createView(new ObjectContent(object), null);
+		rootView = spec.createView(new RootObject(object), null);
 		rootView.invalidateContent();
    }
 
@@ -359,10 +360,9 @@ public class Viewer {
        
 		viewFactory.addEmptyFieldSpecification(loadSpecification("field.empty", EmptyField.Specification.class));
 		
-		viewFactory.addSubviewIconSpecification(loadSpecification("icon.object", IconSpecification.class));
-	//	viewFactory.addWorkspaceView(loadSpecification("root-workspace", RootWorkspaceSpecification.class);
-		viewFactory.addObjectIconSpecification(loadSpecification("icon.object", IconSpecification.class));
-		viewFactory.addClassIconView(loadSpecification("icon.class", ClassIconSpecification.class));
+		viewFactory.addSubviewIconSpecification(loadSpecification("icon.subview", SubviewIconSpecification.class));
+		viewFactory.addObjectIconSpecification(loadSpecification("icon.object", RootIconSpecification.class));
+		viewFactory.addClassIconSpecification(loadSpecification("icon.class", ClassIconSpecification.class));
 			
         String viewParams = Configuration.getInstance().getString(SPECIFICATION_BASE +
                 "view");

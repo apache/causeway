@@ -8,11 +8,11 @@ import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.security.Session;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.InternalCollectionContent;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.UserAction;
-import org.nakedobjects.viewer.skylark.ValueContent;
+import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
@@ -32,10 +32,10 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
 		public View createSubview(Content content, ViewAxis axis) {
 			ViewFactory factory = ViewFactory.getViewFactory();
 			
-			if(content instanceof InternalCollectionContent) {
+			if(content instanceof OneToManyField) {
 				return null;
-	        }  else if(content instanceof ValueContent) { 
-				ViewSpecification specification = factory.getValueFieldSpecification((ValueContent) content);
+	        }  else if(content instanceof ValueField) { 
+				ViewSpecification specification = factory.getValueFieldSpecification((ValueField) content);
 				return specification.createView(content, axis);
 			}  else if(content instanceof ObjectContent) {
 			    ViewSpecification spec = factory.getIconizedSubViewSpecification((ObjectContent) content);

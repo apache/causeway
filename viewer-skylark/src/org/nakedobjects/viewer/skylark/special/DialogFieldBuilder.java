@@ -1,16 +1,20 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.apache.log4j.Logger;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.security.Session;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.basic.ActionContent;
 import org.nakedobjects.viewer.skylark.core.AbstractViewBuilder;
 import org.nakedobjects.viewer.skylark.core.CompositeObjectView;
+import org.nakedobjects.viewer.skylark.core.TextView;
+
+import org.apache.log4j.Logger;
 
 
 public class DialogFieldBuilder extends AbstractViewBuilder {
@@ -22,21 +26,27 @@ public class DialogFieldBuilder extends AbstractViewBuilder {
 	}
 
     public void build(View view) {
-		Assert.assertEquals(view.getView(), view);
+        if (view.getSubviews().length == 0) {
+            Assert.assertEquals(view.getView(), view);
 
-        Action action = ((ActionContent) view.getContent()).getAction();
+            ActionContent actionContent = ((ActionContent) view.getContent());
+            Action action = actionContent.getAction();
 
-        LOG.debug("rebuild view " + view + " for " + action);
+            LOG.debug("rebuild view " + view + " for " + action);
 
-        NakedClass[] flds = action.parameters();
-        for (int f = 0; f < flds.length; f++) {
-            NakedClass field = flds[f];
-			
-			View fieldView = subviewDesign.createSubview(new ParameterContent(), view.getViewAxis());
-			if(fieldView != null) {
-				view.addView(decorateSubview(fieldView));
-			}
-       }
+            NakedObject target = ((ObjectContent) view).getObject();
+            view.addView(new TextView(action.getLabel(Session.getSession().getSecurityContext(), target)));
+
+            ParameterContent[] parameters = actionContent.getParameterContents();
+            for (int f = 0; f < parameters.length; f++) {
+                ParameterContent parameter = parameters[f];
+
+                View fieldView = subviewDesign.createSubview(parameter, view.getViewAxis());
+                if (fieldView != null) {
+                    view.addView(decorateSubview(fieldView));
+                }
+            }
+        }
     }
 
     public View createCompositeView(Content content, CompositeViewSpecification specification, ViewAxis axis) {

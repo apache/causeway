@@ -70,8 +70,10 @@ public class ButtonBorder extends AbstractBorder {
     	        String text = actions[i].getName(getView());
     	        int buttonWidth = TEXT_PADDING + Style.NORMAL.stringWidth(text) + TEXT_PADDING;
 
-    	        if(actions[i].disabled(getView()).isAllowed() && xx > x && xx < x + buttonWidth && yy > y && yy < y + buttonHeight) {
-    	            actions[i].execute(getWorkspace(), getView(), getLocation()); 
+    	        if(xx > x && xx < x + buttonWidth && yy > y && yy < y + buttonHeight) {
+    	            if(actions[i].disabled(getView()).isAllowed()) {
+    	                actions[i].execute(getWorkspace(), getView(), getLocation());
+    	            }
     	            return;
                 }
     	        

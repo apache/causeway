@@ -36,7 +36,7 @@ class TreeLeafNodeSpecification implements ViewSpecification, TreeNodeSpecificat
 	}
 	
 	public View createView(Content content, ViewAxis axis) {
-		return new TreeNodeBorder(new ObjectView(content, this, axis), replacementNodeSpecification);
+		return new TreeNodeBorder(new TreeLeafNode(content, this, axis), replacementNodeSpecification);
 	}
 
 	public String getName() {
@@ -58,6 +58,13 @@ class TreeLeafNodeSpecification implements ViewSpecification, TreeNodeSpecificat
 	void setReplacementNodeSpecification(ViewSpecification replacementNodeSpecification) {
 		this.replacementNodeSpecification = replacementNodeSpecification;
 	}
+}
+
+class TreeLeafNode extends ObjectView {
+
+    public TreeLeafNode(Content content, ViewSpecification design, ViewAxis axis) {
+        super(content, design, axis);
+    }
 }
 
 

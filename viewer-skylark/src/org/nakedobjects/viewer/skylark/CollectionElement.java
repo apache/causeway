@@ -1,49 +1,33 @@
-package org.nakedobjects.viewer.skylark.basic;
+package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
-import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.special.ParameterContent;
+import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 
-/**
- * Links an action on an object to a view.
- */
-public class ActionContent implements ObjectContent {
-    private final Action action;
+public class CollectionElement implements ObjectContent {
+
     private final NakedObject object;
-    private final ParameterContent[] parameterContents;
 
-    public ActionContent(NakedObject object, Action action) {
+    public CollectionElement(NakedObject object) {
         this.object = object;
-        this.action = action;
-        
-        NakedClass[] parameters = action.parameters();
-        parameterContents = new ParameterContent[parameters.length];
-        for (int f = 0; f < parameters.length; f++) {
-            parameterContents[f]  = new ParameterContent(parameters[f]);
-        }
     }
 
-    public ParameterContent[] getParameterContents() {
-        return parameterContents;
-    }
-    
     public String debugDetails() {
-        return "  action: " + action + "\n  object: " + object;
+        String type = getClass().getName();
+        type = type.substring(type.lastIndexOf('.') + 1);
+        return type + "\n" + "  object: " + object + "\n";
     }
-
-    public Action getAction() {
-        return action;
-    }
-
-    public void menuOptions(MenuOptionSet options) {}
 
     public NakedObject getObject() {
         return object;
     }
 
+    public String toString() {
+        return "" + object;
+    }
+
+    public void menuOptions(MenuOptionSet options) {
+		ObjectOption.menuOptions(object, options);    
+    }
 }
 
 

@@ -1,12 +1,39 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.reflect.Value;
 
-public interface FieldContent {
-
-	String getFieldLabel();
+public class ValueField extends AbstractFieldContent {
+	private NakedValue value;
 	
-	Field getField();
+	public ValueField(NakedObject parent, NakedValue value, Value field) {
+	    super(parent, field);
+		this.value = value;
+	}
+
+	public String debugDetails() {
+	    return super.debugDetails() +  "  object:" + value + "\n";  
+	}
+	
+	public Value getValueField() {
+		return (Value) getField();
+	}
+
+	public NakedValue getValue() {
+		return value;
+	}
+
+	public void menuOptions(MenuOptionSet options) {
+	}
+	
+	public String toString() {
+		return value + "/"  + getField();
+	}
+
+    public void updateDerivedValue(NakedValue object) {
+        this.value = object;
+    }
 }
 
 

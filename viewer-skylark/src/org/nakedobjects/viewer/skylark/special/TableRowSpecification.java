@@ -10,7 +10,7 @@ import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
-import org.nakedobjects.viewer.skylark.ValueContent;
+import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -53,8 +53,8 @@ public class TableRowSpecification extends AbstractCompositeViewSpecification {
 
             if (content instanceof InternalCollectionContent) {
                 return null;
-            } else if (content instanceof ValueContent) {
-                spec = factory.getValueFieldSpecification((ValueContent) content);
+            } else if (content instanceof ValueField) {
+                spec = factory.getValueFieldSpecification((ValueField) content);
             } else if (content instanceof ObjectContent) {
                 spec = factory.getIconizedSubViewSpecification((ObjectContent) content);
             } else {

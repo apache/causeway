@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.ValueContent;
+import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
@@ -17,8 +17,8 @@ public class DataFormSpecification extends AbstractCompositeViewSpecification {
         public View createSubview(Content content, ViewAxis axis) {
             ViewFactory factory = ViewFactory.getViewFactory();
 
-            if (content instanceof ValueContent) {
-                ViewSpecification specification = factory.getValueFieldSpecification((ValueContent) content);
+            if (content instanceof ValueField) {
+                ViewSpecification specification = factory.getValueFieldSpecification((ValueField) content);
                 return specification.createView(content, axis);
             }
 
@@ -30,7 +30,7 @@ public class DataFormSpecification extends AbstractCompositeViewSpecification {
         }
 
         public boolean isContentShown(Content content) {
-            return content instanceof ValueContent;
+            return content instanceof ValueField;
         }
     }
 

@@ -2,12 +2,7 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.reflect.AssociateCommand;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.security.Session;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
@@ -15,7 +10,6 @@ import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.Text;
@@ -23,22 +17,19 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
+import org.nakedobjects.viewer.skylark.special.ParameterContent;
 
 import org.apache.log4j.Logger;
 
 
-public class EmptyField extends AbstractView {
-	private static final Logger LOG = Logger.getLogger(EmptyField.class);
+public class ActionParameterField extends AbstractView {
+	private static final Logger LOG = Logger.getLogger(ActionParameterField.class);
 	private static Text style = Style.NORMAL;
     
-	public EmptyField(Content content, ViewSpecification specification, ViewAxis axis) {
+	public ActionParameterField(Content content, ViewSpecification specification, ViewAxis axis) {
 		super(content, specification, axis);
-		if(!(content instanceof OneToOneField)) {
-			throw new IllegalArgumentException("Content for EmptyField must be NullValueField: " + content);
-		}
-		NakedObject object = ((OneToOneField) getContent()).getObject();
-		if(object != null) {
-		    throw new IllegalArgumentException("Content for EmptyField must be null: " + object);
+		if(!(content instanceof ParameterContent)) {
+			throw new IllegalArgumentException("Content for EmptyField must be ParameterContent: " + content);
 		}
 	}
     
@@ -46,32 +37,22 @@ public class EmptyField extends AbstractView {
         NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
         
         if (source instanceof NakedClass) {
-            return true;
+            return false;
         } else {
-            NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
-            Permission perm = getEmptyField().getAbout(Session.getSession().getSecurityContext(), target, source).canUse();
-
-            if (perm.getReason() != null) {
-                getViewManager().setStatus(perm.getReason());
-            }
-
-            //            about  = perm.isAllowed() &&
-            //			field.getType().isAssignableFrom(source.getClass());
-            return perm.isAllowed();
+            NakedClass nc = ((ParameterContent) getContent()).getNakedClass();
+            return nc.isOfType(source.getNakedClass());
         }
     }
-
-    private OneToOneAssociation getEmptyField() {
-    	return (OneToOneAssociation) ((OneToOneField) getContent()).getField();
-	}
     
     protected String iconName() {
-        String clsName = getEmptyField().getType().getName();
+       String name = ((ParameterContent) getContent()).getNakedClass().fullName();
+        
+        String clsName = name;
         return clsName.substring(clsName.lastIndexOf('.') + 1);
 	}
 
     public String toString() {
-		return "EmptyField" + getId();
+		return "ActionParameterField" + getId();
 	}
     
     public void dragObjectIn(ContentDrag drag) {
@@ -124,32 +105,15 @@ public class EmptyField extends AbstractView {
 
     public void drop(ContentDrag drag) {
         if (canDrop(drag)) {
-	        NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
 	        View dragSource = drag.getSourceView();
-            NakedObject source = ((ObjectContent) dragSource.getContent()).getObject();
+            ParameterContent parameterContent = ((ParameterContent) getContent());
+            parameterContent.setObject(((ObjectContent) dragSource.getContent()).getObject());
             
-            NakedObject associatedObject;
-            OneToOneAssociation field = getEmptyField();      
-            LOG.debug("drop " + source + " on " + field + "/" + target);
-            if (source instanceof NakedClass) {
-                associatedObject = ((NakedClass) source).createInstance();
-            } else {
-                associatedObject = source;
-            }
-            
-            getViewManager().getUndoStack().add(new AssociateCommand(target, associatedObject, field));
-            // field.setAssociation(target, associatedObject);
-                        
-            if(! target.isPersistent()) {
-                getParent().invalidateContent();
-            }
+            View replacement;           
+            replacement = new SubviewIconSpecification().createView(getContent(), getViewAxis());
+            getParent().replaceView(this, replacement);
+            markDamaged();
         }
-    }
-
-    private NakedClass forNakedClass() {
-        OneToOneAssociation field = getEmptyField();
-        String className = field.getType().getName();
-        return NakedClassManager.getInstance().getNakedClass(className);
     }
 
     /**
@@ -198,26 +162,8 @@ public class EmptyField extends AbstractView {
 	}
 
     private String name() {
-        OneToOneAssociation field = getEmptyField();
-
-        if (field == null) {
-            return "";
-        } else {
-            return forNakedClass().getSingularName();
-        }
-    }
-
-    /**
-     * Objects returned by menus are used to set this field before passing the
-     * call on to the parent.
-     */
-    public void objectActionResult(Naked result, Location at) {
-        NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
-        OneToOneAssociation field = getEmptyField();
-        if(field.getType().isAssignableFrom(result.getClass())) {
-        	field.setAssociation(target, (NakedObject) result);
-        }
-        super.objectActionResult(result, at);
+        String name = ((ParameterContent) getContent()).getNakedClass().fullName();
+        return name;
     }
 
     protected String  title() {
@@ -225,7 +171,8 @@ public class EmptyField extends AbstractView {
 	}
 
     public void menuOptions(MenuOptionSet options) {
-        ClassOption.menuOptions(forNakedClass(), options);
+        NakedClass nc = ((ParameterContent) getContent()).getNakedClass();
+        ClassOption.menuOptions(nc, options);
     }
     
     public static class Specification implements ViewSpecification {
@@ -234,7 +181,7 @@ public class EmptyField extends AbstractView {
     	}
 
     	public View createView(Content content, ViewAxis axis) {
-    		return new EmptyField(content, this, axis);
+    		return new ActionParameterField(content, this, axis);
     	}
 
     	public boolean isOpen() {

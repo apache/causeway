@@ -31,7 +31,7 @@ public class ClassIconBackground extends AbstractViewDecorator {
 		Action action = nc.getNakedClass().getObjectAction(Action.USER, "Instances");
 		InstanceCollection instances = (InstanceCollection) action.execute(object);
 		View view = ViewFactory.getViewFactory().createOpenRootView(instances);
-		view.setLocation(click.getLocation());
+		view.setLocation(click.getLocationWithinViewer());
 		getWorkspace().addView(view);
 	}
 	

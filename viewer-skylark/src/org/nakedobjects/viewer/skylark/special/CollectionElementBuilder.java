@@ -1,23 +1,25 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import java.util.Enumeration;
-
-import org.apache.log4j.Logger;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.utility.Assert;
+import org.nakedobjects.viewer.skylark.CollectionElement;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.InternalCollectionContent;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.OneToManyAssociationContent;
+import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.core.AbstractViewBuilder;
 import org.nakedobjects.viewer.skylark.core.CollectionActions;
 import org.nakedobjects.viewer.skylark.core.CompositeObjectView;
 import org.nakedobjects.viewer.skylark.core.InternalCollectionActions;
+
+import java.util.Enumeration;
+
+import org.apache.log4j.Logger;
 
 public class CollectionElementBuilder extends AbstractViewBuilder {
     private static final Logger LOG = Logger.getLogger(CollectionElementBuilder.class);
@@ -33,7 +35,7 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
 
 		Content content = view.getContent();
 		NakedCollection collection = (NakedCollection) ((ObjectContent) content).getObject();
-		OneToManyAssociation field = (OneToManyAssociation) (content instanceof InternalCollectionContent ? ((InternalCollectionContent) content).getField() : null);
+		OneToManyAssociation field = (OneToManyAssociation) (content instanceof OneToManyField ? ((OneToManyField) content).getField() : null);
 
         LOG.debug("rebuild view " + view + " for " + collection);
 
@@ -63,10 +65,10 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
         	if(elementView == null) {
         		Content elementContent ;
         		if(field == null) {
-        			elementContent = new ObjectContent(element);
+        			elementContent = new CollectionElement(element);
         		} else {
-        		    NakedObject parent = ((InternalCollectionContent) content).getParent();
-        			elementContent = new OneToManyAssociationContent(parent, element, field);
+        		    NakedObject parent = ((OneToManyField) content).getParent();
+        			elementContent = new OneToManyField(parent, element, field);
         		}
         		elementView = subviewDesign.createSubview(elementContent, view.getViewAxis());
         	}
@@ -77,7 +79,7 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
 	public View createCompositeView(Content content, CompositeViewSpecification specification, ViewAxis axis) {
     	CompositeObjectView view = new CompositeObjectView(content, specification, axis);
     	view.setCanDragView(canDragView);
-		return content instanceof InternalCollectionContent ? new InternalCollectionActions(view) : new CollectionActions(view);
+		return content instanceof OneToManyField ? new InternalCollectionActions(view) : new CollectionActions(view);
     }
 
 	public void setCanDragView(boolean canDragView) {

@@ -4,7 +4,7 @@ import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.value.Option;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.ValueContent;
+import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
@@ -34,7 +34,7 @@ public class OptionSelectionField extends TextField {
     }
     
     Option getOption() {
-        ValueContent content = ((ValueContent) getContent());
+        ValueField content = ((ValueField) getContent());
         Option value = (Option) content.getValue();
 
         return value;

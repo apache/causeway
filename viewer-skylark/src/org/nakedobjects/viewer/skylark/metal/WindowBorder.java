@@ -9,7 +9,7 @@ import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
-import org.nakedobjects.viewer.skylark.basic.IconSpecification;
+import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
 import org.nakedobjects.viewer.skylark.basic.TitleText;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
 
@@ -136,7 +136,7 @@ public class WindowBorder extends AbstractBorder {
 	
 	public void secondClick(Click click) {
         if(click.getViewAreaType() == ViewAreaType.VIEW) {
-            View iconView = new IconSpecification().createView(getContent(), null);
+            View iconView = new RootIconSpecification().createView(getContent(), null);
             iconView.setLocation(getView().getLocation());
             getWorkspace().removeView(getView());
             getWorkspace().addView(iconView);

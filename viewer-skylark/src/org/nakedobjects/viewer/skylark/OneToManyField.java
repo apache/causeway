@@ -1,55 +1,46 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.reflect.Field;
-import org.nakedobjects.object.reflect.Value;
-import org.nakedobjects.security.Session;
+import org.nakedobjects.object.collection.InternalCollection;
+import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.viewer.skylark.basic.ObjectOption;
+import org.nakedobjects.viewer.skylark.basic.RemoveOneToManyAssociationOption;
 
-public class ValueContent implements FieldContent {
-    private final Value field;
-	private NakedObject parent;
-	private NakedValue value;
-	
-	public ValueContent(NakedObject parent, NakedValue value, Value field) {
-	    this.parent = parent;
-		this.value = value;
-		this.field = field;
+public class OneToManyField extends AbstractFieldContent implements ObjectContent {
+	private static final UserAction REMOVE_ASSOCIATION = new RemoveOneToManyAssociationOption();
+    private final NakedObject object;
+
+	   public NakedObject getObject() {
+	        return object;
+	    }
+
+	public OneToManyField(NakedObject parent, NakedObject object, OneToManyAssociation association) {
+		super(parent, association);
+	        this.object = object;
 	}
-
+	
 	public String debugDetails() {
-		String type = getClass().getName();
-		type = type.substring(type.lastIndexOf('.') + 1);
-		return type + "\n" + "  object: " + value + "\n" +  "  field:" + field + "\n";  
+		return super.debugDetails() +  "  object:" + object + "\n";  
 	}
 	
-	public Field getField() {
-		return field;
-	}
-
-	public Value getValueField() {
-		return field;
-	}
-
-	public String getFieldLabel() {
-	    return field.getLabel(Session.getSession().getSecurityContext(), parent);
-		//return field.getName();
-	}
-	
-	public NakedValue getValue() {
-		return value;
+	public OneToManyAssociation getOneToManyAssociation() {
+		return (OneToManyAssociation) getField();
 	}
 
 	public void menuOptions(MenuOptionSet options) {
+		super.menuOptions(options);
+		ObjectOption.menuOptions(object, options);
+		options.add(MenuOptionSet.OBJECT, REMOVE_ASSOCIATION);
 	}
 	
 	public String toString() {
-		return value + "/"  + field;
+		return getObject() + "/" + getField();
+	}
+	
+	public InternalCollection getCollection() {
+	    return (InternalCollection) getObject();
 	}
 
-    public void updateDerivedValue(NakedValue object) {
-        this.value = object;
-    }
 }
 
 

@@ -1,11 +1,10 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import java.util.Enumeration;
-
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.reflect.Field;
@@ -17,18 +16,20 @@ import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.FieldContent;
-import org.nakedobjects.viewer.skylark.InternalCollectionContent;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.OneToOneContent;
+import org.nakedobjects.viewer.skylark.OneToManyField;
+import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.Size;
-import org.nakedobjects.viewer.skylark.ValueContent;
+import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractViewBuilder;
 import org.nakedobjects.viewer.skylark.special.InternalListSpecification;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
+
+import java.util.Enumeration;
 
 public class WorkspaceBuilder extends AbstractViewBuilder {
 	private static final Location ZERO = new Location(0, 0);
@@ -71,33 +72,30 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
 						ViewAxis axis = view.getViewAxis();
 						
 						if(attribute instanceof NakedCollection) {
-							InternalCollectionContent content;
-							content = new InternalCollectionContent(object, (InternalCollection) attribute, (OneToManyAssociation) field);
+							OneToManyField content;
+							content = new OneToManyField(object, (InternalCollection) attribute, (OneToManyAssociation) field);
 							specification = internalList;
 							fieldView =specification.createView(content, axis);
 						
-						} else if(attribute instanceof NakedObject) {
-							OneToOneContent content;
-							content = new OneToOneContent(object, (NakedObject) attribute, (OneToOneAssociation) field);
+						} else if(attribute instanceof NakedObject || attribute == null) {
+							OneToOneField content;
+							content = new OneToOneField(object, (NakedObject) attribute, (OneToOneAssociation) field);
 							specification = factory.getIconizedSubViewSpecification(content);
 							fieldView =specification.createView(content, axis);
 						
 						} else if(attribute instanceof NakedValue) { 
-							ValueContent content;
-							content = new ValueContent(object, (NakedValue) attribute, (Value) field);  
+							ValueField content;
+							content = new ValueField(object, (NakedValue) attribute, (Value) field);  
 							specification = factory.getValueFieldSpecification(content);
 							fieldView =specification.createView(content, axis);
 							
 						} else {
-							OneToOneContent content = new OneToOneContent(object, null, (OneToOneAssociation) field);
-							specification = factory.getEmptyFieldSpecification();
-							fieldView =specification.createView(content, axis);
+						    throw new NakedObjectRuntimeException();
 						}
 						
 						String label = field.getLabel(Session.getSession().getSecurityContext(), object);
 						fieldView = new LabelBorder(label, fieldView);
 						fieldView =  new SimpleBorder(1, fieldView);
-//						specification.build(fieldView);
 						view.addView(fieldView);
 					}
 		        }

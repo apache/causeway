@@ -1,13 +1,23 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.ObjectContent;
 
 
-public class ParameterContent implements Content {
-
-    public ParameterContent() {
+public class ParameterContent implements ObjectContent {
+    private NakedClass parameterClass;
+    private NakedObject object;
+    
+    public ParameterContent(NakedClass parameter) {
         super();
+        this.parameterClass = parameter;
+        object = null;
+    }
+    
+    public NakedClass getNakedClass() {
+        return parameterClass;
     }
 
     public String debugDetails() {
@@ -15,6 +25,14 @@ public class ParameterContent implements Content {
     }
 
     public void menuOptions(MenuOptionSet options) {
+    }
+
+    public NakedObject getObject() {
+        return object;
+    }
+
+    public void setObject(NakedObject object) {
+        this.object = object;
     }
 
 }

@@ -1,49 +1,39 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.Field;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.security.Session;
+import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 import org.nakedobjects.viewer.skylark.basic.RemoveOneToOneAssociationOption;
 
-public class OneToOneContent extends ObjectContent implements FieldContent {
+public class OneToOneField extends AbstractFieldContent implements ObjectContent {
 	private static final UserAction REMOVE_ASSOCIATION = new RemoveOneToOneAssociationOption();
-    private final NakedObject parent;
-	private final OneToOneAssociation association;
+    private final NakedObject object;
 
-	public String debugDetails() {
-		return super.debugDetails() +  "  field:" + association + "\n";  
-	}
+    public String debugDetails() {
+        return super.debugDetails() +  "  object:" + object + "\n";  
+    }
 
-	public OneToOneContent(NakedObject parent, NakedObject object, OneToOneAssociation association) {
-		super(object);
-        this.parent = parent;
-		this.association = association;
-	}
+    public NakedObject getObject() {
+        return object;
+    }
+
+	public OneToOneField(NakedObject parent, NakedObject object, OneToOneAssociation association) {
+		super(parent, association);
+        this.object = object;
+}
 
 	public OneToOneAssociation getOneToOneAssociation() {
-		return association;
+		return (OneToOneAssociation) getField();
 	}
 
-	public Field getField() {
-		return association;
-	}
-	
-	public NakedObject getParent() {
-	    return parent;
-	}
-	
-	public String getFieldLabel() {
-		return association.getLabel(Session.getSession().getSecurityContext(), parent);
-	}
-	
 	public void menuOptions(MenuOptionSet options) {
 		super.menuOptions(options);
+		ObjectOption.menuOptions(object, options);
 		options.add(MenuOptionSet.OBJECT, REMOVE_ASSOCIATION);
 	}
 	
 	public String toString() {
-		return getObject() + "/" + association;
+		return getObject() + "/" + getField();
 	}
 }
 

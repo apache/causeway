@@ -10,7 +10,6 @@ import org.nakedobjects.viewer.skylark.core.ObjectView;
 
 
 public class IconView extends ObjectView {
-
 	private IconGraphic icon;
 	private TitleText text;
 
@@ -45,7 +44,7 @@ public class IconView extends ObjectView {
     }
 
     public String toString() {
-        return "NewIcon" + getId();
+        return "Icon" + getId();
     }
 }
 /*

@@ -1,40 +1,16 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.object.reflect.Field;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.security.Session;
 
-public class InternalCollectionContent extends ObjectContent implements FieldContent {
-	private final OneToManyAssociation association;
-    private final NakedObject parent;
 
-	public InternalCollectionContent(NakedObject parent, InternalCollection object, OneToManyAssociation association) {
-		super(object);
-        this.parent = parent;
-		this.association = association;
-	}
-	
-	public Field getField() {
-		return association;
-	}
-	
-	public NakedObject getParent() {
-        return parent;
+/** @deprecated */
+public class InternalCollectionContent extends OneToManyField {
+
+    public InternalCollectionContent(NakedObject parent, NakedObject object, OneToManyAssociation association) {
+        super(parent, object, association);
     }
-	
-	public String getFieldLabel() {
-		return association.getLabel(Session.getSession().getSecurityContext(), parent);
-	}
-	
-	public InternalCollection getCollection() {
-	    return (InternalCollection) super.getObject();
-	}
-	
-	public String toString() {
-		return getObject() + "/" + association;
-	}
+
 }
 
 

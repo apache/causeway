@@ -29,7 +29,7 @@ package org.nakedobjects.viewer.skylark.value;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.ValueContent;
+import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 
 
@@ -43,7 +43,7 @@ public abstract class AbstractValueOption extends MenuOption {
 	}
 	
     protected NakedValue getValue(View view) {
-		ValueContent vc = (ValueContent) view.getContent();
+		ValueField vc = (ValueField) view.getContent();
         NakedValue value = vc.getValue();
 		return value;
 	}

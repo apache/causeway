@@ -1,95 +1,9 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.collection.InstanceCollection;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.Action.Type;
-import org.nakedobjects.viewer.skylark.basic.DestroyObjectOption;
-import org.nakedobjects.viewer.skylark.basic.DialogedObjectOption;
-import org.nakedobjects.viewer.skylark.basic.FindAllOption;
-import org.nakedobjects.viewer.skylark.basic.FindFirstOption;
-import org.nakedobjects.viewer.skylark.basic.ImmediateObjectOption;
 
-public class ObjectContent implements Content {
-    private final NakedObject object;
-
-    public ObjectContent(NakedObject object) {
-        this.object = object;
-    }
-
-    public String debugDetails() {
-        String type = getClass().getName();
-        type = type.substring(type.lastIndexOf('.') + 1);
-        return type + "\n" + "  object: " + object + "\n";
-    }
-
-    public NakedObject getObject() {
-        return object;
-    }
-
-    public void menuOptions(MenuOptionSet options) {
-        NakedObject object = getObject();
-
-        if (object != null) {
-            if (object.isFinder()) {
-                options.add(MenuOptionSet.OBJECT, new FindFirstOption());
-                options.add(MenuOptionSet.OBJECT, new FindAllOption());
-            } else {
-                menuOption(object, options, Action.USER, MenuOptionSet.OBJECT);
-                menuOption(object, options, Action.EXPLORATION, MenuOptionSet.EXPLORATION);
-            }
-
-            if (!(object instanceof NakedClass) && !(object instanceof InstanceCollection) && object.isPersistent()) {
-                options.add(MenuOptionSet.EXPLORATION, new DestroyObjectOption());
-            }
-        }
-    }
-/*
-    private void menuOptions(NakedClass cls, MenuOptionSet menuOptionSet) {
-        Action[] actions = cls.getClassActions(Action.USER);
-
-        for (int i = 0; i < actions.length; i++) {
-            ImmediateObjectOption option = ImmediateObjectOption.createOption(actions[i], cls);
-            if (option != null) {
-                menuOptionSet.add(MenuOptionSet.OBJECT, option);
-            }
-        }
-
-        actions = cls.getClassActions(Action.EXPLORATION);
-
-        if (actions.length > 0) {
-            menuOptionSet.add(MenuOptionSet.OBJECT, null);
-
-            for (int i = 0; i < actions.length; i++) {
-                ImmediateObjectOption option = ImmediateObjectOption.createOption(actions[i], cls);
-                if (option != null) {
-                    menuOptionSet.add(MenuOptionSet.EXPLORATION, option);
-                }
-            }
-        }
-    }
-*/
-
-    private void menuOption(NakedObject object, MenuOptionSet menuOptionSet, Type actionType, int menuSection) {
-        Action[] actions = object.getNakedClass().getObjectActions(actionType);
-
-        for (int i = 0; i < actions.length; i++) {
-            MenuOption option;
-            if(actions[i].parameters().length == 0) {
-                option = ImmediateObjectOption.createOption(actions[i], object);
-            } else {
-                option = DialogedObjectOption.createOption(actions[i], object);
-            }
-            if (option != null) {
-                menuOptionSet.add(menuSection, option);
-            }
-        }
-    }
-
-    public String toString() {
-        return "" + object;
-    }
+public interface ObjectContent extends Content {
+    NakedObject getObject();
 }
 
 /*

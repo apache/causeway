@@ -4,7 +4,7 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.InternalCollectionContent;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.ValueContent;
+import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
@@ -29,8 +29,8 @@ class GridColumnSpecification extends AbstractCompositeViewSpecification{
 
             if (content instanceof InternalCollectionContent) {
                 specification = new ScheduleSpecification();
-            } else if (content instanceof ValueContent) {
-                specification = factory.getValueFieldSpecification((ValueContent) content);
+            } else if (content instanceof ValueField) {
+                specification = factory.getValueFieldSpecification((ValueField) content);
             } else if (content instanceof ObjectContent) {
                 specification = factory.getIconizedSubViewSpecification((ObjectContent) content);
             } else {

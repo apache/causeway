@@ -35,7 +35,7 @@ import org.nakedobjects.security.Session;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.OneToManyAssociationContent;
+import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
@@ -52,7 +52,7 @@ public class RemoveOneToManyAssociationOption extends MenuOption {
     	NakedObject parentObject = collection.forParent();
 
 		// associated object
-    	OneToManyAssociationContent content = (OneToManyAssociationContent) view.getContent();
+    	OneToManyField content = (OneToManyField) view.getContent();
 		OneToManyAssociation association = content.getOneToManyAssociation();
         NakedObject associatedObject = content.getObject();
         
@@ -74,7 +74,7 @@ public class RemoveOneToManyAssociationOption extends MenuOption {
     	NakedObject parentObject = ((ObjectContent) view.getParent().getParent().getContent()).getObject();
 
 		// associated object
-    	OneToManyAssociationContent content = (OneToManyAssociationContent) view.getContent();
+    	OneToManyField content = (OneToManyField) view.getContent();
 		OneToManyAssociation association = content.getOneToManyAssociation();
         NakedObject associatedObject = content.getObject();
         

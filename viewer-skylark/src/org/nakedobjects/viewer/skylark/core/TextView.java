@@ -1,12 +1,36 @@
-package org.nakedobjects.viewer.skylark;
+package org.nakedobjects.viewer.skylark.core;
 
-import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.viewer.skylark.Canvas;
+import org.nakedobjects.viewer.skylark.Color;
+import org.nakedobjects.viewer.skylark.Size;
+import org.nakedobjects.viewer.skylark.Style;
+import org.nakedobjects.viewer.skylark.Text;
 
-public interface FieldContent {
 
-	String getFieldLabel();
-	
-	Field getField();
+public class TextView extends AbstractView {
+    private Text style = Style.NORMAL;
+    private Color color = Style.BLACK;
+    private String text;
+
+    public TextView(String text) {
+        super(null, null, null);
+        this.text = "ACTION: " + text;
+    }
+    
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
+        canvas.drawText(text,  HPADDING, getBaseline(), color, style);
+    }
+    
+    public int getBaseline() {
+        return style.getAscent() + VPADDING;
+    }
+    
+    public Size getRequiredSize() {
+        int width = style.stringWidth(text)+ HPADDING * 2;
+        int height = style.getHeight() + VPADDING * 2;
+        return new Size(width, height);
+    }
 }
 
 

@@ -2,49 +2,38 @@ package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.Field;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.security.Session;
-import org.nakedobjects.viewer.skylark.basic.RemoveOneToManyAssociationOption;
 
-public class OneToManyAssociationContent extends ObjectContent implements FieldContent {
-	private static final UserAction REMOVE_ASSOCIATION = new RemoveOneToManyAssociationOption();
-    private final NakedObject parent;
-	private final OneToManyAssociation association;
+public abstract class AbstractFieldContent implements Content, FieldContent {
+    private final Field field;
+	private final NakedObject parent;
 
-	public OneToManyAssociationContent(NakedObject parent, NakedObject object, OneToManyAssociation association) {
-		super(object);
-        this.parent = parent;
-		this.association = association;
+	public AbstractFieldContent(NakedObject parent, Field field) {
+	    this.parent = parent;
+	    this.field = field;
 	}
 	
-	public String debugDetails() {
-		return super.debugDetails() +  "  field:" + association + "\n";  
-	}
-	
-	public OneToManyAssociation getOneToManyAssociation() {
-		return association;
-	}
+    public String debugDetails() {
+        String type = getClass().getName();
+        type = type.substring(type.lastIndexOf('.') + 1);
+        return type + "\n" +  "  field:" + getField() + "\n";
+    }
+
+    public void menuOptions(MenuOptionSet options) {}
 
 	public Field getField() {
-		return association;
+		return field;
+	}
+        
+	public NakedObject getParent() {
+	    return parent;
+	}
+	
+	public final String getFieldLabel() {
+	    return field.getLabel(Session.getSession().getSecurityContext(), parent);
 	}
 
-	public NakedObject getParent() {
-        return parent;
-    }
-	
-	public String getFieldLabel() {
-		return association.getLabel(Session.getSession().getSecurityContext(), parent);
-	}
-	
-	public void menuOptions(MenuOptionSet options) {
-		super.menuOptions(options);
-		options.add(MenuOptionSet.OBJECT, REMOVE_ASSOCIATION);
-	}
-	
-	public String toString() {
-		return getObject() + "/" + association;
-	}
+
 }
 
 

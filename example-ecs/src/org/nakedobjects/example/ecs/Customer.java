@@ -32,19 +32,6 @@ public class Customer extends AbstractNakedObject {
         return b;
     }
 
-    public Booking actionNewBooking(Location from, Location to) {
-        Booking b = (Booking) createInstance(Booking.class);
-
-        b.associateCustomer(this);
-        b.setPaymentMethod(this.getPreferredPaymentMethod());
-
-        b.setPickUp(from);
-        b.setDropOff(to);
-        
-        return b;
-    }
-
-    
     public void associateBookings(Booking booking) {
         getBookings().add(booking);
         booking.setCustomer(this);

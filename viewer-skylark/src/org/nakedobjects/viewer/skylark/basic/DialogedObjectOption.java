@@ -1,29 +1,6 @@
-/*
-    Naked Objects - a framework that exposes behaviourally complete
-    business objects directly to the user.
-    Copyright (C) 2000 - 2003  Naked Objects Group Ltd
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-    The authors can be contacted via www.nakedobjects.org (the
-    registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-    Road, Woking GU21 1NR, UK).
-*/
-
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Allow;
@@ -52,19 +29,24 @@ public class DialogedObjectOption extends MenuOption {
     	if(about.canAccess().isVetoed()) {
     		return null;
     	}
+
+    	String label =  action.getLabel(Session.getSession().getSecurityContext(), object) + " (";
+    	NakedClass[] parameters = action.parameters();
+    	for (int i = 0; i < parameters.length; i++) {
+            label += (i > 0 ? ", " : "") + parameters[i].getShortName();
+        }
+    	label += ")...";
     	
-    	String labelName =  action.getLabel(Session.getSession().getSecurityContext(), object);
-    	DialogedObjectOption option = new DialogedObjectOption(labelName);
-    	option.action = action;
-    	option.setName(labelName + "... (dialog)");
+    	DialogedObjectOption option = new DialogedObjectOption(label, action);
+    	
     	return option;
     }
 	
 	private Action action;
 
-
-	private DialogedObjectOption(String name) {
+	private DialogedObjectOption(String name, Action action) {
 		super(name);
+		this.action = action;
 	}
 
     public Permission disabled(View view) {
@@ -86,6 +68,7 @@ public class DialogedObjectOption extends MenuOption {
         NakedObject object = ((ObjectContent) view.getContent()).getObject();
         ActionContent content = new ActionContent(object, action);
         View dialog = dialogSpec.createView(content, null);
+        dialog.setLocation(at);
         workspace.addView(dialog);
     }
 
@@ -93,3 +76,28 @@ public class DialogedObjectOption extends MenuOption {
         return "DialogedObjectOption for " + action;
     }
 }
+
+
+/*
+Naked Objects - a framework that exposes behaviourally complete
+business objects directly to the user.
+Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+The authors can be contacted via www.nakedobjects.org (the
+registered address of Naked Objects Group is Kingsway House, 123 Goldworth
+Road, Woking GU21 1NR, UK).
+*/

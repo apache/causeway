@@ -19,7 +19,7 @@ import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
-import org.nakedobjects.viewer.skylark.ValueContent;
+import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -143,7 +143,7 @@ public abstract class AbstractField extends AbstractView {
     }
 
     public Value getObjectField() {
-		return ((ValueContent) getContent()).getValueField();
+		return ((ValueField) getContent()).getValueField();
 	}
 
     public Padding getPadding() {
@@ -155,7 +155,7 @@ public abstract class AbstractField extends AbstractView {
     }
 
     public final NakedValue getValue() {
-    	return ((ValueContent) getContent()).getValue(); 
+    	return ((ValueField) getContent()).getValue(); 
     }
 
     public boolean hasFocus() {

@@ -1,26 +1,3 @@
-/*
-    Naked Objects - a framework that exposes behaviourally complete
-    business objects directly to the user.
-    Copyright (C) 2000 - 2003  Naked Objects Group Ltd
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-    The authors can be contacted via www.nakedobjects.org (the
-    registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-    Road, Woking GU21 1NR, UK).
-*/
 package org.nakedobjects.viewer.skylark.util;
 
 import java.util.Enumeration;
@@ -35,8 +12,9 @@ import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.OneToOneContent;
-import org.nakedobjects.viewer.skylark.ValueContent;
+import org.nakedobjects.viewer.skylark.OneToOneField;
+import org.nakedobjects.viewer.skylark.RootObject;
+import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.basic.DragContentIcon;
@@ -71,7 +49,7 @@ public class ViewFactory implements DebugInfo {
     private ViewSpecification workspaceObjectIconSpecification;
     private ViewSpecification workspaceSpecification;
 
-	public void addClassIconView(ViewSpecification spec) {
+	public void addClassIconSpecification(ViewSpecification spec) {
 		workspaceClassIconSpecification = spec;
 	}
 
@@ -120,13 +98,13 @@ public class ViewFactory implements DebugInfo {
 
 	public View createIconizedRootView(NakedObject object) {
         ViewSpecification spec = getIconizedRootViewSpecification(object);
-        View view = createView(spec, new ObjectContent(object));
+        View view = createView(spec, new RootObject(object));
         LOG.debug("creating " + view + " (iconized root) for " + object);
 
         return view;
     }
 
-	 public View createIconizedSubview(OneToOneContent content) {
+	 public View createIconizedSubview(OneToOneField content) {
 	        ViewSpecification spec = getIconizedSubViewSpecification(content);
 	        View view = createView(spec, content);
 	        LOG.debug("creating " + view + " (iconized subview) for " + content);
@@ -136,7 +114,7 @@ public class ViewFactory implements DebugInfo {
 
      public View createOpenRootView(NakedObject object) {
         ViewSpecification spec = getOpenRootViewSpecification(object);
-        View view = createView(spec, new ObjectContent(object));
+        View view = createView(spec, new RootObject(object));
         LOG.debug("creating " + view + " (open root) for " + object);
 
         return view;
@@ -156,7 +134,7 @@ public class ViewFactory implements DebugInfo {
     public View createWorkspace(NakedObject workspace) {
         LOG.debug("creating workspace for " + workspace);
 
-        View view = createView(workspaceSpecification, new ObjectContent(workspace));
+        View view = createView(workspaceSpecification, new RootObject(workspace));
 
         return view;
     }
@@ -269,7 +247,7 @@ public class ViewFactory implements DebugInfo {
     	return defaultViewSpecification(subviews, content.getObject());
     }
 
-    public ViewSpecification getValueFieldSpecification(ValueContent content) {
+    public ViewSpecification getValueFieldSpecification(ValueField content) {
     	NakedValue value = content.getValue();
     	
        	return defaultViewSpecification(valueFields, value);
@@ -297,9 +275,9 @@ public class ViewFactory implements DebugInfo {
 
     public Enumeration valueViews(Content forContent, View replacingView) {
 
-        if(forContent instanceof ValueContent) {
-            if (forContent instanceof ValueContent) {
-               	NakedValue value = ((ValueContent) forContent).getValue();
+        if(forContent instanceof ValueField) {
+            if (forContent instanceof ValueField) {
+               	NakedValue value = ((ValueField) forContent).getValue();
 
                	return ViewSpecifications(valueFields, value);
               }
@@ -318,7 +296,30 @@ public class ViewFactory implements DebugInfo {
 			}
 		}
 		return v.elements();
-	}
-	
-	
+	}	
 }
+
+
+/*
+Naked Objects - a framework that exposes behaviourally complete
+business objects directly to the user.
+Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+The authors can be contacted via www.nakedobjects.org (the
+registered address of Naked Objects Group is Kingsway House, 123 Goldworth
+Road, Woking GU21 1NR, UK).
+*/
