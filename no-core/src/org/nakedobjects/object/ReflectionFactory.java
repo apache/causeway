@@ -1,7 +1,7 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyPeer;
 import org.nakedobjects.object.reflect.OneToOnePeer;

@@ -1,13 +1,13 @@
 package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.ReflectionFactory;
-import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.OneToManyPeer;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOnePeer;
+import org.nakedobjects.object.reflect.OneToManyPeer;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.OneToOnePeer;
 
 
 public class LocalReflectionFactory implements ReflectionFactory {

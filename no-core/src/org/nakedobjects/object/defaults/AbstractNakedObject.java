@@ -5,7 +5,6 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.object.persistence.Oid;
@@ -137,8 +136,7 @@ public abstract class AbstractNakedObject implements NakedObject {
 
     public NakedObjectSpecification getSpecification() {
         if(specification == null) {
-            //specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(this.getClass());
-            specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(getObject().getClass());
+            specification = NakedObjects.getSpecificationLoader().loadSpecification(getObject().getClass());
         }
         return specification;
     }
@@ -207,47 +205,9 @@ public abstract class AbstractNakedObject implements NakedObject {
         getSpecification().clearDirty(this);
     }
 
-    /**
-     * Attempts to call <code>save</code> in the object store.
-     * When the state of this object changes, e.g., an attribute is set, then
-     * this method should be called so that it is persisted and a message is
-     * propogated to the users of this object within the system.
-     */
- /*   public void objectChanged() {
-        LOG.debug("object changed " + this);
-        if (isResolved()) {
-            LOG.debug("  notifying object manager");
-            getObjectManager().objectChanged(this);
-        }
-    }
-*/
-    /**
-     * Resolves the current object ensuring all its attributes are available in
-     * memory.
-     */
-    public synchronized void resolve() {
-        if (!isResolved() && isPersistent()) {
-            getObjectManager().resolveImmediately(this);
-        }
-    }
-
     private NakedObjectManager getObjectManager() {
         return NakedObjects.getObjectManager();
-    }
-
-
-    /**
-     * A utiltiy method for simplifying the resolving of an objects attribute.
-     * Calls resolve() on the secified object. If the specified reference no
-     * action is done.
-     */
-    
-    protected void resolve(NakedObject object) {
-        if (object != null && ! object.isResolved()) {
-            getObjectManager().resolveImmediately(object);
-        }
-    }
-    
+    } 
     
     public void setNakedClass(NakedObjectSpecification nakedClass) {
         this.specification = nakedClass;
