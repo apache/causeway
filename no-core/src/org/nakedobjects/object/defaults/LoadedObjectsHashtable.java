@@ -1,10 +1,12 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ResolveException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.utility.Assert;
+import org.nakedobjects.utility.DebugString;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -86,6 +88,23 @@ public class LoadedObjectsHashtable implements LoadedObjects {
     protected void finalize() throws Throwable {
         super.finalize();
         LOG.info("finalizing loaded objects");
+    }
+    
+    public String getDebugData() {
+        DebugString debug = new DebugString();
+        Enumeration e = loaded.keys();
+        while (e.hasMoreElements()) {
+            Oid oid = (Oid) e.nextElement();
+            NakedObjects object = (NakedObjects) loaded.get(oid);
+            debug.append(oid.toString());
+            debug.append("    ");
+            debug.appendln(object.toString());
+        }
+        return debug.toString();
+    }
+    
+    public String getDebugTitle() {
+        return "LoadedObjectsHashtable";
     }
 }
 

@@ -1,7 +1,10 @@
 package org.nakedobjects.object.reflect;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.utility.DebugString;
 
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
@@ -25,6 +28,23 @@ public class PojoAdapterHashImpl implements PojoAdapterHash {
     protected void finalize() throws Throwable {
         super.finalize();
         Logger.getLogger(PojoAdapterHashImpl.class).info("finalizing hash of pojos");
+    }
+    
+    public String getDebugData() {
+        DebugString debug = new DebugString();
+        Enumeration e = pojos.keys();
+        while (e.hasMoreElements()) {
+            Object pojo = (Object) e.nextElement();
+            NakedObjects object = (NakedObjects) pojos.get(pojo);
+            debug.append(pojo.toString());
+            debug.append("    ");
+            debug.appendln(object.toString());
+        }
+        return debug.toString();
+    }
+    
+    public String getDebugTitle() {
+        return "LoadedObjectsHashtable";
     }
 }
 

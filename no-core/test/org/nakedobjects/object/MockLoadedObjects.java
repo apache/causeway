@@ -61,6 +61,14 @@ public class MockLoadedObjects implements LoadedObjects {
     public Enumeration dirtyObjects() {
         return null;
     }
+
+    public String getDebugData() {
+        return null;
+    }
+
+    public String getDebugTitle() {
+        return null;
+    }
 }
 
 

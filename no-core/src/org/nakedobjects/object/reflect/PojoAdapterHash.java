@@ -1,9 +1,10 @@
 package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.utility.DebugInfo;
 
 
-public interface PojoAdapterHash {
+public interface PojoAdapterHash extends DebugInfo {
 
     public void add(Object pojo, Naked adapter);
 

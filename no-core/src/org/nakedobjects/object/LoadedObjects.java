@@ -1,10 +1,11 @@
 package org.nakedobjects.object;
 
 import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.utility.DebugInfo;
 
 import java.util.Enumeration;
 
-public interface LoadedObjects {
+public interface LoadedObjects extends DebugInfo {
     NakedObject getLoadedObject(Oid oid);
 
     boolean isLoaded(Oid oid);
