@@ -68,17 +68,17 @@ public abstract class AbstractView implements View {
     public Location getLocationWithinViewer() {
            if(getParent() != null) {
                Location location = getParent().getLocationWithinViewer();
-               getViewManager().getSpy().trace(this, "parent location ", location);
+               getViewManager().getSpy().addTrace(this, "parent location ", location);
                
                Padding parentPadding = parent.getPadding();
-               getViewManager().getSpy().trace(this, "parent padding ", parentPadding);
+               getViewManager().getSpy().addTrace(this, "parent padding ", parentPadding);
                location.move(parentPadding.getTop(), parentPadding.getLeft());
                
                location.move(x, y);
-               getViewManager().getSpy().trace(this, "new location ", location);
+               getViewManager().getSpy().addTrace(this, "new location ", location);
                return location;
            } else {
-               getViewManager().getSpy().trace(this, "my location ", getLocation());
+               getViewManager().getSpy().addTrace(this, "my location ", getLocation());
                
                return getLocation();
            }
@@ -360,19 +360,19 @@ public abstract class AbstractView implements View {
     
     public View identify(Location location) {
         location.move(-x, -y);
-        getViewManager().getSpy().trace(this, "node view location", location);
+        getViewManager().getSpy().addTrace(this, "node view location", location);
           return getView();
     }
 
     public IdentifiedView identify2(Location location) {
-        getViewManager().getSpy().trace(this, "mouse location within node view", location);
-        getViewManager().getSpy().trace("----");
+        getViewManager().getSpy().addTrace(this, "mouse location within node view", location);
+        getViewManager().getSpy().addTrace("----");
         return new IdentifiedView(getView(), location, getLocation());
     }
 
     public IdentifiedView identify3(Location locationWithinView, Offset offset) {
-      getViewManager().getSpy().trace(this, "mouse location within node view", locationWithinView);
-      getViewManager().getSpy().trace("----");
+      getViewManager().getSpy().addTrace(this, "mouse location within node view", locationWithinView);
+      getViewManager().getSpy().addTrace("----");
       return new IdentifiedView(getView(), locationWithinView, getLocation());
   }
 

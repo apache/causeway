@@ -247,15 +247,15 @@ public class ScrollBorder extends AbstractBorder {
         location.move(-getView().getBounds().getX(), -getView().getBounds().getY());
         location.move(-getView().getPadding().getLeft(), -getView().getPadding().getTop());
 
-        getViewManager().getSpy().trace(this, "scroll view location", location);
-        getViewManager().getSpy().trace(this, "content area", contentArea());
+        getViewManager().getSpy().addTrace(this, "scroll view location", location);
+        getViewManager().getSpy().addTrace(this, "content area", contentArea());
 
         if (contentArea().contains(location)) {
             location.move(getView().getBounds().getX(), getView().getBounds().getY());
             location.move(getView().getPadding().getLeft(), getView().getPadding().getTop());
 
             addOffset(location);
-            getViewManager().getSpy().trace(this, "identify at ", location);
+            getViewManager().getSpy().addTrace(this, "identify at ", location);
             return super.identify(location);
         } else {
  //           return super.identify(location);
@@ -265,9 +265,9 @@ public class ScrollBorder extends AbstractBorder {
 
     public IdentifiedView identify2(Location location) {
         Offset offset = offset();
-        getViewManager().getSpy().trace(this, "scroll offset", offset);
+        getViewManager().getSpy().addTrace(this, "scroll offset", offset);
         location.translate(offset);
-        getViewManager().getSpy().trace(this, "mouse location offset to", location);
+        getViewManager().getSpy().addTrace(this, "mouse location offset to", location);
         return super.identify2(location);
         
         /*getViewManager().getSpy().trace(this, "scroll view location", location);
@@ -290,11 +290,11 @@ public class ScrollBorder extends AbstractBorder {
     public IdentifiedView identify3(Location locationWithinViewer, Offset offset) {
         Location locationWithinBorder = new Location(locationWithinViewer);
         locationWithinBorder.translate(offset);
-        getViewManager().getSpy().trace(this, "mouse location within border", locationWithinBorder);
-        getViewManager().getSpy().trace(this, "non border area", contentArea());
+        getViewManager().getSpy().addTrace(this, "mouse location within border", locationWithinBorder);
+        getViewManager().getSpy().addTrace(this, "non border area", contentArea());
 
        if(overBorder(locationWithinBorder)) {
-            getViewManager().getSpy().trace(this, "over border area", contentArea());
+            getViewManager().getSpy().addTrace(this, "over border area", contentArea());
             return new IdentifiedView(getView(), locationWithinViewer, getLocation());
         } else {
             offset.add(-left, -top);
@@ -318,13 +318,13 @@ public class ScrollBorder extends AbstractBorder {
     
     public Location getLocationWithinViewer() {
         Location location = super.getLocationWithinViewer();
-        getViewManager().getSpy().trace(this, "original location ", location);
+        getViewManager().getSpy().addTrace(this, "original location ", location);
 
         Offset offset = offset();
-        getViewManager().getSpy().trace(this, "scroll offset ", offset);
+        getViewManager().getSpy().addTrace(this, "scroll offset ", offset);
 
         location.move(-offset.getDeltaX(), -offset.getDeltaY());
-        getViewManager().getSpy().trace(this, "new location ", location);
+        getViewManager().getSpy().addTrace(this, "new location ", location);
         return location;
        }
 

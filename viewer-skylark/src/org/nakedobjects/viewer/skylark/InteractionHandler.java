@@ -96,7 +96,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 	     */
 	    public void mouseClicked(MouseEvent me) {        	
 			viewer.setLiveDebugPositionInformation("mouse clicked ", downAt, mouseLocationWithinView, currentlyIdentifiedView);
-			spy.setAction("Mouse clicked " + mouseLocationWithinView);
+			spy.addAction("Mouse clicked " + mouseLocationWithinView);
 			
 	        if(currentlyIdentifiedView != null) {
 		        Click click = new Click(currentlyIdentifiedView, mouseLocationWithinView, mouseLocation, me.getModifiers());
@@ -105,7 +105,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 		        if (click.isButton3()) {
 		            saveCurrentFieldEntry();
 		            if (currentlyIdentifiedView != null) {
-		    	        spy.setAction(" popup " + mouseLocation + " over " + currentlyIdentifiedView);
+		    	        spy.addAction(" popup " + mouseLocation + " over " + currentlyIdentifiedView);
 		    	        viewer.popupMenu(click, currentlyIdentifiedView);
 			        	previouslyIdentifiedView = currentlyIdentifiedView;
 			        }
@@ -152,12 +152,12 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 	    	
 		    View target = currentlyIdentifiedView;
 	       	viewer.setLiveDebugPositionInformation("mouse dragged ", mouseLocation, mouseLocationWithinView, target);
-	       	spy.setAction("Mouse dragged " + mouseLocation);
-	       	spy.setAction("  target " + target + " " + mouseLocationWithinView);
+	       	spy.addAction("Mouse dragged " + mouseLocation);
+	       	spy.addAction("  target " + target + " " + mouseLocationWithinView);
       	
 			drag.updateLocationWithinViewer(mouseLocation, target, mouseLocationWithinView);
 			drag.drag();
-			spy.setAction("drag " + drag);
+			spy.addAction("drag " + drag);
 			
 			if(viewer.getOverlayView() == target) {
 				LOG.error("drag identified over overlay!!!! " + target);
@@ -177,16 +177,16 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 	       	viewer.setLiveDebugPositionInformation("mouse dragged ", mouseLocation, locationInView, previouslyIdentifiedView);
 
 	       	ViewAreaType type = previouslyIdentifiedView.viewAreaType(new Location(locationInView));
-	       	spy.setAction("drag start " + type);
+	       	spy.addAction("drag start " + type);
 			
 			
 			if (type == ViewAreaType.INTERNAL) {
 			    drag = InternalDrag.create(previouslyIdentifiedView, mouseLocation, locationInView, me.getModifiers());
-			    spy.setAction("drag from " + drag);
+			    spy.addAction("drag from " + drag);
 			} else {
 			    saveCurrentFieldEntry();
 
-			    spy.setAction("pickup " + type + ": " + previouslyIdentifiedView + " " + locationInView);
+			    spy.addAction("pickup " + type + ": " + previouslyIdentifiedView + " " + locationInView);
 
 			    if (type == ViewAreaType.VIEW) {
 			    	drag = ViewDrag.create(previouslyIdentifiedView, mouseLocation, locationInView, me.getModifiers());
@@ -261,10 +261,10 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 		        		if (mouseOver != previouslyIdentifiedView) {
 		        			
 		        			if (mouseOver == previouslyIdentifiedView) {
-		        				spy.setAction("moved into subview from " + previouslyIdentifiedView);
+		        				spy.addAction("moved into subview from " + previouslyIdentifiedView);
 		        				previouslyIdentifiedView.enteredSubview();
 		        			} else {
-		        			    spy.setAction("exited " + previouslyIdentifiedView);
+		        			    spy.addAction("exited " + previouslyIdentifiedView);
 		        				previouslyIdentifiedView.exited();
 		        			}
 		        			
@@ -273,10 +273,10 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 		        			
 		        			if(mouseOver != null) {
 		        				if (mouseOver == previouslyIdentified) {
-		        				    spy.setAction("moved back to from " + previouslyIdentified);
+		        				    spy.addAction("moved back to from " + previouslyIdentified);
 		        					mouseOver.exitedSubview();
 		        				} else {
-		        				    spy.setAction("entered " + mouseOver);
+		        				    spy.addAction("entered " + mouseOver);
 		        					mouseOver.entered();
 		        				}
 		        			}
@@ -286,7 +286,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 		        	
 		        	Location pointer = mouseLocationWithinView; //mouseLocation;
 		        	spy.setType(mouseOver.viewAreaType(new Location(pointer)));
-		        	spy.setAction("mouseMoved " + pointer);
+		        	spy.addAction("mouseMoved " + pointer);
 		        	mouseOver.mouseMoved(pointer);
 		        	
 		        	redraw();
@@ -308,7 +308,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 	        drag = null;
 	        downAt = new Location(mouseLocationWithinView);
 	        spy.setDownAt(downAt);
-	        spy.setAction("Mouse pressed " + downAt);
+	        spy.addAction("Mouse pressed " + downAt);
 	        
 	        viewer.setLiveDebugPositionInformation("mouse pressed ", downAt, mouseLocationWithinView, currentlyIdentifiedView);
 	        // hide an overlay view when not being pointed to
@@ -341,7 +341,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 
 
 				drag.updateLocationWithinViewer(mouseLocation, target, mouseLocationWithinView);
-				spy.setAction("drag ended at " + mouseLocationWithinView + " over " + target);
+				spy.addAction("drag ended at " + mouseLocationWithinView + " over " + target);
 	            drag.end();
 
 	            viewer.disposeOverlayView();

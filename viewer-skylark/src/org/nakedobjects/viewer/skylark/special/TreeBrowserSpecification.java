@@ -37,16 +37,17 @@ public class TreeBrowserSpecification implements ViewSpecification {
     public View createView(Content content, ViewAxis axis) {
         TreeBrowserFrame frame = new TreeBrowserFrame(content, this);
 		View view = addBorder(frame);
-		View node;
+		View rootNode;
 		axis = frame;
 		if(((ObjectContent) content).getObject() instanceof NakedCollection) {
-	    	node = collectionCompositeNode.createView(content, axis);
+	    	rootNode = collectionCompositeNode.createView(content, axis);
 	    } else {
-	        node = objectCompositeNode.createView(content, axis);
-	        frame.setSelectedNode(node);
+	        rootNode = objectCompositeNode.createView(content, axis);
+	        frame.setSelectedNode(rootNode);
 	    }
-        ResizeBorder leftPane = new ResizeBorder(new ScrollBorder(node));
-        leftPane.setRequiredSize(new Size(200, 200));
+        ResizeBorder leftPane = new ResizeBorder(new ScrollBorder(rootNode));
+        Size treeSize = new Size(200, 180);
+        leftPane.setRequiredSize(treeSize);
         frame.initLeftPane(leftPane);
         
         return view;

@@ -70,10 +70,11 @@ public class Viewer {
     private Bounds statusBarArea;
     private String developerStatus;
     private String debugPosition;
+    private InteractionSpy spy;
 
  
 	public void markDamaged(Bounds bounds ) {
-		LOG.debug("damaged area " + bounds);
+		spy.addDamagedArea(bounds);
 		synchronized(this) {
 			redrawArea = redrawArea == null ? bounds : redrawArea.union(bounds);
 		}
@@ -131,7 +132,7 @@ public class Viewer {
    */     
         this.renderingArea = renderingArea; //new ViewerFrame(this, title);
         this.listener = listener;
-        InteractionSpy spy = new InteractionSpy();
+        spy = new InteractionSpy();
 		new ViewerAssistant(this, updateNotifier, spy);
         
         popup = new DefaultPopupMenu();

@@ -112,4 +112,8 @@ public class Location {
     public void subtract(Location location) {
         move(-location.x, -location.y);    
     }
+
+    public void add(Offset offset) {
+        move(offset.getDeltaX(), offset.getDeltaY());
+    }
 }

@@ -9,6 +9,7 @@ import org.nakedobjects.viewer.skylark.IdentifiedView;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Offset;
+import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
@@ -38,8 +39,8 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
         b.append(super.debugDetails());
         b.append("\nBrowser:   ");
         b.append(this);
-        b.append("\n           left " + left);
-        b.append("\n           right " + right);
+        b.append("\n           left: " + left.getBounds() + " " + left + ": " + left.getContent() );
+        b.append("\n           right: " + right.getBounds() + " " + right + ": " + right.getContent());
 
         b.append("\n\n");
 
@@ -106,15 +107,22 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
 
     public void layout() {
         if (invalidLayout) {
-            left.layout();
-            left.setSize(left.getRequiredSize());
-
+           Size treeBrowserSize = left.getRequiredSize();
+           
             if (right != null) {
                 right.layout();
-                right.setLocation(new Location(rightViewOffet(), 0));
                 right.setSize(right.getRequiredSize());
+                treeBrowserSize.ensureHeight(right.getSize().getHeight());
             }
 
+            left.layout();
+            left.setRequiredSize(treeBrowserSize);
+            left.setSize(left.getRequiredSize());
+           
+            if (right != null) {
+                right.setLocation(new Location(rightViewOffet(), 0));
+            }
+            
             invalidLayout = false;
         }
     }
@@ -151,15 +159,22 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     }
 
     public IdentifiedView identify3(Location location, Offset offset) {
-        getViewManager().getSpy().trace(this, "mouse location within frame", location);
-    
+        getViewManager().getSpy().addTrace(this, "mouse location within browser frame", location);   
+  
+        Location locationWithinContent = new Location(location);
+        locationWithinContent.add(offset);
+        getViewManager().getSpy().addTrace(this, "mouse location within browser frame content", locationWithinContent);   
+
         
-        if (left != null && left.getBounds().contains(location)) {
-            return left.identify3(location, offset);
+        
+        if (left != null && left.getBounds().contains(locationWithinContent)) {
+            getViewManager().getSpy().addTrace("--> subview: " + left);
+            return left.identify3(locationWithinContent, new Offset(0, 0));
         }
-        if (right != null && right.getBounds().contains(location)) {
-            offset.add(-rightViewOffet(), 0);
-            return right.identify3(location, offset);
+        if (right != null && right.getBounds().contains(locationWithinContent)) {
+            getViewManager().getSpy().addTrace("--> subview: " + right);
+          //  offset.subtract(rightViewOffet(), 0);
+            return right.identify3(locationWithinContent, new Offset(-rightViewOffet(), 0));
         }
 
         return new IdentifiedView(getView(), location, getLocation());

@@ -149,11 +149,11 @@ public class AbstractBorder extends AbstractViewDecorator {
     public IdentifiedView identify3(Location locationWithinViewer, Offset offset) {
         Location locationWithinBorder = new Location(locationWithinViewer);
         locationWithinBorder.translate(offset);
-        getViewManager().getSpy().trace(this, "mouse location within border", locationWithinBorder);
-        getViewManager().getSpy().trace(this, "non border area", contentArea());
+        getViewManager().getSpy().addTrace(this, "mouse location within border", locationWithinBorder);
+        getViewManager().getSpy().addTrace(this, "non border area", contentArea());
 
        if(overBorder(locationWithinBorder)) {
-            getViewManager().getSpy().trace(this, "over border area", contentArea());
+            getViewManager().getSpy().addTrace(this, "over border area", contentArea());
             return new IdentifiedView(getView(), locationWithinViewer, getLocation());
         } else {
             offset.add(-left, -top);

@@ -5,17 +5,6 @@ import java.awt.Graphics;
 
 
 public class InteractionSpy {
-    private String label[][] = new String[2][14];
-    private int event;
-    private int actionCount;
-    private SpyFrame spy;
-    private int traceIndex;
-    private String[] trace = new String[20];
-
-    public InteractionSpy() {
-        spy = new SpyFrame();
-        spy.setBounds(10, 10, 600, 360);
-    }
 
     private class SpyFrame extends Frame {
         public SpyFrame() {
@@ -24,10 +13,10 @@ public class InteractionSpy {
 
         public void paint(Graphics g) {
             int baseline = getInsets().top + 15;
-           
+
             g.drawString("Event " + event, 10, baseline);
             baseline += 18;
-            
+
             for (int i = 0; i < label[0].length; i++) {
                 if (label[0][i] != null) {
                     g.drawString(label[0][i], 10, baseline);
@@ -35,7 +24,7 @@ public class InteractionSpy {
                 }
                 baseline += 12;
             }
-            
+
             baseline += 6;
             for (int i = 0; i < traceIndex; i++) {
                 if (trace[i] != null) {
@@ -46,6 +35,35 @@ public class InteractionSpy {
         }
     }
 
+    private int actionCount;
+    private String damagedArea;
+    private int event;
+    private String label[][] = new String[2][14];
+    private SpyFrame spy;
+    private String[] trace = new String[30];
+    private int traceIndex;
+
+    public InteractionSpy() {
+        spy = new SpyFrame();
+        spy.setBounds(10, 10, 600, 360);
+    }
+
+    public void addDamagedArea(Bounds bounds) {
+        damagedArea += bounds + "; ";
+        set(7, "Damaged areas", damagedArea);
+    }
+
+    public void reset() {
+        traceIndex = 0;
+        actionCount = 8;
+        damagedArea = "";
+        setDownAt(null);
+        for (int i = actionCount; i < label[0].length; i++) {
+            label[0][i] = null;
+            label[1][i] = null;
+        }
+    }
+
     private void set(int index, String label, Object debug) {
         this.label[0][index] = debug == null ? null : label + ":";
         this.label[1][index] = debug == null ? null : debug.toString();
@@ -53,16 +71,20 @@ public class InteractionSpy {
         spy.repaint();
     }
 
-    public void show() {
-        spy.show();
+    public void setAbsoluteLocation(Location absoluteLocation) {
+        set(6, "Absolute view location", absoluteLocation);
     }
 
-    public void setOver(Object data) {
-        set(2, "Mouse over", data);
+    public void addAction(String action) {
+        set(actionCount++, "Action", action);
     }
 
     public void setDownAt(Location downAt) {
         set(0, "Down at", downAt);
+    }
+
+    public void setEvent(int event) {
+        this.event = event;
     }
 
     public void setLocationInView(Location internalLocation) {
@@ -73,25 +95,8 @@ public class InteractionSpy {
         set(1, "Mouse location", mouseLocation);
     }
 
-    public void setAction(String action) {
-        set(actionCount++, "Action", action);
-    }
-
-    public void reset() {
-        traceIndex = 0;
-        actionCount = 7;
-        setDownAt(null);
-        for (int i = actionCount; i < label[0].length; i++) {
-            label[0][i] = null;
-            label[1][i] = null;
-        }
-    }
-
-    public void trace(View view, String message, Object object) {
-        if (traceIndex < trace.length) {
-            trace[traceIndex] = view.getClass().getName() + " " + message + ": " + object;
-            traceIndex++;
-        }
+    public void setOver(Object data) {
+        set(2, "Mouse over", data);
     }
 
     public void setType(ViewAreaType type) {
@@ -102,19 +107,22 @@ public class InteractionSpy {
         set(5, "View location", locationWithinViewer);
     }
 
-    public void trace(String message) {
+    public void show() {
+        spy.show();
+    }
+
+    public void addTrace(String message) {
         if (traceIndex < trace.length) {
-            trace[traceIndex] =message ;
+            trace[traceIndex] = message;
             traceIndex++;
-        }    
+        }
     }
 
-    public void setEvent(int event) {
-        this.event = event;
-    }
-
-    public void setAbsoluteLocation(Location absoluteLocation) {
-        set(6, "Absolute view location", absoluteLocation);
+    public void addTrace(View view, String message, Object object) {
+        if (traceIndex < trace.length) {
+            trace[traceIndex] = view.getClass().getName() + " " + message + ": " + object;
+            traceIndex++;
+        }
     }
 }
 
