@@ -12,13 +12,7 @@ import org.nakedobjects.object.reflect.Field;
 import org.nakedobjects.object.reflect.NakedClassException;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.value.Date;
-import org.nakedobjects.object.value.FloatingPointNumber;
-import org.nakedobjects.object.value.Logical;
-import org.nakedobjects.object.value.Percentage;
-import org.nakedobjects.object.value.WholeNumber;
 import org.nakedobjects.security.SecurityContext;
-import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -69,42 +63,14 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         }
     }
 
-    /**
-     * Check that the specified object menu item is currently disabled. If it is enabled the test
-     * fails.
-     * 
-     * @group assert
-     */
+    /** @deprecated */
     public void assertCantInvokeAction(String name) {
-        Action action;
-
-        action = getAction(name);
-
-        Assert.assertTrue("action " + name + " could not be invoked:", action.getAbout(context, (NakedObject) getForObject())
-                .canUse().isVetoed());
+        assertActionUnusable(name);
     }
 
-    /**
-     * Check that dragged object cannot be dropped on this object. If it can be dropped the test
-     * fails.
-     * 
-     * @group assert
-     */
+    /** @deprecated */
     public void assertCantInvokeAction(String name, TestObject parameter) {
-        NakedObject parameterObject = (NakedObject) parameter.getForObject();
-        Action action = null;
-
-        try {
-            NakedClass nakedClass = ((NakedObject) getForObject()).getNakedClass();
-            NakedClass[] parameters = new NakedClass[] { parameterObject.getNakedClass() };
-            action = nakedClass.getClassAction(Action.USER, name, parameters);
-        } catch (NakedClassException e) {
-            Assert.fail("Can't invoke action " + name + " " + parameterObject.getShortClassName() + " on a "
-                    + getForObject().getShortClassName());
-        }
-
-        Assert.assertTrue("action not allowed on " + getForObject(), action.getAbout(context, (NakedObject) getForObject(),
-                parameterObject).canUse().isVetoed());
+        assertActionUnusable(name, parameter);
     }
 
     public void assertEmpty(String fieldName) {
@@ -112,7 +78,9 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     }
 
     public void assertEmpty(String message, String fieldName) {
-        assertFieldExists(fieldName);
+        Field field = fieldFor(fieldName);
+        assertFieldVisible(fieldName, field);
+         
         TestNaked actual = getField(fieldName);
         Object object = actual.getForObject();
 
@@ -151,7 +119,9 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
      *  
      */
     public void assertFieldContains(String message, String fieldName, NakedValue expectedValue) {
-        assertFieldExists(fieldName);
+        Field field = fieldFor(fieldName);
+        assertFieldVisible(fieldName, field);
+         
         TestNaked actual = getField(fieldName);
         NakedValue actualValue = ((NakedValue) actual.getForObject());
 
@@ -169,7 +139,9 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
      * @group assert
      */
     public void assertFieldContains(String message, String fieldName, String expectedValue) {
-        assertFieldExists(fieldName);
+        Field field = fieldFor(fieldName);
+        assertFieldVisible(fieldName, field);
+         
         Naked object = getField(fieldName).getForObject();
 
         if (object instanceof InternalCollection) {
@@ -197,7 +169,9 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
      * @group assert
      */
     public void assertFieldContains(String message, String fieldName, TestObject expectedView) {
-        assertFieldExists(fieldName);
+        Field field = fieldFor(fieldName);
+        assertFieldVisible(fieldName, field);
+         
         Naked actualObject = getField(fieldName).getForObject();
 
         if (expectedView == null) {
@@ -240,7 +214,9 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     }
 
     public void assertFieldContainsType(String message, String fieldName, String expectedType) {
-        assertFieldExists(fieldName);
+        Field field = fieldFor(fieldName);
+        assertFieldVisible(fieldName, field);
+         
         TestNaked actual = getField(fieldName);
         String actualType = ((Naked) actual.getForObject()).getShortClassName();
 
@@ -268,48 +244,40 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         }
     }
 
-    protected void assertFieldExists(String name) {
-        if (!fields.containsKey(name)) { throw new IllegalArgumentException("Field " + name + " is not in the object "
-                + getForObject()); }
+    public void assertFieldExists(String fieldName) {
+        try {
+            ((NakedObject) getForObject()).getNakedClass().getField(fieldName);
+        } catch (NakedClassException e) {
+            throw new NakedAssertionFailedError("No field called " + fieldName + " in " + getForObject().getClass().getName());
+        } 
+    
     }
 
+    public void assertActionExists(String name) {
+        if (getAction(name) == null) { 
+            throw new NakedAssertionFailedError("Field " + name + " is not found in " + getForObject()); }
+    }
+
+    public void assertActionExists(String name, TestObject parameter) {
+        if (getAction(name, parameter) == null) { 
+            throw new NakedAssertionFailedError("Field " + name + " is not found in " + getForObject()); }
+    }
+
+
     public void assertFieldInvisible(String fieldName) {
-        // TODO implement
-        throw new NotImplementedException();
+        Field field = fieldFor(fieldName);
+        boolean canAccess = field.canAccess(new SecurityContext(), (NakedObject) getForObject());
+        assertFalse("Field " + fieldName + " is visible", canAccess);
     }
 
     /**
      * Check that a field exists with the specified name, and it is read-only. If it does not exist,
      * or is writable, the test fails.
      * 
-     * @group assert
+     * @deprecated
      */
     public void assertFieldReadOnly(String fieldName) {
-        assertFieldExists(fieldName);
-        if (getField(fieldName) == null) {
-            Assert.fail("Field " + fieldName + " could not be found");
-        }
-        try {
-            NakedValue att = (NakedValue) getField(fieldName).getForObject();
-            String value = "";
-
-            if (att instanceof WholeNumber) {
-                value = "1";
-            } else if (att instanceof Date) {
-                value = "1-Dec-00";
-            } else if (att instanceof FloatingPointNumber) {
-                value = "1.0";
-            } else if (att instanceof Logical) {
-                value = "True";
-            } else if (att instanceof Percentage) {
-                value = "10%";
-            }
-
-            fieldEntry(fieldName, value);
-            Assert.fail("Field " + fieldName + " could be set");
-        } catch (IllegalActionError expected) {
-            ;
-        }
+        assertFieldUnmodifiable(fieldName);
     }
 
     public void assertNotEmpty(String fieldName) {
@@ -317,7 +285,9 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     }
 
     public void assertNotEmpty(String message, String fieldName) {
-        assertFieldExists(fieldName);
+        Field field = fieldFor(fieldName);
+        assertFieldVisible(fieldName, field);
+         
         TestNaked actual = getField(fieldName);
         Object object = actual.getForObject();
 
@@ -381,7 +351,10 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
      * @group action
      */
     public void associate(String fieldName, TestObject object) {
-        assertFieldExists(fieldName);
+        Field field = fieldFor(fieldName);
+        assertFieldVisible(fieldName, field);
+        assertFieldModifiable(fieldName, field);
+         
         TestNaked targetField = getField(fieldName);
 
         if (targetField instanceof TestValue) { throw new IllegalActionError(
@@ -407,13 +380,19 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
      * @group action
      */
     public void clearAssociation(String fieldName) {
-        TestObject targetField = (TestObject) fields.get(fieldName);
+        Field field = fieldFor(fieldName);
+        assertFieldVisible(fieldName, field);
+        assertFieldModifiable(fieldName, field);
+         
+       TestObject targetField = (TestObject) fields.get(fieldName);
 
         if (targetField instanceof TestValue) {
             throw new IllegalActionError("set(..) not allowed on value target field; use fieldEntry(..) instead");
         } else {
             NakedObject ref = (NakedObject) fieldFor(fieldName).get((NakedObject) getForObject());
-            ((OneToOneAssociation) fieldFor(fieldName)).clearAssociation((NakedObject) getForObject(), ref);
+            if(ref != null) {
+                ((OneToOneAssociation) fieldFor(fieldName)).clearAssociation((NakedObject) getForObject(), ref);
+            }
         }
     }
 
@@ -425,7 +404,10 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
      * @group action
      */
     public void clearAssociation(String fieldName, String title) {
-        assertFieldExists(fieldName);
+        Field field = fieldFor(fieldName);
+        assertFieldVisible(fieldName, field);
+        assertFieldModifiable(fieldName, field);
+         
         TestObject viewToRemove = getField(fieldName, title);
         Field assoc = fieldFor(fieldName);
 
@@ -450,19 +432,23 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
      * GUI, and should therefore be given in the correct form and formatted correctly. For fields
      * that normally use some other interaction, e.g. a checkbox, then the correct textual form must
      * be used (for the checkbox this is 'TRUE' and 'FALSE').
-     * 
-     * @group action
      */
-    public void fieldEntry(String name, String value) {
-        TestValue field;
-
-        assertFieldExists(name);
-        Object view = fields.get(name);
+    public void fieldEntry(String fieldName, String value) {
+        Field field = fieldFor(fieldName);
+        assertFieldVisible(fieldName, field);
+        assertFieldModifiable(fieldName, field);
+         
+        TestValue testField;
+        Object view = fields.get(fieldName);
 
         if (view instanceof TestValue) {
-            field = (TestValue) view;
-            field.setForObject((Naked) fieldFor(name).get((NakedObject) getForObject()));
-            ((TestValue) field).fieldEntry(value);
+            testField = (TestValue) view;
+            Naked valueObject = (Naked) fieldFor(fieldName).get((NakedObject) getForObject());
+            if(valueObject == null) {
+                throw new NakedAssertionFailedError("Field "+ fieldName + " contains null, but should contain an NakedValue object");
+            }
+            testField.setForObject(valueObject);
+            testField.fieldEntry(value);
             ((NakedObject) getForObject()).objectChanged();
         } else {
             throw new IllegalActionError("Can only make an entry (eg by keyboard) into a value field");
@@ -470,13 +456,9 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     }
 
     private Field fieldFor(String fieldName) {
-        assertFieldExists(fieldName);
         Field att = (Field) ((NakedObject) getForObject()).getNakedClass().getField(fieldName);
-
         if (att == null) {
-            Assert.fail("No field called " + fieldName + " in " + getForObject().getClass().getName());
-
-            return null;
+            throw new NakedAssertionFailedError("No field called " + fieldName + " in " + getForObject().getClass().getName());
         } else {
             return att;
         }
@@ -490,6 +472,9 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
             action = nakedClass.getObjectAction(Action.USER, name);
         } catch (NakedClassException e) {
             Assert.fail(e.getMessage());
+        }
+        if(action == null) {
+            Assert.fail("Method not found: " + name);
         }
         return action;
     }
@@ -524,7 +509,9 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     }
 
     public TestNaked getField(String fieldName) {
-        assertFieldExists(fieldName);
+        Field field = fieldFor(fieldName);
+        assertFieldVisible(fieldName, field);
+         
         TestNaked view = (TestNaked) fields.get(fieldName);
 
         view.setForObject((Naked) fieldFor(fieldName).get((NakedObject) getForObject()));
@@ -537,7 +524,9 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
      * title.
      */
     public TestObject getField(String fieldName, String title) {
-        assertFieldExists(fieldName);
+        Field field = fieldFor(fieldName);
+        assertFieldVisible(fieldName, field);
+                 
         TestObject view = (TestObject) fields.get(fieldName);
 
         view.setForObject((Naked) fieldFor(fieldName).get((NakedObject) getForObject()));
@@ -571,7 +560,9 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
      * returns the title of the object as a String
      */
     public String getFieldTitle(String fieldName) {
-        assertFieldExists(fieldName);
+        Field field = fieldFor(fieldName);
+        assertFieldVisible(fieldName, field);
+         
         if (getField(fieldName).getForObject() == null) { throw new IllegalActionError("No object to get title from in field "
                 + fieldName + " within " + getForObject()); }
 
@@ -590,64 +581,36 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     /**
      * Invokes this object's zero-parameter action method of the the given name. This mimicks the
      * right-clicking on an object and subsequent selection of a menu item.
-     * 
-     * @group action
      */
     public TestObject invokeAction(String name) {
-        Action action;
+        Action action = getAction(name);
+        assertActionUsable(name, action);
+        assertActionVisible(name, action);
 
-        try {
-            NakedClass nakedClass = ((NakedObject) getForObject()).getNakedClass();
-            action = nakedClass.getObjectAction(Action.USER, name);
-            if (action == null) { throw new IllegalActionError("No action '" + name + "' in " + getForObject()); }
-        } catch (NakedClassException e) {
-            throw new IllegalActionError(e.getMessage());
-        }
-
-        org.nakedobjects.object.control.Permission canUse = action.getAbout(context, (NakedObject) getForObject()).canUse();
-
-        if (canUse.isVetoed()) {
-            throw new IllegalActionError("action " + name + " cannot be invoked on " + getForObject() + ": " + canUse.getReason());
-        } else {
-            NakedObject result = action.execute((NakedObject) getForObject());
-
-            return ((result == null) ? null : factory().createTestObject(context, result));
-        }
+        NakedObject result = action.execute((NakedObject) getForObject());	
+        return ((result == null) ? null : factory().createTestObject(context, result));
     }
 
     /**
      * Drop the specified view (object) onto this object and invoke the corresponding
      * <code>action</code> method. A new view representing the returned object, if any is
      * returned, from the invoked <code>action</code> method is returned by this method.
-     * 
-     * @group action
      */
     public TestObject invokeAction(String name, TestObject parameter) {
+        Action action = getAction(name, parameter);
+
         NakedObject dropObject = (NakedObject) parameter.getForObject();
-        Action action;
+        boolean allowed = action.getAbout(context, (NakedObject) getForObject(), dropObject).canUse().isAllowed();
+        assertTrue("action " + name + " is unusable", allowed);
 
-        try {
-            NakedClass nakedClass = ((NakedObject) getForObject()).getNakedClass();
-            NakedClass[] parameters = new NakedClass[] { dropObject.getNakedClass() };
-            action = nakedClass.getObjectAction(Action.USER, name, parameters);
-        } catch (NakedClassException e) {
-            throw new IllegalActionError("Can't invoke " + name + " with " + dropObject.getShortClassName() + " on a "
-                    + getForObject().getShortClassName());
-        }
-
-        if (action == null) { throw new IllegalActionError("invoke  " + name + "(" + parameter + ") not allowed on "
-                + getForObject()); }
-
-        if (action.getAbout(context, (NakedObject) getForObject(), dropObject).canUse().isVetoed()) {
-            throw new IllegalActionError("invoke " + name + " not allowed on " + getForObject());
+        allowed = action.getAbout(context, (NakedObject) getForObject(), dropObject).canAccess().isAllowed();
+        assertTrue("action " + name + " is invisible", allowed);
+ 
+        NakedObject result = action.execute((NakedObject) getForObject(), dropObject);
+        if (result == null) {
+            return null;
         } else {
-
-            NakedObject result = action.execute((NakedObject) getForObject(), dropObject);
-            if (result == null) {
-                return null;
-            } else {
-                return factory().createTestObject(context, result);
-            }
+            return factory().createTestObject(context, result);
         }
     }
 
@@ -664,15 +627,8 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
      * against the expected value.
      */
     public void testField(String fieldName, String setValue, String expectedValue) {
-        assertFieldExists(fieldName);
         fieldEntry(fieldName, setValue);
         Assert.assertEquals("Field " + fieldName + "contains unexpected value", expectedValue, getField(fieldName).getTitle());
-
-        /*
-         * if (!getField(fieldName).getTitle().equals(expectedValue)) { Assert.fail("Expected field
-         * to contain " + expectedValue + " but contained " + setValue); Assert.assertEquals("Field " +
-         * fieldName + "contains unexpected value", expectedValue, getField(fieldName).getTitle()); }
-         */
     }
 
     /**
@@ -680,12 +636,122 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
      * against the expected value.
      */
     public void testField(String fieldName, TestObject expected) {
-        assertFieldExists(fieldName);
         associate(fieldName, expected);
         Assert.assertEquals(expected.getForObject(), getField(fieldName).getForObject());
     }
 
     public String toString() {
         return getForObject().toString();
+    }
+
+    
+    
+    public void assertActionUnusable(String name) {
+        assertActionUnusable(name, getAction(name));
+    }
+    
+    private void assertActionUnusable(String name, Action action) {
+        boolean vetoed = action.getAbout(context, (NakedObject) getForObject()).canUse().isVetoed();
+        Assert.assertTrue("action " + name + " is usable", vetoed);
+    }
+
+    public void assertActionVisible(String name) {
+        assertActionVisible(name, getAction(name));
+    }
+
+    private void assertActionVisible(String name, Action action) {
+        boolean allowed = action.getAbout(context, (NakedObject) getForObject()).canAccess().isAllowed();
+        assertTrue("action " + name + " is invisible", allowed);
+    }
+
+    public void assertActionInvisible(String name) {
+        assertActionInvisible(name, getAction(name));
+    }
+
+    private void assertActionInvisible(String name, Action action) {
+        boolean vetoed = action.getAbout(context, (NakedObject) getForObject()).canAccess().isVetoed();
+        Assert.assertTrue("action " + name + " is visible", vetoed);
+    }
+
+    public void assertActionVisible(String name, TestObject parameter) {
+        assertActionVisible(name, getAction(name, parameter));
+    }
+
+    public void assertActionInvisible(String name, TestObject parameter) {
+        assertActionInvisible(name, getAction(name, parameter));
+    }
+
+    public void assertActionUsable(String name) {
+        assertActionUsable(name, getAction(name));
+    }
+
+    private void assertActionUsable(String name, Action action) {
+        boolean allowed = action.getAbout(context, (NakedObject) getForObject()).canUse().isAllowed();
+        assertTrue("action " + name + " is unusable", allowed);
+    }
+
+    public void assertActionUnusable(String name, TestObject parameter) {
+       assertActionUnusable(name, getAction(name, parameter));
+    }
+
+    public Action getAction(String name, TestObject parameter) {
+        NakedObject parameterObject = (NakedObject) parameter.getForObject();
+        try {
+            NakedClass nakedClass = ((NakedObject) getForObject()).getNakedClass();
+            NakedClass[] parameters = new NakedClass[] { parameterObject.getNakedClass() };
+            Action action = nakedClass.getObjectAction(Action.USER, name, parameters);
+            if(action == null) {
+                Assert.fail("Method not found: " + name + "(" + parameter + ")");
+            }
+            return action;
+        } catch (NakedClassException e) {
+            String parameterName = parameterObject.getShortClassName();
+            String targetName = getForObject().getShortClassName();
+            Assert.fail("Can't find action " + name + " with " + parameterName + " on a "
+                    + targetName);
+            return null;
+        }
+    }
+
+    public void assertActionUsable(String name, TestObject parameter) {
+        assertActionUsable(name, getAction(name, parameter));
+    }
+
+    public void assertFieldVisible(String fieldName) {
+        Field field = fieldFor(fieldName);
+        assertFieldVisible(fieldName, field);
+    }
+    
+    private void assertFieldVisible(String fieldName, Field field) {
+        boolean canAccess = field.canAccess(new SecurityContext(), (NakedObject) getForObject());
+        assertTrue("Field " + fieldName + " is invisible", canAccess);    
+    }
+
+    public void assertFieldModifiable(String fieldName) {
+        Field field = fieldFor(fieldName);
+        assertFieldModifiable(fieldName, field);
+    }
+    
+    private void assertFieldModifiable(String fieldName, Field field) {
+        boolean canAccess = field.canUse(new SecurityContext(), (NakedObject) getForObject());
+        assertTrue("Field " + fieldName + " is unmodifiable", canAccess);
+    }
+   
+    private void assertFalse(String message, boolean condition) {
+        if(condition) {
+            throw new NakedAssertionFailedError(message);
+        }
+    }
+    
+    private void assertTrue(String message, boolean condition) {
+        if(! condition) {
+            throw new NakedAssertionFailedError(message);
+        }
+    }
+
+    public void assertFieldUnmodifiable(String fieldName) {      
+        Field field = fieldFor(fieldName);
+        boolean canAccess = field.canUse(new SecurityContext(), (NakedObject) getForObject());
+        assertFalse("Field " + fieldName + " is modifiable", canAccess);
     }
 }

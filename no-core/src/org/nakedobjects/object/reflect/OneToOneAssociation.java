@@ -18,6 +18,10 @@ public class OneToOneAssociation extends Association {
     	return getAbout(context, object, null).canAccess().isAllowed();
     }
     
+    public boolean canUse(SecurityContext context, NakedObject object) {
+    	return getAbout(context, object, null).canUse().isAllowed();
+    }
+    
     public void clear(NakedObject inObject) {
     	Naked associate = get(inObject);
     	if(associate != null) {
@@ -25,15 +29,10 @@ public class OneToOneAssociation extends Association {
     	}
     }
 
- 
-    /**
-            Remove an associated object (the element) from the specified NakedObject in the association field represented by this object.
-     */
     public void clearAssociation(NakedObject inObject, NakedObject associate) {
         if (associate == null) {
             throw new NullPointerException("Must specify the item to remove/dissociate");
         }
-
     	delegatedTo.clearAssociation(inObject, associate);
     }
 
@@ -67,10 +66,7 @@ public class OneToOneAssociation extends Association {
 		return delegatedTo.isDerived();
 	}
 
-    /**
-     Set the data in an NakedObject.  Passes in an existing object to for the EO to reference.
-     */
-    public void setAssociation(NakedObject inObject, NakedObject associate) {
+  public void setAssociation(NakedObject inObject, NakedObject associate) {
         if (associate == null) {
             throw new NullPointerException("Must specify an object to be associated");
         }

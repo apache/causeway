@@ -18,6 +18,10 @@ public class OneToManyAssociation extends Association {
         return getAbout(context, object, null, true).canAccess().isAllowed();
     }
 
+    public boolean canUse(SecurityContext context, NakedObject object) {
+        return getAbout(context, object, null, true).canUse().isAllowed();
+    }
+
     public void clear(NakedObject inObject) {
         delegatedTo.removeAllAssociations(inObject);
     }

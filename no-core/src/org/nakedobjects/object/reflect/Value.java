@@ -31,6 +31,10 @@ public class Value extends Field {
 		return getAbout(context, object).canAccess().isAllowed();
 	}
     
+    public boolean canUse(SecurityContext context, NakedObject object) {
+		return getAbout(context, object).canUse().isAllowed();
+	}
+    
     public String getLabel(SecurityContext context, NakedObject object) {
     	About about = getAbout(context, object);
 

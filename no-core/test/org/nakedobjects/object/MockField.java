@@ -24,6 +24,10 @@ public class MockField extends Field {
         return false;
     }
 
+    public boolean canUse(SecurityContext context, NakedObject object) {
+        return false;
+    }
+
     public String getLabel(SecurityContext context, NakedObject object) {
         return null;
     }

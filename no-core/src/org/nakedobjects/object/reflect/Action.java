@@ -78,6 +78,10 @@ public class Action extends Member {
     public boolean canAccess(SecurityContext context, NakedObject object) {
         return getAbout(context, object).canAccess().isAllowed();
     }
+    
+    public boolean canUse(SecurityContext context, NakedObject object) {
+        return getAbout(context, object).canUse().isAllowed();
+    }
 
     public NakedObject execute(NakedObject object) {
         return execute(object, new NakedObject[0]);

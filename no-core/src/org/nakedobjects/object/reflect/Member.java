@@ -37,6 +37,8 @@ public abstract class Member {
     
     public abstract boolean canAccess(SecurityContext context, NakedObject object);
 
+    public abstract boolean canUse(SecurityContext context, NakedObject object);
+
     public abstract String getLabel(SecurityContext context, NakedObject object);
     	
     protected String getLabel(About about) {

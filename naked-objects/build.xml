@@ -43,9 +43,9 @@
 		<mkdir dir="tmp"/>
 		<junitreport tofile="tmp/combined.xml">
 			<fileset dir="../no-core/build/test-run"/>
-			<fileset dir="../no-containers/build/test-run"/>
 			<fileset dir="../example-ecs/build/test-run"/>
 			<fileset dir="../viewer-skylark/build/test-run"/>
+			<fileset dir="../no-xat/build/test-run"/>
 			<report format="frames" todir="exploration/tests"/>
 		</junitreport>
 

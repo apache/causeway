@@ -17,16 +17,26 @@ public class HtmlTestObject extends TestObjectDecorator {
         this.doc = documentor;
     }
 
+    /** @deprecated */
     public void assertCantInvokeAction(String name) {
-        super.assertCantInvokeAction(name);
+        assertActionUnusable(name);
+    }
+    
+    public void assertActionUnusable(String name) {
+        super.assertActionUnusable(name);
         doc("Right clicking on the " + doc.objectString(getForObject()));
         doc(" shows that <strong>" + name);
         doc(getAction(name).hasReturn() ? "..." : "");
         doc("</strong> is not currently available. ");
     }
 
+    /** @deprecated */
     public void assertCantInvokeAction(String name, TestObject parameter) {
-        super.assertCantInvokeAction(name, parameter);
+        assertActionUsable(name, parameter);
+    }
+    
+    public void assertActionUsable(String name, TestObject parameter) {
+        super.assertActionUsable(name, parameter);
         doc("note that it can't be dropped onto the ");
         doc(doc.objectString(getForObject()) + ". ");
     }

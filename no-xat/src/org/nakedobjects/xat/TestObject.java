@@ -6,21 +6,68 @@ import org.nakedobjects.object.reflect.Action;
 
 public interface TestObject extends TestNaked {
 
+    public void assertActionExists(String name);
+    
+    public void assertActionExists(String name, TestObject parameter);
+            
     /**
-     * Check that the specified object menu item is currently disabled. If it is enabled the test
-     * fails.
-     * 
-     * @group assert
+      * @deprecated replaced by assertActionUnusable
      */
     void assertCantInvokeAction(String name);
 
     /**
-     * Check that dragged object cannot be dropped on this object. If it can be dropped the test
+     * Check that the specified object menu item is currently disabled. If it is enabled the test
      * fails.
-     * 
-     * @group assert
+     */
+    void assertActionUnusable(String name);
+
+    /**
+     * Check that the specified object menu item is currently visible. If it is invisible the test
+     * fails.
+     */
+    void assertActionVisible(String name);
+
+    /**
+     * Check that the specified object menu item is currently invisible. If it is visible the test
+     * fails.
+     */
+    void assertActionInvisible(String name);
+
+    /**
+     * Check that the specified object menu item is currently visible. If it is invisible the test
+     * fails.
+     */
+    void assertActionVisible(String name, TestObject parameter);
+
+    /**
+     * Check that the specified object menu item is currently invisible. If it is visible the test
+     * fails.
+     */
+    void assertActionInvisible(String name, TestObject parameter);
+
+
+    /**
+     * Check that the specified object menu item is currently available. If it is disabled the test
+     * fails.
+     */
+    void assertActionUsable(String name);
+
+    /**
+     * @deprecated replaced by assertActionUnusable
      */
     void assertCantInvokeAction(String name, TestObject parameter);
+
+    /**
+     * Check that dragged object cannot be dropped on this object. If it can be dropped the test
+     * fails.
+     */
+    void assertActionUnusable(String name, TestObject parameter);
+
+    /**
+     * Check that dragged object can be dropped on this object. If it cannot be dropped the test
+     * fails.
+     */
+    void assertActionUsable(String name, TestObject parameter);
 
     void assertEmpty(String fieldName);
 
@@ -31,8 +78,6 @@ public interface TestObject extends TestNaked {
     /**
      * Check that the specified field contains the expected value. If it does not contain the
      * expected value the test fails.
-     * 
-     * @group assert
      */
     void assertFieldContains(String fieldName, String expectedValue);
 
@@ -44,7 +89,6 @@ public interface TestObject extends TestNaked {
      * 
      * @param message
      *                   text to add to the failure message, which is displayed after a failure.
-     * @group assert
      */
     void assertFieldContains(String message, String fieldName, String expectedValue);
 
@@ -61,8 +105,6 @@ public interface TestObject extends TestNaked {
     /**
      * Check that the specified field contains the expected object (as represented by the specifed
      * view. If it does not contain the expected object the test fails.
-     * 
-     * @group assert
      */
     void assertFieldContains(String fieldName, TestObject expectedView);
 
@@ -74,13 +116,19 @@ public interface TestObject extends TestNaked {
 
     void assertFieldInvisible(String fieldName);
 
+    void assertFieldVisible(String fieldName);
+
     /**
      * Check that a field exists with the specified name, and it is read-only. If it does not exist,
      * or is writable, the test fails.
      * 
-     * @group assert
+     * @deprecated
      */
     void assertFieldReadOnly(String fieldName);
+
+    void assertFieldModifiable(String fieldName);
+
+    void assertFieldUnmodifiable(String fieldName);
 
     void assertNotEmpty(String fieldName);
 
@@ -89,8 +137,6 @@ public interface TestObject extends TestNaked {
     /**
      * Check that the title of this object is the same as the expected title. If it is not the same
      * the test fails.
-     * 
-     * @group assert
      */
     void assertTitleEquals(String expectedTitle);
 
@@ -100,7 +146,6 @@ public interface TestObject extends TestNaked {
      * 
      * @param message
      *                   text to add to the failure message, which is displayed after a failure.
-     * @group assert
      */
     void assertTitleEquals(String message, String expectedTitle);
 

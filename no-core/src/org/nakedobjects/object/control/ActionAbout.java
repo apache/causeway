@@ -118,6 +118,10 @@ public class ActionAbout extends AbstractAbout {
     	return super.visibleOnlyToRoles(roles);
     }
 
+    public AbstractAbout invisible() {
+       return super.invisible();
+    }
+
     
 //	User based methods  
     public AbstractAbout invisibleToUser(User user) {
