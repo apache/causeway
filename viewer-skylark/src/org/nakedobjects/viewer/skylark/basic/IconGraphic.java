@@ -13,16 +13,14 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
-import org.apache.log4j.Logger;
-
 
 /**
  *  
  */
 public class IconGraphic {
     private ObjectContent content;
-    private int iconHeight;
     private Image icon;
+    private int iconHeight;
     private String lastIconName;
 
     public IconGraphic(View view, int height) {
@@ -75,8 +73,8 @@ public class IconGraphic {
         final String iconName = iconName(object);
 
         /*
-         * If the graphic is based on a name provided by the object then the icon
-         * could be changed at any time, so we won't lazily load it.
+         * If the graphic is based on a name provided by the object then the
+         * icon could be changed at any time, so we won't lazily load it.
          */
         if (icon != null && (iconName == null || iconName.equals(lastIconName))) {
             return icon;
@@ -84,7 +82,6 @@ public class IconGraphic {
         lastIconName = iconName;
 
         if (iconName != null) {
-            Logger.getLogger(this.getClass()).debug("loading icon " + iconName);
             final Image loadIcon = loadIcon(iconName);
             if (loadIcon != null) {
                 icon = loadIcon;
@@ -94,32 +91,6 @@ public class IconGraphic {
 
         icon = iconPicture(object);
         return icon;
-    }
-
-    protected Image loadIcon(final NakedObjectSpecification specification, final String type) {
-        String className = specification.getFullName().replace('.', '_') + type;
-        Image loadIcon = loadIcon(className);
-        if (loadIcon == null) {
-            className = specification.getShortName();
-            loadIcon = loadIcon(className);
-            if (loadIcon == null) {
-                NakedObjectSpecification superclass = specification.superclass();
-                if (superclass == null) {
-                    return loadUnknownIcon();
-                }
-                return loadIcon(superclass, type);
-            }
-        }
-
-        return loadIcon;
-    }
-
-    private Image loadUnknownIcon() {
-        return ImageFactory.getInstance().createFallbackIcon(iconHeight, null);
-    }
-
-    private Image loadIcon(final String iconName) {
-        return ImageFactory.getInstance().createIcon(iconName, iconHeight, null);
     }
 
     /**
@@ -144,8 +115,35 @@ public class IconGraphic {
      */
     protected Image iconPicture(final NakedObject object) {
         // work through class, and superclass, names of the object
-        NakedObjectSpecification specification = object instanceof NakedClass ? ((NakedClass) object).forNakedClass() : object.getSpecification();
+        NakedObjectSpecification specification = object instanceof NakedClass ? ((NakedClass) object).forNakedClass() : object
+                .getSpecification();
         return loadIcon(specification, "");
+    }
+
+    protected Image loadIcon(final NakedObjectSpecification specification, final String type) {
+        String className = specification.getFullName().replace('.', '_') + type;
+        Image loadIcon = loadIcon(className);
+        if (loadIcon == null) {
+            className = specification.getShortName();
+            loadIcon = loadIcon(className);
+            if (loadIcon == null) {
+                NakedObjectSpecification superclass = specification.superclass();
+                if (superclass == null) {
+                    return loadUnknownIcon();
+                }
+                return loadIcon(superclass, type);
+            }
+        }
+
+        return loadIcon;
+    }
+
+    private Image loadIcon(final String iconName) {
+        return ImageFactory.getInstance().createIcon(iconName, iconHeight, null);
+    }
+
+    private Image loadUnknownIcon() {
+        return ImageFactory.getInstance().createFallbackIcon(iconHeight, null);
     }
 }
 

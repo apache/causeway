@@ -6,8 +6,6 @@ import org.nakedobjects.viewer.skylark.UiConfiguration;
 
 import java.util.Hashtable;
 
-import org.apache.log4j.Logger;
-
 
 public class ImageFactory {
     private static ImageFactory instance;
@@ -51,7 +49,6 @@ public class ImageFactory {
             return (Image) templateImages.get(id);
 
         } else {
-            Logger.getLogger(this.getClass()).debug("creating icon " + id);
             final String directory = UiConfiguration.getInstance().imageDirectory();
             TemplateImage template = loader.getTemplateImage(directory + name);
             if (template == null) {
