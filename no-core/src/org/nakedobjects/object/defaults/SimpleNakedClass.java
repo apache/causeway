@@ -174,8 +174,8 @@ public class SimpleNakedClass extends AbstractNakedObject implements NakedClass 
         return specification;
     }   
     
-    public Title title() {
-        return getClassName().title();
+    public String titleString() {
+        return forNakedClass().getSingularName();
     }
  
     

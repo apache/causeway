@@ -6,7 +6,7 @@ public class DateTimeTest extends ValueTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        actual = new DateTime(2000,2, 1, 10, 59, 30);
+        actual = new DateTime(2000, 2, 1, 10, 59, 30);
      }
 
 

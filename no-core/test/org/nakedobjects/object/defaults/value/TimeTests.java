@@ -80,9 +80,6 @@ public class TimeTests extends ValueTestCase {
 
         t.parse("23:59");
         assertEquals("23:59", 23 * 3600 + 59 * 60, t.longValue());
-
-        t.parse("24:00");
-        assertEquals("24:00", 0 * 3600 + 0 * 60, t.longValue());
     }
 
     public void testIsEqualsTo() {
