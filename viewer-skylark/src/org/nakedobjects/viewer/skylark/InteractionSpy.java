@@ -46,7 +46,7 @@ public class InteractionSpy {
     private int event;
     private String label[][] = new String[2][20];
     private SpyFrame spy;
-    private String[] trace = new String[30];
+    private String[] trace = new String[60];
     private int traceIndex;
     private boolean isVisible;
 

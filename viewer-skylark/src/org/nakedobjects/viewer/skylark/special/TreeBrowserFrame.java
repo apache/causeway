@@ -7,7 +7,6 @@ import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
@@ -196,23 +195,17 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
         left.setParent(getView());
     }
 
-    public View identify(Location location, Offset offset) {
-        getViewManager().getSpy().addTrace(this, "mouse location within browser frame", location);   
-  
-        Location locationWithinContent = new Location(location);
-        locationWithinContent.add(offset);
-        getViewManager().getSpy().addTrace(this, "mouse location within browser frame content", locationWithinContent);   
-
+    public View identify(Location location) {
+        getViewManager().getSpy().addTrace(this, "mouse location within browser frame", location);         
         
-        
-        if (left != null && left.getBounds().contains(locationWithinContent)) {
+        if (left != null && left.getBounds().contains(location)) {
             getViewManager().getSpy().addTrace("--> subview: " + left);
-            return left.identify(locationWithinContent, new Offset(0, 0));
+            return left.identify(location);
         }
-        if (right != null && right.getBounds().contains(locationWithinContent)) {
+        if (right != null && right.getBounds().contains(location)) {
             getViewManager().getSpy().addTrace("--> subview: " + right);
-          //  offset.subtract(rightViewOffet(), 0);
-            return right.identify(locationWithinContent, new Offset(-rightViewOffet(), 0));
+            location.add(-rightViewOffet(), 0);
+            return right.identify(location);
         }
 
         return getView();

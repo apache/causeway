@@ -47,7 +47,7 @@ public class TreeBrowserSpecification implements ViewSpecification {
 	    }
         //ResizeBorder leftPane = new ResizeBorder(new ScrollBorder(rootNode));
 		View
-		leftPane = new ScrollBorder(rootNode);
+		leftPane = rootNode;
         frame.initLeftPane(leftPane);
         
         return view;

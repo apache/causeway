@@ -54,11 +54,11 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
         if (!isOverThreshold(downAt, me.getPoint())) {
             return;
         }
-        mouseDetails(me, true);
-
-        Location locationInView = new Location(downAt);
+        Location locationInView = new Location(mouseLocation);
         Location locationOfView = previouslyIdentifiedView.getAbsoluteLocation();
         locationInView.subtract(locationOfView);
+
+        mouseDetails(me, true);
 
         ViewAreaType type = previouslyIdentifiedView.viewAreaType(new Location(locationInView));
         spy.addAction("Drag start " + type + ": " + mouseLocation);
@@ -88,13 +88,13 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * Returns true when the point is outside the area around the downAt
      * location
      */
-    private boolean isOverThreshold(Location downAt2, Point point) {
-        int xDown = downAt2.x;
-        int yDown = downAt2.y;
-        int x = point.x;
-        int y = point.y;
+    private boolean isOverThreshold(Location pressed, Point dragged) {
+        int xDown = pressed.x;
+        int yDown = pressed.y;
+        int x = dragged.x;
+        int y = dragged.y;
 
-        int threshold = 4;
+        int threshold = 10;
         return x > xDown + threshold || x < xDown - threshold || y > yDown + threshold || y < yDown - threshold;
     }
 
@@ -161,10 +161,10 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * @see java.awt.event.MouseListener#mouseClicked(MouseEvent)
      */
     public void mouseClicked(MouseEvent me) {
-        spy.addAction("Mouse clicked " + mouseLocation);
 
         if (currentlyIdentifiedView != null) {
             Click click = new Click(currentlyIdentifiedView, mouseLocation, me.getModifiers());
+	        spy.addAction("Mouse clicked " + click.getMouseLocationRelativeToView());
 
             if (click.isButton3() && viewer.getOverlayView() == null) {
                 saveCurrentFieldEntry();
@@ -278,10 +278,14 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                     }
                 }
 
+                spy.addTrace("--> mouse moved");
+                spy.addTrace(currentlyIdentifiedView, " mouse location", mouseLocation);
                 Location locationInView = new Location(mouseLocation);
                 Location locationOfView = currentlyIdentifiedView.getAbsoluteLocation();
+                spy.addTrace(currentlyIdentifiedView, " view location", locationOfView);
                 locationInView.subtract(locationOfView);
-                spy.setType(currentlyIdentifiedView.viewAreaType(new Location(locationInView)));
+                spy.addTrace(currentlyIdentifiedView, " mouse location within view", locationInView);
+               spy.setType(currentlyIdentifiedView.viewAreaType(new Location(locationInView)));
                 spy.addAction("mouseMoved " + locationInView);
                 currentlyIdentifiedView.mouseMoved(locationInView);
 
@@ -298,11 +302,11 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * @see java.awt.event.MouseListener#mousePressed(MouseEvent)
      */
     public void mousePressed(MouseEvent me) {
-        mouseDetails(me, true);
-        drag = null;
-        downAt = new Location(mouseLocation);
+        downAt = new Location(me.getPoint());
         spy.setDownAt(downAt);
-        spy.addAction("Mouse pressed " + downAt);
+        mouseDetails(me, true);
+        spy.addAction("Mouse pressed " + mouseLocation);
+        drag = null;
 
         // hide an overlay view when not being pointed to
         if (currentlyIdentifiedView != viewer.getOverlayView()) {
@@ -310,14 +314,8 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
         }
 
         viewer.makeFocus(currentlyIdentifiedView);
-        canDrag = currentlyIdentifiedView != null && me.getClickCount() == 1; // drag
-                                                                                                                                              // should
-                                                                                                                                              // not
-                                                                                                                                              // be
-                                                                                                                                              // valid
-                                                                                                                                              // after
-                                                                                                                                              // double/triple
-                                                                                                                                              // click
+        canDrag = currentlyIdentifiedView != null && me.getClickCount() == 1;
+        // drag should not be valid after double/triple click
         previouslyIdentifiedView = currentlyIdentifiedView;
     }
 

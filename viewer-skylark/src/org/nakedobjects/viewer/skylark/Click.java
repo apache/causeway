@@ -85,6 +85,10 @@ public class Click extends PointerEvent {
     public void add(Offset offset) {
         locationWithinView.add(offset.getDeltaX(), offset.getDeltaY());
     }
+
+    public void subtract(Offset offset) {
+        subtract(offset.getDeltaX(), offset.getDeltaY());
+    }
 }
 
 /*

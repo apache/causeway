@@ -10,7 +10,6 @@ import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
-import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
@@ -216,11 +215,6 @@ public class MockView implements View
     public Location getAbsoluteLocation() {
         return null;
     }
-
-    public View identify(Location mouseLocation, Offset offset) {
-        return null;
-    }
-
 }
 
 

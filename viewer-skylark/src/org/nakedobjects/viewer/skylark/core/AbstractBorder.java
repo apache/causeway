@@ -6,7 +6,6 @@ import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
@@ -147,18 +146,16 @@ public class AbstractBorder extends AbstractViewDecorator {
         return onBorder;
     }
     
-    public View identify(Location mouseLocation, Offset offset) {
-        Location locationWithinBorder = new Location(mouseLocation);
-        locationWithinBorder.translate(offset);
-        getViewManager().getSpy().addTrace(this, "mouse location within border", locationWithinBorder);
+    public View identify(Location location) {
+        getViewManager().getSpy().addTrace(this, "mouse location within border", location);
         getViewManager().getSpy().addTrace(this, "non border area", contentArea());
 
-       if(overBorder(locationWithinBorder)) {
+       if(overBorder(location)) {
             getViewManager().getSpy().addTrace(this, "over border area", contentArea());
             return getView();
         } else {
-            offset.add(-getLeft(), -getTop());
-            return  super.identify(mouseLocation, offset);
+            location.add(-getLeft(), -getTop());
+            return  super.identify(location);
         }
         
     }

@@ -151,8 +151,6 @@ public interface View extends Cloneable {
      */
     Location getLocation();
 
-    Location getLocationWithinViewer();
-
     Padding getPadding();
 
     View getParent();
@@ -186,7 +184,7 @@ public interface View extends Cloneable {
 
     boolean hasFocus();
 
-    View identify(Location mouseLocation, Offset offset);
+    View identify(Location mouseLocation);
 
     void invalidateContent();
 

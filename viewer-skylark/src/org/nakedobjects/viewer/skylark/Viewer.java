@@ -405,9 +405,9 @@ public class Viewer {
     public View identifyView(Location locationWithinViewer, boolean includeOverlay) {
         if (includeOverlay && overlayView != null && overlayView.getBounds().contains(locationWithinViewer)) {
              locationWithinViewer.move(-overlayView.getLocation().getX(), -overlayView.getLocation().getY());
-            return overlayView.identify(locationWithinViewer, new Offset(0, 0));
+            return overlayView.identify(locationWithinViewer);
         } else {
-            return rootView.identify(locationWithinViewer, new Offset(0, 0));
+            return rootView.identify(locationWithinViewer);
         }
     }
 

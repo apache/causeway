@@ -99,6 +99,10 @@ public class InternalDrag extends Drag {
         this.mouseLocation.x = mouseLocation.x;
         this.mouseLocation.y = mouseLocation.y;
     }
+
+    public void subtract(Offset offset) {
+        subtract(offset.getDeltaX(), offset.getDeltaY());
+    }
 }
 
 /*

@@ -10,7 +10,6 @@ import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
-import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
@@ -313,13 +312,9 @@ public class AbstractViewDecorator implements View {
 	public ViewAreaType viewAreaType(Location mouseLocation) {
 		return wrappedView.viewAreaType(mouseLocation);
 	}
-
-    public Location getLocationWithinViewer() {
-        return wrappedView.getLocationWithinViewer();
-    }
   
-    public View identify(Location mouseLocation, Offset offset) {
-        return wrappedView.identify(mouseLocation, offset);
+    public View identify(Location mouseLocation) {
+        return wrappedView.identify(mouseLocation);
     }
 
     public Location getAbsoluteLocation() {

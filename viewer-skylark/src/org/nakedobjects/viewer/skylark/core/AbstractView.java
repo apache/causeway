@@ -16,7 +16,6 @@ import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
-import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
@@ -63,25 +62,6 @@ public abstract class AbstractView implements View {
         state = new ViewState();
         view = this;
     }
-    
-    public Location getLocationWithinViewer() {
-           if(getParent() != null) {
-               Location location = getParent().getLocationWithinViewer();
-               getViewManager().getSpy().addTrace(this, "parent location ", location);
-               
-               Padding parentPadding = parent.getPadding();
-               getViewManager().getSpy().addTrace(this, "parent padding ", parentPadding);
-               location.move(parentPadding.getTop(), parentPadding.getLeft());
-               
-               location.move(x, y);
-               getViewManager().getSpy().addTrace(this, "new location ", location);
-               return location;
-           } else {
-               getViewManager().getSpy().addTrace(this, "my location ", getLocation());
-               
-               return getLocation();
-           }
-       }
 
     public void run(final BackgroundTask task) {
         Thread t = new Thread("background task") {
@@ -138,7 +118,7 @@ public abstract class AbstractView implements View {
         b.append("\nAxis:      " + getViewAxis());
         b.append("\nState:     " + getState());
         b.append("\nLocation:  " + getLocation());
-        if(specification == null) {
+        if (specification == null) {
             b.append("\nSpec:      none");
         } else {
             b.append("\nSpec:      " + specification.getName() + " (" + specification + ")");
@@ -149,18 +129,17 @@ public abstract class AbstractView implements View {
         b.append("\n           " + (canFocus() ? "focusable" : "non-focusable"));
 
         b.append("\nParent:    ");
-        
+
         View p = getParent();
         String parent = p == null ? "none" : "" + p;
         b.append(parent);
-        
-        while(p != null) {
+
+        while (p != null) {
             p = p.getParent();
             b.append("\n           " + p);
-            
+
         }
-        
-        
+
         b.append("\nWorkspace: " + getWorkspace());
 
         b.append("\n\n");
@@ -176,8 +155,7 @@ public abstract class AbstractView implements View {
         }
     }
 
-    public void drag(InternalDrag drag) {
-    }
+    public void drag(InternalDrag drag) {}
 
     public void dragCancel(InternalDrag drag) {
         getViewManager().showArrowCursor();
@@ -189,14 +167,11 @@ public abstract class AbstractView implements View {
 
     public void dragIn(ContentDrag drag) {}
 
-    public void dragOut(ContentDrag drag) {
-    }
+    public void dragOut(ContentDrag drag) {}
 
-    public void dragTo(InternalDrag drag) {
-    }
+    public void dragTo(InternalDrag drag) {}
 
-    public void draw(Canvas canvas) {
-    }
+    public void draw(Canvas canvas) {}
 
     public void drop(ContentDrag drag) {}
 
@@ -205,20 +180,15 @@ public abstract class AbstractView implements View {
      */
     public void drop(ViewDrag drag) {}
 
-    public void editComplete() {
-    }
+    public void editComplete() {}
 
-    public void entered() {
-    }
+    public void entered() {}
 
-    public void enteredSubview() {
-    }
+    public void enteredSubview() {}
 
-    public void exited() {
-    }
+    public void exited() {}
 
-    public void exitedSubview() {
-    }
+    public void exitedSubview() {}
 
     public void firstClick(Click click) {
         Workspace workspace = getWorkspace();
@@ -356,25 +326,12 @@ public abstract class AbstractView implements View {
     public boolean hasFocus() {
         return false;
     }
-    
-    public View identify(Location location) {
-        location.move(-x, -y);
-        getViewManager().getSpy().addTrace(this, "node view location", location);
-          return getView();
-    }
 
-    public View identify2(Location location) {
+    public View identify(Location location) {
         getViewManager().getSpy().addTrace(this, "mouse location within node view", location);
         getViewManager().getSpy().addTrace("----");
         return getView();
     }
-
-    public View identify(Location mouseLocation, Offset offset) {
-      getViewManager().getSpy().addTrace(this, "mouse location within node view", mouseLocation);
-      getViewManager().getSpy().addTrace("----");
-      return getView();
-  }
-
 
     /**
      * Flags that the views do not properly represent the content, and hence it
@@ -420,13 +377,13 @@ public abstract class AbstractView implements View {
     public void limitBounds(View view) {
         Bounds b = new Bounds(getSize());
         b.contract(getPadding());
-        
+
         Bounds d = view.getBounds();
-        
-        if( b.limitBounds(d)) {
-	        view.setLocation(d.getLocation());
-	        view.setSize(d.getSize());
-	        view.invalidateLayout();
+
+        if (b.limitBounds(d)) {
+            view.setLocation(d.getLocation());
+            view.setSize(d.getSize());
+            view.invalidateLayout();
         }
     }
 
@@ -451,13 +408,16 @@ public abstract class AbstractView implements View {
             return getLocation();
         } else {
             Location location = parent.getAbsoluteLocation();
-            location.move(x, y);
+            getViewManager().getSpy().addTrace(this, "parent location", location);
+            location.add(x, y);
+            getViewManager().getSpy().addTrace(this, "plus view's location", location);
             Padding pad = parent.getPadding();
-            location.move(pad.getLeft(), pad.getTop());
+            location.add(pad.getLeft(), pad.getTop());
+            getViewManager().getSpy().addTrace(this, "plus view's padding", location);
             return location;
         }
     }
-    
+
     public void menuOptions(MenuOptionSet options) {
         if (options.isForView()) {
             viewMenuOptions(options);
@@ -474,35 +434,34 @@ public abstract class AbstractView implements View {
                 refresh();
             }
         });
-        
+
         options.add(MenuOptionSet.DEBUG, new MenuOption("Invalidate content") {
             public void execute(Workspace workspace, View view, Location at) {
                 invalidateContent();
             }
         });
-        
+
         options.add(MenuOptionSet.DEBUG, new MenuOption("Invalidate layout") {
             public void execute(Workspace workspace, View view, Location at) {
                 invalidateLayout();
             }
         });
-        
+
         final UndoStack undoStack = getViewManager().getUndoStack();
-            if (!undoStack.isEmpty()) {
-                options.add(MenuOptionSet.VIEW, new MenuOption("Undo " + undoStack.getNameOfUndo() ){
-                    public void execute(Workspace workspace, View view, Location at) {
-                        undoStack.undoLastCommand();
-                    }
-                 
-                    public Permission disabled(View component) {
-                        return new Allow(undoStack.descriptionOfUndo());
-                    }
-                });
-            }
+        if (!undoStack.isEmpty()) {
+            options.add(MenuOptionSet.VIEW, new MenuOption("Undo " + undoStack.getNameOfUndo()) {
+                public void execute(Workspace workspace, View view, Location at) {
+                    undoStack.undoLastCommand();
+                }
+
+                public Permission disabled(View component) {
+                    return new Allow(undoStack.descriptionOfUndo());
+                }
+            });
+        }
     }
 
-    public void mouseMoved(Location at) {
-    }
+    public void mouseMoved(Location at) {}
 
     public void objectActionResult(Naked result, Location at) {
         getWorkspace().addOpenViewFor(result, at);
@@ -557,8 +516,7 @@ public abstract class AbstractView implements View {
         throw new NakedObjectRuntimeException();
     }
 
-    public void secondClick(Click click) {
-    }
+    public void secondClick(Click click) {}
 
     public void setBounds(Bounds bounds) {
         x = bounds.getX();
@@ -579,7 +537,7 @@ public abstract class AbstractView implements View {
     }
 
     public void setRequiredSize(Size size) {}
-    
+
     public void setSize(Size size) {
         width = size.getWidth();
         height = size.getHeight();
@@ -589,16 +547,14 @@ public abstract class AbstractView implements View {
         this.view = view;
     }
 
-    public void thirdClick(Click click) {
-    }
+    public void thirdClick(Click click) {}
 
     public String toString() {
         String name = getClass().getName();
         return name.substring(name.lastIndexOf('.') + 1) + getId() + " " + getContent();
     }
 
-    public void update(NakedObject object) {
-    }
+    public void update(NakedObject object) {}
 
     public ViewAreaType viewAreaType(Location mouseLocation) {
         return ViewAreaType.CONTENT;

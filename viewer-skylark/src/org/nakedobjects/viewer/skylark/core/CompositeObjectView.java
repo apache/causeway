@@ -8,7 +8,6 @@ import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
@@ -128,30 +127,23 @@ public class CompositeObjectView extends ObjectView {
         return v;
     }
 
-    public View identify(final Location location, Offset offset) {
+    public View identify(final Location location) {
         getViewManager().getSpy().addTrace(this, "mouse location within view", location);
-        getViewManager().getSpy().addTrace(this, "view location within parent", getLocation());
-
-        getViewManager().getSpy().addTrace(this, "offset", offset);
-        Location locationWithinContent = new Location(location);
-        locationWithinContent.translate(offset);
-        getViewManager().getSpy().addTrace(this, "mouse location within content area", locationWithinContent);
+        getViewManager().getSpy().addTrace(this, "view's location within parent", getLocation());
 
         View views[] = getSubviews();
         for (int i = views.length - 1; i >= 0; i--) {
             View subview = views[i];
-            if (subview.getBounds().contains(locationWithinContent)) {
-                getViewManager().getSpy().addTrace(this, "identified subview", subview);
-                locationWithinContent.move(-subview.getLocation().getX(), -subview.getLocation().getY());
-                getViewManager().getSpy().addTrace(this, "mouse location within subview", locationWithinContent);
+            if (subview.getBounds().contains(location)) {
+                location.move(-subview.getLocation().getX(), -subview.getLocation().getY());
+                getViewManager().getSpy().addTrace(this, "mouse location within subview", location);
                 getViewManager().getSpy().addTrace("--> subview: " + subview);
-                View identified = subview.identify(locationWithinContent, new Offset(0, 0));
-                return identified;
+                return subview.identify(location);
             }
         }
 
         getViewManager().getSpy().addTrace("----");
-        getViewManager().getSpy().addTrace(this, "mouse location within composite view", location);
+        getViewManager().getSpy().addTrace(this, "mouse location identified within composite view", this);
         return getView();
     }
 

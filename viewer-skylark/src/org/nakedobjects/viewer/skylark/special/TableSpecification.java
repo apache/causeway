@@ -14,7 +14,6 @@ import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
@@ -54,16 +53,13 @@ class TableBorder extends AbstractBorder {
         return wrappedView.toString() + "/TableHeader";
     }
     
-    public View identify(Location locationWithinView, Offset offset) {
-        Location l = new Location(locationWithinView);
-        l.add(offset);
-        getViewManager().getSpy().addTrace("1- Identify over column " + locationWithinView);
-        getViewManager().getSpy().addTrace("2- Identify over column " + l);
-        if(isOverColumnBorder(l)) {
+    public View identify(Location location) {
+        getViewManager().getSpy().addTrace("Identify over column " + location);
+        if(isOverColumnBorder(location)) {
             getViewManager().getSpy().addAction("Identified over column ");
            return getView();
         }
-        return super.identify(locationWithinView, offset);
+        return super.identify(location);
     }
     
 	
@@ -143,16 +139,7 @@ class TableHeaderBuilder extends AbstractBuilderDecorator {
     }
 
     public View createCompositeView(Content content, CompositeViewSpecification specification, ViewAxis axis) {
-        AbstractTypedNakedCollectionVector coll = (AbstractTypedNakedCollectionVector) ((ObjectContent) content).getObject();
-        NakedObjectSpecification elementSpecification = NakedObjectSpecificationLoader.getInstance().loadSpecification(coll.getElementSpecification().getFullName());
-        NakedObject exampleObject = (NakedObject) elementSpecification.acquireInstance();
-        FieldSpecification[] viewFields = elementSpecification.getVisibleFields(exampleObject, ClientSession.getSession());
-        TableColumnAxis tableAxis = new TableColumnAxis(viewFields, 120);
-
-        View view = wrappedBuilder.createCompositeView(content, specification, tableAxis);
-
-        tableAxis.setRoot(view);
-
+        View view = wrappedBuilder.createCompositeView(content, specification, axis);
         return new TableBorder(view);
     }
 }
@@ -165,7 +152,15 @@ public class TableSpecification extends AbstractCompositeViewSpecification imple
     }
 
     public View createView(Content content, ViewAxis axis) {
-        View table = super.createView(content, axis);
+        AbstractTypedNakedCollectionVector coll = (AbstractTypedNakedCollectionVector) ((ObjectContent) content).getObject();
+        NakedObjectSpecification elementSpecification = NakedObjectSpecificationLoader.getInstance().loadSpecification(coll.getElementSpecification().getFullName());
+        NakedObject exampleObject = (NakedObject) elementSpecification.acquireInstance();
+        FieldSpecification[] viewFields = elementSpecification.getVisibleFields(exampleObject, ClientSession.getSession());
+        TableColumnAxis tableAxis = new TableColumnAxis(viewFields, 120);
+
+        View table = super.createView(content, tableAxis);
+        tableAxis.setRoot(table);
+
         View view = new ScrollBorder(table);
         return view;
     }
