@@ -34,6 +34,8 @@ class TableBorder extends AbstractBorder {
     }
 
     public void draw(Canvas canvas) {
+        super.draw(canvas.createSubcanvas());     
+
         int y = VPADDING + Style.LABEL.getAscent();
 
         TableColumnAxis axis = ((TableColumnAxis) getViewAxis());
@@ -45,8 +47,7 @@ class TableBorder extends AbstractBorder {
             canvas.drawLine(x, 0, x, getSize().getHeight() - 1, Style.SECONDARY2);
             x += axis.getColumnWidth(i);
         }
-        super.draw(canvas);     
-        canvas.drawRectangle(0,0, getSize().getWidth() - 1, getSize().getHeight() - top - 1, Style.SECONDARY2);
+        canvas.drawRectangle(0, VPADDING + Style.LABEL.getHeight(), getSize().getWidth() - 1, getSize().getHeight() - top - 1, Style.SECONDARY2);
     }
 
     public String toString() {

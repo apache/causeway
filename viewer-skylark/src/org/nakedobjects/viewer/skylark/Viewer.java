@@ -369,8 +369,8 @@ public class Viewer {
     }
 
     public void start() {
-        sizeChange();
-        repaint();
+  //      sizeChange();
+   //     repaint();
     }
 
     public void sizeChange() {

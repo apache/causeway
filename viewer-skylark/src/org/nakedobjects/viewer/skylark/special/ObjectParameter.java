@@ -1,8 +1,10 @@
 package org.nakedobjects.viewer.skylark.special;
 
+import org.nakedobjects.object.Lookup;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.viewer.skylark.ActionField;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
@@ -47,6 +49,11 @@ public class ObjectParameter extends ActionField implements ObjectContent {
 
     public void setObject(NakedObject object) {
         this.object = object;
+    }
+
+    public boolean isLookup() {
+        NakedObjectSpecification lookup = NakedObjectSpecificationLoader.getInstance().loadSpecification(Lookup.class);
+        return parameterClass.isOfType(lookup);
     }
 
 }

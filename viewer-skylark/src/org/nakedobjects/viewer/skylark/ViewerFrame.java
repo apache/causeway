@@ -95,6 +95,7 @@ public class ViewerFrame extends Frame implements RenderingArea, ObjectViewingMe
         setBounds(X, Y, WIDTH, HEIGHT);
 		show();
         viewer.start();
+        viewer.sizeChange();
     }
 
     /**

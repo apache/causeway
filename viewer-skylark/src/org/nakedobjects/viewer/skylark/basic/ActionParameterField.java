@@ -11,6 +11,7 @@ import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.Text;
@@ -18,6 +19,7 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
+import org.nakedobjects.viewer.skylark.special.LookupBorder;
 import org.nakedobjects.viewer.skylark.special.ObjectParameter;
 
 import org.apache.log4j.Logger;
@@ -186,7 +188,13 @@ public class ActionParameterField extends AbstractView {
     	}
 
     	public View createView(Content content, ViewAxis axis) {
-    		return new ActionParameterField(content, this, axis);
+    		ActionParameterField emptyField = new ActionParameterField(content, this, axis);
+    	    if(((ObjectParameter) content).isLookup()) {
+    	        return new LookupBorder(emptyField);
+    	    } else {
+    	        return emptyField;
+    	    }
+
     	}
 
     	public boolean isOpen() {

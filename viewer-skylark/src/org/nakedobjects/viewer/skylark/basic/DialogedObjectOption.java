@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Permission;
@@ -22,7 +23,7 @@ class DialogedObjectOption extends MenuOption {
     public static DialogedObjectOption createOption(ActionSpecification action, NakedObject object) {
         int paramCount = action.getParameterCount();
         Assert.assertTrue("Only for actions taking one or more params", paramCount > 0);
-    	About about = action.getAbout(ClientSession.getSession(), object, new NakedObject[paramCount]);
+    	About about = action.getAbout(ClientSession.getSession(), object, action.parameterStubs());
     	if(about.canAccess().isVetoed()) {
     		return null;
     	}
@@ -52,8 +53,10 @@ class DialogedObjectOption extends MenuOption {
 	}
 
     public Permission disabled(View view) {
-		About about = action.getAbout(ClientSession.getSession(), object, new NakedObject[action
-                .getParameterCount()]);
+        Naked[] parameterValues;
+        parameterValues = action.parameterStubs();        
+        
+		About about = action.getAbout(ClientSession.getSession(), object, parameterValues);
         // ignore the details from the About about useablility this will be
         // checked in the dialog
         String description = about.getDescription();

@@ -76,6 +76,7 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
 
     public Size getRequiredSize() {
         Size size = left.getRequiredSize();
+        size.ensureWidth(225);
         size.extend(getPadding());
         size.extendWidth(5);
 
@@ -84,7 +85,7 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
             size.ensureHeight(rightSize.getHeight());
             size.extendWidth(rightSize.getWidth());
         } else {
-            size.extendWidth(150);
+            size.extendWidth(250);
         }
 
         return size;
@@ -114,6 +115,7 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
             workspaceLimit.contract(getWorkspace().getPadding());
             Size rightPanelRequiredSize = (right == null) ? new Size() : right.getRequiredSize();
             Size leftPanelRequiredSize = left.getRequiredSize();
+            leftPanelRequiredSize.setWidth(225);
             
             Bounds subviews = new Bounds(leftPanelRequiredSize);
             subviews.extendWidth(rightPanelRequiredSize.getWidth());
@@ -191,7 +193,8 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     }
 
     void initLeftPane(View view) {
-        left = new ResizeBorder(new ScrollBorder(view));
+        left = new ScrollBorder(view);
+ //       left = new ResizeBorder(new ScrollBorder(view));
         left.setParent(getView());
     }
 

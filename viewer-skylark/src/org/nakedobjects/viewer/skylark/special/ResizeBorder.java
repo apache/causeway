@@ -23,7 +23,7 @@ public class ResizeBorder extends AbstractBorder {
         super(view);
         bottom = right = BORDER_WIDTH;
         
-        resize = new Size(400, 200);
+        resize = new Size(200, 200);
     }
 
     protected void debugDetails(StringBuffer b) {

@@ -2,10 +2,6 @@ package org.nakedobjects.viewer.skylark.special;
 
 
 public class InternalTableSpecification extends TableSpecification {
-    public InternalTableSpecification() {
-        builder = new StackLayout(new CollectionElementBuilder(this, true));
-    }
-
     public String getName() {
         return "Internal Table";
     }
