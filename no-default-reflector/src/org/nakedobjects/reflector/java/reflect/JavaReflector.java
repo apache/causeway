@@ -895,6 +895,9 @@ public class JavaReflector implements Reflector {
         LOG.info("finalizing reflector " + this);
     }
 
+    public String unresolvedTitle(NakedObject pojo) {
+        return "no title";
+    }
 }
 
 /*
