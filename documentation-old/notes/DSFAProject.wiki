@@ -1,0 +1,26 @@
+''2nd Nov 2004
+
+Found bug in .net reflector where the methods for singular and plural names, for member orders, and the class about would only be run once, as the method would be found each time.  Added a mechanism that set up variables with DotNetReflector during instantiation.
+-----
+Added a very simple example to the .net solution to allow testing of new build.
+-----
+Worked with Richard G. to get VB distribution started.  Dylan has suggested going back to the original (and now broken version). 
+-----
+'''XAT documentation
+
+* Implement TestObjectFactory
+* implement getDocumentor() so it passes back the same Documentor for all tests, and call title for each call
+* Change Documentor so it knows when a test has started, and ends
+* Figure out how to set up the test run so it uses a specific test object factory. 
+* Work out how to encompass multiple classes
+
+----
+''3rd Nov 2004
+
+Worked with Derek to get Junits tests to 'break the build' when a test has failed.  .Net seems to be oblivious to the return code set in its code, so the build does not pick up this information. (Confirmed this by looking at %ERRORLEVEL% and running the exit examples on MSDN).  Using <script> tags we have parsed the test output file and set property within the build system, which is susequently examined and, if set, fails the build.
+-----
+Incorporated Dylan additions to the test object for assert states in collection.  Generated new build, which Dan has checked in.
+----
+Talked to Mary and uncovered the 'slowing down' bug in the framework.  Richard's new technique of generating objects rather than storing them seems to be the cause within tree browsers (form view seems alright).
+----
+Helped out Richard G, who is now making progress having ported over some of the transfer objects.  He should be starting some basic testing shortly.

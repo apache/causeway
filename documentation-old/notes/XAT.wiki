@@ -1,0 +1,3 @@
+Acceptance test will run without any documentor by default.  To specify a documentor, create a file called xat.properties in the working directory and in specify which documentor to use.
+
+ nakedobjects.test-object-factory=org.nakedobjects.xat.html.HtmlTestObjectFactory

@@ -1,0 +1,5 @@
+The viewer has technical status bar, which can be turned on using the following configuration setting.
+ nakedobjects.viewer.skylark.debugstatus=on
+ ----
+ Configuration is done via the configuration object, allowing configurations to be set from files, databases, etc. To get the configuration call:
+ UiConfiguration.getInstance().

@@ -1,0 +1,10 @@
+SkylarkViewer
+DevelopmentLogOctober2004
+DsfaProject
+
+----
+'''Development Notes
+
+The problem with  transient-made-persistent not being able to be closed is caused by OIDs (see DevelopmentLogOctober2004).  Need to check that the object managers and loaded objects do not rely on such hash codes.
+
+http://nakedobjects.org

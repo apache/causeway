@@ -1,45 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <meta content="text/html; charset=utf-8" http-equiv=
-  "content-type" />
-  <link href="../style.css" rel="STYLESHEET" type="text/css" />
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
 
-  <title>Properties</title>
-</head>
+    <link href="../style.css" rel="STYLESHEET" type="text/css" />
 
-<body>
-  <h1>Properties</h1>
+    <title>Properties</title>
+  </head>
 
-  <p>The follow details what properties are can be specified in the
-  properties files (by default <code>nakedobjects.properties</code>
-  in the working directory).</p>
+  <body>
+    <h1>Properties</h1>
 
-  <p>To hide the splash screen</p>
-  <pre>
-nakedobjects.nosplash
+    <p>The follow details what properties are can be specified in the
+    properties files (by default <code>nakedobjects.properties</code> in the
+    working directory).</p>
+
+    <p>To hide the splash screen</p>
+
+    <pre>nakedobjects.nosplash
 </pre>
 
-  <p>To set the local (as used by date and times)</p>
-  <pre>
-nakedobjects.locale=<span style=
-"font-style: italic;">locale code</span>
+    <p>To set the locale (as used by date and times)</p>
+
+    <pre>nakedobjects.locale=<span style="font-style: italic;">locale code</span>
 </pre>
 
-  <p>For example the following lines would be used for setting the
-  locale for Japan, England, or France</p>
-  <pre>
+    <p>For example the following lines would be used for setting the locale
+    for Japan, England, or France</p>
+
+    <pre>nakedobjects.locale=en_IE
 nakedobjects.locale=ja_JP
 nakedobjects.locale=en_GB
 nakedobjects.locale=fr_FR
 </pre>
-  
-  
-  
-  
-  <pre>
+
+    <p>The reflector used to work on the object can be specified as follows.
+    The class specified must extend the
+    org.nakedobjects.object.JavaReflectorFactory class.<br /></p>
+
+    <pre>nakedobjects.reflector=org.nakedobjects.object.reflect.JavaReflectorFactory</pre>
+
+    <p></p>
+
+    <p></p>
+
+    <p></p>
+
+    <pre>
+
   
   ## End-user graphical interface
   # UI
@@ -294,7 +304,5 @@ nakedobjects.locale=fr_FR
   log4j.appender.File.layout.ConversionPattern=%d [%-20c{1}] %-5p
   %m%n
   </pre>
-  
-  
-</body>
+  </body>
 </html>
