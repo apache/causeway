@@ -1,0 +1,246 @@
+<?xml version="1.0"?>
+<!DOCTYPE project [
+	<!ENTITY properties SYSTEM "file:../build-templates/properties.xml">
+]>
+
+<project name="Naked Objects framework - exploration edition"
+         default="idebuild"
+         basedir=".">
+
+	<property file="../naked-objects/build.properties" />
+
+	<!-- distribution directories -->
+	<property name="dist.dir" value="dist" />
+	<property name="dist.src.dir" value="${dist.dir}/src" />
+	<property name="dist.lib.dir" value="${dist.dir}/lib" />
+	<property name="dist.doc.dir" value="${dist.dir}/docs" />
+	<property name="dist.conf.dir" value="${dist.dir}/conf" />
+	<property name="dist.icon.dir" value="${dist.dir}/icon-library" />
+	<property name="dist.example.dir" value="${dist.dir}/examples" />
+	<!-- allow compliation for Java 1.2 & with debug -->
+	<property name="compile.debug" value="no" />
+	<property name="compile.target" value="1.1" />
+
+	<!-- classpath -->
+	<path id="libs.external">
+		<fileset dir="../lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<property name="src.dir" value="src" />
+	<property name="test.dir" value="test" />
+	<property name="example.dir" value="example" />
+
+	<!-- resources -->
+	<property name="lib.dir" value="../lib" />
+	<property name="images.dir" value="images" />
+	<property name="doc.dir" value="docs" />
+	<property name="icon.dir" value="icon-library" />
+	<property name="conf.dir" value="conf" />
+	<property name="resource.dir" value="resources" />
+	<property name="bin.dir" value="bin" />
+
+	<!-- output directories -->
+	<!-- build directories -->
+	<property name="build.dir" value="build" />
+	<property name="build.src.dir" value="${build.dir}/src" />
+	<property name="build.test.dir" value="${build.dir}/test" />
+	<property name="build.classes.src" value="${build.dir}/classes/src" />
+	<property name="build.classes.test" value="${build.dir}/classes/test" />
+	<property name="build.example.dir" value="${build.dir}/examples" />
+	<property name="build.doc.dir" value="${build.dir}/docs" />
+	<property name="build.doc.api" value="${build.doc.dir}/api" />
+	<property name="build.relase.dir" value="${build.dir}/release" />
+
+	<!-- test directories -->
+	<property name="test.run.dir" value="${build.dir}/test-run" />
+	<property name="test.results.dir" value="${build.relase.dir}/tests" />
+
+	<property environment="env" />
+
+	<property name="component" value="exploration"/>
+
+	<target name="idebuild" depends="clean, new-release-number, exploration-distribution">
+	</target>
+	
+	<target name="lundbuild" depends="-lundbuild-init, exploration-distribution">
+	</target>
+	
+	<target name="-lundbuild-init">
+		<property name="build.id" value="${buildId}"/>
+	</target>
+	
+	
+	<target name="new-release-number">
+		<tstamp>
+			<format property="build.id" pattern="yyyyMMdd-HH00" locale="en" />
+		</tstamp>
+		<echo>Build number: ${build.id}</echo>
+	</target>
+
+	<target name="clean">
+		<delete dir="${build.dir}" />	
+	</target>
+
+	<target name="exploration-distribution">
+		<echo>Create exploration distribution</echo>
+		<echo message="Version ${build.version}  ${build.id}" />
+
+		<mkdir dir="${build.dir}" />
+
+		<!-- copy across source and add version -->
+		<mkdir dir="${build.src.dir}" />
+		<copy todir="${build.src.dir}">
+			<fileset dir="../no-core/${src.dir}" />
+			<fileset dir="../viewer-skylark/${src.dir}" />
+
+			<fileset dir="../example-ecs/${src.dir}">
+				<exclude name="**/*AcceptanceTest*" />
+			</fileset>
+			<fileset dir="../example-expenses/${src.dir}">
+				<exclude name="**/*AcceptanceTest*" />
+			</fileset>
+			<fileset dir="../example-library/${src.dir}">
+				<exclude name="**/*AcceptanceTest*" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${build.test.dir}" />
+		<copy todir="${build.test.dir}">
+			<fileset dir="../no-core/${test.dir}" />
+			<fileset dir="../viewer-skylark/${test.dir}" />
+
+			<fileset dir="../example-ecs/${test.dir}" />
+			<fileset dir="../example-expenses/${test.dir}" />
+			<fileset dir="../example-library/${test.dir}" />
+		</copy>
+
+
+		<copy todir="build/dist/images">
+			<fileset dir="../no-core/src/images" />
+			<fileset dir="../example-ecs/src/images" />
+			<fileset dir="../example-expenses/src/images" />
+			<fileset dir="../example-library/src/images" />
+		</copy>
+
+		<replace dir="${build.src.dir}">
+			<include name="**/AboutNakedObjects.java" />
+			<replacefilter token="%VERSION%" value="${build.version}" />
+			<replacefilter token="%BUILD_ID%" value="${build.id}" />
+			<replacefilter token="%NAME%" value="${build.name}" />
+			<replacefilter token="%COPYRIGHT_NOTICE%" value="${build.copyright}" />
+			<replacefilter token="%IMAGE_FILE%" value="${build.image-file}" />
+		</replace>
+
+
+		<mkdir dir="${build.classes.src}" />
+		<javac srcdir="${build.src.dir}"
+		       destdir="${build.classes.src}"
+		       includes="**/*.java"
+		       target="${compile.target}"
+		       debug="${compile.debug}"
+		       deprecation="false">
+
+			<classpath refid="libs.external" />
+		</javac>
+
+		<!--                              -->
+		<!--  compile the test srcs  -->
+		<!--                              -->
+		<mkdir dir="${build.classes.test}" />
+		<javac destdir="${build.classes.test}"
+		       includes="**/*.java"
+		       target="${compile.target}"
+		       debug="${compile.debug}"
+		       deprecation="false">
+
+			<src path="${build.test.dir}" />
+
+			<classpath refid="libs.external" />
+			<classpath path="${build.classes.src}" />
+		</javac>
+
+		<delete failonerror="false" dir="${test.run.dir}" />
+
+
+		<!-- Run the tests -->
+		<mkdir dir="${test.run.dir}" />
+		<mkdir dir="${build.relase.dir}/tests" />
+
+		<patternset id="test.sources">
+			<include name="**/*Test.java" />
+			<include name="**/*Tests.java" />
+		</patternset>
+
+		<junit fork="yes" printsummary="no" errorproperty="test-failed" failureproperty="test-failed" haltonfailure="no" dir="${test.run.dir}">
+			<classpath refid="libs.external" />
+			<classpath path="${build.classes.src}" />
+			<classpath path="${build.classes.test}" />
+
+			<formatter type="xml" />
+
+			<batchtest todir="${test.run.dir}">
+				<fileset dir="${build.test.dir}">
+					<patternset refid="test.sources" />
+				</fileset>
+			</batchtest>
+		</junit>
+
+		<echo>Test results ${test-failed}</echo>
+		
+		<mkdir dir="build/dist" />
+
+		<mkdir dir="tmp" />
+		<junitreport tofile="tmp/combined.xml">
+			<fileset dir="build/test-run" includes="TEST*.xml" />
+			<report format="frames" todir="build/dist/tests" />
+		</junitreport>
+		<delete dir="tmp" />
+
+		<!-- copy in:
+				properties files
+				examples & example code in html
+				docs
+				-->
+
+
+		<javadoc destDir="build/dist/api"
+		         windowtitle="Naked Objects Exploration API version ${build.version}"
+		         additionalparam="-breakiterator -tag group -tag testpackage -tag testcase -tag testkind -tag testfamily -tag testsetup -tag testedclass">
+
+			<classpath refid="libs.external" />
+
+			<packageset dir="${build.src.dir}" defaultexcludes="yes">
+				<include name="org/nakedobjects/object/**" />
+			</packageset>
+		</javadoc>
+
+		<jar jarfile="build/dist/${component}.jar">
+			<fileset dir="${build.classes.src}" />
+		</jar>
+
+		<jar jarfile="build/dist/${component}-test.jar">
+			<fileset dir="${build.classes.test}" />
+		</jar>
+
+		<jar jarfile="build/dist/${component}-src.jar">
+			<fileset dir="${build.src.dir}" />
+		</jar>
+
+		<!--zip zipfile="${build.relase.dir}/${component}-api.zip">
+			<fileset dir="${build.doc.api}"/>
+		</zip-->
+
+
+		<mkdir dir="release" />
+		<zip zipfile="release/nakedobjects-xp-${build.id}.zip" basedir="build/dist" />
+		
+		<fail unless="${test-failed}" message="Tests failed"/>
+
+	</target>
+
+
+</project>
+
+
