@@ -18,8 +18,6 @@
 		<copy todir="${build.src.dir}">
 			<fileset dir="../viewer-skylark/${src.dir}" />
 			<fileset dir="../no-exploration/${src.dir}" />
-			<fileset dir="../no-default-reflector/${src.dir}" />
-			<fileset dir="../no-application-library/${src.dir}" />
 		</copy>
 
 		<copy todir="${build.example.dir}">
