@@ -1,15 +1,15 @@
 
 package org.nakedobjects.example.expenses;
 
-import org.nakedobjects.AbstractExplorationFixture;
-import org.nakedobjects.Exploration;
+import org.nakedobjects.exploration.Exploration;
+import org.nakedobjects.exploration.AbstractExplorationFixture;
 import org.nakedobjects.security.User;
 
 
 public class ExpensesExploration extends Exploration {
     static String configFile;
 
-    public void setUpFixture() {
+    public void setUpFixtures() {
         addFixture(new AbstractExplorationFixture() {
 
             public void install() {

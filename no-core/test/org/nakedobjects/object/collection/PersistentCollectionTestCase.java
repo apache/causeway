@@ -1,5 +1,16 @@
 package org.nakedobjects.object.collection;
 
+import org.nakedobjects.object.AssociationExample;
+import org.nakedobjects.object.LocalReflectionFactory;
+import org.nakedobjects.object.MockObjectManager;
+import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.Person;
+import org.nakedobjects.object.Role;
+import org.nakedobjects.object.Team;
+import org.nakedobjects.object.value.TestClock;
+
 import java.util.Enumeration;
 
 import junit.framework.TestCase;
@@ -8,12 +19,6 @@ import junit.textui.TestRunner;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
-import org.nakedobjects.object.AssociationExample;
-import org.nakedobjects.object.MockObjectManager;
-import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.Person;
-import org.nakedobjects.object.Role;
-import org.nakedobjects.object.Team;
 
 import com.mockobjects.ExpectationSet;
 
@@ -22,6 +27,7 @@ import com.mockobjects.ExpectationSet;
 
 public final class PersistentCollectionTestCase extends TestCase {
     private MockObjectManager objectManager;
+    private NakedObjectContext context;
 
 //    private static NakedObjectStore objectStore;
 
@@ -33,9 +39,12 @@ public final class PersistentCollectionTestCase extends TestCase {
         TestRunner.run(new TestSuite(PersistentCollectionTestCase.class));
     }
 
-    public void setUp() throws ObjectStoreException {
+    protected void setUp() throws ObjectStoreException {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
          objectManager = MockObjectManager.setup();
+         context = objectManager.getContext();
+         new TestClock();
+         NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
     }
 
     protected void tearDown() throws Exception {
@@ -150,6 +159,7 @@ public final class PersistentCollectionTestCase extends TestCase {
      */
     public void testInternalCollection() throws ObjectStoreException {
         Team m = new Team();
+        m.setContext(context);
 
         AbstractNakedCollection collection = m.getMembers();
 
@@ -444,6 +454,8 @@ public final class PersistentCollectionTestCase extends TestCase {
      */
     private Role[] setupCollection(AbstractNakedCollection collection, int size)
         throws ObjectStoreException {
+        collection.setContext(context);
+        
         Role[] e = new Role[size];
 
         for (int i = 0; i < size; i++) {

@@ -1,7 +1,6 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.control.ObjectAbout;
+import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.value.MultilineTextString;
 import org.nakedobjects.object.value.TextString;
 
@@ -39,11 +38,10 @@ public class NakedError extends AbstractNakedObject {
         LOG.error(error, e);
     }
     
-
-    public About about() {
-        return ObjectAbout.READ_ONLY;
+    public void aboutFieldDefault(FieldAbout about) {
+        about.unmodifiable();
     }
-
+    
     public TextString getError() {
         return error;
     }

@@ -1,9 +1,6 @@
 package org.nakedobjects.object.value;
 
 
-/**
- Value object representing an integer number.
- */
 import java.text.NumberFormat;
 import java.text.ParseException;
 
@@ -68,8 +65,7 @@ public class WholeNumber extends Magnitude {
      Adds the specified amount to this value.
      */
     public void add(int whole) {
-        checkCanOperate();
-//        this.whole += whole;
+        //        this.whole += whole;
         setValue(this.whole + whole);
     }
 
@@ -77,15 +73,12 @@ public class WholeNumber extends Magnitude {
      Adds the specified value to this value.
      */
     public void add(WholeNumber whole) {
-        checkCanOperate();
-        whole.checkCanOperate();
-//        this.whole += whole.whole;
+        //        this.whole += whole.whole;
         add(whole.whole);
     }
 
     public void clear() {
         isNull = true;
-        fireValueChanged();
     }
 
     /**
@@ -109,7 +102,6 @@ public class WholeNumber extends Magnitude {
      Divides this value by the specified amount.
      */
     public void divide(int whole) {
-        checkCanOperate();
         setValue(this.whole / whole);
     }
 
@@ -117,7 +109,6 @@ public class WholeNumber extends Magnitude {
 	 Divides this value by the specified amount.
 	 */
 	public void divide(double whole) {
-		checkCanOperate();
 		setValue((int)(this.whole / whole));
 	}
 
@@ -125,9 +116,7 @@ public class WholeNumber extends Magnitude {
      Divides this value by the specified amount.
      */
     public void divide(WholeNumber number) {
-        checkCanOperate();
-        number.checkCanOperate();
-//        this.whole /= number.whole;
+        //        this.whole /= number.whole;
         divide(number.whole);
     }
 
@@ -135,7 +124,6 @@ public class WholeNumber extends Magnitude {
      Returns this value as an double.
      */
     public double doubleValue() {
-        checkCanOperate();
         return (double) whole;
     }
 
@@ -150,7 +138,6 @@ public class WholeNumber extends Magnitude {
      Returns this value as an float.
      */
     public float floatValue() {
-        checkCanOperate();
         return (float) whole;
     }
 
@@ -160,7 +147,6 @@ public class WholeNumber extends Magnitude {
      @see #intValue
      */
     public int getInt() {
-        checkCanOperate();
         return whole;
     }
 
@@ -223,7 +209,6 @@ public class WholeNumber extends Magnitude {
      Returns this value as an long.
      */
     public long longValue() {
-        checkCanOperate();
         return (long) whole;
     }
 
@@ -231,7 +216,6 @@ public class WholeNumber extends Magnitude {
      Multiply this value by the specified amount.
      */
     public void multiply(int whole) {
-        checkCanOperate();
         setValue((int)(this.whole * whole));
     }
 
@@ -239,8 +223,6 @@ public class WholeNumber extends Magnitude {
      Multiply this value by the specified amount.
      */
     public void multiply(WholeNumber number) {
-        checkCanOperate();
-        number.checkCanOperate();
         multiply(number.whole);
     }
 
@@ -299,7 +281,6 @@ public class WholeNumber extends Magnitude {
 //		getLogger().debug("setValue(): value=" + whole);
         this.whole = whole;
         isNull = false;
-        fireValueChanged();
     }
 
     public void setValue(WholeNumber value) {
@@ -316,7 +297,6 @@ public class WholeNumber extends Magnitude {
      Returns this value as an short.
      */
     public short shortValue() {
-        checkCanOperate();
         return (short) whole;
     }
 
@@ -324,7 +304,6 @@ public class WholeNumber extends Magnitude {
      Substracts the specified amount from  this value.
      */
     public void subtract(int whole) {
-        checkCanOperate();
         add(-whole);
     }
 
@@ -332,7 +311,6 @@ public class WholeNumber extends Magnitude {
      * Subtracts the specified amount from this value.
      */
     public void subtract(WholeNumber number) {
-        number.checkCanOperate();
         subtract(number.whole);
     }
 

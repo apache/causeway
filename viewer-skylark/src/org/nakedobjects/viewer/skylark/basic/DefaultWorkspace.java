@@ -1,8 +1,12 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedClassSpec;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.object.collection.ArbitraryCollection;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
@@ -50,9 +54,9 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
         Location location = drag.getTargetLocation();
 
         View newView;
-        if (source instanceof NakedClass) {
+        if (source instanceof NakedClassSpec) {
             LOG.info("new " + getSpecification().getName() + " instance");
-            newView = newInstance((NakedClass) source, !drag.isCtrl());
+            newView = newInstance(((NakedClassSpec) source).forNakedClass(), !drag.isCtrl());
         } else {
             if (drag.isShift()) {
                 newView = ViewFactory.getViewFactory().createOpenRootView(source);
@@ -152,8 +156,8 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
      * options.setColor(Style.WORKSPACE_MENU); }
      */
 
-    private View newInstance(NakedClass cls, boolean openAView) {
-        NakedObject object = cls.createInstance();
+    private View newInstance(NakedObjectSpecification cls, boolean openAView) {
+        NakedObject object =  getObject().getContext().getObjectManager().createInstance(cls);
 
         return openAView ? ViewFactory.getViewFactory().createOpenRootView(object) : ViewFactory.getViewFactory()
                 .createIconizedRootView(object);
@@ -213,7 +217,16 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
 
         options.add(MenuOptionSet.OBJECT, new MenuOption("Naked Classes...") {
             public void execute(Workspace workspace, View view, Location at) {
-                View classesView = ViewFactory.getViewFactory().createOpenRootView(NakedClass.SELF.actionInstances());
+                NakedObjectSpecification[] classes = NakedObjectSpecification.getNakedClasses();
+                ArbitraryCollection classCollection = new ArbitraryCollection();
+                NakedObjectManager objectManager = NakedObjectContext.getDefaultContext().getObjectManager();
+                for (int i = 0; i < classes.length; i++) {
+                    NakedObjectSpecification cls = classes[i];
+                    if(cls.isObject()) {
+                        classCollection.add(objectManager.getNakedClass(cls));
+                    }
+                }
+                View classesView = ViewFactory.getViewFactory().createOpenRootView(classCollection);
                 classesView.setLocation(at);
                 addView(classesView);
             }

@@ -1,8 +1,8 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.object.value.Time;
 import org.nakedobjects.object.value.TimePeriod;
 import org.nakedobjects.viewer.skylark.Location;
@@ -24,7 +24,7 @@ class ScheduleLayout extends AbstractBuilderDecorator {
 	}
     
     public void layout(View view) {
-        Field field = null;
+        FieldSpecification field = null;
         int x = 0;
         Size size = view.getSize();
         size.contract(view.getPadding());
@@ -39,13 +39,13 @@ class ScheduleLayout extends AbstractBuilderDecorator {
             NakedObject object = ((ObjectContent) v.getContent()).getObject();
 
             if (field == null) {
-                NakedClass nc = object.getNakedClass();
-                Field[] fields = nc.getFields();
+                NakedObjectSpecification nc = object.getSpecification();
+                FieldSpecification[] fields = nc.getFields();
 
                 for (int j = 0; j < fields.length; j++) {
                     field = fields[j];
 
-                    if (field.getType().isAssignableFrom(TimePeriod.class)) {
+                    if (field.getType().isOfType(NakedObjectSpecification.getNakedClass(TimePeriod.class))) {
                         break;
                     }
                 }

@@ -6,33 +6,25 @@ import org.nakedobjects.utility.ConfigurationException;
 
 
 public abstract class NakedObjectStoreAdvancedTestCase extends NakedObjectStoreTestCase {
-    private Object membersOid;
+    private Oid membersOid;
     private Person people[];
-    private NakedClass personClass;
+    private NakedObjectSpecification personClass;
     private Person personPattern;
-    private NakedClass roleClass;
+    private NakedObjectSpecification roleClass;
     private Role rolePattern;
     private Role[] roles;
     private Team team;
     private Person[] teamMembers;
-    private Object teamOid;
+    private Oid teamOid;
 
     public NakedObjectStoreAdvancedTestCase(String name) {
         super(name);
     }
 
     protected void initialiseObjects() throws Exception {
-        manager.setupAddClass(Person.class);
-        manager.setupAddClass(Role.class);
-        manager.setupAddClass(Team.class);
-        manager.setupAddClass(ValueObjectExample.class);
-        manager.setupAddClass(InternalCollection.class);
-        manager.setupAddClass(NakedObject.class);
-        
-
         // classes
-        personClass = NakedClassManager.getInstance().getNakedClass(Person.class.getName());
-        roleClass = NakedClassManager.getInstance().getNakedClass(Role.class.getName());
+        personClass = NakedObjectSpecification.getNakedClass(Person.class.getName());
+        roleClass = NakedObjectSpecification.getNakedClass(Role.class.getName());
 
         // patterns
         personPattern = new Person();
@@ -63,6 +55,7 @@ public abstract class NakedObjectStoreAdvancedTestCase extends NakedObjectStoreT
         }
 
         team = new Team();
+        team.setContext(context);
         team.setOid(teamOid = nextOid());
         team.getMembers().setOid(membersOid = nextOid());
         
@@ -80,10 +73,12 @@ public abstract class NakedObjectStoreAdvancedTestCase extends NakedObjectStoreT
         restartObjectStore();
 
         Role role = new Role();
+        role.setContext(context);
         role.setOid(nextOid());
         role.name.setValue("Leader");
 
         Person person = new Person();
+        person.setContext(context);
         person.setOid(nextOid());
         person.getName().setValue("Fred");
         role.person = person;
@@ -91,8 +86,8 @@ public abstract class NakedObjectStoreAdvancedTestCase extends NakedObjectStoreT
         objectStore.createObject(role);
         objectStore.createObject(person);
 
-        Object roleOid = role.getOid();
-        Object persoOid = role.person.getOid();
+        Oid roleOid = role.getOid();
+        Oid persoOid = role.person.getOid();
 
         assertTrue(role.isPersistent());
         assertTrue(person.isPersistent());
@@ -114,7 +109,7 @@ public abstract class NakedObjectStoreAdvancedTestCase extends NakedObjectStoreT
     public void testMakeEmptyInternalCollectionPersistent() throws Exception {
         restartObjectStore();
 
-        Team restoredTeam = (Team) objectStore.getObject(teamOid, team.getNakedClass());
+        Team restoredTeam = (Team) objectStore.getObject(teamOid, team.getSpecification());
         assertEquals(teamOid, restoredTeam.getOid());
         assertEquals(membersOid, restoredTeam.getMembers().getOid());
     }

@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.ObjectViewingMechanismListener;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.UpdateNotifier;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.ComponentException;
@@ -58,7 +58,7 @@ public class Viewer {
     private String status;
     private PopupMenu popup;
 	private boolean explorationMode;
-
+	private ObjectViewingMechanismListener listener;
     
 	private ViewUpdateNotifier updateNotifier = new ViewUpdateNotifier();
     private View keyboardFocus;
@@ -167,14 +167,15 @@ public class Viewer {
 	}
 	
 	
-	public void init(RenderingArea renderingArea, NakedObject object) throws ConfigurationException, ComponentException {
+	public void init(RenderingArea renderingArea, NakedObject object, ObjectViewingMechanismListener listener) 
+		throws ConfigurationException, ComponentException {
 	    doubleBuffering = Configuration.getInstance().getBoolean(PROPERTY_BASE +
                 "doublebuffering", true);
 /*         background = (Background) ComponentLoader.loadComponent(PARAMETER_BASE +
                 "background", Background.class);
    */     
         this.renderingArea = renderingArea; //new ViewerFrame(this, title);
-
+        this.listener = listener;
 		new ViewerAssistant(this, updateNotifier);
         
         popup = new DefaultPopupMenu();
@@ -395,10 +396,10 @@ public class Viewer {
 
     }
     
-    public void shutdown() {
+    public void close() {
         DebugFrame.disposeAll();
         renderingArea.dispose();
-        NakedObjectManager.getInstance().shutdown();
+        listener.viewerClosing();
     }
 
     private ViewSpecification loadSpecification(String name, Class cls) throws ConfigurationException, ComponentException {

@@ -3,26 +3,25 @@ package org.nakedobjects.viewer.skylark;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.reflect.Value;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import org.nakedobjects.security.Session;
 
 
 public class ValueField extends ObjectField implements ValueContent {
     private NakedValue value;
 
-    public ValueField(NakedObject parent, NakedValue value, Value field) {
+    public ValueField(NakedObject parent, NakedValue value, ValueFieldSpecification field) {
         super(parent, field);
         this.value = value;
     }
 
     public boolean canChangeValue() {
-        Value objectField = getValueField();
+        ValueFieldSpecification objectField = getValueField();
         boolean persistent = !objectField.isDerived();
-        boolean fieldReadable = objectField.getAbout(Session.getSession().getSecurityContext(), getParent()).canUse().isAllowed();
-        boolean parentReadable = getParent().about().canUse().isAllowed();
-        boolean objectEditable = getValue().about().canUse().isAllowed();
+        boolean fieldReadable = objectField.getAbout(Session.getSession().getContext(), getParent()).canUse().isAllowed();
+        boolean objectEditable = getValue().userChangeable();
 
-        return persistent && fieldReadable && parentReadable && objectEditable;
+        return persistent && fieldReadable && objectEditable;
     }
 
     public String debugDetails() {
@@ -33,8 +32,8 @@ public class ValueField extends ObjectField implements ValueContent {
         return value;
     }
 
-    public Value getValueField() {
-        return (Value) getField();
+    public ValueFieldSpecification getValueField() {
+        return (ValueFieldSpecification) getField();
     }
 
     public void menuOptions(MenuOptionSet options) {}
@@ -53,7 +52,7 @@ public class ValueField extends ObjectField implements ValueContent {
     }
 
     public void refresh() {
-        Value field = getValueField();
+        ValueFieldSpecification field = getValueField();
 
         if (field.isDerived()) {
             getValue().copyObject(field.get(getParent()));

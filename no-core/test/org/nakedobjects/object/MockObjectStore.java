@@ -1,6 +1,5 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.reflect.simple.JavaReflector;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Vector;
@@ -10,15 +9,27 @@ import junit.framework.Assert;
 
 public class MockObjectStore implements NakedObjectStore {
     private Vector actions = new Vector();
-    private NakedClass expectedClass;
+    private NakedObjectSpecification expectedClass;
     private NakedObject getObject;
     private int instanceCount;
-    private Vector instances = null;
+    private NakedObject[] instances = null;
     private MockLoadedObjects mockLoadedObjects = new MockLoadedObjects();
     private boolean hasInstances;
 
     public MockObjectStore() {
         super();
+    }
+
+
+    public void assertAction(int i, String expected) {
+        Assert.assertTrue(actions.size() > i);
+        String actual = (String) actions.elementAt(i);
+        
+		if (expected == null && actual == null)
+			return;
+		if (expected != null && actual.startsWith(expected))
+			return;
+		Assert.fail("action " + i + " expected: <" + expected + "> but was: <" +actual + ">");
     }
 
     public void abortTransaction() {
@@ -29,7 +40,7 @@ public class MockObjectStore implements NakedObjectStore {
         getObject = object;
     }
 
-    public void createNakedClass(NakedClass cls) throws ObjectStoreException {}
+    public void createNakedClass(NakedClassSpec cls) throws ObjectStoreException {}
 
     public void createObject(NakedObject object) throws ObjectStoreException {
         actions.addElement("createObject " + object);
@@ -57,7 +68,7 @@ public class MockObjectStore implements NakedObjectStore {
         return null;
     }
 
-    public Vector getInstances(NakedClass cls, boolean includeSubclasses) {
+    public NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses) {
         if (instances == null) {
             Assert.fail("no predefined instances");
         }
@@ -67,11 +78,11 @@ public class MockObjectStore implements NakedObjectStore {
         return instances;
     }
 
-    public Vector getInstances(NakedClass cls, String pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
-        throw new NotImplementedException();
+    public NakedObject[] getInstances(NakedObjectSpecification cls, String pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
+        return getInstances(cls, includeSubclasses);
     }
 
-    public Vector getInstances(NakedObject pattern, boolean includeSubclasses) {
+    public NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) {
         actions.addElement("getInstances " + pattern);
 
         return instances;
@@ -81,15 +92,11 @@ public class MockObjectStore implements NakedObjectStore {
         return mockLoadedObjects;
     }
 
-    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
-        if (expectedClass == null) {
-            throw new NotImplementedException("Getting naked class " + name);
-        } else {
-            return expectedClass;
-        }
+    public NakedClassSpec getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
+        throw new NotImplementedException("Getting naked class " + name);
     }
 
-    public NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, ObjectStoreException {
+    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectStoreException {
         if(getObject == null) {
             Assert.fail("no object expected");
         }
@@ -97,7 +104,7 @@ public class MockObjectStore implements NakedObjectStore {
         return getObject;
     }
 
-    public boolean hasInstances(NakedClass cls, boolean includeSubclasses) {
+    public boolean hasInstances(NakedObjectSpecification cls, boolean includeSubclasses) {
         return hasInstances;
     }
 
@@ -110,7 +117,7 @@ public class MockObjectStore implements NakedObjectStore {
         return null;
     }
 
-    public int numberOfInstances(NakedClass cls, boolean includedSubclasses) {
+    public int numberOfInstances(NakedObjectSpecification cls, boolean includedSubclasses) {
         return instanceCount;
     }
 
@@ -131,7 +138,7 @@ public class MockObjectStore implements NakedObjectStore {
         instanceCount = i;
     }
 
-    public void setupInstances(Vector instances, NakedClass cls) {
+    public void setupInstances(NakedObject[] instances, NakedObjectSpecification cls) {
         this.instances = instances;
         this.expectedClass = cls;
     }
@@ -146,14 +153,6 @@ public class MockObjectStore implements NakedObjectStore {
 
     public void setupLoaded(NakedObject[] objects) {
         mockLoadedObjects.setupLoadedObjects(objects);
-    }
-
-    public void setupNakedClass(Class cls) {
-        setupNakedClass(NakedClass.createNakedClass(cls.getName(), JavaReflector.class.getName()));
-    }
-
-    public void setupNakedClass(NakedClass nakedClass) {
-        this.expectedClass = nakedClass;
     }
 
     public void shutdown() throws ObjectStoreException {

@@ -1,16 +1,17 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.reflect.UndoStack;
+import org.nakedobjects.security.Session;
+import org.nakedobjects.viewer.skylark.core.AbstractView;
+import org.nakedobjects.viewer.skylark.core.DebugFrame;
+import org.nakedobjects.viewer.skylark.util.ViewFactory;
+
 import java.awt.Cursor;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.nakedobjects.object.NakedObjectManager;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.reflect.UndoStack;
-import org.nakedobjects.viewer.skylark.core.AbstractView;
-import org.nakedobjects.viewer.skylark.core.DebugFrame;
-import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 
 public class ViewerAssistant {
@@ -81,7 +82,7 @@ public class ViewerAssistant {
         options.add(MenuOptionSet.VIEW,
             new MenuOption("Quit") {
                 public void execute(Workspace frame, View view, Location at) {
-                    viewer.shutdown();
+                    viewer.close();
                 }
             });
 
@@ -93,6 +94,16 @@ public class ViewerAssistant {
                     view.markDamaged();
                 }
             });
+
+        options.add(MenuOptionSet.DEBUG,
+            new MenuOption("Vew context details...") {
+                public void execute(Workspace frame, View view, Location at) {
+                    DebugFrame f = new DebugFrame();
+                    f.setInfo(Session.getSession().getContext());
+                    f.show(at.x + 50, frame.getBounds().y + 6);
+                }
+            });
+
 
         options.add(MenuOptionSet.DEBUG,
             new MenuOption("List prototypes...") {
@@ -112,6 +123,7 @@ public class ViewerAssistant {
                 }
             });
 
+        /*
         options.add(MenuOptionSet.DEBUG,
             new MenuOption("Object store state...") {
                 public void execute(Workspace frame, View view, Location at) {
@@ -120,7 +132,8 @@ public class ViewerAssistant {
                     f.show(at.x + 50, frame.getBounds().y + 6);
                 }
             });
-
+            */
+        
         options.add(MenuOptionSet.DEBUG, loggingOption("Error", Level.ERROR));
         options.add(MenuOptionSet.DEBUG, loggingOption("Info", Level.INFO));
         options.add(MenuOptionSet.DEBUG, loggingOption("Debug", Level.DEBUG));

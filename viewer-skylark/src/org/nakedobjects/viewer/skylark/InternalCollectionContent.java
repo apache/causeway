@@ -1,13 +1,13 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 
 
 /** @deprecated */
 public class InternalCollectionContent extends OneToManyField {
 
-    public InternalCollectionContent(NakedObject parent, NakedObject object, OneToManyAssociation association) {
+    public InternalCollectionContent(NakedObject parent, NakedObject object, OneToManyAssociationSpecification association) {
         super(parent, object, association);
     }
 

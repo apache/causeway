@@ -2,8 +2,7 @@ package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.CollectionElement;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
@@ -36,7 +35,7 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
 
 		Content content = view.getContent();
 		NakedCollection collection = (NakedCollection) ((ObjectContent) content).getObject();
-		OneToManyAssociation field = (OneToManyAssociation) (content instanceof OneToManyField ? ((OneToManyField) content).getField() : null);
+		OneToManyAssociationSpecification field = (OneToManyAssociationSpecification) (content instanceof OneToManyField ? ((OneToManyField) content).getField() : null);
 
         LOG.debug("rebuild view " + view + " for " + collection);
 

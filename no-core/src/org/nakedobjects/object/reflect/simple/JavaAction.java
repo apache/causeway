@@ -1,10 +1,10 @@
 package org.nakedobjects.object.reflect.simple;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.ObjectNotFoundException;
@@ -12,8 +12,7 @@ import org.nakedobjects.object.TransactionException;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.reflect.ActionDelegate;
-import org.nakedobjects.object.reflect.Action.Type;
-import org.nakedobjects.security.SecurityContext;
+import org.nakedobjects.object.reflect.ActionSpecification.Type;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -34,14 +33,14 @@ public class JavaAction extends JavaMember implements ActionDelegate {
         paramCount = action.getParameterTypes().length;
     }
 
-    public NakedObject execute(NakedObject object, Naked[] parameters) {
+    public NakedObject execute(NakedObject inObject, Naked[] parameters) {
         if (parameters.length != paramCount) {
             LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);
         }
-        NakedObjectManager objectManager = NakedObjectManager.getInstance();
+        NakedObjectManager objectManager = inObject.getContext().getObjectManager();
 
         try {
-            LOG.debug("Action: invoke " + object + "." + getName());
+            LOG.debug("Action: invoke " + inObject + "." + getName());
             objectManager.startTransaction();
 
             /*
@@ -50,17 +49,18 @@ public class JavaAction extends JavaMember implements ActionDelegate {
              * objects that other clients are using.
              */
             Object result;
-            if(object.getOid() == null || !requiresTransaction()) {
+            if(inObject.getOid() == null || !requiresTransaction()) {
                 // non-persistent
-                result = actionMethod.invoke(object, parameters);
+                result = actionMethod.invoke(inObject, parameters);
             } else {
                 // persistent
-	            NakedObject transactionObject = objectManager.getObject(object);
+	            NakedObject transactionObject = objectManager.getObject(inObject.getOid(), inObject.getSpecification());
 	            
 	            Naked[] transactionParameters = new Naked[parameters.length];
 	            for (int i = 0; i < parameters.length; i++) {
 	                if(parameters[i] instanceof NakedObject) {
-	                    transactionParameters[i] = objectManager.getObject((NakedObject) parameters[i]);
+	                    NakedObject parameter = (NakedObject) parameters[i];
+                        transactionParameters[i] = objectManager.getObject(parameter.getOid(), parameter.getSpecification());
 	                } else {
 	                    transactionParameters[i] = parameters[i];
 	                }
@@ -111,7 +111,7 @@ public class JavaAction extends JavaMember implements ActionDelegate {
         
     }
 
-    public About getAbout(SecurityContext context, NakedObject object, Naked[] parameters) {
+    public About getAbout(NakedObjectContext context, NakedObject object, Naked[] parameters) {
         if (parameters.length != paramCount) {
             LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);
         }
@@ -155,20 +155,20 @@ public class JavaAction extends JavaMember implements ActionDelegate {
         return type;
     }
 
-    private NakedClass nakedClass(Class returnType) {
-        return NakedClassManager.getInstance().getNakedClass(returnType.getName());
+    private NakedObjectSpecification nakedClass(Class returnType) {
+        return NakedObjectSpecification.getNakedClass(returnType.getName());
     }
 
-    public NakedClass[] parameterTypes() {
+    public NakedObjectSpecification[] parameterTypes() {
         Class[] cls = actionMethod.getParameterTypes();
-        NakedClass[] naked = new NakedClass[cls.length];
+        NakedObjectSpecification[] naked = new NakedObjectSpecification[cls.length];
         for (int i = 0; i < cls.length; i++) {
             naked[i] = nakedClass(cls[i]);
         }
         return naked;
     }
 
-    public NakedClass returnType() {
+    public NakedObjectSpecification returnType() {
         Class returnType = actionMethod.getReturnType();
         boolean hasReturn = returnType != void.class && returnType != NakedError.class;
         return hasReturn ? nakedClass(returnType) : null;

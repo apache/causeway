@@ -25,13 +25,12 @@
 package org.nakedobjects.object.value;
 
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.nakedobjects.object.value.WholeNumber;
-
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 
 
 public class WholeNumberTests extends TestCase {

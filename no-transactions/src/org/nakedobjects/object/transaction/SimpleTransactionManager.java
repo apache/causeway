@@ -1,10 +1,12 @@
 package org.nakedobjects.object.transaction;
 
 import org.nakedobjects.object.LocalObjectManager;
-import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.OidGenerator;
 import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.UpdateNotifier;
 import org.nakedobjects.utility.ComponentException;
@@ -16,7 +18,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
@@ -25,8 +26,8 @@ public class SimpleTransactionManager extends LocalObjectManager implements Tran
     private PrintStream file;
     private Hashtable transactions;
     
-    public SimpleTransactionManager(NakedObjectStore objectStore, UpdateNotifier updateNotifier) throws ConfigurationException, ComponentException {
-        super(objectStore, updateNotifier);
+    public SimpleTransactionManager(NakedObjectStore objectStore, UpdateNotifier updateNotifier, OidGenerator oidGenerator) throws ConfigurationException, ComponentException {
+        super(objectStore, updateNotifier, oidGenerator);
         
         transactions = new Hashtable();
         log("Created transaction manager " + this);
@@ -86,12 +87,12 @@ public class SimpleTransactionManager extends LocalObjectManager implements Tran
         return super.getDebugTitle();
     }
 
-    public Vector getInstances(NakedObject pattern) throws UnsupportedFindException {
+    public NakedObject[] getInstances(NakedObject pattern) throws UnsupportedFindException {
         log("get instances like - " + pattern);
         return super.getInstances(pattern);
     }
 
-    public NakedObject getObject(Object oid, NakedClass hint) {
+    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) {
         log("get object - " + oid);
         Transaction transaction = getTransaction();
         if(transaction == null) {
@@ -106,7 +107,7 @@ public class SimpleTransactionManager extends LocalObjectManager implements Tran
         return (Transaction) transactions.get(thread);
     }
 
-    public boolean hasInstances(NakedClass cls) {
+    public boolean hasInstances(NakedObjectSpecification cls) {
         log("has instances of - " + cls);
         return super.hasInstances(cls);
     }
@@ -122,7 +123,7 @@ public class SimpleTransactionManager extends LocalObjectManager implements Tran
         write(transaction + ": " + message);
     }
     
-    public int numberOfInstances(NakedClass cls) {
+    public int numberOfInstances(NakedObjectSpecification cls) {
         log("number of instances of - " + cls);
         return super.numberOfInstances(cls);
     }

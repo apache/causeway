@@ -2,7 +2,7 @@ package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.object.value.TimePeriod;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
@@ -26,12 +26,12 @@ import org.apache.log4j.Logger;
 
 public class ScheduleBlockView extends ObjectView {
 	private static final Logger LOG = Logger.getLogger(ScheduleBlockView.class);
-   	private Field timePeriodField;
-	private Field colorField;
+   	private FieldSpecification timePeriodField;
+	private FieldSpecification colorField;
 	private TitleText text;
 	private IconGraphic icon;
 
-	public ScheduleBlockView(Content content, ViewSpecification specification, ViewAxis axis, Field timePeriodField, Field colorField) {
+	public ScheduleBlockView(Content content, ViewSpecification specification, ViewAxis axis, FieldSpecification timePeriodField, FieldSpecification colorField) {
         super(content, specification, axis);
         this.timePeriodField = timePeriodField;
         this.colorField = colorField;

@@ -1,6 +1,5 @@
 package org.nakedobjects.object;
 
-import java.util.Vector;
 
 import org.nakedobjects.utility.ComponentException;
 import org.nakedobjects.utility.ConfigurationException;
@@ -33,7 +32,7 @@ public interface NakedObjectStore extends DebugInfo {
      */
     public void createObject(NakedObject object) throws ObjectStoreException;
 
-    public void createNakedClass(NakedClass cls) throws ObjectStoreException;
+    public void createNakedClass(NakedClassSpec cls) throws ObjectStoreException;
 
     
     /**
@@ -45,9 +44,9 @@ public interface NakedObjectStore extends DebugInfo {
 
     public void endTransaction() throws ObjectStoreException;
 
-    Vector getInstances(NakedClass cls, boolean includeSubclasses) throws ObjectStoreException;
+    NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses) throws ObjectStoreException;
 
-    Vector getInstances(NakedClass cls, String pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException;
+    NakedObject[] getInstances(NakedObjectSpecification cls, String pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException;
 
     /**
      * Gets the instances that match the specified pattern. The object store
@@ -61,7 +60,7 @@ public interface NakedObjectStore extends DebugInfo {
      * <code>null</code> references are to be ignored; </para>
      * @param includeSubclasses TODO
      */
-    Vector getInstances(NakedObject pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException;
+    NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException;
 
     /**
      * Retrieves the object identified by the specified OID from the object
@@ -100,9 +99,9 @@ public interface NakedObjectStore extends DebugInfo {
      * @throws ObjectNotFoundException
      *                    when no object corresponding to the oid can be found
      */
-    NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, ObjectStoreException;
+    NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectStoreException;
 
-    NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException;
+    NakedClassSpec getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException;
 
     /**
      * Checks whether there are any instances of the specified type. The object
@@ -111,7 +110,7 @@ public interface NakedObjectStore extends DebugInfo {
      * <code>false</code> if there are not.
      * @param includeSubclasses TODO
      */
-    boolean hasInstances(NakedClass cls, boolean includeSubclasses) throws ObjectStoreException;
+    boolean hasInstances(NakedObjectSpecification cls, boolean includeSubclasses) throws ObjectStoreException;
 
     /**
      * Initialize the object store so that calls to this object store access
@@ -132,7 +131,7 @@ public interface NakedObjectStore extends DebugInfo {
      * A count of the number of instances matching the specified pattern.
      * @param includedSubclasses TODO
      */
-    int numberOfInstances(NakedClass cls, boolean includedSubclasses) throws ObjectStoreException;
+    int numberOfInstances(NakedObjectSpecification cls, boolean includedSubclasses) throws ObjectStoreException;
 
     /**
      * Re-initialises the fields of an object. This method should return

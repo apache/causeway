@@ -2,15 +2,17 @@ package org.nakedobjects.xat.system;
 
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedClassSpec;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.UnsupportedFindException;
-import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.object.reflect.FieldSpecification;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -23,17 +25,10 @@ public class ObjectStore implements NakedObjectStore {
     private final static Category LOG = Category.getInstance(ObjectStore.class);
     private final Hashtable classes;
     private final LoadedObjects loaded;
-    /*
-     * The objects need to store in a repeatable sequence so the elements and instances method
-     * return the same data for any repeated call, and so that one subset of instances follows on
-     * the previous. This is done by keeping the objects in the order that they where created.
-     */
- //   private final Vector persistentObjectVector;
-    	private final Hashtable objectInstances;
+    private final Hashtable objectInstances;
 
     public ObjectStore() {
         loaded = new LoadedObjects();
-//        persistentObjectVector = new Vector();
         objectInstances = new Hashtable();
         classes = new Hashtable(30);
     }
@@ -45,15 +40,15 @@ public class ObjectStore implements NakedObjectStore {
         save(object);
     }
 
-    public void createNakedClass(NakedClass cls) throws ObjectStoreException {
+    public void createNakedClass(NakedClassSpec cls) throws ObjectStoreException {
         LOG.debug("createClass " + cls);
         cls.setResolved();
-        classes.put(cls.fullName(), cls);
-        Hashtable persistentObjectVector = instancesFor(cls);
+        classes.put(cls.getName().stringValue(), cls);
+        Hashtable persistentObjectVector = instancesFor(cls.forNakedClass());
         persistentObjectVector.put(cls.getOid(), cls);
     }
     
-    private Hashtable instancesFor(NakedClass cls) {
+    private Hashtable instancesFor(NakedObjectSpecification cls) {
         if(objectInstances.containsKey(cls)) {
             return (Hashtable) objectInstances.get(cls);
         } else {
@@ -65,11 +60,11 @@ public class ObjectStore implements NakedObjectStore {
 
     public void destroyObject(NakedObject object) throws ObjectStoreException {
         LOG.info("Delete requested on '" + object + "'");
-        Hashtable persistentObjectVector = instancesFor(object.getNakedClass());
+        Hashtable persistentObjectVector = instancesFor(object.getSpecification());
         persistentObjectVector.remove(object.getOid());
     }
 
-    private Enumeration elements(NakedClass nakedClass) {
+    private Enumeration elements(NakedObjectSpecification nakedClass) {
         Hashtable persistentObjectVector = instancesFor(nakedClass);
         return persistentObjectVector.elements();
     }
@@ -86,75 +81,87 @@ public class ObjectStore implements NakedObjectStore {
         return name();
     }
 
-    public Vector getInstances(NakedClass cls, boolean includeSubclasses) {
+    public NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses) {
+        Vector instances = instances(cls);
+
+        LOG.debug("getInstances of " + cls + " => " + instances);
+        return toInstancesArray(instances);
+    }
+
+
+    private NakedObject[] toInstancesArray(Vector instances) {
+        NakedObject[] array = new NakedObject[instances.size()];
+        instances.copyInto(array);
+        return array;
+    }
+
+	private Vector instances(NakedObjectSpecification cls) {
         Vector instances = new Vector();
         Enumeration objects = elements(cls);
 
         while (objects.hasMoreElements()) {
             NakedObject object = (NakedObject) objects.nextElement();
 
-            if (cls.equals(object.getNakedClass())) {
+            if (cls.equals(object.getSpecification())) {
                 instances.addElement(object);
             }
         }
-
-        LOG.debug("getInstances of " + cls + " => " + instances);
         return instances;
     }
 
-	public Vector getInstances(NakedClass cls, String pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
-	   	Vector v = getInstances(cls, false);
+    public NakedObject[] getInstances(NakedObjectSpecification cls, String pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
+	   	Vector instances = instances(cls);
 	   	int i = 0;
 	   	String match = pattern.toLowerCase();
-	   	while(i < v.size()) {
-	   	    NakedObject element = (NakedObject) v.elementAt(i);
-            if(element.title().toString().toLowerCase().indexOf(match) == -1) {
-                v.removeElementAt(i);
+	   	while(i < instances.size()) {
+	   	    NakedObject element = (NakedObject) instances.elementAt(i);
+            if(element.titleString().toLowerCase().indexOf(match) == -1) {
+                instances.removeElementAt(i);
             } else {
                 i++;
             }
 	   	}
-	   	return v;
+	   	return toInstancesArray(instances);
 	}
     
-	public Vector getInstances(NakedObject pattern, boolean includeSubclasses) {
+	public NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) {
         if (pattern == null) { throw new NullPointerException(); }
 
         Vector instances = new Vector();
-        if (pattern instanceof NakedClass) {
-            //            NakedClass requiredType = pattern.getNakedClass();
-            Enumeration objects = elements((NakedClass) pattern);
+        if (pattern instanceof NakedClassSpec) {
+            NakedObjectSpecification forNakedClass = ((NakedClassSpec) pattern).forNakedClass();
+            Enumeration objects = elements(forNakedClass);
 
-            String name = ((NakedClass) pattern).fullName();
+            String name = forNakedClass.getFullName();
 
             while (objects.hasMoreElements()) {
                 NakedObject object = (NakedObject) objects.nextElement();
 
-                if (object instanceof NakedClass && ((NakedClass) object).getName().isSameAs(name)) {
+                if (object instanceof NakedClassSpec && ((NakedClassSpec) object).getName().isSameAs(name)) {
                     instances.addElement(object);
                 }
             }
         } else {
-            NakedClass requiredType = pattern.getNakedClass();
+            NakedObjectSpecification requiredType = pattern.getSpecification();
             Enumeration objects = elements(requiredType);
 
             while (objects.hasMoreElements()) {
                 NakedObject object = (NakedObject) objects.nextElement();
 
-                if (requiredType.equals(object.getNakedClass()) && matchesPattern(pattern, object)) {
+                if (requiredType.equals(object.getSpecification()) && matchesPattern(pattern, object)) {
                     instances.addElement(object);
                 }
             }
         }
         LOG.debug("getInstances like " + pattern + " => " + instances);
-        return instances;
+        return toInstancesArray(instances);
     }
 
     public LoadedObjects getLoadedObjects() {
         return loaded;
     }
 
-    public NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, ObjectStoreException {
+    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectStoreException {
         LOG.debug("getObject " + oid);
         Enumeration e = elements(hint);
         while (e.hasMoreElements()) {
@@ -167,8 +174,8 @@ public class ObjectStore implements NakedObjectStore {
         throw new ObjectNotFoundException(oid);
     }
 
-    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
-        NakedClass nc = (NakedClass) classes.get(name);
+    public NakedClassSpec getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
+        NakedClassSpec nc = (NakedClassSpec) classes.get(name);
         if(nc == null) {
             throw new ObjectNotFoundException();
         } else {
@@ -176,12 +183,12 @@ public class ObjectStore implements NakedObjectStore {
         }
     }
     
-    public boolean hasInstances(NakedClass cls, boolean includeSubclasses) {
+    public boolean hasInstances(NakedObjectSpecification cls, boolean includeSubclasses) {
         Enumeration e = elements(cls);
 
         while (e.hasMoreElements()) {
             NakedObject data = (NakedObject) e.nextElement();
-            if (cls.equals(data.getNakedClass())) {
+            if (cls.equals(data.getSpecification())) {
                 LOG.debug("hasInstances of " + cls);
                 return true;
             }
@@ -194,11 +201,11 @@ public class ObjectStore implements NakedObjectStore {
 
     private boolean matchesPattern(NakedObject pattern, NakedObject instance) {
         NakedObject object = instance;
-        NakedClass nc = object.getNakedClass();
-        Field[] fields = nc.getFields();
+        NakedObjectSpecification nc = object.getSpecification();
+        FieldSpecification[] fields = nc.getFields();
 
         for (int f = 0; f < fields.length; f++) {
-            Field fld = fields[f];
+            FieldSpecification fld = fields[f];
 
             // are ignoring internal collections - these probably should be considered
             // ignore derived fields - there is no way to set up these fields
@@ -217,8 +224,8 @@ public class ObjectStore implements NakedObjectStore {
                 }
 
                 // compare the titles
-                String r = reqd.title().toString().toLowerCase();
-                String s = search.title().toString().toLowerCase();
+                String r = reqd.titleString ().toLowerCase();
+                String s = search.titleString().toLowerCase();
 
                 // if the pattern occurs in the object
                 if (s.indexOf(r) == -1) { return false; }
@@ -246,13 +253,13 @@ public class ObjectStore implements NakedObjectStore {
         return "Transient Object Store";
     }
 
-    public int numberOfInstances(NakedClass cls, boolean includedSubclasses) {
+    public int numberOfInstances(NakedObjectSpecification cls, boolean includedSubclasses) {
         int noInstances = 0;
         Enumeration e = elements(cls);
 
         while (e.hasMoreElements()) {
             NakedObject data = (NakedObject) e.nextElement();
-            if (cls.equals(data.getNakedClass())) {
+            if (cls.equals(data.getSpecification())) {
                 noInstances++;
             }
         }
@@ -270,10 +277,10 @@ public class ObjectStore implements NakedObjectStore {
 
     public void save(NakedObject object) throws ObjectStoreException {
         LOG.debug("save " + object);
-        if (object instanceof NakedClass) { 
+        if (object instanceof NakedClassSpec) { 
             throw new ObjectStoreException("Can't make changes to a NakedClass object"); 
         }
-        Hashtable persistentObjectVector = instancesFor(object.getNakedClass());
+        Hashtable persistentObjectVector = instancesFor(object.getSpecification());
         Object oid = object.getOid();
   //      if (!persistentObjectVector.containsKey(oid)) {
             persistentObjectVector.put(oid, object);

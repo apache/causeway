@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedClassSpec;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.View;
@@ -15,8 +15,8 @@ public class ClassTitleText extends TitleText {
     }
 
     protected String title() {
-        final NakedClass nakedClass = (NakedClass) content.getObject();
-        return nakedClass.getShortName();
+        final NakedClassSpec nakedClass = (NakedClassSpec) content.getObject();
+        return nakedClass.getSingularName();
     }
 }
 

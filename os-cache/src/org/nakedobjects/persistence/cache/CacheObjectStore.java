@@ -4,15 +4,18 @@ import org.nakedobjects.io.Memento;
 import org.nakedobjects.io.Transferable;
 import org.nakedobjects.io.BinaryTransferableWriter;
 import org.nakedobjects.object.LoadedObjects;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedClassSpec;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.UnsupportedFindException;
-import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.object.reflect.FieldSpecification;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -103,29 +106,28 @@ public class CacheObjectStore implements NakedObjectStore {
     }
 
     public void createObject(NakedObject object) throws ObjectStoreException {
-        NakedClass nakedClass = object.getNakedClass();
+        NakedObjectSpecification nakedClass = object.getSpecification();
         if(!nakedClass.isCollection()) {
 	        writeJournal("create", new Memento(object));
 	        instances(nakedClass).create(object);
         }
     }
 
-    public void createNakedClass(NakedClass cls) throws ObjectStoreException {
+    public void createNakedClass(NakedClassSpec cls) throws ObjectStoreException {
         String className = cls.getName().stringValue();
         if(objectSets.containsKey(className)) {
             throw new NakedObjectRuntimeException("Class already created: " + cls);
         }
         BinaryTransferableWriter data = new BinaryTransferableWriter();
         data.writeString(className);
-        data.writeString(cls.getReflector().saveString());
         data.writeObject((Transferable) cls.getOid());
         writeJournal("class", data);
-        Instances index = new Instances(cls, loadedObjects);
+        Instances index = new Instances(cls.forNakedClass(), loadedObjects);
         objectSets.put(className, index);
     }
     
-     private Instances instances(NakedClass cls) {
-        String className = cls.getName().stringValue();
+     private Instances instances(NakedObjectSpecification cls) {
+        String className = cls.getFullName();
         
         if (objectSets.containsKey(className)) {
             return (Instances) objectSets.get(className);
@@ -146,7 +148,7 @@ public class CacheObjectStore implements NakedObjectStore {
 
     public void destroyObject(NakedObject object) {
         writeJournal("delete", new Memento(object));
-        instances(object.getNakedClass()).remove(object);
+        instances(object.getSpecification()).remove(object);
     }
 
     public void endTransaction() {}
@@ -167,7 +169,7 @@ public class CacheObjectStore implements NakedObjectStore {
         return null;
     }
 
-    public Vector getInstances(NakedClass cls, boolean includeSubclasses) {
+    public NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses) {
         Vector instances = new Vector();
         Enumeration objects = instances(cls).instances();
         while (objects.hasMoreElements()) {
@@ -178,8 +180,8 @@ public class CacheObjectStore implements NakedObjectStore {
         return instances;
     }
 
-    public Vector getInstances(NakedObject pattern, boolean includeSubclasses) {
-        NakedClass requiredType = pattern.getNakedClass();
+    public NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) {
+        NakedObjectSpecification requiredType = pattern.getSpecification();
         Vector instances = new Vector();
         Enumeration objects = instances(requiredType).instances();
         while (objects.hasMoreElements()) {
@@ -193,7 +195,7 @@ public class CacheObjectStore implements NakedObjectStore {
         return instances;
     }
     
-    public Vector getInstances(NakedClass cls, String pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
+    public NakedObject[] getInstances(NakedObjectSpecification cls, String pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
         Vector instances = new Vector();
         Enumeration objects = instances(cls).instances();
         String match = pattern.toLowerCase();
@@ -212,8 +214,8 @@ public class CacheObjectStore implements NakedObjectStore {
         return loadedObjects;
     }
 
-    public NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, ObjectStoreException {
-        if(NakedClass.class.getName().equals(hint.fullName())) {
+    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectStoreException {
+        if(NakedObjectSpecification.class.getName().equals(hint.getFullName())) {
             Enumeration e = objectSets.elements();
             while (e.hasMoreElements()) {
                 Instances instances = (Instances) e.nextElement();
@@ -229,8 +231,8 @@ public class CacheObjectStore implements NakedObjectStore {
         }
     }
     
-    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
-        NakedClass nc = instances(name).getNakedClass();
+    public NakedClassSpec getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
+        NakedObjectSpecification nc = instances(name).getNakedClass();
         if(nc == null) {
             throw new ObjectNotFoundException();
         } else {
@@ -238,7 +240,7 @@ public class CacheObjectStore implements NakedObjectStore {
         }
     }
 
-    public boolean hasInstances(NakedClass cls, boolean includeSubclasses) {
+    public boolean hasInstances(NakedObjectSpecification cls, boolean includeSubclasses) {
        return numberOfInstances(cls, false) > 0;
     }
 
@@ -264,7 +266,7 @@ public class CacheObjectStore implements NakedObjectStore {
                 oos = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
                 loadClasses(oos);
                 loadInstances(oos);
-                int size = loadData(oos);
+                int size = loadData(oos, NakedObjectContext.getDefaultContext());
                 LOG.info(size + " objects loaded from " + file);
             } catch (FileNotFoundException e) {
                 throw new ObjectStoreException("Failed to find file " + filepath, e);
@@ -293,7 +295,7 @@ public class CacheObjectStore implements NakedObjectStore {
             String className = (String) oos.readObject();
             String reflector = (String) oos.readObject();
             Object oid = oos.readObject();
-            NakedClass cls = NakedClass.createNakedClass(className, reflector);
+            NakedObjectSpecification cls = NakedObjectSpecification.createNakedClass(className, reflector);
             cls.setOid(oid);
             
             Instances ins = new Instances(cls, loadedObjects);
@@ -323,12 +325,12 @@ public class CacheObjectStore implements NakedObjectStore {
         return filepath;
     }
 
-    private int loadData(ObjectInputStream oos) throws ObjectNotFoundException, IOException, ClassNotFoundException {
+    private int loadData(ObjectInputStream oos, NakedObjectContext context) throws ObjectNotFoundException, IOException, ClassNotFoundException {
         int size = 0;
         int noClasses = oos.readInt();
         for (int k = 0; k < noClasses; k++) {                   
             String className = (String) oos.readObject();
-            size += instances(className).loadData(oos);
+            size += instances(className).loadData(oos, context);
         }
         return size;
     }
@@ -345,11 +347,11 @@ public class CacheObjectStore implements NakedObjectStore {
 
     private boolean matchesPattern(NakedObject pattern, NakedObject instance) {
         NakedObject object = instance;
-        NakedClass nc = object.getNakedClass();
-        Field[] fields = nc.getFields();
+        NakedObjectSpecification nc = object.getSpecification();
+        FieldSpecification[] fields = nc.getFields();
 
         for (int f = 0; f < fields.length; f++) {
-            Field fld = fields[f];
+            FieldSpecification fld = fields[f];
 
             // are ignoring internal collections - these probably should be considered
             // ignore derived fields - there is no way to set up these fields
@@ -397,7 +399,7 @@ public class CacheObjectStore implements NakedObjectStore {
         return "Cache Object Store";
     }
 
-    public int numberOfInstances(NakedClass cls, boolean includedSubclasses) {
+    public int numberOfInstances(NakedObjectSpecification cls, boolean includedSubclasses) {
 	    return instances(cls).numberInstances();
     }
 
@@ -478,7 +480,7 @@ public class CacheObjectStore implements NakedObjectStore {
         oos.writeInt(objectSets.size());
         while (e1.hasMoreElements()) {
             Instances instances = (Instances) e1.nextElement();
-            NakedClass cls = instances.getNakedClass();
+            NakedObjectSpecification cls = instances.getNakedClass();
             oos.writeObject(cls.getName().stringValue());
             oos.writeObject(cls.getReflector().stringValue());
             oos.writeObject(cls.getOid());

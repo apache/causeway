@@ -1,26 +1,26 @@
 package org.nakedobjects.persistence.sql;
 
 import org.nakedobjects.object.LoadedObjects;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ObjectNotFoundException;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.UnsupportedFindException;
 
-import java.util.Vector;
 
 public interface ObjectMapper {
     void createObject(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException;
     void destroyObject(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException;
     void save(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException;
-    NakedObject getObject(DatabaseConnector connector, Object oid, NakedClass hint) throws ObjectNotFoundException, SqlObjectStoreException;
+    NakedObject getObject(DatabaseConnector connector, Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, SqlObjectStoreException;
     void resolve(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException;
 
 
-    Vector getInstances(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException;
-    Vector getInstances(DatabaseConnector connector, NakedClass cls, String pattern) throws SqlObjectStoreException, UnsupportedFindException;
-    Vector getInstances(DatabaseConnector connector, NakedObject pattern) throws SqlObjectStoreException, UnsupportedFindException;
-    boolean hasInstances(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException;
-    int numberOfInstances(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException;
+    NakedObject[] getInstances(DatabaseConnector connector, NakedObjectSpecification cls) throws SqlObjectStoreException;
+    NakedObject[] getInstances(DatabaseConnector connector, NakedObjectSpecification cls, String pattern) throws SqlObjectStoreException, UnsupportedFindException;
+    NakedObject[] getInstances(DatabaseConnector connector, NakedObject pattern) throws SqlObjectStoreException, UnsupportedFindException;
+    boolean hasInstances(DatabaseConnector connector, NakedObjectSpecification cls) throws SqlObjectStoreException;
+    int numberOfInstances(DatabaseConnector connector, NakedObjectSpecification cls) throws SqlObjectStoreException;
 
 
     void startup(DatabaseConnector connector, ObjectMapperLookup mappers, LoadedObjects loadedObjects) throws SqlObjectStoreException;

@@ -1,6 +1,7 @@
 package org.nakedobjects.object.reflect.simple;
 
 import org.nakedobjects.object.AbstractNakedObject;
+import org.nakedobjects.object.CompositePart;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
@@ -11,12 +12,12 @@ import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.control.Validity;
-import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.ActionDelegate;
-import org.nakedobjects.object.reflect.MemberIf;
+import org.nakedobjects.object.reflect.Member;
 import org.nakedobjects.object.reflect.NakedClassException;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.Reflector;
 
@@ -162,7 +163,8 @@ public class JavaReflector implements Reflector {
                 "A NakedObject class must be marked as public.  Error in " + cls); }
 
         this.cls = cls;
-
+/*
+ * NOTE some classes do not have a default constructor
         if (!cls.isInterface()) {
             try {
                 cls.getConstructor(new Class[0]);
@@ -170,7 +172,7 @@ public class JavaReflector implements Reflector {
                 throw new NakedObjectRuntimeException("Class " + name + " must have a default constructor");
             }
         }
-
+*/
         methods = cls.getMethods();
     }
 
@@ -186,7 +188,7 @@ public class JavaReflector implements Reflector {
                 throw new NakedObjectRuntimeException("Can't access the default constructor when creating class " + cls
                         + ". Ensure it is public");
             } catch (InstantiationException e) {
-                throw new NakedObjectRuntimeException("Failed to instantiate a " + className() + " object: " + e);
+                throw new NakedObjectRuntimeException("Failed to instantiate a " + className() + " object: " + e, e);
             }
         }
     }
@@ -240,8 +242,8 @@ public class JavaReflector implements Reflector {
                     LOG.debug("  with about method " + aboutMethod);
                 }
 
-                Action.Type action;
-                action = new Action.Type[] { Action.USER, Action.EXPLORATION, Action.DEBUG }[prefix];
+                ActionSpecification.Type action;
+                action = new ActionSpecification.Type[] { ActionSpecification.USER, ActionSpecification.EXPLORATION, ActionSpecification.DEBUG }[prefix];
                 ActionDelegate local = new JavaAction(naturalName(name), action, method, aboutMethod);
                 actions.addElement(local);
             }
@@ -327,7 +329,7 @@ public class JavaReflector implements Reflector {
         }
     }
 
-    public MemberIf[] fields() {
+    public Member[] fields() {
         LOG.debug("looking for fields");
         Vector elements = new Vector();
 
@@ -340,7 +342,7 @@ public class JavaReflector implements Reflector {
         // associations
         oneToOneAssociationFields(elements);
 
-        MemberIf[] results = new MemberIf[elements.size()];
+        Member[] results = new Member[elements.size()];
         elements.copyInto(results);
         return results;
     }
@@ -469,6 +471,10 @@ public class JavaReflector implements Reflector {
         return NakedValue.class.isAssignableFrom(cls);
     }
 
+    public boolean isPartOf() {
+        return CompositePart.class.isAssignableFrom(cls);
+    }
+    
     String[] names(Vector methods) {
         String[] names = new String[methods.size()];
         Enumeration e = methods.elements();
@@ -488,7 +494,7 @@ public class JavaReflector implements Reflector {
      * each suitable get... method a vector of OneToManyAssociation objects are
      * returned.
      * 
-     * @see OneToManyAssociation
+     * @see OneToManyAssociationSpecification
      */
     private void oneToManyAssociationFields(Vector associations) {
         Vector v = findPrefixedMethods(OBJECT, GET_PREFIX, InternalCollection.class, 0);
@@ -552,7 +558,7 @@ public class JavaReflector implements Reflector {
      * NakedObjects.
      * @throws ReflectionException
      * 
-     * @see OneToOneAssociation
+     * @see OneToOneAssociationSpecification
      */
     private void oneToOneAssociationFields(Vector associations) throws ReflectionException {
         Vector v = findPrefixedMethods(OBJECT, GET_PREFIX, NakedObject.class, 0);
@@ -625,6 +631,10 @@ public class JavaReflector implements Reflector {
         }
 
         return null;
+    }
+
+    public String fullName() {
+       return cls.getName();
     }
 
     public String shortName() {

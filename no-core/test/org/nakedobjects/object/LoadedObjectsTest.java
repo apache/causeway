@@ -1,25 +1,24 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.SystemClock;
-import org.nakedobjects.object.value.Date;
-import org.nakedobjects.object.value.TimeStamp;
+import org.nakedobjects.object.value.TestClock;
 
 import junit.framework.TestCase;
 
 public class LoadedObjectsTest extends TestCase {
 
     private LoadedObjects lookup;
-    private Integer oid;
+    private MockOid oid;
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(LoadedObjectsTest.class);
     }
 
     protected void setUp() throws Exception {
-        Date.setClock(new SystemClock());
-        TimeStamp.setClock(new SystemClock());
+        new TestClock();
+        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+        
         lookup = new LoadedObjects();
-        oid = new Integer(1);
+        oid = new MockOid(1);
   }
     
     public void testNotLoaded() {

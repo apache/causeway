@@ -1,9 +1,7 @@
 package org.nakedobjects.persistence.sql.auto;
 
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.SimpleOid;
 import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
@@ -36,12 +34,12 @@ public class RoleMapper extends NameBasedMapper {
 						+ " (id INTEGER, name VARCHAR(255), description VARCHAR(1024))");
 	}
 
-	public Vector getInstances(DatabaseConnector connector, NakedClass cls) throws SqlObjectStoreException {
+	public NakedObject[] getInstances(DatabaseConnector connector, NakedObjectSpecification cls) throws SqlObjectStoreException {
 		String statement = "select " + columns + " from " + table;
 		return getInstances(connector, statement);
 	}
 
-	public Vector getInstances(DatabaseConnector connector, NakedObject pattern)
+	public NakedObject[] getInstances(DatabaseConnector connector, NakedObject pattern)
 			throws SqlObjectStoreException, UnsupportedFindException {
 		LOG.debug("loading user: " + pattern);
 		String statement = "select " + columns + " from " + table
@@ -50,9 +48,8 @@ public class RoleMapper extends NameBasedMapper {
 		return getInstances(connector, statement);
 	}
 
-	private Vector getInstances(DatabaseConnector connector, String statement) throws SqlObjectStoreException {
+	private NakedObject[] getInstances(DatabaseConnector connector, String statement) throws SqlObjectStoreException {
 		Results rs = connector.select(statement);
-		NakedObjectManager manager = NakedObjectManager.getInstance();
 		Vector instances = new Vector();
 
 		while (rs.next()) {
@@ -64,9 +61,7 @@ public class RoleMapper extends NameBasedMapper {
 		    if (loadedObjects.isLoaded(oid)) {
 		        instance = (Role) loadedObjects.getLoadedObject(oid);
 		    } else {
-		        instance = (Role) NakedClassManager.getInstance()
-		        .getNakedClass(Role.class.getName())
-		        .acquireInstance();
+		        instance = (Role) NakedObjectSpecification.getNakedClass(Role.class.getName()).acquireInstance();
 		        instance.setOid(oid);
 		        instance.getName().setValue(rs.getString("name"));
 		        instance.getDescription().setValue(
@@ -78,9 +73,10 @@ public class RoleMapper extends NameBasedMapper {
 		    instances.addElement(instance);
 		}
         rs.close();
-		return instances;
+		return  toInstancesArray(instances);
 	}
 
+	
 	protected boolean needsTables(DatabaseConnector connector) throws SqlObjectStoreException {
 		return !connector.hasTable(table);
 	}
@@ -97,7 +93,7 @@ public class RoleMapper extends NameBasedMapper {
 				+ ((SimpleOid) user.getOid()).getSerialNo());
 	}
 
-	protected String table(NakedClass cls) {
+	protected String table(NakedObjectSpecification cls) {
 		return table;
 	}
 }

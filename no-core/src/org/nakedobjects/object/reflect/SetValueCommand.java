@@ -5,12 +5,12 @@ import org.nakedobjects.object.NakedObject;
 
 public class SetValueCommand implements Command {
     private final String description;
-    private final Value value;
+    private final ValueFieldSpecification value;
     private NakedObject object;
     private String textEntry;
     private String oldValue;
 
-    public SetValueCommand(NakedObject object, Value value) {
+    public SetValueCommand(NakedObject object, ValueFieldSpecification value) {
         this.oldValue = value.getValue(object).saveString();
         this.object = object;
         this.value = value;
@@ -24,7 +24,7 @@ public class SetValueCommand implements Command {
 
     public void undo() {
         value.getValue(object).restoreString(oldValue);
-        object.objectChanged();
+        object.getContext().getObjectManager().objectChanged(object);
     }
 
     public void execute() {}

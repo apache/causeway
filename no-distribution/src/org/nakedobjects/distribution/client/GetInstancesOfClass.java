@@ -1,8 +1,8 @@
 package org.nakedobjects.distribution.client;
 
 import org.nakedobjects.distribution.RequestContext;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedClNakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectManager;
 
 
@@ -10,13 +10,13 @@ public class GetInstancesOfClass extends AbstractGetInstances {
 	private final static long serialVersionUID = 1L;
 	private String className;
 
-	public GetInstancesOfClass(NakedClass cls) {
-		className = cls.fullName();
+	public GetInstancesOfClass(NakedObjectSpecification cls) {
+		className = cls.getFullName();
 	}
 
 	protected void generateResponse(RequestContext server) {
 		NakedObjectManager objectManager = server.getObjectManager();
-		NakedClass cls = NakedClassManager.getInstance().getNakedClass(className);
+		NakedObjectSpecification cls = NakedObjectSpecification.getNakedClass(className);
 		setInstances(objectManager.getInstances(cls));
 	}
 

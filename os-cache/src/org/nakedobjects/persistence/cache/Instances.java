@@ -2,8 +2,9 @@ package org.nakedobjects.persistence.cache;
 
 import org.nakedobjects.io.Memento;
 import org.nakedobjects.object.LoadedObjects;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 
 import java.io.IOException;
@@ -18,25 +19,20 @@ import org.apache.log4j.Category;
 
 class Instances {
     private final static Category LOG = Category.getInstance(Instances.class);
-    private NakedClass cls;
+    private NakedObjectSpecification cls;
     private Hashtable index = new Hashtable();
     private LoadedObjects loadedObjects;
     private Vector orderedInstances = new Vector();
 
-    public Instances(NakedClass cls, LoadedObjects loadedObjects) {
+    public Instances(NakedObjectSpecification cls, LoadedObjects loadedObjects) {
         if(cls == null || loadedObjects == null) {
             throw new NullPointerException();
         }
-        
- /*       if(cls.isCollection()) {
-            throw new NakedObjectRuntimeException("Can't save collections");
-        }
- */       
         this.cls = cls;
         this.loadedObjects = loadedObjects;
     }
 
-    public NakedClass getNakedClass() {
+    public NakedObjectSpecification getNakedClass() {
         return cls;
     }
     
@@ -49,7 +45,7 @@ class Instances {
         return orderedInstances.elements();
     }
 
-    int loadData(ObjectInputStream oos) throws IOException, ClassNotFoundException {
+    int loadData(ObjectInputStream oos, NakedObjectContext context) throws IOException, ClassNotFoundException {
         int noInstances = oos.readInt();
         int size = 0;
         for (int i = 0; i < noInstances; i++) {
@@ -57,7 +53,7 @@ class Instances {
             LOG.debug("read 2: " + i + " " + memento);
 
             NakedObject object = loadedObjects.getLoadedObject(memento.getOid());
-            memento.updateNakedObject(object, loadedObjects);
+            memento.updateNakedObject(object, loadedObjects, context);
             LOG.debug("recreated " + object + " " + object.title());
             size++;
         }
@@ -68,7 +64,7 @@ class Instances {
         int noInstances = oos.readInt();
         for (int i = 0; i < noInstances; i++) {
             Object oid = oos.readObject();
-            LOG.debug("read 1: " + i + " " + cls.fullName() + "/" + oid);
+            LOG.debug("read 1: " + i + " " + cls.getFullName() + "/" + oid);
 
             NakedObject obj = (NakedObject) cls.acquireInstance();
             obj.setOid(oid);
@@ -105,7 +101,7 @@ class Instances {
         while (e.hasMoreElements()) {
             NakedObject object = (NakedObject) e.nextElement();
             Memento memento = new Memento(object);
-            LOG.debug("write 2: " + i++ + " " + cls.fullName() + "/" + memento);
+            LOG.debug("write 2: " + i++ + " " + cls.getFullName() + "/" + memento);
             oos.writeObject(memento);
         }
         return i;
@@ -120,7 +116,7 @@ class Instances {
             NakedObject object = (NakedObject) e.nextElement();
             Object oid = object.getOid();
             oos.writeObject(oid);
-            LOG.debug("write 1: " + i++ + " " + cls.fullName() + "/" + oid);
+            LOG.debug("write 1: " + i++ + " " + cls.getFullName() + "/" + oid);
         }
     }
 }

@@ -1,26 +1,28 @@
 package org.nakedobjects.object.reflect;
 
 
-import junit.framework.TestSuite;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
+import org.nakedobjects.object.LocalReflectionFactory;
 import org.nakedobjects.object.MockObjectManager;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Person;
 import org.nakedobjects.object.Team;
 import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.security.SecurityContext;
+import org.nakedobjects.object.value.TestClock;
+
+import junit.framework.TestSuite;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 
 
 public class OneToManyAssociationTest extends NakedObjectTestCase {
     private static final String MEMBERS_FIELD_LABEL = "Members";
     private static final String MEMBERS_FIELD_NAME = "members";
 	private Team object;
-	private OneToManyAssociation collectionField;
+	private OneToManyAssociationSpecification collectionField;
 	private Person elements[];
     private MockObjectManager manager;
 	
@@ -36,17 +38,19 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     	LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
     	manager = MockObjectManager.setup();
-    	manager.setupAddClass(NakedObject.class);
-    	manager.setupAddClass(Team.class);
-		
+        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+    	new TestClock();
+    	
 		object = new Team();
+		object.setNakedClass(NakedObjectSpecification.getNakedClass(object.getClass()));
+		object.setContext(manager.getContext());
         elements = new Person[3];
         for (int i = 0; i < elements.length; i++) {
 			elements[i] = new Person();
 		}
-        NakedClass c = object.getNakedClass();
+        NakedObjectSpecification c = object.getSpecification();
         
-        collectionField = (OneToManyAssociation) c.getField(MEMBERS_FIELD_NAME);
+        collectionField = (OneToManyAssociationSpecification) c.getField(MEMBERS_FIELD_NAME);
     }
     
     protected void tearDown() throws Exception {
@@ -55,7 +59,7 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     }
 
     public void testType() {
-    	assertEquals(Person.class, collectionField.getType());
+    	assertEquals(Person.class.getName(), collectionField.getType().getFullName());
     }
     	
     public void testSet() {
@@ -82,13 +86,13 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     }
     
     public void testLabel() {
-    	assertEquals(MEMBERS_FIELD_LABEL, collectionField.getLabel(new SecurityContext(), object));
+    	assertEquals(MEMBERS_FIELD_LABEL, collectionField.getLabel(new NakedObjectContext(manager), object));
     }
     
     public void testAbout() {
     	assertTrue(collectionField.hasAbout());
 
-    	assertNotNull(collectionField.getAbout(new SecurityContext(), object));
+    	assertNotNull(collectionField.getAbout(new NakedObjectContext(manager), object));
     }
 }
 

@@ -1,12 +1,11 @@
 package org.nakedobjects.object;
 
 
-import org.nakedobjects.io.Transferable;
 import org.nakedobjects.io.TransferableReader;
 import org.nakedobjects.io.TransferableWriter;
 
 
-public class SimpleOid implements Transferable {
+public class SimpleOid implements Oid {
     private final long serialNo;
    
     public SimpleOid(long serialNo) {
@@ -40,7 +39,7 @@ public class SimpleOid implements Transferable {
     }
 
     public String toString() {
-        return "OID#" + Long.toHexString(serialNo);
+        return "OID#" + Long.toHexString(serialNo).toUpperCase();
     }
 }
 

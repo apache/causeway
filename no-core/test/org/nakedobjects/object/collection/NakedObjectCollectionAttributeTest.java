@@ -4,9 +4,12 @@ import org.nakedobjects.object.ConcreteEmployee;
 import org.nakedobjects.object.ConcreteEmployer;
 import org.nakedobjects.object.Employee;
 import org.nakedobjects.object.Employer;
+import org.nakedobjects.object.LocalReflectionFactory;
 import org.nakedobjects.object.MockObjectManager;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectTestCase;
-import org.nakedobjects.object.reflect.Association;
+import org.nakedobjects.object.reflect.AssociationSpecification;
 
 import java.util.Enumeration;
 
@@ -40,21 +43,23 @@ public class NakedObjectCollectionAttributeTest
         super.setUp();
         
         manager = MockObjectManager.setup();
-        manager.setupAddClass(ConcreteEmployer.class);
-        manager.setupAddClass(ConcreteEmployee.class);
-        manager.setupAddClass(Employer.class);
-        manager.setupAddClass(Employee.class);
-        
+        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+    	
+        NakedObjectContext context = new NakedObjectContext(manager);
         employer = new ConcreteEmployer();
+        employer.setContext(context);
         employer.getCompanyName().setValue("Disney");
         employer.makePersistent();
         e1 = new ConcreteEmployee();
+        e1.setContext(context);
         e1.getName().setValue("Mickey");
         e1.makePersistent();
         e2 = new ConcreteEmployee();
+        e2.setContext(context);
         e2.getName().setValue("Pluto");
         e2.makePersistent();
         e3 = new ConcreteEmployee();
+        e3.setContext(context);
         e3.getName().setValue("Minnie");
         e3.makePersistent();
     }
@@ -65,7 +70,7 @@ public class NakedObjectCollectionAttributeTest
     }
     
     public void testAddEmployees() {
-        Association att = findAssocation("Employees", employer);
+        AssociationSpecification att = findAssocation("Employees", employer);
 
         // add an employee
         assertNull(e1.getEmployer());
@@ -124,7 +129,7 @@ public class NakedObjectCollectionAttributeTest
         team.add(e2);
 
         //	assertEquals(2, team.size());
-        Association association = findAssocation("Intra Company Team", employer);
+        AssociationSpecification association = findAssocation("Intra Company Team", employer);
 
         association.setAssociation(employer, team);
 
@@ -151,7 +156,7 @@ public class NakedObjectCollectionAttributeTest
         set.verify();
 
         // set employer
-        Association association = findAssocation("Employer", e1);
+        AssociationSpecification association = findAssocation("Employer", e1);
 
         assertNull(e1.getEmployer());
         association.setAssociation(e1, employer);

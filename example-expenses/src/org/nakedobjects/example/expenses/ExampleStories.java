@@ -1,5 +1,5 @@
 package org.nakedobjects.example.expenses;
-import org.nakedobjects.AbstractExplorationFixture;
+import org.nakedobjects.exploration.AbstractExplorationFixture;
 import org.nakedobjects.object.value.Money;
 import org.nakedobjects.utility.ComponentException;
 import org.nakedobjects.utility.ConfigurationException;
@@ -32,7 +32,7 @@ public class ExampleStories extends AcceptanceTestCase {
 	}
 
 
-	public void setUpFixture() {
+	public void setUpFixtures() {
 	    addFixture(new AbstractExplorationFixture() {
 	       public void install() {
 	           Locale.setDefault(Locale.US);

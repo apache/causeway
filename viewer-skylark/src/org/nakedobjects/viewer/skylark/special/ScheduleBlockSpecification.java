@@ -1,9 +1,8 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.apache.log4j.Logger;
-import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.object.value.TimePeriod;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -12,21 +11,23 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.basic.SimpleIdentifier;
 import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
 
+import org.apache.log4j.Logger;
+
 public class ScheduleBlockSpecification extends AbstractCompositeViewSpecification{
 	private static final Logger LOG = Logger.getLogger(ScheduleBlockView.class);
 
 	public View createView(Content content, ViewAxis axis) {
-    	NakedClass nc = ((ObjectContent) content).getObject().getNakedClass();
-    	Field[] flds = nc.getFields();
-    	Field timePeriodField = null;
-    	Field colorField = null;
+    	NakedObjectSpecification nc = ((ObjectContent) content).getObject().getSpecification();
+    	FieldSpecification[] flds = nc.getFields();
+    	FieldSpecification timePeriodField = null;
+    	FieldSpecification colorField = null;
     	for (int i = 0; i < flds.length; i++) {
-			Field field = flds[i];
-			if(field.getType().isAssignableFrom(TimePeriod.class)) {
+			FieldSpecification field = flds[i];
+			if(field.getType().isOfType(NakedObjectSpecification.getNakedClass(TimePeriod.class))) {
 				LOG.debug("Found TimePeriod field " + field);
 				timePeriodField = field;
 			}
-			if(field.getType().isAssignableFrom(org.nakedobjects.object.value.Color.class)) {
+			if(field.getType().isOfType(NakedObjectSpecification.getNakedClass(org.nakedobjects.object.value.Color.class))) {
 				LOG.debug("Found Color field " + field);
 				colorField = field;
 			}

@@ -4,16 +4,16 @@ package org.nakedobjects.distribution.reflect;
 import org.nakedobjects.distribution.ObjectProxy;
 import org.nakedobjects.distribution.ObjectRequest;
 import org.nakedobjects.distribution.RequestContext;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.io.Memento;
+import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
-import org.nakedobjects.object.NakedObjectMemento;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.collection.InstanceCollection;
-import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.ActionDelegate;
-import org.nakedobjects.object.reflect.Action.Type;
+import org.nakedobjects.object.reflect.ActionSpecification.Type;
 
 import java.util.Enumeration;
 import java.util.Vector;
@@ -25,7 +25,7 @@ public class ActionRequest extends ObjectRequest {
     private ObjectProxy parameters[];
     private Type actionType;
     
-    public ActionRequest(NakedObject object, ActionDelegate action, NakedObject parameters[]) {
+    public ActionRequest(NakedObject object, ActionDelegate action, Naked parameters[]) {
         super(object);
         this.actionName = action.getName();
         this.actionType = action.getType();
@@ -46,7 +46,7 @@ public class ActionRequest extends ObjectRequest {
         } else if (response instanceof ObjectProxy[]) {
         	Object[] array = (Object[]) response;
         	
-        	NakedClass cls = NakedClassManager.getInstance().getNakedClass((String) array[0]);
+        	NakedObjectSpecification cls = NakedObjectSpecification.getNakedClass((String) array[0]);
         	Vector elements = new Vector();
         	for (int i = 1; i < array.length; i++) {
         		ObjectProxy proxy = (ObjectProxy) array[i];
@@ -55,9 +55,9 @@ public class ActionRequest extends ObjectRequest {
 			}
         	
         	return new InstanceCollection(cls, elements);
-        } else if(response instanceof NakedObjectMemento) {
-            NakedObjectMemento memento = (NakedObjectMemento) response;
-            return memento.recreateObject(getLoadedObjects());
+        } else if(response instanceof Memento) {
+            Memento memento = (Memento) response;
+            return memento.recreateObject(getLoadedObjects(), context);
         } else {
         	ObjectProxy proxy = (ObjectProxy) response;
             return proxy.recreateObject(getLoadedObjects());
@@ -69,23 +69,23 @@ public class ActionRequest extends ObjectRequest {
             NakedObject object = getObject(server.getLoadedObjects());
             int parameterCount = parameters.length;
             NakedObject parameters[] = new NakedObject[parameterCount];
-			NakedClass parameterTypes[] = new NakedClass[parameterCount];
+			NakedObjectSpecification parameterTypes[] = new NakedObjectSpecification[parameterCount];
 			
             NakedObjectManager objectManager = server.getObjectManager();
             for (int i = 0; i < parameterCount; i++) {
-                NakedObject parameter = objectManager.getObject(parameters[i].getOid(), parameters[i].getNakedClass());
+                NakedObject parameter = objectManager.getObject(parameters[i].getOid(), parameters[i].getSpecification());
                 parameters[i] = parameter;
-                parameterTypes[i] = parameter.getNakedClass();
+                parameterTypes[i] = parameter.getSpecification();
             }
             
-            Action action = object.getNakedClass().getObjectAction(actionType, actionName, parameterTypes);
+            ActionSpecification action = object.getSpecification().getObjectAction(actionType, actionName, parameterTypes);
             NakedObject result = action.execute(object, parameters);
 
             
             if(result == null) {
             	response = null;
             } else if (result.getOid() == null) {
-                response = new NakedObjectMemento(result);
+                response = new Memento(result);
             } else if(result instanceof InstanceCollection) {
             	InstanceCollection instances = (InstanceCollection) result;
             	Object[] array = new Object[instances.size() + 1];

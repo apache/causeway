@@ -1,10 +1,8 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.SystemClock;
-import org.nakedobjects.object.collection.TypedCollection;
-import org.nakedobjects.object.value.Date;
-import org.nakedobjects.object.value.TimeStamp;
+import org.nakedobjects.object.value.TestClock;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -14,15 +12,16 @@ public abstract class NakedObjectStoreTestCase extends NakedObjectTestCase {
     protected static NakedObjectStore objectStore;
     private int next;
     protected MockObjectManager manager;
-
+    protected NakedObjectContext context;
+    
     public NakedObjectStoreTestCase(String name) {
         super(name);
     }
 
     protected abstract NakedObjectStore installObjectStore() throws Exception;
 
-    protected SimpleOid nextOid() {
-        return new SimpleOid(next++);
+    protected Oid nextOid() {
+        return new MockOid(next++);
     }
 
     protected void restartObjectStore() throws Exception {
@@ -31,14 +30,18 @@ public abstract class NakedObjectStoreTestCase extends NakedObjectTestCase {
     }
 
     protected void setUp() throws Exception {
-        Logger.getRootLogger().setLevel(Level.OFF);     
+        BasicConfigurator.configure();
+        Logger.getRootLogger().setLevel(Level.ERROR);     
         LOG.debug("test setup");
 
-        Date.setClock(new SystemClock());
-        TimeStamp.setClock(new SystemClock());
-
+        new TestClock();
+        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+        
         manager = MockObjectManager.setup();
-        manager.setupAddClass(TypedCollection.class);
+         
+        context = new NakedObjectContext(manager);
+        
+        new NakedObjectContext(manager);
         
         setupObjectStore();
 

@@ -1,10 +1,10 @@
 package org.nakedobjects.object.value;
 
-import org.nakedobjects.Clock;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.Title;
 import org.nakedobjects.object.ValueParseException;
+import org.nakedobjects.system.Clock;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -106,8 +106,6 @@ public class TimeStamp extends Magnitude {
      returns true if the timeStamp of this object is earlier than the specified timeStamp
      */
     public boolean isLessThan(Magnitude timeStamp) {
-        checkCanOperate();
-
         if (timeStamp instanceof TimeStamp) {
             return !isNull && !timeStamp.isEmpty() &&
             date.before(((TimeStamp) timeStamp).date);
@@ -117,8 +115,6 @@ public class TimeStamp extends Magnitude {
     }
 
     public long longValue() {
-        checkCanOperate();
-
         return date.getTime();
     }
 

@@ -1,16 +1,14 @@
 package org.nakedobjects.object.collection;
 
 
-import java.util.Enumeration;
-
 import org.nakedobjects.object.Aggregate;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.Title;
-import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.control.Veto;
-import org.nakedobjects.security.SecurityContext;
+
+import java.util.Enumeration;
 
 
 public class InternalCollection extends TypedCollection implements Aggregate {
@@ -34,23 +32,12 @@ public class InternalCollection extends TypedCollection implements Aggregate {
         this.parent = parent;
     }
 
-
-    public About aboutActionAddElement(SecurityContext context, NakedObject object) {
-    	FieldAbout about = new FieldAbout(context, this);
-    	about.unmodifiableOnCondition(! getType().isAssignableFrom(object.getClass()), "Can only add objects of type " + getType());
-    	return about;
-    }
-    
-    public void actionAddElement(NakedObject object) {
-    	add(object);
-    }
-    
     public void add(NakedObject object) {
     	if(object == null) {
     		throw new NullPointerException("Cannot add null");
     	}
         super.add(object);
-        ((NakedObject) parent).objectChanged();
+        getObjectManager().objectChanged(((NakedObject) parent));
     }
    
 	public Permission canAdd(NakedObject object) {
@@ -65,12 +52,16 @@ public class InternalCollection extends TypedCollection implements Aggregate {
         return parent;
     }
 
+    public NakedObjectContext getContext() {
+        return parent.getContext();
+    }
+    
     public void remove(NakedObject object) {
     	if(object == null) {
     		throw new NullPointerException("Cannot remove null");
     	}
     	super.remove(object);
-        ((NakedObject) parent).objectChanged();
+    	getObjectManager().objectChanged(parent);
     }
 
     public Title title() {
@@ -95,7 +86,7 @@ public class InternalCollection extends TypedCollection implements Aggregate {
         StringBuffer s = new StringBuffer();
 
         s.append("InternalCollection");
-        s.append(" [");
+        s.append(" [state=");
 
         // Persistent/transient & Resolved or not
         s.append(isPersistent() ? "P" : (isFinder() ? "F" : "T"));
@@ -103,15 +94,15 @@ public class InternalCollection extends TypedCollection implements Aggregate {
 
         // obect identifier
         if (getOid() != null) {
-            s.append(":");
+            s.append(",oid=");
             s.append(getOid().toString().toUpperCase());
         } else {
-            s.append(":-");
+            s.append(",oid=none");
         }
 
 
         // title
-        s.append(' ');
+        s.append(",size=");
         s.append(size());
         
          s.append("]");

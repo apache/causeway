@@ -1,21 +1,21 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedClassSpec;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.reflect.Value;
-import org.nakedobjects.security.SecurityContext;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
 
 import java.util.Hashtable;
 
 public interface TestObjectFactory {
-    TestClass createTestClass(SecurityContext context, NakedClass cls);
+    TestClass createTestClass(NakedObjectContext context, NakedClassSpec cls);
     
-    TestObject createTestObject(SecurityContext context, NakedObject object);
+    TestObject createTestObject(NakedObjectContext context, NakedObject object);
 
-    TestObject createTestObject(SecurityContext context, NakedObject field, Hashtable viewCache);
+    TestObject createTestObject(NakedObjectContext context, NakedObject field, Hashtable viewCache);
     
-    TestValue createTestValue(NakedObject parent, Value field);
+    TestValue createTestValue(NakedObject parent, ValueFieldSpecification field);
 
     TestValue createParamerTestValue(NakedValue value);
 

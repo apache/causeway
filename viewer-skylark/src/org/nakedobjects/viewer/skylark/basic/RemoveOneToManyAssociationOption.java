@@ -6,7 +6,7 @@ import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.control.Veto;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.security.Session;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
@@ -31,16 +31,16 @@ public class RemoveOneToManyAssociationOption extends MenuOption {
 
 		// associated object
     	OneToManyElement content = (OneToManyElement) view.getContent();
-		OneToManyAssociation association = content.getOneToManyAssociation();
+		OneToManyAssociationSpecification association = content.getOneToManyAssociation();
         NakedObject associatedObject = content.getObject();
         
 
-        About about = association.getAbout(Session.getSession().getSecurityContext(), parentObject, associatedObject, false);
+        About about = association.getAbout(Session.getSession().getContext(), parentObject, associatedObject, false);
 
         Permission edit = about.canUse();
 
         if (edit.isAllowed()) {
-            String status = "Clear the association to this object from '" + parentObject.title() + "'";
+            String status = "Clear the association to this object from '" + parentObject.titleString() + "'";
 
             return new Allow(status);
         } else {
@@ -53,7 +53,7 @@ public class RemoveOneToManyAssociationOption extends MenuOption {
 
 		// associated object
     	OneToManyElement content = (OneToManyElement) view.getContent();
-		OneToManyAssociation association = content.getOneToManyAssociation();
+		OneToManyAssociationSpecification association = content.getOneToManyAssociation();
         NakedObject associatedObject = content.getObject();
         
         LOG.debug("Remove " + associatedObject + " from " + parentObject);

@@ -1,10 +1,12 @@
 package org.nakedobjects.object.control;
 
+import java.io.Serializable;
+
 
 /**
  An instance of this type is used to control an object, an attribute or an action within a NakedObject.
  */
-public interface About {
+public interface About extends Serializable {
 
     /**
      Returns a Permission describing whether access is permitted.

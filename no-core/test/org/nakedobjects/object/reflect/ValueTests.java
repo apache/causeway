@@ -2,15 +2,15 @@ package org.nakedobjects.object.reflect;
 
 
 import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.LocalReflectionFactory;
 import org.nakedobjects.object.MockObjectManager;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.value.Money;
+import org.nakedobjects.object.value.TestClock;
 import org.nakedobjects.object.value.TextString;
-import org.nakedobjects.security.SecurityContext;
 
 import junit.framework.TestSuite;
 
@@ -25,7 +25,7 @@ public class ValueTests extends NakedObjectTestCase {
     private static final String NAME_FIELD_NAME = "name";
     private ValueTestObject object;
     
-    private Value nameField, salaryField;
+    private ValueFieldSpecification nameField, salaryField;
     private MockObjectManager manager;
     
     public ValueTests(String name) {
@@ -36,19 +36,20 @@ public class ValueTests extends NakedObjectTestCase {
         junit.textui.TestRunner.run(new TestSuite(ValueTests.class));
     }
 
-    public void setUp()  throws ObjectStoreException {
+    protected void setUp()  throws ObjectStoreException {
     	LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
     	manager = MockObjectManager.setup();
-    	manager.setupAddClass(NakedObject.class);
-    	manager.setupAddClass(ValueTestObject.class);
+        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+    	new TestClock();
     	
         object = new ValueTestObject();
+        object.setContext(manager.getContext());
         
-        NakedClass c = NakedClassManager.getInstance().getNakedClass(ValueTestObject.class.getName());
+        NakedObjectSpecification c = NakedObjectSpecification.getNakedClass(ValueTestObject.class.getName());
         
-        nameField = (Value) c.getField(NAME_FIELD_NAME);
-        salaryField = (Value) c.getField(SALARY_FIELD_NAME);
+        nameField = (ValueFieldSpecification) c.getField(NAME_FIELD_NAME);
+        salaryField = (ValueFieldSpecification) c.getField(SALARY_FIELD_NAME);
     }
     
     protected void tearDown() throws Exception {
@@ -57,8 +58,8 @@ public class ValueTests extends NakedObjectTestCase {
     }
 
     public void testType() {
-    	assertEquals(TextString.class, nameField.getType());
-    	assertEquals(Money.class, salaryField.getType());
+    	assertEquals(TextString.class.getName(), nameField.getType().getFullName());
+    	assertEquals(Money.class.getName(), salaryField.getType().getFullName());
     }
     	
     public void testSetGet() throws InvalidEntryException {
@@ -92,7 +93,7 @@ public class ValueTests extends NakedObjectTestCase {
     }
     
     public void testLabel() {
-    	SecurityContext context = new SecurityContext();
+    	NakedObjectContext context = new NakedObjectContext(manager);
     	assertEquals(NAME_FIELD_LABEL, nameField.getLabel(context, object));
     	assertEquals(SALARY_FIELD_LABEL, salaryField.getLabel(context, object));
     }
@@ -101,7 +102,7 @@ public class ValueTests extends NakedObjectTestCase {
     	assertFalse(nameField.hasAbout());
     	assertTrue(salaryField.hasAbout());
 
-    	assertNotNull(salaryField.getAbout(new SecurityContext(), object));
+    	assertNotNull(salaryField.getAbout(new NakedObjectContext(manager), object));
     }
 }
 

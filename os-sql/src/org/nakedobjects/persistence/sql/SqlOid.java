@@ -1,9 +1,10 @@
 package org.nakedobjects.persistence.sql;
 
-import java.io.Serializable;
+import org.nakedobjects.io.TransferableWriter;
+import org.nakedobjects.object.Oid;
 
 
-public final class SqlOid implements Serializable {
+public final class SqlOid implements Oid {
 	private final String className;
     private final PrimaryKey primaryKey;
 
@@ -45,4 +46,6 @@ public final class SqlOid implements Serializable {
     public String toString() {
 		return "DOID#" + primaryKey + "/" + className;
 	}
+
+    public void writeData(TransferableWriter writer) {}
 }

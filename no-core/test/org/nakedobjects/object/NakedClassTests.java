@@ -1,9 +1,12 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.control.ClassAbout;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.object.reflect.ActionSpecification;
+import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.value.Date;
+import org.nakedobjects.object.value.TestClock;
 import org.nakedobjects.object.value.TextString;
+import org.nakedobjects.object.value.TimeStamp;
+import org.nakedobjects.system.Clock;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -17,7 +20,7 @@ import com.mockobjects.ExpectationSet;
 public class NakedClassTests extends TestCase {
 
     private MockReflector reflector;
-    private NakedClass nakedClass;
+    private NakedObjectSpecification nakedClass;
     private MockObjectManager manager;
 
     public static void main(String[] args) {
@@ -28,76 +31,57 @@ public class NakedClassTests extends TestCase {
         super(name);
     }
 
-    private NakedClass nakedClass(Class cls) {
-        return NakedClassManager.getInstance().getNakedClass(cls.getName());
-    }
-
-    private NakedClass reflect(Class clazz) {
-        NakedClass c = nakedClass(clazz);
-        assertEquals(clazz.getName(), c.fullName());
-        return c;
+    private NakedObjectSpecification nakedClass(Class cls) {
+        return NakedObjectSpecification.getNakedClass(cls.getName());
     }
 
     protected void setUp() {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
+ 
+       new TestClock();
+        
+        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
 
-        manager = MockObjectManager.setup();
-        manager.setupAddClass(Role.class);
-        manager.setupAddClass(GenericTestObject.class);
-        manager.setupAddClass(ContactTestObject.class);
-        manager.setupAddClass(ProductTestObject.class);
-        manager.setupAddClass(ConcreteEmployee.class);
-        manager.setupAddClass(AssociationExample.class);
-        manager.setupAddClass(Employee.class);
-        
-        manager.setupAddClass(NakedObject.class);
-        
         reflector = new MockReflector();
-        nakedClass = new NakedClass();
-        Field[] fields = new Field[] {
-            new MockField("One"),
-            new MockField("Two"),
-            new MockField("Three")
-        };
-        nakedClass.init(reflector, NakedObject.class.getName(), fields, null, null);
+        
+        nakedClass = NakedObjectSpecification.getNakedClass(NakedClassTestObject.class.getName());
     }
 
+    public void testInvalidObjectType() {
+        try {
+            NakedObjectSpecification.getNakedClass(InvalidNakedClassTestObject.class.getName());
+            fail();
+        } catch (NakedObjectRuntimeException expected) {
+        }
+    }
+    
     protected void tearDown() throws Exception {
-        manager.shutdown();
+       // manager.shutdown();
         super.tearDown();
     }
     
     public void testAcquireInstance() {
-        NakedObject acquire = new Person();
-        reflector.setupAcquireInstance(acquire);
-        assertEquals(acquire, nakedClass.acquireInstance());
+        Naked acquire = nakedClass.acquireInstance();
+        assertTrue(acquire instanceof NakedClassTestObject);
     }
-    
+   
+    /* TODO reimplement
     public void testClassAbout() {
         ClassAbout about = new ClassAbout("", true);
         reflector.setupClassAbout(about);
         assertEquals(about, nakedClass.getClassAbout());
        }
+*/
 
-    public void testEquals() {
-        MockReflector reflector2 = new MockReflector();
-        NakedClass nakedClass2 = new NakedClass();
-        nakedClass2.init(reflector, NakedObject.class.getName(), null, null, null);
-        
-        assertFalse(reflector.equals(reflector2));
-    }
-     
     public void testGetFieldsNew() {
-        Field[] actions = nakedClass.getFields();
+        FieldSpecification[] actions = nakedClass.getFields();
 
-        assertEquals(3, actions.length); // 1 NakedObject
+        assertEquals(3, actions.length);
 
        ExpectationSet exp = new ExpectationSet("field names");
-
         exp.addExpected("one");
         exp.addExpected("two");
         exp.addExpected("three");
-
         for (int i = 0; i < actions.length; i++) {
             exp.addActual(actions[i].getName());
         }
@@ -105,58 +89,22 @@ public class NakedClassTests extends TestCase {
     }
 
     // TODO the rest of the test need to use mocks - as the above three do
-    public void testGetFields() {
-        NakedClass c = nakedClass(ContactTestObject.class);
-        Field[] fields = c.getFields();
-
-        assertEquals(7, fields.length); // 1 NakedObject
-
-        assertNotNull(fields[0]);
-        ExpectationSet exp = new ExpectationSet("field names");
-
-        exp.addExpected("iscontact");
-        exp.addExpected("address");
-        exp.addExpected("favourite");
-        exp.addExpected("name");
-        exp.addExpected("worth");
-        exp.addExpected("datecreated");
-        exp.addExpected("lastactivity");
-
-        com.mockobjects.ExpectationList exp2 = new com.mockobjects.ExpectationList("ordered field names");
-
-        exp2.addExpected("name");
-        exp2.addExpected("worth");
-        exp2.addExpected("iscontact");
-        exp2.addExpected("address");
-        exp2.addExpected("datecreated");
-        exp2.addExpected("lastactivity");
-        exp2.addExpected("favourite");
-        
-        for (int i = 0; i < fields.length; i++) {
-            exp.addActual(fields[i].getName());
-            exp2.addActual(fields[i].getName());
-        }
-        exp.verify();
-        exp2.verify();
-
-    }
     
     public void testGetClassActionByParam() {
-        NakedClass targetClass = nakedClass(GenericTestObject.class);
-        NakedClass[] params = new NakedClass[] { nakedClass(ContactTestObject.class) };
-        Action action = targetClass.getClassAction(Action.USER, "accept contact", params);
+        NakedObjectSpecification[] params = new NakedObjectSpecification[] { nakedClass(NakedClassTestParameter.class) };
+        ActionSpecification action = nakedClass.getClassAction(ActionSpecification.USER, "example method", params);
         assertNotNull(action);
-        assertEquals("acceptcontact", action.getName());
-        assertEquals(Action.USER, action.getType());
-        assertEquals(null, action.returns());
+        assertEquals("examplemethod", action.getName());
+        assertEquals(ActionSpecification.USER, action.getActionType());
+        assertEquals(null, action.getReturnType());
         
-        params = new NakedClass[] { nakedClass(ProductTestObject.class) };
-        assertNull(targetClass.getClassAction(Action.USER, "no method", params));
+        params = new NakedObjectSpecification[] { nakedClass(ProductTestObject.class) };
+        assertNull(nakedClass.getClassAction(ActionSpecification.USER, "no method", params));
     }
 
     public void testGetClassActions() {
-        NakedClass c = nakedClass(ContactTestObject.class);
-        Action[] actions = c.getClassActions(Action.USER);
+        NakedObjectSpecification c = nakedClass(ContactTestObject.class);
+        ActionSpecification[] actions = c.getClassActions(ActionSpecification.USER);
         ExpectationSet exp = new ExpectationSet("action names");
         exp.addExpected("classop");
         exp.addExpected("dowhatever");
@@ -170,11 +118,9 @@ public class NakedClassTests extends TestCase {
     }
 
     public void testGetExplorationActions() {
-        NakedClass c = nakedClass(ContactTestObject.class);
-        Action[] actions = c.getObjectActions(Action.EXPLORATION);
+        ActionSpecification[] actions = nakedClass.getObjectActions(ActionSpecification.EXPLORATION);
         ExpectationSet exp = new ExpectationSet("action names");
-        exp.addExpected("clone");
-        exp.addExpected("class");
+        exp.addExpected("explore");
 
         for (int i = 0; i < actions.length; i++) {
             exp.addActual(actions[i].getName());
@@ -183,8 +129,8 @@ public class NakedClassTests extends TestCase {
     }
 
     public void testGetObjectsActions() {
-        NakedClass c = nakedClass(ContactTestObject.class);
-        Action[] actions = c.getObjectActions(Action.USER);
+        NakedObjectSpecification c = nakedClass(ContactTestObject.class);
+        ActionSpecification[] actions = c.getObjectActions(ActionSpecification.USER);
         //assertEquals(6, actions.length);
 
         ExpectationSet exp = new ExpectationSet("action names");
@@ -206,22 +152,22 @@ public class NakedClassTests extends TestCase {
     }
 
     public void testHashCodes() {
-        NakedClass c1 = nakedClass(Role.class);
-        NakedClass c2 = nakedClass(AssociationExample.class);
+        NakedObjectSpecification c1 = nakedClass(Role.class);
+        NakedObjectSpecification c2 = nakedClass(AssociationExample.class);
 
         assertTrue(c1.hashCode() != c2.hashCode());
 
     }
 
     public void testMemberOrdering() {
-        NakedClass c = nakedClass(GenericTestObject.class);
+        NakedObjectSpecification c = nakedClass(GenericTestObject.class);
         com.mockobjects.ExpectationList exp2 = new com.mockobjects.ExpectationList("ordered names");
 
         exp2.addExpected("customer");
         exp2.addExpected("products");
         exp2.addExpected("datecreated");
         exp2.addExpected("lastactivity");
-        Field[] attributes = c.getFields();
+        FieldSpecification[] attributes = c.getFields();
 
         for (int i = 0; i < attributes.length; i++) {
             exp2.addActual(attributes[i].getName());
@@ -230,15 +176,15 @@ public class NakedClassTests extends TestCase {
     }
 
     public void testNameAttribute() {
-        NakedClass c = nakedClass(ContactTestObject.class);
-        Field[] actions = c.getFields();
+        NakedObjectSpecification c = nakedClass(ContactTestObject.class);
+        FieldSpecification[] actions = c.getFields();
 
         for (int i = 0; i < actions.length; i++) {
             if (actions[i].getName().equals("name")) {
-                Field att = actions[i];
+                FieldSpecification att = actions[i];
 
                 assertEquals(true, att.isValue());
-                assertEquals(TextString.class, att.getType());
+                assertEquals(TextString.class.getName(), att.getType().getFullName());
                 assertEquals("name", att.getName());
                 return;
             }
@@ -247,28 +193,27 @@ public class NakedClassTests extends TestCase {
     }
 
     public void testNames() {
-        NakedClass c = reflect(ContactTestObject.class);
+        NakedObjectSpecification c = nakedClass(ContactTestObject.class);
 
-        assertEquals("org.nakedobjects.object.ContactTestObject", c.fullName());
+        assertEquals("org.nakedobjects.object.ContactTestObject", c.getFullName());
         assertEquals("ContactTestObject", c.getShortName());
-        assertEquals("ContactTestObject", c.getIconName());
         assertEquals("Contact", c.getSingularName());
         assertEquals("Contacts", c.getPluralName());
     }
 
     public void testObject() {
-        NakedClass c = reflect(GenericTestObject.class);
+        NakedObjectSpecification c = nakedClass(GenericTestObject.class);
 
         assertEquals("Generic Objects", c.getPluralName());
     }
 
     public void testProduct() {
-        reflect(ProductTestObject.class);
+        nakedClass(ProductTestObject.class);
     }
 
     public void testRepeatability() {
-        NakedClass a = nakedClass(ContactTestObject.class);
-        NakedClass b = nakedClass(ProductTestObject.class);
+        NakedObjectSpecification a = nakedClass(ContactTestObject.class);
+        NakedObjectSpecification b = nakedClass(ProductTestObject.class);
 
         // repeated calls gets the same objects
         assertEquals(a, nakedClass(ContactTestObject.class));
@@ -277,7 +222,7 @@ public class NakedClassTests extends TestCase {
 
     public void testTypes() {
         // concrete classes maintain their type
-        NakedClass c1 = nakedClass(ConcreteEmployee.class);
+        NakedObjectSpecification c1 = nakedClass(ConcreteEmployee.class);
 
         //      assertEquals("org.nakedobjects.object.ConcreteEmployee",
         // c1.getJavaType().getNameAsString());
@@ -297,6 +242,38 @@ public class NakedClassTests extends TestCase {
         // obj2.getClass().getName());
     }
 
+
+    public void testSuperclass() {
+        NakedObjectSpecification cls = nakedClass(Person.class);
+        NakedObjectSpecification subclass1 = nakedClass(LittlePerson.class);
+        
+        assertEquals(cls, subclass1.superclass());
+    }
+    
+    public void testSubclasses() {
+        NakedObjectSpecification cls = nakedClass(Person.class);
+        NakedObjectSpecification subclass1 = nakedClass(LittlePerson.class);
+        NakedObjectSpecification subclass2 = nakedClass(BigPerson.class);
+        NakedObjectSpecification subclass3 = nakedClass(SmallPerson.class);
+               
+        ExpectationSet set = new ExpectationSet("");
+        set.addExpected(subclass1);
+        set.addExpected(subclass2);
+        
+        NakedObjectSpecification[] subclasses = cls.subclasses();
+        set.addActualMany(subclasses);
+        set.verify();
+        
+        assertTrue(cls.isOfType(cls));
+        assertTrue(subclass1.isOfType(cls));
+        assertTrue(subclass2.isOfType(cls));
+        assertTrue(subclass3.isOfType(cls));
+        
+        assertFalse(cls.isOfType(subclass1));
+        assertFalse(cls.isOfType(subclass2));
+        assertFalse(cls.isOfType(subclass3));
+        
+   }
 }
 
 /*

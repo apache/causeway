@@ -1,6 +1,7 @@
 package org.nakedobjects.object.reflect.simple;
 
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
@@ -10,8 +11,7 @@ import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.control.Validity;
 import org.nakedobjects.object.reflect.NakedObjectApplicationException;
 import org.nakedobjects.object.reflect.ReflectionException;
-import org.nakedobjects.object.reflect.ValueIf;
-import org.nakedobjects.security.SecurityContext;
+import org.nakedobjects.object.reflect.ValueField;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -19,7 +19,7 @@ import java.lang.reflect.Method;
 import org.apache.log4j.Category;
 
 
-public class JavaValue extends JavaField implements ValueIf {
+public class JavaValue extends JavaField implements ValueField {
     private final static Category LOG = Category.getInstance(JavaValue.class);
     private Method validMethod;
 
@@ -29,7 +29,7 @@ public class JavaValue extends JavaField implements ValueIf {
         this.validMethod = validMethod;
     }
 
-    public About getAbout(SecurityContext context, NakedObject object) {
+    public About getAbout(NakedObjectContext context, NakedObject object) {
         if (hasAbout()) {
             Method aboutMethod = getAboutMethod();
             
@@ -64,10 +64,10 @@ public class JavaValue extends JavaField implements ValueIf {
     }
 
     public void saveValue(NakedObject inObject, String encodedValue) {
-        NakedObjectManager objectManager = NakedObjectManager.getInstance();
+        NakedObjectManager objectManager = inObject.getContext().getObjectManager();
         objectManager.startTransaction();
         ((NakedValue) get(inObject)).restoreString(encodedValue);
-        inObject.objectChanged();
+        objectManager.objectChanged(inObject);
         objectManager.endTransaction();
     }
     

@@ -24,16 +24,19 @@
 
 package org.nakedobjects.object.reflect.simple;
 
-import org.nakedobjects.SystemClock;
 import org.nakedobjects.object.ContactTestObject;
+import org.nakedobjects.object.LocalReflectionFactory;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.ClassAbout;
 import org.nakedobjects.object.reflect.ActionDelegate;
-import org.nakedobjects.object.reflect.MemberIf;
+import org.nakedobjects.object.reflect.Member;
 import org.nakedobjects.object.reflect.NakedClassException;
-import org.nakedobjects.object.reflect.OneToOneAssociationIF;
+import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.value.Date;
+import org.nakedobjects.object.value.TestClock;
 import org.nakedobjects.object.value.TimeStamp;
+import org.nakedobjects.system.SystemClock;
 
 import java.util.Vector;
 
@@ -59,11 +62,11 @@ public class JavaReflectorTest extends TestCase {
         super(name);
     }
 
-    private String[] abouts(MemberIf[] attributes) {
+    private String[] abouts(Member[] attributes) {
     	Vector v = new Vector();
     	
     	for (int i = 0; i < attributes.length; i++) {
-    		MemberIf att = attributes[i];
+    		Member att = attributes[i];
     		
     		if (att.hasAbout()) {
     			v.addElement(att.getName());
@@ -77,15 +80,15 @@ public class JavaReflectorTest extends TestCase {
     	return names;
     }
 
-    private String[] associates(MemberIf[] fields) {
+    private String[] associates(Member[] fields) {
         Vector v = new Vector();
 
         for (int i = 0; i < fields.length; i++) {
 	
-        	MemberIf member = fields[i];
+        	Member member = fields[i];
 
-            if (member instanceof OneToOneAssociationIF && 
-                    ((OneToOneAssociationIF) member).hasAddMethod()) {
+            if (member instanceof OneToOneAssociation && 
+                    ((OneToOneAssociation) member).hasAddMethod()) {
                 v.addElement(member.getName());
             }
         }
@@ -97,23 +100,23 @@ public class JavaReflectorTest extends TestCase {
         return names;
     }
 
-    private String[] memberNames(MemberIf[] attributes) {
+    private String[] memberNames(Member[] attributes) {
         String[] names = new String[attributes.length];
         int i = 0;
 
         for (int j = 0; j < attributes.length; j++) {
-            MemberIf member = attributes[i];
+            Member member = attributes[i];
             names[i++] = member.getName();
         }
 
         return names;
 	}
 
-    private String[] objectAttributes(MemberIf[] fields) {
+    private String[] objectAttributes(Member[] fields) {
         Vector v = new Vector();
         
         for (int i = 0; i < fields.length; i++) {
-            if (fields[i] instanceof OneToOneAssociationIF) {
+            if (fields[i] instanceof OneToOneAssociation) {
                 v.addElement(fields[i].getName());
             }
         }
@@ -128,8 +131,9 @@ public class JavaReflectorTest extends TestCase {
     protected void setUp() throws ClassNotFoundException {
     	LogManager.getLoggerRepository().setThreshold(Level.OFF);
         
-        Date.setClock(new SystemClock());
-        TimeStamp.setClock(new SystemClock());
+    	NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+     	
+        new TestClock();
     	
         c = new JavaReflector(ContactTestObject.class.getName());
     }
@@ -153,7 +157,6 @@ public class JavaReflectorTest extends TestCase {
         exp.addExpected("Set Up");
         exp.addExpected("Reset Worth");
 
-        exp.addExpected("Class");
         exp.addExpected("Clone");
         exp.addExpected("Persist");
 
@@ -282,7 +285,7 @@ public class JavaReflectorTest extends TestCase {
      */
     public void testFields() throws NakedClassException, ClassNotFoundException {
         JavaReflector c = new JavaReflector(ContactTestObject.class.getName());
-        MemberIf[] fields = c.fields();
+        Member[] fields = c.fields();
 
         // check for all fields
         ExpectationSet exp = new ExpectationSet("fields");

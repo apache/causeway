@@ -5,7 +5,7 @@ import org.nakedobjects.object.MockClassManager;
 import org.nakedobjects.object.MockLoadedObjects;
 import org.nakedobjects.object.MockObjectManager;
 import org.nakedobjects.object.MockReflector;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.Person;
 import org.nakedobjects.object.Role;
@@ -39,7 +39,7 @@ public class InstancesTest extends TestCase {
     public void setUp() {
         Logger.getRoot().setLevel(Level.OFF);
         
-        NakedClass nc = NakedClass.createNakedClass(Person.class.getName(), MockReflector.class.getName());
+        NakedObjectSpecification nc = NakedObjectSpecification.createNakedClass(Person.class.getName(), MockReflector.class.getName());
         LoadedObjects loaded = new MockLoadedObjects();
         ins = new Instances(nc, loaded);
         assertEquals(0, ins.numberInstances());
@@ -82,7 +82,7 @@ public class InstancesTest extends TestCase {
         ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
         ObjectInputStream ois = new ObjectInputStream(bais);
         
-        NakedClass personClass = NakedClass.createNakedClass(Person.class.getName(), JavaReflector.class.getName());
+        NakedObjectSpecification personClass = NakedObjectSpecification.createNakedClass(Person.class.getName(), JavaReflector.class.getName());
         Instances ins2 = new Instances(personClass, new MockLoadedObjects());
         ins2.loadIdentities(ois);
         ois.close();
@@ -116,7 +116,7 @@ public class InstancesTest extends TestCase {
         manager.setupAddClass(Person.class);
         
         
-        NakedClass personClass = NakedClass.createNakedClass(Person.class.getName(), JavaReflector.class.getName());
+        NakedObjectSpecification personClass = NakedObjectSpecification.createNakedClass(Person.class.getName(), JavaReflector.class.getName());
         MockLoadedObjects loadedWithOids = new MockLoadedObjects();
         
         // skeleton objects - loaded objects
@@ -145,7 +145,7 @@ public class InstancesTest extends TestCase {
 
     public void testPersistData2() throws Exception {
         LoadedObjects loaded = new MockLoadedObjects();
-        NakedClass nc = NakedClass.createNakedClass(Person.class.getName(), MockReflector.class.getName());
+        NakedObjectSpecification nc = NakedObjectSpecification.createNakedClass(Person.class.getName(), MockReflector.class.getName());
         ins = new Instances(nc, loaded);
        
         Role r = new Role();
@@ -168,7 +168,7 @@ public class InstancesTest extends TestCase {
         manager.setupAddClass(Person.class);
         
         
-        NakedClass roleClass = NakedClass.createNakedClass(Person.class.getName(), JavaReflector.class.getName());
+        NakedObjectSpecification roleClass = NakedObjectSpecification.createNakedClass(Person.class.getName(), JavaReflector.class.getName());
         MockLoadedObjects loadedWithOids = new MockLoadedObjects();
         
         // skeleton objects - loaded objects

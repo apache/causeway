@@ -1,6 +1,6 @@
 package org.nakedobjects.utility.xmlsnapshot;
 
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
 
 import java.util.Hashtable;
 
@@ -123,8 +123,8 @@ public class NamespaceManager {
     /**
      * @see #manageNamespaceFor(String, String)
      */
-    public boolean managingNamespaceFor(final NakedClass nakedClass) {
-        return managingNamespaceFor(nakedClass.fullName());
+    public boolean managingNamespaceFor(final NakedObjectSpecification nakedClass) {
+        return managingNamespaceFor(nakedClass.getFullName());
     }
 
     /**
@@ -158,8 +158,8 @@ public class NamespaceManager {
     /**
      * @see #getAlias(String)
      */
-    public String getAlias(final NakedClass nakedClass) {
-        return getAlias(nakedClass.fullName());
+    public String getAlias(final NakedObjectSpecification nakedClass) {
+        return getAlias(nakedClass.getFullName());
     }
 
     /**
@@ -172,8 +172,8 @@ public class NamespaceManager {
     /**
      * @see #getUri(String)
      */
-    public String getUri(final NakedClass nakedClass) {
-        return getUri(nakedClass.fullName());
+    public String getUri(final NakedObjectSpecification nakedClass) {
+        return getUri(nakedClass.getFullName());
     }
 
     /**
@@ -193,8 +193,8 @@ public class NamespaceManager {
     /**
      * @see #getQname(String)
      */
-    public String getQname(final NakedClass nakedClass) {
-        return getQname(nakedClass.fullName());
+    public String getQname(final NakedObjectSpecification nakedClass) {
+        return getQname(nakedClass.getFullName());
     }
 
     /**

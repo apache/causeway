@@ -1,5 +1,12 @@
 package org.nakedobjects.object.collection;
 
+import org.nakedobjects.object.LocalReflectionFactory;
+import org.nakedobjects.object.MockObjectManager;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.Role;
+import org.nakedobjects.object.value.TestClock;
+
 import java.util.Enumeration;
 
 import junit.framework.TestCase;
@@ -7,9 +14,6 @@ import junit.framework.TestCase;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.PropertyConfigurator;
-import org.nakedobjects.object.MockObjectManager;
-import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.Role;
 
 public class NakedCollectionTests extends TestCase {
 	private ArbitraryCollection ac;
@@ -21,13 +25,17 @@ public class NakedCollectionTests extends TestCase {
 		super(name);
 	}
 
-	public void setUp() {
+	protected void setUp() {
 		LogManager.getLoggerRepository().setThreshold(Level.ERROR);
 		PropertyConfigurator.configure("log4j.testing.properties");
 	
-		manager = MockObjectManager.setup();
+		new TestClock();
+        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+
+        manager = MockObjectManager.setup();
 		
 		ac = new ArbitraryCollection();
+		ac.setContext(manager.getContext());
 		
 		elements = new Role[SIZE];
 		for (int i = 0; i < elements.length; i++) {

@@ -1,37 +1,40 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.FastFinder;
+import org.nakedobjects.object.NakedClassSpec;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.collection.InstanceCollection;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.Action.Type;
+import org.nakedobjects.object.reflect.ActionSpecification;
+import org.nakedobjects.object.reflect.ActionSpecification.Type;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
+
 
 public class ObjectOption {
 
     public static void menuOptions(NakedObject object, MenuOptionSet options) {
         if (object != null) {
-            if (object.isFinder()) {
+            if (object instanceof FastFinder) {
                 options.add(MenuOptionSet.OBJECT, new FindFirstOption());
                 options.add(MenuOptionSet.OBJECT, new FindAllOption());
             } else {
-                menuOption(object, options, Action.USER, MenuOptionSet.OBJECT);
-                menuOption(object, options, Action.EXPLORATION, MenuOptionSet.EXPLORATION);
+                menuOption(object, options, ActionSpecification.USER, MenuOptionSet.OBJECT);
+                menuOption(object, options, ActionSpecification.EXPLORATION, MenuOptionSet.EXPLORATION);
             }
 
-            if (!(object instanceof NakedClass) && !(object instanceof InstanceCollection) && object.isPersistent()) {
+            boolean isPersistent = object.getOid() != null;
+            if (!(object instanceof NakedClassSpec) && !(object instanceof InstanceCollection) && isPersistent) {
                 options.add(MenuOptionSet.EXPLORATION, new DestroyObjectOption());
             }
         }
     }
 
     private static void menuOption(NakedObject object, MenuOptionSet menuOptionSet, Type actionType, int menuSection) {
-        Action[] actions = object.getNakedClass().getObjectActions(actionType);
+        ActionSpecification[] actions = object.getSpecification().getObjectActions(actionType);
 
         for (int i = 0; i < actions.length; i++) {
             MenuOption option;
-            if(actions[i].parameters().length == 0) {
+            if (actions[i].parameters().length == 0) {
                 option = ImmediateObjectOption.createOption(actions[i], object);
             } else {
                 option = DialogedObjectOption.createOption(actions[i], object);
@@ -44,27 +47,26 @@ public class ObjectOption {
 
 }
 
-
 /*
-Naked Objects - a framework that exposes behaviourally complete
-business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-The authors can be contacted via www.nakedobjects.org (the
-registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-Road, Woking GU21 1NR, UK).
-*/
+ * Naked Objects - a framework that exposes behaviourally complete business
+ * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * Ltd
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * The authors can be contacted via www.nakedobjects.org (the registered address
+ * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
+ * 1NR, UK).
+ */

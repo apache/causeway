@@ -1,10 +1,10 @@
 package org.nakedobjects.object.value;
 
-import org.nakedobjects.Clock;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.Title;
 import org.nakedobjects.object.ValueParseException;
+import org.nakedobjects.system.Clock;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -81,8 +81,6 @@ public class DateTime extends Magnitude {
      Add the specified days, years and months to this date value.
      */
     public void add(int hours, int minutes, int seconds) {
-        checkCanOperate();
-
         Calendar cal = Calendar.getInstance();
 
         cal.setTime(date);
@@ -182,8 +180,6 @@ public class DateTime extends Magnitude {
      returns true if the timeStamp of this object is earlier than the specified timeStamp
      */
     public boolean isLessThan(Magnitude timeStamp) {
-        checkCanOperate();
-
         if (timeStamp instanceof DateTime) {
             return !isNull && !timeStamp.isEmpty() &&
             date.before(((DateTime) timeStamp).date);
@@ -193,8 +189,6 @@ public class DateTime extends Magnitude {
     }
 
     public long longValue() {
-        checkCanOperate();
-
         return date.getTime();
     }
 

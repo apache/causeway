@@ -1,9 +1,14 @@
 package org.nakedobjects.viewer.skylark;
 
-import java.awt.Dimension;
+import org.nakedobjects.ObjectViewingMechanism;
+import org.nakedobjects.ObjectViewingMechanismListener;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.UpdateNotifier;
+import org.nakedobjects.utility.ComponentException;
+import org.nakedobjects.utility.ConfigurationException;
+
 import java.awt.Frame;
 import java.awt.Graphics;
-import java.awt.Window;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
@@ -11,16 +16,8 @@ import java.awt.event.WindowEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.nakedobjects.ObjectViewingMechanism;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.UpdateNotifier;
-import org.nakedobjects.utility.ComponentException;
-import org.nakedobjects.utility.ConfigurationException;
-import org.nakedobjects.viewer.skylark.basic.AboutView;
 
-
-public class ViewerFrame extends Frame implements RenderingArea,
-    ObjectViewingMechanism {
+public class ViewerFrame extends Frame implements RenderingArea, ObjectViewingMechanism {
     private static final int HEIGHT = 700;
     private static final int WIDTH = 800;
     private static final int Y = 10;
@@ -72,8 +69,8 @@ public class ViewerFrame extends Frame implements RenderingArea,
         return viewer.getUpdateNotifier();
     }
 
-    public void init(NakedObject object) throws ConfigurationException, ComponentException {
-        viewer.init(this, object);
+    public void init(NakedObject object, ObjectViewingMechanismListener listener) throws ConfigurationException, ComponentException {
+        viewer.init(this, object, listener);
     }
 
     /**
@@ -87,7 +84,7 @@ public class ViewerFrame extends Frame implements RenderingArea,
     }
 
     public void quit() {
-        viewer.shutdown();
+        viewer.close();
         System.exit(0);
     }
 

@@ -4,7 +4,7 @@ package org.nakedobjects;
 public class AboutNakedObjects {
 
     public static String getVersion() {
-        return select("%VERSION%", "non-versioned");
+        return select("%VERSION%", "Version 2");
     }
     
     public static String getImageName() {
@@ -20,7 +20,7 @@ public class AboutNakedObjects {
     }
     
     public static String getBuildId() {
-        return select("%BUILD_ID%", "unbuilt");
+        return select("%BUILD_ID%", "(temporary build)");
     }
     
     

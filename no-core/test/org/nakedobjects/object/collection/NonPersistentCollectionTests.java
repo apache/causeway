@@ -1,5 +1,16 @@
 package org.nakedobjects.object.collection;
 
+import org.nakedobjects.object.EmptyExample;
+import org.nakedobjects.object.LocalReflectionFactory;
+import org.nakedobjects.object.MockObjectManager;
+import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.Person;
+import org.nakedobjects.object.Role;
+import org.nakedobjects.object.Team;
+import org.nakedobjects.object.value.TestClock;
+
 import java.util.Enumeration;
 
 import junit.framework.TestCase;
@@ -8,17 +19,12 @@ import junit.textui.TestRunner;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
-import org.nakedobjects.object.EmptyExample;
-import org.nakedobjects.object.MockObjectManager;
-import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.Person;
-import org.nakedobjects.object.Role;
-import org.nakedobjects.object.Team;
 
 
 
 public class NonPersistentCollectionTests extends TestCase {
  private MockObjectManager manager;
+private NakedObjectContext context;
 
 //   private static NakedObjectStore objectStore;
 
@@ -30,10 +36,14 @@ public class NonPersistentCollectionTests extends TestCase {
         TestRunner.run(new TestSuite(NonPersistentCollectionTests.class));
     }
 
-    public void setUp() {
+    protected void setUp() {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
         
         manager = MockObjectManager.setup();
+        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+    	context = manager.getContext();
+    	
+        new TestClock();
     }
 
     protected void tearDown() throws Exception {
@@ -47,6 +57,7 @@ public class NonPersistentCollectionTests extends TestCase {
      */
     public void testElements() throws ObjectStoreException {
         AbstractNakedCollection collection = new ArbitraryCollection();
+        collection.setContext(context);
         Role[] e = setupCollection(collection, 200);
         Enumeration enum = collection.elements();
 
@@ -62,6 +73,7 @@ public class NonPersistentCollectionTests extends TestCase {
 
     public void testElements2() throws ObjectStoreException {
         AbstractNakedCollection collection = new ArbitraryCollection();
+        collection.setContext(context);
         Role[] e = setupCollection(collection, 2);
         Enumeration enum = collection.elements();
 
@@ -95,6 +107,7 @@ public class NonPersistentCollectionTests extends TestCase {
 
     public void testDisplayOfInternalCollection() throws ObjectStoreException {
         Team m = new Team();
+        m.setContext(context);
 
         AbstractNakedCollection collection = m.getMembers();
 
@@ -292,18 +305,9 @@ public class NonPersistentCollectionTests extends TestCase {
         }
     }
 
-    public void testReset() throws ObjectStoreException {
-        AbstractNakedCollection collection = new ArbitraryCollection();
-
-        setupCollection(collection, 33);
-
-        assertEquals(33, collection.size());
-        collection.reset();
-        assertEquals(0, collection.size());
-    }
-
     public void testGetWindowSize() throws ObjectStoreException {
         AbstractNakedCollection ac = new ArbitraryCollection();
+        ac.setContext(manager.getContext());
         assertEquals(12, ac.getDisplaySize());
         ac.setDisplaySize(10);
         assertEquals(10, ac.getDisplaySize());
@@ -369,6 +373,8 @@ public class NonPersistentCollectionTests extends TestCase {
      */
     private Role[] setupCollection(AbstractNakedCollection collection, int size)
         throws ObjectStoreException {
+        collection.setContext(context);
+
         Role[] e = new Role[size];
 
         for (int i = 0; i < size; i++) {

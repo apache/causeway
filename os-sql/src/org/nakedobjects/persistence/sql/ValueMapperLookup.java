@@ -1,5 +1,6 @@
 package org.nakedobjects.persistence.sql;
 
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 
 import java.util.Hashtable;
@@ -49,11 +50,12 @@ public class ValueMapperLookup {
 	    }
 	}
 	
-	public ValueMapper mapperFor(Class valueType) {
-	    if(!mappers.containsKey(valueType.getName())) {
-	        throw new NakedObjectRuntimeException("No mapper for " + valueType.getName());
+	public ValueMapper mapperFor(NakedObjectSpecification valueType) {
+	    String name = valueType.getFullName();
+        if(!mappers.containsKey(name)) {
+	        throw new NakedObjectRuntimeException("No mapper for " + name);
 	    }
-	    return (ValueMapper) mappers.get(valueType.getName());
+	    return (ValueMapper) mappers.get(name);
 	}
 	/*
     public String valueAsDBString(Field field, NakedValue value) throws SqlObjectStoreException {

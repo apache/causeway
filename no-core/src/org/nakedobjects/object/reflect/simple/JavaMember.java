@@ -1,11 +1,11 @@
 package org.nakedobjects.object.reflect.simple;
 
 
-import java.lang.reflect.Method;
-
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
+
+import java.lang.reflect.Method;
 
 
 public abstract class JavaMember {

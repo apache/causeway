@@ -25,8 +25,10 @@ package org.nakedobjects.viewer.skylark.core;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.Panel;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
@@ -54,8 +56,7 @@ public class DebugFrame extends Frame {
         addWindowListener(new WindowAdapter() {
 		        DebugFrame frame = DebugFrame.this;
                 public void windowClosing(WindowEvent e) {
-                	frame.hide();
-                    frame.dispose();
+                	closeDialog();
                 }
             });
 
@@ -68,19 +69,61 @@ public class DebugFrame extends Frame {
         add("Center", area);
         field = area;
 
+        Panel buttons = new Panel();
+        buttons.setLayout(new FlowLayout());
+        add(buttons, BorderLayout.SOUTH);
+        
         // add buttons
         // ...
         Button b = new java.awt.Button("Refresh");
         b.setFont(font);
 
-        add(b, BorderLayout.SOUTH);
+        buttons.add(b);
         b.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     refresh();
                 }
             });
+
+        b = new java.awt.Button("Print...");
+        b.setFont(font);
+        b.setEnabled(false);
+
+        buttons.add(b);
+        b.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    // TODO add print option
+                }
+            });
+
+        b = new java.awt.Button("Save...");
+        b.setFont(font);
+        b.setEnabled(false);
+
+        buttons.add(b);
+        b.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    // TODO add save option
+                }
+            });
+
+        b = new java.awt.Button("Close");
+        b.setFont(font);
+
+        buttons.add(b);
+        b.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    closeDialog();
+                }
+            });
+
     }
 
+    private void closeDialog() {
+        hide();
+        dispose();
+    }
+    
     /**
      * Calls dispose on all the open debug frames
      *

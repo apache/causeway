@@ -1,148 +1,175 @@
 package org.nakedobjects.object;
 
-import java.util.Vector;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 
 
 public final class LocalObjectManagerTest extends NakedObjectTestCase {
-	private NakedObjectManager objectManager;
-	private MockObjectStore objectStore;
-	
-	public LocalObjectManagerTest(String name) {
-		super(name);
-	}
+    private NakedObjectContext context;
+    private MockLoadedObjects loadedObjects;
+    private NakedObjectSpecification nc;
+    private LocalObjectManager objectManager;
+    private MockObjectStore objectStore;
+    NakedObject[] v;
 
-	protected void setUp() throws Exception {
-	    LogManager.getLoggerRepository().setThreshold(Level.OFF);
-
-		MockUpdateNotifier updateNotifier = new MockUpdateNotifier();
-		objectStore = new MockObjectStore();
-		objectManager = new LocalObjectManager(objectStore, updateNotifier);
-        objectManager.init();
-
-        super.setUp();
-	}
-	
-	protected void tearDown() throws Exception {
-	    objectManager.shutdown();
-	    objectStore.shutdown();
-	    super.tearDown();
+    public LocalObjectManagerTest(String name) {
+        super(name);
     }
 
-	public void testGetInstances() throws Exception {
-	    NakedClass nc = new NakedClass();
-	    Vector v = new Vector();
+    private void assertInstances(NakedObject[] instances) {
+        assertEquals(v.length, instances.length);
+
+        assertEquals(v[0], instances[0]);
+        assertEquals(v[1], instances[1]);
+        assertEquals(v[2], instances[2]);
+
+        assertEquals(context, instances[0].getContext());
+        assertEquals(context, instances[1].getContext());
+        assertEquals(context, instances[2].getContext());
+    }
+
+    protected void setUp() throws Exception {
+        LogManager.getLoggerRepository().setThreshold(Level.OFF);
+
+        MockUpdateNotifier updateNotifier = new MockUpdateNotifier();
+        objectStore = new MockObjectStore();
+        loadedObjects = (MockLoadedObjects) objectStore.getLoadedObjects();
+        objectManager = new LocalObjectManager(objectStore, updateNotifier, new SimpleOidGenerator());
+        objectManager.init();
+
+        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+
+        context = objectManager.getContext();
+
+        nc = NakedObjectSpecification.getNakedClass(MockNakedObject.class);
+        v = new NakedObject[] { new MockNakedObject(), new MockNakedObject(), new MockNakedObject() };
         objectStore.setupInstances(v, nc);
-		assertSame(v, objectManager.getInstances(nc));
-	}
 
-	public void testGetObjectRepeatability() throws ObjectStoreException {
-	    NakedClass nc = new NakedClass();
-	    Object oid = new Integer(1);
-		
-	    objectStore.setupIsLoaded(false);
-	    Person person = new Person();
-	    person.setOid(oid);
+        super.setUp();
+    }
+
+    protected void tearDown() throws Exception {
+        objectManager.shutdown();
+        objectStore.shutdown();
+        super.tearDown();
+    }
+
+    public void testAlreadyExistingSerialNumbers() throws ObjectStoreException {
+        NakedObjectSpecification nc = NakedObjectSpecification.getNakedClass(Sequence.class);
+        Sequence seq;
+        v = new NakedObject[] { seq = new Sequence() };
+        seq.getName().setValue("test");
+        objectStore.setupInstances(v, nc);
+
+        long i = objectManager.serialNumber("test");
+        assertEquals(1, i);
+
+        objectStore.assertAction(0, "getInstances " + nc);
+        objectStore.assertAction(1, "saveObject " + seq);
+
+        i = objectManager.serialNumber("test");
+        assertEquals(2, i);
+    }
+
+    public void testFirstSerialNumbers() throws ObjectStoreException {
+        NakedObjectSpecification nc = NakedObjectSpecification.getNakedClass(Sequence.class);
+        NakedObject[] v = new NakedObject[] {};
+        objectStore.setupInstances(v, nc);
+
+        long i = objectManager.serialNumber("test");
+        assertEquals(0, i);
+
+        objectStore.assertAction(0, "getInstances " + nc);
+        objectStore.assertAction(1, "createObject Sequence");
+        loadedObjects.assertAction(0, "loaded Sequence");
+    }
+
+    public void testGetInstancesForClass() throws Exception {
+        NakedObject[] instances = objectManager.getInstances(nc);
+        assertInstances(instances);
+    }
+
+    public void testGetInstancesForPattern() throws Exception {
+        NakedObject[] instances = objectManager.getInstances(new MockNakedObject());
+
+        assertInstances(instances);
+    }
+
+    public void testGetInstancesForTerm() throws Exception {
+        NakedObject[] instances = objectManager.getInstances(nc, "term");
+
+        assertInstances(instances);
+    }
+
+    public void testGetObjectRepeatability() throws ObjectStoreException {
+        NakedObjectSpecification nc = NakedObjectSpecification.getNakedClass(AbstractNakedObject.class);
+        Oid oid = new MockOid(1);
+
+        objectStore.setupIsLoaded(false);
+        Person person = new Person();
+        person.setOid(oid);
         objectStore.setupGetObject(person);
-	    assertSame(person, objectManager.getObject(oid, nc));
-	    
-	    objectStore.setupIsLoaded(true);
-	    objectStore.setupGetObject(null);
-	    objectStore.setupLoaded(new NakedObject[] {person});
-	    objectStore.setupGetObject(person);
-	}
+        assertSame(person, objectManager.getObject(oid, nc));
 
-	public void testHasInstances() throws Exception {
-	    NakedClass nc = new NakedClass();
-	    
-	    objectStore.setupHasInstances(false);
-		assertFalse(objectManager.hasInstances(nc));
-	    objectStore.setupHasInstances(true);
-		assertTrue(objectManager.hasInstances(nc));
+        objectStore.setupIsLoaded(true);
+        objectStore.setupGetObject(null);
+        objectStore.setupLoaded(new NakedObject[] { person });
+        assertSame(person, objectManager.getObject(oid, nc));
+    }
 
-	}
-	
-	public void testInstancesCount() throws Exception {
-	    NakedClass nc = new NakedClass();
-		  		
-		objectStore.setupInstancesCount(0);
-		assertEquals(0, objectManager.numberOfInstances(nc));
-		
-		objectStore.setupInstancesCount(5);
-		assertEquals(5, objectManager.numberOfInstances(nc));
-	}
+    public void testHasInstances() throws Exception {
+        NakedObjectSpecification nc = NakedObjectSpecification.getNakedClass(AbstractNakedObject.class);
 
-	/*
-	  
-	 public void testMakePersistentPersistsValue() throws Exception {
-		Role role = new Role();
+        objectStore.setupHasInstances(false);
+        assertFalse(objectManager.hasInstances(nc));
+        objectStore.setupHasInstances(true);
+        assertTrue(objectManager.hasInstances(nc));
 
-		objectManager.makePersistent(role);
-		
-		Vector actions = objectStore.getActions();
-		assertEquals(5, actions.size());
-		assertEquals("createObject " + role, actions.elementAt(4));
-	
-		assertNotNull(role.getOid());
-		assertTrue(role.isPersistent());
-		assertFalse(role.isFinder());
-		assertTrue(role.isResolved());
-	}
+    }
 
-	/**
-	 * To test the serial number we need to ensure that for each call the serial number is
-	 * different to the previous one and that it comes after the previous one.
-	 */
-/*	public void testSerialNumbers() throws ObjectStoreException {
-	    Vector v = new Vector();
-	    v.addElement(new Sequence());
-	    objectStore.setupInstances(v);
-	    objectStore.setupNakedClass(Sequence.class);
-	    assertEquals(0, objectManager.serialNumber("new"));
-	    
-	    Sequence serialNumber = new Sequence();
-	    serialNumber.getName().setValue("persisted");
-		serialNumber.getSerialNumber().setValue(26);
-//	    objectStore.addInstance(serialNumber);
-	   
-		for (int i = 27; i < 31; i++) {
-			long current = objectManager.serialNumber("persisted");
+    public void testInstancesCount() throws Exception {
+        NakedObjectSpecification nc = NakedObjectSpecification.getNakedClass(AbstractNakedObject.class);
 
-			assertTrue("repeated request should give another number " + i, current == i);
-		}
-	}
-	
-	  public void testSequences() throws Exception {
-	        MockObjectStore store = new MockObjectStore();
-	        LocalObjectManager manager = new LocalObjectManager(store,  null);
-	        store.setupNakedClass(NakedClass.createNakedClass(Sequence.class.getName(), JavaReflector.class.getName()));
-	        
-	        assertEquals(0, manager.serialNumber("one"));
-	        assertEquals(1, manager.serialNumber("one"));
-	    }
-	    
-	    */
+        objectStore.setupInstancesCount(0);
+        assertEquals(0, objectManager.numberOfInstances(nc));
+
+        objectStore.setupInstancesCount(5);
+        assertEquals(5, objectManager.numberOfInstances(nc));
+    }
+
+    public void testMakePersistentPersistsValue() throws Exception {
+        NakedObject object = new Role();
+        assertNull(object.getOid());
+        objectManager.makePersistent(object);
+        assertNotNull(object.getOid());
+
+        objectStore.assertAction(0, "createObject " + object);
+        loadedObjects.assertAction(0, "loaded " + object);
+    }
+
 }
 
-
 /*
- * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2003 Naked Objects Group Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business
+ * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
- * the GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU General Public License along with this program; if
- * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- * 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
- * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address
+ * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
+ * 1NR, UK).
  */

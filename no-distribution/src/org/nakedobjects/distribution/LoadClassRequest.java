@@ -1,7 +1,7 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedClNakedObjectSpecification;
 
 
 public class LoadClassRequest extends Request {
@@ -12,12 +12,12 @@ public class LoadClassRequest extends Request {
 	}
 
 	protected void generateResponse(RequestContext context) {
-		NakedClass cls = NakedClassManager.getInstance().getNakedClass(name.getValue());
+		NakedObjectSpecification cls = NakedObjectSpecification.getNakedClass(name.getValue());
 		response = new WrappedString(cls.getReflector().stringValue());
 	}
 
-	public NakedClass getNakedClass() {
-		NakedClass cls = new NakedClass();
+	public NakedObjectSpecification getNakedClass() {
+		NakedObjectSpecification cls = new NakedObjectSpecification();
 		cls.getName().setValue(name.getValue());
 		cls.getReflector().setValue(((WrappedString) response).getValue());
 		return cls;

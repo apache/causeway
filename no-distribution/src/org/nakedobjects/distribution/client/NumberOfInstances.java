@@ -3,20 +3,20 @@ package org.nakedobjects.distribution.client;
 
 import org.nakedobjects.distribution.Request;
 import org.nakedobjects.distribution.RequestContext;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedClNakedObjectSpecification;
 
 
 public class NumberOfInstances extends Request {
     private final static long serialVersionUID = 1L;
 	private String className;
 
-	public NumberOfInstances(NakedClass cls) {
-    	className = cls.fullName();
+	public NumberOfInstances(NakedObjectSpecification cls) {
+    	className = cls.getFullName();
     }
 
 	protected void generateResponse(RequestContext context) {
-		NakedClass cls = NakedClassManager.getInstance().getNakedClass(className);
+		NakedObjectSpecification cls = NakedObjectSpecification.getNakedClass(className);
         response = new Integer(context.getObjectManager().numberOfInstances(cls));
     }
 

@@ -1,7 +1,8 @@
 package org.nakedobjects.persistence.sql;
 
 import org.nakedobjects.object.LoadedObjects;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.SimpleOid;
 
 import java.util.Hashtable;
@@ -41,7 +42,7 @@ public abstract class AbstractObjectMapper {
 	}
 	
 	
-	protected Object recreateOid(Results rs, NakedClass cls, String column) throws SqlObjectStoreException {
+	protected Oid recreateOid(Results rs, NakedObjectSpecification cls, String column) throws SqlObjectStoreException {
 	    PrimaryKey key;
 	    if(keyMapping.containsKey(column)) {
 	        key = ((PrimaryKeyMapper) keyMapping.get(column)).generateKey(rs, column);
@@ -49,7 +50,7 @@ public abstract class AbstractObjectMapper {
 		    int id = rs.getInt(column);
 	        key = new IntegerPrimaryKey(id);
 	    }
-    	Object object = new SqlOid(cls.fullName(), key);
+    	Oid object = new SqlOid(cls.getFullName(), key);
     	return object;
 	}
 

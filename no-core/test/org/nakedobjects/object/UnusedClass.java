@@ -37,7 +37,7 @@ public class UnusedClass extends AbstractNakedObject {
         return null;
     }
 
-	public void setOid(Object oid) {
+	public void setOid(Oid oid) {
 		junit.framework.Assert.fail("No objects of this type should be created");
 	}
 

@@ -18,7 +18,7 @@ public interface Reflector {
 
     String[] classActionSortOrder();
     
-    MemberIf[] fields();
+    Member[] fields();
 
     String[] fieldSortOrder();
 
@@ -27,11 +27,25 @@ public interface Reflector {
      */
     boolean isCollection();
     
+    /**
+     * The natural language (eg english, spanish) name in the plural form - for a number of objects of this type.
+     */
     String pluralName();
 
+    /**
+     * The short, programmatic, class name; excluding any domains, package names etc.
+     */
     String shortName();
+    
+    /**
+     * The fully qualified class name; including domains, package names etc.
+     */
+    String fullName();
 
-    String singularName();
+    /**
+     * The natural language (eg english, spanish) name in the singular form - for a single object of this type.
+     */
+   String singularName();
 
     String getSuperclass();
 
@@ -40,6 +54,8 @@ public interface Reflector {
     boolean isValue();
 
     boolean isObject();
+
+    boolean isPartOf();
 }
 
 /*

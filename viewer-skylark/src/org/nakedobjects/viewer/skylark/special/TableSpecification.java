@@ -1,9 +1,10 @@
 package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.collection.TypedCollection;
-import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.security.Session;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
@@ -30,11 +31,11 @@ class TableHeader extends AbstractBorder {
         int y = padding + Style.LABEL.getAscent();
 
         TableColumnAxis axis = ((TableColumnAxis) getViewAxis());
-        Field[] fields = axis.getFields();
+        FieldSpecification[] fields = axis.getFields();
         int[] widths = axis.getWidths();
         int x = axis.getOffset();
         for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
+            FieldSpecification field = fields[i];
             
             String label = field.getLabel();
             canvas.drawText(label, x, y, Style.SECONDARY1, Style.LABEL);
@@ -57,8 +58,8 @@ class TableHeaderBuilder extends AbstractBuilderDecorator {
 
     public View createCompositeView(Content content, CompositeViewSpecification specification, ViewAxis axis) {
         TypedCollection coll = (TypedCollection) ((ObjectContent) content).getObject();
-        Field[] viewFields = NakedClassManager.getInstance().getNakedClass(coll.getType().getName()).getVisibleFields(
-                null);
+        FieldSpecification[] viewFields = NakedObjectSpecification.getNakedClass(coll.getType().getName()).getVisibleFields(
+                null, Session.getSession().getContext());
         TableColumnAxis tableAxis = new TableColumnAxis(viewFields, 100);
 
         View view = wrappedBuilder.createCompositeView(content, specification, tableAxis);

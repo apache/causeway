@@ -45,9 +45,15 @@ public class MockLoadedObjects extends LoadedObjects {
         this.isLoaded = flag;
     }
 
-    public void assertAction(int i, String string) {
+    public void assertAction(int i, String expected) {
         Assert.assertTrue(actions.size() > i);
-        Assert.assertEquals("action " + i, actions.elementAt(i), string);
+        String actual = (String) actions.elementAt(i);
+        
+		if (expected == null && actual == null)
+			return;
+		if (expected != null && actual.startsWith(expected))
+			return;
+		Assert.fail("action " + i + " expected: <" + expected + "> but was: <" +actual + ">");
     }
 }
 

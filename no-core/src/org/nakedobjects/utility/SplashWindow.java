@@ -1,5 +1,8 @@
 package org.nakedobjects.utility;
 
+import org.nakedobjects.AboutNakedObjects;
+import org.nakedobjects.object.ImageIcon;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -7,11 +10,7 @@ import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.Window;
-
-import org.nakedobjects.AboutNakedObjects;
-import org.nakedobjects.object.ImageIcon;
 
 
 public class SplashWindow extends Window implements Runnable {
@@ -31,7 +30,7 @@ public class SplashWindow extends Window implements Runnable {
         logo = ImageIcon.loadImage("logo.jpg");
 
         font = new Font("SansSerif", Font.PLAIN, 9);
-        FontMetrics fm = Toolkit.getDefaultToolkit().getFontMetrics(font);
+        FontMetrics fm = getFontMetrics(font);
         lineHeight = (int) (fm.getHeight() * 1.05);
         ascent = fm.getAscent();
 
@@ -40,7 +39,7 @@ public class SplashWindow extends Window implements Runnable {
         maxWidth = Math.max(maxWidth, fm.stringWidth(AboutNakedObjects.getVersion()));
 
         width = PADDING + maxWidth + PADDING;
-        height = PADDING + logo.getHeight(this) + PADDING + lineHeight * 2 + PADDING;
+        height = PADDING + logo.getHeight(this) + PADDING + lineHeight * 3 + PADDING;
         Dimension screen = getToolkit().getScreenSize();
         setSize(width, height);
 
@@ -67,18 +66,28 @@ public class SplashWindow extends Window implements Runnable {
 
         g.setFont(font);
 
-        int line = height - PADDING - (2 * lineHeight) + ascent;
 
         FontMetrics fm = g.getFontMetrics();
         String copyrightNotice = AboutNakedObjects.getCopyrightNotice();
         int left1 = width / 2 - fm.stringWidth(copyrightNotice) / 2;
+        
         String version = AboutNakedObjects.getVersion();
         int left2 = width / 2 - fm.stringWidth(version) / 2;
+        
+        String build = AboutNakedObjects.getBuildId();
+        int left3 = width / 2 - fm.stringWidth(build) / 2;
 
         int left = Math.min(left1, left2);
+        left = Math.min(left, left3);
+        int line = height - PADDING - (3 * lineHeight) + ascent;
+
         g.drawString(copyrightNotice, left, line);
+        
         line += lineHeight;
         g.drawString(version, left, line);
+
+        line += lineHeight;
+        g.drawString(build, left, line);
     }
 
     /**

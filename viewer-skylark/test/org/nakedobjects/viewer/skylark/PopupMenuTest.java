@@ -31,7 +31,7 @@ import junit.framework.TestCase;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.DefaultPopupMenu;
 
@@ -199,7 +199,7 @@ public class PopupMenuTest extends TestCase {
 			return null;
 		}
 
-		public View makeView(Naked object, Field field) throws CloneNotSupportedException {
+		public View makeView(Naked object, FieldSpecification field) throws CloneNotSupportedException {
 			return null;
 		}
 	}

@@ -7,9 +7,9 @@ import org.nakedobjects.distribution.RequestContext;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.reflect.Association;
-import org.nakedobjects.object.reflect.OneToManyAssociationIF;
-import org.nakedobjects.object.reflect.OneToOneAssociationIF;
+import org.nakedobjects.object.reflect.AssociationSpecification;
+import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.reflect.OneToOneAssociation;
 
 
 public class AssociateRequest extends ObjectRequest {
@@ -17,11 +17,11 @@ public class AssociateRequest extends ObjectRequest {
     private String name;
     private ObjectProxy value;
     
-    public AssociateRequest(NakedObject object, OneToManyAssociationIF field, NakedObject associate) {
+    public AssociateRequest(NakedObject object, OneToManyAssociation field, NakedObject associate) {
     	this(object, field.getName(), associate);
     }
     
-    public AssociateRequest(NakedObject object, OneToOneAssociationIF field, NakedObject associate) {
+    public AssociateRequest(NakedObject object, OneToOneAssociation field, NakedObject associate) {
     	this(object, field.getName(), associate);
 	}
 
@@ -34,7 +34,7 @@ public class AssociateRequest extends ObjectRequest {
     protected void generateResponse(RequestContext server) {
         try {
             NakedObject object = getObject(server.getLoadedObjects());
-            Association field = (Association) object.getNakedClass().getField(name);
+            AssociationSpecification field = (AssociationSpecification) object.getSpecification().getField(name);
 
             if (field == null) {
                 throw new NakedObjectRuntimeException("ObjectAttributeMessage has invalid Field: " + name);

@@ -27,18 +27,18 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.reflect.OneToOneAssociationIF;
+import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.security.SecurityContext;
 
 import org.apache.log4j.Category;
 
 
-public class RemoteOneToOneAssociation implements OneToOneAssociationIF {
+public class RemoteOneToOneAssociation implements OneToOneAssociation {
 	private final static Category LOG = Category.getInstance(RemoteOneToOneAssociation.class);
-	private OneToOneAssociationIF local;
+	private OneToOneAssociation local;
 	private boolean fullProxy = false;
 	
-	public RemoteOneToOneAssociation(OneToOneAssociationIF local) {
+	public RemoteOneToOneAssociation(OneToOneAssociation local) {
 		this.local = local;
 	}
 

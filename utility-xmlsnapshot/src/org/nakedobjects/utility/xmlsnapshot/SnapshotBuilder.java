@@ -1,15 +1,15 @@
 package org.nakedobjects.utility.xmlsnapshot;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.object.reflect.NakedClassException;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.Value;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import org.nakedobjects.object.value.Snapshot;
 
 import java.util.StringTokenizer;
@@ -164,8 +164,8 @@ public final class SnapshotBuilder {
         fieldNames.removeElementAt(0);
         
         // locate the field in the object's class
-        NakedClass nakedClass = place.getObject().getNakedClass();
-        Field field = null;
+        NakedObjectSpecification nakedClass = place.getObject().getSpecification();
+        FieldSpecification field = null;
         try {
             // HACK: really want a NakedClass.hasField method to check first.
             field = nakedClass.getField(fieldName);
@@ -186,11 +186,11 @@ public final class SnapshotBuilder {
         }
         
 
-        if (field instanceof Value) {
+        if (field instanceof ValueFieldSpecification) {
             return false;
             
-        } else if (field instanceof OneToOneAssociation) {
-            OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
+        } else if (field instanceof OneToOneAssociationSpecification) {
+            OneToOneAssociationSpecification oneToOneAssociation = ((OneToOneAssociationSpecification) field);
             NakedObject referencedObject = (NakedObject) oneToOneAssociation.get(place.getObject()); // cast to ANO rather than NO because haven't (yet) put toXml() onto NO interface.
 
             if (referencedObject == null) {
@@ -199,8 +199,8 @@ public final class SnapshotBuilder {
 
             return appendXmlThenIncludeRemaining(fieldElement, referencedObject, fieldNames, annotation);
         
-        } else if (field instanceof OneToManyAssociation) {
-            OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
+        } else if (field instanceof OneToManyAssociationSpecification) {
+            OneToManyAssociationSpecification oneToManyAssociation = (OneToManyAssociationSpecification) field;
             InternalCollection collection = (InternalCollection) oneToManyAssociation.get(place.getObject());
             
             boolean allFieldsNavigated = true;
@@ -264,7 +264,7 @@ public final class SnapshotBuilder {
             throw new IllegalArgumentException("parentElement must have owner document");
         }
 
-        NakedClass nakedClass = object.getNakedClass();
+        NakedObjectSpecification nakedClass = object.getSpecification();
 
         Document doc = parentElement.getOwnerDocument();
 
@@ -281,9 +281,9 @@ public final class SnapshotBuilder {
         
         namespaceManager.setNofAttribute(element, "oid", object.getOid().toString());
 
-        Field[] fields = nakedClass.getFields();
+        FieldSpecification[] fields = nakedClass.getFields();
         for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
+            FieldSpecification field = fields[i];
             String fieldName = field.getName();
             Element fieldElement = doc.createElementNS(nsUri, namespaceManager.getAlias(nakedClass) + ":" + fieldName); // scoped
             // by
@@ -294,18 +294,18 @@ public final class SnapshotBuilder {
             // containing
             // object
 
-            if (field instanceof Value) {
-                Value valueHolder = ((Value) field);
+            if (field instanceof ValueFieldSpecification) {
+                ValueFieldSpecification valueHolder = ((ValueFieldSpecification) field);
                 Naked value = valueHolder.get(object);
                 if (value != null) {
                     // a null value would be a programming error, but we protect
                     // against it anyway
                     namespaceManager.setNofAttribute(fieldElement, "feature", "value");
                     namespaceManager.setNofAttribute(fieldElement, "datatype", NamespaceManager.NOF_METAMODEL_NS_ALIAS + ":"
-                            + value.getShortClassName());
+                            + value.getSpecification().getShortName());
 
-                    if (!value.isEmpty()) {
-                        String valueStr = value.title().toString();
+                    if (value.titleString().length() > 0) {
+                        String valueStr = value.titleString();
                         fieldElement.appendChild(doc.createTextNode(valueStr));
                     } else {
                         namespaceManager.setNofAttribute(fieldElement, "isEmpty", "true");
@@ -313,17 +313,17 @@ public final class SnapshotBuilder {
                     element.appendChild(fieldElement);
                 }
 
-            } else if (field instanceof OneToOneAssociation) {
-                OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
+            } else if (field instanceof OneToOneAssociationSpecification) {
+                OneToOneAssociationSpecification oneToOneAssociation = ((OneToOneAssociationSpecification) field);
                 NakedObject referencedNakedObject = (NakedObject) oneToOneAssociation.get(object);
                 namespaceManager.setNofAttribute(fieldElement, "feature", "reference");
 
-                String fullyQualifiedClassName = oneToOneAssociation.getType().getName();
+                String fullyQualifiedClassName = oneToOneAssociation.getType().getFullName();
                 namespaceManager.addNamespaceIfRequired(parentElement, fullyQualifiedClassName);
                 setNofTypeAttr(fieldElement, namespaceManager, fullyQualifiedClassName);
 
                 if (referencedNakedObject != null) {
-                    String titleStr = referencedNakedObject.title().toString();
+                    String titleStr = referencedNakedObject.titleString();
 
                     Element titleElement = doc.createElementNS(NamespaceManager.NOF_METAMODEL_NS_URI, "nof:title");
                     fieldElement.appendChild(titleElement);
@@ -336,10 +336,10 @@ public final class SnapshotBuilder {
                 // already there
                 fieldElement = addElementIfNotPresent(element, fieldElement, namespaceManager);
 
-            } else if (field instanceof OneToManyAssociation) {
+            } else if (field instanceof OneToManyAssociationSpecification) {
                 namespaceManager.setNofAttribute(fieldElement, "feature", "collection");
 
-                OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
+                OneToManyAssociationSpecification oneToManyAssociation = (OneToManyAssociationSpecification) field;
                 InternalCollection collection = (InternalCollection) oneToManyAssociation.get(object);
                 String fullyQualifiedClassName = collection.getType().getName();
                 namespaceManager.addNamespaceIfRequired(parentElement, fullyQualifiedClassName);
@@ -386,35 +386,35 @@ public final class SnapshotBuilder {
 */
     
     private static void snapshot(NakedObject object, Snapshot snapshot) {
-        NakedClass nc = object.getNakedClass();
+        NakedObjectSpecification nc = object.getSpecification();
         StringBuffer str = new StringBuffer();
 
-        Field[] fields = nc.getFields();
+        FieldSpecification[] fields = nc.getFields();
         for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
+            FieldSpecification field = fields[i];
 
-            if (field instanceof Value) {
-                Value valueHolder = ((Value) field);
+            if (field instanceof ValueFieldSpecification) {
+                ValueFieldSpecification valueHolder = ((ValueFieldSpecification) field);
                 Naked value = valueHolder.get(object);
                 if (value != null) {
-                    String valueStr = value.title().toString();
+                    String valueStr = value.titleString();
                     str.append(valueStr);
                 }
-            } else if (field instanceof OneToOneAssociation) {
-                OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
+            } else if (field instanceof OneToOneAssociationSpecification) {
+                OneToOneAssociationSpecification oneToOneAssociation = ((OneToOneAssociationSpecification) field);
                 Naked referencedNakedObject = oneToOneAssociation.get(object);
                 if (referencedNakedObject != null) {
-                    String titleStr = referencedNakedObject.title().toString();
+                    String titleStr = referencedNakedObject.titleString();
                     str.append(titleStr);
                 }
-            } else if (field instanceof OneToManyAssociation) {
-                OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
+            } else if (field instanceof OneToManyAssociationSpecification) {
+                OneToManyAssociationSpecification oneToManyAssociation = (OneToManyAssociationSpecification) field;
                 InternalCollection collection = (InternalCollection) oneToManyAssociation.get(object);
 
                 for (int j = 0; j < collection.size(); j++) {
                     NakedObject element = collection.elementAt(i);
                     if (element != null) {
-                        str.append(element.title().toString());
+                        str.append(element.titleString());
                     }
                 }
             }

@@ -1,6 +1,6 @@
 package org.nakedobjects.object;
 
-public class UnsupportedFindException extends NakedObjectException {
+public class UnsupportedFindException extends NakedObjectRuntimeException {
     public UnsupportedFindException() {
         super();
     }

@@ -1,67 +1,27 @@
+
 package org.nakedobjects.object.value;
 
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.control.FieldAbout;
-
-import java.util.Enumeration;
-import java.util.Vector;
+import org.nakedobjects.object.Title;
 
 import org.apache.log4j.Logger;
 
 // TODO remove ValueChanged stuff - to check with Dan first.
 public abstract class AbstractNakedValue implements NakedValue {
     private final static Logger logger = Logger.getLogger(AbstractNakedValue.class);
-    private transient About about;
-
-    /**
-     * @link aggregation
-     * @associates <{NakedValueListener}>
-     */
-    private transient Vector nakedValueListeners = new Vector();
-
+    private final NakedObjectSpecification specification;
+    
     public AbstractNakedValue() {
         super();
+        specification = NakedObjectSpecification.getNakedClass(this.getClass());
     }
 
-    /**
-     * Returns the objects About object. If none is set up then it returns the
-     * default one, namely FieldAbout.READ_WRITE
-     */
-    public About about() {
-        if (about == null) {
-            return FieldAbout.READ_WRITE;
-        } else {
-            return about;
-        }
-    }
-
-    /**
-     * Registers an object as a listener of this naked value. Whenever the naked
-     * value's state changes, then all listeners will be notified.
-     * <p>
-     * CAVEAT: only objects that are resolved and instantiated will be notified.
-     * In general, this means that it is okay for the owning object of a naked
-     * value to register itself as a listener, but not for other objects unless
-     * it can be arranged for them to have already been resolved from the object
-     * store.
-     * </p>
-     */
-    public final void addNakedValueListener(NakedValueListener l) {
-        nakedValueListeners.addElement(l);
-    }
-
-    /**
-     * Throws an exception if the ojbect is null
-     */
-    protected void checkCanOperate() {}
-
-    public String contextualTitle() {
-        return null;
-    }
+    /** By default all values are changeable by the user */
+	public boolean userChangeable() {
+	    return true;
+	}
 
     /**
      * Returns a deep copy of this object.
@@ -82,83 +42,18 @@ public abstract class AbstractNakedValue implements NakedValue {
         }
     }
 
-    public NakedClass getNakedClass() {
-        return NakedClassManager.getInstance().getNakedClass(getClass().getName());
+    public NakedObjectSpecification getSpecification() {
+        return specification;
+//        return NakedClass.getNakedClass(getClass().getName());
     }
 
-    /**
-     * Overridden version of <code>fireValueChanged(NakedValue)</code> that
-     * passes <code>null</code> for the old value.
-     * <p>
-     * This was added since it was noted that some value objects are <i>not </i>
-     * in fact serializable.
-     * </p>
-     * 
-     * @see #fireValueChanged(NakedValue)
-     */
-    public final void fireValueChanged() {
-        fireValueChanged(null);
+
+    public String titleString() {
+        return title().toString();
     }
 
-    /**
-     * Allows subclasses (indeed any class) to notify listeners when they are
-     * about to change the state of the naked value. Typical usage is:
-     * <ul>
-     * <li>call <code>deepCopy()</code> on self to obtain current (old) value
-     * </li>
-     * <li>modify self</li>
-     * <li>call <code>notifyListenersChanged(NakedValue)</code> passing the
-     * old value from first step.</li>
-     * </ul>
-     * 
-     * @see #deepCopy()
-     */
-    public final void fireValueChanged(NakedValue oldValue) {
-        //		getLogger().debug("fireValueChanged(): enter");
-        try {
-            NakedValueChangedEvent ev = new NakedValueChangedEvent(this, oldValue, this);
-            int i = 0;
-            for (Enumeration enum = nakedValueListeners(); enum.hasMoreElements();) {
-                NakedValueListener l = (NakedValueListener) enum.nextElement();
-                l.nakedValueChanged(ev);
-                i++;
-            }
-        } finally {
-            //			getLogger().debug("fireValueChanged(): exit (" + i + " listeners
-            // notified)");
-        }
-    }
-
-    public String getClassName() {
-        return getClass().getName();
-    }
-
-    public String getShortClassName() {
-        String name = getClassName();
-
-        return name.substring(name.lastIndexOf(".") + 1);
-    }
-
-    /**
-     * Returns enumeration of all registered naked value listeners
-     */
-    public final Enumeration nakedValueListeners() {
-        return nakedValueListeners.elements();
-    }
-
-    /**
-     * Removes an object as a listener of this naked value. The listener will no
-     * longer be notified of changes to the naked value's state.
-     */
-    public final void removeNakedValueListener(NakedValueListener l) {
-        nakedValueListeners.removeElement(l);
-    }
-
-    public void setAbout(About newAbout) {
-        if (about != null) throw new IllegalStateException("The about object cannot be reset");
-        about = newAbout;
-    }
-
+    protected abstract Title title();
+    
     /**
      * Returns a string representation of this object.
      * <p>
@@ -169,7 +64,7 @@ public abstract class AbstractNakedValue implements NakedValue {
      * @return string representation of object.
      */
     public String toString() {
-        return title() + " [" + this.getClass().getName() + "]";
+        return titleString() + " [" + this.getClass().getName() + "]";
     }
 }
 

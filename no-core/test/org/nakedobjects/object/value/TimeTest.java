@@ -1,13 +1,11 @@
 package org.nakedobjects.object.value;
 
-import org.nakedobjects.SystemClock;
-
 import junit.framework.TestCase;
 
 public class TimeTest extends TestCase {
 
     protected void setUp() throws Exception {
-		Time.setClock(new SystemClock());
+        new TestClock();
     }
     
     public void testSaveRestore() throws Exception {

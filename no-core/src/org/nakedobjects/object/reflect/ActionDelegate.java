@@ -1,25 +1,25 @@
 package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.control.About;
-import org.nakedobjects.security.SecurityContext;
 
 
-public interface ActionDelegate extends MemberIf {
+public interface ActionDelegate extends Member {
 
     NakedObject execute(NakedObject object, Naked[] parameters);
 
-    About getAbout(SecurityContext context, NakedObject object, Naked[] parameters);
+    About getAbout(NakedObjectContext context, NakedObject object, Naked[] parameters);
 
     int getParameterCount();
 
-    Action.Type getType();
+    ActionSpecification.Type getType();
 
-    NakedClass[] parameterTypes();
+    NakedObjectSpecification[] parameterTypes();
 
-    NakedClass returnType();
+    NakedObjectSpecification returnType();
 }
 
 /*

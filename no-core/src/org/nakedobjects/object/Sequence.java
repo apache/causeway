@@ -6,13 +6,7 @@ import org.nakedobjects.object.value.TextString;
 public class Sequence extends AbstractNakedObject {
     private TextString name = new TextString();
     private SerialNumber serial = new SerialNumber();
-    
-    public static Sequence getPattern(String sequence) {
-        Sequence pattern = (Sequence) createTransientInstance(Sequence.class);
-        pattern.makeFinder();
-        return pattern;
-    }
-
+ 
     public void actionIncrement() {
         serial.next();
     }

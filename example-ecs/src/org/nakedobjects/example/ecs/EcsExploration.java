@@ -1,11 +1,11 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.Exploration;
+import org.nakedobjects.exploration.Exploration;
 
 
 public class EcsExploration extends Exploration {
 
-    public void setUpFixture() {
+    public void setUpFixtures() {
         addFixture(new EcsFixture());
     }
 

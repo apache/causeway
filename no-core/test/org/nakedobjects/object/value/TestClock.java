@@ -1,11 +1,18 @@
 package org.nakedobjects.object.value;
 
-import org.nakedobjects.Clock;
+import org.nakedobjects.system.Clock;
 
 import java.util.Calendar;
 
 public class TestClock implements Clock {
 
+    public TestClock() {
+        Date.setClock(this);
+        Time.setClock(this);
+        DateTime.setClock(this);
+        TimeStamp.setClock(this);
+    }
+    
     public long getTime() {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.YEAR, 2003);

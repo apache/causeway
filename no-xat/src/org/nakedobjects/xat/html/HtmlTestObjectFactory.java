@@ -1,10 +1,10 @@
 package org.nakedobjects.xat.html;
 
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedClassSpec;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.reflect.Value;
-import org.nakedobjects.security.SecurityContext;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import org.nakedobjects.xat.Documentor;
 import org.nakedobjects.xat.ParameterValueImpl;
 import org.nakedobjects.xat.TestClass;
@@ -21,19 +21,19 @@ import java.util.Hashtable;
 public class HtmlTestObjectFactory implements TestObjectFactory{
     private static HtmlDocumentor documentor;
     
-    public TestClass createTestClass(SecurityContext context, NakedClass cls) {
+    public TestClass createTestClass(NakedObjectContext context, NakedClassSpec cls) {
         return new HtmlTestClass(new TestClassImpl(context, cls, this), documentor);
 }
     
-    public TestObject createTestObject(SecurityContext context, NakedObject object) {
+    public TestObject createTestObject(NakedObjectContext context, NakedObject object) {
         return new HtmlTestObject(new TestObjectImpl(context, object, this), documentor);
     }
 
-    public TestObject createTestObject(SecurityContext context, NakedObject field, Hashtable viewCache) {
+    public TestObject createTestObject(NakedObjectContext context, NakedObject field, Hashtable viewCache) {
         return new HtmlTestObject(new TestObjectImpl(context, field, viewCache, this), documentor);
     }
     
-    public TestValue createTestValue(NakedObject parent, Value field) {	
+    public TestValue createTestValue(NakedObject parent, ValueFieldSpecification field) {	
         return new HtmlTestValue(new TestValueImpl(parent, field));
     }
 

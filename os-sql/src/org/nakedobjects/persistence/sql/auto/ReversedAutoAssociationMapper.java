@@ -1,9 +1,10 @@
 package org.nakedobjects.persistence.sql.auto;
 
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.ResolveException;
 import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.persistence.sql.CollectionMapper;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.Results;
@@ -18,9 +19,9 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 	private String table;
 	private String parentColumn;
 	private String elementIdColumn;
-	private Field field;
+	private FieldSpecification field;
 	
-	public ReversedAutoAssociationMapper(String elemenType, Field field, String parameterBase) throws SqlObjectStoreException {
+	public ReversedAutoAssociationMapper(String elemenType, FieldSpecification field, String parameterBase) throws SqlObjectStoreException {
 		super(elemenType, parameterBase);
 		
 		this.field = field;
@@ -36,7 +37,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 		String columnName = fieldMapper.getColumnName(field.getName());
 		elementIdColumn = "PK" + columnName;
 
-		if(nakedClass.fullName().startsWith("org.nakedobjects.")) {
+		if(nakedClass.getFullName().startsWith("org.nakedobjects.")) {
 			table = "no_" + table;
 		}
 	}
@@ -51,7 +52,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 				+ parentColumn + " = " + parentId;
 		Results rs = connector.select(statement);
 		while (rs.next()) {
-			Object oid = recreateOid(rs, nakedClass, elementIdColumn);
+			Oid oid = recreateOid(rs, nakedClass, elementIdColumn);
 			NakedObject element = loadObject(nakedClass, oid);
 			LOG.debug("  element  " + element);
 			collection.added(element);
@@ -73,7 +74,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 			NakedObject element = collection.elementAt(i);
 			
 			String elementId = primaryKey(element.getOid());
-			String cls = element.getNakedClass().fullName();
+			String cls = element.getSpecification().getFullName();
 			String values = parentId + "," + elementId + ", '" + cls + "'";
 			String statement = "insert into " + table + " (" + columns + ") values (" + values + ")";
 			connector.update(statement);

@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 import org.nakedobjects.viewer.skylark.basic.RemoveOneToManyAssociationOption;
 
@@ -13,7 +13,7 @@ public class OneToManyElement extends ObjectField implements ObjectContent {
 	        return element;
 	    }
 
-	public OneToManyElement(NakedObject parent, NakedObject element, OneToManyAssociation association) {
+	public OneToManyElement(NakedObject parent, NakedObject element, OneToManyAssociationSpecification association) {
 		super(parent, association);
 	        this.element = element;
 	}
@@ -22,8 +22,8 @@ public class OneToManyElement extends ObjectField implements ObjectContent {
 		return super.debugDetails() +  "  element:" + element + "\n";  
 	}
 	
-	public OneToManyAssociation getOneToManyAssociation() {
-		return (OneToManyAssociation) getField();
+	public OneToManyAssociationSpecification getOneToManyAssociation() {
+		return (OneToManyAssociationSpecification) getField();
 	}
 
 	public void menuOptions(MenuOptionSet options) {

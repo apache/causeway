@@ -1,17 +1,18 @@
 package org.nakedobjects.object.transaction;
 
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.object.reflect.Field;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.Value;
+import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
 
 import java.util.Date;
 import java.util.Enumeration;
@@ -146,18 +147,18 @@ public class Transaction {
           
             // TODO important - need to replace references to proxies (associations within this transaction) with references to the real objects
             
-            NakedClass cls = newObject.getNakedClass();
-            Field[] fields = cls.getFields();
+            NakedObjectSpecification cls = newObject.getSpecification();
+            FieldSpecification[] fields = cls.getFields();
             for (int i = 0; i < fields.length; i++) {
-                Field field = fields[i];
-                if (field instanceof OneToOneAssociation) {
-                    NakedObject proxyAssociate = (NakedObject) ((OneToOneAssociation) field).get(newObject);
+                FieldSpecification field = fields[i];
+                if (field instanceof OneToOneAssociationSpecification) {
+                    NakedObject proxyAssociate = (NakedObject) ((OneToOneAssociationSpecification) field).get(newObject);
                     if(proxyAssociate != null) {
                         Object associateOid = proxyAssociate.getOid();
                         NakedObject associate = store.getLoadedObjects().getLoadedObject(associateOid);
-                        ((OneToOneAssociation) field).initData(newObject, associate);
+                        ((OneToOneAssociationSpecification) field).initData(newObject, associate);
                     }
-                } else if (field instanceof OneToManyAssociation) {
+                } else if (field instanceof OneToManyAssociationSpecification) {
                     // TODO complete
                     //                   ((OneToManyAssociation) field).proxyElements(newObject, copy);
                 }
@@ -220,34 +221,34 @@ public class Transaction {
     }
 
     private void copyToProxy(NakedObject original, NakedObject proxy) {
-        NakedClass cls = original.getNakedClass();
-        Field[] fields = cls.getFields();
+        NakedObjectSpecification cls = original.getSpecification();
+        FieldSpecification[] fields = cls.getFields();
         log("copy " + original + " -> " + proxy);
         for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
-            if (field instanceof Value) {
-                copyToField((Value) field, original, proxy);           
-            } else if (field instanceof OneToOneAssociation) {
-                copyToField((OneToOneAssociation) field, original, proxy);
-            } else if (field instanceof OneToManyAssociation) {
-                copyToField((OneToManyAssociation) field, original, proxy);
+            FieldSpecification field = fields[i];
+            if (field instanceof ValueFieldSpecification) {
+                copyToField((ValueFieldSpecification) field, original, proxy);           
+            } else if (field instanceof OneToOneAssociationSpecification) {
+                copyToField((OneToOneAssociationSpecification) field, original, proxy);
+            } else if (field instanceof OneToManyAssociationSpecification) {
+                copyToField((OneToManyAssociationSpecification) field, original, proxy);
             }
         }
     }
 
     private void copyFromProxy(NakedObject proxy, NakedObject original) {
-        NakedClass cls = proxy.getNakedClass();
-        Field[] fields = cls.getFields();
+        NakedObjectSpecification cls = proxy.getSpecification();
+        FieldSpecification[] fields = cls.getFields();
         log("copy " + proxy + " -> " + original);
         for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
-            if (field instanceof Value) {
-                copyToField((Value) field, proxy, original);           
-            } else if (field instanceof OneToOneAssociation) {
-                copyToField((OneToOneAssociation) field, proxy, original);
+            FieldSpecification field = fields[i];
+            if (field instanceof ValueFieldSpecification) {
+                copyToField((ValueFieldSpecification) field, proxy, original);           
+            } else if (field instanceof OneToOneAssociationSpecification) {
+                copyToField((OneToOneAssociationSpecification) field, proxy, original);
 
-            } else if (field instanceof OneToManyAssociation) {
-                OneToManyAssociation association = (OneToManyAssociation) field;
+            } else if (field instanceof OneToManyAssociationSpecification) {
+                OneToManyAssociationSpecification association = (OneToManyAssociationSpecification) field;
 
                 InternalCollection proxyCollection = (InternalCollection) association.get(proxy);
                 InternalCollection publicCollection = (InternalCollection) association.get(original);
@@ -274,14 +275,14 @@ public class Transaction {
     /**
      * Sets up the proxy object to have proxty association.
      */
-    private void copyToField(OneToOneAssociation association, NakedObject source, NakedObject proxy) {
+    private void copyToField(OneToOneAssociationSpecification association, NakedObject source, NakedObject proxy) {
         NakedObject associatedObject = (NakedObject) association.get(source);
         if (associatedObject == null) {
             association.clear(proxy);
             log("  copy: " + "null -> " + association.getName());
         } else {
-	        NakedClass cls;
-            cls = associatedObject.getNakedClass();
+	        NakedObjectSpecification cls;
+            cls = associatedObject.getSpecification();
             NakedObject associateCopy = (NakedObject) cls.acquireInstance();
             associateCopy.setOid(associatedObject.getOid());
             association.initData(proxy, associateCopy);
@@ -289,7 +290,7 @@ public class Transaction {
         }
     }
     
-    private void copyToField(Value valueField, NakedObject source, NakedObject proxy) {
+    private void copyToField(ValueFieldSpecification valueField, NakedObject source, NakedObject proxy) {
         NakedValue value = (NakedValue) valueField.get(source);
         valueField.restoreValue(proxy, value.saveString());
         log("  copy: " + value + " -> " + valueField.getName());
@@ -298,7 +299,7 @@ public class Transaction {
     /**
      * Sets up the proxy object to have proxy elements.
      */
-    private void copyToField(OneToManyAssociation association, NakedObject source, NakedObject proxy) {
+    private void copyToField(OneToManyAssociationSpecification association, NakedObject source, NakedObject proxy) {
         NakedCollection collectionOriginal = (NakedCollection) association.get(source);
         NakedCollection collectionCopy = (NakedCollection) association.get(proxy);
         
@@ -309,11 +310,11 @@ public class Transaction {
         Enumeration elements = collectionOriginal.elements();
         while (elements.hasMoreElements()) {
             NakedObject originalElement = (NakedObject) elements.nextElement();
-            Object originalElementOid = originalElement.getOid();
+            Oid originalElementOid = originalElement.getOid();
             
             NakedObject elementCopy = (NakedObject) transactionalObjects.get(originalElementOid);
             if (elementCopy == null) {
-                NakedObject proxyX = (NakedObject) originalElement.getNakedClass().acquireInstance();
+                NakedObject proxyX = (NakedObject) originalElement.getSpecification().acquireInstance();
                 proxyX.setOid(originalElementOid);
                 loaded(proxyX);
                 elementCopy = proxyX;
@@ -349,7 +350,7 @@ public class Transaction {
 
         Object object = transactionalObjects.get(oid);
         if (object == null) {
-            NakedObject proxy = (NakedObject) original.getNakedClass().acquireInstance();
+            NakedObject proxy = (NakedObject) original.getSpecification().acquireInstance();
             proxy.setOid(original.getOid());
             loaded(proxy);
             proxy.setResolved();

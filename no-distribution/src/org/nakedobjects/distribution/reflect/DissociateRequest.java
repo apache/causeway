@@ -6,9 +6,9 @@ import org.nakedobjects.distribution.ObjectRequest;
 import org.nakedobjects.distribution.RequestContext;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.reflect.OneToManyAssociationIF;
+import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociationIF;
 
 
 public class DissociateRequest extends ObjectRequest {
@@ -16,11 +16,11 @@ public class DissociateRequest extends ObjectRequest {
     private String name;
     private ObjectProxy value;
 
-    public DissociateRequest(NakedObject object, OneToManyAssociationIF field, NakedObject associate) {
+    public DissociateRequest(NakedObject object, OneToManyAssociation field, NakedObject associate) {
     	this(object, field.getName(), associate);
     }
     
-    public DissociateRequest(NakedObject object, OneToOneAssociationIF field, NakedObject associate) {
+    public DissociateRequest(NakedObject object, OneToOneAssociation field, NakedObject associate) {
     	this(object, field.getName(), associate);
 	}
 
@@ -35,12 +35,12 @@ public class DissociateRequest extends ObjectRequest {
             NakedObject object = getObject(server.getLoadedObjects());
 
             // find Field
-            OneToOneAssociation att = (OneToOneAssociation) object.getNakedClass().getField(name);
+            OneToOneAssociationSpecification att = (OneToOneAssociationSpecification) object.getSpecification().getField(name);
 
             if (att == null) {
                 throw new IllegalStateException("DeleteElementMessage has invalid Field: " + name);
             }
-            ((OneToOneAssociation) att).clearAssociation(object, value.recreateObject(server.getLoadedObjects()));
+            ((OneToOneAssociationSpecification) att).clearAssociation(object, value.recreateObject(server.getLoadedObjects()));
         } catch (ObjectStoreException e) {
             response = e;
         }

@@ -1,11 +1,13 @@
 package org.nakedobjects.io;
 
+import org.nakedobjects.object.Oid;
+
 class Data implements Transferable {
     private final static long serialVersionUID = 1L;
     final String className;
-    final Object oid;
+    final Oid oid;
 
-    public Data(Object oid, String className) {
+    public Data(Oid oid, String className) {
         this.oid = oid;
         this.className = className;
     }
@@ -15,7 +17,7 @@ class Data implements Transferable {
         return className + "/" + oid;
     }
 
-    public Object getOid() {
+    public Oid getOid() {
         return oid;
     }
 
@@ -26,7 +28,7 @@ class Data implements Transferable {
 
     public Data(TransferableReader data) {
         className = data.readString();
-        oid = data.readObject();
+        oid = (Oid) data.readObject();
     }
 }
 

@@ -30,7 +30,7 @@ abstract class AbstractTestObject {
         if (forObject == null) {
             return  super.toString() + " " + "null";
         } else {
-            return super.toString() + " " + forObject.getShortClassName() + "/" + forObject.toString();
+            return super.toString() + " " + forObject.getSpecification().getShortName() + "/" + forObject.toString();
         }
     }
 }

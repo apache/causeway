@@ -28,7 +28,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.SimpleOid;
@@ -42,7 +42,7 @@ public class ObjectData extends Data {
     private static final Logger LOG = Logger.getLogger(ObjectData.class);
    private Hashtable fields;
 
-    public ObjectData(NakedClass type, SimpleOid oid) {
+    public ObjectData(NakedObjectSpecification type, SimpleOid oid) {
         super(type, oid);
         fields = new Hashtable();
     }
@@ -122,7 +122,8 @@ public class ObjectData extends Data {
     }
 
     void addAssociation(NakedObject fieldContent, String fieldName, boolean ensurePersistent) {
-    	if (ensurePersistent && fieldContent != null && !fieldContent.isPersistent()) {
+    	boolean notAlreadyPersistent = fieldContent.getOid() == null;
+        if (ensurePersistent && fieldContent != null && notAlreadyPersistent) {
     		throw new IllegalStateException("Cannot save an object that is not persistent");
     	}
     //	LOG.debug("adding reference field " + fieldName +" " + fieldContent);		

@@ -1,6 +1,5 @@
 package org.nakedobjects.object.transaction;
 
-import org.nakedobjects.object.NakedObject;
 
 public interface TransactionManager {
 

@@ -178,7 +178,7 @@ public abstract class AbstractField extends AbstractView {
     protected abstract void save();
 
     protected void saveValue(NakedValue value) throws InvalidEntryException {
-        parseEntry(value.title().toString());
+        parseEntry(value.titleString());
     }
 
     protected void parseEntry(String entryText) throws InvalidEntryException {

@@ -45,10 +45,10 @@ public class ClearValueOption extends AbstractValueOption {
 
         if (!view.canChangeValue()) {
             return new Veto("Field cannot be edited");
-        } else if (value.isEmpty() || value.title().toString().equals("")) {
+        } else if (value.isEmpty() || value.titleString().equals("")) {
             return new Veto("Field is already empty");
         } else {
-            return new Allow("Clear value " + value.title());
+            return new Allow("Clear value " + value.titleString());
         }
     }
 

@@ -1,16 +1,17 @@
 package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.object.reflect.Field;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.Value;
+import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
+import org.nakedobjects.security.Session;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
@@ -44,8 +45,8 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
 
         LOG.debug("rebuild view " + view + " for " + object);
 
-        NakedClass cls = object.getNakedClass();
-        Field[] flds = cls.getVisibleFields(object);
+        NakedObjectSpecification cls = object.getSpecification();
+        FieldSpecification[] flds = cls.getVisibleFields(object, Session.getSession().getContext());
        
 	    if(view.getSubviews().length == 0) {
 	    	newBuild(view, object, flds);
@@ -58,10 +59,10 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
 		return new CompositeObjectView(content, specification, axis);
     }
 
-    private void newBuild(View view, NakedObject object, Field[] flds) {
+    private void newBuild(View view, NakedObject object, FieldSpecification[] flds) {
         LOG.debug("build new view " + view + " for " + object);
         for (int f = 0; f < flds.length; f++) {
-            Field field = flds[f];
+            FieldSpecification field = flds[f];
 			Naked value = field.get(object);
 			ObjectField content = createContent(object, value, field);
 			View fieldView = subviewDesign.createSubview(content, view.getViewAxis());
@@ -71,7 +72,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
        }
     }
 
-    private void updateBuild(View view, NakedObject object, Field[] flds) {
+    private void updateBuild(View view, NakedObject object, FieldSpecification[] flds) {
         LOG.debug("rebuild view " + view + " for " + object);
 
         View[] subviews = view.getSubviews();
@@ -85,7 +86,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
             }
             Assert.assertTrue(fld < flds.length);
             
-            Field field = flds[fld];
+            FieldSpecification field = flds[fld];
             Naked value = field.get(object);
             if(value instanceof NakedValue) {
     		    NakedValue existing = ((ValueContent) subview.getContent()).getValue();
@@ -110,18 +111,18 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         }
     }
 
-	private ObjectField createContent(NakedObject parent, Naked object, Field field) {
+	private ObjectField createContent(NakedObject parent, Naked object, FieldSpecification field) {
 		if(field == null) {
 			throw new NullPointerException();
 		}
 		
 		ObjectField content;
 		if(object instanceof InternalCollection) {
-			content = new OneToManyField(parent, (InternalCollection) object, (OneToManyAssociation) field);
+			content = new OneToManyField(parent, (InternalCollection) object, (OneToManyAssociationSpecification) field);
 	    } else if(object instanceof NakedObject || object == null) {
-			content = new OneToOneField(parent, (NakedObject) object, (OneToOneAssociation) field);
+			content = new OneToOneField(parent, (NakedObject) object, (OneToOneAssociationSpecification) field);
 	    } else if(object instanceof NakedValue) { 
-			content = new ValueField(parent, (NakedValue) object, (Value) field);  
+			content = new ValueField(parent, (NakedValue) object, (ValueFieldSpecification) field);  
 	    } else {
 	        throw new NakedObjectRuntimeException();
 	    }

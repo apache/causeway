@@ -1,22 +1,22 @@
 package org.nakedobjects.distribution.client;
 
 
-import java.util.Vector;
-
 import org.nakedobjects.distribution.RequestContext;
+import org.nakedobjects.io.Memento;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
-import org.nakedobjects.object.NakedObjectMemento;
 import org.nakedobjects.object.UnsupportedFindException;
+
+import java.util.Vector;
 
 
 public class GetInstancesForPattern extends AbstractGetInstances {
     private final static long serialVersionUID = 1L;
-    private NakedObjectMemento patternMemento;
+    private Memento patternMemento;
 	
     
     public GetInstancesForPattern(NakedObject pattern) {
-    	patternMemento = new NakedObjectMemento(pattern);
+    	patternMemento = new Memento(pattern);
     }
 
     protected void generateResponse(RequestContext context) {

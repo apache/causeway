@@ -1,12 +1,12 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.object.reflect.FieldSpecification;
 
 public interface FieldContent {
 
 	String getFieldLabel();
 	
-	Field getField();
+	FieldSpecification getField();
 }
 
 

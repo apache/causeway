@@ -2,16 +2,16 @@ package org.nakedobjects.object.transaction;
 
 import org.nakedobjects.object.MockObjectStore;
 import org.nakedobjects.object.MockUpdateNotifier;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.ObjectNotFoundException;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.simple.JavaReflector;
+import org.nakedobjects.object.SimpleOidGenerator;
+import org.nakedobjects.object.collection.InstanceCollection;
+import org.nakedobjects.object.reflect.ActionSpecification;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.Vector;
 
 import junit.framework.TestCase;
 
@@ -25,7 +25,7 @@ public class SimpleTransactionManagerTest extends TestCase {
     public static void main(String[] args) {
         junit.textui.TestRunner.run(SimpleTransactionManagerTest.class);
     }
-    private NakedClass accountClass;
+    private NakedObjectSpecification accountClass;
 
     private NakedObjectManager objectManager;
 
@@ -35,22 +35,22 @@ public class SimpleTransactionManagerTest extends TestCase {
         super(name);
     }
 
-    private void assertInstanceEquals(NakedClass cls, NakedObject expected) {
+    private void assertInstanceEquals(NakedObjectSpecification cls, NakedObject expected) {
         assertInstanceEquals("", cls, expected);
     }
     
-    private void assertInstanceEquals(String message, NakedClass cls, NakedObject expected) {
-        Vector instances = objectManager.getInstances(cls);
+    private void assertInstanceEquals(String message, NakedObjectSpecification cls, NakedObject expected) {
+        InstanceCollection instances = objectManager.allInstances(cls);
         NakedObject instance = (NakedObject) instances.elementAt(0);
         assertEquals(message, expected, instance);    
     }
 
-   private void assertNoInstances(int size, NakedClass cls) {
+   private void assertNoInstances(int size, NakedObjectSpecification cls) {
       assertNoInstances("", size, cls);
    }
    
-   private void assertNoInstances(String message, int size, NakedClass cls) {
-       Vector instances = objectManager.getInstances(cls);
+   private void assertNoInstances(String message, int size, NakedObjectSpecification cls) {
+       InstanceCollection instances = objectManager.allInstances(cls);
        assertEquals(message, size, instances.size());    
    }
 
@@ -77,7 +77,7 @@ public class SimpleTransactionManagerTest extends TestCase {
         //NakedObjectStore objectstore = new XmlObjectStore(XML_DATA_DIRECTORY);
         objectstore = new MockObjectStore();
          MockUpdateNotifier updateNotifier = new MockUpdateNotifier();
-        objectManager = new SimpleTransactionManager(objectstore, updateNotifier);
+        objectManager = new SimpleTransactionManager(objectstore, updateNotifier, new SimpleOidGenerator());
 
   //      accountClass = objectManager.getNakedClass(Account.class.getName());
         /* the following line is needed, else tests that try and restore and update an empy internal
@@ -99,8 +99,7 @@ public class SimpleTransactionManagerTest extends TestCase {
     public void test() {
         
         
-        NakedClass accountClass = NakedClass.createNakedClass(Account.class.getName(), JavaReflector.class.getName()); //NakedClassManager.getInstance().getNakedClass(Account.class.getName());
-        objectstore.setupNakedClass(accountClass);
+        NakedObjectSpecification accountClass = NakedObjectSpecification.getNakedClass(Account.class);
         
         //      transaction 4
         objectManager.startTransaction();
@@ -113,7 +112,7 @@ public class SimpleTransactionManagerTest extends TestCase {
         objectManager.endTransaction();
 
         // transaction 5
-        Action action = accountClass.getObjectAction(Action.USER, "CreateTransactionFrom", new NakedClass[] { accountClass });
+        ActionSpecification action = accountClass.getObjectAction(ActionSpecification.USER, "CreateTransactionFrom", new NakedObjectSpecification[] { accountClass });
         // action corresponding to a drop on account 2
         Transfer transfer1 = (Transfer) action.execute(saving, new NakedObject[] { personal });
 
@@ -122,11 +121,11 @@ public class SimpleTransactionManagerTest extends TestCase {
         objectManager.objectChanged(transfer1);
 
         // transaction 7
-        Action actionApplyFail = transfer1.getNakedClass().getObjectAction(Action.USER, "Apply But Fail");
+        ActionSpecification actionApplyFail = transfer1.getSpecification().getObjectAction(ActionSpecification.USER, "Apply But Fail");
         actionApplyFail.execute(transfer1);
         
         // transaction 8
-        Action actionApply = transfer1.getNakedClass().getObjectAction(Action.USER, "Apply");
+        ActionSpecification actionApply = transfer1.getSpecification().getObjectAction(ActionSpecification.USER, "Apply");
         actionApply.execute(transfer1);
 
         // transaction 9
@@ -137,7 +136,7 @@ public class SimpleTransactionManagerTest extends TestCase {
         objectManager.objectChanged(transfer2);
 
         // transaction 11
-        actionApply = transfer2.getNakedClass().getObjectAction(Action.USER, "Apply");
+        actionApply = transfer2.getSpecification().getObjectAction(ActionSpecification.USER, "Apply");
         actionApply.execute(transfer2);
    
      }
@@ -169,7 +168,7 @@ public class SimpleTransactionManagerTest extends TestCase {
        Account saving = (Account) objectManager.createInstance(Account.class.getName());
        saving.balance.setValue(500.0);
        Transfer transfer = personal.actionCreateTransactionFrom(saving);
-       assertNoInstances(0, transfer.getNakedClass());
+       assertNoInstances(0, transfer.getSpecification());
        objectManager.endTransaction();
 
 
@@ -192,7 +191,7 @@ public class SimpleTransactionManagerTest extends TestCase {
        Account saving = (Account) objectManager.createInstance(Account.class.getName());
        saving.balance.setValue(500.0);
        Transfer transfer = personal.actionCreateTransactionFrom(saving);
-       assertNoInstances(0, transfer.getNakedClass());
+       assertNoInstances(0, transfer.getSpecification());
        objectManager.endTransaction();
 
        
@@ -212,17 +211,17 @@ public class SimpleTransactionManagerTest extends TestCase {
        Account personal = (Account) objectManager.createInstance(Account.class.getName());
        Account saving = (Account) objectManager.createInstance(Account.class.getName());
        objectManager.endTransaction();
-       assertNoInstances(2, personal.getNakedClass());
+       assertNoInstances(2, personal.getSpecification());
          
        objectManager.startTransaction();
        Account toAccount1 = (Account) transactionalObject(personal);
        Account toSaving = (Account) transactionalObject(saving);
        Transfer transfer = toAccount1.actionCreateTransactionFrom(toSaving);
-       assertNoInstances(0, transfer.getNakedClass());
+       assertNoInstances(0, transfer.getSpecification());
        objectManager.endTransaction();
 
-       assertNoInstances(1, transfer.getNakedClass());
-       assertInstanceEquals(transfer.getNakedClass(), transfer);
+       assertNoInstances(1, transfer.getSpecification());
+       assertInstanceEquals(transfer.getSpecification(), transfer);
        assertEquals(saving, transfer.getFromAccount());
        assertEquals(personal, transfer.getToAccount());
     }
@@ -235,7 +234,7 @@ public class SimpleTransactionManagerTest extends TestCase {
     }
    
    private NakedObject transactionalObject(NakedObject object) throws ObjectNotFoundException {
-       NakedObject to = objectManager.getObject(object);
+       NakedObject to = objectManager.getObject(object.getOid(), object.getSpecification());
        assertFalse("Object in a transaction must be different instance", object == to);
        return to;
    }

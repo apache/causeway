@@ -3,16 +3,15 @@ package org.nakedobjects.xat;
 
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ValueParseException;
-import org.nakedobjects.object.reflect.Value;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
 
 
 public class TestValueImpl extends AbstractTestObject implements TestValue {
     private final NakedObject parent;
-    private final Value value;
+    private final ValueFieldSpecification value;
     
-    public TestValueImpl(NakedObject parent, Value value) {
+    public TestValueImpl(NakedObject parent, ValueFieldSpecification value) {
         this.parent = parent;
         this.value = value;
         setForObject(value.get(parent));
@@ -33,7 +32,7 @@ public class TestValueImpl extends AbstractTestObject implements TestValue {
      returns the title of the object as a String
      */
     public String getTitle() {
-        return getForObject().title().toString();
+        return getForObject().titleString().toString();
     }
 }
 

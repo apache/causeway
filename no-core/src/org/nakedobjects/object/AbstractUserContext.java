@@ -5,14 +5,18 @@ import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.security.Role;
 import org.nakedobjects.security.User;
 
+import org.apache.log4j.Logger;
+
 
 
 public abstract class AbstractUserContext extends AbstractNakedObject {
+    private static final Logger LOG = Logger.getLogger(AbstractUserContext.class);
+    
     public static String fieldOrder() {
     	return "user, classes, objects";
     }
     	
-	private final InternalCollection classes = new InternalCollection(NakedClass.class, this);
+	private final InternalCollection classes = new InternalCollection(NakedClassSpec.class, this);
     private final InternalCollection objects = new InternalCollection(NakedObject.class, this);
 	private User user;
     
@@ -28,14 +32,19 @@ public abstract class AbstractUserContext extends AbstractNakedObject {
     	about.modifiableOnlyByRole(Role.SYSADMIN);
     }
     
-    protected NakedClass addClass(Class class1) {
-		NakedClass nakedClass = NakedClassManager.getInstance().getNakedClass(class1.getName());
+    protected NakedClassSpec addClass(Class class1) {
+        LOG.info("Added class " + class1 + " to " + this);
+		NakedObjectSpecification nc = NakedObjectSpecification.getNakedClass(class1.getName());
+		NakedClassSpec nakedClass = getObjectManager().getNakedClass(nc);
         classes.add(nakedClass);
         return nakedClass;
 	}
 	
-	protected NakedClass addClass(String className) {
-		NakedClass nakedClass = NakedClassManager.getInstance().getNakedClass(className);
+	protected NakedClassSpec addClass(String className) {
+	     LOG.info("Added class " + className + " to " + this);
+	    NakedObjectSpecification nc = NakedObjectSpecification.getNakedClass(className);
+	    NakedClassSpec nakedClass = getObjectManager().getNakedClass(nc);
+	    getObjectManager().makePersistent(nakedClass);
         classes.add(nakedClass);
         return nakedClass;
 	}

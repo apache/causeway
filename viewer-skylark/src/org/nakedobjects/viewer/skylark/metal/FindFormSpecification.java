@@ -5,7 +5,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.security.Session;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
@@ -57,7 +57,7 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
 
     public boolean canDisplay(Naked object) {
         // use this view for a finder
-        return super.canDisplay(object) && (object instanceof FastFinder || ((NakedObject) object).isFinder());
+        return super.canDisplay(object) && (object instanceof FastFinder);
     }
 	
     public View createView(Content content, ViewAxis axis) {
@@ -65,14 +65,14 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
         actions[0] = new ButtonAction("Find") {
             public Permission disabled(View view) {
                 NakedObject target = ((ObjectContent) view.getContent()).getObject();
-                Action action = target.getNakedClass().getObjectAction(Action.USER, "Find");
-                About about = action.getAbout(Session.getSession().getSecurityContext(), target);
+                ActionSpecification action = target.getSpecification().getObjectAction(ActionSpecification.USER, "Find");
+                About about = action.getAbout(Session.getSession().getContext(), target);
                 return about.canUse();
             }
             
             public void execute(Workspace workspace, View view, Location at) {
                 NakedObject target = ((ObjectContent) view.getContent()).getObject();
-                Action action = target.getNakedClass().getObjectAction(Action.USER, "Find");
+                ActionSpecification action = target.getSpecification().getObjectAction(ActionSpecification.USER, "Find");
                 NakedObject result = action.execute(target);
                 at.move(30, 60);
                 workspace.addOpenViewFor(result, at);

@@ -67,13 +67,10 @@ public class FloatingPointNumber extends Magnitude {
     }
 
     public void add(double value) {
-        checkCanOperate();
         this.value += value;
     }
 
     public void add(FloatingPointNumber number) {
-        checkCanOperate();
-        number.checkCanOperate();
         this.value += number.value;
     }
 
@@ -94,13 +91,10 @@ public class FloatingPointNumber extends Magnitude {
     }
 
     public void divide(double value) {
-        checkCanOperate();
         this.value /= value;
     }
 
     public void divide(FloatingPointNumber number) {
-        checkCanOperate();
-        number.checkCanOperate();
         this.value /= number.value;
     }
 
@@ -108,7 +102,6 @@ public class FloatingPointNumber extends Magnitude {
      Returns this value as an double.
      */
     public double doubleValue() {
-        checkCanOperate();
         return value;
     }
 
@@ -116,7 +109,6 @@ public class FloatingPointNumber extends Magnitude {
      Returns this value as an float.
      */
     public float floatValue() {
-        checkCanOperate();
         return (float) value;
     }
 
@@ -129,7 +121,6 @@ public class FloatingPointNumber extends Magnitude {
      @see #doubleValue
      */
     public double getValue() {
-        checkCanOperate();
         return value;
     }
 
@@ -137,7 +128,6 @@ public class FloatingPointNumber extends Magnitude {
      Returns this value as an int.
      */
     public int intValue() {
-        checkCanOperate();
         return (int) value;
     }
 
@@ -168,18 +158,14 @@ public class FloatingPointNumber extends Magnitude {
      Returns this value as an long.
      */
     public long longValue() {
-        checkCanOperate();
         return (long) value;
     }
 
     public void multiply(double value) {
-        checkCanOperate();
         this.value *= value;
     }
 
     public void multiply(FloatingPointNumber number) {
-        checkCanOperate();
-        number.checkCanOperate();
         this.value *= number.value;
     }
 
@@ -218,7 +204,6 @@ public class FloatingPointNumber extends Magnitude {
      Returns this value as an short.
      */
     public short shortValue() {
-        checkCanOperate();
         return (short) value;
     }
 
@@ -227,7 +212,6 @@ public class FloatingPointNumber extends Magnitude {
     }
 
     public void subtract(FloatingPointNumber number) {
-        number.checkCanOperate();
         add(-number.value);
     }
 

@@ -24,9 +24,9 @@
 
 package org.nakedobjects.persistence.file;
 
+import org.nakedobjects.object.LocalReflectionFactory;
 import org.nakedobjects.object.MockObjectManager;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Role;
@@ -35,6 +35,7 @@ import org.nakedobjects.object.Team;
 import org.nakedobjects.object.ValueObjectExample;
 import org.nakedobjects.object.collection.ArbitraryCollection;
 import org.nakedobjects.object.value.Date;
+import org.nakedobjects.object.value.DateTime;
 import org.nakedobjects.object.value.FloatingPointNumber;
 import org.nakedobjects.object.value.Label;
 import org.nakedobjects.object.value.Logical;
@@ -43,7 +44,6 @@ import org.nakedobjects.object.value.Option;
 import org.nakedobjects.object.value.Percentage;
 import org.nakedobjects.object.value.TextString;
 import org.nakedobjects.object.value.Time;
-import org.nakedobjects.object.value.DateTime;
 import org.nakedobjects.object.value.URLString;
 import org.nakedobjects.object.value.WholeNumber;
 
@@ -67,15 +67,11 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 		LOG.debug("Test setup...");
 		
 		MockObjectManager objectManager = MockObjectManager.setup();
-		objectManager.setupAddClass(Role.class);
-		objectManager.setupAddClass(Team.class);
-		objectManager.setupAddClass(ArbitraryCollection.class);
-		objectManager.setupAddClass(ValueObjectExample.class);
-		
-		
+        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+
 		oids = new SimpleOid[SIZE];
 		data = new ObjectData[SIZE];
-		NakedClass type = NakedClassManager.getInstance().getNakedClass(Role.class.getName());
+		NakedObjectSpecification type = NakedObjectSpecification.getNakedClass(Role.class.getName());
 		pattern = new ObjectData(type, null);
 		for (int i = 0; i < SIZE; i++) {
 			oids[i] = new SimpleOid(i);
@@ -176,7 +172,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 
 	
 	public void testInsertCollection() throws ObjectStoreException {
-		CollectionData data = new CollectionData(NakedClassManager.getInstance().getNakedClass(ArbitraryCollection.class.getName()), new SimpleOid(200));
+		CollectionData data = new CollectionData(NakedObjectSpecification.getNakedClass(ArbitraryCollection.class.getName()), new SimpleOid(200));
 		
 		SimpleOid oids[] = new SimpleOid[6];
 		for (int i = 0; i < oids.length; i++) {
@@ -225,7 +221,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 	}
 	
 	public void testInsertValues() throws ObjectStoreException {
-		NakedClass type = NakedClassManager.getInstance().getNakedClass(ValueObjectExample.class.getName());
+		NakedObjectSpecification type = NakedObjectSpecification.getNakedClass(ValueObjectExample.class.getName());
 		SimpleOid oid = new SimpleOid(99);
 		ObjectData data =  new ObjectData(type, oid);
 
@@ -333,7 +329,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 	
 
 	public void testSaveValues() throws ObjectStoreException {
-		NakedClass type = NakedClassManager.getInstance().getNakedClass(ValueObjectExample.class.getName());
+		NakedObjectSpecification type = NakedObjectSpecification.getNakedClass(ValueObjectExample.class.getName());
 		SimpleOid oid = new SimpleOid(99);
 		ObjectData data =  new ObjectData(type, oid);
 
@@ -447,7 +443,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 	
 	
 	private ObjectData createData(Class cls, long id) {
-		NakedClass type = NakedClassManager.getInstance().getNakedClass(cls.getName());
+		NakedObjectSpecification type = NakedObjectSpecification.getNakedClass(cls.getName());
 		SimpleOid oid = new SimpleOid(id);
 		return new ObjectData(type, oid);
 		

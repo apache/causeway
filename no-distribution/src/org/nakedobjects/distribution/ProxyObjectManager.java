@@ -1,8 +1,5 @@
 package org.nakedobjects.distribution;
 
-import java.util.Vector;
-
-import org.apache.log4j.Logger;
 import org.nakedobjects.distribution.client.DestroyObjectRequest;
 import org.nakedobjects.distribution.client.GetInstancesForCriteria;
 import org.nakedobjects.distribution.client.GetInstancesForPattern;
@@ -13,11 +10,11 @@ import org.nakedobjects.distribution.client.MakePersistentRequest;
 import org.nakedobjects.distribution.client.NumberOfInstances;
 import org.nakedobjects.distribution.client.ResolveRequest;
 import org.nakedobjects.distribution.client.SerialNumberRequest;
+import org.nakedobjects.io.Memento;
 import org.nakedobjects.object.LoadedObjects;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
-import org.nakedobjects.object.NakedObjectMemento;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.ObjectStoreException;
@@ -25,6 +22,9 @@ import org.nakedobjects.object.UpdateNotifier;
 import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.utility.Log;
 import org.nakedobjects.utility.NotImplementedException;
+
+
+import org.apache.log4j.Logger;
 
 
 public final class ProxyObjectManager extends NakedObjectManager {
@@ -36,7 +36,6 @@ public final class ProxyObjectManager extends NakedObjectManager {
     public ProxyObjectManager(UpdateNotifier notifier) {
         this.notifier = notifier;
         loadedObjects = new LoadedObjects();
-        new ProxyClassManager();
         
 		Request.init(this);
 
@@ -60,19 +59,19 @@ public final class ProxyObjectManager extends NakedObjectManager {
     	LOG.debug("transactions (end) IGNORED in proxy");
     }
 
-    public Vector getInstances(NakedClass cls) {
+    public NakedObject[] getInstances(NakedObjectSpecification cls) {
         return new GetInstancesOfClass(cls).getElements(loadedObjects);
     }
     
-    public Vector getInstances(NakedClass cls, String criteria) {
+    public NakedObject[] getInstances(NakedObjectSpecification cls, String criteria) {
         return new GetInstancesForCriteria(cls, criteria).getElements(loadedObjects);
     }
     
-   public Vector getInstances(NakedObject pattern) {
+   public NakedObject[] getInstances(NakedObject pattern) {
         return new GetInstancesForPattern(pattern).getElements(loadedObjects);
     }
     
-    public synchronized NakedObject getObject(Object oid, NakedClass hint) {
+    public synchronized NakedObject getObject(Object oid, NakedObjectSpecification hint) {
         if (loadedObjects.isLoaded(oid)) {
         	LOG.debug("getObject (from already loaded objects) " + oid);
             return loadedObjects.getLoadedObject(oid);
@@ -92,7 +91,7 @@ public final class ProxyObjectManager extends NakedObjectManager {
 	}
 
 
-    public boolean hasInstances(NakedClass cls) {
+    public boolean hasInstances(NakedObjectSpecification cls) {
     	LOG.debug("hasInstances of " + cls);
         return new HasInstances(cls).hasInstances();
     }
@@ -118,7 +117,7 @@ public final class ProxyObjectManager extends NakedObjectManager {
         return "Proxy Object Store";
     }
 
-    public int numberOfInstances(NakedClass cls) {
+    public int numberOfInstances(NakedObjectSpecification cls) {
     	LOG.debug("numberOfInstance of " + cls);
         return new NumberOfInstances(cls).size();
     }
@@ -167,7 +166,7 @@ public final class ProxyObjectManager extends NakedObjectManager {
         return loadedObjects;
     }
     
-	protected synchronized void updateFromServer(NakedObjectMemento memento) {
+	protected synchronized void updateFromServer(Memento memento) {
 		Object oid = memento.getOid();
 		LOG.debug("Update for " + oid + " ~ " + memento);
 		if(loadedObjects.isLoaded(oid)) {

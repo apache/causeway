@@ -1,8 +1,8 @@
 package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.viewer.skylark.ActionField;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
@@ -13,16 +13,16 @@ import org.nakedobjects.viewer.skylark.Workspace;
 
 
 public class ObjectParameter extends ActionField implements ObjectContent {
-    private NakedClass parameterClass;
+    private NakedObjectSpecification parameterClass;
     private NakedObject object;
     
-    public ObjectParameter(String label, Naked naked, NakedClass parameterClass) {
+    public ObjectParameter(String label, Naked naked, NakedObjectSpecification parameterClass) {
         super(label);
         this.parameterClass = parameterClass;
         object = (NakedObject) naked;
     }
     
-    public NakedClass getNakedClass() {
+    public NakedObjectSpecification getNakedClass() {
         return parameterClass;
     }
 

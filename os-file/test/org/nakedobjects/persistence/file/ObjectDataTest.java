@@ -1,22 +1,23 @@
 package org.nakedobjects.persistence.file;
 
+import org.nakedobjects.object.LocalReflectionFactory;
 import org.nakedobjects.object.MockObjectManager;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.Role;
 import org.nakedobjects.object.SimpleOid;
 import org.nakedobjects.object.ValueObjectExample;
 import org.nakedobjects.object.value.Date;
+import org.nakedobjects.object.value.DateTime;
 import org.nakedobjects.object.value.FloatingPointNumber;
 import org.nakedobjects.object.value.Label;
 import org.nakedobjects.object.value.Logical;
 import org.nakedobjects.object.value.Money;
 import org.nakedobjects.object.value.Option;
 import org.nakedobjects.object.value.Percentage;
+import org.nakedobjects.object.value.TestClock;
 import org.nakedobjects.object.value.TextString;
 import org.nakedobjects.object.value.Time;
-import org.nakedobjects.object.value.DateTime;
 import org.nakedobjects.object.value.URLString;
 import org.nakedobjects.object.value.WholeNumber;
 
@@ -43,11 +44,12 @@ public class ObjectDataTest extends NakedObjectTestCase {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
         MockObjectManager manager = MockObjectManager.setup();
-        manager.setupAddClass(ValueObjectExample.class);
-        manager.setupAddClass(Role.class);
+        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
         
-        NakedClass type = NakedClassManager.getInstance().getNakedClass(ValueObjectExample.class.getName());
+        NakedObjectSpecification type = NakedObjectSpecification.getNakedClass(ValueObjectExample.class.getName());
         data = new ObjectData(type, new SimpleOid(1));
+        
+        new TestClock();
     }
 
     protected void tearDown() throws Exception {
@@ -55,7 +57,7 @@ public class ObjectDataTest extends NakedObjectTestCase {
     }
 
     public void test() {
-        NakedClass roleType = NakedClassManager.getInstance().getNakedClass(Role.class.getName());
+        NakedObjectSpecification roleType = NakedObjectSpecification.getNakedClass(Role.class.getName());
         ObjectData roleData = new ObjectData(roleType, new SimpleOid(1));
 
         roleData.set("Name", "supervisor");

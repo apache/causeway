@@ -1,11 +1,11 @@
 package org.nakedobjects.object.value;
 
+import org.nakedobjects.object.ValueParseException;
+import org.nakedobjects.system.SystemClock;
+
 import java.util.Locale;
 
 import junit.framework.TestCase;
-
-import org.nakedobjects.SystemClock;
-import org.nakedobjects.object.ValueParseException;
 
 public class TimeTests extends TestCase {
 	private Time t;
@@ -113,9 +113,9 @@ public class TimeTests extends TestCase {
 
 	protected void setUp() throws Exception {
 		Locale.setDefault(Locale.UK);
-        Date.setClock(new SystemClock());
-        TimeStamp.setClock(new SystemClock());
 		
+        new TestClock();
+        
 		super.setUp();
     	
 		t = new Time(10, 40);

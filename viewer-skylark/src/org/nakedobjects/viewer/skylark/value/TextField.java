@@ -4,7 +4,6 @@ import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.reflect.Value;
 import org.nakedobjects.object.value.MultilineTextString;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
@@ -401,7 +400,7 @@ public class TextField extends AbstractField {
         textContent = new TextFieldContent(this);
         multiline = value instanceof MultilineTextString;
         noDisplayLines = multiline ? MULTILINE_FIELD_SIZE : 1;
-        textContent.setText(value.title().toString());
+        textContent.setText(value.titleString());
         cursor.home();
         displayFromLine = 0;
         displayToLine = noDisplayLines - 1;
@@ -692,8 +691,8 @@ public class TextField extends AbstractField {
         String entry = textContent.getText();
         
         // do nothing if entry is same as the value object
-        if (!entry.equals(getValue().title().toString())) {
-            LOG.debug("Field edited: \'" + entry + "\' to replace \'" + getValue().title() + "\'");
+        if (!entry.equals(getValue().titleString())) {
+            LOG.debug("Field edited: \'" + entry + "\' to replace \'" + getValue().titleString() + "\'");
             
             try {
                 parseEntry(entry.toString());

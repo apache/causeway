@@ -1,12 +1,11 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
@@ -60,14 +59,14 @@ public class InternalCollectionBorder extends AbstractBorder {
         super.menuOptions(options);
         
         InternalCollection collection = ((OneToManyField) getContent()).getCollection();
-        NakedClass nakedClass = NakedClassManager.getInstance().getNakedClass(collection.getType().getName());
+        NakedObjectSpecification nakedClass = NakedObjectSpecification.getNakedClass(collection.getType().getName());
         
         ClassOption.menuOptions(nakedClass, options);
     }
 	
     public void objectActionResult(Naked result, Location at) {
         OneToManyField internalCollectionContent = (OneToManyField) getContent();
-        OneToManyAssociation field = (OneToManyAssociation) internalCollectionContent.getField();
+        OneToManyAssociationSpecification field = (OneToManyAssociationSpecification) internalCollectionContent.getField();
         
 //        if(field.getType().isAssignableFrom(result.getClass())) {
             NakedObject target = ((ObjectContent) getParent().getContent()).getObject();

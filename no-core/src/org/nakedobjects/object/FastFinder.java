@@ -8,7 +8,7 @@ import org.nakedobjects.object.value.TextString;
 
 public class FastFinder extends AbstractNakedObject {
 	private final TextString term = new TextString();
-	private NakedClass nakedClass;
+	private NakedObjectSpecification nakedClass;
 	
 	public String getIconName() {
 		return "Find";
@@ -23,7 +23,7 @@ public class FastFinder extends AbstractNakedObject {
 	}
 	
 	public NakedObject actionFind() {
-		InstanceCollection instances = InstanceCollection.findInstances(nakedClass, term.stringValue());
+		InstanceCollection instances = getObjectManager().findInstances(nakedClass, term.stringValue());
 		if(instances.size() == 1) { 
 			return (NakedObject) instances.elements().nextElement();
 		} else {
@@ -35,11 +35,11 @@ public class FastFinder extends AbstractNakedObject {
 		about.unmodifiable();
 	}
 	
-	public NakedClass getFromClass() {
+	public NakedObjectSpecification getFromClass() {
 		return nakedClass;
 	}
 	
-	public void setFromClass(NakedClass nakedClass) {
+	public void setFromClass(NakedObjectSpecification nakedClass) {
 		this.nakedClass = nakedClass;
 	}
 	

@@ -1,28 +1,36 @@
 package org.nakedobjects.object.collection;
 
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.Title;
-import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.control.Veto;
-import org.nakedobjects.security.Role;
 
 import java.util.Vector;
 
 
 public class InstanceCollection extends TypedCollection {
+   
+    public InstanceCollection(NakedObjectSpecification cls, NakedObject[] instances) {
+        super(cls.getFullName());
+        
+        int size = instances.length;
+        elements = new Vector(size);
+        for (int i = 0; i < size; i++) {
+            elements.addElement(instances[i]);
+        }
+    }
+
+    
     /*
      * This is temporary to make the debuging work - needs createFinder and
      * acquireInstance in NakedClass TODO remove this
-     */
+     * /
     public InstanceCollection() {
         this(Role.class.getName());
     }
 
-    /** @deprecated */
+    /** @deprecated * /
     public InstanceCollection(NakedClass cls) {
         super(cls.fullName());
         fillAllInstances(cls);
@@ -33,7 +41,7 @@ public class InstanceCollection extends TypedCollection {
         this.elements = elements;
     }
 
-    /** @deprecated */
+    /** @deprecated * /
     public InstanceCollection(NakedObject pattern) {
         super(pattern.getClass());
         fillSelectedInstances(pattern);
@@ -43,10 +51,10 @@ public class InstanceCollection extends TypedCollection {
         super(cls.fullName());
     }
  
-    /** @deprecated */
+    /** @deprecated * /
     public InstanceCollection(String cls) {
         super(cls);
-        NakedClass pattern = NakedClassManager.getInstance().getNakedClass(cls);
+        NakedClass pattern = NakedClass.getNakedClass(cls);
         fillAllInstances(pattern);
     }
     
@@ -59,14 +67,14 @@ public class InstanceCollection extends TypedCollection {
     }
 
     public static InstanceCollection findInstances(String className, String term) {
-        NakedClass cls = NakedClassManager.getInstance().getNakedClass(className);
+        NakedClass cls = NakedClass.getNakedClass(className);
         return findInstances(cls, term);
     }
     
     public static InstanceCollection findInstances(NakedClass cls, String term) {
     	Vector elements;
     	try {
-    		elements =  NakedObjectManager.getInstance().getInstances(cls, term);
+    		elements =  cls.getContext().getObjectManager().getInstances(cls, term);
     	} catch (UnsupportedFindException e) {
     		LOG.warn("Fast find not supported " + term);
     		elements = new Vector();
@@ -78,7 +86,7 @@ public class InstanceCollection extends TypedCollection {
     public static InstanceCollection findInstances(NakedObject pattern) {
     	return new InstanceCollection(pattern);
     }
-
+*/
 
     /**
      * Returns a veto. The user should not be able to add instannces to the set
@@ -95,22 +103,22 @@ public class InstanceCollection extends TypedCollection {
     public Permission canRemove(NakedObject object) {
         return Veto.DEFAULT;
     }
-
+/*
     private void fillAllInstances(NakedClass cls) {
-        elements = NakedObjectManager.getInstance().getInstances(cls);
+        elements = getObjectManager().getInstances(cls);
     }
 
     private void fillSelectedInstances(NakedObject pattern) {
         try {
             // this.pattern = pattern;
             if (!pattern.isFinder()) { throw new IllegalArgumentException("pattern must be a finder object: " + pattern); }
-            elements = NakedObjectManager.getInstance().getInstances(pattern);
+            elements = getObjectManager().getInstances(pattern);
         } catch (UnsupportedFindException e) {
             LOG.warn("Finder not supported " + pattern);
             elements = new Vector();
         }
     }
-
+*/
     /**
      * The instances collections are always shown as persistent as they are
      * based on the ObjectStore, which is used to persist objects, although the
@@ -123,8 +131,13 @@ public class InstanceCollection extends TypedCollection {
     public void resolve() {}
 
     public Title title() {
-        return new Title(NakedClassManager.getInstance().getNakedClass(getType().getName()).getPluralName()).append("(" + size()
+        return new Title(NakedObjectSpecification.getNakedClass(getType().getName()).getPluralName()).append("(" + size()
                 + ")");
+    }
+
+
+    public NakedObject elementAt(int i) {
+        return (NakedObject) elements.elementAt(i);
     }
 }
 

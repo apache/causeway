@@ -1,104 +1,16 @@
 package org.nakedobjects.object.reflect;
 
+public interface Member {
+	boolean hasAbout();
 
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.control.Allow;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.security.SecurityContext;
-
-
-public abstract class Member {
-    // About to use if none has been coded in
-    protected class DefaultAbout implements About {
-        public Permission canAccess() {
-            return Allow.DEFAULT;
-        }
-
-        public Permission canUse() {
-            return Allow.DEFAULT;
-        }
-        
-        public String debug() {
-			return "no details (DefaultAbout)";
-		}
-
-        public String getDescription() {
-            return "";
-        }
-
-        public String getName() {
-            return label;
-        }
-    }
-    
-    private final String label;
-    private final String name;
-    
-    protected Member(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("Name must always be set");
-        }
- 
-        this.label = name;
-        this.name = NameConvertor.simpleName(name);
-    }
-    
-    public abstract boolean canAccess(SecurityContext context, NakedObject object);
-    
-    public abstract boolean canUse(SecurityContext context, NakedObject object);
-    
-    /**
-     * Return the default label for this member.  This is based on the name of this member.
-     * 
-     * @see #getName()
-     */
-    public String getLabel() {
-        return label;
-    }
-    	
-    protected String getLabel(About about) {
-    	if (about == null) {
-    		return label;
-    	} else {
-    		if (about.getName() == null) {
-    			return label;
-    		} else {
-    			return about.getName();
-    		}
-    	}
-    }
-
-    /**
-     * Return the label for this member in the current security context, and for the specified object.
-     * 
-     * @see #getLabel()
-     */
-    public abstract String getLabel(SecurityContext context, NakedObject object);
-
-    /**
-     Returns the name of the member.
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     Returns true if an about method is defined for this Member.
-     */
-    public abstract boolean hasAbout();
-
-    public String toString() {
-    	return "name=" + getName() + ",label='" + getLabel() + "'";
-    }
-
-
+	String getName();
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -2,8 +2,8 @@ package org.nakedobjects.persistence.sql.jdbc;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.reflect.Field;
-import org.nakedobjects.object.reflect.Value;
+import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
 import org.nakedobjects.persistence.sql.ValueMapper;
@@ -19,7 +19,7 @@ public class JdbcTimestampMapper implements ValueMapper {
         return "'" + dbts + "'";
     }
 
-    public void setFromDBColumn(String columnName, Field field, NakedObject object, Results rs) throws SqlObjectStoreException {
+    public void setFromDBColumn(String columnName, FieldSpecification field, NakedObject object, Results rs) throws SqlObjectStoreException {
         String val = rs.getString(columnName);
         
         if(val != null) {
@@ -40,7 +40,7 @@ public class JdbcTimestampMapper implements ValueMapper {
         
         val = val == null ? "NULL" : val;
 
-        ((Value) field).restoreValue(object, val);
+        ((ValueFieldSpecification) field).restoreValue(object, val);
     }
 
 

@@ -1,24 +1,26 @@
 package org.nakedobjects.io;
 
 import org.nakedobjects.object.LoadedObjects;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.object.reflect.Field;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.Value;
+import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
 
+import java.io.Serializable;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
 
-public class Memento implements Transferable {
-
+public class Memento implements Transferable, Serializable {
+    private final static long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(Memento.class);
     private Data state;
 
@@ -41,7 +43,7 @@ public class Memento implements Transferable {
             Data[] collData = new Data[coll.size()];
             for (int j = 0; j < coll.size(); j++) {
                 NakedObject ref = coll.elementAt(j);
-                collData[j] = new Data(ref.getOid(), ref.getClassName());
+                collData[j] = new Data(ref.getOid(), ref.getSpecification().getFullName());
             }
 
             return new InternalCollectionData(coll.getOid(), InternalCollection.class.getName(), collData);
@@ -51,23 +53,23 @@ public class Memento implements Transferable {
     }
 
     private ObjectData createObjectData(NakedObject object) {
-        NakedClass cls = object.getNakedClass();
-        ObjectData d = new ObjectData(object.getOid(), cls.fullName());
+        NakedObjectSpecification cls = object.getSpecification();
+        ObjectData d = new ObjectData(object.getOid(), cls.getFullName());
 
-        Field[] fields = cls.getFields();
+        FieldSpecification[] fields = cls.getFields();
 
         for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
+            FieldSpecification field = fields[i];
             if (!field.isDerived()) {
-                if (field instanceof Value) {
+                if (field instanceof ValueFieldSpecification) {
                     NakedValue v = (NakedValue) field.get(object);
                     d.addField(field.getName(), v.isEmpty() ? null : v.saveString());
-                } else if (field instanceof OneToManyAssociation) {
+                } else if (field instanceof OneToManyAssociationSpecification) {
                     InternalCollection coll = (InternalCollection) field.get(object);
                     d.addField(field.getName(), createData(coll));
-                } else if (field instanceof OneToOneAssociation) {
+                } else if (field instanceof OneToOneAssociationSpecification) {
                     NakedObject ref = (NakedObject) field.get(object);
-                    Object refOid = ref == null ? null : new Data(ref.getOid(), ref.getClassName());
+                    Object refOid = ref == null ? null : new Data(ref.getOid(), ref.getSpecification().getFullName());
                     d.addField(field.getName(), refOid);
                 }
             }
@@ -79,34 +81,36 @@ public class Memento implements Transferable {
         return state.oid;
     }
 
-    public NakedObject recreateObject(LoadedObjects objectManager) {
+    public NakedObject recreateObject(LoadedObjects loadedObjects, NakedObjectContext context) {
         if (state == null) {
             return null;
         } else {
-            NakedClass nc = NakedClassManager.getInstance().getNakedClass(state.className);
+            NakedObjectSpecification nc = NakedObjectSpecification.getNakedClass(state.className);
             NakedObject object = (NakedObject) nc.acquireInstance();
+            object.setContext(context);
             object.setOid(state.oid);
             LOG.debug("Recreated object " + object.getOid());
-            updateNakedObject(object, objectManager);
+            updateNakedObject(object, loadedObjects, context);
 
             return object;
         }
     }
 
-    private NakedObject recreateObject2(LoadedObjects objectManager, Data data) {
-        synchronized (objectManager) {
+    private NakedObject recreateObject2(LoadedObjects loadedObjects, Data data, NakedObjectContext context) {
+        synchronized (loadedObjects) {
             NakedObject ref;
-            Object oid = data.oid;
+            Oid oid = data.oid;
 
-            NakedClass nakedClass = NakedClassManager.getInstance().getNakedClass(data.className);
+            NakedObjectSpecification nakedClass = NakedObjectSpecification.getNakedClass(data.className);
             if (oid == null) {
                 ref = null;
-            } else if (objectManager.isLoaded(oid)) {
-                ref = objectManager.getLoadedObject(oid);
+            } else if (loadedObjects.isLoaded(oid)) {
+                ref = loadedObjects.getLoadedObject(oid);
             } else {
                 ref = (NakedObject) nakedClass.acquireInstance();
+                ref.setContext(context);
                 ref.setOid(oid);
-                objectManager.loaded(ref);
+                loadedObjects.loaded(ref);
             }
 
             return ref;
@@ -125,7 +129,7 @@ public class Memento implements Transferable {
      *                       if the memento was created from different logical object to
      *                       the one specified (i.e. its oid differs).
      */
-    public void updateNakedObject(NakedObject object, LoadedObjects objectManager) {
+    public void updateNakedObject(NakedObject object, LoadedObjects loadedObjects, NakedObjectContext context) {
         Object oid = object.getOid();
         if (oid != null && !oid.equals(state.oid)) {
             throw new IllegalArgumentException("This memento can only be used to " + "update the naked object with the Oid "
@@ -137,19 +141,19 @@ public class Memento implements Transferable {
             } else {
                 ObjectData od = (ObjectData) state;
 
-                Field[] fields = object.getNakedClass().getFields();
+                FieldSpecification[] fields = object.getSpecification().getFields();
 
                 for (int i = 0; i < fields.length; i++) {
-                    Field field = fields[i];
+                    FieldSpecification field = fields[i];
                     Object fieldData = od.getEntry(field.getName());
                     if (!field.isDerived()) {
-                        if (field instanceof Value) {
+                        if (field instanceof ValueFieldSpecification) {
                             updateValue(object, field, (String) fieldData);
-                        } else if (field instanceof OneToManyAssociation) {
-                            updateOneToManyAssociation(object, objectManager, (OneToManyAssociation) field,
-                                    (InternalCollectionData) fieldData);
-                        } else if (field instanceof OneToOneAssociation) {
-                            updateOneToOneAssociation(object, objectManager, (OneToOneAssociation) field, (Data) fieldData);
+                        } else if (field instanceof OneToManyAssociationSpecification) {
+                            updateOneToManyAssociation(object, loadedObjects, (OneToManyAssociationSpecification) field,
+                                    (InternalCollectionData) fieldData, context);
+                        } else if (field instanceof OneToOneAssociationSpecification) {
+                            updateOneToOneAssociation(object, loadedObjects, (OneToOneAssociationSpecification) field, (Data) fieldData, context);
                         }
                     }
                 }
@@ -159,9 +163,10 @@ public class Memento implements Transferable {
 
     }
 
-    private void updateOneToManyAssociation(NakedObject object, LoadedObjects objectManager, OneToManyAssociation field,
-            InternalCollectionData collectionData) {
+    private void updateOneToManyAssociation(NakedObject object, LoadedObjects loadedObjects, OneToManyAssociationSpecification field,
+            InternalCollectionData collectionData, NakedObjectContext context) {
         InternalCollection collection = (InternalCollection) field.get(object);
+        collection.setContext(context);
         if (collection.getOid() == null) {
             collection.setOid(collectionData.getOid());
         }
@@ -173,7 +178,7 @@ public class Memento implements Transferable {
         }
 
         for (int j = 0; j < collectionData.elements.length; j++) {
-            NakedObject element = recreateObject2(objectManager, (Data) collectionData.elements[j]);
+            NakedObject element = recreateObject2(loadedObjects, (Data) collectionData.elements[j], context);
             if (!collection.contains(element)) {
                 LOG.debug("  association " + field + " changed, added " + element.getOid());
                 collection.added(element);
@@ -190,12 +195,12 @@ public class Memento implements Transferable {
         }
     }
 
-    private void updateOneToOneAssociation(NakedObject object, LoadedObjects objectManager, OneToOneAssociation field,
-            Data fieldData) {
+    private void updateOneToOneAssociation(NakedObject object, LoadedObjects loadedObjects, OneToOneAssociationSpecification field,
+            Data fieldData, NakedObjectContext context) {
         if (fieldData == null) {
             field.initData(object, null);
         } else {
-            NakedObject ref = recreateObject2(objectManager, fieldData);
+            NakedObject ref = recreateObject2(loadedObjects, fieldData, context);
             if (field.get(object) != ref) {
                 LOG.debug("  association " + field + " changed to " + ref.getOid());
                 field.initData(object, ref);
@@ -203,7 +208,7 @@ public class Memento implements Transferable {
         }
     }
 
-    private void updateValue(NakedObject object, Field field, String value) {
+    private void updateValue(NakedObject object, FieldSpecification field, String value) {
         NakedValue nv = ((NakedValue) field.get(object));
 
         if (value == null) {

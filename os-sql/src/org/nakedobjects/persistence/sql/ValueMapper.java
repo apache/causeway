@@ -2,12 +2,12 @@ package org.nakedobjects.persistence.sql;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.object.reflect.FieldSpecification;
 
 public interface ValueMapper {
     String valueAsDBString(NakedValue value) throws SqlObjectStoreException;
     
-    void setFromDBColumn(String columnName, Field field, NakedObject object, Results results)
+    void setFromDBColumn(String columnName, FieldSpecification field, NakedObject object, Results results)
 	throws SqlObjectStoreException;
         
     String columnType();

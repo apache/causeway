@@ -2,14 +2,14 @@ package org.nakedobjects.persistence.sql.auto;
 
 import org.nakedobjects.object.AbstractNakedObject;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.reflect.Field;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.Value;
+import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import org.nakedobjects.object.value.TimeStamp;
 import org.nakedobjects.persistence.sql.AbstractObjectMapper;
 import org.nakedobjects.persistence.sql.CollectionMapper;
@@ -29,21 +29,21 @@ import org.apache.log4j.Logger;
 
 public abstract class AbstractAutoMapper extends AbstractObjectMapper {
     private static final Logger LOG = Logger.getLogger(AbstractAutoMapper.class);
-	protected Field collectionFields[];
+	protected FieldSpecification collectionFields[];
 	protected CollectionMapper collectionMappers[];
 	protected String columnNames[];
 	protected boolean dbCreatesId;
 
 	protected FieldNameMapper fieldMapper = new FieldNameMapper();
-	protected Field fields[];
+	protected FieldSpecification fields[];
 	protected String idColumn;
 	protected String lastActivityColumn;
-	protected NakedClass nakedClass;
+	protected NakedObjectSpecification nakedClass;
 	protected String table;
 	protected ValueMapperLookup typeMapper;
 
 	public AbstractAutoMapper(String nakedClassName, String parameterBase) throws SqlObjectStoreException {
-		nakedClass = NakedClassManager.getInstance().getNakedClass(nakedClassName);
+		nakedClass = NakedObjectSpecification.getNakedClass(nakedClassName);
 		typeMapper = ValueMapperLookup.getInstance();
 
 		Configuration configParameters = Configuration.getInstance();
@@ -86,16 +86,16 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 		if (!connection.hasTable(table)) {
 			StringBuffer columns = new StringBuffer();
 			for (int f = 0; f < fields.length; f++) {
-				Field field = fields[f];
+				FieldSpecification field = fields[f];
 				String type;
-				if (field instanceof Value) {
+				if (field instanceof ValueFieldSpecification) {
 					ValueMapperLookup mappers = ValueMapperLookup.getInstance();
 					ValueMapper mapper = mappers.mapperFor(fields[f].getType());
 					if (mapper == null) {
-						throw new SqlObjectStoreException("No type specified for " + fields[f].getType().getName());
+						throw new SqlObjectStoreException("No type specified for " + fields[f].getType().getFullName());
 					}
 					type = mapper.columnType();
-				} else if (field instanceof OneToOneAssociation) {
+				} else if (field instanceof OneToOneAssociationSpecification) {
 				    // TODO make this externally settable
 					type = "INT";
 				} else {
@@ -120,7 +120,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 		}
 	}
 
-	protected String fieldName(Field field) {
+	protected String fieldName(FieldSpecification field) {
 		return fieldMapper.getColumnName(field.getName());
 	}
 
@@ -131,10 +131,10 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 				return i;
 			}
 		}
-		throw new SqlObjectStoreException(fieldName + " does not exist in class " + nakedClass.fullName());
+		throw new SqlObjectStoreException(fieldName + " does not exist in class " + nakedClass.getFullName());
 	}
 
-	protected NakedObject loadObject(NakedClass nakedClass, Object oid) {
+	protected NakedObject loadObject(NakedObjectSpecification nakedClass, Oid oid) {
 		NakedObject reference;
 		if (loadedObjects.isLoaded(oid)) {
 			reference = loadedObjects.getLoadedObject(oid);
@@ -156,14 +156,14 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 	}
 
 	private void setupFullMapping(String nakedClassName, Configuration configParameters, String parameterBase) throws SqlObjectStoreException {
-		Field[] allFields = nakedClass.getFields();
+		FieldSpecification[] allFields = nakedClass.getFields();
 
 		int simpleFieldCount = 0;
 		int collectionFieldCount = 0;
 		for (int i = 0; i < allFields.length; i++) {
 			if (allFields[i].isDerived()) {
 				continue;
-			} else if (allFields[i] instanceof OneToManyAssociation) {
+			} else if (allFields[i] instanceof OneToManyAssociationSpecification) {
 				collectionFieldCount++;
 			} else {
 				simpleFieldCount++;
@@ -171,15 +171,15 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 		}
 
 		columnNames = new String[simpleFieldCount];
-		fields = new Field[simpleFieldCount];
-		collectionFields = new Field[collectionFieldCount];
+		fields = new FieldSpecification[simpleFieldCount];
+		collectionFields = new FieldSpecification[collectionFieldCount];
 		collectionMappers = new CollectionMapper[collectionFieldCount];
 		Properties collectionMappings = configParameters.getPropertySubset(parameterBase + "collection");
 
 		for (int i = 0, simpleFieldNo = 0, collectionFieldNo = 0; i < allFields.length; i++) {
 			if (allFields[i].isDerived()) {
 				continue;
-			} else if (allFields[i] instanceof OneToManyAssociation) {
+			} else if (allFields[i] instanceof OneToManyAssociationSpecification) {
 				collectionFields[collectionFieldNo] = allFields[i];
 				
 				String type = collectionMappings.getProperty(allFields[i].getName());
@@ -199,7 +199,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 				}
 
 				collectionFieldNo++;
-			} else if (allFields[i] instanceof OneToOneAssociation) {
+			} else if (allFields[i] instanceof OneToOneAssociationSpecification) {
 				columnNames[simpleFieldNo] = "FK" + fieldName(allFields[i]);
 				fields[simpleFieldNo] = allFields[i];
 				simpleFieldNo++;
@@ -225,11 +225,11 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 		}
 	}
 
-	private void setupSpecifiedMapping(NakedClass nakedClass, Configuration configParameters, String parameterBase) throws SqlObjectStoreException {
+	private void setupSpecifiedMapping(NakedObjectSpecification nakedClass, Configuration configParameters, String parameterBase) throws SqlObjectStoreException {
 		Properties columnMappings = configParameters.getProperties(parameterBase + "column");
 		int columnsSize = columnMappings.size();
 		columnNames = new String[columnsSize];
-		fields = new Field[columnsSize];
+		fields = new FieldSpecification[columnsSize];
 
 		
 		int i = 0;
@@ -250,7 +250,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 		Properties collectionMappings = configParameters.getProperties(parameterBase + "collection");
 		int collectionsSize = collectionMappings.size();
 		collectionMappers = new AutoAssociationMapper[collectionsSize];
-		collectionFields= new Field[collectionsSize];
+		collectionFields= new FieldSpecification[collectionsSize];
 
 		int j = 0;
 		for(Enumeration names = collectionMappings.propertyNames(); names.hasMoreElements(); j++) {
@@ -271,14 +271,14 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 
 	public String toString() {
 		return "AutoMapper [table=" + table + ",id=" + idColumn + ",noColumns=" + fields.length + ",nakedClass="
-				+ nakedClass.fullName() + "]";
+				+ nakedClass.getFullName() + "]";
 	}
 
-	protected String values(NakedClass cls, NakedObject object) throws SqlObjectStoreException {
+	protected String values(NakedObjectSpecification cls, NakedObject object) throws SqlObjectStoreException {
 		StringBuffer sb = new StringBuffer();
-		Field[] fields = cls.getFields();
+		FieldSpecification[] fields = cls.getFields();
 		for (int i = 0; i < fields.length; i++) {
-			if (fields[i].isDerived() || fields[i] instanceof OneToManyAssociation) {
+			if (fields[i].isDerived() || fields[i] instanceof OneToManyAssociationSpecification) {
 				continue;
 			}
 			sb.append(", ");
@@ -298,7 +298,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 
     protected String updateWhereClause(NakedObject object, boolean and) throws SqlObjectStoreException {
         TimeStamp lastActivity = ((AbstractNakedObject) object).getLastActivity();
-        ValueMapper mapper = typeMapper.mapperFor(TimeStamp.class);
+        ValueMapper mapper = typeMapper.mapperFor(NakedObjectSpecification.getNakedClass(TimeStamp.class));
         String dateString =  mapper.valueAsDBString(lastActivity);
         if(dateString.equals("NULL")) {
             return (and ? " and " +  lastActivityColumn + " is NULL" : "");

@@ -1,6 +1,5 @@
 package org.nakedobjects.object;
 
-import java.util.Date;
 
 
 /**
@@ -10,14 +9,14 @@ public class SimpleOidGenerator implements OidGenerator {
     private long next;
 
     public void init() {
-        next = new Date().getTime();
+        next = 0;
     }
 
     public String name() {
-        return "Simple OID Generator";
+        return "Exploration OID Generator";
     }
 
-    public synchronized Object next(NakedObject object) {
+    public synchronized Oid next(NakedObject object) {
         return new SimpleOid(next++);
     }
 

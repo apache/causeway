@@ -8,19 +8,19 @@ import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.ValueParseException;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Validity;
-import org.nakedobjects.object.reflect.ValueIf;
+import org.nakedobjects.object.reflect.ValueField;
 import org.nakedobjects.security.SecurityContext;
 import org.nakedobjects.utility.NotImplementedException;
 
 import org.apache.log4j.Category;
 
 
-public class RemoteValue implements ValueIf {
+public class RemoteValue implements ValueField {
 	private final static Category LOG = Category.getInstance(RemoteValue.class);
-	private ValueIf local;
+	private ValueField local;
 	private boolean fullProxy = false;
 	
-	public RemoteValue(ValueIf local) {
+	public RemoteValue(ValueField local) {
 		this.local = local;
 	}
 	

@@ -24,7 +24,7 @@ public class ParameterValueImpl extends AbstractTestObject implements TestValue 
      returns the title of the object as a String
      */
     public String getTitle() {
-        return getForObject().title().toString();
+        return getForObject().titleString().toString();
     }
 }
 

@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.AbstractUserContext;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedClassSpec;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
@@ -34,7 +34,7 @@ public class UserContextWorkspace extends DefaultWorkspace {
 		
 		NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
 		
-		if (source instanceof NakedClass) {
+		if (source instanceof NakedClassSpec) {
 			if(drag.isShift()) {
 				getContext().getClasses().add(source);
 			}

@@ -3,19 +3,19 @@ package org.nakedobjects.distribution.client;
 
 import org.nakedobjects.distribution.Request;
 import org.nakedobjects.distribution.RequestContext;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedClNakedObjectSpecification;
 
 
 public class HasInstances extends Request {
 	private String className;
 
-	public HasInstances(NakedClass cls) {
-    	className = cls.fullName();
+	public HasInstances(NakedObjectSpecification cls) {
+    	className = cls.getFullName();
     }
 
 	protected void generateResponse(RequestContext context) {
-		NakedClass cls = NakedClassManager.getInstance().getNakedClass(className);
+		NakedObjectSpecification cls = NakedObjectSpecification.getNakedClass(className);
 		response = new Boolean(context.getObjectManager().hasInstances(cls));
     }
 

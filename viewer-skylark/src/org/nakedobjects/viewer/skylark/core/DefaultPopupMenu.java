@@ -28,7 +28,7 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
@@ -284,7 +284,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
     public void keyTyped(char keyCode) {
     }
 
-    public View makeView(Naked object, Field field) throws CloneNotSupportedException {
+    public View makeView(Naked object, FieldSpecification field) throws CloneNotSupportedException {
         throw new RuntimeException();
     }
 

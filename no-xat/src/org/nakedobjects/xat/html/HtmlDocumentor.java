@@ -72,12 +72,12 @@ public class HtmlDocumentor extends AbstractDocumentor {
     }
 
     public String objectString(Naked object) {
-        String title = object.title().toString();
+        String title = object.titleString();
         StringBuffer str = new StringBuffer();
 
-        str.append("<b>" + object.getShortClassName() + "</b> object ");
+        str.append("<b>" + object.getSpecification().getShortName() + "</b> object ");
         str.append("<em>");
-        String name = object instanceof NakedObject ? ((NakedObject) object).getIconName() : object.getShortClassName();
+        String name = object instanceof NakedObject ? ((NakedObject) object).getIconName() : object.getSpecification().getShortName();
         str.append("<img width=\"16\" height=\"16\" align=\"Center\" src=\"images/" + name + ".gif\">");
         str.append("<font face=\"sans-serif\">" + title + "</font>");
         str.append("</em>");
@@ -88,9 +88,9 @@ public class HtmlDocumentor extends AbstractDocumentor {
         StringBuffer str = new StringBuffer();
 
         str.append("<em>");
-        String name = object instanceof NakedObject ? ((NakedObject) object).getIconName() : object.getShortClassName();
+        String name = object instanceof NakedObject ? ((NakedObject) object).getIconName() : object.getSpecification().getShortName();
         str.append("<img width=\"16\" height=\"16\" align=\"Center\" src=\"images/" + name + ".gif\">");
-        str.append("<font face=\"sans-serif\">" + object.title() + "</font>");
+        str.append("<font face=\"sans-serif\">" + object.titleString() + "</font>");
         str.append("</em>");
         return str.toString();
     }

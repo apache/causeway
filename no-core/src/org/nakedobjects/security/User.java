@@ -11,7 +11,6 @@ import org.nakedobjects.object.value.TextString;
 
 public final class User extends AbstractNakedObject {
 	private static final long serialVersionUID = 1L;
-	private static final Role SYS_ADMIN = new Role("sysadmin");
 	private final TextString name;
     private final InternalCollection roles;
     private NakedObject rootObject;
@@ -31,7 +30,7 @@ public final class User extends AbstractNakedObject {
     }
     
     public void aboutFieldDefault(FieldAbout about) {
-    	about.visibleOnlyToRole(SYS_ADMIN);
+    	about.visibleOnlyToRole(Role.SYSADMIN);
     }
     
     public final TextString getName() {

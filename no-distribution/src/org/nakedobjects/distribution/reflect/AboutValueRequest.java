@@ -6,8 +6,8 @@ import org.nakedobjects.distribution.RequestContext;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.reflect.Value;
-import org.nakedobjects.object.reflect.ValueIf;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
+import org.nakedobjects.object.reflect.ValueField;
 import org.nakedobjects.security.SecurityContext;
 import org.nakedobjects.utility.NotImplementedException;
 
@@ -17,7 +17,7 @@ public class AboutValueRequest extends ObjectRequest {
 	private SecurityContext context;
     private String fieldName;
     
-    public AboutValueRequest(SecurityContext context, NakedObject object, ValueIf field) {
+    public AboutValueRequest(SecurityContext context, NakedObject object, ValueField field) {
         super(object);
         this.context = context;
         this.fieldName = field.getName();
@@ -33,7 +33,7 @@ public class AboutValueRequest extends ObjectRequest {
     protected void generateResponse(RequestContext server) {
         try {
             NakedObject object = getObject(server.getLoadedObjects());
-            Value field = (Value) object.getNakedClass().getField(fieldName);
+            ValueFieldSpecification field = (ValueFieldSpecification) object.getSpecification().getField(fieldName);
 
             response = (field == null) ? null : field.getAbout(context, object);
         } catch (ObjectStoreException e) {

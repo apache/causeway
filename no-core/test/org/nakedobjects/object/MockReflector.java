@@ -3,7 +3,7 @@ package org.nakedobjects.object;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ClassAbout;
 import org.nakedobjects.object.reflect.ActionDelegate;
-import org.nakedobjects.object.reflect.MemberIf;
+import org.nakedobjects.object.reflect.Member;
 import org.nakedobjects.object.reflect.Reflector;
 
 public class MockReflector implements Reflector {
@@ -39,7 +39,7 @@ public class MockReflector implements Reflector {
         return null;
     }
 
-    public MemberIf[] fields() {
+    public Member[] fields() {
         return null;
     }
 
@@ -80,6 +80,14 @@ public class MockReflector implements Reflector {
     }
 
     public boolean isObject() {
+        return false;
+    }
+
+    public String fullName() {
+        return null;
+    }
+
+    public boolean isPartOf() {
         return false;
     }
 

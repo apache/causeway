@@ -5,14 +5,14 @@ import org.nakedobjects.object.NakedObject;
 
 public class AssociateCommand implements Command {
     private final String description;
-    private final OneToOneAssociation field;
+    private final OneToOneAssociationSpecification field;
     private final NakedObject object;
     private final NakedObject associatedObject;
     private String name;
 
-    public AssociateCommand(NakedObject object, NakedObject associatedObject, OneToOneAssociation field) {
-        this.description = "Clear association of " + associatedObject.title();
-        this.name = "associate " + associatedObject.title();
+    public AssociateCommand(NakedObject object, NakedObject associatedObject, OneToOneAssociationSpecification field) {
+        this.description = "Clear association of " + associatedObject.titleString();
+        this.name = "associate " + associatedObject.titleString();
         this.object = object;
         this.associatedObject = associatedObject;
         this.field = field;

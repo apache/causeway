@@ -1,15 +1,17 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.ExplorationClock;
+import org.nakedobjects.object.LocalReflectionFactory;
 import org.nakedobjects.object.MockObjectManager;
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectTestCase;
-import org.nakedobjects.object.reflect.Value;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import org.nakedobjects.object.value.Date;
-import org.nakedobjects.object.value.TimeStamp;
 
 public class TestValueImplTest extends NakedObjectTestCase {
-
+    private MockObjectManager om;
+    private NakedObjectContext context;
+    
     public static void main(String[] args) {
         junit.textui.TestRunner.run(TestValueImplTest.class);
     }
@@ -17,20 +19,26 @@ public class TestValueImplTest extends NakedObjectTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         
-        MockObjectManager manager = MockObjectManager.setup();
-        manager.setupAddClass(TestValueExample.class);
-        manager.setupAddClass(NakedObject.class);
+        om = MockObjectManager.setup();
+        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+        context = new NakedObjectContext(om);
     }
     
     public void test() {
         TestValueExample parent = new TestValueExample();
-        Value fld = (Value) parent.getNakedClass().getFields()[0]; 
+        parent.setContext(context);
+        ValueFieldSpecification fld = (ValueFieldSpecification) parent.getSpecification().getFields()[0]; 
         TestValue value = new TestValueImpl(parent, fld);
- //       value.fieldEntry("+2");
+        value.fieldEntry("+2");
         
         assertEquals(new Date(2003,8,19), parent.getDate());
     }
 
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        
+        om.shutdown();
+    }
 }
 
 

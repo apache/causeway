@@ -1,51 +1,30 @@
 package org.nakedobjects.security;
 
+import org.nakedobjects.object.NakedObjectContext;
+
 import org.apache.log4j.Logger;
 
 public class Session {
 	private static final Logger LOG = Logger.getLogger(Session.class);
-	private static final SecurityContext defaultContext = new SecurityContext();
 	private static Session session;  // for each client JVm there is one user
-	private SecurityContext securityContext;
+	private NakedObjectContext securityContext;
 	
 	public static Session getSession() {
 		if(session == null) {
-			throw new NakedObjectSecurityException("No existing session");
+		    session = new Session();
 		}
 		return session;
 	}
 	
-	public static void initSession() {
-		if(session != null) {
-			throw new NakedObjectSecurityException("Already existing session");
-		}
-		session = new Session(defaultContext);
+	private Session() {
 	}
 	
-	public static void setLoggedOn(SecurityContext securityContext) {
-		if(session.securityContext != defaultContext) {
-			throw new NakedObjectSecurityException("Cannot logon when already logged on");
-		}
-		session.securityContext = securityContext;
-		
-		LOG.info("User logged on " + session.securityContext);
-	}
+	public void setSecurityContext(NakedObjectContext securityContext) {
+        this.securityContext = securityContext;
+    }
 	
-	private Session(SecurityContext securityContext) {
-		this.securityContext = securityContext;
-	}
-	
-	public SecurityContext getSecurityContext() {
+	public NakedObjectContext getContext() {
 		return securityContext;
-	}
-	
-	public static void logoff() {
-		LOG.info("User logged off " + session.securityContext);
-		session.securityContext = defaultContext;
-	}
-
-	public static boolean isLoggedOn() {
-		return session.securityContext != null;
 	}
 	
 	public void shutdown() {

@@ -23,7 +23,6 @@
 */
 package org.nakedobjects.viewer.skylark.special;
 
-import org.apache.log4j.Logger;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.InternalDrag;
@@ -31,6 +30,8 @@ import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
+
+import org.apache.log4j.Logger;
 
 
 

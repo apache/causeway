@@ -1,10 +1,10 @@
 package org.nakedobjects.object.value;
 
-import org.nakedobjects.Clock;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.Title;
 import org.nakedobjects.object.ValueParseException;
+import org.nakedobjects.system.Clock;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -114,8 +114,6 @@ public class Time extends Magnitude {
      Add the specified hours and minutes to this time value.
      */
     public void add(int hours, int minutes) {
-        checkCanOperate();
-
         Calendar cal = Calendar.getInstance();
 
         cal.setTime(date);
@@ -192,8 +190,6 @@ public class Time extends Magnitude {
      @see #dateValue
      */
     public java.util.Date getDate() {
-        checkCanOperate();
-
         return date;
     }
 
@@ -219,8 +215,6 @@ public class Time extends Magnitude {
      returns true if the time of this object is earlier than the specified time
      */
     public boolean isLessThan(Magnitude time) {
-        checkCanOperate();
-
         if (time instanceof Time) {
             return (date != null) && !time.isEmpty() &&
             date.before(((Time) time).date);
@@ -233,8 +227,6 @@ public class Time extends Magnitude {
      * The number of seconds since midnight.
      */
     public long longValue() {
-        checkCanOperate();
-
         return (date.getTime()  -  zoneOffset) / 1000;
     }
 

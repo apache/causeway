@@ -1,17 +1,17 @@
 package org.nakedobjects.xat;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedClassSpec;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NotPersistableException;
 import org.nakedobjects.object.collection.InstanceCollection;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.security.SecurityContext;
+import org.nakedobjects.object.reflect.ActionSpecification;
 
 import java.util.Enumeration;
 
@@ -20,11 +20,11 @@ public class TestClassImpl implements TestClass {
 
     public static void init(NakedObjectStore objectStore) {}
 
-    private SecurityContext context;
-    private NakedClass nakedClass;
+    private NakedObjectContext context;
+    private NakedClassSpec nakedClass;
     private final TestObjectFactory factory;
 
-    public TestClassImpl(SecurityContext context, NakedClass cls, TestObjectFactory factory) {
+    public TestClassImpl(NakedObjectContext context, NakedClassSpec cls, TestObjectFactory factory) {
         this.context = context;
         nakedClass = cls;
         this.factory = factory;
@@ -37,13 +37,13 @@ public class TestClassImpl implements TestClass {
      * though more than one match might occur.
      */
     public TestObject findInstance(String title) {
-        NakedCollection c = instances((NakedClass) getForObject());
+        NakedCollection c = instances((NakedClassSpec) getForObject());
         Enumeration e = c.elements();
 
         while (e.hasMoreElements()) {
             NakedObject object = ((NakedObject) e.nextElement());
 
-            if (object.title().toString().indexOf(title) >= 0) {
+            if (object.titleString().toString().indexOf(title) >= 0) {
                 return factory.createTestObject(context, object);
             }
         }
@@ -58,27 +58,28 @@ public class TestClassImpl implements TestClass {
     }
 
     public String getTitle() {
-        return nakedClass.title().toString();
+        return nakedClass.titleString().toString();
     }
 
     /**
      * Get the instances of this class.
      */
     public TestObject instances() {
-        NakedClass nakedClass = (NakedClass) getForObject();
-        NakedCollection instances = instances((NakedClass) getForObject());
+        NakedClassSpec nakedClass = (NakedClassSpec) getForObject();
+        NakedCollection instances = instances((NakedClassSpec) getForObject());
         if (instances.size() == 0) { throw new IllegalActionError("Find must find at least one object"); }
         return factory.createTestObject(context, instances);
     }
 
-    private InstanceCollection instances(NakedClass cls) {
-        InstanceCollection instances = InstanceCollection.findInstances(cls.pattern());
+    private InstanceCollection instances(NakedClassSpec cls) {
+        NakedObjectContext context = NakedObjectContext.getDefaultContext();
+        InstanceCollection instances = context.getObjectManager().allInstances(cls.forNakedClass());
         instances.first();
         return instances;
     }
 
     public TestObject invokeAction(final String name) {
-        Action action = nakedClass.getClassAction(Action.USER, name);
+        ActionSpecification action = nakedClass.forNakedClass().getClassAction(ActionSpecification.USER, name);
 
         if (action == null) { throw new IllegalActionError("No action " + name + " on the " + nakedClass.getPluralName()
                 + " class."); }
@@ -93,9 +94,9 @@ public class TestClassImpl implements TestClass {
 
     public TestObject invokeAction(final String name, TestObject parameter) {
         NakedObject dropObject = (NakedObject) parameter.getForObject();
-        Action action = nakedClass.getClassAction(Action.USER, name, new NakedClass[] { dropObject.getNakedClass() });
+        ActionSpecification action = nakedClass.forNakedClass().getClassAction(ActionSpecification.USER, name, new NakedObjectSpecification[] { dropObject.getSpecification() });
 
-        if (action == null) { throw new IllegalActionError("Can't drop a " + parameter.getForObject().getShortClassName() + " (for "
+        if (action == null) { throw new IllegalActionError("Can't drop a " + parameter.getForObject().getSpecification().getShortName() + " (for "
                 + name + ") on the " + nakedClass.getPluralName() + " class."); }
         NakedObject result = action.execute(nakedClass, dropObject);
 
@@ -115,19 +116,21 @@ public class TestClassImpl implements TestClass {
          return factory.createTestObject(context, object);
     }
 
-    private NakedObject newInstance(NakedClass cls) {
+    private NakedObject newInstance(NakedClassSpec cls) {
         NakedObject object;
 
         try {
-            object = (NakedObject) cls.acquireInstance();
+            object = (NakedObject) cls.forNakedClass().acquireInstance();
+            object.setContext(cls.getContext());
+            object.getContext().makePersistent(object);
 
-            NakedObjectManager.getInstance().makePersistent(object); //makePersistent(object);
+           // NakedObjectManager.getInstance().makePersistent(object); //makePersistent(object);
             object.created();
-            object.objectChanged();
+            object.getContext().getObjectManager().objectChanged(object);
         } catch (NotPersistableException e) {
-            object = new NakedError("Failed to create instance of " + cls.fullName(), e);
+            object = new NakedError("Failed to create instance of " + cls.forNakedClass().getFullName(), e);
 
-            System.out.println("Failed to create instance of " + cls.fullName());
+            System.out.println("Failed to create instance of " + cls.forNakedClass().getFullName());
             e.printStackTrace();
         }
 

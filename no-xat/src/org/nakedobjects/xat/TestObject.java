@@ -1,7 +1,7 @@
 package org.nakedobjects.xat;
 
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.ActionSpecification;
 
 
 public interface TestObject extends TestNaked {
@@ -204,7 +204,7 @@ public interface TestObject extends TestNaked {
      */
     void fieldEntry(String name, String value);
 
-    Action getAction(String name);
+    ActionSpecification getAction(String name);
 
     /**
      * Returns the view, from within this collection, that has the specified title.

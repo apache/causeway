@@ -3,7 +3,7 @@ package org.nakedobjects.viewer.skylark.core;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.security.Session;
 import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.InternalCollectionContent;
@@ -22,7 +22,7 @@ public class InternalCollectionActions extends CollectionActions {
         NakedObject parent = ((ObjectContent) getParent().getContent()).getObject();
         
         About about = getAssociation().getAbout(
-                Session.getSession().getSecurityContext(), parent, content.getObject(), true);
+                Session.getSession().getContext(), parent, content.getObject(), true);
 
         Permission perm = about.canUse();
         
@@ -51,10 +51,10 @@ public class InternalCollectionActions extends CollectionActions {
     }
 
 
-    private OneToManyAssociation getAssociation() {
+    private OneToManyAssociationSpecification getAssociation() {
         InternalCollectionContent content = (InternalCollectionContent) getContent();
 
-        return (OneToManyAssociation) content.getField();
+        return (OneToManyAssociationSpecification) content.getField();
     }
     
     public String toString() {

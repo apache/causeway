@@ -1,7 +1,9 @@
 package org.nakedobjects.object.value;
 
-import org.nakedobjects.SystemClock;
+import org.nakedobjects.object.LocalReflectionFactory;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ValueParseException;
+import org.nakedobjects.system.SystemClock;
 
 import java.util.Locale;
 
@@ -19,6 +21,8 @@ public class DatePeriodTest extends TestCase {
 	protected void setUp() throws Exception {
 		Locale.setDefault(Locale.UK);
 
+		NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+	    	
 		Date.setClock(new SystemClock());
 		
 		mayJul = new DatePeriod();

@@ -1,5 +1,7 @@
 package org.nakedobjects.io;
 
+import org.nakedobjects.object.Oid;
+
 import java.util.Enumeration;
 import java.util.Hashtable;
 
@@ -8,7 +10,7 @@ class ObjectData extends Data {
     private final static Transferable NO_ENTRY = new Null();
     private final Hashtable fields = new Hashtable();
 
-    public ObjectData(Object oid, String className) {
+    public ObjectData(Oid oid, String className) {
         super(oid, className);
     }
 

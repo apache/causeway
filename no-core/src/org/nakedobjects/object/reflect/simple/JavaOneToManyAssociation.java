@@ -2,12 +2,12 @@ package org.nakedobjects.object.reflect.simple;
 
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.FieldAbout;
-import org.nakedobjects.object.reflect.OneToManyAssociationIF;
-import org.nakedobjects.security.SecurityContext;
+import org.nakedobjects.object.reflect.OneToManyAssociation;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
 import org.apache.log4j.Category;
 
 
-public class JavaOneToManyAssociation extends JavaAssociation implements OneToManyAssociationIF {
+public class JavaOneToManyAssociation extends JavaAssociation implements OneToManyAssociation {
     private final static Category LOG = Category.getInstance(JavaOneToManyAssociation.class);
 
     public JavaOneToManyAssociation(String name, Class type, Method get, Method add, Method remove, Method about) {
@@ -25,7 +25,7 @@ public class JavaOneToManyAssociation extends JavaAssociation implements OneToMa
     public void addAssociation(NakedObject inObject, NakedObject associate) {
         LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
 
-        NakedObjectManager objectManager = NakedObjectManager.getInstance();
+        NakedObjectManager objectManager = inObject.getContext().getObjectManager();
         objectManager.startTransaction();
 
         if (addMethod == null) {
@@ -34,7 +34,7 @@ public class JavaOneToManyAssociation extends JavaAssociation implements OneToMa
             try {
                 addMethod.invoke(inObject, new Object[] { associate });
             } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("set method expects a " + getType().getName() + " object; not a "
+                throw new IllegalArgumentException("set method expects a " + getType().getFullName() + " object; not a "
                         + associate.getClass().getName() + ", " + e.getMessage());
             } catch (InvocationTargetException e) {
                 LOG.error("Exception executing " + addMethod, e.getTargetException());
@@ -49,7 +49,7 @@ public class JavaOneToManyAssociation extends JavaAssociation implements OneToMa
 
     }
 
-    public About getAbout(SecurityContext context, NakedObject object, NakedObject element, boolean add) {
+    public About getAbout(NakedObjectContext context, NakedObject object, NakedObject element, boolean add) {
         if (hasAbout()) {
             Method aboutMethod = getAboutMethod();
             try {
@@ -95,7 +95,7 @@ public class JavaOneToManyAssociation extends JavaAssociation implements OneToMa
             try {
                 removeMethod.invoke(inObject, new Object[] { associate });
             } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("remove method expects a " + getType().getName() + " object; not a "
+                throw new IllegalArgumentException("remove method expects a " + getType().getFullName() + " object; not a "
                         + associate.getClass().getName());
             } catch (InvocationTargetException e) {
                 LOG.error("Exception executing " + addMethod, e.getTargetException());

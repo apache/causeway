@@ -1,11 +1,11 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.security.Session;
 import org.nakedobjects.viewer.skylark.ActionField;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
@@ -17,13 +17,13 @@ import org.nakedobjects.viewer.skylark.special.ObjectParameter;
  * Links an action on an object to a view.
  */
 public class ActionContent implements ObjectContent {
-    private final Action action;
+    private final ActionSpecification action;
     private final NakedObject target;
-    private final NakedClass[] parameterTypes;
+    private final NakedObjectSpecification[] parameterTypes;
     private final Naked[] parameterValues;
     private final ActionField[] parameters;
 
-    public ActionContent(NakedObject target, Action action) {
+    public ActionContent(NakedObject target, ActionSpecification action) {
         this.target = target;
         this.action = action;
         
@@ -45,7 +45,7 @@ public class ActionContent implements ObjectContent {
         }
     }
 
-    public NakedClass[] getParameterTypes() {
+    public NakedObjectSpecification[] getParameterTypes() {
         return parameterTypes;
     }
 
@@ -74,12 +74,12 @@ public class ActionContent implements ObjectContent {
     }
     
     public Permission disabled() {
-         About about = action.getAbout(Session.getSession().getSecurityContext(), target, getParameterValues());
+         About about = action.getAbout(Session.getSession().getContext(), target, getParameterValues());
         return about.canUse();
     }
 
     public String getLabel() {
-        return action.getLabel(Session.getSession().getSecurityContext(), target);
+        return action.getLabel(Session.getSession().getContext(), target);
     }
 
     public ActionField[] getParameters() {

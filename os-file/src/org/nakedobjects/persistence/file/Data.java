@@ -24,7 +24,7 @@
 
 package org.nakedobjects.persistence.file;
 
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.SimpleOid;
 
 
@@ -32,8 +32,8 @@ public abstract class Data {
    private final String type;
    private final SimpleOid oid;
 
-   Data(NakedClass type, SimpleOid oid) {
-      this.type = type.fullName();
+   Data(NakedObjectSpecification type, SimpleOid oid) {
+      this.type = type.getFullName();
       this.oid = oid;
    }
    

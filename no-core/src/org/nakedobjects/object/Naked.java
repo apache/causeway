@@ -1,6 +1,5 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.control.About;
 
 
 /**
@@ -23,38 +22,14 @@ import org.nakedobjects.object.control.About;
 public interface Naked {
 
     /**
-     * Returns an About object that controls the use of this object.
-     * 
-     * @deprecated
-     */
-    public About about();
-
-    /**
      * Copies the content of the specified object into this object.
      */
-    public abstract void copyObject(Naked object);
-
-    /**
-     * Returns the full class name including package details e.g., accounts.Transaction
-     */
-    public String getClassName();
+    abstract void copyObject(Naked object);
 
     /**
      * Returns the NakedClass that represents this object.
      */
-    NakedClass getNakedClass();
-
-
-    /**
-     * Returns the class name without package details e.g., Transaction for the class
-     * accounts.Transaction
-     */
-    public String getShortClassName();
-
-    /**
-     * Returns true if the object contains no data, eg when new
-     */
-    public boolean isEmpty();
+    NakedObjectSpecification getSpecification();
 
     /**
      * Checks to see if two objects contain the same information. Compare with <code>equals</code>,
@@ -67,10 +42,7 @@ public interface Naked {
      */
     boolean isSameAs(Naked object);
 
-    /**
-     * Returns a Title object describing the object.
-     */
-    public Title title();
+    String titleString();
 }
 
 /*
@@ -78,14 +50,14 @@ public interface Naked {
  * user. Copyright (C) 2000 - 2003 Naked Objects Group Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 2 of the
+ * GNU General License as published by the Free Software Foundation; either version 2 of the
  * License, or (at your option) any later version.
  * 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * General License for more details.
  * 
- * You should have received a copy of the GNU General Public License along with this program; if
+ * You should have received a copy of the GNU General License along with this program; if
  * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
  * 02111-1307 USA
  * 

@@ -1,10 +1,12 @@
 package org.nakedobjects.io;
 
+import org.nakedobjects.object.Oid;
+
 class InternalCollectionData extends Data {
     private final static long serialVersionUID = 1L;
     final Data[] elements;
 
-    public InternalCollectionData(Object oid, String className, Data[] elements) {
+    public InternalCollectionData(Oid oid, String className, Data[] elements) {
         super(oid, className);
         this.elements = elements;
     }

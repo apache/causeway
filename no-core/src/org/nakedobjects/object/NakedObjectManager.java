@@ -1,85 +1,22 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.utility.DebugInfo;
+import org.nakedobjects.object.collection.InstanceCollection;
+import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.utility.StartupException;
 
-import java.util.Vector;
 
-import org.apache.log4j.Logger;
-
-
-public abstract class NakedObjectManager implements DebugInfo {
-    private static final Logger LOG = Logger.getLogger(NakedObjectManager.class);
-    private static NakedObjectManager instance;
-
-    public static NakedObjectManager getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException();
-        }
-
-        return instance;
-    }
-    
-    protected NakedObjectManager() {
-        if (instance != null) {
-            throw new IllegalStateException("NakedObjectManager already created: " + instance);
-        }
-
-        instance = this;
-      }
-
-    public abstract void abortTransaction();
-
-    /**
-    A utility method for creating new objects in the context of the system - that is, it is added to the pool of
-    objects the enterprise system contains.
-    */
-    public NakedObject createInstance(String name) {
-        NakedClass cls = getNakedClass(name);
-        return cls.createInstance();
-    }
-
-    public abstract Object createOid(NakedObject object);
+public interface NakedObjectManager {
+    void abortTransaction();
 
     /**
      * Removes the specified object from the system. The specified object's data should be
      * removed from the persistence mechanism.
      */
-    public abstract void destroyObject(NakedObject object);
+    void destroyObject(NakedObject object);
 
-    public abstract void endTransaction();
-
-    public String getDebugData() {
-        StringBuffer data = new StringBuffer();
-        data.append("Using object store " + getObjectStore());
-        data.append('\n');
-        data.append('\n');
-        return data.toString();
-    }
-
-    public String getDebugTitle() {
-        return "Naked Object Manager";
-    }
+    void endTransaction();
 
     /**
-     * Gets the instances that match the specified pattern. The object store should
-     * create a vector and add to it those instances held by the persistence mechanism
-     * that:-
-     *
-     * <para>1) are of the type that the pattern object is;</para>
-     *
-     * <para>2) have the same content as the pattern object where the pattern object has values or
-     * references specified, i.e. empty value objects and <code>null</code> references are to be
-     * ignored;</para>
-     */
-    public abstract Vector getInstances(NakedObject pattern)  throws UnsupportedFindException;
-
-    public abstract Vector getInstances(NakedClass cls);
-   
-    public abstract Vector getInstances(NakedClass cls, String term) throws UnsupportedFindException;
-
-
- 	/**
      * Retrieves the object identified by the specified OID from the object store. The cache should
      * be checked first and, if the object is cached, the cached version should be returned. It is
      * important that if this method is called again, while the originally returned object is in
@@ -106,29 +43,15 @@ public abstract class NakedObjectManager implements DebugInfo {
      *
      * @return the requested naked object
      * @param oid of the object to be retrieved
-      */
-    public abstract NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException;
-
-    public NakedObject getObject(NakedObject object) throws ObjectNotFoundException {
-        return getObject(object.getOid(), object.getNakedClass());
-    }
-    
-    /** @deprecated provided to make the method in AbstractNakedObject work */
-    public abstract NakedObjectStore getObjectStore();
+     */
+    NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException;
 
     /**
      * Checks whether there are any instances of the specified type. The object store should look
      * for instances of the type represented by <variable>type</variable> and return <code>true</code>
      * if there are, or <code>false</code> if there are not.
      */
-    public abstract boolean hasInstances(NakedClass cls);
-
-    /**
-     * Initialize the object store so that calls to this object store access persisted objects
-     * and persist changes to the object that are saved.
-      */
-    public abstract void init() throws StartupException;
-
+    boolean hasInstances(NakedObjectSpecification cls);
 
     /**
      * Makes a naked object persistent. The specified object should be stored away via this object
@@ -147,12 +70,12 @@ public abstract class NakedObjectManager implements DebugInfo {
      * </p>
      *
      */
-    public abstract void makePersistent(NakedObject object);
+    void makePersistent(NakedObject object);
 
     /**
      * A count of the number of instances matching the specified pattern.
      */
-    public abstract int numberOfInstances(NakedClass cls);
+    int numberOfInstances(NakedObjectSpecification cls);
 
     /**
      * Persists the specified object's state. Essentially the data held by the persistence
@@ -161,7 +84,7 @@ public abstract class NakedObjectManager implements DebugInfo {
      * UpdateNotifier</class> object. This can be achieved simply, if extending the <class>
      * AbstractObjectStore</class> by calling its <method>broadcastObjectUpdate</method> method.
      */
-    public abstract void objectChanged(NakedObject object);
+    void objectChanged(NakedObject object);
 
     /**
      * Re-initialises the fields of an object. This method should return immediately if the
@@ -171,48 +94,74 @@ public abstract class NakedObjectManager implements DebugInfo {
      * associations. The object should be set up in the same manner as in <method>getObject
      * </method> above.
      */
-    public abstract void resolve(NakedObject object);
+    void resolve(NakedObject object);
 
     /**
      * Generates a unique serial number for the specified squence set. Each set of serial numbers
      * are a simple numerical sequence. Calling this method with a unused sequence name creates a
      * new set.
      */
-    public abstract long serialNumber(String sequence);
+    long serialNumber(String sequence);
 
-    public void shutdown() {
-        instance = null;
-    }
+    void startTransaction();
 
-    public abstract void startTransaction();
+    InstanceCollection allInstances(String className);
 
-    /** @deprecated all calls to go to class manager */
-    public NakedClass getNakedClass(String name) {
-        return NakedClassManager.getInstance().getNakedClass(name);
-    }
+    InstanceCollection allInstances(NakedObjectSpecification nakedClass);
+
+    InstanceCollection findInstances(String className, String searchTerm) throws UnsupportedFindException;
+
+    InstanceCollection findInstances(NakedObjectSpecification nakedClass, String searchTerm);
+
+    /**
+     A utility method for creating new objects in the context of the system - that is, it is added to the pool of
+     objects the enterprise system contains.
+     */
+    NakedObject createInstance(String className);
+
+    NakedObject createInstance(NakedObjectSpecification nakedClass);
+
+    NakedObject createTransientInstance(String className);
+
+    NakedObject createTransientInstance(NakedObjectSpecification nc);
+
+    InternalCollection createInternalCollection(String elementType, NakedObject forParent);
+
+    InstanceCollection findInstances(NakedObject pattern);
+    
+    NakedClassSpec getNakedClass(NakedObjectSpecification nakedClass);
+    
+    void shutdown();
+
+    /**
+     * Initialize the object store so that calls to this object store access persisted objects
+     * and persist changes to the object that are saved.
+      */
+    void init() throws StartupException;
+
+
 }
 
-
 /*
-Naked Objects - a framework that exposes behaviourally complete
-business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+ Naked Objects - a framework that exposes behaviourally complete
+ business objects directly to the user.
+ Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-The authors can be contacted via www.nakedobjects.org (the
-registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-Road, Woking GU21 1NR, UK).
-*/
+ The authors can be contacted via www.nakedobjects.org (the
+ registered address of Naked Objects Group is Kingsway House, 123 Goldworth
+ Road, Woking GU21 1NR, UK).
+ */

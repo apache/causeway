@@ -1,16 +1,16 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedClassSpec;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.object.reflect.Field;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.Value;
+import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import org.nakedobjects.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
@@ -40,11 +40,11 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
 	       NakedObject object = ((ObjectContent) view.getContent()).getObject();
 
 	       if(object != null && view.getSubviews().length == 0) {
-		        Field[] flds = object.getNakedClass().getVisibleFields(object);
+		        FieldSpecification[] flds = object.getSpecification().getVisibleFields(object, Session.getSession().getContext());
 		        ViewFactory factory = ViewFactory.getViewFactory();
 		        
 		        for (int f = 0; f < flds.length; f++) {
-		            Field field = flds[f];
+		            FieldSpecification field = flds[f];
 					Naked attribute = field.get(object);
 					
 					
@@ -73,19 +73,19 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
 						
 						if(attribute instanceof NakedCollection) {
 							OneToManyField content;
-							content = new OneToManyField(object, (InternalCollection) attribute, (OneToManyAssociation) field);
+							content = new OneToManyField(object, (InternalCollection) attribute, (OneToManyAssociationSpecification) field);
 							specification = internalList;
 							fieldView =specification.createView(content, axis);
 						
 						} else if(attribute instanceof NakedObject || attribute == null) {
 							OneToOneField content;
-							content = new OneToOneField(object, (NakedObject) attribute, (OneToOneAssociation) field);
+							content = new OneToOneField(object, (NakedObject) attribute, (OneToOneAssociationSpecification) field);
 							specification = factory.getIconizedSubViewSpecification(content);
 							fieldView =specification.createView(content, axis);
 						
 						} else if(attribute instanceof NakedValue) { 
 							ValueField content;
-							content = new ValueField(object, (NakedValue) attribute, (Value) field);  
+							content = new ValueField(object, (NakedValue) attribute, (ValueFieldSpecification) field);  
 							specification = factory.getValueFieldSpecification(content);
 							fieldView =specification.createView(content, axis);
 							
@@ -93,7 +93,7 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
 						    throw new NakedObjectRuntimeException();
 						}
 						
-						String label = field.getLabel(Session.getSession().getSecurityContext(), object);
+						String label = field.getLabel(Session.getSession().getContext(), object);
 						fieldView = new LabelBorder(label, fieldView);
 						fieldView =  new SimpleBorder(1, fieldView);
 						view.addView(fieldView);
@@ -154,7 +154,7 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
 						
 					} else {
 						NakedObject object = ((ObjectContent) v.getContent()).getObject();
-						if(object instanceof NakedClass) {
+						if(object instanceof NakedClassSpec) {
 							v.setLocation(new Location(xClass, yClass));
 							yClass += componentSize.getHeight() + 6;
 							

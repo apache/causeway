@@ -31,9 +31,9 @@ public class State extends AbstractNakedValue {
 	public State(State[] states) {
 		this.states = states;
 	}
-
-	public About about() {
-		return FieldAbout.READ_ONLY;
+	
+	public boolean userChangeable() {
+	    return false;
 	}
 	
 	public void clear() {

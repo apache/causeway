@@ -1,14 +1,15 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 
-import org.apache.log4j.Logger;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
+
+import org.apache.log4j.Logger;
 
 
 /**
@@ -22,26 +23,23 @@ public class DestroyObjectOption extends MenuOption {
 	}
 
 	public void execute(Workspace workspace, View view, Location at) {
-		try {
-			NakedObject object = ((ObjectContent) view.getContent()).getObject();
-			
-			// TODO fix
+		NakedObject object = ((ObjectContent) view.getContent()).getObject();
+        
+        // TODO fix
 /*			if(view.getParent() != null && view.getParent().getContent() instanceof ObjectContent) {
-				NakedObject parent = ((ObjectContent) view.getParent().getContent()).getObject();
-				
-				if( view.getFieldOf() != null) {
-					OneToOneAssociation association = (OneToOneAssociation) view.getFieldOf();	
-					association.clearAssociation(parent, object);
-				}
-			}
-	*/		
-			// TODO remove any views in the instance collections
-			
-			object.destroy();
-			workspace.removeViewsFor(object);
-		} catch (ObjectStoreException e) {
-			LOG.error("Object store problem", e);
-		}
+        	NakedObject parent = ((ObjectContent) view.getParent().getContent()).getObject();
+        	
+        	if( view.getFieldOf() != null) {
+        		OneToOneAssociation association = (OneToOneAssociation) view.getFieldOf();	
+        		association.clearAssociation(parent, object);
+        	}
+        }
+*/		
+        // TODO remove any views in the instance collections
+        
+        NakedObjectManager manager = object.getContext().getObjectManager();
+        manager.destroyObject(object);
+        workspace.removeViewsFor(object);
 	}
 }
 

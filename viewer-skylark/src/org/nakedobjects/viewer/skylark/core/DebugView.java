@@ -1,17 +1,13 @@
 package org.nakedobjects.viewer.skylark.core;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
-import org.apache.log4j.Logger;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedClassSpec;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.collection.InstanceCollection;
-import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.reflect.Field;
-import org.nakedobjects.security.SecurityContext;
+import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.security.Session;
 import org.nakedobjects.utility.Debug;
 import org.nakedobjects.utility.DebugInfo;
@@ -19,6 +15,11 @@ import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.View;
+
+import java.util.Enumeration;
+import java.util.Vector;
+
+import org.apache.log4j.Logger;
 
 
 public class DebugView implements DebugInfo {
@@ -92,7 +93,7 @@ public class DebugView implements DebugInfo {
         info.append("GRAPH\n");
         info.append("------\n");
         info.append(object);
-        info.append(debugGraph(object, object.getShortClassName(), 0, new Vector()));
+        info.append(debugGraph(object, object.getSpecification().getShortName(), 0, new Vector()));
 
         return info.toString();
     }
@@ -112,12 +113,12 @@ public class DebugView implements DebugInfo {
 
         // object interface
         if (object != null) {
-            NakedClass nc = object.getNakedClass();
+            NakedObjectSpecification nc = object.getSpecification();
             info.append("Class:        " + nc + "\n");
             LOG.debug("Class details for " + nc);
             //       if(! (object instanceof NakedClass || object instanceof
             // InternalCollection)) {
-            if (!(object instanceof InstanceCollection)) {
+            if (!(object instanceof NakedClassSpec || object instanceof InstanceCollection)) {
                 info.append(nc.debugInterface());
             }
         }
@@ -133,8 +134,9 @@ public class DebugView implements DebugInfo {
             text.append("  Hash:       " + object.hashCode() + "\n");
             text.append("  ID:         " + object.getOid() + "\n");
             text.append("  Class:      " + object.getClass().getName() + "\n");
-            text.append("  NakedClass: " + object.getNakedClass() + "\n");
-
+            text.append("  NakedClass: " + object.getSpecification() + "\n");
+            text.append("  Context:    " + object.getClass().getName() + "\n");
+            
             StringBuffer types = new StringBuffer();
 
             if (object instanceof NakedCollection) {
@@ -143,15 +145,12 @@ public class DebugView implements DebugInfo {
                 types.append("Object ");
             }
 
-            SecurityContext context = Session.getSession().getSecurityContext();
+            NakedObjectContext context = Session.getSession().getContext();
             text.append("  Type:       " + types + "\n");
             text.append("  Context:    " + context + "\n");
-            About about = object.about();
-			text.append("  Accessible: " + about.canAccess().isAllowed() + "\n");
-            text.append("  Editable:   " + about.canUse().isAllowed() + "\n");
-            text.append("  Persistent: " + object.isPersistent() + "\n");
+            text.append("  Persistent: " + object.getOid() != null + "\n");
             text.append("  Resolved:   " + object.isResolved() + "\n");
-            text.append("  Title:      '" + object.title() + "'\n");
+            text.append("  Title:      '" + object.titleString() + "'\n");
         }
         return text.toString();
     }
@@ -190,12 +189,12 @@ public class DebugView implements DebugInfo {
         recursiveElements.addElement(object);
 
         // work through all its fields
-        Field[] fields;
+        FieldSpecification[] fields;
         
-        fields = object.getNakedClass().getVisibleFields(object);
+        fields = object.getSpecification().getVisibleFields(object, Session.getSession().getContext());
 
         for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
+            FieldSpecification field = fields[i];
             Object obj = field.get(object);
 
             name = field.getName();
@@ -208,7 +207,7 @@ public class DebugView implements DebugInfo {
                     s.append("unitialised - error");
                     s.append("\n");
                 } else {
-                    s.append(((NakedValue) obj).title().toString());
+                    s.append(((NakedValue) obj).titleString());
                     s.append("\n");
                 }
             } else if (obj instanceof NakedObject) {

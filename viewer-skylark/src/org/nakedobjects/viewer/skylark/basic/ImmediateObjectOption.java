@@ -5,7 +5,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.security.Session;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Location;
@@ -20,16 +20,16 @@ import org.nakedobjects.viewer.skylark.Workspace;
  */
 public class ImmediateObjectOption extends MenuOption {
 
-    public static ImmediateObjectOption createOption(Action action, NakedObject object) {
+    public static ImmediateObjectOption createOption(ActionSpecification action, NakedObject object) {
     	Assert.assertTrue("Only suitable for 0 param methods", action.parameters().length == 0);
         
-        About about = action.getAbout(Session.getSession().getSecurityContext(), object);
+        About about = action.getAbout(Session.getSession().getContext(), object);
     
     	if(about.canAccess().isVetoed()) {
     		return null;
     	}
     	
-    	String labelName =  action.getLabel(Session.getSession().getSecurityContext(), object);
+    	String labelName =  action.getLabel(Session.getSession().getContext(), object);
     	ImmediateObjectOption option = new ImmediateObjectOption(labelName);
     	option.action = action;
     
@@ -40,7 +40,7 @@ public class ImmediateObjectOption extends MenuOption {
     	return option;
     }
 	
-	private Action action;
+	private ActionSpecification action;
 
 
 	private ImmediateObjectOption(String name) {
@@ -50,11 +50,11 @@ public class ImmediateObjectOption extends MenuOption {
     public Permission disabled(View view) {
         NakedObject object = ((ObjectContent) view.getContent()).getObject();
         
-		About about = action.getAbout(Session.getSession().getSecurityContext(), object);
+		About about = action.getAbout(Session.getSession().getContext(), object);
 		if(about.canUse().isAllowed()) {
 			String description = about.getDescription();
 			if(action.hasReturn()) {
-				description += " returns a " + action.returns();
+				description += " returns a " + action.getReturnType();
 			}
 			return new Allow(description);
 		} else {

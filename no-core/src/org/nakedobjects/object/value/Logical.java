@@ -100,8 +100,6 @@ public class Logical extends AbstractNakedValue {
      Returns true is this object is representing a true state.
      */
     public boolean isSet() {
-        checkCanOperate();
-
         return flag;
     }
 

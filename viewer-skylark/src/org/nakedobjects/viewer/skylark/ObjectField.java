@@ -1,14 +1,14 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.security.Session;
 
 public abstract class ObjectField implements Content, FieldContent {
-    private final Field field;
+    private final FieldSpecification field;
 	private final NakedObject parent;
 
-	public ObjectField(NakedObject parent, Field field) {
+	public ObjectField(NakedObject parent, FieldSpecification field) {
 	    this.parent = parent;
 	    this.field = field;
 	}
@@ -21,7 +21,7 @@ public abstract class ObjectField implements Content, FieldContent {
 
     public void menuOptions(MenuOptionSet options) {}
 
-	public Field getField() {
+	public FieldSpecification getField() {
 		return field;
 	}
         
@@ -30,7 +30,7 @@ public abstract class ObjectField implements Content, FieldContent {
 	}
 	
 	public final String getFieldLabel() {
-	    return field.getLabel(Session.getSession().getSecurityContext(), parent);
+	    return field.getLabel(Session.getSession().getContext(), parent);
 	}
 
 

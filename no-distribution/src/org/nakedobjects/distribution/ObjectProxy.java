@@ -1,8 +1,8 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.LoadedObjects;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedClNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.ObjectNotFoundException;
@@ -32,7 +32,7 @@ public class ObjectProxy implements Serializable {
     }
 
     public ObjectProxy(NakedObject object) {
-        this.type = object.getNakedClass().fullName();
+        this.type = object.getSpecification().getFullName();
         this.oid = object.getOid();
     }
 
@@ -72,11 +72,11 @@ public class ObjectProxy implements Serializable {
         try {
 	        NakedObjectManager objectManager = NakedObjectManager.getInstance();
             synchronized(objectManager){
-                NakedClass cls = NakedClassManager.getInstance().getNakedClass(type);
+                NakedObjectSpecification cls = NakedObjectSpecification.getNakedClass(type);
                 if (loadedObjects.isLoaded(oid)) {
                     object = objectManager.getObject(oid, cls);
                 } else {
-                    object = cls.acquireInstance();
+                    object = (NakedObject) cls.acquireInstance();
                     object.setOid(oid);
                     loadedObjects.loaded(object);
                 }

@@ -1,16 +1,13 @@
 package org.nakedobjects.object;
 
 
-import org.nakedobjects.object.reflect.Association;
-import org.nakedobjects.object.value.Date;
+import org.nakedobjects.object.reflect.AssociationSpecification;
 import org.nakedobjects.object.value.TestClock;
-import org.nakedobjects.object.value.Time;
-import org.nakedobjects.object.value.TimeStamp;
+
+import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-
-import junit.framework.TestCase;
 
 
 public abstract class NakedObjectTestCase extends TestCase {
@@ -22,30 +19,26 @@ public abstract class NakedObjectTestCase extends TestCase {
     public NakedObjectTestCase() {}
 
     public void assertEquals(String name, String expected, NakedValue value) {
-        super.assertEquals(name, expected, value.title().toString());
+        super.assertEquals(name, expected, value.titleString().toString());
     }
 
     public void assertEquals(String expected, NakedValue value) {
-        super.assertEquals(expected, value.title().toString());
+        super.assertEquals(expected, value.titleString().toString());
     }
 
     public void assertEquals(NakedValue expected, NakedValue value) {
-    	super.assertEquals(expected.title().toString(), value.title().toString());
+    	super.assertEquals(expected.titleString().toString(), value.titleString().toString());
     }
 
-    protected Association findAssocation(String attributeName, NakedObject forObject) {
-        NakedClass c = forObject.getNakedClass();
+    protected AssociationSpecification findAssocation(String attributeName, NakedObject forObject) {
+        NakedObjectSpecification c = forObject.getSpecification();
 
-        return (Association) c.getField(attributeName);
+        return (AssociationSpecification) c.getField(attributeName);
     }
     
     protected void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
-        
-        TestClock testClock = new TestClock();
-        Date.setClock(testClock);
-        Time.setClock(testClock);
-        TimeStamp.setClock(testClock);
+        new TestClock();
     }
 }
 

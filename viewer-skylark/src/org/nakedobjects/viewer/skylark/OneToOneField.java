@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 import org.nakedobjects.viewer.skylark.basic.RemoveOneToOneAssociationOption;
 
@@ -10,7 +10,7 @@ public class OneToOneField extends ObjectField implements ObjectContent {
     private static final UserAction REMOVE_ASSOCIATION = new RemoveOneToOneAssociationOption();
     private final NakedObject object;
 
-    public OneToOneField(NakedObject parent, NakedObject object, OneToOneAssociation association) {
+    public OneToOneField(NakedObject parent, NakedObject object, OneToOneAssociationSpecification association) {
         super(parent, association);
         this.object = object;
     }
@@ -24,8 +24,8 @@ public class OneToOneField extends ObjectField implements ObjectContent {
     }
 
     // TODO move the code using this method (in RemoveOneToOneAssociation) to this class and call from the other
-    public OneToOneAssociation getOneToOneAssociation() {
-        return (OneToOneAssociation) getField();
+    public OneToOneAssociationSpecification getOneToOneAssociation() {
+        return (OneToOneAssociationSpecification) getField();
     }
 
     public void menuOptions(MenuOptionSet options) {

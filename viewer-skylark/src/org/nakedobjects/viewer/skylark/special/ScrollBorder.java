@@ -1,7 +1,6 @@
 
 package org.nakedobjects.viewer.skylark.special;
 
-import org.apache.log4j.Logger;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
@@ -10,6 +9,8 @@ import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
+
+import org.apache.log4j.Logger;
 
 public class ScrollBorder extends AbstractBorder {
 	private static final int SCROLLBAR_WIDTH = 16;

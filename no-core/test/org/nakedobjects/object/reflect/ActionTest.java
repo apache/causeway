@@ -1,15 +1,16 @@
 package org.nakedobjects.object.reflect;
 
 
+import org.nakedobjects.object.LocalReflectionFactory;
 import org.nakedobjects.object.MockObjectManager;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Person;
 import org.nakedobjects.object.Team;
 import org.nakedobjects.object.control.About;
-import org.nakedobjects.security.SecurityContext;
+import org.nakedobjects.object.value.TestClock;
 
 import junit.framework.TestSuite;
 
@@ -21,7 +22,7 @@ public class ActionTest extends NakedObjectTestCase {
     private static final String DISOLVE_ACTION_NAME = "reduceheadcount";
     private static final String DISOLVE_ACTION_LABEL = "Reduce Headcount";
 	private Team object;
-	private Action action;
+	private ActionSpecification action;
     private MockObjectManager manager;
     
     public ActionTest(String name) {
@@ -32,18 +33,18 @@ public class ActionTest extends NakedObjectTestCase {
         junit.textui.TestRunner.run(new TestSuite(ActionTest.class));
     }
 
-    public void setUp()  throws ObjectStoreException {
+    protected void setUp()  throws ObjectStoreException {
     	LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
     	manager = MockObjectManager.setup();
-    	manager.setupAddClass(NakedObject.class);
-    	manager.setupAddClass(Team.class);
-    	manager.setupAddClass(Person.class);
+    	NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+    	new TestClock();
     	
         object = new Team();
-        NakedClass c = object.getNakedClass();
+        object.setContext(manager.getContext());
+        NakedObjectSpecification c = object.getSpecification();
         
-        action = (Action) c.getObjectAction(Action.USER, DISOLVE_ACTION_NAME);
+        action = (ActionSpecification) c.getObjectAction(ActionSpecification.USER, DISOLVE_ACTION_NAME);
     }
     
     protected void tearDown() throws Exception {
@@ -53,7 +54,7 @@ public class ActionTest extends NakedObjectTestCase {
 
     public void testReturnType() {
     	assertTrue(action.hasReturn());
-    	assertEquals(Person.class.getName(), action.returns().fullName());
+    	assertEquals(Person.class.getName(), action.getReturnType().getFullName());
     }
     	
     public void testName() {
@@ -61,7 +62,7 @@ public class ActionTest extends NakedObjectTestCase {
     }
     
     public void testLabel() {
-    	assertEquals(DISOLVE_ACTION_LABEL, action.getLabel(new SecurityContext(), object));
+    	assertEquals(DISOLVE_ACTION_LABEL, action.getLabel(new NakedObjectContext(manager), object));
     }
     
     public void testAction() {
@@ -76,7 +77,7 @@ public class ActionTest extends NakedObjectTestCase {
     }
     
     public void testIsVisible() {
-    	action.canAccess(new SecurityContext(), object);
+    	action.canAccess(new NakedObjectContext(manager), object);
     }
     
     public void test() {
@@ -86,7 +87,7 @@ public class ActionTest extends NakedObjectTestCase {
     public void testAboutAssignment() {
     	assertTrue(action.hasAbout());
 
-    	About about = action.getAbout(new SecurityContext(), object);
+    	About about = action.getAbout(new NakedObjectContext(manager), object);
     	assertNotNull(about);
     }
 }

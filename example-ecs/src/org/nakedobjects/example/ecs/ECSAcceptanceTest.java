@@ -1,6 +1,6 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.AbstractExplorationFixture;
+import org.nakedobjects.exploration.AbstractExplorationFixture;
 import org.nakedobjects.object.value.Date;
 import org.nakedobjects.object.value.TextString;
 import org.nakedobjects.xat.AcceptanceTestCase;
@@ -19,7 +19,7 @@ public class ECSAcceptanceTest extends AcceptanceTestCase {
     }
 
 
-     protected void setUpFixture() {
+     protected void setUpFixtures() {
          addFixture(new AbstractExplorationFixture() {
              public void install() {
                  registerClass(Booking.class);
@@ -35,7 +35,7 @@ public class ECSAcceptanceTest extends AcceptanceTestCase {
                  createCity("Washington");
                  createCity("Philadelphia");
                  
-                 getClock().setDate(2001, 12, 14);
+                 setDate(2001, 12, 14);
              }
              
              private void createCity(String name) {
@@ -94,18 +94,18 @@ public class ECSAcceptanceTest extends AcceptanceTestCase {
         //
         nextStep("Specify the  payment method.");
 
-        TestObject payment = getTestClass("Credit Cards").newInstance();
+        TestObject payment = getTestClass(CreditCard.class.getName()).newInstance();
 
         booking.associate("Payment Method", payment);
         payment.fieldEntry("Name On Card", "Richard W Pawson");
-        payment.fieldEntry("Number", "492783451234");
-        payment.fieldEntry("Expires", "01.04");
+        payment.fieldEntry("Number", "4927834512344535");
+        payment.fieldEntry("Expires", "01/04");
 
 
         //
         nextStep("Specify other details.");
 
-        TestObject phone = getTestClass("Telephones").newInstance();
+        TestObject phone = getTestClass(Telephone.class.getName()).newInstance();
 
         booking.associate("Contact Telephone", phone);
         phone.fieldEntry("Number", "6175551234");
@@ -161,7 +161,7 @@ public class ECSAcceptanceTest extends AcceptanceTestCase {
 
         booking.associate("Contact Telephone", mobile);
         nextStep("Specify when to be picked up.");
-        booking.fieldEntry("Date", "2001-1-8");
+        booking.fieldEntry("Date", "2001-12-18");
         booking.fieldEntry("Time", "7:00:00 AM");
         booking.assertFieldContains("Payment Method", 
                                  (TestObject) customer.getField(

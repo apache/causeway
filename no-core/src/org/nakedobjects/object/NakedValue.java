@@ -19,10 +19,23 @@ package org.nakedobjects.object;
  * @see org.nakedobjects.object.value.AbstractNakedValue
  */
 public interface NakedValue extends Naked {
+
+
     /**
+     * Returns true if the value contains no data, e.g. no entry has been made.  A call to clear
+     * should remove the value, so this call will then return true.
+     */
+    boolean isEmpty();
+
+    /** 
+     * Determines if the user can change this type of object.
+     */
+	boolean userChangeable();
+
+	/**
      * Clears the value so that it is empty, i.e. <code>isEmpty</code> returns <code>true</code>.
      */
-    public void clear();
+    void clear();
 
     /**
      * Takes a <b>user </b> entry string which is parsed to set up the object. This needs to
@@ -30,7 +43,7 @@ public interface NakedValue extends Naked {
      * 
      * @see #restoreString(String)
      */
-    public abstract void parse(String text) throws ValueParseException;
+    void parse(String text) throws ValueParseException;
 
     /**
      * Resets a value to its default value. Contrast this with the <code>clear</code> method.
@@ -40,7 +53,7 @@ public interface NakedValue extends Naked {
     /**
      * Takes a storage string and uses it reinstate this value object to its previous state.
   
-     *      * @see #parse(String)
+     *  @see #parse(String)
      */
     public void restoreString(String data);
 

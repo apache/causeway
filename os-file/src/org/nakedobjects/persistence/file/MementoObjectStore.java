@@ -2,20 +2,20 @@ package org.nakedobjects.persistence.file;
 
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedClassSpec;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.SimpleOid;
 import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.object.reflect.Field;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
-
-import java.util.Vector;
+import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 
 import org.apache.log4j.Logger;
 
@@ -28,6 +28,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
     private static final Logger LOG = Logger.getLogger(MementoObjectStore.class);
     private DataManager dataManager;
     private LoadedObjects loadedObjects;
+    private static final NakedObjectSpecification NAKED_CLASS_CLASS = NakedObjectSpecification.getNakedClass(NakedClassSpec.class);
 
     public MementoObjectStore(DataManager manager) {
         this.dataManager = manager;
@@ -36,11 +37,11 @@ public abstract class MementoObjectStore implements NakedObjectStore {
 
     public void abortTransaction() {}
 
-    private NakedClass classFor(String type) {
-        return NakedClassManager.getInstance().getNakedClass(type);
+    private NakedObjectSpecification classFor(String type) {
+        return NakedObjectSpecification.getNakedClass(type);
     }
 
-    public void createNakedClass(NakedClass cls) throws ObjectStoreException {
+    public void createNakedClass(NakedClassSpec cls) throws ObjectStoreException {
         createObject(cls);
     }
 
@@ -54,9 +55,9 @@ public abstract class MementoObjectStore implements NakedObjectStore {
         LOG.debug("Compiling object data for " + object);
 
         ObjectData data;
-        data = new ObjectData(object.getNakedClass(), (SimpleOid) object.getOid());
+        data = new ObjectData(object.getSpecification(), (SimpleOid) object.getOid());
 
-        Field[] fields = object.getNakedClass().getFields();
+        FieldSpecification[] fields = object.getSpecification().getFields();
 
         for (int i = 0; i < fields.length; i++) {
             if (fields[i].isDerived()) {
@@ -79,12 +80,12 @@ public abstract class MementoObjectStore implements NakedObjectStore {
         return data;
     }
 
-    private Object createSkeletalObject(Object oid, String type) {
+    private Object createSkeletalObject(Oid oid, String type) {
         if (loadedObjects.isLoaded(oid)) {
             return loadedObjects.getLoadedObject(oid);
         } else {
             LOG.debug("Creating skeletal object of " + type + " " + oid);
-            NakedClass cls = NakedClassManager.getInstance().getNakedClass(type);
+            NakedObjectSpecification cls = NakedObjectSpecification.getNakedClass(type);
             NakedObject object = (NakedObject) cls.acquireInstance();
             object.setOid(oid);
 
@@ -109,92 +110,57 @@ public abstract class MementoObjectStore implements NakedObjectStore {
         return "MementoObjectStore";
     }
 
-    public Vector getInstances(NakedClass cls, boolean includeSubclasses) throws ObjectStoreException {
+    public NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses) throws ObjectStoreException {
         LOG.debug("getInstances of " + cls);
         ObjectData patternData = new ObjectData(cls, null);
+        NakedObject[] instances = getInstances(patternData, null);
+        return instances;
+    }
 
+    private NakedObject[] getInstances(ObjectData patternData, String title) throws ObjectStoreException {
         ObjectDataVector data = dataManager.getInstances(patternData);
-        Vector instances = new Vector(data.size());
-
+        NakedObject[] instances = new NakedObject[data.size()];
+        int count = 0;
+        
+        String titlePattern = title == null ? "" : title.toLowerCase();
+        
         for (int i = 0; i < data.size(); i++) {
             ObjectData instanceData = data.element(i);
             LOG.debug("instance data " + instanceData);
 
             SimpleOid oid = instanceData.getOid();
             NakedObject instance;
-            // TODO don't create new object if one already exists!
             if (loadedObjects.isLoaded(oid)) {
                 instance = loadedObjects.getLoadedObject(oid);
             } else {
                 instance = (NakedObject) createSkeletalObject(oid, instanceData.getClassName());
+                instance.setContext(NakedObjectContext.getDefaultContext());
                 loadedObjects.loaded(instance);
+	            instance.setResolved();
             }
             initObject(instance, instanceData);
-            instance.setResolved();
-            instances.addElement(instance);
+            
+            if(title == null || instance.titleString().toLowerCase().indexOf(titlePattern) >= 0) {
+                instances[count++] = instance;
+            }
         }
-
+        
+        NakedObject[] array = new NakedObject[count];
+        System.arraycopy(instances, 0, array, 0, count);
         return instances;
     }
 
-    public Vector getInstances(NakedClass cls, String pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
+    public NakedObject[] getInstances(NakedObjectSpecification cls, String pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
         LOG.debug("getInstances like " + pattern);
-        
-        
         ObjectData patternData = new ObjectData(cls, null);
-        ObjectDataVector data = dataManager.getInstances(patternData);
-        Vector instances = new Vector(data.size());
-
-        for (int i = 0; i < data.size(); i++) {
-            ObjectData instanceData = data.element(i);
-            LOG.debug("instance data " + instanceData);
-
-            SimpleOid oid = instanceData.getOid();
-            NakedObject instance;
-            // TODO don't create new object if one already exists!
-            if (loadedObjects.isLoaded(oid)) {
-                instance = loadedObjects.getLoadedObject(oid);
-            } else {
-                instance = (NakedObject) createSkeletalObject(oid, instanceData.getClassName());
-                loadedObjects.loaded(instance);
-            }
-            initObject(instance, instanceData);
-            instance.setResolved();
-            if(instance.title().toString().equalsIgnoreCase(pattern)) {
-                instances.addElement(instance);
-            }
-        }
-
+        NakedObject[] instances = getInstances(patternData, pattern);
         return instances;
     }
 
-    public Vector getInstances(NakedObject pattern, boolean includeSubclasses) throws ObjectStoreException {
+    public NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) throws ObjectStoreException {
         LOG.debug("getInstances like " + pattern);
         ObjectData patternData = createObjectData(pattern, false);
-
-        ObjectDataVector data = dataManager.getInstances(patternData);
-        Vector instances = new Vector(data.size());
-
-        for (int i = 0; i < data.size(); i++) {
-            ObjectData instanceData = data.element(i);
-            LOG.debug("instance data " + instanceData);
-
-            SimpleOid oid = instanceData.getOid();
-            NakedObject instance;
-            // TODO don't create new object if one already exists!
-            if (loadedObjects.isLoaded(oid)) {
-                instance = loadedObjects.getLoadedObject(oid);
-            } else {
-                instance = (NakedObject) createSkeletalObject(oid, instanceData.getClassName());
-                loadedObjects.loaded(instance);
-	            //resolve(instance);
-
-                initObject(instance, instanceData);
-            instance.setResolved();
-            }
-            instances.addElement(instance);
-        }
-
+        NakedObject[] instances = getInstances(patternData, null);
         return instances;
     }
 
@@ -202,22 +168,19 @@ public abstract class MementoObjectStore implements NakedObjectStore {
         return loadedObjects;
     }
 
-    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
-        NakedClass pattern = new NakedClass();
-        pattern.makeFinder();
-        pattern.getName().setValue(name);
-        pattern.getReflector().clear();
-       
-        Vector instances = getInstances((NakedObject) pattern, false);
-        if (instances.size() == 1) {
-            Object oid = ((NakedClass) instances.elementAt(0)).getOid();
-            return (NakedClass) getObject(oid, pattern.getNakedClass());
-        } else {
-            throw new ObjectNotFoundException();
+    public NakedClassSpec getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
+        NakedObject[] instances = getInstances(NAKED_CLASS_CLASS, false);
+        for (int i = 0, len = instances.length; i < len; i++) {
+           NakedClassSpec cls = (NakedClassSpec) instances[i];
+           if(cls.getName().isSameAs(name)) {
+               return cls;
+           }
         }
+
+        throw new ObjectNotFoundException();
     }
 
-    public NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, ObjectStoreException {
+    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectStoreException {
         LOG.debug("getObject " + oid);
         Data data = dataManager.loadData((SimpleOid) oid);
         LOG.debug("Data read " + data);
@@ -232,10 +195,11 @@ public abstract class MementoObjectStore implements NakedObjectStore {
             throw new ObjectNotFoundException();
         }
 
+        object.setContext(NakedObjectContext.getDefaultContext());
         return object;
     }
 
-    public boolean hasInstances(NakedClass cls, boolean includeSubclasses) {
+    public boolean hasInstances(NakedObjectSpecification cls, boolean includeSubclasses) {
         LOG.debug("checking instance of " + cls);
         return numberOfInstances(cls, false) > 0;
     }
@@ -243,10 +207,10 @@ public abstract class MementoObjectStore implements NakedObjectStore {
     public void init() throws ObjectStoreException {}
 
     private void initObject(NakedObject object, ObjectData data) throws ObjectStoreException {
-        Field[] fields = object.getNakedClass().getFields();
+        FieldSpecification[] fields = object.getSpecification().getFields();
 
         for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
+            FieldSpecification field = fields[i];
 
             if (field.isDerived()) {
                 continue;
@@ -280,23 +244,23 @@ public abstract class MementoObjectStore implements NakedObjectStore {
                     }
                 }
             } else {
-                Object reference = data.get(field.getName());
+                Oid reference = (Oid) data.get(field.getName());
                 LOG.debug("setting field " + field + " with " + reference);
 
                 if (reference != null) {
                     if (loadedObjects.isLoaded(reference)) {
                         NakedObject loadedObject = loadedObjects.getLoadedObject(reference);
                         LOG.debug("using loaded object " + loadedObject);
-                        ((OneToOneAssociation) field).initData(object, loadedObject);
+                        ((OneToOneAssociationSpecification) field).initData(object, loadedObject);
                     } else {
-                        Object oid = reference;
+                        Oid oid = reference;
                         NakedObject fieldObject;
                         Data fieldData = (Data) dataManager.loadData((SimpleOid) oid);
 
                         if (fieldData != null) {
                             fieldObject = (NakedObject) classFor(fieldData.getClassName()).acquireInstance();
                         } else {
-                            fieldObject = (NakedObject) classFor(field.getType().getName()).acquireInstance();
+                            fieldObject = (NakedObject) field.getType().acquireInstance();
                         }
 
                         fieldObject.setOid(oid);
@@ -306,14 +270,14 @@ public abstract class MementoObjectStore implements NakedObjectStore {
                         }
 
                         loadedObjects.loaded(fieldObject);
-                        ((OneToOneAssociation) field).initData(object, fieldObject);
+                        ((OneToOneAssociationSpecification) field).initData(object, fieldObject);
                     }
                 }
             }
         }
     }
 
-    public int numberOfInstances(NakedClass cls, boolean includedSubclasses) {
+    public int numberOfInstances(NakedObjectSpecification cls, boolean includedSubclasses) {
         ObjectData data = new ObjectData(cls, null);
         return dataManager.numberOfInstances(data);
     }
@@ -325,9 +289,9 @@ public abstract class MementoObjectStore implements NakedObjectStore {
     private NakedObject recreateObject(ObjectData data) throws ObjectStoreException {
         SimpleOid oid = data.getOid();
         if (loadedObjects.isLoaded(oid)) { return loadedObjects.getLoadedObject(oid); }
-        NakedClass nc = classFor(data.getClassName());
+        NakedObjectSpecification nc = classFor(data.getClassName());
         NakedObject object = (NakedObject) nc.acquireInstance();
-        LOG.debug("Recreating object " + nc.fullName() + "/" + oid);
+        LOG.debug("Recreating object " + nc.getFullName() + "/" + oid);
         object.setOid(oid);
         loadedObjects.loaded(object);
         initObject(object, data);

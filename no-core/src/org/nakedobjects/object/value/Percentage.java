@@ -72,7 +72,6 @@ public class Percentage extends Magnitude {
     }
 
     public void add(double value) {
-        checkCanOperate();
         this.value += value;
     }
 
@@ -93,7 +92,6 @@ public class Percentage extends Magnitude {
     }
 
     public void divide(double value) {
-        checkCanOperate();
         this.value /= value;
     }
 
@@ -101,7 +99,6 @@ public class Percentage extends Magnitude {
      Returns this value as an double.
      */
     public double doubleValue() {
-        checkCanOperate();
         return value;
     }
 
@@ -109,7 +106,6 @@ public class Percentage extends Magnitude {
      Returns this value as an float.
      */
     public float floatValue() {
-        checkCanOperate();
         return (float) value;
     }
 
@@ -122,7 +118,6 @@ public class Percentage extends Magnitude {
      @see #doubleValue
      */
     public double getValue() {
-        checkCanOperate();
         return value;
     }
 
@@ -130,7 +125,6 @@ public class Percentage extends Magnitude {
      Returns this value as an int.
      */
     public int intValue() {
-        checkCanOperate();
         return (int) value;
     }
 
@@ -163,12 +157,10 @@ public class Percentage extends Magnitude {
      Returns this value as an long.
      */
     public long longValue() {
-        checkCanOperate();
         return (long) value;
     }
 
     public void multiply(double value) {
-        checkCanOperate();
         this.value *= value;
     }
 
@@ -208,12 +200,10 @@ public class Percentage extends Magnitude {
      Returns this value as an short.
      */
     public short shortValue() {
-        checkCanOperate();
         return (short) value;
     }
 
     public void subtract(double value) {
-        checkCanOperate();
         add(-value);
     }
 

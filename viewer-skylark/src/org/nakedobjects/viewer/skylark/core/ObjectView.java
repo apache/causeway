@@ -1,9 +1,10 @@
 package org.nakedobjects.viewer.skylark.core;
 
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedClassSpec;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.security.Session;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Content;
@@ -45,10 +46,10 @@ public abstract class ObjectView extends AbstractView {
 
         NakedObject target = getObject();
 
-        Action action = dropAction(source, target); //object.getNakedClass().getObjectAction(Action.USER, null, new NakedClass[] {source.getNakedClass()});
+        ActionSpecification action = dropAction(source, target); //object.getNakedClass().getObjectAction(Action.USER, null, new NakedClass[] {source.getNakedClass()});
 
         if (action != null) {
-            About about = action.getAbout(Session.getSession().getSecurityContext(), target, source);
+            About about = action.getAbout(Session.getSession().getContext(), target, source);
 
             if (about.canUse().isAllowed()) {
                 getViewManager().setStatus(about.getDescription());
@@ -84,10 +85,10 @@ public abstract class ObjectView extends AbstractView {
         NakedObject target = getObject();
         Assert.assertNotNull(target);
 
-        Action action = dropAction(source, target);
+        ActionSpecification action = dropAction(source, target);
         
         if ((action != null) &&
-                action.getAbout(Session.getSession().getSecurityContext(), target, source).canUse().isAllowed()) {
+                action.getAbout(Session.getSession().getContext(), target, source).canUse().isAllowed()) {
             NakedObject result = action.execute(target, source);
 
             if (result != null) {
@@ -103,12 +104,13 @@ public abstract class ObjectView extends AbstractView {
         }
     }
 
-    private Action dropAction(NakedObject source, NakedObject target) {
-        Action action;
-        if(target instanceof NakedClass) {
-            action = ((NakedClass) target).getClassAction(Action.USER, null, new NakedClass[] {source.getNakedClass()});
+    private ActionSpecification dropAction(NakedObject source, NakedObject target) {
+        ActionSpecification action;
+        if(target instanceof NakedClassSpec) {
+            NakedObjectSpecification forNakedClass = ((NakedClassSpec) target).forNakedClass();
+            action = forNakedClass.getClassAction(ActionSpecification.USER, null, new NakedObjectSpecification[] {source.getSpecification()});
         } else {
-            action = target.getNakedClass().getObjectAction(Action.USER, null, new NakedClass[] {source.getNakedClass()});
+            action = target.getSpecification().getObjectAction(ActionSpecification.USER, null, new NakedObjectSpecification[] {source.getSpecification()});
         }
         return action;
     }

@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.FieldContent;
 import org.nakedobjects.viewer.skylark.InternalDrag;
@@ -53,9 +53,9 @@ public class TableCellResizeBorder extends AbstractBorder {
 		View target = drag.getTargetView();
 		TableColumnAxis axis = (TableColumnAxis) target.getViewAxis();
 		FieldContent content = (FieldContent) target.getContent();
-		Field field = content.getField();
+		FieldSpecification field = content.getField();
 		
-		Field[] fields = axis.getFields();
+		FieldSpecification[] fields = axis.getFields();
 		for (int i = 0; i < fields.length; i++) {
 			if(fields[i] == field) {
 				int width = drag.getTargetLocation().getX();

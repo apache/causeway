@@ -24,7 +24,7 @@
 
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 
 
 /**
@@ -40,5 +40,5 @@ public interface CompositePart extends NakedObject {
      */
     public NakedObject partOf();
     
-    public OneToOneAssociation field(); 
+    public OneToOneAssociationSpecification field(); 
 }

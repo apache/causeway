@@ -1,11 +1,7 @@
 package org.nakedobjects.viewer.skylark.util;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
-import org.apache.log4j.Logger;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedClassSpec;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.utility.DebugInfo;
@@ -19,6 +15,11 @@ import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.basic.DragContentIcon;
+
+import java.util.Enumeration;
+import java.util.Vector;
+
+import org.apache.log4j.Logger;
 
 
 /**
@@ -210,7 +211,7 @@ public class ViewFactory implements DebugInfo {
     }
 
     public ViewSpecification getIconizedRootViewSpecification(NakedObject object) {
-    	if(object instanceof NakedClass) {
+    	if(object instanceof NakedClassSpec) {
     	    if(workspaceClassIconSpecification == null) {
                 LOG.error("missing workspace class icon specification; using fallback");
                 return fallback;

@@ -41,13 +41,13 @@ public class ViewUpdateNotifier implements UpdateNotifier, DebugInfo {
         }
     }
 
-    public void broadcastAdd(Object collectionOid, Object elementOid, NakedObjectManager objectStore) {
+    public void broadcastAdd(Object collectionOid, Object elementOid, NakedObjectManager objectManager) {
         throw new NotImplementedException();
     }
 
     // TODO change to broadcastObjectSet, broadcastObjectClear, and
     // broadcastObjectChangeValue
-    public void broadcastObjectChanged(NakedObject object, NakedObjectManager objectStore) {
+    public void broadcastObjectChanged(NakedObject object, NakedObjectManager objectManager) {
         Vector viewsToNotify = (Vector) views.get(object);
 
         if (viewsToNotify == null || viewsToNotify.size() == 0) {
@@ -62,7 +62,7 @@ public class ViewUpdateNotifier implements UpdateNotifier, DebugInfo {
         }
     }
 
-    public void broadcastRemove(Object collectionOid, Object elementOid, NakedObjectManager objectStore) {
+    public void broadcastRemove(Object collectionOid, Object elementOid, NakedObjectManager objectManager) {
         throw new NotImplementedException();
     }
 

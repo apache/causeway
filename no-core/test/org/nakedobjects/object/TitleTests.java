@@ -1,34 +1,8 @@
-/*
-    Naked Objects - a framework that exposes behaviourally complete
-    business objects directly to the user.
-    Copyright (C) 2000 - 2003  Naked Objects Group Ltd
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-    The authors can be contacted via www.nakedobjects.org (the
-    registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-    Road, Woking GU21 1NR, UK).
-*/
-
 package org.nakedobjects.object;
 
 
-import org.nakedobjects.SystemClock;
-import org.nakedobjects.object.value.Date;
+import org.nakedobjects.object.value.TestClock;
 import org.nakedobjects.object.value.TextString;
-import org.nakedobjects.object.value.TimeStamp;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -48,9 +22,9 @@ public class TitleTests extends TestCase {
         junit.textui.TestRunner.run(new TestSuite(TitleTests.class));
     }
 
-    public void setUp() {
-        Date.setClock(new SystemClock());
-        TimeStamp.setClock(new SystemClock());
+    protected void setUp() {
+        new TestClock();
+        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
         test = "Fred";
         t = new Title(test);
         assertEquals(test, t.toString());
@@ -214,3 +188,28 @@ public class TitleTests extends TestCase {
 		} catch(IllegalArgumentException ee){}
     }
 }
+
+
+/*
+Naked Objects - a framework that exposes behaviourally complete
+business objects directly to the user.
+Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+The authors can be contacted via www.nakedobjects.org (the
+registered address of Naked Objects Group is Kingsway House, 123 Goldworth
+Road, Woking GU21 1NR, UK).
+*/

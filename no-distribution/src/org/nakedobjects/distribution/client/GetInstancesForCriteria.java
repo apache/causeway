@@ -4,8 +4,8 @@ package org.nakedobjects.distribution.client;
 import java.util.Vector;
 
 import org.nakedobjects.distribution.RequestContext;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedClNakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.UnsupportedFindException;
 
@@ -16,14 +16,14 @@ public class GetInstancesForCriteria extends AbstractGetInstances {
 	private String pattern;
    
     
-    public GetInstancesForCriteria(NakedClass cls, String pattern) {
-    	className = cls.fullName();
+    public GetInstancesForCriteria(NakedObjectSpecification cls, String pattern) {
+    	className = cls.getFullName();
     	this.pattern = pattern;
     }
 
     protected void generateResponse(RequestContext context) {
     	NakedObjectManager objectManager = context.getObjectManager();
-		NakedClass cls = NakedClassManager.getInstance().getNakedClass(className);
+		NakedObjectSpecification cls = NakedObjectSpecification.getNakedClass(className);
 		
 		Vector instances;
 		try {

@@ -2,7 +2,7 @@ package org.nakedobjects.viewer.skylark.value;
 
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.reflect.Value;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import org.nakedobjects.object.value.Logical;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.Canvas;

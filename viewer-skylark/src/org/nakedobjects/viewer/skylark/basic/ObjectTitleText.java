@@ -1,7 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.Title;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.Text;
@@ -20,10 +19,10 @@ public class ObjectTitleText extends TitleText {
 	        return ((OneToManyField) content).getFieldLabel();
         } else {
 	        NakedObject object = content.getObject();
-	        Title title = object.title();
+	        String title = object.titleString();
 	
-	        if ((title == null) || title.toString().equals("")) {
-	            return "A " + object.getNakedClass().getSingularName().toLowerCase();
+	        if ((title == null) || title.equals("")) {
+	            return "A " + object.getSpecification().getSingularName().toLowerCase();
 	        } else {
 	            return title.toString();
 	        }

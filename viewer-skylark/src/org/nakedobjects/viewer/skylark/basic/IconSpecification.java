@@ -2,19 +2,11 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
-import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
-import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
-import org.nakedobjects.viewer.skylark.Workspace;
-import org.nakedobjects.viewer.skylark.core.AbstractViewDecorator;
 
 
 public abstract class IconSpecification implements ViewSpecification {

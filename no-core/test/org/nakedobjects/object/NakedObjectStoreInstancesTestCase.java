@@ -3,13 +3,12 @@ package org.nakedobjects.object;
 import org.nakedobjects.utility.ComponentException;
 import org.nakedobjects.utility.ConfigurationException;
 
-import java.util.Vector;
-
 
 public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStoreTestCase {
     private Person people[];
-    private NakedClass personClass;
+    private NakedObjectSpecification personClass;
     private Person personPattern;
+    private String personClassName;
  
     public NakedObjectStoreInstancesTestCase(String name) {
         super(name);
@@ -19,14 +18,10 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
 
     
     protected void initialiseObjects() throws Exception {
-        manager.setupAddClass(Person.class);
-        manager.setupAddClass(NakedClass.class);
-        manager.setupAddClass(NakedObject.class);
-        manager.setupAddClass(Role.class);
-        manager.setupAddClass(ValueObjectExample.class);
  
         // classes
-        personClass = NakedClassManager.getInstance().getNakedClass(Person.class.getName());
+        personClassName = Person.class.getName();
+        personClass = NakedObjectSpecification.getNakedClass(personClassName);
 
         // patterns
         personPattern = new Person();
@@ -49,11 +44,11 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
     
         restartObjectStore();
         
-        Vector v = objectStore.getInstances(personClass, false);
-        assertEquals(people.length - 1, v.size());
+        NakedObject[] v = objectStore.getInstances(personClass, false);
+        assertEquals(people.length - 1, v.length);
         // all instances should not be the one we destroyed
-        for (int i = 0; i < v.size(); i++) {
-            assertFalse(people[2].equals(v.elementAt(i)));
+        for (int i = 0; i < v.length; i++) {
+            assertFalse(people[2].equals(v[i]));
         }
     }
 
@@ -74,10 +69,11 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
 
             assertEquals(people.length, objectStore.numberOfInstances(personClass, false));
 
-            Vector v = objectStore.getInstances(personPattern, false);
-            assertEquals(people.length, v.size());
-            for (int i = 0; i < v.size(); i++) {
-                assertEquals(people[i], v.elementAt(i));
+            NakedObject[] v = objectStore.getInstances(personPattern, false);
+            assertEquals(people.length, v.length);
+            for (int i = 0; i < v.length; i++) {
+                NakedObject element = (NakedObject) v[i];
+                assertEquals(people[i], element);
             }
         } catch (UnsupportedFindException e) {}
     }
@@ -93,47 +89,45 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
         restartObjectStore();
 
         try {
-            Vector v1 = objectStore.getInstances(personPattern, false);
-            Vector v2 = objectStore.getInstances(personPattern, false);
-
-            for (int i = 0; i < v1.size(); i++) {
-                assertEquals(v1.elementAt(i), v2.elementAt(i));
+            NakedObject[] v1 = objectStore.getInstances(personPattern, false);
+            NakedObject[] v2 = objectStore.getInstances(personPattern, false);
+            
+            for (int i = 0; i < v1.length; i++) {
+                NakedObject element1 =(NakedObject) v1[i];
+                NakedObject element2 = (NakedObject)v2[i];
+                
+                assertEquals(element1, element2);
             }
         } catch (UnsupportedFindException e) {}
     }
     
-    public void testClass() throws Exception {
-        String name = "org.company.Test";
-
+    public void testClassNotFound() throws Exception {
         try {
+	        String name = "org.company.Test";
             objectStore.getNakedClass(name);
             fail();
         } catch (ObjectNotFoundException expected) {}
-        
-        NakedClass nc = new NakedClass();
+    }
+    
+    public void testClass() throws Exception {
+        NakedClassSpec nc = new NakedClassSpec(personClassName);
+        nc.setContext(context);
         nc.setOid(nextOid());
-        nc.getName().setValue(name);
-        nc.getReflector().setValue("org.company.reflect.Reflector");
         objectStore.createNakedClass(nc);
         
-        NakedClass nc2 = objectStore.getNakedClass(name);
+        NakedClassSpec nc2 = objectStore.getNakedClass(personClassName);
         assertEquals(nc, nc2);
-        assertEquals(name, nc2.getName());
-        assertEquals(nc.getReflector(), nc2.getReflector());
+        assertEquals(personClassName, nc2.getName());
     }
     
     public void testClassAsObjects() throws Exception {
-        NakedClass nc = new NakedClass();
+       NakedClassSpec nc = new NakedClassSpec(personClassName);
         nc.setOid(nextOid());
-        String name = "org.company.Test";
-        nc.getName().setValue(name);
-        nc.getReflector().setValue("org.company.reflect.Reflector");
         objectStore.createNakedClass(nc);
         
-        NakedClass nc2 = (NakedClass) objectStore.getObject(nc.getOid(), nc.getNakedClass());
+        NakedClassSpec nc2 = (NakedClassSpec) objectStore.getObject(nc.getOid(), nc.getSpecification());
         assertEquals(nc, nc2);
-        assertEquals(name, nc2.getName());
-        assertEquals(nc.getReflector(), nc2.getReflector());
+        assertEquals(personClassName, nc2.getName());
     }
 }
 

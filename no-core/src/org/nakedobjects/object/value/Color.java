@@ -32,8 +32,6 @@ public class Color extends Magnitude {
     }
 
     public int intValue() {
-        checkCanOperate();
-
         return color;
     }
 

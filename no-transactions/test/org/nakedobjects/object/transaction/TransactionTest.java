@@ -3,7 +3,9 @@ package org.nakedobjects.object.transaction;
 import org.nakedobjects.object.MockLoadedObjects;
 import org.nakedobjects.object.MockObjectManager;
 import org.nakedobjects.object.MockObjectStore;
+import org.nakedobjects.object.MockOid;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.Person;
 import org.nakedobjects.object.Role;
 import org.nakedobjects.object.Team;
@@ -24,17 +26,17 @@ public class TransactionTest extends TestCase {
     }
 
     private InternalCollection members;
-    private Integer membersOid;
+    private Oid membersOid;
     private Person person;
-    private Integer personOid;
-    private Integer teamOid;
+    private Oid personOid;
+    private Oid teamOid;
 
     private Transaction t;
     private Team team;
     private MockTransactionManager tm;
     private MockObjectStore objectStore;
     private MockLoadedObjects loadedObjects;
-    private Integer roleOid;
+    private Oid roleOid;
     private Role role;
 
     public TransactionTest(String arg0) {
@@ -47,26 +49,23 @@ public class TransactionTest extends TestCase {
         LogManager.getRootLogger().setLevel(Level.OFF);
 
         MockObjectManager manager = MockObjectManager.setup();
-        manager.setupAddClass(Person.class);
-        manager.setupAddClass(Role.class);
-        manager.setupAddClass(Team.class);
-        
+       
         tm = new MockTransactionManager();
         t = new Transaction(tm);
 
         objectStore = new MockObjectStore();
         loadedObjects = (MockLoadedObjects) objectStore.getLoadedObjects();
 
-        personOid = new Integer(1);
+        personOid = new MockOid(1);
         person = new Person();
         person.setOid(personOid);
 
-        roleOid = new Integer(2);
+        roleOid = new MockOid(2);
         role = new Role();
         role.setOid(roleOid);
 
-        teamOid = new Integer(3);
-        membersOid = new Integer(5);
+        teamOid = new MockOid(3);
+        membersOid = new MockOid(5);
         team = new Team();
         team.setOid(teamOid);
         members = team.getMembers();
@@ -186,7 +185,7 @@ public class TransactionTest extends TestCase {
     }
 
     public void testIsolatedObjectWithNullReferences() {
-        Integer roleOid = new Integer(3);
+        Oid roleOid = new MockOid(3);
         String roleName = "Orator";
 
         Role role = new Role();
@@ -202,8 +201,8 @@ public class TransactionTest extends TestCase {
     }
 
     public void testIsolatedObjectWithOneToManyAssociation() {
-        Integer roleOid = new Integer(3);
-        Integer membersOid = new Integer(5);
+        Oid roleOid = new MockOid(3);
+        Oid membersOid = new MockOid(5);
         String personName = "Fred";
 
         person.getName().setValue(personName);
@@ -331,7 +330,7 @@ public class TransactionTest extends TestCase {
     
    public void test() {     
         Role r = new Role(); // transient object
-        Integer roleOid = new Integer(11);
+        Oid roleOid = new MockOid(11);
         r.setOid(roleOid);
         
         Person transactionPerson = (Person) t.getObject(personOid, person);

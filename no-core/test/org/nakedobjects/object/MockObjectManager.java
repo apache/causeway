@@ -7,14 +7,10 @@ import java.util.Vector;
 import junit.framework.Assert;
 
 
-public class MockObjectManager extends NakedObjectManager {
-
-    private static MockClassManager classManager;
-
+public class MockObjectManager extends AbstractNakedObjectManager {
     public static MockObjectManager setup() {
         MockObjectManager manager;
         manager = new MockObjectManager();
-        classManager = MockClassManager.setup();
         manager.reset();
         return manager;
     }
@@ -32,8 +28,9 @@ public class MockObjectManager extends NakedObjectManager {
         return false;
     }
 
+   /** @deprecated */
     public void setupAddClass(Class cls) {
-        classManager.setupAddNakedClass(cls);
+//        classManager.setupAddNakedClass(cls);
     }
 
     public void assertAction(int i, String action) {
@@ -43,9 +40,9 @@ public class MockObjectManager extends NakedObjectManager {
         Assert.assertEquals(action, actions.elementAt(i));
     }
 
-    protected void createClass(NakedClass nc) throws ObjectStoreException {}
+    protected void createClass(NakedObjectSpecification nc) throws ObjectStoreException {}
 
-    public Object createOid(NakedObject object) {
+    public Oid createOid(NakedObject object) {
         throw new NotImplementedException();
     }
 
@@ -65,27 +62,31 @@ public class MockObjectManager extends NakedObjectManager {
         throw new NotImplementedException();
     }
 
-    public Vector getInstances(NakedClass cls) {
+    public NakedObject[] getInstances(NakedObjectSpecification cls) {
         throw new NotImplementedException();
     }
 
-    public Vector getInstances(NakedClass cls, String term) {
+    public NakedObject[] getInstances(NakedObjectSpecification cls, String term) {
         throw new NotImplementedException();
     }
 
-    public Vector getInstances(NakedObject pattern) {
+    public NakedObject[] getInstances(NakedObject pattern) {
         throw new NotImplementedException();
     }
 
-    public NakedObject getObject(Object oid, NakedClass hint) {
+    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) {
         throw new NotImplementedException();
     }
 
+    public NakedClassSpec getNakedClass(NakedObjectSpecification nakedClass) {
+        throw new NotImplementedException();
+    }
+    
     public NakedObjectStore getObjectStore() {
         throw new NotImplementedException();
     }
 
-    public boolean hasInstances(NakedClass cls) {
+    public boolean hasInstances(NakedObjectSpecification cls) {
         throw new NotImplementedException();
     }
 
@@ -95,7 +96,7 @@ public class MockObjectManager extends NakedObjectManager {
         actions.addElement("make persistent " + object);
     }
 
-    public int numberOfInstances(NakedClass cls) {
+    public int numberOfInstances(NakedObjectSpecification cls) {
         throw new NotImplementedException();
     }
 
@@ -114,12 +115,16 @@ public class MockObjectManager extends NakedObjectManager {
     }
 
     public void shutdown() {
-        classManager.shutdown();
+//        classManager.shutdown();
         super.shutdown();
     }
 
     public void startTransaction() {
         actions.addElement("start transaction");
+    }
+
+    public NakedObjectContext getContext() {
+        return new NakedObjectContext(this);
     }
 }
 

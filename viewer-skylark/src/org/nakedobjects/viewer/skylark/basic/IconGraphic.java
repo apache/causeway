@@ -20,14 +20,13 @@ public class IconGraphic {
         content = (ObjectContent) view.getContent();
         iconHeight = height;
     }
+    
+    public IconGraphic(View view, Text style) {
+        this(view, (style.getHeight() * 120) / 100);
+    }
 
     public boolean isImageAvailable() {
         return ImageFactory.getImageFactory().imageAvailable(iconName(content.getObject()), iconHeight, null);  
-    }
-    
-    public IconGraphic(View view, Text style) {
-        content = (ObjectContent) view.getContent();
-        iconHeight = (style.getHeight() * 120) / 100;
     }
 
     public void draw(Canvas canvas, int x, int baseline) {

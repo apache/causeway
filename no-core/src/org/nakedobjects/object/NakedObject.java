@@ -1,6 +1,7 @@
 
 package org.nakedobjects.object;
 
+
 /**
  * Definition of an naked reference object.
  * <p>
@@ -10,23 +11,17 @@ package org.nakedobjects.object;
  */
 public interface NakedObject extends Naked {
     /**
-     * Called when the object is first created to intialised the object. This
+     * A lifecycle method called when the object is first created to intialised the object. This
      * will not be called when the object is recreated when retrieved from the
      * object store.
      */
     void created();
 
     /**
-     * Called when the object is delete, after it is removed from the object
+     * A lifecycle method called when the object is delete, after it is removed from the object
      * store.
      */
     void deleted();
-
-    /**
-     * Called when a the system destoys an object - permenantly removes it from
-     * the object store.
-     */
-    void destroy() throws ObjectStoreException;
 
     String getIconName();
 
@@ -34,54 +29,27 @@ public interface NakedObject extends Naked {
      * The objects unique id. This id allows the object to added to, stored by,
      * and retrieved from the object store.
      */
-    Object getOid();
-
-    /**
-     * Returns true if the object is used for finding objects. An object cannot
-     * be a finder object and persistent.
-     */
-    boolean isFinder();
-
-    /**
-     * returns true if the object is being held by the object store.
-     */
-    boolean isPersistent();
+    Oid getOid();
 
     /**
      * returns true when the object has been completely read into memory and all
-     * it attributes can be accessed.
+     * it attributes can be validly accessed.
      */
     boolean isResolved();
 
-    /**
-     * When the state of this object changes, e.g., an attribute is set, then
-     * this method should be called so that it is persisted and a message is
-     * propogated to the users of this object within the system.
-     */
-    void objectChanged();
-
-    /**
-     * Resolves the current object ensuring all its attributes are available in
-     * memory.
-     */
-    void resolve();
-
-    /**
+      /**
      * Sets the OID for this object. This id must be unique.
      */
-    void setOid(Object oid);
+    void setOid(Oid oid);
 
     /**
      * sets the object's resolved state to true
      */
     void setResolved();
 
-    /**
-     * Returns a String summarising the state of the object.
-     */
-    Summary summary();
-
-    void makeFinder();
+    NakedObjectContext getContext();
+    
+    void setContext(NakedObjectContext context);
 }
 
 /*

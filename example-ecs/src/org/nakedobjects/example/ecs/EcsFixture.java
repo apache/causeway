@@ -1,7 +1,7 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.AbstractExplorationFixture;
-import org.nakedobjects.ExplorationUser;
+import org.nakedobjects.exploration.AbstractExplorationFixture;
+import org.nakedobjects.exploration.ExplorationUser;
 import org.nakedobjects.security.Role;
 import org.nakedobjects.security.User;
 

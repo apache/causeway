@@ -53,7 +53,6 @@ public class SerialNumber extends Magnitude {
     }
 
     public long longValue() {
-        checkCanOperate();
         return (long) number;
     }
 

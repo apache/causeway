@@ -1,12 +1,12 @@
 package org.nakedobjects.xat;
 
+import org.nakedobjects.object.LocalReflectionFactory;
 import org.nakedobjects.object.MockObjectManager;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.object.collection.TypedCollection;
+import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.value.Money;
+import org.nakedobjects.object.value.TestClock;
 import org.nakedobjects.object.value.TextString;
-import org.nakedobjects.security.SecurityContext;
 import org.nakedobjects.security.Session;
 
 import junit.framework.AssertionFailedError;
@@ -32,18 +32,17 @@ public class TestObjectImplTest extends TestCase {
         BasicConfigurator.configure();
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        om = MockObjectManager.setup();
-        om.setupAddClass(NakedObject.class);
-        om.setupAddClass(TestObjectExample.class);
-        om.setupAddClass(InternalCollection.class);
-        om.setupAddClass(TypedCollection.class);
-        om.setupAddClass(TestElement.class);
-       om.setupAddClass(TextString.class);
+        new TestClock();
 
-        Session.initSession();
-        SecurityContext context = Session.getSession().getSecurityContext();
+        om = MockObjectManager.setup();
+        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+        
+        NakedObjectContext context = new NakedObjectContext(om);
+        
+        Session.getSession().setSecurityContext(context);
         
         targetObject = new TestObjectExample();
+        targetObject.setContext(context);
         TestObjectFactory factory = new DefaultTestObjectFactory();
         target = factory.createTestObject(context, targetObject);
         

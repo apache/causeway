@@ -2,7 +2,7 @@ package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 
 public class OneToManyField extends ObjectField implements ObjectContent {
 	private final NakedObject object;
@@ -11,7 +11,7 @@ public class OneToManyField extends ObjectField implements ObjectContent {
 	        return object;
 	    }
 
-	public OneToManyField(NakedObject parent, NakedObject object, OneToManyAssociation association) {
+	public OneToManyField(NakedObject parent, NakedObject object, OneToManyAssociationSpecification association) {
 		super(parent, association);
 	        this.object = object;
 	}
@@ -20,8 +20,8 @@ public class OneToManyField extends ObjectField implements ObjectContent {
 		return super.debugDetails() +  "  object:" + object + "\n";  
 	}
 	
-	public OneToManyAssociation getOneToManyAssociation() {
-		return (OneToManyAssociation) getField();
+	public OneToManyAssociationSpecification getOneToManyAssociation() {
+		return (OneToManyAssociationSpecification) getField();
 	}
 
 	public String toString() {

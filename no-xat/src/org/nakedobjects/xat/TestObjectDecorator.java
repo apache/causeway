@@ -2,7 +2,7 @@ package org.nakedobjects.xat;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.ActionSpecification;
 
 
 public abstract class TestObjectDecorator implements TestObject {
@@ -159,7 +159,7 @@ public abstract class TestObjectDecorator implements TestObject {
         wrappedObject.fieldEntry(name, value);
     }
 
-    public Action getAction(String name) {
+    public ActionSpecification getAction(String name) {
         return wrappedObject.getAction(name);
     }
 

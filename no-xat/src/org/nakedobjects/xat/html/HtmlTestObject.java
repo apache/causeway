@@ -45,17 +45,17 @@ public class HtmlTestObject extends TestObjectDecorator {
         super.assertFieldContains(fieldName, expectedValue);
         if (getField(fieldName) instanceof TestValue) {
             doc("<p>Note that the field <em>" + fieldName + "</em> in the " + doc.objectString(getForObject())
-                    + " is now set to '" + getField(fieldName).getForObject().title() + "'.");
+                    + " is now set to '" + getField(fieldName).getForObject().titleString() + "'.");
         } else {
             doc("<p>Note that object in the field <em>" + fieldName + "</em> of " + doc.objectString(getForObject())
-                    + " now has a title of '" + getField(fieldName).getForObject().title() + "'.");
+                    + " now has a title of '" + getField(fieldName).getForObject().titleString() + "'.");
         }
     }
 
     public void assertFieldContains(String message, String fieldName, NakedValue expectedValue) {
         super.assertFieldContains(message, fieldName, expectedValue);
         doc("<p>Note that the field <em>" + fieldName + "</em> in the " + doc.objectString(getForObject())
-                + " is now set to '" + getField(fieldName).getForObject().title() + "'.");
+                + " is now set to '" + getField(fieldName).getForObject().titleString() + "'.");
     }
 
     public void assertFieldContains(String fieldName, TestObject expectedView) {

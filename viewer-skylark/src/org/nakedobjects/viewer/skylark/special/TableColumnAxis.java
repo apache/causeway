@@ -1,16 +1,16 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 
 public class TableColumnAxis implements ViewAxis {
-	private Field[] fields;
+	private FieldSpecification[] fields;
 	private int[] widths;
 	private int rowHeaderOffet;
 	private View table;
 	
-	public TableColumnAxis(Field[] fields, int defaultWidth) {
+	public TableColumnAxis(FieldSpecification[] fields, int defaultWidth) {
 		this.fields = fields;
 		widths = new int[fields.length];
 		for (int i = 0; i < widths.length; i++) {
@@ -18,7 +18,7 @@ public class TableColumnAxis implements ViewAxis {
 		}
 	}
 
-	public Field[] getFields() {
+	public FieldSpecification[] getFields() {
 		return fields;
 	}
 

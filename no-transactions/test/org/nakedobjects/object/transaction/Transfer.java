@@ -46,10 +46,6 @@ public class Transfer extends AbstractNakedObject {
     public Account fromAccount;
      public Account toAccount;
 
-    public Transfer() {
-        date.setAbout(FieldAbout.READ_ONLY);
-    }
-
     public void aboutActionApply(ActionAbout about) {
         if (isPosted()) {
             about.unusable("Transaction already posted");
@@ -154,5 +150,13 @@ public class Transfer extends AbstractNakedObject {
 
     public Title title() {
         return date.title().append(amount);
+    }
+
+    public void aboutAmount(FieldAbout about) {
+        about.unmodifiable();
+    }
+
+    public void aboutDate(FieldAbout about) {
+        about.unmodifiable();
     }
 }

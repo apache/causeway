@@ -1,36 +1,13 @@
-/*
-    Naked Objects - a framework that exposes behaviourally complete
-    business objects directly to the user.
-    Copyright (C) 2000 - 2003  Naked Objects Group Ltd
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-    The authors can be contacted via www.nakedobjects.org (the
-    registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-    Road, Woking GU21 1NR, UK).
-*/
 package org.nakedobjects.object.reflect.simple;
 
-import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.FieldAbout;
-import org.nakedobjects.object.reflect.OneToOneAssociationIF;
-import org.nakedobjects.security.SecurityContext;
+import org.nakedobjects.object.reflect.OneToOneAssociation;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -38,7 +15,7 @@ import java.lang.reflect.Method;
 import org.apache.log4j.Category;
 
 
-public class JavaOneToOneAssociation extends JavaField implements OneToOneAssociationIF {
+public class JavaOneToOneAssociation extends JavaField implements OneToOneAssociation {
 	private final static Category LOG = Category.getInstance(JavaOneToOneAssociation.class);
     protected Method addMethod;
     protected Method removeMethod;
@@ -52,13 +29,13 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOneAssoci
         removeMethod = remove;
     }
     
-    public About getAbout(SecurityContext context, NakedObject object, NakedObject associate) {
+    public About getAbout(NakedObjectContext context, NakedObject object, NakedObject associate) {
         Method aboutMethod = getAboutMethod();
 		
 		Class parameter = setMethod.getParameterTypes()[0];
 		if(associate != null && !parameter.isAssignableFrom(associate.getClass())) {
 			FieldAbout about = new FieldAbout(context, object);
-			about.unmodifiable("Invalid type: field must be set with a " + NakedClassManager.getInstance().getNakedClass(parameter.getName()));
+			about.unmodifiable("Invalid type: field must be set with a " + NakedObjectSpecification.getNakedClass(parameter.getName()));
 			return about;
 		}
 
@@ -134,7 +111,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOneAssoci
                     setMethod.invoke(inObject, new Object[] { null });
                 }
             } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("set method expects a " + getType().getName() +
+                throw new IllegalArgumentException("set method expects a " + getType().getFullName() +
                     " object; not a " + associate.getClass().getName());
             } catch (InvocationTargetException e) {
                 LOG.error("Exception executing " + setMethod, e.getTargetException());
@@ -152,7 +129,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOneAssoci
         LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
 
             try {
-                NakedObjectManager objectManager = NakedObjectManager.getInstance();
+                NakedObjectManager objectManager = inObject.getContext().getObjectManager();
                 objectManager.startTransaction();
 
                 if (associate == null) {
@@ -200,3 +177,27 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOneAssoci
 		return (NakedObject) get(fromObject);
 	}
 }
+
+/*
+Naked Objects - a framework that exposes behaviourally complete
+business objects directly to the user.
+Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+The authors can be contacted via www.nakedobjects.org (the
+registered address of Naked Objects Group is Kingsway House, 123 Goldworth
+Road, Woking GU21 1NR, UK).
+*/

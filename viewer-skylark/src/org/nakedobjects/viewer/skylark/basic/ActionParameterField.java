@@ -1,7 +1,8 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedClassSpec;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
@@ -34,18 +35,21 @@ public class ActionParameterField extends AbstractView {
 	}
     
     private boolean canDrop(ContentDrag drag) {
-        NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
+        NakedObject dragSource = ((ObjectContent) drag.getSourceContent()).getObject();
         
-        if (source instanceof NakedClass) {
+        if (dragSource instanceof NakedClassSpec) {
             return false;
         } else {
-            NakedClass nc = ((ObjectParameter) getContent()).getNakedClass();
-            return nc.isOfType(source.getNakedClass());
+            NakedObjectSpecification targetType = ((ObjectParameter) getContent()).getNakedClass();
+            NakedObjectSpecification sourceType = dragSource.getSpecification();
+            return sourceType.isOfType(targetType);
         }
     }
     
+
+    
     protected String iconName() {
-       String name = ((ObjectParameter) getContent()).getNakedClass().fullName();
+       String name = ((ObjectParameter) getContent()).getNakedClass().getFullName();
         
         String clsName = name;
         return clsName.substring(clsName.lastIndexOf('.') + 1);
@@ -55,7 +59,7 @@ public class ActionParameterField extends AbstractView {
 		return "ActionParameterField" + getId();
 	}
     
-    public void dragObjectIn(ContentDrag drag) {
+    public void dragIn(ContentDrag drag) {
         if (canDrop(drag)) {
             getState().setCanDrop();
         } else {
@@ -172,7 +176,7 @@ public class ActionParameterField extends AbstractView {
 	}
 
     public void menuOptions(MenuOptionSet options) {
-        NakedClass nc = ((ObjectParameter) getContent()).getNakedClass();
+        NakedObjectSpecification nc = ((ObjectParameter) getContent()).getNakedClass();
         ClassOption.menuOptions(nc, options);
     }
     

@@ -222,7 +222,7 @@ public class CompositeObjectView extends ObjectView {
 	}
 
     protected String title() {
-        return getObject().title().toString();
+        return getObject().titleString();
     }
 
     public String toString() {

@@ -1,22 +1,28 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.control.FieldAbout;
-import org.nakedobjects.object.control.ObjectAbout;
-import org.nakedobjects.object.reflect.Field;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.object.value.Date;
 import org.nakedobjects.object.value.TimeStamp;
+import org.nakedobjects.utility.Assert;
 
 import org.apache.log4j.Logger;
+
 
 public abstract class AbstractNakedObject implements NakedObject {
     private static final Logger LOG = Logger.getLogger(AbstractNakedObject.class);
 
-    protected static NakedObject createInstance(Class type) {
-        return createInstance(type.getName());
+    /**
+     * A utility method for creating new objects in the context of the system -
+     * that is, it is added to the pool of objects the enterprise system
+     * contains.
+     */
+    protected NakedObject createInstance(Class cls) {
+        return getObjectManager().createInstance(cls.getName());
     }
 
     /**
@@ -24,76 +30,75 @@ public abstract class AbstractNakedObject implements NakedObject {
      * that is, it is added to the pool of objects the enterprise system
      * contains.
      */
-    protected static NakedObject createInstance(String className) {
-        NakedClass cls = NakedClassManager.getInstance().getNakedClass(className);
-        NakedObject object;
-
-        try {
-            object = (NakedObject) cls.acquireInstance();
-
-            NakedObjectManager.getInstance().makePersistent(object);
-            object.created();
-            object.objectChanged();
-        } catch (NakedObjectRuntimeException e) {
-            object = new NakedError("Failed to create instance of " + cls);
-
-            LOG.error("Failed to create instance of " + cls, e);
-        }
-
-        return object;
+    protected NakedObject createInstance(String className) {
+        return getObjectManager().createInstance(className);
     }
 
     /**
-     * A utility method for creating new objects in the context of the system -
-     * that is, it is added to the pool of objects the enterprise system
+     * A utility method for creating new objects, which are transient and will not 
+     * be added to the pool of objects the enterprise system
      * contains.
      */
-    protected static NakedObject createTransientInstance(Class type) {
-        return createTransientInstance(type.getName());
+    protected NakedObject createTransientInstance(Class type) {
+        return getObjectManager().createTransientInstance(type.getName());
     }
 
-    protected static NakedObject createTransientInstance(String className) {
-        NakedClass nc = NakedClassManager.getInstance().getNakedClass(className);
-
-        if (nc == null) {
-            throw new RuntimeException("Invalid type to create " + className);
-        }
-        NakedObject object = (NakedObject) nc.acquireInstance();
-
-        object.created();
-
-        return object;
+    /**
+     * A utility method for creating new objects, which are transient and will not 
+     * be added to the pool of objects the enterprise system
+     * contains.
+     */
+    protected NakedObject createTransientInstance(String className) {
+        return getObjectManager().createTransientInstance(className);
     }
 
+    /**
+     * A utility method for creating a new internal collection object for storing one-to-many
+     * associations.
+     */
+    protected InternalCollection createInternalCollection(Class elementType) {
+        return new InternalCollection(elementType, this);
+    }
+    
+    /**
+     * A utility method for creating a new internal collection object for storing one-to-many
+     * associations.
+     */
+    protected InternalCollection createInternalCollection(String elementType) {
+        return getObjectManager().createInternalCollection(elementType, this);
+    }
+        
     /**
      * A utiltiy method for simplifying the resolving of an objects attribute.
      * Calls resolve() on the secified object. If the specified reference no
      * action is done.
      */
-    public static void resolve(NakedObject object) {
-        if (object != null) {
-            object.resolve();
+    
+    protected void resolve(NakedObject object) {
+        if (object != null && ! object.isResolved()) {
+            getObjectManager().resolve(object);
         }
     }
 
-    private Date dateCreated = new Date();
-
+    private final Date dateCreated = new Date();
     private boolean isFinder = false;
     private transient boolean isResolved = false;
     private TimeStamp lastActivity = new TimeStamp();
-    private Object oid;
-
-    public AbstractNakedObject() {
-        lastActivity.clear();    
+    private Oid oid;
+    private NakedObjectContext context;
+    private NakedObjectSpecification nakedClass;
+    
+    public void setContext(NakedObjectContext context) {
+        this.context = context;
     }
     
-    /**
-     * Return a standard READ/WRITE About, specifically: ObjectAbout.READ_WRITE
-     * 
-     * @deprecated
-     */
-    public About about() {
-        return ObjectAbout.READ_WRITE;
+    public void setNakedClass(NakedObjectSpecification nakedClass) {
+        this.nakedClass = nakedClass;
+    }
+    
+    public AbstractNakedObject() {
+        lastActivity.clear();
+        nakedClass = NakedObjectSpecification.getNakedClass(this.getClass());
     }
 
     /*
@@ -147,15 +152,15 @@ public abstract class AbstractNakedObject implements NakedObject {
         }
 
         NakedObject object = (NakedObject) objectToCopy;
-        Field[] fields = getNakedClass().getFields();
+        FieldSpecification[] fields = getSpecification().getFields();
 
         for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
+            FieldSpecification field = fields[i];
 
-            if (field instanceof OneToManyAssociation) {
+            if (field instanceof OneToManyAssociationSpecification) {
                 ((NakedCollection) field.get(this)).copyObject((NakedCollection) field.get(object));
-            } else if (field instanceof OneToOneAssociation) {
-                ((OneToOneAssociation) field).initData(this, (NakedObject) field.get(object));
+            } else if (field instanceof OneToOneAssociationSpecification) {
+                ((OneToOneAssociationSpecification) field).initData(this, (NakedObject) field.get(object));
             } else {
                 ((NakedValue) field.get(this)).copyObject((Naked) field.get(object));
             }
@@ -176,7 +181,7 @@ public abstract class AbstractNakedObject implements NakedObject {
      */
     public void destroy() throws ObjectStoreException {
         if (isPersistent()) {
-            NakedObjectManager.getInstance().destroyObject(this);
+            getObjectManager().destroyObject(this);
         }
     }
 
@@ -202,8 +207,8 @@ public abstract class AbstractNakedObject implements NakedObject {
         }
     }
 
-    public NakedClass explorationActionClass() {
-        return getNakedClass();
+    public NakedObjectSpecification explorationActionClass() {
+        return getSpecification();
     }
 
     /**
@@ -226,8 +231,9 @@ public abstract class AbstractNakedObject implements NakedObject {
         return this.getClass().getName();
     }
 
-    protected ObjectContext getContext() {
-        return ObjectContext.getInstance();
+    public NakedObjectContext getContext() {
+        Assert.assertTrue("must have a context: " + this, context != null);
+        return context;
     }
 
     public Date getDateCreated() {
@@ -235,38 +241,26 @@ public abstract class AbstractNakedObject implements NakedObject {
     }
 
     /**
-     * Returns the String returned by getClassName()
-     * 
-     * @see #getClassName
+     * Returns the short name from this objects NakedObjectSpecification
      */
     public String getIconName() {
-        return getShortClassName();
+        return getSpecification().getShortName();
     }
 
     public TimeStamp getLastActivity() {
         return lastActivity;
     }
 
-    public NakedClass getNakedClass() {
-        return NakedClassManager.getInstance().getNakedClass(getClass().getName());
+    public NakedObjectSpecification getSpecification() {
+        return nakedClass;
     }
 
-    public Object getOid() {
+    protected NakedObjectManager getObjectManager() {
+        return getContext().getObjectManager();
+    }
+    
+    public Oid getOid() {
         return oid;
-    }
-
-    /**
-     * Returns the short class name looking at the getFullClassName() result and
-     * passes back all the text after the last period/dot.
-     */
-    public String getShortClassName() {
-        String name = getClassName();
-
-        if (name.indexOf('$') >= 0) {
-            name = name.substring(0, name.indexOf('$'));
-        }
-
-        return name.substring(name.lastIndexOf(".") + 1);
     }
 
     public int hashCode() {
@@ -320,32 +314,35 @@ public abstract class AbstractNakedObject implements NakedObject {
     public void makePersistent() {
         if (!isPersistent()) {
             LOG.debug("makePersistent(" + this + ")");
-            NakedObjectManager.getInstance().makePersistent(this);
+            getObjectManager().makePersistent(this);
         }
     }
 
     /**
      * Attempts to call <code>save</code> in the object store.
+     * When the state of this object changes, e.g., an attribute is set, then
+     * this method should be called so that it is persisted and a message is
+     * propogated to the users of this object within the system.
      */
     public void objectChanged() {
         LOG.debug("object changed " + this);
         if (isResolved()) {
             LOG.debug("  notifying object manager");
-            NakedObjectManager.getInstance().objectChanged(this);
-        } else if (isFinder()) {
-            // if a finder then update the listeners
-
-            //  need to update viewers somehow
+            getObjectManager().objectChanged(this);
         }
     }
 
+    /**
+     * Resolves the current object ensuring all its attributes are available in
+     * memory.
+     */
     public synchronized void resolve() {
         if (!isResolved() && isPersistent()) {
-            NakedObjectManager.getInstance().resolve(this);
+            getObjectManager().resolve(this);
         }
     }
 
-    public void setOid(Object oid) {
+    public void setOid(Oid oid) {
         if (this.oid == null) {
             this.oid = oid;
         } else {
@@ -361,10 +358,10 @@ public abstract class AbstractNakedObject implements NakedObject {
         }
     }
 
-    public Summary summary() {
-        return new Summary();
+    public String titleString() {
+        return title().toString();
     }
-
+    
     /**
      * every Naked Object is required to provide a <code>Title</code> by which
      * it is identified to the end user.
@@ -373,7 +370,7 @@ public abstract class AbstractNakedObject implements NakedObject {
      * <code>Title</code> object is available through
      * <code>contextualTitle()</code>.
      */
-    public Title title() {
+    protected Title title() {
         return new Title();
     }
 
@@ -381,7 +378,7 @@ public abstract class AbstractNakedObject implements NakedObject {
         StringBuffer s = new StringBuffer();
 
         // datatype
-        s.append(getShortClassName());
+        s.append(getSpecification().getShortName());
         s.append(" [");
 
         // type of object - EO, Primitive, Collection, with Status etc

@@ -24,7 +24,7 @@
 
 package org.nakedobjects.persistence.file;
 
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.SimpleOid;
 
 
@@ -34,7 +34,7 @@ import org.nakedobjects.object.SimpleOid;
 public class CollectionData extends Data {
    private ReferenceVector elements;
 
-   public CollectionData(NakedClass type, SimpleOid oid) {
+   public CollectionData(NakedObjectSpecification type, SimpleOid oid) {
       super(type, oid);
       elements = new ReferenceVector(oid);
    }

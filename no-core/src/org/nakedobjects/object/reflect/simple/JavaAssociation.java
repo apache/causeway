@@ -23,9 +23,9 @@
 */
 package org.nakedobjects.object.reflect.simple;
 
-import java.lang.reflect.Method;
-
 import org.nakedobjects.object.NakedObject;
+
+import java.lang.reflect.Method;
 
 
 public abstract class JavaAssociation extends JavaField {

@@ -1,7 +1,7 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.LoadedObjects;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ObjectNotFoundException;
 
@@ -21,8 +21,8 @@ public abstract class ObjectRequest extends Request {
         this.externalOid = externalOid;
     }
     
-    public ObjectRequest(Object oid, NakedClass hint) {
-        this(new ObjectProxy(hint.fullName(), oid));
+    public ObjectRequest(Object oid, NakedObjectSpecification hint) {
+        this(new ObjectProxy(hint.getFullName(), oid));
     }
 
     protected NakedObject getObject(LoadedObjects loadedObjects) throws ObjectNotFoundException {

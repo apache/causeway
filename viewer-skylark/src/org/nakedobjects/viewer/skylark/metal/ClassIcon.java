@@ -1,10 +1,9 @@
 package org.nakedobjects.viewer.skylark.metal;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedClassSpec;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.collection.InstanceCollection;
-import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
@@ -27,7 +26,7 @@ public class ClassIcon extends ObjectView {
     public static class Specification implements ViewSpecification {
 
 		public boolean canDisplay(Naked object) {
-			return object instanceof NakedClass;
+			return object instanceof NakedClassSpec;
 		}
 
         public View createView(Content content, ViewAxis axis) {
@@ -120,7 +119,6 @@ public class ClassIcon extends ObjectView {
         final Size iconSize = icon.getSize();
         final Size textSize = title.getSize();
         NakedObject object = ((ObjectContent) getContent()).getObject();
-        NakedClass nc = ((NakedClass) object);
         
         iconSize.extendHeight(VPADDING + textSize.getHeight()  + VPADDING);
         iconSize.ensureWidth(textSize.getWidth());
@@ -133,9 +131,11 @@ public class ClassIcon extends ObjectView {
     
     public void secondClick(Click click) {
 		NakedObject object = ((ObjectContent) getContent()).getObject();
-		NakedClass nc = ((NakedClass) object);
-		Action action = nc.getNakedClass().getObjectAction(Action.USER, "Instances");
+		NakedClassSpec nc = ((NakedClassSpec) object);
+		/*Action action = nc.getNakedClass().getObjectAction(Action.USER, "Instances");
 		InstanceCollection instances = (InstanceCollection) action.execute(object);
+		*/
+		InstanceCollection instances = nc.actionInstances();
 		View view = ViewFactory.getViewFactory().createOpenRootView(instances);
 		view.setLocation(click.getLocationWithinViewer());
 		getWorkspace().addView(view);

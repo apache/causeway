@@ -1,18 +1,17 @@
 package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
-import org.nakedobjects.viewer.skylark.InternalCollectionContent;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.Text;
@@ -40,13 +39,13 @@ public class TreeNodeBorder extends AbstractBorder {
 		
 		replaceWithSpecification = replaceWith;
 		
-		if(getContent() instanceof InternalCollectionContent) {
-		    InternalCollection collection = ((InternalCollection) ((InternalCollectionContent) getContent()).getObject());
+		if(getContent() instanceof OneToManyField) {
+		    InternalCollection collection = ((InternalCollection) ((OneToManyField) getContent()).getObject());
             String type = collection.getType().getName();
-            final NakedClass nc = NakedClassManager.getInstance().getNakedClass(type);
+            final NakedObjectSpecification nc = NakedObjectSpecification.getNakedClass(type);
 		    icon = new IconGraphic(this, LABEL_STYLE) {
 		        protected String iconName(NakedObject object) {
-		            return nc.getIconName();
+		            return nc.getShortName();
 		        }
 		    };
 		    text = new TitleText(this, LABEL_STYLE) {
@@ -157,9 +156,9 @@ public class TreeNodeBorder extends AbstractBorder {
  	}
  	
 	public void menuOptions(MenuOptionSet options) {
-	    if(getContent() instanceof InternalCollectionContent) {
-	        InternalCollection collection = ((InternalCollectionContent) getContent()).getCollection();
-	        NakedClass nakedClass = NakedClassManager.getInstance().getNakedClass(collection.getType().getName());
+	    if(getContent() instanceof OneToManyField) {
+	        InternalCollection collection = ((OneToManyField) getContent()).getCollection();
+	        NakedObjectSpecification nakedClass = NakedObjectSpecification.getNakedClass(collection.getType().getName());
 	        
 	        ClassOption.menuOptions(nakedClass, options);
 	        
@@ -169,10 +168,10 @@ public class TreeNodeBorder extends AbstractBorder {
     }
 	
     public void objectActionResult(Naked result, Location at) {
-        if(getContent() instanceof InternalCollectionContent) {
+        if(getContent() instanceof OneToManyField) {
 	        //      TODO same as InternalCollectionBorder
-            InternalCollectionContent internalCollectionContent = (InternalCollectionContent) getContent();
-            OneToManyAssociation field = (OneToManyAssociation) internalCollectionContent.getField();
+            OneToManyField internalCollectionContent = (OneToManyField) getContent();
+            OneToManyAssociationSpecification field = (OneToManyAssociationSpecification) internalCollectionContent.getField();
             NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
         	field.setAssociation(target, (NakedObject) result);
         } else {

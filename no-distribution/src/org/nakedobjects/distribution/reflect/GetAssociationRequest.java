@@ -3,19 +3,20 @@ package org.nakedobjects.distribution.reflect;
 
 import org.nakedobjects.distribution.ObjectRequest;
 import org.nakedobjects.distribution.RequestContext;
+import org.nakedobjects.io.Memento;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectMemento;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociationIF;
 
 
 public class GetAssociationRequest extends ObjectRequest {
     private final static long serialVersionUID = 1L;
     private String name;
     
-    public GetAssociationRequest(NakedObject object, OneToOneAssociationIF field) {
+    public GetAssociationRequest(NakedObject object, OneToOneAssociation field) {
         super(object);
         name = field.getName();
     }
@@ -23,12 +24,12 @@ public class GetAssociationRequest extends ObjectRequest {
     protected void generateResponse(RequestContext server) {
         try {
             NakedObject object = getObject(server.getLoadedObjects());
-            OneToOneAssociation association = (OneToOneAssociation) object.getNakedClass().getField(name);
+            OneToOneAssociationSpecification association = (OneToOneAssociationSpecification) object.getSpecification().getField(name);
 
             if (association == null) {
                 throw new NakedObjectRuntimeException("ObjectAttributeMessage has invalid Field: " + name);
             }
-            response = new NakedObjectMemento((NakedObject) association.get(object));
+            response = new Memento((NakedObject) association.get(object));
         } catch (ObjectStoreException e) {
             response = e;
         }
@@ -36,7 +37,7 @@ public class GetAssociationRequest extends ObjectRequest {
 
     public NakedObject getAssociate() throws ObjectStoreException {
         sendRequest();
-        return ((NakedObjectMemento) response).recreateObject(getLoadedObjects());
+        return ((Memento) response).recreateObject(getLoadedObjects(), context);
     }
 
     public String toString() {

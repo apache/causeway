@@ -128,7 +128,7 @@ public abstract class AbstractNakedCollection extends AbstractNakedObject implem
 
         for (int i = from; i < to; i++) {
             NakedObject element = (NakedObject) elements.elementAt(i);
-            element.resolve();
+            getObjectManager().resolve(element);
             display.addElement(element);
         }
         return display.elements();
@@ -148,7 +148,7 @@ public abstract class AbstractNakedCollection extends AbstractNakedObject implem
 
     	    public Object nextElement() {
     	    	Object next = e.nextElement();
-    	    	((NakedObject)next).resolve();
+    	    	getObjectManager().resolve((NakedObject) next);
     	    	return next;
     	    }
     	};
@@ -240,7 +240,7 @@ public abstract class AbstractNakedCollection extends AbstractNakedObject implem
     	elements.removeElement(object);
     }
 
-    public void reset() {
+    private void reset() {
     	elements.removeAllElements();
         displayFrom = 0;
 

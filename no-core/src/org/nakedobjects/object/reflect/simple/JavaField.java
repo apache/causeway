@@ -1,10 +1,9 @@
 package org.nakedobjects.object.reflect.simple;
 
 
-import org.nakedobjects.object.CompositePart;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedValue;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -18,11 +17,14 @@ public abstract class JavaField extends JavaMember {
     protected final Method getMethod;
 
     private Class type;
+    private NakedObjectSpecification nakedClass;
     private boolean isDerived;
 
     public JavaField(String name, Class type, Method get, Method about, boolean isDerived) {
         super(name, about);
+        // note that internal collections can have their element types set to null
         this.type = type;
+        this.nakedClass = type == null ? null : NakedObjectSpecification.getNakedClass(type);
         this.isDerived = isDerived;
         this.getMethod = get;
     }
@@ -41,16 +43,8 @@ public abstract class JavaField extends JavaMember {
    /**
      return the object type, as a Class object, that the method returns.
      */
-    public Class getType() {
-        return type;
-    }
-
-    /**
-     * Determines if this field hold a part, i.e. an object that is part of a composite object.
-     * @return boolean
-     */
-    public boolean isPart() {
-        return type != null && CompositePart.class.isAssignableFrom(type);
+    public NakedObjectSpecification getType() {
+        return nakedClass;
     }
 
     /**
@@ -59,14 +53,6 @@ public abstract class JavaField extends JavaMember {
      */
     public boolean isDerived() {
         return isDerived;
-    }
-
-    /**
-     * 
-     * @return boolean
-     */
-    public boolean isValue() {
-        return type != null && NakedValue.class.isAssignableFrom(type);
     }
 }
 

@@ -4,14 +4,15 @@ package org.nakedobjects.distribution.reflect;
 import org.nakedobjects.distribution.ObjectProxy;
 import org.nakedobjects.distribution.ObjectRequest;
 import org.nakedobjects.distribution.RequestContext;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.ActionDelegate;
-import org.nakedobjects.object.reflect.Action.Type;
+import org.nakedobjects.object.reflect.ActionSpecification.Type;
 import org.nakedobjects.security.Certificate;
 import org.nakedobjects.security.SecurityContext;
 
@@ -23,10 +24,10 @@ public class AboutActionRequest extends ObjectRequest {
     private ObjectProxy parameters[];
     private Type actionType;
     
-    public AboutActionRequest(NakedObject object, ActionDelegate action, SecurityContext context, NakedObject parameters[]) {
+    public AboutActionRequest(NakedObject object, ActionDelegate action, SecurityContext context, Naked parameters[]) {
         super(object);
         this.actionName = action.getName();
-        this.actionType = action.getType();
+        this.actionType = action.getActionType();
         this.certificate = context.getCertificate();
         this.parameters = new ObjectProxy[parameters.length];
         for (int i = 0; i < parameters.length; i++) {
@@ -47,16 +48,16 @@ public class AboutActionRequest extends ObjectRequest {
             NakedObject object = getObject(server.getLoadedObjects());
             int parameterCount = parameters.length;
 			NakedObject parameters[] = new NakedObject[parameterCount];
-			NakedClass parameterTypes[] = new NakedClass[parameterCount];
+			NakedObjectSpecification parameterTypes[] = new NakedObjectSpecification[parameterCount];
 			
 	        NakedObjectManager objectManager = server.getObjectManager();
             for (int i = 0; i < parameterCount; i++) {
                 NakedObject parameter = objectManager.getObject(parameters[i]);
                 parameters[i] = parameter;
-                parameterTypes[i] = parameter.getNakedClass();
+                parameterTypes[i] = parameter.getSpecification();
             }
             
-            Action action = object.getNakedClass().getObjectAction(actionType, actionName, parameterTypes);
+            ActionSpecification action = object.getSpecification().getObjectAction(actionType, actionName, parameterTypes);
    
             SecurityContext context = server.getSecurityContext(certificate);
 			response = (action == null) ? null : action.getAbout(context, object, parameters);

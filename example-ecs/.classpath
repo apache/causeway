@@ -8,7 +8,6 @@
 	<classpathentry sourcepath="LOG4J_SRC" kind="var" path="LOG4J"/>
 	<classpathentry kind="src" path="/viewer-skylark"/>
 	<classpathentry kind="src" path="/os-cache"/>
-	<classpathentry kind="src" path="/version1.3-xat"/>
 	<classpathentry kind="src" path="/no-xat"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

@@ -5,8 +5,8 @@ import org.nakedobjects.distribution.ObjectRequest;
 import org.nakedobjects.distribution.RequestContext;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.reflect.Value;
-import org.nakedobjects.object.reflect.ValueIf;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
+import org.nakedobjects.object.reflect.ValueField;
 
 
 public class SaveValueRequest extends ObjectRequest {
@@ -14,7 +14,7 @@ public class SaveValueRequest extends ObjectRequest {
     private String name;
     private String encodedValue;
     
-    public SaveValueRequest(NakedObject inObject, ValueIf attribute, String encodedValue) {
+    public SaveValueRequest(NakedObject inObject, ValueField attribute, String encodedValue) {
         super(inObject);
         name = attribute.getName();
         this.encodedValue = encodedValue;
@@ -24,7 +24,7 @@ public class SaveValueRequest extends ObjectRequest {
         try {
             NakedObject object = getObject(server.getLoadedObjects());
             // find Field
-            Value field = (Value) object.getNakedClass().getField(name);
+            ValueFieldSpecification field = (ValueFieldSpecification) object.getSpecification().getField(name);
 
             if (field == null) {
                 throw new NakedObjectRuntimeException("DataAttributeMessage has invalid Field: " + name);

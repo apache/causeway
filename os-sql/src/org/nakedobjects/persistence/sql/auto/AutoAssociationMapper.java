@@ -1,11 +1,11 @@
 package org.nakedobjects.persistence.sql.auto;
 
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.ResolveException;
 import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.persistence.sql.AbstractObjectMapper;
 import org.nakedobjects.persistence.sql.CollectionMapper;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
@@ -20,10 +20,10 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 	private String parentColumn;
 	private String elementIdColumn;
 	private String elementClassColumn;
-	private Field field;
+	private FieldSpecification field;
 	private AbstractAutoMapper mapper;
 
-	public AutoAssociationMapper(AbstractAutoMapper mapper, NakedClass nakedClass, Field field) throws SqlObjectStoreException {
+	public AutoAssociationMapper(AbstractAutoMapper mapper, NakedObjectSpecification nakedClass, FieldSpecification field) throws SqlObjectStoreException {
 		this.mapper = mapper;
 		this.field = field;
 
@@ -38,7 +38,7 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 		elementClassColumn = columnName + "Class";
 
 		table = className + "_" + columnName;
-		if(nakedClass.fullName().startsWith("org.nakedobjects.")) {
+		if(nakedClass.getFullName().startsWith("org.nakedobjects.")) {
 			table = "no_" + table;
 		}
 	}
@@ -65,8 +65,8 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 		Results rs = connector.select(statement);
 		while (rs.next()) {
 			String cls = rs.getString(elementClassColumn);
-			NakedClass elementCls = NakedClassManager.getInstance().getNakedClass(cls);
-			Object oid = recreateOid(rs, elementCls, elementIdColumn);
+			NakedObjectSpecification elementCls = NakedObjectSpecification.getNakedClass(cls);
+			Oid oid = recreateOid(rs, elementCls, elementIdColumn);
 			NakedObject element = mapper.loadObject(elementCls, oid);
 			LOG.debug("  element  " + element.getOid());
 			collection.added(element);
@@ -87,7 +87,7 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 			NakedObject element = collection.elementAt(i);
 			
 			String elementId = mapper.primaryKey(element.getOid());
-			String cls = element.getNakedClass().fullName();
+			String cls = element.getSpecification().getFullName();
 			String values = parentId + "," + elementId + ", '" + cls + "'";
 			String statement = "insert into " + table + " (" + columns + ") values (" + values + ")";
 			connector.update(statement);

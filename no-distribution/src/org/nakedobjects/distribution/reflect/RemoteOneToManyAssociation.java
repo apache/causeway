@@ -27,19 +27,19 @@ import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.reflect.OneToManyAssociationIF;
+import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.security.SecurityContext;
 import org.nakedobjects.utility.NotImplementedException;
 
 import org.apache.log4j.Category;
 
 
-public class RemoteOneToManyAssociation implements OneToManyAssociationIF {
+public class RemoteOneToManyAssociation implements OneToManyAssociation {
 	private final static Category LOG = Category.getInstance(RemoteOneToManyAssociation.class);
-	private OneToManyAssociationIF local;
+	private OneToManyAssociation local;
 	private boolean fullProxy = false;
 
-	public RemoteOneToManyAssociation(OneToManyAssociationIF local) {
+	public RemoteOneToManyAssociation(OneToManyAssociation local) {
 		this.local = local;
     }
 

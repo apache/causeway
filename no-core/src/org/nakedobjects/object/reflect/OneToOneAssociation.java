@@ -1,83 +1,32 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.control.About;
-import org.nakedobjects.security.SecurityContext;
 
 
-public class OneToOneAssociation extends Association {
-	private final OneToOneAssociationIF delegatedTo;
+public interface OneToOneAssociation extends Member {
+
+	void clearAssociation(NakedObject inObject, NakedObject associate);
+
+	About getAbout(NakedObjectContext context, NakedObject object, NakedObject value);
+
+	NakedObject getAssociation(NakedObject inObject);
 	
-    public OneToOneAssociation(String name, Class type, OneToOneAssociationIF association) {
-        super(name, type);
-        this.delegatedTo = association;
-    }
-    
-    public boolean canAccess(SecurityContext context, NakedObject object) {
-    	return getAbout(context, object, null).canAccess().isAllowed();
-    }
-    
-    public boolean canUse(SecurityContext context, NakedObject object) {
-    	return getAbout(context, object, null).canUse().isAllowed();
-    }
-    
-    public void clear(NakedObject inObject) {
-    	Naked associate = get(inObject);
-    	if(associate != null) {
-    		clearAssociation(inObject, (NakedObject) associate);
-    	}
-    }
+	NakedObjectSpecification getType();
 
-    public void clearAssociation(NakedObject inObject, NakedObject associate) {
-        if (associate == null) {
-            throw new NullPointerException("Must specify the item to remove/dissociate");
-        }
-    	delegatedTo.clearAssociation(inObject, associate);
-    }
+	boolean hasAbout();
 
-	public Naked get(NakedObject fromObject) {
-		return delegatedTo.getAssociation(fromObject);
-	}
-    
-    public About getAbout(SecurityContext context, NakedObject object, NakedObject value) {
-    	return delegatedTo.getAbout(context, object, value);
-    }
+	boolean hasAddMethod();
 
-    public String getLabel(SecurityContext context, NakedObject object) {
-      	About about = getAbout(context, object, (NakedObject) get(object));
+	void initData(NakedObject inObject, Object associate);
 
-        return getLabel(about);
-    }
+	boolean isDerived();
 
-	public boolean hasAbout() {
-		return delegatedTo.hasAbout();
-	}
-
-    public boolean hasAddMethod() {
-        return delegatedTo.hasAddMethod();
-    }
-
-	public void initData(NakedObject inObject, Object associate) {
-    	delegatedTo.initData(inObject, associate);
-	}
-
-	public boolean isDerived() {
-		return delegatedTo.isDerived();
-	}
-
-  public void setAssociation(NakedObject inObject, NakedObject associate) {
-        if (associate == null) {
-            throw new NullPointerException("Must specify an object to be associated");
-        }
-
-    	delegatedTo.setAssociation(inObject, associate);
-    }
-	
-    public String toString() {
-        return "OneToOne [" + super.toString() + "]";
-    }
+	void setAssociation(NakedObject inObject, NakedObject associate);
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete

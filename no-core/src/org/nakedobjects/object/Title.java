@@ -170,7 +170,7 @@ public class Title {
        @return a reference to the called object (itself).
      */
     public Title append(String joiner, Naked object, String defaultValue) {
-        if (string.length() > 0 && (object != null && object.title().toString().length() > 0) ||
+        if (string.length() > 0 && (object != null && object.titleString().toString().length() > 0) ||
                 (defaultValue != null && defaultValue.length() > 0)) {
             concat(joiner);
             appendSpace();
@@ -181,16 +181,16 @@ public class Title {
     }
 
     /**
-       Appends the title text of the specified object.  If <code>object</code> or <code>object.title()</code> is
-       <code>null</code> or the <code>object.title().toString()</code> returns an empty string then nothing will
+       Appends the title text of the specified object.  If <code>object</code> or <code>object.label()</code> is
+       <code>null</code> or the <code>object.label().toString()</code> returns an empty string then nothing will
        be appended.
        @param object  the object whose we want to append to this title object.
        @return a reference to the called object (itself).
      */
     public Title append(Naked object) {
-        if (object != null && object.title() != null && !object.title().toString().equals("")) {
+        if (object != null && object.titleString() != null && !object.titleString().toString().equals("")) {
             appendSpace();
-            string.append(object.title());
+            string.append(object.titleString());
         }
 
         return this;
@@ -235,7 +235,7 @@ public class Title {
     }
 
 	public final Title concat(String joiner, Naked object) {
-		if (string.length() > 0 && (object != null && object.title().toString().length() > 0)) {
+		if (string.length() > 0 && (object != null && object.titleString().toString().length() > 0)) {
 			concat(joiner);
 		}
 		concat(object, "");
@@ -245,7 +245,7 @@ public class Title {
 
 
     /**
-       Concatenate the the title value (the result of calling an objects title() method) to this Title object.
+       Concatenate the the title value (the result of calling an objects label() method) to this Title object.
        If the value is null the no text is added.
        @param object  the naked object to get a title from
        @return a reference to the called object (itself).
@@ -257,7 +257,7 @@ public class Title {
     }
 
 	public final Title concat(String joiner, Naked object, String defaultValue) {
-		if (string.length() > 0 && (object != null && object.title().toString().length() > 0)) {
+		if (string.length() > 0 && (object != null && object.titleString().toString().length() > 0)) {
 			concat(joiner);
 		}
 		concat(object, defaultValue);
@@ -266,17 +266,17 @@ public class Title {
 	}
 
     /**
-       Concatenate the the title value (the result of calling an objects title() method), or the specified default value if the
+       Concatenate the the title value (the result of calling an objects label() method), or the specified default value if the
        title is equal to null or is empty, to this Title object.
        @param object  the naked object to get a title from
        @param defaultValue  the default text to use when the naked object is null
        @return a reference to the called object (itself).
      */
     public final Title concat(Naked object, String defaultValue) {
-        if (object == null || object.isEmpty()) {
+        if (object == null || object.titleString().length() == 0) {
             string.append(defaultValue);
         } else {
-            string.append(object.title());
+            string.append(object.titleString());
         }
 
         return this;
@@ -320,6 +320,6 @@ public class Title {
     }
 
     public static Title title(NakedObject object) {
-        return object == null ? new Title() : object.title();
+        return object == null ? new Title() : new Title(object.titleString());
     }
 }

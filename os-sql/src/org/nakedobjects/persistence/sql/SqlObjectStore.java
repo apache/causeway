@@ -1,13 +1,15 @@
 package org.nakedobjects.persistence.sql;
 
 import org.nakedobjects.object.LoadedObjects;
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedClassSpec;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.utility.ComponentException;
@@ -15,7 +17,6 @@ import org.nakedobjects.utility.ComponentLoader;
 import org.nakedobjects.utility.ConfigurationException;
 
 import java.util.Hashtable;
-import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
@@ -28,14 +29,14 @@ public final class SqlObjectStore implements NakedObjectStore {
     private DatabaseConnectorPool connectionPool;
     private Hashtable transactionOrientedConnections;
 
-    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
+    public NakedClassSpec getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
         DatabaseConnector connection = getDatabaseConnector();
-        NakedClass cls = mapperLookup.getNakedClassMapper(connection).getNakedClass(connection, name);
+        NakedClassSpec cls = mapperLookup.getNakedClassMapper(connection).getNakedClass(connection, name);
         releaseConnectionIfNotInTransaction(connection);
         return cls;
     }
     
-    public void createNakedClass(NakedClass cls) throws ObjectStoreException {
+    public void createNakedClass(NakedClassSpec cls) throws ObjectStoreException {
         DatabaseConnector connection = getDatabaseConnector();
         mapperLookup.getNakedClassMapper(connection).createNakedClass(connection, cls);
         releaseConnectionIfNotInTransaction(connection);
@@ -61,28 +62,28 @@ public final class SqlObjectStore implements NakedObjectStore {
         return null;
     }
 
-    public Vector getInstances(NakedClass cls, boolean includeSubclasses) throws ObjectStoreException {
+    public NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses) throws ObjectStoreException {
         DatabaseConnector connection = getDatabaseConnector();
-        Vector instances = mapperLookup.getMapper(connection, cls).getInstances(connection, cls);
+        NakedObject[] instances = mapperLookup.getMapper(connection, cls).getInstances(connection, cls);
         releaseConnectionIfNotInTransaction(connection);
         return instances;
     }
 
-    public Vector getInstances(NakedClass cls, String pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
+    public NakedObject[] getInstances(NakedObjectSpecification cls, String pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
         DatabaseConnector connection = getDatabaseConnector();
-        Vector instances = mapperLookup.getMapper(connection, cls).getInstances(connection, cls, pattern);
+        NakedObject[] instances = mapperLookup.getMapper(connection, cls).getInstances(connection, cls, pattern);
         releaseConnectionIfNotInTransaction(connection);
         return instances;
     }
 
-    public Vector getInstances(NakedObject pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
+    public NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
         DatabaseConnector connection = getDatabaseConnector();
-        Vector instances = mapperLookup.getMapper(connection, pattern).getInstances(connection, pattern);
+        NakedObject[] instances = mapperLookup.getMapper(connection, pattern).getInstances(connection, pattern);
         releaseConnectionIfNotInTransaction(connection);
         return instances;
     }
 
-    public NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, ObjectStoreException {
+    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectStoreException {
         DatabaseConnector connection = getDatabaseConnector();
         NakedObject object = mapperLookup.getMapper(connection, hint).getObject(connection, oid, hint);
         releaseConnectionIfNotInTransaction(connection);
@@ -93,7 +94,7 @@ public final class SqlObjectStore implements NakedObjectStore {
         return loadedObjects;
     }
     
-    public boolean hasInstances(NakedClass cls, boolean includeSubclasses) throws ObjectStoreException {
+    public boolean hasInstances(NakedObjectSpecification cls, boolean includeSubclasses) throws ObjectStoreException {
         DatabaseConnector connection = getDatabaseConnector();
         boolean hasInstances = mapperLookup.getMapper(connection, cls).hasInstances(connection, cls);
         releaseConnectionIfNotInTransaction(connection);
@@ -123,7 +124,7 @@ public final class SqlObjectStore implements NakedObjectStore {
         return "SQL Object Store";
     }
 
-    public int numberOfInstances(NakedClass cls, boolean includedSubclasses) throws ObjectStoreException {
+    public int numberOfInstances(NakedObjectSpecification cls, boolean includedSubclasses) throws ObjectStoreException {
         DatabaseConnector connection = getDatabaseConnector();
         int number = mapperLookup.getMapper(connection, cls).numberOfInstances(connection, cls);
         releaseConnectionIfNotInTransaction(connection);

@@ -1,6 +1,6 @@
 package org.nakedobjects.xat.html;
 
-import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedClassSpec;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.xat.TestClass;
 import org.nakedobjects.xat.TestClassDecorator;
@@ -17,15 +17,15 @@ public class HtmlTestClass extends TestClassDecorator {
 
     public TestObject findInstance(String title) {
         NakedObject object = (NakedObject) getForObject();
-        String shortName = object.getNakedClass().getSingularName();
+        String shortName = object.getSpecification().getSingularName();
         TestObject result = super.findInstance(title);
         doc.doc("Find the <b>" + shortName + "</b> instance " + doc.simpleObjectString(object) + ". ");
         return result;
     }
 
     public TestObject instances() {
-        NakedClass nakedClass = (NakedClass) getForObject();
-        String className = nakedClass.fullName();
+        NakedClassSpec nakedClass = (NakedClassSpec) getForObject();
+        String className = nakedClass.getFullName();
         String shortName = className.substring(className.lastIndexOf(".") + 1);
 
         doc.doc("Get the instances of the " + shortName + " (<img width=\"16\" height=\"16\" align=\"Center\" src=\"images/"
@@ -37,12 +37,12 @@ public class HtmlTestClass extends TestClassDecorator {
     }
 
     public TestObject newInstance() {
-        String className = ((NakedClass) getForObject()).getPluralName();
+        String className = ((NakedClassSpec) getForObject()).getPluralName();
         doc.doc("Create a new " + className + " instance: ");
         TestObject instance = super.newInstance();
         NakedObject object = (NakedObject) instance.getForObject();
         doc.doc(doc.simpleObjectString(object));
-        doc.docln(object.title().toString().equals("") ? ", which is untitled. " : ". ");
+        doc.docln(object.titleString().equals("") ? ", which is untitled. " : ". ");
         return instance;
     }
 }

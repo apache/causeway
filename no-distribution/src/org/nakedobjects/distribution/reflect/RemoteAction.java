@@ -1,12 +1,14 @@
 package org.nakedobjects.distribution.reflect;
 
 import org.apache.log4j.Category;
-import org.nakedobjects.object.NakedClass;
+
+import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.reflect.ActionDelegate;
-import org.nakedobjects.object.reflect.Action.Type;
+import org.nakedobjects.object.reflect.ActionSpecification.Type;
 import org.nakedobjects.security.SecurityContext;
 
 
@@ -19,7 +21,7 @@ public class RemoteAction implements ActionDelegate {
     	this.local = local;
     }
 
-    public NakedObject execute(NakedObject object, NakedObject[] parameters) {
+    public NakedObject execute(NakedObject object, Naked[] parameters) {
         if (object.isPersistent()) {
 	        try {
 	            return new ActionRequest(object, this, parameters).executeAction();
@@ -33,7 +35,7 @@ public class RemoteAction implements ActionDelegate {
         }
     }
     
-     public About getAbout(SecurityContext context, NakedObject object, NakedObject[] parameters) {
+     public About getAbout(SecurityContext context, NakedObject object, Naked[] parameters) {
         if (object.isPersistent() && fullProxy) {
 	     	try {
 	            return new AboutActionRequest(object, this, context, parameters).about();
@@ -63,11 +65,11 @@ public class RemoteAction implements ActionDelegate {
 		return local.hasAbout();
 	}
 
-	public NakedClass[] parameterTypes() {
+	public NakedObjectSpecification[] parameterTypes() {
 		return local.parameterTypes();
 	}
 
-	public NakedClass returnType() {
+	public NakedObjectSpecification returnType() {
 		return local.returnType();
 	}
 }
