@@ -1,0 +1,117 @@
+package org.nakedobjects.object.reflect.simple;
+
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.ValueParseException;
+import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.control.FieldAbout;
+import org.nakedobjects.object.control.Validity;
+import org.nakedobjects.object.reflect.NakedObjectApplicationException;
+import org.nakedobjects.object.reflect.ReflectionException;
+import org.nakedobjects.object.reflect.ValueIf;
+import org.nakedobjects.security.SecurityContext;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import org.apache.log4j.Category;
+
+
+public class JavaValue extends JavaField implements ValueIf {
+    private final static Category LOG = Category.getInstance(JavaValue.class);
+    private Method validMethod;
+
+    public JavaValue(String name, Class type, Method get, Method about, Method validMethod,
+        boolean isDerived) {
+        super(name, type, get, about, isDerived);
+        this.validMethod = validMethod;
+    }
+
+    public About getAbout(SecurityContext context, NakedObject object) {
+        if (hasAbout()) {
+            Method aboutMethod = getAboutMethod();
+
+            try {
+            	FieldAbout about = new FieldAbout(context, object);
+				aboutMethod.invoke(object, new Object[] { about });
+				return about; 
+            } catch (InvocationTargetException e) {
+                LOG.error("Exception executing " + aboutMethod,
+                    e.getTargetException());
+            } catch (IllegalAccessException ignore) {
+                LOG.error("Illegal access of " + aboutMethod, ignore);
+            }
+
+            return null;
+        } else {
+            return new DefaultAbout();
+        }
+    }
+
+    /**
+     Set the data in an NakedObject.  Passes in an existing object to for the object to reference.
+     */
+    public void restoreValue(NakedObject inObject, Object setValue) {
+        NakedValue nakedValue = (NakedValue) get(inObject);
+    	if(nakedValue == null) {
+    		throw new ReflectionException("Value field '" + getName() + "' not set up in " + inObject);
+    	}
+        LOG.debug("Attribute.init() " + getName() + " " + inObject + "/" + setValue);
+        nakedValue.restoreString((String) setValue);
+    }
+
+    /**
+     Set the data in an NakedObject.  Passes in an existing object to for the NO to reference.
+     */
+    public void setValue(NakedObject inObject, NakedValue value) {
+        NakedObjectManager objectManager = NakedObjectManager.getInstance();
+        objectManager.startTransaction();
+        ((NakedValue) get(inObject)).copyObject(value);
+        inObject.objectChanged();
+        objectManager.endTransaction();
+    }
+    
+    public void parseValue(NakedValue value, String setValue) throws ValueParseException {
+        value.parse(setValue);
+    }
+    
+    public void isValid(NakedObject inObject, Validity validity) {
+        if(validMethod != null) {
+            try {
+                validMethod.invoke(inObject, new Object[] { validity });
+            } catch (IllegalArgumentException e) {
+                throw new NakedObjectRuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new NakedObjectRuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new NakedObjectApplicationException(e);
+            }
+        }
+    }
+}
+
+/*
+Naked Objects - a framework that exposes behaviourally complete
+business objects directly to the user.
+Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+The authors can be contacted via www.nakedobjects.org (the
+registered address of Naked Objects Group is Kingsway House, 123 Goldworth
+Road, Woking GU21 1NR, UK).
+*/

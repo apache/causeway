@@ -1,0 +1,158 @@
+package org.nakedobjects.object.collection;
+
+
+import java.util.Enumeration;
+
+import org.nakedobjects.object.Aggregate;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Title;
+import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.control.FieldAbout;
+import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.security.SecurityContext;
+
+
+public class InternalCollection extends TypedCollection implements Aggregate {
+    private NakedObject parent;
+
+    /*
+     * This is temporary to make the debuging work
+     * TODO remove this
+     */
+    public InternalCollection() {
+    	this(NakedObject.class, null);
+    }
+    
+    public InternalCollection(Class type, NakedObject parent) {
+        super(type);
+        this.parent = parent;
+    }
+
+    public InternalCollection(String typeName, NakedObject parent) {
+        super(typeName);
+        this.parent = parent;
+    }
+
+
+    public About aboutActionAddElement(SecurityContext context, NakedObject object) {
+    	FieldAbout about = new FieldAbout(context, this);
+    	about.unmodifiableOnCondition(! getType().isAssignableFrom(object.getClass()), "Can only add objects of type " + getType());
+    	return about;
+    }
+    
+    public void actionAddElement(NakedObject object) {
+    	add(object);
+    }
+    
+    public void add(NakedObject object) {
+    	if(object == null) {
+    		throw new NullPointerException("Cannot add null");
+    	}
+        super.add(object);
+        ((NakedObject) parent).objectChanged();
+    }
+   
+	public Permission canAdd(NakedObject object) {
+		if(object == parent) {
+			return new Veto("Cannot add parent object");
+		} else {
+		      return super.canAdd(object);
+		}
+	}
+
+    public NakedObject forParent() {
+        return parent;
+    }
+
+    public void remove(NakedObject object) {
+    	if(object == null) {
+    		throw new NullPointerException("Cannot remove null");
+    	}
+    	super.remove(object);
+        ((NakedObject) parent).objectChanged();
+    }
+
+    public Title title() {
+        return new Title();
+    }
+
+	public NakedObject firstElement() {
+		first();
+		Enumeration elements = elements();
+		if(elements.hasMoreElements()) {
+			return (NakedObject) elements.nextElement();
+		} else {
+			return null;
+		}
+	}
+
+	public NakedObject elementAt(int index) {
+		return (NakedObject) elements.elementAt(index);
+	}
+	
+	public String toString() {
+        StringBuffer s = new StringBuffer();
+
+        s.append("InternalCollection");
+        s.append(" [");
+
+        // Persistent/transient & Resolved or not
+        s.append(isPersistent() ? "P" : (isFinder() ? "F" : "T"));
+        s.append(isResolved() ? "R" : "-");
+
+        // obect identifier
+        if (getOid() != null) {
+            s.append(":");
+            s.append(getOid().toString().toUpperCase());
+        } else {
+            s.append(":-");
+        }
+
+
+        // title
+        s.append(' ');
+        s.append(size());
+        
+         s.append("]");
+
+        s.append("  " + Long.toHexString(super.hashCode()).toUpperCase());
+
+        return s.toString();
+    }
+	
+	public String debug() {
+	    String str = "";
+	    for(int i = 0; i < elements.size(); i++) {
+	        str += elements.elementAt(i) + "; ";
+	    }
+	    if(str.length() == 0) {
+	        str = "empty";
+	    }
+	    return str;
+	}
+}
+
+/*
+Naked Objects - a framework that exposes behaviourally complete
+business objects directly to the user.
+Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+The authors can be contacted via www.nakedobjects.org (the
+registered address of Naked Objects Group is Kingsway House, 123 Goldworth
+Road, Woking GU21 1NR, UK).
+*/

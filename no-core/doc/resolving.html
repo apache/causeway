@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Language" content="en">
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+  <link href="./style.css" rel="STYLESHEET">
+  <title>Resolving objects</title>
+</head>
+<body style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);"
+ alink="#ffcc99" link="#ff9966" vlink="#ff9966">
+<h2>Resolving Objects</h2>
+<p>Naked objects are loaded lazily so that traffic across the network
+and
+access to the persistent store are both minimized.&nbsp; The problem we
+are facing is that although it saves effort by not opening up each and
+every object, more network calls are made and more database accesses
+take place because the logical amount of data required is normally more
+than that provided.<br>
+</p>
+<p>Objects are resolved when they are acessed via accessor
+methods.&nbsp; I.e. if a customer has a getOrder() method then calling
+that method to get the order will ensure that the order object is
+resolved.<br>
+</p>
+<p>The process of resolving an object (restoring its persistent state)
+is done by the NakedObjectManager, and it in turn uses the
+NakedObjectStore.&nbsp; At present the process is prematurely suspended
+if the object is already marked as resolved (isResolved() returns true).&nbsp;
+When the NakedObjectManager has restored the state of an object it
+calls setResolved() to set that object's resolved flag.<br>
+</p>
+<p><br>
+</p>
+<p>CAUTION - titles that refer to contained objects will cause objects
+to be resolved early.<br>
+</p>
+</body>
+</html>

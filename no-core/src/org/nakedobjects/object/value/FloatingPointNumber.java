@@ -1,0 +1,246 @@
+/*
+    Naked Objects - a framework that exposes behaviourally complete
+    business objects directly to the user.
+    Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    The authors can be contacted via www.nakedobjects.org (the
+    registered address of Naked Objects Group is Kingsway House, 123 Goldworth
+    Road, Woking GU21 1NR, UK).
+*/
+
+package org.nakedobjects.object.value;
+
+
+import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.Title;
+import org.nakedobjects.object.ValueParseException;
+
+import java.text.NumberFormat;
+import java.text.ParseException;
+
+
+/**
+ * NOTE: this class currently does not support about listeners.
+ */
+public class FloatingPointNumber extends Magnitude {
+	private static final long serialVersionUID = 1L;
+    private static NumberFormat FORMAT = NumberFormat.getNumberInstance();
+    private boolean isNull;
+    private double value;
+    public FloatingPointNumber() {
+        this(0.0);
+        isNull = false;
+    }
+
+    public FloatingPointNumber(double value) {
+        this.value = value;
+        isNull = false;
+    }
+
+    /**
+     @deprecated
+     */
+    public FloatingPointNumber(String text) {
+        try {
+            parse(text);
+            isNull = false;
+        } catch (ValueParseException ignore) {}
+    }
+
+    public FloatingPointNumber(FloatingPointNumber value) {
+        this.isNull = value.isNull;
+        this.value = value.value;
+    }
+
+    public void add(double value) {
+        checkCanOperate();
+        this.value += value;
+    }
+
+    public void add(FloatingPointNumber number) {
+        checkCanOperate();
+        number.checkCanOperate();
+        this.value += number.value;
+    }
+
+    public void clear() {
+        isNull = true;
+    }
+
+    /**
+     Copies the specified object's contained data to this instance.
+     param object the object to copy the data from
+     */
+    public void copyObject(Naked object) {
+        if (!(object instanceof FloatingPointNumber)) {
+            throw new IllegalArgumentException("Can only copy the value of  a FloatingPointNumber object");
+        }
+        isNull = ((FloatingPointNumber) object).isNull;
+        value = ((FloatingPointNumber) object).value;
+    }
+
+    public void divide(double value) {
+        checkCanOperate();
+        this.value /= value;
+    }
+
+    public void divide(FloatingPointNumber number) {
+        checkCanOperate();
+        number.checkCanOperate();
+        this.value /= number.value;
+    }
+
+    /**
+     Returns this value as an double.
+     */
+    public double doubleValue() {
+        checkCanOperate();
+        return value;
+    }
+
+    /**
+     Returns this value as an float.
+     */
+    public float floatValue() {
+        checkCanOperate();
+        return (float) value;
+    }
+
+    public String getObjectHelpText() {
+        return "A floating point number object.";
+    }
+
+    /**
+     @deprecated replaced by doubleValue
+     @see #doubleValue
+     */
+    public double getValue() {
+        checkCanOperate();
+        return value;
+    }
+
+    /**
+     Returns this value as an int.
+     */
+    public int intValue() {
+        checkCanOperate();
+        return (int) value;
+    }
+
+    public boolean isEmpty() {
+        return isNull;
+    }
+
+    public boolean isEqualTo(Magnitude magnitude) {
+        if (magnitude instanceof FloatingPointNumber) {
+            if (isNull) {
+                return magnitude.isEmpty();
+            }
+            return ((FloatingPointNumber) magnitude).value == value;
+        } else {
+            throw new IllegalArgumentException("Parameter must be of type FloatingPointNumber");
+        }
+    }
+
+    public boolean isLessThan(Magnitude magnitude) {
+        if (magnitude instanceof FloatingPointNumber) {
+            return !isEmpty() && !magnitude.isEmpty() && value < ((FloatingPointNumber) magnitude).value;
+        } else {
+            throw new IllegalArgumentException("Parameter must be of type FloatingPointNumber");
+        }
+    }
+
+    /**
+     Returns this value as an long.
+     */
+    public long longValue() {
+        checkCanOperate();
+        return (long) value;
+    }
+
+    public void multiply(double value) {
+        checkCanOperate();
+        this.value *= value;
+    }
+
+    public void multiply(FloatingPointNumber number) {
+        checkCanOperate();
+        number.checkCanOperate();
+        this.value *= number.value;
+    }
+
+    public void parse(String text) throws ValueParseException {
+        if (text.trim().equals("")) {
+            clear();
+        } else {
+            try {
+                setValue(FORMAT.parse(text).doubleValue());
+            } catch (ParseException e) {
+                throw new ValueParseException(e, "Invalid number");
+            }
+        }
+    }
+
+	/**
+	 * Reset this floating point number so it contains 0.0.
+	 * @see org.nakedobjects.object.NakedValue#reset()
+	 */
+	public void reset() {
+        value= 0.0;
+        isNull = false;
+	}
+	
+    public void setValue(double value) {
+        this.value = value;
+        isNull = false;
+    }
+
+    public void setValue(FloatingPointNumber value) {
+        this.value = value.value;
+        this.isNull = value.isNull;
+    }
+
+    /**
+     Returns this value as an short.
+     */
+    public short shortValue() {
+        checkCanOperate();
+        return (short) value;
+    }
+
+    public void subtract(double value) {
+        add(-value);
+    }
+
+    public void subtract(FloatingPointNumber number) {
+        number.checkCanOperate();
+        add(-number.value);
+    }
+
+    public Title title() {
+        return new Title(isEmpty() ? "" : FORMAT.format(value));
+    }
+    
+	public void restoreString(String data) {
+		setValue(Double.valueOf(data).doubleValue());
+	}
+
+	public String saveString() {
+		return String.valueOf(doubleValue());
+	}
+
+}
