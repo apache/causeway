@@ -3,14 +3,17 @@ package org.nakedobjects.distribution.xml;
 import org.nakedobjects.distribution.ClientDistribution;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ObjectDataHelper;
+import org.nakedobjects.distribution.xml.request.AbortTransaction;
 import org.nakedobjects.distribution.xml.request.AllInstances;
 import org.nakedobjects.distribution.xml.request.ClearAssociation;
+import org.nakedobjects.distribution.xml.request.EndTransaction;
 import org.nakedobjects.distribution.xml.request.ExecuteAction;
 import org.nakedobjects.distribution.xml.request.FindInstances;
 import org.nakedobjects.distribution.xml.request.HasInstances;
 import org.nakedobjects.distribution.xml.request.MakePersistent;
 import org.nakedobjects.distribution.xml.request.SetAssociation;
 import org.nakedobjects.distribution.xml.request.SetValue;
+import org.nakedobjects.distribution.xml.request.StartTransaction;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.control.Hint;
@@ -117,6 +120,21 @@ public class XmlClient implements ClientDistribution {
     
     public void setLoadedObjects(LoadedObjects loadedObjects) {
         this.loadedObjects = loadedObjects;
+    }
+
+    public void abortTransaction(Session session) {
+        Request request = new AbortTransaction(session);
+        remoteExecute(request);    
+    }
+
+    public void endTransaction(Session session) {
+        Request request = new EndTransaction(session);
+        remoteExecute(request);    
+    }
+
+    public void startTransaction(Session session) {
+        Request request = new StartTransaction(session);
+        remoteExecute(request);        
     }
 
 }
