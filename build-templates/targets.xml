@@ -127,13 +127,14 @@
 	<target name="compile.tests" depends="-init" description="Compile the component's tests">
 		<mkdir dir="${build.classes.test}"/>
 		<javac 
-			srcdir="${build.test.dir}"
 			destdir="${build.classes.test}" 
 			includes="**/*.java"
 			target="${compile.target}" 
 			debug="${compile.debug}" 
 			deprecation="false" >
 
+			<src path="${build.test.dir}"/>
+	
 			<classpath refid="libs.internal"/>
 			<classpath refid="libs.external"/>
 			<classpath path="${build.classes.src}"/>
@@ -143,7 +144,7 @@
 	<!--                              -->
 	<!--  create packages    -->
 	<!--                              -->
-	<target name="package" depends="compile.src,compile.tests,docs.javadoc" description="Create jar/zip files containing the component, its tests, and its source">
+	<target name="package" depends="compile.src,compile.tests" description="Create jar/zip files containing the component, its tests, and its source">
 		<mkdir dir="${build.relase.dir}"/>
 		
 		<jar jarfile="${build.relase.dir}/${component}.jar">
@@ -158,9 +159,9 @@
 			<fileset dir="${build.src.dir}"/>
 		</jar>
 		
-		<zip zipfile="${build.relase.dir}/${component}-api.zip">
+		<!--zip zipfile="${build.relase.dir}/${component}-api.zip">
 			<fileset dir="${build.doc.api}"/>
-		</zip>
+		</zip-->
 	</target>
 
 
@@ -220,12 +221,12 @@
 			</batchtest>
 		</junit>
 
-		<junitreport tofile="${test.run.dir}/all-tests.xml">
+		<!-- junitreport tofile="${test.run.dir}/all-tests.xml">
 			<fileset dir="${test.run.dir}">
 				<include name="TEST-*.xml"/>
 			</fileset>
 			<report format="frames" todir="${test.results.dir}"/>
-		</junitreport>
+		</junitreport-->
 	</target>
 
 
