@@ -271,6 +271,10 @@ public interface TestObject extends TestNaked {
 
     TestNaked getField(String fieldName);
 
+    TestObject getFieldAsObject(final String fieldName);
+
+    TestValue getFieldAsValue(final String fieldName);
+    
     /**
      * Get the view for the object held within the named collection view, that
      * has the specified title.

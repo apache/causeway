@@ -5,7 +5,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.AbstractNakedObject;
@@ -14,37 +13,18 @@ import org.nakedobjects.object.reflect.valueadapter.StringAdapter;
 import org.nakedobjects.object.security.Session;
 
 import java.util.Date;
-import java.util.Hashtable;
 
 public class PojoAdapter extends AbstractNakedObject {
-    protected static Hashtable pojos = new Hashtable();
+    private static PojoAdapterHash pojos;
     private static ReflectorFactory reflectorFactory;
-    private Object pojo;
-
-
-    public static void setReflectorFactory(ReflectorFactory reflectorFactory) {
-        PojoAdapter.reflectorFactory = reflectorFactory;
-    }
     
-    /**
-	 * Expose as a .Net property.
-	 * @property
-	 */
-    public static void set_ReflectorFactory(ReflectorFactory reflectorFactory) {
-        PojoAdapter.reflectorFactory = reflectorFactory;
-    }
-    
-    public static NakedObject createNOAdapter(Object pojo) {
-        return (NakedObject) createAdapter(pojo);
-    }
-
-    private static Naked createAdapter(Object pojo, Oid oid) {
+    public static Naked createAdapter(Object pojo) {
         if(pojo == null) {
             return null;
         }
         Naked nakedObject;
-        if(pojos.containsKey(pojo)) {
-            nakedObject = (PojoAdapter) pojos.get(pojo);
+        if(pojos.containsPojo(pojo)) {
+            nakedObject = pojos.getPojo(pojo);
         } else {
             if(pojo instanceof PojoAdapter) {
                 throw new NakedObjectRuntimeException("Warning: adapter is wrapping an adapter: " + pojo);
@@ -64,39 +44,66 @@ public class PojoAdapter extends AbstractNakedObject {
         return nakedObject;       
     }
     
-    public static Naked createAdapter(Object pojo) {
-       return createAdapter(pojo, null);
+    public static NakedObject createNOAdapter(Object pojo) {
+        return (NakedObject) createAdapter(pojo);
     }
+    
+    /**
+	 * Expose as a .Net property.
+	 * @property
+	 */
+    public static void set_PojoAdapterHash(PojoAdapterHash pojos) {
+        PojoAdapter.pojos = pojos;
+    }
+    
+    /**
+	 * Expose as a .Net property.
+	 * @property
+	 */
+    public static void set_ReflectorFactory(ReflectorFactory reflectorFactory) {
+        PojoAdapter.reflectorFactory = reflectorFactory;
+    }
+    
+    public static void setPojoAdapterHash(PojoAdapterHash pojos) {
+        PojoAdapter.pojos = pojos;
+    }
+
+    // TODO is the pojo hashmap the same thing as the loaded objects; can they be combined
+
+    public static void setReflectorFactory(ReflectorFactory reflectorFactory) {
+        PojoAdapter.reflectorFactory = reflectorFactory;
+    }
+    private Object pojo;
     
     public PojoAdapter() {}
     
     protected PojoAdapter(Object pojo) {
         this.pojo= pojo;
-        pojos.put(pojo, this);
-        
-      /*
-         if(pojo.getClass().getName().endsWith("String")) {
-            new RuntimeException().printStackTrace();
-        }
-        */
+        pojos.add(pojo, this);
     }
 
-    public Object getObject() {
-        return pojo;
+    public boolean canAccess(Session session, Action action) {
+        return action.canAccess(session, this);
     }
 
-    public String titleString() {
-        NakedObjectSpecification specification = getSpecification();
-        String title =  specification == null ? null : specification.getTitle().title(this);
-        if (title == null) {
-            return "A " + specification.getSingularName().toLowerCase();
-        } else {
-            return title;
-        }
+    public boolean canAccess(Session session, NakedObjectField specification) {
+        return specification.canAccess(session, this);
+    }
+
+    public boolean canUse(Session session, NakedObjectField field) {
+        return  field.canUse(session, this);
     }
     
-    public String toString() {
-        return "POJO " + super.toString() + " " + titleString();
+    public void clearAssociation(NakedObjectAssociation specification, NakedObject associate) {
+        specification.clearAssociation(this, associate);
+    }
+
+    public void clearCollection(OneToManyAssociation association) {
+        association.clearCollection(this);
+    }
+
+    public void clearValue(OneToOneAssociation association) {
+        association.clearValue(this);    
     }
     
     public boolean equals(Object obj) {
@@ -111,75 +118,18 @@ public class PojoAdapter extends AbstractNakedObject {
         return false;
     }
 
-    public String getLabel(Session session, Action action) {
-        return action.getLabel(session, this);
-    }
-    
-    public void clearAssociation(NakedObjectAssociation specification, NakedObject associate) {
-        specification.clearAssociation(this, associate);
-    }
-    
-    public Naked getField(NakedObjectField field) {
-        return field.get(this);
+    public Naked execute(Action action, Naked[] parameters) {
+        Naked result = action.execute(this, parameters);
+        getObjectManager().saveChanges();
+        return result;
     }
     
     public NakedObject getAssociation(OneToOneAssociation field) {
         return (NakedObject) field.get(this);
     }
-
-    public NakedValue getValue(OneToOneAssociation field) {
-        return (NakedValue) field.get(this);
-    }
-
-    public void clearValue(OneToOneAssociation association) {
-        association.clearValue(this);    
-    }
-
-    public void clearCollection(OneToManyAssociation association) {
-        association.clearCollection(this);
-    }
     
-    public void initOneToManyAssociation(OneToManyAssociation field, NakedObject[] instances) {
-        field.initOneToManyAssociation(this, instances);
-    }
-    
-    public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
-        field.setAssociation(this, associatedObject);
-        getObjectManager().saveChanges();
-    }
-    
-    public void initAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
-        field.initAssociation(this, associatedObject);
-    }
-
-    public void setValue(OneToOneAssociation field, Object object) {
-        field.setValue(this, object);
-    }
-
-    public void initValue(OneToOneAssociation field, Object object) {
-        field.initValue(this, object);
-    }
-
-    public String getLabel(Session session, NakedObjectField field) {
-        return field.getLabel(session, this);
-    }
-
-    public boolean canAccess(Session session, NakedObjectField specification) {
-        return specification.canAccess(session, this);
-    }
-
-    public boolean canAccess(Session session, Action action) {
-        return action.canAccess(session, this);
-    }
-
-    public boolean canUse(Session session, NakedObjectField field) {
-        return  field.canUse(session, this);
-    }
-
-    public Naked execute(Action action, Naked[] parameters) {
-        Naked result = action.execute(this, parameters);
-        getObjectManager().saveChanges();
-        return result;
+    public Naked getField(NakedObjectField field) {
+        return field.get(this);
     }
 
     public Hint getHint(Session session, Action action, Naked[] parameterValues) {
@@ -195,6 +145,39 @@ public class PojoAdapter extends AbstractNakedObject {
             throw new NakedObjectRuntimeException();
         }
     }
+
+    public String getLabel(Session session, Action action) {
+        return action.getLabel(session, this);
+    }
+
+    public String getLabel(Session session, NakedObjectField field) {
+        return field.getLabel(session, this);
+    }
+
+    public Object getObject() {
+        return pojo;
+    }
+    
+    
+    public ActionParameterSet getParameters(Session session, Action action, NakedObjectSpecification[] parameterTypes) {
+        return action.getParameters(session, this, parameterTypes);
+    }
+
+    public NakedValue getValue(OneToOneAssociation field) {
+        return (NakedValue) field.get(this);
+    }
+    
+    public void initAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
+        field.initAssociation(this, associatedObject);
+    }
+    
+    public void initOneToManyAssociation(OneToManyAssociation field, NakedObject[] instances) {
+        field.initOneToManyAssociation(this, instances);
+    }
+
+    public void initValue(OneToOneAssociation field, Object object) {
+        field.initValue(this, object);
+    }
     
     public boolean isEmpty(NakedObjectField field) {
         return field.isEmpty(this);
@@ -204,9 +187,27 @@ public class PojoAdapter extends AbstractNakedObject {
         return  getSpecification().isParsable();
     }
     
+    public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
+        field.setAssociation(this, associatedObject);
+        getObjectManager().saveChanges();
+    }
+
+    public void setValue(OneToOneAssociation field, Object object) {
+        field.setValue(this, object);
+    }
+
+    public String titleString() {
+        NakedObjectSpecification specification = getSpecification();
+        String title =  specification == null ? null : specification.getTitle().title(this);
+        if (title == null) {
+            return "A " + specification.getSingularName().toLowerCase();
+        } else {
+            return title;
+        }
+    }
     
-    public ActionParameterSet getParameters(Session session, Action action, NakedObjectSpecification[] parameterTypes) {
-        return action.getParameters(session, this, parameterTypes);
+    public String toString() {
+        return "POJO " + super.toString() + " " + titleString();
     }
 }
 

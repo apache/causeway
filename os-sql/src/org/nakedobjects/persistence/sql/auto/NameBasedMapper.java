@@ -199,7 +199,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
                     continue;
                 } else if (fields[i] instanceof OneToManyAssociationSpecification) {
                    DatabaseConnector connection = connector.getConnectionPool().acquire();
-                    loadInternalCollection(connection, id, fields[i], (InternalCollection) fields[i].get(object));
+                    loadInternalCollection(connection, id, fields[i], (InternalCollection) fields[i].getPojo(object));
                     connector.getConnectionPool().release(connection);
                 } else if (fields[i] instanceof ValueFieldSpecification) {
                     ValueMapper mapper = ValueMapperLookup.getInstance().mapperFor(fields[i].getSpecification());
@@ -229,7 +229,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
             if (fields[i].isDerived()) {
                 continue;
             }
-            Naked fieldValue = fields[i].get(object);
+            Naked fieldValue = fields[i].getPojo(object);
             if (fields[i] instanceof OneToManyAssociationSpecification) {
                 saveInternalCollection(connector, fields[i], (InternalCollection) fieldValue);
             } else {
@@ -284,7 +284,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
                 continue;
             }
             sb.append(", ");
-            Naked fieldValue = fields[i].get(object);
+            Naked fieldValue = fields[i].getPojo(object);
             if (fieldValue == null) {
                 sb.append("NULL");
             } else {

@@ -25,10 +25,6 @@ public abstract class AbstractNakedValue {
     public abstract String getValueClass();
 
 
-
-
-
-
     public Oid getOid() {
         return null;
     }

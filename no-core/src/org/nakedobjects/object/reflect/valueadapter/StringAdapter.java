@@ -41,7 +41,6 @@ public class StringAdapter extends AbstractNakedValue implements StringValue {
     public String getValueClass() {
         return String.class.getName();
     }
- 
 }
 
 

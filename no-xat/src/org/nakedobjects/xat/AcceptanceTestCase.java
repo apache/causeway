@@ -8,14 +8,16 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.exploration.ExplorationFixture;
 import org.nakedobjects.object.exploration.ExplorationSetUp;
+import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Session;
 
 import java.util.Hashtable;
+import java.util.Properties;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -76,10 +78,14 @@ public abstract class AcceptanceTestCase extends TestCase {
     }
 
     protected void setUp() throws Exception {
-        BasicConfigurator.configure();
-        LogManager.getRootLogger().setLevel(Level.ERROR);
         ConfigurationFactory.setConfiguration(new Configuration("xat.properties"));
-        PropertyConfigurator.configure(ConfigurationFactory.getConfiguration().getProperties("log4j"));
+        Properties logProperties = ConfigurationFactory.getConfiguration().getProperties("log4j");
+//        LogManager.resetConfiguration();
+        if(logProperties.size() == 0) {
+            LogManager.getRootLogger().setLevel(Level.OFF);
+        } else {
+            PropertyConfigurator.configure(logProperties);
+        }
         
         Logger.getLogger(AcceptanceTestCase.class).debug("XAT Logging enabled - new test: " + getName());
 
@@ -127,6 +133,7 @@ public abstract class AcceptanceTestCase extends TestCase {
         ClientSession.setSession(new Session());
         Session session = ClientSession.getSession();
         
+        PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
         setUpFixtures(); 
             
         try{

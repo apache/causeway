@@ -72,7 +72,6 @@ public class BooleanPrimitiveAdapter extends AbstractNakedValue implements Boole
     public String getValueClass() {
         return boolean.class.getName();
     }
-
 }
 
 

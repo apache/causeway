@@ -14,6 +14,7 @@ import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.defaults.TimeBasedOidGenerator;
 import org.nakedobjects.object.defaults.TransientObjectStore;
 import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.SimpleExplorationSetup;
@@ -97,6 +98,7 @@ public class EcsStandalone {
 
             JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
 
+            PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
             PojoAdapter.setReflectorFactory(reflectorFactory);
             
             //    new NakedObjectSpecificationImpl();
@@ -121,7 +123,9 @@ public class EcsStandalone {
             frame.setViewer(viewer);
 
             viewer.setListener(new ObjectViewingMechanismListener() {
-                public void viewerClosing() {}
+                public void viewerClosing() {
+                    System.out.println("EXITED");
+                }
             });
 
             InteractionSpy spy = new InteractionSpy();

@@ -549,7 +549,9 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
                     }
                 }
 
-                LOG.error("Invalid ordering element '" + order[orderIndex] + "' in " + nakedClassName);
+                if(!order[orderIndex].trim().equals("")) {
+                    LOG.warn("Invalid ordering element '" + order[orderIndex] + "' in " + nakedClassName);
+                }
             }
 
             NakedObjectMember[] results = (NakedObjectMember[]) Array.newInstance(memberType, original.length);

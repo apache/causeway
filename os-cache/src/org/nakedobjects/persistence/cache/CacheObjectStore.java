@@ -368,8 +368,8 @@ public class CacheObjectStore implements NakedObjectStore {
 
             if (fld.isValue()) {
                 // find the objects
-                NakedValue reqd = (NakedValue) fld.get(pattern);
-                NakedValue search = (NakedValue) fld.get(object);
+                NakedValue reqd = (NakedValue) fld.getPojo(pattern);
+                NakedValue search = (NakedValue) fld.getPojo(object);
 
                 // if pattern contains empty value then it matches anything
                 if (reqd.isEmpty()) {
@@ -384,8 +384,8 @@ public class CacheObjectStore implements NakedObjectStore {
                 if (s.indexOf(r) == -1) { return false; }
             } else {
                 // find the objects
-                NakedObject reqd = (NakedObject) fld.get(pattern);
-                NakedObject search = (NakedObject) fld.get(object);
+                NakedObject reqd = (NakedObject) fld.getPojo(pattern);
+                NakedObject search = (NakedObject) fld.getPojo(object);
 
                 // if pattern contains null reference then it matches anything
                 if (reqd == null) {

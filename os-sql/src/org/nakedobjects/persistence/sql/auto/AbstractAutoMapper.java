@@ -283,7 +283,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 				continue;
 			}
 			sb.append(", ");
-			Naked fieldValue = fields[i].get(object);
+			Naked fieldValue = fields[i].getPojo(object);
 			if (fieldValue == null) {
 				sb.append("NULL");
 			} else if (fields[i].isValue()) {

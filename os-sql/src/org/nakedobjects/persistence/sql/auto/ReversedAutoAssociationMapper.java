@@ -44,7 +44,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 
 	public void loadInternalCollection(DatabaseConnector connector, NakedObject parent)
 			throws ResolveException, SqlObjectStoreException {
-		InternalCollection collection = (InternalCollection) field.get(parent);
+		InternalCollection collection = (InternalCollection) field.getPojo(parent);
 		LOG.debug("Loading internal collection " + collection);
 		String parentId = primaryKey(parent.getOid());
 		
@@ -62,7 +62,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 	}
 
 	public void saveInternalCollection(DatabaseConnector connector, NakedObject parent) throws SqlObjectStoreException {
-		InternalCollection collection = (InternalCollection) field.get(parent);
+		InternalCollection collection = (InternalCollection) field.getPojo(parent);
 		LOG.debug("Saving internal collection " + collection);
 		String parentId = primaryKey(parent.getOid());
 		

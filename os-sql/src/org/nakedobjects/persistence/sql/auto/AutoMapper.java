@@ -182,7 +182,7 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 		StringBuffer assignments = new StringBuffer();
 		int fld = 0;
 		for (int i = 0; i < fields.length; i++) {
-			Naked fieldValue = fields[i].get(object);
+			Naked fieldValue = fields[i].getPojo(object);
 
 			if (i > 0) {
 				assignments.append(", ");

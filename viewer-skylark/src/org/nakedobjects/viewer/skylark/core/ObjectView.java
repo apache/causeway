@@ -1,4 +1,4 @@
-package org.nakedobjects.viewer.skylark.core;
+ package org.nakedobjects.viewer.skylark.core;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;

@@ -3,6 +3,7 @@ package org.nakedobjects.object.reflect;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.security.Session;
@@ -25,9 +26,9 @@ public class OneToOneAssociation extends NakedObjectAssociation {
     }
     
     protected void clearValue(NakedObject inObject) {
-    	Naked associate = get(inObject);
+    	NakedValue associate = (NakedValue) get(inObject);
     	if(associate != null) {
-    		clearAssociation(inObject, (NakedObject) associate);
+    	    setValue(inObject, null);
     	}
     }
 

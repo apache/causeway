@@ -227,6 +227,14 @@ public abstract class TestObjectDecorator implements TestObject {
     public TestNaked getField(String fieldName) {
         return wrappedObject.getField(fieldName);
     }
+    
+    public TestObject getFieldAsObject(String fieldName) {
+        return wrappedObject.getFieldAsObject(fieldName);
+    }
+    
+    public TestValue getFieldAsValue(String fieldName) {
+        return wrappedObject.getFieldAsValue(fieldName);
+    }
 
     public TestObject getField(String fieldName, String title) {
         return wrappedObject.getField(fieldName, title);

@@ -4,6 +4,7 @@ import org.nakedobjects.application.system.ExplorationClock;
 import org.nakedobjects.application.valueholder.Date;
 import org.nakedobjects.application.valueholder.TextString;
 import org.nakedobjects.application.valueholder.Time;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.exploration.AbstractExplorationFixture;
 import org.nakedobjects.xat.IllegalActionError;
@@ -11,6 +12,7 @@ import org.nakedobjects.xat.NakedAssertionFailedError;
 import org.nakedobjects.xat.TestClass;
 import org.nakedobjects.xat.TestNaked;
 import org.nakedobjects.xat.TestObject;
+import org.nakedobjects.xat.TestObjectImpl;
 import org.nakedobjects.xat.TestValue;
 
 
@@ -47,6 +49,13 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
                  clock.setDate(2001, 12, 14);
                  
                  
+                 
+                 Customer c = (Customer) createInstance(Customer.class);
+                 Location l = (Location) createInstance(Location.class);
+                 
+                 c.getFirstName().setValue("Harry");
+                 c.addToLocations(l);
+                 c.setHome(l);
              }
              
              private void createCity(String name) {
@@ -110,7 +119,7 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
 
         pickup.fieldEntry("Street Address", "234 E 42nd Street");
         booking.associate("Pick Up", pickup);
-
+        
         TestObject dropoff = city.invokeAction("New Location");
 
         dropoff.fieldEntry("Street Address", "JFK Airport, BA Terminal");
@@ -167,6 +176,21 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
         //
         customer.assertFieldContains("Locations", pickup);
         customer.assertFieldContains("Locations", dropoff);
+    }
+
+    public void testMakeRecursive() {
+        TestClass testClass = getTestClass(Customer.class.getName());
+        TestObject customer = testClass.findInstance("Harry");
+        
+        /*
+        TestObject customer = getTestClass(Customer.class.getName()).findInstance("Pawson");
+       TestObject location = customer.getField("locations", "234 E 42nd Street, New York");
+        customer.associate("home", location);
+        
+        customer.assertFieldContains("home", location);
+        
+        customer.getField("home");
+        */
     }
 
     public void testReuseBooking() {
@@ -392,6 +416,15 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
 
         creditCard.assertFieldEntryCantParse("Color", "RED");
     }
+    
+
+    public void testDestroyObject() {
+        TestObject creditCard = getTestClass(CreditCard.class.getName()).newInstance();
+        creditCard.fieldEntry("Number", "12345678901234567");
+        
+        ((NakedObject) creditCard.getForObject()).getContext().getObjectManager().destroyObject((NakedObject) creditCard.getForObject());
+    }
+    
     
 /*
     public void story3ReturnBooking() {
