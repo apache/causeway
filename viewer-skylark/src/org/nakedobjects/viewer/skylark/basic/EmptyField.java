@@ -36,7 +36,6 @@ public class EmptyField extends AbstractView {
             EmptyField emptyField = new EmptyField(content, this, axis);
             NakedObjectSpecification contentType = content.getType();
             if(contentType.isOfType(LOOKUP)) {
-//            if (((ObjectContent) content).getObject() instanceof Lookup) {
                 return new ObjectBorder(new LookupBorder(emptyField));
             } else {
                 return new ObjectBorder(emptyField);
@@ -154,7 +153,7 @@ public class EmptyField extends AbstractView {
         Size size = new Size(0, 0);
         int iconHeight = (style.getHeight() * 120) / 100;
         size.extendWidth((iconHeight * 80) / 100);
-        size.extendWidth(HPADDING * 2);
+        size.extendWidth(HPADDING * 3);
         size.extendWidth(style.stringWidth(name()));
 
         size.setHeight(iconHeight);

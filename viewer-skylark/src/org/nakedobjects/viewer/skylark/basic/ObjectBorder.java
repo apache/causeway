@@ -51,6 +51,8 @@ public class ObjectBorder extends AbstractBorder {
             color = Style.INVALID;
 		} else if(state.isObjectIdentified()) {
             color = Style.SECONDARY2;
+		}  else if(getViewManager().hasFocus(getView())) {
+            color = Style.IDENTIFIED;
 		}
 		
 		Size s  = getSize();

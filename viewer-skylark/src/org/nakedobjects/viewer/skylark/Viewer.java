@@ -63,6 +63,7 @@ public class Viewer {
 
     private ViewUpdateNotifier updateNotifier = new ViewUpdateNotifier();
     private View keyboardFocus;
+    private View windowFocus;
     private Size internalDisplaySize;
     private Insets insets;
     private int statusBarHeight;
@@ -290,6 +291,14 @@ public class Viewer {
         }
     }
 
+    public void makeWindowFocus(View view) {
+        if (view != null && view.canFocus()) {
+            windowFocus = view;
+            keyboardFocus.focusLost();
+            keyboardFocus = null;
+        }
+    }
+    
     public boolean hasFocus(View view) {
         return keyboardFocus == view;
     }

@@ -19,10 +19,12 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     private InteractionSpy spy;
     private final Viewer viewer;
 
-    InteractionHandler(Viewer topView, InteractionSpy debugFrame) {
-        this.viewer = topView;
+    private final KeyboardManager keyboardManager;
+    
+    InteractionHandler(Viewer viewer, InteractionSpy debugFrame) {
+        this.viewer = viewer;
         this.spy = debugFrame;
-
+        keyboardManager = new KeyboardManager(viewer);
     }
 
     private void drag(MouseEvent me) {
@@ -82,12 +84,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
             }
             viewer.clearOverlayView();
         }
-
-        View keyboardFocus = viewer.getFocus();
-
-        if (keyboardFocus != null) {
-            keyboardFocus.keyPressed(ke.getKeyCode(), ke.getModifiers());
-        }
+        keyboardManager.pressed(ke.getKeyCode(), ke.getModifiers());
 
         redraw();
     }
@@ -99,11 +96,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * @see java.awt.event.KeyListener#keyReleased(KeyEvent)
      */
     public void keyReleased(KeyEvent ke) {
-        View keyboardFocus = viewer.getFocus();
-
-        if (keyboardFocus != null) {
-            keyboardFocus.keyReleased(ke.getKeyCode(), ke.getModifiers());
-        }
+        keyboardManager.released(ke.getKeyCode(), ke.getModifiers());
         redraw();
     }
 
@@ -114,13 +107,10 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * @see java.awt.event.KeyListener#keyTyped(KeyEvent)
      */
     public void keyTyped(KeyEvent ke) {
-        View keyboardFocus = viewer.getFocus();
-        if (keyboardFocus != null) {
-            if (!ke.isActionKey() && !Character.isISOControl(ke.getKeyChar())) {
-                keyboardFocus.keyTyped(ke.getKeyChar());
-            }
+        if (!ke.isActionKey()) {
+            keyboardManager.typed(ke.getKeyChar());
+            redraw();
         }
-        redraw();
     }
 
     /**

@@ -953,12 +953,12 @@ public class TextField extends AbstractField {
             }
 
             // TODO movement between fields to happen in view manager
-            if ((modifiers & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK) {
+/*            if ((modifiers & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK) {
                 focusPrevious();
             } else {
                 focusNext();
             }
-
+*/
             break;
 
         case KeyEvent.VK_ENTER:

@@ -43,8 +43,11 @@ public class ResizeBorder extends AbstractBorder {
             canvas.drawLine(x, 0, x, height - 1, color);
         }
 
-        canvas.setClip(0,0, width - BORDER_WIDTH, height - BORDER_WIDTH);
-        wrappedView.draw(canvas);
+        Canvas subCanvas = canvas.createSubcanvas(0,0, width - BORDER_WIDTH, height - BORDER_WIDTH);
+        wrappedView.draw(subCanvas);
+
+//        canvas.setClip(0,0, width - BORDER_WIDTH, height - BORDER_WIDTH);
+//        wrappedView.draw(canvas);
     }
 
     public ViewAreaType viewAreaType(Location mouseLocation) {

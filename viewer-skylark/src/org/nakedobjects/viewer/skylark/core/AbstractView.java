@@ -78,7 +78,7 @@ public abstract class AbstractView implements View {
     }
 
     public boolean canFocus() {
-        return false;
+        return true;
     }
 
     /**
@@ -189,56 +189,6 @@ public abstract class AbstractView implements View {
 
     public void focusLost() {}
 
-    public void focusNext() {
-        View[] views = getParent().getSubviews();
-
-        for (int i = 0; i < views.length; i++) {
-            if (views[i] == getView()) {
-                for (int j = i + 1; j < views.length; j++) {
-                    if (views[j].canFocus()) {
-                        getViewManager().makeFocus(views[j]);
-                        return;
-                    }
-                }
-                for (int j = 0; j < i; j++) {
-                    if (views[j].canFocus()) {
-                        getViewManager().makeFocus(views[j]);
-                        return;
-                    }
-                }
-                // no other focusable view; stick with the view we've got
-                return;
-            }
-        }
-
-        throw new NakedObjectRuntimeException();
-    }
-
-    public void focusPrevious() {
-        View[] views = getParent().getSubviews();
-
-        for (int i = 0; i < views.length; i++) {
-            if (views[i] == getView()) {
-                for (int j = i - 1; j >= 0; j--) {
-                    if (views[j].canFocus()) {
-                        getViewManager().makeFocus(views[j]);
-                        return;
-                    }
-                }
-                for (int j = views.length - 1; j > i; j--) {
-                    if (views[j].canFocus()) {
-                        getViewManager().makeFocus(views[j]);
-                        return;
-                    }
-                }
-                // no other focusable view; stick with the view we've got
-                return;
-            }
-        }
-
-        throw new NakedObjectRuntimeException();
-    }
-
     public void focusRecieved() {}
 
     public Location getAbsoluteLocation() {
@@ -322,8 +272,9 @@ public abstract class AbstractView implements View {
         return getParent() == null ? null : getParent().getWorkspace();
     }
 
+
     public boolean hasFocus() {
-        return false;
+        return getViewManager().hasFocus(getView());
     }
 
     public View identify(Location location) {

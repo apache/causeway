@@ -13,7 +13,8 @@ public class Canvas {
 
     protected Canvas(Graphics bufferGraphic, int x, int y, int width, int height) {
         graphics = bufferGraphic;
-        graphics.setClip(x, y, width, height);
+     //   graphics.setClip(x, y, width, height);
+        graphics.clipRect(x, y, width, height);
     }
 
     protected Canvas(Graphics graphics) {
@@ -22,7 +23,6 @@ public class Canvas {
 
     public Canvas createSubcanvas() {
         return new Canvas(graphics.create());
-//        return new Canvas(graphics.create(), activeArea.x, activeArea.y, activeArea.width, activeArea.height);
     }
 
     public Canvas createSubcanvas(Bounds bounds) {
@@ -31,11 +31,18 @@ public class Canvas {
 
     public Canvas createSubcanvas(int x, int y, int width, int height) {
         Graphics g = graphics.create();
-        g.clipRect(x, y, width, height); // this form of clipping must go here!
+ //       g.clipRect(x, y, width, height); // this form of clipping must go here!
         g.translate(x, y);
         return new Canvas(g, 0, 0, width, height);
     }
-
+ 
+/*
+    public void setClip(int x, int y, int width, int height) {
+        graphics.translate(-x, -y);
+        graphics.setClip(x, y, width, height);
+    }
+*/
+    
      public boolean overlaps(Bounds bounds) {
        // return activeArea.intersects(bounds);
          Rectangle clip = graphics.getClipBounds();
@@ -103,11 +110,6 @@ public class Canvas {
         graphics.fillRect(x, y, width, height);
     }
 
-    /*
-     * public void drawFullRectangle(Bounds bounds, Color color) {
-     * drawFullRectangle(bounds.x, bounds.y, bounds.width, bounds.height,
-     * color); }
-     */
     public void drawSolidRectangle(Location at, Size size, Color color) {
         drawSolidRectangle(at.getX(), at.getY(), size.getWidth(), size.getHeight(), color);
     }
@@ -136,11 +138,6 @@ public class Canvas {
         useColor(color);
         useFont(style);
         graphics.drawString(text, x, y);
-    }
-
-    public void setClip(int x, int y, int width, int height) {
-        graphics.translate(-x, -y);
-        graphics.setClip(x, y, width, height);
     }
 
     public String toString() {

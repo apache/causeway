@@ -89,13 +89,14 @@ public class CompositeObjectView extends ObjectView {
         View views[] = getSubviews();
         for (int i = 0; i < views.length; i++) {
             View subview = views[i];
-            Bounds subviewBounds = subview.getBounds();
+            Bounds bounds = subview.getBounds();
             if (AbstractView.DEBUG) {	                   
-                LOG.debug("compare: " + subviewBounds +"  " + canvas);
+                LOG.debug("compare: " + bounds +"  " + canvas);
             }
-            if(canvas.overlaps(subviewBounds)) {
-	            Canvas subCanvas = canvas.createSubcanvas();
-	            subCanvas.offset(subview.getBounds().getX(), subview.getBounds().getY());
+            if(canvas.overlaps(bounds)) {
+	            //Canvas subCanvas = canvas.createSubcanvas();
+	            Canvas subCanvas = canvas.createSubcanvas(bounds.getX(), bounds.getY(), bounds.getWidth() - 0 , bounds.getSize().getHeight());
+	         //   subCanvas.offset(subview.getBounds().getX(), subview.getBounds().getY());
 	            if (AbstractView.DEBUG) {
 	                LOG.debug("-- repainting " + subview );
 	                LOG.debug("subcanvas " + subCanvas);
