@@ -1,32 +1,5 @@
-/*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
- * Ltd
- * 
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option)
- * any later version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
- * 
- * The authors can be contacted via www.nakedobjects.org (the registered
- * address of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking
- * GU21 1NR, UK).
- */
+
 package org.nakedobjects.viewer.skylark;
-
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-
-import junit.framework.TestCase;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.control.Permission;
@@ -34,6 +7,11 @@ import org.nakedobjects.object.control.defaults.Allow;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.DefaultPopupMenu;
+
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+
+import junit.framework.TestCase;
 
 public class PopupMenuTest extends TestCase {
 //	private MockWorkspace workspace;
@@ -45,7 +23,7 @@ public class PopupMenuTest extends TestCase {
 	}
 
 	private Click click(int x, int y) {
-		return new Click(popup, new Location(x, y), new Location(), MouseEvent.BUTTON1_MASK);
+		return new Click(popup, new Location(x, y), new Location(), InputEvent.BUTTON1_MASK);
 	}
 
 	public void testClickFirstOption() {
@@ -230,3 +208,27 @@ public class PopupMenuTest extends TestCase {
         }
 	}
 }
+
+/*
+ * Naked Objects - a framework that exposes behaviourally complete business
+ * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * Ltd
+ * 
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * The authors can be contacted via www.nakedobjects.org (the registered
+ * address of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking
+ * GU21 1NR, UK).
+ */
