@@ -541,8 +541,12 @@ public class JavaReflector implements Reflector {
         }
     }
     
+    public boolean isCollection() {
+        return Vector.class.isAssignableFrom(cls) || InternalCollection.class.isAssignableFrom(cls);
+    }
+    
     public boolean isObject() {
-        return NakedObject.class.isAssignableFrom(cls);
+        return !isValue() && !isCollection();
     }
     
     public boolean isValue() {
