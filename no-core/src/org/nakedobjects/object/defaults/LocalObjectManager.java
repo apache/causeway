@@ -330,7 +330,8 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
                 continue;
             } else if (field.isValue()) {
                 continue;
-            } else if (field.isPart()) {
+//            } else if (field.isPart()) {
+            } else if (field instanceof OneToManyAssociationSpecification) {
                 InternalCollection collection = (InternalCollection) field.get(object);
                 collection.setOid(createOid(collection));
                 collection.setResolved();

@@ -4,13 +4,14 @@ package org.nakedobjects.object;
 /**
  *  Defines an Object which is part of another object
  */
-public interface Aggregate extends NakedObject {
+public interface Aggregated extends NakedObject {
 
     /**
      *  Return the parent of this Aggregate
-     *  @return NakedObject
-     */
-    public NakedObject forParent();
+    */
+    public NakedObject parent();
+    
+    public boolean isAggregated();
 }
 
 /*

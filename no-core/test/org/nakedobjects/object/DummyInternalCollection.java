@@ -9,7 +9,7 @@ public class DummyInternalCollection implements InternalCollection {
         return null;
     }
 
-    public NakedObject forParent() {
+    public NakedObject parent() {
         return null;
     }
 
@@ -49,6 +49,14 @@ public class DummyInternalCollection implements InternalCollection {
         return false;
     }
 
+    public boolean isAggregated() {
+        return false;
+    }
+
+    public boolean isPersistent() {
+        return false;
+    }
+    
     public NakedObject elementAt(int index) {
         return null;
     }

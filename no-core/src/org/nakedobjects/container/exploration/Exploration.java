@@ -64,6 +64,7 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
         }
         Logger.getRootLogger().setLevel(Level.WARN);
         
+        SplashWindow splash = null;
         NakedObjectManager objectManager = null;
         try {
             String name = this.getClass().getName();
@@ -76,7 +77,12 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
             log.info(AboutNakedObjects.getVersion());
             log.info(AboutNakedObjects.getBuildId());
 
-            showSplash();
+           
+            boolean noSplash = Configuration.getInstance().getBoolean("nosplash", false);
+            if (!noSplash) {
+                splash = new SplashWindow();
+            } 
+
             setUpLocale();
             
             installSpecificationLoader();
@@ -164,15 +170,21 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
      
             viewer.init(rootObject, this);
             viewer.start();
-
+            
+            splash.toFront();
+            
         } catch (ConfigurationException e) {
             throw new NakedObjectRuntimeException(e);
         } catch( StartupException e) {
-            if(objectManager == null) {
-                objectManager.shutdown();
+            if(splash != null) {
+                splash.removeAfterDelay(4);
             }
             
             throw new NakedObjectRuntimeException(e);
+        } finally {
+            if(splash != null) {
+                splash.removeAfterDelay(4);
+            }
         }
     }
 
@@ -230,14 +242,6 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
         }
 
         LOG.debug("locale is " + Locale.getDefault());
-    }
-
-    private void showSplash() {
-        boolean noSplash = Configuration.getInstance().getBoolean("nosplash", false);
-        if (!noSplash) {
-            SplashWindow splash = new SplashWindow();
-            splash.removeAfterDelay(4);
-        }
     }
 
     public void viewerClosing() {

@@ -32,11 +32,16 @@ public interface NakedObject extends Naked {
     Oid getOid();
 
     /**
-     * returns true when the object has been completely read into memory and all
+     * Returns true once the object has been completely read into memory and all
      * it attributes can be validly accessed.
      */
     boolean isResolved();
 
+    /**
+     * Returns true when the object is persistent.
+     */
+    boolean isPersistent();
+    
       /**
      * Sets the OID for this object. This id must be unique.
      */

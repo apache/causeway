@@ -1,7 +1,7 @@
 package org.nakedobjects.object;
 
 
-public interface InternalCollection extends TypedNakedCollection, Aggregate {
+public interface InternalCollection extends TypedNakedCollection, Aggregated {
 
 }
 

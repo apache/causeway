@@ -17,6 +17,10 @@ public class DummyNakedObject implements NakedObject {
         return false;
     }
 
+    public boolean isPersistent() {
+        return false;
+    }
+    
     public void setOid(Oid oid) {}
 
     public void setResolved() {}

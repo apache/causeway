@@ -1,6 +1,6 @@
 package org.nakedobjects.object.reflect.defaults;
 
-import org.nakedobjects.object.Aggregate;
+import org.nakedobjects.object.Aggregated;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
@@ -458,7 +458,7 @@ public class JavaReflector implements Reflector {
     }
 
     public boolean isPartOf() {
-        return Aggregate.class.isAssignableFrom(cls);
+        return Aggregated.class.isAssignableFrom(cls);
     }
     
     String[] names(Vector methods) {
