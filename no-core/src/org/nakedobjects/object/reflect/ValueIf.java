@@ -1,5 +1,6 @@
 package org.nakedobjects.object.reflect;
 
+import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ValueParseException;
@@ -25,7 +26,7 @@ public interface ValueIf extends MemberIf {
 
     void restoreValue(NakedObject inObject, String encodeValue);
 
-    void saveValue(NakedObject inObject, String encodeValue);
+    void saveValue(NakedObject inObject, String encodeValue) throws InvalidEntryException;
 }
 
 

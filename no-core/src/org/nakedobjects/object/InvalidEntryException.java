@@ -2,12 +2,9 @@ package org.nakedobjects.object;
 
 
 public class InvalidEntryException extends NakedObjectException {
-    private Throwable cause;
-    
 	public InvalidEntryException() {
 		this("Invalid value");
 	}
-
 
 	public InvalidEntryException(String message) {
 		super(message);
@@ -18,12 +15,7 @@ public class InvalidEntryException extends NakedObjectException {
     }
 
     public InvalidEntryException(Throwable cause, String message) {
-        super(message);
-        this.cause = cause;
-    }
-    
-    public Throwable getCause() {
-    	return cause;
+        super(message, cause);
     }
 }
 
