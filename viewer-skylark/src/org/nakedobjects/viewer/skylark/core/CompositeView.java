@@ -8,6 +8,7 @@ import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
@@ -177,10 +178,13 @@ public class CompositeView extends ObjectView {
         return layoutInvalid;
     }
     
-    protected View subviewFor(Location location) {
+    public View subviewFor(Location location) {
+        Location l = new Location(location);
+        Padding padding = getPadding();
+        l.subtract(padding.getLeft(), padding.getTop());
         View views[] = getSubviews();
         for (int i = views.length - 1; i >= 0; i--) {
-            if (views[i].getBounds().contains(location)) {
+            if (views[i].getBounds().contains(l)) {
                 return views[i];
             }
         }

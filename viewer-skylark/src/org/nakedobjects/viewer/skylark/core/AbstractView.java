@@ -569,11 +569,7 @@ public abstract class AbstractView implements View {
         this.view = view;
     }
 
-    /**
-     * Identifies the subview that contains the specified location within its
-     * bounds. Returns null if no subview exists for that location.
-     */
-    protected View subviewFor(Location location) {
+    public View subviewFor(Location location) {
         return null;
     }
 

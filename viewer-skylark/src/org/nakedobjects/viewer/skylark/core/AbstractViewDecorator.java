@@ -318,6 +318,10 @@ public class AbstractViewDecorator implements View {
         wrappedView.setView(view);
     }
 
+    public View subviewFor(Location location) {
+        return wrappedView.subviewFor(location);
+    }
+    
     public void thirdClick(Click click) {
         wrappedView.thirdClick(click);
     }

@@ -6,6 +6,7 @@ import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
@@ -164,7 +165,10 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     }
 
     
-    protected View subviewFor(Location location) {
+    public View subviewFor(Location location) {
+        Location l = new Location(location);
+        Padding padding = getPadding();
+        l.subtract(padding.getLeft(), padding.getTop());
         if(left.getBounds().contains(location)) {
            return  left;
         } else if(right != null && right.getBounds().contains(location)) {

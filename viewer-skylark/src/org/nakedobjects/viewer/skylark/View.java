@@ -295,6 +295,12 @@ public interface View extends Cloneable {
     void setView(View view);
 
     /**
+     * Identifies the subview that contains the specified location within its
+     * bounds. Returns null if no subview exists for that location.
+     */
+    View subviewFor(Location location);
+    
+    /**
      * Called when the user triple-clicks the mouse buttone within this view.
      * This method will have been preceded by a call to <code>doubleClick</code>.
      */
