@@ -23,7 +23,6 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
-import org.nakedobjects.viewer.skylark.basic.LabelAxis;
 import org.nakedobjects.viewer.skylark.basic.SimpleIdentifier;
 import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
 import org.nakedobjects.viewer.skylark.special.ViewResizeOutline;
@@ -499,14 +498,14 @@ public class TextField extends AbstractField {
          
         } else {
             if (canChangeValue()) {
-                selection.extendTo(drag.getTargetLocation());
+                selection.extendTo(drag.getLocation());
                 markDamaged();
             }
         }
     }
 
     public View dragFrom(InternalDrag drag) {
-        Location at = drag.getSourceLocation();
+        Location at = drag.getLocation();
 
         if (isOnResize(at)) {
             isResizing = true;
@@ -538,7 +537,7 @@ public class TextField extends AbstractField {
     }
 
     public void dragTo(InternalDrag drag) {
-        Location at = drag.getTargetLocation();
+        Location at = drag.getLocation();
 
         if (isResizing) {
             isResizing = false;

@@ -7,17 +7,26 @@ import org.apache.log4j.Logger;
  * view.
  * 
  * <p>An overlay view, as returned by the pickup() method on the source view, is moved by this 
- * drag descripter so its location follows the pointer.
+ * drag objects so its location follows the pointer by an offset equivalent to the mouse location within the view.
  */
 public class ViewDrag extends Drag {
 	private static final Logger LOG = Logger.getLogger(ViewDrag.class);
-    protected View dragging;
-	private final View workspace;
+    private final View overlayView;
+	private final View viewsWorkspace;
+    private Location mouseLocation;
+    /**
+     * Offset from the view's top-left corner to the pointer (relative to the view).
+     */
+    private final Offset overlayOffset;
 
-	public static ViewDrag create(View source, Location absolute, Location relative, int modifiers) {
-		ViewDrag drag = new ViewDrag(source, absolute, relative, modifiers);
-		
-		return drag.dragging == null ? null : drag;
+	public static ViewDrag create(View source, Location mouseLocationWithinViewer, Location locationWithinView, int modifiers) {
+	    View parent = source.getParent();
+        if(parent == null) {
+            return null;
+        }
+	    
+		ViewDrag drag = new ViewDrag(source, mouseLocationWithinViewer, locationWithinView, modifiers);
+		return drag.overlayView == null ? null : drag;
 	}
 	
 	/**
@@ -26,26 +35,26 @@ public class ViewDrag extends Drag {
 	 * continuously so that it tracks the pointer,
 	 * 
 	 * @param source	the view over which the pointer was when this event started
- 	 * @param absolute  the location within the viewer (the Frame/Applet/Window etc)
+ 	 * @param mouseLocationWithinViewer  the location within the viewer (the Frame/Applet/Window etc)
  	 * @param relative  the location within the specified view
  	 * @param modifiers  the button and key modifiers (@see java.awt.event.MouseEvent)
 	 */
-    private ViewDrag(View source, Location absolute, Location relative, int modifiers) {
-        super(source, absolute, relative, modifiers);
-
-        workspace = source.getWorkspace().getView();
-        dragging = source.pickup(this);
+    private ViewDrag(View source, Location mouseLocationWithinViewer, Location relative, int modifiers) {
+        super(source, mouseLocationWithinViewer, relative, modifiers);
         
-        
-	    if(dragging != null) {
+        overlayView = source.pickup(this);
+        overlayOffset = new Offset(relative.getX(), relative.getY());
+        viewsWorkspace = source.getParent().getWorkspace().getView();
+ 
+        if(overlayView != null) {
 		    source.exited();
 		    LOG.debug("pickup " + this);
-		    source.getViewManager().setOverlayView(dragging);
+		    source.getViewManager().setOverlayView(overlayView);
 		    source.getViewManager().showMoveCursor();
 		    // need to update the view location to reset the pointer location that changed 
 		    // during the pickup method above
-	        updateLocationWithinViewer(dragging, absolute);
-		    setDraggingLocation();
+	        updateLocationWithinViewer(mouseLocationWithinViewer, overlayView, relative);
+		    updateDraggingLocation();
 	    }
     }
 
@@ -60,37 +69,44 @@ public class ViewDrag extends Drag {
      * Moves the overlay view so it follows the pointer
      */
     protected void drag() {
-        if (dragging != null) {
-            dragging.markDamaged();
-            setDraggingLocation();
-            dragging.markDamaged();
+        if (overlayView != null) {
+            overlayView.markDamaged();
+            updateDraggingLocation();
+            overlayView.markDamaged();
         }
     }
     
-    private void setDraggingLocation() {
-        LOG.debug("pointer location  " + getPointerLocation());
-		Location viewOffset = new Location(getPointerLocation());
-		viewOffset.move(-sourceLocation.getX(), -sourceLocation.getY());
-		dragging.setLocation(viewOffset);
+    private void updateDraggingLocation() {
+        LOG.debug("mouse location  " + mouseLocation);
+        Location viewLocation = new Location(mouseLocation);
+		viewLocation.subtract(overlayOffset);
+		overlayView.setLocation(viewLocation);
 	}
     
     /**
      * Ends the drag by calling drop() on the workspace.
      */
     protected  void end() {
-        workspace.drop(this);
+        viewsWorkspace.drop(this);
     }
 
-    /**
-     * Returns the workspace as the targer view.
-     */
-    public View getTargetView() {
-		return workspace;
-	}
-    
     public String toString() {
 		return "ViewDrag [" + super.toString() + "]";
 	}
+
+    public void move(int x, int y) {}
+
+    void updateLocationWithinViewer(Location mouseLocation, View target, Location locationInTarget) {
+        this.mouseLocation = mouseLocation;
+    }
+
+    public Location getViewDropLocation() {
+        Location viewLocation = new Location(mouseLocation);
+		viewLocation.subtract(overlayOffset);
+        viewLocation.subtract(viewsWorkspace.getAbsoluteLocation());
+        viewLocation.move(-viewsWorkspace.getPadding().left, -viewsWorkspace.getPadding().top);
+        return viewLocation;
+    }
 }
 
 

@@ -26,16 +26,14 @@ public class ViewerAssistant {
     private final ViewUpdateNotifier updateNotifier;
     private final Viewer viewer;
     private final UndoStack undoStack = new UndoStack();
+    private final InteractionSpy debugFrame;
     
     protected ViewerAssistant(Viewer topView,
-        ViewUpdateNotifier updateNotifier) {
+        ViewUpdateNotifier updateNotifier, InteractionSpy debugFrame) {
         this.viewer = topView;
         this.updateNotifier = updateNotifier;
+        this.debugFrame = debugFrame;
         instance = this;
-    }
-
-    public Location absoluteLocation(View view) {
-    	return Viewer.absoluteLocation(view);
     }
 
     public void addToNotificationList(View view) {
@@ -54,6 +52,10 @@ public class ViewerAssistant {
         viewer.repaint();
     }
 
+    public InteractionSpy getSpy() {
+        return debugFrame;
+    }
+    
     public boolean hasFocus(View view) {
         return viewer.hasFocus(view);
     }

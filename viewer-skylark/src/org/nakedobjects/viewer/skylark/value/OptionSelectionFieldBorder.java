@@ -49,8 +49,8 @@ public class OptionSelectionFieldBorder extends AbstractBorder {
                 Size size = overlay.getRequiredSize();
                 overlay.setSize(size);
 
-                Location location = getView().getLocationWithinViewer();
-                location.move(getView().getSize().getWidth() - size.getWidth(), getView().getSize().getHeight());
+                Location location = click.getLocationWithinViewer();
+                // TODO offset by constant amount
                 overlay.setLocation(location);
 
                 overlay.markDamaged();

@@ -8,17 +8,25 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
 
 public class LineBorder extends AbstractBorder {
+    private final Color color;
+    
 	public LineBorder(View wrappedView) {
 		this(1, wrappedView);
 	}
 	
 	public LineBorder(int size, View wrappedView) {
+	    this(size, Style.PRIMARY2, wrappedView);
+	}
+	
+	public LineBorder(int size, Color color, View wrappedView) {
 		super(wrappedView);
 		
 		top = size;
 		left = size;
 		bottom = size;
 		right = size;
+		
+		this.color = color;
 	}
 
 	protected void debugDetails(StringBuffer b) {
@@ -26,7 +34,7 @@ public class LineBorder extends AbstractBorder {
     }
    
 	public void draw(Canvas canvas) {
-		Color color = Style.PRIMARY2;
+		
 		Size s  = getSize();
 		int width = s.getWidth();
 		for (int i = 0; i < left; i++) {

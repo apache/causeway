@@ -17,7 +17,7 @@ public class InternalDragTest extends TestCase {
 		assertEquals(new Location(100, 110), id.getSourceLocationWithinViewer());
 		assertEquals(new Location(20, 25), id.getSourceLocation());
 		
-		id.updateLocationWithinViewer(view, new Location(110, 120));
+		id.updateLocationWithinViewer(new Location(110, 120), view, new Location(20, 35));
 		
 		assertEquals(new Location(20, 25), id.getSourceLocation());
 	}

@@ -51,6 +51,7 @@ public class ViewFactory implements DebugInfo {
     private final Vector valueFields = new Vector();
     private ViewSpecification workspaceClassIconSpecification;
     private ViewSpecification workspaceObjectIconSpecification;
+    private ViewSpecification rootWorkspaceSpecification;
     private ViewSpecification workspaceSpecification;
 
 	public void addClassIconSpecification(ViewSpecification spec) {
@@ -81,6 +82,10 @@ public class ViewFactory implements DebugInfo {
 	public void addValueFieldSpecification(ViewSpecification spec) {
     	valueFields.addElement(spec);
 	}
+
+	public void addRootWorkspaceSpecification(ViewSpecification spec) {
+		rootWorkspaceSpecification = spec;
+	}	
 
 	public void addWorkspaceSpecification(ViewSpecification spec) {
 		workspaceSpecification = spec;
@@ -145,13 +150,21 @@ public class ViewFactory implements DebugInfo {
 	    return view;
     }
 
-    public View createWorkspace(NakedObject workspace) {
-        LOG.debug("creating workspace for " + workspace);
+    public View createRootWorkspace(NakedObject workspace) {
+        LOG.debug("creating root workspace for " + workspace);
+        View view = createRootView(workspace, rootWorkspaceSpecification);
+
+        return view;
+    }
+	
+    public View createInnerWorkspace(NakedObject workspace) {
+        LOG.debug("creating inner workspace for " + workspace);
         View view = createRootView(workspace, workspaceSpecification);
 
         return view;
     }
 	
+
 	private ViewSpecification defaultViewSpecification(Vector availableViews, Naked forObject) {
 		Enumeration fields = availableViews.elements();
 		while (fields.hasMoreElements()) {

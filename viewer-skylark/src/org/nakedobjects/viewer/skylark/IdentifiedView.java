@@ -1,15 +1,43 @@
-package org.nakedobjects.viewer.skylark.special;
+package org.nakedobjects.viewer.skylark;
 
+public class IdentifiedView {
 
-public class InternalTableSpecification extends TableSpecification {
-    public InternalTableSpecification() {
-        builder = new TableHeaderBuilder(new StackLayout(new CollectionElementBuilder(this, true)));
+    private final View view;
+    private final Location mouseLocation;
+    private final Location viewLocation;
+
+    public IdentifiedView(final View view, final Location mouseLocation, final Location viewLocation) {
+        this.view = view;
+        this.mouseLocation = mouseLocation;
+        this.viewLocation = viewLocation;
     }
 
-    public String getName() {
-        return "Internal Table";
+    public View getView() {
+        return view;
     }
+
+    Location getMouseLocationWithinView() {
+        return mouseLocation;
+    }
+
+    Location getViewLocationWithinViewer() {
+        return viewLocation;
+    }
+
+    public void translate(final Location location) {
+        viewLocation.translate(location);
+    }
+
+    public void translate(int left, int top) {
+        viewLocation.move(left, top);
+    }
+
+    public void translate(Offset offset) {
+        viewLocation.translate(offset);
+    }
+    
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete

@@ -15,7 +15,7 @@ public class ScrollBorderTest extends TestCase {
 
     public void testScrollBar() {
        View  view = new ScrollBorder(new MockView());
-       view.setSize(new Size(100, 200));
+       view.setRequiredSize(new Size(100, 200));
        
        ViewAreaType type = view.viewAreaType(new Location(20, 190));
        assertEquals(ViewAreaType.INTERNAL, type);

@@ -97,4 +97,19 @@ public class Location {
     public void translate(Offset offset) {
         move(offset.getDeltaX(), offset.getDeltaY());
     }
+
+    public Offset offsetFrom(Location workspaceLocation) {
+        
+        Offset offset;
+        offset = new Offset(x - workspaceLocation.x, y - workspaceLocation.y);
+        return offset;
+    }
+
+    public void subtract(Offset offset) {
+        move(-offset.getDeltaX(), -offset.getDeltaY());
+    }
+
+    public void subtract(Location location) {
+        move(-location.x, -location.y);    
+    }
 }

@@ -25,9 +25,11 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
     private static final Logger LOG = Logger.getLogger(CollectionElementBuilder.class);
 	private boolean canDragView = true;
 	private SubviewSpec subviewDesign;
+    private boolean showAll;
 
-    public CollectionElementBuilder(SubviewSpec subviewDesign) {
+    public CollectionElementBuilder(SubviewSpec subviewDesign, boolean showAll) {
     	this.subviewDesign = subviewDesign;
+    	this.showAll = showAll;
 	}
 	
     public void build(View view) {
@@ -39,10 +41,15 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
 
         LOG.debug("rebuild view " + view + " for " + content);
 
-        CollectionDisplayIterator iterator = ((CollectionContent) content).getIterator();
-        
-        Enumeration elements = iterator.displayElements();
- 
+        CollectionContent collectionContent = ((CollectionContent) content);
+         Enumeration elements;
+        if(showAll) {
+            elements = collectionContent.allElements();
+        } else {
+            CollectionDisplayIterator iterator = collectionContent.getIterator();
+            elements = iterator.displayElements();
+        }
+         
         /*
          * remove all subviews from the view and then work through the elements of the
          * collection adding in a view for each element.  Where a subview for the that 

@@ -4,6 +4,7 @@ import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
+import org.nakedobjects.viewer.skylark.IdentifiedView;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Offset;
@@ -13,11 +14,8 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
 
-import org.apache.log4j.Logger;
-
 
 public class ScrollBorder extends AbstractBorder {
-    private static final Logger LOG = Logger.getLogger(ScrollBorder.class);
     private static final int SCROLLBAR_WIDTH = 16;
 
     private int horizontalScrollPosition = 0;
@@ -64,11 +62,14 @@ public class ScrollBorder extends AbstractBorder {
         canvas.drawLine(contents.getWidth(), 0, contents.getWidth(), height, Style.SECONDARY2);
 
         Color color = isOnBorder() ? Style.SECONDARY1 : Style.SECONDARY2;
-        canvas.drawSolidRectangle(horizontalScrollPosition, contents.getHeight() + 2, horizontalVisibleAmount,
+        if(horizontalScrollPosition > 0 || horizontalVisibleAmount != contents.getWidth()) {
+            canvas.drawSolidRectangle(horizontalScrollPosition, contents.getHeight() + 2, horizontalVisibleAmount,
                 SCROLLBAR_WIDTH - 3, color);
-        canvas.drawSolidRectangle(contents.getWidth() + 2, verticalScrollPosition, SCROLLBAR_WIDTH - 3, verticalVisibleAmount,
-                color);
-
+        }
+        if(verticalScrollPosition > 0 || verticalVisibleAmount != contents.getHeight()) {
+                   canvas.drawSolidRectangle(contents.getWidth() + 2, verticalScrollPosition, 
+                           SCROLLBAR_WIDTH - 3, verticalVisibleAmount,             color);
+        }
         Offset offset = offset();
         canvas.setClip(offset.getDeltaX(), offset.getDeltaY(), contents.getWidth(), contents.getHeight());
         super.draw(canvas);
@@ -102,6 +103,8 @@ public class ScrollBorder extends AbstractBorder {
         horizontalVisibleAmount = displayWidth * displayWidth / contentWidth;
         horizontalMinimum = 0;
         horizontalMaximum = displayWidth - horizontalVisibleAmount;
+        
+        wrappedView.setSize(wrappedView.getRequiredSize());
     }
 
     public void setVerticalPostion(final int position) {
@@ -200,8 +203,8 @@ public class ScrollBorder extends AbstractBorder {
 
     public View dragFrom(InternalDrag drag) {
         Bounds contents = contentArea();
-        int x = drag.getSourceLocation().getX();
-        int y = drag.getSourceLocation().getY();
+        int x = drag.getLocation().getX();
+        int y = drag.getLocation().getY();
 
         dragOffset = -1;
         if (x >= contents.getWidth()) {
@@ -230,25 +233,76 @@ public class ScrollBorder extends AbstractBorder {
             super.drag(drag);
         } else {
             if (verticalDrag) {
-                int y = drag.getTargetLocation().getY();
+                int y = drag.getLocation().getY();
                 setVerticalPostion(y - dragOffset);
             } else {
-                int x = drag.getTargetLocation().getX();
+                int x = drag.getLocation().getX();
                 setHorizontalPostion(x - dragOffset);
             }
         }
     }
 
     public View identify(Location location) {
+        
+        location.move(-getView().getBounds().getX(), -getView().getBounds().getY());
+        location.move(-getView().getPadding().getLeft(), -getView().getPadding().getTop());
+
+        getViewManager().getSpy().trace(this, "scroll view location", location);
+        getViewManager().getSpy().trace(this, "content area", contentArea());
+
         if (contentArea().contains(location)) {
+            location.move(getView().getBounds().getX(), getView().getBounds().getY());
+            location.move(getView().getPadding().getLeft(), getView().getPadding().getTop());
+
             addOffset(location);
-         //   LOG.debug("identify at " + location);
+            getViewManager().getSpy().trace(this, "identify at ", location);
             return super.identify(location);
         } else {
-            return getView();
+ //           return super.identify(location);
+                     return getView();
         }
     }
 
+    public IdentifiedView identify2(Location location) {
+        Offset offset = offset();
+        getViewManager().getSpy().trace(this, "scroll offset", offset);
+        location.translate(offset);
+        getViewManager().getSpy().trace(this, "mouse location offset to", location);
+        return super.identify2(location);
+        
+        /*getViewManager().getSpy().trace(this, "scroll view location", location);
+        getViewManager().getSpy().trace(this, "content area", contentArea());
+
+        if (contentArea().contains(location)) {
+            location.move(getView().getBounds().getX(), getView().getBounds().getY());
+            location.move(getView().getPadding().getLeft(), getView().getPadding().getTop());
+
+            addOffset(location);
+            getViewManager().getSpy().trace(this, "identify at ", location);
+            IdentifiedView identified = wrappedView.identify2(location);
+            identified.translate(offset());
+            return identified;
+        } else {
+            return wrappedView.identify2(location);
+        }*/
+    }
+
+    public IdentifiedView identify3(Location locationWithinViewer, Offset offset) {
+        Location locationWithinBorder = new Location(locationWithinViewer);
+        locationWithinBorder.translate(offset);
+        getViewManager().getSpy().trace(this, "mouse location within border", locationWithinBorder);
+        getViewManager().getSpy().trace(this, "non border area", contentArea());
+
+       if(overBorder(locationWithinBorder)) {
+            getViewManager().getSpy().trace(this, "over border area", contentArea());
+            return new IdentifiedView(getView(), locationWithinViewer, getLocation());
+        } else {
+            offset.add(-left, -top);
+	        offset.add(offset().getDeltaX(), offset().getDeltaY());
+            return  wrappedView.identify3(locationWithinViewer, offset);
+        }
+    }
+    
     public void mouseMoved(Location location) {
         if (contentArea().contains(location)) {
             addOffset(location);
@@ -264,11 +318,17 @@ public class ScrollBorder extends AbstractBorder {
     
     public Location getLocationWithinViewer() {
         Location location = super.getLocationWithinViewer();
+        getViewManager().getSpy().trace(this, "original location ", location);
+
         Offset offset = offset();
+        getViewManager().getSpy().trace(this, "scroll offset ", offset);
+
         location.move(-offset.getDeltaX(), -offset.getDeltaY());
+        getViewManager().getSpy().trace(this, "new location ", location);
         return location;
-    }
-}
+       }
+
+  }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business

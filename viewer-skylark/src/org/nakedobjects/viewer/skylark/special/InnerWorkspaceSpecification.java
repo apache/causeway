@@ -1,4 +1,4 @@
-package org.nakedobjects.viewer.skylark.metal;
+package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
@@ -9,37 +9,33 @@ import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
+import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.DefaultWorkspace;
-import org.nakedobjects.viewer.skylark.basic.LineBorder;
-import org.nakedobjects.viewer.skylark.basic.RootWorkspaceBuilder;
 import org.nakedobjects.viewer.skylark.basic.UserContextWorkspace;
+import org.nakedobjects.viewer.skylark.basic.WorkspaceBuilder;
+import org.nakedobjects.viewer.skylark.metal.WindowBorder;
 
-
-// taken from RootWorkspaceSpecification.java in org.nakedobjects.viewer.skylark.special
-public class WorkspaceSpecification implements org.nakedobjects.viewer.skylark.special.WorkspaceSpecification {
-	RootWorkspaceBuilder builder = new RootWorkspaceBuilder();
+public class InnerWorkspaceSpecification implements WorkspaceSpecification {
+	WorkspaceBuilder builder = new WorkspaceBuilder();
 	
 	public View createView(Content content, ViewAxis axis) {
-			View workspace;
-			NakedObject root = ((ObjectContent) content).getObject();
-			if(root instanceof UserContext) {
-				workspace = new WindowBorder(new UserContextWorkspace(content, this, axis));
+			Workspace workspace;
+			NakedObject contentType = ((ObjectContent) content).getObject();
+			if(contentType instanceof UserContext) {
+				workspace = new UserContextWorkspace(content, this, axis);
 			} else {
-				workspace = new WindowBorder(new LineBorder(5, new DefaultWorkspace(content, this, axis)));
+				workspace = new DefaultWorkspace(content, this, axis);
 			}
-			return workspace;
+			return new WindowBorder(new ResizeBorder(workspace));
 		}
 	
+
 	public CompositeViewBuilder getSubviewBuilder() {
 		return builder;
 	}
 	
-	public void setRequiredSize(Size size) {
-		builder.setRequiredSize(size);
-	}
-	
 	public String getName() {
-		return "Workspace";
+		return "Root Workspace";
 	}
 
 	public boolean isOpen() {
@@ -57,6 +53,9 @@ public class WorkspaceSpecification implements org.nakedobjects.viewer.skylark.s
 	public boolean canDisplay(Naked object) {
 		return object instanceof NakedObject;
 	}
+
+
+    public void setRequiredSize(Size size) {}
 }
 
 

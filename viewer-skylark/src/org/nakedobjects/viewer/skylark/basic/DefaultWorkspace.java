@@ -2,14 +2,13 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.control.ClassAbout;
 import org.nakedobjects.object.defaults.collection.ArbitraryCollectionVector;
+import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
@@ -54,8 +53,9 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
         getViewManager().showArrowCursor();
 
         NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
-        Location location = drag.getTargetLocation();
-
+        throw new NotImplementedException();
+        //Location location = drag.getTargetLocation();
+/*
         View newView;
         if (source instanceof NakedClass) {
             NakedObjectSpecification spec = ((NakedClass) source).forNakedClass();
@@ -79,25 +79,24 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
         //      location.translate(-offset.x, -offset.y);
         newView.setLocation(location);
         drag.getTargetView().addView(newView);
+        */
     }
 
     public void drop(ViewDrag drag) {
         getViewManager().showDefaultCursor();
 
-        Location newLocation = drag.getTargetLocation();
-        Location offset = drag.getSourceLocation();
-        newLocation.move(-offset.getX(), -offset.getY());
-
         View view = drag.getSourceView();
         if (view.getSpecification().isSubView()) {
             if (view.getSpecification().isOpen()) {
-                // TODO
+                // TODO remove the open view from the container and place on workspace; replace the internal view with an icon
             } else {
                 ObjectContent content = (ObjectContent) view.getContent();
+                Location newLocation = drag.getViewDropLocation();
                 addOpenViewFor(content.getObject(), newLocation);
             }
         } else {
             view.markDamaged();
+            Location newLocation = drag.getViewDropLocation();
             view.setLocation(newLocation);
             limitBounds(view);
             view.markDamaged();

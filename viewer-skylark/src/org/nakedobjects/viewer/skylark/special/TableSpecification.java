@@ -75,7 +75,7 @@ public class TableSpecification extends AbstractCompositeViewSpecification imple
     private ViewSpecification rowSpecification = new TableRowSpecification();
 
     public TableSpecification() {
-        builder = new WindowDecorator(new TableHeaderBuilder(new StackLayout(new CollectionElementBuilder(this))));
+        builder = new WindowDecorator(new TableHeaderBuilder(new StackLayout(new CollectionElementBuilder(this, true))));
     }
 
     public boolean canDisplay(Naked object) {

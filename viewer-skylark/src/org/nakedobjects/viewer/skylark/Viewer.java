@@ -18,6 +18,7 @@ import org.nakedobjects.viewer.skylark.special.BarchartSpecification;
 import org.nakedobjects.viewer.skylark.special.DataFormSpecification;
 import org.nakedobjects.viewer.skylark.special.FormSpecification;
 import org.nakedobjects.viewer.skylark.special.GridSpecification;
+import org.nakedobjects.viewer.skylark.special.InnerWorkspaceSpecification;
 import org.nakedobjects.viewer.skylark.special.ListSpecification;
 import org.nakedobjects.viewer.skylark.special.RootWorkspaceSpecification;
 import org.nakedobjects.viewer.skylark.special.TableSpecification;
@@ -71,29 +72,6 @@ public class Viewer {
     private String debugPosition;
 
  
-	
-    static Location absoluteLocation(View view) {
-//    	Assert.assertEquals(view.getView(), view);
-    	return view.getLocationWithinViewer();
-    	/*
-    	Location location = view.getLocation();
-		while((view = view.getParent()) != null) {
-    		Location parentLocation = view.getLocation();
-    		location.move(parentLocation.x, parentLocation.y);
-    		Padding padding = view.getPadding();
-    		location.move(padding.getLeft(), padding.getTop());
-    	}
-
-		return location;
-    	*/
-	}
-
-	public void markDamaged(View view) {
-		Size size = view.getBounds().getSize();
-		Location location = absoluteLocation(view);
-		markDamaged(new Bounds(location, size));
-	}
-
 	public void markDamaged(Bounds bounds ) {
 		LOG.debug("damaged area " + bounds);
 		synchronized(this) {
@@ -110,7 +88,7 @@ public class Viewer {
 	
 	public void clearOverlayView() {
 		if(overlayView != null) {
-			markDamaged(overlayView);
+			overlayView.markDamaged();
 			if(overlayView == keyboardFocus) {
 				keyboardFocus = null;
 			}
@@ -126,53 +104,15 @@ public class Viewer {
 		return updateNotifier;
 	}
 
-	public View identifyView(Location downAt, boolean includeOverlay) {
-		if (includeOverlay && overlayView != null && overlayView.getBounds().contains(downAt)) {
+	public View identifyView(Location location, boolean includeOverlay) {
+		if (includeOverlay && overlayView != null && overlayView.getBounds().contains(location)) {
+		    location.move(-overlayView.getLocation().getX(), -overlayView.getLocation().getY());
 			return overlayView;
 		} else {
-		    //View identified = identifyView(rootView, downAt);
-		    View identified = rootView.identify(new Location(downAt));
+		    View identified = rootView.identify(location);
 			return identified;
 		}
 	}
-/*
-	private View identifyView(View view, Location locationWithinParent) {
-	   	Assert.assertEquals(view.getView(), view);
-	    
-		Location location = new Location(locationWithinParent);
-		LOG.debug("  checking " + view + " for " + location);
-		Bounds bounds = view.getBounds();
-		if(bounds.contains(location)) {
-			Padding parentPadding = view.getPadding(); 
-			bounds.translate(parentPadding.getLeft(), parentPadding.getTop());
-			bounds.contract(parentPadding);
-			if(bounds.contains(location)) {
-				Location viewLocation = view.getLocation();
-				location.move(-viewLocation.x, -viewLocation.y);
-				//		LOG.debug("    checking " + location);
-				location.move(-parentPadding.getLeft(), -parentPadding.getTop());
-//				LOG.debug("    checking " + location);
-				
-				View views[] = view.getSubviews();
-				
-				for (int i = views.length - 1; i >= 0; i--) {
-					View subview = views[i];
-					View v = identifyView(subview, location);
-					if(v != null) {
-						return v;
-					}
-				}
-				return view;
-				
-			} else {
-				return view;
-			}
-			
-		} else {
-			return null;
-		}
-	}
-	*/
 	
 	public void init(RenderingArea renderingArea, NakedObject object, ObjectViewingMechanismListener listener) throws ConfigurationException, ComponentException {
 		init(renderingArea, listener);
@@ -191,17 +131,19 @@ public class Viewer {
    */     
         this.renderingArea = renderingArea; //new ViewerFrame(this, title);
         this.listener = listener;
-		new ViewerAssistant(this, updateNotifier);
+        InteractionSpy spy = new InteractionSpy();
+		new ViewerAssistant(this, updateNotifier, spy);
         
         popup = new DefaultPopupMenu();
         explorationMode = Configuration.getInstance().getBoolean(PROPERTY_BASE + "show-exploration");
 
-        InteractionHandler interactionHandler = new InteractionHandler(this);
+        InteractionHandler interactionHandler = new InteractionHandler(this, spy);
 		renderingArea.addMouseMotionListener(interactionHandler);
 		renderingArea.addMouseListener(interactionHandler);
 		renderingArea.addKeyListener(interactionHandler);
 
 		setupViewFactory();
+        spy.show();
 	}
 	
 	public void setRootView(View rootView) {
@@ -318,7 +260,7 @@ public class Viewer {
 	public void setOverlayView(View view) {
 		disposeOverlayView();
 		overlayView = view;
-		markDamaged(overlayView);
+		overlayView.markDamaged();
 	}
 
     /**
@@ -345,12 +287,8 @@ public class Viewer {
         }
     }
     
-    public void setLiveDebugPositionInformation(String action, Location mouseLocation, View mouseOver) {
+    public void setLiveDebugPositionInformation(String action, Location mouseLocation, Location innerLocation, View mouseOver) {
         if(showDeveloperStatus) {
-            Location innerLocation = new Location(mouseLocation);
-            if(mouseOver != null) {
-            innerLocation.move(-mouseOver.getLocationWithinViewer().x, -mouseOver.getLocationWithinViewer().y);
-            }
             debugPosition = action + " [" + mouseLocation + " " + innerLocation + " - " + mouseOver + "]";
             renderingArea.repaint(statusBarArea.x, statusBarArea.y, statusBarArea.width, statusBarArea.height);
         }
@@ -358,8 +296,8 @@ public class Viewer {
     
     protected void popupMenu(Click click, View over) {
     	ViewAreaType type = click.getViewAreaType();
-    	Location at = absoluteLocation(click.getView());
-    	at.translate(click.getLocation());
+    	Location at = click.getLocationWithinViewer();
+    	// TODO make sure this offset is constant
     	boolean forView = type == ViewAreaType.VIEW;
     	
     	forView = (click.isCtrl() && ! click.isShift()) ^ forView;
@@ -381,7 +319,7 @@ public class Viewer {
 	        keyboardFocus = view;
 	        keyboardFocus.focusRecieved();
 	        
-	        markDamaged(view);
+	        view.markDamaged();
     	}
     }
 
@@ -407,7 +345,8 @@ public class Viewer {
 		viewFactory.addValueFieldSpecification(loadSpecification("field.timeperiod", TimePeriodBarField.Specification.class));
 		viewFactory.addValueFieldSpecification(loadSpecification("field.text", TextField.Specification.class));
 
-		viewFactory.addWorkspaceSpecification(new org.nakedobjects.viewer.skylark.metal.WorkspaceSpecification());
+		viewFactory.addRootWorkspaceSpecification(new org.nakedobjects.viewer.skylark.metal.WorkspaceSpecification());
+		viewFactory.addWorkspaceSpecification(new InnerWorkspaceSpecification());
         
 		if(Configuration.getInstance().getBoolean(SPECIFICATION_BASE + "defaults", true)) {
 			viewFactory.addCompositeRootViewSpecification(new FormSpecification());
@@ -499,6 +438,24 @@ public class Viewer {
 
     public void translate(MouseEvent me) {
         me.translatePoint(-insets.left, -insets.top);
+    }
+
+    public IdentifiedView identifyView2(Location locationWithinViewer, boolean includeOverlay) {
+		if (includeOverlay && overlayView != null && overlayView.getBounds().contains(locationWithinViewer)) {
+		    locationWithinViewer.move(-overlayView.getLocation().getX(), -overlayView.getLocation().getY());
+		   return new IdentifiedView(overlayView, locationWithinViewer, locationWithinViewer);
+		} else {
+		    return rootView.identify2(locationWithinViewer);
+		}
+    }
+
+    public IdentifiedView identifyView3(Location locationWithinViewer, boolean includeOverlay) {
+		if (includeOverlay && overlayView != null && overlayView.getBounds().contains(locationWithinViewer)) {
+		    locationWithinViewer.move(-overlayView.getLocation().getX(), -overlayView.getLocation().getY());
+		   return new IdentifiedView(overlayView, locationWithinViewer, locationWithinViewer);
+		} else {
+		    return rootView.identify3(locationWithinViewer, new Offset(0, 0));
+		}
     }
 }
 

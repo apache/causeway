@@ -4,8 +4,10 @@ import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.ContentDrag;
+import org.nakedobjects.viewer.skylark.IdentifiedView;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
@@ -28,7 +30,7 @@ public class AbstractBorder extends AbstractViewDecorator {
     }
 
     protected Bounds contentArea() {
-        return new Bounds(0, 0, getSize().getWidth() - right, getSize().getHeight() - bottom);
+        return new Bounds(left, top, getSize().getWidth() -left - right, getSize().getHeight() - top - bottom);
     }
 
     public void drag(InternalDrag drag) {
@@ -126,6 +128,12 @@ public class AbstractBorder extends AbstractViewDecorator {
         return top;
     }
 
+	protected void debugDetails(StringBuffer b) {
+	    super.debugDetails(b);
+	    
+		b.append("\n           contents:  " + contentArea());
+	}
+
     protected boolean overBorder(Location mouseLocation) {
         return !contentArea().contains(mouseLocation);
     }
@@ -134,21 +142,46 @@ public class AbstractBorder extends AbstractViewDecorator {
         return contentArea().contains(mouseLocation);
     }
 
-   public View identify(Location location) {
-        location.move(-getLeft(), -getTop());
-        return wrappedView.identify(location);
-    }
-    
     protected boolean isOnBorder() {
         return onBorder;
     }
+    
+    public IdentifiedView identify3(Location locationWithinViewer, Offset offset) {
+        Location locationWithinBorder = new Location(locationWithinViewer);
+        locationWithinBorder.translate(offset);
+        getViewManager().getSpy().trace(this, "mouse location within border", locationWithinBorder);
+        getViewManager().getSpy().trace(this, "non border area", contentArea());
 
+       if(overBorder(locationWithinBorder)) {
+            getViewManager().getSpy().trace(this, "over border area", contentArea());
+            return new IdentifiedView(getView(), locationWithinViewer, getLocation());
+        } else {
+            offset.add(-left, -top);
+            return  super.identify3(locationWithinViewer, offset);
+        }
+        
+    }
+
+/*    public IdentifiedView identify2(Location location) {
+        getViewManager().getSpy().trace(this, "mouse location within border", location);
+        getViewManager().getSpy().trace(this, "non border area", contentArea());
+
+       if(overBorder(location)) {
+           getViewManager().getSpy().trace(this, "in border ", contentArea());
+           return new IdentifiedView(getView(), location, getLocation());
+       } else {
+           location.move(-left, -top);
+           return wrappedView.identify2(location);
+       }
+    }
+
+*/
     public void mouseMoved(Location at) {
         boolean on = overBorder(at);
         if (onBorder != on) {
             markDamaged();
             onBorder = on;
-            LOG.debug("On border " + onBorder);
+            LOG.debug("On border " + onBorder + " " + this);
         }
 
         at.move(-getLeft(), -getTop());

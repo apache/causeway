@@ -13,7 +13,7 @@ public class BarchartSpecification extends AbstractCompositeViewSpecification im
 	private ViewSpecification specification = new BarSpecification();
 
 	public BarchartSpecification() {
-		builder = new WindowDecorator(new StackLayout(new CollectionElementBuilder(this)));
+		builder = new WindowDecorator(new StackLayout(new CollectionElementBuilder(this, false)));
 	}
 	
 	public View createSubview(Content content, ViewAxis axis) {

@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark;
 
-import java.awt.event.MouseEvent;
+import java.awt.event.InputEvent;
 
 /**
  * Details an event involving the pointer, such as a click or drag.
@@ -13,14 +13,13 @@ public abstract class PointerEvent {
  	/**
  	 * Creates a new pointer event object.
  	 * @param view	the view over which the pointer was when this event occurred
- 	 * @param location  the location within the specified view
+ 	 * @param locationWithinView  the location within the specified view
  	 * @param mods  the button and key modifiers (@see java.awt.event.MouseEvent)
  	 */
-    PointerEvent(View view, Location location, int mods) {
-        super();
+    PointerEvent(View view, Location locationWithinView, int mods) {
         this.mods = mods;
         this.view = view;
-        this.type = view.viewAreaType(new Location(location));
+        this.type = view.viewAreaType(new Location(locationWithinView));
     }
 
     /** 
@@ -34,49 +33,49 @@ public abstract class PointerEvent {
      * Returns true if the 'Alt' key is depressed
      */
     public boolean isAlt() {
-        return (mods & MouseEvent.ALT_MASK) > 0;
+        return (mods & InputEvent.ALT_MASK) > 0;
     }
 
     /**
      * Returns true if the left-hand button on the mouse is depressed
      */
     public boolean isButton1() {
-        return (mods & MouseEvent.BUTTON1_MASK) > 0;
+        return (mods & InputEvent.BUTTON1_MASK) > 0;
     }
 
     /**
      * Returns true if the middle button on the mouse is depressed
      */
     public boolean isButton2() {
-        return (mods & MouseEvent.BUTTON2_MASK) > 0;
+        return (mods & InputEvent.BUTTON2_MASK) > 0;
     }
 
     /**
      * Returns true if the right-hand button on the mouse is depressed
      */
     public boolean isButton3() {
-        return (mods & MouseEvent.BUTTON3_MASK) > 0;
+        return (mods & InputEvent.BUTTON3_MASK) > 0;
     }
 
     /**
      * Returns true if the control key is depressed
      */
     public boolean isCtrl() {
-        return (mods & MouseEvent.CTRL_MASK) > 0;
+        return (mods & InputEvent.CTRL_MASK) > 0;
     }
 
     /**
      * Returns true if the 'Alt' key is depressed
      */
     public boolean isMeta() {
-        return (mods & MouseEvent.META_MASK) > 0;
+        return (mods & InputEvent.META_MASK) > 0;
     }
 
     /**
      * Returns true if the shift key is depressed
      */
     public boolean isShift() {
-        return (mods & MouseEvent.SHIFT_MASK) > 0;
+        return (mods & InputEvent.SHIFT_MASK) > 0;
     }
 
     public String toString() {

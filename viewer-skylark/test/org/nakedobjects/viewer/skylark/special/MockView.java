@@ -7,6 +7,7 @@ import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
+import org.nakedobjects.viewer.skylark.IdentifiedView;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
@@ -93,10 +94,6 @@ public class MockView implements View
     }
 
     public Location getLocation() {
-        return null;
-    }
-
-    public Location getLocationWithinViewer() {
         return null;
     }
 
@@ -209,6 +206,14 @@ public class MockView implements View
     public void setRequiredSize(Size size) {}
 
     public View identify(Location location) {
+        return null;
+    }
+
+    public Location getLocationWithinViewer() {
+        return null;
+    }
+
+    public IdentifiedView identify2(Location locationWithinViewer) {
         return null;
     }
 

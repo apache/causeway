@@ -1,26 +1,3 @@
-/*
-        Naked Objects - a framework that exposes behaviourally complete
-        business objects directly to the user.
-        Copyright (C) 2000 - 2003  Naked Objects Group Ltd
-
-        This program is free software; you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation; either version 2 of the License, or
-        (at your option) any later version.
-
-        This program is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU General Public License for more details.
-
-        You should have received a copy of the GNU General Public License
-        along with this program; if not, write to the Free Software
-        Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-        The authors can be contacted via www.nakedobjects.org (the
-        registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-        Road, Woking GU21 1NR, UK).
-*/
 package org.nakedobjects.viewer.skylark;
 
 import junit.framework.TestCase;
@@ -37,7 +14,8 @@ public class BoundsTest extends TestCase {
         assertTrue(b.contains(new Location(8, 15)));
         assertTrue(b.contains(new Location(5, 10)));
         assertFalse(b.contains(new Location(4, 10)));
-        assertFalse(b.contains(new Location(16, 10)));
+        assertFalse(b.contains(new Location(15, 10)));
+        assertTrue(b.contains(new Location(10, 29)));
     }
 
     public void testDefaultBounds() {
@@ -81,9 +59,9 @@ public class BoundsTest extends TestCase {
 
     public void testFarPoint() {
         assertEquals(5, b.getX());
-        assertEquals(15, b.getX2());
+        assertEquals(14, b.getX2());
         assertEquals(10, b.getY());
-        assertEquals(30, b.getY2());
+        assertEquals(29, b.getY2());
     }
 
     public void testUpRightIntersects() {
@@ -96,7 +74,7 @@ public class BoundsTest extends TestCase {
     }
 
     public void testXOverlapToLeft() {
-        Bounds c = new Bounds(1, 15, 5, 0);
+        Bounds c = new Bounds(1, 15, 6, 0);
         assertTrue(b.intersects(c));
     }
     
@@ -173,8 +151,58 @@ public class BoundsTest extends TestCase {
         assertEquals(20, b.getWidth());
         assertEquals(25, b.getHeight());
     }
+    
+    public void testContracSize() {
+        b.contract(new Size(5, 12));
+        assertEquals(5, b.getWidth());
+        assertEquals(8, b.getHeight());
+    }
+
+    public void testContracWidth() {
+        b.contractWidth(5);
+        assertEquals(5, b.getWidth());
+    }
+
+    public void testContractHeight() {
+        b.contractHeight(12);
+        assertEquals(8, b.getHeight());
+    }
+    
+    public void testContractPadding() {
+        b.contract(new Padding(2, 4, 1, 3));
+        assertEquals(3, b.getWidth());
+        assertEquals(17, b.getHeight());
+        assertEquals(9, b.getX());
+        assertEquals(12, b.getY());
+   }
+
+
 
     protected void setUp() throws Exception {
         b = new Bounds(5, 10, 10, 20);
     }
 }
+
+/*
+Naked Objects - a framework that exposes behaviourally complete
+business objects directly to the user.
+Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+The authors can be contacted via www.nakedobjects.org (the
+registered address of Naked Objects Group is Kingsway House, 123 Goldworth
+Road, Woking GU21 1NR, UK).
+*/

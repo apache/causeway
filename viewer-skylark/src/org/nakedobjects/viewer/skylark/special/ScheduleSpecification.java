@@ -8,7 +8,7 @@ import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
 public class ScheduleSpecification extends AbstractCompositeViewSpecification{
 	
     ScheduleSpecification() {
-        builder = new ScheduleLayout(new CollectionElementBuilder(new ScheduleBlockSubviews()));
+        builder = new ScheduleLayout(new CollectionElementBuilder(new ScheduleBlockSubviews(), true));
     }
 	
 	public String getName() {

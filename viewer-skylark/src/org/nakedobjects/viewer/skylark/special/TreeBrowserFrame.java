@@ -5,8 +5,10 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.IdentifiedView;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
@@ -109,12 +111,16 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
 
             if (right != null) {
                 right.layout();
-                right.setLocation(new Location(left.getSize().getWidth() + 5, 0));
+                right.setLocation(new Location(rightViewOffet(), 0));
                 right.setSize(right.getRequiredSize());
             }
 
             invalidLayout = false;
         }
+    }
+
+    private int rightViewOffet() {
+        return left.getSize().getWidth() + 5;
     }
 
     public View pickup(ViewDrag drag) {
@@ -144,16 +150,19 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
         left.setParent(getView());
     }
 
-    public View identify(Location location) {
-        location.move(-getBounds().getX(), -getBounds().getY());
+    public IdentifiedView identify3(Location location, Offset offset) {
+        getViewManager().getSpy().trace(this, "mouse location within frame", location);
+    
+        
         if (left != null && left.getBounds().contains(location)) {
-            return left.identify(location);
+            return left.identify3(location, offset);
         }
         if (right != null && right.getBounds().contains(location)) {
-            return right.identify(location);
+            offset.add(-rightViewOffet(), 0);
+            return right.identify3(location, offset);
         }
 
-        return getView();
+        return new IdentifiedView(getView(), location, getLocation());
     }
 
     private void showInRightPane(View view) {

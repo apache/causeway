@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 
 public class ResizeBorder extends AbstractBorder {
     private static final int BORDER_WIDTH = 5;
-    private Size resize;
+    private Size resize = new Size(200, 100);
     private int direction;
 
     public ResizeBorder(View view) {
@@ -55,7 +55,7 @@ public class ResizeBorder extends AbstractBorder {
 
     public View dragFrom(InternalDrag drag) {
         if(isOnBorder()) {
-	        direction = onBorder(drag.getSourceLocation());
+	        direction = onBorder(drag.getLocation());
 	        if (direction > 0) {
 	            ViewResizeOutline outline = new ViewResizeOutline(drag, getView(), direction);
 	            getViewManager().setOverlayView(outline);
@@ -103,7 +103,6 @@ public class ResizeBorder extends AbstractBorder {
      * the cursor to show it can be resized.
      */
     public void mouseMoved(Location at) {
-        Logger.getLogger(this.getClass()).debug("moved: " + at);
         switch (onBorder(at)) {
         case ViewResizeOutline.RIGHT:
             getViewManager().showResizeRightCursor();

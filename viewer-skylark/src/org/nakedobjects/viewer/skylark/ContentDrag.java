@@ -32,7 +32,8 @@ public class ContentDrag extends Drag {
     private static final Logger LOG = Logger.getLogger(ContentDrag.class);
     private View target;
 	private View previousTarget;
-    protected View dragging;
+    private final View dragging;
+    private Location mouseLocation;
 
 	public static ContentDrag create(View source, Location absolute, Location relative, int modifiers) {
 		ContentDrag drag = new ContentDrag(source, absolute, relative, modifiers);
@@ -49,7 +50,7 @@ public class ContentDrag extends Drag {
 	 * @param source	the view over which the pointer was when this event started
  	 * @param absolute  the location within the viewer (the Frame/Applet/Window etc)
  	 * @param relative  the location within the specified view
- 	 * @param mods  the button and key modifiers (@see java.awt.event.MouseEvent)
+ 	 * @param modifiers  the button and key modifiers (@see java.awt.event.MouseEvent)
 	 */
     private ContentDrag(View source, Location absolute, Location relative, int modifiers) {
         super(source, absolute, relative, modifiers);
@@ -58,6 +59,7 @@ public class ContentDrag extends Drag {
         if(dragging != null) {
 		    source.exited();
 		    LOG.debug("pickup " + this);
+		    mouseLocation = absolute;
 			setDraggingLocation();
 		    source.getViewManager().setOverlayView(dragging);
 		    source.getViewManager().showHandCursor();
@@ -97,9 +99,9 @@ public class ContentDrag extends Drag {
     }
     
     private void setDraggingLocation() {
-		Location viewOffset = new Location(getPointerLocation());
-		viewOffset.move(-sourceLocation.getX(), -sourceLocation.getY());
-         dragging.setLocation(viewOffset);
+		Location location = new Location(mouseLocation);
+//		viewOffset.move(-sourceLocationWithinView.getX(), -sourceLocationWithinView.getY());
+         dragging.setLocation(location);
 	}
 
 	/**
@@ -127,6 +129,10 @@ public class ContentDrag extends Drag {
 		return target;
 	}
     
+    public void move(int x, int y) {
+  //      mouseLocation.move(x, y);
+    }
+    
     public String toString() {
     	return "ContentDrag [" + super.toString() + "]";
 	}
@@ -134,8 +140,8 @@ public class ContentDrag extends Drag {
     /**
      * Captures the latest pointer information (target and location).
      */
-    protected void updateLocationWithinViewer(View target, Location newAbsoluteLocation) {
-    	this.target = target;
-    	super.updateLocationWithinViewer(target, newAbsoluteLocation);
+    protected void updateLocationWithinViewer(Location mouseLocation, View target, Location locationInTarget) {
+    	this.mouseLocation = mouseLocation;
+        this.target = target;
     }
 }

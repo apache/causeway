@@ -12,7 +12,7 @@ public class GridSpecification extends AbstractCompositeViewSpecification implem
 	GridColumnSpecification columnSpecification = new GridColumnSpecification();
 	
 	public GridSpecification() {
-		builder = new WindowDecorator(new GridLayout(new CollectionElementBuilder(this)));
+		builder = new WindowDecorator(new GridLayout(new CollectionElementBuilder(this, false)));
 	}
 	
 	public View createSubview(Content content, ViewAxis axis) {

@@ -7,9 +7,11 @@ import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
+import org.nakedobjects.viewer.skylark.IdentifiedView;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
@@ -150,10 +152,6 @@ public class AbstractViewDecorator implements View {
 	
 	public Location getLocation() {
 		return wrappedView.getLocation();
-	}
-	
-	public Location getLocationWithinViewer() {
-		return wrappedView.getLocationWithinViewer();
 	}
 
 	public Padding getPadding() {
@@ -320,6 +318,23 @@ public class AbstractViewDecorator implements View {
 	public ViewAreaType viewAreaType(Location mouseLocation) {
 		return wrappedView.viewAreaType(mouseLocation);
 	}
+
+    public Location getLocationWithinViewer() {
+        return wrappedView.getLocationWithinViewer();
+    }
+    
+    public IdentifiedView identify2(Location locationWithinViewer) {
+        return wrappedView.identify2(locationWithinViewer);
+    }
+
+    public IdentifiedView identify3(Location locationWithinViewer, Offset offset) {
+        return wrappedView.identify3(locationWithinViewer, offset);
+    }
+
+    public Location getAbsoluteLocation() {
+        return wrappedView.getAbsoluteLocation();
+    }
+    
 }
 
 

@@ -14,7 +14,7 @@ import org.nakedobjects.viewer.skylark.util.ViewFactory;
 public class InternalListSpecification extends AbstractCompositeViewSpecification implements SubviewSpec {
 
 	public InternalListSpecification() {	
-	    builder = new InternalListDecorator(new StackLayout(new CollectionElementBuilder(this)));
+	    builder = new InternalListDecorator(new StackLayout(new CollectionElementBuilder(this, true)));
 	}
 		
 	// TODO the rest of this is the same as ListSpecificatio

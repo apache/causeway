@@ -19,12 +19,8 @@ import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
-import org.apache.log4j.Logger;
-
 
 public abstract class ObjectView extends AbstractView {
-    private static final Logger LOG = Logger.getLogger(AbstractView.class);
-
     public ObjectView(Content content, ViewSpecification design, ViewAxis axis) {
         super(content, design, axis);
 
@@ -93,9 +89,8 @@ public abstract class ObjectView extends AbstractView {
 
             if (result != null) {
                 View view = ViewFactory.getViewFactory().createOpenRootView(result);
-                Location location = drag.getPointerLocation();
-                Location offset = getWorkspace().getLocationWithinViewer();
-                location.move(-offset.getX(), -offset.getY());
+                Location location = new Location();
+                location.move(10, 10);
                 view.setLocation(location);
                 getWorkspace().addView(view);
             }
@@ -125,7 +120,6 @@ public abstract class ObjectView extends AbstractView {
         dragView = ViewFactory.getViewFactory().createContentDragIcon(drag);
 
     	getViewManager().setOverlayView(dragView);
-        LOG.debug("drag object start " + drag.getSourceLocationWithinViewer());
         getViewManager().setDeveloperStatus("Dragging " + getContent());
 
         return dragView;
@@ -138,7 +132,7 @@ public abstract class ObjectView extends AbstractView {
             new MenuOption("New Workspace") {
                 public void execute(Workspace workspace, View view, Location at) {
                     View newWorkspace;
-                    newWorkspace = ViewFactory.getViewFactory().createWorkspace(getObject());
+                    newWorkspace = ViewFactory.getViewFactory().createInnerWorkspace(getObject());
                     newWorkspace.setLocation(at);
                     getWorkspace().addView(newWorkspace);
                  //   newWorkspace.setSize(new Size(200, 100));

@@ -28,6 +28,15 @@ public class Offset {
 		location.move(dx, dy);
 		return location;
 	}
+	
+	public String toString() {
+        return "Offset " + dx + ", " + dy;
+    }
+
+    public void add(int dx, int dy) {
+        this.dx += dx;
+        this.dy += dy;
+    }
 }
 
 

@@ -14,7 +14,7 @@ import org.nakedobjects.viewer.skylark.util.ViewFactory;
 public class ListSpecification extends AbstractCompositeViewSpecification implements SubviewSpec {
 
 	public ListSpecification() {
-		builder = new WindowDecorator(new StackLayout(new CollectionElementBuilder(this)));
+		builder = new WindowDecorator(new StackLayout(new CollectionElementBuilder(this, true)));
 	}
 	
 	public View createSubview(Content content, ViewAxis axis) {

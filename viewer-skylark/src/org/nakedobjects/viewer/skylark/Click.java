@@ -12,17 +12,17 @@ public class Click extends PointerEvent {
      * 
      * @param view
      *                       the view over which the pointer was when this click occurred
-     * @param location
+     * @param locationWithinView
      *                       the location within the specified view
      * @param mods
      *                       the button and key held down during the click (@see
      *                       java.awt.event.MouseEvent)
      */
-    public Click(View view, Location location, Location locationWithinViewer, int mods) {
-        super(view, location, mods);
+    public Click(View view, Location locationWithinView, Location locationWithinViewer, int mods) {
+        super(view, locationWithinView, mods);
 
-        this.location = location;
-        this.locationWithinViewer = locationWithinViewer;
+        this.location = new Location(locationWithinView);
+        this.locationWithinViewer = new Location(locationWithinViewer);
     }
 
     /**

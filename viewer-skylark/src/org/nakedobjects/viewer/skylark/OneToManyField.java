@@ -7,6 +7,8 @@ import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.viewer.skylark.special.CollectionDisplayIterator;
 import org.nakedobjects.viewer.skylark.special.CollectionIterator;
 
+import java.util.Enumeration;
+
 
 public class OneToManyField extends ObjectField implements CollectionContent {
     private final NakedCollection collection;
@@ -15,6 +17,10 @@ public class OneToManyField extends ObjectField implements CollectionContent {
     public OneToManyField(NakedObject parent, NakedObject object, OneToManyAssociationSpecification association) {
         super(parent, association);
         this.collection = (NakedCollection) object;
+    }
+
+    public Enumeration allElements() {
+        return getCollection().elements();
     }
 
     public String debugDetails() {

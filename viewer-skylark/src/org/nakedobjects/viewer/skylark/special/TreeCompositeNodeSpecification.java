@@ -25,7 +25,7 @@ public class TreeCompositeNodeSpecification implements CompositeViewSpecificatio
     public static ViewSpecification createCollectionNode(TreeLeafNodeSpecification objectLeafNode,
         TreeLeafNodeSpecification collectionLeafNode) {
         TreeCompositeNodeSpecification spec = new TreeCompositeNodeSpecification();
-        spec.builder = new StackLayout(new CollectionElementBuilder(spec));
+        spec.builder = new StackLayout(new CollectionElementBuilder(spec, true));
         spec.replacementSpecification = objectLeafNode;
         spec.collectionNodeSpecification = collectionLeafNode;
         spec.objectNodeSpecification = objectLeafNode;

@@ -26,7 +26,7 @@ public class UserContextWorkspace extends DefaultWorkspace {
     }
 
 	public View pickup(ViewDrag drag) {
-		return null;
+	    return getParent() == null ? null : super.pickup(drag);
 	}
 	
 	public void drop(ContentDrag drag) {

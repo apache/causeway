@@ -50,7 +50,7 @@ public class TableCellResizeBorder extends AbstractBorder {
 	}
 	
 	public void dragTo(InternalDrag drag) {
-		View target = drag.getTargetView();
+		View target = getView();
 		TableColumnAxis axis = (TableColumnAxis) target.getViewAxis();
 		FieldContent content = (FieldContent) target.getContent();
 		FieldSpecification field = content.getField();
@@ -58,7 +58,7 @@ public class TableCellResizeBorder extends AbstractBorder {
 		FieldSpecification[] fields = axis.getFields();
 		for (int i = 0; i < fields.length; i++) {
 			if(fields[i] == field) {
-				int width = drag.getTargetLocation().getX();
+				int width = drag.getLocation().getX();
 				axis.setWidth(i, width);
 				axis.invalidateLayout();
 				break;

@@ -66,7 +66,7 @@ public class DebugView implements DebugInfo {
 
         info.append("\n\nDRAWING\n");
         info.append("------\n");
-		view.draw(new DebugCanvas(info, new Bounds(view.getLocationWithinViewer(), view.getSize())));
+		view.draw(new DebugCanvas(info, new Bounds(view.getBounds())));
 
         return info.toString();
     }

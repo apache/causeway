@@ -145,11 +145,6 @@ public interface View extends Cloneable {
      */
     Location getLocation();
 
-    /**
-     * Determines the location relative to the top-left corner of Viewer (the applicatin window)
-     */
-    Location getLocationWithinViewer();
-
     Padding getPadding();
 
     View getParent();
@@ -294,6 +289,14 @@ public interface View extends Cloneable {
     ViewAreaType viewAreaType(Location mouseLocation);
 
     View identify(Location location);
+
+    Location getLocationWithinViewer();
+
+    IdentifiedView identify2(Location locationWithinViewer);
+
+    IdentifiedView identify3(Location locationWithinViewer, Offset offset);
+    
+    Location getAbsoluteLocation();
 }
 
 

@@ -3,8 +3,12 @@ package org.nakedobjects.viewer.skylark;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.viewer.skylark.special.CollectionDisplayIterator;
 
+import java.util.Enumeration;
+
 public interface CollectionContent extends ObjectContent {
     NakedCollection getCollection();
+    
+    Enumeration allElements();
     
     CollectionDisplayIterator getIterator();
 }
