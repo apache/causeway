@@ -41,20 +41,25 @@
 		</javadoc>
 		
 		<junitreport>
-			<fileset dir="../no-core/build/test-result"/>
-			<fileset dir="../no-containers/build/test-result"/>
-			<fileset dir="../example-ecs/build/test-result"/>
-			<fileset dir="../viewer-skylark/build/test-result"/>
+			<fileset dir="../no-core/build/test-run"/>
+			<fileset dir="../no-containers/build/test-run"/>
+			<fileset dir="../example-ecs/build/test-run"/>
+			<fileset dir="../viewer-skylark/build/test-run"/>
 			<report format="frames" todir="exploration/tests"/>
 		</junitreport>
 
 		
-
 		<!-- copy in:
 				properties files
 				examples & example code in html
 				docs
 				-->
+		
+		<property file="../naked-objects/build.properties"/>
+
+		<zip zipfile="../release/exploration-${build.version}.zip" basedir="exploration">
+			
+		</zip>
 	</target>
 	
 	<target name="all-components">
@@ -63,10 +68,11 @@
 		<antcall target="no-containers"/>
 		<antcall target="os-cache"/>
 		<antcall target="os-file"/>
-		<antcall target="os-mysql"/>
-		<!--antcall target="os-sql"/-->
-		<antcall target="xat-new"/>
+		<antcall target="os-sql"/>
+		<antcall target="no-xat"/>
 		<antcall target="viewer-skylark"/>
+		<antcall target="example-ecs"/>
+		<antcall target="example-expenses"/>
 	</target>
 	
 	<target name="core" >
@@ -77,22 +83,18 @@
 		<ant dir="../os-cache" target="${target}" inheritAll="false"/>
 	</target>
 	
-	<target name="xat-new" >
-		<ant dir="../xat-new" target="${target}" inheritAll="false"/>
+	<target name="no-xat" >
+		<ant dir="../no-xat" target="${target}" inheritAll="false"/>
 	</target>
 	
 	<target name="os-file" >
 		<ant dir="../os-file" target="${target}" inheritAll="false"/>
 	</target>
 	
-	<target name="os-mysql" >
-		<ant dir="../os-mysql" target="${target}" inheritAll="false"/>
-	</target>
-
 	<target name="os-sql" >
 		<ant dir="../os-sql" target="${target}" inheritAll="false"/>
 	</target>
-	
+
 	<target name="viewer-skylark" >
 		<ant dir="../viewer-skylark" target="${target}" inheritAll="false"/>
 	</target>
@@ -103,6 +105,14 @@
 	
 	<target name="no-containers" >
 		<ant dir="../no-containers" target="${target}" inheritAll="false"/>
+	</target>
+	
+	<target name="example-ecs" >
+		<ant dir="../example-ecs" target="${target}" inheritAll="false"/>
+	</target>
+	
+	<target name="example-expenses" >
+		<ant dir="../example-expenses" target="${target}" inheritAll="false"/>
 	</target>
 	
 

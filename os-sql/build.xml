@@ -9,7 +9,7 @@
 
 	&properties;
 
-	<property name="component" value="os-mysql"/>
+	<property name="component" value="os-sql"/>
 	
 	<!-- classpath -->
 	<path id="libs.internal">

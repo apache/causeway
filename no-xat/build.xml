@@ -10,7 +10,7 @@
 
 	&properties;
 
-	<property name="component" value="xat-new"/>
+	<property name="component" value="no-xat"/>
 	
 	<!-- classpath -->
 	<path id="libs.internal">

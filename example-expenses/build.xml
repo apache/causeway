@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE project [
+	<!ENTITY properties SYSTEM "file:../naked-objects/properties.xml">
+	<!ENTITY targets SYSTEM "file:../naked-objects/targets.xml">
+]>
+
+<project name="Naked Object Example - Expenses, an expenses system designed by trainees at CSC" default="all" basedir=".">
+	<description></description>
+
+	&properties;
+
+	<property name="component" value="example-expenses"/>
+	
+	<!-- classpath -->
+	<path id="libs.internal">
+		<fileset dir="../no-core/build/release">
+			<include name="no-core.jar"/>
+			<include name="no-core-test.jar"/>
+		</fileset>
+		<fileset dir="../no-containers/build/release">
+			<include name="no-containers.jar"/>
+			<include name="no-containers.jar"/>
+		</fileset>
+		<fileset dir="../no-xat/build/release">
+			<include name="no-xat.jar"/>
+			<include name="no-xat-test.jar"/>
+		</fileset>
+	</path>
+
+	&targets;	
+</project>
+
+

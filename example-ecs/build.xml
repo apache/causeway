@@ -4,9 +4,8 @@
 	<!ENTITY targets SYSTEM "file:../naked-objects/targets.xml">
 ]>
 
-<project name="Naked Object Cache Object Store" default="all" basedir=".">
-	<description>Prevalyer style object store that journals all changes to the objects, and captures a snapshot
-		at shutdown.</description>
+<project name="Naked Object Example - ECS, a system for an Excutive Car Service" default="all" basedir=".">
+	<description></description>
 
 	&properties;
 
@@ -22,9 +21,9 @@
 			<include name="no-containers.jar"/>
 			<include name="no-containers.jar"/>
 		</fileset>
-		<fileset dir="../xat-new/build/release">
-			<include name="xat-new.jar"/>
-			<include name="xat-new.jar"/>
+		<fileset dir="../no-xat/build/release">
+			<include name="no-xat.jar"/>
+			<include name="no-xat-test.jar"/>
 		</fileset>
 	</path>
 
