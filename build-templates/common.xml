@@ -31,13 +31,6 @@
 	<property name="test.run.dir" value="${build.dir}/test-run" />
 	<property name="test.results.dir" value="${build.relase.dir}/tests" />
 
-	<!-- distribution directories -->
-	<property name="dist.dir" value="build/dist" />
-	<property name="release.dir" value="release" />
-	<property name="dist.images.dir" value="${dist.dir}/images" />
-	<property name="dist.test.dir" value="${dist.dir}/test" />
-	<property name="dist.example.dir" value="${dist.dir}/example" />
-	<property name="dist.api.dir" value="${dist.dir}/api" />
 
 	<property environment="env" />
 
@@ -48,7 +41,8 @@
 	</target>
 
 	<target name="-lundbuild-init">
-		<property name="build.id" value="${buildId}" />
+		<property name="build.id" value="${buildVersion}" />
+		<property name="dist.dir" value="${publishDir}" />
 	</target>
 
 
@@ -66,6 +60,15 @@
 	<target name="distribution">
 		<echo>Create ${distribution} distribution</echo>
 		<echo>Version ${build.version}  ${build.id}</echo>
+
+		<!-- distribution directories -->
+		<property name="dist.dir" value="build/dist" />
+		<property name="release.dir" value="release" />
+		<property name="dist.images.dir" value="${dist.dir}/images" />
+		<property name="dist.test.dir" value="${dist.dir}/test" />
+		<property name="dist.example.dir" value="${dist.dir}/example" />
+		<property name="dist.api.dir" value="${dist.dir}/api" />
+
 
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.src.dir}" />
