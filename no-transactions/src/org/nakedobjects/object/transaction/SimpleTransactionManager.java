@@ -87,9 +87,9 @@ public class SimpleTransactionManager extends LocalObjectManager implements Tran
         return super.getDebugTitle();
     }
 
-    public NakedObject[] getInstances(NakedObject pattern) throws UnsupportedFindException {
+    public NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) throws UnsupportedFindException {
         log("get instances like - " + pattern);
-        return super.getInstances(pattern);
+        return super.getInstances(pattern, includeSubclasses);
     }
 
     public NakedObject getObject(Oid oid, NakedObjectSpecification hint) {

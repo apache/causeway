@@ -41,7 +41,7 @@ public class SimpleTransactionManagerTest extends TestCase {
     }
     
     private void assertInstanceEquals(String message, NakedObjectSpecification cls, NakedObject expected) {
-        NakedCollection instances = objectManager.allInstances(cls);
+        NakedCollection instances = objectManager.allInstances(cls, false);
         NakedObject instance = (NakedObject) instances.elementAt(0);
         assertEquals(message, expected, instance);    
     }
@@ -51,7 +51,7 @@ public class SimpleTransactionManagerTest extends TestCase {
    }
    
    private void assertNoInstances(String message, int size, NakedObjectSpecification cls) {
-       NakedCollection instances = objectManager.allInstances(cls);
+       NakedCollection instances = objectManager.allInstances(cls, false);
        assertEquals(message, size, instances.size());    
    }
 
