@@ -409,21 +409,6 @@ public class Viewer {
         }
     }
 
-    public void limitBounds(View view) {
-        Bounds bounds = new Bounds(new Size(renderingArea.getSize()));
-        Insets in = renderingArea.getInsets();
-        bounds.contract(in.left + in.right, in.top + in.bottom);
-        bounds.contract(0, statusBarHeight);
-
-        Bounds d = view.getBounds();
-
-        if (bounds.limitBounds(d)) {
-            view.setLocation(d.getLocation());
-            view.setSize(d.getSize());
-            view.invalidateLayout();
-        }
-    }
-
     public void mouseMoved(Location location) {
         if (onOverlay(location)) {
             location.subtract(overlayView.getLocation());
@@ -522,6 +507,14 @@ public class Viewer {
             keyboardFocus.editComplete();
             keyboardFocus.markDamaged();
         }
+    }
+
+    public Bounds getOverlayBounds() {
+        Bounds bounds = new Bounds(new Size(renderingArea.getSize()));
+        Insets in = renderingArea.getInsets();
+        bounds.contract(in.left + in.right, in.top + in.bottom);
+        bounds.contract(0, statusBarHeight);
+        return bounds;
     }
 }
 

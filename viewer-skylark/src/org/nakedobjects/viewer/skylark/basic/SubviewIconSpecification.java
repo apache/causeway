@@ -15,7 +15,8 @@ public class SubviewIconSpecification extends IconSpecification {
 
     public View createView(Content content, ViewAxis axis) {
 	    ObjectContent c = (ObjectContent) content;
-	    if(c.getType().isOfType(LOOKUP)) {
+	    NakedObjectSpecification type = c.getType();
+        if(type != null && type.isOfType(LOOKUP) || c instanceof Lookup) {
 	        return new ObjectBorder(new LookupBorder(new IconView(content, this, axis, Style.NORMAL)));
 	    } else {
 	        return new ObjectBorder(new IconView(content, this, axis, Style.NORMAL));

@@ -8,8 +8,6 @@ public interface Workspace extends View {
     View addOpenViewFor(Naked object, Location at);
 
     void lower(View view);
-
-    void limitBounds(View view);
     
     void raise(View view);
 

@@ -378,7 +378,7 @@ public abstract class AbstractView implements View {
     /**
      * Limits the bounds of the given view (when being moved or dropped) so its
      * never extends outside the bounds of the containing open view
-     */
+    
     public void limitBounds(View view) {
         Bounds contentBounds = view.getBounds();
         Bounds containerBounds = new Bounds(getSize());
@@ -388,6 +388,20 @@ public abstract class AbstractView implements View {
             view.invalidateLayout();
         }
     }
+     */
+
+    /**
+     * Limits the bounds of the this view (when being moved or dropped) so it
+     * never extends outside the bounds of the parent view
+     */
+    public void limitBoundsWithin(Bounds containerBounds) {
+        Bounds contentBounds = getView().getBounds();
+        if (containerBounds.limitBounds(contentBounds) && ! getView().getBounds().equals(contentBounds)) {
+            getView().setBounds(contentBounds);
+            invalidateLayout();
+        }
+    }
+
 
     public void markDamaged() {
         markDamaged(getView().getBounds());

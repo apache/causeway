@@ -225,12 +225,12 @@ public class ViewerAssistant {
         return undoStack;
     }
 
-    public void limitBounds(View view) {
-        viewer.limitBounds(view);
-    }
-
     public void saveCurrentFieldEntry() {
         viewer.saveCurrentFieldEntry();
+    }
+
+    public Bounds getOverlayBounds() {
+        return viewer.getOverlayBounds();
     }
 }
 

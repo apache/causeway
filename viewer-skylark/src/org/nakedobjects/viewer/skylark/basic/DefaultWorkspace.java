@@ -10,6 +10,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.control.ClassAbout;
 import org.nakedobjects.object.defaults.collection.ArbitraryCollectionVector;
+import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
@@ -123,49 +124,19 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
         return new Size(requiredSize);
     }
 
-    /*
-     * public String getDebugData() { StringBuffer info = new StringBuffer();
-     * 
-     * info.append("WORKSPACE\n"); info.append("Bounds: ");
-     * 
-     * Bounds bounds = getBounds(); info.append(bounds.width + "x" +
-     * bounds.height + "+" + bounds.x + "+" + bounds.y);
-     * 
-     * info.append("\nReq'd : ");
-     * 
-     * Size required = getRequiredSize(); info.append(required.width + "x" +
-     * required.height);
-     * 
-     * info.append("\nPadding: ");
-     * 
-     * Padding insets = getPadding(); info.append("top/bottom " + insets.top +
-     * "/" + insets.bottom + ", left/right " + insets.left + "/" +
-     * insets.right);
-     * 
-     * info.append("\nDESKTOP Layer\n"); info.append("-------------\n");
-     * 
-     * Enumeration v = getSubviews(); while (v.hasMoreElements()) { View view =
-     * (View) v.nextElement(); if(! view.isOpen()) {
-     * info.append(view.toString()); info.append("\n"); } }
-     * 
-     * info.append("\nOPEN VIEW Layer\n"); info.append("---------------\n");
-     * 
-     * while (v.hasMoreElements()) { View view = (View) v.nextElement();
-     * if(view.isOpen()) { info.append(view.toString()); info.append("\n"); } }
-     * 
-     * return info.toString(); }
-     *  
-     */
-
     public Workspace getWorkspace() {
         return this;
     }
 
     public void layout() {
-        super.layout();
-        View[] subviews = getSubviews();
-        for (int i = 0; i < subviews.length; i++) {
-	        limitBounds(subviews[i].getView());
+        if(isLayoutInvalid()) {
+            super.layout();
+            View[] subviews = getSubviews();
+            Bounds bounds = new Bounds(getSize());
+            for (int i = 0; i < subviews.length; i++) {
+                subviews[i].limitBoundsWithin(bounds);
+                //	        limitBounds(subviews[i].getView());
+            }
         }
     }
     

@@ -163,6 +163,10 @@ public class CompositeObjectView extends ObjectView {
         }
     }
 
+    protected boolean isLayoutInvalid() {
+        return layoutInvalid;
+    }
+    
     protected View subviewFor(Location location) {
         View views[] = getSubviews();
         for (int i = views.length - 1; i >= 0; i--) {

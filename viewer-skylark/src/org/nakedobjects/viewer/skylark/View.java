@@ -216,6 +216,12 @@ public interface View extends Cloneable {
 
     void layout();
 
+    /**
+     * Limits the bounds of this view (normally when being moved or dropped) so it
+     * never extends beyond the bounds of its containing view.
+     */
+    void limitBoundsWithin(Bounds bounds);
+
     void markDamaged();
 
     void markDamaged(Bounds bounds);

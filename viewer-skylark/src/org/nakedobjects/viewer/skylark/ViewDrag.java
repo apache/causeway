@@ -109,7 +109,8 @@ public class ViewDrag extends Drag {
         Location viewLocation = new Location(location);
         viewLocation.subtract(overlayOffset);
         dragView.setLocation(viewLocation);
-        viewsWorkspace.limitBounds(dragView);
+        dragView.limitBoundsWithin(new Bounds(viewsWorkspace.getSize()));
+//        viewsWorkspace.limitBounds(dragView);
     }
 
     public void subtract(int x, int y) {

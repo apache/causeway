@@ -220,6 +220,8 @@ public class MockView implements View
     public Drag dragStart(DragStart drag) {
         return null;
     }
+
+    public void limitBoundsWithin(Bounds bounds) {}
 }
 
 

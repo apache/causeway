@@ -330,6 +330,10 @@ public class AbstractViewDecorator implements View {
     public boolean contains(View view) {
         return wrappedView.contains(view);
     }
+
+    public void limitBoundsWithin(Bounds bounds) {
+        wrappedView.limitBoundsWithin(bounds);    
+    }
     
 }
 

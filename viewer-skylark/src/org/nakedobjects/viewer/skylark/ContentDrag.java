@@ -59,7 +59,8 @@ public class ContentDrag extends Drag {
             Location location1 = new Location(this.location);
             location1.subtract(offset);
             dragView.setLocation(location1);
-            workspace.limitBounds(dragView);
+            dragView.limitBoundsWithin(new Bounds(workspace.getSize()));
+//            workspace.limitBounds(dragView);
             dragView.markDamaged();
         }
 
