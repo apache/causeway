@@ -14,6 +14,7 @@ import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.DebugString;
+import org.nakedobjects.viewer.skylark.basic.ClassOption;
 
 import java.util.Enumeration;
 
@@ -136,6 +137,9 @@ public class OneToManyField extends CollectionContent implements FieldContent {
     }
 
 
+    public void menuOptions(MenuOptionSet options) {
+        ClassOption.menuOptions(getOneToManyAssociation().getSpecification(), options);
+    }
 }
 
 /*

@@ -13,9 +13,7 @@ import org.nakedobjects.viewer.skylark.OneToManyFieldElement;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.core.AbstractViewBuilder;
-import org.nakedobjects.viewer.skylark.core.CollectionActions;
 import org.nakedobjects.viewer.skylark.core.CompositeView;
-import org.nakedobjects.viewer.skylark.core.InternalCollectionActions;
 
 import java.util.Enumeration;
 
@@ -88,7 +86,7 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
 	public View createCompositeView(Content content, CompositeViewSpecification specification, ViewAxis axis) {
     	CompositeView view = new CompositeView(content, specification, axis);
     	view.setCanDragView(canDragView);
-		return content instanceof OneToManyField ? new InternalCollectionActions(view) : new CollectionActions(view);
+		return view;
     }
 
 	public void setCanDragView(boolean canDragView) {

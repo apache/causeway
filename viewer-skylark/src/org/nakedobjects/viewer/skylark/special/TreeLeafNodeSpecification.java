@@ -8,12 +8,10 @@ import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.basic.ObjectBorder;
-import org.nakedobjects.viewer.skylark.core.InternalCollectionActions;
 import org.nakedobjects.viewer.skylark.core.ObjectView;
 
 class TreeLeafNodeSpecification implements ViewSpecification, TreeNodeSpecification {
@@ -43,9 +41,6 @@ class TreeLeafNodeSpecification implements ViewSpecification, TreeNodeSpecificat
 	
 	public View createView(Content content, ViewAxis axis) {
 		View treeLeafNode = new TreeLeafNode(content, this, axis);
-		if(content instanceof OneToManyField) {
-		    treeLeafNode = new InternalCollectionActions(treeLeafNode);
-		}
         return new TreeNodeBorder(new ObjectBorder(treeLeafNode), replacementNodeSpecification);
 	}
 
