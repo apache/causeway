@@ -38,6 +38,7 @@ public class TransientObjectStore implements NakedObjectStore {
     private final Vector persistentObjectVector;
 
     public TransientObjectStore() {
+        LOG.info("new object store");
         persistentObjectVector = new Vector(300);
         classes = new Hashtable(30);
     }
@@ -318,7 +319,7 @@ public class TransientObjectStore implements NakedObjectStore {
     }
 
     public void init() throws ObjectStoreException {
-        LOG.debug("init");
+        LOG.info("init");
     }
 
     private Vector instances(NakedObjectSpecification cls) {
@@ -414,7 +415,7 @@ public class TransientObjectStore implements NakedObjectStore {
         return noInstances;
     }
 
-    public void resolve(NakedObject object) throws ObjectStoreException {
+    public void resolveImmediately(NakedObject object) throws ObjectStoreException {
         LOG.debug("resolve " + object);
 
         NakedObject o = getObject(object.getOid(), null);
@@ -453,7 +454,10 @@ public class TransientObjectStore implements NakedObjectStore {
     }
 
     public void shutdown() throws ObjectStoreException {
-        LOG.debug("shutdown");
+        classes.clear();
+        loaded = null;
+        persistentObjectVector.removeAllElements();
+        LOG.info("shutdown");
     }
 
     public void startTransaction() {
@@ -464,6 +468,12 @@ public class TransientObjectStore implements NakedObjectStore {
         NakedObject[] array = new NakedObject[instances.size()];
         instances.copyInto(array);
         return array;
+    }
+
+
+    protected void finalize() throws Throwable {
+        super.finalize();
+        LOG.info("finalizing object store");
     }
 
 }

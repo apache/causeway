@@ -101,7 +101,7 @@ public abstract class AbstractNakedCollectionVector extends AbstractNakedObject 
 
             public Object nextElement() {
                 Object next = e.nextElement();
-                NakedObjects.getObjectManager().resolve((NakedObject) next);
+                NakedObjects.getObjectManager().resolveImmediately((NakedObject) next);
                 return next;
             }
         };

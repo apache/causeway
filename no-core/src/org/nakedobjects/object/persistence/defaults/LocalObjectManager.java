@@ -38,19 +38,11 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     private NakedObjectStore objectStore;
     private OidGenerator oidGenerator;
     private Transaction transaction;
+	    
+	public LocalObjectManager() {
+	    LOG.info("creating object manager");    
+	}
     
-    
- 
-    public LocalObjectManager() {}
-/*
-    public LocalObjectManager(NakedObjectStore objectStore, UpdateNotifier notifier, OidGenerator oidGenerator,
-            ObjectFactory factory) throws ConfigurationException, ComponentException {
-        super(factory);
-        this.objectStore = objectStore;
-        this.notifier = notifier;
-        this.oidGenerator = oidGenerator;
-    }
-*/
     public void abortTransaction() {
         try {
             getTransaction().abort();
@@ -404,18 +396,13 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
      * associations. The object should be set up in the same manner as in
      * <method>getObject </method> above.
      */
-    public void resolve(NakedObject object) {
+    public void resolveImmediately(NakedObject object) {
         if (object.isResolved() || !isPersistent(object)) {
             return;
         }
-
-        LOG.info("resolve " + object);
-
-        if (!objectStore.getLoadedObjects().isLoaded(object.getOid())) {
-            objectStore.getLoadedObjects().loaded(object);
-        }
+        LOG.info("resolve-immediately" + object);
         try {
-            objectStore.resolve(object);
+            objectStore.resolveImmediately(object);
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
@@ -491,7 +478,10 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     public void shutdown() {
         try {
             oidGenerator.shutdown();
+            oidGenerator = null;
             objectStore.shutdown();
+            objectStore = null;
+            loadedObjects = null;
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
@@ -504,6 +494,16 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
     public String toString() {
         return "LocalObjectManager [objectStore=" + objectStore.name() + ",oidGenerator=" + oidGenerator.name() + "]";
+    }
+
+    public void resolveEagerly(NakedObject object, NakedObjectField field) {
+        
+    }
+
+
+    protected void finalize() throws Throwable {
+        super.finalize();
+        LOG.info("finalizing object manager");
     }
 
 }

@@ -12,6 +12,7 @@ import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
 
@@ -152,7 +153,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         LOG.debug("objectChanged " + object + " - ignored by proxy manager ");
     }
 
-    public synchronized void resolve(NakedObject object) {
+    public synchronized void resolveImmediately(NakedObject object) {
         LOG.debug("resolve " + object);
         if (object.isResolved() || !object.isPersistent()) {
             return;
@@ -226,6 +227,8 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     public void startTransaction() {
         LOG.debug("transactions (start) IGNORED in proxy");
     }
+
+    public void resolveEagerly(NakedObject object, NakedObjectField field) {}
 }
 
 /*

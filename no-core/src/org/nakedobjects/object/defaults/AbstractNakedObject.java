@@ -227,7 +227,7 @@ public abstract class AbstractNakedObject implements NakedObject {
      */
     public synchronized void resolve() {
         if (!isResolved() && isPersistent()) {
-            getObjectManager().resolve(this);
+            getObjectManager().resolveImmediately(this);
         }
     }
 
@@ -244,7 +244,7 @@ public abstract class AbstractNakedObject implements NakedObject {
     
     protected void resolve(NakedObject object) {
         if (object != null && ! object.isResolved()) {
-            getObjectManager().resolve(object);
+            getObjectManager().resolveImmediately(object);
         }
     }
     
