@@ -1,17 +1,17 @@
 package org.nakedobjects.persistence.sql.auto;
 
-import org.nakedobjects.configuration.Configuration;
-import org.nakedobjects.object.AbstractNakedObject;
+import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.defaults.AbstractNakedObject;
+import org.nakedobjects.object.defaults.value.TimeStamp;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.object.reflect.ValueFieldSpecification;
-import org.nakedobjects.object.value.TimeStamp;
 import org.nakedobjects.persistence.sql.AbstractObjectMapper;
 import org.nakedobjects.persistence.sql.CollectionMapper;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
@@ -43,7 +43,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 	protected ValueMapperLookup typeMapper;
 
 	public AbstractAutoMapper(String nakedClassName, String parameterBase) throws SqlObjectStoreException {
-		nakedClass = NakedObjectSpecification.getNakedClass(nakedClassName);
+		nakedClass = NakedObjectSpecification.getSpecification(nakedClassName);
 		typeMapper = ValueMapperLookup.getInstance();
 
 		Configuration configParameters = Configuration.getInstance();
@@ -298,7 +298,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 
     protected String updateWhereClause(NakedObject object, boolean and) throws SqlObjectStoreException {
         TimeStamp lastActivity = ((AbstractNakedObject) object).getLastActivity();
-        ValueMapper mapper = typeMapper.mapperFor(NakedObjectSpecification.getNakedClass(TimeStamp.class));
+        ValueMapper mapper = typeMapper.mapperFor(NakedObjectSpecification.getSpecification(TimeStamp.class));
         String dateString =  mapper.valueAsDBString(lastActivity);
         if(dateString.equals("NULL")) {
             return (and ? " and " +  lastActivityColumn + " is NULL" : "");

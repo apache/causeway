@@ -36,7 +36,7 @@ public class MockObjectStore implements NakedObjectStore {
         actions.addElement("abortTransaction");
     }
 
-    void setupGetObject(NakedObject object) {
+    public void setupGetObject(NakedObject object) {
         getObject = object;
     }
 

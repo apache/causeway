@@ -26,7 +26,7 @@ package org.nakedobjects.persistence.file;
 
 import java.util.Vector;
 
-import org.nakedobjects.object.SerialOid;
+import org.nakedobjects.object.defaults.SerialOid;
 
 public class ReferenceVector {
 	private final SerialOid oid;

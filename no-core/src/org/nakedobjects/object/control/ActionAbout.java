@@ -2,8 +2,8 @@ package org.nakedobjects.object.control;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.security.Role;
-import org.nakedobjects.security.User;
+import org.nakedobjects.object.security.Role;
+import org.nakedobjects.object.security.User;
 
 
 /**

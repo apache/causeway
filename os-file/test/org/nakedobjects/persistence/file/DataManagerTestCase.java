@@ -24,28 +24,28 @@
 
 package org.nakedobjects.persistence.file;
 
-import org.nakedobjects.object.LocalReflectionFactory;
-import org.nakedobjects.object.MockObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Role;
-import org.nakedobjects.object.SerialOid;
 import org.nakedobjects.object.Team;
 import org.nakedobjects.object.ValueObjectExample;
-import org.nakedobjects.object.collection.SimpleArbitraryCollection;
-import org.nakedobjects.object.value.Date;
-import org.nakedobjects.object.value.DateTime;
-import org.nakedobjects.object.value.FloatingPointNumber;
-import org.nakedobjects.object.value.Label;
-import org.nakedobjects.object.value.Logical;
-import org.nakedobjects.object.value.Money;
-import org.nakedobjects.object.value.Option;
-import org.nakedobjects.object.value.Percentage;
-import org.nakedobjects.object.value.TextString;
-import org.nakedobjects.object.value.Time;
-import org.nakedobjects.object.value.URLString;
-import org.nakedobjects.object.value.WholeNumber;
+import org.nakedobjects.object.defaults.LocalReflectionFactory;
+import org.nakedobjects.object.defaults.MockObjectManager;
+import org.nakedobjects.object.defaults.SerialOid;
+import org.nakedobjects.object.defaults.collection.ArbitraryCollectionVector;
+import org.nakedobjects.object.defaults.value.Date;
+import org.nakedobjects.object.defaults.value.DateTime;
+import org.nakedobjects.object.defaults.value.FloatingPointNumber;
+import org.nakedobjects.object.defaults.value.Label;
+import org.nakedobjects.object.defaults.value.Logical;
+import org.nakedobjects.object.defaults.value.Money;
+import org.nakedobjects.object.defaults.value.Option;
+import org.nakedobjects.object.defaults.value.Percentage;
+import org.nakedobjects.object.defaults.value.TextString;
+import org.nakedobjects.object.defaults.value.Time;
+import org.nakedobjects.object.defaults.value.URLString;
+import org.nakedobjects.object.defaults.value.WholeNumber;
 
 import org.apache.log4j.Logger;
 
@@ -71,7 +71,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 
 		oids = new SerialOid[SIZE];
 		data = new ObjectData[SIZE];
-		NakedObjectSpecification type = NakedObjectSpecification.getNakedClass(Role.class.getName());
+		NakedObjectSpecification type = NakedObjectSpecification.getSpecification(Role.class.getName());
 		pattern = new ObjectData(type, null);
 		for (int i = 0; i < SIZE; i++) {
 			oids[i] = new SerialOid(i);
@@ -172,7 +172,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 
 	
 	public void testInsertCollection() throws ObjectStoreException {
-		CollectionData data = new CollectionData(NakedObjectSpecification.getNakedClass(SimpleArbitraryCollection.class.getName()), new SerialOid(200));
+		CollectionData data = new CollectionData(NakedObjectSpecification.getSpecification(ArbitraryCollectionVector.class.getName()), new SerialOid(200));
 		
 		SerialOid oids[] = new SerialOid[6];
 		for (int i = 0; i < oids.length; i++) {
@@ -221,7 +221,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 	}
 	
 	public void testInsertValues() throws ObjectStoreException {
-		NakedObjectSpecification type = NakedObjectSpecification.getNakedClass(ValueObjectExample.class.getName());
+		NakedObjectSpecification type = NakedObjectSpecification.getSpecification(ValueObjectExample.class.getName());
 		SerialOid oid = new SerialOid(99);
 		ObjectData data =  new ObjectData(type, oid);
 
@@ -329,7 +329,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 	
 
 	public void testSaveValues() throws ObjectStoreException {
-		NakedObjectSpecification type = NakedObjectSpecification.getNakedClass(ValueObjectExample.class.getName());
+		NakedObjectSpecification type = NakedObjectSpecification.getSpecification(ValueObjectExample.class.getName());
 		SerialOid oid = new SerialOid(99);
 		ObjectData data =  new ObjectData(type, oid);
 
@@ -443,7 +443,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 	
 	
 	private ObjectData createData(Class cls, long id) {
-		NakedObjectSpecification type = NakedObjectSpecification.getNakedClass(cls.getName());
+		NakedObjectSpecification type = NakedObjectSpecification.getSpecification(cls.getName());
 		SerialOid oid = new SerialOid(id);
 		return new ObjectData(type, oid);
 		

@@ -2,7 +2,7 @@ package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.security.Session;
+import org.nakedobjects.object.security.Session;
 
 public abstract class ObjectField implements Content, FieldContent {
     private final FieldSpecification field;

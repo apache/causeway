@@ -1,7 +1,7 @@
 package org.nakedobjects.persistence.file;
 
-import org.nakedobjects.configuration.ComponentException;
-import org.nakedobjects.configuration.ConfigurationException;
+import org.nakedobjects.container.configuration.ComponentException;
+import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedObjectStoreInstancesTestCase;
 import org.nakedobjects.object.ObjectStoreException;

@@ -1,12 +1,12 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.object.AbstractNakedObject;
-import org.nakedobjects.object.Title;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ClassAbout;
 import org.nakedobjects.object.control.FieldAbout;
-import org.nakedobjects.object.value.TextString;
-import org.nakedobjects.security.Role;
+import org.nakedobjects.object.defaults.AbstractNakedObject;
+import org.nakedobjects.object.defaults.Title;
+import org.nakedobjects.object.defaults.value.TextString;
+import org.nakedobjects.object.security.Role;
 
 
 public class City extends AbstractNakedObject {

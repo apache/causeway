@@ -1,8 +1,8 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.viewer.skylark.special.CollectionDisplayIterator;
 import org.nakedobjects.viewer.skylark.special.CollectionIterator;

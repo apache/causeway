@@ -28,7 +28,7 @@ import java.util.Enumeration;
 
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.SerialOid;
+import org.nakedobjects.object.defaults.SerialOid;
 
 
 public abstract class DataManager {

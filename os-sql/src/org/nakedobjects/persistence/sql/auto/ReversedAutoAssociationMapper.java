@@ -1,9 +1,9 @@
 package org.nakedobjects.persistence.sql.auto;
 
+import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.ResolveException;
-import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.persistence.sql.CollectionMapper;
 import org.nakedobjects.persistence.sql.DatabaseConnector;

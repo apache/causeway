@@ -1,20 +1,22 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.configuration.ComponentException;
-import org.nakedobjects.configuration.ConfigurationException;
-import org.nakedobjects.exploration.ExplorationFixture;
-import org.nakedobjects.exploration.ExplorationSetUp;
-import org.nakedobjects.object.LocalObjectManager;
+import org.nakedobjects.container.configuration.ComponentException;
+import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.NullUpdateNotifier;
 import org.nakedobjects.object.OidGenerator;
-import org.nakedobjects.object.SimpleOidGenerator;
-import org.nakedobjects.object.TransientObjectStore;
-import org.nakedobjects.security.Session;
+import org.nakedobjects.object.defaults.LocalObjectManager;
+import org.nakedobjects.object.defaults.LocalReflectionFactory;
+import org.nakedobjects.object.defaults.NullUpdateNotifier;
+import org.nakedobjects.object.defaults.SimpleNakedClass;
+import org.nakedobjects.object.defaults.SimpleOidGenerator;
+import org.nakedobjects.object.defaults.TransientObjectStore;
+import org.nakedobjects.object.exploration.ExplorationFixture;
+import org.nakedobjects.object.exploration.ExplorationSetUp;
+import org.nakedobjects.object.security.Session;
 import org.nakedobjects.xat.html.HtmlTestObjectFactory;
 
 import java.util.Hashtable;
@@ -108,14 +110,14 @@ public abstract class AcceptanceTestCase extends TestCase {
 	            testObjectFactory = new HtmlTestObjectFactory();
 	        }
 	        
-	        documentor =testObjectFactory.getDocumentor(getName().substring(4));
+	        documentor = testObjectFactory.getDocumentor(getName().substring(4));
 	        
 	        explorationSetUp.installFixtures();
 	        String[] cls = explorationSetUp.getClasses();
 	        for (int i = 0; i < cls.length; i++) {
-	            NakedObjectSpecification nc = NakedObjectSpecification.getNakedClass(cls[i]);
+	            NakedObjectSpecification nc = NakedObjectSpecification.getSpecification(cls[i]);
 	            
-	            NakedClass spec = new NakedClass(cls[i]);
+	            NakedClass spec = new SimpleNakedClass(cls[i]);
 	            spec.setContext(con);
 	            spec.setNakedClass(nc);
 	            
@@ -135,6 +137,8 @@ public abstract class AcceptanceTestCase extends TestCase {
     }
 
     protected LocalObjectManager createObjectManager() throws ConfigurationException, ComponentException {
+		NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+
         NakedObjectStore nos;
         nos = new TransientObjectStore();
         OidGenerator oidGenerator = new SimpleOidGenerator();     

@@ -1,6 +1,6 @@
 package org.nakedobjects.example.expenses;
 
-import org.nakedobjects.object.AbstractUserContext;
+import org.nakedobjects.object.defaults.AbstractUserContext;
 
 public class ExpensesContext extends AbstractUserContext {
 	public void created() {

@@ -1,14 +1,14 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.object.AbstractNakedObject;
 import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.object.Title;
 import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.control.Validity;
-import org.nakedobjects.object.value.Date;
-import org.nakedobjects.object.value.TextString;
-import org.nakedobjects.object.value.Time;
+import org.nakedobjects.object.defaults.AbstractNakedObject;
+import org.nakedobjects.object.defaults.Title;
+import org.nakedobjects.object.defaults.value.Date;
+import org.nakedobjects.object.defaults.value.TextString;
+import org.nakedobjects.object.defaults.value.Time;
 
 
 /*

@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.value.Percentage;
+import org.nakedobjects.object.defaults.value.Percentage;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.ValueField;

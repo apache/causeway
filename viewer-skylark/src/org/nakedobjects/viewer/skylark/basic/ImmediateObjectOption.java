@@ -1,12 +1,11 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.security.Session;
+import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
@@ -68,7 +67,7 @@ public class ImmediateObjectOption extends MenuOption {
         try {
 	        returnedObject = action.execute(object);
 	    } catch (Exception e) {
-        	returnedObject = new NakedError("System error",e);
+        	returnedObject =object.getContext().getObjectManager().generatorError("System error",e);
         }
         if (returnedObject != null) {
         	view.objectActionResult(returnedObject, at);

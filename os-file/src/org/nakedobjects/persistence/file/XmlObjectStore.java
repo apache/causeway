@@ -1,6 +1,6 @@
 package org.nakedobjects.persistence.file;
 
-import org.nakedobjects.configuration.Configuration;
+import org.nakedobjects.container.configuration.Configuration;
 
 public class XmlObjectStore extends MementoObjectStore {
 

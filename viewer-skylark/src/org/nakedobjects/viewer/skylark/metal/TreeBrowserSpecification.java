@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.FastFinder;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.defaults.FastFinder;
 import org.nakedobjects.viewer.skylark.View;
 
 public class TreeBrowserSpecification extends org.nakedobjects.viewer.skylark.special.TreeBrowserSpecification {

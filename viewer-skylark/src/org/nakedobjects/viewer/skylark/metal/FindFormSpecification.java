@@ -1,12 +1,12 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.FastFinder;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.defaults.FastFinder;
 import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.security.Session;
+import org.nakedobjects.object.security.Session;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;

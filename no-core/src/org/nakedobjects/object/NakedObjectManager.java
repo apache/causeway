@@ -1,6 +1,5 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.collection.TypedNakedCollection;
 import org.nakedobjects.utility.StartupException;
 
 
@@ -24,6 +23,8 @@ public interface NakedObjectManager {
 
     NakedObject createTransientInstance(String className);
 
+    NakedError generatorError(String message, Exception e);
+    
     /**
      * Removes the specified object from the system. The specified object's data
      * should be removed from the persistence mechanism.

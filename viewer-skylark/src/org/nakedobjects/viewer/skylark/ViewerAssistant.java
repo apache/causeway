@@ -2,7 +2,7 @@ package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.reflect.UndoStack;
-import org.nakedobjects.security.Session;
+import org.nakedobjects.object.security.Session;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.DebugFrame;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;

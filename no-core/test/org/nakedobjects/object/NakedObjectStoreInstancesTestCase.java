@@ -1,7 +1,8 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.configuration.ComponentException;
-import org.nakedobjects.configuration.ConfigurationException;
+import org.nakedobjects.container.configuration.ComponentException;
+import org.nakedobjects.container.configuration.ConfigurationException;
+import org.nakedobjects.object.defaults.SimpleNakedClass;
 
 
 public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStoreTestCase {
@@ -21,7 +22,7 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
  
         // classes
         personClassName = Person.class.getName();
-        personClass = NakedObjectSpecification.getNakedClass(personClassName);
+        personClass = NakedObjectSpecification.getSpecification(personClassName);
 
         // patterns
         personPattern = new Person();
@@ -110,7 +111,7 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
     }
     
     public void testClass() throws Exception {
-        NakedClass nc = new NakedClass(personClassName);
+        NakedClass nc = new SimpleNakedClass(personClassName);
         nc.setContext(context);
         nc.setOid(nextOid());
         objectStore.createNakedClass(nc);
@@ -121,7 +122,7 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
     }
     
     public void testClassAsObjects() throws Exception {
-       NakedClass nc = new NakedClass(personClassName);
+       NakedClass nc = new SimpleNakedClass(personClassName);
         nc.setOid(nextOid());
         objectStore.createNakedClass(nc);
         

@@ -1,6 +1,6 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.exploration.Exploration;
+import org.nakedobjects.container.exploration.Exploration;
 
 
 public class EcsExploration extends Exploration {

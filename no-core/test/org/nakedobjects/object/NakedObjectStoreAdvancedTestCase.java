@@ -1,8 +1,7 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.configuration.ComponentException;
-import org.nakedobjects.configuration.ConfigurationException;
-import org.nakedobjects.object.collection.InternalCollection;
+import org.nakedobjects.container.configuration.ComponentException;
+import org.nakedobjects.container.configuration.ConfigurationException;
 
 
 public abstract class NakedObjectStoreAdvancedTestCase extends NakedObjectStoreTestCase {
@@ -23,8 +22,8 @@ public abstract class NakedObjectStoreAdvancedTestCase extends NakedObjectStoreT
 
     protected void initialiseObjects() throws Exception {
         // classes
-        personClass = NakedObjectSpecification.getNakedClass(Person.class.getName());
-        roleClass = NakedObjectSpecification.getNakedClass(Role.class.getName());
+        personClass = NakedObjectSpecification.getSpecification(Person.class.getName());
+        roleClass = NakedObjectSpecification.getSpecification(Role.class.getName());
 
         // patterns
         personPattern = new Person();

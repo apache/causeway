@@ -1,8 +1,8 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.security.Certificate;
-import org.nakedobjects.security.Role;
-import org.nakedobjects.security.User;
+import org.nakedobjects.object.security.Certificate;
+import org.nakedobjects.object.security.Role;
+import org.nakedobjects.object.security.User;
 import org.nakedobjects.utility.DebugInfo;
 
 import java.util.Enumeration;

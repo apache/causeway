@@ -2,12 +2,12 @@ package org.nakedobjects.persistence.sql.auto;
 
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.SerialOid;
 import org.nakedobjects.object.UnsupportedFindException;
+import org.nakedobjects.object.defaults.SerialOid;
+import org.nakedobjects.object.security.Role;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
-import org.nakedobjects.security.Role;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Vector;
@@ -61,7 +61,7 @@ public class RoleMapper extends NameBasedMapper {
 		    if (loadedObjects.isLoaded(oid)) {
 		        instance = (Role) loadedObjects.getLoadedObject(oid);
 		    } else {
-		        instance = (Role) NakedObjectSpecification.getNakedClass(Role.class.getName()).acquireInstance();
+		        instance = (Role) NakedObjectSpecification.getSpecification(Role.class.getName()).acquireInstance();
 		        instance.setOid(oid);
 		        instance.getName().setValue(rs.getString("name"));
 		        instance.getDescription().setValue(

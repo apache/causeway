@@ -24,10 +24,10 @@
 
 package org.nakedobjects.example.expenses;
 
-import org.nakedobjects.object.AbstractNakedObject;
-import org.nakedobjects.object.Title;
-import org.nakedobjects.object.value.Date;
-import org.nakedobjects.object.value.TextString;
+import org.nakedobjects.object.defaults.AbstractNakedObject;
+import org.nakedobjects.object.defaults.Title;
+import org.nakedobjects.object.defaults.value.Date;
+import org.nakedobjects.object.defaults.value.TextString;
 
 
 public class Receipt extends AbstractNakedObject {

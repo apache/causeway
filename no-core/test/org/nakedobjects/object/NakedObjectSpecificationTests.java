@@ -1,9 +1,11 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.object.defaults.LocalReflectionFactory;
+import org.nakedobjects.object.defaults.MockObjectManager;
+import org.nakedobjects.object.defaults.value.TestClock;
+import org.nakedobjects.object.defaults.value.TextString;
 import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.value.TestClock;
-import org.nakedobjects.object.value.TextString;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -28,7 +30,7 @@ public class NakedObjectSpecificationTests extends TestCase {
     }
 
     private NakedObjectSpecification nakedClass(Class cls) {
-        return NakedObjectSpecification.getNakedClass(cls.getName());
+        return NakedObjectSpecification.getSpecification(cls.getName());
     }
 
     protected void setUp() {
@@ -40,12 +42,12 @@ public class NakedObjectSpecificationTests extends TestCase {
 
         reflector = new MockReflector();
         
-        nakedClass = NakedObjectSpecification.getNakedClass(NakedClassTestObject.class.getName());
+        nakedClass = NakedObjectSpecification.getSpecification(NakedClassTestObject.class.getName());
     }
 
     public void testInvalidObjectType() {
         try {
-            NakedObjectSpecification.getNakedClass(InvalidNakedClassTestObject.class.getName());
+            NakedObjectSpecification.getSpecification(InvalidNakedClassTestObject.class.getName());
             fail();
         } catch (NakedObjectRuntimeException expected) {
         }

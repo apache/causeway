@@ -1,5 +1,6 @@
 package org.nakedobjects.persistence.file;
 
+import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -11,9 +12,9 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.SerialOid;
 import org.nakedobjects.object.UnsupportedFindException;
-import org.nakedobjects.object.collection.InternalCollection;
+import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
+import org.nakedobjects.object.defaults.SerialOid;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 
@@ -28,17 +29,17 @@ public abstract class MementoObjectStore implements NakedObjectStore {
     private static final Logger LOG = Logger.getLogger(MementoObjectStore.class);
     private DataManager dataManager;
     private LoadedObjects loadedObjects;
-    private static final NakedObjectSpecification NAKED_CLASS_CLASS = NakedObjectSpecification.getNakedClass(NakedClass.class);
+    private static final NakedObjectSpecification NAKED_CLASS_CLASS = NakedObjectSpecification.getSpecification(NakedClass.class);
 
     public MementoObjectStore(DataManager manager) {
         this.dataManager = manager;
-        loadedObjects = new LoadedObjects();
+        loadedObjects = new LoadedObjectsHashtable();
     }
 
     public void abortTransaction() {}
 
     private NakedObjectSpecification classFor(String type) {
-        return NakedObjectSpecification.getNakedClass(type);
+        return NakedObjectSpecification.getSpecification(type);
     }
 
     public void createNakedClass(NakedClass cls) throws ObjectStoreException {
@@ -85,7 +86,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
             return loadedObjects.getLoadedObject(oid);
         } else {
             LOG.debug("Creating skeletal object of " + type + " " + oid);
-            NakedObjectSpecification cls = NakedObjectSpecification.getNakedClass(type);
+            NakedObjectSpecification cls = NakedObjectSpecification.getSpecification(type);
             NakedObject object = (NakedObject) cls.acquireInstance();
             object.setOid(oid);
 
@@ -172,7 +173,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
         NakedObject[] instances = getInstances(NAKED_CLASS_CLASS, false);
         for (int i = 0, len = instances.length; i < len; i++) {
            NakedClass cls = (NakedClass) instances[i];
-           if(cls.getName().isSameAs(name)) {
+           if(cls.getName().equals(name)) {
                return cls;
            }
         }

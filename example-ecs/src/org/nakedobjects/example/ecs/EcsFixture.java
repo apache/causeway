@@ -1,9 +1,9 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.exploration.AbstractExplorationFixture;
-import org.nakedobjects.exploration.ExplorationUser;
-import org.nakedobjects.security.Role;
-import org.nakedobjects.security.User;
+import org.nakedobjects.object.exploration.AbstractExplorationFixture;
+import org.nakedobjects.object.exploration.ExplorationUser;
+import org.nakedobjects.object.security.Role;
+import org.nakedobjects.object.security.User;
 
 public class EcsFixture extends AbstractExplorationFixture {
 

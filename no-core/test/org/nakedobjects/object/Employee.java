@@ -25,7 +25,9 @@
 package org.nakedobjects.object;
 
 
-import org.nakedobjects.object.value.TextString;
+import org.nakedobjects.object.defaults.AbstractNakedObject;
+import org.nakedobjects.object.defaults.Title;
+import org.nakedobjects.object.defaults.value.TextString;
 
 
 public abstract class Employee extends AbstractNakedObject {

@@ -1,6 +1,6 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.object.AbstractNakedObject;
+import org.nakedobjects.object.defaults.AbstractNakedObject;
 
 
 public abstract class PaymentMethod extends AbstractNakedObject {

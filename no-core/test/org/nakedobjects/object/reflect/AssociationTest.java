@@ -1,13 +1,13 @@
 package org.nakedobjects.object.reflect;
 
 
-import org.nakedobjects.object.LocalReflectionFactory;
-import org.nakedobjects.object.MockObjectManager;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.Person;
 import org.nakedobjects.object.Role;
+import org.nakedobjects.object.defaults.LocalReflectionFactory;
+import org.nakedobjects.object.defaults.MockObjectManager;
 
 import junit.framework.TestSuite;
 

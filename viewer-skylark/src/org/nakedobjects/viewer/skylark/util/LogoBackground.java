@@ -23,7 +23,7 @@
 */
 package org.nakedobjects.viewer.skylark.util;
 
-import org.nakedobjects.configuration.Configuration;
+import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.viewer.skylark.Background;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Icon;

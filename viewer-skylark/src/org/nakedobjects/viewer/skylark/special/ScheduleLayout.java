@@ -2,9 +2,9 @@ package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.defaults.value.Time;
+import org.nakedobjects.object.defaults.value.TimePeriod;
 import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.value.Time;
-import org.nakedobjects.object.value.TimePeriod;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
@@ -45,7 +45,7 @@ class ScheduleLayout extends AbstractBuilderDecorator {
                 for (int j = 0; j < fields.length; j++) {
                     field = fields[j];
 
-                    if (field.getType().isOfType(NakedObjectSpecification.getNakedClass(TimePeriod.class))) {
+                    if (field.getType().isOfType(NakedObjectSpecification.getSpecification(TimePeriod.class))) {
                         break;
                     }
                 }

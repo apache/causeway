@@ -1,16 +1,16 @@
 package org.nakedobjects.utility.xmlsnapshot;
 
+import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.collection.InternalCollection;
+import org.nakedobjects.object.defaults.value.Snapshot;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.object.reflect.NakedObjectSpecificationException;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.object.reflect.ValueFieldSpecification;
-import org.nakedobjects.object.value.Snapshot;
 
 import java.util.StringTokenizer;
 import java.util.Vector;

@@ -3,12 +3,12 @@ package org.nakedobjects.persistence.file;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Role;
-import org.nakedobjects.object.SerialOid;
-import org.nakedobjects.object.value.Date;
-import org.nakedobjects.object.value.DateTime;
-import org.nakedobjects.object.value.Logical;
-import org.nakedobjects.object.value.Money;
-import org.nakedobjects.object.value.TextString;
+import org.nakedobjects.object.defaults.SerialOid;
+import org.nakedobjects.object.defaults.value.Date;
+import org.nakedobjects.object.defaults.value.DateTime;
+import org.nakedobjects.object.defaults.value.Logical;
+import org.nakedobjects.object.defaults.value.Money;
+import org.nakedobjects.object.defaults.value.TextString;
 
 import org.apache.log4j.PropertyConfigurator;
 
@@ -19,7 +19,7 @@ public class TestValues {
 		
 		DataManager manager = new XmlDataManager("tmp/tests");
 
-		NakedObjectSpecification type = NakedObjectSpecification.getNakedClass(Role.class.getName());
+		NakedObjectSpecification type = NakedObjectSpecification.getSpecification(Role.class.getName());
 		SerialOid oid = new SerialOid(99);
 		ObjectData data =  new ObjectData(type, oid);
 

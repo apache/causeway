@@ -1,10 +1,10 @@
 package org.nakedobjects.persistence.sql.auto;
 
+import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.ResolveException;
-import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.persistence.sql.AbstractObjectMapper;
 import org.nakedobjects.persistence.sql.CollectionMapper;
@@ -65,7 +65,7 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 		Results rs = connector.select(statement);
 		while (rs.next()) {
 			String cls = rs.getString(elementClassColumn);
-			NakedObjectSpecification elementCls = NakedObjectSpecification.getNakedClass(cls);
+			NakedObjectSpecification elementCls = NakedObjectSpecification.getSpecification(cls);
 			Oid oid = recreateOid(rs, elementCls, elementIdColumn);
 			NakedObject element = mapper.loadObject(elementCls, oid);
 			LOG.debug("  element  " + element.getOid());

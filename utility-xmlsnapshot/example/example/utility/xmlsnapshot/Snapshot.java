@@ -1,6 +1,6 @@
 package example.utility.xmlsnapshot;
 
-import org.nakedobjects.object.AbstractNakedObject;
+import org.nakedobjects.object.defaults.AbstractNakedObject;
 import org.nakedobjects.utility.xmlsnapshot.DomSerializer;
 import org.nakedobjects.utility.xmlsnapshot.DomSerializerCrimson;
 import org.nakedobjects.utility.xmlsnapshot.NamespaceManager;

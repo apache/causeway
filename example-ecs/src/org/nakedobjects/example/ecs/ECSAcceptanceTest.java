@@ -1,8 +1,8 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.exploration.AbstractExplorationFixture;
-import org.nakedobjects.object.value.Date;
-import org.nakedobjects.object.value.TextString;
+import org.nakedobjects.object.defaults.value.Date;
+import org.nakedobjects.object.defaults.value.TextString;
+import org.nakedobjects.object.exploration.AbstractExplorationFixture;
 import org.nakedobjects.xat.AcceptanceTestCase;
 import org.nakedobjects.xat.TestObject;
 

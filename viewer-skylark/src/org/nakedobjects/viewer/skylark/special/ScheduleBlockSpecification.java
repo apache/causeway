@@ -2,8 +2,8 @@ package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.defaults.value.TimePeriod;
 import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.value.TimePeriod;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.View;
@@ -23,11 +23,11 @@ public class ScheduleBlockSpecification extends AbstractCompositeViewSpecificati
     	FieldSpecification colorField = null;
     	for (int i = 0; i < flds.length; i++) {
 			FieldSpecification field = flds[i];
-			if(field.getType().isOfType(NakedObjectSpecification.getNakedClass(TimePeriod.class))) {
+			if(field.getType().isOfType(NakedObjectSpecification.getSpecification(TimePeriod.class))) {
 				LOG.debug("Found TimePeriod field " + field);
 				timePeriodField = field;
 			}
-			if(field.getType().isOfType(NakedObjectSpecification.getNakedClass(org.nakedobjects.object.value.Color.class))) {
+			if(field.getType().isOfType(NakedObjectSpecification.getSpecification(org.nakedobjects.object.defaults.value.Color.class))) {
 				LOG.debug("Found Color field " + field);
 				colorField = field;
 			}

@@ -2,8 +2,8 @@ package org.nakedobjects.viewer.skylark.value;
 
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.value.Time;
-import org.nakedobjects.object.value.TimePeriod;
+import org.nakedobjects.object.defaults.value.Time;
+import org.nakedobjects.object.defaults.value.TimePeriod;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;

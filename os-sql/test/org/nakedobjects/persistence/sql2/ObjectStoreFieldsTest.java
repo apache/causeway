@@ -1,6 +1,6 @@
 package org.nakedobjects.persistence.sql2;
 
-import org.nakedobjects.configuration.Configuration;
+import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedObjectStoreFieldsTestCase;
 import org.nakedobjects.persistence.sql.DatabaseConnector;

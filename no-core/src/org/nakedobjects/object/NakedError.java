@@ -1,76 +1,14 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.control.FieldAbout;
-import org.nakedobjects.object.value.MultilineTextString;
-import org.nakedobjects.object.value.TextString;
+public interface NakedError extends NakedObject {
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-
-import org.apache.log4j.Logger;
-
-
-public class NakedError extends AbstractNakedObject {
-    private static final Logger LOG = Logger.getLogger(NakedError.class);
-    private TextString error;
-    private TextString exception;
-    private MultilineTextString trace;
-
-    public NakedError(String msg) {
-        error = new TextString(msg);
-        LOG.error(error);
-    }
-
-    public NakedError(String msg, Throwable e) {
-        error = new TextString(msg + " " + e.getMessage());
-        exception = new TextString(e.getMessage());
-
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            e.printStackTrace(new PrintStream(baos));
-            trace = new MultilineTextString(baos.toString());
-            baos.close();
-        } catch (IOException ex) {
-            LOG.error(ex);
-        }
-
-        LOG.error(error, e);
-    }
-    
-    public void aboutFieldDefault(FieldAbout about) {
-        about.unmodifiable();
-    }
-    
-    public TextString getError() {
-        return error;
-    }
-
-    public TextString getException() {
-        return exception;
-    }
-
-    public MultilineTextString getTrace() {
-        return trace;
-    }
-
-    public String iconName() {
-		return "error";
-	}
-
-    public void makePersistent() {
-        throw new NotPersistableException("Can't make an error object persistent.");
-    }
-
-    public Title title() {
-        return error.title();
-    }
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

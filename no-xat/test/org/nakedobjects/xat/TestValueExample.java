@@ -1,7 +1,7 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.object.AbstractNakedObject;
-import org.nakedobjects.object.value.Date;
+import org.nakedobjects.object.defaults.AbstractNakedObject;
+import org.nakedobjects.object.defaults.value.Date;
 
 public class TestValueExample extends AbstractNakedObject {
     private Date date = new Date();

@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.metal;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.value.Option;
+import org.nakedobjects.object.defaults.value.Option;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;

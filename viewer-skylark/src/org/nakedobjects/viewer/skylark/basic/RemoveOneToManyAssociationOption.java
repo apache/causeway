@@ -1,13 +1,13 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
-import org.nakedobjects.security.Session;
+import org.nakedobjects.object.security.Session;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.ObjectContent;

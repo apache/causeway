@@ -3,14 +3,13 @@ package org.nakedobjects.xat;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
-import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NotPersistableException;
-import org.nakedobjects.object.collection.TypedNakedCollection;
+import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.reflect.ActionSpecification;
 
 import java.util.Enumeration;
@@ -128,7 +127,7 @@ public class TestClassImpl implements TestClass {
             object.created();
             object.getContext().getObjectManager().objectChanged(object);
         } catch (NotPersistableException e) {
-            object = new NakedError("Failed to create instance of " + cls.forNakedClass().getFullName(), e);
+            object = cls.getContext().getObjectManager().generatorError("Failed to create instance of " + cls.forNakedClass().getFullName(), e);
 
             System.out.println("Failed to create instance of " + cls.forNakedClass().getFullName());
             e.printStackTrace();

@@ -1,25 +1,25 @@
 package org.nakedobjects.persistence.file;
 
-import org.nakedobjects.object.LocalReflectionFactory;
-import org.nakedobjects.object.MockObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.Role;
-import org.nakedobjects.object.SerialOid;
 import org.nakedobjects.object.ValueObjectExample;
-import org.nakedobjects.object.value.Date;
-import org.nakedobjects.object.value.DateTime;
-import org.nakedobjects.object.value.FloatingPointNumber;
-import org.nakedobjects.object.value.Label;
-import org.nakedobjects.object.value.Logical;
-import org.nakedobjects.object.value.Money;
-import org.nakedobjects.object.value.Option;
-import org.nakedobjects.object.value.Percentage;
-import org.nakedobjects.object.value.TestClock;
-import org.nakedobjects.object.value.TextString;
-import org.nakedobjects.object.value.Time;
-import org.nakedobjects.object.value.URLString;
-import org.nakedobjects.object.value.WholeNumber;
+import org.nakedobjects.object.defaults.LocalReflectionFactory;
+import org.nakedobjects.object.defaults.MockObjectManager;
+import org.nakedobjects.object.defaults.SerialOid;
+import org.nakedobjects.object.defaults.value.Date;
+import org.nakedobjects.object.defaults.value.DateTime;
+import org.nakedobjects.object.defaults.value.FloatingPointNumber;
+import org.nakedobjects.object.defaults.value.Label;
+import org.nakedobjects.object.defaults.value.Logical;
+import org.nakedobjects.object.defaults.value.Money;
+import org.nakedobjects.object.defaults.value.Option;
+import org.nakedobjects.object.defaults.value.Percentage;
+import org.nakedobjects.object.defaults.value.TestClock;
+import org.nakedobjects.object.defaults.value.TextString;
+import org.nakedobjects.object.defaults.value.Time;
+import org.nakedobjects.object.defaults.value.URLString;
+import org.nakedobjects.object.defaults.value.WholeNumber;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
@@ -46,7 +46,7 @@ public class ObjectDataTest extends NakedObjectTestCase {
         MockObjectManager manager = MockObjectManager.setup();
         NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
         
-        NakedObjectSpecification type = NakedObjectSpecification.getNakedClass(ValueObjectExample.class.getName());
+        NakedObjectSpecification type = NakedObjectSpecification.getSpecification(ValueObjectExample.class.getName());
         data = new ObjectData(type, new SerialOid(1));
         
         new TestClock();
@@ -57,7 +57,7 @@ public class ObjectDataTest extends NakedObjectTestCase {
     }
 
     public void test() {
-        NakedObjectSpecification roleType = NakedObjectSpecification.getNakedClass(Role.class.getName());
+        NakedObjectSpecification roleType = NakedObjectSpecification.getSpecification(Role.class.getName());
         ObjectData roleData = new ObjectData(roleType, new SerialOid(1));
 
         roleData.set("Name", "supervisor");

@@ -4,7 +4,7 @@ import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.value.MultilineTextString;
+import org.nakedobjects.object.defaults.value.MultilineTextString;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;

@@ -1,7 +1,7 @@
 package org.nakedobjects.utility.xmlsnapshot;
 
 import org.nakedobjects.object.MockNakedObject;
-import org.nakedobjects.object.value.TextString;
+import org.nakedobjects.object.defaults.value.TextString;
 
 public class TestObject extends MockNakedObject {
     private final TextString name = new TextString();

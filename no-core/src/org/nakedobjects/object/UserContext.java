@@ -1,7 +1,6 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.security.User;
+import org.nakedobjects.object.security.User;
 
 
 public interface UserContext {

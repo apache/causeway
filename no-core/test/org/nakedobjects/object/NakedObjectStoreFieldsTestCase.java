@@ -1,17 +1,17 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.value.Date;
-import org.nakedobjects.object.value.FloatingPointNumber;
-import org.nakedobjects.object.value.Label;
-import org.nakedobjects.object.value.Logical;
-import org.nakedobjects.object.value.Money;
-import org.nakedobjects.object.value.Option;
-import org.nakedobjects.object.value.Percentage;
-import org.nakedobjects.object.value.TextString;
-import org.nakedobjects.object.value.Time;
-import org.nakedobjects.object.value.TimeStamp;
-import org.nakedobjects.object.value.URLString;
-import org.nakedobjects.object.value.WholeNumber;
+import org.nakedobjects.object.defaults.value.Date;
+import org.nakedobjects.object.defaults.value.FloatingPointNumber;
+import org.nakedobjects.object.defaults.value.Label;
+import org.nakedobjects.object.defaults.value.Logical;
+import org.nakedobjects.object.defaults.value.Money;
+import org.nakedobjects.object.defaults.value.Option;
+import org.nakedobjects.object.defaults.value.Percentage;
+import org.nakedobjects.object.defaults.value.TextString;
+import org.nakedobjects.object.defaults.value.Time;
+import org.nakedobjects.object.defaults.value.TimeStamp;
+import org.nakedobjects.object.defaults.value.URLString;
+import org.nakedobjects.object.defaults.value.WholeNumber;
 
 
 public abstract class NakedObjectStoreFieldsTestCase extends NakedObjectStoreTestCase {
@@ -56,8 +56,8 @@ public abstract class NakedObjectStoreFieldsTestCase extends NakedObjectStoreTes
     
     protected void initialiseObjects() throws Exception {
         // classes
-        personClass = NakedObjectSpecification.getNakedClass(Person.class.getName());
-        roleClass = NakedObjectSpecification.getNakedClass(Role.class.getName());
+        personClass = NakedObjectSpecification.getSpecification(Person.class.getName());
+        roleClass = NakedObjectSpecification.getSpecification(Role.class.getName());
 
         // objects
         String names[] = { "Freddy", "John", "Sam", "Zax", "fdfdklj" };

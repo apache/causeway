@@ -1,7 +1,6 @@
 package org.nakedobjects.persistence.sql.auto;
 
-import org.nakedobjects.configuration.Configuration;
-import org.nakedobjects.object.AbstractNakedObject;
+import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
@@ -10,6 +9,7 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.UnsupportedFindException;
+import org.nakedobjects.object.defaults.AbstractNakedObject;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import org.nakedobjects.persistence.sql.DatabaseConnector;

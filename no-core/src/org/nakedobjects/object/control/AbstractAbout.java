@@ -2,8 +2,8 @@ package org.nakedobjects.object.control;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.security.Role;
-import org.nakedobjects.security.User;
+import org.nakedobjects.object.security.Role;
+import org.nakedobjects.object.security.User;
 
 
 public abstract class AbstractAbout implements About {
@@ -209,7 +209,7 @@ public abstract class AbstractAbout implements About {
         	
             inUsableState = inUsableState && !stateIsSameAs(states[i]);
             listOfValidStates = listOfValidStates +
-                states[i].title().toString();
+                states[i].titleString();
 
             if (i < states.length) {
                 listOfValidStates = listOfValidStates + ", ";
@@ -292,7 +292,7 @@ public abstract class AbstractAbout implements About {
     protected AbstractAbout usableOnlyInState(State state) {
         if (!stateIsSameAs(state)) {
             vetoUse("Usable only when object is in the state: " +
-                state.title());
+                state.titleString());
         }
 
         return this;
@@ -310,7 +310,7 @@ public abstract class AbstractAbout implements About {
             inUsableState = inUsableState || stateIsSameAs(states[i]);
             listOfValidStates.append(listOfValidStates);
             listOfValidStates.append(i > 0 ? ", ": "");
-            listOfValidStates.append(states[i].title());
+            listOfValidStates.append(states[i].titleString());
         }
 
         if (!inUsableState) {

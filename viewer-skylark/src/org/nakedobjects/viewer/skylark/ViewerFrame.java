@@ -1,11 +1,11 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.ObjectViewingMechanism;
-import org.nakedobjects.ObjectViewingMechanismListener;
-import org.nakedobjects.configuration.ComponentException;
-import org.nakedobjects.configuration.ConfigurationException;
+import org.nakedobjects.container.configuration.ComponentException;
+import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.UpdateNotifier;
+import org.nakedobjects.viewer.ObjectViewingMechanism;
+import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 
 import java.awt.Frame;
 import java.awt.Graphics;

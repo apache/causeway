@@ -1,8 +1,10 @@
 package org.nakedobjects.object;
 
 
-import org.nakedobjects.object.value.TestClock;
-import org.nakedobjects.object.value.TextString;
+import org.nakedobjects.object.defaults.LocalReflectionFactory;
+import org.nakedobjects.object.defaults.Title;
+import org.nakedobjects.object.defaults.value.TestClock;
+import org.nakedobjects.object.defaults.value.TextString;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

@@ -4,11 +4,12 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
+
+import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.SerialOid;
-import org.nakedobjects.object.collection.InternalCollection;
+import org.nakedobjects.object.defaults.SerialOid;
 
 
 /**

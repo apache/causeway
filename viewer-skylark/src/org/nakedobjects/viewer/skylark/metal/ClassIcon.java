@@ -1,10 +1,11 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.configuration.Configuration;
+import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.defaults.SimpleNakedClass;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
@@ -131,7 +132,7 @@ public class ClassIcon extends ObjectView {
     
     public void secondClick(Click click) {
 		NakedObject object = ((ObjectContent) getContent()).getObject();
-		NakedClass nc = ((NakedClass) object);
+		SimpleNakedClass nc = ((SimpleNakedClass) object);
 		/*Action action = nc.getNakedClass().getObjectAction(Action.USER, "Instances");
 		InstanceCollection instances = (InstanceCollection) action.execute(object);
 		*/

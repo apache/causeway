@@ -6,9 +6,9 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.collection.SimpleInstanceCollection;
+import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
 import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.security.Session;
+import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.Debug;
 import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.viewer.skylark.Bounds;
@@ -118,7 +118,7 @@ public class DebugView implements DebugInfo {
             LOG.debug("Class details for " + nc);
             //       if(! (object instanceof NakedClass || object instanceof
             // InternalCollection)) {
-            if (!(object instanceof NakedClass || object instanceof SimpleInstanceCollection)) {
+            if (!(object instanceof NakedClass || object instanceof InstanceCollectionVector)) {
                 info.append(nc.debugInterface());
             }
         }

@@ -3,7 +3,7 @@ package org.nakedobjects.viewer.skylark.value;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.value.Logical;
+import org.nakedobjects.object.defaults.value.Logical;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;

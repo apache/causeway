@@ -24,6 +24,9 @@
 
 package org.nakedobjects.object;
 
+import org.nakedobjects.object.defaults.AbstractNakedObject;
+import org.nakedobjects.object.defaults.Title;
+
 
 
 

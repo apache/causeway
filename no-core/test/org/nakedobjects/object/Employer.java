@@ -25,11 +25,12 @@
 package org.nakedobjects.object;
 
 
-import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.FieldAbout;
-import org.nakedobjects.object.value.TextString;
-import org.nakedobjects.object.value.WholeNumber;
+import org.nakedobjects.object.defaults.AbstractNakedObject;
+import org.nakedobjects.object.defaults.Title;
+import org.nakedobjects.object.defaults.value.TextString;
+import org.nakedobjects.object.defaults.value.WholeNumber;
 
 
 public abstract class Employer extends AbstractNakedObject {

@@ -4,7 +4,7 @@ import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.reflect.ValueFieldSpecification;
-import org.nakedobjects.security.Session;
+import org.nakedobjects.object.security.Session;
 
 
 public class ValueField extends ObjectField implements ValueContent {

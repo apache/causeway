@@ -12,6 +12,7 @@ import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.UnsupportedFindException;
+import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
 import org.nakedobjects.object.reflect.FieldSpecification;
 
 import java.util.Enumeration;
@@ -28,7 +29,7 @@ public class ObjectStore implements NakedObjectStore {
     private final Hashtable objectInstances;
 
     public ObjectStore() {
-        loaded = new LoadedObjects();
+        loaded = new LoadedObjectsHashtable();
         objectInstances = new Hashtable();
         classes = new Hashtable(30);
     }
@@ -43,7 +44,7 @@ public class ObjectStore implements NakedObjectStore {
     public void createNakedClass(NakedClass cls) throws ObjectStoreException {
         LOG.debug("createClass " + cls);
         cls.setResolved();
-        classes.put(cls.getName().stringValue(), cls);
+        classes.put(cls.getName(), cls);
         Hashtable persistentObjectVector = instancesFor(cls.forNakedClass());
         persistentObjectVector.put(cls.getOid(), cls);
     }
@@ -137,7 +138,7 @@ public class ObjectStore implements NakedObjectStore {
             while (objects.hasMoreElements()) {
                 NakedObject object = (NakedObject) objects.nextElement();
 
-                if (object instanceof NakedClass && ((NakedClass) object).getName().isSameAs(name)) {
+                if (object instanceof NakedClass && ((NakedClass) object).getName().equals(name)) {
                     instances.addElement(object);
                 }
             }

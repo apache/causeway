@@ -1,12 +1,12 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.object.LocalReflectionFactory;
-import org.nakedobjects.object.MockObjectManager;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectTestCase;
+import org.nakedobjects.object.defaults.LocalReflectionFactory;
+import org.nakedobjects.object.defaults.MockObjectManager;
+import org.nakedobjects.object.defaults.value.Date;
 import org.nakedobjects.object.reflect.ValueFieldSpecification;
-import org.nakedobjects.object.value.Date;
 
 public class TestValueImplTest extends NakedObjectTestCase {
     private MockObjectManager om;

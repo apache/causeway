@@ -1,7 +1,6 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.object.value.TextString;
+import org.nakedobjects.object.defaults.value.TextString;
 
 public class NakedClassTestObject extends MockNakedObject {
     

@@ -1,6 +1,6 @@
 package org.nakedobjects.persistence.sql;
 
-import org.nakedobjects.configuration.ComponentLoader;
+import org.nakedobjects.container.configuration.ComponentLoader;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.ObjectStoreException;

@@ -16,7 +16,7 @@ import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.Reflector;
 import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import org.nakedobjects.object.reflect.ValueField;
-import org.nakedobjects.object.reflect.simple.JavaReflector;
+import org.nakedobjects.object.reflect.defaults.JavaReflector;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -369,7 +369,7 @@ public final class NakedObjectSpecification {
         LOG.debug("NakedClass " + this);
     	this.reflector = reflector;
     	if(superclass != null) {
-	    	this.superclass = NakedObjectSpecification.getNakedClass(superclass);
+	    	this.superclass = NakedObjectSpecification.getSpecification(superclass);
 	    	LOG.debug("  Superclass " + superclass);
 	    	this.superclass.subclasses.addSubclass(this);
     	}
@@ -410,11 +410,7 @@ public final class NakedObjectSpecification {
     public NakedObjectSpecification[] subclasses() {
         return subclasses.toArray();
     }
-  
-    public Title title() {
-        return new Title(getPluralName());
-    }
-    
+     
     public String toString() {
         StringBuffer s = new StringBuffer();
 
@@ -469,11 +465,11 @@ public final class NakedObjectSpecification {
         return reflector.isObject();
     }
 
-    public static NakedObjectSpecification getNakedClass(Class cls) {
-        return getNakedClass(cls.getName());
+    public static NakedObjectSpecification getSpecification(Class cls) {
+        return getSpecification(cls.getName());
     }	
     
-    public static NakedObjectSpecification getNakedClass(String className) {
+    public static NakedObjectSpecification getSpecification(String className) {
         if(classes.containsKey(className)) {
             return (NakedObjectSpecification) classes.get(className);
         } else {

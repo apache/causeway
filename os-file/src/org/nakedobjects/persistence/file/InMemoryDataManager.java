@@ -4,7 +4,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.SerialOid;
+import org.nakedobjects.object.defaults.SerialOid;
 
 
 public class InMemoryDataManager extends DataManager {

@@ -23,7 +23,7 @@
 */
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.configuration.Configuration;
+import org.nakedobjects.container.configuration.Configuration;
 
 
 public class Color {

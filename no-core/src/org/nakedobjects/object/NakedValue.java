@@ -16,7 +16,7 @@ package org.nakedobjects.object;
  * <li>Parse a String to set the objects value</li>
  * </ul>
  * 
- * @see org.nakedobjects.object.value.AbstractNakedValue
+ * @see org.nakedobjects.object.defaults.value.AbstractNakedValue
  */
 public interface NakedValue extends Naked {
 

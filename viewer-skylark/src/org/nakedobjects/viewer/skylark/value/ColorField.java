@@ -2,8 +2,8 @@ package org.nakedobjects.viewer.skylark.value;
 
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.defaults.value.Logical;
 import org.nakedobjects.object.reflect.ValueFieldSpecification;
-import org.nakedobjects.object.value.Logical;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
@@ -34,7 +34,7 @@ public class ColorField extends AbstractField {
 	    }
 	    
 	    public boolean canDisplay(Naked object) {
-	    	return object instanceof org.nakedobjects.object.value.Color;
+	    	return object instanceof org.nakedobjects.object.defaults.value.Color;
 		}
 	}
 	
@@ -89,9 +89,9 @@ public class ColorField extends AbstractField {
         return size; 
   }
 
-    org.nakedobjects.object.value.Color getColor() {
+    org.nakedobjects.object.defaults.value.Color getColor() {
         ValueContent content = ((ValueContent) getContent());
-        org.nakedobjects.object.value.Color value = (org.nakedobjects.object.value.Color) content.getValue();
+        org.nakedobjects.object.defaults.value.Color value = (org.nakedobjects.object.defaults.value.Color) content.getValue();
 
         return value;
     }

@@ -1,15 +1,15 @@
 package org.nakedobjects.persistence.sql;
 
-import org.nakedobjects.configuration.ComponentException;
-import org.nakedobjects.configuration.ComponentLoader;
-import org.nakedobjects.configuration.Configuration;
-import org.nakedobjects.configuration.ConfigurationException;
+import org.nakedobjects.container.configuration.ComponentException;
+import org.nakedobjects.container.configuration.ComponentLoader;
+import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.ConfigurationException;
+import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.persistence.sql.auto.AutoMapper;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.NotImplementedException;
@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
 
 public class ObjectMapperLookup {
     private static final Logger LOG = Logger.getLogger(ObjectMapperLookup.class);
-    private static final NakedObjectSpecification nakedClass = NakedObjectSpecification.getNakedClass(NakedObjectSpecification.class.getName());
+    private static final NakedObjectSpecification nakedClass = NakedObjectSpecification.getSpecification(NakedObjectSpecification.class.getName());
     private final Hashtable mappers = new Hashtable();
     private final LoadedObjects loadedObjects;
     private ObjectMapperFactory mapperFactory;
@@ -78,7 +78,7 @@ public class ObjectMapperLookup {
     }
 
     private void add(String className, ObjectMapper mapper) throws SqlObjectStoreException {
-        NakedObjectSpecification cls = NakedObjectSpecification.getNakedClass(className);
+        NakedObjectSpecification cls = NakedObjectSpecification.getSpecification(className);
         add(cls, mapper);
     }
 

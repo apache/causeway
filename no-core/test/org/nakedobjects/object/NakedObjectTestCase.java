@@ -1,8 +1,8 @@
 package org.nakedobjects.object;
 
 
+import org.nakedobjects.object.defaults.value.TestClock;
 import org.nakedobjects.object.reflect.AssociationSpecification;
-import org.nakedobjects.object.value.TestClock;
 
 import junit.framework.TestCase;
 

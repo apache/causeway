@@ -1,7 +1,7 @@
 package org.nakedobjects.persistence.sql;
 
-import org.nakedobjects.io.TransferableWriter;
 import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.io.TransferableWriter;
 
 
 public final class SqlOid implements Oid {

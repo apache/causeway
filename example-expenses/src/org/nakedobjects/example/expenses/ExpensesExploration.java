@@ -1,9 +1,9 @@
 
 package org.nakedobjects.example.expenses;
 
-import org.nakedobjects.exploration.Exploration;
-import org.nakedobjects.exploration.AbstractExplorationFixture;
-import org.nakedobjects.security.User;
+import org.nakedobjects.container.exploration.Exploration;
+import org.nakedobjects.object.exploration.AbstractExplorationFixture;
+import org.nakedobjects.object.security.User;
 
 
 public class ExpensesExploration extends Exploration {

@@ -1,13 +1,13 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.LocalReflectionFactory;
-import org.nakedobjects.object.MockObjectManager;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Role;
-import org.nakedobjects.object.collection.SimpleArbitraryCollection;
-import org.nakedobjects.object.value.TestClock;
+import org.nakedobjects.object.defaults.LocalReflectionFactory;
+import org.nakedobjects.object.defaults.MockObjectManager;
+import org.nakedobjects.object.defaults.collection.ArbitraryCollectionVector;
+import org.nakedobjects.object.defaults.value.TestClock;
 
 import java.util.Enumeration;
 
@@ -40,7 +40,7 @@ public final class NakedCollections2Test extends TestCase {
          new TestClock();
          NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
          
-         SimpleArbitraryCollection collection = new SimpleArbitraryCollection();
+         ArbitraryCollectionVector collection = new ArbitraryCollectionVector();
          int size = 26;
          Role[] e = new Role[size];
          for (int i = 0; i < size; i++) {

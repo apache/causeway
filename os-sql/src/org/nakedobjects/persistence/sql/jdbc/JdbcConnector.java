@@ -1,6 +1,6 @@
 package org.nakedobjects.persistence.sql.jdbc;
 
-import org.nakedobjects.configuration.Configuration;
+import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.persistence.sql.AbstractDatabaseConnector;
 import org.nakedobjects.persistence.sql.Results;

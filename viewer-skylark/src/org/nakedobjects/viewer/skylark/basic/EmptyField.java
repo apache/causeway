@@ -1,13 +1,14 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.defaults.SimpleNakedClass;
 import org.nakedobjects.object.reflect.AssociateCommand;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
-import org.nakedobjects.security.Session;
+import org.nakedobjects.object.security.Session;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
@@ -144,7 +145,7 @@ public class EmptyField extends AbstractView {
             OneToOneAssociationSpecification field = getEmptyField();      
             LOG.debug("drop " + source + " on " + field + "/" + target);
             if (source instanceof NakedClass) {
-                associatedObject = ((NakedClass) source).actionNewInstance();
+                associatedObject = ((SimpleNakedClass) source).actionNewInstance();
             } else {
                 associatedObject = source;
             }

@@ -7,7 +7,7 @@ package org.nakedobjects.object;
  * <p>
  * A basic implementation is provided by AbstractNakedObject.
  * 
- * @see org.nakedobjects.object.AbstractNakedObject
+ * @see org.nakedobjects.object.defaults.AbstractNakedObject
  */
 public interface NakedObject extends Naked {
     /**

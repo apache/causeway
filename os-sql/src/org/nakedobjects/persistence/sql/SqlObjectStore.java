@@ -1,8 +1,9 @@
 package org.nakedobjects.persistence.sql;
 
-import org.nakedobjects.configuration.ComponentException;
-import org.nakedobjects.configuration.ComponentLoader;
-import org.nakedobjects.configuration.ConfigurationException;
+import org.nakedobjects.container.configuration.ComponentException;
+import org.nakedobjects.container.configuration.ComponentLoader;
+import org.nakedobjects.container.configuration.ConfigurationException;
+import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedClass;
@@ -14,7 +15,7 @@ import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.UnsupportedFindException;
-import org.nakedobjects.object.collection.InternalCollection;
+import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
 
 import java.util.Hashtable;
 
@@ -102,7 +103,7 @@ public final class SqlObjectStore implements NakedObjectStore {
     }
 
     public void init() throws ConfigurationException, ComponentException, ObjectStoreException {
-        loadedObjects = new LoadedObjects();
+        loadedObjects = new LoadedObjectsHashtable();
         transactionOrientedConnections = new Hashtable();
         
         DatabaseConnectorFactory connectorFactory = (DatabaseConnectorFactory) ComponentLoader.

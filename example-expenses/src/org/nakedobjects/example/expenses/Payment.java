@@ -24,9 +24,9 @@
 
 package org.nakedobjects.example.expenses;
 
-import org.nakedobjects.object.AbstractNakedObject;
-import org.nakedobjects.object.Title;
-import org.nakedobjects.object.value.*;
+import org.nakedobjects.object.defaults.AbstractNakedObject;
+import org.nakedobjects.object.defaults.Title;
+import org.nakedobjects.object.defaults.value.*;
 
 
 public class Payment extends AbstractNakedObject {

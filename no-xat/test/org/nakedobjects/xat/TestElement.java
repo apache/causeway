@@ -1,7 +1,7 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.object.AbstractNakedObject;
-import org.nakedobjects.object.Title;
+import org.nakedobjects.object.defaults.AbstractNakedObject;
+import org.nakedobjects.object.defaults.Title;
 
 public class TestElement extends AbstractNakedObject {
 

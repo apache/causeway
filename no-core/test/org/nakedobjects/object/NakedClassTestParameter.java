@@ -1,5 +1,6 @@
 package org.nakedobjects.object;
 
+
 public class NakedClassTestParameter extends MockNakedObject {
 
 }

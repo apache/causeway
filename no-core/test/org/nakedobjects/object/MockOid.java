@@ -1,6 +1,6 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.io.TransferableWriter;
+import org.nakedobjects.object.io.TransferableWriter;
 
 public class MockOid implements Oid {
 

@@ -2,15 +2,15 @@ package org.nakedobjects.object.reflect;
 
 
 import org.nakedobjects.object.InvalidEntryException;
-import org.nakedobjects.object.LocalReflectionFactory;
-import org.nakedobjects.object.MockObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.value.Money;
-import org.nakedobjects.object.value.TestClock;
-import org.nakedobjects.object.value.TextString;
+import org.nakedobjects.object.defaults.LocalReflectionFactory;
+import org.nakedobjects.object.defaults.MockObjectManager;
+import org.nakedobjects.object.defaults.value.Money;
+import org.nakedobjects.object.defaults.value.TestClock;
+import org.nakedobjects.object.defaults.value.TextString;
 
 import junit.framework.TestSuite;
 
@@ -46,7 +46,7 @@ public class ValueTests extends NakedObjectTestCase {
         object = new ValueTestObject();
         object.setContext(manager.getContext());
         
-        NakedObjectSpecification c = NakedObjectSpecification.getNakedClass(ValueTestObject.class.getName());
+        NakedObjectSpecification c = NakedObjectSpecification.getSpecification(ValueTestObject.class.getName());
         
         nameField = (ValueFieldSpecification) c.getField(NAME_FIELD_NAME);
         salaryField = (ValueFieldSpecification) c.getField(SALARY_FIELD_NAME);

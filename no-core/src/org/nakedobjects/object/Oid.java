@@ -1,6 +1,6 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.io.Transferable;
+import org.nakedobjects.object.io.Transferable;
 
 public interface Oid extends Transferable {
 

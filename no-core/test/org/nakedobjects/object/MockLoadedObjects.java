@@ -4,7 +4,7 @@ import java.util.Vector;
 
 import junit.framework.Assert;
 
-public class MockLoadedObjects extends LoadedObjects {
+public class MockLoadedObjects implements LoadedObjects {
     private Vector actions = new Vector();
     private boolean isLoaded;
     private Vector loadedObjects;

@@ -25,7 +25,7 @@
 package org.nakedobjects.persistence.file;
 
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.SerialOid;
+import org.nakedobjects.object.defaults.SerialOid;
 
 
 public abstract class Data {

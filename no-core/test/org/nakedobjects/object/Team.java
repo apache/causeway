@@ -24,9 +24,10 @@
 
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.control.FieldAbout;
+import org.nakedobjects.object.defaults.AbstractNakedObject;
+import org.nakedobjects.object.defaults.Title;
 
 
 /**

@@ -1,9 +1,9 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.object.AbstractUserContext;
+import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedCollection;
-import org.nakedobjects.object.Title;
-import org.nakedobjects.object.collection.InternalCollection;
+import org.nakedobjects.object.defaults.AbstractUserContext;
+import org.nakedobjects.object.defaults.Title;
 
 public class EcsContext extends AbstractUserContext {
     private final InternalCollection cities = createInternalCollection(City.class);

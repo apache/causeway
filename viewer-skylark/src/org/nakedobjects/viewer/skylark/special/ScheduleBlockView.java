@@ -2,8 +2,8 @@ package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.defaults.value.TimePeriod;
 import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.value.TimePeriod;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
@@ -48,7 +48,7 @@ public class ScheduleBlockView extends ObjectView {
    			color = Style.PRIMARY3;
    		} else {
 	   		NakedObject object = ((ObjectContent) getContent()).getObject();
-   			org.nakedobjects.object.value.Color fieldColor = (org.nakedobjects.object.value.Color) colorField.get(object);
+   			org.nakedobjects.object.defaults.value.Color fieldColor = (org.nakedobjects.object.defaults.value.Color) colorField.get(object);
    			color = new Color((fieldColor).intValue());
    		}
 

@@ -2,7 +2,7 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.collection.SimpleInstanceCollection;
+import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
 import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
@@ -29,7 +29,7 @@ public class ClassIconBackground extends AbstractViewDecorator {
 		NakedObject object = ((ObjectContent) getContent()).getObject();
 		NakedClass nc = ((NakedClass) object);
 		ActionSpecification action = nc.getSpecification().getObjectAction(ActionSpecification.USER, "Instances");
-		SimpleInstanceCollection instances = (SimpleInstanceCollection) action.execute(object);
+		InstanceCollectionVector instances = (InstanceCollectionVector) action.execute(object);
 		View view = ViewFactory.getViewFactory().createOpenRootView(instances);
 		view.setLocation(click.getLocationWithinViewer());
 		getWorkspace().addView(view);

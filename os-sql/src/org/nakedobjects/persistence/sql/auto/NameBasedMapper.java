@@ -1,5 +1,6 @@
 package org.nakedobjects.persistence.sql.auto;
 
+import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -8,9 +9,8 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.ResolveException;
-import org.nakedobjects.object.SerialOid;
 import org.nakedobjects.object.UnsupportedFindException;
-import org.nakedobjects.object.collection.InternalCollection;
+import org.nakedobjects.object.defaults.SerialOid;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
@@ -144,7 +144,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
 
     private void loadInternalCollection(DatabaseConnector connector, String id, FieldSpecification field, InternalCollection collection) throws ResolveException, SqlObjectStoreException {
         NakedObjectSpecification cls = collection.forParent().getSpecification();
-        NakedObjectSpecification elementCls = NakedObjectSpecification.getNakedClass(collection.getType().getFullName());
+        NakedObjectSpecification elementCls = NakedObjectSpecification.getSpecification(collection.getType().getFullName());
 
         String table = table(cls) + "_" + field.getName().toLowerCase();
         LOG.debug("loading internal collection data from SQL " + table);

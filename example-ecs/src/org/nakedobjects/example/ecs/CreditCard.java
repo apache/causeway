@@ -1,8 +1,8 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.object.Title;
 import org.nakedobjects.object.control.Validity;
-import org.nakedobjects.object.value.TextString;
+import org.nakedobjects.object.defaults.Title;
+import org.nakedobjects.object.defaults.value.TextString;
 
 
 public class CreditCard extends PaymentMethod {

@@ -1,12 +1,12 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.object.AbstractNakedObject;
-import org.nakedobjects.object.collection.InternalCollection;
+import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.control.Validity;
-import org.nakedobjects.object.value.Money;
-import org.nakedobjects.object.value.TextString;
+import org.nakedobjects.object.defaults.AbstractNakedObject;
+import org.nakedobjects.object.defaults.value.Money;
+import org.nakedobjects.object.defaults.value.TextString;
 
 
 public class TestObjectExample extends AbstractNakedObject {
