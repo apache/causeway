@@ -4,7 +4,7 @@ import org.nakedobjects.object.reflect.FieldSpecification;
 
 public interface FieldContent {
 
-	String getFieldLabel();
+	String getName();
 	
 	FieldSpecification getField();
 }

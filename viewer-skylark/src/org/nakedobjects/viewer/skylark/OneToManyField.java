@@ -3,6 +3,9 @@ package org.nakedobjects.viewer.skylark;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.defaults.Veto;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.viewer.skylark.special.CollectionDisplayIterator;
 import org.nakedobjects.viewer.skylark.special.CollectionIterator;
@@ -49,7 +52,23 @@ public class OneToManyField extends ObjectField implements CollectionContent {
     public String toString() {
         return getObject() + "/" + getField();
     }
+    
 
+    public void setObject(NakedObject object) {
+        throw new NakedObjectRuntimeException("Invalid call");
+    }
+
+    public void clear() {
+        throw new NakedObjectRuntimeException("Invalid call");    
+    }
+
+    public Permission canClear() {
+        return Veto.DEFAULT;
+    }
+    
+    public Permission canSet(NakedObject dragSource) {
+        return Veto.DEFAULT;
+    }
 }
 
 /*

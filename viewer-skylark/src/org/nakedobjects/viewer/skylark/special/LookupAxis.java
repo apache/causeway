@@ -1,27 +1,27 @@
-package org.nakedobjects.viewer.skylark.basic;
+package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.Lookup;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
-import org.nakedobjects.viewer.skylark.special.LookupBorder;
 
-public class SubviewIconSpecification extends IconSpecification {
-    private static final NakedObjectSpecification LOOKUP = NakedObjectSpecificationLoader.getInstance().loadSpecification(Lookup.class);
+class LookupAxis implements ViewAxis {
+    private final ObjectContent content;
 
-    public View createView(Content content, ViewAxis axis) {
-	    ObjectContent c = (ObjectContent) content;
-	    if(c.getType().isOfType(LOOKUP)) {
-	        return new ObjectBorder(new LookupBorder(new IconView(content, this, axis, Style.NORMAL)));
-	    } else {
-	        return new ObjectBorder(new IconView(content, this, axis, Style.NORMAL));
-	    }
-	    }
-	
+    public LookupAxis(ObjectContent content, View parentVIew) {
+        this.content = content;
+        this.parentView = parentVIew;
+    }
+    
+    ObjectContent getContent() {
+        return content;
+    }
+     
+     private final View parentView;
+     
+     public View getParentView() {
+        return parentView;
+    }
+    
 }
 
 

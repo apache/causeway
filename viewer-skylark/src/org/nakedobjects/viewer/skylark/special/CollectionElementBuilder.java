@@ -8,7 +8,7 @@ import org.nakedobjects.viewer.skylark.CollectionElement;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.OneToManyElement;
+import org.nakedobjects.viewer.skylark.OneToManyFieldElement;
 import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -77,7 +77,7 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
         			elementContent = new CollectionElement(element);
         		} else {
         		    NakedObject parent = ((OneToManyField) content).getParent();
-        			elementContent = new OneToManyElement(parent, element, field);
+        			elementContent = new OneToManyFieldElement(parent, element, field);
         		}
         		elementView = subviewDesign.createSubview(elementContent, view.getViewAxis());
         	}

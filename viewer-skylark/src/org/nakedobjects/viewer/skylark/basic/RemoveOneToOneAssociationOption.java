@@ -1,62 +1,26 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Allow;
-import org.nakedobjects.object.control.defaults.Veto;
-import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
-import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
-import org.apache.log4j.Logger;
-
 
 public class RemoveOneToOneAssociationOption extends MenuOption {
-    private static final Logger LOG = Logger.getLogger(RemoveOneToOneAssociationOption.class);
-
     public RemoveOneToOneAssociationOption() {
         super("Clear association");
     }
 
     public Permission disabled(View view) {
-    	NakedObject parentObject = ((ObjectContent) view.getParent().getContent()).getObject();
-
-		// associated object
         OneToOneField content = ((OneToOneField) view.getContent());
-		OneToOneAssociationSpecification association = content.getOneToOneAssociation();
-        NakedObject associatedObject = content.getObject();
-        
-
-        About about = association.getAbout(ClientSession.getSession(), parentObject, associatedObject);
-
-        Permission edit = about.canUse();
-
-        if (edit.isAllowed()) {
-            String status = "Clear the association to this object from '" + parentObject.titleString() + "'";
-
-            return new Allow(status);
-        } else {
-            return new Veto(edit.getReason());
-        }
+        return content.canClear();
     }
 
     public void execute(Workspace frame, View view, Location at) {
-    	NakedObject parentObject = ((ObjectContent) view.getParent().getContent()).getObject();
-
-		// associated object
         OneToOneField content = ((OneToOneField) view.getContent());
-		OneToOneAssociationSpecification association = content.getOneToOneAssociation();
-        NakedObject associatedObject = content.getObject();
-        
-        LOG.debug("Remove " + associatedObject + " from " + parentObject);
-        association.clearAssociation(parentObject, associatedObject);
-        
+        content.clear();
         view.getParent().invalidateContent();
     }
 }

@@ -1,10 +1,18 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.object.Aggregated;
 import org.nakedobjects.object.Lookup;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.defaults.Allow;
+import org.nakedobjects.object.control.defaults.Veto;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
+import org.nakedobjects.object.security.ClientSession;
+import org.nakedobjects.viewer.skylark.basic.ClassOption;
 import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 import org.nakedobjects.viewer.skylark.basic.RemoveOneToOneAssociationOption;
 
@@ -18,6 +26,51 @@ public class OneToOneField extends ObjectField implements ObjectContent {
         this.object = object;
     }
 
+    public Permission canClear() {
+        NakedObject parentObject = getParent();
+        OneToOneAssociationSpecification association = getOneToOneAssociation();
+        NakedObject associatedObject = getObject();
+        About about = association.getAbout(ClientSession.getSession(), parentObject, associatedObject);
+        Permission edit = about.canUse();
+        if (edit.isAllowed()) {
+            String status = "Clear the association to this object from '" + parentObject.titleString() + "'";
+            return new Allow(status);
+        } else {
+            return new Veto(edit.getReason());
+        }
+    }
+    
+    public Permission canSet(NakedObject object) {
+        if (object instanceof NakedClass) {
+            return new Allow();
+        } else {
+            NakedObjectSpecification targetType = getOneToOneAssociation().getType();
+            NakedObjectSpecification sourceType = object.getSpecification();
+            if (!sourceType.isOfType(targetType)) {
+                return new Veto("Can only drop objects of type " + targetType.getSingularName());
+            }
+
+            if (getParent().getOid() != null && object.getOid() == null) {
+                return new Veto("Can't drop a non-persistent into this persistent object");
+            }
+
+            if(object instanceof Aggregated) {
+                Aggregated aggregated = ((Aggregated) object);
+                if(aggregated.isAggregated() && aggregated.parent() != getParent()) {
+                    return new Veto("Object is already associated with another object: " + aggregated.parent());
+                }
+            }
+
+            Permission perm = getOneToOneAssociation().getAbout(ClientSession.getSession(), getParent(), object).canUse();
+            return perm;
+        }
+
+    }
+    
+    public void clear() {
+        getOneToOneAssociation().clearAssociation(getParent(), object);
+    }
+
     public String debugDetails() {
         return super.debugDetails() + "  object:" + object + "\n";
     }
@@ -26,25 +79,49 @@ public class OneToOneField extends ObjectField implements ObjectContent {
         return object;
     }
 
-    // TODO move the code using this method (in RemoveOneToOneAssociation) to this class and call from the other
-    public OneToOneAssociationSpecification getOneToOneAssociation() {
+    private OneToOneAssociationSpecification getOneToOneAssociation() {
         return (OneToOneAssociationSpecification) getField();
     }
 
-    public void menuOptions(MenuOptionSet options) {
-        super.menuOptions(options);
-        ObjectOption.menuOptions(object, options);
-        options.add(MenuOptionSet.OBJECT, REMOVE_ASSOCIATION);
-    }
-
-    public String toString() {
-        return getObject() + "/" + getField();
+    public NakedObjectSpecification getType() {
+        return getOneToOneAssociation().getType();
     }
 
     public boolean isLookup() {
         NakedObjectSpecification lookup = NakedObjectSpecificationLoader.getInstance().loadSpecification(Lookup.class);
         return getOneToOneAssociation().getType().isOfType(lookup);
     }
+
+    public void menuOptions(MenuOptionSet options) {
+        super.menuOptions(options);
+        if(getObject() == null) {
+            ClassOption.menuOptions(getOneToOneAssociation().getType(), options);
+        } else {
+            ObjectOption.menuOptions(object, options);
+            options.add(MenuOptionSet.OBJECT, REMOVE_ASSOCIATION);
+        }
+    }
+
+    public void setObject(NakedObject object) {
+        NakedObject associatedObject;
+        if (object instanceof NakedClass) {
+            associatedObject = ((NakedClass) object).newInstance();
+        } else {
+            associatedObject = object;
+        }
+
+ //       getViewManager().getUndoStack().add(new AssociateCommand(target, associatedObject, field));
+        getOneToOneAssociation().setAssociation(getParent(), associatedObject);
+    }
+
+    public String toString() {
+        return getObject() + "/" + getField();
+    }
+    /*
+    public String getName() {
+        return getOneToOneAssociation().getType().getSingularName();
+    }
+    */
 }
 
 /*

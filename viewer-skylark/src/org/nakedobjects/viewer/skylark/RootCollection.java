@@ -2,6 +2,11 @@ package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.defaults.Veto;
+import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.special.CollectionDisplayIterator;
 import org.nakedobjects.viewer.skylark.special.CollectionIterator;
 
@@ -18,6 +23,10 @@ public class RootCollection implements CollectionContent {
 
     public Enumeration allElements() {
         return getCollection().elements();
+    }
+
+    public void clear() {
+        throw new NakedObjectRuntimeException("Invalid call");
     }
 
     public String debugDetails() {
@@ -43,9 +52,28 @@ public class RootCollection implements CollectionContent {
 
     public void menuOptions(MenuOptionSet options) {}
 
+    public void setObject(NakedObject object) {
+        throw new NakedObjectRuntimeException("Invalid call");
+    }
+
     public String toString() {
         return "" + collection;
     }
+
+    public Permission canSet(NakedObject dragSource) {
+        return Veto.DEFAULT;    }
+
+    public Permission canClear() {
+        return Veto.DEFAULT;    }
+
+    public String getName() {
+        return "";
+    }
+    
+    public NakedObjectSpecification getType() {
+        throw new NotImplementedException();
+    }
+    
 }
 
 /*

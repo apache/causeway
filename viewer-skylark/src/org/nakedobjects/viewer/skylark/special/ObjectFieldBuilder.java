@@ -34,14 +34,14 @@ import org.apache.log4j.Logger;
 
 public class ObjectFieldBuilder extends AbstractViewBuilder {
     private static final Logger LOG = Logger.getLogger(ObjectFieldBuilder.class);
-	private SubviewSpec subviewDesign;
+    private SubviewSpec subviewDesign;
 
     public ObjectFieldBuilder(SubviewSpec subviewDesign) {
-    	this.subviewDesign = subviewDesign;
-	}
+        this.subviewDesign = subviewDesign;
+    }
 
     public void build(View view) {
-		Assert.assertEquals(view.getView(), view);
+        Assert.assertEquals(view.getView(), view);
 
         NakedObject object = ((ObjectContent) view.getContent()).getObject();
 
@@ -49,16 +49,39 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
 
         NakedObjectSpecification cls = object.getSpecification();
         FieldSpecification[] flds = cls.getVisibleFields(object, ClientSession.getSession());
-       
-	    if(view.getSubviews().length == 0) {
-	    	newBuild(view, object, flds);
-	    } else {
-	    	updateBuild(view, object, flds);
-	    }
+
+        if (view.getSubviews().length == 0) {
+            newBuild(view, object, flds);
+        } else {
+            updateBuild(view, object, flds);
+        }
     }
 
     public View createCompositeView(Content content, CompositeViewSpecification specification, ViewAxis axis) {
-		return new CompositeObjectView(content, specification, axis);
+        return new CompositeObjectView(content, specification, axis);
+    }
+
+    private ObjectField createContent(NakedObject parent, Naked object, FieldSpecification field) {
+        if (field == null) {
+            throw new NullPointerException();
+        }
+
+        ObjectField content;
+        if (object instanceof InternalCollection) {
+            content = new OneToManyField(parent, (InternalCollection) object, (OneToManyAssociationSpecification) field);
+        } else if (object instanceof NakedObject || object == null) {
+            content = new OneToOneField(parent, (NakedObject) object, (OneToOneAssociationSpecification) field);
+        } else if (object instanceof NakedValue) {
+            content = new ValueField(parent, (NakedValue) object, (ValueFieldSpecification) field);
+        } else {
+            throw new NakedObjectRuntimeException();
+        }
+
+        return content;
+    }
+
+    public View decorateSubview(View subview) {
+        return subviewDesign.decorateSubview(subview);
     }
 
     private void newBuild(View view, NakedObject object, FieldSpecification[] flds) {
@@ -66,39 +89,39 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         for (int f = 0; f < flds.length; f++) {
             FieldSpecification field = flds[f];
             try {
-				Naked value = field.get(object);
-				ObjectField content = createContent(object, value, field);
-				View fieldView = subviewDesign.createSubview(content, view.getViewAxis());
-				if(fieldView != null) {
-					view.addView(decorateSubview(fieldView));
-				}
+                Naked value = field.get(object);
+                ObjectField content = createContent(object, value, field);
+                View fieldView = subviewDesign.createSubview(content, view.getViewAxis());
+                if (fieldView != null) {
+                    view.addView(decorateSubview(fieldView));
+                }
             } catch (NakedObjectDefinitionException e) {
                 LOG.error("Invalid field", e);
                 view.addView(new FieldErrorView(e.getMessage()));
             }
-       }
+        }
     }
 
     private void updateBuild(View view, NakedObject object, FieldSpecification[] flds) {
         LOG.debug("rebuild view " + view + " for " + object);
 
         View[] subviews = view.getSubviews();
-    	
+
         int fld = 0;
-        
+
         for (int i = 0; i < subviews.length; i++) {
             View subview = subviews[i];
-            while(((FieldContent) subview.getContent()).getField() != flds[fld]) {
+            while (((FieldContent) subview.getContent()).getField() != flds[fld]) {
                 fld++;
             }
             Assert.assertTrue(fld < flds.length);
-            
+
             FieldSpecification field = flds[fld];
             try {
                 Naked value = field.get(object);
-                if(value instanceof NakedValue) {
+                if (value instanceof NakedValue) {
                     NakedValue existing = ((ValueContent) subview.getContent()).getValue();
-                    if(value != existing) {
+                    if (value != existing) {
                         ((ValueField) subview.getContent()).updateDerivedValue((NakedValue) value);
                     }
                     subview.refresh();
@@ -108,67 +131,43 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
                     NakedObject existing = ((ObjectContent) subviews[i].getContent()).getObject();
                     boolean changeToNull = value == null && existing != null;
                     boolean changedFromNull = value != null && existing == null;
-                    if(changeToNull || changedFromNull) {
-                        View fieldView =	subviewDesign.createSubview(createContent(object, value, field), view.getViewAxis());
-                        if(fieldView != null) {
+                    if (changeToNull || changedFromNull) {
+                        View fieldView = subviewDesign.createSubview(createContent(object, value, field), view.getViewAxis());
+                        if (fieldView != null) {
                             view.replaceView(subview, decorateSubview(fieldView));
                         }
-                    } 
+                    }
                 }
             } catch (NakedObjectDefinitionException e) {
                 LOG.error("Invalid field", e);
                 view.addView(new FieldErrorView(e.getMessage()));
             }
 
-    		fld++;
+            fld++;
         }
     }
-
-	private ObjectField createContent(NakedObject parent, Naked object, FieldSpecification field) {
-		if(field == null) {
-			throw new NullPointerException();
-		}
-		
-		ObjectField content;
-		if(object instanceof InternalCollection) {
-			content = new OneToManyField(parent, (InternalCollection) object, (OneToManyAssociationSpecification) field);
-	    } else if(object instanceof NakedObject || object == null) {
-			content = new OneToOneField(parent, (NakedObject) object, (OneToOneAssociationSpecification) field);
-	    } else if(object instanceof NakedValue) { 
-			content = new ValueField(parent, (NakedValue) object, (ValueFieldSpecification) field);  
-	    } else {
-	        throw new NakedObjectRuntimeException();
-	    }
-	
-		return content;
-	}
-
-    public View decorateSubview(View subview) {
-    	return subviewDesign.decorateSubview(subview);
-	}
 }
 
-
 /*
-Naked Objects - a framework that exposes behaviourally complete
-business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-The authors can be contacted via www.nakedobjects.org (the
-registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-Road, Woking GU21 1NR, UK).
-*/
+ * Naked Objects - a framework that exposes behaviourally complete business
+ * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * Ltd
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * The authors can be contacted via www.nakedobjects.org (the registered address
+ * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
+ * 1NR, UK).
+ */

@@ -97,7 +97,7 @@ public class ViewUpdateNotifier implements UpdateNotifier, DebugInfo {
         if (content instanceof ObjectContent) {
             Naked object = ((ObjectContent) content).getObject();
 
-            if (views.containsKey(object)) {
+            if (object != null && views.containsKey(object)) {
                 Vector viewsToNotify;
                 viewsToNotify = (Vector) views.get(object);
                 viewsToNotify.removeElement(view);

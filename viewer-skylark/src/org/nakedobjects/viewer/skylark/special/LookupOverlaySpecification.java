@@ -2,25 +2,18 @@ package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.viewer.skylark.Canvas;
-import org.nakedobjects.viewer.skylark.Click;
-import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.RootCollection;
-import org.nakedobjects.viewer.skylark.Size;
-import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.basic.LineBorder;
 import org.nakedobjects.viewer.skylark.basic.PlainBackground;
 import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
-import org.nakedobjects.viewer.skylark.core.AbstractViewDecorator;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 
@@ -30,12 +23,8 @@ class LookupOverlaySpecification extends AbstractCompositeViewSpecification impl
         builder = new StackLayout(new CollectionElementBuilder(this, true));
     }
 
-    public View createView(final Content content, final ViewAxis axis) {
-        OneToOneField field = (OneToOneField) content;
-        NakedObjectSpecification type = field.getOneToOneAssociation().getType();
-        NakedObjectManager manager = field.getParent().getContext().getObjectManager();
-        RootCollection instanceContent = new RootCollection(manager.allInstances(type, true));
-        return new PlainBackground(new LineBorder(super.createView(instanceContent, axis)));
+    public boolean canDisplay(Naked object) {
+        return object instanceof NakedCollection;
     }
 
     public View createSubview(Content content, ViewAxis lookupAxis) {
@@ -43,51 +32,16 @@ class LookupOverlaySpecification extends AbstractCompositeViewSpecification impl
         return new LookupSelection(specification.createView(content, lookupAxis));
     }
 
+    public View createView(final Content content, final ViewAxis axis) {
+        ObjectContent field = (ObjectContent) content;
+        NakedObjectSpecification type = field.getType();
+        NakedObjectManager manager = NakedObjectContext.getDefaultContext().getObjectManager();
+        RootCollection instanceContent = new RootCollection(manager.allInstances(type, true));
+        return new PlainBackground(new LineBorder(super.createView(instanceContent, axis)));
+    }
+
     public String getName() {
         return "List";
-    }
-
-    public boolean canDisplay(Naked object) {
-        return object instanceof NakedCollection;
-    }
-}
-
-class LookupSelection extends AbstractViewDecorator {
-
-    protected LookupSelection(View wrappedView) {
-        super(wrappedView);
-    }
-
-    public void entered() {
-        getState().setObjectIdentified();
-        getState().setViewIdentified();
-        wrappedView.entered();
-        markDamaged();
-    }
-
-    public void exited() {
-        getState().clearObjectIdentified();
-        getState().clearViewIdentified();
-        wrappedView.exited();
-        markDamaged();
-    }
-
-    public void firstClick(Click click) {
-        LookupAxis axis = (LookupAxis) getViewAxis();
-        OneToOneField field = axis.getField();
-        NakedObject lookup = ((ObjectContent) getContent()).getObject();
-        field.getOneToOneAssociation().setAssociation(field.getParent(), lookup);
-        axis.getParentView().invalidateContent();
-        getParent().dispose();
-    }
-
-    public void draw(Canvas canvas) {
-        super.draw(canvas);
-        if (getState().isViewIdentified()) {
-            Color color = Style.SECONDARY2;
-            Size s = getSize();
-            canvas.drawRectangle(s, color);
-        }
     }
 }
 

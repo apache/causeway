@@ -1,16 +1,11 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.Aggregated;
+import org.nakedobjects.object.Lookup;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Allow;
-import org.nakedobjects.object.control.defaults.Veto;
-import org.nakedobjects.object.reflect.AssociateCommand;
-import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
@@ -18,7 +13,6 @@ import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.Text;
@@ -28,19 +22,21 @@ import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.special.LookupBorder;
 
-import org.apache.log4j.Logger;
-
 
 public class EmptyField extends AbstractView {
 
     public static class Specification implements ViewSpecification {
+        private static final NakedObjectSpecification LOOKUP = NakedObjectSpecificationLoader.getInstance().loadSpecification(Lookup.class);
+
         public boolean canDisplay(Naked object) {
             return object == null;
         }
 
         public View createView(Content content, ViewAxis axis) {
             EmptyField emptyField = new EmptyField(content, this, axis);
-            if (((OneToOneField) content).isLookup()) {
+            NakedObjectSpecification contentType = content.getType();
+            if(contentType.isOfType(LOOKUP)) {
+//            if (((ObjectContent) content).getObject() instanceof Lookup) {
                 return new ObjectBorder(new LookupBorder(emptyField));
             } else {
                 return new ObjectBorder(emptyField);
@@ -63,51 +59,28 @@ public class EmptyField extends AbstractView {
             return true;
         }
     }
-    private static final Logger LOG = Logger.getLogger(EmptyField.class);
+
     private static Text style = Style.NORMAL;
 
     public EmptyField(Content content, ViewSpecification specification, ViewAxis axis) {
         super(content, specification, axis);
-        if (!(content instanceof OneToOneField)) {
-            throw new IllegalArgumentException("Content for EmptyField must be NullValueField: " + content);
+        if (((ObjectContent) content).getObject() != null) {
+            throw new IllegalArgumentException("Content for EmptyField must be null: " + content);
         }
-        NakedObject object = ((OneToOneField) getContent()).getObject();
+        NakedObject object = ((ObjectContent) getContent()).getObject();
         if (object != null) {
             throw new IllegalArgumentException("Content for EmptyField must be null: " + object);
         }
     }
 
-    private Permission canDrop(NakedObject dragSource, NakedObject parent) {
-        if (dragSource instanceof NakedClass) {
-            return new Allow();
-        } else {
-            NakedObjectSpecification targetType = forSpecification();
-            NakedObjectSpecification sourceType = dragSource.getSpecification();
-            if (!sourceType.isOfType(targetType)) {
-                return new Veto("Can only drop objects of type " + targetType.getSingularName());
-            }
-
-            if (parent.getOid() != null && dragSource.getOid() == null) {
-                return new Veto("Can't drop a non-persistent into this persistent object");
-            }
-
-            if(dragSource instanceof Aggregated) {
-                Aggregated aggregated = ((Aggregated) dragSource);
-                if(aggregated.isAggregated() && aggregated.parent() != parent) {
-                    return new Veto("Object is already associated with another object: " + aggregated.parent());
-                }
-            }
-
-            Permission perm = getEmptyField().getAbout(ClientSession.getSession(), parent, dragSource).canUse();
-            return perm;
-        }
+    private Permission canDrop(NakedObject dragSource) {
+        ObjectContent content = (ObjectContent) getContent();
+        return content.canSet(dragSource);
     }
 
     public void dragIn(ContentDrag drag) {
-        NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
         NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
-
-        Permission perm = canDrop(source, target);
+        Permission perm = canDrop(source);
         if (perm.getReason() != null) {
             getViewManager().setStatus(perm.getReason());
         }
@@ -167,29 +140,7 @@ public class EmptyField extends AbstractView {
         NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
         NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
 
-        if (canDrop(source, target).isAllowed()) {
-
-            NakedObject associatedObject;
-            OneToOneAssociationSpecification field = getEmptyField();
-            LOG.debug("drop " + source + " on " + field + "/" + target);
-            if (source instanceof NakedClass) {
-                associatedObject = ((NakedClass) source).newInstance();
-            } else {
-                associatedObject = source;
-            }
-
-            getViewManager().getUndoStack().add(new AssociateCommand(target, associatedObject, field));
-            // field.setAssociation(target, associatedObject);
-
-            boolean isNotPersistent = target.getOid() == null;
-            if (isNotPersistent) {
-                getParent().invalidateContent();
-            }
-        }
-    }
-
-    private NakedObjectSpecification forSpecification() {
-        return getEmptyField().getType();
+        setField(target, source);
     }
 
     /**
@@ -197,16 +148,6 @@ public class EmptyField extends AbstractView {
      */
     public int getBaseline() {
         return style.getAscent() + VPADDING;
-/*
-        int containerHeight = getSize().getHeight();
-        int iconCentre = containerHeight / 2;
-        int yt = iconCentre + (style.getAscent() / 2);
-
-        return yt;
-*/    }
-
-    private OneToOneAssociationSpecification getEmptyField() {
-        return (OneToOneAssociationSpecification) ((OneToOneField) getContent()).getField();
     }
 
     public Size getRequiredSize() {
@@ -221,25 +162,13 @@ public class EmptyField extends AbstractView {
         return size;
     }
 
-    protected String iconName() {
-        String clsName = getEmptyField().getType().getFullName();
-        return clsName.substring(clsName.lastIndexOf('.') + 1);
-    }
-
     public void menuOptions(MenuOptionSet options) {
-        ClassOption.menuOptions(forSpecification(), options);
-
+        ((ObjectContent) getContent()).menuOptions(options);
         options.setColor(Style.CONTENT_MENU);
     }
 
     private String name() {
-        OneToOneAssociationSpecification field = getEmptyField();
-
-        if (field == null) {
-            return "";
-        } else {
-            return forSpecification().getSingularName();
-        }
+        return ((ObjectContent) getContent()).getName();
     }
 
     /**
@@ -248,11 +177,20 @@ public class EmptyField extends AbstractView {
      */
     public void objectActionResult(Naked result, Location at) {
         NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
-        OneToOneAssociationSpecification field = getEmptyField();
-        if (field.getType().isOfType(result.getSpecification())) {
-            field.setAssociation(target, (NakedObject) result);
-        }
+        setField(target, (NakedObject) result);
         super.objectActionResult(result, at);
+    }
+
+    private void setField(NakedObject parent, NakedObject object) {
+        if (canDrop(object).isAllowed()) {
+            ((ObjectContent) getContent()).setObject(object);
+
+            getParent().invalidateContent();
+            /*
+             * boolean isNotPersistent = parent.getOid() == null; if
+             * (isNotPersistent) { getParent().invalidateContent(); }
+             */
+        }
     }
 
     protected String title() {

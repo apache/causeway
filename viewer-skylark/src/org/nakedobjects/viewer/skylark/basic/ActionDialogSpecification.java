@@ -98,8 +98,11 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
 
         public View createSubview(Content content, ViewAxis axis) {
             if(content instanceof ObjectParameter) {
-	            View view = (new ActionParameterField.Specification()).createView(content, axis);
-	            return view;
+                if(((ObjectParameter) content).getObject() == null) {
+                    return (new EmptyField.Specification()).createView(content, axis);
+                } else {
+                    return new SubviewIconSpecification().createView(content, axis);
+                }
             } else if(content instanceof ValueParameter) {
                 ViewFactory factory = ViewFactory.getViewFactory();
                 ViewSpecification specification = factory.getValueFieldSpecification((ValueContent) content);

@@ -16,7 +16,7 @@ public class ObjectTitleText extends TitleText {
 
     protected String title() {
         if(content instanceof OneToManyField) {
-	        return ((OneToManyField) content).getFieldLabel();
+	        return ((OneToManyField) content).getName();
         } else {
 	        NakedObject object = content.getObject();
 	        String title = object.titleString();

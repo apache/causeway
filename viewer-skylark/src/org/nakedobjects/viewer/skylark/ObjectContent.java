@@ -1,9 +1,22 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.control.Permission;
+
 
 public interface ObjectContent extends Content {
+
+    Permission canClear();
+
+    Permission canSet(NakedObject dragSource);
+
+    void clear();
+
+    String getName();
+
     NakedObject getObject();
+
+    void setObject(NakedObject object);
 }
 
 /*

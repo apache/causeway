@@ -1,63 +1,27 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.defaults.Allow;
-import org.nakedobjects.object.control.defaults.Veto;
-import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
-import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.OneToManyElement;
+import org.nakedobjects.viewer.skylark.OneToManyFieldElement;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
-import org.apache.log4j.Logger;
-
 
 public class RemoveOneToManyAssociationOption extends MenuOption {
-    private static final Logger LOG = Logger.getLogger(RemoveOneToManyAssociationOption.class);
 
     public RemoveOneToManyAssociationOption() {
         super("Clear association");
     }
 
-    public Permission disabled(View view) {
-        InternalCollection collection = (InternalCollection) ((ObjectContent) view.getParent().getContent()).getObject();
-    	NakedObject parentObject = collection.parent();
-
-		// associated object
-    	OneToManyElement content = (OneToManyElement) view.getContent();
-		OneToManyAssociationSpecification association = content.getOneToManyAssociation();
-        NakedObject associatedObject = content.getObject();
-        
-
-        About about = association.getAbout(ClientSession.getSession(), parentObject, associatedObject, false);
-
-        Permission edit = about.canUse();
-
-        if (edit.isAllowed()) {
-            String status = "Clear the association to this object from '" + parentObject.titleString() + "'";
-
-            return new Allow(status);
-        } else {
-            return new Veto(edit.getReason());
-        }
+    public Permission disabled(View view) {        
+        OneToManyFieldElement content = (OneToManyFieldElement) view.getContent();
+        return content.canClear();
     }
 
     public void execute(Workspace frame, View view, Location at) {
-    	NakedObject parentObject = ((ObjectContent) view.getParent().getParent().getContent()).getObject();
-
-		// associated object
-    	OneToManyElement content = (OneToManyElement) view.getContent();
-		OneToManyAssociationSpecification association = content.getOneToManyAssociation();
-        NakedObject associatedObject = content.getObject();
-        
-        LOG.debug("Remove " + associatedObject + " from " + parentObject);
-        association.clearAssociation(parentObject, associatedObject);
+        OneToManyFieldElement content = (OneToManyFieldElement) view.getContent();
+        content.clear();
     }
 }
 
