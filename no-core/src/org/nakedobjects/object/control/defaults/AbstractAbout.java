@@ -10,7 +10,7 @@ import org.nakedobjects.object.security.Session;
 import org.nakedobjects.object.security.User;
 
 
-public abstract class AbstractAbout implements About {
+public abstract class AbstractAbout {
     private final static long serialVersionUID = 1L;
    
     private Session session;

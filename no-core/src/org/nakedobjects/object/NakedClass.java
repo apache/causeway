@@ -7,6 +7,7 @@ public interface NakedClass extends NakedObject {
 
     void setNakedClass(NakedObjectSpecification nc);
 
+    // TODO is this the right name for this method.  See also setNakedClass()
     NakedObjectSpecification forNakedClass();
 
     String getPluralName();

@@ -4,7 +4,7 @@ import org.nakedobjects.object.security.Role;
 import org.nakedobjects.object.security.User;
 
 
-public interface ClassAbout {
+public interface ClassAbout extends About {
     void uninstantiatable();
 
     void uninstantiatable(String reason);

@@ -1,6 +1,6 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.control.ClassAbout;
 import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.object.security.Session;
@@ -13,7 +13,7 @@ public interface NakedObjectSpecification {
      */
     Naked acquireInstance();
 
-    About getClassAbout();
+    ClassAbout getClassAbout();
 
     ActionSpecification getClassAction(ActionSpecification.Type type, String name);
 

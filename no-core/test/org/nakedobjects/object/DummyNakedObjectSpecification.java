@@ -1,5 +1,5 @@
 package org.nakedobjects.object;
-import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.control.ClassAbout;
 import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.object.reflect.ActionSpecification.Type;
@@ -11,7 +11,7 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         return null;
     }
 
-    public About getClassAbout() {
+    public ClassAbout getClassAbout() {
         return null;
     }
 

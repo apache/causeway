@@ -11,6 +11,7 @@ import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NotPersistableException;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.control.ActionAbout;
+import org.nakedobjects.object.control.ClassAbout;
 import org.nakedobjects.object.defaults.value.TextString;
 
 import org.apache.log4j.Logger;
@@ -18,7 +19,7 @@ import org.apache.log4j.Logger;
 public class SimpleNakedClass extends AbstractNakedObject implements NakedClass {
     private final static Logger LOG = Logger.getLogger(SimpleNakedClass.class);
     private final TextString className = new TextString();
-    private NakedObjectSpecification nakedClass;
+    private NakedObjectSpecification specification;
     private boolean createPersistentInstances;
 
     {
@@ -26,7 +27,7 @@ public class SimpleNakedClass extends AbstractNakedObject implements NakedClass 
     }
 
     public SimpleNakedClass(String name) {
-        nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(name);
+        specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(name);
         className.setValue(name);
     }
     
@@ -37,6 +38,10 @@ public class SimpleNakedClass extends AbstractNakedObject implements NakedClass 
 		about.setName("Find " + getPluralName());
 		about.unusableOnCondition(! getObjectManager().hasInstances(forNakedClass()), 
 				"No instances available to find");
+    	ClassAbout ca = specification.getClassAbout();
+    	if(ca != null && ca.canAccess().isVetoed() ) {
+    	    about.invisible();
+    	}
     }
 
     public String getSingularName() {
@@ -46,8 +51,13 @@ public class SimpleNakedClass extends AbstractNakedObject implements NakedClass 
     public void aboutActionInstances(ActionAbout about) throws ObjectStoreException {
     	about.setDescription("Get the " + getSingularName() + " instances");
     	about.setName(getPluralName());
-    	about.unusableOnCondition(! getObjectManager()
-                                                       .hasInstances(forNakedClass()), "No instances available");
+    	ClassAbout ca = specification.getClassAbout();
+    	if(ca != null && ca.canAccess().isVetoed() ) {
+    	    about.invisible();
+    	} else {
+	    	about.unusableOnCondition(! getObjectManager()
+	                                                       .hasInstances(forNakedClass()), "No instances available");
+    	}  	
     }
 
     public String getPluralName() {
@@ -61,6 +71,10 @@ public class SimpleNakedClass extends AbstractNakedObject implements NakedClass 
     public void aboutActionNewInstance(ActionAbout about) {
        	about.setDescription("Create a new " + getSingularName() + " instance");
     	about.setName("New " + getSingularName());
+    	ClassAbout ca = specification.getClassAbout();
+    	if(ca != null && ca.canUse().isVetoed() ) {
+    	    about.invisible();
+    	}
      }
 
 	public FastFinder actionFind() {
@@ -151,13 +165,13 @@ public class SimpleNakedClass extends AbstractNakedObject implements NakedClass 
     }
 
     public NakedObjectSpecification forNakedClass() {
-        if(nakedClass == null) {
+        if(specification == null) {
             if(getName().length() == 0) {
                 throw new NakedObjectRuntimeException();
             }
-            nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(getName());
+            specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(getName());
         }
-        return nakedClass;
+        return specification;
     }   
     
     public Title title() {

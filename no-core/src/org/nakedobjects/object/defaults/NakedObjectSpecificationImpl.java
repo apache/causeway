@@ -202,8 +202,8 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         return results;
     }
  
-    public final About getClassAbout() {
-        return null;
+    public final ClassAbout getClassAbout() {
+        return reflector.classAbout();
     }
 
     public ActionSpecification getClassAction(ActionSpecification.Type type, String name) {
