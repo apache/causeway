@@ -4,10 +4,10 @@ import org.nakedobjects.application.BusinessObjectContainer;
 import org.nakedobjects.application.InstancesCriteria;
 import org.nakedobjects.application.UnsupportedFindException;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.TypedNakedCollection;
+import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.utility.NotImplementedException;
 

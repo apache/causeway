@@ -8,15 +8,15 @@ import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectStore;
-import org.nakedobjects.object.ObjectNotFoundException;
-import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
+import org.nakedobjects.object.persistence.NakedObjectManager;
+import org.nakedobjects.object.persistence.NakedObjectStore;
+import org.nakedobjects.object.persistence.ObjectNotFoundException;
+import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.persistence.UnsupportedFindException;
 
 import java.util.Hashtable;
 

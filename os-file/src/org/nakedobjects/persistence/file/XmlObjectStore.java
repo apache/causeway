@@ -6,15 +6,18 @@ import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.NakedObjectStore;
-import org.nakedobjects.object.ObjectNotFoundException;
-import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.UnsupportedFindException;
-import org.nakedobjects.object.defaults.SerialOid;
+import org.nakedobjects.object.persistence.CreateObjectCommand;
+import org.nakedobjects.object.persistence.DestroyObjectCommand;
+import org.nakedobjects.object.persistence.NakedObjectStore;
+import org.nakedobjects.object.persistence.ObjectNotFoundException;
+import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.persistence.PersistenceCommand;
+import org.nakedobjects.object.persistence.SaveObjectCommand;
+import org.nakedobjects.object.persistence.UnsupportedFindException;
+import org.nakedobjects.object.persistence.defaults.SerialOid;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
@@ -33,16 +36,6 @@ public class XmlObjectStore implements NakedObjectStore {
 
     private NakedObjectSpecification classFor(String type) {
         return NakedObjectSpecificationLoader.getInstance().loadSpecification(type);
-    }
-
-    public void createNakedClass(NakedObject cls) throws ObjectStoreException {
-        createObject(cls);
-    }
-
-    public void createObject(NakedObject object) throws ObjectStoreException {
-        LOG.debug("createObject " + object);
-        Data data = createObjectData(object, true);
-        dataManager.insert(data);
     }
 
     private ObjectData createObjectData(NakedObject object, boolean ensurePersistent) {
@@ -86,10 +79,6 @@ public class XmlObjectStore implements NakedObjectStore {
 
             return object;
         }
-    }
-
-    public void destroyObject(NakedObject object) throws ObjectStoreException {
-        dataManager.remove((SerialOid) object.getOid());
     }
 
     public void endTransaction() {}
@@ -215,8 +204,6 @@ public class XmlObjectStore implements NakedObjectStore {
         } else {
             throw new ObjectNotFoundException();
         }
-
-        object.setContext(NakedObjectContext.getDefaultContext());
         return object;
     }
 
@@ -332,27 +319,15 @@ public class XmlObjectStore implements NakedObjectStore {
         }
     }
 
-    public void save(NakedObject object) throws ObjectStoreException {
-        LOG.debug("Save object " + object);
-
-        if (object instanceof InternalCollection) {
-            NakedObject parent = ((InternalCollection) object).parent();
-            Data data = createObjectData(parent, true);
-            dataManager.save(data);
-        } else {
-            Data data = createObjectData(object, true);
-            dataManager.save(data);
-        }
-    }
-
     public void setDataManager(DataManager dataManager) {
         this.dataManager = dataManager;
     }
-    
+
     /**
-	 * Expose as a .NET property
-	 * @property
-	 */
+     * Expose as a .NET property
+     * 
+     * @property
+     */
     public void set_DataManager(DataManager dataManager) {
         this.dataManager = dataManager;
     }
@@ -360,11 +335,12 @@ public class XmlObjectStore implements NakedObjectStore {
     public void setLoadedObjects(LoadedObjects loadedObjects) {
         this.loadedObjects = loadedObjects;
     }
-    
+
     /**
-	 * Expose as a .NET property
-	 * @property
-	 */
+     * Expose as a .NET property
+     * 
+     * @property
+     */
     public void set_LoadedObjects(LoadedObjects loadedObjects) {
         this.loadedObjects = loadedObjects;
     }
@@ -372,6 +348,48 @@ public class XmlObjectStore implements NakedObjectStore {
     public void shutdown() throws ObjectStoreException {}
 
     public void startTransaction() {}
+
+    public CreateObjectCommand createCreateObjectCommand(final NakedObject object) {
+        return new CreateObjectCommand() {
+            public void execute() throws ObjectStoreException {
+                LOG.debug("createObject " + object);
+                Data data = createObjectData(object, true);
+                dataManager.insert(data);
+            }
+        };
+    }
+
+    public DestroyObjectCommand createDestroyObjectCommand(final NakedObject object) {
+        return new DestroyObjectCommand() {
+            public void execute() throws ObjectStoreException {
+                dataManager.remove((SerialOid) object.getOid());
+            }
+        };
+    }
+
+    public SaveObjectCommand createSaveObjectCommand(final NakedObject object) {
+        return new SaveObjectCommand() {
+            public void execute() throws ObjectStoreException {
+                LOG.debug("Save object " + object);
+
+                if (object instanceof InternalCollection) {
+                    NakedObject parent = ((InternalCollection) object).parent();
+                    Data data = createObjectData(parent, true);
+                    dataManager.save(data);
+                } else {
+                    Data data = createObjectData(object, true);
+                    dataManager.save(data);
+                }
+            }
+        };
+    }
+
+    public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException {
+        for (int i = 0; i < commands.length; i++) {
+            PersistenceCommand command = commands[i];
+            command.execute();
+        }
+    }
 }
 
 /*

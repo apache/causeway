@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.ActionParameterSet;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
 
@@ -25,11 +26,11 @@ public class MockAction implements ActionPeer {
         this.action = action;    
     }
 
-    public Naked execute(NakedObject object, Naked[] parameters) {
+    public Naked execute(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
         return null;
     }
 
-    public Hint getHint(Session session, NakedObject object, Naked[] parameters) {
+    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
         return null;
     }
 
@@ -65,7 +66,7 @@ public class MockAction implements ActionPeer {
         return aboutMethod;
     }
 
-    public ActionParameterSet getParameters(Session session, NakedObject object, NakedObjectSpecification[] parameterTypes) {
+    public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, NakedObjectSpecification[] parameterTypes) {
         return null;
     }
 

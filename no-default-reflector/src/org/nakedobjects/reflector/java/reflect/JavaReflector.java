@@ -174,6 +174,7 @@ public class JavaReflector implements Reflector {
         
         Object object = objectFactory.createObject(cls);
             
+        // TODO this code is duplicated in JavaReflectorFactory
          if (object instanceof TextString ){
             return new TextStringAdapter((TextString) object);
          } else if (object instanceof Logical ){

@@ -25,13 +25,13 @@ final class MockAction implements ActionPeer {
     Hint about;
     
   
-    public Naked execute(NakedObject object, Naked[] parameters) {
+    public Naked execute(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
         actions.addElement("execute " + object);
         actions.addElement("execute " + parameters);
        return returnObject;
     }
 
-    public Hint getHint(Session session, NakedObject object, Naked[] parameters) {
+    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
         about = new Hint() {
 
             public Consent canAccess() {
@@ -70,7 +70,7 @@ final class MockAction implements ActionPeer {
     }
 
     public NakedObjectSpecification[] parameterTypes() {
-        return null;
+        return new NakedObjectSpecification[0];
     }
 
     public NakedObjectSpecification returnType() {
@@ -89,7 +89,7 @@ final class MockAction implements ActionPeer {
         Assert.assertEquals(expected, actions.elementAt(index));
     }
 
-    public ActionParameterSet getParameters(Session session, NakedObject object, NakedObjectSpecification[] parameterTypes) {
+    public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, NakedObjectSpecification[] parameterTypes) {
         return null;
     }
 }

@@ -1,9 +1,23 @@
-package org.nakedobjects.object;
+package org.nakedobjects.object.reflect;
 
-public class MockNakedObjectContext extends NakedObjectContext {
+import org.nakedobjects.object.NakedObjectException;
 
-    public MockNakedObjectContext(NakedObjectManager objectManager) {
-        super(objectManager);
+public class ReflectriveActionException extends NakedObjectException {
+
+    public ReflectriveActionException() {
+        super();
+    }
+
+    public ReflectriveActionException(String msg) {
+        super(msg);
+    }
+
+    public ReflectriveActionException(Throwable cause) {
+        super(cause);
+    }
+
+    public ReflectriveActionException(String msg, Throwable cause) {
+        super(msg, cause);
     }
 
 }
@@ -12,7 +26,7 @@ public class MockNakedObjectContext extends NakedObjectContext {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2005  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

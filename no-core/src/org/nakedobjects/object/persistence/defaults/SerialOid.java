@@ -1,7 +1,7 @@
-package org.nakedobjects.object.defaults;
+package org.nakedobjects.object.persistence.defaults;
 
 
-import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.persistence.Oid;
 
 
 public class SerialOid implements Oid {

@@ -1,6 +1,6 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.persistence.Oid;
 
 public class JavaObjectDataFactory extends ObjectDataFactory {
 

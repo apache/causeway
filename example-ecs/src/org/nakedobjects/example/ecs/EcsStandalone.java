@@ -1,18 +1,18 @@
 package org.nakedobjects.example.ecs;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.object.OidGenerator;
 import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
-import org.nakedobjects.object.defaults.LocalObjectManager;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
-import org.nakedobjects.object.defaults.TimeBasedOidGenerator;
-import org.nakedobjects.object.defaults.TransientObjectStore;
+import org.nakedobjects.object.persistence.OidGenerator;
+import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
+import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
+import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
@@ -46,11 +46,14 @@ public class EcsStandalone {
     public static void main(String[] args) throws ConfigurationException {
         BasicConfigurator.configure();
 
-        ConfigurationFactory.setConfiguration(new Configuration(DEFAULT_CONFIG));
-        if (ConfigurationFactory.getConfiguration().getString(SHOW_EXPLORATION_OPTIONS) == null) {
-            ConfigurationFactory.getConfiguration().add(SHOW_EXPLORATION_OPTIONS, "yes");
+        Configuration configuration = new Configuration(DEFAULT_CONFIG);
+        NakedObjects.setConfiguration(configuration);
+        
+        ConfigurationFactory.setConfiguration(configuration);
+        if (NakedObjects.getConfiguration().getString(SHOW_EXPLORATION_OPTIONS) == null) {
+            NakedObjects.getConfiguration().add(SHOW_EXPLORATION_OPTIONS, "yes");
         }
-        PropertyConfigurator.configure(ConfigurationFactory.getConfiguration().getProperties("log4j"));
+        PropertyConfigurator.configure(NakedObjects.getConfiguration().getProperties("log4j"));
 
         Logger log = Logger.getLogger("Naked Objects");
         log.info(AboutNakedObjects.getName());
@@ -81,7 +84,8 @@ public class EcsStandalone {
             TransientObjectStore objectStore = new TransientObjectStore();
             objectStore.setLoadedObjects(loadedObjectsHashtable);
 
-            OidGenerator oidGenerator = new TimeBasedOidGenerator();            
+//            OidGenerator oidGenerator = new TimeBasedOidGenerator();            
+            OidGenerator oidGenerator = new SimpleOidGenerator();            
 
             LocalObjectManager objectManager = new LocalObjectManager();
             objectManager.setObjectStore(objectStore);
@@ -89,6 +93,9 @@ public class EcsStandalone {
             objectManager.setFactory(objectFactory);
             objectManager.setOidGenerator(oidGenerator);
             objectManager.setLoadedObjects(loadedObjectsHashtable);
+            
+            NakedObjects.setObjectManager(objectManager);
+            
             
             container.setObjectManger(objectManager);
 
@@ -107,10 +114,7 @@ public class EcsStandalone {
 
             reflectorFactory.setObjectFactory(objectFactory);
 
-            NakedObjectContext context = new NakedObjectContext(objectManager);
-
             SimpleExplorationSetup explorationSetup = new SimpleExplorationSetup();
-            explorationSetup.setContext(context);
             
             explorationSetup.addFixture(new EcsFixture());
  
@@ -155,6 +159,7 @@ public class EcsStandalone {
 
             frame.show();
             
+            explorationSetup.setObjectManager(objectManager);
             explorationSetup.installFixtures();
 
 

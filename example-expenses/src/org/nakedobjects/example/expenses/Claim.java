@@ -7,7 +7,6 @@ import org.nakedobjects.application.valueholder.Case;
 import org.nakedobjects.application.valueholder.Money;
 import org.nakedobjects.application.valueholder.TextString;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 
 import java.util.Enumeration;
 import java.util.Vector;
@@ -52,7 +51,7 @@ public class Claim extends BaseObject {
     }
 
 	public static Claim actionNewClaim(Employee forEmployee) {
-		Claim newClaim = (Claim) NakedObjectContext.getDefaultContext().createInstance(Claim.class);
+		Claim newClaim = (Claim) createInstance(Claim.class);
 		newClaim.associateClaimant(forEmployee);
 
 		return newClaim;

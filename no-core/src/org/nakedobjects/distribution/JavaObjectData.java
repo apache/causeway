@@ -1,6 +1,6 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.persistence.Oid;
 
 
 public class JavaObjectData implements ObjectData {
@@ -29,7 +29,7 @@ public class JavaObjectData implements ObjectData {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

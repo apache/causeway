@@ -5,32 +5,32 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.AbstractActionPeer;
 import org.nakedobjects.object.reflect.ActionPeer;
-import org.nakedobjects.object.reflect.ActionParameterSet;
-import org.nakedobjects.object.reflect.Action.Type;
+import org.nakedobjects.object.reflect.MemberIdentifier;
+import org.nakedobjects.object.reflect.ReflectriveActionException;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Session;
 
 import org.apache.log4j.Logger;
 
 
-public final class ProxyAction implements ActionPeer {
+public final class ProxyAction extends AbstractActionPeer {
     final static Logger LOG = Logger.getLogger(ProxyAction.class);
     private ClientDistribution connection;
     private boolean fullProxy = false;
-    private ActionPeer local;
     private final LoadedObjects loadedObjects;
     private final ObjectDataFactory objectDataFactory;
 
     public ProxyAction(final ActionPeer local, final ClientDistribution connection, final LoadedObjects loadedObjects,
             ObjectDataFactory objectDataFactory) {
-        this.local = local;
+        super(local);
         this.connection = connection;
         this.loadedObjects = loadedObjects;
         this.objectDataFactory = objectDataFactory;
     }
 
-    public Naked execute(NakedObject target, Naked[] parameters) {
+    public Naked execute(MemberIdentifier identifier, NakedObject target, Naked[] parameters) throws ReflectriveActionException {
         if (isPersistent(target)) {
             String[] parameterTypes = pararmeterTypes();
             ObjectData[] parameterObjectData = parameterValues(parameters);
@@ -40,7 +40,7 @@ public final class ProxyAction implements ActionPeer {
             returnedObject = targetObjectData == null ? null : ObjectDataHelper.recreate(loadedObjects, targetObjectData);
             return returnedObject;
         } else {
-            return local.execute(target, parameters);
+            return super.execute(identifier, target, parameters);
         }
     }
 
@@ -63,47 +63,19 @@ public final class ProxyAction implements ActionPeer {
         return parameterTypeNames;
     }
 
-    public Hint getHint(Session session, NakedObject object, Naked[] parameters) {
+    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
         if (isPersistent(object) && fullProxy) {
             String[] parameterTypes = pararmeterTypes();
             ObjectData[] parameterObjectData = parameterValues(parameters);
             return connection.getActionHint(session, getType().getName(), getName(), parameterTypes, object.getOid(), object
                     .getSpecification().getFullName(), parameterObjectData);
         } else {
-            return local.getHint(session, object, parameters);
+            return super.getHint(identifier, session, object, parameters);
         }
-    }
-
-    public String getName() {
-        return local.getName();
-    }
-
-    public int getParameterCount() {
-        return local.getParameterCount();
-    }
-
-    public Type getType() {
-        return local.getType();
-    }
-
-    public boolean hasHint() {
-        return local.hasHint();
     }
 
     private boolean isPersistent(NakedObject object) {
         return object.getOid() != null;
-    }
-
-    public NakedObjectSpecification[] parameterTypes() {
-        return local.parameterTypes();
-    }
-
-    public NakedObjectSpecification returnType() {
-        return local.returnType();
-    }
-
-    public ActionParameterSet getParameters(Session session, NakedObject object, NakedObjectSpecification[] parameterTypes) {
-        return local.getParameters(session, object, parameterTypes);
     }
 }
 

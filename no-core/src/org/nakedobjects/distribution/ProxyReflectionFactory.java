@@ -18,21 +18,21 @@ public class ProxyReflectionFactory implements ReflectionFactory {
 
     public ProxyReflectionFactory() {}
 
-    public Action createAction(ActionPeer localDelegate) {
+    public Action createAction(String className, ActionPeer localDelegate) {
         ActionPeer fullDelegate = new ProxyAction(localDelegate, connection, loadedObjects, objectDataFactory);
-        return new Action(fullDelegate.getName(), fullDelegate);
+        return new Action(className, fullDelegate.getName(), fullDelegate);
     }
 
-    public NakedObjectField createField(OneToManyPeer local) {
+    public NakedObjectField createField(String className, OneToManyPeer local) {
         OneToManyPeer oneToManyDelegate = new ProxyOneToManyAssociation(local, connection);
-        OneToManyAssociation association = new OneToManyAssociation(oneToManyDelegate.getName(), oneToManyDelegate.getType(),
+        OneToManyAssociation association = new OneToManyAssociation(className, oneToManyDelegate.getName(), oneToManyDelegate.getType(),
                 oneToManyDelegate);
         return association;
     }
 
-    public NakedObjectField createField(OneToOnePeer local) {
+    public NakedObjectField createField(String className, OneToOnePeer local) {
         OneToOnePeer oneToOneDelegate = new ProxyOneToOneAssociation(local, connection);
-        OneToOneAssociation association = new OneToOneAssociation(oneToOneDelegate.getName(), oneToOneDelegate.getType(),
+        OneToOneAssociation association = new OneToOneAssociation(className, oneToOneDelegate.getName(), oneToOneDelegate.getType(),
                 oneToOneDelegate);
         return association;
     }

@@ -1,7 +1,7 @@
 package org.nakedobjects.distribution.xml.request;
 
 import org.nakedobjects.distribution.ServerDistribution;
-import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.security.Session;
 
 public class SetValue extends AbstractRequest {

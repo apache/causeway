@@ -9,13 +9,12 @@ import org.nakedobjects.distribution.xml.request.ExecuteAction;
 import org.nakedobjects.distribution.xml.request.FindInstances;
 import org.nakedobjects.distribution.xml.request.HasInstances;
 import org.nakedobjects.distribution.xml.request.MakePersistent;
-import org.nakedobjects.distribution.xml.request.SerialNumber;
 import org.nakedobjects.distribution.xml.request.SetAssociation;
 import org.nakedobjects.distribution.xml.request.SetValue;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
 
@@ -103,12 +102,6 @@ public class XmlClient implements ClientDistribution {
             ObjectDataHelper.update(loadedObjects, updates[i]);
         }
 //        response.update();
-    }
-
-    public long serialNumber(Session session, String name) {
-        SerialNumber request = new SerialNumber(session, name);
-        remoteExecute(request);
-        return request.getSerialNumber();
     }
 
     public void setAssociation(Session session, String fieldIdentifier, Oid objectOid, String objectType, Oid associateOid,

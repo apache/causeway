@@ -1,25 +1,8 @@
-package org.nakedobjects.distribution.xml.request;
+package org.nakedobjects.object.persistence;
 
-import org.nakedobjects.distribution.ServerDistribution;
-import org.nakedobjects.object.security.Session;
 
-public class SerialNumber extends AbstractRequest {
+public interface Oid {
 
-    private final String name;
-
-    public SerialNumber(Session session, String name) {
-        super(session);
-        this.name = name;
-    }
-
-    public void execute(ServerDistribution sd) {
-        long serialNumber = sd.serialNumber(session, name);
-        setResponse(new Long(serialNumber));
-    }
-    
-    public long getSerialNumber() {
-        return ((Long) response).longValue();
-    }
 }
 
 

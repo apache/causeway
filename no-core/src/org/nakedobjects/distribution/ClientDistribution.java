@@ -1,7 +1,7 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.security.Session;
 
 
@@ -31,8 +31,6 @@ public interface ClientDistribution {
     Oid[] makePersistent(Session session, ObjectData object);
 
     int numberOfInstances(Session sessionId, String fullName);
-
-    long serialNumber(Session sessionId, String name);
 
     void setAssociation(Session session, String fieldIdentifier, Oid objectOid, String objectType, Oid associateOid,
             String associateType);

@@ -159,7 +159,7 @@ public abstract class AbstractField extends AbstractView {
         options.add(MenuOptionSet.OBJECT, new CopyValueOption());
         options.add(MenuOptionSet.OBJECT, new PasteValueOption());
         if (getView().getSpecification().isReplaceable()) {
-            replaceOptions(Skylark.getInstance().getViewFactory().valueViews(getContent(), this), options);
+            replaceOptions(Skylark.getViewFactory().valueViews(getContent(), this), options);
         }
 
         super.contentMenuOptions((options));

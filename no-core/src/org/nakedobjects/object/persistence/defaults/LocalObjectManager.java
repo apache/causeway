@@ -1,4 +1,4 @@
-package org.nakedobjects.object.defaults;
+package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.container.configuration.ComponentException;
 import org.nakedobjects.container.configuration.ConfigurationException;
@@ -8,21 +8,22 @@ import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectStore;
-import org.nakedobjects.object.NotPersistableException;
 import org.nakedobjects.object.ObjectFactory;
-import org.nakedobjects.object.ObjectNotFoundException;
-import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.OidGenerator;
-import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.UpdateNotifier;
+import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
+import org.nakedobjects.object.persistence.NakedObjectStore;
+import org.nakedobjects.object.persistence.NotPersistableException;
+import org.nakedobjects.object.persistence.ObjectNotFoundException;
+import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.persistence.OidGenerator;
+import org.nakedobjects.object.persistence.UnsupportedFindException;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.utility.StartupException;
 
 import java.util.Enumeration;
@@ -33,82 +34,38 @@ import org.apache.log4j.Logger;
 
 public class LocalObjectManager extends AbstractNakedObjectManager {
     private static final Logger LOG = Logger.getLogger(LocalObjectManager.class);
-    private NakedObjectContext context;
-
     private final Hashtable nakedClasses = new Hashtable();
+    private LoadedObjects loadedObjects;
     private UpdateNotifier notifier;
     private NakedObjectStore objectStore;
     private OidGenerator oidGenerator;
-    private LoadedObjects loadedObjects;
+    private Transaction transaction;
     
+    
+ 
     public LocalObjectManager() {}
-    
-    public LocalObjectManager(NakedObjectStore objectStore, UpdateNotifier notifier, OidGenerator oidGenerator, ObjectFactory factory)
-            throws ConfigurationException, ComponentException {
+
+    public LocalObjectManager(NakedObjectStore objectStore, UpdateNotifier notifier, OidGenerator oidGenerator,
+            ObjectFactory factory) throws ConfigurationException, ComponentException {
         super(factory);
         this.objectStore = objectStore;
         this.notifier = notifier;
         this.oidGenerator = oidGenerator;
-        context = new NakedObjectContext(this);
     }
 
-    public void setLoadedObjects(LoadedObjects loadedObjects) {
-        this.loadedObjects = loadedObjects;
-    }
-
-    /**
-	 * Expose as a .NET property
-	 * @property
-	 */
-    public void set_LoadedObjects(LoadedObjects loadedObjects) {
-        this.loadedObjects = loadedObjects;
-    }
-    
-    public void setObjectStore(NakedObjectStore objectStore) {
-        this.objectStore = objectStore;
-    }
-    
-    /**
-	 * Expose as a .NET property
-	 * @property
-	 */
-    public void set_ObjectStore(NakedObjectStore objectStore) {
-        this.objectStore = objectStore;
-    }
-    
-    public void setNotifier(UpdateNotifier notifier) {
-        this.notifier = notifier;
-    }
-    
-    /**
-	 * Expose as a .NET property
-	 * @property
-	 */
-    public void set_Notifier(UpdateNotifier notifier) {
-        this.notifier = notifier;
-    }
-    
-    public void setOidGenerator(OidGenerator oidGenerator) {
-        this.oidGenerator = oidGenerator;
-    }
-    
-    /**
-	 * Expose as a .NET property
-	 * @property
-	 */
-    public void set_OidGenerator(OidGenerator oidGenerator) {
-        this.oidGenerator = oidGenerator;
-    }
-    
     public void abortTransaction() {
         try {
+            getTransaction().abort();
             objectStore.abortTransaction();
         } catch (ObjectStoreException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
+    private Transaction getTransaction() {
+        return transaction;
+    }
+    
     /**
      * Removes all the data from the specified object. All associations are set
      * to nulll; values have clear() call on them; and internal collections are
@@ -122,29 +79,29 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
             if (field.isCollection()) {
                 object.clearCollection((OneToManyAssociation) field);
-            } else if(field.isValue()) {
+            } else if (field.isValue()) {
                 object.clearValue((OneToOneAssociation) field);
             } else if (field.isObject()) {
                 NakedObject ref = (NakedObject) object.getField(field);
                 if (ref != null) {
                     object.clearAssociation((OneToOneAssociation) field, ref);
                 }
-            } 
+            }
         }
     }
 
     private void createNakedClassSpec(NakedObject object) throws ObjectStoreException {
-        objectStore.createNakedClass(object);
+        throw new NotImplementedException();
+        //        objectStore.createNakedClass(object);
     }
 
     private void createObject(NakedObject object) throws ObjectStoreException {
-        objectStore.createObject(object);
+        getTransaction().addCommand(objectStore.createCreateObjectCommand(object));
     }
 
     public final Oid createOid(Naked object) {
         Oid oid = oidGenerator.next(object);
         LOG.debug("createOid " + oid);
-
         return oid;
     }
 
@@ -155,29 +112,43 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     public void destroyObject(NakedObject object) {
         LOG.debug("destroyObject " + object);
 
-        try {
-            objectStore.destroyObject(object);
-            object.deleted();
-            clear(object);
+        getTransaction().addCommand(objectStore.createDestroyObjectCommand(object));
+        object.deleted();
+        clear(object);
 
-            if (objectStore.getLoadedObjects().isLoaded(object.getOid())) {
-                objectStore.getLoadedObjects().unloaded(object);
-            }
-        } catch (ObjectStoreException e) {
-            throw new NakedObjectRuntimeException(e);
+        if (objectStore.getLoadedObjects().isLoaded(object.getOid())) {
+            objectStore.getLoadedObjects().unloaded(object);
         }
     }
 
     public void endTransaction() {
         try {
-            objectStore.endTransaction();
+            getTransaction().end(objectStore, notifier);
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
     }
 
-    protected NakedObjectContext getContext() {
-        return context;
+    public String getDebugData() {
+        StringBuffer data = new StringBuffer();
+        data.append('\n');
+        data.append(objectStore.getDebugData());
+        data.append('\n');
+        return data.toString();
+    }
+
+    public String getDebugTitle() {
+        return objectStore.getDebugTitle();
+    }
+
+    protected NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) {
+        LOG.debug("getInstances matching " + criteria);
+        try {
+            NakedObject[] instances = objectStore.getInstances(criteria, false);
+            return instances;
+        } catch (ObjectStoreException e) {
+            throw new NakedObjectRuntimeException(e);
+        }
     }
 
     /**
@@ -197,7 +168,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         LOG.debug("getInstances like " + pattern);
         try {
             NakedObject[] instances = objectStore.getInstances(pattern, false);
-            setInstancesContext(instances);
             return instances;
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
@@ -209,29 +179,17 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         LOG.debug("getInstances of " + specification);
         try {
             NakedObject[] instances = objectStore.getInstances(specification, false);
-            setInstancesContext(instances);
             return instances;
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
     }
-    
-    protected NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) {
-        LOG.debug("getInstances matching " + criteria);
-        try {
-            NakedObject[] instances = objectStore.getInstances(criteria, false);
-            setInstancesContext(instances);
-            return instances;
-        }  catch (ObjectStoreException e) {
-            throw new NakedObjectRuntimeException(e);
-        }
-    }
 
-    protected NakedObject[] getInstances(NakedObjectSpecification specification, String term, boolean includeSubclasses) throws UnsupportedFindException {
+    protected NakedObject[] getInstances(NakedObjectSpecification specification, String term, boolean includeSubclasses)
+            throws UnsupportedFindException {
         LOG.debug("getInstances of " + specification + " with term " + term);
         try {
             NakedObject[] instances = objectStore.getInstances(specification, term, false);
-            setInstancesContext(instances);
             return instances;
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
@@ -252,7 +210,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
             throw new NakedObjectRuntimeException(e);
         }
         nakedClasses.put(nakedClass, spec);
-//        spec.setContext(getContext());
+        //        spec.setContext(getContext());
         return spec;
     }
 
@@ -295,26 +253,11 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
                 return objectStore.getLoadedObjects().getLoadedObject(oid);
             }
             NakedObject object = objectStore.getObject(oid, hint);
-            object.setContext(context);
             return object;
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
     }
-    
-    public String getDebugData() {
-        StringBuffer data = new StringBuffer();
-        data.append('\n');
-        data.append(objectStore.getDebugData());
-        data.append('\n');
-        return data.toString();
-    }
-
-    public String getDebugTitle() {
-        return objectStore.getDebugTitle();
-    }
-
-
 
     /**
      * Checks whether there are any instances of the specified type. The object
@@ -390,7 +333,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
                 continue;
             } else if (field.isValue()) {
                 continue;
-//            } else if (field.isPart()) {
             } else if (field instanceof OneToManyAssociation) {
                 InternalCollection collection = (InternalCollection) object.getField(field);
                 collection.setOid(createOid(collection));
@@ -412,7 +354,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
                     continue;
                 }
 
-                if(!(fieldValue instanceof NakedObject)) {
+                if (!(fieldValue instanceof NakedObject)) {
                     throw new NakedObjectRuntimeException();
                 }
                 NakedObject association = (NakedObject) fieldValue;
@@ -451,29 +393,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     /**
-     * Persists the specified object's state. Essentially the data held by the
-     * persistence mechanism should be updated to reflect the state of the
-     * specified objects. Once updated, the object store should issue a
-     * notification to all of the object's users via the <class>UpdateNotifier
-     * </class> object. This can be achieved simply, if extending the
-     * <class>AbstractObjectStore </class> by calling its
-     * <method>broadcastObjectUpdate </method> method.
-     */
-    public void objectChanged(NakedObject object) {
-        LOG.debug("objectChanged " + object);
-        if (isPersistent(object)) {
-            try {
-                objectStore.save(object);
-            } catch (ObjectStoreException e) {
-                throw new NakedObjectRuntimeException(e);
-            }
-        }
-
-        LOG.debug("broadcastObjectUpdate " + object);
-        notifier.broadcastObjectChanged(object, this);
-    }
-
-    /**
      * Re-initialises the fields of an object. This method should return
      * immediately if the object's resolved flag (determined by calling
      * <method>isResolved </method> on the object) is already set. If the object
@@ -500,12 +419,70 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         object.setResolved();
     }
 
- 
-
-    private void setInstancesContext(NakedObject[] instances) {
-        for (int i = 0, len = instances.length; i < len; i++) {
-            instances[i].setContext(context);
+    public void saveChanges() {
+        LOG.debug("collating changes");
+        Enumeration e = loadedObjects.dirtyObjects();
+        while (e.hasMoreElements()) {
+            NakedObject object = (NakedObject) e.nextElement();
+            LOG.debug("  changed " + object);
+            if (isPersistent(object)) {
+                getTransaction().addCommand(objectStore.createSaveObjectCommand(object));
+            }
+            getTransaction().addNotify(object);
+            object.clearPersistDirty();
         }
+    }
+
+    /**
+     * Expose as a .NET property
+     * 
+     * @property
+     */
+    public void set_LoadedObjects(LoadedObjects loadedObjects) {
+        this.loadedObjects = loadedObjects;
+    }
+
+    /**
+     * Expose as a .NET property
+     * 
+     * @property
+     */
+    public void set_Notifier(UpdateNotifier notifier) {
+        this.notifier = notifier;
+    }
+
+    /**
+     * Expose as a .NET property
+     * 
+     * @property
+     */
+    public void set_ObjectStore(NakedObjectStore objectStore) {
+        this.objectStore = objectStore;
+    }
+
+    /**
+     * Expose as a .NET property
+     * 
+     * @property
+     */
+    public void set_OidGenerator(OidGenerator oidGenerator) {
+        this.oidGenerator = oidGenerator;
+    }
+
+    public void setLoadedObjects(LoadedObjects loadedObjects) {
+        this.loadedObjects = loadedObjects;
+    }
+
+    public void setNotifier(UpdateNotifier notifier) {
+        this.notifier = notifier;
+    }
+
+    public void setObjectStore(NakedObjectStore objectStore) {
+        this.objectStore = objectStore;
+    }
+
+    public void setOidGenerator(OidGenerator oidGenerator) {
+        this.oidGenerator = oidGenerator;
     }
 
     public void shutdown() {
@@ -520,6 +497,8 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
     public void startTransaction() {
         try {
+            transaction = new Transaction();
+            getTransaction().start();
             objectStore.startTransaction();
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
@@ -531,21 +510,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         return "LocalObjectManager [objectStore=" + objectStore.name() + ",oidGenerator=" + oidGenerator.name() + "]";
     }
 
-    public long serialNumber(String sequence) {
-        return 0;
-    }
-    
-    public void saveChanges() {
-       LOG.debug("Saving changes");
-       Enumeration e = loadedObjects.dirtyObjects();
-       while (e.hasMoreElements()) {
-           NakedObject object = (NakedObject) e.nextElement();
-           LOG.debug("  " + object);
-           objectChanged(object);
-           object.clearPersistDirty();
-       }
-    }
-    
 }
 
 /*

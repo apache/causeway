@@ -2,12 +2,12 @@ package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.viewer.skylark.Skylark;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.basic.WindowDecorator;
 import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
-import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 public class ListSpecification extends AbstractCompositeViewSpecification implements SubviewSpec {
 
@@ -16,7 +16,7 @@ public class ListSpecification extends AbstractCompositeViewSpecification implem
 	}
 	
 	public View createSubview(Content content, ViewAxis axis) {
-		ViewSpecification specification = ViewFactory.getViewFactory().getIconizedSubViewSpecification((ObjectContent) content);
+		ViewSpecification specification = Skylark.getViewFactory().getIconizedSubViewSpecification((ObjectContent) content);
 		return specification.createView(content, axis);
 	}
 

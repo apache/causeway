@@ -1,5 +1,6 @@
 package org.nakedobjects.xat;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
@@ -797,7 +798,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         } catch (InvalidEntryException e) {
             throw new IllegalActionError("");
         }
-        object.getContext().getObjectManager().saveChanges();
+        NakedObjects.getObjectManager().saveChanges();
     }
 
     private NakedObjectField fieldFor(final String fieldName) {

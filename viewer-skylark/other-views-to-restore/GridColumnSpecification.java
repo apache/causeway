@@ -23,7 +23,7 @@ class GridColumnSpecification extends AbstractCompositeViewSpecification{
 	
     private static class ColumnSubviews implements SubviewSpec {
         public View createSubview(Content content, ViewAxis axis) {
-            ViewFactory factory = ViewFactory.getViewFactory();
+            ViewFactory factory = Skylark.getViewFactory();
 
             ViewSpecification specification;
 

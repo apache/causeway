@@ -4,7 +4,6 @@ import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.OneToManyPeer;
@@ -28,15 +27,10 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
         super(name, type, get, about, false);
         this.addMethod = add;
         this.removeMethod = remove;
-//        this.clearMethod = clearMethod;
    }
 
     public void addAssociation(NakedObject inObject, NakedObject associate) {
         LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
-
-        NakedObjectManager objectManager = inObject.getContext().getObjectManager();
-        objectManager.startTransaction();
-
         try {
             addMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
         } catch (IllegalArgumentException e) {
@@ -48,8 +42,6 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
             LOG.error("Illegal access of " + addMethod, ignore);
             throw new RuntimeException(ignore.getMessage());
         }
-
-        objectManager.endTransaction();
     }
     
     public void initAssociation(NakedObject inObject, NakedObject associate) {
@@ -123,17 +115,9 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
         LOG.debug("local clear association " + associate + " from field " + getName() + " in " + inObject);
 
         try {
-            NakedObjectManager objectManager = inObject.getContext().getObjectManager();
-            objectManager.startTransaction();
-
             removeMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
-            
-            objectManager.endTransaction();
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(e.getMessage() + " object: " + inObject.getObject() + ", parameter: " + associate.getObject()); 
-            // TODO remove - this exception can be: for a invalid object; or for invalid parameters
-             //remove method expects a " + getType().getFullName() + " object; not a "
-                 //   + associate.getObject().getClass().getName());
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + addMethod, e);
         } catch (IllegalAccessException ignore) {

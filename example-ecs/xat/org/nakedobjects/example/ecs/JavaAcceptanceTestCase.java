@@ -1,15 +1,15 @@
 package org.nakedobjects.example.ecs;
 
-import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.object.OidGenerator;
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
-import org.nakedobjects.object.defaults.LocalObjectManager;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
-import org.nakedobjects.object.defaults.TimeBasedOidGenerator;
-import org.nakedobjects.object.defaults.TransientObjectStore;
 import org.nakedobjects.object.exploration.ExplorationSetUp;
+import org.nakedobjects.object.persistence.OidGenerator;
+import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
+import org.nakedobjects.object.persistence.defaults.TimeBasedOidGenerator;
+import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
@@ -52,6 +52,8 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
         objectManager.setOidGenerator(oidGenerator);
         objectManager.setLoadedObjects(loadedObjectsHashtable);
 
+        NakedObjects.setObjectManager(objectManager);
+        
         container.setObjectManger(objectManager);
 
         new NakedObjectSpecificationLoaderImpl();
@@ -68,11 +70,10 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
 
         reflectorFactory.setObjectFactory(objectFactory);
 
-        NakedObjectContext context = new NakedObjectContext(objectManager);
-
         SimpleExplorationSetup explorationSetup = new SimpleExplorationSetup();
-        explorationSetup.setContext(context);
 
+        explorationSetup.setObjectManager(objectManager);
+        
         return explorationSetup;
     }
     

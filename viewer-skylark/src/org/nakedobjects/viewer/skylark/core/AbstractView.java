@@ -19,6 +19,7 @@ import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
+import org.nakedobjects.viewer.skylark.Skylark;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
@@ -29,7 +30,6 @@ import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.ViewState;
 import org.nakedobjects.viewer.skylark.ViewerAssistant;
 import org.nakedobjects.viewer.skylark.Workspace;
-import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 import java.util.Enumeration;
 
@@ -402,7 +402,7 @@ public abstract class AbstractView implements View {
         options.setColor(Style.VIEW_MENU);
 
         if (getParent() != null) {
-            Enumeration possibleViews = ViewFactory.getViewFactory().openRootViews(content, null);
+            Enumeration possibleViews = Skylark.getViewFactory().openRootViews(content, null);
             while (possibleViews.hasMoreElements()) {
                 ViewSpecification specification = (ViewSpecification) possibleViews.nextElement();
                 MenuOption viewAs = new OpenViewOption(specification);
@@ -412,13 +412,13 @@ public abstract class AbstractView implements View {
 
         if (view.getSpecification().isSubView()) {
             if (view.getSpecification().isReplaceable()) {
-                replaceOptions(ViewFactory.getViewFactory().openSubviews(content, this), options);
-                replaceOptions(ViewFactory.getViewFactory().closedSubviews(content, this), options);
+                replaceOptions(Skylark.getViewFactory().openSubviews(content, this), options);
+                replaceOptions(Skylark.getViewFactory().closedSubviews(content, this), options);
             }
         } else {
             if (view.getSpecification().isReplaceable()) {
                 // offer other/alternative views
-                replaceOptions(ViewFactory.getViewFactory().openRootViews(content, this), options);
+                replaceOptions(Skylark.getViewFactory().openRootViews(content, this), options);
             }
             options.add(MenuOptionSet.VIEW, new PrintOption());
             if (getParent() != null) {

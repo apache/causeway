@@ -1,5 +1,14 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.object.persistence.CreateObjectCommand;
+import org.nakedobjects.object.persistence.DestroyObjectCommand;
+import org.nakedobjects.object.persistence.NakedObjectStore;
+import org.nakedobjects.object.persistence.ObjectNotFoundException;
+import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.persistence.PersistenceCommand;
+import org.nakedobjects.object.persistence.SaveObjectCommand;
+import org.nakedobjects.object.persistence.UnsupportedFindException;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Vector;
@@ -41,13 +50,6 @@ public class MockObjectStore implements NakedObjectStore {
 
     public void createNakedClass(NakedObject cls) throws ObjectStoreException {}
 
-    public void createObject(NakedObject object) throws ObjectStoreException {
-        actions.addElement("createObject " + object);
-    }
-
-    public void destroyObject(NakedObject object) throws ObjectStoreException {
-        actions.addElement("destroyObject " + object.getOid());
-    }
 
     public void endTransaction() {
         actions.addElement("abortTransaction");
@@ -58,12 +60,10 @@ public class MockObjectStore implements NakedObjectStore {
     }
 
     public String getDebugData() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     public String getDebugTitle() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -83,7 +83,6 @@ public class MockObjectStore implements NakedObjectStore {
 
     public NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) {
         actions.addElement("getInstances " + pattern);
-
         return instances;
     }
 
@@ -108,11 +107,9 @@ public class MockObjectStore implements NakedObjectStore {
     }
 
     public void init() throws ObjectStoreException {
-    // TODO Auto-generated method stub
     }
 
     public String name() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -126,11 +123,6 @@ public class MockObjectStore implements NakedObjectStore {
     }
 
     public void resolve(NakedObject object) {
-    // TODO Auto-generated method stub
-    }
-
-    public void save(NakedObject object) throws ObjectStoreException {
-        actions.addElement("saveObject " + object);
     }
 
     public void setupInstancesCount(int i) {
@@ -165,6 +157,23 @@ public class MockObjectStore implements NakedObjectStore {
         actions.addElement("getInstances " + criteria);
         return instances;
     }
+
+    public CreateObjectCommand createCreateObjectCommand(NakedObject object) {
+        actions.addElement("createObject " + object);
+        return null;
+    }
+
+    public DestroyObjectCommand createDestroyObjectCommand(NakedObject object) {
+        actions.addElement("destroyObject " + object.getOid());
+        return null;
+    }
+
+    public SaveObjectCommand createSaveObjectCommand(NakedObject object) {
+        actions.addElement("saveObject " + object);
+        return null;
+    }
+
+    public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException {}
 }
 
 /*

@@ -3,13 +3,13 @@ package org.nakedobjects.object.reflect.internal;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.valueadapter.StringAdapter;
@@ -79,9 +79,6 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
         LOG.debug("local setValue() " + inObject.getOid() + "/" + value);
 
         try {
-            NakedObjectManager objectManager = inObject.getContext().getObjectManager();
-            objectManager.startTransaction();
-
             if (setMethod == null) {
 //                    throw new IllegalStateException("can't intialise " + getName() + "  in " +
 //                        inObject.getClass() + " as there is no set method");
@@ -91,8 +88,6 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
             } else {
                 	setMethod.invoke(inObject.getObject(), new Object[] { value });
             }
-
-            objectManager.endTransaction();
         } catch (InvocationTargetException e) {
             LOG.error("Exception executing " + setMethod, e.getTargetException());
             
@@ -177,9 +172,6 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
         LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
 
             try {
-                NakedObjectManager objectManager = inObject.getContext().getObjectManager();
-                objectManager.startTransaction();
-
                 if (associate == null) {
                     if (removeMethod != null) {
                         removeMethod.invoke(inObject.getObject(), new Object[] { get(inObject) });
@@ -193,8 +185,6 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
                         setMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
                     }
                 }
-
-                objectManager.endTransaction();
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException(setMethod + " method doesn't expect a " +
                     associate.getClass().getName());

@@ -8,11 +8,11 @@ import org.nakedobjects.object.reflect.OneToOnePeer;
 
 
 public interface ReflectionFactory {
-    Action createAction(ActionPeer action);
+    Action createAction(String className, ActionPeer action);
 
-    NakedObjectField createField(OneToManyPeer local);
+    NakedObjectField createField(String className, OneToManyPeer local);
 
-    NakedObjectField createField(OneToOnePeer local);
+    NakedObjectField createField(String className, OneToOnePeer local);
 }
 
 /*

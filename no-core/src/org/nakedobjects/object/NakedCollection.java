@@ -1,5 +1,7 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.object.persistence.Oid;
+
 import java.util.Enumeration;
 
 

@@ -3,12 +3,9 @@ package org.nakedobjects.object.reflect.internal;
 
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.MockNakedObjectContext;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
-import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 
@@ -74,10 +71,6 @@ public class InternalOneToManyAssociationTest extends NakedObjectTestCase {
         loader.addSpec(new DummyNakedObjectSpecification()); // for object
         
         NakedObject associate = PojoAdapter.createNOAdapter(new InternalObjectForReferencing());
-
-        NakedObjectContext context = new MockNakedObjectContext(MockObjectManager.setup());
-        nakedObject.setContext(context);
-
         oneToOneAssociation.addAssociation(nakedObject, associate);
         
         assertEquals(associate.getObject(), objectWithVector.added);

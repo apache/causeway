@@ -1,18 +1,20 @@
 package org.nakedobjects.object.reflect;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.DefaultHint;
+import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.security.Session;
 
 
 public class OneToManyAssociation extends NakedObjectAssociation {
     private final OneToManyPeer reflectiveAdapter;
 
-    public OneToManyAssociation(String name, NakedObjectSpecification type, OneToManyPeer association) {
-        super(name, type);
+    public OneToManyAssociation(String className, String methodName, NakedObjectSpecification type, OneToManyPeer association) {
+        super(methodName, type, new MemberIdentifier(className, methodName));
         this.reflectiveAdapter = association;
     }
 
@@ -25,13 +27,41 @@ public class OneToManyAssociation extends NakedObjectAssociation {
     }
 
     public void clearCollection(NakedObject inObject) {
-        reflectiveAdapter.removeAllAssociations(inObject);
+        NakedObjectManager objectManager = NakedObjects.getObjectManager();
+        try {
+            if (inObject.isPersistent()) {
+                objectManager.startTransaction();
+            }
+            reflectiveAdapter.removeAllAssociations(inObject);
+            objectManager.saveChanges();
+            if (inObject.isPersistent()) {
+                objectManager.endTransaction();
+            }
+        } catch (RuntimeException e) {
+            objectManager.abortTransaction();
+            throw e;
+        }
     }
 
     public void clearAssociation(NakedObject inObject, NakedObject associate) {
-        if (associate == null) { throw new IllegalArgumentException("element should not be null"); }
+        if (associate == null) {
+            throw new IllegalArgumentException("element should not be null");
+        }
 
-        reflectiveAdapter.removeAssociation(inObject, associate);
+        NakedObjectManager objectManager = NakedObjects.getObjectManager();
+        try {
+            if (inObject.isPersistent()) {
+                objectManager.startTransaction();
+            }
+            reflectiveAdapter.removeAssociation(inObject, associate);
+            objectManager.saveChanges();
+            if (inObject.isPersistent()) {
+                objectManager.endTransaction();
+            }
+        } catch (RuntimeException e) {
+            objectManager.abortTransaction();
+            throw e;
+        }
     }
 
     public Naked get(NakedObject fromObject) {
@@ -43,12 +73,12 @@ public class OneToManyAssociation extends NakedObjectAssociation {
     }
 
     public Hint getHint(Session session, NakedObject container, NakedObject element, boolean add) {
-        if(hasHint()) {
+        if (hasHint()) {
             return reflectiveAdapter.getHint(session, container, element, add);
         } else {
             return new DefaultHint();
         }
-        
+
     }
 
     protected String getLabel(Session session, NakedObject object) {
@@ -68,15 +98,30 @@ public class OneToManyAssociation extends NakedObjectAssociation {
     public boolean isPart() {
         return true;
     }
-    
+
     public boolean isCollection() {
         return true;
     }
 
     public void setAssociation(NakedObject inObject, NakedObject associate) {
-        if (associate == null) { throw new IllegalArgumentException("Can't use null to add an item to a collection"); }
-    
-        reflectiveAdapter.addAssociation(inObject, associate);
+        if (associate == null) {
+            throw new IllegalArgumentException("Can't use null to add an item to a collection");
+        }
+
+        NakedObjectManager objectManager = NakedObjects.getObjectManager(); //inObject.getContext().getObjectManager();
+        try {
+            if (inObject.isPersistent()) {
+                objectManager.startTransaction();
+            }
+            reflectiveAdapter.addAssociation(inObject, associate);
+            objectManager.saveChanges();
+            if (inObject.isPersistent()) {
+                objectManager.endTransaction();
+            }
+        } catch (RuntimeException e) {
+            objectManager.abortTransaction();
+            throw e;
+        }
     }
 
     public void initAssociation(NakedObject inObject, NakedObject associate) {
@@ -84,15 +129,16 @@ public class OneToManyAssociation extends NakedObjectAssociation {
     }
 
     public String toString() {
-        return "OneToManyAssociation [" + super.toString() + ",type=" + (getSpecification() == null ? "unknown" : getSpecification().getShortName()) + "]";
+        return "OneToManyAssociation [" + super.toString() + ",type="
+                + (getSpecification() == null ? "unknown" : getSpecification().getShortName()) + "]";
     }
-    
+
     public boolean isEmpty(NakedObject inObject) {
         return reflectiveAdapter.isEmpty(inObject);
     }
 
     public void initOneToManyAssociation(NakedObject inObject, NakedObject[] instances) {
-        reflectiveAdapter. initOneToManyAssociation(inObject, instances);
+        reflectiveAdapter.initOneToManyAssociation(inObject, instances);
     }
 
 }

@@ -1,21 +1,23 @@
-package org.nakedobjects.object.defaults;
+package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.OidGenerator;
-import org.nakedobjects.utility.StartupException;
+import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.persistence.OidGenerator;
 
-import java.util.Date;
 
 
 /**
  * Generates OIDs based on the system clock.
  */
-public class TimeBasedOidGenerator implements OidGenerator {
-    private long next = new Date().getTime();
+public class SimpleOidGenerator implements OidGenerator {
+    private long next;
+
+    public void init() {
+        next = 0;
+    }
 
     public String name() {
-        return "Simple OID Generator";
+        return "Exploration OID Generator";
     }
 
     public synchronized Oid next(Naked object) {
@@ -23,8 +25,6 @@ public class TimeBasedOidGenerator implements OidGenerator {
     }
 
     public void shutdown() {}
-
-    public void init() throws StartupException {}
 }
 
 /*

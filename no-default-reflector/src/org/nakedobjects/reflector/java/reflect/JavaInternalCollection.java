@@ -5,7 +5,6 @@ import org.nakedobjects.application.collection.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.control.DefaultHint;
@@ -35,10 +34,6 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
 
     public void addAssociation(NakedObject inObject, NakedObject associate) {
         LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
-
-        NakedObjectManager objectManager = inObject.getContext().getObjectManager();
-        objectManager.startTransaction();
-
         try {
             if(addMethod != null) {
                 addMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
@@ -55,8 +50,6 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
             LOG.error("Illegal access of " + addMethod, ignore);
             throw new RuntimeException(ignore.getMessage());
         }
-
-        objectManager.endTransaction();
     }
     
     public void initAssociation(NakedObject inObject, NakedObject associate) {
@@ -127,17 +120,12 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
         LOG.debug("local clear association " + associate + " from field " + getName() + " in " + inObject);
 
         try {
-            NakedObjectManager objectManager = inObject.getContext().getObjectManager();
-            objectManager.startTransaction();
-
             if(removeMethod != null) {
 	            removeMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
             } else {
                 InternalCollection collection = (InternalCollection) getMethod.invoke(inObject.getObject(), new Object[0]);
                 collection.remove(associate.getObject());
             }
-            
-            objectManager.endTransaction();
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("remove method expects a " + getType().getFullName() + " object; not a "
                     + associate.getClass().getName());

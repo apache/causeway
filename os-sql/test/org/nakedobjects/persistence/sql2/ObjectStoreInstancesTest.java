@@ -1,8 +1,8 @@
 package org.nakedobjects.persistence.sql2;
 
 import org.nakedobjects.container.configuration.ConfigurationFactory;
-import org.nakedobjects.object.NakedObjectStore;
-import org.nakedobjects.object.NakedObjectStoreInstancesTestCase;
+import org.nakedobjects.object.persistence.NakedObjectStore;
+import org.nakedobjects.object.persistence.NakedObjectStoreInstancesTestCase;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.SqlObjectStore;
 import org.nakedobjects.persistence.sql.jdbc.JdbcConnector;

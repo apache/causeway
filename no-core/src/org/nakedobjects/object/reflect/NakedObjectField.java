@@ -8,8 +8,8 @@ import org.nakedobjects.object.NakedObject;
 public abstract class NakedObjectField extends NakedObjectMember {
     private final NakedObjectSpecification specification;
     
-    public NakedObjectField(String name, NakedObjectSpecification type) {
-        super(name);
+    public NakedObjectField(String name, NakedObjectSpecification type, MemberIdentifier identifier) {
+        super(name, identifier);
         if(type == null)
         {
             throw new IllegalArgumentException("type cannot be null");
@@ -41,14 +41,6 @@ public abstract class NakedObjectField extends NakedObjectMember {
 
     public boolean isObject() {
         return specification.isObject();
-    }
-
-    /**
-     * Determines if this field hold a part, i.e. an object that is part of a composite object.
-     * @return boolean
-     */
-    public boolean isPart() {
-        return specification.isPartOf();
     }
     
     public boolean isValue() {

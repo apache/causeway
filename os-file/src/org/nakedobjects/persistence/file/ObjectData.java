@@ -4,7 +4,7 @@ import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.defaults.SerialOid;
+import org.nakedobjects.object.persistence.defaults.SerialOid;
 
 import java.util.Enumeration;
 import java.util.Hashtable;

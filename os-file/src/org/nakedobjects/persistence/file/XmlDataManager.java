@@ -3,9 +3,9 @@ package org.nakedobjects.persistence.file;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.ObjectNotFoundException;
-import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.defaults.SerialOid;
+import org.nakedobjects.object.persistence.ObjectNotFoundException;
+import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.defaults.SerialOid;
 
 import java.io.File;
 import java.io.FileInputStream;

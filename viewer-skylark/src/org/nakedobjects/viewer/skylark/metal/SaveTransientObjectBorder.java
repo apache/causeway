@@ -1,9 +1,11 @@
 package org.nakedobjects.viewer.skylark.metal;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Location;
@@ -80,7 +82,15 @@ public class SaveTransientObjectBorder extends ButtonBorder {
             action = view.getContent().getSpecification().getObjectAction(Action.USER, "persist");
         }
         if(action == null) {
-	        transientObject.getContext().getObjectManager().makePersistent(transientObject);
+	        NakedObjectManager objectManager = NakedObjects.getObjectManager();
+	        try {
+		        objectManager.startTransaction();
+	            objectManager.makePersistent(transientObject);
+	            objectManager.endTransaction();
+	        } catch (RuntimeException e) {
+	            objectManager.abortTransaction();
+	            throw e;
+	        }
         } else {
             transientObject.execute(action, new Naked[0]);
         }
@@ -95,7 +105,7 @@ public class SaveTransientObjectBorder extends ButtonBorder {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

@@ -37,12 +37,13 @@ public class NakedObjectSpecificationImplTests extends TestCase {
 
         MockNakedObjectSpecificationLoader specificationLoader = new MockNakedObjectSpecificationLoader();
         NakedObjectSpecificationImpl.setReflectionFactory(new MockReflectionFactory());
-                
+
         nakedObjectSpecification = new NakedObjectSpecificationImpl();
         mockReflector = new MockReflector();
         mockReflector.superClass = new NakedObjectSpecificationImpl();
         
         specificationLoader.addSpec(mockReflector.superClass);
+        
         
         nakedObjectSpecification.reflect("class-x", mockReflector);
 

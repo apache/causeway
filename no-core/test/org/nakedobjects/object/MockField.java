@@ -7,7 +7,7 @@ import org.nakedobjects.object.security.Session;
 public class MockField extends NakedObjectField {
 
     public MockField(String name) {
-        super(name, null);
+        super(name, null, null);
     }
 
     public Naked get(NakedObject fromObject) {

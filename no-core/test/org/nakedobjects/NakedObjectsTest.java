@@ -1,30 +1,35 @@
-package org.nakedobjects.object;
+package org.nakedobjects;
 
-public class NotPersistableException extends NakedObjectRuntimeException {
+import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.object.defaults.MockObjectFactory;
+import org.nakedobjects.object.defaults.MockObjectManager;
 
-    public NotPersistableException() {
-        super();
+import junit.framework.TestCase;
+
+public class NakedObjectsTest extends TestCase {
+
+    public static void main(String[] args) {
+        junit.textui.TestRunner.run(NakedObjectsTest.class);
     }
 
-    public NotPersistableException(String message) {
-        super(message);
+    public void testConfiguration() {
+        Configuration configuration = new Configuration();
+        NakedObjects.setConfiguration(configuration);
+        assertEquals(configuration, NakedObjects.getConfiguration());
     }
-
-    public NotPersistableException(Throwable cause) {
-        super(cause);
+    
+    public void testObjectManager() {
+        MockObjectManager objectManager = new MockObjectManager(new MockObjectFactory());
+        NakedObjects.setObjectManager(objectManager);
+        assertEquals(objectManager, NakedObjects.getObjectManager());
     }
-
-    public NotPersistableException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
 }
 
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2005  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -4,11 +4,8 @@ package org.nakedobjects.reflector.java.reflect;
 import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
-import org.nakedobjects.object.MockNakedObjectContext;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
-import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
@@ -75,9 +72,6 @@ public class JavaAssociationTest extends TestCase {
         loader.addSpec(new DummyNakedObjectSpecification()); // for one-to-one
         loader.addSpec(new DummyNakedObjectSpecification()); // for object
         
-        NakedObjectContext context = new MockNakedObjectContext(MockObjectManager.setup());
-        nakedObjectHoldingObjectWithAssociations.setContext(context);
-       
      	assertNull(javaObjectWithOneToOneAssociations.getReferencedObject());
      	personField.setAssociation(nakedObjectHoldingObjectWithAssociations, associate);
      	assertEquals(javaObjectForReferencing, javaObjectWithOneToOneAssociations.getReferencedObject());

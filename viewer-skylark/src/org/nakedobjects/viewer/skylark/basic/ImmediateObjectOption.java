@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
@@ -72,7 +73,7 @@ class ImmediateObjectOption extends MenuOption {
 		        try {
 			        returnedObject = object.execute(action, null);
 			    } catch (Exception e) {
-		        	returnedObject = PojoAdapter.createAdapter(object.getContext().getObjectManager().generatorError("System error",e));
+		        	returnedObject = PojoAdapter.createAdapter(NakedObjects.getObjectManager().generatorError("System error",e));
 		        }
 		        if (returnedObject != null) {
 		            if(returnedObject instanceof NakedError) {

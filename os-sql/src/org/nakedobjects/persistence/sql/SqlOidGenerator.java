@@ -3,9 +3,9 @@ package org.nakedobjects.persistence.sql;
 import org.nakedobjects.container.configuration.ComponentLoader;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.OidGenerator;
+import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.utility.StartupException;
 
 

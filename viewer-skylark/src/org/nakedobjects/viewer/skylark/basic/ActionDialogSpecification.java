@@ -1,11 +1,10 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.Skylark;
 import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.View;
@@ -39,7 +38,7 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
 
         public View createSubview(Content content, ViewAxis axis) {
             if (content instanceof ValueParameter) {
-                ViewFactory factory = ViewFactory.getViewFactory();
+                ViewFactory factory = Skylark.getViewFactory();
                 ViewSpecification specification = factory.getValueFieldSpecification((ValueContent) content);
                 return specification.createView(content, axis);
             } else if (content instanceof ObjectParameter) {
@@ -50,7 +49,7 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
                     //return new SubviewIconSpecification().createView(content,
                     // axis);
 
-                    ViewFactory factory = ViewFactory.getViewFactory();
+                    ViewFactory factory = Skylark.getViewFactory();
                     ViewSpecification specification = factory.getIconizedSubViewSpecification(parameterContent);
                     return specification.createView(content, axis);
                 }
@@ -83,11 +82,11 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
                 protected void execute() {
                     ActionContent actionContent = ((ActionContent) view.getContent());
                     Naked result = actionContent.execute();
-                    NakedObject actionObject = actionContent.getObject();
-                    if (!(actionObject.getObject() instanceof NakedClass)) {
+                    /*                 NakedObject actionObject = actionContent.getObject();
+                     if (!(actionObject.getObject() instanceof NakedClass)) {
                         //actionObject.getContext().getObjectManager().objectChanged(actionObject);
                         actionObject.getContext().getObjectManager().saveChanges();
-                    }
+                    } */
                     if (result != null) {
                         move(at);
                         workspace.addOpenViewFor(result, at);

@@ -7,7 +7,6 @@ import org.nakedobjects.application.control.ActionAbout;
 import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.application.valueholder.Money;
 import org.nakedobjects.application.valueholder.TextString;
-import org.nakedobjects.object.NakedObjectContext;
 
 
 public class Expense extends BaseObject {
@@ -48,7 +47,7 @@ public class Expense extends BaseObject {
     }
 
     public static Expense actionNewExpenseItem(Claim forClaim) {
-        Expense newExpenseItem = (Expense) NakedObjectContext.getDefaultContext().createInstance(Expense.class);
+        Expense newExpenseItem = (Expense) createInstance(Expense.class);
         forClaim.associateExpenses(newExpenseItem);
 
         return newExpenseItem;
@@ -73,7 +72,7 @@ public class Expense extends BaseObject {
     }
 
     public static Expense actionNewExpenseItem(Project forProject) {
-        Expense newExpenseItem = (Expense) NakedObjectContext.getDefaultContext().createInstance(Expense.class);
+        Expense newExpenseItem = (Expense) createInstance(Expense.class);
         newExpenseItem.setProject(forProject);
 
         return newExpenseItem;

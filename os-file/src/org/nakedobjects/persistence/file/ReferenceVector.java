@@ -24,7 +24,7 @@
 
 package org.nakedobjects.persistence.file;
 
-import org.nakedobjects.object.defaults.SerialOid;
+import org.nakedobjects.object.persistence.defaults.SerialOid;
 
 import java.util.Vector;
 

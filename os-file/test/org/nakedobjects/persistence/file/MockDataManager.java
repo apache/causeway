@@ -1,8 +1,8 @@
 package org.nakedobjects.persistence.file;
 
-import org.nakedobjects.object.ObjectNotFoundException;
-import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.defaults.SerialOid;
+import org.nakedobjects.object.persistence.ObjectNotFoundException;
+import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.defaults.SerialOid;
 
 import java.util.Vector;
 
@@ -68,7 +68,7 @@ public class MockDataManager implements DataManager {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

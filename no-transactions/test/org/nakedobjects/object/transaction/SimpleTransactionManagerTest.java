@@ -4,11 +4,11 @@ import org.nakedobjects.object.MockObjectStore;
 import org.nakedobjects.object.MockUpdateNotifier;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.ObjectNotFoundException;
-import org.nakedobjects.object.defaults.SimpleOidGenerator;
+import org.nakedobjects.object.persistence.NakedObjectManager;
+import org.nakedobjects.object.persistence.ObjectNotFoundException;
+import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.reflect.ActionSpecification;
 
 import java.io.File;
@@ -115,7 +115,7 @@ public class SimpleTransactionManagerTest extends TestCase {
         // transaction 5
         ActionSpecification action = accountClass.getObjectAction(ActionSpecification.USER, "CreateTransactionFrom", new NakedObjectSpecification[] { accountClass });
         // action corresponding to a drop on account 2
-        Transfer transfer1 = (Transfer) action.execute(saving, new NakedObject[] { personal });
+        Transfer transfer1 = (Transfer) action.execute(identifier, saving, new NakedObject[] { personal });
 
         // transaction 6
         transfer1.getAmount().setValue(100);
@@ -123,14 +123,14 @@ public class SimpleTransactionManagerTest extends TestCase {
 
         // transaction 7
         ActionSpecification actionApplyFail = transfer1.getSpecification().getObjectAction(ActionSpecification.USER, "Apply But Fail");
-        transfer1.execute(actionApplyFail, null);
+        transfer1.execute(identifier, actionApplyFail, null);
         
         // transaction 8
         ActionSpecification actionApply = transfer1.getSpecification().getObjectAction(ActionSpecification.USER, "Apply");
-        transfer1.execute(actionApplyFail, null);
+        transfer1.execute(identifier, actionApplyFail, null);
 
         // transaction 9
-        Transfer transfer2 = (Transfer) action.execute(personal, new NakedObject[] { saving });
+        Transfer transfer2 = (Transfer) action.execute(identifier, personal, new NakedObject[] { saving });
 
         // transaction 10
         transfer2.getAmount().setValue(50);
@@ -138,7 +138,7 @@ public class SimpleTransactionManagerTest extends TestCase {
 
         // transaction 11
         actionApply = transfer2.getSpecification().getObjectAction(ActionSpecification.USER, "Apply");
-        transfer2.execute(actionApply, null);   
+        transfer2.execute(identifier, actionApply, null);   
      }
 
     public void testIsolationInCreate() {

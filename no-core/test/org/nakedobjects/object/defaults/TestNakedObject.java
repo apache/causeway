@@ -3,18 +3,17 @@ package org.nakedobjects.object.defaults;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.ActionParameterSet;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.ActionParameterSet;
 import org.nakedobjects.object.security.Session;
 
 public class TestNakedObject implements NakedObject {
@@ -50,12 +49,6 @@ public class TestNakedObject implements NakedObject {
     public void setOid(Oid oid) {}
 
     public void setResolved() {}
-
-    public NakedObjectContext getContext() {
-        return null;
-    }
-
-    public void setContext(NakedObjectContext context) {}
 
     public boolean isEmpty(NakedObjectField field) {
         return false;

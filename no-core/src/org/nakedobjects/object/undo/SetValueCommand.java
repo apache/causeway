@@ -1,5 +1,6 @@
 package org.nakedobjects.object.undo;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 
@@ -25,7 +26,7 @@ public class SetValueCommand implements Command {
     public void undo() {
    //     value.getValue(object).restoreFromEncodedString(oldValue);
        // object.getContext().getObjectManager().objectChanged(object);
-        object.getContext().getObjectManager().saveChanges();
+        NakedObjects.getObjectManager().saveChanges();
     }
 
     public void execute() {}

@@ -1,7 +1,6 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.UpdateNotifier;
 
 import java.util.Enumeration;
@@ -15,7 +14,7 @@ public class SingleResponseUpdateNotifier implements UpdateNotifier {
     private ObjectDataFactory factory;
     private Vector updates = new Vector();
 
-    public void broadcastObjectChanged(NakedObject object, NakedObjectManager objectManager) {
+    public void broadcastObjectChanged(NakedObject object) {
         LOG.debug("Update captured for " + object);
         
         Vector copy;

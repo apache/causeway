@@ -1,5 +1,11 @@
-package org.nakedobjects.object;
+package org.nakedobjects.object.persistence;
 
+import org.nakedobjects.object.InstancesCriteria;
+import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedError;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.utility.StartupException;
 
 
@@ -149,13 +155,6 @@ public interface NakedObjectManager {
      * <method>getObject </method> above.
      */
     void resolve(NakedObject object);
-
-    /**
-     * Generates a unique serial number for the specified squence set. Each set
-     * of serial numbers are a simple numerical sequence. Calling this method
-     * with a unused sequence name creates a new set.
-     */
-    long serialNumber(String sequence);
 
     void shutdown();
 

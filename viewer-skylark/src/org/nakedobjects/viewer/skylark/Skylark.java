@@ -5,40 +5,27 @@ import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 
 public class Skylark {
-    private static Skylark instance;
+    private static Skylark instance = new Skylark();
 
-    public static Skylark getInstance() {
-        if (instance == null) {
-            instance = new Skylark();
-        }
-
-        return instance;
-            }
-
-    private ContentFactory contentFactory;
-
-    private ViewFactory viewFactory;
-
-    public ContentFactory getContentFactory() {
-        if (contentFactory == null) {
-            contentFactory = new ContentFactory();
-        }
-
-        return contentFactory;
+    public static ContentFactory getContentFactory() {
+        return getInstance().contentFactory;
     }
 
-    public ViewFactory getViewFactory() {
-        if (viewFactory == null) {
-            viewFactory = new ViewFactory();
-        }
+    private static Skylark getInstance() {
+        return instance;
+    }
 
-        return viewFactory;
+    protected ContentFactory contentFactory = new ContentFactory();
+    protected ViewFactory viewFactory = new ViewFactory();
+
+    public static ViewFactory getViewFactory() {
+        return getInstance().viewFactory;
     }
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

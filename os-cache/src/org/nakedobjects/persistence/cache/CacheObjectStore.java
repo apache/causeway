@@ -8,17 +8,18 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.ObjectNotFoundException;
-import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
 import org.nakedobjects.object.io.BinaryTransferableWriter;
 import org.nakedobjects.object.io.Memento;
 import org.nakedobjects.object.io.Transferable;
+import org.nakedobjects.object.persistence.NakedObjectStore;
+import org.nakedobjects.object.persistence.ObjectNotFoundException;
+import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.persistence.UnsupportedFindException;
 import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.io.BufferedInputStream;
@@ -355,14 +356,14 @@ public class CacheObjectStore implements NakedObjectStore {
     private boolean matchesPattern(NakedObject pattern, NakedObject instance) {
         NakedObject object = instance;
         NakedObjectSpecification nc = object.getSpecification();
-        FieldSpecification[] fields = nc.getFields();
+        NakedObjectField[] fields = nc.getFields();
 
         for (int f = 0; f < fields.length; f++) {
-            FieldSpecification fld = fields[f];
+            NakedObjectField fld = fields[f];
 
             // are ignoring internal collections - these probably should be considered
             // ignore derived fields - there is no way to set up these fields
-            if (fld.isPart() || fld.isDerived()) {
+            if (fld.isDerived()) {
                 continue;
             }
 

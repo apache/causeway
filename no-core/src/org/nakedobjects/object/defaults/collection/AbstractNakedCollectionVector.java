@@ -1,5 +1,6 @@
 package org.nakedobjects.object.defaults.collection;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
@@ -100,7 +101,7 @@ public abstract class AbstractNakedCollectionVector extends AbstractNakedObject 
 
             public Object nextElement() {
                 Object next = e.nextElement();
-                getObjectManager().resolve((NakedObject) next);
+                NakedObjects.getObjectManager().resolve((NakedObject) next);
                 return next;
             }
         };

@@ -1,13 +1,13 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
@@ -94,7 +94,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
                 }
                 newView = createSubviewFor(source, true);
                 //newView = Skylark.getInstance().getViewFactory().createIcon(content);
-                //newView = ViewFactory.getViewFactory().createWorkspaceIcon(source);
+                //newView = Skylark.getViewFactory().createWorkspaceIcon(source);
             }
         }
         newView.setSize(newView.getRequiredSize());
@@ -107,12 +107,12 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
 
     public View createSubviewFor(Naked object, boolean asIcon) {
         View view;
-        Content content = Skylark.getInstance().getContentFactory().createRootContent(object);
+        Content content = Skylark.getContentFactory().createRootContent(object);
        // newView = getSpecification().createViewView(content, getViewAxis());
         if(asIcon) {
-            view = Skylark.getInstance().getViewFactory().createIcon(content);
+            view = Skylark.getViewFactory().createIcon(content);
         } else {
-            view = Skylark.getInstance().getViewFactory().createWindow(content);
+            view = Skylark.getViewFactory().createWindow(content);
         }
         return view;
     }
@@ -168,7 +168,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
     }
 
     private View newInstance(NakedObjectSpecification cls, boolean openAView) {
-        NakedObject newInstance =  ((NakedObject) getContent().getNaked()).getContext().getObjectManager().createInstance(cls);
+        NakedObject newInstance =  NakedObjects.getObjectManager().createInstance(cls);
         return createSubviewFor(newInstance, openAView);
     }
 
@@ -226,7 +226,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
                 NakedObjectSpecification[] specs = NakedObjectSpecificationLoader.getInstance().getAllSpecifications();
                 //ArbitraryCollectionVector classCollection = new ArbitraryCollectionVector("Naked Classes");
                 Vector classCollection = new Vector();
-                NakedObjectManager objectManager = NakedObjectContext.getDefaultContext().getObjectManager();
+                NakedObjectManager objectManager = NakedObjects.getObjectManager();
                 for (int i = 0; i < specs.length; i++) {
                     NakedObjectSpecification cls = specs[i];
                     if(cls.isObject()) {

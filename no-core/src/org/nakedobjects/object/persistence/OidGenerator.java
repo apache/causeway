@@ -1,5 +1,6 @@
-package org.nakedobjects.object;
+package org.nakedobjects.object.persistence;
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.utility.StartupException;
 
 

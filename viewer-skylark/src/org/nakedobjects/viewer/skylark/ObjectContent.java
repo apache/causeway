@@ -115,8 +115,8 @@ public abstract class ObjectContent extends AbstractContent {
 
                 public void execute(Workspace workspace, View view, Location at) {
                     View newWorkspace;
-                    Content content = Skylark.getInstance().getContentFactory().createRootContent(getObject());
-                    newWorkspace = Skylark.getInstance().getViewFactory().createInnerWorkspace(content);
+                    Content content = Skylark.getContentFactory().createRootContent(getObject());
+                    newWorkspace =  Skylark.getViewFactory().createInnerWorkspace(content);
                     newWorkspace.setLocation(at);
                     workspace.addView(newWorkspace);
                     newWorkspace.markDamaged();
@@ -140,7 +140,7 @@ public abstract class ObjectContent extends AbstractContent {
              * (AbstractNakedObject) createInstance(getClass());
              * clone.copyObject(this); clone.objectChanged();
              * 
-             * ViewFactory.getViewFactory().createInnerWorkspace(clone);
+             * Skylark.getViewFactory().createInnerWorkspace(clone);
              * newWorkspace.setLocation(at);
              * getWorkspace().addView(newWorkspace); newWorkspace.markDamaged();
              */

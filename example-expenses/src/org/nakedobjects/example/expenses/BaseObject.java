@@ -1,27 +1,19 @@
 package org.nakedobjects.example.expenses;
 
-import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.NakedObjects;
+
 
 public class BaseObject {
 
 	public void resolve(Object object) {}
 
     public void objectChanged() {}
-
-    private NakedObjectContext context;
     
-    public NakedObjectContext getContext() {
-        // TODO context needs to assigned to the object properly
-//       Assert.assertTrue("must have a context: " + this, context != null);
-		 if(context == null) context = NakedObjectContext.getDefaultContext();
-       return context;
-   }
 
-    protected NakedObjectManager getObjectManager() {
-        return getContext().getObjectManager();
+    protected  static Object createInstance(Class class1) {
+        return NakedObjects.getObjectManager().createInstance(class1.getName());
     }
-    
+
 }
 
 

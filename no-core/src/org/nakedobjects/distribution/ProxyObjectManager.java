@@ -5,14 +5,13 @@ import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.ObjectNotFoundException;
-import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.TypedNakedCollection;
-import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
 import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
+import org.nakedobjects.object.persistence.ObjectNotFoundException;
+import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.persistence.UnsupportedFindException;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
 
@@ -25,7 +24,6 @@ import org.apache.log4j.Logger;
 public final class ProxyObjectManager extends AbstractNakedObjectManager {
     final static Logger LOG = Logger.getLogger(ProxyObjectManager.class);
     private ClientDistribution connection;
-    private NakedObjectContext context;
     private LoadedObjects loadedObjects;
     private final Hashtable nakedClasses = new Hashtable();
     private ObjectDataFactory objectDataFactory;
@@ -81,10 +79,6 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         LOG.debug("getInstances of " + specification + " with " + criteria);
         ObjectData[] instances = connection.findInstances(session, specification.getFullName(), criteria, includeSubclasses);
         return convertToNakedObjects(specification, instances);
-    }
-
-    protected NakedObjectContext getContext() {
-        return context;
     }
 
     protected NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) {
@@ -186,11 +180,6 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         }
     }
 
-    public long serialNumber(String name) {
-        LOG.debug("serialNumber " + name);
-        return connection.serialNumber(session, name);
-    }
-
     /**
      * .NET property
      * 
@@ -220,10 +209,6 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
 
     public void setConnection(ClientDistribution connection) {
         this.connection = connection;
-    }
-
-    public void setContext(NakedObjectContext context) {
-        this.context = context;
     }
 
     public void setLoadedObjects(LoadedObjects loadedObjects) {

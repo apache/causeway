@@ -1,9 +1,11 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.utility.UnexpectedCallException;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
@@ -33,8 +35,9 @@ public class EmptyField extends AbstractView {
         public View createView(Content content, ViewAxis axis) {
             EmptyField emptyField = new EmptyField(content, this, axis);
             NakedObjectSpecification contentType = content.getSpecification();
-            if(contentType.isLookup()) {
-//            if (((ObjectContent) content).getObject() instanceof Lookup) {
+            if (contentType.isLookup()) {
+                //            if (((ObjectContent) content).getObject() instanceof Lookup)
+                // {
                 return new ObjectBorder(new LookupBorder(emptyField));
             } else {
                 return new ObjectBorder(emptyField);
@@ -122,14 +125,14 @@ public class EmptyField extends AbstractView {
 
         int xi = getPadding().getLeft() + HPADDING;
         int yi = iconCentre - (iconHeight / 2);
-        
+
         Image icon = ImageFactory.getInstance().createIcon("emptyField", iconHeight, null);
-        if(icon == null) {
+        if (icon == null) {
             canvas.drawSolidOval(xi, yi, iconWidth, iconHeight, color);
         } else {
             canvas.drawIcon(icon, xi, yi, iconWidth, iconHeight);
         }
-        
+
         canvas.drawText(name(), xt, yt, color, style);
 
         if (AbstractView.DEBUG) {
@@ -186,6 +189,11 @@ public class EmptyField extends AbstractView {
     }
 
     private void setField(NakedObject parent, NakedObject object) {
+        // TODO deal with the dropping of a NakedClass
+        if (object instanceof NakedClass) {
+            throw new UnexpectedCallException("Not ready for NakedClasses");
+        }
+
         if (canDrop(object).isAllowed()) {
             ((ObjectContent) getContent()).setObject(object);
 

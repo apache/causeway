@@ -2,12 +2,12 @@ package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.viewer.skylark.Skylark;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.basic.InternalListDecorator;
 import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
-import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 public class InternalListSpecification extends AbstractCompositeViewSpecification implements SubviewSpec {
 
@@ -17,7 +17,7 @@ public class InternalListSpecification extends AbstractCompositeViewSpecificatio
 		
 	// TODO the rest of this is the same as ListSpecificatio
 	public View createSubview(Content content, ViewAxis axis) {
-		ViewSpecification specification = ViewFactory.getViewFactory().getIconizedSubViewSpecification((ObjectContent) content);
+		ViewSpecification specification = Skylark.getViewFactory().getIconizedSubViewSpecification((ObjectContent) content);
 		return specification.createView(content, axis);
 	}
 

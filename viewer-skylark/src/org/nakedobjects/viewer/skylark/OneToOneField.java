@@ -147,16 +147,7 @@ public class OneToOneField extends ObjectContent implements FieldContent {
     }
 
     public void setObject(NakedObject object) {
-        NakedObject associatedObject;
-        if (object.getObject() instanceof NakedClass) {
-            associatedObject = ((NakedClass) object.getObject()).newInstance();
-        } else {
-            associatedObject = object;
-        }
-
-        //       getViewManager().getUndoStack().add(new AssociateCommand(target,
-        // associatedObject, field));
-        getParent().setAssociation(getOneToOneAssociation(), associatedObject);
+        getParent().setAssociation(getOneToOneAssociation(), object);
     }
 
     public String title() {

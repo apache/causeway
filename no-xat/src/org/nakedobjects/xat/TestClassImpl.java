@@ -1,16 +1,17 @@
 package org.nakedobjects.xat;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectStore;
-import org.nakedobjects.object.NotPersistableException;
 import org.nakedobjects.object.TypedNakedCollection;
+import org.nakedobjects.object.persistence.NakedObjectManager;
+import org.nakedobjects.object.persistence.NakedObjectStore;
+import org.nakedobjects.object.persistence.NotPersistableException;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.security.Session;
@@ -34,9 +35,8 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
      * though more than one match might occur.
      */
     public TestObject findInstance(String title) {
-        NakedObjectContext context = NakedObjectContext.getDefaultContext();
         NakedObjectSpecification type = ((NakedClass) getForNaked().getObject()).forObjectType();
-        TypedNakedCollection instances = context.getObjectManager().findInstances(type, title, true);
+        TypedNakedCollection instances = NakedObjects.getObjectManager().findInstances(type, title, true);
         if (instances.size() == 0) {
             throw new IllegalActionError("No instance found with title " + title);
         } else {
@@ -60,8 +60,7 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
      * Get the instances of this class.
      */
     public TestCollection instances() {
-        NakedObjectContext context = NakedObjectContext.getDefaultContext();
-        NakedCollection instances = context.getObjectManager().allInstances(((NakedClass) getForNaked()).forObjectType(), false);
+        NakedCollection instances = NakedObjects.getObjectManager().allInstances(((NakedClass) getForNaked()).forObjectType(), false);
         if (instances.size() == 0) {
             throw new IllegalActionError("Find must find at least one object");
         } else {
@@ -81,16 +80,14 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
     private NakedObject newInstance(NakedClass cls) {
         NakedObject object;
 
-        NakedObjectContext context = NakedObjectContext.getDefaultContext();
+        NakedObjectManager objectManager = NakedObjects.getObjectManager();
         try {
-            object = context.getObjectManager().createTransientInstance(cls.forObjectType());
-            object.setContext(context);
-            object.getContext().makePersistent(object);
+            object = objectManager.createTransientInstance(cls.forObjectType());
+            objectManager.makePersistent(object);
             object.created();
-            //object.getContext().getObjectManager().objectChanged(object);
-            object.getContext().getObjectManager().saveChanges();
+            objectManager.saveChanges();
         } catch (NotPersistableException e) {
-            NakedError error = context.getObjectManager().generatorError(
+            NakedError error = objectManager.generatorError(
                     "Failed to create instance of " + cls.forObjectType().getFullName(), e);
             object = PojoAdapter.createNOAdapter(error);
 

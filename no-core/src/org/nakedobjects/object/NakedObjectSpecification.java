@@ -83,9 +83,6 @@ public interface NakedObjectSpecification {
 
     boolean isParsable();
 
-    /** @deprecated */
-    boolean isPartOf();
-
     /**
      * Determines if objects of this specification can be persisted or not.  If they can be persisted NakedObject.isPersistent() will indicated 
      * whether the object is persistent or not.  If they cannot be persisted then NakedObject.isPersistent() should be ignored.

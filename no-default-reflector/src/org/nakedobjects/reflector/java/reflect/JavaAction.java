@@ -4,17 +4,16 @@ import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.ObjectNotFoundException;
-import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.TransactionException;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.ActionParameterSet;
+import org.nakedobjects.object.reflect.ActionPeer;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.ReflectriveActionException;
 import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.reflector.java.control.SimpleActionAbout;
@@ -38,88 +37,40 @@ public class JavaAction extends JavaMember implements ActionPeer {
         paramCount = action.getParameterTypes().length;
     }
 
-    public Naked execute(NakedObject inObject, Naked[] parameters) {
+    public Naked execute(MemberIdentifier identifier, NakedObject inObject, Naked[] parameters) throws ReflectriveActionException {
         if (parameters.length != paramCount) {
             LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);
         }
-        NakedObjectManager objectManager = inObject.getContext().getObjectManager();
 
         try {
-            LOG.debug("Action: invoke " + inObject + "." + getName());
-            objectManager.startTransaction();
-
-            /*
-             * TODO the object that we are invoking this method on, and the
-             * parameters, need to be part of the transaction, and not the same
-             * objects that other clients are using.
-             */
-            Object result;
-            if(inObject.getOid() == null || !requiresTransaction()) {
-                // non-persistent
-	            Object[] executionParameters = new Object[parameters.length];
-	            for (int i = 0; i < parameters.length; i++) {
-	                executionParameters[i] = parameters[i] == null ? null : parameters[i].getObject();
-                }
-
-                result = actionMethod.invoke(inObject.getObject(), executionParameters);
-            } else {
-                // persistent
-	            NakedObject transactionObject = objectManager.getObject(inObject.getOid(), inObject.getSpecification());
-	            
-	            Object[] transactionParameters = new Object[parameters.length];
-	            for (int i = 0; i < parameters.length; i++) {
-	                Naked parameter = (Naked) parameters[i];
-	                Oid parameterOid = parameter == null ? null : parameter.getOid();
-	                parameter = parameterOid == null ? parameter : objectManager.getObject(parameterOid, parameter.getSpecification());
-	                transactionParameters[i] = parameter == null ? null : parameter.getObject();
-                }
-	            
-	            result = actionMethod.invoke(transactionObject.getObject(), transactionParameters);
+            Object[] executionParameters = new Object[parameters.length];
+            for (int i = 0; i < parameters.length; i++) {
+                executionParameters[i] = parameters[i] == null ? null : parameters[i].getObject();
             }
-            
+            Object result = actionMethod.invoke(inObject.getObject(), executionParameters);
             LOG.debug(" action result " + result);
-
-            objectManager.endTransaction();
-//            if (result != null && result instanceof NakedObject) { return (NakedObject) result; }
-            if (result != null) { return PojoAdapter.createAdapter(result); }
+            if (result != null) { 
+                return PojoAdapter.createAdapter(result);
+            }
 
         } catch (InvocationTargetException e) {
             e.fillInStackTrace();
-            
             if(e.getTargetException() instanceof TransactionException) {
-        	    LOG.info("TransactionException thrown while executing " + actionMethod + " " + e.getTargetException().getMessage());
-	            objectManager.abortTransaction();
+        	    throw new ReflectriveActionException("TransactionException thrown while executing " + actionMethod + " " + e.getTargetException().getMessage(), e.getTargetException());
         	} else {
 	            invocationException("Exception executing " + actionMethod, e);
         	}
         	
-            
         } catch (IllegalAccessException e) {
-            LOG.error("Illegal access of " + actionMethod, e);
-            objectManager.abortTransaction();
-        } catch (ObjectNotFoundException e) {
-            LOG.error("Non-existing target or parameter used in " + actionMethod, e);
-            objectManager.abortTransaction();
+            throw new ReflectriveActionException("Illegal access of " + actionMethod, e);
         }
 
         return null;
     }
 
-    public boolean requiresTransaction() {
-        return true ; // testing
-        
-     /*   Class[] exceptions = actionMethod.getExceptionTypes();
-        for (int i = 0; i < exceptions.length; i++) {
-            if(exceptions[i] == TransactionException.class) {
-                return true;
-            }
-        }
-        return false;
-     */
-        
-    }
 
-    public Hint getHint(Session session, NakedObject object, Naked[] parameters) {
+
+    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
         if (parameters.length != paramCount) {
             LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);
         }
@@ -137,13 +88,8 @@ public class JavaAction extends JavaMember implements ActionPeer {
             } else {
                 Object[] longParams = new Object[parameters.length + 1];
                 longParams[0] = about;
-              //  System.arraycopy(parameters, 0, longParams, 1, parameters.length);
                 for (int i = 1; i < longParams.length; i++) {
-                 //   if(parameters[i - 1] instanceof Naked) {
-                  //      longParams[i] = parameters[i - 1];
-                 //   } else {
                         longParams[i] = parameters[i - 1] == null ? null : parameters[i - 1].getObject();
-                  //  }
                 }
                 aboutMethod.invoke(object.getObject(), longParams);
             }
@@ -189,9 +135,9 @@ public class JavaAction extends JavaMember implements ActionPeer {
         return hasReturn ? nakedClass(returnType) : null;
     }
     
-    public ActionParameterSet getParameters(Session session, NakedObject object, NakedObjectSpecification[] parameterTypes) {
+    public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, NakedObjectSpecification[] parameterTypes) {
         Naked[] parameters = new Naked[parameterTypes.length];
-        Hint hint= getHint(session, object, parameters);
+        Hint hint= getHint(identifier, session, object, parameters);
         if(hint instanceof SimpleActionAbout) {
             SimpleActionAbout about = (SimpleActionAbout) hint;
             return new ActionParameterSet(about.getDefaultParameterValues(), about.getParameterLabels());

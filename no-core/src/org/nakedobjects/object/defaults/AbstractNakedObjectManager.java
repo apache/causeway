@@ -4,16 +4,15 @@ import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ObjectFactory;
-import org.nakedobjects.object.ObjectNotFoundException;
-import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.TypedNakedCollection;
-import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
+import org.nakedobjects.object.persistence.NakedObjectManager;
+import org.nakedobjects.object.persistence.ObjectNotFoundException;
+import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.persistence.UnsupportedFindException;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.utility.DebugInfo;
 
@@ -153,8 +152,6 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
     public NakedError generatorError(String message, Exception e) {
         return new Error(message, e);
     }
-
-    protected abstract NakedObjectContext getContext();
 
     public String getDebugData() {
         StringBuffer data = new StringBuffer();

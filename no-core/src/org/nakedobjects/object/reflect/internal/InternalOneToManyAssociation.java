@@ -3,7 +3,6 @@ package org.nakedobjects.object.reflect.internal;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
@@ -32,10 +31,6 @@ public class InternalOneToManyAssociation extends InternalField implements OneTo
 
     public void addAssociation(NakedObject inObject, NakedObject associate) {
         LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
-
-        NakedObjectManager objectManager = inObject.getContext().getObjectManager();
-        objectManager.startTransaction();
-
         try {
             addMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
         } catch (IllegalArgumentException e) {
@@ -48,9 +43,6 @@ public class InternalOneToManyAssociation extends InternalField implements OneTo
             LOG.error("Illegal access of " + addMethod, ignore);
             throw new RuntimeException(ignore.getMessage());
         }
-
-        objectManager.endTransaction();
-
     }
     
     public void initAssociation(NakedObject inObject, NakedObject associate) {

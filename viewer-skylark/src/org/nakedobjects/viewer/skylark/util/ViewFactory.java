@@ -5,7 +5,6 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.Skylark;
 import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
@@ -27,10 +26,6 @@ public class ViewFactory implements DebugInfo {
     public static final int INTERNAL = 2;
     private static final Logger LOG = Logger.getLogger(ViewFactory.class);
     public static final int WINDOW = 1;
-
-    public static ViewFactory getViewFactory() {
-        return Skylark.getInstance().getViewFactory();
-    }
 
     private ViewSpecification emptyFieldSpecification;
     private final Vector rootViews = new Vector();

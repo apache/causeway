@@ -126,14 +126,14 @@ public class ClassIcon extends ObjectView {
             if (click.isCtrl()) {
                 NakedCollection instances = getNakedClass().allInstances();
                 object = instances;
-//                view = ViewFactory.getViewFactory().createOpenRootView(instances);
+//                view = Skylark.getViewFactory().createOpenRootView(instances);
                 
             } else {
                 if (getNakedClass() instanceof NakedClass) {
 
                     FastFinder finder = getNakedClass().explorationActionFind();
                     object = PojoAdapter.createAdapter(finder);
-                    //view = ViewFactory.getViewFactory().createOpenRootView(PojoAdapter.createAdapter(finder));
+                    //view = Skylark.getViewFactory().createOpenRootView(PojoAdapter.createAdapter(finder));
                 }
             }
             if(object != null) {

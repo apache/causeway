@@ -4,12 +4,12 @@ import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
-import org.nakedobjects.object.defaults.SerialOid;
+import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.defaults.SerialOid;
 import org.nakedobjects.reflector.java.reflect.JavaReflectorFactory;
 
 import junit.framework.TestCase;

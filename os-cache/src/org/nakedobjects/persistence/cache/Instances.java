@@ -5,8 +5,8 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.io.Memento;
+import org.nakedobjects.object.persistence.Oid;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

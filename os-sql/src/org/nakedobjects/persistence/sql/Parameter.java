@@ -1,6 +1,6 @@
 package org.nakedobjects.persistence.sql;
 
-import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectStoreException;
 
 public interface Parameter {
 	void setupParameter(int parameter, StoredProcedure procedure) throws ObjectStoreException;

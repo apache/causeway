@@ -55,6 +55,7 @@ public class Telephone {
     
     public void setRingCount(IntegerNumber ringCount) {
         this.ringCount = ringCount;
+        
     }
 }
 

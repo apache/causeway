@@ -59,6 +59,10 @@ public class Customer {
 
     }
 
+    
+    public Vector actionLocations() {
+        return locations;
+    }
 
     public Booking actionUsePaymentMethod(PaymentMethod method) {
         Booking booking = (Booking) container.createInstance(Booking.class);
@@ -173,6 +177,7 @@ public class Customer {
 
     public void setHome(Location home) {
         this.home = home;
+        markDirty();
     }
 
     public void setPreferredPaymentMethod(PaymentMethod method) {

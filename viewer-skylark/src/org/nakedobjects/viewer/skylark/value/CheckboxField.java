@@ -18,7 +18,7 @@ public class CheckboxField extends AbstractField {
 
     public static class Specification extends AbstractFieldSpecification {
         public boolean canDisplay(Content content) {
-            return content.isValue() && content instanceof BooleanValue;
+            return content.isValue() && content.getNaked() instanceof BooleanValue;
         }
 
         public View createView(Content content, ViewAxis axis) {
@@ -70,16 +70,7 @@ public class CheckboxField extends AbstractField {
         BooleanValue value = (BooleanValue) getContent().getNaked();
         return value.isSet();
     }
-/*
-    public void refresh() {
-        ValueField content = ((ValueField) getContent());
-        Value field = content.getValueField();
 
-        if (field.isDerived()) {
-            content.getValue().copyObject(field.get(((ObjectContent) getParent().getContent()).getObject()));
-        }
-    }
-*/
     protected void save() {
         if (canChangeValue()) {
             BooleanValue value = (BooleanValue) getContent().getNaked();

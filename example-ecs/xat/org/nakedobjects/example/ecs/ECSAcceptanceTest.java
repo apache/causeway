@@ -425,15 +425,6 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
         creditCard.assertFieldEntryCantParse("Color", "RED");
     }
     
-
-    public void testDestroyObject() {
-        TestObject creditCard = getTestClass(CreditCard.class.getName()).newInstance();
-        creditCard.fieldEntry("Number", "12345678901234567");
-        
-        ((NakedObject) creditCard.getForNaked()).getContext().getObjectManager().destroyObject((NakedObject) creditCard.getForNaked());
-    }
-    
-    
     public void testClassMethod() {
         TestClass bookingClass = getTestClass(Booking.class.getName());
         TestObject customer = getTestClass(Customer.class.getName()).newInstance();

@@ -4,8 +4,8 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
@@ -70,7 +70,7 @@ public abstract class AbstractNakedValue {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

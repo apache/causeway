@@ -30,7 +30,7 @@ public class ColorField extends AbstractField {
 	    }
 	    
 	    public boolean canDisplay(Content content) {
-	    	return content.isValue() && content instanceof ColorValue;
+	    	return content.isValue() && content.getNaked() instanceof ColorValue;
 		}
 	}
 	

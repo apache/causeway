@@ -25,6 +25,7 @@ public class JavaReflectorFactory extends ReflectorFactory {
     }
     
     public Naked createAdapter(Object object) {
+        //    TODO this code is duplicated in JavaReflector
         if (object instanceof TextString ){
             return new TextStringAdapter((TextString) object);
         } else if (object instanceof Logical ){

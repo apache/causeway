@@ -118,7 +118,7 @@ public class ValueField extends ValueContent implements FieldContent {
     }
 
     public String toString() {
-        return object.titleString() + "/" + getField();
+        return (object == null ? "null" : object.titleString()) + "/" + getField();
     }
     
     public String windowTitle() {

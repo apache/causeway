@@ -8,11 +8,11 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ObjectFactory;
-import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.defaults.LocalObjectManager;
+import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
@@ -129,9 +129,6 @@ public class ServerDistribution implements ClientDistribution {
         return objectManager.numberOfInstances(getSpecification(fullName));
     }
 
-    public long serialNumber(Session sessionId, String name) {
-        return objectManager.serialNumber(name);
-    }
 
     /**
      * .NET property

@@ -3,13 +3,10 @@ package org.nakedobjects.reflector.java.reflect;
 import org.nakedobjects.application.control.ActionAbout;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
-import org.nakedobjects.object.MockNakedObjectContext;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
-import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
@@ -54,21 +51,16 @@ public class JavaActionTest extends TestCase {
     }
 
     public void testAbout() {
-        Hint about = javaAction.getHint(null, nakedObject, new Naked[0]);
+        Hint about = javaAction.getHint(null, null, nakedObject, new Naked[0]);
         assertNotNull(about);
         assertEquals("about for test", about.getName());
     }
 
-    public void testAction() {
+    public void testAction() throws Exception {
         DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
         loader.addSpec(spec);
         
-        NakedObjectContext context = new MockNakedObjectContext(MockObjectManager.setup());
-        nakedObject.setContext(context);
-
-        
-   //     object.setContext(new NakedObjectContext(manager));
-        javaAction.execute(nakedObject, new Naked[0]);
+        javaAction.execute(null, nakedObject, new Naked[0]);
 
   //      manager.assertAction(0, "start transaction");
    //     manager.assertAction(1, "end transaction");

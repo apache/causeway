@@ -11,7 +11,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.persistence.sql.auto.AutoMapper;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.NotImplementedException;

@@ -2,8 +2,8 @@ package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.AbstractOneToOnePeer;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Session;
@@ -11,14 +11,13 @@ import org.nakedobjects.object.security.Session;
 import org.apache.log4j.Logger;
 
 
-public final class ProxyOneToOneAssociation implements OneToOnePeer {
+public final class ProxyOneToOneAssociation extends AbstractOneToOnePeer {
     private final static Logger LOG = Logger.getLogger(ProxyOneToOneAssociation.class);
     private final ClientDistribution connection;
     private final boolean fullProxy = false;
-    private OneToOnePeer local;
 
     public ProxyOneToOneAssociation(OneToOnePeer local, final ClientDistribution connection) {
-        this.local = local;
+        super(local);
         this.connection = connection;
     }
 
@@ -27,7 +26,7 @@ public final class ProxyOneToOneAssociation implements OneToOnePeer {
         if (isPersistent(inObject)) {
             connection.clearAssociation(ClientSession.getSession(), getName(), inObject.getOid(), inObject.getSpecification().getFullName(), associate.getOid(), associate.getSpecification().getFullName());
         } else {
-            local.clearAssociation(inObject, associate);
+            super.clearAssociation(inObject, associate);
         }
     }
 
@@ -35,7 +34,7 @@ public final class ProxyOneToOneAssociation implements OneToOnePeer {
         if (isPersistent(inObject) && fullProxy) {
             throw new NotExpectedException();
         } else {
-            return local.getHint(session, inObject, associate);
+            return super.getHint(session, inObject, associate);
         }
     }
 
@@ -44,40 +43,16 @@ public final class ProxyOneToOneAssociation implements OneToOnePeer {
           //  return connection.getOneToOneAssociation(ClientSession.getSession(), inObject);
             throw new NotExpectedException();
        } else {
-            return local.getAssociation(inObject);
+            return super.getAssociation(inObject);
         }
-    }
-
-    public String getName() {
-        return local.getName();
-    }
-
-    public NakedObjectSpecification getType() {
-        return local.getType();
-    }
-
-    public boolean hasHint() {
-        return local.hasHint();
     }
 
     public void setValue(NakedObject inObject, Object associate) {
         if (isPersistent(inObject)) {
             connection.setValue(ClientSession.getSession(), getName(), inObject.getOid(), inObject.getSpecification().getFullName(),  associate);
         } else {
-	        local.setValue(inObject, associate);
+	        super.setValue(inObject, associate);
         }
-    }
-
-    public void initValue(NakedObject inObject, Object associate) {
-        local.initValue(inObject, associate);
-    }
-
-    public boolean isDerived() {
-        return local.isDerived();
-    }
-
-    public boolean isEmpty(NakedObject inObject) {
-        return local.isEmpty(inObject);
     }
 
     private boolean isPersistent(NakedObject inObject) {
@@ -89,12 +64,8 @@ public final class ProxyOneToOneAssociation implements OneToOnePeer {
         if (isPersistent(inObject)) {
             connection.setAssociation(ClientSession.getSession(), getName(), inObject.getOid(), inObject.getSpecification().getFullName(), associate.getOid(), associate.getSpecification().getFullName());
         } else {
-            local.setAssociation(inObject, associate);
+            super.setAssociation(inObject, associate);
         }
-    }
-    
-    public void initAssociation(NakedObject inObject, NakedObject associate) {
-        local.initAssociation(inObject, associate);
     }
 }
 

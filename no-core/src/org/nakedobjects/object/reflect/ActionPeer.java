@@ -12,9 +12,9 @@ public interface ActionPeer {
 
 	String getName();
 
-    Naked execute(NakedObject object, Naked[] parameters);
+    Naked execute(MemberIdentifier identifier, NakedObject object, Naked[] parameters) throws ReflectriveActionException;
 
-    Hint getHint(Session session, NakedObject object, Naked[] parameters);
+    Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters);
 
     int getParameterCount();
 
@@ -24,7 +24,7 @@ public interface ActionPeer {
 
     NakedObjectSpecification returnType();
 
-    ActionParameterSet getParameters(Session session, NakedObject object, NakedObjectSpecification[] parameterTypes);
+    ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, NakedObjectSpecification[] parameterTypes);
 }
 
 /*

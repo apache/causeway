@@ -3,8 +3,8 @@ package org.nakedobjects.object.defaults;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.reflect.internal.InternalAbout;
 
 

@@ -310,7 +310,7 @@ public class Viewer {
     }
 
     private void setupViewFactory() throws ConfigurationException, ComponentException {
-        ViewFactory viewFactory = ViewFactory.getViewFactory();
+        ViewFactory viewFactory = Skylark.getViewFactory();
 
         LOG.debug("Setting up default views (provided by the framework)");
 

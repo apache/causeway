@@ -1,9 +1,9 @@
 package org.nakedobjects.container.exploration;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.exploration.ExplorationFixture;
 import org.nakedobjects.object.exploration.ExplorationSetUp;
@@ -25,7 +25,6 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
     private static final String DEFAULT_CONFIG = "nakedobjects.properties";
     private static final Logger LOG = Logger.getLogger(Exploration.class);
     private static final String SHOW_EXPLORATION_OPTIONS = "viewer.lightweight.show-exploration";
-    private NakedObjectContext context;
     protected ExplorationSetUp explorationSetUp;
   
     protected Exploration() {
@@ -130,7 +129,7 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
     }
 
     public void viewerClosing() {
-        context.getObjectManager().shutdown();
+        NakedObjects.getObjectManager().shutdown();
     }
 }
 

@@ -15,16 +15,16 @@ public class MockReflectionFactory implements ReflectionFactory {
         super();
     }
 
-    public Action createAction(ActionPeer action) {
+    public Action createAction(String className, ActionPeer action) {
         return null;
     }
 
-    public NakedObjectField createField(OneToManyPeer local) {
+    public NakedObjectField createField(String className, OneToManyPeer local) {
         return null;
     }
 
-    public NakedObjectField createField(OneToOnePeer local) {
-        return new OneToOneAssociation("field one", new DummyNakedObjectSpecification(), local);
+    public NakedObjectField createField(String className, OneToOnePeer local) {
+        return new OneToOneAssociation(className, "field one", new DummyNakedObjectSpecification(), local);
     }
 
 }

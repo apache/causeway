@@ -1,14 +1,17 @@
 package org.nakedobjects.object.reflect;
 
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectTestCase;
-import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.defaults.MockObjectFactory;
+import org.nakedobjects.object.defaults.MockObjectManager;
+import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.object.security.Session;
 
 import junit.framework.TestSuite;
@@ -38,13 +41,15 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     public void setUp()  throws ObjectStoreException {
     	LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
+    	NakedObjects.setObjectManager(new MockObjectManager(new MockObjectFactory()));
+    	
        	session = new Session();
        	nakedObject = new DummyNakedObject();
         associate = new DummyNakedObject();
         
         type = new DummyNakedObjectSpecification();
         associationDelegate = new MockOneToManyAssociation();
-        association = new OneToManyAssociation(FIELD_NAME, type, associationDelegate);
+        association = new OneToManyAssociation("", FIELD_NAME, type, associationDelegate);
     }
     
     public void testType() {

@@ -22,20 +22,44 @@
     Road, Woking GU21 1NR, UK).
 */
 
-package org.nakedobjects.object;
+package org.nakedobjects.object.persistence;
+
+import org.nakedobjects.object.NakedObjectException;
 
 
-public class ObjectNotFoundException extends ObjectStoreException {
+public class ObjectStoreException extends NakedObjectException {
+    private final Throwable cause;
 
-    public ObjectNotFoundException() {
+    public ObjectStoreException() {
         super();
+        cause = null;
     }
 
-    public ObjectNotFoundException(Object oid) {
-        super("Object not found in store with oid " + oid);
-    }
-
-    public ObjectNotFoundException(String s) {
+    public ObjectStoreException(String s) {
         super(s);
+        cause = null;
     }
+
+    public ObjectStoreException(String s, Throwable cause) {
+        super(s);
+        this.cause = cause;
+    }
+
+    public ObjectStoreException(Throwable cause) {
+        super(cause.getMessage());
+        this.cause = cause;
+    }
+
+    public final Throwable getCause() {
+        return cause;
+    }
+    
+	public String toString() {
+		if(cause == null) {
+			return super.toString();
+		} else {
+			return super.toString() + ": " + cause.getMessage();
+		}
+	}
+
 }

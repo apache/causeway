@@ -34,8 +34,8 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
 
         if (object != null && view.getSubviews().length == 0) {
             NakedObjectField[] flds = object.getSpecification().getVisibleFields(object, ClientSession.getSession());
-            ViewFactory viewFactory = Skylark.getInstance().getViewFactory();
-            ContentFactory contentFactory = Skylark.getInstance().getContentFactory();
+            ViewFactory viewFactory = Skylark.getViewFactory();
+            ContentFactory contentFactory = Skylark.getContentFactory();
             
             for (int f = 0; f < flds.length; f++) {
                 NakedObjectField field = flds[f];

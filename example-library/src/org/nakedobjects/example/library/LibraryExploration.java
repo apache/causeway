@@ -10,6 +10,7 @@ public class LibraryExploration extends DefaultExploration {
     protected void setUpFixtures() {
         addFixture(new AbstractExplorationFixture() {
             public void install() {
+                
                 registerClass(Member.class);
                 registerClass(Book.class);
                 registerClass(Loan.class);

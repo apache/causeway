@@ -133,7 +133,7 @@ public abstract class ObjectView extends AbstractView {
         } else {
             Location location = getAbsoluteLocation();
             location.translate(click.getLocation());
-            View openWindow = Skylark.getInstance().getViewFactory().createWindow(getContent());
+            View openWindow = Skylark.getViewFactory().createWindow(getContent());
             openWindow.setLocation(location);
             getWorkspace().addView(openWindow);
         }

@@ -123,7 +123,6 @@ public class PojoAdapter extends AbstractNakedObject {
 
     public Naked execute(Action action, Naked[] parameters) {
         Naked result = action.execute(this, parameters);
-        getObjectManager().saveChanges();
         return result;
     }
     
@@ -192,10 +191,10 @@ public class PojoAdapter extends AbstractNakedObject {
     
     public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
         field.setAssociation(this, associatedObject);
-        getObjectManager().saveChanges();
     }
 
     public void setValue(OneToOneAssociation field, Object object) {
+ //       markDirty();
         field.setValue(this, object);
     }
 

@@ -1,8 +1,8 @@
 package org.nakedobjects.persistence.cache;
 
-import org.nakedobjects.object.NakedObjectStore;
-import org.nakedobjects.object.NakedObjectStoreInstancesTestCase;
-import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.persistence.NakedObjectStore;
+import org.nakedobjects.object.persistence.NakedObjectStoreInstancesTestCase;
+import org.nakedobjects.object.persistence.ObjectStoreException;
 
 import java.io.File;
 

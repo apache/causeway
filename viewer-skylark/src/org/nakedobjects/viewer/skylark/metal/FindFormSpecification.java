@@ -11,6 +11,7 @@ import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.OneToManyField;
+import org.nakedobjects.viewer.skylark.Skylark;
 import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.View;
@@ -30,7 +31,7 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
 
     private static class DataFormSubviews implements SubviewSpec {
 		public View createSubview(Content content, ViewAxis axis) {
-			ViewFactory factory = ViewFactory.getViewFactory();
+			ViewFactory factory = Skylark.getViewFactory();
 			
 			if(content instanceof OneToManyField) {
 				return null;

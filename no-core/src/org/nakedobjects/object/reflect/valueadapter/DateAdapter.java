@@ -1,8 +1,8 @@
 package org.nakedobjects.object.reflect.valueadapter;
 
 import org.nakedobjects.object.InvalidEntryException;
-import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.TextEntryParseException;
+import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.value.DateValue;
 
 import java.text.DateFormat;
@@ -138,7 +138,7 @@ public class DateAdapter extends AbstractNakedValue implements DateValue {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,13 +1,11 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.UserContext;
-import org.nakedobjects.object.reflect.PojoAdapter;
 
 import java.util.Vector;
 
@@ -26,34 +24,15 @@ public abstract class AbstractUserContext implements UserContext {
 	private final Vector classes = new Vector();
     private final Vector objects = new Vector();
 //	private User user;
-    
-    /*
-    public void aboutClasses(FieldAbout about, NakedObject element, boolean add) {
-    	about.modifiableOnlyByRole(Role.SYSADMIN);
-    }
-    
-    public void aboutObjects(FieldAbout about, NakedObject element, boolean add) {
-    	about.modifiableOnlyByUser(user);
-    }
-    
-    public void aboutUser(FieldAbout about, User user) {
-    	about.modifiableOnlyByRole(Role.SYSADMIN);
-    }
-    */
-    
-    protected NakedClass addClass(Class class1) {
-        LOG.info("Added class " + class1 + " to " + this);
-		NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(class1.getName());
-		NakedClass nakedClass = getObjectManager().getNakedClass(nc);
-        classes.addElement(nakedClass);
-        return nakedClass;
+
+    protected NakedClass addClass(Class cls) {
+        return addClass(cls.getName());
 	}
 	
 	protected NakedClass addClass(String className) {
 	     LOG.info("Added class " + className + " to " + this);
 	    NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
-	    NakedClass nakedClass = getObjectManager().getNakedClass(nc);
-	    getObjectManager().makePersistent(PojoAdapter.createNOAdapter(nakedClass));
+	    NakedClass nakedClass = NakedObjects.getObjectManager().getNakedClass(nc);
         classes.addElement(nakedClass);
         return nakedClass;
 	}
@@ -97,24 +76,4 @@ public abstract class AbstractUserContext implements UserContext {
         objects.addElement(cls);
         objectChanged();
     }
-    
-
-    
-    
-    private NakedObjectContext context;
-    
-    private NakedObjectContext getContext() {
-        // TODO context needs to assigned to the object properly
-//       Assert.assertTrue("must have a context: " + this, context != null);
-		 if(context == null) context = NakedObjectContext.getDefaultContext();
-       return context;
-   }
-
-    private NakedObjectManager getObjectManager() {
-        return getContext().getObjectManager();
-    }
-    
-
-    
-    
 }

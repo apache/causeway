@@ -2,14 +2,13 @@ import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.object.OidGenerator;
 import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
-import org.nakedobjects.object.defaults.LocalObjectManager;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
-import org.nakedobjects.object.defaults.TimeBasedOidGenerator;
+import org.nakedobjects.object.persistence.OidGenerator;
+import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
+import org.nakedobjects.object.persistence.defaults.TimeBasedOidGenerator;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.persistence.file.XmlObjectStore;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
@@ -98,10 +97,7 @@ public class ExamplePersistent {
 
             reflectorFactory.setObjectFactory(objectFactory);
 
-            NakedObjectContext context = new NakedObjectContext(objectManager);
-
             SimpleExplorationSetup explorationSetup = new SimpleExplorationSetup();
-            explorationSetup.setContext(context);
             
      //       explorationSetup.addFixture(new EcsFixture());
  

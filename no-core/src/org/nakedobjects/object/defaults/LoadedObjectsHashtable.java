@@ -2,8 +2,8 @@ package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.ResolveException;
+import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.utility.Assert;
 
 import java.util.Enumeration;

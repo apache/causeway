@@ -3,11 +3,10 @@ package org.nakedobjects.object.reflect;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.security.Session;
 
 public class DummyNakedObject implements NakedObject {
@@ -45,12 +44,6 @@ public class DummyNakedObject implements NakedObject {
     public void setOid(Oid oid) {}
 
     public void setResolved() {}
-
-    public NakedObjectContext getContext() {
-        return null;
-    }
-
-    public void setContext(NakedObjectContext context) {}
 
     public boolean isEmpty(NakedObjectField field) {
         return false;

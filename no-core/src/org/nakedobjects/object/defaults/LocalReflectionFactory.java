@@ -11,16 +11,16 @@ import org.nakedobjects.object.reflect.OneToOneAssociation;
 
 
 public class LocalReflectionFactory implements ReflectionFactory {
-    public Action createAction(ActionPeer action) {
-        return new Action(action.getName(), action);
+    public Action createAction(String className, ActionPeer peer) {
+        return new Action(className, peer.getName(), peer);
     }
 
-    public NakedObjectField createField(OneToManyPeer local) {
-        return new OneToManyAssociation(local.getName(), local.getType(), local);
+    public NakedObjectField createField(String className, OneToManyPeer peer) {
+        return new OneToManyAssociation(className, peer.getName(), peer.getType(), peer);
     }
 
-    public NakedObjectField createField(OneToOnePeer local) {
-        return new OneToOneAssociation(local.getName(), local.getType(), local);
+    public NakedObjectField createField(String className, OneToOnePeer peer) {
+        return new OneToOneAssociation(className, peer.getName(), peer.getType(), peer);
 
     }
 }

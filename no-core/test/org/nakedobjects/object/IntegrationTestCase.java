@@ -13,7 +13,6 @@ import org.apache.log4j.LogManager;
 
 public class IntegrationTestCase extends TestCase {
     protected MockObjectManager manager;
-    protected NakedObjectContext context;
 
     protected void setUp() throws Exception {
         super.setUp();
@@ -22,8 +21,6 @@ public class IntegrationTestCase extends TestCase {
         manager = MockObjectManager.setup();
         new NakedObjectSpecificationLoaderImpl();
         NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
-//        NakedObjectSpecificationImpl.setReflectorFactory(new InternalReflectorFactory());
-        context = new NakedObjectContext(manager);
     }
     
     protected void tearDown() throws Exception {

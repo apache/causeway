@@ -1,4 +1,6 @@
-package org.nakedobjects.object;
+package org.nakedobjects.object.persistence;
+
+import org.nakedobjects.object.NakedObjectRuntimeException;
 
 public class UnsupportedFindException extends NakedObjectRuntimeException {
     public UnsupportedFindException() {

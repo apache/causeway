@@ -1,6 +1,7 @@
 package org.nakedobjects.object;
 
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
@@ -17,8 +18,6 @@ public class MockNakedObject implements NakedObject {
         return this;
     }
     
-    private NakedObjectContext context;
-
     public void created() {}
 
     public void deleted() {}
@@ -28,7 +27,7 @@ public class MockNakedObject implements NakedObject {
         return null;
     }
 
-    public org.nakedobjects.object.Oid getOid() {
+    public org.nakedobjects.object.persistence.Oid getOid() {
         return null;
     }
 
@@ -43,14 +42,6 @@ public class MockNakedObject implements NakedObject {
     public void setOid(Oid oid) {}
 
     public void setResolved() {}
-
-    public NakedObjectContext getContext() {
-        return context;
-    }
-
-    public void setContext(NakedObjectContext context) {
-        this.context = context;
-    }
 
     public void copyObject(Naked object) {}
 

@@ -3,8 +3,8 @@ package org.nakedobjects.distribution;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.AbstractOneToManyPeer;
 import org.nakedobjects.object.reflect.OneToManyPeer;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Session;
@@ -13,14 +13,13 @@ import org.nakedobjects.utility.NotImplementedException;
 import org.apache.log4j.Category;
 
 
-public final class ProxyOneToManyAssociation implements OneToManyPeer {
+public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
     private final static Category LOG = Category.getInstance(ProxyOneToManyAssociation.class);
     private ClientDistribution connection;
     private boolean fullProxy = false;
-    private OneToManyPeer local;
 
     public ProxyOneToManyAssociation(OneToManyPeer local, final ClientDistribution connection) {
-        this.local = local;
+        super(local);
         this.connection = connection;
     }
 
@@ -34,17 +33,8 @@ public final class ProxyOneToManyAssociation implements OneToManyPeer {
                 throw (NakedObjectRuntimeException) e.getCause();
             }
         } else {
-            local.addAssociation(inObject, associate);
+            super.addAssociation(inObject, associate);
         }
-    }
-
-
-    public void initAssociation(NakedObject inObject, NakedObject associate) {
-        local.initAssociation(inObject, associate);
-    }
-    
-    public void initOneToManyAssociation(NakedObject inObject, NakedObject[] instances) {
-        local.initOneToManyAssociation(inObject, instances);
     }
 
     public Hint getHint(Session session, NakedObject inObject, NakedObject associate, boolean add) {
@@ -58,7 +48,7 @@ public final class ProxyOneToManyAssociation implements OneToManyPeer {
             //    				return null;
             //    			}
         } else {
-            return local.getHint(session, inObject, associate, add);
+            return super.getHint(session, inObject, associate, add);
         }
     }
 
@@ -67,36 +57,12 @@ public final class ProxyOneToManyAssociation implements OneToManyPeer {
             LOG.debug("remote get association " + inObject);
             throw new NotImplementedException();
         } else {
-            return local.getAssociations(inObject);
+            return super.getAssociations(inObject);
         }
-    }
-
-    public String getName() {
-        return local.getName();
-    }
-
-    public NakedObjectSpecification getType() {
-        return local.getType();
-    }
-
-    public boolean hasHint() {
-        return local.hasHint();
-    }
-
-    public boolean isDerived() {
-        return local.isDerived();
-    }
-
-    public boolean isEmpty(NakedObject inObject) {
-        return local.isEmpty(inObject);
     }
 
     private boolean isPersistent(NakedObject inObject) {
         return inObject.getOid() != null;
-    }
-
-    public void removeAllAssociations(NakedObject inObject) {
-        local.removeAllAssociations(inObject);
     }
 
     /**
@@ -112,7 +78,7 @@ public final class ProxyOneToManyAssociation implements OneToManyPeer {
                 throw (NakedObjectRuntimeException) e.getCause();
             }
         } else {
-            local.removeAssociation(inObject, associate);
+            super.removeAssociation(inObject, associate);
         }
     }
 }

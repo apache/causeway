@@ -93,7 +93,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         Action actionChains[] = new Action[actions.length];
 
         for (int i = 0; i < actions.length; i++) {
-            actionChains[i] = reflectionFactory.createAction(actions[i]);
+            actionChains[i] = reflectionFactory.createAction(getFullName(), actions[i]);
         }
 
         return actionChains;
@@ -113,10 +113,10 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
             Object object = fieldPeers[i];
 
             if (object instanceof OneToOnePeer) {
-                fields[i] = reflectionFactory.createField((OneToOnePeer) object);
+                fields[i] = reflectionFactory.createField(getFullName(), (OneToOnePeer) object);
 
             } else if (object instanceof OneToManyPeer) {
-                fields[i] = reflectionFactory.createField((OneToManyPeer) object);
+                fields[i] = reflectionFactory.createField(getFullName(), (OneToManyPeer) object);
 
             } else {
                 throw new NakedObjectRuntimeException();
@@ -532,6 +532,8 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
 
         ActionPeer delegates[];
 
+        this.reflector = reflector;
+        
         delegates = reflector.actions(Reflector.OBJECT);
         String[] order = reflector.actionSortOrder();
         Action[] objectActions = createActions(reflector, className, delegates, order);

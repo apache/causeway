@@ -1,14 +1,16 @@
 package org.nakedobjects.object.reflect;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectTestCase;
-import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.object.defaults.MockObjectManager;
+import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.object.security.Session;
 
 import junit.framework.TestSuite;
@@ -36,8 +38,10 @@ public class ActionTest extends NakedObjectTestCase {
     protected void setUp() throws ObjectStoreException {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
+        NakedObjects.setObjectManager(new MockObjectManager());
+        
         actionDelegate = new MockAction();
-        action = new Action(ACTION_NAME, actionDelegate);
+        action = new Action("", ACTION_NAME, actionDelegate);
     }
 
     protected void tearDown() throws Exception {

@@ -1,14 +1,14 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.persistence.NakedObjectManager;
+import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
@@ -18,50 +18,32 @@ import org.apache.log4j.Logger;
 
 public abstract class AbstractNakedObject implements NakedObject {
     private static final Logger LOG = Logger.getLogger(AbstractNakedObject.class);
-
-    public Object getObject() {
-        return this;
-    }
-    /**
-     * A utility method for creating new objects in the context of the system -
-     * that is, it is added to the pool of objects the enterprise system
-     * contains.
-     */
-    protected NakedObject createInstance(Class cls) {
-        return getObjectManager().createInstance(cls.getName());
-    }
-
-    /**
-     * A utiltiy method for simplifying the resolving of an objects attribute.
-     * Calls resolve() on the secified object. If the specified reference no
-     * action is done.
-     */
-    
-    protected void resolve(NakedObject object) {
-        if (object != null && ! object.isResolved()) {
-            getObjectManager().resolve(object);
-        }
-    }
-
     private boolean isFinder = false;
-    private transient boolean isResolved = false;
-    private Oid oid;
-    private NakedObjectContext context;
-    private NakedObjectSpecification specification;
-    private boolean isViewDirty;
     private boolean isPersistDirty;
-    
-    public void setContext(NakedObjectContext context) {
-        this.context = context;
-    }
-    
-    public void setNakedClass(NakedObjectSpecification nakedClass) {
-        this.specification = nakedClass;
-    }
+    private transient boolean isResolved = false;
+    private boolean isViewDirty;
+    private Oid oid;
+    private NakedObjectSpecification specification;
 
     public NakedError actionPersist() {
         makePersistent();
         return null;
+    }
+     
+
+     private void checkIsPojoDirty() {
+        boolean isDirty = getSpecification() == null ? false : getSpecification().isDirty(this);
+        if(isDirty) {
+            markDirty();
+        }
+     }
+
+    public void clearPersistDirty() {
+        isPersistDirty = false;
+    }
+
+    public void clearViewDirty() {
+        isViewDirty = false;
     }
  
     /**
@@ -92,6 +74,14 @@ public abstract class AbstractNakedObject implements NakedObject {
     }
 
      public void created() {}
+    /**
+     * A utility method for creating new objects in the context of the system -
+     * that is, it is added to the pool of objects the enterprise system
+     * contains.
+     */
+    protected NakedObject createInstance(Class cls) {
+        return getObjectManager().createInstance(cls.getName());
+    }
 
     /**
      * hook method, see interface description for further details
@@ -128,13 +118,6 @@ public abstract class AbstractNakedObject implements NakedObject {
         }
     }
 
-     public NakedObjectContext getContext() {
-         // TODO context needs to assigned to the object properly
-//        Assert.assertTrue("must have a context: " + this, context != null);
-		 if(context == null) context = NakedObjectContext.getDefaultContext();
-        return context;
-    }
-
      /**
      * Returns the short name from this objects NakedObjectSpecification
      * 
@@ -144,20 +127,20 @@ public abstract class AbstractNakedObject implements NakedObject {
         return null;
     }
 
+    public Object getObject() {
+        return this;
+    }
+    
+    public Oid getOid() {
+        return oid;
+    }
+
     public NakedObjectSpecification getSpecification() {
         if(specification == null) {
             //specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(this.getClass());
             specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(getObject().getClass());
         }
         return specification;
-    }
-
-    protected NakedObjectManager getObjectManager() {
-        return getContext().getObjectManager();
-    }
-    
-    public Oid getOid() {
-        return oid;
     }
 
     /**
@@ -170,6 +153,11 @@ public abstract class AbstractNakedObject implements NakedObject {
     public boolean isFinder() {
         return isFinder;
     }
+     
+     public boolean isPersistDirty() {
+         checkIsPojoDirty();
+         return isPersistDirty;
+     }
 
     /**
      * Returns true if this object has an OID set.
@@ -191,6 +179,11 @@ public abstract class AbstractNakedObject implements NakedObject {
     public boolean isSameAs(Naked object) {
         return object == this;
     }
+     
+     public boolean isViewDirty() {
+         checkIsPojoDirty();
+         return isViewDirty;
+     }
 
     public void makeFinder() {
         if (isPersistent()) {
@@ -205,6 +198,13 @@ public abstract class AbstractNakedObject implements NakedObject {
             LOG.debug("makePersistent(" + this + ")");
             getObjectManager().makePersistent(this);
         }
+    }
+
+
+    public void markDirty() {
+        isViewDirty = true;
+        isPersistDirty = true;
+        getSpecification().clearDirty(this);
     }
 
     /**
@@ -229,6 +229,28 @@ public abstract class AbstractNakedObject implements NakedObject {
         if (!isResolved() && isPersistent()) {
             getObjectManager().resolve(this);
         }
+    }
+
+    private NakedObjectManager getObjectManager() {
+        return NakedObjects.getObjectManager();
+    }
+
+
+    /**
+     * A utiltiy method for simplifying the resolving of an objects attribute.
+     * Calls resolve() on the secified object. If the specified reference no
+     * action is done.
+     */
+    
+    protected void resolve(NakedObject object) {
+        if (object != null && ! object.isResolved()) {
+            getObjectManager().resolve(object);
+        }
+    }
+    
+    
+    public void setNakedClass(NakedObjectSpecification nakedClass) {
+        this.specification = nakedClass;
     }
 
     public void setOid(Oid oid) {
@@ -257,8 +279,8 @@ public abstract class AbstractNakedObject implements NakedObject {
 
         // type of object - EO, Primitive, Collection, with Status etc
         // Persistent/transient & Resolved or not
-        s.append(isViewDirty ? "U" : "-");
-        s.append(isPersistDirty ? "S" : "-");
+        s.append(isViewDirty ? "V" : "-");
+        s.append(isPersistDirty ? "D" : "-");
         s.append(isPersistent() ? "P" : (isFinder() ? "F" : "T"));
         s.append(isResolved ? "R" : "-");
 
@@ -285,45 +307,6 @@ public abstract class AbstractNakedObject implements NakedObject {
         s.append("  " + Long.toHexString(super.hashCode()).toUpperCase());
 
         return s.toString();
-    }
-     
-     public boolean isViewDirty() {
-         checkIsPojoDirty();
-         return isViewDirty;
-     }
-     
-     public boolean isPersistDirty() {
-         checkIsPojoDirty();
-         return isPersistDirty;
-     }
-     
-
-     private void checkIsPojoDirty() {
-        boolean isDirty = getSpecification() == null ? false : getSpecification().isDirty(this);
-        if(isDirty) {
-            markDirty();
-        }
-     }
-
-    public void clearViewDirty() {
-        isViewDirty = false;
-    }
-
-    public void clearPersistDirty() {
-        isPersistDirty = false;
-    }
-
-
-    public void markDirty() {
-        /*
-         * Removed the following as we don't think the NOF needs to tell the POJO that it has changed.
-         * The POJO will know it has changed.
-         */
-        //        getSpecification().markDirty(this);
-        
-        isViewDirty = true;
-        isPersistDirty = true;
-        getSpecification().clearDirty(this);
     }
     
 }

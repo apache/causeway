@@ -2,6 +2,7 @@ package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.OneToOneField;
+import org.nakedobjects.viewer.skylark.Skylark;
 import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -16,7 +17,7 @@ public class TreeBrowserFormSpecification extends AbstractCompositeViewSpecifica
 
     private static class DataFormSubviews implements SubviewSpec {
         public View createSubview(Content content, ViewAxis axis) {
-            ViewFactory factory = ViewFactory.getViewFactory();
+            ViewFactory factory = Skylark.getViewFactory();
 
             if (content instanceof OneToOneField) {
                 ViewSpecification specification = factory.getIconizedSubViewSpecification((OneToOneField) content);

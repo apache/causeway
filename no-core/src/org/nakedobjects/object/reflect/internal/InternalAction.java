@@ -1,18 +1,19 @@
 package org.nakedobjects.object.reflect.internal;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.TransactionException;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.reflect.ActionPeer;
+import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.reflect.ActionParameterSet;
+import org.nakedobjects.object.reflect.ActionPeer;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
@@ -37,48 +38,23 @@ public class InternalAction extends InternalMember implements ActionPeer {
         paramCount = action.getParameterTypes().length;
     }
 
-    public Naked execute(NakedObject inObject, Naked[] parameters) {
+    public Naked execute(MemberIdentifier identifier, NakedObject inObject, Naked[] parameters) {
         if (parameters.length != paramCount) {
             LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);
         }
-        NakedObjectManager objectManager = inObject.getContext().getObjectManager();
+        NakedObjectManager objectManager = NakedObjects.getObjectManager();
 
         try {
             LOG.debug("Action: invoke " + inObject + "." + getName());
-            objectManager.startTransaction();
-
-            /*
-             * TODO the object that we are invoking this method on, and the
-             * parameters, need to be part of the transaction, and not the same
-             * objects that other clients are using.
-             */
-            Object result;
-            if(inObject.getOid() == null || !requiresTransaction()) {
-                // non-persistent
-                result = actionMethod.invoke(inObject.getObject(), parameters);
-            } else {
-                // persistent
-	            NakedObject transactionObject = objectManager.getObject(inObject.getOid(), inObject.getSpecification());
-	            
-	            Object[] transactionParameters = new Object[parameters.length];
-	            for (int i = 0; i < parameters.length; i++) {
-	                if(parameters[i] instanceof NakedObject) {
-	                    NakedObject parameter = (NakedObject) parameters[i];
-                        transactionParameters[i] = objectManager.getObject(parameter.getOid(), parameter.getSpecification()).getObject();
-	                } else {
-	                    transactionParameters[i] = parameters[i];
-	                }
-                }
-	            
-	            result = actionMethod.invoke(transactionObject.getObject(), transactionParameters);
+            Object[] executionParameters = new Object[parameters.length];
+            for (int i = 0; i < parameters.length; i++) {
+                executionParameters[i] = parameters[i] == null ? null : parameters[i].getObject();
             }
-            
+            Object result = actionMethod.invoke(inObject.getObject(), executionParameters);
             LOG.debug(" action result " + result);
 
-            objectManager.endTransaction();
             if (result != null && result instanceof Naked) { return (Naked) result; }
             if (result != null) { return PojoAdapter.createAdapter(result); }
-
         } catch (InvocationTargetException e) {
             e.fillInStackTrace();
             
@@ -90,34 +66,15 @@ public class InternalAction extends InternalMember implements ActionPeer {
 	        	LOG.error(error);
 	        	throw new NakedObjectRuntimeException(error, e.getTargetException());
         	}
-        	
-            
         } catch (IllegalAccessException e) {
             LOG.error("Illegal access of " + actionMethod, e);
-            objectManager.abortTransaction();
-        } catch (ObjectNotFoundException e) {
-            LOG.error("Non-existing target or parameter used in " + actionMethod, e);
             objectManager.abortTransaction();
         }
 
         return null;
     }
 
-    public boolean requiresTransaction() {
-        return true ; // testing
-        
-     /*   Class[] exceptions = actionMethod.getExceptionTypes();
-        for (int i = 0; i < exceptions.length; i++) {
-            if(exceptions[i] == TransactionException.class) {
-                return true;
-            }
-        }
-        return false;
-     */
-        
-    }
-
-    public Hint getHint(Session session, NakedObject object, Naked[] parameters) {
+    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
         if (parameters.length != paramCount) {
             LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);
         }
@@ -187,7 +144,7 @@ public class InternalAction extends InternalMember implements ActionPeer {
         return hasReturn ? nakedClass(returnType) : null;
     }
 
-    public ActionParameterSet getParameters(Session session, NakedObject object, NakedObjectSpecification[] parameterTypes) {
+    public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, NakedObjectSpecification[] parameterTypes) {
         throw new UnexpectedCallException();
     }
 }

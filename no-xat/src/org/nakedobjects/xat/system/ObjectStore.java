@@ -5,14 +5,18 @@ import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectStore;
-import org.nakedobjects.object.ObjectNotFoundException;
-import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
+import org.nakedobjects.object.persistence.CreateObjectCommand;
+import org.nakedobjects.object.persistence.DestroyObjectCommand;
+import org.nakedobjects.object.persistence.NakedObjectManager;
+import org.nakedobjects.object.persistence.NakedObjectStore;
+import org.nakedobjects.object.persistence.ObjectNotFoundException;
+import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.persistence.PersistenceCommand;
+import org.nakedobjects.object.persistence.SaveObjectCommand;
+import org.nakedobjects.object.persistence.UnsupportedFindException;
 import org.nakedobjects.object.reflect.NakedObjectField;
 
 import java.util.Enumeration;
@@ -216,7 +220,7 @@ public class ObjectStore implements NakedObjectStore {
 
             // are ignoring internal collections - these probably should be considered
             // ignore derived fields - there is no way to set up these fields
-            if (fld.isPart() || fld.isDerived()) {
+            if (fld.isDerived()) {
                 continue;
             }
 
@@ -301,6 +305,20 @@ public class ObjectStore implements NakedObjectStore {
     public void startTransaction() {
         LOG.debug("start transaction");
     }
+
+    public CreateObjectCommand createCreateObjectCommand(NakedObject object) {
+        return null;
+    }
+
+    public DestroyObjectCommand createDestroyObjectCommand(NakedObject object) {
+        return null;
+    }
+
+    public SaveObjectCommand createSaveObjectCommand(NakedObject object) {
+        return null;
+    }
+
+    public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException {}
 }
 
 /*

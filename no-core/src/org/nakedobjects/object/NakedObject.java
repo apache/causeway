@@ -1,5 +1,6 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
@@ -41,8 +42,6 @@ public interface NakedObject extends Naked {
 
     NakedObject getAssociation(OneToOneAssociation field);
 
-    NakedObjectContext getContext();
-
     Naked getField(NakedObjectField field);
 
     String getIconName();
@@ -83,8 +82,6 @@ public interface NakedObject extends Naked {
     void markDirty();
 
     void setAssociation(NakedObjectAssociation field, NakedObject associatedObject);
-
-    void setContext(NakedObjectContext context);
 
     /**
      * Sets the OID for this object. This id must be unique.

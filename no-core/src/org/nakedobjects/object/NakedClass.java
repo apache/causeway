@@ -1,9 +1,12 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.FastFinder;
 import org.nakedobjects.object.defaults.InternalNakedObject;
+import org.nakedobjects.object.persistence.NakedObjectManager;
+import org.nakedobjects.object.persistence.NotPersistableException;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.internal.InternalAbout;
 
@@ -12,22 +15,20 @@ import org.apache.log4j.Logger;
 
 public class NakedClass implements InternalNakedObject {
     private final static Logger LOG = Logger.getLogger(NakedClass.class);
+    private final String className;
+    private boolean createPersistentInstances;
+    private NakedObjectSpecification specification;
 
     {
         createPersistentInstances = ConfigurationFactory.getConfiguration().getBoolean("nakedclass.create-persistent", true);
     }
-    private final String className;
-    private boolean createPersistentInstances;
-    private NakedObjectSpecification specification;
 
     public NakedClass(String name) {
         specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(name);
         className = name;
     }
 
-    //    public NakedClass() {}
-
-    public void aboutaboutExplorationActionFind(InternalAbout about) {
+    public void aboutExplorationActionFind(InternalAbout about) {
         about.setDescription("Get a simple finder object to start searches within the " + getSingularName() + " instances");
         about.setName("Find " + getPluralName());
         about.unusableOnCondition(!getObjectManager().hasInstances(forObjectType()), "No instances available to find");
@@ -95,7 +96,7 @@ public class NakedClass implements InternalNakedObject {
     }
 
     private NakedObjectManager getObjectManager() {
-        return NakedObjectContext.getDefaultContext().getObjectManager();
+        return NakedObjects.getObjectManager();
     }
 
     public String getPluralName() {
@@ -106,23 +107,13 @@ public class NakedClass implements InternalNakedObject {
         return forObjectType().getSingularName();
     }
 
-    public NakedObject newInstance() {
+    private NakedObject newInstance() {
         NakedObjectManager objectManager = getObjectManager();
-
-        if (createPersistentInstances) {
-            objectManager.startTransaction();
-        }
-
         NakedObject object = objectManager.createTransientInstance(forObjectType());
-        //        object = (NakedObject) forNakedClass().acquireInstance();
-        object.setContext(NakedObjectContext.getDefaultContext());
-        //        object.created();
-
         object.setResolved();
         if (createPersistentInstances) {
             try {
                 getObjectManager().makePersistent(object);
-                objectManager.endTransaction();
             } catch (NotPersistableException e) {
                 object = PojoAdapter.createNOAdapter(getObjectManager().generatorError("Failed to create instance of " + this, e));
                 LOG.error("Failed to create instance of " + this, e);

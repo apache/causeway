@@ -18,7 +18,6 @@ import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewDrag;
 import org.nakedobjects.viewer.skylark.Workspace;
-import org.nakedobjects.viewer.skylark.basic.ActionContent;
 import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
 import org.nakedobjects.viewer.skylark.core.DragViewOutline;
@@ -114,7 +113,7 @@ public class WindowBorder extends AbstractBorder {
         int h = BUTTON_HEIGHT - 1;
 
         // transient marker
-        if (getContent().isTransient()) {
+        if (isTransient()) {
             Image icon = ImageFactory.getInstance().createIcon("transient", BUTTON_HEIGHT, null);
             if (icon == null) {
                 canvas.drawText("*", x, y, Style.BLACK, Style.NORMAL);
@@ -124,7 +123,7 @@ public class WindowBorder extends AbstractBorder {
             //canvas.drawRectangle(x, y, w, h, Style.WHITE);
         }
         
-        if(!getContent().isTransient()) {
+        if(!isTransient()) {
 	        // window buttons
 	        x += BUTTON_WIDTH + padding;
 	        canvas.drawRectangle(x + 1, y + 1, w, h, Style.WHITE);
@@ -142,7 +141,7 @@ public class WindowBorder extends AbstractBorder {
 	        x += BUTTON_WIDTH + padding;
 	        canvas.drawRectangle(x + 1, y + 1, w, h, Style.WHITE);
 	        canvas.drawRectangle(x, y, w, h, Style.SECONDARY1);
-	        Color crossColor = getContent().isTransient() ? Style.SECONDARY1 : Style.BLACK;
+	        Color crossColor = isTransient() ? Style.SECONDARY1 : Style.BLACK;
 	        canvas.drawLine(x + 4, y + 3, x + 10, y + 9, crossColor);
 	        canvas.drawLine(x + 5, y + 3, x + 11, y + 9, crossColor);
 	        canvas.drawLine(x + 10, y + 3, x + 4, y + 9, crossColor);
@@ -153,8 +152,13 @@ public class WindowBorder extends AbstractBorder {
         super.draw(canvas);
     }
 
+    private boolean isTransient() {
+        Content content = getContent();
+        return content.isPersistable() && content.isTransient();
+    }
+
     public void firstClick(Click click) {
-        if (!getContent().isTransient()) {
+        if (!isTransient()) {
             Bounds buttonBounds = new Bounds(getSize().getWidth() - right - 3 * (BUTTON_WIDTH + padding) - 1, LINE_THICKNESS + padding,
                     BUTTON_WIDTH, BUTTON_WIDTH);
             if (buttonBounds.contains(click.getLocation())) {

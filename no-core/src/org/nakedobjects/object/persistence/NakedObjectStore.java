@@ -1,8 +1,12 @@
-package org.nakedobjects.object;
-
+package org.nakedobjects.object.persistence;
 
 import org.nakedobjects.container.configuration.ComponentException;
 import org.nakedobjects.container.configuration.ConfigurationException;
+import org.nakedobjects.object.InstancesCriteria;
+import org.nakedobjects.object.LoadedObjects;
+import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.utility.DebugInfo;
 
 
@@ -30,23 +34,37 @@ public interface NakedObjectStore extends DebugInfo {
      * </p>
      *  
      */
-    public void createObject(NakedObject object) throws ObjectStoreException;
+    CreateObjectCommand createCreateObjectCommand(NakedObject object);
 
-    public void createNakedClass(NakedObject cls) throws ObjectStoreException;
+    //   public void createObject(NakedObject object) throws ObjectStoreException;
 
-    
+    //   public void createNakedClass(NakedObject cls) throws
+    // ObjectStoreException;
+
     /**
      * Removes the specified object from the object store. The specified
      * object's data should be removed from the persistence mechanism and, if it
      * is cached (which it probably is), removed from the cache also.
      */
-    void destroyObject(NakedObject object) throws ObjectStoreException;
+    DestroyObjectCommand createDestroyObjectCommand(NakedObject object);
+
+    /**
+     * Persists the specified object's state. Essentially the data held by the
+     * persistence mechanism should be updated to reflect the state of the
+     * specified objects. Once updated, the object store should issue a
+     * notification to all of the object's users via the <class>UpdateNotifier
+     * </class> object. This can be achieved simply, if extending the <class>
+     * AbstractObjectStore </class> by calling its <method>broadcastObjectUpdate
+     * </method> method.
+     */
+    SaveObjectCommand createSaveObjectCommand(NakedObject object);
+
+    //    void destroyObject(NakedObject object) throws ObjectStoreException;
 
     public void endTransaction() throws ObjectStoreException;
 
-    NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses) throws ObjectStoreException;
-
-    NakedObject[] getInstances(NakedObjectSpecification cls, String pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException;
+    NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) throws ObjectStoreException,
+            UnsupportedFindException;
 
     /**
      * Gets the instances that match the specified pattern. The object store
@@ -58,12 +76,22 @@ public interface NakedObjectStore extends DebugInfo {
      * <para>2) have the same content as the pattern object where the pattern
      * object has values or references specified, i.e. empty value objects and
      * <code>null</code> references are to be ignored; </para>
-     * @param includeSubclasses 
+     * 
+     * @param includeSubclasses
      */
-    NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException;
+    NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) throws ObjectStoreException,
+            UnsupportedFindException;
 
+    NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses) throws ObjectStoreException;
 
-    NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException;
+    NakedObject[] getInstances(NakedObjectSpecification cls, String pattern, boolean includeSubclasses)
+            throws ObjectStoreException, UnsupportedFindException;
+
+    //    void save(NakedObject object) throws ObjectStoreException;
+
+    public LoadedObjects getLoadedObjects();
+
+    NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException;
 
     /**
      * Retrieves the object identified by the specified OID from the object
@@ -72,8 +100,8 @@ public interface NakedObjectStore extends DebugInfo {
      * method is called again, while the originally returned object is in
      * working memory, then this method must return that same Java object.
      * 
-     * <para>Assuming that the object is not cached then the data for the
-     * object should be retreived from the persistence mechanism and the object
+     * <para>Assuming that the object is not cached then the data for the object
+     * should be retreived from the persistence mechanism and the object
      * recreated (as describe previously). The specified OID should then be
      * assigned to the recreated object by calling its <method>setOID </method>.
      * Before returning the object its resolved flag should also be set by
@@ -94,24 +122,24 @@ public interface NakedObjectStore extends DebugInfo {
      * </para>
      * 
      * @param oid
-     *                   of the object to be retrieved
+     *                       of the object to be retrieved
      * @param hint
-     *                   TODO
+     *                       TODO
      * 
      * @return the requested naked object
      * @throws ObjectNotFoundException
-     *                    when no object corresponding to the oid can be found
+     *                       when no object corresponding to the oid can be found
      */
     NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectStoreException;
-
-    NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException;
 
     /**
      * Checks whether there are any instances of the specified type. The object
      * store should look for instances of the type represented by <variable>type
      * </variable> and return <code>true</code> if there are, or
      * <code>false</code> if there are not.
-     * @param includeSubclasses TODO
+     * 
+     * @param includeSubclasses
+     *                       TODO
      */
     boolean hasInstances(NakedObjectSpecification cls, boolean includeSubclasses) throws ObjectStoreException;
 
@@ -120,8 +148,8 @@ public interface NakedObjectStore extends DebugInfo {
      * persisted objects and persist changes to the object that are saved.
      * 
      * @throws ObjectStoreException
-     *                    if the object store cannot be initialized. The store should
-     *                    not be used if it can not be initialized.
+     *                       if the object store cannot be initialized. The store should
+     *                       not be used if it can not be initialized.
      */
     void init() throws ConfigurationException, ComponentException, ObjectStoreException;
 
@@ -132,7 +160,9 @@ public interface NakedObjectStore extends DebugInfo {
 
     /**
      * A count of the number of instances matching the specified pattern.
-     * @param includedSubclasses TODO
+     * 
+     * @param includedSubclasses
+     *                       TODO
      */
     int numberOfInstances(NakedObjectSpecification cls, boolean includedSubclasses) throws ObjectStoreException;
 
@@ -147,18 +177,7 @@ public interface NakedObjectStore extends DebugInfo {
      */
     void resolve(NakedObject object) throws ObjectStoreException;
 
-    /**
-     * Persists the specified object's state. Essentially the data held by the
-     * persistence mechanism should be updated to reflect the state of the
-     * specified objects. Once updated, the object store should issue a
-     * notification to all of the object's users via the <class>UpdateNotifier
-     * </class> object. This can be achieved simply, if extending the <class>
-     * AbstractObjectStore </class> by calling its <method>broadcastObjectUpdate
-     * </method> method.
-     */
-    void save(NakedObject object) throws ObjectStoreException;
-
-    public LoadedObjects getLoadedObjects();
+    public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException;
 
     public void shutdown() throws ObjectStoreException;
 

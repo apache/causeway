@@ -6,7 +6,6 @@ import org.nakedobjects.application.valueholder.BusinessValueHolder;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.DefaultHint;
@@ -85,12 +84,12 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         try {
             if (setMethod == null) {
                 BusinessValueHolder value = (BusinessValueHolder) getMethod.invoke(inObject.getObject(), new Object[] {});
-                if(setValue instanceof String) {
-	                value.parseUserEntry((String) setValue);
-                } else if(setValue instanceof BusinessValueHolder) {
+                if (setValue instanceof String) {
+                    value.parseUserEntry((String) setValue);
+                } else if (setValue instanceof BusinessValueHolder) {
                     value.copyObject((BusinessValueHolder) setValue);
                 }
-                
+
             } else {
                 setMethod.invoke(inObject.getObject(), new Object[] { setValue == null ? null : setValue.toString() });
             }
@@ -108,24 +107,18 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         LOG.debug("local setValue() " + inObject.getOid() + "/" + getName() + "/" + setValue);
 
         try {
-            NakedObjectManager objectManager = inObject.getContext().getObjectManager();
-            objectManager.startTransaction();
-
             if (setMethod == null) {
- //               BusinessValue value = (BusinessValue) getMethod.invoke(inObject.getObject(), new Object[] {});
- // value.parseUserEntry((String) setValue);
+                inObject.markDirty();
             } else {
                 setMethod.invoke(inObject.getObject(), new Object[] { setValue });
             }
-        
-            objectManager.endTransaction();
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + setMethod, e);
         } catch (IllegalAccessException ignore) {
             LOG.error("Illegal access of " + setMethod, ignore);
         } catch (ValueParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
+            throw e;
         }
     }
 
@@ -133,15 +126,11 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         LOG.debug("local clear association " + inObject + "/" + associate);
 
         try {
-	        NakedObjectManager objectManager = inObject.getContext().getObjectManager();
-	        objectManager.startTransaction();
-	
-	        if (removeMethod != null) {
+            if (removeMethod != null) {
                 removeMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
             } else {
                 setMethod.invoke(inObject.getObject(), new Object[] { null });
             }
-            objectManager.endTransaction();
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("set method expects a " + getType().getFullName() + " object; not a "
                     + associate.getClass().getName());
@@ -176,9 +165,6 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
 
         try {
-            NakedObjectManager objectManager = inObject.getContext().getObjectManager();
-            objectManager.startTransaction();
-
             if (associate == null) {
                 if (removeMethod != null) {
                     removeMethod.invoke(inObject.getObject(), new Object[] { get(inObject) });
@@ -193,7 +179,6 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
                 }
             }
 
-            objectManager.endTransaction();
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(setMethod + " method doesn't expect a " + associate.getClass().getName());
         } catch (InvocationTargetException e) {
@@ -263,7 +248,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
 
         }
     }
-    
+
     public boolean isEmpty(NakedObject fromObject) {
         try {
             Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);

@@ -2,11 +2,9 @@ package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.UpdateNotifier;
 import org.nakedobjects.utility.DebugInfo;
-import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -43,13 +41,7 @@ public class ViewUpdateNotifier implements UpdateNotifier, DebugInfo {
         }
     }
 
-    public void broadcastAdd(Object collectionOid, Object elementOid, NakedObjectManager objectManager) {
-        throw new NotImplementedException();
-    }
-
-    // TODO change to broadcastObjectSet, broadcastObjectClear, and
-    // broadcastObjectChangeValue
-    public void broadcastObjectChanged(NakedObject object, NakedObjectManager objectManager) {
+    public void broadcastObjectChanged(NakedObject object) {
         Vector viewsToNotify = (Vector) views.get(object);
 
         if (viewsToNotify == null || viewsToNotify.size() == 0) {
@@ -61,10 +53,6 @@ public class ViewUpdateNotifier implements UpdateNotifier, DebugInfo {
                 view.update(object);
             }
         }
-    }
-
-    public void broadcastRemove(Object collectionOid, Object elementOid, NakedObjectManager objectManager) {
-        throw new NotImplementedException();
     }
 
     public String getDebugData() {

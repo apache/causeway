@@ -1,12 +1,12 @@
 package org.nakedobjects.object;
 
 
+
 public interface UpdateNotifier {
 	/**
 	 * Indicates that a specific object has been changed
-	 * @param object
 	 */
-	void broadcastObjectChanged(NakedObject object, NakedObjectManager objectManager);
+	void broadcastObjectChanged(NakedObject object);
 
     /**
      Called when the UpdateNotifier is about to be shutdown.  All connections and resources should be
