@@ -19,6 +19,10 @@
 			<fileset dir="../viewer-skylark/${src.dir}" />
 		</copy>
 
+		<copy todir="${build.src.dir}">
+			<fileset dir="../exploration/${src.dir}" />
+		</copy>
+
 		<copy todir="${build.example.dir}">
 			<fileset dir="../example-ecs/${src.dir}">
 				<exclude name="**/*AcceptanceTest*" />
@@ -35,8 +39,8 @@
 			<fileset dir="../viewer-skylark/${test.dir}" />
 
 			<fileset dir="../example-ecs/${test.dir}" />
-			<fileset dir="../example-expenses/${test.dir}" />
-			<fileset dir="../example-library/${test.dir}" />
+			<!-- fileset dir="../example-expenses/${test.dir}" />
+			<fileset dir="../example-library/${test.dir}" /-->
 		</copy>
 
 		<copy todir="${dist.images.dir}">

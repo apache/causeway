@@ -48,8 +48,9 @@
 
 	<target name="new-release-number">
 		<tstamp>
-			<format property="build.id" pattern="yyyyMMdd-HH00" locale="en" />
+			<format property="build.date" pattern="yyyyMMdd-HH00" locale="en" />
 		</tstamp>
+		<property name="build.id" value="pojo-${build.date}"/>
 		<echo>Build number: ${build.id}</echo>
 	</target>
 
@@ -77,6 +78,8 @@
 		<!-- copy across source and add version -->
 		<copy todir="${build.src.dir}">
 			<fileset dir="${core.dir}/${src.dir}" />
+			<fileset dir="../no-application-library/${src.dir}" />
+			<fileset dir="../no-default-reflector/${src.dir}" />
 		</copy>
 
 		<replace dir="${build.src.dir}">
@@ -90,12 +93,13 @@
 
 		<copy todir="${build.test.dir}">
 			<fileset dir="${core.dir}/${test.dir}" />
+			<fileset dir="../no-application-library/${test.dir}" />
+			<fileset dir="../no-default-reflector/${test.dir}" />
 		</copy>
 
 		<copy todir="${dist.images.dir}">
 			<fileset dir="${core.dir}/${src.dir}/images" />
 		</copy>
-
 
 
 
