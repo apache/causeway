@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE project [
+	<!ENTITY properties SYSTEM "file:../naked-objects/properties.xml">
+	<!ENTITY targets SYSTEM "file:../naked-objects/targets.xml">
+]>
+
+<project name="Naked Object Cache Object Store" default="all" basedir=".">
+	<description>Prevalyer style object store that journals all changes to the objects, and captures a snapshot
+		at shutdown.</description>
+
+	&properties;
+
+	<property name="component" value="example-ecs"/>
+	
+	<!-- classpath -->
+	<path id="libs.internal">
+		<fileset dir="../no-core/build/release">
+			<include name="no-core.jar"/>
+			<include name="no-core-test.jar"/>
+		</fileset>
+		<fileset dir="../no-containers/build/release">
+			<include name="no-containers.jar"/>
+			<include name="no-containers.jar"/>
+		</fileset>
+		<fileset dir="../xat-new/build/release">
+			<include name="xat-new.jar"/>
+			<include name="xat-new.jar"/>
+		</fileset>
+	</path>
+
+	&targets;	
+</project>
+
+
