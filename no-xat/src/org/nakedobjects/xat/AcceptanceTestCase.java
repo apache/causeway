@@ -11,6 +11,7 @@ import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.OidGenerator;
+import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.defaults.LocalObjectManager;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
@@ -36,6 +37,8 @@ import org.apache.log4j.LogManager;
 
 
 public abstract class AcceptanceTestCase extends TestCase {
+    private static final String TEST_OBJECT_FACTORY = "test-object-factory";
+    private static final String REFLECTOR_FACTORY = "reflector";
     private Hashtable classes = new Hashtable();
     private Documentor documentor;
     private LocalObjectManager objectManager;
@@ -92,6 +95,7 @@ public abstract class AcceptanceTestCase extends TestCase {
          * These need to be provide differently for different runs of the tests.
          */
 
+        loadReflector();
         objectManager = createObjectManager();
 
         try {
@@ -103,7 +107,7 @@ public abstract class AcceptanceTestCase extends TestCase {
 
             if (testObjectFactory == null) {
                 Configuration.installConfiguration("xat.properties");
-                testObjectFactory = (TestObjectFactory) ComponentLoader.loadComponent("test-object-factory",
+                testObjectFactory = (TestObjectFactory) ComponentLoader.loadComponent(TEST_OBJECT_FACTORY,
                         NonDocumentingTestObjectFactory.class, TestObjectFactory.class);
             }
             documentor = testObjectFactory.getDocumentor();
@@ -144,10 +148,14 @@ public abstract class AcceptanceTestCase extends TestCase {
         }
     }
 
-    protected LocalObjectManager createObjectManager() throws ConfigurationException, ComponentException {
+    protected void loadReflector() throws ConfigurationException, ComponentException {
         NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
-        NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
-
+        
+        ReflectorFactory reflectorFactory = (ReflectorFactory) ComponentLoader.loadComponent(REFLECTOR_FACTORY, JavaReflectorFactory.class, ReflectorFactory.class);
+        NakedObjectSpecificationImpl.setReflectorFactory(reflectorFactory);    
+    }
+    
+    protected LocalObjectManager createObjectManager() throws ConfigurationException, ComponentException {
         NakedObjectStore nos;
         nos = new TransientObjectStore();
         OidGenerator oidGenerator = new SimpleOidGenerator();
