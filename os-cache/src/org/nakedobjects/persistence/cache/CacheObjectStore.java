@@ -428,6 +428,8 @@ public class CacheObjectStore implements NakedObjectStore {
 
     public void resolveImmediately(NakedObject object) {}
 
+    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectStoreException {}
+    
     public void save(NakedObject object) throws ObjectStoreException {
         writeJournal("save", new Memento(object));
     }
