@@ -40,7 +40,7 @@ public class TableRowSpecification extends AbstractCompositeViewSpecification {
     }
 
     public TableRowSpecification() {
-        builder = new TableRowLayout(new ObjectFieldBuilder(new Cells()));
+        builder = new TableRowLayout(new ObjectFieldBuilder(new Cells(), true));
     }
 
     public View createView(Content content, ViewAxis axis) {

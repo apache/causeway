@@ -35,19 +35,33 @@ import org.apache.log4j.Logger;
 public class ObjectFieldBuilder extends AbstractViewBuilder {
     private static final Logger LOG = Logger.getLogger(ObjectFieldBuilder.class);
     private SubviewSpec subviewDesign;
+    private final boolean useFieldType;
 
-    public ObjectFieldBuilder(SubviewSpec subviewDesign) {
-        this.subviewDesign = subviewDesign;
+    public ObjectFieldBuilder(final SubviewSpec subviewDesign) {
+        this(subviewDesign, false);
     }
 
+    public ObjectFieldBuilder(final SubviewSpec subviewDesign, boolean useFieldType) {
+        this.subviewDesign = subviewDesign;
+        this.useFieldType = useFieldType;
+    }
+    
     public void build(View view) {
         Assert.assertEquals(view.getView(), view);
 
-        NakedObject object = ((ObjectContent) view.getContent()).getObject();
+        Content content = view.getContent();
+        NakedObject object = ((ObjectContent) content).getObject();
 
         LOG.debug("rebuild view " + view + " for " + object);
 
-        NakedObjectSpecification cls = object.getSpecification();
+        NakedObjectSpecification cls = null;
+        if(useFieldType && content instanceof ObjectField) {
+            cls = ((ObjectField) content).getType();
+        } 
+
+        if(cls == null) {
+            cls = object.getSpecification();
+        }
         FieldSpecification[] flds = cls.getVisibleFields(object, ClientSession.getSession());
 
         if (view.getSubviews().length == 0) {
