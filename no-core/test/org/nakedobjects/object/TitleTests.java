@@ -25,7 +25,10 @@
 package org.nakedobjects.object;
 
 
+import org.nakedobjects.SystemClock;
+import org.nakedobjects.object.value.Date;
 import org.nakedobjects.object.value.TextString;
+import org.nakedobjects.object.value.TimeStamp;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -46,6 +49,8 @@ public class TitleTests extends TestCase {
     }
 
     public void setUp() {
+        Date.setClock(new SystemClock());
+        TimeStamp.setClock(new SystemClock());
         test = "Fred";
         t = new Title(test);
         assertEquals(test, t.toString());

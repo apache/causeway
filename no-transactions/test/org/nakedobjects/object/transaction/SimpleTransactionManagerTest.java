@@ -3,10 +3,8 @@ package org.nakedobjects.object.transaction;
 import org.nakedobjects.object.MockObjectStore;
 import org.nakedobjects.object.MockUpdateNotifier;
 import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
-import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.simple.JavaReflector;
@@ -115,7 +113,7 @@ public class SimpleTransactionManagerTest extends TestCase {
         objectManager.endTransaction();
 
         // transaction 5
-        Action action = accountClass.getObjectAction(Action.USER, new NakedClass[] { accountClass });
+        Action action = accountClass.getObjectAction(Action.USER, "CreateTransactionFrom", new NakedClass[] { accountClass });
         // action corresponding to a drop on account 2
         Transfer transfer1 = (Transfer) action.execute(saving, new NakedObject[] { personal });
 

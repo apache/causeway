@@ -1,5 +1,9 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.SystemClock;
+import org.nakedobjects.object.value.Date;
+import org.nakedobjects.object.value.TimeStamp;
+
 import junit.framework.TestCase;
 
 public class LoadedObjectsTest extends TestCase {
@@ -12,6 +16,8 @@ public class LoadedObjectsTest extends TestCase {
     }
 
     protected void setUp() throws Exception {
+        Date.setClock(new SystemClock());
+        TimeStamp.setClock(new SystemClock());
         lookup = new LoadedObjects();
         oid = new Integer(1);
   }

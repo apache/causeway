@@ -22,32 +22,27 @@ public interface NakedObject extends Naked {
      * will not be called when the object is recreated when retrieved from the
      * object store.
      */
-    public void created();
+    void created();
 
     /**
      * Called when the object is delete, after it is removed from the object
      * store.
      */
-    public void deleted();
+    void deleted();
 
     /**
      * Called when a the system destoys an object - permenantly removes it from
      * the object store.
      */
-    public void destroy() throws ObjectStoreException;
+    void destroy() throws ObjectStoreException;
 
-    public String getIconName();
-
-    /**
-     * Returns the NakedClass that represents this object.
-     */
-    public NakedClass getNakedClass();
+    String getIconName();
 
     /**
      * The objects unique id. This id allows the object to added to, stored by,
      * and retrieved from the object store.
      */
-    public Object getOid();
+    Object getOid();
 
     /**
      * Returns true if the object is used for finding objects. An object cannot
@@ -71,30 +66,30 @@ public interface NakedObject extends Naked {
      * this method should be called so that it is persisted and a message is
      * propogated to the users of this object within the system.
      */
-    public void objectChanged();
+    void objectChanged();
 
     /**
      * Resolves the current object ensuring all its attributes are available in
      * memory.
      */
-    public void resolve();
+    void resolve();
 
     /**
      * Sets the OID for this object. This id must be unique.
      */
-    public void setOid(Object oid);
+    void setOid(Object oid);
 
     /**
      * sets the object's resolved state to true
      */
-    public void setResolved();
+    void setResolved();
 
     /**
      * Returns a String summarising the state of the object.
      */
-    public Summary summary();
+    Summary summary();
 
-    public void makeFinder();
+    void makeFinder();
 }
 
 /*

@@ -1,5 +1,7 @@
 package org.nakedobjects.object.value;
 
+import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.About;
@@ -78,6 +80,10 @@ public abstract class AbstractNakedValue implements NakedValue {
         } catch (IllegalAccessException e) {
             throw new NakedObjectRuntimeException(e);
         }
+    }
+
+    public NakedClass getNakedClass() {
+        return NakedClassManager.getInstance().getNakedClass(getClass().getName());
     }
 
     /**

@@ -51,13 +51,13 @@ public class Value extends Field {
         }
         NakedValue value = delegatedTo.getValue(inObject);
     
+        String originalValue = value.title().toString();
         delegatedTo.parseValue(value, textEntry);
         Validity validity = new Validity(value, getLabel(null, inObject));
         delegatedTo.isValid(inObject, validity);
         if(validity.isValid()) {  
             delegatedTo.saveValue(inObject, value.saveString());
         } else {
-	        String originalValue = value.title().toString();
             delegatedTo.parseValue(value, originalValue);
             throw new InvalidEntryException(validity.getReason());
         }

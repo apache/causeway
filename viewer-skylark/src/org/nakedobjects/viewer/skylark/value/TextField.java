@@ -699,8 +699,9 @@ public class TextField extends AbstractField {
                 parseEntry(entry.toString());
                 invalidReason = null;
                 isSaved = true;
-                markDamaged();
                 getViewManager().setStatus("VALID ENTRY: " + entry);
+                getState().setValid();
+                markDamaged();
                 //getParent().invalidateLayout();
             } catch (NakedObjectRuntimeException e) {
                 invalidReason = "UPDATE FAILURE: " + e.getMessage();
@@ -710,6 +711,7 @@ public class TextField extends AbstractField {
           } catch (InvalidEntryException e) {
                 invalidReason = "INVALID ENTRY: " + e.getMessage();
                 getViewManager().setStatus(invalidReason);
+                getState().setInvalid();
                 markDamaged();
             }
         }

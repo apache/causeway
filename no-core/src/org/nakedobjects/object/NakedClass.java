@@ -8,6 +8,7 @@ import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.Field;
 import org.nakedobjects.object.reflect.Member;
 import org.nakedobjects.object.reflect.NakedClassException;
+import org.nakedobjects.object.reflect.NameConvertor;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.Reflector;
@@ -354,20 +355,12 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
             }
         }
 
-        throw new NakedClassException("No field called " + name + " in " +
-            getSingularName());
+        throw new NakedClassException("No field called '" + name + "' in '" +
+            getSingularName() + "'");
     }
 
     private String searchName(String name) {
-        StringBuffer searchName;
-        searchName = new StringBuffer(name.length());
-        for(int c = 0, len = name.length(); c < len; c++) {
-           char  ch = name.charAt(c);
-            if(ch != ' ') {
-               searchName.append(Character.toLowerCase(ch));
-            }
-        }
-        return searchName.toString();
+        return NameConvertor.simpleName(name);
     }
 
     public Field[] getFields() {

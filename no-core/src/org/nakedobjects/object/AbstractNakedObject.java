@@ -107,12 +107,28 @@ public abstract class AbstractNakedObject implements NakedObject {
         }
     }
 
-    public void aboutDateCreated(FieldAbout about) {
-        about.unmodifiable();
+    public final void aboutDateCreated(FieldAbout about) {
+        if(showDateCreated()) {
+            about.unmodifiable();
+        } else {
+            about.invisible();
+        }
     }
 
-    public void aboutLastActivity(FieldAbout about) {
-        about.invisible();
+    protected boolean showDateCreated() {
+        return false;
+    }
+
+    public final void aboutLastActivity(FieldAbout about) {
+        if(showLastActivity()) {
+            about.unmodifiable();
+        } else {
+            about.invisible();
+        }
+    }
+
+    protected boolean showLastActivity() {
+        return false;
     }
 
     public NakedError actionPersist() {

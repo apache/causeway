@@ -9,6 +9,7 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectStore;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.NullUpdateNotifier;
 import org.nakedobjects.object.TransientObjectStore;
 import org.nakedobjects.object.value.Date;
@@ -92,18 +93,22 @@ public abstract class AcceptanceTestCase extends TestCase implements MutableCont
         fixtures.addElement(fixture);
     }
 
+    public TestValue createParameterTestValue(NakedValue value) {
+        return TestObjectFactory.getInstance().createParamerTestValue(value);    
+    }
+    
     protected void setUp() throws Exception {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
+        clock = new ExplorationClock();
+        Date.setClock(clock);
+        Time.setClock(clock);
+        TimeStamp.setClock(clock);
+
         NakedObjectStore nos;
         nos = new TransientObjectStore();
         objectManager = new LocalObjectManager(nos, new NullUpdateNotifier());
         
-        try {
-	        clock = new ExplorationClock();
-	        Date.setClock(clock);
-	        Time.setClock(clock);
-	        TimeStamp.setClock(clock);
-	        
+        try {        
 	        setUpFixture();
 	        ExplorationSetUp fs = new ExplorationSetUp();
 	        fs.init(fixtures, NakedClassManager.getInstance(), objectManager, clock);

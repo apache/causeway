@@ -43,7 +43,7 @@ public class MockClassManager extends NakedClassManager {
         if(nakedClasses.containsKey(name)) {
             return (NakedClass) nakedClasses.get(name);
         } else {
-            Assert.fail("no class - " + name);
+            Assert.fail("no class specified in mock class manager - " + name);
             return null;
         }
     }

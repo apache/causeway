@@ -1,36 +1,39 @@
-package org.nakedobjects.object;
+package org.nakedobjects;
 
 
-import org.nakedobjects.utility.ComponentException;
-import org.nakedobjects.utility.ConfigurationException;
+public class AboutNakedObjects {
 
-import junit.framework.TestSuite;
+    public static String getVersion() {
+        return select("%VERSION%", "non-versioned");
+    }
+    
+    public static String getImageName() {
+        return select("%IMAGE_FILE%", "logo.jpg");
+    }
+    
+    private static String select(String value, String defaultValue) {
+        return value.startsWith("%") && value.endsWith("%") ? defaultValue : value;
+    }
 
-
-public class TransientObjectStoreFieldsTest extends NakedObjectStoreFieldsTestCase {
-
-   public TransientObjectStoreFieldsTest(String name) {
-      super(name);
-   }
-
-   public static void main(String[] args) {
-      junit.textui.TestRunner.run(new TestSuite(TransientObjectStoreFieldsTest.class));
-   }
-
-	public NakedObjectStore installObjectStore() throws ObjectStoreException {
-      return new TransientObjectStore();
-   }
-	
-	protected void restartObjectStore() throws ObjectStoreException, Exception, ConfigurationException, ComponentException {
-	    // override so the store is not restarted
-	}
+    public static String getName() {
+        return select("%NAME%", "Naked Objects Framework");
+    }
+    
+    public static String getBuildId() {
+        return select("%BUILD_ID%", "unbuilt");
+    }
+    
+    
+    public static String getCopyrightNotice() {
+        return select("%COPYRIGHT_NOTICE%", "Copyright Naked Objects Group");
+    }
 }
 
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,59 +1,79 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta content="text/html; charset=ISO-8859-1"
- http-equiv="content-type">
+  <meta content="text/html; charset=utf-8" http-equiv=
+  "content-type" />
+
   <title>Skylark Viewer</title>
 </head>
+
 <body>
-<h1>The 'Skylark' Viewer</h1>
-<p>The skylark viewer is a lightweight viewer for rendering Naked
-Objects.&nbsp; The entire workspace is series of composite views that
-use builders to create new views, and each view is wrapped by
-decorators to give a view behaviours and visual features.&nbsp; Each
-view is created to render a Content object.<br>
-</p>
-<p><>ObjectView is the base class for all views that display
-NakedObjects.&nbsp; It provides default behaviour for dragging and
-dropping objects onto other objects.&nbsp; It provides easy access to
-the content's object (which is held by the ObjectContent). The only
-option added to the menu items is New Workspace, which should create a
-new workspace, within the existing workspace, showing the specified
-object.</><br>
-</p>
-<h3>Content</h3>
-<p>The Content interface links a view to an object within naked
-objects.&nbsp; The subclasses of AbstractFieldContent represent naked
-objects that are fields of a parent object.&nbsp; </p>
-<><></></>
-<p>Content types for fields:-</p>
-<ul>
-  <li>
-    <p>ValueField - for NakedValue objects identified as a Value object</p>
-  </li>
-  <li>
-    <p>OneToOneField - for NakedObject objects identified as a
-OneToOneAssociation object</p>
-  </li>
-  <li>
-    <p>OneToManyField - for NakedObject objects identified as a
-OneToManyAssociation object</p>
-  </li>
-</ul>
-<p><>RootObject is for top-level NakedObjects - placed on the
-desktop/workplace.</></p>
-<></>
-<p><>CollectionElement is for NakedObjects that are placed in non-field
-based collection, such as those for instances.</></p>
-<p>ActionContent links together and object and an action that can be
-performed on it.<br>
-</p>
-<p>ParameterContent provide the holders for the parameter for the
-Actions<br>
-</p>
-<h3><>Changing views</><></></h3>
-<p><>When a view has been changed, moved, replaced etc, call
-markDamaged() to cause the view to be redrawn next time drawing is
-taking place.</></p>
+  <h1>The 'Skylark' Viewer</h1>
+
+  <p>The skylark viewer is a lightweight viewer for rendering Naked
+  Objects.Ã‚Â  The entire workspace is series of composite views
+  that use builders to create new views, and each view is wrapped
+  by decorators to give a view behaviours and visual features.Ã‚Â 
+  Each view is created to render a Content object.</p>
+
+  <p>&lt;&gt;ObjectView is the base class for all views that
+  display NakedObjects.Ã‚Â  It provides default behaviour for
+  dragging and dropping objects onto other objects.Ã‚Â  It provides
+  easy access to the content's object (which is held by the
+  ObjectContent). The only option added to the menu items is New
+  Workspace, which should create a new workspace, within the
+  existing workspace, showing the specified object.</p>
+
+  <h3>Content</h3>
+
+  <p>The Content interface links a view to an object within naked
+  objects.Ã‚Â  The subclasses of ObjectField represent naked
+  objects that are fields of a parent object, and subclasses of
+  ActionField represent parameters used when invoking an action
+  method.</p>
+
+  <p></p>
+
+  <p>Content types for fields:-</p>
+
+  <ul>
+    <li>
+      <p>ValueField - for NakedValue objects identified as a Value
+      object</p>
+    </li>
+
+    <li>
+      <p>OneToOneField - for NakedObject objects identified as a
+      OneToOneAssociation object</p>
+    </li>
+
+    <li>
+      <p>OneToManyField - for NakedObject objects identified as a
+      OneToManyAssociation object</p>
+    </li>
+  </ul>
+
+  <p>RootObject is for top-level NakedObjects - placed on the
+  desktop/workplace.</p>
+
+  <p>CollectionElement is for NakedObjects that are placed in
+  non-field based collection, such as those for instances.</p>
+
+  <p>ActionContent links together and object and an action that can
+  be performed on it.</p>
+
+  <p>ParameterContent provide the holders for the parameter for the
+  Actions</p>
+
+  <p></p>
+
+  <h3>Changing views</h3>
+
+  <p>When a view has been changed, moved, replaced etc, call
+  markDamaged() to cause the view to be redrawn next time drawing
+  is taking place.</p>
 </body>
 </html>

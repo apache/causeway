@@ -168,7 +168,7 @@ public class Viewer {
 	
 	
 	public void init(RenderingArea renderingArea, NakedObject object) throws ConfigurationException, ComponentException {
-        doubleBuffering = Configuration.getInstance().getBoolean(PROPERTY_BASE +
+	    doubleBuffering = Configuration.getInstance().getBoolean(PROPERTY_BASE +
                 "doublebuffering", true);
 /*         background = (Background) ComponentLoader.loadComponent(PARAMETER_BASE +
                 "background", Background.class);

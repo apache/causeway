@@ -1,49 +1,44 @@
-package org.nakedobjects.xat;
+package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.AbstractNakedObject;
+import org.nakedobjects.object.Title;
+import org.nakedobjects.object.control.FieldAbout;
+import org.nakedobjects.object.control.Validity;
+import org.nakedobjects.object.value.Money;
+import org.nakedobjects.object.value.TextString;
 
-
-abstract class AbstractTestObject {
-
-    /**
-     The object this mock is showing
-     */
-    private Naked forObject;
-
-    TestObjectFactory factory() {
-        return TestObjectFactory.getInstance();
+public class ValueTestObject extends AbstractNakedObject {
+	public final TextString name = new TextString();
+	public final Money salary = new Money();
+	
+    public Title title() {
+        return name.title();
     }
-
-    /**
-     Return  the object this mock is showing
-     */
-    public final Naked getForObject() {
-        return forObject;
-    }
-
-    /**
-     Return the title sting from the object this mock is showing
-     */
-    public abstract String getTitle();
     
-    public final void setForObject(Naked object) {
-        forObject = object;
+    public TextString getName() {
+    	if(name == null) {
+    		throw new NullPointerException();
+    	}
+    	return name;	
     }
 
-    public String toString() {
-        if (forObject == null) {
-            return  super.toString() + " " + "null";
-        } else {
-            return super.toString() + " " + forObject.getShortClassName() + "/" + forObject.toString();
-        }
+    public void aboutSalary(FieldAbout about) {
     }
+    
+    public void validSalary(Validity validity) {
+        validity.invalidOnCondition(salary.doubleValue() < 0.0, "Salary must be positive");
+    }
+    
+	public Money getSalary() {
+		return salary;
+	}
 }
 
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -8,7 +8,6 @@ import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.Person;
 import org.nakedobjects.object.value.Money;
 import org.nakedobjects.object.value.TextString;
 import org.nakedobjects.security.SecurityContext;
@@ -24,7 +23,7 @@ public class ValueTests extends NakedObjectTestCase {
     private static final String SALARY_FIELD_NAME = "salary";
     private static final String NAME_FIELD_LABEL = "Name";
     private static final String NAME_FIELD_NAME = "name";
-    private Person object;
+    private ValueTestObject object;
     
     private Value nameField, salaryField;
     private MockObjectManager manager;
@@ -42,11 +41,11 @@ public class ValueTests extends NakedObjectTestCase {
 
     	manager = MockObjectManager.setup();
     	manager.setupAddClass(NakedObject.class);
-    	manager.setupAddClass(Person.class);
+    	manager.setupAddClass(ValueTestObject.class);
     	
-        object = new Person();
+        object = new ValueTestObject();
         
-        NakedClass c = NakedClassManager.getInstance().getNakedClass(Person.class.getName());
+        NakedClass c = NakedClassManager.getInstance().getNakedClass(ValueTestObject.class.getName());
         
         nameField = (Value) c.getField(NAME_FIELD_NAME);
         salaryField = (Value) c.getField(SALARY_FIELD_NAME);
@@ -69,6 +68,15 @@ public class ValueTests extends NakedObjectTestCase {
      	assertEquals("Fred", object.getName());
      	assertEquals(20.41, object.getSalary().doubleValue(), 0.001);
     }     	
+    
+    public void testSetInvalidValue() throws Exception {
+        salaryField.parseAndSave(object, "12.0");
+   	try{
+	        salaryField.parseAndSave(object, "-1.0");
+	        fail();
+    	} catch(InvalidEntryException expected) {}
+    	assertEquals(12.0, ((Money) salaryField.get(object)).doubleValue(), 0.0);
+    }
     
     public void testInitGet() {
     	nameField.restoreValue(object, "Joe");

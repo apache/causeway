@@ -3,6 +3,7 @@ package org.nakedobjects.xat;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.reflect.Value;
 import org.nakedobjects.security.SecurityContext;
 import org.nakedobjects.xat.html.HtmlDocumentor;
 import org.nakedobjects.xat.html.HtmlTestClass;
@@ -35,13 +36,17 @@ public class TestObjectFactory {
         return new HtmlTestObject(new TestObjectImpl(context, field, viewCache), documentor);
     }
     
-    protected TestValue createTestValue(NakedValue value) {	
-        return new HtmlTestValue(new TestValueImpl(value));
+    protected TestValue createTestValue(NakedObject parent, Value field) {	
+        return new HtmlTestValue(new TestValueImpl(parent, field));
     }
 
     public HtmlDocumentor getDocumentor(String name) {
         documentor = new HtmlDocumentor("tmp/", name);
         return documentor;
+    }
+
+    public TestValue createParamerTestValue(NakedValue value) {
+        return new ParameterValueImpl(value);
     }
 }
 

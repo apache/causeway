@@ -43,12 +43,12 @@ public abstract class ObjectView extends AbstractView {
     public void dragIn(ContentDrag drag) {
         NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
 
-        NakedObject object = getObject();
+        NakedObject target = getObject();
 
-        Action target = object.getNakedClass().getObjectAction(Action.USER, null, new NakedClass[] {source.getNakedClass()});
+        Action action = dropAction(source, target); //object.getNakedClass().getObjectAction(Action.USER, null, new NakedClass[] {source.getNakedClass()});
 
-        if (target != null) {
-            About about = target.getAbout(Session.getSession().getSecurityContext(), object, source);
+        if (action != null) {
+            About about = action.getAbout(Session.getSession().getSecurityContext(), target, source);
 
             if (about.canUse().isAllowed()) {
                 getViewManager().setStatus(about.getDescription());
@@ -62,7 +62,11 @@ public abstract class ObjectView extends AbstractView {
             getViewManager().setStatus("");
             getState().setCantDrop();
         }
-
+        markDamaged();
+    }
+    
+    public void dragOut(ContentDrag drag) {
+        getState().clearObjectIdentified();
         markDamaged();
     }
 
@@ -80,12 +84,7 @@ public abstract class ObjectView extends AbstractView {
         NakedObject target = getObject();
         Assert.assertNotNull(target);
 
-        Action action;
-        if(target instanceof NakedClass) {
-            action = ((NakedClass) target).getClassAction(Action.USER, null, new NakedClass[] {source.getNakedClass()});
-        } else {
-            action = target.getNakedClass().getObjectAction(Action.USER, null, new NakedClass[] {source.getNakedClass()});
-        }
+        Action action = dropAction(source, target);
         
         if ((action != null) &&
                 action.getAbout(Session.getSession().getSecurityContext(), target, source).canUse().isAllowed()) {
@@ -102,6 +101,16 @@ public abstract class ObjectView extends AbstractView {
 
             markDamaged();
         }
+    }
+
+    private Action dropAction(NakedObject source, NakedObject target) {
+        Action action;
+        if(target instanceof NakedClass) {
+            action = ((NakedClass) target).getClassAction(Action.USER, null, new NakedClass[] {source.getNakedClass()});
+        } else {
+            action = target.getNakedClass().getObjectAction(Action.USER, null, new NakedClass[] {source.getNakedClass()});
+        }
+        return action;
     }
 
     protected NakedObject getObject() {

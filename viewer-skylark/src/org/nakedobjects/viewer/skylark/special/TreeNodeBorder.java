@@ -21,6 +21,7 @@ import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.basic.ClassOption;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
+import org.nakedobjects.viewer.skylark.basic.ObjectTitleText;
 import org.nakedobjects.viewer.skylark.basic.TitleText;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
 
@@ -56,7 +57,7 @@ public class TreeNodeBorder extends AbstractBorder {
 		    
 		} else {
 		    icon = new IconGraphic(this, LABEL_STYLE);
-		    text = new TitleText(this, LABEL_STYLE);
+		    text = new ObjectTitleText(this, LABEL_STYLE);
 		}
 		int height = icon.getSize().getHeight();
 		

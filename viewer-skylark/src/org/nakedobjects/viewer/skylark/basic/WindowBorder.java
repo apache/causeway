@@ -26,7 +26,7 @@ public class WindowBorder extends AbstractBorder {
 		thickness = size;
 		
 		icon = new IconGraphic(this, TITLE_STYLE);
-		text = new TitleText(this, TITLE_STYLE);
+		text = new ObjectTitleText(this, TITLE_STYLE);
 		int height = icon.getSize().getHeight();
 		
 		baseline = icon.getBaseline();

@@ -39,7 +39,7 @@
 	<!--        init            -->
 	<!--                        -->
 	<target name="-init">
-		<echo message="Version ${build.version}"/>
+		<echo message="Version ${build.version}  ${build.id}"/>
 
 		<mkdir dir="${build.dir}"/>
 		
@@ -53,6 +53,14 @@
 		<copy todir="${build.test.dir}">
 			<fileset dir="${test.dir}"/>
 		</copy>
+
+		<replace dir="${build.src.dir}" includes="**/About.java">
+			<replacefilter token="@VERSION@" value="${build.version}"/>
+			<replacefilter token="@BUILD_ID@" value="${build.id}"/>
+			<replacefilter token="@NAME@" value="${build.name}"/>
+			<replacefilter token="@COYRIGHT@" value="${build.copyright}"/>
+			<replacefilter token="@IMAGE_FILE@" value="${build.image-file}"/>
+		</replace>
 
 		<tstamp/>
 	</target>

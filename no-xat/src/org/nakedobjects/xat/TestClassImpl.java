@@ -79,7 +79,7 @@ public class TestClassImpl implements TestClass {
         return instances;
     }
 
-    public TestObject invokeAction(String name) {
+    public TestObject invokeAction(final String name) {
         Action action = nakedClass.getClassAction(Action.USER, name);
 
         if (action == null) { throw new IllegalActionError("No action " + name + " on the " + nakedClass.getPluralName()
@@ -93,7 +93,7 @@ public class TestClassImpl implements TestClass {
         }
     }
 
-    public TestObject invokeAction(String name, TestObject parameter) {
+    public TestObject invokeAction(final String name, TestObject parameter) {
         NakedObject dropObject = (NakedObject) parameter.getForObject();
         Action action = nakedClass.getClassAction(Action.USER, name, new NakedClass[] { dropObject.getNakedClass() });
 

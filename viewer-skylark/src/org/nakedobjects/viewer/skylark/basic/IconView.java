@@ -17,7 +17,7 @@ public class IconView extends ObjectView {
         super(content, specification, axis);
         
         icon = new IconGraphic(this, style);
-        text = new TitleText(this, style);
+        text = new ObjectTitleText(this, style);
     }
 
     public boolean isOpen() {

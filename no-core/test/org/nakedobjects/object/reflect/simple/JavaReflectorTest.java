@@ -24,6 +24,7 @@
 
 package org.nakedobjects.object.reflect.simple;
 
+import org.nakedobjects.SystemClock;
 import org.nakedobjects.object.ContactTestObject;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.control.ClassAbout;
@@ -31,6 +32,8 @@ import org.nakedobjects.object.reflect.ActionDelegate;
 import org.nakedobjects.object.reflect.MemberIf;
 import org.nakedobjects.object.reflect.NakedClassException;
 import org.nakedobjects.object.reflect.OneToOneAssociationIF;
+import org.nakedobjects.object.value.Date;
+import org.nakedobjects.object.value.TimeStamp;
 
 import java.util.Vector;
 
@@ -124,6 +127,9 @@ public class JavaReflectorTest extends TestCase {
 
     protected void setUp() throws ClassNotFoundException {
     	LogManager.getLoggerRepository().setThreshold(Level.OFF);
+        
+        Date.setClock(new SystemClock());
+        TimeStamp.setClock(new SystemClock());
     	
         c = new JavaReflector(ContactTestObject.class.getName());
     }

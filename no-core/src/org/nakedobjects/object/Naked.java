@@ -40,6 +40,12 @@ public interface Naked {
     public String getClassName();
 
     /**
+     * Returns the NakedClass that represents this object.
+     */
+    NakedClass getNakedClass();
+
+
+    /**
      * Returns the class name without package details e.g., Transaction for the class
      * accounts.Transaction
      */

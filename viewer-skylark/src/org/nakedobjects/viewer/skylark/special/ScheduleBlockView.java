@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.apache.log4j.Logger;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.Field;
@@ -18,8 +17,11 @@ import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
+import org.nakedobjects.viewer.skylark.basic.ObjectTitleText;
 import org.nakedobjects.viewer.skylark.basic.TitleText;
 import org.nakedobjects.viewer.skylark.core.ObjectView;
+
+import org.apache.log4j.Logger;
 
 
 public class ScheduleBlockView extends ObjectView {
@@ -35,7 +37,7 @@ public class ScheduleBlockView extends ObjectView {
         this.colorField = colorField;
 
         icon = new IconGraphic(this, Style.NORMAL);
-        text = new TitleText(this, Style.NORMAL);
+        text = new ObjectTitleText(this, Style.NORMAL);
  	}
 
     public void draw(Canvas canvas) {

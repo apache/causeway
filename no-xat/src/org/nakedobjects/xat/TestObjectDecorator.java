@@ -220,7 +220,31 @@ public abstract class TestObjectDecorator implements TestObject {
         }
 
 
-}
+    public void assertActionInvisible(String name, TestNaked[] parameters) {
+        wrappedObject.assertActionInvisible(name, parameters);
+    }
+    public void assertActionUnusable(String name, TestNaked[] parameters) {
+        wrappedObject.assertActionUnusable(name, parameters);
+    }
+    public void assertActionUsable(String name, TestNaked[] parameters) {
+        wrappedObject.assertActionUsable(name, parameters);
+    }
+    public void assertActionVisible(String name, TestNaked[] parameters) {
+        wrappedObject.assertActionVisible(name, parameters);
+    }
+    
+    public TestObject invokeAction(String name, TestNaked[] parameters) {
+        return wrappedObject.invokeAction(name, parameters);
+    }
+    
+    public void assertActionExists(String name, TestNaked[] parameters) {
+        wrappedObject.assertActionExists(name, parameters);
+    }
+    
+    public void assertFieldExists(String fieldName) {
+        wrappedObject.assertFieldExists(fieldName);
+    }    
+}    
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business

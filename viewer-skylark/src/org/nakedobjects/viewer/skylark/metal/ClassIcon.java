@@ -16,6 +16,7 @@ import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
+import org.nakedobjects.viewer.skylark.basic.ClassTitleText;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
 import org.nakedobjects.viewer.skylark.core.ObjectView;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
@@ -52,6 +53,7 @@ public class ClassIcon extends ObjectView {
     private IconGraphic iconUnselected;
     private IconGraphic iconSelected;
     private IconGraphic icon;
+    private final ClassTitleText title;
 
     public ClassIcon(Content content, ViewSpecification specification, ViewAxis axis) {
         super(content, specification, axis);
@@ -77,6 +79,8 @@ public class ClassIcon extends ObjectView {
         }
         
        icon = iconUnselected;
+       
+       title = new ClassTitleText(this, Style.CLASS);
     }
 
     public void exited() {
@@ -102,14 +106,10 @@ public class ClassIcon extends ObjectView {
         int y = icon.getBaseline();
         icon.draw(canvas, x, y);
  
-		NakedObject object = ((ObjectContent) getContent()).getObject();
-		NakedClass nc = ((NakedClass) object);
-		String name = nc.getShortName();
-
-		int w = Style.CLASS.stringWidth(name);
+		int w = title.getSize().getWidth();
 		int x2 = (w > icon.getSize().getWidth()) ? x : getSize().getWidth() / 2 - w / 2;
 		int y2 = icon.getSize().getHeight() + Style.CLASS.getAscent() + VPADDING;
-        canvas.drawText(name, x2, y2, Style.BLACK, Style.CLASS);
+		title.draw(canvas, x2, y2);
     }
 
     public int getBaseline() {
@@ -117,16 +117,14 @@ public class ClassIcon extends ObjectView {
     }
 
     public Size getRequiredSize() {
-        Size size = icon.getSize();
-        int textHeight = Style.CLASS.getHeight();
+        final Size iconSize = icon.getSize();
+        final Size textSize = title.getSize();
         NakedObject object = ((ObjectContent) getContent()).getObject();
         NakedClass nc = ((NakedClass) object);
-		String name = nc.getShortName();
-        int textWidth = Style.CLASS.stringWidth(name);
         
-        size.extendHeight(VPADDING + textHeight  + VPADDING);
-        size.ensureWidth(textWidth);
-        return size;
+        iconSize.extendHeight(VPADDING + textSize.getHeight()  + VPADDING);
+        iconSize.ensureWidth(textSize.getWidth());
+        return iconSize;
     }
 
     public boolean isOpen() {

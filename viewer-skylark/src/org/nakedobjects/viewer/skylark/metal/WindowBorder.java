@@ -8,6 +8,7 @@ import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
+import org.nakedobjects.viewer.skylark.basic.ObjectTitleText;
 import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
 import org.nakedobjects.viewer.skylark.basic.TitleText;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
@@ -28,7 +29,7 @@ public class WindowBorder extends AbstractBorder {
 		super(wrappedView);
 		
 		icon = new IconGraphic(this, TITLE_STYLE);
-		text = new TitleText(this, TITLE_STYLE);
+		text = new ObjectTitleText(this, TITLE_STYLE);
 		titlebarHeight = icon.getSize().getHeight();
 
 		left = LINE_THICKNESS;

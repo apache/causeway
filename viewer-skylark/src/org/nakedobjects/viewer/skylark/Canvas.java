@@ -1,26 +1,3 @@
-/*
-        Naked Objects - a framework that exposes behaviourally complete
-        business objects directly to the user.
-        Copyright (C) 2000 - 2003  Naked Objects Group Ltd
-
-        This program is free software; you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation; either version 2 of the License, or
-        (at your option) any later version.
-
-        This program is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU General Public License for more details.
-
-        You should have received a copy of the GNU General Public License
-        along with this program; if not, write to the Free Software
-        Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-        The authors can be contacted via www.nakedobjects.org (the
-        registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-        Road, Woking GU21 1NR, UK).
-*/
 package org.nakedobjects.viewer.skylark;
 
 import java.awt.Font;
@@ -47,19 +24,9 @@ public class Canvas {
     }
     
     public Canvas createSubcanvas(int x, int y, int width, int height) {
-  //      int existingWidth = graphics.getClipBounds().width - x;
- //       int existingHeight = graphics.getClipBounds().height - y;
-
     	Graphics g = graphics.create();
     	g.clipRect(x, y, width, height);  // this form of clipping must go here!
         g.translate(x, y);
-        
-//        int w = Math.max(0, Math.min(existingWidth, width));
-   //     int h = Math.max(0, Math.min(existingHeight, height));
-
-  //      g.clipRect(x, y, width, height);
-//        g.setClip(0, 0, width, height);
-    //    g.setClip(0, 0, w, h);
 
         return new Canvas(g, 0, 0, width, height);
     }
@@ -84,6 +51,10 @@ public class Canvas {
 */
     public void drawSolidRectangle(Location at, Size size, Color color) {
         drawSolidRectangle(at.getX(), at.getY(), size.getWidth(), size.getHeight(), color);
+    }
+
+    public void drawSolidRectangle(Size size, Color color) {
+        drawSolidRectangle(0, 0, size.getWidth(), size.getHeight(), color);
     }
 
     public void drawIcon(Icon icon, int x, int y) {
@@ -156,19 +127,6 @@ public class Canvas {
     }
 
  	public void reduce(int left, int top, int right, int bottom) {
-/*
- 		int x = graphics.getClipBounds().x;
- 		int y = graphics.getClipBounds().y;
- 		int width = graphics.getClipBounds().width;
- 		int height = graphics.getClipBounds().height;
- 		
- 		graphics.setColor(Color.DEBUG1.getAwtColor());
- 		graphics.drawRect(x , y, width - 1, height - 1);
- 		graphics.setColor(Color.DEBUG2.getAwtColor());
- 		graphics.drawRect(x + left, y + top, width - left - right - 1, height -top - bottom - 1);
- 		
-   // 	graphics.clipRect(x + left, y + top, width - left - right, height -top - bottom);  // this form of clipping must go here!
-    */	
         graphics.translate(left, top);
 
 	}
@@ -195,3 +153,27 @@ public class Canvas {
         }
     }
 }
+
+/*
+Naked Objects - a framework that exposes behaviourally complete
+business objects directly to the user.
+Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+The authors can be contacted via www.nakedobjects.org (the
+registered address of Naked Objects Group is Kingsway House, 123 Goldworth
+Road, Woking GU21 1NR, UK).
+*/

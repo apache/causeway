@@ -1,21 +1,31 @@
 package org.nakedobjects.xat;
 
 
+import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ValueParseException;
+import org.nakedobjects.object.reflect.Value;
 
 
 class TestValueImpl extends AbstractTestObject implements TestValue {
-
-    public TestValueImpl(NakedValue object) {
-        setForObject(object);
+    private final NakedObject parent;
+    private final Value value;
+    
+    public TestValueImpl(NakedObject parent, Value value) {
+        this.parent = parent;
+        this.value = value;
+        setForObject(value.get(parent));
     }
 
     public void fieldEntry(String value) {
          try {
+             this.value.parseAndSave(parent, value);
             ((NakedValue) getForObject()).parse(value);
         } catch (ValueParseException e) {
-            throw new IllegalActionError("Field value " + value + " could not be parsed in " + getForObject());
+            throw new IllegalActionError("Field value '" + value + "' could not be parsed in field " + this.value.getName());
+        } catch (InvalidEntryException e) {
+            throw new IllegalActionError("Field value '" + value + "' is not valid: " + e.getMessage());
         }
     }
 

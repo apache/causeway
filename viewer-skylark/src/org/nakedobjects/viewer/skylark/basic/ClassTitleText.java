@@ -1,20 +1,25 @@
-package org.nakedobjects.viewer.skylark;
+package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.viewer.skylark.Text;
+import org.nakedobjects.viewer.skylark.View;
 
 
-public interface Workspace extends View {
-    View addOpenViewFor(Naked object, Location at);
+public class ClassTitleText extends TitleText {
+    private final ObjectContent content;
 
-    void lower(View view);
+    public ClassTitleText(final View view, final Text style) {
+        super(view, style);
+        content = (ObjectContent) view.getContent();
+    }
 
-    void raise(View view);
+    protected String title() {
+        final NakedClass nakedClass = (NakedClass) content.getObject();
+        return nakedClass.getShortName();
+    }
+}
 
-    void removeOtherRootViews(View view);
-
-    void removeViewsFor(NakedObject object);
- }
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
  * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group

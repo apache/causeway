@@ -1,31 +1,32 @@
-package org.nakedobjects.object;
+package org.nakedobjects.xat;
 
 
-import org.nakedobjects.utility.ComponentException;
-import org.nakedobjects.utility.ConfigurationException;
-
-import junit.framework.TestSuite;
+import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.ValueParseException;
 
 
-public class TransientObjectStoreFieldsTest extends NakedObjectStoreFieldsTestCase {
+class ParameterValueImpl extends AbstractTestObject implements TestValue {
 
-   public TransientObjectStoreFieldsTest(String name) {
-      super(name);
-   }
+    public ParameterValueImpl(NakedValue object) {
+        setForObject(object);
+    }
 
-   public static void main(String[] args) {
-      junit.textui.TestRunner.run(new TestSuite(TransientObjectStoreFieldsTest.class));
-   }
+    public void fieldEntry(String value) {
+        // TODO run validation first
+         try {
+            ((NakedValue) getForObject()).parse(value);
+        } catch (ValueParseException e) {
+            throw new IllegalActionError("Field value " + value + " could not be parsed in " + getForObject());
+        }
+    }
 
-	public NakedObjectStore installObjectStore() throws ObjectStoreException {
-      return new TransientObjectStore();
-   }
-	
-	protected void restartObjectStore() throws ObjectStoreException, Exception, ConfigurationException, ComponentException {
-	    // override so the store is not restarted
-	}
+    /**
+     returns the title of the object as a String
+     */
+    public String getTitle() {
+        return getForObject().title().toString();
+    }
 }
-
 
 /*
 Naked Objects - a framework that exposes behaviourally complete

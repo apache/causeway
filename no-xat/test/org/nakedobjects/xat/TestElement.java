@@ -1,36 +1,28 @@
-package org.nakedobjects.object;
+package org.nakedobjects.xat;
 
+import org.nakedobjects.object.AbstractNakedObject;
+import org.nakedobjects.object.Title;
 
-import org.nakedobjects.utility.ComponentException;
-import org.nakedobjects.utility.ConfigurationException;
+public class TestElement extends AbstractNakedObject {
 
-import junit.framework.TestSuite;
+    private String name;
 
+    public TestElement() {}
+    
+    public TestElement(String name) {
+        this.name = name;
+    }
 
-public class TransientObjectStoreFieldsTest extends NakedObjectStoreFieldsTestCase {
-
-   public TransientObjectStoreFieldsTest(String name) {
-      super(name);
-   }
-
-   public static void main(String[] args) {
-      junit.textui.TestRunner.run(new TestSuite(TransientObjectStoreFieldsTest.class));
-   }
-
-	public NakedObjectStore installObjectStore() throws ObjectStoreException {
-      return new TransientObjectStore();
-   }
-	
-	protected void restartObjectStore() throws ObjectStoreException, Exception, ConfigurationException, ComponentException {
-	    // override so the store is not restarted
-	}
+    public Title title() {
+        return new Title(name);
+    }
 }
 
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,7 +1,12 @@
 package org.nakedobjects.xat;
 
+import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.MockObjectManager;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.collection.InternalCollection;
+import org.nakedobjects.object.collection.TypedCollection;
+import org.nakedobjects.object.value.Money;
+import org.nakedobjects.object.value.TextString;
 import org.nakedobjects.security.SecurityContext;
 import org.nakedobjects.security.Session;
 
@@ -14,10 +19,13 @@ import org.apache.log4j.Logger;
 
 
 public class TestObjectImplTest extends TestCase {
-
-    private TestObjectImpl testObject;
-    private TestObjectExample object;
+    private TestObjectExample targetObject;
+    private TestObject target;
+    private TestObject singleParameter;
+    private TestNaked[] multipleParameters;
     private MockObjectManager om;
+    private TestElement elementOne;
+    private TestElement elementTwo;
 
     public static void main(String[] args) {}
 
@@ -28,12 +36,25 @@ public class TestObjectImplTest extends TestCase {
         om = MockObjectManager.setup();
         om.setupAddClass(NakedObject.class);
         om.setupAddClass(TestObjectExample.class);
+        om.setupAddClass(InternalCollection.class);
+        om.setupAddClass(TypedCollection.class);
+        om.setupAddClass(TestElement.class);
+       om.setupAddClass(TextString.class);
 
         Session.initSession();
         SecurityContext context = Session.getSession().getSecurityContext();
-        object = new TestObjectExample();
-
-        testObject = new TestObjectImpl(context, object);
+        
+        targetObject = new TestObjectExample();
+        target = new TestObjectImpl(context, targetObject);
+        
+        singleParameter = new TestObjectImpl(context, new TestObjectExample());
+        TestObjectImpl parameter2 = new TestObjectImpl(context, new TestObjectExample());
+        //TestValueImpl valueParameter = new TestValueImpl(new TextString("six"));
+		TestValue valueParameter = TestObjectFactory.getInstance().createParamerTestValue(new TextString("a value"));
+        multipleParameters = new TestNaked[] {singleParameter, parameter2, valueParameter};
+        
+        targetObject.getCollection().add(elementOne = new TestElement("one"));
+        targetObject.getCollection().add(elementTwo = new TestElement("two"));
     }
     
     protected void tearDown() throws Exception {
@@ -43,186 +64,248 @@ public class TestObjectImplTest extends TestCase {
     }
 
     public void testAssertActionVisible() {
-        testObject.assertActionVisible("One Default");
-        testObject.assertActionVisible("Two Default", testObject);
+       target.assertActionVisible("One Default");
+       target.assertActionVisible("Two Default", singleParameter);
+       target.assertActionVisible("Seven", multipleParameters);
     }
 
     public void testAssertActionExists() {
-        testObject.assertActionExists("One Default");
-        testObject.assertActionExists("Two Default", testObject);
-        testObject.assertActionExists("Three Invisible");
-
+       target.assertActionExists("One Default");
+       target.assertActionExists("Three Invisible");
+       target.assertActionExists("Two Default", singleParameter);
+       target.assertActionExists("Seven", multipleParameters);
+       try {
+           target.assertActionExists("Non existant");
+            fail();
+        } catch (NakedAssertionFailedError expected) {}
     }
 
     public void testAssertActionInvisible() {
-        testObject.assertActionInvisible("Three Invisible");
+       target.assertActionInvisible("Three Invisible");
+       target.assertActionInvisible("nineInvisible", singleParameter);
+       target.assertActionInvisible("eight invisible", multipleParameters);
 
         try {
-            testObject.assertActionInvisible("One Default");
+           target.assertActionInvisible("One Default");
+            fail();
         } catch (AssertionFailedError expected) {
-            return;
         }
-        fail();
     }
 
     public void testAssertActionUsable() {
-        testObject.assertActionUsable("One Default");
+       target.assertActionUsable("One Default");
+       target.assertActionExists("Two Default", singleParameter);
+       target.assertActionUsable("Seven", multipleParameters);
     }
 
     public void testAssertActionUnusable() {
-        testObject.assertActionUnusable("Four Unusable");
+        target.assertActionUnusable("Four Unusable");
+        target.assertActionUnusable("Six Unusable", singleParameter);
+        target.assertActionUnusable("ten  Unusable", multipleParameters);
     }
 
     public void testAssertFieldModifiable() {
-        testObject.assertFieldModifiable("One Modifiable");
+       target.assertFieldModifiable("One Modifiable");
         try {
-            testObject.assertFieldModifiable("Two Unmodifiable");
+           target.assertFieldModifiable("Two Unmodifiable");
             fail();
         } catch (NakedAssertionFailedError expected) {}
     }
 
     public void testAssertFieldUnmodifiable() {
-        testObject.assertFieldUnmodifiable("Two Unmodifiable");
+       target.assertFieldUnmodifiable("Two Unmodifiable");
         try {
-            testObject.assertFieldUnmodifiable("One Modifiable");
+           target.assertFieldUnmodifiable("One Modifiable");
             fail();
         } catch (NakedAssertionFailedError expected) {}
     }
 
     public void testAssertFieldVisible() {
-        testObject.assertFieldVisible("One Modifiable");
+       target.assertFieldVisible("One Modifiable");
         try {
-            testObject.assertFieldVisible("Three Invisible");
+           target.assertFieldVisible("Three Invisible");
             fail();
         } catch (NakedAssertionFailedError expected) {}
     }
 
     public void testAssertFieldInvisible() {
-        testObject.assertFieldInvisible("Three Invisible");
+       target.assertFieldInvisible("Three Invisible");
         try {
-            testObject.assertFieldInvisible("One Modifiable");
+           target.assertFieldInvisible("One Modifiable");
             fail();
         } catch (NakedAssertionFailedError expected) {}
     }
-
-    public void testAssertFieldExists() {
-        testObject.assertFieldExists("One Modifiable");
-        testObject.assertFieldExists("Three Invisible");
+    
+    public void testAssertFieldContainsElement() {
+        target.assertFieldContains("collection", "one");
         try {
-            testObject.assertFieldExists("Nonexistant");
+            target.assertFieldContains("collection", "four");
+             fail();
+         } catch (NakedAssertionFailedError expected) {}
+   }
+
+    public void testGetFieldElement() {
+        TestObject fld = target.getField("collection", "two");
+        
+        assertEquals(elementTwo, fld.getForObject());
+   }
+
+   public void testAssertFieldExists() {
+       target.assertFieldExists("One Modifiable");
+       target.assertFieldExists("Three Invisible");
+        try {
+           target.assertFieldExists("Nonexistant");
             fail();
         } catch (NakedAssertionFailedError expected) {}
     }
 
     public void testInvokeAction() {
-        testObject.invokeAction("One Default");
-        assertEquals("one", object.result());
+        target.invokeAction("One Default");
+        assertEquals("one", targetObject.result());
 
-        testObject.invokeAction("Two Default", testObject);
-        assertEquals("two", object.result());
+        target.invokeAction("Two Default", singleParameter);
+        assertEquals("two", targetObject.result());
 
+        target.invokeAction("Seven", multipleParameters);
+        assertEquals("a value", targetObject.result());
+    }
+
+    public void testCantSeeAction() {
         try {
-            testObject.invokeAction("Three Invisible");
+            target.invokeAction("Three Invisible");
             fail();
         } catch (NakedAssertionFailedError e) {}
 
         try {
-            testObject.invokeAction("Five Invisible", testObject);
+            target.invokeAction("Five Invisible", singleParameter);
             fail();
         } catch (NakedAssertionFailedError e) {}
 
         try {
-            testObject.invokeAction("Four Unusable");
+            target.invokeAction("EIGHT Invisible",multipleParameters);
+            fail();
+        } catch (NakedAssertionFailedError e) {}
+    }
+
+    public void testCantInvokeAction() {
+
+        try {
+            target.invokeAction("Four Unusable");
             fail();
         } catch (NakedAssertionFailedError e) {}
 
         try {
-            testObject.invokeAction("Six Unusable", testObject);
+            target.invokeAction("Six Unusable", singleParameter);
+            fail();
+        } catch (NakedAssertionFailedError e) {}
+
+        try {
+            target.invokeAction("ten Unusable", multipleParameters);
             fail();
         } catch (NakedAssertionFailedError e) {}
     }
 
     public void testSetValueFields() {
-        testObject.fieldEntry("One Modifiable", "text entry");
+        target.fieldEntry("One Modifiable", "text entry");
+    }
 
+    public void testCantSetValueFields() {
         try {
-            testObject.fieldEntry("Two Unmodifiable", "text entry");
+            target.fieldEntry("Two Unmodifiable", "text entry");
             fail();
         } catch (NakedAssertionFailedError expected) {}
 
         try {
-            testObject.fieldEntry("Three Invisible", "text entry");
+            target.fieldEntry("Three Invisible", "text entry");
             fail();
         } catch (NakedAssertionFailedError expected) {}
     }
 
     public void testValueTestFields() {
-        testObject.testField("One Modifiable", "text entry");
-        testObject.testField("One Modifiable", "text entry", "text entry");
-
-        try {
-            testObject.testField("Two Unmodifiable", "text entry");
+        target.testField("One Modifiable", "text entry");
+        target.testField("One Modifiable", "text entry", "text entry");
+    }
+    
+    public void testValueTestFieldsThatCantBeChanged() {
+       try {
+            target.testField("Two Unmodifiable", "text entry");
             fail();
         } catch (NakedAssertionFailedError expected) {}
 
         try {
-            testObject.testField("Two Unmodifiable", "text entry", "text entry");
+            target.testField("Two Unmodifiable", "text entry", "text entry");
             fail();
         } catch (NakedAssertionFailedError expected) {}
 
         try {
-            testObject.testField("Three Invisible", "text entry");
+            target.testField("Three Invisible", "text entry");
             fail();
         } catch (NakedAssertionFailedError expected) {}
 
         try {
-            testObject.testField("Three Invisible", "text entry", "text entry");
+            target.testField("Three Invisible", "text entry", "text entry");
             fail();
         } catch (NakedAssertionFailedError expected) {}
     }
 
     public void testAssociate() {
-        testObject.associate("Four Default", testObject);
-        assertEquals(testObject.toString(), object.result());
-
+        target.associate("Four Default", singleParameter);
+        assertEquals(singleParameter.toString(), targetObject.result());
+    }
+    
+    public void testCantAssociate() {  
         try {
-            testObject.associate("Five Unmodifiable", testObject);
+            target.associate("Five Unmodifiable", singleParameter);
             fail();
         } catch (NakedAssertionFailedError expected) {}
 
         try {
-            testObject.associate("Six Invisible", testObject);
+            target.associate("Six Invisible", singleParameter);
             fail();
         } catch (NakedAssertionFailedError expected) {}
     }
     
     public void testTestAssociate() {
-        testObject.testField("Four Default", testObject);
-
+        target.testField("Four Default", singleParameter);
+    }
+    
+    public void testTestAssociateButCantBeChanged() {  
         try {
-            testObject.testField("Five Unmodifiable", testObject);
+            target.testField("Five Unmodifiable", singleParameter);
             fail();
         } catch (NakedAssertionFailedError expected) {}
 
         try {
-            testObject.testField("Six Invisible", testObject);
+            target.testField("Six Invisible", singleParameter);
             fail();
         } catch (NakedAssertionFailedError expected) {}
     }
     
 
     public void testClearAssociation() {
-        testObject.clearAssociation("Four Default");
-
+        target.clearAssociation("Four Default");
+    }
+    
+    public void testCantClearAssociation() {
         try {
-            testObject.clearAssociation("Five Unmodifiable");
+            target.clearAssociation("Five Unmodifiable");
             fail();
         } catch (NakedAssertionFailedError expected) {}
 
         try {
-            testObject.clearAssociation("Six Invisible");
+            target.clearAssociation("Six Invisible");
             fail();
         } catch (NakedAssertionFailedError expected) {}
+    }
+    
+    public void testInvalidFieldEntry() {
+        try {
+            target.fieldEntry("amount", "7.0");
+           target.fieldEntry("amount", "-3.0");
+            fail();
+        }  catch (IllegalActionError expected) {}
+        Money amount = ((Money) target.getField("amount").getForObject());
+        assertEquals(7.0, amount.doubleValue(), 0.0);
     }
 
 }

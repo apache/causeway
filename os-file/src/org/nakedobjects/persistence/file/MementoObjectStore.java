@@ -109,7 +109,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
         return "MementoObjectStore";
     }
 
-    public Vector getInstances(NakedClass cls, boolean includeSubclasses) {
+    public Vector getInstances(NakedClass cls, boolean includeSubclasses) throws ObjectStoreException {
         LOG.debug("getInstances of " + cls);
         ObjectData patternData = new ObjectData(cls, null);
 
@@ -129,7 +129,8 @@ public abstract class MementoObjectStore implements NakedObjectStore {
                 instance = (NakedObject) createSkeletalObject(oid, instanceData.getClassName());
                 loadedObjects.loaded(instance);
             }
-            instance.resolve();
+            initObject(instance, instanceData);
+            instance.setResolved();
             instances.addElement(instance);
         }
 
@@ -137,7 +138,34 @@ public abstract class MementoObjectStore implements NakedObjectStore {
     }
 
     public Vector getInstances(NakedClass cls, String pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
-        throw new UnsupportedFindException();
+        LOG.debug("getInstances like " + pattern);
+        
+        
+        ObjectData patternData = new ObjectData(cls, null);
+        ObjectDataVector data = dataManager.getInstances(patternData);
+        Vector instances = new Vector(data.size());
+
+        for (int i = 0; i < data.size(); i++) {
+            ObjectData instanceData = data.element(i);
+            LOG.debug("instance data " + instanceData);
+
+            SimpleOid oid = instanceData.getOid();
+            NakedObject instance;
+            // TODO don't create new object if one already exists!
+            if (loadedObjects.isLoaded(oid)) {
+                instance = loadedObjects.getLoadedObject(oid);
+            } else {
+                instance = (NakedObject) createSkeletalObject(oid, instanceData.getClassName());
+                loadedObjects.loaded(instance);
+            }
+            initObject(instance, instanceData);
+            instance.setResolved();
+            if(instance.title().toString().equalsIgnoreCase(pattern)) {
+                instances.addElement(instance);
+            }
+        }
+
+        return instances;
     }
 
     public Vector getInstances(NakedObject pattern, boolean includeSubclasses) throws ObjectStoreException {
@@ -160,6 +188,9 @@ public abstract class MementoObjectStore implements NakedObjectStore {
                 instance = (NakedObject) createSkeletalObject(oid, instanceData.getClassName());
                 loadedObjects.loaded(instance);
 	            //resolve(instance);
+
+                initObject(instance, instanceData);
+            instance.setResolved();
             }
             instances.addElement(instance);
         }

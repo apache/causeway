@@ -1,8 +1,8 @@
 package org.nakedobjects.viewer.skylark;
 
 public class ViewState implements Cloneable {
-    private static final short CAN_DROP = 0x08;
-    private static final short CANT_DROP = 0x18;
+    private static final short CAN_DROP = 0x10;
+    private static final short CANT_DROP = 0x08;
     private static final short OBJECT_IDENTIFIED = 0x04;
     private static final short ROOT_VIEW_IDENTIFIED = 0x01;
     private static final short VIEW_IDENTIFIED = 0x02;
@@ -45,11 +45,11 @@ public class ViewState implements Cloneable {
     }
 
     public boolean canDrop() {
-        return (state & CAN_DROP) > 0;
+        return (state & CAN_DROP) == CAN_DROP;
     }
 
     public boolean cantDrop() {
-        return (state & CANT_DROP) > 0;
+        return (state & CANT_DROP) == CANT_DROP;
     }
 
     public void clearObjectIdentified() {
@@ -74,6 +74,7 @@ public class ViewState implements Cloneable {
     	str += isRootViewIdentified() ? "Root-view-identified " : "";
     	str += canDrop() ? "Can-drop " : "";
     	str += cantDrop() ? "Cant-drop " : "";
+    	str += " " + Integer.toBinaryString(state);
 		return str;
 	}
 

@@ -30,27 +30,10 @@ public class SimpleBorder extends AbstractBorder {
     }
    
 	public void dragIn(ContentDrag drag) {
-		getState().setCanDrop();
-	wrappedView.dragIn(drag);
+		wrappedView.dragIn(drag);
 	    markDamaged();
 	}
-/*	
-	public void dragOut(ContentDrag drag) {
-		getState().
-		delegate.dragOut(drag);
-	    markDamaged();
-	}
-	*/
-/*	public void entered() {
-		delegate.entered();
-	    markDamaged();
-	}
-	
-	public void exited() {
-		delegate.exited();
-	    markDamaged();
-	}
-*/	
+
 	public void entered() {
 		getState().setObjectIdentified();
 		getState().setViewIdentified();

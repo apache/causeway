@@ -6,7 +6,6 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectException;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectStore;
@@ -263,7 +262,7 @@ public abstract class Exploration {
         boolean noSplash = Configuration.getInstance().getBoolean("nosplash", false);
         if (!noSplash) {
             SplashWindow splash = new SplashWindow();
-            splash.removeAfterDelay(4);
+            splash.removeAfterDelay(40);
         }
     }
 

@@ -1,122 +1,289 @@
 <?xml version="1.0"?>
+<!DOCTYPE project [
+	<!ENTITY properties SYSTEM "file:../naked-objects/properties.xml">
+]>
 
-<project name="Naked Objects framework" default="all" basedir=".">
-
+<project name="Naked Objects framework" default="release-rebuild" basedir=".">
+	&properties;
+	
 	<description>
 	</description>
 
-	<target name="all">
-		<antcall target="all-components">
+	<target name ="new-release-number">
+		<tstamp>
+			<format property="build.number" pattern="yyyyMMdd-HH00" locale="en" />
+		</tstamp>
+		<echo>Build number: ${build.number}</echo>
+	</target>
+
+
+	<target name="release-milestone" description="Numbered milestone" depends="new-release-number">
+		<echo>Release milestone distributions</echo>
+	</target>
+
+	<target name="release-integration" depends="new-release-number">
+		<echo>Release integration distributions</echo>
+	</target>
+
+	<target name="release-rebuild" depends="new-release-number">
+		<echo>Release rebuild distributions</echo>
+
+		<antcall target="create-all-distributions">
+			<param name="build.id" value="B${build.number}"/>
 			<param name="target" value="all"/>
 		</antcall>
 	</target>
 	
-	<target name="release-exploration">
+	<target name="create-all-distributions" depends="all-components">
+		<antcall target="exploration-distribution"/>
+		<antcall target="dotnet-distribution"/>
+		<antcall target="enterprise-distribution"/>
+		<antcall target="source-distribution"/>
+	</target>
+
+	<target name="exploration-distribution">
+		<echo>Create exploration distribution</echo>
+		
 		<mkdir dir="exploration"/>
-		<mkdir dir="exploration/api"/>
 				
 		<jar jarfile="exploration/exploration.jar">
 			<zipfileset src="../no-core/build/release/no-core.jar"/>
 			<zipfileset src="../viewer-skylark/build/release/viewer-skylark.jar"/>
 		</jar>
-				
+
 		<jar jarfile="exploration/exploration-src.jar">
 			<zipfileset src="../no-core/build/release/no-core-src.jar"/>
 			<zipfileset src="../viewer-skylark/build/release/viewer-skylark-src.jar"/>
 		</jar>
-				
-		<javadoc 
-			destDir="exploration/api" 
-			windowtitle="Naked Objects Exploration API version ${build.version}" 
-			additionalparam="-breakiterator -tag group -tag testpackage -tag testcase -tag testkind -tag testfamily -tag testsetup -tag testedclass">
+
+		<copy todir="exploration/images">
+			<fileset dir="../no-core/src/images">
+			</fileset>
+		</copy>
+
+		<javadoc destDir="exploration/api"
+		         windowtitle="Naked Objects Exploration API version ${build.version}"
+		         additionalparam="-breakiterator -tag group -tag testpackage -tag testcase -tag testkind -tag testfamily -tag testsetup -tag testedclass">
 
 			<package name="org.nakedobjects.*"/>
-			
+
 			<sourcepath location="../no-core/build/src" />
 			<sourcepath location="../example-ecs/build/src" />
 			<!-- is viewer doc necessary?? -->
 			<!-- sourcepath location="../viewer-skylark/build/src" /-->
 		</javadoc>
-		
+
 		<mkdir dir="tmp"/>
 		<junitreport tofile="tmp/combined.xml">
 			<fileset dir="../no-core/build/test-run"/>
-			<fileset dir="../example-ecs/build/test-run"/>
 			<fileset dir="../viewer-skylark/build/test-run"/>
-			<fileset dir="../no-xat/build/test-run"/>
 			<report format="frames" todir="exploration/tests"/>
 		</junitreport>
 
-		
+
 		<!-- copy in:
 				properties files
 				examples & example code in html
 				docs
 				-->
-		
-		<property file="../naked-objects/build.properties"/>
 
-		<zip zipfile="../release/exploration-${build.version}.zip" basedir="exploration">
-			
-		</zip>
+		<zip zipfile="../release/nakedobjects-xp-${build.id}.zip" basedir="exploration"/>
 	</target>
 	
+	
+	<target name="dotnet-distribution">	
+		<echo>Create exploration distribution</echo>
+	</target>
+	
+	
+	<target name="enterprise-distribution">
+		<echo>Create enterprise distribution</echo>
+		
+		<mkdir dir="enterprise"/>
+		
+		<jar jarfile="enterprise/enterprise.jar">
+			<zipfileset src="../no-core/build/release/no-core.jar"/>
+			<zipfileset src="../no-xat/build/release/no-xat.jar"/>
+			<zipfileset src="../os-cache/build/release/os-cache.jar"/>
+			<zipfileset src="../os-file/build/release/os-file.jar"/>
+			<zipfileset src="../os-sql/build/release/os-sql.jar"/>
+			<zipfileset src="../utility-xmlsnapshot/build/release/utility-xmlsnapshot.jar"/>
+			<zipfileset src="../viewer-skylark/build/release/viewer-skylark.jar"/>
+		</jar>
+
+		<jar jarfile="enterprise/enterprise-src.jar">
+			<zipfileset src="../no-core/build/release/no-core-src.jar"/>
+			<zipfileset src="../no-xat/build/release/no-xat-src.jar"/>
+			<zipfileset src="../os-cache/build/release/os-cache-src.jar"/>
+			<zipfileset src="../os-file/build/release/os-file-src.jar"/>
+			<zipfileset src="../os-sql/build/release/os-sql-src.jar"/>
+			<zipfileset src="../utility-xmlsnapshot/build/release/utility-xmlsnapshot-src.jar"/>
+			<zipfileset src="../viewer-skylark/build/release/viewer-skylark-src.jar"/>
+		</jar>
+
+		<copy todir="enterprise/images">
+			<fileset dir="../no-core/src/images">
+			</fileset>
+		</copy>
+
+		<javadoc destDir="enterprise/api"
+		         windowtitle="Naked Objects Exploration API version ${build.version}"
+		         additionalparam="-breakiterator -tag group -tag testpackage -tag testcase -tag testkind -tag testfamily -tag testsetup -tag testedclass">
+
+			<package name="org.nakedobjects.*"/>
+
+			<sourcepath location="../no-core/build/src" />
+			<sourcepath location="../example-ecs/build/src" />
+			<!-- is viewer doc necessary?? -->
+			<!-- sourcepath location="../viewer-skylark/build/src" /-->
+		</javadoc>
+
+		<mkdir dir="tmp"/>
+		<junitreport tofile="tmp/combined.xml">
+			<fileset dir="../no-core/build/test-run"/>
+			<fileset dir="../no-xat/build/test-run"/>
+			<fileset dir="../os-cache/build/test-run"/>
+			<fileset dir="../os-file/build/test-run"/>
+			<fileset dir="../os-sql/build/test-run"/>
+			<fileset dir="../utility-xmlsnapshot/build/test-run"/>
+			<fileset dir="../viewer-skylark/build/test-run"/>
+			<fileset dir="../example-ecs/build/test-run"/>
+			<report format="frames" todir="enterprise/tests"/>
+		</junitreport>
+
+
+		<!-- copy in:
+				properties files
+				examples & example code in html
+				docs
+				-->
+
+		<zip zipfile="../release/nakedobjects-ep-${build.id}.zip" basedir="enterprise"/>
+	</target>
+	
+	<target name="source-distribution">
+		<echo>Create source distribution</echo>
+	</target>
+
 	<target name="all-components">
-		<antcall target="core"/>
-		<!-- antcall target="no-distribution"/-->
-		<!-- antcall target="no-containers"/-->
-		<antcall target="os-cache"/>
-		<antcall target="os-file"/>
-		<antcall target="os-sql"/>
-		<antcall target="no-xat"/>
-		<antcall target="viewer-skylark"/>
-		<antcall target="example-ecs"/>
-		<antcall target="example-expenses"/>
-		<antcall target="utility-xmlsnapshot"/>
+		<!--property name="build.id" value="${build.type}${build.number}"/-->
+		<echo>build id: ${build.id}</echo>
+		
+		<mkdir dir="exploration"/>
+		<mkdir dir="exploration/api"/>
+		<mkdir dir="exploration/images"/>
+
+		<antcall target="-core"/>
+		<!-- antcall target="-no-distribution"/-->
+		<!-- antcall target="-no-containers"/-->
+		<antcall target="-os-cache"/>
+		<antcall target="-os-file"/>
+		<antcall target="-os-sql"/>
+		<antcall target="-no-xat"/>
+		<antcall target="-viewer-skylark"/>
+		<antcall target="-example-ecs"/>
+		<antcall target="-example-expenses"/>
+		<antcall target="-utility-xmlsnapshot"/>
 	</target>
-	
-	<target name="core" >
-		<ant dir="../no-core" target="${target}" inheritAll="false"/>
+
+	<target name="-core" >
+		<ant dir="../no-core" target="${target}" inheritAll="false">
+			<property name="build.id" value="${build.id}"/>
+		</ant>
 	</target>
-	
-	<target name="os-cache" >
+
+	<target name="-os-cache" >
 		<ant dir="../os-cache" target="${target}" inheritAll="false"/>
 	</target>
-	
-	<target name="no-xat" >
+
+	<target name="-no-xat" >
 		<ant dir="../no-xat" target="${target}" inheritAll="false"/>
 	</target>
-	
-	<target name="os-file" >
+
+	<target name="-os-file" >
 		<ant dir="../os-file" target="${target}" inheritAll="false"/>
 	</target>
-	
-	<target name="os-sql" >
+
+	<target name="-os-sql" >
 		<ant dir="../os-sql" target="${target}" inheritAll="false"/>
 	</target>
 
-	<target name="viewer-skylark" >
+	<target name="-viewer-skylark" >
 		<ant dir="../viewer-skylark" target="${target}" inheritAll="false"/>
 	</target>
-	
-	<target name="no-distribution" >
+
+	<target name="-no-distribution" >
 		<ant dir="../no-distribution" target="${target}" inheritAll="false"/>
 	</target>
-	
-	<target name="no-containers" >
+
+	<target name="-no-containers" >
 		<ant dir="../no-containers" target="${target}" inheritAll="false"/>
 	</target>
-	
-	<target name="example-ecs" >
+
+	<target name="-example-ecs" >
 		<ant dir="../example-ecs" target="${target}" inheritAll="false"/>
 	</target>
-	
-	<target name="example-expenses" >
+
+	<target name="-example-expenses" >
 		<ant dir="../example-expenses" target="${target}" inheritAll="false"/>
 	</target>
 
-	<target name="utility-xmlsnapshot" >
+	<target name="-utility-xmlsnapshot" >
 		<ant dir="../utility-xmlsnapshot" target="${target}" inheritAll="false"/>
+	</target>
+
+		
+	<target name="dotnet-copy">
+		<delete dir="${dotnet.dir}"/>
+		
+		<mkdir dir="${dotnet.dir}"/>
+
+		
+		<!-- TODO create the project file listing all the files to include in the compilation -->
+	
+		<copy todir="${dotnet.dir}">
+			<fileset dir="../no-core/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+
+		<copy todir="${dotnet.dir}">
+			<fileset dir="../no-xat/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+
+		<copy todir="${dotnet.dir}">
+			<fileset dir="../no-distribution/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+
+		<copy todir="${dotnet.dir}">
+			<fileset dir="../example-ecs/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+
+		<copy todir="${dotnet.dir}">
+			<fileset dir="../os-sql/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+
+		<copy todir="${dotnet.dir}">
+			<fileset dir="../viewer-skylark/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+
+		<copy todir="${dotnet.dir}">
+			<fileset dir="../utility-xmlsnapshot/src">
+				<include name="**/*.java" />
+				<exclude name="**/DomSerializerJaxp.java" />
+			</fileset>
+		</copy>
+
 	</target>
 	
 

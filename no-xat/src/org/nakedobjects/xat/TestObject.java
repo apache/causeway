@@ -9,7 +9,10 @@ public interface TestObject extends TestNaked {
     public void assertActionExists(String name);
     
     public void assertActionExists(String name, TestObject parameter);
-            
+   
+    public void assertActionExists(String name, TestNaked[] parameters);
+    
+
     /**
       * @deprecated replaced by assertActionUnusable
      */
@@ -39,12 +42,15 @@ public interface TestObject extends TestNaked {
      */
     void assertActionVisible(String name, TestObject parameter);
 
+    void assertActionVisible(String name, TestNaked[] parameters);
+
     /**
      * Check that the specified object menu item is currently invisible. If it is visible the test
      * fails.
      */
     void assertActionInvisible(String name, TestObject parameter);
 
+    void assertActionInvisible(String name, TestNaked[] parameters);
 
     /**
      * Check that the specified object menu item is currently available. If it is disabled the test
@@ -63,11 +69,15 @@ public interface TestObject extends TestNaked {
      */
     void assertActionUnusable(String name, TestObject parameter);
 
+    void assertActionUnusable(String name, TestNaked[] parameters);
+
     /**
      * Check that dragged object can be dropped on this object. If it cannot be dropped the test
      * fails.
      */
     void assertActionUsable(String name, TestObject parameter);
+
+    void assertActionUsable(String name, TestNaked[] parameter);
 
     void assertEmpty(String fieldName);
 
@@ -113,6 +123,8 @@ public interface TestObject extends TestNaked {
     void assertFieldContainsType(String message, String fieldName, String expectedType);
 
     void assertFieldContainsType(String message, String fieldName, String title, String expectedType);
+
+    void assertFieldExists(String fieldName);
 
     void assertFieldInvisible(String fieldName);
 
@@ -228,6 +240,8 @@ public interface TestObject extends TestNaked {
      * @group action
      */
     TestObject invokeAction(String name, TestObject parameter);
+
+    TestObject invokeAction(String name, TestNaked[] parameter);
 
     /**
      * Test the named field by calling fieldEntry with the specifed value and then check the value

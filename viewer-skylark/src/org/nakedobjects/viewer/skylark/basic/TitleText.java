@@ -1,11 +1,7 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.Title;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
-import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.Text;
@@ -14,15 +10,13 @@ import org.nakedobjects.viewer.skylark.ViewState;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 
 
-public class TitleText {
-    private ObjectContent content;
-    private View view;
+public abstract class TitleText {
+     private View view;
     private Text style;
 
     public TitleText(View view, Text style) {
         this.view = view;
-        content = (ObjectContent) view.getContent();
-        this.style = style;
+         this.style = style;
     }
 
     public Size getSize() {
@@ -90,20 +84,7 @@ public class TitleText {
         return view.getState();
     }
 
-    protected String title() {
-        if(content instanceof OneToManyField) {
-	        return ((OneToManyField) content).getFieldLabel();
-        } else {
-	        NakedObject object = content.getObject();
-	        Title title = object.title();
-	
-	        if ((title == null) || title.toString().equals("")) {
-	            return "A " + object.getNakedClass().getSingularName().toLowerCase();
-	        } else {
-	            return title.toString();
-	        }
-        }
-    }
+    protected abstract String title();
 }
 
 /*

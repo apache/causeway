@@ -74,7 +74,7 @@ public class EmptyField extends AbstractView {
 		return "EmptyField" + getId();
 	}
     
-    public void dragObjectIn(ContentDrag drag) {
+    public void dragIn(ContentDrag drag) {
         if (canDrop(drag)) {
             getState().setCanDrop();
         } else {
@@ -84,6 +84,12 @@ public class EmptyField extends AbstractView {
         markDamaged();
     }
 
+    public void dragOut(ContentDrag drag) {
+        getState().clearObjectIdentified();
+        
+        markDamaged();
+    }
+    
     public void draw(Canvas canvas) {
         super.draw(canvas);
 

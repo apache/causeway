@@ -1,30 +1,78 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta content="text/html; charset=ISO-8859-1"
- http-equiv="content-type">
-  <link href="./style.css" rel="STYLESHEET">
+  <meta content="text/html; charset=utf-8" http-equiv=
+  "content-type" />
+  <link href="./style.css" rel="STYLESHEET" type="text/css" />
+
   <title>Getting Started</title>
 </head>
+
 <body>
-<h1>Getting started</h1>
-<h3>Creating an Exploration application</h3>
-<p>To create a exploration application create a new class extending
-<code>Exploration</code>, add a <code>setUp </code>method to specify
-what classes to make
-available to the user, and add a main method to start it.&nbsp; If you
-want to create some intial objects these can be added in the setup
-method.&nbsp; The following serves as a simple example of all the above
-aspects.<br>
-</p>
-<pre>import org.nakedobjects.Exploration;<br><br>public class ExpensesExploration extends Exploration {<br>	public void setUp() {<br>		registerClass(Employee.class);<br>		registerClass(Project.class);<br>		registerClass(Expense.class);<br>		registerClass(Claim.class);<br><br><br>		if(hasNoInstances(Employee.class)) {<br> 			Employee newUser;<br>			<br>			newUser = (Employee) createInstance(Employee.class);<br>			newUser.getFirstName().setValue("John");<br>			newUser.getSurname().setValue("Smith");<br>		}	<br>	}<br><br>	public static void main(String[] args) {<br>		new ExpensesExploration();<br>	}<br>}<br></pre>
-<h3>Creating a Executable Acceptance Test (XAT)</h3>
-<p>To create an acceptance test (a <a href="http://www.junit.org">Junit</a>
-test designed to test the functionality of a Naked Objects application)
-you must extend <code>AcceptanceTestCase</code>.&nbsp; Again classes
-that the user has direct access to must be registered and this is
-similarly done in the setUp method.<br>
-</p>
-<pre>import org.nakedobjects.utility.ComponentException;<br>import org.nakedobjects.utility.ConfigurationException;<br>import org.nakedobjects.xat.AcceptanceTestCase;<br><br>public class ECSAcceptanceTest extends AcceptanceTestCase {<br><br>    public void setUp() throws ConfigurationException, ComponentException {<br>        super.setUp();<br>        <br>        registerClass(Booking.class);<br>        registerClass(City.class);<br>        registerClass(Customer.class);<br>        registerClass(Location.class);<br>        registerClass(CreditCard.class);<br>        registerClass(Telephone.class);<br>    }<br>}<br></pre>
+  <h1>Getting started</h1>
+
+  <h3>Creating an Exploration application</h3>
+
+  <p>To create a exploration application create a new class
+  extending <code>Exploration</code>, add a <code>setUp</code>
+  method to specify what classes to make available to the user, and
+  add a main method to start it.  If you want to create some intial
+  objects these can be added in the setup method.  The following
+  serves as a simple example of all the above aspects.<br /></p>
+  <pre>
+import org.nakedobjects.Exploration;<br />
+<br />
+public class ExpensesExploration extends Exploration {<br />
+     public void setUp() {<br />
+               registerClass(Employee.class);<br />
+              registerClass(Project.class);<br />
+               registerClass(Expense.class);<br />
+               registerClass(Claim.class);<br />
+<br />
+<br />
+         if(hasNoInstances(Employee.class)) {<br />
+                        Employee newUser;<br />
+                   <br />
+                    newUser = (Employee) createInstance(Employee.class);<br />
+                        newUser.getFirstName().setValue("John");<br />
+                    newUser.getSurname().setValue("Smith");<br />
+             }       <br />
+    }<br />
+<br />
+       public static void main(String[] args) {<br />
+            new ExpensesExploration();<br />
+  }<br />
+}<br />
+</pre>
+
+  <h3>Creating a Executable Acceptance Test (XAT)</h3>
+
+  <p>To create an acceptance test (a <a href=
+  "http://www.junit.org">Junit</a> test designed to test the
+  functionality of a Naked Objects application) you must extend
+  <code>AcceptanceTestCase</code>.  Again classes that the user has
+  direct access to must be registered and this is similarly done in
+  the setUp method.<br /></p>
+  <pre>
+import org.nakedobjects.utility.ComponentException;<br />
+import org.nakedobjects.utility.ConfigurationException;<br />
+import org.nakedobjects.xat.AcceptanceTestCase;<br />
+<br />
+public class ECSAcceptanceTest extends AcceptanceTestCase {<br />
+<br />
+    public void setUp() throws ConfigurationException, ComponentException {<br />
+        super.setUp();<br />
+        <br />
+        registerClass(Booking.class);<br />
+        registerClass(City.class);<br />
+        registerClass(Customer.class);<br />
+        registerClass(Location.class);<br />
+        registerClass(CreditCard.class);<br />
+        registerClass(Telephone.class);<br />
+    }<br />
+}<br />
+</pre>
 </body>
 </html>

@@ -66,11 +66,6 @@ public class DebugCanvas extends Canvas {
 		buffer.append("Rectangle (full) " + x + "," + y + " " + width + "x"  + height + " " + color);
 	}
 
-	public void drawFullRectangle(Bounds bounds, Color color) {
-		indent();
-		buffer.append("Rectangle (full) " + bounds.getX() + "," + bounds.getY() + " " + (bounds.getWidth() - 1) + "x"  + (bounds.getHeight() - 1) + " " + color);
-	}
-
 	public void drawSolidRectangle(Location at, Size size, Color color) {
 		indent();
 		buffer.append("Rectangle (full) " + at.getX() + "," + at.getY() + " " + size.getWidth() + "x"  + size.getHeight() + " " + color);

@@ -1,6 +1,9 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.SystemClock;
 import org.nakedobjects.object.collection.TypedCollection;
+import org.nakedobjects.object.value.Date;
+import org.nakedobjects.object.value.TimeStamp;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -31,11 +34,14 @@ public abstract class NakedObjectStoreTestCase extends NakedObjectTestCase {
         Logger.getRootLogger().setLevel(Level.OFF);     
         LOG.debug("test setup");
 
+        Date.setClock(new SystemClock());
+        TimeStamp.setClock(new SystemClock());
+
         manager = MockObjectManager.setup();
         manager.setupAddClass(TypedCollection.class);
         
         setupObjectStore();
-        
+
         initialiseObjects();
         LOG.debug("test starting");
     }
