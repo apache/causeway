@@ -62,6 +62,19 @@ The factory delegates the actual loading of the images to the TemplateImageLoade
 
 The TemplateImageLoader, passes back a TemplateImage to the factory.  From this template the factory can provide the client with the full size original image, or it can reduce and tint the image to create an icon.  These template images are cached by the image loaded ready for the next request from the factory.  This will actually only happen when the factory is asked for another icon of the same name, but with another size or tint.
 ----
+'''View creation - the view factory
+
+Every object that the user sees on the screen is represented by a Content, which in turn is rendered using a view.  Each content is shown within a context, including:-
+* an icon on the desktop
+* an window on the desktop
+* a field within an object
+* an element within a collection
+* 
+
+View actions such as drop, double-click etc should be done through the view's content object.  For example the EmptyField view should allow an object to be dropped into, but delegate the setting of the field or the initialisation of the a parameter to the OneToOneField and ObjectParameter respectively.  Similarly the SubviewIcon should allow the reference to be cleared, but delegate this to the same Content objects.
+
+
+----
 ''''Notes
  
 see SkylarkGraphics
