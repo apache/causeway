@@ -298,7 +298,9 @@ public class InternalReflector implements Reflector {
 
   //     valueFields(elements, BusinessValue.class);
         valueFields(elements, String.class);
-        valueFields(elements, Float.class);
+  //      valueFields(elements, Float.class);
+  //      valueFields(elements, Boolean.class);
+  //      valueFields(elements, Integer.class);
 
 //        primitiveFields(elements);
         derivedFields(elements);

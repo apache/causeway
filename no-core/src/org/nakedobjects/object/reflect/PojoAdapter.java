@@ -8,8 +8,10 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.AbstractNakedObject;
+import org.nakedobjects.object.reflect.valueadapter.BooleanPrimitiveAdapter;
 import org.nakedobjects.object.reflect.valueadapter.DateAdapter;
 import org.nakedobjects.object.reflect.valueadapter.FloatAdapter;
+import org.nakedobjects.object.reflect.valueadapter.IntAdapter;
 import org.nakedobjects.object.reflect.valueadapter.StringAdapter;
 import org.nakedobjects.object.security.Session;
 
@@ -37,7 +39,11 @@ public class PojoAdapter extends AbstractNakedObject {
                 nakedObject = new DateAdapter((Date) pojo);
             } else if(pojo instanceof Float) {
                 nakedObject = new FloatAdapter();
-            } else {
+            } else if(pojo instanceof Boolean) {
+                nakedObject = new BooleanPrimitiveAdapter();
+            } else if(pojo instanceof Integer) {
+                nakedObject = new IntAdapter();
+           } else {
                 nakedObject = reflectorFactory.createAdapter(pojo);
             }
             if(nakedObject == null) {

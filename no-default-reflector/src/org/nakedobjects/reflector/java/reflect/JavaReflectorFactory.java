@@ -17,6 +17,8 @@ import org.nakedobjects.reflector.java.value.LogicalValueObjectAdapter;
 import org.nakedobjects.reflector.java.value.IntegerNumberAdapter;
 import org.nakedobjects.reflector.java.value.TextStringAdapter;
 
+import java.util.Vector;
+
 public class JavaReflectorFactory extends ReflectorFactory {
     private JavaObjectFactory objectFactory;
     
@@ -36,6 +38,9 @@ public class JavaReflectorFactory extends ReflectorFactory {
             return new IntegerNumberAdapter((IntegerNumber) object);
         } else if (object instanceof BusinessValueHolder ){
             return new BusinessValueAdapter((BusinessValueHolder) object);
+        } else if (object instanceof Vector){
+            return VectorCollectionAdapter.createAdapter((Vector) object, Object.class);
+
          } else {
             return null;
         }

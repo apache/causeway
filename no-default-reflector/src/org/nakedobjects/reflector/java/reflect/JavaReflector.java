@@ -378,6 +378,8 @@ public class JavaReflector implements Reflector {
         valueFields(elements, String.class);
         valueFields(elements, Date.class);
         valueFields(elements, float.class);
+        valueFields(elements, int.class);
+        valueFields(elements, boolean.class);
 
 //        primitiveFields(elements);
         derivedFields(elements);
