@@ -74,7 +74,7 @@ public class TestClassImpl implements TestClass {
     }
 
     private InstanceCollection instances(NakedClass cls) {
-        InstanceCollection instances = new InstanceCollection(cls.pattern());
+        InstanceCollection instances = InstanceCollection.findInstances(cls.pattern());
         instances.first();
         return instances;
     }

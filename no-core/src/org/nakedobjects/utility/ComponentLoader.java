@@ -90,8 +90,8 @@ public class ComponentLoader {
         return loadComponent(paramName, defaultType, requiredClass, false);
     }
 
-    private static ConfigurationParameters params() {
-        return ConfigurationParameters.getInstance();
+    private static Configuration params() {
+        return Configuration.getInstance();
     }
 }
 

@@ -34,7 +34,7 @@ import java.net.URL;
 import java.util.Hashtable;
 
 import org.apache.log4j.Category;
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 
 
 /**
@@ -74,7 +74,7 @@ public class ImageIcon {
     private int size;
     
     static {
-		alsoLoadAsFiles = ConfigurationParameters.getInstance().getBoolean("viewer.lightweight.load-images-from-files", true);
+		alsoLoadAsFiles = Configuration.getInstance().getBoolean("viewer.lightweight.load-images-from-files", true);
 		Image im = loadAsResource("UnknownLarge.gif");
     	if(im == null) {
     		Component c = new Canvas();

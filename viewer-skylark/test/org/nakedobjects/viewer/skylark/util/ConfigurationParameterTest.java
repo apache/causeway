@@ -5,7 +5,7 @@ import java.util.Properties;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 
 import junit.framework.TestCase;
 
@@ -15,7 +15,7 @@ public class ConfigurationParameterTest extends TestCase {
     public static void main(String[] args) {
         junit.textui.TestRunner.run(ConfigurationParameterTest.class);
     }
-    private ConfigurationParameters params;
+    private Configuration params;
 
     public ConfigurationParameterTest(String name) {
         super(name);
@@ -24,7 +24,7 @@ public class ConfigurationParameterTest extends TestCase {
     protected void setUp() throws Exception {
         BasicConfigurator.configure();
         LogManager.getRootLogger().setLevel(Level.OFF);
-        params = ConfigurationParameters.getInstance();
+        params = Configuration.getInstance();
         Properties p = new Properties();
         p.put("nakedobjects.bool", "on");
         p.put("nakedobjects.str", "string");

@@ -13,7 +13,7 @@ import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.value.TextString;
 import org.nakedobjects.persistence.sql2.NakedClassMapper;
 import org.nakedobjects.persistence.sql2.SqlOid;
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.utility.NotImplementedException;
 
 
@@ -26,7 +26,7 @@ public class DefaultNakedClassMapper extends MySqlMapper implements NakedClassMa
 	private String reflectorColumn;
 
     public DefaultNakedClassMapper() {
-    	ConfigurationParameters params = ConfigurationParameters.getInstance();
+    	Configuration params = Configuration.getInstance();
     	table = params.getString(PREFIX + "table", "nakedclass");
     	idColumn = params.getString(PREFIX + "column.id", "id");
     	nameColumn = params.getString(PREFIX + "column.name", "name");

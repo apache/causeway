@@ -1,11 +1,14 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.control.ObjectAbout;
 import org.nakedobjects.object.reflect.Field;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.Value;
+import org.nakedobjects.object.value.Snapshot;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.io.IOException;
@@ -364,6 +367,34 @@ public abstract class AbstractNakedObject implements NakedObject {
         s.append("  " + Long.toHexString(super.hashCode()).toUpperCase());
 
         return s.toString();
+    }
+    
+    public Snapshot snapshot() {
+        Snapshot snapshot = new Snapshot();
+        snapshot(this, snapshot);
+        return snapshot;
+    }
+
+    private void snapshot(AbstractNakedObject object, Snapshot snapshot) {
+        NakedClass nc = object.getNakedClass();
+        StringBuffer str = new StringBuffer();
+        
+        Field[] fields = nc.getFields();
+        for (int i = 0; i < fields.length; i++) {
+            Field field = fields[i];
+            if(field instanceof Value) {
+                str.append(((Value) field).get(object).title().toString());
+            } else if(field instanceof OneToOneAssociation) {
+                str.append(((OneToOneAssociation) field).get(object).title().toString());
+            } else if(field instanceof OneToManyAssociation) {
+                InternalCollection coll = (InternalCollection) ((OneToManyAssociation) field).get(object);
+                for (int j = 0; j < coll.size(); j++) {
+	                str.append(coll.elementAt(i).title().toString());
+                }
+            }
+            
+            str.append(",  ");
+        }
     }
 }
 

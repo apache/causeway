@@ -1,13 +1,9 @@
 package org.nakedobjects.persistence.file;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.PropertyConfigurator;
-
 import org.nakedobjects.object.MockObjectManager;
-import org.nakedobjects.object.NakedObjectManager;
-import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.Role;
 import org.nakedobjects.object.SimpleOid;
 import org.nakedobjects.object.ValueObjectExample;
@@ -23,6 +19,10 @@ import org.nakedobjects.object.value.Time;
 import org.nakedobjects.object.value.TimeStamp;
 import org.nakedobjects.object.value.URLString;
 import org.nakedobjects.object.value.WholeNumber;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.PropertyConfigurator;
 
 
 public class ObjectDataTest extends NakedObjectTestCase {
@@ -46,7 +46,7 @@ public class ObjectDataTest extends NakedObjectTestCase {
         manager.setupAddClass(ValueObjectExample.class);
         manager.setupAddClass(Role.class);
         
-        NakedClass type = NakedObjectManager.getInstance().getNakedClass(ValueObjectExample.class.getName());
+        NakedClass type = NakedClassManager.getInstance().getNakedClass(ValueObjectExample.class.getName());
         data = new ObjectData(type, new SimpleOid(1));
     }
 
@@ -55,7 +55,7 @@ public class ObjectDataTest extends NakedObjectTestCase {
     }
 
     public void test() {
-        NakedClass roleType = NakedObjectManager.getInstance().getNakedClass(Role.class.getName());
+        NakedClass roleType = NakedClassManager.getInstance().getNakedClass(Role.class.getName());
         ObjectData roleData = new ObjectData(roleType, new SimpleOid(1));
 
         roleData.set("Name", "supervisor");

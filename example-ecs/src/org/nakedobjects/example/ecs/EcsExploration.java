@@ -1,23 +1,18 @@
 package org.nakedobjects.example.ecs;
 
 import org.nakedobjects.Exploration;
-import org.nakedobjects.NakedClassList;
-import org.nakedobjects.object.ObjectStoreException;
 
 
 public class EcsExploration extends Exploration {
-    public void classSet(NakedClassList classes) {
-        classes.addClass(Booking.class);
-        classes.addClass(City.class);
-        classes.addClass(Location.class);
-        classes.addClass(CreditCard.class);
-        classes.addClass(Customer.class);
-        classes.addClass(Telephone.class);
-    }
-	
 
-    
-    public void initObjects() throws ObjectStoreException {
+    public void setUp() {
+       registerClass(Booking.class);
+        registerClass(City.class);
+        registerClass(Location.class);
+        registerClass(CreditCard.class);
+        registerClass(Customer.class);
+        registerClass(Telephone.class);
+  
         if (hasNoInstances(City.class)) {
             String[] cityNames = {
                 "New York", "Boston", "Washington", "Chicago", "Tampa",

@@ -24,12 +24,12 @@
 
 package org.nakedobjects.persistence.file;
 
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 
 public class XmlObjectStore extends MementoObjectStore {
 
 	private static String directory() {
-		return ConfigurationParameters.getInstance().getString("xml-object-store.directory", "xml");
+		return Configuration.getInstance().getString("xml-object-store.directory", "xml");
 	}
 
 	public XmlObjectStore() {

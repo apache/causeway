@@ -21,7 +21,7 @@ import org.nakedobjects.object.value.Time;
 import org.nakedobjects.object.value.TimeStamp;
 import org.nakedobjects.object.value.URLString;
 import org.nakedobjects.object.value.WholeNumber;
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 
 
 public class TypeMapper {
@@ -37,7 +37,7 @@ public class TypeMapper {
 		
 		instance.id = "id";
 		
-		ConfigurationParameters params = ConfigurationParameters.getInstance();
+		Configuration params = Configuration.getInstance();
 		Properties properties = params.getPropertySubset(PREFIX);
 		Enumeration e = properties.keys();
 		while (e.hasMoreElements()) {

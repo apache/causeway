@@ -71,12 +71,12 @@ public class ECSAcceptanceTest extends AcceptanceTestCase {
         super.setUp();
         
     	Locale.setDefault(Locale.US);
-        addClass(Booking.class);
-        addClass(City.class);
-        addClass(Customer.class);
-        addClass(Location.class);
-        addClass(CreditCard.class);
-        addClass(Telephone.class);
+        registerClass(Booking.class);
+        registerClass(City.class);
+        registerClass(Customer.class);
+        registerClass(Location.class);
+        registerClass(CreditCard.class);
+        registerClass(Telephone.class);
 
         setupCities();
     }

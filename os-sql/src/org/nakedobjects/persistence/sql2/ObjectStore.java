@@ -13,7 +13,7 @@ import org.nakedobjects.persistence.sql2.mysql.AutoMapper;
 import org.nakedobjects.utility.ComponentException;
 import org.nakedobjects.utility.ComponentLoader;
 import org.nakedobjects.utility.ConfigurationException;
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 
 import java.util.Enumeration;
 import java.util.Properties;
@@ -98,7 +98,7 @@ public class ObjectStore implements NakedObjectStore {
             throw new ComponentException("Failed to set up class mapper", e);
         }
 
-        Properties properties = ConfigurationParameters.getInstance().getPropertySubset(BASE_NAME + ".mapper");
+        Properties properties = Configuration.getInstance().getPropertySubset(BASE_NAME + ".mapper");
         Enumeration e = properties.keys();
         while (e.hasMoreElements()) {
             String key = (String) e.nextElement();

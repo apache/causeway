@@ -16,7 +16,7 @@ import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.Value;
 import org.nakedobjects.persistence.sql2.CollectionMapper;
 import org.nakedobjects.utility.ConfigurationException;
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.utility.NotImplementedException;
 
 
@@ -38,7 +38,7 @@ public abstract class AbstractAutoMapper extends MySqlMapper {
 		nakedClass = NakedClassManager.getInstance().getNakedClass(nakedClassName);
 		typeMapper = TypeMapper.getInstance();
 
-		ConfigurationParameters configParameters = ConfigurationParameters.getInstance();
+		Configuration configParameters = Configuration.getInstance();
 
 		table = configParameters.getString(parameterBase + "table");
 		if (table == null) {
@@ -142,7 +142,7 @@ public abstract class AbstractAutoMapper extends MySqlMapper {
 		return !db.hasTable(table);
 	}
 
-	private void setupFullMapping(String nakedClassName, ConfigurationParameters configParameters, String parameterBase) throws ObjectStoreException, ConfigurationException {
+	private void setupFullMapping(String nakedClassName, Configuration configParameters, String parameterBase) throws ObjectStoreException, ConfigurationException {
 		Field[] allFields = nakedClass.getFields();
 
 		int simpleFieldCount = 0;
@@ -205,7 +205,7 @@ public abstract class AbstractAutoMapper extends MySqlMapper {
 		}
 	}
 
-	private void setupSpecifiedMapping(NakedClass nakedClass, ConfigurationParameters configParameters, String parameterBase) throws ObjectStoreException {
+	private void setupSpecifiedMapping(NakedClass nakedClass, Configuration configParameters, String parameterBase) throws ObjectStoreException {
 		Properties columnMappings = configParameters.getProperties(parameterBase + "column");
 		int columnsSize = columnMappings.size();
 		columnNames = new String[columnsSize];

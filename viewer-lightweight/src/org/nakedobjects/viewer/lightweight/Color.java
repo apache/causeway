@@ -23,7 +23,7 @@
 */
 package org.nakedobjects.viewer.lightweight;
 
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 
 
 public class Color {
@@ -41,7 +41,7 @@ public class Color {
 
     Color(String propertyName, String defaultColor) {
         this.name = propertyName;
-        color = ConfigurationParameters.getInstance().getColor(PROPERTY_BASE + propertyName,
+        color = Configuration.getInstance().getColor(PROPERTY_BASE + propertyName,
                 java.awt.Color.decode(defaultColor));
     }
 

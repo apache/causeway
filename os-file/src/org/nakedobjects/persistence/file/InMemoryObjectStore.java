@@ -24,11 +24,6 @@
 
 package org.nakedobjects.persistence.file;
 
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.UnsupportedFindException;
-
-import java.util.Vector;
 
 public class InMemoryObjectStore extends MementoObjectStore {
 

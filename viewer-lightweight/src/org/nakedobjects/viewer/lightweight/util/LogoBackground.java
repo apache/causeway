@@ -24,7 +24,7 @@
 package org.nakedobjects.viewer.lightweight.util;
 
 import org.apache.log4j.Logger;
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.viewer.lightweight.Background;
 import org.nakedobjects.viewer.lightweight.Canvas;
 import org.nakedobjects.viewer.lightweight.Icon;
@@ -40,7 +40,7 @@ public class LogoBackground implements Background {
     private Location location;
 
     public LogoBackground() {
-        ConfigurationParameters cp = ConfigurationParameters.getInstance();
+        Configuration cp = Configuration.getInstance();
         String fileName = cp.getString(PARAMETER_BASE + "image", "logo.gif");
         logo = ImageFactory.getImageFactory().loadImage(fileName);
 

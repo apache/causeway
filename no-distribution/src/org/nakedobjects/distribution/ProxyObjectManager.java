@@ -67,6 +67,10 @@ public final class ProxyObjectManager extends NakedObjectManager {
         return new GetInstancesRequest(cls).getElements(loadedObjects);
     }
     
+    public Vector getInstances(NakedClass cls, String criteria) {
+        throw new NotImplementedException();
+    }
+    
    public Vector getInstances(NakedObject pattern) {
         if (pattern == null) {
             throw new NullPointerException();

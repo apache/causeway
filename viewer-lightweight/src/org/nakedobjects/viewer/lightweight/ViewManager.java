@@ -30,7 +30,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import org.apache.log4j.Logger;
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 
 
 /*
@@ -55,7 +55,7 @@ public class ViewManager implements MouseMotionListener, MouseListener, KeyListe
         this.workspace = workspace;
         this.popup = popup;
         
-        explorationMode = ConfigurationParameters.getInstance().getBoolean(
+        explorationMode = Configuration.getInstance().getBoolean(
             	"viewer.lightweight.show-exploration");
     }
 

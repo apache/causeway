@@ -26,7 +26,7 @@ package org.nakedobjects.viewer.lightweight.util;
 
 import java.util.Hashtable;
 
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.viewer.lightweight.Color;
 import org.nakedobjects.viewer.lightweight.Icon;
 
@@ -51,7 +51,7 @@ public class ImageFactory {
 	}
 	
 	private ImageFactory() {
-		String fallbackImage = ConfigurationParameters.getInstance().getString(FALLBACK_PARAM, "Unknown.gif");
+		String fallbackImage = Configuration.getInstance().getString(FALLBACK_PARAM, "Unknown.gif");
 		loader = new ImageLoader(DIRECTORY + fallbackImage);
 	}
 

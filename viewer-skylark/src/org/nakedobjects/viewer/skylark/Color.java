@@ -23,30 +23,30 @@
 */
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 
 
 public class Color {
-    private static final String PROPERTY_STEM = Viewer.PROPERTY_BASE + "color.";
     public static Color DEBUG1 = new Color(java.awt.Color.magenta);
     public static Color DEBUG2 = new Color(java.awt.Color.cyan);
     public static Color DEBUG3 = new Color(java.awt.Color.orange);
+	protected static Color NULL = new Color(0);
+    private static final String PROPERTY_STEM = Viewer.PROPERTY_BASE + "color.";
     private java.awt.Color color;
     private String name;
-	protected static Color NULL = new Color(0);
 
     public Color(int rgbColor) {
         this(new java.awt.Color(rgbColor));
     }
 
-    Color(String propertyName, String defaultColor) {
-        this.name = propertyName;
-        color = ConfigurationParameters.getInstance().getColor(PROPERTY_STEM + propertyName,
-                java.awt.Color.decode(defaultColor));
-    }
-
     private Color(java.awt.Color color) {
         this.color = color;
+    }
+
+    Color(String propertyName, String defaultColor) {
+        this.name = propertyName;
+        color = Configuration.getInstance().getColor(PROPERTY_STEM + propertyName,
+                java.awt.Color.decode(defaultColor));
     }
 
     public Color brighter() {
@@ -57,11 +57,11 @@ public class Color {
         return new Color(color.darker());
     }
 
-    public String toString() {
-        return name + " " + color;
-    }
-
     public java.awt.Color getAwtColor() {
         return color;
+    }
+
+    public String toString() {
+        return name + " " + color;
     }
 }

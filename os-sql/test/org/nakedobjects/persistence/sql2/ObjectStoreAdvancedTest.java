@@ -3,7 +3,7 @@ package org.nakedobjects.persistence.sql2;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedObjectStoreInstancesTestCase;
 import org.nakedobjects.persistence.sql2.mysql.Connector;
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 
 
 public class ObjectStoreAdvancedTest extends NakedObjectStoreInstancesTestCase {
@@ -15,7 +15,7 @@ public class ObjectStoreAdvancedTest extends NakedObjectStoreInstancesTestCase {
     }
 
     protected NakedObjectStore installObjectStore() throws Exception {
-        ConfigurationParameters.installConfiguration("conf/sqlos2-testing.properties");
+        Configuration.installConfiguration("conf/sqlos2-testing.properties");
         ObjectStore os = new ObjectStore();
         return os;
     }

@@ -1,0 +1,37 @@
+Notes
+
+look at manual directory
+what to do with existing docs?
+need to add routine to create a single PDF
+need a document (xml) that captures the structure of the documentation
+
+
+
+Structure
+---------
+
+New features, and changes, in 1.3
+
+Types of application - exploration, standalone, client, server
+
+Configuration
+ - how to
+ - configuration options for each aspect to be defined in context
+ 
+ 
+Logging options
+	setting level
+	determining content - excluding certian classes
+	output to screen/file
+	changing message structure
+
+Using the UI
+
+Java WEBStart
+
+Security model
+
+Abouts
+	method types
+	
+User, Role and SecurityContext

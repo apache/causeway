@@ -1,61 +1,57 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.Style;
-import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.Size;
+import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
+import org.nakedobjects.viewer.skylark.core.ObjectView;
 
 
-public class IconSpecification implements ViewSpecification {
-	private boolean isSubView;
-	private boolean isReplaceable;
+public class IconView extends ObjectView {
 
-	public IconSpecification() {
-	    this(true, true);
-	}
-	
-	IconSpecification(boolean isSubView, boolean isReplaceable) {
-		this.isSubView = isSubView;
-		this.isReplaceable = isReplaceable;
-	}
-	
-	public boolean canDisplay(Naked object) {
-		return object instanceof NakedObject && object != null;
-	}
-	
-	public View createView(Content content, ViewAxis axis) {
-		return new SimpleBorder(1, new IconView(content, this, null, Style.NORMAL));
+	private IconGraphic icon;
+	private TitleText text;
+
+	public IconView(Content content, ViewSpecification specification, ViewAxis axis, Text style) {
+        super(content, specification, axis);
+        
+        icon = new IconGraphic(this, style);
+        text = new TitleText(this, style);
     }
 
-	public String getName() {
-        return "Icon";
+    public boolean isOpen() {
+        return false;
     }
 
-	public boolean isSubView() {
-		return isSubView;
-	}
-	
-	public boolean isReplaceable() {
-		return isReplaceable;
-	}
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
+        int x = 0;
+        int y = icon.getBaseline();
+        icon.draw(canvas, x, y);
+        x += icon.getSize().getWidth();
+        text.draw(canvas, x, y);
+    }
 
-	public View decorateSubview(View subview) {
-		return subview;
-	}
+    public int getBaseline() {
+    	return icon.getBaseline();
+    }
 
-	public boolean isOpen() {
-		return false;
-	}
+    public Size getRequiredSize() {
+        Size size = icon.getSize();
+        size.extendWidth(text.getSize().getWidth());
+        return size;
+    }
+
+    public String toString() {
+        return "NewIcon" + getId();
+    }
 }
-
-
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2003  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -23,14 +23,15 @@
 */
 package org.nakedobjects.viewer.skylark.util;
 
-import org.apache.log4j.Logger;
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.viewer.skylark.Background;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Icon;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Viewer;
+
+import org.apache.log4j.Logger;
 
 
 public class LogoBackground implements Background {
@@ -41,7 +42,7 @@ public class LogoBackground implements Background {
     private Location location;
 
     public LogoBackground() {
-        ConfigurationParameters cp = ConfigurationParameters.getInstance();
+        Configuration  cp = Configuration.getInstance();
         String fileName = cp.getString(PARAMETER_BASE + "image", "logo.gif");
         logo = ImageFactory.getImageFactory().loadImage(fileName);
 

@@ -16,7 +16,7 @@ import org.nakedobjects.object.reflect.simple.JavaReflector;
 import org.nakedobjects.object.value.TextString;
 import org.nakedobjects.security.SecurityContext;
 import org.nakedobjects.security.Session;
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 
 import java.io.Serializable;
 import java.util.Vector;
@@ -458,7 +458,7 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
     }
 
     void init(Reflector reflector, String superclass, Field[] fields, Action[] objectActions, Action[] classActions) {
-    	createPresistent = ConfigurationParameters.getInstance().getBoolean("nakedclass.create-persistent", true);
+    	createPresistent = Configuration.getInstance().getBoolean("nakedclass.create-persistent", true);
     	
         LOG.debug("NakedClass " + this);
     	this.reflector = reflector;

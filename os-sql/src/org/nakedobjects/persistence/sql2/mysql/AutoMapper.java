@@ -21,7 +21,7 @@ import org.nakedobjects.object.value.TimeStamp;
 import org.nakedobjects.persistence.sql2.ObjectMapper;
 import org.nakedobjects.persistence.sql2.SqlOid;
 import org.nakedobjects.utility.ConfigurationException;
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 
 public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 	private static final Logger LOG = Logger.getLogger(AutoMapper.class);
@@ -31,7 +31,7 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 	public AutoMapper(String nakedClassName, String parameterBase) throws ConfigurationException, ObjectStoreException {
 		super(nakedClassName, parameterBase);
 		
-		ConfigurationParameters configParameters = ConfigurationParameters.getInstance();
+		Configuration configParameters = Configuration.getInstance();
 
 		instancesWhereClause = configParameters.getString(parameterBase + "find");
 		if(instancesWhereClause == null) {

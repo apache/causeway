@@ -11,7 +11,7 @@ import java.util.Hashtable;
 import org.apache.log4j.Logger;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 
 
 public class Connector {
@@ -49,7 +49,7 @@ public class Connector {
 
     public void open() throws ObjectStoreException {
         try {
-            ConfigurationParameters params = ConfigurationParameters.getInstance();
+            Configuration params = Configuration.getInstance();
             String BASE = "sql-object-store-2.";
             String driver = params.getString(BASE + "driver");
             String url = params.getString(BASE + "connection");
@@ -189,11 +189,12 @@ public class Connector {
         try {
             statement = connection.prepareStatement(sql);
             statement.executeUpdate();
-            ResultSet rs = statement.getGeneratedKeys();
+  /* require 3.0    
+   *       ResultSet rs = statement.getGeneratedKeys();
             if(rs.next()) {
             	int id = rs.getInt(1);
             }
-            statement.close();
+      */      statement.close();
         } catch (SQLException e) {
             throw new ObjectStoreException("SQL error", e);
         }

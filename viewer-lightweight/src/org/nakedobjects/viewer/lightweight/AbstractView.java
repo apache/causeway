@@ -30,7 +30,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 
 
 /**
@@ -48,13 +48,13 @@ public abstract class AbstractView implements View {
     private static final Logger LOG = Logger.getLogger(AbstractView.class);
 
     /** Vertical padding (=) between two components */
-    public static final int VPADDING = ConfigurationParameters.getInstance().getInteger("viewer.lightweight.vpadding",
+    public static final int VPADDING = Configuration.getInstance().getInteger("viewer.lightweight.vpadding",
             2);
 
     /** Horizontal padding (||) between two components */
-    public static final int HPADDING = ConfigurationParameters.getInstance().getInteger("viewer.lightweight.hpadding",
+    public static final int HPADDING = Configuration.getInstance().getInteger("viewer.lightweight.hpadding",
             2);
-    public static final int DRAG_HANDLE_WIDTH = ConfigurationParameters.getInstance().getInteger("viewer.lightweight.handlewidth",
+    public static final int DRAG_HANDLE_WIDTH = Configuration.getInstance().getInteger("viewer.lightweight.handlewidth",
             18);
     private static Workspace workspace;
     protected static final int ICON_SIZE = 16;

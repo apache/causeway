@@ -25,7 +25,7 @@ package org.nakedobjects.viewer.lightweight.view;
 
 import java.util.Vector;
 
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.viewer.lightweight.Border;
 import org.nakedobjects.viewer.lightweight.Bounds;
 import org.nakedobjects.viewer.lightweight.Canvas;
@@ -42,7 +42,7 @@ import org.nakedobjects.viewer.lightweight.View;
 
 
 public abstract class SimpleBorder implements Border {
-    private static final boolean hasControls = ConfigurationParameters.getInstance().getBoolean("viewer.lightweight.border-controls",
+    private static final boolean hasControls = Configuration.getInstance().getBoolean("viewer.lightweight.border-controls",
             true);
     private static int next = 0;
     private static final int handleWidth = 14;

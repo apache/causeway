@@ -1,11 +1,12 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.utility.Configuration;
+
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Frame;
 
 import org.apache.log4j.Logger;
-import org.nakedobjects.utility.ConfigurationParameters;
 
 public class Text {
     private static final Logger LOG = Logger.getLogger(Text.class);
@@ -15,7 +16,7 @@ public class Text {
     private Frame fontMetricsComponent = new Frame();
 
     protected Text(String propertyName, String defaultFont) {
-        ConfigurationParameters cfg = ConfigurationParameters.getInstance();
+        Configuration cfg = Configuration.getInstance();
         font = cfg.getFont(PROPERTY_STEM + propertyName, Font.decode(defaultFont));
         LOG.info("font " + propertyName + " loaded as " + font);
 

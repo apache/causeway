@@ -24,6 +24,12 @@
 
 package org.nakedobjects.persistence.file;
 
+import org.nakedobjects.object.NakedClassManager;
+import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.SimpleOid;
+import org.nakedobjects.utility.Configuration;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -35,11 +41,6 @@ import java.io.OutputStreamWriter;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.nakedobjects.object.NakedObjectManager;
-import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.SimpleOid;
-import org.nakedobjects.utility.ConfigurationParameters;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
@@ -67,7 +68,7 @@ public class XmlDataManager extends DataManager {
             this.directory.mkdirs();
         }
         
-		charset = ConfigurationParameters.getInstance().getString(ENCODING_PROPERTY, DEFAULT_ENCODING);
+		charset = Configuration.getInstance().getString(ENCODING_PROPERTY, DEFAULT_ENCODING);
     }
 
     protected static void clearTestDirectory() {
@@ -341,11 +342,11 @@ public class XmlDataManager extends DataManager {
                 if (tagName.equals("naked-object")) {
                     String type = attrs.getValue("type");
                     long id = Long.valueOf(attrs.getValue("id"), 16).longValue();
-                    object = new ObjectData(NakedObjectManager.getInstance().getNakedClass(type), new SimpleOid(id));
+                    object = new ObjectData(NakedClassManager.getInstance().getNakedClass(type), new SimpleOid(id));
                 } else if (tagName.equals("collection")) {
                     String type = attrs.getValue("type");
                     long id = Long.valueOf(attrs.getValue("id"), 16).longValue();
-                    collection = new CollectionData(NakedObjectManager.getInstance().getNakedClass(type), new SimpleOid(id));
+                    collection = new CollectionData(NakedClassManager.getInstance().getNakedClass(type), new SimpleOid(id));
                 } else {
                     throw new SAXException("Invalid data");
                 }

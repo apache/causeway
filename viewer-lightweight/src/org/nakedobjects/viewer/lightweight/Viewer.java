@@ -38,7 +38,7 @@ import org.nakedobjects.object.value.Option;
 import org.nakedobjects.utility.ComponentException;
 import org.nakedobjects.utility.ComponentLoader;
 import org.nakedobjects.utility.ConfigurationException;
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.viewer.lightweight.util.ViewFactory;
 import org.nakedobjects.viewer.lightweight.view.Browser;
 import org.nakedobjects.viewer.lightweight.view.BrowserBorder;
@@ -187,7 +187,7 @@ public class Viewer implements ObjectViewingMechanism {
 		window.addMouseListener(viewManager);
 		window.addKeyListener(viewManager);
 
-        doubleBuffering = ConfigurationParameters.getInstance().getBoolean(PARAMETER_BASE +
+        doubleBuffering = Configuration.getInstance().getBoolean(PARAMETER_BASE +
                 "doublebuffering", true);
 
         setupViewFactory();
@@ -428,7 +428,7 @@ public class Viewer implements ObjectViewingMechanism {
 
         // read from config file
 		LOG.debug("Setting up externally requested views (specified in the configuration file)");
-        String viewParams = ConfigurationParameters.getInstance().getString(PARAMETER_BASE +
+        String viewParams = Configuration.getInstance().getString(PARAMETER_BASE +
                 "view");
 
         if (viewParams != null) {

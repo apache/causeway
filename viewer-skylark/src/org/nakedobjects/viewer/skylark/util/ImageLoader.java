@@ -24,6 +24,9 @@
 
 package org.nakedobjects.viewer.skylark.util;
 
+import org.nakedobjects.utility.Configuration;
+import org.nakedobjects.viewer.skylark.Viewer;
+
 import java.awt.Canvas;
 import java.awt.Image;
 import java.awt.MediaTracker;
@@ -35,8 +38,6 @@ import java.net.URL;
 import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
-import org.nakedobjects.utility.ConfigurationParameters;
-import org.nakedobjects.viewer.skylark.Viewer;
 
 
 class ImageLoader {
@@ -56,7 +57,7 @@ class ImageLoader {
 	private boolean alsoLoadAsFiles;
 
 	ImageLoader(String pathForFallbackImage) {
-		alsoLoadAsFiles = ConfigurationParameters.getInstance().getBoolean(Viewer.PROPERTY_BASE + "load-images-from-files", true);
+		alsoLoadAsFiles = Configuration.getInstance().getBoolean(Viewer.PROPERTY_BASE + "load-images-from-files", true);
 		Image im = load(pathForFallbackImage);
 
 		if (im == null) {
@@ -152,7 +153,7 @@ class ImageLoader {
 		File file = new File(path);
 
 		if (!file.exists()) {
-			LOG.error("Could not find image file: " + file.getAbsolutePath());
+			LOG.debug("Could not find image file: " + file.getAbsolutePath());
 
 			return null;
 		} else {

@@ -24,12 +24,12 @@
 
 package org.nakedobjects.viewer.skylark.util;
 
-import java.util.Hashtable;
-
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Icon;
 import org.nakedobjects.viewer.skylark.Viewer;
+
+import java.util.Hashtable;
 
 
 public class ImageFactory {
@@ -52,7 +52,7 @@ public class ImageFactory {
 	}
 	
 	private ImageFactory() {
-		String fallbackImage = ConfigurationParameters.getInstance().getString(FALLBACK_PARAM, "Unknown.gif");
+		String fallbackImage = Configuration.getInstance().getString(FALLBACK_PARAM, "Unknown.gif");
 		loader = new ImageLoader(DIRECTORY + fallbackImage);
 	}
 

@@ -10,7 +10,7 @@ import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.Title;
 import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.utility.NotImplementedException;
 
 
@@ -244,7 +244,7 @@ public abstract class AbstractNakedCollection extends AbstractNakedObject implem
     	elements.removeAllElements();
         displayFrom = 0;
 
-        ConfigurationParameters p = ConfigurationParameters.getInstance();
+        Configuration p = Configuration.getInstance();
         displaySize = p.getInteger("collection.pagesize", DEFAULT_PAGE_SIZE);
     }
 

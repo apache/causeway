@@ -5,7 +5,7 @@ import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.Style;
 
-public class DragContentIcon extends NewIconView {
+public class DragContentIcon extends IconView {
 	private final int thickness = 1;
 
 	public DragContentIcon(Drag drag) {

@@ -20,15 +20,15 @@ import org.apache.log4j.Logger;
 /**
  * Holds the available properties for this Naked Objects session.
  */
-public final class ConfigurationParameters {
-    private static ConfigurationParameters instance = new ConfigurationParameters();
-    private static final Logger LOG = Logger.getLogger(ConfigurationParameters.class);
+public final class Configuration {
+    private static Configuration instance = new Configuration();
+    private static final Logger LOG = Logger.getLogger(Configuration.class);
     private static final String PREFIX = "nakedobjects.";
 
     /**
      * Returns the singleton that is to be used to access the properties.
      */
-    public final static ConfigurationParameters getInstance() {
+    public final static Configuration getInstance() {
         return instance;
     }
 
@@ -45,7 +45,7 @@ public final class ConfigurationParameters {
     public static Properties loadProperties(String resource) throws ConfigurationException {
 
         try {
-            URL url = ConfigurationParameters.class.getResource(resource);
+            URL url = Configuration.class.getResource(resource);
             if (url == null) { throw new ConfigurationException("Configuration resource not found: " + resource); }
             return loadProperties(url);
 
@@ -263,7 +263,7 @@ public final class ConfigurationParameters {
             String key = (String) e.nextElement();
             String value = (String) p.get(key);
             String modifiedKey = key.substring(prefixLength);
-            LOG.debug(key + "=" + modifiedKey);
+            LOG.debug(key + " modified to: " + modifiedKey);
             modifiedProperties.put(modifiedKey, value);
         }
 

@@ -1,0 +1,168 @@
+-Development Log
+-Robert Matthews
+
+--8-7-04
+
+Extracting the NakedClass actions from the NakedObjectManager - created a separate manager call NakedClassManager.
+
+Looking at division of NOF into components that can run within EJB, COM+ etc, and how we can modify the existing applications so that they become lightweight containers for standalone use.
+
+
+--7-7-04
+
+Reviewing object stores - worked on getting CacheObjectStore completed as this is the simplest store.  Refactored the snapshot saving, and pushed the relavent functionality into the Instances collection class.  Tidied up OS tests.
+
+
+--6-7-04
+
+Added more asserts to the XAT framework to allow richer testing.
+
+Extended NakedObjectManager and NakedObjectStore so that NakedClasses are dealt with separately from other NakedObjects.  Added createNakedClass() and getNakedClass() methods.  As naked classes are the first thing to be loaded up, and they need to be accessed by name, this simplifies the writing of object stores.
+
+Started to implement the object finding mechanisms by reintroducing the old 'find by text' that allows an object(s) to be found that match a text string entered by the user.  How the object store matches the text with the object is up to the object store.  In addition the OS can throw a UnsupportedFindException if it cannot deal with such a search.  The 'dialog' for the user still needs be implemented. 
+
+
+--5-7-04
+
+Split out the holding of loaded objects from NakedObjectStore into a separate class.  This is used independently by the object stores and in distribution.
+
+Split the testing of object stores into three tests.  The first, checks instances can be added and retrieved, but does not deal with it fields.  The second, tests the ability to store values and associations.  The third, deals with complications, such recursive objects and hanging references.
+
+
+--2-7-04
+
+Reworked the value field validation so it applied in the same manner as field abouts: validFieldName(Validity), where the validity object can be used to check set the validity of the field and throws an exception is an invalid entry is made.  The user interface is now able pick up the expception and flag a field as invalid.  The change is now not made to back end until the field is valid.
+
+
+--1-7-04
+
+Modified the object store interface so that the get method is given a NakedClass as well as the oid.  There are limited situations (if any) when only the oid is available, and having the class can make for more efficient object stores as the type of object is now known.  (We need to deal with any cases of unknown classes as they arise.)
+
+
+--22-6-04
+
+---Modularisation
+
+Started looking at splitting the framework into a number of projects to simplify development, ready for the release of different versions of NakedObjects.  Currently these will be: an explorationedition; a delivery platform (multi-user, distributed); and a possible standalone edition.
+
+---Transaction Manager
+
+The Transaction test now works completely, and the account example also works and 
+needs to be changed into a test for TransactionManager.  The next thing to work on is 
+concurrent transactions, using locking to serialise the transaction order.
+
+The problem of circularity was resolved by checking whether a object change request (initiatedin the set methods) is part of a transaction or not.  Transaction objects know which phase of thetransaction they are in and consequently can terminate a circular request.  The same problemarises in InternalCollections, and by accessing the elements more directly - to get the OIDs, andnot resolving the contained objects - solved the problems.  I feel this problem couldreappear, so we should look carefully at how collections, specifically internal ones, workand consider how to make this process consistent and more evident.  To make this work I had to change the way that MementoObjectStore (the basis of the XML OS) worked in line with this need.
+
+---Next Steps:
+
+* Create a unit test for TransactionManager.
+
+* Look at InternalCollection, and how we can work more cleanly with it elements OIDs rather
+than the objects.
+
+
+--21-6-04
+
+Finished off the first version of the XAT framework.  Made all the test objects into interfaces 
+and created empty decorators for each.  Removed all access to the Documentor class.  Made the 
+Documentor into an interface.
+
+Created a new package - org.nakedobjects.xal.htlm - for HTML decorators.  Implemented the 
+Documentor interface, and created a set of HTML decorators for the test object classes.  This 
+reinstates the behaviour we had previously allowing us to generate HTML documentation.
+
+At present the factory that creates the decorated test objects is hard code but will
+allow us to add new documention styles later.
+
+---Next steps:
+
+* Add mechanism to set/capture use by different users, with various roles.
+
+* Load up specific document factory as declared in configuration file.
+
+
+--18-6-04
+
+Created a unit test for the Transaction class.  Worked on updating the
+public objects from the proxies that contain the changes made by the
+transaction.  Hit a problem where the updating of the publicly available object, from the
+objects modified by a transaction, would cause the object manager to be asked to persist the object
+again.  This same behaviour is just about avoided in the rest of the framework by 
+physical separation of client and server.
+
+
+--16-6-04
+
+---Transaction Manager
+
+Set up proxies for parameters in action methods, and re-jigged the
+manager so all calls within the action method as considered by the
+transaction.  All objects being used are with the action method within
+a transaction are created and altered only within the transaction.
+This can be seen in the transaction log (which is written to a
+separate file) which shows the same objects (logically) but as
+distinguishable instances (identified by unique hash codes).
+
+Object saves are now picked up by the manager and is captured within
+the transaction.  The final process (the commit phase) is not yet
+complete, so not all changes are made persistent.
+
+---XAT (executable acceptance testing) Framework
+
+Richard and I spent some time today designing a reimplemented
+acceptance testing framework (see org.nakedobjects.xat).  The main
+points we are trying to capture in this revised framework are:-
+
+* tests are to be based on Junit tests so they can be run as a suite,
+  and within an automated environment;
+
+* actions are to be based on the core capabilities of naked objects
+  rather than on 'views' of those objects - no more drag, drop, and
+  right-click, instead set association, invoke action etc.;
+
+* decorators are to provide documentation abilities abilities, which
+  can be changed to provide specific instructions for disparate user
+  interfaces.
+
+
+--15-6-04
+
+Continuing with the transaction manager (as I will for good while yet)
+I have made progress with isolating changes from the shared objects.
+Every object manager (of which the transaction manager is now a
+subclass) call that would access or modify the an object is directed
+into a transaction which stores that change in a copy of the objects
+normally available from the object manager.
+
+The JavaAction.execute method has been changed so it starts and ends,
+or aborts, the transaction.  Additionally it creates a copy of the
+object it is invoking the method on so the action takes place within
+the transaction (as discussed above).
+
+There appears to be difficulties with executing methods on
+non-persistent objects, as these do not interact with the transaction
+manager properly.  (My example created a transient transfer object
+that would first be persisted and then applied to it two
+pre-initialised accounts.)
+
+---Next Steps: 
+
+* get proxies for the action's parameters (in the same way that a
+  proxy is obtained for the object that the method is invoked on.
+
+* the other methods in the object manager (save etc.) need to use the
+  proxies as well.
+
+* persist those changes that are held by the transaction, and to
+  update the public versions of the objects.
+ 
+
+--14-6-04
+
+Started work on a transaction manager for managing tranactions across
+objects.  As stated long ago each action is a transaction, so the
+method should either complete and all it changes saved, or the method
+will about and none on the changes must persist.  In addition any
+changed objects must not affect any other objects being used in
+another simultaneously executing action.
+

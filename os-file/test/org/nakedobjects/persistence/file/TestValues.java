@@ -24,9 +24,8 @@
 
 package org.nakedobjects.persistence.file;
 
-import org.apache.log4j.PropertyConfigurator;
 import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Role;
 import org.nakedobjects.object.SimpleOid;
@@ -36,6 +35,8 @@ import org.nakedobjects.object.value.Money;
 import org.nakedobjects.object.value.TextString;
 import org.nakedobjects.object.value.TimeStamp;
 
+import org.apache.log4j.PropertyConfigurator;
+
 public class TestValues {
 
 	public static void main(String[] args) throws ObjectStoreException {
@@ -43,7 +44,7 @@ public class TestValues {
 		
 		DataManager manager = new XmlDataManager("tmp/tests");
 
-		NakedClass type = NakedObjectManager.getInstance().getNakedClass(Role.class.getName());
+		NakedClass type = NakedClassManager.getInstance().getNakedClass(Role.class.getName());
 		SimpleOid oid = new SimpleOid(99);
 		ObjectData data =  new ObjectData(type, oid);
 

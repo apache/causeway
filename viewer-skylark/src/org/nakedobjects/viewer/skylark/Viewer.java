@@ -6,8 +6,8 @@ import org.nakedobjects.object.UpdateNotifier;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.ComponentException;
 import org.nakedobjects.utility.ComponentLoader;
+import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.utility.ConfigurationException;
-import org.nakedobjects.utility.ConfigurationParameters;
 import org.nakedobjects.viewer.skylark.basic.ClassIconSpecification;
 import org.nakedobjects.viewer.skylark.basic.EmptyField;
 import org.nakedobjects.viewer.skylark.basic.IconSpecification;
@@ -167,7 +167,7 @@ public class Viewer {
 	
 	
 	public void init(RenderingArea renderingArea, NakedObject object) throws ConfigurationException, ComponentException {
-        doubleBuffering = ConfigurationParameters.getInstance().getBoolean(PROPERTY_BASE +
+        doubleBuffering = Configuration.getInstance().getBoolean(PROPERTY_BASE +
                 "doublebuffering", true);
 /*         background = (Background) ComponentLoader.loadComponent(PARAMETER_BASE +
                 "background", Background.class);
@@ -177,7 +177,7 @@ public class Viewer {
 		new ViewerAssistant(this, updateNotifier);
         
         popup = new DefaultPopupMenu();
-        explorationMode = ConfigurationParameters.getInstance().getBoolean(PROPERTY_BASE + "show-exploration");
+        explorationMode = Configuration.getInstance().getBoolean(PROPERTY_BASE + "show-exploration");
 
         InteractionHandler interactionHandler = new InteractionHandler(this);
 		renderingArea.addMouseMotionListener(interactionHandler);
@@ -347,7 +347,7 @@ public class Viewer {
 		viewFactory.addValueFieldSpecification(loadSpecification("field.timeperiod", TimePeriodBarField.Specification.class));
 		viewFactory.addValueFieldSpecification(loadSpecification("field.text", TextField.Specification.class));
 
-        if(ConfigurationParameters.getInstance().getBoolean(SPECIFICATION_BASE + "defaults", true)) {
+        if(Configuration.getInstance().getBoolean(SPECIFICATION_BASE + "defaults", true)) {
 			viewFactory.addCompositeRootViewSpecification(new FormSpecification());
 			viewFactory.addCompositeRootViewSpecification(new DataFormSpecification());
 			viewFactory.addCompositeRootViewSpecification(new ListSpecification());
@@ -364,7 +364,7 @@ public class Viewer {
 		viewFactory.addObjectIconSpecification(loadSpecification("icon.object", IconSpecification.class));
 		viewFactory.addClassIconView(loadSpecification("icon.class", ClassIconSpecification.class));
 			
-        String viewParams = ConfigurationParameters.getInstance().getString(SPECIFICATION_BASE +
+        String viewParams = Configuration.getInstance().getString(SPECIFICATION_BASE +
                 "view");
         
         if (viewParams != null) {

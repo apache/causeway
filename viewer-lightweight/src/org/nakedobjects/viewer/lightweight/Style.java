@@ -28,7 +28,7 @@ import java.awt.FontMetrics;
 import java.awt.Frame;
 
 import org.apache.log4j.Logger;
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 
 
 /**
@@ -69,7 +69,7 @@ public class Style {
         private Frame fontMetricsComponent = new Frame();
 
         private Text(String propertyName, String defaultFont) {
-            ConfigurationParameters cfg = ConfigurationParameters.getInstance();
+            Configuration cfg = Configuration.getInstance();
             font = cfg.getFont(PROPERTY_STEM + propertyName, Font.decode(defaultFont));
             LOG.info("font " + propertyName + " loaded as " + font);
 

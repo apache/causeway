@@ -34,6 +34,7 @@ public abstract class AcceptanceTestCase extends TestCase {
 
     /**
      * Register a class as being available to the user.
+     * @deprecated
      */
     protected void addClass(Class cls) {
         registerClass(cls.getName());
@@ -63,6 +64,10 @@ public abstract class AcceptanceTestCase extends TestCase {
 
     protected void note(String text) {
         docln(text);
+    }
+
+    protected void registerClass(Class cls) {
+        registerClass(cls.getName());
     }
 
     protected void registerClass(String className) {

@@ -1,0 +1,79 @@
+
+public void aboutFieldDefault(FieldAbout about)
+public void aboutActionDefault(FieldAbout about)
+
+
+
+Primitives
+
+public <NakedValue> get<Name>()
+
+public void about<Name>(FieldAbout about)
+
+Derived Primitives
+
+public <NakedValue> derive<Name>()
+
+public void about<Name>(FieldAbout about)
+
+
+
+One to One Associations
+
+public <NakedObject> get<Name>()
+public void set<Name>(<NakedObject> object)
+
+public void associate<Name>(<NakedObject> object)
+public void add<Name>(<NakedObject> object)
+
+public void dissociate<Name>(<NakedObject> object)
+public void remove<Name>(<NakedObject> object)
+
+public void about<Name>(FieldAbout about, <NakedObject> object)
+
+
+
+One to Many Associations
+
+public <InternalCollection> get<Name>()
+
+public void add<Name>(<NakedObject> object)
+public void associate<Name>(<NakedObject> object)
+
+public void remove<Name>(<NakedObject> object)
+public void dissociate<Name>(<NakedObject> object)
+
+public void about<Name>(FieldAbout about, <NakedObject> object, boolean add)
+
+
+Actions
+
+public <NakedObject/void> explorationAction()
+
+public void aboutExplorationAction(ActionAbout about)
+
+
+public <NakedObject/void> explorationAction(<NakedObject> parameter)
+
+public void aboutExplorationAction(ActionAbout about, <NakedObject> parameter)
+
+
+Orders
+
+
+public static String fieldOrder() {
+	return "<name>, <name>, ....";
+}
+
+public static String actionOrder() {
+	return "<name>, <name>, ....";
+}
+
+public static String classActionOrder() {
+	return "<name>, <name>, ....";
+}
+
+
+
+
+public static about<ClassName>()	

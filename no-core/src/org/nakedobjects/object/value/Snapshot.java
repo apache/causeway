@@ -1,24 +1,7 @@
-package org.nakedobjects.viewer.skylark.basic;
+package org.nakedobjects.object.value;
 
-import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.Style;
-import org.nakedobjects.viewer.skylark.View;
-import org.nakedobjects.viewer.skylark.ViewAxis;
+public class Snapshot extends TextString {
 
-public class ClassIconSpecification extends IconSpecification {
-
-
-	public ClassIconSpecification() {
-		this(false, false);
-	}
-	
-	ClassIconSpecification(boolean isSubView, boolean isReplaceable) {
-		super(isSubView, isReplaceable);
-	}
-	
-    public View createView(Content content, ViewAxis axis) {
-		return new SimpleBorder(1, new ClassBackground(new IconView(content, this, null, Style.TITLE)));
-    }
 }
 
 

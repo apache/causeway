@@ -35,7 +35,7 @@ import java.net.URL;
 import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
-import org.nakedobjects.utility.ConfigurationParameters;
+import org.nakedobjects.utility.Configuration;
 
 
 class ImageLoader {
@@ -55,7 +55,7 @@ class ImageLoader {
 	private boolean alsoLoadAsFiles;
 
 	ImageLoader(String pathForFallbackImage) {
-		alsoLoadAsFiles = ConfigurationParameters.getInstance().getBoolean("viewer.lightweight.load-images-from-files", true);
+		alsoLoadAsFiles = Configuration.getInstance().getBoolean("viewer.lightweight.load-images-from-files", true);
 		Image im = load(pathForFallbackImage);
 
 		if (im == null) {
