@@ -128,68 +128,7 @@ public class CompositeObjectView extends ObjectView {
         return v;
     }
 
-    public View identify(Location location) {
-        location.move(-getView().getBounds().getX(), -getView().getBounds().getY());
-        location.move(-getView().getPadding().getLeft(), -getView().getPadding().getTop());
-
-        getViewManager().getSpy().addTrace(this, "location within parent", getLocation());
-        getViewManager().getSpy().addTrace(this, "mouse location", location);
-
-        View views[] = getSubviews();
-        for (int i = views.length - 1; i >= 0; i--) {
-            View subview = views[i];
-            if (subview.getBounds().contains(location)) {
-                return subview.identify(location);
-            }
-        }
-
-        location.move(getView().getPadding().getLeft(), getView().getPadding().getTop());
-        return getView();
-    }
-
-    public IdentifiedView identify2(final Location location) {
-        getViewManager().getSpy().addTrace(this, "mouse location within view", location);
-        getViewManager().getSpy().addTrace(this, "view location within parent", getLocation());
-
-        Bounds bounds = new Bounds(getView().getSize());
-        getViewManager().getSpy().addTrace(this, "view area", bounds);
-        Padding padding = getView().getPadding();
-        getViewManager().getSpy().addTrace(this, "padding", padding);
-        bounds.contract(padding);
-        getViewManager().getSpy().addTrace(this, "contents area", bounds);
-
-        if (bounds.contains(location)) {
-            Location locationWithinContent = new Location(location);
-            // use locationWithinContent instead of location
-
-            locationWithinContent.move(-padding.getLeft(), -padding.getTop());
-            getViewManager().getSpy().addTrace(this, "mouse location within content area", locationWithinContent);
-
-            View views[] = getSubviews();
-            for (int i = views.length - 1; i >= 0; i--) {
-                View subview = views[i];
-                if (subview.getBounds().contains(locationWithinContent)) {
-                    getViewManager().getSpy().addTrace(this, "identified subview", subview);
-                    locationWithinContent.move(-subview.getLocation().getX(), -subview.getLocation().getY());
-                    getViewManager().getSpy().addTrace(this, "mouse location within subview", locationWithinContent);
-
-                    IdentifiedView identified = subview.identify2(locationWithinContent);
-                    identified.translate(getLocation());
-                    getViewManager().getSpy().addTrace(this, "offset by (parent location)", getLocation());
-                    identified.translate(padding.getLeft(), padding.getTop());
-                    getViewManager().getSpy().addTrace(this, "offset by (parent padding)", padding);
-
-                    return identified;
-                }
-            }
-        }
-
-        getViewManager().getSpy().addTrace("----");
-        getViewManager().getSpy().addTrace(this, "mouse location within composite view", location);
-        return new IdentifiedView(getView(), location, getLocation());
-    }
-
-    public IdentifiedView identify3(final Location location, Offset offset) {
+    public IdentifiedView identify(final Location location, Offset offset) {
         getViewManager().getSpy().addTrace(this, "mouse location within view", location);
         getViewManager().getSpy().addTrace(this, "view location within parent", getLocation());
 
@@ -206,7 +145,7 @@ public class CompositeObjectView extends ObjectView {
                 locationWithinContent.move(-subview.getLocation().getX(), -subview.getLocation().getY());
                 getViewManager().getSpy().addTrace(this, "mouse location within subview", locationWithinContent);
                 getViewManager().getSpy().addTrace("--> subview: " + subview);
-                IdentifiedView identified = subview.identify3(locationWithinContent, new Offset(0, 0));
+                IdentifiedView identified = subview.identify(locationWithinContent, new Offset(0, 0));
                 identified.translate(getLocation());
 
                 getViewManager().getSpy().addTrace("....");

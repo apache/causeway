@@ -170,7 +170,6 @@ class TextFieldBlock {
 
 	/**
 	 * breaks a block at the cursor position by truncating this block and creating a new block and adding the removed text.
-	 * @return
 	 */
 	public TextFieldBlock breakBlock(int line, int character) {
 		int pos = pos(line, character);

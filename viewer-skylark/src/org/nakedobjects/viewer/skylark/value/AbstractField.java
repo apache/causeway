@@ -193,7 +193,6 @@ public abstract class AbstractField extends AbstractView {
         try {
             value = getValue();
         } catch (NullPointerException ignore) {
-            ;
         }
 
         return cls.substring(cls.lastIndexOf('.') + 1) + getId() + " [location=" + getLocation() + ",object=" + value + "]";

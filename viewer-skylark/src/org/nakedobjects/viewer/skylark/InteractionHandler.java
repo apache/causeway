@@ -95,14 +95,13 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 	     * @see java.awt.event.MouseListener#mouseClicked(MouseEvent)
 	     */
 	    public void mouseClicked(MouseEvent me) {        	
-			viewer.setLiveDebugPositionInformation("mouse clicked ", downAt, mouseLocationWithinView, currentlyIdentifiedView);
 			spy.addAction("Mouse clicked " + mouseLocationWithinView);
 			
 	        if(currentlyIdentifiedView != null) {
 		        Click click = new Click(currentlyIdentifiedView, mouseLocationWithinView, mouseLocation, me.getModifiers());
 		        LOG.debug(click);
 		        
-		        if (click.isButton3()) {
+		        if (click.isButton3() && viewer.getOverlayView() == null) {
 		            saveCurrentFieldEntry();
 		            if (currentlyIdentifiedView != null) {
 		    	        spy.addAction(" popup " + mouseLocation + " over " + currentlyIdentifiedView);
@@ -149,7 +148,6 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 	    	mouseDetails(me, false);
 	    	
 		    View target = currentlyIdentifiedView;
-	       	viewer.setLiveDebugPositionInformation("mouse dragged ", mouseLocation, mouseLocationWithinView, target);
 	       	spy.addAction("Mouse dragged " + mouseLocation);
 	       	spy.addAction("  target " + target + " " + mouseLocationWithinView);
       	
@@ -173,10 +171,9 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 	        mouseDetails(me, true);
 
 	        Location locationInView = new Location(downAt);
-	       	viewer.setLiveDebugPositionInformation("mouse dragged ", mouseLocation, locationInView, previouslyIdentifiedView);
-
+	       	
 	       	ViewAreaType type = previouslyIdentifiedView.viewAreaType(new Location(locationInView));
-	       	spy.addAction("Drag start " + type + ": " + mouseLocation);
+	       	spy.addAction("Drag start " + type + ": " + locationInView);
 			
 			
 			if (type == ViewAreaType.INTERNAL) {
@@ -252,8 +249,6 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 	*/	        
 	           final  View mouseOver = currentlyIdentifiedView;
 		        if(mouseOver != null) {
-		        	viewer.setLiveDebugPositionInformation("mouse moved ", mouseLocation, viewLocationWithinViewer, mouseOver);
-		        	
 		        	if(previouslyIdentifiedView == null) {
 		        		previouslyIdentifiedView = mouseOver;
 		        	} else {
@@ -309,7 +304,6 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 	        spy.setDownAt(downAt);
 	        spy.addAction("Mouse pressed " + downAt);
 	        
-	        viewer.setLiveDebugPositionInformation("mouse pressed ", downAt, mouseLocationWithinView, currentlyIdentifiedView);
 	        // hide an overlay view when not being pointed to
 	        if(currentlyIdentifiedView != viewer.getOverlayView()) {
 	        	viewer.disposeOverlayView();
@@ -336,7 +330,6 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 
 	            View target = currentlyIdentifiedView;
 	            
-	        	viewer.setLiveDebugPositionInformation("Mouse released ", mouseLocation, mouseLocationWithinView, currentlyIdentifiedView);
 
 
 				drag.updateLocationWithinViewer(mouseLocation, target, mouseLocationWithinView);
@@ -369,7 +362,6 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 	    /**
 	     * Calculates all the relevant information about locations and views based on the current mouse
 	     * location.
-	     * @param includeOverlay TODO
 	     */
 	    private void mouseDetails(MouseEvent me, boolean includeOverlay) {
 	        spy.reset();
@@ -378,7 +370,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 	        mouseLocation = new Location(me.getPoint());
 	        spy.setLocationInViewer(mouseLocation);
 	        
-	         IdentifiedView identified = viewer.identifyView3(mouseLocation, includeOverlay);
+	        IdentifiedView identified = viewer.identifyView(mouseLocation, includeOverlay);
 	        currentlyIdentifiedView =  identified.getView();
 	        mouseLocationWithinView =identified.getMouseLocationWithinView();
 	        viewLocationWithinViewer = identified.getViewLocationWithinViewer();

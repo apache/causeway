@@ -94,7 +94,6 @@ public class ScheduleBlockView extends ObjectView {
 	    
     	getViewManager().setOverlayView(outlineView);
 		LOG.debug("drag view start " + location);
-		getViewManager().setDeveloperStatus("Changing " + this);
 		return outlineView;
 	}
     

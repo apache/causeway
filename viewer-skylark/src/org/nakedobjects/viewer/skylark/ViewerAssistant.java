@@ -132,14 +132,6 @@ public class ViewerAssistant {
             }
         });
         
-        /*
-         * options.add(MenuOptionSet.DEBUG, new MenuOption("Object store
-         * state...") { public void execute(Workspace frame, View view, Location
-         * at) { DebugFrame f = new DebugFrame();
-         * f.setInfo(NakedObjectManager.getInstance()); f.show(at.x + 50,
-         * frame.getBounds().y + 6); } });
-         */
-        
         options.add(MenuOptionSet.DEBUG, loggingOption("Error", Level.ERROR));
         options.add(MenuOptionSet.DEBUG, loggingOption("Info", Level.INFO));
         options.add(MenuOptionSet.DEBUG, loggingOption("Debug", Level.DEBUG));
@@ -156,10 +148,6 @@ public class ViewerAssistant {
 
     public void setStatus(String status) {
         viewer.setStatus(status);
-    }
-    
-    public void setDeveloperStatus(String status) {
-        viewer.setLiveDebugMessage(status);
     }
     
     public void showArrowCursor() {
@@ -224,6 +212,10 @@ public class ViewerAssistant {
 
     public UndoStack getUndoStack() {
         return undoStack;
+    }
+
+    public void limitBounds(View view) {
+        viewer.limitBounds(view);
     }
 }
 

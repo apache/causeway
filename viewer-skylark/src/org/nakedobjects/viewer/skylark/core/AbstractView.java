@@ -370,7 +370,7 @@ public abstract class AbstractView implements View {
         return new IdentifiedView(getView(), location, getLocation());
     }
 
-    public IdentifiedView identify3(Location locationWithinView, Offset offset) {
+    public IdentifiedView identify(Location locationWithinView, Offset offset) {
       getViewManager().getSpy().addTrace(this, "mouse location within node view", locationWithinView);
       getViewManager().getSpy().addTrace("----");
       return new IdentifiedView(getView(), locationWithinView, getLocation());
@@ -419,8 +419,7 @@ public abstract class AbstractView implements View {
      * never extends outside the bounds of the containing open view
      */
     public void limitBounds(View view) {
-        
-        Bounds b = getBounds();
+        Bounds b = new Bounds(getSize());
         b.contract(getPadding());
         
         Bounds d = view.getBounds();
@@ -430,65 +429,6 @@ public abstract class AbstractView implements View {
 	        view.setSize(d.getSize());
 	        view.invalidateLayout();
         }
-        
-/*        
-        
-        Location location = view.getLocation();
-        Size size = view.getSize();
-
-        int viewLeft = location.getX();
-        int viewTop = location.getY();
-        int viewRight = viewLeft + size.getWidth();
-        int viewBottom = viewTop + size.getHeight();
-
-        Size wd = getSize();
-        Padding insets = getPadding();
-
-        int limitLeft = insets.getLeft();
-        int limitTop = insets.getTop();
-        int limitRight = wd.getWidth() - insets.getRight();
-        int limitBottom = wd.getHeight() - insets.getBottom();
-
-        if (viewRight > limitRight) {
-            viewLeft = limitRight - size.getWidth();
-            LOG.info("right side oustide limits, moving left to" + viewLeft + " on " + view);
-        }
-
-        if (viewLeft < limitLeft) {
-            viewLeft = limitLeft;
-            LOG.info("left side outside limit, moving left to " + viewLeft + " on " + view);
-        }
-
-        if (viewBottom > limitBottom) {
-            viewTop = limitBottom - size.getHeight();
-            LOG.info("bottom outside limit, moving top to " + viewTop + " on " + view);
-        }
-
-        if (viewTop < limitTop) {
-            viewTop = limitTop;
-            LOG.info("top outside limit, moving top to " + viewTop + " on " + view);
-        }
-
-        location.setX(viewLeft);
-        location.setY(viewTop);
-        view.setLocation(location);
-        
-        
-        
-        viewBottom = viewTop + size.getHeight();
-        viewRight = viewLeft + size.getWidth();
-        
-        if (viewRight > limitRight) {
-            view.setSize(new Size(wd.getWidth(), size.getHeight()));
-            view.invalidateLayout();
-        }
-
-        if (viewBottom > limitBottom) {
-           view.setSize(new Size(size.getWidth(),  wd.getHeight()));
-           view.invalidateLayout();
-        }
-        
-        */
     }
 
     public void markDamaged() {
@@ -575,7 +515,6 @@ public abstract class AbstractView implements View {
 
     public View pickup(ViewDrag drag) {
         View dragView = new DragViewOutline(drag);
-        getViewManager().setDeveloperStatus("Moving " + this);
         return dragView;
     }
 

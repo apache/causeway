@@ -13,8 +13,9 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
-import org.nakedobjects.viewer.skylark.basic.LabelAxis;
+import org.nakedobjects.viewer.skylark.basic.LineBorder;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
+import org.nakedobjects.viewer.skylark.special.ScrollBorder;
 
 import java.util.StringTokenizer;
 
@@ -30,7 +31,7 @@ public class NakedErrorViewSpecification implements ViewSpecification {
     }
 
     public View createView(Content content, ViewAxis axis) {
-        return new ErrorView(content, this, new LabelAxis());
+        return new LineBorder(new ScrollBorder(new ErrorView(content, this, null)));
     }
 
     public boolean isOpen() {
@@ -53,7 +54,31 @@ class ErrorView extends AbstractView {
     }
     
     public Size getRequiredSize() {
-        return new Size(700, 500);
+        Size size = new Size();
+       size.extendHeight(Style.TITLE.getHeight());
+       size.extendHeight(30);
+
+       Error error = (Error) ((ObjectContent) getContent()).getObject();
+       
+       size.ensureWidth(Style.NORMAL.stringWidth(error.getError().stringValue()));
+       size.extendHeight(Style.NORMAL.getHeight());
+       size.extendHeight(30);
+       
+       size.ensureWidth(Style.NORMAL.stringWidth(error.getException().stringValue()));
+       size.extendHeight(Style.NORMAL.getHeight());
+       size.extendHeight(30);
+
+
+       String trace = error.getTrace().stringValue();
+        StringTokenizer st = new StringTokenizer(trace, "\n\r");
+        while (st.hasMoreTokens()) {
+            String line = st.nextToken();
+            size.ensureWidth((line.startsWith("\t") ? 20 : 0) + Style.NORMAL.stringWidth(line));
+            size.extendHeight(Style.NORMAL.getHeight());
+        }
+
+        size.extend(40, 20);
+        return size;
     }
     
     public void draw(Canvas canvas) {
@@ -82,7 +107,8 @@ class ErrorView extends AbstractView {
         String trace = error.getTrace().stringValue();
         StringTokenizer st = new StringTokenizer(trace, "\n\r");
         while (st.hasMoreTokens()) {
-        canvas.drawText(st.nextToken(),left, top, Style.INVALID, Style.NORMAL);
+            String line = st.nextToken();
+            canvas.drawText(line,left + (line.startsWith("\t") ? 20 : 00), top, Style.INVALID, Style.NORMAL);
             top += Style.NORMAL.getHeight();
         }
         

@@ -201,10 +201,6 @@ public class AbstractViewDecorator implements View {
 	public boolean hasFocus() {
 		return wrappedView.hasFocus();
 	}
-
-	public View identify(Location location) {
-        return wrappedView.identify(location);
-    }
 	
 	public void invalidateContent() {
 		wrappedView.invalidateContent();
@@ -322,13 +318,9 @@ public class AbstractViewDecorator implements View {
     public Location getLocationWithinViewer() {
         return wrappedView.getLocationWithinViewer();
     }
-    
-    public IdentifiedView identify2(Location locationWithinViewer) {
-        return wrappedView.identify2(locationWithinViewer);
-    }
-
-    public IdentifiedView identify3(Location locationWithinViewer, Offset offset) {
-        return wrappedView.identify3(locationWithinViewer, offset);
+  
+    public IdentifiedView identify(Location locationWithinViewer, Offset offset) {
+        return wrappedView.identify(locationWithinViewer, offset);
     }
 
     public Location getAbsoluteLocation() {

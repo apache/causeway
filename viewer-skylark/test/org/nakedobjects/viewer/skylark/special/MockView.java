@@ -218,7 +218,7 @@ public class MockView implements View
         return null;
     }
 
-    public IdentifiedView identify3(Location locationWithinViewer, Offset offset) {
+    public IdentifiedView identify(Location locationWithinViewer, Offset offset) {
         return null;
     }
 

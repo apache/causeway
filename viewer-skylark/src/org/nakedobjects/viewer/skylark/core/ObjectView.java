@@ -116,12 +116,8 @@ public abstract class ObjectView extends AbstractView {
 
     public View pickup(ContentDrag drag) {
         View dragView;
-
         dragView = ViewFactory.getViewFactory().createContentDragIcon(drag);
-
-    	getViewManager().setOverlayView(dragView);
-        getViewManager().setDeveloperStatus("Dragging " + getContent());
-
+        getViewManager().setOverlayView(dragView);
         return dragView;
     }
 

@@ -709,7 +709,7 @@ public class TextField extends AbstractField {
                 parseEntry(entry.toString());
                 invalidReason = null;
                 isSaved = true;
-                getViewManager().setDeveloperStatus("VALID ENTRY: " + entry);
+                getViewManager().getSpy().addAction("VALID ENTRY: " + entry);
                 getState().setValid();
                 markDamaged();
                 //getParent().invalidateLayout();

@@ -19,7 +19,10 @@ import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 import java.util.Enumeration;
 
+import org.apache.log4j.Logger;
+
 public class WorkspaceBuilder extends AbstractViewBuilder {
+    private static final Logger LOG = Logger.getLogger(WorkspaceBuilder.class);
 	private static final int PADDING = 10;
     private static final Location ZERO = new Location(0, 0);
 	private boolean layoutInvalid = true;
@@ -80,6 +83,8 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
 			Size size = view.getSize();
 			size.contract(view.getPadding());
 			
+			LOG.debug("Laying out workspace within " + size);
+			
 			int maxHeight = size.getHeight();
 			
 			int xClass = PADDING;
@@ -109,7 +114,9 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
 						        yClass = PADDING;
 						        xClass += maxClassWidth + PADDING;
 						        maxClassWidth = 0;
+	                            LOG.debug("Creating new column at " + xClass + ", " + yClass);
 						    }
+                            LOG.debug("Class icon at " + xClass + ", " + yClass);
 							v.setLocation(new Location(xClass, yClass));
 							maxClassWidth = Math.max(maxClassWidth, componentSize.getWidth());
 							yClass += height;

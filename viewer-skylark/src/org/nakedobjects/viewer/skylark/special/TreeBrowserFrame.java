@@ -110,9 +110,8 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
         if (right != null) {
             right.layout();
         }
-        
-        // TODO set up sizes of frame, right hand pane, and left hand pane in one go.
-        if (invalidLayout) {
+ 
+       if (invalidLayout) {
             Bounds workspaceLimit = getWorkspace().getBounds();
             workspaceLimit.contract(getWorkspace().getPadding());
             Size rightPanelRequiredSize = (right == null) ? new Size() : right.getRequiredSize();
@@ -123,7 +122,6 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
             subviews.ensureHeight(rightPanelRequiredSize.getHeight());
             
             if(workspaceLimit.limitBounds(subviews)) {
-                // TODO change sizes
                 if (right != null) {
                     rightPanelRequiredSize.setWidth(workspaceLimit.getWidth() - leftPanelRequiredSize.getWidth());
                 }
@@ -179,8 +177,7 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
 
     public void replaceView(View toReplace, View replacement) {
         if (toReplace == left) {
-            left = replacement;
-            replacement.setParent(getView());
+            initLeftPane(replacement);
             invalidateLayout();
         } else {
             throw new NakedObjectRuntimeException();
@@ -196,11 +193,11 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     }
 
     void initLeftPane(View view) {
-        left = view;
+        left = new ResizeBorder(new ScrollBorder(view));
         left.setParent(getView());
     }
 
-    public IdentifiedView identify3(Location location, Offset offset) {
+    public IdentifiedView identify(Location location, Offset offset) {
         getViewManager().getSpy().addTrace(this, "mouse location within browser frame", location);   
   
         Location locationWithinContent = new Location(location);
@@ -211,12 +208,12 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
         
         if (left != null && left.getBounds().contains(locationWithinContent)) {
             getViewManager().getSpy().addTrace("--> subview: " + left);
-            return left.identify3(locationWithinContent, new Offset(0, 0));
+            return left.identify(locationWithinContent, new Offset(0, 0));
         }
         if (right != null && right.getBounds().contains(locationWithinContent)) {
             getViewManager().getSpy().addTrace("--> subview: " + right);
           //  offset.subtract(rightViewOffet(), 0);
-            return right.identify3(locationWithinContent, new Offset(-rightViewOffet(), 0));
+            return right.identify(locationWithinContent, new Offset(-rightViewOffet(), 0));
         }
 
         return new IdentifiedView(getView(), location, getLocation());

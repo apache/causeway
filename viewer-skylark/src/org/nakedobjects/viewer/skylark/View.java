@@ -7,14 +7,10 @@ import org.nakedobjects.object.NakedObject;
 
 public interface View extends Cloneable {
     /** Horizontal padding (||) between two components */
-    public static final int HPADDING = Configuration.getInstance()
-                                                              .getInteger(Viewer.PROPERTY_BASE + "hpadding",
-            2);
+    public static final int HPADDING = Configuration.getInstance().getInteger(Viewer.PROPERTY_BASE + "hpadding", 2);
     /** Vertical padding (=) between two components */
-    public static final int VPADDING = Configuration.getInstance()
-                                                              .getInteger(Viewer.PROPERTY_BASE + "vpadding",
-            2);
-    
+    public static final int VPADDING = Configuration.getInstance().getInteger(Viewer.PROPERTY_BASE + "vpadding", 2);
+
     void addView(View view);
 
     /**
@@ -23,7 +19,7 @@ public interface View extends Cloneable {
     boolean canChangeValue();
 
     /**
-     * Determines whether this view accepts keyboard focus.  If so focusLost and
+     * Determines whether this view accepts keyboard focus. If so focusLost and
      * focusReceived will be called.
      */
     boolean canFocus();
@@ -31,13 +27,14 @@ public interface View extends Cloneable {
     String debugDetails();
 
     /**
-     * Called when a view is no longer needed and its resources can be disposed of.
+     * Called when a view is no longer needed and its resources can be disposed
+     * of.
      */
     void dispose();
 
     /**
-     * Called as mouse is dragged within and without this view.  This only occurs when
-     * no content or view is being dragged.
+     * Called as mouse is dragged within and without this view. This only occurs
+     * when no content or view is being dragged.
      */
     void drag(InternalDrag drag);
 
@@ -46,22 +43,22 @@ public interface View extends Cloneable {
     View dragFrom(InternalDrag drag);
 
     /**
-     * Called as the content being dragged is dragged into this view.  This only occurs
-     * when view contents are being dragged, and not when views themselves are being
-     * dragged.
+     * Called as the content being dragged is dragged into this view. This only
+     * occurs when view contents are being dragged, and not when views
+     * themselves are being dragged.
      */
     void dragIn(ContentDrag drag);
 
     /**
-     * Called as the content being dragged is dragged out of this view.  This only occurs
-     * when view contents are being dragged, and not when views themselves are being
-     * dragged.
+     * Called as the content being dragged is dragged out of this view. This
+     * only occurs when view contents are being dragged, and not when views
+     * themselves are being dragged.
      */
     void dragOut(ContentDrag drag);
 
     /**
-     * Called as the drag ends within and without this view.  This only occurs when
-     * no content or view is being dragged.
+     * Called as the drag ends within and without this view. This only occurs
+     * when no content or view is being dragged.
      */
     void dragTo(InternalDrag drag);
 
@@ -72,26 +69,28 @@ public interface View extends Cloneable {
     void draw(Canvas canvas);
 
     /**
-     * Called as another view's contents (the source) is dropped on this view's contents
-     * (the target).  The source view can be obtained from the ViewDrag object.
+     * Called as another view's contents (the source) is dropped on this view's
+     * contents (the target). The source view can be obtained from the ViewDrag
+     * object.
      */
     void drop(ContentDrag drag);
 
     /**
-     * Called as another view (the source) is dropped on this view (the target).  The
-     * source view can be obtained from the ViewDrag object.
+     * Called as another view (the source) is dropped on this view (the target).
+     * The source view can be obtained from the ViewDrag object.
      */
     void drop(ViewDrag drag);
 
     /**
-     * Indicates that editing has been completed and the entry should be saved.  Will be called by the
-     * view manager when other action place within the parent.
+     * Indicates that editing has been completed and the entry should be saved.
+     * Will be called by the view manager when other action place within the
+     * parent.
      */
     void editComplete();
 
     /**
-     * Called as the mouse crosses the bounds, and ends up inside, of this view.  Is also
-     * called as the mouse returns into this view from a contained view.
+     * Called as the mouse crosses the bounds, and ends up inside, of this view.
+     * Is also called as the mouse returns into this view from a contained view.
      */
     void entered();
 
@@ -101,7 +100,8 @@ public interface View extends Cloneable {
     void enteredSubview();
 
     /**
-     * Called as the mouse crosses the bounds, and ends up outside, of this view.
+     * Called as the mouse crosses the bounds, and ends up outside, of this
+     * view.
      */
     void exited();
 
@@ -112,8 +112,10 @@ public interface View extends Cloneable {
 
     /**
      * Called when the user clicks the mouse buttone within this view.
-     * @param click        the location within the current view where the mouse click
-     * took place
+     * 
+     * @param click
+     *                       the location within the current view where the mouse click
+     *                       took place
      */
     void firstClick(Click click);
 
@@ -121,17 +123,20 @@ public interface View extends Cloneable {
 
     void focusRecieved();
 
+    Location getAbsoluteLocation();
+
     int getBaseline();
 
     /**
-     * Returns the bounding rectangle that describes where (within it parent), and how big,
-     * this view is.
+     * Returns the bounding rectangle that describes where (within it parent),
+     * and how big, this view is.
+     * 
      * @see #getSize()
      * @see #getLocation()
      * @return Bounds
      */
     Bounds getBounds();
-    
+
     /**
      * get the object that this view represents
      */
@@ -141,9 +146,12 @@ public interface View extends Cloneable {
 
     /**
      * Determines the location relative to this object's containing view
+     * 
      * @see #getBounds()
      */
     Location getLocation();
+
+    Location getLocationWithinViewer();
 
     Padding getPadding();
 
@@ -153,6 +161,7 @@ public interface View extends Cloneable {
 
     /**
      * Determines the size of this view.
+     * 
      * @see #getBounds()
      */
     Size getSize();
@@ -164,17 +173,20 @@ public interface View extends Cloneable {
     View[] getSubviews();
 
     /**
-     * returns the topmost decorator in the chain, or the view itself if not decorated.
+     * returns the topmost decorator in the chain, or the view itself if not
+     * decorated.
      */
     View getView();
 
     ViewAxis getViewAxis();
-    
+
     ViewerAssistant getViewManager();
 
     Workspace getWorkspace();
 
     boolean hasFocus();
+
+    IdentifiedView identify(Location locationWithinViewer, Offset offset);
 
     void invalidateContent();
 
@@ -194,8 +206,9 @@ public interface View extends Cloneable {
 
     /**
      * Called when the user presses a non-control key (i.e. data entry keys and
-     * not shift, up-arrow etc).  Such a key press will result in a prior call
-     * to <code>keyPressed</code> and a subsequent call to <code>keyReleased</code>.
+     * not shift, up-arrow etc). Such a key press will result in a prior call to
+     * <code>keyPressed</code> and a subsequent call to
+     * <code>keyReleased</code>.
      */
     void keyTyped(char keyCode);
 
@@ -206,23 +219,29 @@ public interface View extends Cloneable {
     void markDamaged(Bounds bounds);
 
     /**
-     * Called when the popup menu is being populated for this view.  Any
-     * options that need to appear on the menu should be added to the
+     * Called when the popup menu is being populated for this view. Any options
+     * that need to appear on the menu should be added to the
      * <code>menuOptions</code> object.
+     * 
      * @param menuOptions
      */
     void menuOptions(MenuOptionSet menuOptions);
 
     /**
-     * Called as the mouse is moved around within this view.    Does nothing;
+     * Called as the mouse is moved around within this view. Does nothing;
      * should be overriden when needed.
-     * @param at          the position relative to the top-left of this view
+     * 
+     * @param at
+     *                       the position relative to the top-left of this view
      */
     void mouseMoved(Location at);
 
     /**
-     * Called when an action generates a result, allowing this view to decide what to do with it.
-     * @param at        the location where the action took place
+     * Called when an action generates a result, allowing this view to decide
+     * what to do with it.
+     * 
+     * @param at
+     *                       the location where the action took place
      */
     void objectActionResult(Naked result, Location at);
 
@@ -248,8 +267,8 @@ public interface View extends Cloneable {
     void replaceView(View toReplace, View replacement);
 
     /**
-     * Called when the user double-clicked this view.  This method will have
-     * been preceded by a call to <code>click</code>.
+     * Called when the user double-clicked this view. This method will have been
+     * preceded by a call to <code>click</code>.
      */
     void secondClick(Click click);
 
@@ -257,6 +276,7 @@ public interface View extends Cloneable {
 
     /**
      * Specifies the location of this view, relative to its enclosing view.
+     * 
      * @param point
      */
     void setLocation(Location point);
@@ -270,10 +290,9 @@ public interface View extends Cloneable {
     void setView(View view);
 
     /**
-      * Called when the user triple-clicks the mouse buttone within this view.
-      * This method will have been preceded by a call to
-      * <code>doubleClick</code>.
-      */
+     * Called when the user triple-clicks the mouse buttone within this view.
+     * This method will have been preceded by a call to <code>doubleClick</code>.
+     */
     void thirdClick(Click click);
 
     /**
@@ -282,44 +301,36 @@ public interface View extends Cloneable {
     void update(NakedObject object);
 
     /**
-     * Determines if the user is invoking an action relating to this view, rather than to whatever this view represents.
+     * Determines if the user is invoking an action relating to this view,
+     * rather than to whatever this view represents.
+     * 
      * @param mouseLocation
-     * @return true if the user is targeting the view itself, false if the user is targeting what is being represented
+     * @return true if the user is targeting the view itself, false if the user
+     *                 is targeting what is being represented
      */
     ViewAreaType viewAreaType(Location mouseLocation);
-
-    View identify(Location location);
-
-    Location getLocationWithinViewer();
-
-    IdentifiedView identify2(Location locationWithinViewer);
-
-    IdentifiedView identify3(Location locationWithinViewer, Offset offset);
-    
-    Location getAbsoluteLocation();
 }
 
-
 /*
-Naked Objects - a framework that exposes behaviourally complete
-business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-The authors can be contacted via www.nakedobjects.org (the
-registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-Road, Woking GU21 1NR, UK).
-*/
+ * Naked Objects - a framework that exposes behaviourally complete business
+ * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * Ltd
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * The authors can be contacted via www.nakedobjects.org (the registered address
+ * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
+ * 1NR, UK).
+ */

@@ -68,7 +68,8 @@ public class TableRowSpecification extends AbstractCompositeViewSpecification {
         }
 
         public View decorateSubview(View cell) {
-            return new TableCellResizeBorder(cell);
+//            return new TableCellResizeBorder(cell);
+            return cell;
         }
     }
 }
@@ -89,7 +90,7 @@ class RowBorder extends AbstractBorder {
 
         left = icon.getSize().getWidth() + HPADDING + title.getSize().getWidth();
         
-        ((TableColumnAxis) wrappedRow.getViewAxis()).setOffset(left);
+        ((TableColumnAxis) wrappedRow.getViewAxis()).ensureOffset(left);
 
         right = HANDLE_WIDTH;
     }
@@ -106,11 +107,16 @@ class RowBorder extends AbstractBorder {
         int bl = getBaseline();
         icon.draw(canvas, 1, bl);
         title.draw(canvas, icon.getSize().getWidth() + HPADDING, bl);
+        int y = getSize().getHeight() - 1;
+        canvas.drawLine(0, y, getSize().getWidth(), y, Style.SECONDARY2);
+         
+ /*
         int l = getLeft() - 1;
         canvas.drawLine(0, 0, l, 0, Style.SECONDARY2);
         canvas.drawLine(l, 0, l, getSize().getHeight(), Style.SECONDARY2);
         l--;
         canvas.drawLine(l, 0, l, getSize().getHeight(), Style.SECONDARY2);
+     */
         
         // components
        super.draw(canvas);
@@ -145,7 +151,7 @@ class RowLayout extends AbstractBuilderDecorator {
         int height = 0;
         int width = 0;
         View[] cells = row.getSubviews();
-        int[] widths = ((TableColumnAxis) row.getViewAxis()).getWidths();
+        TableColumnAxis axis = ((TableColumnAxis) row.getViewAxis());
 
         int maxBaseline = 0;
         for (int i = 0; i < cells.length; i++) {
@@ -158,7 +164,7 @@ class RowLayout extends AbstractBuilderDecorator {
             Size s = cell.getRequiredSize();
             int b = cell.getBaseline();
             height = Math.max(height, s.getHeight()+ (b < maxBaseline ? maxBaseline - b: 0));
-            width += widths[i];
+            width += axis.getColumnWidth(i);
         }
 
         return new Size(width, height);
@@ -169,7 +175,7 @@ class RowLayout extends AbstractBuilderDecorator {
         int y = 0;
         
         View[] cells = row.getSubviews();
-        int[] widths = ((TableColumnAxis) row.getViewAxis()).getWidths();
+        TableColumnAxis axis = ((TableColumnAxis) row.getViewAxis());
 
         int maxBaseline = 0;
         for (int i = 0; i < cells.length; i++) {
@@ -182,7 +188,7 @@ class RowLayout extends AbstractBuilderDecorator {
             Size s = cell.getRequiredSize();
             int b = cell.getBaseline();
             
-            s.setWidth(widths[i]);
+            s.setWidth(axis.getColumnWidth(i));
             cell.setSize(s);
             cell.setLocation(new Location(x, y + (b < maxBaseline ? maxBaseline - b: 0)));
             x += s.getWidth();

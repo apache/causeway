@@ -148,7 +148,7 @@ public class AbstractBorder extends AbstractViewDecorator {
         return onBorder;
     }
     
-    public IdentifiedView identify3(Location locationWithinViewer, Offset offset) {
+    public IdentifiedView identify(Location locationWithinViewer, Offset offset) {
         Location locationWithinBorder = new Location(locationWithinViewer);
         locationWithinBorder.translate(offset);
         getViewManager().getSpy().addTrace(this, "mouse location within border", locationWithinBorder);
@@ -159,7 +159,7 @@ public class AbstractBorder extends AbstractViewDecorator {
             return new IdentifiedView(getView(), locationWithinViewer, getLocation());
         } else {
             offset.add(-getLeft(), -getTop());
-            return  super.identify3(locationWithinViewer, offset);
+            return  super.identify(locationWithinViewer, offset);
         }
         
     }

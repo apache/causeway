@@ -37,7 +37,7 @@ public class TimePeriodBarField extends AbstractField {
    }
     private static final Logger LOG = Logger.getLogger(TimePeriodBarField.class);
     private int endTime;
-    private int startTime;
+  //  private int startTime;
 
     protected TimePeriodBarField(Content content, ViewSpecification specification, ViewAxis axis) {
         super(content, specification, axis);

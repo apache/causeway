@@ -12,12 +12,13 @@ import org.apache.log4j.Logger;
 public class ViewDrag extends Drag {
 	private static final Logger LOG = Logger.getLogger(ViewDrag.class);
     private final View overlayView;
-	private final View viewsWorkspace;
+	private final View viewsDecoratedWorkspace;
     private Location mouseLocation;
     /**
      * Offset from the view's top-left corner to the pointer (relative to the view).
      */
     private final Offset overlayOffset;
+    private Workspace viewsWorkspace;
 
 	public static ViewDrag create(View source, Location mouseLocationWithinViewer, Location locationWithinView, int modifiers) {
 	    View parent = source.getParent();
@@ -44,7 +45,8 @@ public class ViewDrag extends Drag {
         
         overlayView = source.pickup(this);
         overlayOffset = new Offset(relative.getX(), relative.getY());
-        viewsWorkspace = source.getParent().getWorkspace().getView();
+        viewsWorkspace = source.getParent().getWorkspace();
+        viewsDecoratedWorkspace = viewsWorkspace.getView();
  
         if(overlayView != null) {
 		    source.exited();
@@ -82,17 +84,17 @@ public class ViewDrag extends Drag {
     }
 
     private void updateDraggingLocation() {
-        LOG.debug("mouse location  " + mouseLocation);
         Location viewLocation = new Location(mouseLocation);
 		viewLocation.subtract(overlayOffset);
 		overlayView.setLocation(viewLocation);
+		viewsWorkspace.limitBounds(overlayView);
 	}
     
     /**
      * Ends the drag by calling drop() on the workspace.
      */
     protected  void end() {
-        viewsWorkspace.drop(this);
+        viewsDecoratedWorkspace.drop(this);
     }
 
     public String toString() {
@@ -108,8 +110,8 @@ public class ViewDrag extends Drag {
     public Location getViewDropLocation() {
         Location viewLocation = new Location(mouseLocation);
 		viewLocation.subtract(overlayOffset);
-        viewLocation.subtract(viewsWorkspace.getAbsoluteLocation());
-        viewLocation.move(-viewsWorkspace.getPadding().left, -viewsWorkspace.getPadding().top);
+        viewLocation.subtract(viewsDecoratedWorkspace.getAbsoluteLocation());
+        viewLocation.move(-viewsDecoratedWorkspace.getPadding().left, -viewsDecoratedWorkspace.getPadding().top);
         return viewLocation;
     }
 }

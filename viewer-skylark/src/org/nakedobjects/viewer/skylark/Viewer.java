@@ -59,7 +59,6 @@ public class Viewer {
     private String userStatus;
     private PopupMenu popup;
     private boolean explorationMode;
-    private boolean showDeveloperStatus = Configuration.getInstance().getBoolean(PROPERTY_BASE + "debugstatus", false);
     private ObjectViewingMechanismListener listener;
 
     private ViewUpdateNotifier updateNotifier = new ViewUpdateNotifier();
@@ -68,8 +67,6 @@ public class Viewer {
     private Insets insets;
     private int statusBarHeight;
     private Bounds statusBarArea;
-    private String developerStatus;
-    private String debugPosition;
     private InteractionSpy spy;
 
     public void markDamaged(Bounds bounds) {
@@ -104,16 +101,6 @@ public class Viewer {
         return updateNotifier;
     }
 
-    public View identifyView(Location location, boolean includeOverlay) {
-        if (includeOverlay && overlayView != null && overlayView.getBounds().contains(location)) {
-            location.move(-overlayView.getLocation().getX(), -overlayView.getLocation().getY());
-            return overlayView;
-        } else {
-            View identified = rootView.identify(location);
-            return identified;
-        }
-    }
-
     public void init(RenderingArea renderingArea, NakedObject object, ObjectViewingMechanismListener listener)
             throws ConfigurationException, ComponentException {
         init(renderingArea, listener);
@@ -127,6 +114,7 @@ public class Viewer {
     public void init(RenderingArea renderingArea, ObjectViewingMechanismListener listener) throws ConfigurationException,
             ComponentException {
         doubleBuffering = Configuration.getInstance().getBoolean(PROPERTY_BASE + "doublebuffering", true);
+        
         /*
          * background = (Background)
          * ComponentLoader.loadComponent(PARAMETER_BASE + "background",
@@ -146,7 +134,9 @@ public class Viewer {
         renderingArea.addKeyListener(interactionHandler);
 
         setupViewFactory();
-        spy.show();
+        if(Configuration.getInstance().getBoolean(PROPERTY_BASE + "debugstatus", false)) {
+            spy.open();
+        }
     }
 
     public void setRootView(View rootView) {
@@ -194,9 +184,6 @@ public class Viewer {
 
         // paint status
         paintUserStatus(bufferGraphics);
-        if (showDeveloperStatus) {
-            paintDeveloperStatus(bufferGraphics);
-        }
 
         // blat to screen
         if (doubleBuffering) {
@@ -208,12 +195,6 @@ public class Viewer {
             g.drawRect(r.x, r.y, r.width - 1, r.height - 1);
             g.drawString("#" + redrawCount, r.x + 3, r.y + 15);
         }
-    }
-
-    private void paintDeveloperStatus(Graphics bufferCanvas) {
-        int top = internalDisplaySize.getHeight() - statusBarHeight * 2;
-        bufferCanvas.setColor(new Color(0xe0, 0xe0, 0xe0));
-        paintStatus(bufferCanvas, top, debugPosition + ": " + developerStatus);
     }
 
     private void paintStatus(Graphics bufferCanvas, int top, String text) {
@@ -247,12 +228,15 @@ public class Viewer {
     }
 
     public boolean isShowingDeveloperStatus() {
-        return showDeveloperStatus;
+        return spy.isVisible();
     }
 
     public void setShowDeveloperStatus(boolean showDeveloperStatus) {
-        this.showDeveloperStatus = showDeveloperStatus;
-        sizeChange();
+        if(spy.isVisible()) {
+            spy.close();
+        } else {
+            spy.open();
+        }
     }
 
     public void setCursor(Cursor cursor) {
@@ -272,26 +256,6 @@ public class Viewer {
         if (!status.equals(this.userStatus)) {
             this.userStatus = status;
             LOG.debug("changed user status " + status + " " + statusBarArea);
-            renderingArea.repaint(statusBarArea.x, statusBarArea.y, statusBarArea.width, statusBarArea.height);
-        }
-    }
-
-    /**
-     * Sets the status string and refreshes that part of the screen.
-     */
-    public void setLiveDebugMessage(String status) {
-        if (showDeveloperStatus) {
-            if (!status.equals(this.developerStatus)) {
-                this.developerStatus = status;
-                LOG.debug("changed developer status " + status + " " + statusBarArea);
-                renderingArea.repaint(statusBarArea.x, statusBarArea.y, statusBarArea.width, statusBarArea.height);
-            }
-        }
-    }
-
-    public void setLiveDebugPositionInformation(String action, Location mouseLocation, Location innerLocation, View mouseOver) {
-        if (showDeveloperStatus) {
-            debugPosition = action + " [" + mouseLocation + " " + innerLocation + " - " + mouseOver + "]";
             renderingArea.repaint(statusBarArea.x, statusBarArea.y, statusBarArea.width, statusBarArea.height);
         }
     }
@@ -406,7 +370,6 @@ public class Viewer {
 
     public void start() {
         sizeChange();
-        setLiveDebugMessage("Viewer started " + this);
         repaint();
     }
 
@@ -421,11 +384,9 @@ public class Viewer {
 
         Size rootViewSize = new Size(internalDisplaySize);
         statusBarHeight = 2 + Style.STATUS.getHeight() + 2;
-        int totalBarHeight = statusBarHeight * (showDeveloperStatus ? 2 : 1);
-        rootViewSize.contractHeight(totalBarHeight);
-        statusBarArea = new Bounds(insets.left, insets.top + rootViewSize.height, rootViewSize.width, totalBarHeight);
+        rootViewSize.contractHeight(statusBarHeight);
+        statusBarArea = new Bounds(insets.left, insets.top + rootViewSize.height, rootViewSize.width, statusBarHeight);
         ((WorkspaceSpecification) rootView.getSpecification()).setRequiredSize(rootViewSize);
-  //      rootView.setRequiredSize(rootViewSize);
         rootView.invalidateLayout();
 
         Bounds bounds = new Bounds(internalDisplaySize);
@@ -441,21 +402,27 @@ public class Viewer {
         me.translatePoint(-insets.left, -insets.top);
     }
 
-    public IdentifiedView identifyView2(Location locationWithinViewer, boolean includeOverlay) {
+    public IdentifiedView identifyView(Location locationWithinViewer, boolean includeOverlay) {
         if (includeOverlay && overlayView != null && overlayView.getBounds().contains(locationWithinViewer)) {
             locationWithinViewer.move(-overlayView.getLocation().getX(), -overlayView.getLocation().getY());
             return new IdentifiedView(overlayView, locationWithinViewer, locationWithinViewer);
         } else {
-            return rootView.identify2(locationWithinViewer);
+            return rootView.identify(locationWithinViewer, new Offset(0, 0));
         }
     }
 
-    public IdentifiedView identifyView3(Location locationWithinViewer, boolean includeOverlay) {
-        if (includeOverlay && overlayView != null && overlayView.getBounds().contains(locationWithinViewer)) {
-            locationWithinViewer.move(-overlayView.getLocation().getX(), -overlayView.getLocation().getY());
-            return new IdentifiedView(overlayView, locationWithinViewer, locationWithinViewer);
-        } else {
-            return rootView.identify3(locationWithinViewer, new Offset(0, 0));
+    public void limitBounds(View view) {
+        Bounds bounds = new Bounds(new Size(renderingArea.getSize()));
+        Insets in = renderingArea.getInsets();
+        bounds.contract(in.left + in.right, in.top + in.bottom);
+        bounds.contract(0, statusBarHeight);
+        
+        Bounds d = view.getBounds();
+        
+        if( bounds.limitBounds(d)) {
+	        view.setLocation(d.getLocation());
+	        view.setSize(d.getSize());
+	        view.invalidateLayout();
         }
     }
 }

@@ -34,6 +34,7 @@ public class ContentDrag extends Drag {
 	private View previousTarget;
     private final View dragging;
     private Location mouseLocation;
+    private final Workspace workspace;
 
 	public static ContentDrag create(View source, Location absolute, Location relative, int modifiers) {
 		ContentDrag drag = new ContentDrag(source, absolute, relative, modifiers);
@@ -55,6 +56,7 @@ public class ContentDrag extends Drag {
     private ContentDrag(View source, Location absolute, Location relative, int modifiers) {
         super(source, absolute, relative, modifiers);
         
+        workspace = source.getWorkspace();
         dragging =source.pickup(this);
         if(dragging != null) {
 		    source.exited();
@@ -100,8 +102,8 @@ public class ContentDrag extends Drag {
     
     private void setDraggingLocation() {
 		Location location = new Location(mouseLocation);
-//		viewOffset.move(-sourceLocationWithinView.getX(), -sourceLocationWithinView.getY());
-         dragging.setLocation(location);
+		dragging.setLocation(location);
+		workspace.limitBounds(dragging);
 	}
 
 	/**

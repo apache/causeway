@@ -59,8 +59,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
     private Color backgroundColor;
     private View forView;
     private Item[] items = new Item[0];
-	private Location mouseAt;
-    private int optionIdentified;
+	private int optionIdentified;
 	
 	public DefaultPopupMenu() {
 		super(null, null, null);
@@ -127,8 +126,10 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
     }
 
     public void firstClick(Click click) {
-    	mouseMoved(click.getLocation());
-        invoke();
+        if(click.isButton1()) {
+	    	mouseMoved(click.getLocation());
+	        invoke();
+        }
     }
 
 	public void focusLost() {
@@ -202,11 +203,10 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
         
         Size size = getRequiredSize();
         setSize(size);
-        this.mouseAt = mouseAt;
-		Location location = new Location(mouseAt);
+        Location location = new Location(mouseAt);
 		location.move(-14, -10);
         setLocation(location);
-       // limitBounds(this); -- does not work
+        getViewManager().limitBounds(this);
     }
 
     public void invoke() {

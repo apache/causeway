@@ -2,13 +2,20 @@ package org.nakedobjects.viewer.skylark;
 
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 
 public class InteractionSpy {
 
     private class SpyFrame extends Frame {
         public SpyFrame() {
-            super("Debug");
+            super("View/Interaction Spy");
+            addWindowListener(new WindowAdapter() {
+                public void windowClosing(WindowEvent e) {
+                    close();
+                }
+            });
         }
 
         public void paint(Graphics g) {
@@ -38,29 +45,57 @@ public class InteractionSpy {
     private int actionCount;
     private String damagedArea;
     private int event;
-    private String label[][] = new String[2][16];
+    private String label[][] = new String[2][20];
     private SpyFrame spy;
     private String[] trace = new String[30];
     private int traceIndex;
+    private boolean isVisible;
 
-    public InteractionSpy() {
-        spy = new SpyFrame();
-        spy.setBounds(10, 10, 600, 360);
+    public void addAction(String action) {
+        if (isVisible) {
+            set(actionCount++, "Action", action);
+        }
     }
 
     public void addDamagedArea(Bounds bounds) {
-        damagedArea += bounds + "; ";
-        set(7, "Damaged areas", damagedArea);
+        if (isVisible) {
+            damagedArea += bounds + "; ";
+            set(7, "Damaged areas", damagedArea);
+        }
+    }
+
+    public void addTrace(String message) {
+        if (isVisible && traceIndex < trace.length) {
+            trace[traceIndex] = message;
+            traceIndex++;
+        }
+    }
+
+    public void addTrace(View view, String message, Object object) {
+        if (isVisible && traceIndex < trace.length) {
+            trace[traceIndex] = view.getClass().getName() + " " + message + ": " + object;
+            traceIndex++;
+        }
+    }
+
+    public void close() {
+        if (isVisible) {
+            spy.hide();
+            spy.dispose();
+            isVisible = false;
+        }
     }
 
     public void reset() {
-        traceIndex = 0;
-        actionCount = 8;
-        damagedArea = "";
-        setDownAt(null);
-        for (int i = actionCount; i < label[0].length; i++) {
-            label[0][i] = null;
-            label[1][i] = null;
+        if (isVisible) {
+            traceIndex = 0;
+            actionCount = 8;
+            damagedArea = "";
+            setDownAt(null);
+            for (int i = actionCount; i < label[0].length; i++) {
+                label[0][i] = null;
+                label[1][i] = null;
+            }
         }
     }
 
@@ -72,57 +107,65 @@ public class InteractionSpy {
     }
 
     public void setAbsoluteLocation(Location absoluteLocation) {
-        set(6, "Absolute view location", absoluteLocation);
-    }
-
-    public void addAction(String action) {
-        set(actionCount++, "Action", action);
+        if (isVisible) {
+            set(6, "Absolute view location", absoluteLocation);
+        }
     }
 
     public void setDownAt(Location downAt) {
-        set(0, "Down at", downAt);
+        if (isVisible) {
+            set(0, "Down at", downAt);
+        }
     }
 
     public void setEvent(int event) {
-        this.event = event;
+        if (isVisible) {
+            this.event = event;
+        }
+
     }
 
     public void setLocationInView(Location internalLocation) {
-        set(3, "Relative mouse location", internalLocation);
+        if (isVisible) {
+            set(3, "Relative mouse location", internalLocation);
+        }
     }
 
     public void setLocationInViewer(Location mouseLocation) {
-        set(1, "Mouse location", mouseLocation);
+        if (isVisible) {
+            set(1, "Mouse location", mouseLocation);
+        }
     }
 
     public void setOver(Object data) {
-        set(2, "Mouse over", data);
+        if (isVisible) {
+            set(2, "Mouse over", data);
+        }
     }
 
     public void setType(ViewAreaType type) {
-        set(4, "Area type", type);
+        if (isVisible) {
+            set(4, "Area type", type);
+        }
     }
 
     public void setViewLocation(Location locationWithinViewer) {
-        set(5, "View location", locationWithinViewer);
-    }
-
-    public void show() {
-        // spy.show();
-    }
-
-    public void addTrace(String message) {
-        if (traceIndex < trace.length) {
-            trace[traceIndex] = message;
-            traceIndex++;
+        if (isVisible) {
+            set(5, "View location", locationWithinViewer);
         }
     }
 
-    public void addTrace(View view, String message, Object object) {
-        if (traceIndex < trace.length) {
-            trace[traceIndex] = view.getClass().getName() + " " + message + ": " + object;
-            traceIndex++;
+    public void open() {
+        if (!isVisible) {
+            spy = new SpyFrame();
+            spy.setBounds(10, 10, 800, 500);
+            spy.show();
+            isVisible = true;
         }
+    }
+
+    public boolean isVisible() {
+        return isVisible;
     }
 }
 

@@ -22,6 +22,8 @@ public class ResizeBorder extends AbstractBorder {
     public ResizeBorder(View view) {
         super(view);
         bottom = right = BORDER_WIDTH;
+        
+        resize = new Size(400, 200);
     }
 
     protected void debugDetails(StringBuffer b) {
@@ -42,7 +44,6 @@ public class ResizeBorder extends AbstractBorder {
         }
 
         canvas.setClip(0,0, width - BORDER_WIDTH, height - BORDER_WIDTH);
-       // super.draw(canvas);
         wrappedView.draw(canvas);
     }
 
@@ -90,14 +91,14 @@ public class ResizeBorder extends AbstractBorder {
             super.dragTo(drag);
         }
     }
-/*
+    
     public Size getRequiredSize() {
  //       if(resize == null) {
-            resize = wrappedView.getRequiredSize();
+ //           resize = wrappedView.getRequiredSize();
  //       }
         return new Size(resize);
     }
-   */ 
+    
     public void setRequiredSize(Size size) {
         this.resize = size;
     }

@@ -5,25 +5,30 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 
 public class TableColumnAxis implements ViewAxis {
-	private FieldSpecification[] fields;
-	private int[] widths;
+	private final int[] widths;
+	private final String[] names;
 	private int rowHeaderOffet;
 	private View table;
 	
 	public TableColumnAxis(FieldSpecification[] fields, int defaultWidth) {
-		this.fields = fields;
 		widths = new int[fields.length];
+		names = new String[fields.length];
 		for (int i = 0; i < widths.length; i++) {
 			 widths[i] = defaultWidth;
+			 names[i] = fields[i].getLabel();
 		}
 	}
 
-	public FieldSpecification[] getFields() {
-		return fields;
+	public int getColumnWidth(int column) {
+		return widths[column];
 	}
-
-	public int[] getWidths() {
-		return widths;
+	
+	public String getColumnName(int column) {
+	    return names[column];
+	}
+	
+	public int getColumnCount() {
+	    return names.length;
 	}
 
 	public int getHeaderOffset() {
@@ -34,7 +39,7 @@ public class TableColumnAxis implements ViewAxis {
 		widths[index] = width;
 	}
 
-	public void setOffset(int offset) {
+	public void ensureOffset(int offset) {
 		rowHeaderOffet = Math.max(rowHeaderOffet, offset + 5);
 	}
 	

@@ -119,13 +119,6 @@ public class CollectionIterator implements CollectionDisplayIterator {
         }
     }
 
-    private void reset() {
-        displayFrom = 0;
-
-        Configuration p = Configuration.getInstance();
-        displaySize = p.getInteger("collection.pagesize", DEFAULT_PAGE_SIZE);
-    }
-
     int getStartWindowAt() {
         return displayFrom;
     }

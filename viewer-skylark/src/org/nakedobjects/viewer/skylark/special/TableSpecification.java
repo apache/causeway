@@ -11,47 +11,130 @@ import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.IdentifiedView;
+import org.nakedobjects.viewer.skylark.InternalDrag;
+import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
 import org.nakedobjects.viewer.skylark.core.AbstractBuilderDecorator;
 import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
 
-class TableHeader extends AbstractBorder {
-    private final static int padding = 2;
+class TableBorder extends AbstractBorder {
 
-    public TableHeader(View view) {
+    private int resizeColumn;
+
+
+    public TableBorder(View view) {
         super(view);
-        top = padding + Style.LABEL.getHeight() + padding;
+        top = VPADDING + Style.LABEL.getHeight() + VPADDING;
     }
 
     public void draw(Canvas canvas) {
-        int y = padding + Style.LABEL.getAscent();
+        int y = VPADDING + Style.LABEL.getAscent();
 
         TableColumnAxis axis = ((TableColumnAxis) getViewAxis());
-        FieldSpecification[] fields = axis.getFields();
-        int[] widths = axis.getWidths();
-        int x = axis.getHeaderOffset();
-        for (int i = 0; i < fields.length; i++) {
-            FieldSpecification field = fields[i];
-            
-            String label = field.getLabel();
-            canvas.drawText(label, x, y, Style.SECONDARY1, Style.LABEL);
-            x += widths[i];
-        }
-        canvas.drawLine(0, top, x - 1, top, Style.SECONDARY2);
-
-        super.draw(canvas);
         
+        int x = axis.getHeaderOffset();
+        int columns = axis.getColumnCount();
+        for (int i = 0; i < columns; i++) {
+            canvas.drawText(axis.getColumnName(i), x + HPADDING, y, Style.SECONDARY1, Style.LABEL);
+            canvas.drawLine(x, 0, x, getSize().getHeight() - 1, Style.SECONDARY2);
+            x += axis.getColumnWidth(i);
+        }
+        super.draw(canvas);     
         canvas.drawRectangle(0,0, getSize().getWidth() - 1, getSize().getHeight() - top - 1, Style.SECONDARY2);
     }
 
     public String toString() {
         return wrappedView.toString() + "/TableHeader";
     }
+    
+    public IdentifiedView identify(Location locationWithinView, Offset offset) {
+        Location l = new Location(locationWithinView);
+        l.add(offset);
+        getViewManager().getSpy().addTrace("1- Identify over column " + locationWithinView);
+        getViewManager().getSpy().addTrace("2- Identify over column " + l);
+        if(isOverColumnBorder(l)) {
+            getViewManager().getSpy().addAction("Identified over column ");
+           return new IdentifiedView(this, l, locationWithinView);
+        }
+        return super.identify(locationWithinView, offset);
+    }
+    
+	
+	public void mouseMoved(Location at) {
+		if(isOverColumnBorder(at)) {
+			getViewManager().showResizeRightCursor();
+		} else {
+		    super.mouseMoved(at);
+			getViewManager().showDefaultCursor();
+		} 
+	}
+	
+	private boolean isOverColumnBorder(Location at) {
+		int x = at.getX();
+		return getColumnAt(x) >= 0;
+	}
+	
+	private int getColumnAt(int xPosition) {
+        getViewManager().getSpy().addTrace("Looking for column at " + xPosition);
+	    TableColumnAxis axis = ((TableColumnAxis) getViewAxis());
+	    for (int i = 0, width = axis.getHeaderOffset(), cols = axis.getColumnCount(); i < cols; i++) {
+            width += axis.getColumnWidth(i);
+            getViewManager().getSpy().addTrace("Checking bounda around " + width);
+            if(xPosition >= width - 1 && xPosition <= width + 1) {
+                getViewManager().getSpy().addTrace("Identified column " + i);
+                return i;
+            }
+        }
+	    return -1;
+	}
+
+	public View dragFrom(InternalDrag drag) {
+	    if(isOverColumnBorder(drag.getRelativeLocation())) {
+	        resizeColumn = getColumnAt(drag.getRelativeLocation().getX());
+	        
+	        return new ViewResizeOutline(drag, this, ViewResizeOutline.RIGHT);
+	    } else {
+	        return super.dragFrom(drag);
+	    }
+	}
+	
+	public void dragTo(InternalDrag drag) {
+		getViewManager().showDefaultCursor();
+
+	    TableColumnAxis axis = ((TableColumnAxis) getViewAxis());
+	    int totalWidth = axis.getHeaderOffset();
+	    for (int i = 0; i < resizeColumn; i++) {
+            totalWidth += axis.getColumnWidth(i);
+        }
+	    
+	    int newWidth = drag.getRelativeLocation().getX() - totalWidth;
+		getViewManager().getSpy().addAction("Resize column to " + newWidth);
+	    axis.setWidth(resizeColumn, newWidth);
+	    
+	    axis.invalidateLayout();
+	}
+	
+	
+	public ViewAreaType viewAreaType(Location at) {
+		int x = at.getX();
+		
+		if(getColumnAt(x) >= 0) {
+			return ViewAreaType.INTERNAL;
+		} else {
+			return super.viewAreaType(at);
+		}
+	}
+
+    
+    
 }
 
 class TableHeaderBuilder extends AbstractBuilderDecorator {
@@ -71,7 +154,7 @@ class TableHeaderBuilder extends AbstractBuilderDecorator {
 
         tableAxis.setRoot(view);
 
-        return new TableHeader(view);
+        return new TableBorder(view);
     }
 }
 
@@ -85,7 +168,6 @@ public class TableSpecification extends AbstractCompositeViewSpecification imple
     public View createView(Content content, ViewAxis axis) {
         View table = super.createView(content, axis);
         View view = new ScrollBorder(table);
-//        View view = new ResizeBorder(new ScrollBorder(table));
         return view;
     }
     
