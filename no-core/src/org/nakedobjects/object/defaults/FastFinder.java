@@ -25,7 +25,7 @@ public class FastFinder extends AbstractNakedObject {
 	}
 	
 	public NakedObject actionFind() {
-		NakedCollection instances = getObjectManager().findInstances(forClass, term.stringValue());
+		NakedCollection instances = getObjectManager().findInstances(forClass, term.stringValue(), true);
 		if(instances.size() == 1) { 
 			return (NakedObject) instances.elements().nextElement();
 		} else {

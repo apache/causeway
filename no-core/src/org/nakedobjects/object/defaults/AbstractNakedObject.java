@@ -421,8 +421,6 @@ public abstract class AbstractNakedObject implements NakedObject {
                 s.append("no title");
             }
             s.append("'");
-        } else {
-            s.append(" unresolved");
         }
         s.append("]");
 

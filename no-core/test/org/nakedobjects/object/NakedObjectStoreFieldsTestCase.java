@@ -29,16 +29,131 @@ public abstract class NakedObjectStoreFieldsTestCase extends NakedObjectStoreTes
     
     public void testTextStringValue() throws Exception {
         ObjectContainingTextString object = new ObjectContainingTextString();
-        Oid oid = nextOid();
+        object.getTextString().setValue("Henry");
+        ObjectContainingTextString restored = (ObjectContainingTextString) saveAndGet(object);
+        assertEquals("Henry", restored.getTextString().stringValue());
+    }
+    
+    public void testEmptyTextStringValue() throws Exception {
+        ObjectContainingTextString object = new ObjectContainingTextString();
+        object.getTextString().clear();
+        ObjectContainingTextString restored = (ObjectContainingTextString) saveAndGet(object);
+        assertTrue(restored.getTextString().isEmpty());
+    }
+
+    public void testDateValue() throws Exception {
+        ObjectContainingDate object = new ObjectContainingDate();
+        object.getValue().setValue(1980, 10, 21);
+        ObjectContainingDate restored = (ObjectContainingDate) saveAndGet(object);
+        assertEquals(object.getValue(), restored.getValue());
+    }
+    
+    public void testEmptyDateValue() throws Exception {
+        ObjectContainingDate object = new ObjectContainingDate();
+        object.getValue().clear();
+        ObjectContainingDate restored = (ObjectContainingDate) saveAndGet(object);
+        assertTrue(restored.getValue().isEmpty());
+    }
+
+
+    public void testDateTimeValue() throws Exception {
+        ObjectContainingDateTime object = new ObjectContainingDateTime();
+        object.getValue().setValue(1980, 10, 21, 12, 22, 00);
+        ObjectContainingDateTime restored = (ObjectContainingDateTime) saveAndGet(object);
+        assertEquals(object.getValue(), restored.getValue());
+    }
+    
+    public void testEmptyDateTimeValue() throws Exception {
+        ObjectContainingDateTime object = new ObjectContainingDateTime();
+        object.getValue().clear();
+        ObjectContainingDateTime restored = (ObjectContainingDateTime) saveAndGet(object);
+        assertTrue(restored.getValue().isEmpty());
+    }
+
+    public void testTimeValue() throws Exception {
+        ObjectContainingTime object = new ObjectContainingTime();
+        object.getValue().setValue(14, 33);
+        ObjectContainingTime restored = (ObjectContainingTime) saveAndGet(object);
+        assertEquals(object.getValue(), restored.getValue());
+    }
+    
+    public void testEmptyTimeValue() throws Exception {
+        ObjectContainingTime object = new ObjectContainingTime();
+        object.getValue().clear();
+        ObjectContainingTime restored = (ObjectContainingTime) saveAndGet(object);
+        assertTrue(restored.getValue().isEmpty());
+    }
+
+    public void testWholeNumberValue() throws Exception {
+        ObjectContainingWholeNumber object = new ObjectContainingWholeNumber();
+        object.getValue().setValue(37);
+        ObjectContainingWholeNumber restored = (ObjectContainingWholeNumber) saveAndGet(object);
+        assertEquals(object.getValue(), restored.getValue());
+    }
+    
+    public void testEmptyWholeNumberValue() throws Exception {
+        ObjectContainingWholeNumber object = new ObjectContainingWholeNumber();
+        object.getValue().clear();
+        ObjectContainingWholeNumber restored = (ObjectContainingWholeNumber) saveAndGet(object);
+        assertTrue(restored.getValue().isEmpty());
+    }
+
+    public void testFloatingPointNumberValue() throws Exception {
+        ObjectContainingFloatingPointNumber object = new ObjectContainingFloatingPointNumber();
+        object.getValue().setValue(37.43);
+        ObjectContainingFloatingPointNumber restored = (ObjectContainingFloatingPointNumber) saveAndGet(object);
+        assertEquals(object.getValue(), restored.getValue());
+    }
+    
+    public void testEmptyFloatingPointNumberValue() throws Exception {
+        ObjectContainingFloatingPointNumber object = new ObjectContainingFloatingPointNumber();
+        object.getValue().clear();
+        ObjectContainingFloatingPointNumber restored = (ObjectContainingFloatingPointNumber) saveAndGet(object);
+        assertTrue(restored.getValue().isEmpty());
+    }
+
+    public void testMoneyValue() throws Exception {
+        ObjectContainingMoney object = new ObjectContainingMoney();
+        object.getValue().setValue(37.43);
+        ObjectContainingMoney restored = (ObjectContainingMoney) saveAndGet(object);
+        assertEquals(object.getValue(), restored.getValue());
+    }
+    
+    public void testEmptyMoneyValue() throws Exception {
+        ObjectContainingMoney object = new ObjectContainingMoney();
+        object.getValue().clear();
+        ObjectContainingMoney restored = (ObjectContainingMoney) saveAndGet(object);
+        assertTrue(restored.getValue().isEmpty());
+    }
+
+    public void testLogialValue() throws Exception {
+        ObjectContainingLogical object = new ObjectContainingLogical();
+        object.getValue().setValue(true);
+        ObjectContainingLogical restored = (ObjectContainingLogical) saveAndGet(object);
+        assertEquals(object.getValue(), restored.getValue());
+        
+        object = new ObjectContainingLogical();
+        object.getValue().setValue(false);
+        restored = (ObjectContainingLogical) saveAndGet(object);
+        assertEquals(object.getValue(), restored.getValue());
+    }
+    
+    public void testEmptyLogicalValue() throws Exception {
+        ObjectContainingLogical object = new ObjectContainingLogical();
+        object.getValue().clear();
+        ObjectContainingLogical restored = (ObjectContainingLogical) saveAndGet(object);
+        assertTrue(restored.getValue().isEmpty());
+    }
+
+    private NakedObject saveAndGet(NakedObject object) throws ObjectStoreException, Exception, ObjectNotFoundException {
         NakedObjectSpecification spec = object.getSpecification();
+        Oid oid = nextOid();
         object.setOid(oid);
         objectStore.save(object);
 
         restartObjectStore();
 
-        ObjectContainingTextString restored = (ObjectContainingTextString) objectStore.getObject(oid, spec);
-
-        assertEquals(restored.getTextString(), restored.getTextString());
+        return objectStore.getObject(oid, spec);
     }
 
 /*

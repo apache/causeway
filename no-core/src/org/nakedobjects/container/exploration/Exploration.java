@@ -94,7 +94,7 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
             User user;
             NakedObjectSpecification userClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(User.class.getName());
             if (objectManager.hasInstances(userClass)) {
-                NakedCollection users = objectManager.findInstances(userClass, name);
+                NakedCollection users = objectManager.findInstances(userClass, name, true);
                 if(users.size() == 0) {
                     throw new NakedObjectRuntimeException("No users found: " + name);
                 }
@@ -121,7 +121,7 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
                 applicationContext.addClass(classes[i]);
              }            
             
-            NakedCollection coll = objectManager.allInstances(userClass);
+            NakedCollection coll = objectManager.allInstances(userClass, false);
             applicationContext.setUpUsers(coll);
 
             

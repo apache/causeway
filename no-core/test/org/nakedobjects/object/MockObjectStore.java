@@ -155,11 +155,15 @@ public class MockObjectStore implements NakedObjectStore {
     }
 
     public void shutdown() throws ObjectStoreException {
-    // TODO Auto-generated method stub
     }
 
     public void startTransaction() {
         actions.addElement("abortTransaction");
+    }
+
+    public NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
+        actions.addElement("getInstances " + criteria);
+        return instances;
     }
 }
 

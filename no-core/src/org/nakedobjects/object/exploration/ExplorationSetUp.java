@@ -137,7 +137,7 @@ public class ExplorationSetUp {
     private void setInitialUser() {
         if(user != null) {
 	        NakedObjectSpecification cls = NakedObjectSpecificationLoader.getInstance().loadSpecification(User.class.getName());
-	        NakedCollection coll = objectManager.findInstances(cls, user);
+	        NakedCollection coll = objectManager.findInstances(cls, user, true);
 	        if(coll.size() == 0) {
 	            throw new NakedObjectRuntimeException("No user " + user);
 	        }

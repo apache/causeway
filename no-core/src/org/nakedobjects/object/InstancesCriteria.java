@@ -1,25 +1,26 @@
 package org.nakedobjects.object;
 
-
-public interface UpdateNotifier {
-	/**
-	 * Indicates that a specific object has been changed
-	 * @param object
-	 */
-	void broadcastObjectChanged(NakedObject object, NakedObjectManager objectManager);
+/**
+ * Defines a criteria for including instances in set.
+ */
+public interface InstancesCriteria {
+    
+    /**
+     * Returns true if the specified object is to be included in the set of instances.
+     */
+    boolean matches(NakedObject object);
 
     /**
-     Called when the UpdateNotifier is about to be shutdown.  All connections and resources should be
-     released.
+     * The type of instances in the resulting set.
      */
-    void shutdown();
+    NakedObjectSpecification getSpecification();
 }
 
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

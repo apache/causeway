@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import org.apache.log4j.Category;
 
+import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
@@ -114,6 +115,27 @@ public class TransientObjectStore implements NakedObjectStore {
 	   	}
 	   	return  toInstancesArray(instances);
 	}
+    
+    public NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) throws ObjectStoreException,
+            UnsupportedFindException {
+        if (criteria == null) { throw new NullPointerException(); }
+
+        Vector instances = new Vector();
+        Enumeration objects = elements();
+
+        NakedObjectSpecification requiredType = criteria.getSpecification();
+        while (objects.hasMoreElements()) {
+            NakedObject object = (NakedObject) objects.nextElement();
+
+            if (requiredType.equals(object.getSpecification()) && criteria.matches(object)) {
+                instances.addElement(object);
+            }
+        }
+
+        LOG.debug("getInstances for " + criteria + " => " + instances);
+        return toInstancesArray(instances);
+    }
+    
     
 	public NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) {
         if (pattern == null) { throw new NullPointerException(); }

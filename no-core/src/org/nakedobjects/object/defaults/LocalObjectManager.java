@@ -2,6 +2,7 @@ package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.container.configuration.ComponentException;
 import org.nakedobjects.container.configuration.ConfigurationException;
+import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
@@ -140,7 +141,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
      * 
      * @throws UnsupportedFindException
      */
-    protected NakedObject[] getInstances(NakedObject pattern) throws UnsupportedFindException {
+    protected NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) throws UnsupportedFindException {
         LOG.debug("getInstances like " + pattern);
         try {
             NakedObject[] instances = objectStore.getInstances(pattern, false);
@@ -152,7 +153,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
     }
 
-    protected NakedObject[] getInstances(NakedObjectSpecification cls) {
+    protected NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses) {
         LOG.debug("getInstances of " + cls);
         try {
             NakedObject[] instances = objectStore.getInstances(cls, false);
@@ -162,8 +163,19 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
             throw new NakedObjectRuntimeException(e);
         }
     }
+    
+    protected NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) {
+        LOG.debug("getInstances matching " + criteria);
+        try {
+            NakedObject[] instances = objectStore.getInstances(criteria, false);
+            setInstancesContext(instances);
+            return instances;
+        }  catch (ObjectStoreException e) {
+            throw new NakedObjectRuntimeException(e);
+        }
+    }
 
-    protected NakedObject[] getInstances(NakedObjectSpecification cls, String term) throws UnsupportedFindException {
+    protected NakedObject[] getInstances(NakedObjectSpecification cls, String term, boolean includeSubclasses) throws UnsupportedFindException {
         LOG.debug("getInstances of " + cls + " with term " + term);
         try {
             NakedObject[] instances = objectStore.getInstances(cls, term, false);
@@ -385,16 +397,16 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
      */
     public void objectChanged(NakedObject object) {
         LOG.debug("objectChanged " + object);
-        try {
-            objectStore.save(object);
-        } catch (ObjectStoreException e) {
-            throw new NakedObjectRuntimeException(e);
+        if (isPersistent(object)) {
+            try {
+                objectStore.save(object);
+            } catch (ObjectStoreException e) {
+                throw new NakedObjectRuntimeException(e);
+            }
         }
 
-        if (isPersistent(object)) {
-            LOG.debug("broadcastObjectUpdate " + object);
-            notifier.broadcastObjectChanged(object, this);
-        }
+        LOG.debug("broadcastObjectUpdate " + object);
+        notifier.broadcastObjectChanged(object, this);
     }
 
     /**

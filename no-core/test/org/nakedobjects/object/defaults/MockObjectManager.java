@@ -1,5 +1,6 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedError;
@@ -71,18 +72,18 @@ public class MockObjectManager extends AbstractNakedObjectManager {
         throw new NotImplementedException();
     }
 
-    public NakedObject[] getInstances(NakedObjectSpecification cls) {
+    public NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses) {
         return new NakedObject[] {
                new MockNakedObject(),
                new MockNakedObject(),
         };
     }
 
-    public NakedObject[] getInstances(NakedObjectSpecification cls, String term) {
+    public NakedObject[] getInstances(NakedObjectSpecification cls, String term, boolean includeSubclasses) {
         throw new NotImplementedException();
     }
 
-    public NakedObject[] getInstances(NakedObject pattern) {
+    public NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) {
         throw new NotImplementedException();
     }
 
@@ -141,6 +142,10 @@ public class MockObjectManager extends AbstractNakedObjectManager {
     }
 
     public NakedError generatorError(String message, Exception e) {
+        return null;
+    }
+
+    protected NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) {
         return null;
     }
 }

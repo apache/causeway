@@ -1,5 +1,6 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
@@ -23,16 +24,16 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
 
     public abstract void abortTransaction();
 
-    public TypedNakedCollection allInstances(NakedObjectSpecification nakedClass) {
-        NakedObject[] instances = getInstances(nakedClass);
+    public TypedNakedCollection allInstances(NakedObjectSpecification nakedClass, boolean includeSubclasses) {
+        NakedObject[] instances = getInstances(nakedClass, includeSubclasses);
         TypedNakedCollection collection = new InstanceCollectionVector(nakedClass, instances);
         collection.setContext(getContext());
         return collection;
     }
 
-    public TypedNakedCollection allInstances(String className) {
+    public TypedNakedCollection allInstances(String className, boolean includeSubclasses) {
         NakedObjectSpecification cls = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
-        return allInstances(cls);
+        return allInstances(cls, includeSubclasses);
     }
 
     public NakedObject createInstance(NakedObjectSpecification nakedClass) {
@@ -78,23 +79,44 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
     }
 
     public TypedNakedCollection findInstances(NakedObject pattern) {
+        return findInstances(pattern, false);
+    }
+    
+    public TypedNakedCollection findInstances(NakedObject pattern, boolean includeSubclasses) {
+        NakedObject[] instances = getInstances(pattern, includeSubclasses);
         NakedObjectSpecification nakedClass = pattern.getSpecification();
-        NakedObject[] instances = getInstances(pattern);
         TypedNakedCollection collection = new InstanceCollectionVector(nakedClass, instances);
         collection.setContext(getContext());
         return collection;
     }
 
     public TypedNakedCollection findInstances(NakedObjectSpecification nakedClass, String searchTerm) {
-        NakedObject[] instances = getInstances(nakedClass, searchTerm);
+        return findInstances(nakedClass, searchTerm, false);
+    }
+    
+    public TypedNakedCollection findInstances(NakedObjectSpecification nakedClass, String searchTerm, boolean includeSubclasses) {
+        NakedObject[] instances = getInstances(nakedClass, searchTerm, includeSubclasses);
+        TypedNakedCollection collection = new InstanceCollectionVector(nakedClass, instances);
+        collection.setContext(getContext());
+        return collection;
+    }
+    
+    public TypedNakedCollection findInstances(InstancesCriteria criteria) {
+        return findInstances(criteria, false);
+	}
+    
+    public TypedNakedCollection findInstances(InstancesCriteria criteria, boolean includeSubclasses)
+            throws UnsupportedFindException {
+        NakedObject[] instances = getInstances(criteria, includeSubclasses);
+        NakedObjectSpecification nakedClass = criteria.getSpecification();
         TypedNakedCollection collection = new InstanceCollectionVector(nakedClass, instances);
         collection.setContext(getContext());
         return collection;
     }
 
-    public TypedNakedCollection findInstances(String className, String searchTerm) throws UnsupportedFindException {
+    public TypedNakedCollection findInstances(String className, String searchTerm, boolean includeSubclasses) throws UnsupportedFindException {
         NakedObjectSpecification cls = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
-        return findInstances(cls, searchTerm);
+        return findInstances(cls, searchTerm, includeSubclasses);
     }
 
     public NakedError generatorError(String message, Exception e) {
@@ -125,13 +147,16 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
      * <para>2) have the same content as the pattern object where the pattern
      * object has values or references specified, i.e. empty value objects and
      * <code>null</code> references are to be ignored; </para>
+     * @param includeSubclasses TODO
      */
-    protected abstract NakedObject[] getInstances(NakedObject pattern) throws UnsupportedFindException;
+    protected abstract NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) throws UnsupportedFindException;
 
-    protected abstract NakedObject[] getInstances(NakedObjectSpecification cls);
+    protected abstract NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses);
 
-    protected abstract NakedObject[] getInstances(NakedObjectSpecification cls, String term) throws UnsupportedFindException;
+    protected abstract NakedObject[] getInstances(NakedObjectSpecification cls, String term, boolean includeSubclasses) throws UnsupportedFindException;
 
+    protected abstract NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses);
+    
     public NakedObject getObject(NakedObject object) throws ObjectNotFoundException {
         return getObject(object.getOid(), object.getSpecification());
     }

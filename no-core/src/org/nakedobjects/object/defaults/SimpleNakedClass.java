@@ -89,11 +89,11 @@ public class SimpleNakedClass extends AbstractNakedObject implements NakedClass 
     }
     
     public NakedCollection allInstances() {
-        return getObjectManager().allInstances(forNakedClass());
+        return getObjectManager().allInstances(forNakedClass(), false);
     }
 
     public NakedCollection findInstances(String searchTerm) {
-        return getObjectManager().findInstances(forNakedClass(), searchTerm);
+        return getObjectManager().findInstances(forNakedClass(), searchTerm, true);
     }
     
     public NakedObject actionNewInstance() {

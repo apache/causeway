@@ -1,20 +1,16 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.object.defaults.AbstractNakedObject;
+import org.nakedobjects.object.defaults.value.FloatingPointNumber;
 
-public interface UpdateNotifier {
-	/**
-	 * Indicates that a specific object has been changed
-	 * @param object
-	 */
-	void broadcastObjectChanged(NakedObject object, NakedObjectManager objectManager);
 
-    /**
-     Called when the UpdateNotifier is about to be shutdown.  All connections and resources should be
-     released.
-     */
-    void shutdown();
+public class ObjectContainingFloatingPointNumber extends AbstractNakedObject {
+    private final FloatingPointNumber number= new FloatingPointNumber();
+
+    public FloatingPointNumber getValue() {
+        return number;
+    }
 }
-
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
@@ -39,3 +35,4 @@ The authors can be contacted via www.nakedobjects.org (the
 registered address of Naked Objects Group is Kingsway House, 123 Goldworth
 Road, Woking GU21 1NR, UK).
 */
+

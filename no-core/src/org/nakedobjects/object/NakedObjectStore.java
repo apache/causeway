@@ -58,9 +58,12 @@ public interface NakedObjectStore extends DebugInfo {
      * <para>2) have the same content as the pattern object where the pattern
      * object has values or references specified, i.e. empty value objects and
      * <code>null</code> references are to be ignored; </para>
-     * @param includeSubclasses TODO
+     * @param includeSubclasses 
      */
     NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException;
+
+
+    NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException;
 
     /**
      * Retrieves the object identified by the specified OID from the object
