@@ -36,7 +36,7 @@ public abstract class Magnitude extends BusinessValueHolder {
 
     /**
      * delegates the comparsion to the <code>isEqualTo</code> method if specified object is a <code>Magnitude</code> else returns false.
-     * @see #isSameAs(BusinessValue)
+      * @see BusinessValueHolder#isSameAs(BusinessValueHolder)
      */
     public final boolean isSameAs(BusinessValueHolder object) {
         if (object instanceof Magnitude) {

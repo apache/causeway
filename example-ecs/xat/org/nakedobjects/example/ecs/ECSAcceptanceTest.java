@@ -4,14 +4,17 @@ import org.nakedobjects.application.system.ExplorationClock;
 import org.nakedobjects.application.valueholder.Date;
 import org.nakedobjects.application.valueholder.TextString;
 import org.nakedobjects.application.valueholder.Time;
+import org.nakedobjects.example.xat.JavaAcceptanceTestCase;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.exploration.AbstractExplorationFixture;
+import org.nakedobjects.reflector.java.fixture.JavaFixture;
 import org.nakedobjects.xat.IllegalActionError;
 import org.nakedobjects.xat.NakedAssertionFailedError;
 import org.nakedobjects.xat.TestClass;
 import org.nakedobjects.xat.TestNaked;
 import org.nakedobjects.xat.TestObject;
 import org.nakedobjects.xat.TestValue;
+
+import java.util.Locale;
 
 
 
@@ -27,8 +30,11 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
 
 
      protected void setUpFixtures() {
-         addFixture(new AbstractExplorationFixture() {
+         addFixture(new JavaFixture() {
              public void install() {
+
+                 Locale.setDefault(Locale.FRANCE);
+                 
                  ExplorationClock clock = new ExplorationClock();
                  
                  registerClass(Booking.class);
@@ -127,7 +133,7 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
         //
         nextStep("Specify when to pick up.");
         booking.fieldEntry("Date", "+2");
-        booking.fieldEntry("Time", "2:30:00 PM");
+        booking.fieldEntry("Time", "14:30:00 PM");
 
         booking.assertFieldContains("Time", new Time(14, 30));
         booking.assertFieldContains("Date", new Date(2001, 12, 16));
@@ -178,7 +184,8 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
 
     public void testMakeRecursive() {
         TestClass testClass = getTestClass(Customer.class.getName());
-        TestObject customer = testClass.findInstance("Harry");
+       // TestObject customer = 
+            testClass.findInstance("Harry");
         
         /*
         TestObject customer = getTestClass(Customer.class.getName()).findInstance("Pawson");
@@ -338,7 +345,7 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
         customer.assertFieldContains("bookings", booking);
         booking.assertFieldContains("pick up", location);
         booking.assertFieldContains("reference", "002");
-        booking.assertFieldContains("date", "Jan 23, 2001");
+        booking.assertFieldContains("date", new Date(2001, 1, 23));
     }
     
     public void testMethodWithNullParameter() {
@@ -355,7 +362,7 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
         booking.assertFieldContains("drop off", (Object) null);
         booking.assertEmpty("dropoff");
         booking.assertFieldContains("reference", "002");
-        booking.assertFieldContains("date", "Jan 23, 2001");     
+        booking.assertFieldContains("date", new Date(2001, 1, 23));     
     }
     
     public void testContains() {

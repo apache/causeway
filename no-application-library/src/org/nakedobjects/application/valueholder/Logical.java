@@ -76,7 +76,7 @@ public class Logical extends BusinessValueHolder {
      * Compares the flags if specified object is a <code>Logical</code> object
      * else returns false.
      * 
-     * @see BusinessValueHolder#isSameAs(BusinessValue)
+     * @see BusinessValueHolder#isSameAs(BusinessValueHolder)
      */
     public boolean isSameAs(BusinessValueHolder object) {
         if (object instanceof Logical) {

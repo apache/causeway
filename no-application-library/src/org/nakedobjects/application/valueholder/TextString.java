@@ -56,7 +56,7 @@ public class TextString extends BusinessValueHolder {
 
     /**
      * delegates the comparsion to the <code>isSameAs(TextString)</code> method if specified object is a <code>TextString</code> else returns false.
-     * @see BusinessValueHolder#isSameAs(BusinessValue)
+      * @see BusinessValueHolder#isSameAs(BusinessValueHolder)
      */
     public boolean isSameAs(BusinessValueHolder object) {
         if (object instanceof TextString) {

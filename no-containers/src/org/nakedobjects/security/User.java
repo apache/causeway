@@ -1,6 +1,6 @@
 package org.nakedobjects.security;
 
-import org.nakedobjects.object.defaults.AbstractUserContext;
+import org.nakedobjects.object.ApplicationContext;
 
 public class User {
 
@@ -10,7 +10,7 @@ public class User {
 
     public User(String string) {}
 
-    public AbstractUserContext getRootObject() {
+    public ApplicationContext getRootObject() {
         return null;
     }
 

@@ -1,65 +1,58 @@
-package org.nakedobjects.example.ecs;
+package org.nakedobjects.example.ecs.fixtures;
 
-import org.nakedobjects.application.control.Role;
-import org.nakedobjects.application.control.User;
-import org.nakedobjects.example.exploration.ExplorationUser;
-import org.nakedobjects.example.exploration.JavaAbstractExplorationFixture;
+import org.nakedobjects.example.ecs.Booking;
+import org.nakedobjects.example.ecs.City;
+import org.nakedobjects.example.ecs.CreditCard;
+import org.nakedobjects.example.ecs.Customer;
+import org.nakedobjects.example.ecs.Location;
+import org.nakedobjects.example.ecs.Telephone;
+import org.nakedobjects.reflector.java.fixture.JavaFixture;
 
-public class EcsFixture extends JavaAbstractExplorationFixture {
+public class BookingsFixture extends JavaFixture {
+    
+    private final CitiesFixture cities;
+
+    public BookingsFixture(CitiesFixture cities) {
+        this.cities = cities;}
 
     public void install() {
-        setupClasses();  
-        setupClock();
-        City[] cities = setupCities();
-        setupObjects(cities);    
-        setUsers();
-        resetClock();
-    }
+        setDate(2003, 10, 23);
+        setTime(20, 15);
 
-    private void setUsers() {
-        User joe = addUser("Joe");
-        addRole("entry", joe);
-        Role delete = addRole("delete", joe);
-        
-        User admin = addUser("Admin");
-        addRole(delete, admin);
-        addRole("admin", admin);
-        
-        User sysadmin = addUser("sysadmin");
-        addRole("sysadmin", sysadmin);
-    }
-
-    private void setupObjects(City[] cities) {
         Customer newCustomer = (Customer) createInstance(Customer.class);
         newCustomer.getFirstName().setValue("Richard");
         newCustomer.getLastName().setValue("Pawson");
 
+        City boston = cities.boston;
+        City newYork = cities.newYork;
+        City washington = cities.washington;
+        
         Location l = (Location) createInstance(Location.class);
-        l.setCity(cities[1]);
+        l.setCity(boston);
         l.getKnownAs().setValue("Home");
         l.getStreetAddress().setValue("433 Pine St.");
         newCustomer.addToLocations(l);
 
         l = (Location) createInstance(Location.class);
-        l.setCity(cities[1]);
+        l.setCity(boston);
         l.getKnownAs().setValue("Office");
         l.getStreetAddress().setValue("944 Main St, Cambridge");
         newCustomer.addToLocations(l);
 
         l = (Location) createInstance(Location.class);
-        l.setCity(cities[0]);
+        l.setCity(newYork);
         l.getKnownAs().setValue("QIC Headquaters");
         l.getStreetAddress().setValue("285 Park Avenue");
         newCustomer.addToLocations(l);
 
         l = (Location) createInstance(Location.class);
-        l.setCity(cities[0]);
+        l.setCity(newYork);
 //        l.getKnownAs().setValue("PPO Headquaters");
         l.getStreetAddress().setValue("234 E 42nd Street");
         newCustomer.addToLocations(l);
 
         l = (Location) createInstance(Location.class);
-        l.setCity(cities[0]);
+        l.setCity(newYork);
         l.getKnownAs().setValue("JFK Airport, BA Terminal");
         newCustomer.addToLocations(l);
 
@@ -93,20 +86,20 @@ public class EcsFixture extends JavaAbstractExplorationFixture {
   //          booking.getTime().setValue(14, 50);
 
         l = (Location) createInstance(Location.class);
-        l.setCity(cities[5]);
+        l.setCity(washington);
         l.getKnownAs().setValue("Home");
         l.getStreetAddress().setValue("1112 Condor St, Carlton Park");
         newCustomer.addToLocations(l);
         booking.setPickUp(l);
 
         l = (Location) createInstance(Location.class);
-        l.setCity(cities[5]);
+        l.setCity(washington);
         l.getKnownAs().setValue("Office");
         l.getStreetAddress().setValue("299 Union St");
         newCustomer.addToLocations(l);
 
         l = (Location) createInstance(Location.class);
-        l.setCity(cities[0]);
+        l.setCity(newYork);
         l.getKnownAs().setValue("Headquaters");
         l.getStreetAddress().setValue("285 Park Avenue");
         newCustomer.addToLocations(l);
@@ -128,40 +121,11 @@ public class EcsFixture extends JavaAbstractExplorationFixture {
         cc.getExpires().setValue("10/04");
         cc.getNameOnCard().setValue("MR R MATTHEWS");
         booking.setPaymentMethod(cc);
-    }
-
-    private City[] setupCities() {
-        String[] cityNames = {
-            "New York", "Boston", "Washington", "Chicago", "Tampa",
-            "Seattle", "Atlanta"
-        };
-
-        City[] cities = new City[cityNames.length];
-
-        for (int i = 0; i < cityNames.length; i++) {
-            cities[i] = (City) createInstance(City.class);
-            cities[i].setName(cityNames[i]);
-        }
-        return cities;
-    }
-
-    private void setupClock() {
-        setDate(2003, 10, 23);
-        setTime(20, 15);
-    }
-
-    private void setupClasses() {
-        registerClass(Booking.class);
-        registerClass(City.class);
-        registerClass(Location.class);
-        registerClass(CreditCard.class);
-        registerClass(Customer.class);
-        registerClass(Telephone.class);  
         
-        registerClass(ExplorationUser.class);
+
+        resetClock();
     }
-    
-    
+
 }
 
 

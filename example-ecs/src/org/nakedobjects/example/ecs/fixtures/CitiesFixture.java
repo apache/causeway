@@ -1,26 +1,33 @@
-package org.nakedobjects.security;
+package org.nakedobjects.example.ecs.fixtures;
 
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.defaults.AbstractUserContext;
+import org.nakedobjects.example.ecs.City;
+import org.nakedobjects.reflector.java.fixture.JavaFixture;
 
-import java.util.Vector;
+public class CitiesFixture extends JavaFixture {
+    City boston;
+    City newYork;
+    City washington;
+    
+    public void install() {
+        String[] cityNames = {
+            "New York", "Boston", "Washington", "Chicago", "Tampa",
+            "Seattle", "Atlanta"
+        };
 
+        City[] cities = new City[cityNames.length];
 
-public class SysadminContext extends AbstractUserContext {
-	private Vector contexts = new Vector();
-
-	public Vector getContexts() {
-		return contexts;
-	}
-	
-	public void addToContexts(NakedClass cls) {
-	    contexts.addElement(cls);
-	}
-	
-	public void removeFromContexts(NakedClass cls) {
-	    contexts.removeElement(cls);
-	}
+        for (int i = 0; i < cityNames.length; i++) {
+            cities[i] = (City) createInstance(City.class);
+            cities[i].setName(cityNames[i]);
+        }
+        
+        boston = cities[1];
+        newYork = cities[0];
+        washington = cities[2];
+    }
 }
+
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete

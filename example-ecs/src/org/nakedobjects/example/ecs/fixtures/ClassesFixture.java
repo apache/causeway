@@ -1,35 +1,27 @@
-package org.nakedobjects.reflector.java;
+package org.nakedobjects.example.ecs.fixtures;
 
-import org.nakedobjects.application.system.ExplorationClock;
-import org.nakedobjects.object.exploration.ExplorationSetUp;
-import org.nakedobjects.object.security.ClientSession;
-import org.nakedobjects.reflector.java.control.SimpleSession;
+import org.nakedobjects.example.ecs.Booking;
+import org.nakedobjects.example.ecs.City;
+import org.nakedobjects.example.ecs.CreditCard;
+import org.nakedobjects.example.ecs.Customer;
+import org.nakedobjects.example.ecs.Location;
+import org.nakedobjects.example.ecs.Telephone;
+import org.nakedobjects.reflector.java.fixture.JavaFixture;
 
-public class SimpleExplorationSetup extends ExplorationSetUp {
-    private ExplorationClock clock;
+public class ClassesFixture extends JavaFixture {
 
-    public SimpleExplorationSetup() {
-        this.clock = ExplorationClock.initialize();
-        ClientSession.setSession(new SimpleSession());
+    public void install() {
+        registerClass(Booking.class);
+        registerClass(City.class);
+        registerClass(Location.class);
+        registerClass(CreditCard.class);
+        registerClass(Customer.class);
+        registerClass(Telephone.class);  
     }
     
-    public void resetClock() {
-        clock.reset();
-    }
-
-    public void setTime(int hour, int minute) {
-        clock.setTime(hour, minute);
-    }
-
-    public void setDate(int year, int month, int day) {
-        clock.setDate(year, month, day);
-    }
-
-
-    public void setUser(String name) {}
-
-
+    
 }
+
 
 
 /*

@@ -1,27 +1,36 @@
-package org.nakedobjects.example.ecs;
+package org.nakedobjects.reflector.java.fixture;
 
-import org.nakedobjects.example.exploration.DefaultExploration;
-import org.nakedobjects.object.defaults.AbstractUserContext;
+import org.nakedobjects.object.fixture.Fixture;
+import org.nakedobjects.object.fixture.FixtureBuilder;
 
 
-public class EcsExploration extends DefaultExploration {
+public abstract class JavaFixture extends Fixture {
+    private JavaFixtureBuilder builder;
 
-    public static void main(String[] args) {
-        new EcsExploration();
+    protected FixtureBuilder getBuilder() {
+        return builder;
     }
 
-    protected AbstractUserContext applicationContext() {
-        return new EcsContext();
+    public void resetClock() {
+        builder.resetClock();
     }
 
-    public void setUpFixtures() {
-        addFixture(new EcsFixture());
+    public void setBuilder(FixtureBuilder builder) {
+        this.builder = (JavaFixtureBuilder) builder;
+    }
+
+    public void setDate(int year, int month, int day) {
+        builder.setDate(year, month, day);
+    }
+
+    public void setTime(int hour, int minute) {
+        builder.setTime(hour, minute);
     }
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

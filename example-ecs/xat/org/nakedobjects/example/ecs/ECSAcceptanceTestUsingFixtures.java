@@ -2,7 +2,11 @@ package org.nakedobjects.example.ecs;
 
 import org.nakedobjects.application.valueholder.Date;
 import org.nakedobjects.application.valueholder.Time;
-import org.nakedobjects.object.exploration.AbstractExplorationFixture;
+import org.nakedobjects.example.ecs.fixtures.BookingsFixture;
+import org.nakedobjects.example.ecs.fixtures.CitiesFixture;
+import org.nakedobjects.example.ecs.fixtures.ClassesFixture;
+import org.nakedobjects.example.xat.JavaAcceptanceTestCase;
+import org.nakedobjects.reflector.java.fixture.JavaFixture;
 import org.nakedobjects.xat.TestObject;
 
 
@@ -19,8 +23,12 @@ public class ECSAcceptanceTestUsingFixtures extends JavaAcceptanceTestCase {
 
 
      protected void setUpFixtures() {
-         addFixture(new EcsFixture());
-         addFixture(new AbstractExplorationFixture() {
+         CitiesFixture cities;
+         addFixture(cities = new CitiesFixture());
+         addFixture(new BookingsFixture(cities));
+         addFixture(new ClassesFixture());
+
+         addFixture(new JavaFixture() {
              public void install() {
                  setDate(2001, 12, 14);
              }

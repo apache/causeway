@@ -1,28 +1,18 @@
 package org.nakedobjects.example.library;
 
-import org.nakedobjects.example.exploration.DefaultExploration;
-import org.nakedobjects.object.defaults.AbstractUserContext;
-import org.nakedobjects.object.exploration.AbstractExplorationFixture;
+import org.nakedobjects.example.exploration.JavaExploration;
 
 
-public class LibraryExploration extends DefaultExploration {
-
-    protected void setUpFixtures() {
-        addFixture(new AbstractExplorationFixture() {
-            public void install() {
-                
-                registerClass(Member.class);
-                registerClass(Book.class);
-                registerClass(Loan.class);
-            }
-        });
-    }
+public class LibraryExploration{
 
     public static void main(String[] args) {
-        new LibraryExploration();
+        JavaExploration e = new JavaExploration();
+        
+        e.registerClass(Member.class);
+        e.registerClass(Book.class);
+        e.registerClass(Loan.class);
+        
+        e.display();
     }
 
-    protected AbstractUserContext applicationContext() {
-        return null;
-    }
 }

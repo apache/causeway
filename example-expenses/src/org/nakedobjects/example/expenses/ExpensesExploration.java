@@ -1,15 +1,16 @@
 package org.nakedobjects.example.expenses;
 
 import org.nakedobjects.application.control.User;
-import org.nakedobjects.example.exploration.DefaultExploration;
-import org.nakedobjects.example.exploration.JavaAbstractExplorationFixture;
+import org.nakedobjects.example.exploration.JavaExploration;
+import org.nakedobjects.reflector.java.fixture.JavaFixture;
 
 
-public class ExpensesExploration extends DefaultExploration {
-    static String configFile;
+public class ExpensesExploration {
 
-    public void setUpFixtures() {
-        addFixture(new JavaAbstractExplorationFixture() {
+    public static void main(String[] args) {
+        JavaExploration e = new JavaExploration();
+
+        e.addFixture(new JavaFixture() {
 
             public void install() {
                 registerClass(Employee.class);
@@ -19,9 +20,6 @@ public class ExpensesExploration extends DefaultExploration {
 
                 User user = new User();
                 user.getName().setValue("expenses");
-                ExpensesContext context = new ExpensesContext();
-                context.created();
-                //   context.associateUser(user);
 
                 Employee newUser;
 
@@ -56,19 +54,8 @@ public class ExpensesExploration extends DefaultExploration {
             }
         });
 
-    }
+        e.display();
 
-    public static void main(String[] args) {
-        configFile = args.length >= 1 ? args[0] : "properties";
-        new ExpensesExploration();
-    }
-
-    protected String getUserName() {
-        return "expenses";
-    }
-
-    protected String configurationFile() {
-        return configFile;
     }
 
 }

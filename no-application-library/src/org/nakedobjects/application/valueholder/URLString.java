@@ -69,7 +69,7 @@ public class URLString extends BusinessValueHolder {
      * Compares the url string to see if the contain the same text if the
      * specified object is a <code>URLString</code> object else returns false.
      * 
-     * @see BusinessValueHolder#isSameAs(BusinessValue)
+     * @see BusinessValueHolder#isSameAs(BusinessValueHolder)
      */
     public boolean isSameAs(BusinessValueHolder object) {
         if (object instanceof URLString) {

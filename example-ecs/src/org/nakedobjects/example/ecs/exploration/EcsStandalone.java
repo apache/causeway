@@ -1,10 +1,10 @@
-package org.nakedobjects.example.ecs;
+package org.nakedobjects.example.ecs.exploration;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.example.ecs.fixtures.EcsFixture;
 import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
@@ -15,21 +15,15 @@ import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
-import org.nakedobjects.reflector.java.SimpleExplorationSetup;
+import org.nakedobjects.reflector.java.control.SimpleSession;
+import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
 import org.nakedobjects.reflector.java.reflect.JavaReflectorFactory;
 import org.nakedobjects.system.AboutNakedObjects;
 import org.nakedobjects.system.SplashWindow;
-import org.nakedobjects.viewer.ObjectViewingMechanismListener;
-import org.nakedobjects.viewer.skylark.InteractionSpy;
-import org.nakedobjects.viewer.skylark.RootObject;
-import org.nakedobjects.viewer.skylark.View;
-import org.nakedobjects.viewer.skylark.ViewUpdateNotifier;
-import org.nakedobjects.viewer.skylark.Viewer;
-import org.nakedobjects.viewer.skylark.ViewerAssistant;
-import org.nakedobjects.viewer.skylark.ViewerFrame;
-import org.nakedobjects.viewer.skylark.special.RootWorkspaceSpecification;
+import org.nakedobjects.viewer.skylark.SkylarkViewer;
 
 import java.util.Locale;
 
@@ -71,7 +65,7 @@ public class EcsStandalone {
         try {
             JavaBusinessObjectContainer container = new JavaBusinessObjectContainer();
 
-            ViewUpdateNotifier updateNotifier = new ViewUpdateNotifier();
+  //          ViewUpdateNotifier updateNotifier = new ViewUpdateNotifier();
 
             LoadedObjectsHashtable loadedObjectsHashtable = new LoadedObjectsHashtable();
 
@@ -89,8 +83,8 @@ public class EcsStandalone {
 
             LocalObjectManager objectManager = new LocalObjectManager();
             objectManager.setObjectStore(objectStore);
-            objectManager.setNotifier(updateNotifier);
-            objectManager.setFactory(objectFactory);
+    //        objectManager.setNotifier(updateNotifier);
+            objectManager.setObjectFactory(objectFactory);
             objectManager.setOidGenerator(oidGenerator);
             objectManager.setLoadedObjects(loadedObjectsHashtable);
             
@@ -114,53 +108,27 @@ public class EcsStandalone {
 
             reflectorFactory.setObjectFactory(objectFactory);
 
+            
+            
+            // Exploration setup
+            JavaFixtureBuilder fixtureBuilder = new JavaFixtureBuilder();
+            fixtureBuilder.addFixture(new EcsFixture());
+            fixtureBuilder.installFixtures();
+/*            
             SimpleExplorationSetup explorationSetup = new SimpleExplorationSetup();
-            
             explorationSetup.addFixture(new EcsFixture());
- 
-            ViewerFrame frame = new ViewerFrame();
-            frame.setTitle("ECS");
-
-            Viewer viewer = new Viewer();
-            viewer.setRenderingArea(frame);
-
-            frame.setViewer(viewer);
-
-            viewer.setListener(new ObjectViewingMechanismListener() {
-                public void viewerClosing() {
-                    System.out.println("EXITED");
-                    System.exit(0);
-                }
-            });
-
-            InteractionSpy spy = new InteractionSpy();
-
-            ViewerAssistant viewerAssistant = new ViewerAssistant();
-            viewerAssistant.setViewer(viewer);
-            viewerAssistant.setDebugFrame(spy);
-            viewerAssistant.setUpdateNotifier(updateNotifier);
-
-            viewer.setUpdateNotifier(updateNotifier);
-            viewer.setSpy(spy);
-
-            viewer.start();
-
-            EcsContext applicationContext = new EcsContext();
-            applicationContext.created();
-
-            NakedObject rootObject = PojoAdapter.createNOAdapter(applicationContext);
-            RootWorkspaceSpecification spec = new RootWorkspaceSpecification();
-            View view = spec.createView(new RootObject(rootObject), null);
-            viewer.setRootView(view);
-
-            frame.setBounds(10, 10, 800, 600);
-
-            viewer.sizeChange();
-
-            frame.show();
-            
-            explorationSetup.setObjectManager(objectManager);
             explorationSetup.installFixtures();
+ */
+
+            ClientSession.setSession(new SimpleSession());
+
+            // Viewer
+            SkylarkViewer viewer = new SkylarkViewer();
+            EcsContext ecs = new EcsContext();
+            viewer.setApplication(ecs);
+            viewer.setObjectManager(objectManager);
+            viewer.show();
+            
 
 
         } finally {

@@ -1,25 +1,34 @@
-package org.nakedobjects.example.expenses;
+package org.nakedobjects.reflector.java.fixture;
 
-import org.nakedobjects.object.defaults.AbstractUserContext;
+import org.nakedobjects.application.system.ExplorationClock;
+import org.nakedobjects.object.fixture.FixtureBuilder;
 
-public class ExpensesContext extends AbstractUserContext {
-	public void created() {
-		addClass(Employee.class);
-		addClass(Project.class);
-		addClass(Expense.class);
-		addClass(Claim.class);
-	}
+public final class JavaFixtureBuilder extends FixtureBuilder {
+private         ExplorationClock clock;
 
-    public String titleString() {
-        return "Expenses";
+    public JavaFixtureBuilder() {
+        clock = new ExplorationClock();
     }
+    
+    public void resetClock() {
+        clock.reset();
+    }
+    
+    public void setDate(int year, int month, int day) {
+        clock.setDate(year, month, day);
+    }
+
+    public void setTime(int hour, int minute) {
+        clock.setTime(hour, minute);
+    }
+
 }
 
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2005  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -94,7 +94,7 @@ public class Option extends BusinessValueHolder {
 
     /**
      * Compares the selected options if the specified object is a <code>Option</code> object else returns false.
-     * @see BusinessValueHolder#isSameAs(BusinessValue)
+     * @see BusinessValueHolder#isSameAs(BusinessValueHolder)
      */
     public boolean isSameAs(BusinessValueHolder object) {
         if (object instanceof Option) {

@@ -1,42 +1,23 @@
-package org.nakedobjects.example.ecs;
+package org.nakedobjects.example.ecs.exploration;
 
-import org.nakedobjects.application.Title;
-import org.nakedobjects.object.defaults.AbstractUserContext;
+import org.nakedobjects.example.ecs.fixtures.BookingsFixture;
+import org.nakedobjects.example.ecs.fixtures.CitiesFixture;
+import org.nakedobjects.example.ecs.fixtures.ClassesFixture;
+import org.nakedobjects.example.exploration.JavaExploration;
 
 
-public class EcsContext extends AbstractUserContext {
-//    private final InternalCollection cities = createInternalCollection(City.class);
-//    private final InternalCollection customers = createInternalCollection(Customer.class);
+public class EcsExploration {
 
-    public void created() {
-        addClass(Customer.class);
-        addClass(Booking.class);
-        addClass(Location.class);
-        addClass(Telephone.class);
-        addClass(CreditCard.class);
-        addClass(City.class);
-        addClass(LocationGroup.class);
+    public static void main(String[] args) {
+        JavaExploration e = new JavaExploration();
         
-        addClass(CompanyAccount.class);
+        CitiesFixture cities;
+        e.addFixture(cities = new CitiesFixture());
+        e.addFixture(new BookingsFixture(cities));
+        e.addFixture(new ClassesFixture());
+        
+        e.display();
     }
-
-    public static String singleName() {
-        return "ECS Application";
-    }
-
-    public Title title() {
-        return new Title("ECS Bookings");
-    }
-    
-/*
-    public InternalCollection getCities() {
-        return cities;
-    }
-
-    public InternalCollection getCustomers() {
-        return customers;
-    }
-    */
 }
 
 /*
