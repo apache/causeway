@@ -682,7 +682,25 @@ public class JavaReflector implements Reflector {
         return new JavaValueField(name, method.getReturnType(), method, aboutMethod, validMethod, false);
     }
 
-    public String getSuperclass() {
+    public String[] getInterfaces() {
+        Class[] interfaces = cls.getInterfaces();
+        Class[] nakedInterfaces = new Class[interfaces.length];
+        int validInterfaces = 0;
+        for (int i = 0; i < interfaces.length; i++) {
+            if(Naked.class.isAssignableFrom(interfaces[i])) {
+                nakedInterfaces[validInterfaces++] = interfaces[i];
+            }
+        }
+        
+        String[] interfaceNames = new String[validInterfaces];
+        for (int i = 0; i < validInterfaces; i++) {
+            interfaceNames[i] = nakedInterfaces[i].getName();
+        }
+
+        return interfaceNames;
+    }
+    
+    public String getSuperclass() { 
         Class superclass = cls.getSuperclass();
         
         if(superclass == null) {

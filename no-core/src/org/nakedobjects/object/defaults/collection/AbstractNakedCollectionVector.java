@@ -75,6 +75,9 @@ public abstract class AbstractNakedCollectionVector extends AbstractNakedObject 
      * Returns true if the logical collection contains the specified object.
      */
     public boolean contains(NakedObject object) {
+        if(object == null) {
+            throw new IllegalArgumentException("null is not a valid element for a collection");
+        }
         resolve();
         return elements.contains(object);
     }

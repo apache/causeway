@@ -53,6 +53,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
     private Reflector reflector;
     private SubclassList subclasses = new SubclassList();
     private NakedObjectSpecificationImpl superclass;
+    private NakedObjectSpecification[] interfaces;
 	
 	NakedObjectSpecificationImpl() {	}
 
@@ -326,17 +327,24 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         return subclasses != null;
     }
 
-    private void init(Reflector reflector, String superclass, FieldSpecification[] fields, ActionSpecification[] objectActions, ActionSpecification[] classActions) {
-     	if(reflector == null) {
+    private void init(Reflector reflector, String superclass, String[] interfaces, FieldSpecification[] fields, ActionSpecification[] objectActions, ActionSpecification[] classActions) {
+        if(reflector == null) {
      	    throw new NullPointerException("No reflector specified");
      	}
         LOG.debug("NakedClass " + this);
     	this.reflector = reflector;
+    	NakedObjectSpecificationLoader loader = NakedObjectSpecificationLoader.getInstance();
     	if(superclass != null) {
-	    	this.superclass = (NakedObjectSpecificationImpl) NakedObjectSpecificationLoader.getInstance().loadSpecification(superclass);
+            this.superclass = (NakedObjectSpecificationImpl) loader.loadSpecification(superclass);
 	    	LOG.debug("  Superclass " + superclass);
 	    	this.superclass.subclasses.addSubclass(this);
     	}
+    	
+    	this.interfaces = new NakedObjectSpecification[interfaces.length];
+    	for (int i = 0; i < interfaces.length; i++) {
+            this.interfaces[i] = loader.loadSpecification(interfaces[i]);                            
+        }
+    	
     	if(isValue() && fields.length > 0) {
     	    LOG.warn("Naked values cannot have fields, they will be ignored");
     	} else {
@@ -356,19 +364,30 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
     /**
      * Determines if this class respresents the same class, or a subclass, of the specified class. 
      */
-	public boolean isOfType(NakedObjectSpecification cls) {
-	    if(cls == this) {
-		    return true;
-		} else {
-		    if(superclass != null) {
-		        return superclass.isOfType(cls);
-		    }
-		}
-		return false;
-	}
+	public boolean isOfType(NakedObjectSpecification specification) {
+	    if (specification == this) {
+            return true;
+        } else {
+            if (interfaces != null) {
+                for (int i = 0, len = interfaces.length; i < len; i++) {
+                    if (interfaces[i].isOfType(specification)) {
+                        return true;
+                    }
+                }
+            }
+            if (superclass != null) {
+                return superclass.isOfType(specification);
+            }
+        }
+        return false;
+    }
 
     public NakedObjectSpecification superclass() {
         return superclass;
+    }
+    
+    public NakedObjectSpecification[] getInterfaces() {
+        return interfaces;
     }
     
     public NakedObjectSpecification[] subclasses() {
@@ -454,8 +473,9 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         FieldSpecification[] fields = (FieldSpecification[]) orderArray(FieldSpecification.class, fieldVector, reflector.fieldSortOrder(), className);
 
         String superclass = reflector.getSuperclass();
+        String[] interfaces = reflector.getInterfaces();
         
-        init(reflector, superclass, fields, objectActions, classActions);
+        init(reflector, superclass, interfaces, fields, objectActions, classActions);
     }
   
     

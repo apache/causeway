@@ -124,6 +124,18 @@ public class JavaReflectorTest extends TestCase {
         assertEquals("Register", JavaReflector.javaBaseName("actionRegister"));
         assertEquals("", JavaReflector.javaBaseName("action"));
     }
+    
+    public void testSuperclass() {
+        assertEquals("org.nakedobjects.object.DummyNakedObject", reflector.getSuperclass());
+    }
+    
+    
+    public void testInterfaces() {
+        String[] interfaces = reflector.getInterfaces();
+        assertEquals(2, interfaces.length);
+        assertEquals("org.nakedobjects.object.NakedError", interfaces[0]);
+        assertEquals("org.nakedobjects.object.NakedObject", interfaces[1]);
+          }
 }
 
 /*

@@ -48,6 +48,11 @@ public interface Reflector {
    String singularName();
 
    /**
+    * Returns a list of this class's interfaces where the interfaces are of subtypes of Naked.
+    */
+   public String[] getInterfaces();
+   
+   /**
     * The name of this reflector's class's superclass.  Returns null if this reflector's class does not extend 
     * a class that implements the Naked interface.
     */

@@ -1,11 +1,16 @@
 package org.nakedobjects.object.control;
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.security.Role;
 import org.nakedobjects.object.security.User;
 
 
 public interface ActionAbout extends About {
     void changeNameIfUsable(String name);
+
+    Naked[] getDefaultParameterValues();
+
+    String[] getParameterLabels();
 
     void invisible();
 
@@ -16,6 +21,16 @@ public interface ActionAbout extends About {
     void setDescription(String string);
 
     void setName(String string);
+
+    void setParameter(int index, Naked defaultValue);
+
+    void setParameter(int index, String label);
+
+    void setParameter(int index, String label, Naked defaultValue);
+
+    void setParameters(Naked[] defaultValues);
+
+    void setParameters(String[] labels);
 
     void unusable();
 
@@ -38,6 +53,7 @@ public interface ActionAbout extends About {
     void visibleOnlyToUser(User user);
 
     void visibleOnlyToUsers(User[] users);
+
 }
 
 /*

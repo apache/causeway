@@ -123,7 +123,7 @@ public class JavaAction extends JavaMember implements Action {
 
         try {
             About about;
-            about = new SimpleActionAbout(session, object);
+            about = new SimpleActionAbout(session, object, parameters);
 
             if (aboutMethod.getName().equals("aboutActionDefault")) {
                 aboutMethod.invoke(object, new Object[] { about });

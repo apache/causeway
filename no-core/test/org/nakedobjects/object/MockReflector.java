@@ -84,6 +84,10 @@ public class MockReflector implements Reflector {
         return false;
     }
 
+    public String[] getInterfaces() {
+        return null;
+    }
+
 }
 
 

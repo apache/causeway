@@ -1,5 +1,6 @@
 package org.nakedobjects.object.control.defaults;
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.control.State;
@@ -14,14 +15,29 @@ import org.nakedobjects.object.security.User;
 public class SimpleActionAbout extends AbstractAbout implements ActionAbout {
     private final static long serialVersionUID = 1L;
 
-    public SimpleActionAbout(Session session, NakedObject object) {
+    private Naked[] defaultValues;
+    private String[] labels;
+
+    public SimpleActionAbout(Session session, NakedObject object, Naked[] parameters) {
         super(session, object);
+
+        int noParams = parameters.length;
+        labels = new String[noParams];
+        defaultValues = new Naked[noParams];
     }
 
     public void changeNameIfUsable(String name) {
         if (canUse().isAllowed()) {
             setName(name);
         }
+    }
+
+    public Naked[] getDefaultParameterValues() {
+        return defaultValues;
+    }
+
+    public String[] getParameterLabels() {
+        return labels;
     }
 
     public void invisible() {
@@ -34,6 +50,42 @@ public class SimpleActionAbout extends AbstractAbout implements ActionAbout {
 
     public void invisibleToUsers(User[] users) {
         super.invisibleToUsers(users);
+    }
+
+    public void setParameter(int index, Naked defaultValue) {
+        if (index < 0 || index > defaultValues.length) {
+            throw new IllegalArgumentException("No parameter index " + index);
+        }
+        defaultValues[index] = defaultValue;
+    }
+
+    public void setParameter(int index, String label) {
+        if (index < 0 || index > defaultValues.length) {
+            throw new IllegalArgumentException("No parameter index " + index);
+        }
+        labels[index] = label;
+    }
+
+    public void setParameter(int index, String label, Naked defaultValue) {
+        if (index < 0 || index > defaultValues.length) {
+            throw new IllegalArgumentException("No parameter index " + index);
+        }
+        defaultValues[index] = defaultValue;
+    }
+
+    public void setParameters(Naked[] defaultValues) {
+        if (this.defaultValues.length != defaultValues.length) {
+            throw new IllegalArgumentException("Expected " + this.defaultValues.length + " defaults but got "
+                    + defaultValues.length);
+        }
+        this.defaultValues = defaultValues;
+    }
+
+    public void setParameters(String[] labels) {
+        if (this.labels.length != labels.length) {
+            throw new IllegalArgumentException("Expected " + this.labels.length + " defaults but got " + labels.length);
+        }
+        this.labels = labels;
     }
 
     public void unusable() {
