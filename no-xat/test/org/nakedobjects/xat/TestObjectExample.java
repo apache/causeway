@@ -147,6 +147,7 @@ public class TestObjectExample extends AbstractNakedObject {
 	public Money getAmount() {
 		return amount;
 	}
+	
 
 }
 

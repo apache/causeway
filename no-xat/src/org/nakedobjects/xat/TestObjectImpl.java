@@ -1,11 +1,13 @@
 package org.nakedobjects.xat;
 
 import org.nakedobjects.object.InternalCollection;
+import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.ValueParseException;
 import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.AssociationSpecification;
 import org.nakedobjects.object.reflect.FieldSpecification;
@@ -430,8 +432,8 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
      *                       failure.
      * @param fieldName
      *                       Name of the field to check the value in
- 
-      *      * @group assert
+     *  *
+     * @group assert
      */
 
     public void assertFieldDoesNotContain(final String message, final String fieldName, final TestObject testView) {
@@ -624,6 +626,55 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         }
     }
 
+    public void assertFieldEntryCantParse(String fieldName, String value) {
+        FieldSpecification field = fieldFor(fieldName);
+        assertFieldVisible(fieldName, field);
+        assertFieldModifiable(fieldName, field);
+
+        Object view = fields.get(simpleName(fieldName));
+
+        if (! (view instanceof TestValue)) {
+            throw new IllegalActionError("Can only make an entry (eg by keyboard) into a value field");
+        }
+
+        NakedValue valueObject = (NakedValue) field.get((NakedObject) getForObject());
+        if (valueObject == null) {
+            throw new NakedAssertionFailedError("Field '" + fieldName
+                    + "' contains null, but should contain an NakedValue object");
+        }
+        try {
+            valueObject.parse(value);
+            throw new NakedAssertionFailedError("Value was unexpectedly parsed");
+        } catch (ValueParseException expected) {
+        }
+
+    }
+
+    public void assertFieldEntryInvalid(String fieldName, String value) {
+        FieldSpecification field = fieldFor(fieldName);
+        assertFieldVisible(fieldName, field);
+        assertFieldModifiable(fieldName, field);
+
+        Object view = fields.get(simpleName(fieldName));
+
+        if (! (view instanceof TestValue)) {
+            throw new IllegalActionError("Can only make an entry (eg by keyboard) into a value field");
+        }
+
+        NakedValue valueObject = (NakedValue) field.get((NakedObject) getForObject());
+        if (valueObject == null) {
+            throw new NakedAssertionFailedError("Field '" + fieldName
+                    + "' contains null, but should contain an NakedValue object");
+        }
+        try {
+//            valueObject.parse(value);
+    //        SimpleFieldAbout about = new SimpleFieldAbout(null, (NakedObject) getForObject());
+            ((ValueFieldSpecification) field).parseAndSave((NakedObject) getForObject(), value);
+            throw new NakedAssertionFailedError("Value was unexpectedly validateds");
+        } catch (InvalidEntryException expected) {
+        }
+    }
+
     /**
      * Drop the specified view (object) into the specified field.
      * 
@@ -732,7 +783,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
         if (view instanceof TestValue) {
             testField = (TestValue) view;
-            Naked valueObject = (Naked) fieldFor(fieldName).get((NakedObject) getForObject());
+            Naked valueObject = (Naked) field.get((NakedObject) getForObject());
             if (valueObject == null) {
                 throw new NakedAssertionFailedError("Field '" + fieldName
                         + "' contains null, but should contain an NakedValue object");

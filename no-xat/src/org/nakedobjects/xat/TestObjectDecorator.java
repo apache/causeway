@@ -140,6 +140,14 @@ public abstract class TestObjectDecorator implements TestObject {
         wrappedObject.assertFieldDoesNotContain(fieldName, testView);
     }
 
+    public void assertFieldEntryCantParse(String fieldName, String value) {
+        wrappedObject.assertFieldEntryCantParse(fieldName, value);
+    }
+
+    public void assertFieldEntryInvalid(String fieldName, String value) {
+        wrappedObject.assertFieldEntryInvalid(fieldName, value);
+    }
+
     public void assertFieldExists(String fieldName) {
         wrappedObject.assertFieldExists(fieldName);
     }

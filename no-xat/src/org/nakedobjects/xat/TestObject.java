@@ -195,6 +195,10 @@ public interface TestObject extends TestNaked {
 
     void assertType(String message, String expectedType);
 
+    public void assertFieldEntryInvalid(String fieldName, String value);
+    
+    public void assertFieldEntryCantParse(String fieldName, String value);
+
     /**
      * Drop the specified view (object) into the specified field.
      * 
