@@ -14,7 +14,7 @@
 	
 	<!-- classpath -->
 	<path id="libs.internal">
-		<fileset dir="../no-core/build/release">
+		<fileset dir="${no-core.release.dir}">
 			<include name="**/*.jar"/>
 		</fileset>
 	</path>
