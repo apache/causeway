@@ -94,8 +94,8 @@ public class ActionSpecification extends MemberSpecification {
      * is derived from method name, if there is no About or its name is set to
      * null.
      */
-    public String getLabel(Session session, NakedObject object) {
-        About about = getAbout(session, object, new NakedObject[getParameterCount()]);
+    public String getLabel(Session session, NakedObject object) {  
+        About about = getAbout(session, object, parameterStubs());
 
         return getLabel(about);
     }
@@ -124,6 +124,22 @@ public class ActionSpecification extends MemberSpecification {
         return actionDelegate.parameterTypes();
     }
 
+    public Naked[] parameterStubs() {
+        Naked[] parameterValues;
+        int paramCount = getParameterCount();     
+        parameterValues = new Naked[paramCount];
+        NakedObjectSpecification[] parameters = parameters();
+        for (int i = 0; i < paramCount; i++) {
+            NakedObjectSpecification parameter = parameters[i];
+            if(parameter.isValue()) {
+                parameterValues[i]  = parameter.acquireInstance();
+           } else {
+               parameterValues[i]  = null;
+            }
+        }
+        return parameterValues;
+    }
+    
     public NakedObjectSpecification getReturnType() {
         return actionDelegate.returnType();
     }

@@ -2,6 +2,7 @@ package org.nakedobjects.object.reflect.defaults;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectApplicationException;
 import org.nakedobjects.object.NakedObjectDefinitionException;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
@@ -11,7 +12,6 @@ import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.control.Validity;
 import org.nakedobjects.object.control.defaults.SimpleFieldAbout;
-import org.nakedobjects.object.reflect.NakedObjectApplicationException;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.ValueField;
 import org.nakedobjects.object.security.Session;

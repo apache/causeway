@@ -1,6 +1,4 @@
-package org.nakedobjects.object.reflect;
-
-import org.nakedobjects.object.NakedObjectRuntimeException;
+package org.nakedobjects.object;
 
 /**
  * Indicates an error in the application code; essentailly any invalid convention following.
@@ -11,16 +9,16 @@ public class NakedObjectApplicationException extends NakedObjectRuntimeException
         super();
     }
 
-    public NakedObjectApplicationException(String message) {
-        super(message);
+    public NakedObjectApplicationException(String msg) {
+        super(msg);
     }
 
     public NakedObjectApplicationException(Throwable cause) {
         super(cause);
     }
 
-    public NakedObjectApplicationException(String message, Throwable cause) {
-        super(message, cause);
+    public NakedObjectApplicationException(String msg, Throwable cause) {
+        super(msg, cause);
     }
 
 }

@@ -173,7 +173,7 @@ public class SplashWindow extends Window implements Runnable {
     }
 
     public void paint(Graphics g) {
-        g.setColor(Color.white);
+        g.setColor(Color.gray);
         g.drawRect(0, 0, width - 1, height - 1);
         
         if (logo != null) {

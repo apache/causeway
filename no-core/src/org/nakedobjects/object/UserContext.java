@@ -3,7 +3,7 @@ package org.nakedobjects.object;
 import org.nakedobjects.object.security.User;
 
 
-public interface UserContext {
+public interface UserContext extends NakedObject {
     InternalCollection getClasses();
 
     InternalCollection getObjects();
