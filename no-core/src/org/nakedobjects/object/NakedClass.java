@@ -12,13 +12,13 @@ import org.apache.log4j.Logger;
 
 public class NakedClass implements InternalNakedObject {
     private final static Logger LOG = Logger.getLogger(NakedClass.class);
-    private final String className;
-    private NakedObjectSpecification specification;
-    private boolean createPersistentInstances;
 
     {
         createPersistentInstances = ConfigurationFactory.getConfiguration().getBoolean("nakedclass.create-persistent", true);
     }
+    private final String className;
+    private boolean createPersistentInstances;
+    private NakedObjectSpecification specification;
 
     public NakedClass(String name) {
         specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(name);
@@ -31,16 +31,16 @@ public class NakedClass implements InternalNakedObject {
         about.setDescription("Get a simple finder object to start searches within the " + getSingularName() + " instances");
         about.setName("Find " + getPluralName());
         about.unusableOnCondition(!getObjectManager().hasInstances(forObjectType()), "No instances available to find");
-        Hint ca = specification.getClassAbout();
+        Hint ca = specification.getClassHint();
         if (ca != null && ca.canAccess().isVetoed()) {
             about.invisible();
         }
     }
 
-    public void aboutActionInstances(InternalAbout about) {
+    public void aboutExplorationActionInstances(InternalAbout about) {
         about.setDescription("Get the " + getSingularName() + " instances");
         about.setName(getPluralName());
-        Hint ca = specification.getClassAbout();
+        Hint ca = specification.getClassHint();
         if (ca != null && ca.canAccess().isVetoed()) {
             about.invisible();
         } else {
@@ -48,22 +48,10 @@ public class NakedClass implements InternalNakedObject {
         }
     }
 
-    public String getPluralName() {
-        return forObjectType().getPluralName();
-    }
-
-    public String getSingularName() {
-        return forObjectType().getSingularName();
-    }
-
-    public String getFullName() {
-        return forObjectType().getFullName();
-    }
-
-    public void aboutActionNewInstance(InternalAbout about) {
+    public void aboutExplorationActionNewInstance(InternalAbout about) {
         about.setDescription("Create a new " + getSingularName() + " instance");
         about.setName("New " + getSingularName());
-        Hint ca = specification.getClassAbout();
+        Hint ca = specification.getClassHint();
         if (ca != null && ca.canUse().isVetoed()) {
             about.invisible();
         }
@@ -76,16 +64,46 @@ public class NakedClass implements InternalNakedObject {
         return find;
     }
 
-    public NakedCollection actionInstances() {
-        return allInstances();
-    }
-
     public NakedCollection allInstances() {
         return getObjectManager().allInstances(forObjectType(), false);
     }
 
-    public NakedObject actionNewInstance() {
+    public NakedCollection explorationActionInstances() {
+        return allInstances();
+    }
+
+    public NakedObject explorationActionNewInstance() {
         return newInstance();
+    }
+
+    public NakedObjectSpecification forObjectType() {
+        if (specification == null) {
+            if (getName().length() == 0) {
+                throw new NakedObjectRuntimeException();
+            }
+            specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(getName());
+        }
+        return specification;
+    }
+
+    public String getFullName() {
+        return forObjectType().getFullName();
+    }
+
+    public String getName() {
+        return className;
+    }
+
+    private NakedObjectManager getObjectManager() {
+        return NakedObjectContext.getDefaultContext().getObjectManager();
+    }
+
+    public String getPluralName() {
+        return forObjectType().getPluralName();
+    }
+
+    public String getSingularName() {
+        return forObjectType().getSingularName();
     }
 
     public NakedObject newInstance() {
@@ -114,10 +132,6 @@ public class NakedClass implements InternalNakedObject {
         return object;
     }
 
-    public String getName() {
-        return className;
-    }
-
     public String toString() {
         StringBuffer s = new StringBuffer();
 
@@ -140,20 +154,6 @@ public class NakedClass implements InternalNakedObject {
         s.append("  " + Long.toHexString(super.hashCode()).toUpperCase());
 
         return s.toString();
-    }
-
-    public NakedObjectSpecification forObjectType() {
-        if (specification == null) {
-            if (getName().length() == 0) {
-                throw new NakedObjectRuntimeException();
-            }
-            specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(getName());
-        }
-        return specification;
-    }
-
-    private NakedObjectManager getObjectManager() {
-        return NakedObjectContext.getDefaultContext().getObjectManager();
     }
 }
 

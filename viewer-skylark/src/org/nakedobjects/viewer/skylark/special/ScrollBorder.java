@@ -181,9 +181,9 @@ public class ScrollBorder extends AbstractBorder {
 
         Bounds contents = contentArea();
         if (x >= contents.getWidth()) {
-            if (click.isButton2()) {
+            if (click.button3()) {
                 setVerticalPostion(y - verticalVisibleAmount / 2);
-            } else {
+            } else if (click.button1()) {
                 if (y < verticalScrollPosition) {
                     setVerticalPostion(verticalScrollPosition - verticalVisibleAmount);
                 } else if (y > verticalScrollPosition + verticalVisibleAmount) {
@@ -192,9 +192,9 @@ public class ScrollBorder extends AbstractBorder {
             }
 
         } else if (y >= contents.getHeight()) {
-            if (click.isButton2()) {
+            if (click.button3()) {
                 setHorizontalPostion(x - horizontalVisibleAmount / 2);
-            } else {
+            } else if (click.button1()) {
                 if (x < horizontalScrollPosition) {
                     setHorizontalPostion(horizontalScrollPosition - horizontalVisibleAmount);
                 } else if (x > horizontalScrollPosition + horizontalVisibleAmount) {

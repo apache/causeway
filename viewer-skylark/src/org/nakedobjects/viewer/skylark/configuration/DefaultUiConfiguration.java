@@ -14,7 +14,7 @@ public class DefaultUiConfiguration implements org.nakedobjects.viewer.skylark.G
     private final static String IMAGE_DIRECTORY = "images/";
     private final static String IMAGE_DIRECTORY_PARAM = Viewer.PROPERTY_BASE + "image-directory";
     public static final String PROPERTY_BASE = "viewer.skylark.";
-    private static final String SPECIFICATION_BASE = PROPERTY_BASE + "specification.";
+//   private static final String SPECIFICATION_BASE = PROPERTY_BASE + "specification.";
     static {
         configurationFile = ConfigurationFactory.getConfiguration();
     }

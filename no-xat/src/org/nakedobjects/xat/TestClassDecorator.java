@@ -14,8 +14,8 @@ public class TestClassDecorator implements TestClass {
         return wrappedObject.findInstance(title);
     }
 
-    public Naked getForObject() {
-        return wrappedObject.getForObject();
+    public Naked getForNaked() {
+        return wrappedObject.getForNaked();
     }
 
     public String getTitle() {
@@ -34,8 +34,8 @@ public class TestClassDecorator implements TestClass {
         return wrappedObject.newInstance();
     }
 
-    public void setForObject(Naked object) {
-        wrappedObject.setForObject(object);
+    public void setForNaked(Naked object) {
+        wrappedObject.setForNaked(object);
     }
 
     public void assertActionExists(String name) {

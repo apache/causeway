@@ -13,14 +13,18 @@ public interface NakedObjectSpecification {
      on the Class object returned using the getJavaType method).
      */
     Naked acquireInstance();
-    
-    Hint getClassAbout();
+
+    void clearDirty(NakedObject object);
+
+    String debugInterface();
 
     Action getClassAction(Action.Type type, String name);
 
     Action getClassAction(Action.Type type, String name, NakedObjectSpecification[] parameters);
 
     Action[] getClassActions(Action.Type type);
+    
+    Hint getClassHint();
 
     NakedObjectField getField(String name);
 
@@ -55,43 +59,48 @@ public interface NakedObjectSpecification {
      <p>Removes the text up to, and including the last period (".").</p>
      */
     String getSingularName();
+    
+    ObjectTitle getTitle();
 
     NakedObjectField[] getVisibleFields(NakedObject object, Session session);
 
     boolean hasSubclasses();
 
-    /**
-     * Determines if this class respresents the same class, or a subclass, of the specified class. 
-     */
-    boolean isOfType(NakedObjectSpecification cls);
-
-    NakedObjectSpecification superclass();
-
     NakedObjectSpecification[] interfaces();
-    
-    NakedObjectSpecification[] subclasses();
-
-    boolean isLookup();
 
     boolean isAbstract();
 
-    boolean isPartOf();
+    boolean isDirty(NakedObject object);
 
-    boolean isValue();
+    boolean isLookup();
 
     boolean isObject();
 
-    String debugInterface();
-    
-    ObjectTitle getTitle();
+    /**
+     * Determines if this specification respresents the same specification, or a subclass, of the specified specification. 
+     */
+    boolean isOfType(NakedObjectSpecification cls);
 
     boolean isParsable();
 
-    boolean isDirty(NakedObject object);
+    /** @deprecated */
+    boolean isPartOf();
 
-    void clearDirty(NakedObject object);
+    /**
+     * Determines if objects of this specification can be persisted or not.  If they can be persisted NakedObject.isPersistent() will indicated 
+     * whether the object is persistent or not.  If they cannot be persisted then NakedObject.isPersistent() should be ignored.
+     * 
+     * @see NakedObject#isPersistent()
+     */
+    boolean isPersistable();
+
+    boolean isValue();
 
     void markDirty(NakedObject object);
+    
+    NakedObjectSpecification[] subclasses();
+
+    NakedObjectSpecification superclass();
 }
 
 /*

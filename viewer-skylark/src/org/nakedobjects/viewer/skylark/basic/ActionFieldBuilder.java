@@ -5,10 +5,11 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.ParameterContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.core.AbstractViewBuilder;
-import org.nakedobjects.viewer.skylark.core.CompositeObjectView;
+import org.nakedobjects.viewer.skylark.core.CompositeView;
 import org.nakedobjects.viewer.skylark.core.TextView;
 import org.nakedobjects.viewer.skylark.special.SubviewSpec;
 
@@ -36,10 +37,10 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
     }
 
     public View createCompositeView(Content content, CompositeViewSpecification specification, ViewAxis axis) {
-        return new CompositeObjectView(content, specification, axis);
+        return new CompositeView(content, specification, axis);
     }
 
-    private View createFieldView(View view, ActionParameter parameter) {
+    private View createFieldView(View view, ParameterContent parameter) {
         View fieldView = subviewDesign.createSubview(parameter, view.getViewAxis());
         if (fieldView == null) {
             throw new NakedObjectRuntimeException("All parameters must be shown");
@@ -49,13 +50,13 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
 
     private void newBuild(View view, ActionContent actionContent) {
         LOG.debug("build new view " + view + " for " + actionContent);
-        view.addView(new TextView(actionContent.getName()));
+        view.addView(new TextView(actionContent.getActionName()));
 
         int noParameters = actionContent.getNoParameters();
         for (int f = 0; f < noParameters; f++) {
-            ActionParameter parameter = actionContent.getParameter(f);
+            ParameterContent parameter = actionContent.getParameter(f);
             View fieldView = createFieldView(view, parameter);
-            String label = parameter.getName();
+            String label = parameter.getParameterName();
             view.addView(decorateSubview(new LabelBorder(label, fieldView)));
         }
     }
@@ -75,9 +76,9 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
                 boolean changedFromNull = emptyField && parameterValue != null;
                 if (changeToNull || changedFromNull) {
                     ObjectParameter parameter = (ObjectParameter) content;
-                    String label = parameter.getName();
+                    String label = parameter.getParameterName();
 
-                    ObjectParameter pa = new ObjectParameter(label, parameterValue, parameter.getSpecification(), actionContent, i);
+                    ObjectParameter pa = new ObjectParameter(label, parameterValue, parameter.getSpecification(), actionContent);
                     View fieldView = createFieldView(view, pa);
                     view.replaceView(subview, decorateSubview(new LabelBorder(label, fieldView)));
                 }

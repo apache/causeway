@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.util;
 
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
@@ -43,7 +42,7 @@ class FallbackView extends AbstractView  {
 	}
 	
 	public static class Specification implements ViewSpecification {
-		public boolean canDisplay(Naked object) {
+		public boolean canDisplay(Content content) {
 			return true;
 		}
 		

@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.defaults.Error;
 import org.nakedobjects.object.reflect.PojoAdapter;
@@ -23,8 +22,8 @@ import java.util.StringTokenizer;
 
 public class NakedErrorViewSpecification implements ViewSpecification {
 
-    public boolean canDisplay(Naked object) {
-        return object instanceof PojoAdapter && ((PojoAdapter) object).getObject() instanceof NakedError;
+    public boolean canDisplay(Content content) {
+        return content.isObject() && content.getNaked() instanceof PojoAdapter && ((PojoAdapter) content.getNaked()).getObject() instanceof NakedError;
     }
 
     public String getName() {

@@ -2,25 +2,29 @@ package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.security.ClientSession;
+import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 import org.nakedobjects.viewer.skylark.basic.RemoveOneToManyAssociationOption;
 
 import org.apache.log4j.Logger;
 
 
-public class OneToManyFieldElement extends ObjectField implements ObjectContent {
+public class OneToManyFieldElement extends ObjectContent implements FieldContent {
     private static final Logger LOG = Logger.getLogger(OneToManyFieldElement.class);
     private static final UserAction REMOVE_ASSOCIATION = new RemoveOneToManyAssociationOption();
     private final NakedObject element;
+    private final ObjectField field;
 
     public OneToManyFieldElement(NakedObject parent, NakedObject element, OneToManyAssociation association) {
-        super(parent, association);
+        field = new ObjectField(parent, association);
         this.element = element;
     }
 
@@ -49,8 +53,17 @@ public class OneToManyFieldElement extends ObjectField implements ObjectContent 
         association.clearAssociation(parentObject, element);
     }
 
-    public String debugDetails() {
-        return super.debugDetails() + "  element:" + element + "\n";
+    public void debugDetails(DebugString debug) {
+        field.debugDetails(debug);
+        debug.appendln(4, "element", element);
+    }
+
+    public String getFieldName() {
+        return field.getName();
+    }
+
+    public NakedObjectField getFieldReflector() {
+        return field.getFieldReflector();
     }
 
     public String getIconName() {
@@ -66,7 +79,19 @@ public class OneToManyFieldElement extends ObjectField implements ObjectContent 
     }
 
     private OneToManyAssociation getOneToManyAssociation() {
-        return (OneToManyAssociation) getField();
+        return (OneToManyAssociation) field.getFieldReflector();
+    }
+
+    private NakedObject getParent() {
+        return field.getParent();
+    }
+
+    public NakedObjectSpecification getSpecification() {
+        return field.getSpecification();
+    }
+
+    public boolean isObject() {
+        return true;
     }
 
     public boolean isTransient() {
@@ -74,7 +99,6 @@ public class OneToManyFieldElement extends ObjectField implements ObjectContent 
     }
 
     public void menuOptions(MenuOptionSet options) {
-        super.menuOptions(options);
         ObjectOption.menuOptions(element, options);
         options.add(MenuOptionSet.OBJECT, REMOVE_ASSOCIATION);
     }
@@ -95,7 +119,11 @@ public class OneToManyFieldElement extends ObjectField implements ObjectContent 
     }
 
     public String toString() {
-        return getObject() + "/" + getField();
+        return getObject() + "/" + field.getFieldReflector();
+    }
+    
+    public String windowTitle() {
+        return field.getName();
     }
 }
 

@@ -2,6 +2,7 @@ package org.nakedobjects.object.reflect.valueadapter;
 
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.value.DateValue;
 
 import java.text.DateFormat;
@@ -52,7 +53,7 @@ public class DateAdapter extends AbstractNakedValue implements DateValue {
                         break;
                     } catch (ParseException e) {
                         if ((i + 1) == formats.length) {
-                            throw new InvalidEntryException("Invalid date " + dateString, e);
+                            throw new TextEntryParseException("Invalid date " + dateString, e);
                         }
                     }
                 }

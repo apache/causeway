@@ -16,11 +16,11 @@ class TestNakedNullParameter implements TestNaked {
         specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(cls);
     }
 
-    public Naked getForObject() {
+    public Naked getForNaked() {
         return null;
     }
 
-    public void setForObject(Naked object) {
+    public void setForNaked(Naked object) {
         throw new NakedObjectRuntimeException();
     }
     

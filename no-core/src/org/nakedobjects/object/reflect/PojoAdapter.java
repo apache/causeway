@@ -9,6 +9,7 @@ import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.AbstractNakedObject;
 import org.nakedobjects.object.reflect.valueadapter.DateAdapter;
+import org.nakedobjects.object.reflect.valueadapter.FloatAdapter;
 import org.nakedobjects.object.reflect.valueadapter.StringAdapter;
 import org.nakedobjects.object.security.Session;
 
@@ -33,7 +34,9 @@ public class PojoAdapter extends AbstractNakedObject {
             if(pojo instanceof String) {
                 nakedObject = new StringAdapter((String) pojo);
             } else if(pojo instanceof Date) {
-                    nakedObject = new DateAdapter((Date) pojo);
+                nakedObject = new DateAdapter((Date) pojo);
+            } else if(pojo instanceof Float) {
+                nakedObject = new FloatAdapter();
             } else {
                 nakedObject = reflectorFactory.createAdapter(pojo);
             }

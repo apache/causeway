@@ -9,7 +9,7 @@ import java.awt.event.MouseMotionListener;
 
 
 public class InteractionHandler implements MouseMotionListener, MouseListener, KeyListener {
-    private final static int THRESHOLD = 4;
+    private final static int THRESHOLD = 7;
     private boolean canDrag;
     /*
      * The location within the frame where the mouse button was pressed down.
@@ -125,7 +125,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
         spy.addAction("Mouse clicked " + click.getLocation());
 
 
-        if (click.isButton3() && viewer.getOverlayView() == null) {
+        if (click.button3() && viewer.getOverlayView() == null) {
             if (previouslyIdentifiedView != null) {
                 spy.addAction(" popup " + downAt + " over " + previouslyIdentifiedView);
                 viewer.popupMenu(previouslyIdentifiedView, click);

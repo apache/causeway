@@ -29,44 +29,101 @@ import org.apache.log4j.Logger;
 
 
 public final class NakedObjectSpecificationImpl implements NakedObjectSpecification {
+
+    private class SubclassList {
+        private Vector classes = new Vector();
+
+        public void addSubclass(NakedObjectSpecificationImpl cls) {
+            classes.addElement(cls);
+        }
+
+        public NakedObjectSpecification[] toArray() {
+            NakedObjectSpecification[] classesArray = new NakedObjectSpecification[classes.size()];
+            classes.copyInto(classesArray);
+            return classesArray;
+        }
+    }
+
     private final static Logger LOG = Logger.getLogger(NakedObjectSpecificationImpl.class);
 
     private static ReflectionFactory reflectionFactory;
 
-    public static void setReflectionFactory(ReflectionFactory reflectionFactory) {
-        NakedObjectSpecificationImpl.reflectionFactory = reflectionFactory;
-    }
-    
     /**
-	 * Expose as a .NET property
-	 * @property
-	 */
+     * Expose as a .NET property
+     * 
+     * @property
+     */
     public static void set_ReflectionFactory(ReflectionFactory reflectionFactory) {
         NakedObjectSpecificationImpl.reflectionFactory = reflectionFactory;
     }
-    
+
+    public static void setReflectionFactory(ReflectionFactory reflectionFactory) {
+        NakedObjectSpecificationImpl.reflectionFactory = reflectionFactory;
+    }
+
     private Action[] classActions = new Action[0];
-    private Action[] objectActions = new Action[0];
     private NakedObjectField[] fields = new NakedObjectField[0];
-    private NakedObjectField[] viewFields;
+    private NakedObjectSpecificationImpl[] interfaces;
+    private Action[] objectActions = new Action[0];
 
     private Reflector reflector;
     private SubclassList subclasses = new SubclassList();
     private NakedObjectSpecificationImpl superclass;
-    private NakedObjectSpecificationImpl[] interfaces;
 
     private ObjectTitle title;
-	
-	NakedObjectSpecificationImpl() {	}
+    private NakedObjectField[] viewFields;
 
+    NakedObjectSpecificationImpl() {}
 
     /**
-    Creates an object of the type represented by this object. This method only creates a java object (using newInstance
-    on the Class object returned using the getJavaType method).
-    */
+     * Creates an object of the type represented by this object. This method
+     * only creates a java object (using newInstance on the Class object
+     * returned using the getJavaType method).
+     */
     public Naked acquireInstance() {
-    	LOG.debug("acquire instance of " + getShortName());
+        LOG.debug("acquire instance of " + getShortName());
         return reflector.acquireInstance();
+    }
+
+    public void clearDirty(NakedObject object) {
+        reflector.clearDirty(object);
+    }
+
+    private Action[] createActions(ActionPeer[] actions) {
+        Action actionChains[] = new Action[actions.length];
+
+        for (int i = 0; i < actions.length; i++) {
+            actionChains[i] = reflectionFactory.createAction(actions[i]);
+        }
+
+        return actionChains;
+    }
+
+    private Action[] createActions(Reflector reflector, String nakedClassName, ActionPeer[] delegates, String[] order) {
+        Action[] actions = createActions(delegates);
+        Action[] objectActions = (Action[]) orderArray(Action.class, actions, order, nakedClassName);
+        return objectActions;
+    }
+
+    private NakedObjectField[] createFields(FieldPeer fieldPeers[]) {
+        NakedObjectField[] fields = new NakedObjectField[fieldPeers.length];
+
+        for (int i = 0; i < fieldPeers.length; i++) {
+
+            Object object = fieldPeers[i];
+
+            if (object instanceof OneToOnePeer) {
+                fields[i] = reflectionFactory.createField((OneToOnePeer) object);
+
+            } else if (object instanceof OneToManyPeer) {
+                fields[i] = reflectionFactory.createField((OneToManyPeer) object);
+
+            } else {
+                throw new NakedObjectRuntimeException();
+            }
+        }
+
+        return fields;
     }
 
     private void debugAboutDetail(StringBuffer text, NakedObjectMember member) {
@@ -86,8 +143,8 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         }
 
         for (int i = 0; i < fields.length; i++) {
-            //text.append("    " + attributes[i].toString() + "\n");
-           if (fields[i] instanceof OneToManyAssociation) {
+            //text.append(" " + attributes[i].toString() + "\n");
+            if (fields[i] instanceof OneToManyAssociation) {
                 OneToManyAssociation f = (OneToManyAssociation) fields[i];
                 debugAboutDetail(text, f);
             } else if (fields[i] instanceof OneToOneAssociation) {
@@ -95,7 +152,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
                 debugAboutDetail(text, f);
             }
         }
-        
+
         text.append("\n  Object Actions" + "\n");
 
         if (objectActions.length == 0) {
@@ -122,15 +179,77 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
 
         return text.toString();
     }
-    
+
+    private Action getAction(Action[] availableActions, Action.Type type, String name, NakedObjectSpecification[] parameters) {
+        if (name == null) {
+            return null;
+        }
+
+        String searchName = searchName(name);
+        outer: for (int i = 0; i < availableActions.length; i++) {
+            Action action = availableActions[i];
+            if (action.getActionType().equals(type)) {
+                if (action.getName().equals(searchName)) {
+                    if (action.parameters().length == parameters.length) {
+                        for (int j = 0; j < parameters.length; j++) {
+                            if (action.parameters()[j] != parameters[j]) {
+                                continue outer;
+                            }
+                        }
+                        return action;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private Action[] getActions(Action[] availableActions, Action.Type type, int noParameters) {
+        Vector actions = new Vector();
+        for (int i = 0; i < availableActions.length; i++) {
+            Action action = availableActions[i];
+            if (action.getActionType().equals(type) && (noParameters == -1 || action.parameters().length == noParameters)) {
+                actions.addElement(action);
+            }
+        }
+
+        Action[] results = new Action[actions.size()];
+        actions.copyInto(results);
+        return results;
+    }
+
+    public Action getClassAction(Action.Type type, String name) {
+        return getClassAction(type, name, new NakedObjectSpecification[0]);
+    }
+
+    public Action getClassAction(Action.Type type, String name, NakedObjectSpecification[] parameters) {
+        if (name == null) {
+            return getDefaultAction(classActions, type, parameters);
+        } else {
+            return getAction(classActions, type, name, parameters);
+        }
+    }
+
+    public Action[] getClassActions(Action.Type type) {
+        return getActions(classActions, type, -1);
+    }
+
+    public final Hint getClassHint() {
+        Hint hint = reflector.classHint();
+        if (hint == null && superclass != null) {
+            hint = superclass.getClassHint();
+        }
+        return hint;
+    }
+
     private Action getDefaultAction(Action[] availableActions, Action.Type type, NakedObjectSpecification[] parameters) {
-        outer:
-            for (int i = 0; i < availableActions.length; i++) {
+        outer: for (int i = 0; i < availableActions.length; i++) {
             Action action = availableActions[i];
             if (action.getActionType().equals(type)) {
                 if (action.parameters().length == parameters.length) {
                     for (int j = 0; j < parameters.length; j++) {
-                        if (! parameters[j].isOfType(action.parameters()[j])) {
+                        if (!parameters[j].isOfType(action.parameters()[j])) {
                             continue outer;
                         }
                     }
@@ -139,105 +258,41 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
 
             }
         }
-        
-    	return null;
-   }
-    
-    private Action getAction(Action[] availableActions, Action.Type type, String name, NakedObjectSpecification[] parameters) {
-        if(name == null) {
-           return null;
-        }
-        
-        String searchName = searchName(name);  
-        outer:
-            for (int i = 0; i < availableActions.length; i++) {
-                Action action = availableActions[i];
-                if (action.getActionType().equals(type)) {
-                    if(action.getName().equals(searchName)) {
-                        if(action.parameters().length == parameters.length) {
-    	                    for (int j = 0; j < parameters.length; j++) {
-    	                        if(action.parameters()[j] != parameters[j]) {
-    	                            continue outer;
-    	                        }
-    	                    }
-	                        return action;
-    	                }
-    	            }
-            }
-        }
-        
-    	return null;
-    }
-    
-    private Action[] getActions(Action[] availableActions, Action.Type type, int noParameters) {
-       Vector actions = new Vector();
-        for (int i = 0; i < availableActions.length; i++) {
-            Action action = availableActions[i];
-            if (action.getActionType().equals(type) && (noParameters == -1 || action.parameters().length == noParameters)) {
-                actions.addElement(action);
-            }
-        }
-        
-        Action[] results = new Action[actions.size()];
-        actions.copyInto(results);
-        return results;
-    }
- 
-    public final Hint getClassAbout() {
-        return reflector.classHint();
+
+        return null;
     }
 
-    public Action getClassAction(Action.Type type, String name) {
-        return getClassAction(type, name, new NakedObjectSpecification[0]);
-    }
-   
-    public Action getClassAction(Action.Type type, String name, NakedObjectSpecification[] parameters) {
-        if(name == null) {
-            return getDefaultAction(classActions, type, parameters);
-        } else {
-            return getAction(classActions, type, name, parameters);
-        }
-    }
- 
-    public Action[] getClassActions(Action.Type type) {
-        return getActions(classActions, type, -1);
-    }
-    
     public NakedObjectField getField(String name) {
         String searchName = searchName(name);
-        
+
         for (int i = 0; i < fields.length; i++) {
             if (fields[i].getName().equals(searchName)) {
                 return fields[i];
             }
         }
 
-        throw new NakedObjectSpecificationException("No field called '" + name + "' in '" +
-            getSingularName() + "'");
-    }
-
-    private String searchName(String name) {
-        return NameConvertor.simpleName(name);
+        throw new NakedObjectSpecificationException("No field called '" + name + "' in '" + getSingularName() + "'");
     }
 
     public NakedObjectField[] getFields() {
-       	return fields;
+        return fields;
     }
 
     /**
-       Returns the name of the NakedClass.  This is the fully qualified name of the Class object that
-       this object represents (i.e. it includes the package name).
+     * Returns the name of the NakedClass. This is the fully qualified name of
+     * the Class object that this object represents (i.e. it includes the
+     * package name).
      */
     public String getFullName() {
         return reflector.fullName();
     }
-    
+
     public Action getObjectAction(Action.Type type, String name) {
         return getObjectAction(type, name, new NakedObjectSpecification[0]);
     }
-    
+
     public Action getObjectAction(Action.Type type, String name, NakedObjectSpecification[] parameters) {
-        if(name == null) {
+        if (name == null) {
             return getDefaultAction(objectActions, type, parameters);
         } else {
             return getAction(objectActions, type, name, parameters);
@@ -247,11 +302,13 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
     public Action[] getObjectActions(Action.Type type) {
         return getActions(objectActions, type, -1);
     }
-    
+
     /**
-    Returns the short name (with spacing) for this object in a pluralised form.  The plural from is obtained from the defining classes
-    pluralName method, if it exists, or by adding 's', 'es', or 'ies dependending of the name's ending.
-    */
+     * Returns the short name (with spacing) for this object in a pluralised
+     * form. The plural from is obtained from the defining classes pluralName
+     * method, if it exists, or by adding 's', 'es', or 'ies dependending of the
+     * name's ending.
+     */
     public final String getPluralName() {
         String pluralName = reflector.pluralName();
 
@@ -263,28 +320,36 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
     }
 
     /**
-       Returns the class name without the package. Removes the text up to, and including the last period (".").
+     * Returns the class name without the package. Removes the text up to, and
+     * including the last period (".").
      */
     public String getShortName() {
         return reflector.shortName();
     }
 
     /**
-       Returns the short name (with spacing) of this NakedClass object.  This is the objects name with package name removed.
-
-       <p>Removes the text up to, and including the last period (".").</p>
+     * Returns the short name (with spacing) of this NakedClass object. This is
+     * the objects name with package name removed.
+     * 
+     * <p>
+     * Removes the text up to, and including the last period (".").
+     * </p>
      */
     public String getSingularName() {
         String singularName = reflector.singularName();
 
-        return singularName != null ? singularName: NameConvertor.naturalName(getShortName());
+        return singularName != null ? singularName : NameConvertor.naturalName(getShortName());
+    }
+
+    public ObjectTitle getTitle() {
+        return title;
     }
 
     public NakedObjectField[] getVisibleFields(NakedObject object, Session session) {
         if (this.viewFields != null) {
             return viewFields;
         }
-        
+
         NakedObjectField[] viewFields = new NakedObjectField[fields.length];
         int v = 0;
         for (int i = 0; i < fields.length; i++) {
@@ -308,43 +373,65 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         return subclasses != null;
     }
 
-    private void init(Reflector reflector, String superclass, String[] interfaces, NakedObjectField[] fields, Action[] objectActions, Action[] classActions, ObjectTitle title) {
-        if(reflector == null) {
-     	    throw new NullPointerException("No reflector specified");
-     	}
+    private void init(Reflector reflector, String superclass, String[] interfaces, NakedObjectField[] fields,
+            Action[] objectActions, Action[] classActions, ObjectTitle title) {
+        if (reflector == null) {
+            throw new NullPointerException("No reflector specified");
+        }
         LOG.debug("NakedClass " + this);
-    	this.reflector = reflector;
-    	NakedObjectSpecificationLoader loader = NakedObjectSpecificationLoader.getInstance();
-    	if(superclass != null) {
+        this.reflector = reflector;
+        NakedObjectSpecificationLoader loader = NakedObjectSpecificationLoader.getInstance();
+        if (superclass != null) {
             this.superclass = (NakedObjectSpecificationImpl) loader.loadSpecification(superclass);
-            if(this.superclass != null) {
-		    	LOG.debug("  Superclass " + superclass);
-		    	this.superclass.subclasses.addSubclass(this);
+            if (this.superclass != null) {
+                LOG.debug("  Superclass " + superclass);
+                this.superclass.subclasses.addSubclass(this);
             }
-    	}
-    	
-    	this.interfaces = new NakedObjectSpecificationImpl[interfaces.length];
-    	for (int i = 0; i < interfaces.length; i++) {
+        }
+
+        this.interfaces = new NakedObjectSpecificationImpl[interfaces.length];
+        for (int i = 0; i < interfaces.length; i++) {
             this.interfaces[i] = (NakedObjectSpecificationImpl) loader.loadSpecification(interfaces[i]);
             this.interfaces[i].subclasses.addSubclass(this);
         }
-    	
-    	if(isValue() && fields.length > 0) {
-    	    LOG.warn("Naked values cannot have fields, they will be ignored");
-    	} else {
-    	    this.fields = fields;
-    	}
-    	this.objectActions = objectActions;
-    	this.classActions = classActions;
-    	
-    	this.title = title;
+
+        if (isValue() && fields.length > 0) {
+            LOG.warn("Naked values cannot have fields, they will be ignored");
+        } else {
+            this.fields = fields;
+        }
+        this.objectActions = objectActions;
+        this.classActions = classActions;
+
+        this.title = title;
+    }
+
+    public NakedObjectSpecification[] interfaces() {
+        return interfaces;
+    }
+
+    public boolean isAbstract() {
+        return reflector.isAbstract();
+    }
+
+    public boolean isDirty(NakedObject object) {
+        return reflector.isDirty(object);
+    }
+
+    public boolean isLookup() {
+        return reflector.isLookup();
+    }
+
+    public boolean isObject() {
+        return reflector.isObject();
     }
 
     /**
-     * Determines if this class respresents the same class, or a subclass, of the specified class. 
+     * Determines if this class respresents the same class, or a subclass, of
+     * the specified class.
      */
-	public boolean isOfType(NakedObjectSpecification specification) {
-	    if (specification == this) {
+    public boolean isOfType(NakedObjectSpecification specification) {
+        if (specification == this) {
             return true;
         } else {
             if (interfaces != null) {
@@ -361,164 +448,31 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         return false;
     }
 
-    public NakedObjectSpecification superclass() {
-        return superclass;
-    }
-    
-    public NakedObjectSpecification[] interfaces() {
-        return interfaces;
-    }
-    
-    public NakedObjectSpecification[] subclasses() {
-        return subclasses.toArray();
-    }
-     
-    public String toString() {
-        StringBuffer s = new StringBuffer();
-
-        s.append("NakedObjectSpecification");
-        if(reflector != null) {
-            s.append(" [name=");
-            s.append(getFullName());
-            s.append(",fields=");
-            s.append(fields.length);
-            s.append(",object methods=");
-            s.append(objectActions.length);
-            s.append(",class methods=");
-            s.append(classActions.length);
-            s.append(",reflector=");
-            s.append(reflector);
-            s.append("]");
-        } else {
-            s.append("[no relector set up]");
-        }
-       
-        s.append("  " + Long.toHexString(super.hashCode()).toUpperCase());
-
-        return s.toString();
-    }
-
-    
-
-    private class SubclassList {
-        private Vector classes = new Vector();
-
-        public void addSubclass(NakedObjectSpecificationImpl cls) {
-            classes.addElement(cls);
-        }
-
-        public NakedObjectSpecification[] toArray() {
-            NakedObjectSpecification[] classesArray = new NakedObjectSpecification[classes.size()];
-            classes.copyInto(classesArray);
-            return classesArray;
-        }
-    }
-
-    public boolean isLookup() {
-        return reflector.isLookup();
-    }
-    
-    public boolean isAbstract() {
-        return reflector.isAbstract();
-    }
-    
-    public boolean isDirty(NakedObject object) {
-        return reflector.isDirty(object);
-    }
-    
-    public void clearDirty(NakedObject object) {
-        reflector.clearDirty(object);    
-    }
-    
-    public void markDirty(NakedObject object) {
-        reflector.markDirty(object);    
-    }
-    
     /** TODO implement */
     public boolean isParsable() {
         return true;
     }
 
+   /** @deprecated */
     public boolean isPartOf() {
         return reflector.isPartOf();
+    }
+
+    public boolean isPersistable() {
+        return reflector.isPersistable();
     }
 
     public boolean isValue() {
         return reflector.isValue();
     }
 
-    public boolean isObject() {
-        return reflector.isObject();
+    public void markDirty(NakedObject object) {
+        reflector.markDirty(object);
     }
 
     void nonReflect(String className) {
-    	reflector = new PrimitiveReflector(className);
-    	title = reflector.title();
-    }
-
-    void reflect( String className, Reflector reflector) {
-        LOG.debug("creating reflector for " + className + " using " + reflector);
-        
-         ActionPeer delegates[];
-
-        delegates = reflector.actions(Reflector.OBJECT);
-        String[] order = reflector.actionSortOrder();
-        Action[] objectActions = createActions(reflector, className, delegates, order);
-
-        delegates = reflector.actions(Reflector.CLASS);
-        order = reflector.classActionSortOrder();
-        Action[] classActions = createActions( reflector, className, delegates, order);
-
-        FieldPeer fieldDelegates[] = reflector.fields();
-        NakedObjectField[] fieldVector = createFields(fieldDelegates);
-        NakedObjectField[] fields = (NakedObjectField[]) orderArray(NakedObjectField.class, fieldVector, reflector.fieldSortOrder(), className);
-
-        String superclass = reflector.getSuperclass();
-        String[] interfaces = reflector.getInterfaces();
-        
-        init(reflector, superclass, interfaces, fields, objectActions, classActions, reflector.title());
-    }
-  
-    
-    private Action[] createActions(ActionPeer[] actions) {
-        Action actionChains[] = new Action[actions.length];
-
-        for (int i = 0; i < actions.length; i++) {
-            actionChains[i] = reflectionFactory.createAction(actions[i]);
-        }
-
-        return actionChains;
-    }
-
-
-    private NakedObjectField[] createFields(FieldPeer fieldPeers[]) {
-        NakedObjectField[] fields = new NakedObjectField[fieldPeers.length];
-
-        for (int i = 0; i < fieldPeers.length; i++) {
-
-            Object object = fieldPeers[i];
-
-            if (object instanceof OneToOnePeer) {
-                fields[i] = reflectionFactory.createField((OneToOnePeer) object);
-
-            } else if (object instanceof OneToManyPeer) {
-                fields[i] = reflectionFactory.createField((OneToManyPeer) object);
-
-            } else {
-                throw new NakedObjectRuntimeException();
-            }
-        }
-
-        return fields;
-    }
-
-    
-
-    private Action[] createActions(Reflector reflector, String nakedClassName, ActionPeer[] delegates,
-            String[] order) {
-        Action[] actions = createActions(delegates);
-        Action[] objectActions = (Action[]) orderArray(Action.class, actions, order, nakedClassName);
-        return objectActions;
+        reflector = new PrimitiveReflector(className);
+        title = reflector.title();
     }
 
     private NakedObjectMember[] orderArray(Class memberType, NakedObjectMember[] original, String[] order, String nakedClassName) {
@@ -529,10 +483,10 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
             for (int i = 0; i < order.length; i++) {
                 order[i] = NameConvertor.simpleName(order[i]);
             }
-            
-	        NakedObjectMember[] ordered = (NakedObjectMember[]) Array.newInstance(memberType, original.length);
 
-	        // work through each order element and find, if there is one, a
+            NakedObjectMember[] ordered = (NakedObjectMember[]) Array.newInstance(memberType, original.length);
+
+            // work through each order element and find, if there is one, a
             // matching member.
             int orderedIndex = 0;
             ordering: for (int orderIndex = 0; orderIndex < order.length; orderIndex++) {
@@ -549,7 +503,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
                     }
                 }
 
-                if(!order[orderIndex].trim().equals("")) {
+                if (!order[orderIndex].trim().equals("")) {
                     LOG.warn("Invalid ordering element '" + order[orderIndex] + "' in " + nakedClassName);
                 }
             }
@@ -573,31 +527,88 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         }
     }
 
-    public ObjectTitle getTitle() {
-        return title;
+    void reflect(String className, Reflector reflector) {
+        LOG.debug("creating reflector for " + className + " using " + reflector);
+
+        ActionPeer delegates[];
+
+        delegates = reflector.actions(Reflector.OBJECT);
+        String[] order = reflector.actionSortOrder();
+        Action[] objectActions = createActions(reflector, className, delegates, order);
+
+        delegates = reflector.actions(Reflector.CLASS);
+        order = reflector.classActionSortOrder();
+        Action[] classActions = createActions(reflector, className, delegates, order);
+
+        FieldPeer fieldDelegates[] = reflector.fields();
+        NakedObjectField[] fieldVector = createFields(fieldDelegates);
+        NakedObjectField[] fields = (NakedObjectField[]) orderArray(NakedObjectField.class, fieldVector, reflector
+                .fieldSortOrder(), className);
+
+        String superclass = reflector.getSuperclass();
+        String[] interfaces = reflector.getInterfaces();
+
+        init(reflector, superclass, interfaces, fields, objectActions, classActions, reflector.title());
+    }
+
+    private String searchName(String name) {
+        return NameConvertor.simpleName(name);
+    }
+
+    public NakedObjectSpecification[] subclasses() {
+        return subclasses.toArray();
+    }
+
+    public NakedObjectSpecification superclass() {
+        return superclass;
+    }
+
+    public String toString() {
+        StringBuffer s = new StringBuffer();
+
+        s.append("NakedObjectSpecification");
+        if (reflector != null) {
+            s.append(" [name=");
+            s.append(getFullName());
+            s.append(",fields=");
+            s.append(fields.length);
+            s.append(",object methods=");
+            s.append(objectActions.length);
+            s.append(",class methods=");
+            s.append(classActions.length);
+            s.append(",reflector=");
+            s.append(reflector);
+            s.append("]");
+        } else {
+            s.append("[no relector set up]");
+        }
+
+        s.append("  " + Long.toHexString(super.hashCode()).toUpperCase());
+
+        return s.toString();
     }
 }
 
 /*
-Naked Objects - a framework that exposes behaviourally complete
-business objects directly to the user.
-Copyright (C) 2000 - 2005  Naked Objects Group Ltd
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-The authors can be contacted via www.nakedobjects.org (the
-registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-Road, Woking GU21 1NR, UK).
-*/
+ * Naked Objects - a framework that exposes behaviourally complete business
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
+ * Ltd
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * The authors can be contacted via www.nakedobjects.org (the registered address
+ * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
+ * 1NR, UK).
+ */

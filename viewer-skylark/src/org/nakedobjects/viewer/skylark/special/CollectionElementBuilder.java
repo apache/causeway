@@ -14,7 +14,7 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.core.AbstractViewBuilder;
 import org.nakedobjects.viewer.skylark.core.CollectionActions;
-import org.nakedobjects.viewer.skylark.core.CompositeObjectView;
+import org.nakedobjects.viewer.skylark.core.CompositeView;
 import org.nakedobjects.viewer.skylark.core.InternalCollectionActions;
 
 import java.util.Enumeration;
@@ -37,7 +37,7 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
 
 		Content content = view.getContent();
 		//NakedCollection collection = (NakedCollection) ((ObjectContent) content).getObject();
-		OneToManyAssociation field = (OneToManyAssociation) (content instanceof OneToManyField ? ((OneToManyField) content).getField() : null);
+		OneToManyAssociation field = content instanceof OneToManyField ? ((OneToManyField) content).getOneToManyAssociation() : null;
 
         LOG.debug("rebuild view " + view + " for " + content);
 
@@ -75,7 +75,8 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
         		if(field == null) {
         			elementContent = new CollectionElement(element);
         		} else {
-        		    NakedObject parent = ((OneToManyField) content).getParent();
+        		    Naked obj = view.getParent().getContent().getNaked();
+        		    NakedObject parent = (NakedObject) obj;
         			elementContent = new OneToManyFieldElement(parent, element, field);
         		}
         		elementView = subviewDesign.createSubview(elementContent, view.getViewAxis());
@@ -85,7 +86,7 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
     }
 
 	public View createCompositeView(Content content, CompositeViewSpecification specification, ViewAxis axis) {
-    	CompositeObjectView view = new CompositeObjectView(content, specification, axis);
+    	CompositeView view = new CompositeView(content, specification, axis);
     	view.setCanDragView(canDragView);
 		return content instanceof OneToManyField ? new InternalCollectionActions(view) : new CollectionActions(view);
     }

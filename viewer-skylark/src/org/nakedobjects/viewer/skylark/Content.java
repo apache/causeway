@@ -1,24 +1,85 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.utility.DebugString;
 
 
 public interface Content {
 
-    String debugDetails();
+    /**
+     * Determines if the specified content can be drop on this content.
+     */
+    Consent canDrop(Content sourceContent);
 
+    void debugDetails(DebugString debug);
+
+    /**
+     * Implements the response to the dropping of the specified content onto this content.
+     */
+    Naked drop(Content sourceContent);
+
+    Hint getHint();
+
+    /** 
+     * The name of the icon to use to respresent the object represented by this content.
+     */
     String getIconName();
 
+    /** 
+     * The icon to use to respresent the object represented by this content.
+     */
     Image getIconPicture(int iconHeight);
-    
+
+    /**
+     * The object represented by this content.
+     */
     Naked getNaked();
 
+    /**
+     * The specification of the object represented by this content.
+     */
     NakedObjectSpecification getSpecification();
 
+    /**
+     * Returns true if this content represents a NakedCollection.
+     */
+    boolean isCollection();
+
+    /**
+     * Returns true if this content represents a NakedObject.
+     */
+    boolean isObject();
+
+    /** 
+     * Returns true if the object represented by this content can be persisted.
+     */
+    boolean isPersistable();
+
+    /** 
+     * Returns true if the object represented by this content is transient; has not been persisted yet.
+     */
     boolean isTransient();
 
+    /**
+     * Returns true if this content represents a NakedValue.
+     */
+    boolean isValue();
+
+    /**
+     * Allows this content to add menu options to the set of menu options the user will see for a view.
+     */
     void menuOptions(MenuOptionSet options);
+
+    /**
+     * Flags that the object represented by this content has had it state changed by the viewer.
+     */
+    boolean objectChanged();
+
+    void parseTextEntry(String entryText) throws InvalidEntryException;
 
     String title();
 

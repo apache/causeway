@@ -1,16 +1,9 @@
-package org.nakedobjects.distribution;
+package org.nakedobjects.application;
 
-import org.nakedobjects.object.Oid;
-
-public class DefaultObjectDataFactory extends ObjectDataFactory {
-
- /*   public ObjectData createObjectData(NakedObject object) {
-        return new ObjectData(object);
-    }
-*/
-    public ObjectData createObjectData(Oid oid, String type, Object[] fieldContent) {
-        return new ObjectData(oid, type, fieldContent);
-    }
+/**
+ * Marker interface to show that an object cannot be persisted.
+ */
+public interface NonPersistable {
 
 }
 
@@ -18,7 +11,7 @@ public class DefaultObjectDataFactory extends ObjectDataFactory {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2005  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

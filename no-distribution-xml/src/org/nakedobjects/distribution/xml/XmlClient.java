@@ -2,6 +2,7 @@ package org.nakedobjects.distribution.xml;
 
 import org.nakedobjects.distribution.ClientDistribution;
 import org.nakedobjects.distribution.ObjectData;
+import org.nakedobjects.distribution.ObjectDataHelper;
 import org.nakedobjects.distribution.xml.request.AllInstances;
 import org.nakedobjects.distribution.xml.request.ClearAssociation;
 import org.nakedobjects.distribution.xml.request.ExecuteAction;
@@ -99,7 +100,7 @@ public class XmlClient implements ClientDistribution {
         
         ObjectData[] updates = response.getUpdates();
         for (int i = 0; i < updates.length; i++) {
-            updates[i].update(loadedObjects);
+            ObjectDataHelper.update(loadedObjects, updates[i]);
         }
 //        response.update();
     }

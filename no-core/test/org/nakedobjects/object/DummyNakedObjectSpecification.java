@@ -16,7 +16,7 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         return null;
     }
 
-    public Hint getClassAbout() {
+    public Hint getClassHint() {
         return null;
     }
 
@@ -146,6 +146,10 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     
     public String toString() {
         return "DummyNakedObjectSpecification" + id + " " + fullName;
+    }
+
+    public boolean isPersistable() {
+        return false;
     }
 }
 

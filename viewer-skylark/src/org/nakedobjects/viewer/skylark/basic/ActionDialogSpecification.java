@@ -13,6 +13,8 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
+import org.nakedobjects.viewer.skylark.core.BackgroundTask;
+import org.nakedobjects.viewer.skylark.core.BackgroundThread;
 import org.nakedobjects.viewer.skylark.metal.ButtonAction;
 import org.nakedobjects.viewer.skylark.metal.ButtonBorder;
 import org.nakedobjects.viewer.skylark.metal.WindowBorder;
@@ -20,81 +22,21 @@ import org.nakedobjects.viewer.skylark.special.StackLayout;
 import org.nakedobjects.viewer.skylark.special.SubviewSpec;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
+
 public class ActionDialogSpecification extends AbstractCompositeViewSpecification {
 
-    public ActionDialogSpecification() {
-        builder = new StackLayout(new ActionFieldBuilder(new DialogFormSubviews()));
-    }
-
-    public View createView(Content content, ViewAxis axis) {
-        UserAction[] actions = new UserAction[] {
-                new ExecuteAction(),
-                new ExecuteAndCloseAction(),
-                new CloseAction(),
-        };
-        return new WindowBorder(new ButtonBorder(actions, super.createView(content, new LabelAxis())), false);
-    }
-    
-    private static class  CloseAction extends ButtonAction {
+    private static class CloseAction extends ButtonAction {
         public CloseAction() {
             super("Close");
         }
-        
+
         public void execute(Workspace workspace, View view, Location at) {
             workspace.removeView(view);
         }
     }
-    
-    
-    private static class  ExecuteAction extends ButtonAction {
-        public ExecuteAction() {
-            this("Execute");
-        }
-        
-        public ExecuteAction(String name) {
-            super(name);
-        }
 
-        public Consent disabled(View view) {
-            ActionContent actionContent = ((ActionContent) view.getContent());
-            return actionContent.disabled();
-        }
-        
-        public void execute(Workspace workspace, View view, Location at) {
-            ActionContent actionContent = ((ActionContent) view.getContent());
-            Naked result = actionContent.execute();
-            NakedObject actionObject = actionContent.getObject();
-            if(! (actionObject.getObject() instanceof NakedClass)) {
-                //actionObject.getContext().getObjectManager().objectChanged(actionObject);
-                actionObject.getContext().getObjectManager().saveChanges();
-            }
-            if(result != null) {
-	            move(at);
-	            workspace.addOpenViewFor(result, at);
-            }
-        }
-
-        protected void move(Location at) {
-            at.move(30, 60);
-        }
-    }
-    
-    private static class ExecuteAndCloseAction extends ExecuteAction {
-        public ExecuteAndCloseAction() {
-            super("Execute & Close");
-        }
-        
-        public void execute(Workspace workspace, View view, Location at) {
-            super.execute(workspace, view, at);
-            workspace.removeView(view);
-        }
-        
-        protected void move(Location at) {
-        }
-    }
-    
     private static class DialogFormSubviews implements SubviewSpec {
-        
+
         public View createSubview(Content content, ViewAxis axis) {
             if (content instanceof ValueParameter) {
                 ViewFactory factory = ViewFactory.getViewFactory();
@@ -113,13 +55,76 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
                     return specification.createView(content, axis);
                 }
             }
-            
+
             return null;
         }
 
         public View decorateSubview(View view) {
             return view;
         }
+    }
+
+    private static class ExecuteAction extends ButtonAction {
+        public ExecuteAction() {
+            this("Apply");
+        }
+
+        public ExecuteAction(String name) {
+            super(name);
+        }
+
+        public Consent disabled(View view) {
+            ActionContent actionContent = ((ActionContent) view.getContent());
+            return actionContent.disabled();
+        }
+
+        public void execute(final Workspace workspace, final View view, final Location at) {
+            BackgroundThread.run(view, new BackgroundTask() {
+                protected void execute() {
+                    ActionContent actionContent = ((ActionContent) view.getContent());
+                    Naked result = actionContent.execute();
+                    NakedObject actionObject = actionContent.getObject();
+                    if (!(actionObject.getObject() instanceof NakedClass)) {
+                        //actionObject.getContext().getObjectManager().objectChanged(actionObject);
+                        actionObject.getContext().getObjectManager().saveChanges();
+                    }
+                    if (result != null) {
+                        move(at);
+                        workspace.addOpenViewFor(result, at);
+                    }
+                }
+            });
+        }
+
+        protected void move(Location at) {
+            at.move(30, 60);
+        }
+    }
+
+    private static class ExecuteAndCloseAction extends ExecuteAction {
+        public ExecuteAndCloseAction() {
+            super("OK");
+        }
+
+        public void execute(Workspace workspace, View view, Location at) {
+            super.execute(workspace, view, at);
+            workspace.removeView(view);
+        }
+
+        protected void move(Location at) {}
+    }
+
+    public ActionDialogSpecification() {
+        builder = new StackLayout(new ActionFieldBuilder(new DialogFormSubviews()));
+    }
+
+    public boolean canDisplay(Content content) {
+        return content instanceof ActionContent;
+    }
+
+    public View createView(Content content, ViewAxis axis) {
+        UserAction[] actions = new UserAction[] { new ExecuteAndCloseAction(), new CloseAction(), new ExecuteAction(), };
+        return new WindowBorder(new ButtonBorder(actions, super.createView(content, new LabelAxis())), false);
     }
 
     public String getName() {

@@ -7,12 +7,13 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Enumeration;
 
 
-public class RootCollection implements CollectionContent {
+public class RootCollection extends CollectionContent {
     private final NakedCollection collection;
 
     public RootCollection(NakedCollection collection) {
@@ -33,14 +34,16 @@ public class RootCollection implements CollectionContent {
         throw new NakedObjectRuntimeException("Invalid call");
     }
 
-    public String debugDetails() {
-        String type = getClass().getName();
-        type = type.substring(type.lastIndexOf('.') + 1);
-        return type + "\n" + "  object: " + collection + "\n";
+    public void debugDetails(DebugString debug) {
+        debug.appendln(4, "collection", collection);
     }
 
     public NakedCollection getCollection() {
         return collection;
+    }
+    
+    public boolean isCollection() {
+        return true;
     }
     
     public String getIconName() {
@@ -61,7 +64,7 @@ public class RootCollection implements CollectionContent {
 
 
     public NakedObjectSpecification getSpecification() {
-      	return null;
+      	return collection.getSpecification();
     }
 
 
@@ -85,6 +88,14 @@ public class RootCollection implements CollectionContent {
 
     public String toString() {
         return "Root Collection: " + collection;
+    }
+
+    public Naked drop(Content sourceContent) {
+        return null;
+    }
+
+    public Consent canDrop(Content sourceContent) {
+        return Veto.DEFAULT;
     }
 }
 

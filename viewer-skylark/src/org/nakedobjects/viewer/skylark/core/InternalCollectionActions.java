@@ -1,24 +1,14 @@
 package org.nakedobjects.viewer.skylark.core;
 
-import org.nakedobjects.object.Aggregated;
-import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.control.Veto;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.security.ClientSession;
-import org.nakedobjects.viewer.skylark.ContentDrag;
-import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.View;
 
+/** @deprecated */
 public class InternalCollectionActions extends CollectionActions {
 
     public InternalCollectionActions(View wrappedView) {
         super(wrappedView);
     }
-
+/*
     public void dragIn(ContentDrag drag) {
         NakedObject object = ((ObjectContent) drag.getSourceContent()).getObject();
         NakedObject parent = ((ObjectContent) getParent().getContent()).getObject();
@@ -30,24 +20,7 @@ public class InternalCollectionActions extends CollectionActions {
             getState().setCanDrop();
         }
     }
-
-    private Consent canDrop(NakedObject parent, NakedObject object) {
-        InternalCollection collection = (InternalCollection) parent.getField(getAssociation());
-        if(!object.getSpecification().isOfType(collection.getElementSpecification())) {
-            return new Veto("Only objects of type " + collection.getElementSpecification().getSingularName() + " are allowed in this collection");
-        }
-        if(parent.getOid() != null && object.getOid() == null) {
-            return new Veto("Can't set field in persistent object with reference to non-persistent object");
-        }
-        if(object instanceof Aggregated) {
-            Aggregated aggregated = ((Aggregated) object);
-            if(aggregated.isAggregated() && aggregated.parent() != parent) {
-                return new Veto("Object is already associated with another object: " + aggregated.parent());
-            }
-        }
-        Hint about = getAssociation().getHint(ClientSession.getSession(), parent, object, true);
-        return about.canUse();
-    }
+ 
 
     public void dragOut(ContentDrag drag) {
         getState().clearObjectIdentified();
@@ -64,13 +37,14 @@ public class InternalCollectionActions extends CollectionActions {
 	        layout();
         }
     }
+*/
 
-
+/*
     private OneToManyAssociation getAssociation() {
         OneToManyField content = (OneToManyField) getContent();
-        return (OneToManyAssociation) content.getField();
+        return content.getOneToManyAssociation();
     }
-    
+    */
     public String toString() {
 		return wrappedView.toString() + "/InternalCollectionActions";
 	}

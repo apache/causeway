@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
@@ -45,8 +44,8 @@ public class TreeCompositeNodeSpecification implements CompositeViewSpecificatio
         return spec;
     }
 
-    public boolean canDisplay(Naked object) {
-        return TreeDisplayRules.canDisplay(object);
+    public boolean canDisplay(Content content) {
+        return TreeDisplayRules.canDisplay(content.getNaked());
     }
 
     public boolean canOpen(Content content) {

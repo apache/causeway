@@ -29,6 +29,7 @@ import org.nakedobjects.viewer.skylark.basic.LabelAxis;
 import org.nakedobjects.viewer.skylark.basic.SimpleIdentifier;
 import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
 import org.nakedobjects.viewer.skylark.core.BackgroundTask;
+import org.nakedobjects.viewer.skylark.core.BackgroundThread;
 import org.nakedobjects.viewer.skylark.special.ResizeDrag;
 
 import java.awt.Toolkit;
@@ -413,6 +414,10 @@ public class TextField extends AbstractField {
 
     }
 
+    private NakedValue getValue() {
+        return (NakedValue) getContent().getNaked();
+    }
+
     private void alignDisplay(int line) {
         int noContentLines = textContent.noLines();
         int lastLine = noContentLines - 1;
@@ -685,7 +690,7 @@ public class TextField extends AbstractField {
     public void editComplete() {
         if (canChangeValue() && !isSaved) {
             isSaved = true;
-            run(new BackgroundTask() {
+            BackgroundThread.run(this, new BackgroundTask() {
                 protected void execute() {
                     save();
                     getParent().updateView();
@@ -1025,7 +1030,7 @@ public class TextField extends AbstractField {
         return style.getHeight() + LINE_SPACING;
     }
 
-    public void menuOptions(MenuOptionSet options) {
+    public void contentMenuOptions(MenuOptionSet options) {
         options.add(MenuOptionSet.OBJECT, new MenuOption("Refresh") {
             public void execute(Workspace workspace, View view, Location at) {
                 invalidReason = null;
@@ -1036,7 +1041,7 @@ public class TextField extends AbstractField {
                 return AbstractConsent.allow(invalidReason != null);
             }
         });
-        super.menuOptions(options);
+        super.contentMenuOptions(options);
     }
 
     /**
@@ -1081,7 +1086,7 @@ public class TextField extends AbstractField {
 
     public void refresh() {
         super.refresh();
-        NakedValue object = getValueContent().getObject();
+        NakedValue object = getValue();
         if(object == null) {
             textContent.setText("");
         } else {

@@ -2,11 +2,11 @@ package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.reflect.NakedObjectField;
 
-public interface FieldContent {
+public interface FieldContent extends Content {
 
-	String getName();
+	String getFieldName();
 	
-	NakedObjectField getField();
+	NakedObjectField getFieldReflector();
 }
 
 

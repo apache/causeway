@@ -42,6 +42,10 @@ public class TableRowSpecification extends AbstractCompositeViewSpecification {
         builder = new TableRowLayout(new ObjectFieldBuilder(new Cells(), true));
     }
 
+    public boolean canDisplay(Content content) {
+        return content.isObject();
+    }
+
     public View createView(Content content, ViewAxis axis) {
         View view = super.createView(content, axis);
 

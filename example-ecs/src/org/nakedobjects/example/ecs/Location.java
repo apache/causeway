@@ -7,6 +7,8 @@ import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.application.valueholder.Option;
 import org.nakedobjects.application.valueholder.TextString;
 
+import java.util.Vector;
+
 
 public class Location {
     private final TextString streetAddress;
@@ -38,6 +40,28 @@ public class Location {
         about.changeNameIfUsable("New booking from " + location + 
                                 " to " + title());
     }
+    
+
+    public void explorationActionExplorationMethod() {
+        Vector instances = container.allInstances(City.class);
+        if(instances.size() > 0)
+        {
+            city = (City) instances.elementAt(0);
+        }
+        instances = container.allInstances(Customer.class);
+        if(instances.size() > 0)
+        {
+            customer = (Customer) instances.elementAt(0);
+        }
+    }
+    
+    public void debugActionDebugMethod() {
+        System.out.println(this);
+        System.out.println("  " + knownAs.titleString());
+        System.out.println("  " + streetAddress.titleString());
+        System.out.println("  " + city.title());
+        System.out.println("  " + customer.title());
+    }
 
     public Booking actionNewBooking(Location location) {
         Booking booking = (Booking) container.createTransientInstance(Booking.class);
@@ -49,6 +73,28 @@ public class Location {
 
         container.makePersistent(booking);
 
+        if (customer != null) {
+            booking.associateCustomer(customer);
+            booking.setPaymentMethod(customer.getPreferredPaymentMethod());
+        }
+
+        return booking;
+    }
+
+
+    public Booking actionSlowAction() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        Booking booking = (Booking) container.createTransientInstance(Booking.class);
+        booking.setPickUp(this);
+        booking.setCity(getCity());
+        container.makePersistent(booking);
+
+        Customer customer = getCustomer();
         if (customer != null) {
             booking.associateCustomer(customer);
             booking.setPaymentMethod(customer.getPreferredPaymentMethod());

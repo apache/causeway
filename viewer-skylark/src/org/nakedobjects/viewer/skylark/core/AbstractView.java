@@ -80,6 +80,16 @@ public abstract class AbstractView implements View {
         return true;
     }
 
+    public boolean contains(View view) {
+        View[] subviews = getSubviews();
+        for (int i = 0; i < subviews.length; i++) {
+            if (subviews[i] == view || subviews[i].contains(view)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Returns debug details about this view.
      */
@@ -137,7 +147,7 @@ public abstract class AbstractView implements View {
         }
     }
 
-    public void drag(InternalDrag drag) { }
+    public void drag(InternalDrag drag) {}
 
     public void dragCancel(InternalDrag drag) {
         getViewManager().showArrowCursor();
@@ -157,7 +167,17 @@ public abstract class AbstractView implements View {
 
     public void dragOut(ContentDrag drag) {}
 
-    public void dragTo(InternalDrag drag) { }
+    public Drag dragStart(DragStart drag) {
+        View subview = subviewFor(drag.getLocation());
+        if (subview != null) {
+            drag.subtract(subview.getLocation());
+            return subview.dragStart(drag);
+        } else {
+            return null;
+        }
+    }
+
+    public void dragTo(InternalDrag drag) {}
 
     public void draw(Canvas canvas) {}
 
@@ -271,20 +291,19 @@ public abstract class AbstractView implements View {
         return getParent() == null ? null : getParent().getWorkspace();
     }
 
-
     public boolean hasFocus() {
         return getViewManager().hasFocus(getView());
     }
 
     public View identify(Location location) {
         View subview = subviewFor(location);
-        if(subview == null) {
+        if (subview == null) {
             getViewManager().getSpy().addTrace(this, "mouse location within node view", location);
             getViewManager().getSpy().addTrace("----");
             return getView();
         } else {
-             location.subtract(subview.getLocation());
-             return subview.identify(location);
+            location.subtract(subview.getLocation());
+            return subview.identify(location);
         }
     }
 
@@ -328,16 +347,13 @@ public abstract class AbstractView implements View {
     /**
      * Limits the bounds of the given view (when being moved or dropped) so its
      * never extends outside the bounds of the containing open view
-    
-    public void limitBounds(View view) {
-        Bounds contentBounds = view.getBounds();
-        Bounds containerBounds = new Bounds(getSize());
- //       containerBounds.contract(getPadding());
-        if (containerBounds.limitBounds(contentBounds) && ! view.getBounds().equals(contentBounds)) {
-            view.setBounds(contentBounds);
-            view.invalidateLayout();
-        }
-    }
+     * 
+     * public void limitBounds(View view) { Bounds contentBounds =
+     * view.getBounds(); Bounds containerBounds = new Bounds(getSize()); //
+     * containerBounds.contract(getPadding()); if
+     * (containerBounds.limitBounds(contentBounds) && !
+     * view.getBounds().equals(contentBounds)) { view.setBounds(contentBounds);
+     * view.invalidateLayout(); } }
      */
 
     /**
@@ -349,13 +365,12 @@ public abstract class AbstractView implements View {
         if (containerBounds.limitBounds(contentBounds)) {
             getView().setBounds(contentBounds);
         }
-        /*if (containerBounds.limitBounds(contentBounds) && ! getView().getBounds().equals(contentBounds)) {
-            getView().setBounds(contentBounds);
-//            invalidateLayout();
-        }
-        */
+        /*
+         * if (containerBounds.limitBounds(contentBounds) && !
+         * getView().getBounds().equals(contentBounds)) {
+         * getView().setBounds(contentBounds); // invalidateLayout(); }
+         */
     }
-
 
     public void markDamaged() {
         markDamaged(getView().getBounds());
@@ -373,14 +388,42 @@ public abstract class AbstractView implements View {
         }
     }
 
-    public void menuOptions(MenuOptionSet options) {
-        if (options.isForView()) {
-            viewMenuOptions(options);
+    public void contentMenuOptions(MenuOptionSet options) {
+        options.setColor(Style.CONTENT_MENU);
+        
+        Content content = getContent();
+        if (content != null) {
+            content.menuOptions(options);
+        }
 
+    }
+    
+    public void viewMenuOptions(MenuOptionSet options) {
+        options.setColor(Style.VIEW_MENU);
+
+        if (getParent() != null) {
+            Enumeration possibleViews = ViewFactory.getViewFactory().openRootViews(content, null);
+            while (possibleViews.hasMoreElements()) {
+                ViewSpecification specification = (ViewSpecification) possibleViews.nextElement();
+                MenuOption viewAs = new OpenViewOption(specification);
+                options.add(MenuOptionSet.VIEW, viewAs);
+            }
+        }
+
+        if (view.getSpecification().isSubView()) {
+            if (view.getSpecification().isReplaceable()) {
+                replaceOptions(ViewFactory.getViewFactory().openSubviews(content, this), options);
+                replaceOptions(ViewFactory.getViewFactory().closedSubviews(content, this), options);
+            }
         } else {
-            options.setColor(Style.CONTENT_MENU);
-            if (getContent() != null) {
-                getContent().menuOptions(options);
+            if (view.getSpecification().isReplaceable()) {
+                // offer other/alternative views
+                replaceOptions(ViewFactory.getViewFactory().openRootViews(content, this), options);
+            }
+            options.add(MenuOptionSet.VIEW, new PrintOption());
+            if (getParent() != null) {
+                options.add(MenuOptionSet.VIEW, CLOSE_OPTION);
+                options.add(MenuOptionSet.VIEW, CLOSE_ALL_OPTION);
             }
         }
 
@@ -428,16 +471,6 @@ public abstract class AbstractView implements View {
     public void objectActionResult(Naked result, Location at) {
         getWorkspace().addOpenViewFor(result, at);
     }
-    
-    public Drag dragStart(DragStart drag) {
-        View subview = subviewFor(drag.getLocation());
-        if (subview != null) {
-            drag.subtract(subview.getLocation());
-            return subview.dragStart(drag);
-        } else {
-            return null;
-        }
-    }
 
     public View pickupContent(Location location) {
         View subview = subviewFor(location);
@@ -445,7 +478,7 @@ public abstract class AbstractView implements View {
             location.subtract(subview.getLocation());
             return subview.pickupView(location);
         } else {
-	        return new DragViewOutline(getView());
+            return new DragViewOutline(getView());
         }
     }
 
@@ -455,7 +488,7 @@ public abstract class AbstractView implements View {
             location.subtract(subview.getLocation());
             return subview.pickupView(location);
         } else {
-	        return null;
+            return null;
         }
     }
 
@@ -478,11 +511,11 @@ public abstract class AbstractView implements View {
      * Forces a repaint; should only be used in places markDamaged() does not
      * work because no user action occurs - within the required timeframe - that
      * would otherwise cause a redraw automatically.
-     */
     protected void repaint() {
         markDamaged();
         getViewManager().forceRepaint();
     }
+     */
 
     protected void replaceOptions(Enumeration possibleViews, MenuOptionSet options) {
         while (possibleViews.hasMoreElements()) {
@@ -497,25 +530,6 @@ public abstract class AbstractView implements View {
 
     public void replaceView(View toReplace, View replacement) {
         throw new NakedObjectRuntimeException();
-    }
-
-    public void run(final BackgroundTask task) {
-        Thread t = new Thread("background task") {
-            public void run() {
-                //isSaving = true;
-                state.setActive();
-                repaint();
-
-                task.execute();
-
-                // isSaving = false;
-                state.setInactive();
-                markDamaged();
-                repaint();
-            }
-        };
-
-        t.start();
     }
 
     public void secondClick(Click click) {
@@ -556,8 +570,8 @@ public abstract class AbstractView implements View {
     }
 
     /**
-     * Identifies the subview that contains the specified location within its bounds.  Returns null if no subview exists
-     * for that location.
+     * Identifies the subview that contains the specified location within its
+     * bounds. Returns null if no subview exists for that location.
      */
     protected View subviewFor(Location location) {
         return null;
@@ -588,47 +602,6 @@ public abstract class AbstractView implements View {
         } else {
             return ViewAreaType.CONTENT;
         }
-    }
-
-    public void viewMenuOptions(MenuOptionSet options) {
-        options.setColor(Style.VIEW_MENU);
-        Content content = getContent();
-    
-        if(getParent() != null) {
-            Enumeration possibleViews = ViewFactory.getViewFactory().openRootViews(content, null);
-            while (possibleViews.hasMoreElements()) {
-                ViewSpecification specification = (ViewSpecification) possibleViews.nextElement();
-                MenuOption viewAs = new OpenViewOption(specification);
-                options.add(MenuOptionSet.VIEW, viewAs);
-            }
-        }
-
-        if (view.getSpecification().isSubView()) {
-            if (view.getSpecification().isReplaceable()) {
-                replaceOptions(ViewFactory.getViewFactory().openSubviews(content, this), options);
-                replaceOptions(ViewFactory.getViewFactory().closedSubviews(content, this), options);
-            }
-        } else {
-            if (view.getSpecification().isReplaceable()) {
-                // offer other/alternative views
-                replaceOptions(ViewFactory.getViewFactory().openRootViews(content, this), options);
-            }
-            options.add(MenuOptionSet.VIEW, new PrintOption());
-            if(getParent() != null) {
-                options.add(MenuOptionSet.VIEW, CLOSE_OPTION);
-                options.add(MenuOptionSet.VIEW, CLOSE_ALL_OPTION);
-            }
-        }
-    }
-    
-    public boolean contains(View view) {
-        View[] subviews = getSubviews();
-        for (int i = 0; i < subviews.length; i++) {
-            if(subviews[i] == view || subviews[i].contains(view)) {
-                return true;
-            }
-        }
-        return false;
     }
 }
 

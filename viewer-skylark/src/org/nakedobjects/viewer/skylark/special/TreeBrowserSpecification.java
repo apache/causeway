@@ -1,10 +1,10 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -30,8 +30,18 @@ public class TreeBrowserSpecification implements ViewSpecification {
 		collectionLeafNode.setReplacementNodeSpecification(collectionCompositeNode);
 	}
 	
-    public boolean canDisplay(Naked object) {
-        return object instanceof NakedObject;
+    public boolean canDisplay(Content content) {
+        if(content.isObject()) {
+            NakedObject object = (NakedObject) content.getNaked();
+	        NakedObjectField[] fields = content.getSpecification().getVisibleFields(object , ClientSession.getSession());
+	        for (int i = 0; i < fields.length; i++) {
+                if(fields[i].isCollection()) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
 
     public View createView(Content content, ViewAxis axis) {

@@ -1,20 +1,7 @@
  package org.nakedobjects.viewer.skylark.core;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.UserContext;
-import org.nakedobjects.object.control.AbstractConsent;
-import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.control.Veto;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.NakedObjectAssociation;
-import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.security.ClientSession;
-import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
@@ -25,18 +12,15 @@ import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Size;
+import org.nakedobjects.viewer.skylark.Skylark;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewDrag;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
-import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.DragContentIcon;
-import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 import org.apache.log4j.Logger;
 
@@ -46,38 +30,10 @@ public abstract class ObjectView extends AbstractView {
     
     public ObjectView(Content content, ViewSpecification design, ViewAxis axis) {
         super(content, design, axis);
-
         if (!(content instanceof ObjectContent) && !(content instanceof CollectionContent)) {
             throw new IllegalArgumentException("Content must be ObjectContent or AssociateContent: " + content);
         }
-
         getViewManager().addToNotificationList(this);
-    }
-
-    private Consent canDrop(NakedObject source, NakedObject target) {
-        Action action = dropAction(source, target);
-        Session session = ClientSession.getSession();
-        if (action != null) {
-            Hint about = target.getHint(session, action, new NakedObject[] {source});
-            return about.canUse();
-
-        } else {
-            if (target.getOid() != null && source.getOid() == null) {
-                return new Veto("Can't set field in persistent object with reference to non-persistent object");
-
-            } else {
-                NakedObjectField[] fields = target.getSpecification().getVisibleFields(target, session);
-                for (int i = 0; i < fields.length; i++) {
-                    if (source.getSpecification().isOfType(fields[i].getSpecification())) {
-                        if(target.getField(fields[i]) == null) {
-                            return new Allow("Set field " + target.getLabel(session, fields[i]));
-                        }
-                    }
-                }
-                return new Veto("No empty field accepting object of type " + source.getSpecification().getSingularName());
-
-            }
-        }
     }
 
     public void dispose() {
@@ -86,10 +42,8 @@ public abstract class ObjectView extends AbstractView {
     }
 
     public void dragIn(ContentDrag drag) {
-        NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
-        NakedObject target = (NakedObject) getObject();
-        Consent perm = canDrop(source, target);
-        if (perm.isAllowed()) {
+        Consent perm = getContent().canDrop(drag.getSourceContent());
+         if (perm.isAllowed()) {
             getViewManager().setStatus(perm.getReason());
             getState().setCanDrop();
         } else {
@@ -139,53 +93,18 @@ public abstract class ObjectView extends AbstractView {
     public void drop(ContentDrag drag) {
         Assert.assertTrue(drag.getSourceContent() instanceof ObjectContent);
 
-        NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
-        Assert.assertNotNull(source);
-
-        NakedObject target = (NakedObject) getObject();
-        Assert.assertNotNull(target);
-
-        if (canDrop(source, target).isAllowed()) {
-            Action action = dropAction(source, target);
-
-            if ((action != null) && target.getHint(ClientSession.getSession(), action, new NakedObject[] {source}).canUse().isAllowed()) {
-                Naked result = target.execute(action, new NakedObject[] {source});
-
-                if (result != null) {
-                    View view = ViewFactory.getViewFactory().createOpenRootView(result);
-                    Location location = new Location();
-                    location.move(10, 10);
-                    view.setLocation(location);
-                    getWorkspace().addView(view);
-                }
-
-                markDamaged();
-            } else {
-                NakedObjectField[] fields = target.getSpecification().getVisibleFields(target, ClientSession.getSession());
-                for (int i = 0; i < fields.length; i++) {
-                    if (source.getSpecification().isOfType(fields[i].getSpecification())
-                            && target.getField(fields[i]) == null) {
-                        target.setAssociation(((NakedObjectAssociation) fields[i]), source);
-                        invalidateContent();
-                        break;
-                    }
-                }
-            }
+        Naked result = getContent().drop(drag.getSourceContent());
+        if (result != null) {
+            View view = getWorkspace().createSubviewFor(result, false);
+            Location location = new Location();
+            location.move(10, 10);
+            view.setLocation(location);
+            getWorkspace().addView(view);
         }
+
+        markDamaged();
     }
 
-    private Action dropAction(NakedObject source, NakedObject target) {
-        Action action;
-        if (target.getObject() instanceof NakedClass) {
-            NakedObjectSpecification forNakedClass = ((NakedClass) target.getObject()).forObjectType();
-            action = forNakedClass.getClassAction(Action.USER, null, new NakedObjectSpecification[] { source
-                    .getSpecification() });
-        } else {
-            action = target.getSpecification().getObjectAction(Action.USER, null,
-                    new NakedObjectSpecification[] { source.getSpecification() });
-        }
-        return action;
-    }
 
     public void firstClick(Click click) {
         View subview = subviewFor(click.getLocation());
@@ -193,8 +112,8 @@ public abstract class ObjectView extends AbstractView {
             click.subtract(subview.getLocation());
             subview.firstClick(click);
         } else {
-            if (click.isButton2() || click.isButton1() && click.isAlt()) {
-                View view = ViewFactory.getViewFactory().createOpenRootView(getObject());
+            if (click.button2()) {
+                View view = getWorkspace().createSubviewFor(getContent().getNaked(), false);
                 Size size = view.getRequiredSize();
                 view.setSize(size);
                 Location location = new Location(click.getLocationWithinViewer());
@@ -205,9 +124,6 @@ public abstract class ObjectView extends AbstractView {
         }
     }
 
-    protected Naked getObject() {
-        return getContent().getNaked();
-    }
 
     public void secondClick(Click click) {
         View subview = subviewFor(click.getLocation());
@@ -217,60 +133,18 @@ public abstract class ObjectView extends AbstractView {
         } else {
             Location location = getAbsoluteLocation();
             location.translate(click.getLocation());
-            getWorkspace().addOpenViewFor(getObject(), location);
+            View openWindow = Skylark.getInstance().getViewFactory().createWindow(getContent());
+            openWindow.setLocation(location);
+            getWorkspace().addView(openWindow);
         }
-    }
-    
-    public void viewMenuOptions(MenuOptionSet options) {
-        if (getObject() instanceof UserContext) {
-            options.add(MenuOptionSet.VIEW, new MenuOption("New Workspace") {
-                public Consent disabled(View component) {
-                    return AbstractConsent.allow(getObject() instanceof UserContext);
-                }
-
-                public void execute(Workspace workspace, View view, Location at) {
-                    View newWorkspace;
-                    newWorkspace = ViewFactory.getViewFactory().createInnerWorkspace((NakedObject) getObject());
-                    newWorkspace.setLocation(at);
-                    getWorkspace().addView(newWorkspace);
-                    newWorkspace.markDamaged();
-                }
-            });
-        }
-        
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Class") {
-            public void execute(Workspace workspace, View view, Location at) {
-	 /* TODO reimplement
-                return getObjectManager().getNakedClass(getObject().getSpecification());
-                */
-            }
-        });
-
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Clone") {
-            public void execute(Workspace workspace, View view, Location at) {
-                /* TODO reimplement
-                AbstractNakedObject clone = (AbstractNakedObject) createInstance(getClass());
-    	        clone.copyObject(this);
-    	        clone.objectChanged();
-    	        
-    	        ViewFactory.getViewFactory().createInnerWorkspace(clone);
-                newWorkspace.setLocation(at);
-                getWorkspace().addView(newWorkspace);
-                newWorkspace.markDamaged();
-                */
-            }
-        });
-
-
-        super.viewMenuOptions(options);
     }
     
     public void updateView() {
-        if(((NakedObject) getObject()).isViewDirty()) {
+        if(getContent().objectChanged()) {
             LOG.debug("object changed; view updated: " + getView());
             getView().refresh();
-            ((NakedObject) getObject()).clearViewDirty();
         }
+
         super.updateView();
     }
     

@@ -7,17 +7,22 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
-public class CollectionElement implements ObjectContent {
+public class CollectionElement extends ObjectContent {
     private final NakedObject object;
 
     public CollectionElement(NakedObject object) {
         this.object = object;
     }
 
+    public boolean isObject() {
+        return true;
+    }
+    
     public Consent canClear() {
         return Veto.DEFAULT;
     }
@@ -30,10 +35,8 @@ public class CollectionElement implements ObjectContent {
         throw new NakedObjectRuntimeException("Invalid call");
     }
 
-    public String debugDetails() {
-        String type = getClass().getName();
-        type = type.substring(type.lastIndexOf('.') + 1);
-        return type + "\n" + "  object: " + object + "\n";
+    public void debugDetails(DebugString debug) {
+        debug.appendln(4, "element", object);
     }
     
     public String getIconName() {

@@ -4,7 +4,6 @@ import org.nakedobjects.application.system.ExplorationClock;
 import org.nakedobjects.application.valueholder.Date;
 import org.nakedobjects.application.valueholder.TextString;
 import org.nakedobjects.application.valueholder.Time;
-import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.exploration.AbstractExplorationFixture;
 import org.nakedobjects.xat.IllegalActionError;
@@ -12,7 +11,6 @@ import org.nakedobjects.xat.NakedAssertionFailedError;
 import org.nakedobjects.xat.TestClass;
 import org.nakedobjects.xat.TestNaked;
 import org.nakedobjects.xat.TestObject;
-import org.nakedobjects.xat.TestObjectImpl;
 import org.nakedobjects.xat.TestValue;
 
 
@@ -247,9 +245,9 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
          TestObject paymentMethod = (TestObject) customer.getField("Preferred Payment Method");
          customer.assertFieldContains("Preferred Payment Method", paymentMethod);
          customer.assertFieldContains("Preferred Payment Method", paymentMethod.getTitle());
-         customer.assertFieldContains("Preferred Payment Method", paymentMethod.getForObject().getObject());
+         customer.assertFieldContains("Preferred Payment Method", paymentMethod.getForNaked().getObject());
 
-         NakedObject original = (NakedObject) paymentMethod.getForObject();
+         NakedObject original = (NakedObject) paymentMethod.getForNaked();
          
          TestObject newCard = getTestClass(CreditCard.class.getName()).newInstance();
           customer.clearAssociation("Preferred Payment Method");
@@ -422,10 +420,21 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
         TestObject creditCard = getTestClass(CreditCard.class.getName()).newInstance();
         creditCard.fieldEntry("Number", "12345678901234567");
         
-        ((NakedObject) creditCard.getForObject()).getContext().getObjectManager().destroyObject((NakedObject) creditCard.getForObject());
+        ((NakedObject) creditCard.getForNaked()).getContext().getObjectManager().destroyObject((NakedObject) creditCard.getForNaked());
     }
     
     
+    public void testClassMethod() {
+        TestClass bookingClass = getTestClass(Booking.class.getName());
+        TestObject customer = getTestClass(Customer.class.getName()).newInstance();
+        
+        bookingClass.assertActionExists("create booking");
+        bookingClass.invokeAction("create booking");
+
+        bookingClass.assertActionExists("new booking", customer);
+        bookingClass.invokeAction("new booking", customer);
+     }
+
 /*
     public void story3ReturnBooking() {
         story("A Return Booking");

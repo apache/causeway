@@ -11,18 +11,20 @@ import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionParameterSet;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.security.ClientSession;
+import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.viewer.skylark.ParameterContent;
 import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
 /**
  * Links an action on an object to a view.
  */
-public class ActionContent implements ObjectContent {
+public class ActionContent extends ObjectContent {
     private final Action action;
-    private final ActionParameter[] parameters;
+    private final ParameterContent[] parameters;
     private final NakedObject target;
 
     public ActionContent(NakedObject target, Action action) {
@@ -62,7 +64,7 @@ public class ActionContent implements ObjectContent {
 
         // parameterSet = new ParameterSet(action);
         //parameterValues = parameterSet.getParameterValues();
-        parameters = new ActionParameter[numberParameters];
+        parameters = new ParameterContent[numberParameters];
 
         for (int i = 0; i < numberParameters; i++) {
             // change name using the hint
@@ -71,9 +73,9 @@ public class ActionContent implements ObjectContent {
             Object value = defaultValues[i] == null ? parameterValues[i] : PojoAdapter.createAdapter(defaultValues[i]);
 
             if (type.isValue()) {
-                parameters[i] = new ValueParameter(label, (Naked) value, type, this, i);
+                parameters[i] = new ValueParameter(label, (Naked) value, type, this);
             } else {
-                parameters[i] = new ObjectParameter(label, (Naked) value, type, this, i);
+                parameters[i] = new ObjectParameter(label, (Naked) value, type, this);
             }
         }
     }
@@ -90,13 +92,14 @@ public class ActionContent implements ObjectContent {
         throw new NakedObjectRuntimeException("Invalid call");
     }
 
-    public String debugDetails() {
+    public void debugDetails(DebugString debug) {
+        debug.appendln(4, "action", action);
+        debug.appendln(4, "target", target);
         String parameterSet = "";
         for (int i = 0; i < parameters.length; i++) {
-            ActionParameter element = parameters[i];
-            parameterSet += element;
+            parameterSet += parameters[i];
         }
-        return "ActionContent\n  action: " + action + "\n  object: " + target + "\n  parameters: " + parameterSet;
+        debug.appendln(4, "parameters", parameterSet);
     }
 
     public Consent disabled() {
@@ -108,17 +111,21 @@ public class ActionContent implements ObjectContent {
         return target.execute(action, parameterValues());
     }
 
+    public String getActionName() {
+        return target.getLabel(ClientSession.getSession(), action);
+    }
+
     public String getIconName() {
         return target.getIconName();
     }
 
     public Image getIconPicture(int iconHeight) {
         NakedObjectSpecification specification = target.getSpecification();
-        return  ImageFactory.getInstance().loadIcon(specification, "", iconHeight);
+        return ImageFactory.getInstance().loadIcon(specification, "", iconHeight);
     }
 
-    public String getName() {
-        return target.getLabel(ClientSession.getSession(), action);
+    public Naked getNaked() {
+        return target;
     }
 
     public int getNoParameters() {
@@ -128,12 +135,8 @@ public class ActionContent implements ObjectContent {
     public NakedObject getObject() {
         return target;
     }
-    
-    public Naked getNaked() {
-        return target;
-    }
 
-    public ActionParameter getParameter(int index) {
+    public ParameterContent getParameter(int index) {
         return parameters[index];
     }
 
@@ -149,6 +152,13 @@ public class ActionContent implements ObjectContent {
         return true;
     }
     
+    /**
+     * Can't pesist actions
+     */
+    public boolean isPersistable() {
+        return false;
+    }
+
     public void menuOptions(MenuOptionSet options) {}
 
     private Naked[] parameterValues() {
@@ -163,12 +173,12 @@ public class ActionContent implements ObjectContent {
         throw new NakedObjectRuntimeException("Invalid call");
     }
 
-    public String windowTitle() {
-        return action.getName();
-    }
-    
     public String title() {
         return "";
+    }
+
+    public String windowTitle() {
+        return getActionName();
     }
 }
 

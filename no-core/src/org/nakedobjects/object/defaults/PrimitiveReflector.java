@@ -81,6 +81,10 @@ public class PrimitiveReflector implements Reflector {
         return false;
     }
 
+    public boolean isPersistable() {
+        return false;
+    }
+
     public boolean isValue() {
         return true;
     }

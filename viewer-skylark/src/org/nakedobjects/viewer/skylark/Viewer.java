@@ -259,9 +259,20 @@ public class Viewer {
         Location at = click.getLocation();
         boolean forView = rootView.viewAreaType(new Location(click.getLocation())) == ViewAreaType.VIEW;
 
-        forView = (click.isCtrl() && !click.isShift()) ^ forView;
+/*        forView = (click.isCtrl() && !click.isShift()) ^ forView;
         boolean includeExploration = click.isShift() || explorationMode;
         boolean includeDebug = click.isShift() && click.isCtrl();
+*/
+        
+        forView = click.isAlt() ^ forView;
+        boolean includeExploration = click.isCtrl() || explorationMode;
+        boolean includeDebug = click.isShift() && click.isCtrl();
+     /*   
+        forView = click.button4() ^ forView;
+        boolean includeExploration = click.button5();//click.isShift() || explorationMode;
+        boolean includeDebug = click.button6(); //click.isShift() && click.isCtrl();
+        */
+
         popup.init(over, rootView, at, forView, includeExploration, includeDebug);
         setOverlayView(popup);
 

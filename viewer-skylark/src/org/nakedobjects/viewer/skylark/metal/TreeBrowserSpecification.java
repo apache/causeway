@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.defaults.FastFinder;
+import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.View;
 
 public class TreeBrowserSpecification extends org.nakedobjects.viewer.skylark.special.TreeBrowserSpecification {
@@ -14,9 +14,9 @@ public class TreeBrowserSpecification extends org.nakedobjects.viewer.skylark.sp
         return new WindowBorder(frame, false);
     }
     
-    public boolean canDisplay(Naked object) {
+    public boolean canDisplay(Content content) {
         // don't use this view for a finder
-        return super.canDisplay(object) && ! (object instanceof FastFinder);
+        return super.canDisplay(content) && ! (content.getNaked().getObject() instanceof FastFinder);
     }
 }
 

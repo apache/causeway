@@ -6,11 +6,11 @@ import org.nakedobjects.object.reflect.Action;
 
 public interface TestObject extends TestNaked {
 
-    public void assertActionExists(String name);
+    void assertActionExists(String name);
 
-    public void assertActionExists(String name, TestNaked parameter);
+    void assertActionExists(String name, TestNaked parameter);
 
-    public void assertActionExists(String name, TestNaked[] parameters);
+    void assertActionExists(String name, TestNaked[] parameters);
 
     /**
      * Check that the specified object menu item is currently invisible. If it
@@ -79,9 +79,7 @@ public interface TestObject extends TestNaked {
      * not contain the expected value the test fails.
      */
     void assertFieldContains(String fieldName, String expected);
-    
-    
-    
+
     void assertFieldContains(String message, String fieldName, Object expected);
 
     /**
@@ -158,10 +156,10 @@ public interface TestObject extends TestNaked {
      * object the test fails.
      */
     void assertFieldDoesNotContain(String fieldName, TestObject expected);
-    
-    public void assertFieldEntryCantParse(String fieldName, String value);
 
-    public void assertFieldEntryInvalid(String fieldName, String value);
+    void assertFieldEntryCantParse(String fieldName, String value);
+
+    void assertFieldEntryInvalid(String fieldName, String value);
 
     void assertFieldExists(String fieldName);
 
@@ -175,21 +173,18 @@ public interface TestObject extends TestNaked {
 
     void assertFirstElementInField(String fieldName, String expected);
 
-    
-    
     void assertFirstElementInField(String message, String fieldName, String expected);
-    
+
     void assertFirstElementInField(String message, String fieldName, TestObject expected);
-    
+
     void assertFirstElementInField(String fieldName, TestObject expected);
-    
+
     void assertLastElementInField(String fieldName, String expected);
-    
+
     void assertLastElementInField(String message, String fieldName, String expected);
 
-    
     void assertLastElementInField(String message, String fieldName, TestObject expected);
-    
+
     void assertLastElementInField(String fieldName, TestObject expected);
 
     void assertNoOfElements(String collectionName, int noOfElements);
@@ -271,20 +266,22 @@ public interface TestObject extends TestNaked {
 
     TestNaked getField(String fieldName);
 
-    TestObject getFieldAsObject(final String fieldName);
-
-    TestValue getFieldAsValue(final String fieldName);
-    
     /**
      * Get the view for the object held within the named collection view, that
      * has the specified title.
      */
     TestObject getField(String fieldName, String title);
 
+    TestObject getFieldAsObject(final String fieldName);
+
+    TestValue getFieldAsValue(final String fieldName);
+
     /**
      * returns the title of the object as a String
      */
     String getFieldTitle(String field);
+
+    Object getForObject();
 
     /**
      * Invokes this object's zero-parameter action method of the the given name.

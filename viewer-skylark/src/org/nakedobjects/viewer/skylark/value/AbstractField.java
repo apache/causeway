@@ -1,10 +1,8 @@
 package org.nakedobjects.viewer.skylark.value;
 
 import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
@@ -14,15 +12,15 @@ import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
+import org.nakedobjects.viewer.skylark.Skylark;
 import org.nakedobjects.viewer.skylark.Style;
-import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.BackgroundTask;
-import org.nakedobjects.viewer.skylark.util.ViewFactory;
+import org.nakedobjects.viewer.skylark.core.BackgroundThread;
 
 
 public abstract class AbstractField extends AbstractView {
@@ -37,8 +35,7 @@ public abstract class AbstractField extends AbstractView {
     }
 
     public boolean canChangeValue() {
-        // TODO need to check whether a value can be edited
-        return getValueContent().getValueHint(ClientSession.getSession(), "").canUse().isAllowed(); //canChangeValue();
+        return getContent().getHint().canUse().isAllowed();
     }
     
     /**
@@ -123,10 +120,6 @@ public abstract class AbstractField extends AbstractView {
         throw new NotImplementedException();
     }
 
-    public final NakedValue getValue() {
-        return ((ValueContent) getContent()).getObject();
-    }
-
     public boolean hasFocus() {
         return getViewManager().hasFocus(getView());
     }
@@ -161,20 +154,20 @@ public abstract class AbstractField extends AbstractView {
      */
     public void keyTyped(char keyCode) {}
 
-    public void menuOptions(MenuOptionSet options) {
+    public void contentMenuOptions(MenuOptionSet options) {
         options.add(MenuOptionSet.OBJECT, new ClearValueOption());
         options.add(MenuOptionSet.OBJECT, new CopyValueOption());
         options.add(MenuOptionSet.OBJECT, new PasteValueOption());
         if (getView().getSpecification().isReplaceable()) {
-            replaceOptions(ViewFactory.getViewFactory().valueViews(getContent(), this), options);
+            replaceOptions(Skylark.getInstance().getViewFactory().valueViews(getContent(), this), options);
         }
 
-        super.menuOptions((options));
+        super.contentMenuOptions((options));
         options.setColor(Style.VALUE_MENU);
     }
 
     protected final void initiateSave() {
-        run(new BackgroundTask() {
+       BackgroundThread.run(this, new BackgroundTask() {
             protected void execute() {
                 save();
                 getParent().updateView();
@@ -190,24 +183,13 @@ public abstract class AbstractField extends AbstractView {
     }
 
     protected void parseEntry(String entryText) throws InvalidEntryException {
-        ValueContent valueContent = getValueContent();
-        Hint about = valueContent.getValueHint(ClientSession.getSession(), entryText);
-        if(about.isValid().isVetoed()) {
-            throw new InvalidEntryException(about.isValid().getReason());
-        }
-        valueContent.parseEntry(entryText);
+        getContent().parseTextEntry(entryText);
     }
 
     public String toString() {
         String cls = getClass().getName();
-        NakedValue value = null;
-
-        try {
-            value = getValue();
-        } catch (NullPointerException ignore) {
-        }
-
-        return cls.substring(cls.lastIndexOf('.') + 1) + getId() + " [location=" + getLocation() + ",object=" + value + "]";
+        Naked naked = getContent().getNaked();
+        return cls.substring(cls.lastIndexOf('.') + 1) + getId() + " [location=" + getLocation() + ",object=" + (naked == null ? "" : naked.getObject()) + "]";
     }
 
     public ViewAreaType viewAreaType(Location mouseLocation) {
@@ -217,11 +199,11 @@ public abstract class AbstractField extends AbstractView {
     public int getBaseline() {
         return Style.defaultBaseline();
     }
-
+/*
     protected ValueContent getValueContent() {
         return ((ValueContent) getContent());
     }
-
+*/
     public Size getRequiredSize() {
         return new Size(0, Style.defaultFieldHeight());
     }

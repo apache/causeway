@@ -16,11 +16,15 @@ public class TestValueImpl implements TestValue {
         throw new NotImplementedException();
     }
 
-    public Naked getForObject() {
+    public final Naked getForNaked() {
         return object;
     }
+    
+    public final Object getForObject() {
+        return object.getObject();
+    }
 
-    public void setForObject(Naked object) {
+    public void setForNaked(Naked object) {
         this.object = (NakedValue) object;
     }
 

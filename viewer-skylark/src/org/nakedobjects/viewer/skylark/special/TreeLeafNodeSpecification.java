@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
@@ -20,8 +19,8 @@ import org.nakedobjects.viewer.skylark.core.ObjectView;
 class TreeLeafNodeSpecification implements ViewSpecification, TreeNodeSpecification {
 	private ViewSpecification replacementNodeSpecification;
 
-	public boolean canDisplay(Naked object) {
-	    return TreeDisplayRules.canDisplay(object);
+	public boolean canDisplay(Content content) {
+	    return content.isObject() && TreeDisplayRules.canDisplay(content.getNaked());
 	}
 
 	public boolean canOpen(Content content) {

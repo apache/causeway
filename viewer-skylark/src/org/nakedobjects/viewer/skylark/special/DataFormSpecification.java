@@ -12,6 +12,7 @@ import org.nakedobjects.viewer.skylark.basic.WindowDecorator;
 import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
+
 public class DataFormSpecification extends AbstractCompositeViewSpecification {
 
     private static class DataFormSubviews implements SubviewSpec {
@@ -37,6 +38,10 @@ public class DataFormSpecification extends AbstractCompositeViewSpecification {
 
     public DataFormSpecification() {
         builder = new WindowDecorator(new StackLayout(new ObjectFieldBuilder(new DataFormSubviews())));
+    }
+
+    public boolean canDisplay(Content content) {
+        return content.isObject();
     }
 
     public View createView(Content content, ViewAxis axis) {

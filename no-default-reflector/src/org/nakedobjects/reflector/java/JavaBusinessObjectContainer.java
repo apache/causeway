@@ -109,7 +109,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     }
 
     public void save(Object object) {
-
+        objectManger.saveChanges();
     }
 
     /**

@@ -16,11 +16,11 @@ public class TestCollectionImpl implements TestCollection {
         this.collection = collection;
     }
 
-    public Naked getForObject() {
+    public Naked getForNaked() {
         return collection;
     }
 
-    public void setForObject(Naked object) {
+    public void setForNaked(Naked object) {
         if(object instanceof NakedCollection) {
             collection = (NakedCollection) object;
         } else {

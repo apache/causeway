@@ -1,8 +1,7 @@
-package org.nakedobjects.reflector.java.value;
+package org.nakedobjects.object.reflect.valueadapter;
 
-import org.nakedobjects.application.ValueParseException;
 import org.nakedobjects.object.InvalidEntryException;
-import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;
+import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.value.FloatingPointValue;
 
 import java.text.NumberFormat;
@@ -37,7 +36,7 @@ public class FloatAdapter extends AbstractNakedValue implements FloatingPointVal
             try {
                 value = FORMAT.parse(entry).doubleValue();
             } catch (ParseException e) {
-                throw new ValueParseException("Invalid number", e);
+                throw new TextEntryParseException("Invalid number", e);
             }
         }
     }

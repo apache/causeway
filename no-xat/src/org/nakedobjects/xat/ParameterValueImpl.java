@@ -30,15 +30,15 @@ public class ParameterValueImpl implements TestValue {
      returns the title of the object as a String
      */
     public String getTitle() {
-        return getForObject().titleString().toString();
+        return getForNaked().titleString().toString();
     }
 
-    public Naked getForObject() {
+    public Naked getForNaked() {
         return PojoAdapter.createAdapter(object);
  //       return PojoAdapter.createAdapter(value);
     }
 
-    public void setForObject(Naked value) {
+    public void setForNaked(Naked value) {
         throw new NakedObjectRuntimeException();
         //this.value =value;
     }

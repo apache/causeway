@@ -5,14 +5,19 @@ import org.nakedobjects.object.NakedObject;
 
 
 public interface Workspace extends View {
+
+    View addIconFor(Naked naked, Location at);
+
     View addOpenViewFor(Naked object, Location at);
 
+    View createSubviewFor(Naked object, boolean asIcon);
+
     void lower(View view);
-    
+
     void raise(View view);
 
     void removeViewsFor(NakedObject object);
- }
+}
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
  * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group

@@ -130,8 +130,10 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
             
             objectManager.endTransaction();
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("remove method expects a " + getType().getFullName() + " object; not a "
-                    + associate.getClass().getName());
+            throw new IllegalArgumentException(e.getMessage() + " object: " + inObject.getObject() + ", parameter: " + associate.getObject()); 
+            // TODO remove - this exception can be: for a invalid object; or for invalid parameters
+             //remove method expects a " + getType().getFullName() + " object; not a "
+                 //   + associate.getObject().getClass().getName());
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + addMethod, e);
         } catch (IllegalAccessException ignore) {

@@ -10,8 +10,8 @@ import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.core.AbstractViewDecorator;
-import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 public class ClassIconBackground extends AbstractViewDecorator {
 
@@ -29,12 +29,13 @@ public class ClassIconBackground extends AbstractViewDecorator {
 		NakedObject object = ((ObjectContent) getContent()).getObject();
 		Action action = object.getSpecification().getObjectAction(Action.USER, "Instances");
 		NakedCollection instances = (NakedCollection) object.execute(action, null);
-		View view = ViewFactory.getViewFactory().createOpenRootView(instances);
+		Workspace workspace = getWorkspace();
+        View view = workspace.createSubviewFor(instances, false);
 		view.setLocation(click.getLocation());
-		getWorkspace().addView(view);
+		workspace.addView(view);
 	}
 	
-	public void menuOptions(MenuOptionSet options) {
+	public void contentMenuOptions(MenuOptionSet options) {
     	NakedObject object = ((ObjectContent) getContent()).getObject();
 		NakedClass cls = (NakedClass) object.getObject();
 		ClassOption.menuOptions(cls.forObjectType(), options);

@@ -54,9 +54,8 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
 		builder = new StackLayout(new ObjectFieldBuilder(new DataFormSubviews()));
 	}
 
-    public boolean canDisplay(Naked object) {
-        // use this view for a finder
-        return super.canDisplay(object) && (object.getObject() instanceof FastFinder);
+    public boolean canDisplay(Content content) {
+        return content.isObject() && content.getNaked().getObject() instanceof FastFinder;
     }
 	
     public View createView(Content content, ViewAxis axis) {

@@ -26,8 +26,8 @@ import org.nakedobjects.viewer.skylark.util.ImageFactory;
 public class EmptyField extends AbstractView {
 
     public static class Specification implements ViewSpecification {
-        public boolean canDisplay(Naked object) {
-            return object == null;
+        public boolean canDisplay(Content content) {
+            return content == null || content.getNaked() == null;
         }
 
         public View createView(Content content, ViewAxis axis) {
@@ -166,8 +166,8 @@ public class EmptyField extends AbstractView {
         return size;
     }
 
-    public void menuOptions(MenuOptionSet options) {
-        ((ObjectContent) getContent()).menuOptions(options);
+    public void contentMenuOptions(MenuOptionSet options) {
+        getContent().menuOptions(options);
         options.setColor(Style.CONTENT_MENU);
     }
 

@@ -35,7 +35,7 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
      */
     public TestObject findInstance(String title) {
         NakedObjectContext context = NakedObjectContext.getDefaultContext();
-        NakedObjectSpecification type = ((NakedClass) getForObject().getObject()).forObjectType();
+        NakedObjectSpecification type = ((NakedClass) getForNaked().getObject()).forObjectType();
         TypedNakedCollection instances = context.getObjectManager().findInstances(type, title, true);
         if (instances.size() == 0) {
             throw new IllegalActionError("No instance found with title " + title);
@@ -48,10 +48,10 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
     /**
      * Returns the NakedClass that this view represents.
      */
-    public final Naked getForObject() {
+    public final Naked getForNaked() {
         return PojoAdapter.createAdapter(nakedClass);
     }
-
+  
     public String getTitle() {
         return nakedClass.getSingularName();
     }
@@ -61,7 +61,7 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
      */
     public TestCollection instances() {
         NakedObjectContext context = NakedObjectContext.getDefaultContext();
-        NakedCollection instances = context.getObjectManager().allInstances(((NakedClass) getForObject()).forObjectType(), false);
+        NakedCollection instances = context.getObjectManager().allInstances(((NakedClass) getForNaked()).forObjectType(), false);
         if (instances.size() == 0) {
             throw new IllegalActionError("Find must find at least one object");
         } else {
@@ -101,17 +101,15 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
         return object;
     }
 
-    public void setForObject(Naked object) {
+    public void setForNaked(Naked object) {
         throw new NakedObjectRuntimeException();
     }
-  
-    protected Action getAction(NakedObjectSpecification nakedClass, String name) {
-        return nakedClass.getClassAction(Action.USER, name);
-    }
     
-    protected Action getAction(NakedObjectSpecification nakedClass, String name,
-            NakedObjectSpecification[] parameterClasses) {
-        return nakedClass.getClassAction(Action.USER, simpleName(name), parameterClasses);}
+    protected Action getAction(String name, NakedObjectSpecification[] parameterClasses) {
+        NakedObjectSpecification spec = this.nakedClass.forObjectType();
+        return spec.getClassAction(Action.USER, simpleName(name), parameterClasses);
+        
+    }
 }
 
 /*

@@ -10,7 +10,6 @@ import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
-import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 
 public class FindAllOption extends MenuOption {
@@ -25,7 +24,7 @@ public class FindAllOption extends MenuOption {
 
         Naked object = (instances.size() == 1) ? (Naked) instances.elements().nextElement() : instances;
 
-        View newView = ViewFactory.getViewFactory().createOpenRootView(object);
+        View newView = workspace.createSubviewFor(object, false);
 
         newView.setLocation(at);
 

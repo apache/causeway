@@ -28,7 +28,7 @@ public class TimingTestClass extends TestClassDecorator {
         timer.userDelay(4, 8);
         timer.start();
         TestObject instance = super.newInstance();
-        instance.getForObject();
+        instance.getForNaked();
         timer.stop();
        doc.record(timer);
         return instance;

@@ -9,20 +9,23 @@ import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.security.ClientSession;
+import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.viewer.skylark.basic.ClassOption;
 import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 import org.nakedobjects.viewer.skylark.basic.RemoveOneToOneAssociationOption;
 import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
-public class OneToOneField extends ObjectField implements ObjectContent {
+public class OneToOneField extends ObjectContent implements FieldContent {
     private static final UserAction REMOVE_ASSOCIATION = new RemoveOneToOneAssociationOption();
+    private final ObjectField field;
     private final NakedObject object;
 
     public OneToOneField(NakedObject parent, NakedObject object, OneToOneAssociation association) {
-        super(parent, association);
+        field = new ObjectField(parent, association);
         this.object = object;
     }
 
@@ -72,8 +75,25 @@ public class OneToOneField extends ObjectField implements ObjectContent {
         //        getOneToOneAssociation().clearAssociation(getParent(), object);
     }
 
-    public String debugDetails() {
-        return super.debugDetails() + "  object:    " + object + "\n" + "  parent:    " + getParent() + "\n";
+    public void debugDetails(DebugString debug) {
+        field.debugDetails(debug);
+        debug.appendln(4, "object", object);
+    }
+
+    private OneToOneAssociation getField() {
+        return (OneToOneAssociation) field.getFieldReflector();
+    }
+
+    public String getFieldName() {
+        return field.getName();
+    }
+
+    public NakedObjectField getFieldReflector() {
+        return field.getFieldReflector();
+    }
+
+    public Hint getHint() {
+        return getParent().getHint(ClientSession.getSession(), getField(), null);
     }
 
     public String getIconName() {
@@ -97,6 +117,10 @@ public class OneToOneField extends ObjectField implements ObjectContent {
         return (OneToOneAssociation) getField();
     }
 
+    private NakedObject getParent() {
+        return field.getParent();
+    }
+
     public NakedObjectSpecification getSpecification() {
         return getOneToOneAssociation().getSpecification();
     }
@@ -105,12 +129,15 @@ public class OneToOneField extends ObjectField implements ObjectContent {
         return getOneToOneAssociation().getSpecification().isLookup();
     }
 
+    public boolean isObject() {
+        return true;
+    }
+
     public boolean isTransient() {
         return object != null && !object.isPersistent();
     }
 
     public void menuOptions(MenuOptionSet options) {
-        super.menuOptions(options);
         if (getObject() == null) {
             ClassOption.menuOptions(getOneToOneAssociation().getSpecification(), options);
         } else {
@@ -138,6 +165,10 @@ public class OneToOneField extends ObjectField implements ObjectContent {
 
     public String toString() {
         return getObject() + "/" + getField();
+    }
+
+    public String windowTitle() {
+        return title();
     }
 }
 

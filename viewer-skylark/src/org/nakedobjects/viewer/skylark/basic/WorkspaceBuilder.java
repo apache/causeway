@@ -12,9 +12,11 @@ import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
+import org.nakedobjects.viewer.skylark.Skylark;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.core.AbstractViewBuilder;
+import org.nakedobjects.viewer.skylark.util.ContentFactory;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 import java.util.Enumeration;
@@ -32,8 +34,9 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
 
         if (object != null && view.getSubviews().length == 0) {
             NakedObjectField[] flds = object.getSpecification().getVisibleFields(object, ClientSession.getSession());
-            ViewFactory factory = ViewFactory.getViewFactory();
-
+            ViewFactory viewFactory = Skylark.getInstance().getViewFactory();
+            ContentFactory contentFactory = Skylark.getInstance().getContentFactory();
+            
             for (int f = 0; f < flds.length; f++) {
                 NakedObjectField field = flds[f];
                 Naked attribute = object.getField(field);
@@ -42,7 +45,9 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
                     Enumeration elements = ((InternalCollection) attribute).elements();
                     while (elements.hasMoreElements()) {
                         NakedObject cls = (NakedObject) elements.nextElement();
-                        View classIcon = factory.createIconizedRootView(cls);
+                        Content content = contentFactory.createRootContent(cls);
+                        View classIcon = viewFactory.createIcon(content);
+                        //View classIcon = viewFactory.createWorkspaceIcon(cls);
                         classIcon.setLocation(WorkspaceBuilder.UNPLACED);
                         view.addView(classIcon);
                     }
@@ -51,7 +56,9 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
                     Enumeration elements = ((InternalCollection) attribute).elements();
                     while (elements.hasMoreElements()) {
                         NakedObject obj = (NakedObject) elements.nextElement();
-                        View objectIcon = factory.createIconizedRootView(obj);
+                        Content content = contentFactory.createRootContent(obj);
+                        View objectIcon = viewFactory.createIcon(content);
+                        //View objectIcon = viewFactory.createWorkspaceIcon(obj);
                         view.addView(objectIcon);
                     }
                 }

@@ -1,10 +1,10 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.viewer.skylark.ViewAxis;
-import org.nakedobjects.viewer.skylark.core.CompositeObjectView;
+import org.nakedobjects.viewer.skylark.core.CompositeView;
 
 public class LabelAxis implements ViewAxis {
-    CompositeObjectView container;
+    CompositeView container;
     int width;
     
     public void accommodateWidth(int width) {

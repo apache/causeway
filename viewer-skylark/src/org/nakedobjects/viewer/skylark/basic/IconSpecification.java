@@ -1,12 +1,11 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
+
 
 
 public abstract class IconSpecification implements ViewSpecification {
@@ -22,13 +21,12 @@ public abstract class IconSpecification implements ViewSpecification {
 		this.isReplaceable = isReplaceable;
 	}
 	
-	public boolean canDisplay(Naked object) {
-		return object instanceof NakedObject && object != null;
+	public boolean canDisplay(Content content) {
+		return content.isObject() && content.getNaked() != null;
 	}
 	
 	public View createView(Content content, ViewAxis axis) {
 		return new ObjectBorder(new IconOpenAction(new IconView(content, this, axis, Style.NORMAL)));
-//		return new SimpleBorder(1, new CloseIcon(new IconView(content, this, axis, Style.NORMAL)));
     }
 
 	public String getName() {

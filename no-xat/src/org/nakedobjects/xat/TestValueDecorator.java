@@ -14,16 +14,16 @@ public class TestValueDecorator implements TestValue {
         wrappedObject.fieldEntry(value);
     }
 
-    public Naked getForObject() {
-        return wrappedObject.getForObject();
+    public Naked getForNaked() {
+        return wrappedObject.getForNaked();
     }
-
+    
     public String getTitle() {
         return wrappedObject.getTitle();
     }
 
-    public void setForObject(Naked object) {
-        wrappedObject.setForObject(object);
+    public void setForNaked(Naked object) {
+        wrappedObject.setForNaked(object);
     }
 
 }

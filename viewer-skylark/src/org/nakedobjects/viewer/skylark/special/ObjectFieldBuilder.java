@@ -17,14 +17,13 @@ import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.FieldContent;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.ObjectField;
 import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.core.AbstractViewBuilder;
-import org.nakedobjects.viewer.skylark.core.CompositeObjectView;
+import org.nakedobjects.viewer.skylark.core.CompositeView;
 import org.nakedobjects.viewer.skylark.util.FieldErrorView;
 
 import org.apache.log4j.Logger;
@@ -53,8 +52,8 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         LOG.debug("rebuild view " + view + " for " + object);
 
         NakedObjectSpecification cls = null;
-        if(useFieldType && content instanceof ObjectField) {
-            cls = object.getSpecification();cls = ((ObjectField) content).getSpecification();
+        if(useFieldType) {
+            cls = content.getSpecification();  //cls = ((ObjectField) content).getSpecification();
         } 
         if(cls == null) {
             cls = object.getSpecification();
@@ -71,15 +70,15 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
     }
 
     public View createCompositeView(Content content, CompositeViewSpecification specification, ViewAxis axis) {
-        return new CompositeObjectView(content, specification, axis);
+        return new CompositeView(content, specification, axis);
     }
 
-    private ObjectField createContent(NakedObject parent, Naked object, NakedObjectField field) {
+    private Content createContent(NakedObject parent, Naked object, NakedObjectField field) {
         if (field == null) {
             throw new NullPointerException();
         }
 
-        ObjectField content;
+        Content content;
         if (field instanceof OneToManyAssociation) {
             content = new OneToManyField(parent, (InternalCollection) object, (OneToManyAssociation) field);
         } else if (field.isValue()) {
@@ -103,7 +102,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
             NakedObjectField field = flds[f];
             try {
                 Naked value = object.getField(field);
-                ObjectField content = createContent(object, value, field);
+                Content content = createContent(object, value, field);
                 View fieldView = subviewDesign.createSubview(content, view.getViewAxis());
                 if (fieldView != null) {
                     view.addView(decorateSubview(fieldView));
@@ -124,7 +123,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
 
         for (int i = 0; i < subviews.length; i++) {
             View subview = subviews[i];
-            while (((FieldContent) subview.getContent()).getField() != flds[fld]) {
+            while (((FieldContent) subview.getContent()).getFieldReflector() != flds[fld]) {
                 fld++;
             }
             Assert.assertTrue(fld < flds.length);

@@ -14,6 +14,8 @@ import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
+import org.nakedobjects.viewer.skylark.core.BackgroundTask;
+import org.nakedobjects.viewer.skylark.core.BackgroundThread;
 
 import org.apache.log4j.Logger;
 
@@ -62,24 +64,30 @@ class ImmediateObjectOption extends MenuOption {
 		}
     }
 
-    public void execute(Workspace workspace, View view, Location at) {
-        Naked returnedObject;
-        try {
-	        returnedObject = object.execute(action, null);
-	    } catch (Exception e) {
-        	returnedObject = PojoAdapter.createAdapter(object.getContext().getObjectManager().generatorError("System error",e));
-        }
-        if (returnedObject != null) {
-            if(returnedObject instanceof NakedError) {
-                Logger.getLogger(getClass()).error(((NakedError)returnedObject));
-                workspace.addOpenViewFor(returnedObject, at);
-            } else {
-                if(!(returnedObject instanceof Naked)) {
-                    returnedObject = PojoAdapter.createAdapter(returnedObject);
-                }
-                view.objectActionResult(returnedObject, at);
+    public void execute(final Workspace workspace, final View view, final Location at) {
+        
+        BackgroundThread.run(view, new BackgroundTask() {
+            protected void execute() {
+		        Naked returnedObject;
+		        try {
+			        returnedObject = object.execute(action, null);
+			    } catch (Exception e) {
+		        	returnedObject = PojoAdapter.createAdapter(object.getContext().getObjectManager().generatorError("System error",e));
+		        }
+		        if (returnedObject != null) {
+		            if(returnedObject instanceof NakedError) {
+		                Logger.getLogger(getClass()).error(((NakedError)returnedObject));
+		                workspace.addOpenViewFor(returnedObject, at);
+		            } else {
+		                if(!(returnedObject instanceof Naked)) {
+		                    returnedObject = PojoAdapter.createAdapter(returnedObject);
+		                }
+		                view.objectActionResult(returnedObject, at);
+		            }
+		        }
+                
             }
-        }
+            });
     }
 
     public String toString() {

@@ -50,9 +50,9 @@ public class NakedObjectSpecificationLoaderImpl extends NakedObjectSpecification
                 if(InternalNakedObject.class.isAssignableFrom(cls) || cls.getName().startsWith("java.")) {
                     reflector = new InternalReflector(className);
                 } else {
-		            reflector = reflectorFactory.createReflector(className);
+    	            reflector = reflectorFactory.createReflector(className);
                 }
-
+    
                 LOG.info("Initialising specification for " + className);
                 NakedObjectSpecificationImpl spec = new NakedObjectSpecificationImpl();
                 classes.put(className, spec);
@@ -62,8 +62,8 @@ public class NakedObjectSpecificationLoaderImpl extends NakedObjectSpecification
                 LOG.debug("non class " + className);     
                 NakedObjectSpecificationImpl spec = new NakedObjectSpecificationImpl();
                 spec.nonReflect(className);
-	            classes.put(className, spec);
-	            return spec;
+                classes.put(className, spec);
+                return spec;
             }
                     
         }

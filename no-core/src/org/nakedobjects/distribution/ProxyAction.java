@@ -37,7 +37,7 @@ public final class ProxyAction implements ActionPeer {
             ObjectData targetObjectData = connection.executeAction(ClientSession.getSession(), getType().getName(), getName(),
                     parameterTypes, target.getOid(), target.getSpecification().getFullName(), parameterObjectData);
             NakedObject returnedObject;
-            returnedObject = targetObjectData == null ? null : targetObjectData.recreate(loadedObjects);
+            returnedObject = targetObjectData == null ? null : ObjectDataHelper.recreate(loadedObjects, targetObjectData);
             return returnedObject;
         } else {
             return local.execute(target, parameters);

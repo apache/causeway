@@ -79,7 +79,7 @@ public class ServerDistribution implements ClientDistribution {
         Naked[] parameters = new Naked[parameterData.length];
         for (int i = 0; i < parameters.length; i++) {
             if (parameterData[i] != null) {
-                parameters[i] = parameterData[i].recreate(loadedObjects);
+                parameters[i] = ObjectDataHelper.recreate(loadedObjects, parameterData[i]);
             }
         }
         NakedObject result = (NakedObject) object.execute(action, parameters);
@@ -119,7 +119,7 @@ public class ServerDistribution implements ClientDistribution {
     }
 
     public Oid[] makePersistent(Session session, ObjectData data) {
-        NakedObject object = data.recreate(loadedObjects);
+        NakedObject object = ObjectDataHelper.recreate(loadedObjects, data);
         objectFactory.recreatedObject(object.getObject());
         objectManager.makePersistent(object);
         return new Oid[] { object.getOid() };

@@ -125,6 +125,7 @@ public class EcsStandalone {
             viewer.setListener(new ObjectViewingMechanismListener() {
                 public void viewerClosing() {
                     System.out.println("EXITED");
+                    System.exit(0);
                 }
             });
 

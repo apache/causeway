@@ -168,17 +168,14 @@ public class TreeNodeBorder extends AbstractBorder {
  		}
  	}
  	
-	public void menuOptions(MenuOptionSet options) {
-	    if(getContent() instanceof OneToManyField) {
+	public void contentMenuOptions(MenuOptionSet options) {
+/*	    if(getContent() instanceof OneToManyField) {
 	        NakedObjectSpecification nakedClass = ((OneToManyField) getContent()).getSpecification();
-	       	//TypedNakedCollection collection = (TypedNakedCollection) ((OneToManyField) getContent()).getCollection();
-	       // NakedObjectSpecification nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(collection.getElementSpecification().getFullName());
-	        
 	        ClassOption.menuOptions(nakedClass, options);
-	        
 		    // TODO same as InternalCollectionBorder
 	    }
-        super.menuOptions(options);
+	*/
+        super.contentMenuOptions(options);
         TreeDisplayRules.menuOptions(options);
     }
 	
@@ -186,10 +183,10 @@ public class TreeNodeBorder extends AbstractBorder {
         if(getContent() instanceof OneToManyField) {
 	        // same as InternalCollectionBorder
             OneToManyField internalCollectionContent = (OneToManyField) getContent();
-            OneToManyAssociation field = (OneToManyAssociation) internalCollectionContent.getField();
+            OneToManyAssociation field = internalCollectionContent.getOneToManyAssociation();
             NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
 
-            Hint about = target.getHint(ClientSession.getSession(), field, (NakedObject) result);
+            Hint about = target.getHint(ClientSession.getSession(), field, result);
             if(about.canUse().isAllowed()) {
 //	          if(field.canAssociate(target, (NakedObject) result)) {
 	        	target.setAssociation(field, (NakedObject) result);

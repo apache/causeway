@@ -1,12 +1,11 @@
 package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.OneToOneField;
+import org.nakedobjects.viewer.skylark.ParameterContent;
 import org.nakedobjects.viewer.skylark.View;
-import org.nakedobjects.viewer.skylark.basic.ActionParameter;
 
 
 public class LookupBorder extends OpenOptionFieldBorder {
@@ -25,11 +24,9 @@ public class LookupBorder extends OpenOptionFieldBorder {
         Content content = getContent();
         if(content instanceof OneToOneField) {
             OneToOneField oneToOneField = ((OneToOneField) content);
-            Hint about = oneToOneField.getParent().getHint(ClientSession.getSession(), oneToOneField.getField(), null);
-            //About about = ((OneToOneAssociation) oneToOneField.getField()).getAbout(ClientSession.getSession(), oneToOneField.getParent(), null);
-            oneToOneField.getParent();
-            return about.canUse().isAllowed();
-        } else if(content instanceof ActionParameter) {
+            Hint hint = oneToOneField.getHint();
+            return hint.canUse().isAllowed();
+        } else if(content instanceof ParameterContent) {
             return true;
         } else {
             return false;

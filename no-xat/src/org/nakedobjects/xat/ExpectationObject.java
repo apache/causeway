@@ -23,7 +23,7 @@ public class ExpectationObject {
      * @param viewer org.nakedobjects.mockobject.View
      */
     public void addActual(TestObject viewer) {
-        NakedObject obj = (NakedObject) viewer.getForObject();
+        NakedObject obj = (NakedObject) viewer.getForNaked();
 
         if (!obj.getClass().isAssignableFrom(type)) {
             Assert.fail("Expected an object of type " + type.getName() + " but got a " + obj.getClass().getName());
@@ -42,7 +42,7 @@ public class ExpectationObject {
 
     public void addExpectedReference(String name, TestObject view) {
         checkFieldUse(name);
-        expectedReferences.put(name, new ExpectationValue((NakedObject) view.getForObject()));
+        expectedReferences.put(name, new ExpectationValue((NakedObject) view.getForNaked()));
         setHasExpectations();
     }
 
@@ -86,7 +86,7 @@ public class ExpectationObject {
         e = expectedReferences.keys();
         while (e.hasMoreElements()) {
             String fieldName = (String) e.nextElement();
-            NakedObject fieldValue = (NakedObject) actual.getField(fieldName).getForObject();
+            NakedObject fieldValue = (NakedObject) actual.getField(fieldName).getForNaked();
             NakedObject ref = ((ExpectationValue) expectedReferences.get(fieldName)).getReference();
 
             Assert.assertEquals("Wrong reference for " + fieldName, ref, fieldValue);

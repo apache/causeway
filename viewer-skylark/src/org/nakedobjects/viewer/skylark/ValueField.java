@@ -3,6 +3,7 @@ package org.nakedobjects.viewer.skylark;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.TextEntryParseException;
@@ -14,19 +15,37 @@ import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Session;
+import org.nakedobjects.utility.DebugString;
 
 
-public class ValueField extends ObjectField implements ValueContent {
-    // TODO change to NakedValue
+public class ValueField extends ValueContent implements FieldContent {
+    private final ObjectField field;
     private NakedValue object;
 
     public ValueField(NakedObject parent, NakedValue object, OneToOneAssociation association) {
-        super(parent, association);
+        field = new ObjectField(parent, association);
         this.object = object;
     }
 
-    public String debugDetails() {
-        return super.debugDetails() + "  object:    " + object + "\n" + "  parent:    " + getParent() + "\n";
+    public void clear() {
+        getParent().clearValue(getOneToOneAssociation());
+    }
+
+    public void debugDetails(DebugString debug) {
+        field.debugDetails(debug);
+        debug.appendln(4, "object", object);
+    }
+
+    private NakedObjectField getField() {
+        return field.getFieldReflector();
+    }
+
+    public String getFieldName() {
+        return field.getName();
+    }
+
+    public NakedObjectField getFieldReflector() {
+        return field.getFieldReflector();
     }
 
     public String getIconName() {
@@ -45,16 +64,21 @@ public class ValueField extends ObjectField implements ValueContent {
         return (OneToOneAssociation) getField();
     }
 
+    private NakedObject getParent() {
+        return field.getParent();
+    }
+
     public NakedObjectSpecification getSpecification() {
         return getOneToOneAssociation().getSpecification();
     }
 
-    private String getValue() {
-        return null;
-    }
-
     public Hint getValueHint(Session session, String entryText) {
         NakedValue example = (NakedValue) getSpecification().acquireInstance();
+
+        if (example == null) {
+            throw new NakedObjectRuntimeException("Can't create an instance of " + getSpecification());
+        }
+
         try {
             example.parseTextEntry(entryText);
         } catch (final InvalidEntryException e) {
@@ -68,22 +92,49 @@ public class ValueField extends ObjectField implements ValueContent {
         return getParent().getHint(ClientSession.getSession(), (NakedObjectField) getField(), example);
     }
 
+    public boolean isEmpty() {
+        return getParent().isEmpty(getField());
+    }
+
     public boolean isTransient() {
         return false;
     }
 
+    public boolean isValue() {
+        return true;
+    }
+
     public void parseEntry(String entryText) throws TextEntryParseException, InvalidEntryException {
-        //getParent().parseTextEntry(getOneToOneAssociation(), entryText);
-        if(object == null) {			
+        if (object == null) {
             object = (NakedValue) getSpecification().acquireInstance();
-        } 
+        }
         object.parseTextEntry(entryText);
         getParent().setValue(getOneToOneAssociation(), object.getObject());
-        
+
+    }
+
+    public String title() {
+        return field.getName();
     }
 
     public String toString() {
-        return getValue() + "/" + getField();
+        return object.titleString() + "/" + getField();
+    }
+    
+    public String windowTitle() {
+        return title();
+    }
+
+    public boolean objectChanged() {
+        return false;
+    }
+
+    public Naked drop(Content sourceContent) {
+        return null;
+    }
+
+    public Consent canDrop(Content sourceContent) {
+        return Veto.DEFAULT;
     }
 }
 

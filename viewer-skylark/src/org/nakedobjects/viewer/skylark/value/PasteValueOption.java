@@ -2,12 +2,13 @@
 package org.nakedobjects.viewer.skylark.value;
 
 
+import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.OneToOneField;
+import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
@@ -37,9 +38,15 @@ public class PasteValueOption extends AbstractValueOption {
 
     public void execute(Workspace frame, View view, Location at) {
         String pasteValue = getClipboard();
-        OneToOneField objectContent = ((OneToOneField) view.getContent());
-        objectContent.getParent().setValue((OneToOneAssociation) objectContent.getField(), pasteValue);
-        updateParent(view);
+        ValueField objectContent = ((ValueField) view.getContent());
+        try {
+            objectContent.parseEntry(pasteValue);
+	        updateParent(view);
+        } catch (TextEntryParseException e) {
+            LOG.error("Invalid clipboard operation " + e);
+        } catch (InvalidEntryException e) {
+            LOG.error("Invalid clipboard operation " + e);
+        }
     }
 
 	private String getClipboard() {

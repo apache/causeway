@@ -26,21 +26,21 @@ public abstract class PointerEvent {
     /**
      * Returns true if the left-hand button on the mouse is depressed
      */
-    public boolean isButton1() {
+    private boolean isButton1() {
         return (mods & InputEvent.BUTTON1_MASK) > 0;
     }
 
     /**
      * Returns true if the middle button on the mouse is depressed
      */
-    public boolean isButton2() {
+    private boolean isButton2() {
         return (mods & InputEvent.BUTTON2_MASK) > 0;
     }
 
     /**
      * Returns true if the right-hand button on the mouse is depressed
      */
-    public boolean isButton3() {
+    private boolean isButton3() {
         return (mods & InputEvent.BUTTON3_MASK) > 0;
     }
 
@@ -71,6 +71,32 @@ public abstract class PointerEvent {
 
         return "buttons=" + buttons + ",modifiers=" + modifiers;
     }
+    
+    public boolean button1() {
+        return (isButton1() && !isShift()) || (isButton2() && isShift());
+    }
+
+    public boolean button2() {
+        return (isButton2() && !isShift()) || (isButton1() && isShift());
+    }
+    
+    public boolean button3() {
+        return isButton3();
+    }
+/*
+    public boolean button4() {
+        return isButton3() && !isCtrl() && !isShift() && isAlt();
+    }
+    
+    public boolean button5() {
+        return isButton3() && isShift() && !isCtrl() && !isAlt();
+    }
+
+    public boolean button6() {
+        return isButton3() && !isAlt() && !isShift() && isCtrl();
+    }
+    */
+    
 }
 
 

@@ -1,146 +1,18 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.LoadedObjects;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.reflect.NakedObjectAssociation;
-import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
 
 
-public class ObjectData {
-    private final Object fieldContent[];
-    private final Oid oid;
-    private final String type;
-    
-    protected ObjectData() {
-        fieldContent = null;
-        oid = null;
-        type = null;
-    }
-    
-    public ObjectData(Oid oid, String type, Object[] fieldContent) {
-        this.oid = oid;
-        this.type = type;
-        this.fieldContent = fieldContent;
-    }
+public interface ObjectData {
+    Object[] getFieldContent();
 
-    public Object[] getFieldContent() {
-        return fieldContent;
-    }
+    Oid getOid();
 
-    public Oid getOid() {
-        return oid;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public NakedObject recreate(LoadedObjects loadedObjects) {
-        NakedObject object;
-        if (oid != null && loadedObjects.isLoaded(oid)) {
-            object = loadedObjects.getLoadedObject(oid);
-        } else {
-            NakedObjectSpecification specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(type);
-            object = (NakedObject) specification.acquireInstance();
-            if (oid != null) {
-                object.setOid(oid);
-	            loadedObjects.loaded(object);
-            }
-        }
-
-        if (!object.isResolved() && fieldContent != null) {
-            object.setResolved();
-            NakedObjectField[] fields = object.getSpecification().getFields();
-            if (fields.length == 0) {
-                for (int i = 0; i < fieldContent.length; i++) {
-
-                }
-            } else {
-                for (int i = 0; i < fields.length; i++) {
-                    if (fields[i].isCollection()) {
-                        if (fieldContent[i] != null) {
-                            //              object.initAssociation((OneToManyAssociation)
-                            // fields[i], ((ObjectData) fieldContent[i])
-                            //                      .recreate(loadedObjects));
-                            ObjectData collection = (ObjectData) fieldContent[i];
-                            NakedObject[] instances = new NakedObject[collection.fieldContent.length];
-                            for (int j = 0; j < instances.length; j++) {
-                                instances[j] = ((ObjectData) collection.fieldContent[j]).recreate(loadedObjects);
-                            }
-                            object.initOneToManyAssociation((OneToManyAssociation) fields[i], instances);
-                        }
-                    } else if (fields[i].isValue()) {
-                        object.initValue((OneToOneAssociation) fields[i], fieldContent[i]);
-                    } else {
-                        if (fieldContent[i] != null) {
-                            object.initAssociation((NakedObjectAssociation) fields[i], ((ObjectData) fieldContent[i])
-                                    .recreate(loadedObjects));
-                        }
-                    }
-                }
-            }
-        }
-
-        return object;
-    }
-    
-    public String toString() {
-        return "ObjectData [oid=" + oid + ",type=" + type + "]";
-    }
-
-    public void update(LoadedObjects loadedObjects) {
-        NakedObject object;
-        if (oid != null && loadedObjects.isLoaded(oid)) {
-            object = loadedObjects.getLoadedObject(oid);
-        } else {
-            NakedObjectSpecification specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(type);
-            object = (NakedObject) specification.acquireInstance();
-            if (oid != null) {
-                object.setOid(oid);
-	            loadedObjects.loaded(object);
-            }
-        }
-
-            NakedObjectField[] fields = object.getSpecification().getFields();
-            if (fields.length == 0) {
-                for (int i = 0; i < fieldContent.length; i++) {
-
-                }
-
-            } else {
-                for (int i = 0; i < fields.length; i++) {
-                    if (fields[i].isCollection()) {
-                        /*
-                        if (fieldContent[i] != null) {
-                            ObjectData collection = (ObjectData) fieldContent[i];
-                            NakedObject[] instances = new NakedObject[collection.fieldContent.length];
-                            for (int j = 0; j < instances.length; j++) {
-                                instances[j] = ((ObjectData) collection.fieldContent[j]).update(loadedObjects);
-                            }
-                            object.initOneToManyAssociation((OneToManyAssociation) fields[i], instances);
-                        }
-                        */
-                    } else if (fields[i].isValue()) {
-                        object.initValue((OneToOneAssociation) fields[i], fieldContent[i]);
-                    } else {
-                        if (fieldContent[i] != null) {
-                            NakedObject field = ((ObjectData) fieldContent[i]).recreate(loadedObjects);
-                            object.initAssociation((NakedObjectAssociation) fields[i], field);
-                        }
-                    }
-                }
-            }
-        }
+    String getType();
 }
-
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

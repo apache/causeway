@@ -2,10 +2,7 @@ package org.nakedobjects.viewer.skylark.core;
 
 import org.nakedobjects.utility.DebugFrame;
 import org.nakedobjects.utility.DebugInfo;
-import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.View;
-import org.nakedobjects.viewer.skylark.ViewAxis;
-import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Viewer;
 
 public class OverlayDebugFrame extends DebugFrame {

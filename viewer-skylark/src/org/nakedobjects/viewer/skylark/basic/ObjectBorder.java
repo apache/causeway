@@ -45,7 +45,9 @@ public class ObjectBorder extends AbstractBorder {
 	public void draw(Canvas canvas) {
 		Color color = null;
 		ViewState state = getState();
-        if(state.canDrop()) {
+        if(state.isActive()) {
+		    color = new Color(0x0ff0000);
+        } else if(state.canDrop()) {
 		    color = Style.VALID;
 		} else if(state.cantDrop()) {
             color = Style.INVALID;

@@ -59,21 +59,16 @@ public class InternalCollectionBorder extends AbstractBorder {
 	}
 	
 	
-	public void menuOptions(MenuOptionSet options) {
-        super.menuOptions(options);
-        
+	public void contentMenuOptions(MenuOptionSet options) {
+        super.contentMenuOptions(options);
         NakedObjectSpecification nakedClass = ((OneToManyField) getContent()).getSpecification();
-        /*
-        InternalCollection collection = (InternalCollection) ((OneToManyField) getContent()).getCollection();
-        NakedObjectSpecification nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(collection.getElementSpecification().getFullName());
-        */
         ClassOption.menuOptions(nakedClass, options);
     }
 	
     public void objectActionResult(Naked result, Location at) {
         // same as in TreeNodeBorder
         OneToManyField internalCollectionContent = (OneToManyField) getContent();
-        OneToManyAssociation field = (OneToManyAssociation) internalCollectionContent.getField();
+        OneToManyAssociation field = internalCollectionContent.getOneToManyAssociation();
         NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
         
         Hint about = target.getHint(ClientSession.getSession(), field, (NakedObject) result);

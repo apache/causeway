@@ -19,8 +19,8 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 
 
-public class CompositeObjectView extends ObjectView {
-    private static final Logger LOG = Logger.getLogger(CompositeObjectView.class);
+public class CompositeView extends ObjectView {
+    private static final Logger LOG = Logger.getLogger(CompositeView.class);
     private int buildCount = 0;
 
     private CompositeViewBuilder builder;
@@ -30,7 +30,7 @@ public class CompositeObjectView extends ObjectView {
     private boolean layoutInvalid = true;
     protected Vector views;
 
-    public CompositeObjectView(Content content, CompositeViewSpecification specification, ViewAxis axis) {
+    public CompositeView(Content content, CompositeViewSpecification specification, ViewAxis axis) {
         super(content, specification, axis);
         views = new Vector();
         builder = specification.getSubviewBuilder();

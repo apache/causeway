@@ -1,12 +1,10 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.utility.DebugString;
 
 
-public abstract class ActionParameter implements Content {
+final class ActionParameter {
     private final String name;
     private final NakedObjectSpecification specification;
 
@@ -15,28 +13,17 @@ public abstract class ActionParameter implements Content {
         this.specification = specification;
     }
 
-    public String debugDetails() {
-        String type = getClass().getName();
-        type = type.substring(type.lastIndexOf('.') + 1);
-        return type + "\n" + "  label:" + name + "\n";
+    public void debugDetails(DebugString debug) {
+        debug.appendln(4, "label", name );
     }
-
-    public abstract Naked getNaked();
 
     public String getName() {
         return name;
     }
 
-    public void menuOptions(MenuOptionSet options) {}
-    
     public NakedObjectSpecification getSpecification() {
         return specification;
     }
-    
-    public String windowTitle() {
-        return "Parameter";
-    }
-
 }
 
 /*

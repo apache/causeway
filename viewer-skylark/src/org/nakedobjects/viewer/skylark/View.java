@@ -25,6 +25,13 @@ public interface View extends Cloneable {
 
     boolean contains(View view);
 
+    /**
+     * Called when the popup menu is being populated for this view. Any content
+     * options that need to appear on the menu should be added to the
+     * <code>menuOptions</code> object.
+     */
+    void contentMenuOptions(MenuOptionSet menuOptions);
+
     String debugDetails();
 
     /**
@@ -216,23 +223,14 @@ public interface View extends Cloneable {
     void layout();
 
     /**
-     * Limits the bounds of this view (normally when being moved or dropped) so it
-     * never extends beyond the bounds of its containing view.
+     * Limits the bounds of this view (normally when being moved or dropped) so
+     * it never extends beyond the bounds of its containing view.
      */
     void limitBoundsWithin(Bounds bounds);
 
     void markDamaged();
 
     void markDamaged(Bounds bounds);
-
-    /**
-     * Called when the popup menu is being populated for this view. Any options
-     * that need to appear on the menu should be added to the
-     * <code>menuOptions</code> object.
-     * 
-     * @param menuOptions
-     */
-    void menuOptions(MenuOptionSet menuOptions);
 
     /**
      * Called as the mouse is moved around within this view. Does nothing;
@@ -307,6 +305,8 @@ public interface View extends Cloneable {
      */
     void update(Naked object);
 
+    void updateView();
+
     /**
      * Determines if the user is invoking an action relating to this view,
      * rather than to whatever this view represents.
@@ -317,7 +317,12 @@ public interface View extends Cloneable {
      */
     ViewAreaType viewAreaType(Location mouseLocation);
 
-    void updateView();
+    /**
+     * Called when the popup menu is being populated for this view. Any view
+     * options that need to appear on the menu should be added to the
+     * <code>menuOptions</code> object.
+     */
+    void viewMenuOptions(MenuOptionSet menuOptions);
 }
 
 /*

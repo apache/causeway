@@ -1,8 +1,6 @@
 package org.nakedobjects.viewer.skylark.value;
 
 import org.nakedobjects.object.InvalidEntryException;
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.value.ColorValue;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.Canvas;
@@ -31,8 +29,8 @@ public class ColorField extends AbstractField {
 			return new ColorField(content, this, axis);
 	    }
 	    
-	    public boolean canDisplay(Naked object) {
-	    	return object instanceof ColorValue;
+	    public boolean canDisplay(Content content) {
+	    	return content.isValue() && content instanceof ColorValue;
 		}
 	}
 	
@@ -68,7 +66,7 @@ public class ColorField extends AbstractField {
     }
 
     public void firstClick(Click click) {
-        if(getValueContent().getValueHint(ClientSession.getSession(), "").canUse().isAllowed()) {
+        if(getContent().getHint().canUse().isAllowed()) {
 	        View overlay = new ColorFieldOverlay(this);
 	        Location location = click.getLocation();
 	        // TODO offset by constant amount

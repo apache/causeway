@@ -1,7 +1,5 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -27,8 +25,8 @@ public class FormSpecification extends AbstractCompositeViewSpecification implem
         builder = new StackLayout(new ObjectFieldBuilder(this));
     }
 
-    public boolean canDisplay(Naked object) {
-        return object instanceof NakedObject;
+    public boolean canDisplay(Content content) {
+        return content.isObject();
     }
 
     public View createSubview(Content content, ViewAxis axis) {

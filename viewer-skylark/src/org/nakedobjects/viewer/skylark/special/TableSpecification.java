@@ -1,10 +1,9 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.defaults.collection.AbstractTypedNakedCollectionVector;
+import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.security.ClientSession;
@@ -38,9 +37,19 @@ public class TableSpecification extends AbstractCompositeViewSpecification imple
         builder = new TableHeaderBuilder(new StackLayout(new CollectionElementBuilder(this, true)));
     }
 
+    public boolean canDisplay(Content content) {
+        return content.isCollection();
+    }
+
+    public View createSubview(Content content, ViewAxis axis) {
+        return rowSpecification.createView(content, axis);
+    }
+
     public View createView(Content content, ViewAxis axis) {
-   //     NakedObjectSpecification elementSpecification = ((CollectionContent) content).getCollection().getElementType();
-        AbstractTypedNakedCollectionVector coll = (AbstractTypedNakedCollectionVector) ((CollectionContent) content).getCollection();
+        //     NakedObjectSpecification elementSpecification = ((CollectionContent)
+        // content).getCollection().getElementType();
+        TypedNakedCollection coll = (TypedNakedCollection) ((CollectionContent) content)
+                .getCollection();
         NakedObjectSpecification elementSpecification = NakedObjectSpecificationLoader.getInstance().loadSpecification(
                 coll.getElementSpecification().getFullName());
         NakedObject exampleObject = (NakedObject) elementSpecification.acquireInstance();
@@ -53,34 +62,26 @@ public class TableSpecification extends AbstractCompositeViewSpecification imple
         return table;
     }
 
-    private NakedObjectField[]  tableFields(NakedObjectField[] viewFields) {
-        NakedObjectField[] tableFields = new NakedObjectField[viewFields.length];
-        int c = 0;
-        for (int i = 0; i < viewFields.length; i++) {
-            if(!(viewFields[i] instanceof OneToManyAssociation)) {
-                tableFields[c++] = viewFields[i];
-            }
-        }            
-
-        NakedObjectField[] results = new NakedObjectField[c];
-        System.arraycopy(tableFields, 0, results, 0, c);
-        return results;
-    }
-
-    public boolean canDisplay(Naked object) {
-        return object instanceof AbstractTypedNakedCollectionVector;
-    }
-
-    public View createSubview(Content content, ViewAxis axis) {
-        return rowSpecification.createView(content, axis);
-    }
-
     public String getName() {
         return "Standard Table";
     }
 
     public boolean isReplaceable() {
         return false;
+    }
+
+    private NakedObjectField[] tableFields(NakedObjectField[] viewFields) {
+        NakedObjectField[] tableFields = new NakedObjectField[viewFields.length];
+        int c = 0;
+        for (int i = 0; i < viewFields.length; i++) {
+            if (!(viewFields[i] instanceof OneToManyAssociation)) {
+                tableFields[c++] = viewFields[i];
+            }
+        }
+
+        NakedObjectField[] results = new NakedObjectField[c];
+        System.arraycopy(tableFields, 0, results, 0, c);
+        return results;
     }
 }
 

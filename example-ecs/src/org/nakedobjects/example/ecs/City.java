@@ -15,7 +15,7 @@ import java.util.Vector;
 public class City implements Lookup, TitledObject {
     private String name;
     private Date dateOpened;
-//    private float population;
+    private float population;
     private transient BusinessObjectContainer container;
 
     public Vector actionLocationsForCity() throws UnsupportedFindException {
@@ -53,7 +53,7 @@ public class City implements Lookup, TitledObject {
     public String toString() {
         return name;
     }
-/*
+
     public float getPopulation() {
         return population;
     }
@@ -61,7 +61,6 @@ public class City implements Lookup, TitledObject {
     public void setPopulation(float population) {
         this.population = population;
     }
-    */
 
     public Date getDateOpened() {
         return dateOpened;

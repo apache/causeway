@@ -7,11 +7,12 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
-public class RootObject implements ObjectContent {
+public class RootObject extends ObjectContent {
     private final NakedObject object;
 
     public RootObject(NakedObject object) {
@@ -30,20 +31,22 @@ public class RootObject implements ObjectContent {
         throw new NakedObjectRuntimeException("Invalid call");
     }
 
-    public String debugDetails() {
-        String type = getClass().getName();
-        type = type.substring(type.lastIndexOf('.') + 1);
-        return type + "\n" + "  object: " + object + "\n";
+    public void debugDetails(DebugString debug) {
+        debug.appendln(4, "object", object);
     }
-    
+
     public String getIconName() {
         return object.getIconName();
     }
-    
+
     public Image getIconPicture(int iconHeight) {
-            NakedObjectSpecification specification = object.getObject() instanceof NakedClass ? ((NakedClass) object.getObject()).forObjectType() : object
-                    .getSpecification();
-            return  ImageFactory.getInstance().loadIcon(specification, "", iconHeight);
+        NakedObjectSpecification specification = object.getObject() instanceof NakedClass ? ((NakedClass) object.getObject())
+                .forObjectType() : object.getSpecification();
+        return ImageFactory.getInstance().loadIcon(specification, "", iconHeight);
+    }
+
+    public Naked getNaked() {
+        return object;
     }
 
     public String getName() {
@@ -54,14 +57,14 @@ public class RootObject implements ObjectContent {
         return object;
     }
 
-    public Naked getNaked() {
-        return object;
-    }
-
     public NakedObjectSpecification getSpecification() {
         return object.getSpecification();
     }
-    
+
+    public boolean isObject() {
+        return true;
+    }
+
     public boolean isTransient() {
         return object != null && object.getOid() == null;
     }
@@ -73,17 +76,17 @@ public class RootObject implements ObjectContent {
     public void setObject(NakedObject object) {
         throw new NakedObjectRuntimeException("Invalid call");
     }
-    
+
     public String title() {
         return object.titleString();
-    }
-    
-    public String windowTitle() {
-        return getSpecification().getShortName();
     }
 
     public String toString() {
         return "Root Object: " + object;
+    }
+
+    public String windowTitle() {
+        return (isTransient() ? "Transient " : "") + getSpecification().getShortName();
     }
 }
 

@@ -4,7 +4,6 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
@@ -28,8 +27,8 @@ public class ClearValueOption extends AbstractValueOption {
     }
 
     public void execute(Workspace frame, View view, Location at) {
-        ValueField vc = (ValueField) view.getContent();        
-        vc.getParent().clearValue((OneToOneAssociation) vc.getField());
+        ValueField field = (ValueField) view.getContent();        
+        field.clear();
         updateParent(view);
     }
 

@@ -32,8 +32,8 @@ public class ClassIcon extends ObjectView {
     
     public static class Specification implements ViewSpecification {
 
-		public boolean canDisplay(Naked object) {
-			return object.getObject() instanceof  NakedClass;
+		public boolean canDisplay(Content content) {
+			return content.isObject() && content.getNaked() instanceof  NakedClass;
 		}
 
         public View createView(Content content, ViewAxis axis) {
@@ -119,7 +119,7 @@ public class ClassIcon extends ObjectView {
     }
     
     public void secondClick(Click click) {
-        Hint classAbout = getNakedClass().forObjectType().getClassAbout();
+        Hint classAbout = getNakedClass().forObjectType().getClassHint();
             if (classAbout == null || classAbout.canAccess().isAllowed()) {
           //  View view = null;
             Naked object = null;
@@ -160,7 +160,7 @@ public class ClassIcon extends ObjectView {
 		return (NakedClass) object.getObject();
     }
     
-    public void menuOptions(MenuOptionSet options) {
+    public void contentMenuOptions(MenuOptionSet options) {
         NakedObjectSpecification spec = getNakedClass().forObjectType();
         ClassOption.menuOptions(spec, options);
         options.setColor(Style.CONTENT_MENU);

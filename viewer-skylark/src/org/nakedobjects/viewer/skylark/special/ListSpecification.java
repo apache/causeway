@@ -1,7 +1,5 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.View;
@@ -26,8 +24,8 @@ public class ListSpecification extends AbstractCompositeViewSpecification implem
 		return "Standard List";
 	}
 	
-	public boolean canDisplay(Naked object) {
-		return object instanceof NakedCollection;
+	public boolean canDisplay(Content content) {
+		return content.isCollection();
 	}
 }
 

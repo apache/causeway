@@ -419,6 +419,10 @@ public class InternalReflector implements Reflector {
         return false;
     }
     
+    public boolean isPersistable() {
+        return false;
+    }
+    
     public boolean isAbstract() {
         return Modifier.isAbstract(cls.getModifiers());
     }

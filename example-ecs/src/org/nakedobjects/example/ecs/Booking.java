@@ -33,6 +33,18 @@ public class Booking {
         time = new Time();
     }
 
+
+    public void aboutActionSave(ActionAbout about) {
+        about.unusableOnCondition(date.isEmpty(), "Must have a date specified");
+        about.unusableOnCondition(pickUp == null, "Must have a pick up");
+        about.unusableOnCondition(dropOff == null, "Must have a drop off");
+    }
+    
+    public void actionSave() {
+        status.setValue("made persistent");
+        container.makePersistent(this);
+    }
+
     public void aboutActionReturnBooking(ActionAbout about) {
         about.setDescription(
                 "Creates a new Booking based on the current booking.  The new booking has the pick up amd drop off locations reversed.");
@@ -161,6 +173,10 @@ public class Booking {
     * drop a customer onto the Booking class icon. */
     public static Booking actionNewBooking(Customer customer) {
         return customer.createBooking();
+    }
+    
+    public static Booking actionCreateBooking() {
+        return null;
     }
 
     /* The recommended ordering for the action methods can be specified

@@ -49,7 +49,17 @@ public class DebugView implements DebugInfo {
         // content
         Content content = view.getContent();
         debug.appendTitle("CONTENT");
-        debug.append("Content:     " + (content == null ? "none" : content.debugDetails()) + "\n");
+        if(content != null) {
+	        String type = content.getClass().getName();
+	        type = type.substring(type.lastIndexOf('.') + 1);
+            debug.appendln(0, "Content", type);
+	        content.debugDetails(debug);
+            debug.appendln(4, "Object", content.isObject());
+            debug.appendln(4, "Collection", content.isCollection());
+            debug.appendln(4, "Value", content.isValue());
+        } else {
+            debug.appendln(0, "Content",  "none");
+        }
 
         if(content instanceof ObjectContent) {
         	NakedObject object = ((ObjectContent) content).getObject();

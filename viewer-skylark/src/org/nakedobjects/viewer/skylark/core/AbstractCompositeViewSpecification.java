@@ -1,8 +1,5 @@
 package org.nakedobjects.viewer.skylark.core;
 
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedCollection;
-import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
@@ -38,10 +35,6 @@ public abstract class AbstractCompositeViewSpecification implements CompositeVie
 
 	public boolean isSubView() {
 		return false;
-	}
-
-	public boolean canDisplay(Naked object) {
-		return object instanceof NakedObject && !(object instanceof NakedCollection);
 	}
 }
 

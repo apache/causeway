@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.UserContext;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
@@ -53,8 +52,8 @@ public class RootWorkspaceSpecification implements WorkspaceSpecification {
 		return false;
 	}
 
-	public boolean canDisplay(Naked object) {
-		return object instanceof UserContext;
+	public boolean canDisplay(Content content) {
+		return content.isObject() && content.getNaked() instanceof UserContext;
 	}
 }
 

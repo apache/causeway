@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.object.Naked;
 
 /**
  * Describes a view, and how it is built.
@@ -34,7 +33,7 @@ public interface ViewSpecification {
      * Determines if the view created to this specification can display the specified type.  Returns true
      * if it can.
      */
-	boolean canDisplay(Naked object);
+	boolean canDisplay(Content content);
 }
 
 

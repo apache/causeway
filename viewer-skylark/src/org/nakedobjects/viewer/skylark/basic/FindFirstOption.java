@@ -10,7 +10,6 @@ import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
-import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 
 public class FindFirstOption extends MenuOption {
@@ -18,18 +17,18 @@ public class FindFirstOption extends MenuOption {
         super("Find First Matching Object");
     }
 
-    public void execute(Workspace frame, View view, Location at) {
+    public void execute(Workspace workspace, View view, Location at) {
         NakedObjectManager objectManager = NakedObjectContext.getDefaultContext().getObjectManager();
         NakedObject pattern = ((ObjectContent) view.getContent()).getObject();
         NakedCollection instances = objectManager.findInstances(pattern, true);
 
         Naked object = (instances.size() >= 1) ? (Naked) instances.elements().nextElement() : instances;
 
-        View newView = ViewFactory.getViewFactory().createOpenRootView(object);
+        View newView = workspace.createSubviewFor(object, false);
 
         newView.setLocation(at);
 
-        frame.addView(newView);
+        workspace.addView(newView);
     }
 
     public String getDescription(View view) {

@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.value;
 
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.value.BooleanValue;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
@@ -18,8 +17,8 @@ public class CheckboxField extends AbstractField {
     private static final int size = Style.NORMAL.getHeight();
 
     public static class Specification extends AbstractFieldSpecification {
-        public boolean canDisplay(Naked object) {
-            return object instanceof BooleanValue;
+        public boolean canDisplay(Content content) {
+            return content.isValue() && content instanceof BooleanValue;
         }
 
         public View createView(Content content, ViewAxis axis) {
@@ -68,7 +67,7 @@ public class CheckboxField extends AbstractField {
     }
 
     private boolean isSet() {
-        BooleanValue value = (BooleanValue) getValueContent().getObject();
+        BooleanValue value = (BooleanValue) getContent().getNaked();
         return value.isSet();
     }
 /*
@@ -83,7 +82,7 @@ public class CheckboxField extends AbstractField {
 */
     protected void save() {
         if (canChangeValue()) {
-            BooleanValue value = (BooleanValue) getValueContent().getObject();
+            BooleanValue value = (BooleanValue) getContent().getNaked();
             value.toggle();
             markDamaged();
         }

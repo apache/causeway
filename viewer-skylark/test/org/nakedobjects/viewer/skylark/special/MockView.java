@@ -160,7 +160,7 @@ public class MockView implements View
 
     public void markDamaged(Bounds bounds) {}
 
-    public void menuOptions(MenuOptionSet menuOptions) {}
+    public void contentMenuOptions(MenuOptionSet menuOptions) {}
 
     public void mouseMoved(Location at) {}
 
@@ -223,6 +223,8 @@ public class MockView implements View
     public void limitBoundsWithin(Bounds bounds) {}
 
     public void updateView() {}
+
+    public void viewMenuOptions(MenuOptionSet menuOptions) {}
 }
 
 

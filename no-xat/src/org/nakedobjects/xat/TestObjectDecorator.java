@@ -16,60 +16,60 @@ public abstract class TestObjectDecorator implements TestObject {
         wrappedObject.assertActionExists(name);
     }
 
-    public void assertActionExists(String name, TestNaked[] parameters) {
-        wrappedObject.assertActionExists(name, parameters);
-    }
-
     public void assertActionExists(String name, TestNaked parameter) {
         wrappedObject.assertActionExists(name, parameter);
+    }
+
+    public void assertActionExists(String name, TestNaked[] parameters) {
+        wrappedObject.assertActionExists(name, parameters);
     }
 
     public void assertActionInvisible(String name) {
         wrappedObject.assertActionInvisible(name);
     }
 
-    public void assertActionInvisible(String name, TestNaked[] parameters) {
-        wrappedObject.assertActionInvisible(name, parameters);
-    }
-
     public void assertActionInvisible(String name, TestNaked parameter) {
         wrappedObject.assertActionInvisible(name, parameter);
+    }
+
+    public void assertActionInvisible(String name, TestNaked[] parameters) {
+        wrappedObject.assertActionInvisible(name, parameters);
     }
 
     public void assertActionUnusable(String name) {
         wrappedObject.assertActionUnusable(name);
     }
 
-    public void assertActionUnusable(String name, TestNaked[] parameters) {
-        wrappedObject.assertActionUnusable(name, parameters);
-    }
-
     public void assertActionUnusable(String name, TestNaked parameter) {
         wrappedObject.assertActionUnusable(name, parameter);
+    }
+
+    public void assertActionUnusable(String name, TestNaked[] parameters) {
+        wrappedObject.assertActionUnusable(name, parameters);
     }
 
     public void assertActionUsable(String name) {
         wrappedObject.assertActionUsable(name);
     }
 
-    public void assertActionUsable(String name, TestNaked[] parameters) {
-        wrappedObject.assertActionUsable(name, parameters);
-    }
-
     public void assertActionUsable(String name, TestNaked parameter) {
         wrappedObject.assertActionUsable(name, parameter);
+    }
+
+    public void assertActionUsable(String name, TestNaked[] parameters) {
+        wrappedObject.assertActionUsable(name, parameters);
     }
 
     public void assertActionVisible(String name) {
         wrappedObject.assertActionVisible(name);
     }
 
-    public void assertActionVisible(String name, TestNaked[] parameters) {
-        wrappedObject.assertActionVisible(name, parameters);
-    }
-
     public void assertActionVisible(String name, TestNaked parameter) {
         wrappedObject.assertActionVisible(name, parameter);
+    }
+
+    public void assertActionVisible(String name, TestNaked[] parameters) {
+        wrappedObject.assertActionVisible(name, parameters);
     }
 
     public void assertEmpty(String fieldName) {
@@ -168,6 +168,38 @@ public abstract class TestObjectDecorator implements TestObject {
         wrappedObject.assertFieldVisible(fieldName);
     }
 
+    public void assertFirstElementInField(String fieldName, String expected) {
+        wrappedObject.assertFirstElementInField(fieldName, expected);
+    }
+
+    public void assertFirstElementInField(String message, String fieldName, String expected) {
+        wrappedObject.assertFirstElementInField(message, fieldName, expected);
+    }
+
+    public void assertFirstElementInField(String message, String fieldName, TestObject expected) {
+        wrappedObject.assertFirstElementInField(message, fieldName, expected);
+    }
+
+    public void assertFirstElementInField(String fieldName, TestObject expected) {
+        wrappedObject.assertFirstElementInField(fieldName, expected);
+    }
+
+    public void assertLastElementInField(String fieldName, String expected) {
+        wrappedObject.assertLastElementInField(fieldName, expected);
+    }
+
+    public void assertLastElementInField(String message, String fieldName, String expected) {
+        wrappedObject.assertLastElementInField(message, fieldName, expected);
+    }
+
+    public void assertLastElementInField(String message, String fieldName, TestObject expected) {
+        wrappedObject.assertLastElementInField(message, fieldName, expected);
+    }
+
+    public void assertLastElementInField(String fieldName, TestObject expected) {
+        wrappedObject.assertLastElementInField(fieldName, expected);
+    }
+
     public void assertNoOfElements(String collectionName, int noOfElements) {
         wrappedObject.assertNoOfElements(collectionName, noOfElements);
     }
@@ -227,24 +259,28 @@ public abstract class TestObjectDecorator implements TestObject {
     public TestNaked getField(String fieldName) {
         return wrappedObject.getField(fieldName);
     }
-    
-    public TestObject getFieldAsObject(String fieldName) {
-        return wrappedObject.getFieldAsObject(fieldName);
-    }
-    
-    public TestValue getFieldAsValue(String fieldName) {
-        return wrappedObject.getFieldAsValue(fieldName);
-    }
 
     public TestObject getField(String fieldName, String title) {
         return wrappedObject.getField(fieldName, title);
+    }
+
+    public TestObject getFieldAsObject(String fieldName) {
+        return wrappedObject.getFieldAsObject(fieldName);
+    }
+
+    public TestValue getFieldAsValue(String fieldName) {
+        return wrappedObject.getFieldAsValue(fieldName);
     }
 
     public String getFieldTitle(String field) {
         return wrappedObject.getFieldTitle(field);
     }
 
-    public Naked getForObject() {
+    public Naked getForNaked() {
+        return wrappedObject.getForNaked();
+    }
+
+    public Object getForObject() {
         return wrappedObject.getForObject();
     }
 
@@ -256,16 +292,16 @@ public abstract class TestObjectDecorator implements TestObject {
         return wrappedObject.invokeAction(name);
     }
 
-    public TestObject invokeAction(String name, TestNaked[] parameters) {
-        return wrappedObject.invokeAction(name, parameters);
-    }
-
     public TestObject invokeAction(String name, TestNaked parameter) {
         return wrappedObject.invokeAction(name, parameter);
     }
 
-    public void setForObject(Naked object) {
-        wrappedObject.setForObject(object);
+    public TestObject invokeAction(String name, TestNaked[] parameters) {
+        return wrappedObject.invokeAction(name, parameters);
+    }
+
+    public void setForNaked(Naked object) {
+        wrappedObject.setForNaked(object);
     }
 
     public void testField(String fieldName, String expectedValue) {
@@ -278,38 +314,6 @@ public abstract class TestObjectDecorator implements TestObject {
 
     public void testField(String fieldName, TestObject expectedObject) {
         wrappedObject.testField(fieldName, expectedObject);
-    }
-
-    public void assertFirstElementInField(String message, String fieldName, String expected) {
-        wrappedObject.assertFirstElementInField(message, fieldName, expected);
-    }
-
-    public void assertFirstElementInField(String message, String fieldName, TestObject expected) {
-        wrappedObject.assertFirstElementInField(message, fieldName, expected);
-    }
-
-    public void assertFirstElementInField(String fieldName, TestObject expected) {
-        wrappedObject.assertFirstElementInField(fieldName, expected);
-    }
-
-    public void assertFirstElementInField(String fieldName, String expected) {
-        wrappedObject.assertFirstElementInField(fieldName, expected);
-    }
-
-    public void assertLastElementInField(String message, String fieldName, TestObject expected) {
-        wrappedObject.assertLastElementInField(message, fieldName, expected);
-    }
-
-    public void assertLastElementInField(String message, String fieldName, String expected) {
-        wrappedObject.assertLastElementInField(message, fieldName, expected);
-    }
-
-    public void assertLastElementInField(String fieldName, String expected) {
-        wrappedObject.assertLastElementInField(fieldName, expected);
-    }
-
-    public void assertLastElementInField(String fieldName, TestObject expected) {
-        wrappedObject.assertLastElementInField(fieldName, expected);
     }
 }
 

@@ -1,7 +1,5 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -25,8 +23,8 @@ class LookupOverlaySpecification extends AbstractCompositeViewSpecification impl
         builder = new StackLayout(new CollectionElementBuilder(this, true), true);
     }
 
-    public boolean canDisplay(Naked object) {
-        return object instanceof NakedCollection;
+    public boolean canDisplay(Content content) {
+        return content.isCollection();
     }
 
     public View createSubview(Content content, ViewAxis lookupAxis) {

@@ -1,52 +1,102 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.object.Aggregated;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.security.ClientSession;
+import org.nakedobjects.utility.DebugString;
 
 import java.util.Enumeration;
 
 
-public class OneToManyField extends ObjectField implements CollectionContent {
+public class OneToManyField extends CollectionContent implements FieldContent {
     private final NakedCollection collection;
+    private final ObjectField field;
+
+    public Consent canDrop(Content sourceContent) {
+        NakedObject object = (NakedObject) sourceContent.getNaked();
+        //NakedObject parent = (NakedObject) getNaked();
+        NakedObject parent = field.getParent();
+
+        //InternalCollection collection = (InternalCollection) parent.getField(getOneToManyAssociation());
+        InternalCollection collection = (InternalCollection) getNaked();
+        if(!object.getSpecification().isOfType(collection.getElementSpecification())) {
+            return new Veto("Only objects of type " + collection.getElementSpecification().getSingularName() + " are allowed in this collection");
+        }
+        if(parent.getOid() != null && object.getOid() == null) {
+            return new Veto("Can't set field in persistent object with reference to non-persistent object");
+        }
+        if(object instanceof Aggregated) {
+            Aggregated aggregated = ((Aggregated) object);
+            if(aggregated.isAggregated() && aggregated.parent() != parent) {
+                return new Veto("Object is already associated with another object: " + aggregated.parent());
+            }
+        }
+        Hint about = getOneToManyAssociation().getHint(ClientSession.getSession(), parent, object, true);
+        return about.canUse();
+    }
+    
+    public Naked drop(Content sourceContent) {
+        NakedObject object = (NakedObject) sourceContent.getNaked();
+        NakedObject parent = field.getParent();
+        Consent perm = canDrop(sourceContent);
+        if (perm.isAllowed()) {
+	        parent.setAssociation(getOneToManyAssociation(), object);
+	//        layout();
+        }
+        return null;
+    }
 
     public OneToManyField(NakedObject parent, InternalCollection object, OneToManyAssociation association) {
-        super(parent, association);
+        field = new ObjectField(parent, association);
         this.collection = (NakedCollection) object;
     }
 
     public Enumeration allElements() {
-//        return getParent().getFieldElements(getOneToManyAssociation());
+        //        return getParent().getFieldElements(getOneToManyAssociation());
         return getCollection().elements();
     }
 
     public Consent canClear() {
         return Veto.DEFAULT;
     }
-    
+
     public Consent canSet(NakedObject dragSource) {
         return Veto.DEFAULT;
     }
 
     public void clear() {
-        throw new NakedObjectRuntimeException("Invalid call");    
+        throw new NakedObjectRuntimeException("Invalid call");
     }
 
-    public String debugDetails() {
-        return super.debugDetails() + "  object: collection\n";
+    public void debugDetails(DebugString debug) {
+        field.debugDetails(debug);
+        debug.appendln(4, "collection",  collection);
+    }
+
+    public NakedCollection getCollection() {
+        return collection;
+    }
+
+    public String getFieldName() {
+        return field.getName();
+    }
+
+    public NakedObjectField getFieldReflector() {
+        return field.getFieldReflector();
     }
 
     public String getIconName() {
         return "internal-collection";
-    }
-    
-    public NakedCollection getCollection() {
-        return collection;
     }
 
     public Naked getNaked() {
@@ -54,20 +104,38 @@ public class OneToManyField extends ObjectField implements CollectionContent {
     }
 
     public OneToManyAssociation getOneToManyAssociation() {
-        return (OneToManyAssociation) getField();
+        return (OneToManyAssociation) field.getFieldReflector();
     }
-    
+
+    public NakedObjectSpecification getSpecification() {
+        return field.getSpecification();
+    }
+
+    public boolean isCollection() {
+        return true;
+    }
+
     public boolean isTransient() {
         return false;
     }
-    
+
     public void setObject(NakedObject object) {
         throw new NakedObjectRuntimeException("Invalid call");
     }
 
-    public String toString() {
-        return collection + "/" + getField();
+    public final String title() {
+        return field.getName();
     }
+
+    public String toString() {
+        return collection + "/" + field.getFieldReflector();
+    }
+    
+    public String windowTitle() {
+        return title() + " for " + field.getParent().titleString();
+    }
+
+
 }
 
 /*

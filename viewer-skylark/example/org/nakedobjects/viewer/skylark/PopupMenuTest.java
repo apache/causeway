@@ -168,7 +168,7 @@ public class PopupMenuTest extends TestCase {
 		MockUserAction action3;
 		MockUserAction action4;
 
-		public void menuOptions(MenuOptionSet options) {
+		public void contentMenuOptions(MenuOptionSet options) {
 			action1 = new MockUserAction("option 1");
 			options.add(MenuOptionSet.OBJECT, action1);
 			options.add(MenuOptionSet.OBJECT, null); // effectively action 2

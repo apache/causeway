@@ -6,7 +6,7 @@ import org.nakedobjects.viewer.skylark.View;
 public class FieldLabel extends LabelBorder {
 
 	public FieldLabel(View wrappedView) {
-		super(((FieldContent) wrappedView.getContent()).getName(), wrappedView);
+		super(((FieldContent) wrappedView.getContent()).getFieldName(), wrappedView);
 	}
 }
 

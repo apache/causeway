@@ -4,25 +4,31 @@ import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.object.security.Session;
+import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.utility.ToString;
+import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Image;
+import org.nakedobjects.viewer.skylark.ParameterContent;
 import org.nakedobjects.viewer.skylark.ValueContent;
 
 
-class ValueParameter extends ActionParameter implements ValueContent {
+class ValueParameter extends ValueContent implements ParameterContent {
     private final NakedValue object;
-
-    public ValueParameter(String name, Naked naked, NakedObjectSpecification specification, ActionContent content, int parameter) {
-        super(name, specification);
+    private ActionParameter parameter;
+    
+    public ValueParameter(String name, Naked naked, NakedObjectSpecification specification, ActionContent content) {
+        parameter = new ActionParameter(name, specification);
         object = (NakedValue) naked;
     }
 
-    public String debugDetails() {
-        return "  object:" + object + "\n";
+    public void debugDetails(DebugString debug) {
+        debug.appendln(4, "object", object);
     }
 
     public String getIconName() {
@@ -48,24 +54,22 @@ class ValueParameter extends ActionParameter implements ValueContent {
     public boolean isTransient() {
         return true;
     }
-    
+
+    public boolean isValue() {
+        return true;
+    }
+
     public void parseEntry(String entryText) throws InvalidEntryException {
         object.parseTextEntry(entryText);
         /*
-        
-        //  TODO V IMPORTANT - this really is smelly - need to sort out the
-        // reflectors ans specs
-        Object pojo = object.getObject();
-        Class cls = pojo.getClass();
-        Method method;
-        try {
-            method = cls.getMethod("parseUserEntry", new Class[] { String.class });
-            method.invoke(pojo, new Object[] { entryText });
-        } catch (Exception e) {
-            throw new NakedObjectRuntimeException(e);
-        }
-        
-        */
+         *  // TODO V IMPORTANT - this really is smelly - need to sort out the //
+         * reflectors ans specs Object pojo = object.getObject(); Class cls =
+         * pojo.getClass(); Method method; try { method =
+         * cls.getMethod("parseUserEntry", new Class[] { String.class });
+         * method.invoke(pojo, new Object[] { entryText }); } catch (Exception
+         * e) { throw new NakedObjectRuntimeException(e); }
+         *  
+         */
     }
 
     public String title() {
@@ -76,6 +80,26 @@ class ValueParameter extends ActionParameter implements ValueContent {
         ToString toString = new ToString(this);
         toString.append("object", object);
         return toString.toString();
+    }
+
+    public String getParameterName() {
+        return parameter.getName();
+    }
+
+    public NakedObjectSpecification getSpecification() {
+        return parameter.getSpecification();
+    }
+
+    public boolean objectChanged() {
+        return false;
+    }
+
+    public Naked drop(Content sourceContent) {
+        return null;
+    }
+
+    public Consent canDrop(Content sourceContent) {
+        return Veto.DEFAULT;
     }
 }
 

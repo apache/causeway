@@ -44,7 +44,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     private TypedNakedCollection convertToNakedObjects(NakedObjectSpecification specification, ObjectData[] data) {
         NakedObject[] instances = new NakedObject[data.length];
         for (int i = 0; i < data.length; i++) {
-            instances[i] = data[i].recreate(loadedObjects);
+            instances[i] = ObjectDataHelper.recreate(loadedObjects, data[i]);
         }
         return new InstanceCollectionVector(specification, instances);
     }
@@ -131,7 +131,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         } else {
             LOG.debug("getObject (remotely from server)" + oid);
             ObjectData data = connection.getObject(session, oid, hint.getFullName());
-            return data.recreate(loadedObjects);
+            return ObjectDataHelper.recreate(loadedObjects, data);
         }
     }
 

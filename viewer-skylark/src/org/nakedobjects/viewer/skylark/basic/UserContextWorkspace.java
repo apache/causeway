@@ -14,14 +14,10 @@ public class UserContextWorkspace extends DefaultWorkspace {
 	public UserContextWorkspace(Content content, CompositeViewSpecification specification, ViewAxis axis) {
 		super(content, specification, axis);
 
-		if(!(getObject() instanceof UserContext)) {
+		if(!(content.getNaked() instanceof UserContext)) {
 			throw new IllegalArgumentException("Content must represent an AbstractUserContext");
 		}
 	}
-	
-	protected UserContext getContext() {
-        return (UserContext) getObject();
-    }
 	
 	public void drop(ContentDrag drag) {
 		super.drop(drag);
@@ -30,11 +26,11 @@ public class UserContextWorkspace extends DefaultWorkspace {
 		
 		if (source.getObject() instanceof NakedClass) {
 			if(drag.isShift()) {
-				getContext().getClasses().addElement(source);
+				((UserContext) getContent().getNaked()).getClasses().addElement(source);
 			}
 		} else {
 			if(!drag.isShift()) {
-				getContext().getObjects().addElement(source);
+			    ((UserContext) getContent().getNaked()).getObjects().addElement(source);
 			}
 		}	
 	}

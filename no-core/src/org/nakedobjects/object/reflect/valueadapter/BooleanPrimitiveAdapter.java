@@ -1,8 +1,7 @@
-package org.nakedobjects.reflector.java.value;
+package org.nakedobjects.object.reflect.valueadapter;
 
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;
 import org.nakedobjects.object.value.BooleanValue;
 
 public class BooleanPrimitiveAdapter extends AbstractNakedValue implements BooleanValue {

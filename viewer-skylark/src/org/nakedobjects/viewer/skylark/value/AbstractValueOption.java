@@ -30,8 +30,8 @@ public abstract class AbstractValueOption extends MenuOption {
     }
 	
 	protected boolean isEmpty(View view) {
-	    ValueField vc = (ValueField) view.getContent();
-        return vc.getParent().isEmpty(vc.getField());
+	    ValueField field = (ValueField) view.getContent();
+        return field.isEmpty();
 	}
 }
 

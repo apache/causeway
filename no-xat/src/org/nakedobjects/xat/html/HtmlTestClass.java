@@ -17,7 +17,7 @@ public class HtmlTestClass extends TestClassDecorator {
     }
 
     public TestObject findInstance(String title) {
-        NakedObject object = (NakedObject) getForObject();
+        NakedObject object = (NakedObject) getForNaked();
         String shortName = object.getSpecification().getSingularName();
         TestObject result = super.findInstance(title);
         doc.doc("Find the <b>" + shortName + "</b> instance " + doc.simpleObjectString(object) + ". ");
@@ -25,7 +25,7 @@ public class HtmlTestClass extends TestClassDecorator {
     }
 
     public TestCollection instances() {
-        NakedClass nakedClass = (NakedClass) getForObject();
+        NakedClass nakedClass = (NakedClass) getForNaked();
         String className = nakedClass.getFullName();
         String shortName = className.substring(className.lastIndexOf(".") + 1);
 
@@ -33,15 +33,15 @@ public class HtmlTestClass extends TestClassDecorator {
                 + shortName + "16.gif\">) " + " class");
 
         TestCollection instances = super.instances();
-        doc.docln(", which returns " + doc.objectString(instances.getForObject()) + ". ");
+        doc.docln(", which returns " + doc.objectString(instances.getForNaked()) + ". ");
         return instances;
     }
 
     public TestObject newInstance() {
-        String className = ((NakedClass) getForObject()).getPluralName();
+        String className = ((NakedClass) getForNaked()).getPluralName();
         doc.doc("Create a new " + className + " instance: ");
         TestObject instance = super.newInstance();
-        NakedObject object = (NakedObject) instance.getForObject();
+        NakedObject object = (NakedObject) instance.getForNaked();
         doc.doc(doc.simpleObjectString(object));
         doc.docln(object.titleString().equals("") ? ", which is untitled. " : ". ");
         return instance;

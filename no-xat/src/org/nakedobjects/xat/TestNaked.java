@@ -4,9 +4,9 @@ import org.nakedobjects.object.Naked;
 
 public interface TestNaked {
 
-    Naked getForObject();
+    Naked getForNaked();
 
-    void setForObject(Naked object);
+    void setForNaked(Naked object);
 
     /**
      * returns the title of the object as a String

@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.util;
 
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Content;
@@ -51,7 +50,7 @@ public class FieldErrorView extends AbstractView  {
 	}
 	
 	public static class Specification implements ViewSpecification {
-		public boolean canDisplay(Naked object) {
+		public boolean canDisplay(Content content) {
 			return true;
 		}
 		

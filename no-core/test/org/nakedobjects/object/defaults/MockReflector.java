@@ -110,6 +110,10 @@ public class MockReflector implements Reflector {
     public void clearDirty(NakedObject object2) {}
 
     public void markDirty(NakedObject object2) {}
+
+    public boolean isPersistable() {
+        return false;
+    }
 }
 
 

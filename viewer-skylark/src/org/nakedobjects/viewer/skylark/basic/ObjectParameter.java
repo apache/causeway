@@ -5,22 +5,25 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.ToString;
 import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.viewer.skylark.ParameterContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
-class ObjectParameter extends ActionParameter implements ObjectContent {
+class ObjectParameter extends ObjectContent implements ParameterContent {
     private NakedObject object;
- 
-    public ObjectParameter(String name, Naked naked, NakedObjectSpecification specification, ActionContent content, int parameter) {
-        super(name, specification);
+    private ActionParameter parameter;
+
+    public ObjectParameter(String name, Naked naked, NakedObjectSpecification specification, ActionContent content) {
+        parameter = new ActionParameter(name, specification);
         object = (NakedObject) naked;
     }
 
@@ -36,17 +39,17 @@ class ObjectParameter extends ActionParameter implements ObjectContent {
         object = null;
     }
 
-    public String debugDetails() {
-        return "  object:" + object + "\n";
+    public void debugDetails(DebugString debug) {
+        debug.appendln(4, "object", object);
     }
-    
+
     public String getIconName() {
         return object.getIconName();
     }
-    
+
     public Image getIconPicture(int iconHeight) {
         NakedObjectSpecification specification = object.getSpecification();
-        return  ImageFactory.getInstance().loadIcon(specification, "", iconHeight);
+        return ImageFactory.getInstance().loadIcon(specification, "", iconHeight);
     }
 
     public Naked getNaked() {
@@ -56,14 +59,18 @@ class ObjectParameter extends ActionParameter implements ObjectContent {
     public NakedObject getObject() {
         return object;
     }
-    
+
+    public boolean isObject() {
+        return true;
+    }
+
     public boolean isTransient() {
         return object != null && !object.isPersistent();
     }
-    
+
     public void menuOptions(MenuOptionSet options) {
         if (object != null) {
-            options.add(MenuOptionSet.VIEW, new MenuOption("Clear field") {
+            options.add(MenuOptionSet.VIEW, new MenuOption("Clear parameter") {
 
                 public void execute(Workspace workspace, View view, Location at) {
                     clear();
@@ -76,16 +83,24 @@ class ObjectParameter extends ActionParameter implements ObjectContent {
     public void setObject(NakedObject object) {
         this.object = object;
     }
-    
+
     public String title() {
         return object.titleString();
     }
-    
+
     public String toString() {
         ToString toString = new ToString(this);
         toString.append("object", object);
         toString.append("spec", getSpecification());
         return toString.toString();
+    }
+
+    public String getParameterName() {
+        return parameter.getName();
+    }
+
+    public NakedObjectSpecification getSpecification() {
+        return parameter.getSpecification();
     }
 }
 

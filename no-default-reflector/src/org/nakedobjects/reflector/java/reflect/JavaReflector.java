@@ -1,6 +1,7 @@
 package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.application.Lookup;
+import org.nakedobjects.application.NonPersistable;
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.collection.InternalCollection;
 import org.nakedobjects.application.control.ActionAbout;
@@ -276,7 +277,9 @@ public class JavaReflector implements Reflector {
         LOG.debug("looking for class about");
         try {
             SimpleClassAbout about = new SimpleClassAbout(null, null);
-            cls.getMethod(ABOUT_PREFIX + shortName(), new Class[] {ClassAbout.class}).invoke(null, new Object[] {about});
+            String className = shortName();
+            Method aboutMethod = getAboutMethod(className);
+            aboutMethod.invoke(null, new Object[] {about});
             return about; 
         } catch (NoSuchMethodException ignore) {
         } catch (IllegalAccessException ignore) {
@@ -284,6 +287,14 @@ public class JavaReflector implements Reflector {
         }
 
         return null;
+    }
+
+    private Method getAboutMethod(String className) throws NoSuchMethodException {
+        Method method = cls.getMethod(ABOUT_PREFIX + className, new Class[] {ClassAbout.class});
+        if(method == null) {
+            return getAboutMethod(getSuperclass());
+        }
+        return method;
     }
 
     public String[] classActionSortOrder() {
@@ -485,6 +496,10 @@ public class JavaReflector implements Reflector {
     
     public boolean isLookup() {
         return Lookup.class.isAssignableFrom(cls);
+    }
+    
+    public boolean isPersistable() {
+        return !(NonPersistable.class.isAssignableFrom(cls));
     }
     
     public boolean isAbstract() {

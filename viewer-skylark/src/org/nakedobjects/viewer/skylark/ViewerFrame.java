@@ -88,7 +88,6 @@ public class ViewerFrame extends Frame implements RenderingArea, ObjectViewingMe
 
     public void quit() {
         viewer.close();
-        System.exit(0);
     }
 
     public void start() {
