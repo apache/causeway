@@ -1,6 +1,9 @@
-package org.nakedobjects.example.expenses;
 import org.nakedobjects.container.configuration.ComponentException;
 import org.nakedobjects.container.configuration.ConfigurationException;
+import org.nakedobjects.example.expenses.Claim;
+import org.nakedobjects.example.expenses.Employee;
+import org.nakedobjects.example.expenses.Expense;
+import org.nakedobjects.example.expenses.Project;
 import org.nakedobjects.object.defaults.value.Money;
 import org.nakedobjects.object.exploration.AbstractExplorationFixture;
 import org.nakedobjects.xat.AcceptanceTestCase;
