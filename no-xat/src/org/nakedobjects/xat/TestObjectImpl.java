@@ -10,7 +10,7 @@ import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.AssociationSpecification;
 import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.reflect.NakedClassException;
+import org.nakedobjects.object.reflect.NakedObjectSpecificationException;
 import org.nakedobjects.object.reflect.NameConvertor;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
@@ -262,7 +262,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     public void assertFieldExists(final String fieldName) {
         try {
             ((NakedObject) getForObject()).getSpecification().getField(fieldName);
-        } catch (NakedClassException e) {
+        } catch (NakedObjectSpecificationException e) {
             throw new NakedAssertionFailedError("No field called '" + fieldName + "' in " + getForObject().getClass().getName());
         }
 
@@ -505,7 +505,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         try {
             NakedObjectSpecification nakedClass = ((NakedObject) getForObject()).getSpecification();
             action = nakedClass.getObjectAction(ActionSpecification.USER, name);
-        } catch (NakedClassException e) {
+        } catch (NakedObjectSpecificationException e) {
             throw new NakedAssertionFailedError(e.getMessage());
         }
         if (action == null) {
@@ -767,7 +767,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
                 throw new NakedAssertionFailedError("Method not found: " + name + "(" + parameterList + ")");
             }
             return action;
-        } catch (NakedClassException e) {
+        } catch (NakedObjectSpecificationException e) {
             String targetName = getForObject().getSpecification().getShortName();
             String parameterList = "";
             for (int i = 0; i < noParameters; i++) {

@@ -1,8 +1,8 @@
 package org.nakedobjects.utility;
 
 import org.nakedobjects.AboutNakedObjects;
-import org.nakedobjects.object.ImageIcon;
 
+import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -10,10 +10,108 @@ import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.MediaTracker;
+import java.awt.Toolkit;
 import java.awt.Window;
+import java.io.File;
+import java.net.URL;
+
+import org.apache.log4j.Logger;
 
 
 public class SplashWindow extends Window implements Runnable {
+    private static final String DIRECTORY = "images" + File.separator;
+    private static final String LOGO_FILE = "logo.jpg";
+    final static Logger LOG = Logger.getLogger(SplashWindow.class);
+
+    /**
+     * Get an Image object from the specified file path on the file system.
+     */
+    private static Image loadAsFile(String filename) {
+        File file = new File(DIRECTORY + filename);
+
+        if (!file.exists()) {
+            LOG.error("Could not find image file: " + file.getAbsolutePath());
+
+            return null;
+        } else {
+            Toolkit t = Toolkit.getDefaultToolkit();
+            Image image = t.getImage(file.getAbsolutePath());
+
+            MediaTracker mt = new MediaTracker(new Canvas());
+            if (image != null) {
+                mt.addImage(image, 0);
+
+                try {
+                    mt.waitForAll();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (mt.isErrorAny()) {
+                    LOG.error("Failed to load image from file: " + file.getAbsolutePath());
+                    mt.removeImage(image);
+                    image = null;
+                } else {
+                    mt.removeImage(image);
+                    LOG.info("Image loaded from file: " + file);
+                }
+            }
+
+            return image;
+        }
+    }
+
+    /**
+     * Get an Image object from the jar/zip file that this class was loaded
+     * from.
+     */
+    private static Image loadAsResource(String ref) {
+        URL url = SplashWindow.class.getResource("/" + DIRECTORY + ref);
+        LOG.debug("Image from " + url);
+        if (url == null) {
+            return null;
+        }
+        Image image = Toolkit.getDefaultToolkit().getImage(url);
+        MediaTracker mt = new MediaTracker(new Canvas());
+        if (image != null) {
+            mt.addImage(image, 0);
+
+            try {
+                mt.waitForAll();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (mt.isErrorAny()) {
+                LOG.error("Failed to load image from resources: " + url + " " + mt.getErrorsAny()[0]);
+                mt.removeImage(image);
+                image = null;
+            } else {
+                mt.removeImage(image);
+                LOG.info("Image loaded from resources: " + url);
+            }
+        }
+        return image;
+    }
+
+    /**
+     * Load a java.awt.Image object using the file name <code>name</code>.
+     * This method attempts to load the image from the jar/zip file this class
+     * was loaded from ie, your application, and then from the file system as a
+     * file if can't be found as a resource. If neither method works the default
+     * image is returned.
+     * 
+     * @see java.lang.Class#getResource(String)
+     */
+    public static Image loadImage(String name) {
+        Image image = loadAsResource(name);
+        if (image == null) {
+            image = loadAsFile(name);
+        }
+        return image;
+    }
+
     private final int ascent;
     private int delay;
     private final Font font;
@@ -27,7 +125,7 @@ public class SplashWindow extends Window implements Runnable {
     public SplashWindow() {
         super(new Frame());
         parent = (Frame) getParent();
-        logo = ImageIcon.loadImage("logo.jpg");
+        logo = loadImage(LOGO_FILE);
 
         font = new Font("SansSerif", Font.PLAIN, 9);
         FontMetrics fm = getFontMetrics(font);
@@ -66,14 +164,13 @@ public class SplashWindow extends Window implements Runnable {
 
         g.setFont(font);
 
-
         FontMetrics fm = g.getFontMetrics();
         String copyrightNotice = AboutNakedObjects.getCopyrightNotice();
         int left1 = width / 2 - fm.stringWidth(copyrightNotice) / 2;
-        
+
         String version = AboutNakedObjects.getVersion();
         int left2 = width / 2 - fm.stringWidth(version) / 2;
-        
+
         String build = AboutNakedObjects.getBuildId();
         int left3 = width / 2 - fm.stringWidth(build) / 2;
 
@@ -82,7 +179,7 @@ public class SplashWindow extends Window implements Runnable {
         int line = height - PADDING - (3 * lineHeight) + ascent;
 
         g.drawString(copyrightNotice, left, line);
-        
+
         line += lineHeight;
         g.drawString(version, left, line);
 
@@ -112,6 +209,7 @@ public class SplashWindow extends Window implements Runnable {
 
         removeImmediately();
     }
+
 }
 
 /*

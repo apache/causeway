@@ -29,9 +29,9 @@ import org.nakedobjects.object.LocalReflectionFactory;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.ClassAbout;
-import org.nakedobjects.object.reflect.ActionDelegate;
+import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.Member;
-import org.nakedobjects.object.reflect.NakedClassException;
+import org.nakedobjects.object.reflect.NakedObjectSpecificationException;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.value.Date;
 import org.nakedobjects.object.value.TestClock;
@@ -141,8 +141,8 @@ public class JavaReflectorTest extends TestCase {
     /**
      * 
      */
-    public void testObjectActions() throws NakedClassException {
-         ActionDelegate[] actions = c.actions(false);
+    public void testObjectActions() throws NakedObjectSpecificationException {
+         Action[] actions = c.actions(false);
 
         // check for all actions
         ExpectationSet exp = new ExpectationSet("object actions");
@@ -175,7 +175,7 @@ public class JavaReflectorTest extends TestCase {
         exp.verify();
     }
     
-    public void testFieldSortOrder() throws NakedClassException {
+    public void testFieldSortOrder() throws NakedObjectSpecificationException {
         ExpectationList exp = new ExpectationList("fields");
         exp.addExpected("Name");
         exp.addExpected("Worth");
@@ -189,7 +189,7 @@ public class JavaReflectorTest extends TestCase {
         exp.verify();
     }
     
-    public void testActionSortOrder() throws NakedClassException {
+    public void testActionSortOrder() throws NakedObjectSpecificationException {
         ExpectationList exp = new ExpectationList("actions");
         exp.addExpected("Do Whatever");
         exp.addExpected("Create Invoice");
@@ -202,7 +202,7 @@ public class JavaReflectorTest extends TestCase {
         exp.verify();
     }
     
-    public void testClassActionSortOrder() throws NakedClassException {
+    public void testClassActionSortOrder() throws NakedObjectSpecificationException {
         ExpectationList exp = new ExpectationList("actions");
         exp.addExpected("Class Op");
         exp.addExpected("Do Whatever");
@@ -240,9 +240,9 @@ public class JavaReflectorTest extends TestCase {
         assertEquals(ClassAbout.class, about.getClass());
     }
 
-    public void testClassActions() throws NakedClassException, ClassNotFoundException {
+    public void testClassActions() throws NakedObjectSpecificationException, ClassNotFoundException {
         JavaReflector c = new JavaReflector(ContactTestObject.class.getName());
-        ActionDelegate[] actions = c.actions(JavaReflector.CLASS);
+        Action[] actions = c.actions(JavaReflector.CLASS);
 
         // check for all actions
         ExpectationSet exp = new ExpectationSet("actions");
@@ -269,13 +269,13 @@ public class JavaReflectorTest extends TestCase {
      * @throws ClassNotFoundException
      * 
      */
-    public void testCreate() throws NakedClassException, ClassNotFoundException {
+    public void testCreate() throws NakedObjectSpecificationException, ClassNotFoundException {
         new JavaReflector(ContactTestObject.class.getName());
 
         try {
             new JavaReflector(Object.class.getName());
             fail("Accept types other than Naked");
-        } catch (NakedClassException ok) {
+        } catch (NakedObjectSpecificationException ok) {
         }
     }
 
@@ -283,7 +283,7 @@ public class JavaReflectorTest extends TestCase {
      * @throws ClassNotFoundException
      * 
      */
-    public void testFields() throws NakedClassException, ClassNotFoundException {
+    public void testFields() throws NakedObjectSpecificationException, ClassNotFoundException {
         JavaReflector c = new JavaReflector(ContactTestObject.class.getName());
         Member[] fields = c.fields();
 

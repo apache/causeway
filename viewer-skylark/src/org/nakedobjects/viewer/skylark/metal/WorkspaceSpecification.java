@@ -1,8 +1,8 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.AbstractUserContext;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.UserContext;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -22,7 +22,7 @@ public class WorkspaceSpecification implements org.nakedobjects.viewer.skylark.s
 	public View createView(Content content, ViewAxis axis) {
 			Workspace workspace;
 			NakedObject root = ((ObjectContent) content).getObject();
-			if(root instanceof AbstractUserContext) {
+			if(root instanceof UserContext) {
 				workspace = new UserContextWorkspace(content, this, axis);
 			} else {
 				workspace = new DefaultWorkspace(content, this, axis);

@@ -21,7 +21,7 @@ public class Claim extends AbstractNakedObject {
 	private final TextString status;
 
 	public Claim() {
-		expenseItems = new InternalCollection(Expense.class, this);
+		expenseItems = createInternalCollection(Expense.class);
 		status = new TextString();
 	}
 

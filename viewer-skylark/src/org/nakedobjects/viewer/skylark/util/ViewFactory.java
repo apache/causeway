@@ -2,6 +2,7 @@ package org.nakedobjects.viewer.skylark.util;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.utility.DebugInfo;
@@ -9,6 +10,7 @@ import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.OneToOneField;
+import org.nakedobjects.viewer.skylark.RootCollection;
 import org.nakedobjects.viewer.skylark.RootObject;
 import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.ValueField;
@@ -100,13 +102,23 @@ public class ViewFactory implements DebugInfo {
 
 	public View createIconizedRootView(NakedObject object) {
         ViewSpecification spec = getIconizedRootViewSpecification(object);
-        View view = createView(spec, new RootObject(object));
+        View view = createRootView(object, spec);
         LOG.debug("creating " + view + " (iconized root) for " + object);
 
         return view;
     }
 
-	 public View createIconizedSubview(OneToOneField content) {
+	 private View createRootView(NakedObject object, ViewSpecification spec) {
+        Content content;
+        if(object instanceof NakedCollection) {
+            content = new RootCollection((NakedCollection) object);
+        } else {
+            content = new RootObject(object);
+        }
+        return createView(spec, content);
+    }
+
+    public View createIconizedSubview(OneToOneField content) {
 	        ViewSpecification spec = getIconizedSubViewSpecification(content);
 	        View view = createView(spec, content);
 	        LOG.debug("creating " + view + " (iconized subview) for " + content);
@@ -116,7 +128,7 @@ public class ViewFactory implements DebugInfo {
 
      public View createOpenRootView(NakedObject object) {
         ViewSpecification spec = getOpenRootViewSpecification(object);
-        View view = createView(spec, new RootObject(object));
+        View view = createRootView(object, spec);
         LOG.debug("creating " + view + " (open root) for " + object);
 
         return view;
@@ -135,7 +147,7 @@ public class ViewFactory implements DebugInfo {
 
     public View createWorkspace(NakedObject workspace) {
         LOG.debug("creating workspace for " + workspace);
-        View view = createView(workspaceSpecification, new RootObject(workspace));
+        View view = createRootView(workspace, workspaceSpecification);
 
         return view;
     }

@@ -4,7 +4,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.SimpleOid;
+import org.nakedobjects.object.SerialOid;
 
 
 public class InMemoryDataManager extends DataManager {
@@ -22,17 +22,17 @@ public class InMemoryDataManager extends DataManager {
         indexes.put(name, instances);
     }
 
-    protected void deleteData(SimpleOid oid, String type) {
+    protected void deleteData(SerialOid oid, String type) {
         objects.remove(oid);
     }
 
-    protected Data loadData(SimpleOid oid) {
+    protected Data loadData(SerialOid oid) {
         if (!objects.containsKey(oid)) { return null; }
 
         return (Data) objects.get(oid);
     }
 
-    protected void addInstance(SimpleOid oid, String type) {
+    protected void addInstance(SerialOid oid, String type) {
         Vector instances = (Vector) indexes.get(type);
 
         if (instances == null) {
@@ -43,13 +43,13 @@ public class InMemoryDataManager extends DataManager {
         instances.addElement(oid);
     }
 
-    protected void addData(SimpleOid oid, String type, Data data) throws ObjectStoreException {
+    protected void addData(SerialOid oid, String type, Data data) throws ObjectStoreException {
         if (data.getOid() == null) { throw new IllegalArgumentException("Oid must be non-null"); }
 
         objects.put(oid, data);
     }
 
-    protected void updateData(SimpleOid oid, String type, Data data) throws ObjectStoreException {
+    protected void updateData(SerialOid oid, String type, Data data) throws ObjectStoreException {
         objects.put(oid, data);
     }
 
@@ -61,7 +61,7 @@ public class InMemoryDataManager extends DataManager {
         int instanceCount = 0;
 
         for (int i = 0; i < instances.size(); i++) {
-            SimpleOid oid = (SimpleOid) instances.elementAt(i);
+            SerialOid oid = (SerialOid) instances.elementAt(i);
             ObjectData instanceData = (ObjectData) objects.get(oid);
 
             if (matchesPattern(pattern, instanceData)) {
@@ -80,7 +80,7 @@ public class InMemoryDataManager extends DataManager {
         ObjectDataVector matches = new ObjectDataVector();
 
         for (int i = 0; i < instances.size(); i++) {
-            SimpleOid oid = (SimpleOid) instances.elementAt(i);
+            SerialOid oid = (SerialOid) instances.elementAt(i);
             ObjectData instanceData = (ObjectData) objects.get(oid);
 
             if (matchesPattern(pattern, instanceData)) {
@@ -91,7 +91,7 @@ public class InMemoryDataManager extends DataManager {
         return matches;
     }
 
-    protected void removeInstance(SimpleOid oid, String type) throws ObjectStoreException {
+    protected void removeInstance(SerialOid oid, String type) throws ObjectStoreException {
         Vector instances = (Vector) indexes.get(type);
         instances.removeElement(oid);
     }

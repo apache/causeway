@@ -18,7 +18,7 @@ public class TimeBasedOidGenerator implements OidGenerator {
     }
 
     public synchronized Oid next(NakedObject object) {
-        return new SimpleOid(next++);
+        return new SerialOid(next++);
     }
 
     public void shutdown() {}

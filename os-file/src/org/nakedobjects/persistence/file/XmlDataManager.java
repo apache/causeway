@@ -1,11 +1,11 @@
 
 package org.nakedobjects.persistence.file;
 
+import org.nakedobjects.configuration.Configuration;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.SimpleOid;
-import org.nakedobjects.utility.Configuration;
+import org.nakedobjects.object.SerialOid;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -63,7 +63,7 @@ public class XmlDataManager extends DataManager {
         }
     }
 
-    protected void deleteData(SimpleOid oid, String type) {
+    protected void deleteData(SerialOid oid, String type) {
         file(filename(oid)).delete();
     }
 
@@ -80,7 +80,7 @@ public class XmlDataManager extends DataManager {
         return handler.value + 1;
     }
 
-    protected Data loadData(SimpleOid oid) {
+    protected Data loadData(SerialOid oid) {
         DataHandler handler = new DataHandler();
         parse(handler, filename(oid));
 
@@ -98,7 +98,7 @@ public class XmlDataManager extends DataManager {
         return handler.instances;
     }
 
-    private void writeData(SimpleOid xoid, Data data) throws ObjectStoreException {
+    private void writeData(SerialOid xoid, Data data) throws ObjectStoreException {
         StringBuffer xml = new StringBuffer();
         boolean isObject = data instanceof ObjectData;
         String tag = isObject ? "naked-object" : "collection";
@@ -115,9 +115,9 @@ public class XmlDataManager extends DataManager {
                 String field = (String) fields.nextElement();
                 Object entry = object.get(field);
 
-                if (entry instanceof SimpleOid) {
+                if (entry instanceof SerialOid) {
                 	xml.append("  <association field=\"" + field + "\" ");
-                	xml.append("ref=\"" + encodedOid((SimpleOid)entry) + "\"/>\n");
+                	xml.append("ref=\"" + encodedOid((SerialOid)entry) + "\"/>\n");
                 } else if (entry instanceof ReferenceVector) {
                 	ReferenceVector references = (ReferenceVector) entry;
                 	xml.append("  <multiple-association field=\"" + field + "\" ");
@@ -126,7 +126,7 @@ public class XmlDataManager extends DataManager {
                 	for (int i = 0; i < references.size(); i++) {
                 		Object oid = references.elementAt(i);
                 		xml.append("    <element ");
-                		xml.append("ref=\"" +encodedOid((SimpleOid)oid)  + "\"/>\n");
+                		xml.append("ref=\"" +encodedOid((SerialOid)oid)  + "\"/>\n");
                 	}
 
                 	xml.append("  </multiple-association>\n");
@@ -142,7 +142,7 @@ public class XmlDataManager extends DataManager {
             for (int i = 0; i < refs.size(); i++) {
                 Object oid = refs.elementAt(i);
                 xml.append("  <element ");
-                xml.append("ref=\"" + encodedOid((SimpleOid)oid) + "\"/>\n");
+                xml.append("ref=\"" + encodedOid((SerialOid)oid) + "\"/>\n");
             }
         }
 
@@ -150,11 +150,11 @@ public class XmlDataManager extends DataManager {
         writeXml(filename(xoid), xml);
     }
 
-	private String filename(SimpleOid oid) {
+	private String filename(SerialOid oid) {
 		return encodedOid(oid);
 	}
 
-	private String encodedOid(SimpleOid oid) {
+	private String encodedOid(SerialOid oid) {
 		return Long.toHexString(oid.getSerialNo()).toUpperCase();
 	}
 
@@ -182,7 +182,7 @@ public class XmlDataManager extends DataManager {
         data.append("<instances name=\"" + name + "\">\n");
 
         for (int i = 0; i < instances.size(); i++) {
-            data.append("  <instance id=\"" + encodedOid((SimpleOid) instances.elementAt(i)) + "\"/>\n");
+            data.append("  <instance id=\"" + encodedOid((SerialOid) instances.elementAt(i)) + "\"/>\n");
         }
 
         data.append("</instances>");
@@ -298,32 +298,32 @@ public class XmlDataManager extends DataManager {
                     String fieldName = attrs.getValue("field");
 //                    String type = attrs.getValue("type");
                     long id = Long.valueOf(attrs.getValue("ref"), 16).longValue();
-                    object.set(fieldName, new SimpleOid(id));
+                    object.set(fieldName, new SerialOid(id));
                 } else if (tagName.equals("element")) {
 //                    String type = attrs.getValue("type");
                     long id = Long.valueOf(attrs.getValue("ref"), 16).longValue();
-                    object.addElement(fieldName, new SimpleOid(id));
+                    object.addElement(fieldName, new SerialOid(id));
                 } else if (tagName.equals("multiple-association")) {
                 	fieldName = attrs.getValue("field");
                 	long id = Long.valueOf(attrs.getValue("ref"), 16).longValue();
-                    SimpleOid internalCollection = new SimpleOid(id);
+                    SerialOid internalCollection = new SerialOid(id);
                     object.initCollection(internalCollection, fieldName);
                 }
             } else if (collection != null) {
                 if (tagName.equals("element")) {
 //                    String type = attrs.getValue("type");
                     long id = Long.valueOf(attrs.getValue("ref"), 16).longValue();
-                    collection.addElement(new SimpleOid(id));
+                    collection.addElement(new SerialOid(id));
                 }
             } else {
                 if (tagName.equals("naked-object")) {
                     String type = attrs.getValue("type");
                     long id = Long.valueOf(attrs.getValue("id"), 16).longValue();
-                    object = new ObjectData(NakedObjectSpecification.getNakedClass(type), new SimpleOid(id));
+                    object = new ObjectData(NakedObjectSpecification.getNakedClass(type), new SerialOid(id));
                 } else if (tagName.equals("collection")) {
                     String type = attrs.getValue("type");
                     long id = Long.valueOf(attrs.getValue("id"), 16).longValue();
-                    collection = new CollectionData(NakedObjectSpecification.getNakedClass(type), new SimpleOid(id));
+                    collection = new CollectionData(NakedObjectSpecification.getNakedClass(type), new SerialOid(id));
                 } else {
                     throw new SAXException("Invalid data");
                 }
@@ -342,22 +342,22 @@ public class XmlDataManager extends DataManager {
             throws SAXException {
             if (tagName.equals("instance")) {
                 long oid = Long.valueOf(attrs.getValue("id"), 16).longValue();
-                instances.addElement(new SimpleOid(oid));
+                instances.addElement(new SerialOid(oid));
             }
         }
     }
 
-	protected void addInstance(SimpleOid oid, String type) throws ObjectStoreException {
+	protected void addInstance(SerialOid oid, String type) throws ObjectStoreException {
 		Vector instances = loadInstances(type);
 		instances.addElement(oid);
 		writeInstanceFile(type, instances);
 	}
 
-	protected void addData(SimpleOid oid, String type, Data data) throws ObjectStoreException {
+	protected void addData(SerialOid oid, String type, Data data) throws ObjectStoreException {
 		writeData(oid, data);
 	}
 
-	protected void updateData(SimpleOid oid, String type, Data data) throws ObjectStoreException {
+	protected void updateData(SerialOid oid, String type, Data data) throws ObjectStoreException {
 		writeData(oid, data);
 	}
 	
@@ -371,7 +371,7 @@ public class XmlDataManager extends DataManager {
 		
 		int instanceCount = 0;
 		for (int i = 0; i < instances.size(); i++) {
-			SimpleOid oid = (SimpleOid) instances.elementAt(i);
+			SerialOid oid = (SerialOid) instances.elementAt(i);
 			ObjectData instanceData = (ObjectData) loadData(oid);
 			if(instanceData != null && matchesPattern(pattern, instanceData)) {
 				instanceCount++;
@@ -389,7 +389,7 @@ public class XmlDataManager extends DataManager {
 		
 		ObjectDataVector matches = new ObjectDataVector();
 		for (int i = 0; i < instances.size(); i++) {
-			SimpleOid oid = (SimpleOid) instances.elementAt(i);
+			SerialOid oid = (SerialOid) instances.elementAt(i);
 			ObjectData instanceData = (ObjectData) loadData(oid);
 			if(instanceData == null) {
 				throw new NakedObjectRuntimeException("No data found for " + oid +" (possible missing file)");
@@ -401,7 +401,7 @@ public class XmlDataManager extends DataManager {
 		return matches;
 	}
 
-	protected void removeInstance(SimpleOid oid, String type) throws ObjectStoreException {
+	protected void removeInstance(SerialOid oid, String type) throws ObjectStoreException {
 		Vector instances = loadInstances(type);
 		instances.removeElement(oid);
 		writeInstanceFile(type, instances);

@@ -6,7 +6,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.reflect.NakedClassException;
+import org.nakedobjects.object.reflect.NakedObjectSpecificationException;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.object.reflect.ValueFieldSpecification;
@@ -169,7 +169,7 @@ public final class SnapshotBuilder {
         try {
             // HACK: really want a NakedClass.hasField method to check first.
             field = nakedClass.getField(fieldName);
-        } catch(NakedClassException ex) {
+        } catch(NakedObjectSpecificationException ex) {
             return false;
         }
         
@@ -341,7 +341,7 @@ public final class SnapshotBuilder {
 
                 OneToManyAssociationSpecification oneToManyAssociation = (OneToManyAssociationSpecification) field;
                 InternalCollection collection = (InternalCollection) oneToManyAssociation.get(object);
-                String fullyQualifiedClassName = collection.getType().getName();
+                String fullyQualifiedClassName = collection.getType().getFullName();
                 namespaceManager.addNamespaceIfRequired(parentElement, fullyQualifiedClassName);
                 setNofTypeAttr(fieldElement, namespaceManager, fullyQualifiedClassName);
 

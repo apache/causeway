@@ -1,4 +1,4 @@
-package org.nakedobjects.utility;
+package org.nakedobjects.configuration;
 
 import org.nakedobjects.object.NakedObjectRuntimeException;
 

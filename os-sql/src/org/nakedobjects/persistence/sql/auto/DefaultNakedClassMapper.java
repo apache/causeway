@@ -1,5 +1,6 @@
 package org.nakedobjects.persistence.sql.auto;
 
+import org.nakedobjects.configuration.Configuration;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
@@ -13,7 +14,6 @@ import org.nakedobjects.persistence.sql.NakedClassMapper;
 import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
 import org.nakedobjects.persistence.sql.ValueMapperLookup;
-import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.utility.NotImplementedException;
 
 import org.apache.log4j.Logger;

@@ -41,9 +41,9 @@ public class Account extends AbstractNakedObject {
 
     public Account() {
         accountNumber = new TextString();
-        outStandingClaims = new InternalCollection(Claim.class, this);
-        claims = new InternalCollection(Claim.class, this);
-        payments = new InternalCollection(Payment.class, this);
+        outStandingClaims = createInternalCollection(Claim.class);
+        claims = createInternalCollection(Claim.class);
+        payments = createInternalCollection(Payment.class);
     }
 
     public Title title() {

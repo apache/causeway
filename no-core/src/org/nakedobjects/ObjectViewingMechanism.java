@@ -1,9 +1,9 @@
 package org.nakedobjects;
 
+import org.nakedobjects.configuration.ComponentException;
+import org.nakedobjects.configuration.ConfigurationException;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.UpdateNotifier;
-import org.nakedobjects.utility.ComponentException;
-import org.nakedobjects.utility.ConfigurationException;
 
 
 public interface ObjectViewingMechanism {

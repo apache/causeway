@@ -1,5 +1,6 @@
 package org.nakedobjects.persistence.sql.auto;
 
+import org.nakedobjects.configuration.Configuration;
 import org.nakedobjects.object.AbstractNakedObject;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -17,7 +18,6 @@ import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
 import org.nakedobjects.persistence.sql.ValueMapper;
 import org.nakedobjects.persistence.sql.ValueMapperLookup;
-import org.nakedobjects.utility.Configuration;
 
 import java.util.Vector;
 

@@ -226,7 +226,7 @@
 
 		<antcall target="-core"/>
 		<!-- antcall target="-no-distribution"/-->
-		<!-- antcall target="-no-containers"/-->
+		<antcall target="-no-containers"/>
 		<!-- antcall target="-os-cache"/-->
 		<antcall target="-os-file"/>
 		<antcall target="-os-sql"/>

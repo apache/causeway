@@ -1,8 +1,8 @@
 package org.nakedobjects.example.expenses;
+import org.nakedobjects.configuration.ComponentException;
+import org.nakedobjects.configuration.ConfigurationException;
 import org.nakedobjects.exploration.AbstractExplorationFixture;
 import org.nakedobjects.object.value.Money;
-import org.nakedobjects.utility.ComponentException;
-import org.nakedobjects.utility.ConfigurationException;
 import org.nakedobjects.xat.AcceptanceTestCase;
 import org.nakedobjects.xat.TestObject;
 

@@ -5,6 +5,7 @@ import org.nakedobjects.object.AbstractNakedObject;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.Title;
 import org.nakedobjects.object.collection.InternalCollection;
+import org.nakedobjects.object.collection.SimpleInternalCollection;
 import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.value.TextString;
 
@@ -17,7 +18,7 @@ public final class User extends AbstractNakedObject {
     
     public User() {
         name = new TextString();
-        roles = new InternalCollection(Role.class, this);
+        roles = new SimpleInternalCollection(Role.class, this);
     }
 
     public User(String name) {

@@ -36,7 +36,7 @@ public class Project extends AbstractNakedObject {
     private ProjectExpenses expenses;
 
     public Project() {
-        teamMembers = new InternalCollection(Employee.class, this);
+        teamMembers = createInternalCollection(Employee.class);
         name = new TextString();
     }
 

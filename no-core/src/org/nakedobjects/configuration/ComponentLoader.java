@@ -1,4 +1,4 @@
-package org.nakedobjects.utility;
+package org.nakedobjects.configuration;
 
 public class ComponentLoader {
     /**

@@ -11,7 +11,7 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.SimpleOid;
+import org.nakedobjects.object.SerialOid;
 import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.reflect.FieldSpecification;
@@ -55,7 +55,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
         LOG.debug("Compiling object data for " + object);
 
         ObjectData data;
-        data = new ObjectData(object.getSpecification(), (SimpleOid) object.getOid());
+        data = new ObjectData(object.getSpecification(), (SerialOid) object.getOid());
 
         FieldSpecification[] fields = object.getSpecification().getFields();
 
@@ -94,7 +94,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
     }
 
     public void destroyObject(NakedObject object) throws ObjectStoreException {
-        dataManager.remove((SimpleOid) object.getOid());
+        dataManager.remove((SerialOid) object.getOid());
     }
 
     public void endTransaction() {}
@@ -128,7 +128,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
             ObjectData instanceData = data.element(i);
             LOG.debug("instance data " + instanceData);
 
-            SimpleOid oid = instanceData.getOid();
+            SerialOid oid = instanceData.getOid();
             NakedObject instance;
             if (loadedObjects.isLoaded(oid)) {
                 instance = loadedObjects.getLoadedObject(oid);
@@ -182,7 +182,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
 
     public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectStoreException {
         LOG.debug("getObject " + oid);
-        Data data = dataManager.loadData((SimpleOid) oid);
+        Data data = dataManager.loadData((SerialOid) oid);
         LOG.debug("Data read " + data);
 
         NakedObject object;
@@ -255,7 +255,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
                     } else {
                         Oid oid = reference;
                         NakedObject fieldObject;
-                        Data fieldData = (Data) dataManager.loadData((SimpleOid) oid);
+                        Data fieldData = (Data) dataManager.loadData((SerialOid) oid);
 
                         if (fieldData != null) {
                             fieldObject = (NakedObject) classFor(fieldData.getClassName()).acquireInstance();
@@ -287,7 +287,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
      * internal collection populated by this method.
      */
     private NakedObject recreateObject(ObjectData data) throws ObjectStoreException {
-        SimpleOid oid = data.getOid();
+        SerialOid oid = data.getOid();
         if (loadedObjects.isLoaded(oid)) { return loadedObjects.getLoadedObject(oid); }
         NakedObjectSpecification nc = classFor(data.getClassName());
         NakedObject object = (NakedObject) nc.acquireInstance();
@@ -300,7 +300,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
     }
 
     public void resolve(NakedObject object) throws ObjectStoreException {
-        ObjectData data = (ObjectData) dataManager.loadData((SimpleOid) object.getOid());
+        ObjectData data = (ObjectData) dataManager.loadData((SerialOid) object.getOid());
         initObject(object, data);
     }
 

@@ -5,7 +5,7 @@ import org.nakedobjects.object.MockObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.Role;
-import org.nakedobjects.object.SimpleOid;
+import org.nakedobjects.object.SerialOid;
 import org.nakedobjects.object.ValueObjectExample;
 import org.nakedobjects.object.value.Date;
 import org.nakedobjects.object.value.DateTime;
@@ -47,7 +47,7 @@ public class ObjectDataTest extends NakedObjectTestCase {
         NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
         
         NakedObjectSpecification type = NakedObjectSpecification.getNakedClass(ValueObjectExample.class.getName());
-        data = new ObjectData(type, new SimpleOid(1));
+        data = new ObjectData(type, new SerialOid(1));
         
         new TestClock();
     }
@@ -58,13 +58,13 @@ public class ObjectDataTest extends NakedObjectTestCase {
 
     public void test() {
         NakedObjectSpecification roleType = NakedObjectSpecification.getNakedClass(Role.class.getName());
-        ObjectData roleData = new ObjectData(roleType, new SimpleOid(1));
+        ObjectData roleData = new ObjectData(roleType, new SerialOid(1));
 
         roleData.set("Name", "supervisor");
-        roleData.set("Person", new SimpleOid(2));
+        roleData.set("Person", new SerialOid(2));
 
         assertEquals("supervisor", roleData.get("Name"));
-        assertEquals(new SimpleOid(2), roleData.get("Person"));
+        assertEquals(new SerialOid(2), roleData.get("Person"));
     }
 
     public void testText() {

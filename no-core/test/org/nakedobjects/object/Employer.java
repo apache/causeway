@@ -73,7 +73,7 @@ public abstract class Employer extends AbstractNakedObject {
 
     public abstract InternalCollection getEmployees();
 
-    public abstract org.nakedobjects.object.collection.ArbitraryCollection getIntraCompanyTeam();
+    public abstract NakedCollection getIntraCompanyTeam();
 
     public void removeEmployees(Employee removeEmployee) {
         removeEmployee.setEmployer(null);
@@ -82,7 +82,7 @@ public abstract class Employer extends AbstractNakedObject {
 
     public abstract void setCEO(Employee ceo);
 
-    public abstract void setIntraCompanyTeam(org.nakedobjects.object.collection.ArbitraryCollection newIntraCompanyTeam);
+    public abstract void setIntraCompanyTeam(NakedCollection newIntraCompanyTeam);
 
     public Title title() {
         return getCompanyName().title();

@@ -22,8 +22,6 @@
     Road, Woking GU21 1NR, UK).
 */
 
-package org.nakedobjects.object;
-
 import java.awt.Canvas;
 import java.awt.Font;
 import java.awt.Frame;

@@ -1,13 +1,13 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.ObjectViewingMechanismListener;
+import org.nakedobjects.configuration.ComponentException;
+import org.nakedobjects.configuration.ComponentLoader;
+import org.nakedobjects.configuration.Configuration;
+import org.nakedobjects.configuration.ConfigurationException;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.UpdateNotifier;
 import org.nakedobjects.utility.Assert;
-import org.nakedobjects.utility.ComponentException;
-import org.nakedobjects.utility.ComponentLoader;
-import org.nakedobjects.utility.Configuration;
-import org.nakedobjects.utility.ConfigurationException;
 import org.nakedobjects.viewer.skylark.basic.ClassIconSpecification;
 import org.nakedobjects.viewer.skylark.basic.EmptyField;
 import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;

@@ -1,6 +1,9 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.object.collection.ArbitraryNakedCollection;
 import org.nakedobjects.object.collection.InternalCollection;
+import org.nakedobjects.object.collection.SimpleArbitraryCollection;
+import org.nakedobjects.object.collection.SimpleInternalCollection;
 import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.reflect.FieldSpecification;
@@ -56,8 +59,17 @@ public abstract class AbstractNakedObject implements NakedObject {
      * A utility method for creating a new internal collection object for storing one-to-many
      * associations.
      */
+    protected ArbitraryNakedCollection createArbitraryCollection(String name) {
+        return new SimpleArbitraryCollection(name);
+    }
+    
+
+    /**
+     * A utility method for creating a new internal collection object for storing one-to-many
+     * associations.
+     */
     protected InternalCollection createInternalCollection(Class elementType) {
-        return new InternalCollection(elementType, this);
+        return new SimpleInternalCollection(elementType, this);
     }
     
     /**
@@ -65,7 +77,7 @@ public abstract class AbstractNakedObject implements NakedObject {
      * associations.
      */
     protected InternalCollection createInternalCollection(String elementType) {
-        return getObjectManager().createInternalCollection(elementType, this);
+        return  new SimpleInternalCollection(elementType, this);
     }
         
     /**
@@ -179,7 +191,7 @@ public abstract class AbstractNakedObject implements NakedObject {
 
     /**
      */
-    public void destroy() throws ObjectStoreException {
+    protected void destroy() throws ObjectStoreException {
         if (isPersistent()) {
             getObjectManager().destroyObject(this);
         }

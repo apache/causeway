@@ -6,7 +6,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.collection.InstanceCollection;
+import org.nakedobjects.object.collection.SimpleInstanceCollection;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.security.Session;
 import org.nakedobjects.utility.Debug;
@@ -118,7 +118,7 @@ public class DebugView implements DebugInfo {
             LOG.debug("Class details for " + nc);
             //       if(! (object instanceof NakedClass || object instanceof
             // InternalCollection)) {
-            if (!(object instanceof NakedClass || object instanceof InstanceCollection)) {
+            if (!(object instanceof NakedClass || object instanceof SimpleInstanceCollection)) {
                 info.append(nc.debugInterface());
             }
         }

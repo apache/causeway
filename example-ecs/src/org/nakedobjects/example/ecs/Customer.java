@@ -18,9 +18,9 @@ public class Customer extends AbstractNakedObject {
     public Customer() {
         firstName = new TextString();
         lastName = new TextString();
-        locations = new InternalCollection(Location.class, this);
-        phoneNumbers = new InternalCollection(Telephone.class, this);
-        bookings = new InternalCollection(Booking.class, this);
+        locations = createInternalCollection(Location.class);
+        phoneNumbers = createInternalCollection(Telephone.class);
+        bookings = createInternalCollection(Booking.class);
     }
 
     public Booking actionNewBooking() {

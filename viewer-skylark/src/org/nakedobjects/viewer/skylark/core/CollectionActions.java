@@ -1,13 +1,13 @@
 package org.nakedobjects.viewer.skylark.core;
 
-import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
-import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
+import org.nakedobjects.viewer.skylark.special.CollectionDisplayIterator;
 
 
 public class CollectionActions extends AbstractViewDecorator {
@@ -19,10 +19,10 @@ public class CollectionActions extends AbstractViewDecorator {
         b.append("CollectionActions");
     }
 
-    private NakedCollection getCollection() {
-        ObjectContent content = (ObjectContent) getContent();
+    private CollectionDisplayIterator getCollection() {
+        CollectionContent content = (CollectionContent) getContent();
 
-        return (NakedCollection) content.getObject();
+        return content.getIterator();
     }
 
     public void menuOptions(MenuOptionSet options) {

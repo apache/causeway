@@ -1,47 +1,20 @@
-package org.nakedobjects.object;
+package org.nakedobjects.object.reflect;
 
 
-import org.nakedobjects.io.TransferableReader;
-import org.nakedobjects.io.TransferableWriter;
+/**
+ * A runtime exception indicating an problem has occurred within the Naked Objects framework.
+ */
+public class NakedObjectSpecificationException extends RuntimeException {
 
-
-public class SimpleOid implements Oid {
-    private final long serialNo;
-   
-    public SimpleOid(long serialNo) {
-        this.serialNo = serialNo;
+    public NakedObjectSpecificationException() {
+        super();
     }
 
-    public SimpleOid(TransferableReader data) {
-        serialNo = data.readLong();
-    }
-
-    public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (obj instanceof SimpleOid) {
-            return ((SimpleOid) obj).serialNo == serialNo;
-        }
-        return false;
-    }
-
-    public void writeData(TransferableWriter data) {
-        data.writeLong(serialNo);
-    }
-
-    public long getSerialNo() {
-        return serialNo;
-    }
-
-    public int hashCode() {
-        return 37 * 17 + (int) (serialNo ^ (serialNo >>> 32));
-    }
-
-    public String toString() {
-        return "OID#" + Long.toHexString(serialNo).toUpperCase();
+    public NakedObjectSpecificationException(String s) {
+        super(s);
     }
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete

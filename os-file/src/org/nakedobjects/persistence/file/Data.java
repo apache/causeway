@@ -25,19 +25,19 @@
 package org.nakedobjects.persistence.file;
 
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.SimpleOid;
+import org.nakedobjects.object.SerialOid;
 
 
 public abstract class Data {
    private final String type;
-   private final SimpleOid oid;
+   private final SerialOid oid;
 
-   Data(NakedObjectSpecification type, SimpleOid oid) {
+   Data(NakedObjectSpecification type, SerialOid oid) {
       this.type = type.getFullName();
       this.oid = oid;
    }
    
-	public SimpleOid getOid() {
+	public SerialOid getOid() {
 		return oid;
 	}
 

@@ -1,8 +1,8 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.configuration.ComponentException;
+import org.nakedobjects.configuration.ConfigurationException;
 import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.utility.ComponentException;
-import org.nakedobjects.utility.ConfigurationException;
 
 
 public abstract class NakedObjectStoreAdvancedTestCase extends NakedObjectStoreTestCase {
@@ -37,6 +37,7 @@ public abstract class NakedObjectStoreAdvancedTestCase extends NakedObjectStoreT
         people = new Person[names.length];
         for (int i = 0; i < names.length; i++) {
             people[i] = new Person();
+            people[i].setContext(context);
             people[i].setOid(nextOid());
             people[i].name.setValue(names[i]);
             objectStore.createObject(people[i]);
@@ -48,6 +49,7 @@ public abstract class NakedObjectStoreAdvancedTestCase extends NakedObjectStoreT
         roles = new Role[roleNames.length];
         for (int i = 0; i < roleNames.length; i++) {
             roles[i] = new Role();
+            roles[i].setContext(context);
             roles[i].setOid(nextOid());
             roles[i].name.setValue(roleNames[i]);
             roles[i].person = people[i];

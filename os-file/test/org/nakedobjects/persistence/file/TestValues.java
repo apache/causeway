@@ -3,7 +3,7 @@ package org.nakedobjects.persistence.file;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Role;
-import org.nakedobjects.object.SimpleOid;
+import org.nakedobjects.object.SerialOid;
 import org.nakedobjects.object.value.Date;
 import org.nakedobjects.object.value.DateTime;
 import org.nakedobjects.object.value.Logical;
@@ -20,7 +20,7 @@ public class TestValues {
 		DataManager manager = new XmlDataManager("tmp/tests");
 
 		NakedObjectSpecification type = NakedObjectSpecification.getNakedClass(Role.class.getName());
-		SimpleOid oid = new SimpleOid(99);
+		SerialOid oid = new SerialOid(99);
 		ObjectData data =  new ObjectData(type, oid);
 
 //		data.set("field1", NakedObjectManager.getInstance().getNakedClass(Role.class).getName(), 101);
@@ -47,11 +47,11 @@ public class TestValues {
 		data.saveValue("money", m);
 		System.out.println(m + " " + m.saveString());
 		
-		SimpleOid coid = new SimpleOid(100);
+		SerialOid coid = new SerialOid(100);
 		
 		data.initCollection(coid, "field4");
 		for (int i = 0; i < 6; i++) {
-			data.addElement("field4", new SimpleOid(103 + i));
+			data.addElement("field4", new SerialOid(103 + i));
 		}		
 		
 		manager.save(data);

@@ -1,10 +1,11 @@
-package org.nakedobjects.object.collection;
+package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.LocalReflectionFactory;
 import org.nakedobjects.object.MockObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Role;
+import org.nakedobjects.object.collection.SimpleArbitraryCollection;
 import org.nakedobjects.object.value.TestClock;
 
 import java.util.Enumeration;
@@ -16,11 +17,11 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.PropertyConfigurator;
 
 public class NakedCollectionTests extends TestCase {
-	private ArbitraryCollection ac;
 	private final int SIZE = 79;
 	private Role elements[];
     private MockObjectManager manager;
-	
+    private CollectionIterator ac;
+    
 	public NakedCollectionTests(String name) {
 		super(name);
 	}
@@ -33,18 +34,21 @@ public class NakedCollectionTests extends TestCase {
         NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
 
         manager = MockObjectManager.setup();
-		
-		ac = new ArbitraryCollection();
-		ac.setContext(manager.getContext());
+    
+        SimpleArbitraryCollection collection;
+        collection = new SimpleArbitraryCollection();
+        collection.setContext(manager.getContext());
 		
 		elements = new Role[SIZE];
 		for (int i = 0; i < elements.length; i++) {
 			elements[i] = new Role();
 			elements[i].getName().setValue("Element " + i);
-			assertTrue(!ac.contains(elements[i]));
-			ac.add(elements[i]);
-			assertTrue(ac.contains(elements[i]));
+			assertTrue(!collection.contains(elements[i]));
+			collection.add(elements[i]);
+			assertTrue(collection.contains(elements[i]));
 		}
+		
+	    ac = new CollectionIterator(collection);
 	}
 	
     protected void tearDown() throws Exception {
@@ -52,32 +56,18 @@ public class NakedCollectionTests extends TestCase {
         super.tearDown();
     }
 
-
-
-	public void testAddTwice() {
-		ac.add(elements[1]);
-		assertEquals(SIZE, ac.size());
-	}
-	
 	public static void main(String[] args) {
 		junit.textui.TestRunner.run(NakedCollectionTests.class);
-	}
-
-	public void testTitle() {
-		assertEquals("", ac.title().toString());
 	}
 
 	public void testGetWindowSize() throws ObjectStoreException {
 		assertEquals(12, ac.getDisplaySize());
 		ac.setDisplaySize(10);
 		assertEquals(10, ac.getDisplaySize());
-		ac.makePersistent();
 		assertEquals(10, ac.getDisplaySize());
 	}
 
 	public void testDisplayElements() throws ObjectStoreException {
-		displayElements();
-		ac.makePersistent();
 		displayElements();
 	}
 	
@@ -90,26 +80,8 @@ public class NakedCollectionTests extends TestCase {
 		}
 		assertEquals(ac.getDisplaySize(), i);
 	}
-
-	public void testElements() throws ObjectStoreException {
-		elements();
-		ac.makePersistent();
-		elements();
-	}
 		
-	public void elements() {
-		Enumeration data = ac.elements();
-		int i = 0;
-		while (data.hasMoreElements()) {
-			Role element = (Role) data.nextElement();
-			assertEquals(elements[i++], element);
-		}
-		assertEquals("all elements retrieved", SIZE, i);
-	}
-
 	public void testFirst() throws ObjectStoreException {
-		first();
-		ac.makePersistent();
 		first();
 	}
 	
@@ -129,7 +101,6 @@ public class NakedCollectionTests extends TestCase {
 		ac.first();
 		assertTrue(ac.hasNext());
 		// using persistence
-		ac.makePersistent();
 		ac.first();
 		assertTrue(ac.hasNext());
 		assertTrue(!ac.hasPrevious());
@@ -139,7 +110,6 @@ public class NakedCollectionTests extends TestCase {
 		ac.last();
 		assertTrue(ac.hasPrevious());
 		// using persistence
-		ac.makePersistent();
 		ac.last();
 		assertTrue(ac.hasPrevious());
 		assertTrue(!ac.hasNext());
@@ -148,7 +118,6 @@ public class NakedCollectionTests extends TestCase {
 	public void testLast() throws ObjectStoreException {
 		last();
 		// using persistence
-		ac.makePersistent();
 		last();
 	}
 
@@ -166,7 +135,6 @@ public class NakedCollectionTests extends TestCase {
 	public void testNext() throws ObjectStoreException {
 		next();
 		// using persistence
-		ac.makePersistent();
 		next();
 	}
 	
@@ -195,7 +163,6 @@ public class NakedCollectionTests extends TestCase {
 
 	public void testPrevious() throws ObjectStoreException {
 		previous();
-		ac.makePersistent();
 		previous();	
 	}
 	
@@ -222,45 +189,6 @@ public class NakedCollectionTests extends TestCase {
 			Role element = (Role) data.nextElement();
 			assertEquals(elements[i++], element);
 		}
-	}
-
-	public void testRemove() {
-		for (int i = 0; i < SIZE; i++) {
-			ac.remove(elements[i]);
-		}
-		assertEquals(0, ac.size());
-	}
-
-	public void testPersistentRemove() throws ObjectStoreException {
-		ac.makePersistent();
-		for (int i = 0; i < SIZE; i++) {
-			ac.remove(elements[i]);
-		}
-		assertEquals(0, ac.size());
-	}
-
-	public void testReset() {
-	}
-
-	public void testSize() throws ObjectStoreException {
-		assertEquals(SIZE, ac.size())	;
-		ac.makePersistent();
-		assertEquals("persistent", SIZE, ac.size())	;
-	}
-	
-	public void testIsEmpty() {
-		for (int i = 0; i < SIZE; i++) {
-			ac.remove(elements[i]);
-		}
-		assertTrue(ac.isEmpty());
-	}
-
-	public void testPersistentIsEmpty() throws ObjectStoreException {
-		ac.makePersistent();
-		for (int i = 0; i < SIZE; i++) {
-			ac.remove(elements[i]);
-		}
-		assertTrue(ac.isEmpty());
 	}
 }
 

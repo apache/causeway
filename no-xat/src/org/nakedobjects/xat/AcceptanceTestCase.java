@@ -1,5 +1,7 @@
 package org.nakedobjects.xat;
 
+import org.nakedobjects.configuration.ComponentException;
+import org.nakedobjects.configuration.ConfigurationException;
 import org.nakedobjects.exploration.ExplorationFixture;
 import org.nakedobjects.exploration.ExplorationSetUp;
 import org.nakedobjects.object.LocalObjectManager;
@@ -13,8 +15,6 @@ import org.nakedobjects.object.OidGenerator;
 import org.nakedobjects.object.SimpleOidGenerator;
 import org.nakedobjects.object.TransientObjectStore;
 import org.nakedobjects.security.Session;
-import org.nakedobjects.utility.ComponentException;
-import org.nakedobjects.utility.ConfigurationException;
 import org.nakedobjects.xat.html.HtmlTestObjectFactory;
 
 import java.util.Hashtable;

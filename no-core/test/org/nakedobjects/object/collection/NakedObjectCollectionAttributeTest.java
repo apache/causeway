@@ -119,7 +119,7 @@ public class NakedObjectCollectionAttributeTest
     }
 
     public void testCollectionObject() {
-        ArbitraryCollection team = new ArbitraryCollection(); //(ArbitraryCollection)e1.getObjectStore().newInstance(ArbitraryCollection.class);
+        ArbitraryNakedCollection team = new SimpleArbitraryCollection(); //(ArbitraryCollection)e1.getObjectStore().newInstance(ArbitraryCollection.class);
 
         team.created();
 
@@ -139,7 +139,7 @@ public class NakedObjectCollectionAttributeTest
     public void testNewObjects() {
         assertEquals("Disney", employer.getCompanyName().title().toString());
         assertTrue("A collection", 
-                   employer.getEmployees() instanceof org.nakedobjects.object.collection.AbstractNakedCollection);
+                   employer.getEmployees() instanceof org.nakedobjects.object.collection.AbstractVectorCollection);
         assertEquals("Mickey", e1.getName().title().toString());
         assertEquals(null, e1.getEmployer());
         assertEquals("Pluto", e2.getName().title().toString());

@@ -1,12 +1,12 @@
 package org.nakedobjects.exploration;
 
-import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.collection.InstanceCollection;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.security.Session;
 import org.nakedobjects.security.User;
 
@@ -137,7 +137,7 @@ public class ExplorationSetUp {
     private void setInitialUser() {
         if(user != null) {
 	        NakedObjectSpecification cls = NakedObjectSpecification.getNakedClass(User.class.getName());
-	        InstanceCollection coll = objectManager.findInstances(cls, user);
+	        NakedCollection coll = objectManager.findInstances(cls, user);
 	        if(coll.size() == 0) {
 	            throw new NakedObjectRuntimeException("No user " + user);
 	        }

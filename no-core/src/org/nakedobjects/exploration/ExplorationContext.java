@@ -2,15 +2,15 @@ package org.nakedobjects.exploration;
 
 import org.nakedobjects.object.AbstractUserContext;
 import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.Title;
-import org.nakedobjects.object.collection.InstanceCollection;
 import org.nakedobjects.object.value.TextString;
 
 public class ExplorationContext extends AbstractUserContext  {
-    private InstanceCollection users;
+    private NakedCollection users;
     private final TextString name = new TextString();
     
-    public void setUpUsers(InstanceCollection users) {
+    public void setUpUsers(NakedCollection users) {
         this.users = users;
     }
     

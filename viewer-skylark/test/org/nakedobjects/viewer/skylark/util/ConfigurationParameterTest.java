@@ -5,7 +5,8 @@ import java.util.Properties;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
-import org.nakedobjects.utility.Configuration;
+
+import org.nakedobjects.configuration.Configuration;
 
 import junit.framework.TestCase;
 

@@ -47,7 +47,7 @@ public class GenericTestObject extends AbstractNakedObject {
         return "Generic Objects";
     }
     private ContactTestObject customer;
-    private final InternalCollection products = new InternalCollection(ProductTestObject.class, this);
+    private final InternalCollection products = createInternalCollection(ProductTestObject.class);
 
      public About aboutActionTest() {
         return ActionAbout.enable(customer != null);

@@ -2,7 +2,7 @@ package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.collection.TypedCollection;
+import org.nakedobjects.object.collection.SimpleTypedCollection;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.security.Session;
 import org.nakedobjects.viewer.skylark.Canvas;
@@ -57,8 +57,8 @@ class TableHeaderBuilder extends AbstractBuilderDecorator {
     }
 
     public View createCompositeView(Content content, CompositeViewSpecification specification, ViewAxis axis) {
-        TypedCollection coll = (TypedCollection) ((ObjectContent) content).getObject();
-        FieldSpecification[] viewFields = NakedObjectSpecification.getNakedClass(coll.getType().getName()).getVisibleFields(
+        SimpleTypedCollection coll = (SimpleTypedCollection) ((ObjectContent) content).getObject();
+        FieldSpecification[] viewFields = NakedObjectSpecification.getNakedClass(coll.getType().getFullName()).getVisibleFields(
                 null, Session.getSession().getContext());
         TableColumnAxis tableAxis = new TableColumnAxis(viewFields, 100);
 
@@ -78,7 +78,7 @@ public class TableSpecification extends AbstractCompositeViewSpecification imple
     }
 
     public boolean canDisplay(Naked object) {
-        return object instanceof TypedCollection;
+        return object instanceof SimpleTypedCollection;
     }
 
     public View createSubview(Content content, ViewAxis axis) {

@@ -1,10 +1,9 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.collection.InstanceCollection;
+import org.nakedobjects.configuration.Configuration;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.value.TextString;
-import org.nakedobjects.utility.Configuration;
 
 import org.apache.log4j.Logger;
 
@@ -84,7 +83,7 @@ public class NakedClass extends AbstractNakedObject {
 		return find;
     }
 
-    public InstanceCollection actionInstances() {
+    public NakedCollection actionInstances() {
         return getObjectManager().allInstances(forNakedClass());
     }
 

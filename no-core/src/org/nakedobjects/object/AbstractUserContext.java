@@ -1,6 +1,7 @@
 package org.nakedobjects.object;
 
 import org.nakedobjects.object.collection.InternalCollection;
+import org.nakedobjects.object.collection.SimpleInternalCollection;
 import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.security.Role;
 import org.nakedobjects.security.User;
@@ -9,15 +10,15 @@ import org.apache.log4j.Logger;
 
 
 
-public abstract class AbstractUserContext extends AbstractNakedObject {
+public abstract class AbstractUserContext extends AbstractNakedObject implements UserContext {
     private static final Logger LOG = Logger.getLogger(AbstractUserContext.class);
     
     public static String fieldOrder() {
     	return "user, classes, objects";
     }
     	
-	private final InternalCollection classes = new InternalCollection(NakedClass.class, this);
-    private final InternalCollection objects = new InternalCollection(NakedObject.class, this);
+	private final InternalCollection classes = new SimpleInternalCollection(NakedClass.class, this);
+    private final InternalCollection objects = new SimpleInternalCollection(NakedObject.class, this);
 	private User user;
     
     public void aboutClasses(FieldAbout about, NakedObject element, boolean add) {

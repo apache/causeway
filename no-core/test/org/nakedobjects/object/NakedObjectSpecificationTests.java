@@ -2,11 +2,8 @@ package org.nakedobjects.object;
 
 import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.value.Date;
 import org.nakedobjects.object.value.TestClock;
 import org.nakedobjects.object.value.TextString;
-import org.nakedobjects.object.value.TimeStamp;
-import org.nakedobjects.system.Clock;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -17,17 +14,16 @@ import org.apache.log4j.LogManager;
 import com.mockobjects.ExpectationSet;
 
 // TODO most of these tests are testing the JavaReflector; move them to its test
-public class NakedClassTests extends TestCase {
-
+public class NakedObjectSpecificationTests extends TestCase {
     private MockReflector reflector;
     private NakedObjectSpecification nakedClass;
     private MockObjectManager manager;
 
     public static void main(String[] args) {
-        junit.textui.TestRunner.run(new TestSuite(NakedClassTests.class));
+        junit.textui.TestRunner.run(new TestSuite(NakedObjectSpecificationTests.class));
     }
 
-    public NakedClassTests(String name) {
+    public NakedObjectSpecificationTests(String name) {
         super(name);
     }
 

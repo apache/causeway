@@ -1,11 +1,11 @@
 package org.nakedobjects.persistence.sql2;
 
+import org.nakedobjects.configuration.Configuration;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedObjectStoreInstancesTestCase;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.SqlObjectStore;
 import org.nakedobjects.persistence.sql.jdbc.JdbcConnector;
-import org.nakedobjects.utility.Configuration;
 
 
 public class ObjectStoreAdvancedTest extends NakedObjectStoreInstancesTestCase {

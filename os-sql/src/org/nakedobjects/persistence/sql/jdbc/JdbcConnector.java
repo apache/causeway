@@ -1,10 +1,10 @@
 package org.nakedobjects.persistence.sql.jdbc;
 
+import org.nakedobjects.configuration.Configuration;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.persistence.sql.AbstractDatabaseConnector;
 import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
-import org.nakedobjects.utility.Configuration;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -29,8 +29,6 @@ public final class PersistentCollectionTestCase extends TestCase {
     private MockObjectManager objectManager;
     private NakedObjectContext context;
 
-//    private static NakedObjectStore objectStore;
-
     public PersistentCollectionTestCase(String name) {
         super(name);
     }
@@ -52,80 +50,11 @@ public final class PersistentCollectionTestCase extends TestCase {
         super.tearDown();
     }
     
-    public void testHasNext() throws ObjectStoreException {
-        AbstractNakedCollection ac = new ArbitraryCollection();
-
-        setupCollection(ac, 26);
-        ac.first();
-        assertTrue(ac.hasNext());
-        ac.first();
-        assertTrue(ac.hasNext());
-        assertTrue(!ac.hasPrevious());
-    }
-
-    public void testHasPrevious() throws ObjectStoreException {
-        AbstractNakedCollection ac = new ArbitraryCollection();
-
-        setupCollection(ac, 26);
-        ac.last();
-        assertTrue(ac.hasPrevious());
-        ac.last();
-        assertTrue(ac.hasPrevious());
-        assertTrue(!ac.hasNext());
-    }
-
-    public void testCachingWithDefaultSizes() throws ObjectStoreException {
-        AbstractNakedCollection collection = new ArbitraryCollection();
-
-        Role[] e = setupCollection(collection, 26);
-
-        // now check the cache - moving forward through it
-        collection.first();
-        checkDisplayElements(collection, e, 0); // first
-        collection.next();
-        checkDisplayElements(collection, e, 12); // + 12
-        collection.next();
-        checkDisplayElements(collection, e, 14); // + 12 > 26 -> 26 - 12 = 14
-        collection.next();
-        checkDisplayElements(collection, e, 14); // 14...25
-
-        // moving backward
-        collection.previous();
-        checkDisplayElements(collection, e, 2); // 2..13
-        collection.previous();
-        checkDisplayElements(collection, e, 0); // 0..11
-        collection.previous();
-        checkDisplayElements(collection, e, 0);
-    }
-
-    /**
-     *
-     */
-    public void testCachingWithDefaultSizes2() throws ObjectStoreException {
-        AbstractNakedCollection collection = new ArbitraryCollection();
-
-        Role[] e = setupCollection(collection, 11);
-
-        // now check the cache - moving forward through it
-        collection.first();
-        checkDisplayElements(collection, e, 0); // first
-        collection.next();
-        checkDisplayElements(collection, e, 0); // + 12 > 26
-
-        // moving backward
-        collection.previous();
-        checkDisplayElements(collection, e, 0);
-        collection.previous();
-        checkDisplayElements(collection, e, 0);
-        collection.previous();
-        checkDisplayElements(collection, e, 0);
-    }
-
     /**
      *
      */
     public void testElementsWithCaching() throws ObjectStoreException {
-        AbstractNakedCollection collection = new ArbitraryCollection();
+        ArbitraryNakedCollection collection = new SimpleArbitraryCollection();
         Role[] e = setupCollection(collection, 200);
         Enumeration enum = collection.elements();
 
@@ -140,7 +69,7 @@ public final class PersistentCollectionTestCase extends TestCase {
     }
 
     public void testElementsWithCaching2() throws ObjectStoreException {
-        AbstractNakedCollection collection = new ArbitraryCollection();
+        ArbitraryNakedCollection collection = new SimpleArbitraryCollection();
         Role[] e = setupCollection(collection, 2);
         Enumeration enum = collection.elements();
 
@@ -161,7 +90,7 @@ public final class PersistentCollectionTestCase extends TestCase {
         Team m = new Team();
         m.setContext(context);
 
-        AbstractNakedCollection collection = m.getMembers();
+        InternalCollection collection = m.getMembers();
 
         Person[] v = new Person[4];
 
@@ -171,12 +100,6 @@ public final class PersistentCollectionTestCase extends TestCase {
 
         assertEquals(4, collection.size());
 
-        // now check the cache - moving forward through it
-        collection.first();
-        checkDisplayElements(collection, v, 0);
-        collection.next();
-        checkDisplayElements(collection, v, 0);
-
         // try and add another type
         collection.add(new AssociationExample());
         collection.add(new Role());
@@ -184,177 +107,9 @@ public final class PersistentCollectionTestCase extends TestCase {
         assertEquals("Size should be the same as before", 4, collection.size());
     }
 
-    /**
-     *
-     */
-    public void testCachingWithLargeCollection() throws ObjectStoreException {
-        AbstractNakedCollection collection = new ArbitraryCollection();
-
-        Role[] e = setupCollection(collection, 33);
-
-        collection.setDisplaySize(5);
-
-        // now check the cache - moving forward through it
-        collection.first();
-        checkDisplayElements(collection, e, 0);
-        assertTrue("..5", collection.hasNext());
-        collection.next();
-        checkDisplayElements(collection, e, 5);
-        assertTrue("..10", collection.hasNext());
-        collection.next();
-        checkDisplayElements(collection, e, 10);
-        assertTrue("..15", collection.hasNext());
-        collection.next();
-        checkDisplayElements(collection, e, 15);
-        assertTrue("..20", collection.hasNext());
-        collection.next();
-        checkDisplayElements(collection, e, 20);
-        assertTrue("..25", collection.hasNext());
-        collection.next();
-        checkDisplayElements(collection, e, 25);
-        assertTrue("..last", collection.hasNext());
-        collection.next();
-        checkDisplayElements(collection, e, 28);
-        assertTrue("..last again", !collection.hasNext());
-        collection.next();
-        checkDisplayElements(collection, e, 28);
-
-        // moving backward
-        collection.previous();
-        assertTrue("..23", collection.hasPrevious());
-        checkDisplayElements(collection, e, 23);
-        assertTrue("..18", collection.hasPrevious());
-        collection.previous();
-        checkDisplayElements(collection, e, 18);
-        assertTrue("..13", collection.hasPrevious());
-        collection.previous();
-        checkDisplayElements(collection, e, 13);
-        assertTrue("..8", collection.hasPrevious());
-        collection.previous();
-        checkDisplayElements(collection, e, 8);
-        assertTrue("..3", collection.hasPrevious());
-        collection.previous();
-        checkDisplayElements(collection, e, 3);
-        assertTrue("..first", collection.hasPrevious());
-        collection.previous();
-        checkDisplayElements(collection, e, 0);
-        assertTrue("..first again", !collection.hasPrevious());
-        collection.previous();
-        checkDisplayElements(collection, e, 0);
-    }
-
-    /**
-     *
-     */
-    public void testCachingWithLargeCollection2() throws ObjectStoreException {
-        AbstractNakedCollection collection = new ArbitraryCollection();
-
-        collection.setDisplaySize(7);
-        Role[] e = setupCollection(collection, 26);
-
-        // now check the cache - moving forward through it
-        collection.first();
-        checkDisplayElements(collection, e, 0);
-        collection.next();
-        checkDisplayElements(collection, e, 7);
-        collection.next();
-        checkDisplayElements(collection, e, 14);
-        collection.next();
-        checkDisplayElements(collection, e, 19); // 14 + 7 > 26 -> 26 -7 = 19
-        collection.next();
-        checkDisplayElements(collection, e, 19);
-
-        // moving backward
-        collection.previous();
-        checkDisplayElements(collection, e, 12); // 19 -7 = 12
-        collection.previous();
-        checkDisplayElements(collection, e, 5);
-        collection.previous();
-        checkDisplayElements(collection, e, 0);
-        collection.previous();
-        checkDisplayElements(collection, e, 0);
-    }
-
-    /**
-     *
-     */
-    public void testCachingWithLargeCollection3() throws ObjectStoreException {
-        AbstractNakedCollection collection = new ArbitraryCollection();
-
-        Role[] e = setupCollection(collection, 256);
-
-        collection.setDisplaySize(7);
-
-        // now check the cache - moving forward through it
-        collection.first();
-        checkDisplayElements(collection, e, 0);
-        collection.next();
-        checkDisplayElements(collection, e, 7);
-        collection.next();
-        checkDisplayElements(collection, e, 14);
-        collection.last();
-        checkDisplayElements(collection, e, 256 - 7);
-
-        // moving backward
-        collection.previous();
-        checkDisplayElements(collection, e, 256 - 7 - 7);
-        collection.previous();
-        checkDisplayElements(collection, e, 256 - 7 - 7 - 7);
-        collection.first();
-        checkDisplayElements(collection, e, 0);
-    }
-
-    /**
-     *
-     */
-    public void testCachingWithLargeCollection4() throws ObjectStoreException {
-        AbstractNakedCollection collection = new ArbitraryCollection();
-
-        Role[] e = setupCollection(collection, 79);
-
-        // now check the cache - moving forward through it
-        collection.first();
-        checkDisplayElements(collection, e, 0);
-        collection.next();
-        checkDisplayElements(collection, e, 12);
-        collection.next();
-        checkDisplayElements(collection, e, 24);
-        collection.last();
-        checkDisplayElements(collection, e, 79 - 12);
-        collection.next();
-        checkDisplayElements(collection, e, 79 - 12);
-
-        // moving backward
-        collection.previous();
-        checkDisplayElements(collection, e, 79 - 12 - 12);
-        collection.previous();
-        checkDisplayElements(collection, e, 79 - 12 - 12 - 12);
-        collection.first();
-        checkDisplayElements(collection, e, 0);
-        collection.previous();
-        checkDisplayElements(collection, e, 0);
-    }
-
-    /**
-     *
-     */
-    public void testLast() throws ObjectStoreException {
-        AbstractNakedCollection collection = new ArbitraryCollection();
-
-        Role[] e = setupCollection(collection, 26);
-
-        collection.setDisplaySize(5);
-
-        // now check the cache - moving forward through it
-        collection.last();
-        checkDisplayElements(collection, e, 21);
-    }
-
     public void testRemove() throws ObjectStoreException {
-        AbstractNakedCollection collection = new ArbitraryCollection();
+        ArbitraryNakedCollection collection = new SimpleArbitraryCollection();
 
-        collection.setDisplaySize(5);
-        //      collection.setMaxCacheSize(14);
         Role[] e = setupCollection(collection, 26);
 
         //
@@ -365,9 +120,7 @@ public final class PersistentCollectionTestCase extends TestCase {
     }
 
     public void testRemovePersistent() throws ObjectStoreException {
-        AbstractNakedCollection collection = new ArbitraryCollection();
-
-        collection.setDisplaySize(5);
+        ArbitraryNakedCollection collection = new SimpleArbitraryCollection();
 
         Role[] e = setupCollection(collection, 26);
 
@@ -395,12 +148,10 @@ public final class PersistentCollectionTestCase extends TestCase {
      *
      */
     public void testSize() throws ObjectStoreException {
-        AbstractNakedCollection collection = new ArbitraryCollection();
+        ArbitraryNakedCollection collection = new SimpleArbitraryCollection();
 
         setupCollection(collection, 26);
 
-        collection.setDisplaySize(5);
- 
         assertEquals("26 elements added", 26, collection.size());
     }
 
@@ -408,51 +159,15 @@ public final class PersistentCollectionTestCase extends TestCase {
      *
      */
     public void testSmallCollection() throws ObjectStoreException {
-        AbstractNakedCollection collection = new ArbitraryCollection();
+        ArbitraryNakedCollection collection = new SimpleArbitraryCollection();
 
         Role[] e = setupCollection(collection, 8);
-
-        collection.setDisplaySize(5);
-
-        // now check the cache - moving forward through it
-        collection.first();
-        checkDisplayElements(collection, e, 0);
-        collection.next();
-        checkDisplayElements(collection, e, 3);
-        collection.next();
-        checkDisplayElements(collection, e, 3);
-
-        // moving backward
-        collection.previous();
-        checkDisplayElements(collection, e, 0);
-        collection.previous();
-        checkDisplayElements(collection, e, 0);
-        collection.previous();
-        checkDisplayElements(collection, e, 0);
-    }
-
-    private void checkDisplayElements(AbstractNakedCollection collection, Object[] e, int empStart) {
-        Enumeration elements = collection.displayElements();
-
-        assertTrue("No next display elements (start=" + empStart + ")", elements.hasMoreElements());
-
-        for (int i = 0; i < collection.getDisplaySize(); i++) {
-            if (!elements.hasMoreElements()) {
-                return;
-            }
-
-            int empNo = i + empStart;
-
-            assertEquals("Next BasicExample " + empNo, e[empNo], elements.nextElement());
-        }
-
-        assertTrue("Next : Too many elements (start=" + empStart + ")", !elements.hasMoreElements());
     }
 
     /**
      *
      */
-    private Role[] setupCollection(AbstractNakedCollection collection, int size)
+    private Role[] setupCollection(ArbitraryNakedCollection collection, int size)
         throws ObjectStoreException {
         collection.setContext(context);
         

@@ -1,13 +1,13 @@
 package org.nakedobjects.example.ecs;
 
 import org.nakedobjects.object.AbstractUserContext;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.Title;
-import org.nakedobjects.object.collection.InstanceCollection;
 import org.nakedobjects.object.collection.InternalCollection;
 
 public class EcsContext extends AbstractUserContext {
-    private final InternalCollection cities = new InternalCollection(City.class, this);
-    private final InternalCollection customers = new InternalCollection(Customer.class, this);
+    private final InternalCollection cities = createInternalCollection(City.class);
+    private final InternalCollection customers =createInternalCollection(Customer.class);
     
     public void created() {
 		super.created();
@@ -18,7 +18,7 @@ public class EcsContext extends AbstractUserContext {
 		addClass(Location.class);
 		addClass(CreditCard.class);
 
-		InstanceCollection coll = getObjectManager().allInstances(City.class.getName());
+		NakedCollection coll = getObjectManager().allInstances(City.class.getName());
 		getCities().addAll(coll);
 	}
     

@@ -1,24 +1,25 @@
-package org.nakedobjects.utility;
+package org.nakedobjects.configuration;
+
+import org.nakedobjects.utility.StartupException;
 
 
-public class ComponentException extends StartupException {
-	private Throwable cause;
 
-    public ComponentException() {
+public class ConfigurationException extends StartupException {
+
+    public ConfigurationException() {
         super();
     }
 
-    public ComponentException(String s) {
+    public ConfigurationException(String s) {
         super(s);
     }
     
-	public ComponentException(Throwable cause) {
-		super(cause);
-	}
-
-	public ComponentException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
+    public ConfigurationException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
+    public ConfigurationException(Throwable cause) {
+        super(cause);
+    }
 }
 
 /*

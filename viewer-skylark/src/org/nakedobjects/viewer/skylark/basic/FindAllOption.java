@@ -1,9 +1,9 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
-import org.nakedobjects.object.collection.InstanceCollection;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -19,7 +19,7 @@ public class FindAllOption extends MenuOption {
     public void execute(Workspace workspace, View view, Location at) {
         NakedObjectManager objectManager = NakedObjectContext.getDefaultContext().getObjectManager();
         NakedObject pattern = ((ObjectContent) view.getContent()).getObject();
-        InstanceCollection instances = objectManager.findInstances(pattern);
+        NakedCollection instances = objectManager.findInstances(pattern);
 
 		NakedObject object = (instances.size() == 1) ? (NakedObject) instances.elements().nextElement() : instances;
 		

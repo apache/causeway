@@ -7,7 +7,7 @@ import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.control.About;
 
 
-public interface ActionDelegate extends Member {
+public interface Action extends Member {
 
     NakedObject execute(NakedObject object, Naked[] parameters);
 

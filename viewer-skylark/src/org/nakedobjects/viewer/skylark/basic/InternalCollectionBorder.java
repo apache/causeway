@@ -58,8 +58,8 @@ public class InternalCollectionBorder extends AbstractBorder {
 	public void menuOptions(MenuOptionSet options) {
         super.menuOptions(options);
         
-        InternalCollection collection = ((OneToManyField) getContent()).getCollection();
-        NakedObjectSpecification nakedClass = NakedObjectSpecification.getNakedClass(collection.getType().getName());
+        InternalCollection collection = (InternalCollection) ((OneToManyField) getContent()).getCollection();
+        NakedObjectSpecification nakedClass = NakedObjectSpecification.getNakedClass(collection.getType().getFullName());
         
         ClassOption.menuOptions(nakedClass, options);
     }

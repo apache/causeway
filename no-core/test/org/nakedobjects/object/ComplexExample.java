@@ -33,7 +33,7 @@ import org.nakedobjects.object.value.TextString;
  */
 public class ComplexExample extends AbstractNakedObject {
     public Role basic;
-    public final InternalCollection elements = new InternalCollection(NakedObject.class, this);
+    public final InternalCollection elements = createInternalCollection(NakedObject.class);
     public final TextString name = new TextString();
     public Person assoc;
 

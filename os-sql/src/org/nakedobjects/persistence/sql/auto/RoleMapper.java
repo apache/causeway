@@ -2,7 +2,7 @@ package org.nakedobjects.persistence.sql.auto;
 
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.SimpleOid;
+import org.nakedobjects.object.SerialOid;
 import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.Results;
@@ -54,7 +54,7 @@ public class RoleMapper extends NameBasedMapper {
 
 		while (rs.next()) {
 		    int id = rs.getInt("id");
-		    SimpleOid oid = new SimpleOid(id);
+		    SerialOid oid = new SerialOid(id);
 		    LOG.debug("  instance  " + oid);
 		    Role instance;
 		    
@@ -90,7 +90,7 @@ public class RoleMapper extends NameBasedMapper {
 		connector.update("update " + table + " set name='"
 				+ user.getName().stringValue() + "', description='"
 				+ user.getDescription().stringValue() + "' where id = "
-				+ ((SimpleOid) user.getOid()).getSerialNo());
+				+ ((SerialOid) user.getOid()).getSerialNo());
 	}
 
 	protected String table(NakedObjectSpecification cls) {

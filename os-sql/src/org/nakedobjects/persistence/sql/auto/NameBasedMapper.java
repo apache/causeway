@@ -8,7 +8,7 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.ResolveException;
-import org.nakedobjects.object.SimpleOid;
+import org.nakedobjects.object.SerialOid;
 import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.reflect.FieldSpecification;
@@ -71,7 +71,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         String table = table(cls);
         String columns = columns(cls);
         String values = values(cls, object);
-        long id = ((SimpleOid) object.getOid()).getSerialNo();
+        long id = ((SerialOid) object.getOid()).getSerialNo();
         String statement = "insert into " + table + " (ID, " + columns + ") values (" + id + values + ")";
 
         // one-to-many assoc are not persisted - see save
@@ -81,7 +81,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
     public void destroyObject(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
         NakedObjectSpecification cls = object.getSpecification();
         String table = table(cls);
-        long id = ((SimpleOid) object.getOid()).getSerialNo();
+        long id = ((SerialOid) object.getOid()).getSerialNo();
         String statement = "delete from " + table + " where id = " + id;
         connector.update(statement);
     }
@@ -144,7 +144,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
 
     private void loadInternalCollection(DatabaseConnector connector, String id, FieldSpecification field, InternalCollection collection) throws ResolveException, SqlObjectStoreException {
         NakedObjectSpecification cls = collection.forParent().getSpecification();
-        NakedObjectSpecification elementCls = NakedObjectSpecification.getNakedClass(collection.getType().getName());
+        NakedObjectSpecification elementCls = NakedObjectSpecification.getNakedClass(collection.getType().getFullName());
 
         String table = table(cls) + "_" + field.getName().toLowerCase();
         LOG.debug("loading internal collection data from SQL " + table);
@@ -165,7 +165,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
 
     private NakedObject setupReference(LoadedObjects manager, NakedObjectSpecification elementCls, int id) {
         NakedObject element;
-        SimpleOid oid = new SimpleOid(id);
+        SerialOid oid = new SerialOid(id);
         if (manager.isLoaded(oid)) {
             element = manager.getLoadedObject(oid);
         } else {
@@ -254,7 +254,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         }
         String assignments = sb.toString();
 
-        long id = ((SimpleOid) object.getOid()).getSerialNo();
+        long id = ((SerialOid) object.getOid()).getSerialNo();
         String statement = "update " + table + " set " + assignments + " where ID = " + id;
         connector.update(statement);
     }
@@ -264,12 +264,12 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
 
         String table = table(cls) + "_" + field.getName().toLowerCase();
 
-        long parentId = ((SimpleOid) collection.forParent().getOid()).getSerialNo();
+        long parentId = ((SerialOid) collection.forParent().getOid()).getSerialNo();
         int size = collection.size();
         for (int i = 0; i < size; i++) {
             NakedObject element = collection.elementAt(i);
             String columns = table(cls) + "_id, " + field.getName().toLowerCase() + "_id";
-            long elementId = ((SimpleOid) element.getOid()).getSerialNo();
+            long elementId = ((SerialOid) element.getOid()).getSerialNo();
             String values = parentId + ", " + elementId;
             String statement = "insert into " + table + " (" + columns + ") values (" + values + ")";
             connector.update(statement);

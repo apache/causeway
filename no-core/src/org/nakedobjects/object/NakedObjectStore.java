@@ -1,8 +1,8 @@
 package org.nakedobjects.object;
 
 
-import org.nakedobjects.utility.ComponentException;
-import org.nakedobjects.utility.ConfigurationException;
+import org.nakedobjects.configuration.ComponentException;
+import org.nakedobjects.configuration.ConfigurationException;
 import org.nakedobjects.utility.DebugInfo;
 
 

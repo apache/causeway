@@ -8,7 +8,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.Person;
 import org.nakedobjects.object.Role;
-import org.nakedobjects.object.SimpleOid;
+import org.nakedobjects.object.SerialOid;
 import org.nakedobjects.object.Team;
 import org.nakedobjects.object.value.Date;
 import org.nakedobjects.object.value.TestClock;
@@ -53,24 +53,24 @@ public class NakedObjectMementoTest extends TestCase {
 
        team = new Team();
         team.setContext(context);
-        team.setOid(new SimpleOid(11));
-        team.getMembers().setOid(new SimpleOid(13));
+        team.setOid(new SerialOid(11));
+        team.getMembers().setOid(new SerialOid(13));
 
         person = new Person();
         person.setContext(context);
-        person.setOid(new SimpleOid(9));
+        person.setOid(new SerialOid(9));
         person.getName().setValue("Fred");
         team.getMembers().added(person);
 
         person2 = new Person();
         person2.setContext(context);
-        person2.setOid(new SimpleOid(17));
+        person2.setOid(new SerialOid(17));
         person2.getName().setValue("John");
         team.getMembers().added(person2);
 
         role = new Role();
         role.setContext(context);
-        role.setOid(new SimpleOid(19));
+        role.setOid(new SerialOid(19));
         role.getName().setValue("One");
         role.setPerson(person2);
         
@@ -85,7 +85,7 @@ public class NakedObjectMementoTest extends TestCase {
         Memento mem = mementoTransfer(team);
 
         Person expected = new Person();
-        expected.setOid(new SimpleOid(17));
+        expected.setOid(new SerialOid(17));
         loadedObjects.loaded(expected);
 
         Team t2 = (Team) mem.recreateObject(loadedObjects, context);
@@ -122,7 +122,7 @@ public class NakedObjectMementoTest extends TestCase {
 
         Person expected = new Person();
         expected.setContext(context);
-        expected.setOid(new SimpleOid(17));
+        expected.setOid(new SerialOid(17));
         loadedObjects.loaded(expected);
         
         Role r2 = (Role) mem.recreateObject(loadedObjects, context);

@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.utility.Configuration;
+import org.nakedobjects.configuration.Configuration;
 
 import java.awt.Font;
 import java.awt.FontMetrics;

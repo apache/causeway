@@ -1,10 +1,10 @@
 package org.nakedobjects.viewer.skylark.metal;
 
+import org.nakedobjects.configuration.Configuration;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.collection.InstanceCollection;
-import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
@@ -135,7 +135,7 @@ public class ClassIcon extends ObjectView {
 		/*Action action = nc.getNakedClass().getObjectAction(Action.USER, "Instances");
 		InstanceCollection instances = (InstanceCollection) action.execute(object);
 		*/
-		InstanceCollection instances = nc.actionInstances();
+		NakedCollection instances = nc.actionInstances();
 		View view = ViewFactory.getViewFactory().createOpenRootView(instances);
 		view.setLocation(click.getLocationWithinViewer());
 		getWorkspace().addView(view);

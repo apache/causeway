@@ -1,9 +1,11 @@
 package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.collection.InternalCollection;
+import org.nakedobjects.object.collection.TypedNakedCollection;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
@@ -41,7 +43,7 @@ public class TreeNodeBorder extends AbstractBorder {
 		
 		if(getContent() instanceof OneToManyField) {
 		    InternalCollection collection = ((InternalCollection) ((OneToManyField) getContent()).getObject());
-            String type = collection.getType().getName();
+            String type = collection.getType().getFullName();
             final NakedObjectSpecification nc = NakedObjectSpecification.getNakedClass(type);
 		    icon = new IconGraphic(this, LABEL_STYLE) {
 		        protected String iconName(NakedObject object) {
@@ -157,8 +159,8 @@ public class TreeNodeBorder extends AbstractBorder {
  	
 	public void menuOptions(MenuOptionSet options) {
 	    if(getContent() instanceof OneToManyField) {
-	        InternalCollection collection = ((OneToManyField) getContent()).getCollection();
-	        NakedObjectSpecification nakedClass = NakedObjectSpecification.getNakedClass(collection.getType().getName());
+	       	TypedNakedCollection collection = (TypedNakedCollection) ((OneToManyField) getContent()).getCollection();
+	        NakedObjectSpecification nakedClass = NakedObjectSpecification.getNakedClass(collection.getType().getFullName());
 	        
 	        ClassOption.menuOptions(nakedClass, options);
 	        

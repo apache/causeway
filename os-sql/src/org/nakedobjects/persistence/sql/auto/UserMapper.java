@@ -2,7 +2,7 @@ package org.nakedobjects.persistence.sql.auto;
 
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.SimpleOid;
+import org.nakedobjects.object.SerialOid;
 import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.Results;
@@ -55,7 +55,7 @@ public class UserMapper extends NameBasedMapper {
 
 		while (rs.next()) {
 		    int id = rs.getInt("id");
-		    SimpleOid oid = new SimpleOid(id);
+		    SerialOid oid = new SerialOid(id);
 		    LOG.debug("  instance  " + oid);
 		    User user;
 		    
@@ -81,7 +81,7 @@ public class UserMapper extends NameBasedMapper {
 		long rootObjectId = rs.getLong("root_object");
 		if (rootObjectId != 0) {
 			String rootObjectClass = rs.getString("root_class");
-			SimpleOid rootObjectOid = new SimpleOid(rootObjectId);
+			SerialOid rootObjectOid = new SerialOid(rootObjectId);
 
 			NakedObject rootObject;
 			if (loadedObjects.isLoaded(rootObjectOid)) {

@@ -46,9 +46,9 @@ public class ActionSpecification extends MemberSpecification {
 
     public final static Type USER = new Type("USER");
 
-    private ActionDelegate actionDelegate;
+    private Action actionDelegate;
 
-    public ActionSpecification(String name, ActionDelegate actionDelegate) {
+    public ActionSpecification(String name, Action actionDelegate) {
         super(name);
         this.actionDelegate = actionDelegate;
     }

@@ -1,133 +1,16 @@
 package org.nakedobjects.object.collection;
 
-
 import org.nakedobjects.object.Aggregate;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.object.Title;
-import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.control.Veto;
 
-import java.util.Enumeration;
+public interface InternalCollection extends TypedNakedCollection, Aggregate {
 
-
-public class InternalCollection extends TypedCollection implements Aggregate {
-    private NakedObject parent;
-
-    /*
-     * This is temporary to make the debuging work
-     * TODO remove this
-     */
-    public InternalCollection() {
-    	this(NakedObject.class, null);
-    }
-    
-    public InternalCollection(Class type, NakedObject parent) {
-        super(type);
-        this.parent = parent;
-    }
-
-    public InternalCollection(String typeName, NakedObject parent) {
-        super(typeName);
-        this.parent = parent;
-    }
-
-    public void add(NakedObject object) {
-    	if(object == null) {
-    		throw new NullPointerException("Cannot add null");
-    	}
-        super.add(object);
-        getObjectManager().objectChanged(((NakedObject) parent));
-    }
-   
-	public Permission canAdd(NakedObject object) {
-		if(object == parent) {
-			return new Veto("Cannot add parent object");
-		} else {
-		      return super.canAdd(object);
-		}
-	}
-
-    public NakedObject forParent() {
-        return parent;
-    }
-
-    public NakedObjectContext getContext() {
-        return parent.getContext();
-    }
-    
-    public void remove(NakedObject object) {
-    	if(object == null) {
-    		throw new NullPointerException("Cannot remove null");
-    	}
-    	super.remove(object);
-    	getObjectManager().objectChanged(parent);
-    }
-
-    public Title title() {
-        return new Title();
-    }
-
-	public NakedObject firstElement() {
-		first();
-		Enumeration elements = elements();
-		if(elements.hasMoreElements()) {
-			return (NakedObject) elements.nextElement();
-		} else {
-			return null;
-		}
-	}
-
-	public NakedObject elementAt(int index) {
-		return (NakedObject) elements.elementAt(index);
-	}
-	
-	public String toString() {
-        StringBuffer s = new StringBuffer();
-
-        s.append("InternalCollection");
-        s.append(" [state=");
-
-        // Persistent/transient & Resolved or not
-        s.append(isPersistent() ? "P" : (isFinder() ? "F" : "T"));
-        s.append(isResolved() ? "R" : "-");
-
-        // obect identifier
-        if (getOid() != null) {
-            s.append(",oid=");
-            s.append(getOid().toString().toUpperCase());
-        } else {
-            s.append(",oid=none");
-        }
-
-
-        // title
-        s.append(",size=");
-        s.append(size());
-        
-         s.append("]");
-
-        s.append("  " + Long.toHexString(super.hashCode()).toUpperCase());
-
-        return s.toString();
-    }
-	
-	public String debug() {
-	    String str = "";
-	    for(int i = 0; i < elements.size(); i++) {
-	        str += elements.elementAt(i) + "; ";
-	    }
-	    if(str.length() == 0) {
-	        str = "empty";
-	    }
-	    return str;
-	}
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

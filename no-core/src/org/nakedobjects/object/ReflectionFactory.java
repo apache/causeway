@@ -1,7 +1,7 @@
 package org.nakedobjects.object;
 
 import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.object.reflect.ActionDelegate;
+import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
@@ -9,7 +9,7 @@ import org.nakedobjects.object.reflect.ValueField;
 
 
 public interface ReflectionFactory {
-    ActionSpecification createAction(ActionDelegate action);
+    ActionSpecification createAction(Action action);
 
     FieldSpecification createField(OneToManyAssociation local);
 

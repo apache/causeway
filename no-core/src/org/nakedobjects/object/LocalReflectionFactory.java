@@ -1,7 +1,7 @@
 package org.nakedobjects.object;
 
 import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.object.reflect.ActionDelegate;
+import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 public class LocalReflectionFactory implements ReflectionFactory {
     private static final Logger LOG = Logger.getLogger(LocalReflectionFactory.class);
 
-    public ActionSpecification createAction(ActionDelegate action) {
+    public ActionSpecification createAction(Action action) {
         return new ActionSpecification(action.getName(), action);
     }
 

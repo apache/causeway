@@ -1,5 +1,8 @@
 package org.nakedobjects.persistence.sql;
 
+import org.nakedobjects.configuration.ComponentException;
+import org.nakedobjects.configuration.ComponentLoader;
+import org.nakedobjects.configuration.ConfigurationException;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedClass;
@@ -12,9 +15,6 @@ import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.utility.ComponentException;
-import org.nakedobjects.utility.ComponentLoader;
-import org.nakedobjects.utility.ConfigurationException;
 
 import java.util.Hashtable;
 

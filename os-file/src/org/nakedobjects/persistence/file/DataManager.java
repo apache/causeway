@@ -28,7 +28,7 @@ import java.util.Enumeration;
 
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.SimpleOid;
+import org.nakedobjects.object.SerialOid;
 
 
 public abstract class DataManager {
@@ -41,26 +41,26 @@ public abstract class DataManager {
 		}
 
 		String type = data.getClassName();
-		SimpleOid oid = data.getOid();
+		SerialOid oid = data.getOid();
 		addData(oid, type, data);
 		addInstance(oid, type);
 	}
 
-	public final SimpleOid createOid() throws PersistorException {
-		return new SimpleOid(nextId());
+	public final SerialOid createOid() throws PersistorException {
+		return new SerialOid(nextId());
 	}
 
 	/**
 	 * Loads in data for a collection for the specified identifier.
 	 */
-	public final CollectionData loadCollectionData(SimpleOid oid) {
+	public final CollectionData loadCollectionData(SerialOid oid) {
 		return (CollectionData) loadData(oid);
 	}
 	
 	/**
 	 * Loads in data for an object for the specified identifier.
 	 */
-	public final ObjectData loadObjectData(SimpleOid oid) {
+	public final ObjectData loadObjectData(SerialOid oid) {
 		return (ObjectData) loadData(oid);
 	}
 	
@@ -70,7 +70,7 @@ public abstract class DataManager {
 	// TODO we need to be able to find collection instances as well
 	protected abstract ObjectDataVector getInstances(ObjectData pattern);
 	
-	public final void remove(SimpleOid oid) throws ObjectNotFoundException, ObjectStoreException {
+	public final void remove(SerialOid oid) throws ObjectNotFoundException, ObjectStoreException {
 		Data data = loadData(oid);
 		String type = data.getClassName();
 		removeInstance(oid, type);
@@ -89,34 +89,34 @@ public abstract class DataManager {
 	 */
 	protected abstract long nextId() throws PersistorException;
 
-	protected abstract Data loadData(SimpleOid oid);
+	protected abstract Data loadData(SerialOid oid);
 
 	/**
 	 * Add the reference for an instance to the list of all instances.
 	 */
-	protected abstract void addInstance(SimpleOid oid, String type) throws ObjectStoreException;
+	protected abstract void addInstance(SerialOid oid, String type) throws ObjectStoreException;
 
 	/**
 	 * Remove the reference for an instance from the list of all instances.
 	 */
-	protected abstract void removeInstance(SimpleOid oid, String type) throws ObjectStoreException;
+	protected abstract void removeInstance(SerialOid oid, String type) throws ObjectStoreException;
 
 	/**
 	 * Write out the data for a new instance.
 	 */
-	protected abstract void addData(SimpleOid oid, String type, Data data)
+	protected abstract void addData(SerialOid oid, String type, Data data)
 	throws ObjectStoreException;
 
 	/**
 	 * Delete the data for an existing instance.
 	 */
-	protected abstract void deleteData(SimpleOid oid, String type)
+	protected abstract void deleteData(SerialOid oid, String type)
 	throws ObjectStoreException;
 
 	/**
 	 * Write out the data for an existing instance.
 	 */
-	protected abstract void updateData(SimpleOid oid, String type, Data data)
+	protected abstract void updateData(SerialOid oid, String type, Data data)
 	throws ObjectStoreException;
 
 	/** 
@@ -150,7 +150,7 @@ public abstract class DataManager {
 			if(testFieldValue instanceof ReferenceVector) {
 				ReferenceVector patternElements = (ReferenceVector) patternFieldValue;
 				for (int i = 0; i < patternElements.size(); i++) {
-					SimpleOid requiredElement = patternElements.elementAt(i);  // must have this element
+					SerialOid requiredElement = patternElements.elementAt(i);  // must have this element
 					boolean requiredFound = false;
 					ReferenceVector testElements = ((ReferenceVector) testFieldValue);
 					for (int j = 0; j < testElements.size(); j++) {

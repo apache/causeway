@@ -30,10 +30,10 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Role;
-import org.nakedobjects.object.SimpleOid;
+import org.nakedobjects.object.SerialOid;
 import org.nakedobjects.object.Team;
 import org.nakedobjects.object.ValueObjectExample;
-import org.nakedobjects.object.collection.ArbitraryCollection;
+import org.nakedobjects.object.collection.SimpleArbitraryCollection;
 import org.nakedobjects.object.value.Date;
 import org.nakedobjects.object.value.DateTime;
 import org.nakedobjects.object.value.FloatingPointNumber;
@@ -55,7 +55,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 	protected DataManager manager;
 	protected final int SIZE = 5;
 	
-	private SimpleOid oids[];
+	private SerialOid oids[];
 	private ObjectData data[];
 	private ObjectData pattern;
 	
@@ -69,12 +69,12 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 		MockObjectManager objectManager = MockObjectManager.setup();
         NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
 
-		oids = new SimpleOid[SIZE];
+		oids = new SerialOid[SIZE];
 		data = new ObjectData[SIZE];
 		NakedObjectSpecification type = NakedObjectSpecification.getNakedClass(Role.class.getName());
 		pattern = new ObjectData(type, null);
 		for (int i = 0; i < SIZE; i++) {
-			oids[i] = new SimpleOid(i);
+			oids[i] = new SerialOid(i);
 			data[i] = new ObjectData(type, oids[i]);
 			manager.insert(data[i]);
 		}
@@ -96,7 +96,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 	}
 	
 	public void testCreateOid() throws Exception {
-		SimpleOid oid = manager.createOid();
+		SerialOid oid = manager.createOid();
 		long start = oid.getSerialNo();
 		long next = start +1;
 		for (int i = 0; i < 3; i++) {
@@ -114,7 +114,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 
 	public void testInsertObjectWithFields() throws ObjectStoreException {
 		ObjectData data = createData(Role.class, 99);
-		data.set("Person", new SimpleOid(101));
+		data.set("Person", new SerialOid(101));
 		assertNotNull(data.get("Person"));
 		data.set("Name", "Harry");
 		assertNotNull(data.get("Name"));
@@ -133,7 +133,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 	public void testInsertObjectWithEmptyOneToManyAssociations() throws ObjectStoreException {
 		ObjectData data = createData(Team.class, 99);
 
-		SimpleOid coid = new SimpleOid(103);
+		SerialOid coid = new SerialOid(103);
 		data.initCollection(coid, "Members");
 		
 		manager.insert(data);
@@ -151,11 +151,11 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 	public void testInsertObjectWithOneToManyAssociations() throws ObjectStoreException {
 		ObjectData data = createData(Team.class, 99);
 		
-		SimpleOid coid = new SimpleOid(103);
+		SerialOid coid = new SerialOid(103);
 		data.initCollection(coid, "Members");
-		SimpleOid oid[] = new SimpleOid[3];
+		SerialOid oid[] = new SerialOid[3];
 		for (int i = 0; i < oid.length; i++) {
-			oid[i] = new SimpleOid(104 + i);
+			oid[i] = new SerialOid(104 + i);
 			data.addElement("Members", oid[i]);
 		}
 		manager.insert(data);
@@ -172,11 +172,11 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 
 	
 	public void testInsertCollection() throws ObjectStoreException {
-		CollectionData data = new CollectionData(NakedObjectSpecification.getNakedClass(ArbitraryCollection.class.getName()), new SimpleOid(200));
+		CollectionData data = new CollectionData(NakedObjectSpecification.getNakedClass(SimpleArbitraryCollection.class.getName()), new SerialOid(200));
 		
-		SimpleOid oids[] = new SimpleOid[6];
+		SerialOid oids[] = new SerialOid[6];
 		for (int i = 0; i < oids.length; i++) {
-			oids[i] = new SimpleOid(103 + i);
+			oids[i] = new SerialOid(103 + i);
 			data.addElement(oids[i]);
 		}		
 		
@@ -195,7 +195,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 		
 	
 	public void testRemove() throws Exception {
-		SimpleOid oid = oids[2];
+		SerialOid oid = oids[2];
 		manager.remove(oid);
 		
 		assertEquals(SIZE - 1, manager.numberOfInstances(pattern));
@@ -209,7 +209,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 	}
 
 	public void testSaveObject() throws Exception {
-		data[2].set("Person", new SimpleOid(231));
+		data[2].set("Person", new SerialOid(231));
 		data[2].set("Name", "Fred");
 		manager.save(data[2]);
 		
@@ -222,7 +222,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 	
 	public void testInsertValues() throws ObjectStoreException {
 		NakedObjectSpecification type = NakedObjectSpecification.getNakedClass(ValueObjectExample.class.getName());
-		SimpleOid oid = new SimpleOid(99);
+		SerialOid oid = new SerialOid(99);
 		ObjectData data =  new ObjectData(type, oid);
 
 
@@ -330,7 +330,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 
 	public void testSaveValues() throws ObjectStoreException {
 		NakedObjectSpecification type = NakedObjectSpecification.getNakedClass(ValueObjectExample.class.getName());
-		SimpleOid oid = new SimpleOid(99);
+		SerialOid oid = new SerialOid(99);
 		ObjectData data =  new ObjectData(type, oid);
 
 		manager.insert(data);
@@ -444,7 +444,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 	
 	private ObjectData createData(Class cls, long id) {
 		NakedObjectSpecification type = NakedObjectSpecification.getNakedClass(cls.getName());
-		SimpleOid oid = new SimpleOid(id);
+		SerialOid oid = new SerialOid(id);
 		return new ObjectData(type, oid);
 		
 	}

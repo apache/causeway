@@ -21,7 +21,7 @@ public abstract class NakedObjectStoreTestCase extends NakedObjectTestCase {
     protected abstract NakedObjectStore installObjectStore() throws Exception;
 
     protected Oid nextOid() {
-        return new MockOid(next++);
+        return new SerialOid(next++);
     }
 
     protected void restartObjectStore() throws Exception {

@@ -3,7 +3,7 @@ package org.nakedobjects.persistence.sql;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.SimpleOid;
+import org.nakedobjects.object.SerialOid;
 
 import java.util.Hashtable;
 
@@ -23,7 +23,7 @@ public abstract class AbstractObjectMapper {
 	}
 
 	public String primaryKey(Object oid) {
-		return oid instanceof SqlOid ? ((SqlOid) oid).stringValue() : "" + ((SimpleOid) oid).getSerialNo();
+		return oid instanceof SqlOid ? ((SqlOid) oid).stringValue() : "" + ((SerialOid) oid).getSerialNo();
 	}
 
 	public final void shutdown() throws SqlObjectStoreException {

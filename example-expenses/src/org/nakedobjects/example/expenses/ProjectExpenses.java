@@ -46,7 +46,7 @@ public class ProjectExpenses extends AbstractNakedObject {
 
     /** Creates a new instance of Account */
     public ProjectExpenses() {
-        expenseItems = new InternalCollection(Expense.class, this);
+        expenseItems = createInternalCollection(Expense.class);
     }
 
     public static String fieldOrder() {

@@ -25,7 +25,7 @@
 package org.nakedobjects.persistence.file;
 
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.SimpleOid;
+import org.nakedobjects.object.SerialOid;
 
 
 /**
@@ -34,16 +34,16 @@ import org.nakedobjects.object.SimpleOid;
 public class CollectionData extends Data {
    private ReferenceVector elements;
 
-   public CollectionData(NakedObjectSpecification type, SimpleOid oid) {
+   public CollectionData(NakedObjectSpecification type, SerialOid oid) {
       super(type, oid);
       elements = new ReferenceVector(oid);
    }
    
-   public void addElement(SimpleOid elementOid) {
+   public void addElement(SerialOid elementOid) {
      	elements.add(elementOid);
    }
    
-   public void removeElement(SimpleOid elementOid) {
+   public void removeElement(SerialOid elementOid) {
    	elements.remove(elementOid);	
    }
    

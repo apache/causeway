@@ -1,9 +1,9 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.utility.Assert;
+import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.CollectionElement;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
@@ -34,12 +34,14 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
 		Assert.assertEquals(view.getView(), view);
 
 		Content content = view.getContent();
-		NakedCollection collection = (NakedCollection) ((ObjectContent) content).getObject();
+		//NakedCollection collection = (NakedCollection) ((ObjectContent) content).getObject();
 		OneToManyAssociationSpecification field = (OneToManyAssociationSpecification) (content instanceof OneToManyField ? ((OneToManyField) content).getField() : null);
 
-        LOG.debug("rebuild view " + view + " for " + collection);
+        LOG.debug("rebuild view " + view + " for " + content);
 
-        Enumeration elements = collection.displayElements();
+        CollectionDisplayIterator iterator = ((CollectionContent) content).getIterator();
+        
+        Enumeration elements = iterator.displayElements();
  
         /*
          * remove all subviews from the view and then work through the elements of the

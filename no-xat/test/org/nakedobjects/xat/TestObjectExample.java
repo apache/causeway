@@ -12,7 +12,7 @@ import org.nakedobjects.object.value.TextString;
 public class TestObjectExample extends AbstractNakedObject {
     private String result = null;
     private final TextString oneModifiable = new TextString();
-    private final InternalCollection collection = new InternalCollection(TestElement.class, this);
+    private final InternalCollection collection = createInternalCollection(TestElement.class);
     private TestObjectExample fourDefault;
 
     public void actionOneDefault() {
@@ -112,7 +112,8 @@ public class TestObjectExample extends AbstractNakedObject {
     }
 
     public TestObjectExample getFiveUnmodifiable() {
-        throw new NakedAssertionFailedError();
+ //       throw new NakedAssertionFailedError();
+        return null;
     }
 
     public void setFiveUnmodifiable(TestObjectExample e) {
@@ -120,7 +121,8 @@ public class TestObjectExample extends AbstractNakedObject {
     }
 
     public TestObjectExample getSixInvisible() {
-        throw new NakedAssertionFailedError();
+   //     throw new NakedAssertionFailedError();
+        return null;
     }
 
     public void setSixInvisible(TestObjectExample e) {

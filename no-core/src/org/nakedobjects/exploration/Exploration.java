@@ -2,9 +2,14 @@ package org.nakedobjects.exploration;
 
 import org.nakedobjects.ObjectViewingMechanism;
 import org.nakedobjects.ObjectViewingMechanismListener;
+import org.nakedobjects.configuration.ComponentException;
+import org.nakedobjects.configuration.ComponentLoader;
+import org.nakedobjects.configuration.Configuration;
+import org.nakedobjects.configuration.ConfigurationException;
 import org.nakedobjects.object.DefaultUserContext;
 import org.nakedobjects.object.LocalObjectManager;
 import org.nakedobjects.object.LocalReflectionFactory;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
@@ -15,14 +20,9 @@ import org.nakedobjects.object.OidGenerator;
 import org.nakedobjects.object.SimpleOidGenerator;
 import org.nakedobjects.object.TransientObjectStore;
 import org.nakedobjects.object.UpdateNotifier;
-import org.nakedobjects.object.collection.InstanceCollection;
 import org.nakedobjects.security.Role;
 import org.nakedobjects.security.Session;
 import org.nakedobjects.security.User;
-import org.nakedobjects.utility.ComponentException;
-import org.nakedobjects.utility.ComponentLoader;
-import org.nakedobjects.utility.Configuration;
-import org.nakedobjects.utility.ConfigurationException;
 import org.nakedobjects.utility.SplashWindow;
 import org.nakedobjects.utility.StartupException;
 
@@ -63,8 +63,8 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
             showSplash();
             setUpLocale();
             ObjectViewingMechanism viewer = installViewer();
-            objectManager = installObjectManager(viewer.getUpdateNotifier());
             NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+            objectManager = installObjectManager(viewer.getUpdateNotifier());
             
             NakedObjectContext context = new NakedObjectContext(objectManager);
             explorationSetUp = new ExplorationSetUp(context);
@@ -77,7 +77,7 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
             User user;
             NakedObjectSpecification userClass = NakedObjectSpecification.getNakedClass(User.class.getName());
             if (objectManager.hasInstances(userClass)) {
-                InstanceCollection users = objectManager.findInstances(userClass, name);
+                NakedCollection users = objectManager.findInstances(userClass, name);
                 if(users.size() == 0) {
                     throw new NakedObjectRuntimeException("No users found: " + name);
                 }
@@ -104,7 +104,7 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
                 applicationContext.addClass(classes[i]);
              }            
             
-            InstanceCollection coll = objectManager.allInstances(userClass);
+            NakedCollection coll = objectManager.allInstances(userClass);
             applicationContext.setUpUsers(coll);
 
             

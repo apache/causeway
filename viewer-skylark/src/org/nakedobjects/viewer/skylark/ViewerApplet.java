@@ -1,12 +1,12 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.configuration.ComponentException;
+import org.nakedobjects.configuration.ConfigurationException;
 import org.nakedobjects.object.LocalObjectManager;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.SimpleOidGenerator;
 import org.nakedobjects.object.TransientObjectStore;
 import org.nakedobjects.security.User;
-import org.nakedobjects.utility.ComponentException;
-import org.nakedobjects.utility.ConfigurationException;
 
 import java.applet.Applet;
 import java.awt.Graphics;

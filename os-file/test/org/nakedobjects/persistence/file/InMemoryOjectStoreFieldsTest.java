@@ -1,10 +1,10 @@
 package org.nakedobjects.persistence.file;
 
+import org.nakedobjects.configuration.ComponentException;
+import org.nakedobjects.configuration.ConfigurationException;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedObjectStoreFieldsTestCase;
 import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.utility.ComponentException;
-import org.nakedobjects.utility.ConfigurationException;
 
 
 public class InMemoryOjectStoreFieldsTest extends NakedObjectStoreFieldsTestCase {

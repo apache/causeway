@@ -2,6 +2,7 @@ package org.nakedobjects.object.reflect.simple;
 
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 
@@ -34,10 +35,12 @@ public abstract class JavaField extends JavaMember {
            return (Naked) getMethod.invoke(fromObject, new Object[0]);
        } catch (InvocationTargetException e) {
             LOG.error("Exception executing " + getMethod, e.getTargetException());
+            throw new NakedObjectRuntimeException(e);
        } catch (IllegalAccessException ignore) {
            LOG.error("Illegal access of " + getMethod, ignore);
+           throw new NakedObjectRuntimeException(ignore);
        }
-       return null;
+//       return null;
    }
 
    /**

@@ -33,7 +33,7 @@ import org.nakedobjects.object.control.FieldAbout;
  * A very simple NakedObject classes - contains only a one-to-many association
  */
 public class Team extends AbstractNakedObject {
-   private final InternalCollection members = new InternalCollection(Person.class, this);
+   private final InternalCollection members =createInternalCollection(Person.class);
    public boolean reduced = false;
    
    public void aboutMembers(FieldAbout about, Person person, boolean add) {

@@ -1,8 +1,8 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.AbstractUserContext;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.UserContext;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -21,7 +21,7 @@ public class RootWorkspaceSpecification implements WorkspaceSpecification {
 	public View createView(Content content, ViewAxis axis) {
 			Workspace workspace;
 			NakedObject contentType = ((ObjectContent) content).getObject();
-			if(contentType instanceof AbstractUserContext) {
+			if(contentType instanceof UserContext) {
 				workspace = new UserContextWorkspace(content, this, axis);
 			} else {
 				workspace = new DefaultWorkspace(content, this, axis);

@@ -1,5 +1,9 @@
 package org.nakedobjects.persistence.sql;
 
+import org.nakedobjects.configuration.ComponentException;
+import org.nakedobjects.configuration.ComponentLoader;
+import org.nakedobjects.configuration.Configuration;
+import org.nakedobjects.configuration.ConfigurationException;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
@@ -8,10 +12,6 @@ import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.persistence.sql.auto.AutoMapper;
 import org.nakedobjects.utility.Assert;
-import org.nakedobjects.utility.ComponentException;
-import org.nakedobjects.utility.ComponentLoader;
-import org.nakedobjects.utility.Configuration;
-import org.nakedobjects.utility.ConfigurationException;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Enumeration;

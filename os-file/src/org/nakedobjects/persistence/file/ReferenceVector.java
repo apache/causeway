@@ -26,21 +26,21 @@ package org.nakedobjects.persistence.file;
 
 import java.util.Vector;
 
-import org.nakedobjects.object.SimpleOid;
+import org.nakedobjects.object.SerialOid;
 
 public class ReferenceVector {
-	private final SimpleOid oid;
+	private final SerialOid oid;
 	private final Vector elements = new Vector();
 	
-	public ReferenceVector(SimpleOid oid) {
+	public ReferenceVector(SerialOid oid) {
 		this.oid = oid;
 	}
 
-	public void add(SimpleOid oid) {
+	public void add(SerialOid oid) {
 		elements.addElement(oid);
 	}
 	
-	public void remove(SimpleOid oid) {
+	public void remove(SerialOid oid) {
 		elements.removeElement(oid);
 	}
 
@@ -56,7 +56,7 @@ public class ReferenceVector {
 //		return references.elements();	
 //	}
 //	
-	public SimpleOid getOid() {
+	public SerialOid getOid() {
 		return oid;
 	}
 	
@@ -64,8 +64,8 @@ public class ReferenceVector {
 		return elements.size();
 	}
 	
-	public SimpleOid elementAt(int index) {
-		return (SimpleOid) elements.elementAt(index);
+	public SerialOid elementAt(int index) {
+		return (SerialOid) elements.elementAt(index);
 	}
 
 //	public boolean contains(Object reference) {

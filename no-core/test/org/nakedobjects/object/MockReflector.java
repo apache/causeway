@@ -2,7 +2,7 @@ package org.nakedobjects.object;
 
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ClassAbout;
-import org.nakedobjects.object.reflect.ActionDelegate;
+import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.Member;
 import org.nakedobjects.object.reflect.Reflector;
 
@@ -23,7 +23,7 @@ public class MockReflector implements Reflector {
         return acquireInstance;
     }
 
-    public ActionDelegate[] actions(boolean forClass) {
+    public Action[] actions(boolean forClass) {
         return null;
     }
 

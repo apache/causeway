@@ -3,13 +3,14 @@ package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.LocalReflectionFactory;
 import org.nakedobjects.object.MockObjectManager;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Person;
 import org.nakedobjects.object.Team;
 import org.nakedobjects.object.collection.InternalCollection;
+import org.nakedobjects.object.collection.SimpleInternalCollection;
 import org.nakedobjects.object.value.TestClock;
 
 import junit.framework.TestSuite;
@@ -78,7 +79,7 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     }     	
     
     public void testGet() {
-    	assertTrue( collectionField.get(object).isSameAs(new InternalCollection(Person.class, object)));
+    	assertTrue( collectionField.get(object).isSameAs(new SimpleInternalCollection(Person.class, object)));
     }     	
     
     public void testName() {

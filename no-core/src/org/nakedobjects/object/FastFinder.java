@@ -1,6 +1,5 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.collection.InstanceCollection;
 import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.value.TextString;
@@ -23,7 +22,7 @@ public class FastFinder extends AbstractNakedObject {
 	}
 	
 	public NakedObject actionFind() {
-		InstanceCollection instances = getObjectManager().findInstances(nakedClass, term.stringValue());
+		NakedCollection instances = getObjectManager().findInstances(nakedClass, term.stringValue());
 		if(instances.size() == 1) { 
 			return (NakedObject) instances.elements().nextElement();
 		} else {

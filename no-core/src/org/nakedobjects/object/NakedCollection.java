@@ -7,12 +7,15 @@ import org.nakedobjects.object.control.Permission;
 
 public interface NakedCollection extends NakedObject {
 	
+
+    void addAll(NakedCollection coll);
+
     /**
      adds <code>object</code> to the collection and notifies all views that the collection has changed.
      */
-    public void add(NakedObject object);
+    void add(NakedObject object);
     
-    public void added(NakedObject object);
+    void added(NakedObject object);
 
     /**
      Vetos the addition to this collection if the object being added requests it.  Returns the
@@ -20,78 +23,45 @@ public interface NakedCollection extends NakedObject {
      By default a collection can be added to another collection (but not to itself).   Any type of object
      which wishes to restrict its placement in a collection should override this method.
      */
-    public Permission canAdd(NakedObject object);
+    Permission canAdd(NakedObject object);
 
     /**
      Vetos the removal from this collection if the object being removed requests it.  Returns the
      result of <code>canRemoveFrom()</code> called on the object reference.
      */
-    public Permission canRemove(NakedObject object);
+    Permission canRemove(NakedObject object);
 
     /**
      Returns true if the logical collection contains the specified object. 
      */
-    public boolean contains(NakedObject object);
-
-    /**
-      *  Return cache to be viewed on current page
-      */
-    public Enumeration displayElements();
+    boolean contains(NakedObject object);
 
     /**
      *  Return all elements in this collection
      */
-    public Enumeration elements();
-
-    /**
-     *  Position cursor at first element
-     */
-    public void first();
-    
-	public int getDisplaySize();
-
-    /**
-     *  If true there is a next page to display, and 'next' and 'last' options are valid
-     */
-    public boolean hasNext();
-
-    public boolean hasPrevious();
-
-    /**
-     *  Position cursor at last
-     */
-    public void last();
-
-    /**
-     *  Position cursor at beginning of next page
-     */
-    public void next();
-    
-	public int position();
-
-    /**
-    *  Position cursor at beginning of previous page
-    */
-    public void previous();
+    Enumeration elements();
 
     /**
      removes <code>object</code> from the collection and notifies all views that the collection has changed.
      */
-    public void remove(NakedObject element);
+    void remove(NakedObject element);
+
+    /**
+     * Removes all objects from the collection.
+     */
+    public void removeAll();
     
-    public void removed(NakedObject element);
+    void removed(NakedObject element);
 
     /**
      *  Return a NakedCollection of objects which match the specified pattern from within the current collection
      */
 
-    public int size();
-
-    /**
-     by default returns the collections name and its number of elements
-     */
-    public Title title();
-
+    int size();
+    
+    boolean isEmpty();
+    
+    NakedObject elementAt(int index);
 }
 
 

@@ -1,16 +1,16 @@
 package org.nakedobjects.xat;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NotPersistableException;
-import org.nakedobjects.object.collection.InstanceCollection;
+import org.nakedobjects.object.collection.TypedNakedCollection;
 import org.nakedobjects.object.reflect.ActionSpecification;
 
 import java.util.Enumeration;
@@ -71,10 +71,10 @@ public class TestClassImpl implements TestClass {
         return factory.createTestObject(context, instances);
     }
 
-    private InstanceCollection instances(NakedClass cls) {
+    private TypedNakedCollection instances(NakedClass cls) {
         NakedObjectContext context = NakedObjectContext.getDefaultContext();
-        InstanceCollection instances = context.getObjectManager().allInstances(cls.forNakedClass());
-        instances.first();
+        TypedNakedCollection instances = context.getObjectManager().allInstances(cls.forNakedClass());
+ //       instances.first();
         return instances;
     }
 

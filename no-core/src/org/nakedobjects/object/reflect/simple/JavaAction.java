@@ -11,7 +11,7 @@ import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.TransactionException;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ActionAbout;
-import org.nakedobjects.object.reflect.ActionDelegate;
+import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionSpecification.Type;
 
 import java.lang.reflect.InvocationTargetException;
@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
 import org.apache.log4j.Logger;
 
 
-public class JavaAction extends JavaMember implements ActionDelegate {
+public class JavaAction extends JavaMember implements Action {
     final static Logger LOG = Logger.getLogger(JavaAction.class);
     private final Method actionMethod;
     private final int paramCount;

@@ -1,8 +1,8 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.AbstractUserContext;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.UserContext;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
@@ -16,13 +16,13 @@ public class UserContextWorkspace extends DefaultWorkspace {
 	public UserContextWorkspace(Content content, CompositeViewSpecification specification, ViewAxis axis) {
 		super(content, specification, axis);
 
-		if(!(getObject() instanceof AbstractUserContext)) {
+		if(!(getObject() instanceof UserContext)) {
 			throw new IllegalArgumentException("Content must represent an AbstractUserContext");
 		}
 	}
 	
-	protected AbstractUserContext getContext() {
-        return (AbstractUserContext) getObject();
+	protected UserContext getContext() {
+        return (UserContext) getObject();
     }
 
 	public View pickup(ViewDrag drag) {

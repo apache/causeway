@@ -1,7 +1,7 @@
 package org.nakedobjects.object.reflect.simple;
 
 import org.nakedobjects.object.AbstractNakedObject;
-import org.nakedobjects.object.CompositePart;
+import org.nakedobjects.object.Aggregate;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
@@ -12,10 +12,10 @@ import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.control.Validity;
+import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.object.reflect.ActionDelegate;
 import org.nakedobjects.object.reflect.Member;
-import org.nakedobjects.object.reflect.NakedClassException;
+import org.nakedobjects.object.reflect.NakedObjectSpecificationException;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.object.reflect.ReflectionException;
@@ -156,10 +156,10 @@ public class JavaReflector implements Reflector {
          * } catch (ClassNotFoundException e) { throw new
          * NakedObjectRuntimeException("Could not load class " + name); }
          */
-        if (!Naked.class.isAssignableFrom(cls)) { throw new NakedClassException("A naked object must be based on the "
+        if (!Naked.class.isAssignableFrom(cls)) { throw new NakedObjectSpecificationException("A naked object must be based on the "
                 + "NakedObject interface, this is not the case with " + cls); }
 
-        if (!Modifier.isPublic(cls.getModifiers())) { throw new NakedClassException(
+        if (!Modifier.isPublic(cls.getModifiers())) { throw new NakedObjectSpecificationException(
                 "A NakedObject class must be marked as public.  Error in " + cls); }
 
         this.cls = cls;
@@ -193,7 +193,7 @@ public class JavaReflector implements Reflector {
         }
     }
 
-    public ActionDelegate[] actions(boolean forClass) {
+    public Action[] actions(boolean forClass) {
         LOG.debug("looking for action methods");
         Method defaultAboutMethod = findMethod(forClass, "aboutActionDefault", null, new Class[] { ActionAbout.class });
         LOG.debug(defaultAboutMethod == null ? "no default about method for actions" : defaultAboutMethod.toString());
@@ -244,7 +244,7 @@ public class JavaReflector implements Reflector {
 
                 ActionSpecification.Type action;
                 action = new ActionSpecification.Type[] { ActionSpecification.USER, ActionSpecification.EXPLORATION, ActionSpecification.DEBUG }[prefix];
-                ActionDelegate local = new JavaAction(naturalName(name), action, method, aboutMethod);
+                Action local = new JavaAction(naturalName(name), action, method, aboutMethod);
                 actions.addElement(local);
             }
         }
@@ -295,15 +295,15 @@ public class JavaReflector implements Reflector {
         return cls.getName();
     }
 
-    private ActionDelegate[] convertToArray(Vector actions) {
-        ActionDelegate results[] = new ActionDelegate[actions.size()];
+    private Action[] convertToArray(Vector actions) {
+        Action results[] = new Action[actions.size()];
         Enumeration actionEnumeration = actions.elements();
         int i = 0;
         while (actionEnumeration.hasMoreElements()) {
-            results[i++] = (ActionDelegate) actionEnumeration.nextElement();
+            results[i++] = (Action) actionEnumeration.nextElement();
 
         }
-        return (ActionDelegate[]) results;
+        return (Action[]) results;
     }
 
     private void derivedFields(Vector fields) {
@@ -472,7 +472,7 @@ public class JavaReflector implements Reflector {
     }
 
     public boolean isPartOf() {
-        return CompositePart.class.isAssignableFrom(cls);
+        return Aggregate.class.isAssignableFrom(cls);
     }
     
     String[] names(Vector methods) {

@@ -3,11 +3,11 @@ package org.nakedobjects.object;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ClassAbout;
 import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.object.reflect.ActionDelegate;
+import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.object.reflect.MemberSpecification;
 import org.nakedobjects.object.reflect.Member;
-import org.nakedobjects.object.reflect.NakedClassException;
+import org.nakedobjects.object.reflect.NakedObjectSpecificationException;
 import org.nakedobjects.object.reflect.NameConvertor;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
@@ -43,7 +43,7 @@ public final class NakedObjectSpecification {
     private FieldSpecification[] viewFields;
 
     private Reflector reflector;
-    private NakedClassList subclasses = new NakedClassList();
+    private ClassList subclasses = new ClassList();
     private NakedObjectSpecification superclass;
 	
 	private NakedObjectSpecification() {	}
@@ -252,7 +252,7 @@ public final class NakedObjectSpecification {
             }
         }
 
-        throw new NakedClassException("No field called '" + name + "' in '" +
+        throw new NakedObjectSpecificationException("No field called '" + name + "' in '" +
             getSingularName() + "'");
     }
 
@@ -438,7 +438,7 @@ public final class NakedObjectSpecification {
 
     
 
-    private class NakedClassList {
+    private class ClassList {
         private Vector classes = new Vector();
 
         public void addSubclass(NakedObjectSpecification cls) {
@@ -536,7 +536,7 @@ public final class NakedObjectSpecification {
 
         String nakedClassName = nakedObjectClassName;
 
-        ActionDelegate delegates[];
+        Action delegates[];
 
         delegates = reflector.actions(Reflector.OBJECT);
         String[] order = reflector.actionSortOrder();
@@ -557,7 +557,7 @@ public final class NakedObjectSpecification {
     }
   
     
-    private ActionSpecification[] createActions(ActionDelegate[] actions) {
+    private ActionSpecification[] createActions(Action[] actions) {
         ActionSpecification actionChains[] = new ActionSpecification[actions.length];
 
         for (int i = 0; i < actions.length; i++) {
@@ -594,7 +594,7 @@ public final class NakedObjectSpecification {
 
     
 
-    private ActionSpecification[] createActions(Reflector reflector, String nakedClassName, ActionDelegate[] delegates,
+    private ActionSpecification[] createActions(Reflector reflector, String nakedClassName, Action[] delegates,
             String[] order) {
         ActionSpecification[] actions = createActions(delegates);
         ActionSpecification[] objectActions = (ActionSpecification[]) orderArray(ActionSpecification.class, actions, order, nakedClassName);

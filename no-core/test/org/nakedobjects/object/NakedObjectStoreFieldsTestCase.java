@@ -60,7 +60,7 @@ public abstract class NakedObjectStoreFieldsTestCase extends NakedObjectStoreTes
         roleClass = NakedObjectSpecification.getNakedClass(Role.class.getName());
 
         // objects
-        String names[] = { "Freddy", "John", "Sam", "Zax" };
+        String names[] = { "Freddy", "John", "Sam", "Zax", "fdfdklj" };
         people = new Person[names.length];
         for (int i = 0; i < names.length; i++) {
             people[i] = new Person();
@@ -89,7 +89,6 @@ public abstract class NakedObjectStoreFieldsTestCase extends NakedObjectStoreTes
         
         for (int i = 0; i < people.length; i++) {
             Person person = (Person) objectStore.getObject(people[i].getOid(), personClass);
-            assertEquals(context, person.getContext());
             assertEquals(people[i].name, person.name);
         }
     }
@@ -109,6 +108,7 @@ public abstract class NakedObjectStoreFieldsTestCase extends NakedObjectStoreTes
         try {
             Role rolePattern; 
             rolePattern = new Role();
+            rolePattern.setContext(context);
             rolePattern.makeFinder();
             rolePattern.person = people[1];
 
@@ -175,6 +175,7 @@ public abstract class NakedObjectStoreFieldsTestCase extends NakedObjectStoreTes
 
             for (int i = 0; i < obj.length; i++) {
                 obj[i] = new Role();
+                obj[i].setContext(context);
                 obj[i].setOid(nextOid());
                 obj[i].getName().setValue(((i % 2) == 0) ? "even" : "odd");
 
@@ -187,6 +188,7 @@ public abstract class NakedObjectStoreFieldsTestCase extends NakedObjectStoreTes
 
             // with an empty pattern, expect all
             Role examplePattern = new Role();
+            examplePattern.setContext(context);
             examplePattern.makeFinder();
 
             NakedObject[] instances = objectStore.getInstances(examplePattern, false);

@@ -37,7 +37,7 @@ public class Employee extends AbstractNakedObject {
     private Account account;
 
     public Employee() {
-        projects = new InternalCollection(Project.class, this);
+        projects = createInternalCollection(Project.class);
         firstName = new TextString();
         surname = new TextString();
     }
