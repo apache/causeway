@@ -8,6 +8,7 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ObjectNotFoundException;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.TransactionException;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.defaults.SimpleActionAbout;
@@ -61,7 +62,8 @@ public class JavaAction extends JavaMember implements Action {
 	            for (int i = 0; i < parameters.length; i++) {
 	                if(parameters[i] instanceof NakedObject) {
 	                    NakedObject parameter = (NakedObject) parameters[i];
-                        transactionParameters[i] = objectManager.getObject(parameter.getOid(), parameter.getSpecification());
+	                    Oid parameterOid = parameter.getOid();
+                        transactionParameters[i] = parameterOid == null ? parameter : objectManager.getObject(parameterOid, parameter.getSpecification());
 	                } else {
 	                    transactionParameters[i] = parameters[i];
 	                }
