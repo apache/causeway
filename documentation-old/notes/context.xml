@@ -1,0 +1,93 @@
+<?xml version='1.0'?>
+<!DOCTYPE webpage SYSTEM "./document.dtd">
+
+<webpage title="Contexts" label="contexts" date="10-Mar-04">
+	
+<para>In Naked Objects (1.3+), a Context is a convenient way to hold a collection of
+	Naked Object classes and instances. If an organistion makes substantial use
+	of the Naked Objects approach, it is likely that each user will end up having
+	multiple contexts, such as an Email context, an Expenses Processing context, a Customer Service
+	context and so forth.</para>
+	
+<subheading>Contexts vs. applications</subheading>
+	
+<para>It might be convenient to think of Contexts as applications:  there
+	are certainly some similarities.  However, we have chosen to call them
+	Contexts because there are also some differences from the conventional
+	notion of applications:</para>
+	
+<list>
+	<para>Like applications, a user can have multiple contexts open at the
+		same time.  A Context may fill the screen, or the user may have multiple
+		contexts open in separate windows.</para>
+		
+	<para>Contexts are not mutually exclusive.  The same classes and/or instances may appear
+		in multiple cotexts (e.g. the CostCentre class may be used in the Expenses
+		Processing, Time Recording and Project Management Contexts).  It is possible
+		to move or copy objects, or specific Views of objects, between Contexts.</para>
+	
+	<para>Contexts can be recursive.  Since a Context is just another Naked Object
+		it is possible for any Context to hold a reference to any other Context.</para>
+	
+	<para>Contexts can be user defined.  Although users may be issued with some
+		standard Contexts by the systems administrator, they may also define their
+		own Contexts:  which may cover just a sub-set of the standard contxt functionality,
+		may be a super-set of standard contexts, or just an arbitrary collection of classes
+		and objects for that user.  (In the last sense, Contexts can also be
+		thought of as similar to folders in a conventional desktop metaphor). </para>
+	
+	<para>Contexts can be visually represented in several forms. Like any other
+		Naked Object, it is possible to view a Context through more than one
+		Viewer.  The default viewer for a Context is based on the popular desktop metaphor:  
+		allowing the user to position the various contained objects in two
+		dimensions.  Alternatives include th Form view and the Tree Browswer view.</para>
+	
+</list>
+	
+<subheading>Starting Context</subheading>
+
+<para>In a deployed application, when a user logs on, they will be taken into
+	their starting context.  This is specified in the 'root object' field in
+	 the User object, and can only be changed by the 
+	 	<see label="sysadmin">systems administrator</see>.
+	 Strictly speaking, the root object does not have to be a Context at all:  it could
+	 be any Naked Object, such as a particular Employee or Customer instance. 
+	 However, since the root object must provide the means of navigating to
+	 any other object or class that the user needs to access, it is usual to
+	 make the root object a Context. Where there are multiple Contexts it can be
+	 helpful to think of the one defined as the user's root object as being like a 'portal'.
+	 Note, however, that because Contexts can be recursive, there is no structural difference
+	 between a portal context and any other context. </para>
+	 
+	 <para>It is always possible to get back to the starting context by
+	 	[doing what?] </para>
+	
+<subheading>Creating a Context</subheading>
+
+<para>A Context can be created manually or programmatically.  Manually, the systems administrator
+	(who's starting context is created and populated automatically by the framework)
+	can create a new instance of the class DefaultContext  [??Rename this to GenericContext ??].  
+	Into this new Context the SystemsAdministrator can drag instances of NakedClass 
+	(i.e. representing the business classes that the user needs access to in that Context) as well as
+	any other NakedObject instances for convenience.  The systems administrator can then define this
+	newly created Context as the root object for a particular user, or if one already exists can drag
+	the next context into the existing one.</para>
+	
+<para>An instance of Context can only be associated with one user  -  because it can potentially hold
+	objects specific to that user.  However, the clone method can be used to create a similar Context
+	for another user.</para>
+	
+<para>Creating contexts programmatically . . . </para>
+
+<subheading>Specialised Contexts</subheading>
+
+<para>Instead of using GenericContext, the programmer may create a specialised Context, by extending
+	the AbstractContext class.  In addition to holding the generic list of classes and list of object references, a specialised
+	context may have dedicate value, object reference, or collection fields.  In our Expenses example
+	application, ExpensesContext has fields for:  My Claims, Claims To Approve, My Cost Centres
+	and so forth.  These are not just for the convenience of the user:  those fields are accessed directly
+	by other objects in the application.  For example, when a Claim is submitted for approval, the method
+	adds the claim to the 'Claims To Approve' field of the claimant's manager.  Thus, a specialised
+	Context is key to implementing workflows.</para>
+
+</webpage>

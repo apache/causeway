@@ -1,0 +1,54 @@
+<?xml version='1.0'?>
+<!DOCTYPE webpage SYSTEM "./document.dtd">
+
+<webpage title="Security" label="themes" date="10-Mar-04">
+	
+<subheading>Users and Roles</subheading>
+
+	<para>The org.nakedobjects.security package provides a number of new classes
+		concerned with security.  The most significant of these are User and Role.
+		A User represents a specific individual, and will define their user name
+		and password.  Each User object can have a number of Role objects 
+		associated with it. </para>
+		
+<subheading>Log-in</subheading>
+	
+	<para>When a deployed Naked Object system (i.e. a Standalone or ???) is run, the user will be required
+		to log-in with a username and password.  (No log-in is required for
+		an Exploration, in order to keep the exploration cycle as simple as possible).
+	</para>
+	
+	<para>TBD  -  changing your password</para>
+	
+<subheading>Default roles:  sysadmin and guest</subheading>
+
+	<para>All deployed systems are provided, by default with two roles:  sysadmin
+		and guest, and with two Users of the same name.  [?? How are the passwords
+		for sysadmin and guest specified??].  Only the systems administrator
+		(sysadmin) can create new Users, new Roles, or assign new Roles to an
+		existing User.  The systems administrators may also be given additional
+		specific rights or responsibilities by the application.</para>
+		
+	<para>Guest is a kind of default user role:  all Users automatically have
+		the role of 'guest'.  Any anyone can log in as the user 'guest' provided
+		they know the password (which is usually quite widely disseminated). Guest
+		should therefore be considered as a zero-security role.  Given the 
+			<see label="subtractive-control">subractive
+		style of control</see> adopted by Naked Objects, any field or action that
+		has no form of control specified will be accessible to the guest role. </para>
+
+	<para>Note to Rob:  there should therefore be a way of disabling the
+		guest log-in for some systems.</para>
+
+<subheading>Creating new Roles</subheading>
+
+<para>Although new instances of Role are created by 
+	</para>
+	
+	
+	
+	<para>Accessing users and roles from within an application</para>
+	
+	<para>Defining the 'root object' for a user</para>
+
+</webpage>

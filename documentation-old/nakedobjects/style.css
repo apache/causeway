@@ -1,0 +1,163 @@
+BODY {
+      font-family: Verdana, Helvetica, Sans-Serif;
+      line-height: 140%;
+      
+      padding-top: 120px;
+      padding-left: 120px;
+      padding-right: 100px;
+      border-left: 30px solid #330099;
+      
+      background-color: white;
+      background-image: url(logo.png);
+      background-position: 150px 20;
+      background-repeat: no-repeat;
+      background-attachment: scroll;
+      
+}
+
+H1 {
+     font-family: Verdana, Arial, Helvetica, Sans-Serif;
+	 font-size: 160%;
+     color: #330099;
+     clear: both;
+     margin-left: 0px;
+     line-height: 150%;
+}
+
+H2 {
+     font-family: Verdana, Arial, Helvetica, Sans-Serif;
+     color: #330099;
+     clear: both;
+     margin-left: 0px;
+     line-height: 150%;
+     border-bottom: 3px solid #330099;
+}
+
+H3 {
+     font-family: Verdana, Arial, Helvetica, Sans-Serif;
+     color: #330099;
+     clear: both;
+     margin-left: 0px;
+     line-height: 150%;
+     padding-top: 8px;
+     padding-bottom: -4px;
+     border-bottom: 2px solid #330099;
+}
+
+H4 {
+     font-family: Verdana, Arial, Helvetica, Sans-Serif;
+     color: #330099;
+     clear: both;
+     margin-left: 0px;
+     line-height: 150%;
+     padding-bottom: -4px;
+     border-bottom: 1px solid lightgray;
+}
+
+a.navigation {
+     font-size: 90%;
+     text-decoration: none;
+     padding: 4px;
+     margin-right: 2px;
+     line-height: 150%;
+     background-color: #DDDDDD;
+     clear: both;
+}
+
+
+
+P {
+  font-size: 10pt;
+  margin-left: 0px;
+
+}
+
+P.navigation {
+   font-size: 9pt;
+   margin-left: 0px;
+   clear: both;
+}
+
+P.copyright {
+	color: #888888;
+	font-size: 8pt;
+     clear: both;
+
+}
+
+
+img{
+     margin-left: 6px;
+}
+
+img.border {
+     margin-left: 0px;
+}
+
+img.wrapped {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    float: left;
+    clear: left;
+}
+
+CODE {
+    font-size: 10pt; 
+    font-family: andale mono, monospaced;
+    color: #6600CC;
+}
+
+PRE {
+    font-size: 10pt; 
+    font-family: andale mono, monospaced;
+    color: #6600CC;
+       
+    margin-left: 0.25in;
+    margin-right: 0.25in;
+     clear: both;
+}
+
+pre.b {
+    color:black; 
+}
+
+
+
+Code {
+     color: #6600CC;
+     font: monospaced;
+}
+
+
+LI {
+  margin-bottom: 10px;
+  clear: both;
+}
+
+
+div.block {
+     clear: both;
+     margin-above: 10px;
+}
+
+div.other-pages {
+     font-size: 90%;
+     text-decoration: none;
+	 margin: 4px;
+     padding: 4px;
+     margin-right: 2px;
+     line-height: 150%;
+     background-color: #DDDDDD;
+	float: right;
+}
+
+
+
+
+
+
+
+
+
+
+

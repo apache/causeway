@@ -1,0 +1,218 @@
+{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fswiss\fcharset0 Arial;}{\f1\fnil Courier New;}{\f2\fnil\fcharset0 Courier New;}{\f3\fswiss\fprq2\fcharset0 Arial Narrow;}{\f4\fswiss\fprq2\fcharset0 Arial;}}
+{\colortbl ;\red0\green0\blue0;\red255\green0\blue0;\red255\green255\blue255;\red127\green0\blue85;\red42\green0\blue255;}
+{\*\generator Msftedit 5.41.15.1503;}\viewkind4\uc1\pard\cf1\b\f0\fs20 Notes about control\par
+\par
+\b0 The Naked Objects approach to providing controls differs from conventional approaches in two important ways.\par
+\par
+The first difference is that all controls are specified within the business objects that they apply to.  Conventionally, the majority of controls are implemented outside the business objects, in the form of custom-written controllers and/or views.\par
+\par
+The second difference is that the process of applying controls is a 'subtractive' one rather than an 'additive' one.  In the more familiar additive approach the default position is that the user cannot see any object or invoke any method.  User tasks are then built up on top of the model.  For each step of each task the programmer adds the minimum information and minimum set of actions deemed necessary for that task.  In the Naked Objects 'subtractive' approach, the default position is that all objects and all methods are available to all users in all contexts.  The programmer must then explicitly take away capabilities that are not appropriate.\par
+\par
+As a result of these two differences the Naked Objects approach to control might at first seem somewhat counter-intuitive.  However, once you have become familiar with it, there are several distinct advantages:\par
+\par
+1.  Prototyping is very fast.  When you create a new class of objects, the generic capabilities to create new instances of that class, and retrieve existing ones, are instantly available to the user;  create a new attribute and the user immediately has the capability to specify that attribute for any object.\par
+\par
+2.  Better user progression.  With additive control the system is initially designed from the perspective of a user who is assumed to be minimally competent, and untrustworthy. With subtractive control, the system is initially designed from the perspective of a user who is fully competent and trustworthy.    It is much easier to reduce the 'expressiveness' of the latter type of system, than it is to increase the expressiveness of the former type.\par
+\par
+3.  Easier to change.  With the Naked Objects approach all the controls associated with a given object, field or action are concentrated in one place.  With the conventional approach, one easily-specified control change may impact on dozens of views and/or controllers, each of which must first be identified and then changed.\par
+\par
+4.  Context-independent control.  With Naked Objects the same domain objects may be accessed simultaneously through several different kinds of viewing mechanism (for example:  the default viewing mechanism, an HTML-only viewing mechanism, and a PocketPC mechanism).  Since the controls are all implemented within the domain objects, they apply irrespective of how the objects are being represented to the user.\par
+\par
+5.  Tighter control.  The irony is that despite the greater expressivness offered to the user, the Naked Objects approach actually offers tighter control where it is really needed.  When controls are implemented at the task level, users are very adept at finding ways to combine tasks in such a way as to circumvent the controls  (for a nice example, see pxx of the book).  With Naked Objects the controls are encapsulated at the lowest level that they can be. \par
+\par
+\b\fs28 Domains of control\fs20\par
+\par
+\b0 In a Naked Objects application, controls can apply to four domains:\par
+\par
+-  Actions\par
+-  Fields\par
+-  Objects\par
+-  Classes\par
+\par
+\b Action controls\par
+\par
+\b0 The programmer can control whether a particular actionMethod is \b visible \b0 to the user, and whether it is \b usable \b0 in a particular context.  The particular way in which these controls are manifest to the user is a property of the viewing mechanism: on the default viewing mechanism, if an actionMethod is specified as invisible then it will not show up on the pop-up menu for the object; if it is specified as unusable then that menu option will be greyed-out in the specified context.  (If an actionMethof is invisible, then, by definition it is also unusable;  the reverse is not true).  \par
+\par
+\b Field controls\par
+\b0\par
+The programmer can control whether a particular field is \b visible \b0 to the user and whether it is \b modifiable \b0 or not.  (If a field is invisible, then, by definition it is also unmodifiable;  the reverse is not true).  If a value field is specified as unmodifiable then the user will not be able to edit its contents.  If a reference field is unmodifiable then the user will not be able to replace the object (or objects, if it is a collection) in that field.  In the default viewing mechanism this means that the user could not drop any new object into the field or remove an existing one.  Note, however, that the user may still be able to open a view of the object contained within the field and edit \i its \i0  contents:  unless the programmer has specified otherwise \i for that object\i0 .  \par
+\par
+\par
+\b Object controls\par
+\par
+\b0 The programmer can control whether an object as a whole is \b accessible \b0 to a user, or in a particular context.  If an object is specified as 'inaccessible'  the user may still see references to that object, but will not be able to access any of the fields within that object or invoke any methods on that object.  Nor will the user be able to make additional references to that object.  In the default viewing mechanism, if an object is specified as inaccessible the user will be able to see the icon and its title, but will not be able to open a view of that object, nor right-click to get a pop-up menu, nor be able to drag that object out of its current location.\par
+\par
+Alternatively, the programmer can specify an object as \b unmodifable\b0 .  This is equivalent to specifying that each of its fields is unmodifiable by the user (or in a context).  However, the user can view the object's contents and use its methods.  (If an object is inaccessible, then, by definition it is also unmodifiable;  the reverse is not true).\cf2 Don't like the duplication with the default field about.\cf1\par
+\par
+\b Class controls\par
+\par
+\b0 The programmer can contol whether a class is directly \b accessible \b0 to the user.  This form of control does not affect individual objects of that class (that is down to object controls) but whether the user has access to the class-level operations.  If a class is specified as inaccessible then the user will not be able to create new instances of that class, or to retrieve objects of that class directly.  In the default viewing mechanism, an inaccessible class would not appear as a class icon on the desktop, nor would it be possible to right-click on the grey hole in a field and invoke the 'new' or 'finder' methods.  Note:  the user may be allowed to create new instances of that class indirectly, where the programmer has specifically provided for this capability:  for example the user may not have direct access to the Booking class, but may be allowed to use the NewBooking [for this customer] method on a Customer object.\par
+\par
+Alternatively, the programmer can specify that a class is \b uninstantiable\b0 .  The user may then have direct access to the class, and use this to find and retrieve existing instances, but may not create new ones.  (If a class is inaccessible, then, by definition it is also uninstantiable;  the reverse is not true).  \par
+\par
+\b\par
+\fs28 Layers of control\fs20\par
+\par
+\b0 Within each of the four domains of control, five different layers of control can be applied:\par
+\par
+1.  Absolute control\par
+2.  State-based control\par
+3.  Conditional control\par
+4.  Role-based control\par
+5.  User-based control\par
+\par
+\par
+\b Absolute control\par
+\b0 These controls apply in all contexts and to all users.  Examples:\par
+\par
+\highlight3\f1 u\lang2057\f2 nmodifiable();\par
+\par
+uninstantiable();\par
+\highlight0\lang1033\f0\par
+\highlight3\lang2057\f2 invisible();\highlight0\lang1033\f0\par
+\par
+\par
+\b State-based control\b0\par
+Some classes of objects have an explicit state  -  which takes one of a known series of values.  For an expenses claim might the state might be one of:  New, Submitted, AuthorisedForPayment, and Paid..  Many forms of control are based upon this state:  for example once a claim has been submitted many of its fields should be unmodifiable.  These objects are sometimes referred to as 'purposeful objects', or (in Peter Coad's archetypes) 'moment-interval' objects.  Where an object has an explicit state (meaning that it implements the StatefulObject interface) then there is an easy mechanism for speciying controls that apply in a given state.  Examples:\par
+\par
+\highlight3\f1 usableOnlyInState(newItem)\lang2057\f2 ;\par
+\par
+unusableInState(paid);\highlight0\lang1033\f0\par
+\par
+\highlight3\f1 usableOnlyInStates(\b new\b0  State[] \{submitted, queried\lang2057\f2 , modified\lang1033\f1\})\lang2057\f2 ;\par
+\par
+\highlight0\lang1033\f0 Note that all the states are explicitly named (declared within the class definition).  In the third example an array of states has been passed as the parameter.\par
+\par
+\b Conditional control\par
+\b0 Conditional controls provide a finer grained form of control, and can also be used on objects that do not have an explicit state i.e. do not implement the StatefulObject interface.  (Note:  any object that contains data will have 'state' in the broadest sense of the word, but not necessarily a single explicit state).  Conditional logic controls could control access to a particular action, field or object based upon the value in another field, or the state of another object being passed to it.  Examples:\par
+\par
+\highlight3\f1 unusableOnCondition(expenseItems.isEmpty(), "Claim has no Expense Items to apply Cost Centre to")\lang2057\f2 ;\par
+\par
+\lang1033\f1 unusableOnCondition(defaultCostCentre == \b null\b0 , "A Default Cost Centre must be specified");\par
+\par
+a.unusableOnCondition(!containsQueriedItems(), "Claim has no queried Expense Items");\highlight0\par
+\f0\par
+Note that the literal strings are used to provide feedback to the user as to why something is unusable.  In the default viewing mechanism this appears on the status bar at the bottom of the screen if the user holds the mouse over the intended object field or menu option.  The other layers of control generate their own feedback messages automatically.\par
+\par
+\b Role based control\par
+\b0 These controls are conditional upon the roles fulfilled by the current user.  Thus, the 'pay' method on an expenses claim might only be visible by a user that had the role 'financialOfficer'.  Note that a given user might fulfil multiple roles and that roles themselves may encompass other roles.  (The specification of Roles is described elsewhere).\par
+\par
+\highlight3\f1 a.visibleOnlyTo\lang2057\f2 Role\lang1033\f1 (\lang2057\f2 financialOfficer\lang1033\f1 );\highlight0\f0\par
+\par
+\b User based controls\par
+\b0 These controls are concerned with specific user identities.  They should only be specified where role-based control is insufficient.  For example, even if a manager fulfils the role of 'ExpenseAuthoriser' he or she will not (typically) be allowed to authorise his/her own personal claims.  It is expected that the specific users concerned will be referenced directly, or indirectly, from the object in question.  Examples:\par
+\par
+\highlight3\f1 a.visibleOnlyToUser(employee.getMyManager());\par
+\par
+a.visibleOnlyToUsers(new User[] \{claim.getEmployee(), \par
+\lang2057\f2\tab\lang1033\f1 claim.getEmplo\lang2057\f2 yee\lang1033\f1 ().getAdministrativeAssistant()\});\par
+\highlight0\f0\par
+\par
+\b\fs28 Applying the layers to the domains\par
+\par
+[add explanation]\par
+\par
+\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx1080\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx3060\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx5400\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx7560\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx9720\pard\intbl\cf0\lang2057\f3\fs20\cell\f4 Action\cell Field\cell Object\cell Class\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx1080\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx3060\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx5400\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx7560\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx9720\pard\intbl\f3\par
+Absolute\par
+Control\par
+\cell\b0\cell\cf1\par
+invisible()\cf0\par
+\par
+unmodifiable()\par
+\cell\par
+\par
+\par
+unmodifiable()\cell\par
+\par
+\par
+uninstantiable()\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx1080\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx3060\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx5400\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx7560\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx9720\pard\intbl\b\par
+State-based control\cell\b0\par
+unusableInState()\par
+unusableInStates()\par
+usableOnlyInState()\par
+usableOnlyInStates()\cell\par
+unmodifiableInState()\par
+unmodifiableInStates()\par
+modifiableOnlyInState()\par
+modifiableOnlyInStates()\par
+\cell\cell\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx1080\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx3060\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx5400\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx7560\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx9720\pard\intbl\b\par
+Conditional control\par
+\cell\b0\par
+unusableOnCondition()\cell\par
+unmodifiableOnCondition()\cell\cell\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx1080\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx3060\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx5400\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx7560\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx9720\pard\intbl\b\par
+Role-based control\cell\b0\par
+visibleOnlyToRole()\par
+visibleOnlyToRoles()\cell\par
+visibleOnlyToRole()\par
+visibleOnlyToRoles()\par
+\par
+modifiableOnlyByRole()\par
+modifiableOnlyByRoles()\par
+\cell\par
+accessibleOnlyToRole()\par
+accessibleOnlyToRoles()\par
+\par
+modifiableOnlyByRole()\par
+modifiableOnlyByRoles()\cell\par
+accessibleOnlyToRole()\par
+accessibleOnlyToRoles()\par
+\par
+instantiableOnlyByRole()\par
+instantiableOnlyByRoles()\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx1080\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx3060\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx5400\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx7560\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx9720\pard\intbl\b\par
+User-based control\cell\b0\par
+visibleOnlyToUser()\par
+visibleOnlyToUsers()\cell\par
+visibleOnlyToUser()\par
+visibleOnlyToUsers()\par
+\par
+modifiableOnlyByUser()\par
+modifiableOnlyByUsers()\par
+\cell\par
+accessibleOnlyToUser()\par
+accessibleOnlyToUsers()\par
+\par
+modifiableOnlyByUser()\par
+modifiableOnlyByUsers()\cell\cell\row\pard\cf1\lang1033\f0\par
+\par
+\par
+\b\fs28 Locating the controls [move up to after the four domains]\b0\fs20\par
+\par
+Controls are located in 'aboutMethods' where the method name reflects the name of the thing being controlled.  An aboutMethod returns an About object.  The framework provides four types of About: ActionAbout, FieldAbout, ObjectAbout, and ClassAbout, which correspond to the four domains of control.  An aboutMethod thus starts by instantiating one of those objects, and then invoking any of its methods corresponding to the various layers of control.  Note that all these methods are essentially 'subtractive' in nature:  if any one of them restricts the visibility or use then the visibility or use will remain restricted even if the other methods would allow it.\par
+\par
+The following code shows three levels of control (user, state-based and conditional logic) applied to the method \highlight3\f1 actionApplyCostCentreToAll()\lang2057\f2  :\par
+\par
+\f1\tab\cf4\b public\cf1\b0  About aboutActionApplyCostCentreToAll() \{\cf0\highlight0\par
+\cf1\highlight3\tab\tab NewActionAbout a = \cf4\b new\cf1\b0  NewActionAbout(\cf4\b this\cf1\b0 );\par
+\f2\tab\tab\f1 a.usableOnlyInStates(\cf4\b new\cf1\b0  State[] \{newClaim, returned\});\cf0\highlight0\par
+\cf1\highlight3\tab  \tab a.unusableOnCondition(defaultCostCentre == \cf4\b null\cf1\b0 , \par
+\f2\tab\tab\tab\cf5\f1 "A Default Cost Centre must be specified"\cf1 );\cf0\highlight0\par
+\cf1\highlight3\tab  \tab a.unusableOnCondition(expenseItems.isEmpty(), \par
+\f2\tab\tab\tab\cf5\f1 "Claim has no Expense Items to apply Cost Centre to"\cf1 );\par
+\f2\tab\tab\f1 a.visibleOnlyToUser(employee); \cf0\highlight0\par
+\cf1\highlight3\tab  \tab\cf4\b return\cf1\b0  a;\cf0\highlight0\par
+\cf1\highlight3\tab\}\highlight0\lang1033\f0\par
+\par
+[more examples]\par
+\par
+\b\fs28 A lightweight methodology\b0\fs20\par
+\par
+During the exploration phase of a Naked Objects project, controls do not play a large part.  It may be appropriate to prototype certain controls either to ease the demonstration, or to explore a particular piece of business logic.\par
+\par
+In the delivery phase, however, it is necessary to be rigorous about controls.  It is good practice to write both class and object controls for each class  -  even if those methods are initially empty.  It is also good practice to locate the class and object abouts at the top of your class code, and the various field and action abouts directly above the code for appropriate getMethod or actionMethod it applies to.\par
+\par
+Each field and each action should also have a corresponding aboutMethod.  However, since there is often a lot of commonality to the controls for fields or actions on an object, it is possible to write a aboutDefaultAction() method and/or an aboutDefaultField() method that will apply to all actions/fields by default.  If a field or action has its own specified aboutMethod, this will over-ride the default.  Examples:\par
+\par
+Similarly, if two or more fields (or actions) require similar controls (but not the default) then it is permissible for one of the aboutMethods to delegate responsibility to the other.  (The same pattern of delegation could be applied to object and class controls also).  Examples:\par
+\par
+\par
+\par
+As each new field or action method is implemented, it is good practice to work through the five layers of control in the order specified above.  This will not only ensure that you have covered all the appropriate forms of control, but it will also minimise the risk of duplication.  The order in which the various control statements are written and executed within an aboutMethod does not affect the outcome.  However it is good discipline to place them in a consistent order reflecting the order in which the five levels of control have been analysed  -  making them easier to read.\par
+\par
+}
+ 
