@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.reflect.FieldSpecification;
@@ -85,12 +86,12 @@ public class Memento implements Transferable, Serializable {
         if (state == null) {
             return null;
         } else {
-            NakedObjectSpecification nc = NakedObjectSpecification.getSpecification(state.className);
+            NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(state.className);
             NakedObject object = (NakedObject) nc.acquireInstance();
             object.setContext(context);
             object.setOid(state.oid);
             LOG.debug("Recreated object " + object.getOid());
-            updateNakedObject(object, loadedObjects, context);
+            updateObject(object, loadedObjects, context);
 
             return object;
         }
@@ -101,7 +102,7 @@ public class Memento implements Transferable, Serializable {
             NakedObject ref;
             Oid oid = data.oid;
 
-            NakedObjectSpecification nakedClass = NakedObjectSpecification.getSpecification(data.className);
+            NakedObjectSpecification nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(data.className);
             if (oid == null) {
                 ref = null;
             } else if (loadedObjects.isLoaded(oid)) {
@@ -129,7 +130,7 @@ public class Memento implements Transferable, Serializable {
      *                       if the memento was created from different logical object to
      *                       the one specified (i.e. its oid differs).
      */
-    public void updateNakedObject(NakedObject object, LoadedObjects loadedObjects, NakedObjectContext context) {
+    public void updateObject(NakedObject object, LoadedObjects loadedObjects, NakedObjectContext context) {
         Object oid = object.getOid();
         if (oid != null && !oid.equals(state.oid)) {
             throw new IllegalArgumentException("This memento can only be used to " + "update the naked object with the Oid "

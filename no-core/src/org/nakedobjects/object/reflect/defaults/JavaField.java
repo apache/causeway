@@ -5,6 +5,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -15,12 +16,12 @@ import org.apache.log4j.Logger;
 public abstract class JavaField extends JavaMember {
     private final static Logger LOG = Logger.getLogger(JavaField.class);
     protected final Method getMethod;
-    private NakedObjectSpecification nakedClass;
-    private boolean isDerived;
+     private final boolean isDerived;
+    private final  Class type;
 
     public JavaField(String name, Class type, Method get, Method about, boolean isDerived) {
         super(name, about);
-        this.nakedClass = type == null ? null : NakedObjectSpecification.getSpecification(type);
+        this.type = type;
         this.isDerived = isDerived;
         this.getMethod = get;
     }
@@ -42,7 +43,7 @@ public abstract class JavaField extends JavaMember {
      return the object type, as a Class object, that the method returns.
      */
     public NakedObjectSpecification getType() {
-        return nakedClass;
+        return type == null ? null : NakedObjectSpecificationLoader.getInstance().loadSpecification(type);
     }
 
     /**

@@ -72,7 +72,7 @@ public class ObjectProxy implements Serializable {
         try {
 	        NakedObjectManager objectManager = NakedObjectManager.getInstance();
             synchronized(objectManager){
-                NakedObjectSpecification cls = NakedObjectSpecification.getNakedClass(type);
+                NakedObjectSpecification cls = NakedObjectSpecification.getSpecification(type);
                 if (loadedObjects.isLoaded(oid)) {
                     object = objectManager.getObject(oid, cls);
                 } else {

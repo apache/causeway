@@ -4,11 +4,12 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.defaults.SimpleNakedClass;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
@@ -16,6 +17,7 @@ import org.nakedobjects.viewer.skylark.UiConfiguration;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
+import org.nakedobjects.viewer.skylark.basic.ClassOption;
 import org.nakedobjects.viewer.skylark.basic.ClassTitleText;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
 import org.nakedobjects.viewer.skylark.core.ObjectView;
@@ -113,16 +115,24 @@ public class ClassIcon extends ObjectView {
     }
     
     public void secondClick(Click click) {
-		NakedObject object = ((ObjectContent) getContent()).getObject();
-		SimpleNakedClass nc = ((SimpleNakedClass) object);
-		/*Action action = nc.getNakedClass().getObjectAction(Action.USER, "Instances");
-		InstanceCollection instances = (InstanceCollection) action.execute(object);
-		*/
-		NakedCollection instances = nc.actionInstances();
+        NakedCollection instances = getNakedClass().allInstances();
 		View view = ViewFactory.getViewFactory().createOpenRootView(instances);
 		view.setLocation(click.getLocationWithinViewer());
 		getWorkspace().addView(view);
 	}
+    
+    private NakedClass getNakedClass()
+    {
+        NakedObject object = ((ObjectContent) getContent()).getObject();
+		return ((NakedClass) object);
+    }
+    
+    public void menuOptions(MenuOptionSet options) {
+        NakedObjectSpecification spec = getNakedClass().forNakedClass();
+        ClassOption.menuOptions(spec, options);
+        
+        options.setColor(Style.CONTENT_MENU);
+    }
 
     public String toString() {
         return "MetalClassIcon" + getId();

@@ -1,10 +1,10 @@
 package org.nakedobjects.object.defaults.value;
 
-import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationImpl;
+import org.nakedobjects.object.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.ValueParseException;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.value.Time;
-import org.nakedobjects.object.defaults.value.TimePeriod;
+import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 
 import java.util.Locale;
 
@@ -24,7 +24,9 @@ public class TimePeriodTest extends TestCase {
 		Locale.setDefault(Locale.UK);
    	
 		new TestClock();
-		NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+    	new NakedObjectSpecificationLoaderImpl();
+    	NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
+    	NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
 
         tp1 = new TimePeriod();
         tp2 = new TimePeriod();

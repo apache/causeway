@@ -121,14 +121,14 @@ public class NamespaceManager {
     }
 
     /**
-     * @see #manageNamespaceFor(String, String)
+     * @see #manageNamespaceFor(String)
      */
     public boolean managingNamespaceFor(final NakedObjectSpecification nakedClass) {
         return managingNamespaceFor(nakedClass.getFullName());
     }
 
     /**
-     * @see #manageNamespaceFor(String, String)
+     * @see #manageNamespaceFor(String)
      */
     public boolean managingNamespaceFor(final Class clazz) {
         return managingNamespaceFor(clazz.getName());

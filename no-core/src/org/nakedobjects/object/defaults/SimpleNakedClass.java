@@ -7,6 +7,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NotPersistableException;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.control.About;
@@ -26,7 +27,7 @@ public class SimpleNakedClass extends AbstractNakedObject implements NakedClass 
     }
 
     public SimpleNakedClass(String name) {
-        nakedClass = NakedObjectSpecification.getSpecification(name);
+        nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(name);
         className.setValue(name);
     }
     
@@ -88,10 +89,22 @@ public class SimpleNakedClass extends AbstractNakedObject implements NakedClass 
     }
 
     public NakedCollection actionInstances() {
+       return allInstances();
+    }
+    
+    public NakedCollection allInstances() {
         return getObjectManager().allInstances(forNakedClass());
     }
 
+    public NakedCollection findInstances(String searchTerm) {
+        return getObjectManager().findInstances(forNakedClass(), searchTerm);
+    }
+    
     public NakedObject actionNewInstance() {
+        return newInstance();
+    }
+    
+    public NakedObject newInstance() {
         NakedObjectManager objectManager = getObjectManager();
         
         if(createPersistentInstances) {
@@ -160,7 +173,7 @@ public class SimpleNakedClass extends AbstractNakedObject implements NakedClass 
             if(getName().length() == 0) {
                 throw new NakedObjectRuntimeException();
             }
-            nakedClass = NakedObjectSpecification.getSpecification(getName());
+            nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(getName());
         }
         return nakedClass;
     }   

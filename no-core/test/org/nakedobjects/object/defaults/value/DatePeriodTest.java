@@ -1,10 +1,10 @@
 package org.nakedobjects.object.defaults.value;
 
-import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationImpl;
+import org.nakedobjects.object.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.ValueParseException;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.value.Date;
-import org.nakedobjects.object.defaults.value.DatePeriod;
+import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 import org.nakedobjects.system.SystemClock;
 
 import java.util.Locale;
@@ -23,7 +23,9 @@ public class DatePeriodTest extends TestCase {
 	protected void setUp() throws Exception {
 		Locale.setDefault(Locale.UK);
 
-		NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+    	new NakedObjectSpecificationLoaderImpl();
+    	NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
+    	NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
 	    	
 		Date.setClock(new SystemClock());
 		

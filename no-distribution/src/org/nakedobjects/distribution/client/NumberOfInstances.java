@@ -16,7 +16,7 @@ public class NumberOfInstances extends Request {
     }
 
 	protected void generateResponse(RequestContext context) {
-		NakedObjectSpecification cls = NakedObjectSpecification.getNakedClass(className);
+		NakedObjectSpecification cls = NakedObjectSpecification.getSpecification(className);
         response = new Integer(context.getObjectManager().numberOfInstances(cls));
     }
 

@@ -4,6 +4,7 @@ import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.viewer.skylark.Bounds;
@@ -43,7 +44,7 @@ public class TreeNodeBorder extends AbstractBorder {
 		if(getContent() instanceof OneToManyField) {
 		    InternalCollection collection = ((InternalCollection) ((OneToManyField) getContent()).getObject());
             String type = collection.getElementSpecification().getFullName();
-            final NakedObjectSpecification nc = NakedObjectSpecification.getSpecification(type);
+            final NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(type);
 		    icon = new IconGraphic(this, LABEL_STYLE) {
 		        protected String iconName(NakedObject object) {
 		            return nc.getShortName();
@@ -159,13 +160,14 @@ public class TreeNodeBorder extends AbstractBorder {
 	public void menuOptions(MenuOptionSet options) {
 	    if(getContent() instanceof OneToManyField) {
 	       	TypedNakedCollection collection = (TypedNakedCollection) ((OneToManyField) getContent()).getCollection();
-	        NakedObjectSpecification nakedClass = NakedObjectSpecification.getSpecification(collection.getElementSpecification().getFullName());
+	        NakedObjectSpecification nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(collection.getElementSpecification().getFullName());
 	        
 	        ClassOption.menuOptions(nakedClass, options);
 	        
 		    // TODO same as InternalCollectionBorder
 	    }
         super.menuOptions(options);
+        TreeDisplayRules.menuOptions(options);
     }
 	
     public void objectActionResult(Naked result, Location at) {

@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.reflect.ActionSpecification;
@@ -99,7 +100,7 @@ public class SimpleTransactionManagerTest extends TestCase {
     public void test() {
         
         
-        NakedObjectSpecification accountClass = NakedObjectSpecification.getSpecification(Account.class);
+        NakedObjectSpecification accountClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(Account.class);
         
         //      transaction 4
         objectManager.startTransaction();

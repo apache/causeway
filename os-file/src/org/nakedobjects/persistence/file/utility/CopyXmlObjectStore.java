@@ -54,14 +54,12 @@ public class CopyXmlObjectStore {
                 try {
                     bis.close();
                 } catch (IOException ignore) {
-                    ;
                 }
             }
             if (bos != null) {
                 try {
                     bos.close();
                 } catch (IOException ignore) {
-                    ;
                 }
             }
         }

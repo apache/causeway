@@ -7,6 +7,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectNotFoundException;
@@ -29,7 +30,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
     private static final Logger LOG = Logger.getLogger(MementoObjectStore.class);
     private DataManager dataManager;
     private LoadedObjects loadedObjects;
-    private static final NakedObjectSpecification NAKED_CLASS_CLASS = NakedObjectSpecification.getSpecification(NakedClass.class);
+    private static final NakedObjectSpecification NAKED_CLASS_CLASS = NakedObjectSpecificationLoader.getInstance().loadSpecification(NakedClass.class);
 
     public MementoObjectStore(DataManager manager) {
         this.dataManager = manager;
@@ -39,7 +40,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
     public void abortTransaction() {}
 
     private NakedObjectSpecification classFor(String type) {
-        return NakedObjectSpecification.getSpecification(type);
+        return NakedObjectSpecificationLoader.getInstance().loadSpecification(type);
     }
 
     public void createNakedClass(NakedClass cls) throws ObjectStoreException {
@@ -86,7 +87,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
             return loadedObjects.getLoadedObject(oid);
         } else {
             LOG.debug("Creating skeletal object of " + type + " " + oid);
-            NakedObjectSpecification cls = NakedObjectSpecification.getSpecification(type);
+            NakedObjectSpecification cls = NakedObjectSpecificationLoader.getInstance().loadSpecification(type);
             NakedObject object = (NakedObject) cls.acquireInstance();
             object.setOid(oid);
 

@@ -3,11 +3,11 @@ package org.nakedobjects.distribution.reflect;
 
 import org.nakedobjects.distribution.ObjectRequest;
 import org.nakedobjects.distribution.RequestContext;
-import org.nakedobjects.io.Memento;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectMemento;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.io.Memento;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 

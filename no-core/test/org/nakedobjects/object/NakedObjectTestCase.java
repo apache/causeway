@@ -18,16 +18,16 @@ public abstract class NakedObjectTestCase extends TestCase {
     
     public NakedObjectTestCase() {}
 
-    public void assertEquals(String name, String expected, NakedValue value) {
-        super.assertEquals(name, expected, value.titleString().toString());
+    public static void assertEquals(String name, String expected, NakedValue value) {
+        assertEquals(name, expected, value.titleString().toString());
     }
 
-    public void assertEquals(String expected, NakedValue value) {
-        super.assertEquals(expected, value.titleString().toString());
+    public static void assertEquals(String expected, NakedValue value) {
+        assertEquals(expected, value.titleString().toString());
     }
 
-    public void assertEquals(NakedValue expected, NakedValue value) {
-    	super.assertEquals(expected.titleString().toString(), value.titleString().toString());
+    public static void assertEquals(NakedValue expected, NakedValue value) {
+    	assertEquals(expected.titleString().toString(), value.titleString().toString());
     }
 
     protected AssociationSpecification findAssocation(String attributeName, NakedObject forObject) {

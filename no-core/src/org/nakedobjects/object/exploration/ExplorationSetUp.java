@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.User;
 
@@ -66,7 +67,7 @@ public class ExplorationSetUp {
      * exploration programs that need to set up instances.
      */
     protected final NakedObject createInstance(Class type) {
-        NakedObjectSpecification nc = NakedObjectSpecification.getSpecification(type.getName());
+        NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(type.getName());
         if (nc == null) { return objectManager.generatorError("Could not create an object of class " + type, null); }
         return createInstance(nc);
     }
@@ -76,7 +77,7 @@ public class ExplorationSetUp {
      * exploration programs that need to set up instances.
      */
     protected final NakedObject createInstance(String className) {
-        NakedObjectSpecification nc = NakedObjectSpecification.getSpecification(className);
+        NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
         if (nc == null) { return objectManager.generatorError("Could not create an object of class " + className, null); }
         return createInstance(nc);
     }
@@ -102,7 +103,7 @@ public class ExplorationSetUp {
      * any instances of the specified class
      */
     protected final boolean needsInstances(String className) {
-        return !objectManager.hasInstances(NakedObjectSpecification.getSpecification(className));
+        return !objectManager.hasInstances(NakedObjectSpecificationLoader.getInstance().loadSpecification(className));
     }
 
     
@@ -135,7 +136,7 @@ public class ExplorationSetUp {
 
     private void setInitialUser() {
         if(user != null) {
-	        NakedObjectSpecification cls = NakedObjectSpecification.getSpecification(User.class.getName());
+	        NakedObjectSpecification cls = NakedObjectSpecificationLoader.getInstance().loadSpecification(User.class.getName());
 	        NakedCollection coll = objectManager.findInstances(cls, user);
 	        if(coll.size() == 0) {
 	            throw new NakedObjectRuntimeException("No user " + user);

@@ -1,7 +1,6 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedClNakedObjectSpecification;
 
 
 public class LoadClassRequest extends Request {
@@ -12,7 +11,7 @@ public class LoadClassRequest extends Request {
 	}
 
 	protected void generateResponse(RequestContext context) {
-		NakedObjectSpecification cls = NakedObjectSpecification.getNakedClass(name.getValue());
+		NakedObjectSpecification cls = NakedObjectSpecification.getSpecification(name.getValue());
 		response = new WrappedString(cls.getReflector().stringValue());
 	}
 

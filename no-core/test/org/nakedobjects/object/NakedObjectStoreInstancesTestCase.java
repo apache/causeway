@@ -22,7 +22,7 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
  
         // classes
         personClassName = Person.class.getName();
-        personClass = NakedObjectSpecification.getSpecification(personClassName);
+        personClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(personClassName);
 
         // patterns
         personPattern = new Person();
@@ -40,7 +40,6 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
     }
 
     public void testDestroyObject() throws Exception {
-        Object oid = people[2].getOid();
         objectStore.destroyObject(people[2]);
     
         restartObjectStore();

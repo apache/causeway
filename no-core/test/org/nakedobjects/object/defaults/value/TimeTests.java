@@ -1,8 +1,6 @@
 package org.nakedobjects.object.defaults.value;
 
 import org.nakedobjects.object.ValueParseException;
-import org.nakedobjects.object.defaults.value.Time;
-import org.nakedobjects.system.SystemClock;
 
 import java.util.Locale;
 

@@ -10,7 +10,7 @@ import org.nakedobjects.distribution.client.MakePersistentRequest;
 import org.nakedobjects.distribution.client.NumberOfInstances;
 import org.nakedobjects.distribution.client.ResolveRequest;
 import org.nakedobjects.distribution.client.SerialNumberRequest;
-import org.nakedobjects.io.Memento;
+import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
@@ -19,8 +19,8 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.UpdateNotifier;
-import org.nakedobjects.object.collection.InternalCollection;
-import org.nakedobjects.utility.Log;
+import org.nakedobjects.object.io.Memento;
+import org.nakedobjects.system.Log;
 import org.nakedobjects.utility.NotImplementedException;
 
 

@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.Oid;
@@ -30,7 +31,7 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
     }
 
     public TypedNakedCollection allInstances(String className) {
-        NakedObjectSpecification cls = NakedObjectSpecification.getSpecification(className);
+        NakedObjectSpecification cls = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
         return allInstances(cls);
     }
 
@@ -56,7 +57,7 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
      * contains.
      */
     public NakedObject createInstance(String className) {
-        NakedObjectSpecification cls = NakedObjectSpecification.getSpecification(className);
+        NakedObjectSpecification cls = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
         return createInstance(cls);
     }
 
@@ -72,7 +73,7 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
     }
 
     public NakedObject createTransientInstance(String className) {
-        NakedObjectSpecification nc = NakedObjectSpecification.getSpecification(className);
+        NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
         return createTransientInstance(nc);
     }
 
@@ -92,7 +93,7 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
     }
 
     public TypedNakedCollection findInstances(String className, String searchTerm) throws UnsupportedFindException {
-        NakedObjectSpecification cls = NakedObjectSpecification.getSpecification(className);
+        NakedObjectSpecification cls = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
         return findInstances(cls, searchTerm);
     }
 

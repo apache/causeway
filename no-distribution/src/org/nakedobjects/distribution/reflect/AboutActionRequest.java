@@ -11,10 +11,10 @@ import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.object.reflect.ActionDelegate;
+import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionSpecification.Type;
-import org.nakedobjects.security.Certificate;
-import org.nakedobjects.security.SecurityContext;
+import org.nakedobjects.object.security.Certificate;
+import org.nakedobjects.object.security.SecurityContext;
 
 
 public class AboutActionRequest extends ObjectRequest {
@@ -24,7 +24,7 @@ public class AboutActionRequest extends ObjectRequest {
     private ObjectProxy parameters[];
     private Type actionType;
     
-    public AboutActionRequest(NakedObject object, ActionDelegate action, SecurityContext context, Naked parameters[]) {
+    public AboutActionRequest(NakedObject object, Action action, SecurityContext context, Naked parameters[]) {
         super(object);
         this.actionName = action.getName();
         this.actionType = action.getActionType();

@@ -2,6 +2,7 @@ package org.nakedobjects.object.control;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ValueParseException;
 import org.nakedobjects.utility.NotImplementedException;
@@ -21,12 +22,12 @@ public class State implements NakedValue {
 		
 		this.id = id;
 		this.name = name;
-        specification = NakedObjectSpecification.getSpecification(this.getClass());
+        specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(this.getClass());
 	}
 
 	public State(State[] states) {
 		this.states = states;
-        specification = NakedObjectSpecification.getSpecification(this.getClass());
+        specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(this.getClass());
 	}
 	
 	public boolean userChangeable() {

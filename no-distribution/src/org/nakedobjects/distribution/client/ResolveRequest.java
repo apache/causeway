@@ -3,11 +3,11 @@ package org.nakedobjects.distribution.client;
 
 import org.nakedobjects.distribution.ObjectRequest;
 import org.nakedobjects.distribution.RequestContext;
-import org.nakedobjects.io.Memento;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.io.Memento;
 
 
 public class ResolveRequest extends ObjectRequest {

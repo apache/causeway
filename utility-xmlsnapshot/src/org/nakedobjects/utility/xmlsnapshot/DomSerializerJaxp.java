@@ -29,13 +29,11 @@ public class DomSerializerJaxp implements DomSerializer {
     }
 
     public void serializeTo(final Element domElement, OutputStream os) throws IOException {
-        CharArrayWriter caw = new CharArrayWriter();
         StreamResult result = new StreamResult(os);
         serializeTo(domElement, result);
     }
 
     public void serializeTo(final Element domElement, Writer w) throws IOException {
-        StreamResult result = new StreamResult(w);
         serializeTo(domElement, new StreamResult(w));
     }
 

@@ -2,6 +2,7 @@ package org.nakedobjects.object.defaults.value;
 
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.defaults.Title;
 
@@ -9,7 +10,7 @@ public abstract class AbstractNakedValue implements NakedValue {
     private final NakedObjectSpecification specification;
     
     public AbstractNakedValue() {
-        specification = NakedObjectSpecification.getSpecification(this.getClass());
+        specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(this.getClass());
     }
 
     /** By default all values are changeable by the user */

@@ -10,6 +10,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Oid;
@@ -22,7 +23,6 @@ import org.nakedobjects.object.defaults.value.TimeStamp;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
-import org.nakedobjects.utility.Assert;
 
 import org.apache.log4j.Logger;
 
@@ -121,7 +121,7 @@ public abstract class AbstractNakedObject implements NakedObject {
     
     public AbstractNakedObject() {
         lastActivity.clear();
-        nakedClass = NakedObjectSpecification.getSpecification(this.getClass());
+        nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(this.getClass());
     }
 
     /*
@@ -247,8 +247,9 @@ public abstract class AbstractNakedObject implements NakedObject {
     }
 
      public NakedObjectContext getContext() {
-        Assert.assertTrue("must have a context: " + this, context != null);
-//		 if(context == null) context = NakedObjectContext.getDefaultContext();
+         // TODO context needs to assigned to the object properly
+//        Assert.assertTrue("must have a context: " + this, context != null);
+		 if(context == null) context = NakedObjectContext.getDefaultContext();
         return context;
     }
 

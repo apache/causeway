@@ -10,8 +10,11 @@ import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationImpl;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.OidGenerator;
+import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.UpdateNotifier;
 import org.nakedobjects.object.defaults.DefaultUserContext;
 import org.nakedobjects.object.defaults.LocalObjectManager;
@@ -21,6 +24,7 @@ import org.nakedobjects.object.defaults.TransientObjectStore;
 import org.nakedobjects.object.exploration.ExplorationContext;
 import org.nakedobjects.object.exploration.ExplorationFixture;
 import org.nakedobjects.object.exploration.ExplorationSetUp;
+import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Role;
 import org.nakedobjects.object.security.User;
@@ -44,6 +48,7 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
     public static final String OBJECT_STORE = "object-store";
     private static final String SHOW_EXPLORATION_OPTIONS = "viewer.lightweight.show-exploration";
     private final static String VIEWING_MECHANISM = "viewer";
+    private static final String REFLECTOR_FACTORY = "reflector";
 
     private NakedObjectContext context;
     private ExplorationSetUp explorationSetUp;
@@ -66,7 +71,8 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
             showSplash();
             setUpLocale();
             ObjectViewingMechanism viewer = installViewer();
-            NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+            NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
+            NakedObjectSpecificationImpl.setReflectorFactory(installReflectorFactory());
             objectManager = installObjectManager(viewer.getUpdateNotifier());
             
             context = new NakedObjectContext(objectManager);
@@ -78,7 +84,7 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
 
             ExplorationContext applicationContext;
             User user;
-            NakedObjectSpecification userClass = NakedObjectSpecification.getSpecification(User.class.getName());
+            NakedObjectSpecification userClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(User.class.getName());
             if (objectManager.hasInstances(userClass)) {
                 NakedCollection users = objectManager.findInstances(userClass, name);
                 if(users.size() == 0) {
@@ -157,6 +163,11 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
     private ObjectViewingMechanism installViewer() throws ConfigurationException, ComponentException {
         return  (ObjectViewingMechanism) ComponentLoader.loadComponent(VIEWING_MECHANISM,
                 ObjectViewingMechanism.class);
+    }
+
+    private ReflectorFactory installReflectorFactory() throws ConfigurationException, ComponentException {
+        return  (ReflectorFactory) ComponentLoader.loadComponent(REFLECTOR_FACTORY,
+                JavaReflectorFactory.class, ReflectorFactory.class);
     }
 
     private void loadConfiguration() throws ConfigurationException {

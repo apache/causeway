@@ -57,7 +57,7 @@ public class MockNakedObject implements NakedObject {
     }
 
     public NakedObjectSpecification getSpecification() {
-        return null;
+        return new DummyNakedObjectSpecification();//NakedObjectSpecification.getSpecification(MockNakedObject.class);
     }
 
     public String getShortClassName() {

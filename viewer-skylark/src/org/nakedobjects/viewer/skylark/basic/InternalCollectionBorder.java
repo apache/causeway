@@ -5,6 +5,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Location;
@@ -60,7 +61,7 @@ public class InternalCollectionBorder extends AbstractBorder {
         super.menuOptions(options);
         
         InternalCollection collection = (InternalCollection) ((OneToManyField) getContent()).getCollection();
-        NakedObjectSpecification nakedClass = NakedObjectSpecification.getSpecification(collection.getElementSpecification().getFullName());
+        NakedObjectSpecification nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(collection.getElementSpecification().getFullName());
         
         ClassOption.menuOptions(nakedClass, options);
     }

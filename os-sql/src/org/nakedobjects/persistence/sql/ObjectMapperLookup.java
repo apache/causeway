@@ -9,6 +9,7 @@ import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.persistence.sql.auto.AutoMapper;
 import org.nakedobjects.utility.Assert;
@@ -23,7 +24,7 @@ import org.apache.log4j.Logger;
 
 public class ObjectMapperLookup {
     private static final Logger LOG = Logger.getLogger(ObjectMapperLookup.class);
-    private static final NakedObjectSpecification nakedClass = NakedObjectSpecification.getSpecification(NakedObjectSpecification.class.getName());
+    private static final NakedObjectSpecification nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(NakedObjectSpecification.class.getName());
     private final Hashtable mappers = new Hashtable();
     private final LoadedObjects loadedObjects;
     private ObjectMapperFactory mapperFactory;
@@ -78,7 +79,7 @@ public class ObjectMapperLookup {
     }
 
     private void add(String className, ObjectMapper mapper) throws SqlObjectStoreException {
-        NakedObjectSpecification cls = NakedObjectSpecification.getSpecification(className);
+        NakedObjectSpecification cls = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
         add(cls, mapper);
     }
 

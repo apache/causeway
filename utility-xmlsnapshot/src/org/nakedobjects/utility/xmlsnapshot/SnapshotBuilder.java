@@ -2,9 +2,9 @@ package org.nakedobjects.utility.xmlsnapshot;
 
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.defaults.value.Snapshot;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.object.reflect.NakedObjectSpecificationException;
@@ -378,12 +378,11 @@ public final class SnapshotBuilder {
         namespaceManager.setNofAttribute(fieldElement, "type", referencedQname);
     }
 
-/*    public Snapshot snapshot() {
+    public Snapshot snapshot(NakedObject object) {
         Snapshot snapshot = new Snapshot();
-        snapshot(this, snapshot);
+        snapshot(object, snapshot);
         return snapshot;
     }
-*/
     
     private static void snapshot(NakedObject object, Snapshot snapshot) {
         NakedObjectSpecification nc = object.getSpecification();

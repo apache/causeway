@@ -1,18 +1,24 @@
 package org.nakedobjects.object.defaults.collection;
 
 import org.nakedobjects.object.ArbitraryNakedCollection;
+import org.nakedobjects.object.AssociationExample;
 import org.nakedobjects.object.ConcreteEmployee;
 import org.nakedobjects.object.ConcreteEmployer;
 import org.nakedobjects.object.Employee;
 import org.nakedobjects.object.Employer;
 import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectSpecificationImpl;
+import org.nakedobjects.object.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.NakedObjectTestCase;
+import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.Person;
+import org.nakedobjects.object.Role;
+import org.nakedobjects.object.Team;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
-import org.nakedobjects.object.defaults.collection.ArbitraryCollectionVector;
 import org.nakedobjects.object.reflect.AssociationSpecification;
+import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 
 import java.util.Enumeration;
 
@@ -24,7 +30,7 @@ import org.apache.log4j.LogManager;
 import com.mockobjects.ExpectationSet;
 
 
-public class NakedObjectCollectionAttributeTest
+public class CollectionIntegrationTest
     extends NakedObjectTestCase {
     private Employer employer;
     private Employee e1;
@@ -32,13 +38,9 @@ public class NakedObjectCollectionAttributeTest
     private Employee e3;
     private MockObjectManager manager;
 
-    public NakedObjectCollectionAttributeTest(String name) {
-        super(name);
-    }
-
     public static void main(String[] args) {
         junit.textui.TestRunner.run(
-                new TestSuite(NakedObjectCollectionAttributeTest.class));
+                new TestSuite(CollectionIntegrationTest.class));
     }
 
     protected void setUp() throws Exception {
@@ -46,7 +48,9 @@ public class NakedObjectCollectionAttributeTest
         super.setUp();
         
         manager = MockObjectManager.setup();
-        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+        new NakedObjectSpecificationLoaderImpl();
+        NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
+        NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
     	
         NakedObjectContext context = new NakedObjectContext(manager);
         employer = new ConcreteEmployer();
@@ -79,7 +83,7 @@ public class NakedObjectCollectionAttributeTest
         assertNull(e1.getEmployer());
         att.setAssociation(employer, e1);
         assertEquals(employer, e1.getEmployer());
-        assertTrue("has elements", !employer.getEmployees().isEmpty());
+        assertFalse("should now have some elements", employer.getEmployees().isEmpty());
         assertTrue("Collection should contain the 1st employer as an element", 
                    ((InternalCollection) att.get(employer)).contains(e1));
 
@@ -181,6 +185,130 @@ public class NakedObjectCollectionAttributeTest
         // check empty
         set.addActualMany(employer.getEmployees().elements());
         set.verify();
+    }
+    
+    public void testElementsWithCaching() throws ObjectStoreException {
+        ArbitraryNakedCollection collection = new ArbitraryCollectionVector();
+        Role[] e = setupCollection(collection, 200);
+        Enumeration enum = collection.elements();
+
+        int i = 0;
+
+        while (enum.hasMoreElements()) {
+            assertEquals(e[i], enum.nextElement());
+            i++;
+        }
+
+        assertEquals(200, i);
+    }
+
+    public void testElementsWithCaching2() throws ObjectStoreException {
+        ArbitraryNakedCollection collection = new ArbitraryCollectionVector();
+        Role[] e = setupCollection(collection, 2);
+        Enumeration enum = collection.elements();
+
+        int i = 0;
+
+        while (enum.hasMoreElements()) {
+            assertEquals(e[i], enum.nextElement());
+            i++;
+        }
+
+        assertEquals(2, i);
+    }
+
+    /**
+     *
+     */
+    public void testInternalCollection() throws ObjectStoreException {
+        Team m = new Team();
+//        m.setContext(context);
+
+        InternalCollection collection = m.getMembers();
+
+        Person[] v = new Person[4];
+
+        for (int i = 0; i < v.length; i++) {
+            collection.add(v[i] = new Person());
+        }
+
+        assertEquals(4, collection.size());
+
+        // try and add another type
+        collection.add(new AssociationExample());
+        collection.add(new Role());
+
+        assertEquals("Size should be the same as before", 4, collection.size());
+    }
+
+    public void testRemove() throws ObjectStoreException {
+        ArbitraryNakedCollection collection = new ArbitraryCollectionVector();
+
+        Role[] e = setupCollection(collection, 26);
+
+        //
+        for (int i = 5; i < 11; i++) {
+            collection.remove(e[i]);
+            assertTrue("removed BasicExample " + i, !collection.contains(e[i]));
+        }
+    }
+
+    public void testRemovePersistent() throws ObjectStoreException {
+        ArbitraryNakedCollection collection = new ArbitraryCollectionVector();
+
+        Role[] e = setupCollection(collection, 26);
+
+        ExpectationSet set = new ExpectationSet("remove");
+
+        for (int i = 0; i < 5; i++) {
+            set.addExpected(e[i]);
+        }
+
+        for (int i = 11; i < e.length; i++) {
+            set.addExpected(e[i]);
+        }
+
+        //
+        for (int i = 5; i < 11; i++) {
+            collection.remove(e[i]);
+            assertTrue("removed BasicExample " + i, !collection.contains(e[i]));
+        }
+
+        set.addActualMany(collection.elements());
+        set.verify();
+    }
+
+    /**
+     *
+     */
+    public void testSize() throws ObjectStoreException {
+        ArbitraryNakedCollection collection = new ArbitraryCollectionVector();
+
+        setupCollection(collection, 26);
+
+        assertEquals("26 elements added", 26, collection.size());
+    }
+
+    /**
+     *
+     */
+    private Role[] setupCollection(ArbitraryNakedCollection collection, int size)
+        throws ObjectStoreException {
+//        collection.setContext(context);
+        
+        Role[] e = new Role[size];
+
+        for (int i = 0; i < size; i++) {
+            e[i] = new Role();
+            e[i].created();
+            e[i].getName().setValue("A" + i);
+            collection.add(e[i]);
+            assertTrue("Find added object " + e[i], collection.contains(e[i]));
+        }
+
+        assertEquals(size, collection.size());
+
+        return e;
     }
 }
 

@@ -170,7 +170,7 @@
 		<javadoc 
 			destDir="${build.doc.api}" 
 			sourcepath="${build.src.dir}" 
-			windowtitle="Naked Objects API version ${build.version}" 
+			windowtitle="Naked Objects API - ${component} - version ${build.version}" 
 			additionalparam="-breakiterator -tag group -tag testpackage -tag testcase -tag testkind -tag testfamily -tag testsetup -tag testedclass">
 
 			<classpath refid="libs.internal"/>

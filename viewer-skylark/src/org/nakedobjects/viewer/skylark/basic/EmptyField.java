@@ -5,7 +5,6 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Permission;
-import org.nakedobjects.object.defaults.SimpleNakedClass;
 import org.nakedobjects.object.reflect.AssociateCommand;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.object.security.ClientSession;
@@ -145,7 +144,7 @@ public class EmptyField extends AbstractView {
             OneToOneAssociationSpecification field = getEmptyField();      
             LOG.debug("drop " + source + " on " + field + "/" + target);
             if (source instanceof NakedClass) {
-                associatedObject = ((SimpleNakedClass) source).actionNewInstance();
+                associatedObject = ((NakedClass) source).newInstance();
             } else {
                 associatedObject = source;
             }
@@ -239,6 +238,8 @@ public class EmptyField extends AbstractView {
 
     public void menuOptions(MenuOptionSet options) {
         ClassOption.menuOptions(forNakedClass(), options);
+        
+        options.setColor(Style.CONTENT_MENU);
     }
     
     public static class Specification implements ViewSpecification {

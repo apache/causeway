@@ -5,6 +5,7 @@ import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.Oid;
@@ -144,7 +145,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
 
     private void loadInternalCollection(DatabaseConnector connector, String id, FieldSpecification field, InternalCollection collection) throws ResolveException, SqlObjectStoreException {
         NakedObjectSpecification cls = collection.forParent().getSpecification();
-        NakedObjectSpecification elementCls = NakedObjectSpecification.getSpecification(collection.getElementSpecification().getFullName());
+        NakedObjectSpecification elementCls = NakedObjectSpecificationLoader.getInstance().loadSpecification(collection.getElementSpecification().getFullName());
 
         String table = table(cls) + "_" + field.getName().toLowerCase();
         LOG.debug("loading internal collection data from SQL " + table);

@@ -13,8 +13,6 @@ import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.security.Session;
 
-import java.util.Enumeration;
-
 
 public class TestClassImpl implements TestClass {
 
@@ -37,17 +35,15 @@ public class TestClassImpl implements TestClass {
      * though more than one match might occur.
      */
     public TestObject findInstance(String title) {
-        NakedCollection c = instances((NakedClass) getForObject());
-        Enumeration e = c.elements();
-
-        while (e.hasMoreElements()) {
-            NakedObject object = ((NakedObject) e.nextElement());
-
-            if (object.titleString().toString().indexOf(title) >= 0) {
-                return factory.createTestObject(session, object);
-            }
+        NakedObjectContext context = NakedObjectContext.getDefaultContext();
+        NakedObjectSpecification type = ((NakedClass) getForObject()).forNakedClass();
+        TypedNakedCollection instances = context.getObjectManager().findInstances(type, title);
+        if (instances.size() == 0) {
+            throw new IllegalActionError("No instance found with title " + title);
+        } else {
+            NakedObject foundObject = instances.elementAt(0);
+            return factory.createTestObject(session, foundObject);
         }
-        throw new IllegalActionError("No instance found with title " + title);
     }
 
     /**
@@ -65,24 +61,21 @@ public class TestClassImpl implements TestClass {
      * Get the instances of this class.
      */
     public TestObject instances() {
-        NakedClass nakedClass = (NakedClass) getForObject();
-        NakedCollection instances = instances((NakedClass) getForObject());
-        if (instances.size() == 0) { throw new IllegalActionError("Find must find at least one object"); }
-        return factory.createTestObject(session, instances);
-    }
-
-    private TypedNakedCollection instances(NakedClass cls) {
         NakedObjectContext context = NakedObjectContext.getDefaultContext();
-        TypedNakedCollection instances = context.getObjectManager().allInstances(cls.forNakedClass());
- //       instances.first();
-        return instances;
+        NakedCollection instances = context.getObjectManager().allInstances(((NakedClass) getForObject()).forNakedClass());
+        if (instances.size() == 0) {
+            throw new IllegalActionError("Find must find at least one object");
+        } else {
+            return factory.createTestObject(session, instances);
+        }
     }
 
     public TestObject invokeAction(final String name) {
         ActionSpecification action = nakedClass.forNakedClass().getClassAction(ActionSpecification.USER, name);
 
-        if (action == null) { throw new IllegalActionError("No action " + name + " on the " + nakedClass.getPluralName()
-                + " class."); }
+        if (action == null) {
+            throw new IllegalActionError("No action " + name + " on the " + nakedClass.getPluralName() + " class.");
+        }
         NakedObject result = action.execute(nakedClass);
 
         if (result == null) {
@@ -94,10 +87,13 @@ public class TestClassImpl implements TestClass {
 
     public TestObject invokeAction(final String name, TestObject parameter) {
         NakedObject dropObject = (NakedObject) parameter.getForObject();
-        ActionSpecification action = nakedClass.forNakedClass().getClassAction(ActionSpecification.USER, name, new NakedObjectSpecification[] { dropObject.getSpecification() });
+        ActionSpecification action = nakedClass.forNakedClass().getClassAction(ActionSpecification.USER, name,
+                new NakedObjectSpecification[] { dropObject.getSpecification() });
 
-        if (action == null) { throw new IllegalActionError("Can't drop a " + parameter.getForObject().getSpecification().getShortName() + " (for "
-                + name + ") on the " + nakedClass.getPluralName() + " class."); }
+        if (action == null) {
+            throw new IllegalActionError("Can't drop a " + parameter.getForObject().getSpecification().getShortName() + " (for "
+                    + name + ") on the " + nakedClass.getPluralName() + " class.");
+        }
         NakedObject result = action.execute(nakedClass, dropObject);
 
         if (result == null) {
@@ -113,7 +109,7 @@ public class TestClassImpl implements TestClass {
     public TestObject newInstance() {
         NakedObject object = newInstance(nakedClass);
 
-         return factory.createTestObject(session, object);
+        return factory.createTestObject(session, object);
     }
 
     private NakedObject newInstance(NakedClass cls) {
@@ -124,11 +120,13 @@ public class TestClassImpl implements TestClass {
             object.setContext(cls.getContext());
             object.getContext().makePersistent(object);
 
-           // NakedObjectManager.getInstance().makePersistent(object); //makePersistent(object);
+            // NakedObjectManager.getInstance().makePersistent(object);
+            // //makePersistent(object);
             object.created();
             object.getContext().getObjectManager().objectChanged(object);
         } catch (NotPersistableException e) {
-            object = cls.getContext().getObjectManager().generatorError("Failed to create instance of " + cls.forNakedClass().getFullName(), e);
+            object = cls.getContext().getObjectManager().generatorError(
+                    "Failed to create instance of " + cls.forNakedClass().getFullName(), e);
 
             System.out.println("Failed to create instance of " + cls.forNakedClass().getFullName());
             e.printStackTrace();

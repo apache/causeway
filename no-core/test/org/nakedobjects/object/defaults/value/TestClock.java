@@ -1,9 +1,5 @@
 package org.nakedobjects.object.defaults.value;
 
-import org.nakedobjects.object.defaults.value.Date;
-import org.nakedobjects.object.defaults.value.DateTime;
-import org.nakedobjects.object.defaults.value.Time;
-import org.nakedobjects.object.defaults.value.TimeStamp;
 import org.nakedobjects.system.Clock;
 
 import java.util.Calendar;
@@ -19,9 +15,15 @@ public class TestClock implements Clock {
     
     public long getTime() {
         Calendar c = Calendar.getInstance();
+        c.set(Calendar.MILLISECOND, 0);
+              
         c.set(Calendar.YEAR, 2003);
         c.set(Calendar.MONTH, 7);
         c.set(Calendar.DAY_OF_MONTH, 17);
+        
+        c.set(Calendar.HOUR_OF_DAY, 21);
+        c.set(Calendar.MINUTE, 30);
+        c.set(Calendar.SECOND, 25);
         
         return c.getTime().getTime();
     }

@@ -15,12 +15,16 @@ import java.lang.reflect.Method;
 import org.apache.log4j.Category;
 
 
-public class JavaOneToManyAssociation extends JavaAssociation implements OneToManyAssociation {
+public class JavaOneToManyAssociation extends JavaField implements OneToManyAssociation {
     private final static Category LOG = Category.getInstance(JavaOneToManyAssociation.class);
+    private Method addMethod;
+    private Method removeMethod;
 
     public JavaOneToManyAssociation(String name, Class type, Method get, Method add, Method remove, Method about) {
-        super(name, type, get, add, remove, about);
-    }
+        super(name, type, get, about, false);
+        this.addMethod = add;
+        this.removeMethod = remove;
+   }
 
     public void addAssociation(NakedObject inObject, NakedObject associate) {
         LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);

@@ -1,12 +1,13 @@
 package org.nakedobjects.object.defaults.collection;
 
-import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationImpl;
+import org.nakedobjects.object.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Role;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
-import org.nakedobjects.object.defaults.collection.ArbitraryCollectionVector;
 import org.nakedobjects.object.defaults.value.TestClock;
+import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 
 import java.util.Enumeration;
 
@@ -47,7 +48,9 @@ public class SimpleArbitraryCollectionTests extends TestCase {
         PropertyConfigurator.configure("log4j.testing.properties");
 
         new TestClock();
-        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+    	new NakedObjectSpecificationLoaderImpl();
+    	NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
+    	NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
 
         manager = MockObjectManager.setup();
 

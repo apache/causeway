@@ -2,8 +2,8 @@ package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObjectManager;
-import org.nakedobjects.security.Certificate;
-import org.nakedobjects.security.SecurityContext;
+import org.nakedobjects.object.security.Certificate;
+import org.nakedobjects.object.security.SecurityContext;
 
 
 public interface RequestContext {

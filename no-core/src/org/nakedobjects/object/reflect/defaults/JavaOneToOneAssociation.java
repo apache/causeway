@@ -3,7 +3,7 @@ package org.nakedobjects.object.reflect.defaults;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
-import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
@@ -35,7 +35,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOneAssoci
 		Class parameter = setMethod.getParameterTypes()[0];
 		if(associate != null && !parameter.isAssignableFrom(associate.getClass())) {
 			FieldAbout about = new FieldAbout(session, object);
-			about.unmodifiable("Invalid type: field must be set with a " + NakedObjectSpecification.getSpecification(parameter.getName()));
+			about.unmodifiable("Invalid type: field must be set with a " + NakedObjectSpecificationLoader.getInstance().loadSpecification(parameter.getName()));
 			return about;
 		}
 

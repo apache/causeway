@@ -154,6 +154,14 @@ public class DateTime extends Magnitude {
         return isNull ? null : date;
     }
 
+    public boolean equals(Object obj) {
+        if(obj instanceof DateTime) {
+            DateTime d = (DateTime) obj;
+            return d.date.equals(date);
+        }
+ 	    return super.equals(obj);
+    }
+    
     /**
      *  Return true if the time stamp is blank
      */
@@ -358,7 +366,7 @@ public class DateTime extends Magnitude {
     }
 
     public String toString() {
-        return title() + " " + longValue() + " [TimeStamp]";
+        return title() + " " + longValue() + " [DateTime]";
     }
 }
 

@@ -56,8 +56,8 @@ public abstract class NakedObjectStoreFieldsTestCase extends NakedObjectStoreTes
     
     protected void initialiseObjects() throws Exception {
         // classes
-        personClass = NakedObjectSpecification.getSpecification(Person.class.getName());
-        roleClass = NakedObjectSpecification.getSpecification(Role.class.getName());
+        personClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(Person.class.getName());
+        roleClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(Role.class.getName());
 
         // objects
         String names[] = { "Freddy", "John", "Sam", "Zax", "fdfdklj" };

@@ -25,6 +25,9 @@
 package org.nakedobjects.persistence.file;
 
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationImpl;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Role;
@@ -46,6 +49,7 @@ import org.nakedobjects.object.defaults.value.TextString;
 import org.nakedobjects.object.defaults.value.Time;
 import org.nakedobjects.object.defaults.value.URLString;
 import org.nakedobjects.object.defaults.value.WholeNumber;
+import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 
 import org.apache.log4j.Logger;
 
@@ -66,12 +70,14 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 	protected void setUp() throws Exception {
 		LOG.debug("Test setup...");
 		
-		MockObjectManager objectManager = MockObjectManager.setup();
-        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+		MockObjectManager.setup();
+        new NakedObjectSpecificationLoaderImpl();
+        NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
+        NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
 
 		oids = new SerialOid[SIZE];
 		data = new ObjectData[SIZE];
-		NakedObjectSpecification type = NakedObjectSpecification.getSpecification(Role.class.getName());
+		NakedObjectSpecification type = NakedObjectSpecificationLoader.getInstance().loadSpecification(Role.class.getName());
 		pattern = new ObjectData(type, null);
 		for (int i = 0; i < SIZE; i++) {
 			oids[i] = new SerialOid(i);
@@ -172,7 +178,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 
 	
 	public void testInsertCollection() throws ObjectStoreException {
-		CollectionData data = new CollectionData(NakedObjectSpecification.getSpecification(ArbitraryCollectionVector.class.getName()), new SerialOid(200));
+		CollectionData data = new CollectionData(NakedObjectSpecificationLoader.getInstance().loadSpecification(ArbitraryCollectionVector.class.getName()), new SerialOid(200));
 		
 		SerialOid oids[] = new SerialOid[6];
 		for (int i = 0; i < oids.length; i++) {
@@ -221,7 +227,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 	}
 	
 	public void testInsertValues() throws ObjectStoreException {
-		NakedObjectSpecification type = NakedObjectSpecification.getSpecification(ValueObjectExample.class.getName());
+		NakedObjectSpecification type = NakedObjectSpecificationLoader.getInstance().loadSpecification(ValueObjectExample.class.getName());
 		SerialOid oid = new SerialOid(99);
 		ObjectData data =  new ObjectData(type, oid);
 
@@ -329,7 +335,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 	
 
 	public void testSaveValues() throws ObjectStoreException {
-		NakedObjectSpecification type = NakedObjectSpecification.getSpecification(ValueObjectExample.class.getName());
+		NakedObjectSpecification type = NakedObjectSpecificationLoader.getInstance().loadSpecification(ValueObjectExample.class.getName());
 		SerialOid oid = new SerialOid(99);
 		ObjectData data =  new ObjectData(type, oid);
 
@@ -443,7 +449,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 	
 	
 	private ObjectData createData(Class cls, long id) {
-		NakedObjectSpecification type = NakedObjectSpecification.getSpecification(cls.getName());
+		NakedObjectSpecification type = NakedObjectSpecificationLoader.getInstance().loadSpecification(cls.getName());
 		SerialOid oid = new SerialOid(id);
 		return new ObjectData(type, oid);
 		

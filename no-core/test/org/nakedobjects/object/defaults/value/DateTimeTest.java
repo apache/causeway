@@ -1,6 +1,6 @@
 package org.nakedobjects.object.defaults.value;
 
-import org.nakedobjects.object.defaults.value.DateTime;
+import org.nakedobjects.object.DummyNakedObjectSpecificationLoader;
 
 import junit.framework.TestCase;
 
@@ -9,7 +9,8 @@ public class DateTimeTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         
-        DateTime.setClock(new TestClock());
+        new DummyNakedObjectSpecificationLoader();
+        new TestClock();
     }
 
     public void testSaveRestore() throws Exception {

@@ -28,7 +28,7 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.security.SecurityContext;
+import org.nakedobjects.object.security.SecurityContext;
 
 import org.apache.log4j.Category;
 

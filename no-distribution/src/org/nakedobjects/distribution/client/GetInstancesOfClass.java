@@ -16,7 +16,7 @@ public class GetInstancesOfClass extends AbstractGetInstances {
 
 	protected void generateResponse(RequestContext server) {
 		NakedObjectManager objectManager = server.getObjectManager();
-		NakedObjectSpecification cls = NakedObjectSpecification.getNakedClass(className);
+		NakedObjectSpecification cls = NakedObjectSpecification.getSpecification(className);
 		setInstances(objectManager.getInstances(cls));
 	}
 

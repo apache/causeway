@@ -5,6 +5,7 @@ import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.Title;
 import org.nakedobjects.object.defaults.value.TestClock;
 import org.nakedobjects.object.defaults.value.TextString;
+import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -26,8 +27,11 @@ public class TitleTests extends TestCase {
 
     protected void setUp() {
         new TestClock();
-        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
-        test = "Fred";
+    	new NakedObjectSpecificationLoaderImpl();
+    	NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
+    	NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
+
+    	test = "Fred";
         t = new Title(test);
         assertEquals(test, t.toString());
         companyName = "ABC Co.";

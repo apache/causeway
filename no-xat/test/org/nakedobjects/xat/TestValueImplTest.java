@@ -1,12 +1,14 @@
 package org.nakedobjects.xat;
 
 import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationImpl;
+import org.nakedobjects.object.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.value.Date;
 import org.nakedobjects.object.reflect.ValueFieldSpecification;
+import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 
 public class TestValueImplTest extends NakedObjectTestCase {
     private MockObjectManager om;
@@ -20,7 +22,9 @@ public class TestValueImplTest extends NakedObjectTestCase {
         super.setUp();
         
         om = MockObjectManager.setup();
-        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+        new NakedObjectSpecificationLoaderImpl();
+        NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
+        NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
         context = new NakedObjectContext(om);
     }
     

@@ -1,7 +1,5 @@
 package org.nakedobjects.object.defaults.value;
 
-import org.nakedobjects.object.defaults.value.Time;
-
 import junit.framework.TestCase;
 
 public class TimeTest extends TestCase {

@@ -9,7 +9,7 @@ import org.nakedobjects.object.ValueParseException;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Validity;
 import org.nakedobjects.object.reflect.ValueField;
-import org.nakedobjects.security.SecurityContext;
+import org.nakedobjects.object.security.SecurityContext;
 import org.nakedobjects.utility.NotImplementedException;
 
 import org.apache.log4j.Category;

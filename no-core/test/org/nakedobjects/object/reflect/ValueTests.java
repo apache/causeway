@@ -3,6 +3,9 @@ package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationImpl;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
@@ -10,6 +13,7 @@ import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.value.Money;
 import org.nakedobjects.object.defaults.value.TestClock;
 import org.nakedobjects.object.defaults.value.TextString;
+import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 import org.nakedobjects.object.security.Session;
 
 import junit.framework.TestSuite;
@@ -41,7 +45,9 @@ public class ValueTests extends NakedObjectTestCase {
     	LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
     	manager = MockObjectManager.setup();
-        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+    	new NakedObjectSpecificationLoaderImpl();
+    	NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
+    	NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
     	new TestClock();
     	
        	session = new Session();
@@ -49,7 +55,7 @@ public class ValueTests extends NakedObjectTestCase {
         object = new ValueTestObject();
         object.setContext(manager.getContext());
         
-        NakedObjectSpecification c = NakedObjectSpecification.getSpecification(ValueTestObject.class.getName());
+        NakedObjectSpecification c = NakedObjectSpecificationLoader.getInstance().loadSpecification(ValueTestObject.class.getName());
         
         nameField = (ValueFieldSpecification) c.getField(NAME_FIELD_NAME);
         salaryField = (ValueFieldSpecification) c.getField(SALARY_FIELD_NAME);

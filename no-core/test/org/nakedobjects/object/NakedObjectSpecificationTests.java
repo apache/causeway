@@ -1,11 +1,12 @@
 package org.nakedobjects.object;
 
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.value.TestClock;
 import org.nakedobjects.object.defaults.value.TextString;
 import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.NakedObjectSpecificationException;
+import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -15,11 +16,10 @@ import org.apache.log4j.LogManager;
 
 import com.mockobjects.ExpectationSet;
 
+
 // TODO most of these tests are testing the JavaReflector; move them to its test
 public class NakedObjectSpecificationTests extends TestCase {
-    private MockReflector reflector;
     private NakedObjectSpecification nakedClass;
-    private MockObjectManager manager;
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(new TestSuite(NakedObjectSpecificationTests.class));
@@ -30,53 +30,52 @@ public class NakedObjectSpecificationTests extends TestCase {
     }
 
     private NakedObjectSpecification nakedClass(Class cls) {
-        return NakedObjectSpecification.getSpecification(cls.getName());
+        return NakedObjectSpecificationLoader.getInstance().loadSpecification(cls.getName());
     }
 
     protected void setUp() {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
- 
-       new TestClock();
-        
-        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
 
-        reflector = new MockReflector();
-        
-        nakedClass = NakedObjectSpecification.getSpecification(NakedClassTestObject.class.getName());
+        new TestClock();
+
+        new NakedObjectSpecificationLoaderImpl();
+        NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
+        NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
+
+        new MockReflector();
+
+        nakedClass = nakedClass(NakedClassTestObject.class);
     }
 
     public void testInvalidObjectType() {
         try {
-            NakedObjectSpecification.getSpecification(InvalidNakedClassTestObject.class.getName());
+            nakedClass(InvalidNakedClassTestObject.class);
             fail();
-        } catch (NakedObjectRuntimeException expected) {
-        }
+        } catch (NakedObjectSpecificationException expected) {}
     }
-    
+
     protected void tearDown() throws Exception {
-       // manager.shutdown();
+        // manager.shutdown();
         super.tearDown();
     }
-    
+
     public void testAcquireInstance() {
         Naked acquire = nakedClass.acquireInstance();
         assertTrue(acquire instanceof NakedClassTestObject);
     }
-   
-    /* TODO reimplement
-    public void testClassAbout() {
-        ClassAbout about = new ClassAbout("", true);
-        reflector.setupClassAbout(about);
-        assertEquals(about, nakedClass.getClassAbout());
-       }
-*/
+
+    /*
+     * TODO reimplement public void testClassAbout() { ClassAbout about = new
+     * ClassAbout("", true); reflector.setupClassAbout(about);
+     * assertEquals(about, nakedClass.getClassAbout()); }
+     */
 
     public void testGetFieldsNew() {
         FieldSpecification[] actions = nakedClass.getFields();
 
         assertEquals(3, actions.length);
 
-       ExpectationSet exp = new ExpectationSet("field names");
+        ExpectationSet exp = new ExpectationSet("field names");
         exp.addExpected("one");
         exp.addExpected("two");
         exp.addExpected("three");
@@ -87,7 +86,7 @@ public class NakedObjectSpecificationTests extends TestCase {
     }
 
     // TODO the rest of the test need to use mocks - as the above three do
-    
+
     public void testGetClassActionByParam() {
         NakedObjectSpecification[] params = new NakedObjectSpecification[] { nakedClass(NakedClassTestParameter.class) };
         ActionSpecification action = nakedClass.getClassAction(ActionSpecification.USER, "example method", params);
@@ -95,7 +94,7 @@ public class NakedObjectSpecificationTests extends TestCase {
         assertEquals("examplemethod", action.getName());
         assertEquals(ActionSpecification.USER, action.getActionType());
         assertEquals(null, action.getReturnType());
-        
+
         params = new NakedObjectSpecification[] { nakedClass(ProductTestObject.class) };
         assertNull(nakedClass.getClassAction(ActionSpecification.USER, "no method", params));
     }
@@ -240,38 +239,37 @@ public class NakedObjectSpecificationTests extends TestCase {
         // obj2.getClass().getName());
     }
 
-
     public void testSuperclass() {
         NakedObjectSpecification cls = nakedClass(Person.class);
         NakedObjectSpecification subclass1 = nakedClass(LittlePerson.class);
-        
+
         assertEquals(cls, subclass1.superclass());
     }
-    
+
     public void testSubclasses() {
         NakedObjectSpecification cls = nakedClass(Person.class);
         NakedObjectSpecification subclass1 = nakedClass(LittlePerson.class);
         NakedObjectSpecification subclass2 = nakedClass(BigPerson.class);
         NakedObjectSpecification subclass3 = nakedClass(SmallPerson.class);
-               
+
         ExpectationSet set = new ExpectationSet("");
         set.addExpected(subclass1);
         set.addExpected(subclass2);
-        
+
         NakedObjectSpecification[] subclasses = cls.subclasses();
         set.addActualMany(subclasses);
         set.verify();
-        
+
         assertTrue(cls.isOfType(cls));
         assertTrue(subclass1.isOfType(cls));
         assertTrue(subclass2.isOfType(cls));
         assertTrue(subclass3.isOfType(cls));
-        
+
         assertFalse(cls.isOfType(subclass1));
         assertFalse(cls.isOfType(subclass2));
         assertFalse(cls.isOfType(subclass3));
-        
-   }
+
+    }
 }
 
 /*

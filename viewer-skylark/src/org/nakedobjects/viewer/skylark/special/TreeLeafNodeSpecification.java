@@ -18,7 +18,7 @@ class TreeLeafNodeSpecification implements ViewSpecification, TreeNodeSpecificat
 	private ViewSpecification replacementNodeSpecification;
 
 	public boolean canDisplay(Naked object) {
-		return object instanceof NakedObject && !(object instanceof Lookup);
+	    return TreeDisplayRules.canDisplay(object);
 	}
 
 	public boolean canOpen(Content content) {

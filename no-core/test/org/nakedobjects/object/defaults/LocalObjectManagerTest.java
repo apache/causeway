@@ -9,11 +9,15 @@ import org.nakedobjects.object.MockUpdateNotifier;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationImpl;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.Person;
 import org.nakedobjects.object.Role;
+import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
@@ -52,11 +56,13 @@ public final class LocalObjectManagerTest extends NakedObjectTestCase {
         objectManager = new LocalObjectManager(objectStore, updateNotifier, new SimpleOidGenerator());
         objectManager.init();
 
-        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+    	new NakedObjectSpecificationLoaderImpl();
+    	NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
+    	NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
 
         context = objectManager.getContext();
 
-        nc = NakedObjectSpecification.getSpecification(MockNakedObject.class);
+        nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(MockNakedObject.class);
         v = new NakedObject[] { new MockNakedObject(), new MockNakedObject(), new MockNakedObject() };
         objectStore.setupInstances(v, nc);
 
@@ -70,7 +76,7 @@ public final class LocalObjectManagerTest extends NakedObjectTestCase {
     }
 
     public void testAlreadyExistingSerialNumbers() throws ObjectStoreException {
-        NakedObjectSpecification nc = NakedObjectSpecification.getSpecification(Sequence.class);
+        NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(Sequence.class);
         Sequence seq;
         v = new NakedObject[] { seq = new Sequence() };
         seq.getName().setValue("test");
@@ -87,7 +93,7 @@ public final class LocalObjectManagerTest extends NakedObjectTestCase {
     }
 
     public void testFirstSerialNumbers() throws ObjectStoreException {
-        NakedObjectSpecification nc = NakedObjectSpecification.getSpecification(Sequence.class);
+        NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(Sequence.class);
         NakedObject[] v = new NakedObject[] {};
         objectStore.setupInstances(v, nc);
 
@@ -117,7 +123,7 @@ public final class LocalObjectManagerTest extends NakedObjectTestCase {
     }
 
     public void testGetObjectRepeatability() throws ObjectStoreException {
-        NakedObjectSpecification nc = NakedObjectSpecification.getSpecification(AbstractNakedObject.class);
+        NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(AbstractNakedObject.class);
         Oid oid = new MockOid(1);
 
         objectStore.setupIsLoaded(false);
@@ -133,7 +139,7 @@ public final class LocalObjectManagerTest extends NakedObjectTestCase {
     }
 
     public void testHasInstances() throws Exception {
-        NakedObjectSpecification nc = NakedObjectSpecification.getSpecification(AbstractNakedObject.class);
+        NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(AbstractNakedObject.class);
 
         objectStore.setupHasInstances(false);
         assertFalse(objectManager.hasInstances(nc));
@@ -143,7 +149,7 @@ public final class LocalObjectManagerTest extends NakedObjectTestCase {
     }
 
     public void testInstancesCount() throws Exception {
-        NakedObjectSpecification nc = NakedObjectSpecification.getSpecification(AbstractNakedObject.class);
+        NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(AbstractNakedObject.class);
 
         objectStore.setupInstancesCount(0);
         assertEquals(0, objectManager.numberOfInstances(nc));

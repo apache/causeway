@@ -14,7 +14,12 @@ public interface NakedClass extends NakedObject {
     String getFullName();
 
     String getSingularName();
-
+    
+    NakedCollection allInstances();
+    
+    NakedCollection findInstances(String searchTerm);
+    
+    NakedObject newInstance();
 }
 
 

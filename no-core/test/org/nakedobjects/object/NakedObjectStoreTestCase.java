@@ -38,7 +38,7 @@ public abstract class NakedObjectStoreTestCase extends NakedObjectTestCase {
         LOG.debug("test setup");
 
         new TestClock();
-        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+        NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
         
         manager = MockObjectManager.setup();
          

@@ -7,17 +7,17 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.reflect.ActionDelegate;
+import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionSpecification.Type;
-import org.nakedobjects.security.SecurityContext;
+import org.nakedobjects.object.security.SecurityContext;
 
 
-public class RemoteAction implements ActionDelegate {
+public class RemoteAction implements Action {
     final static Category LOG = Category.getInstance(RemoteAction.class);
 	private boolean fullProxy = false;
-	private ActionDelegate local;
+	private Action local;
 	
-    public RemoteAction(ActionDelegate local) {
+    public RemoteAction(Action local) {
     	this.local = local;
     }
 

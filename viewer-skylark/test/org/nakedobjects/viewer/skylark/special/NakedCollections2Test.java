@@ -1,15 +1,12 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Role;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.collection.ArbitraryCollectionVector;
 import org.nakedobjects.object.defaults.value.TestClock;
-
-import java.util.Enumeration;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -22,7 +19,6 @@ import org.apache.log4j.LogManager;
 
 public final class NakedCollections2Test extends TestCase {
     private MockObjectManager objectManager;
-    private NakedObjectContext context;
     private CollectionIterator ac;
 
     public NakedCollections2Test(String name) {
@@ -36,9 +32,9 @@ public final class NakedCollections2Test extends TestCase {
     protected void setUp() throws ObjectStoreException {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
          objectManager = MockObjectManager.setup();
-         context = objectManager.getContext();
+         objectManager.getContext();
          new TestClock();
-         NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+         NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
          
          ArbitraryCollectionVector collection = new ArbitraryCollectionVector();
          int size = 26;
@@ -84,24 +80,6 @@ public final class NakedCollections2Test extends TestCase {
         ac.last();
         assertTrue(ac.hasPrevious());
         assertFalse(ac.hasNext());
-    }
-
-    private void checkDisplayElements(CollectionDisplayIterator collection, Object[] e, int empStart) {
-        Enumeration elements = collection.displayElements();
-
-        assertTrue("No next display elements (start=" + empStart + ")", elements.hasMoreElements());
-
-        for (int i = 0; i < collection.getDisplaySize(); i++) {
-            if (!elements.hasMoreElements()) {
-                return;
-            }
-
-            int empNo = i + empStart;
-
-            assertEquals("Next BasicExample " + empNo, e[empNo], elements.nextElement());
-        }
-
-        assertTrue("Next : Too many elements (start=" + empStart + ")", !elements.hasMoreElements());
     }
 }
 

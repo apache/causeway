@@ -1,6 +1,9 @@
 package org.nakedobjects.persistence.file;
 
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationImpl;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.Role;
 import org.nakedobjects.object.ValueObjectExample;
@@ -20,6 +23,7 @@ import org.nakedobjects.object.defaults.value.TextString;
 import org.nakedobjects.object.defaults.value.Time;
 import org.nakedobjects.object.defaults.value.URLString;
 import org.nakedobjects.object.defaults.value.WholeNumber;
+import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
@@ -43,10 +47,12 @@ public class ObjectDataTest extends NakedObjectTestCase {
         PropertyConfigurator.configure("log4j.testing.properties");
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
-        MockObjectManager manager = MockObjectManager.setup();
-        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
-        
-        NakedObjectSpecification type = NakedObjectSpecification.getSpecification(ValueObjectExample.class.getName());
+        MockObjectManager.setup();
+        new NakedObjectSpecificationLoaderImpl();
+        NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
+        NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
+
+        NakedObjectSpecification type = NakedObjectSpecificationLoader.getInstance().loadSpecification(ValueObjectExample.class.getName());
         data = new ObjectData(type, new SerialOid(1));
         
         new TestClock();
@@ -57,7 +63,7 @@ public class ObjectDataTest extends NakedObjectTestCase {
     }
 
     public void test() {
-        NakedObjectSpecification roleType = NakedObjectSpecification.getSpecification(Role.class.getName());
+        NakedObjectSpecification roleType = NakedObjectSpecificationLoader.getInstance().loadSpecification(Role.class.getName());
         ObjectData roleData = new ObjectData(roleType, new SerialOid(1));
 
         roleData.set("Name", "supervisor");

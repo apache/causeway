@@ -20,6 +20,7 @@ import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.Reflector;
+import org.nakedobjects.object.reflect.ValueField;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -133,33 +134,21 @@ public class JavaReflector implements Reflector {
     private Method methods[];
     private Method defaultAboutFieldMethod;
 
-    public JavaReflector(String name) throws ClassNotFoundException {
+    public JavaReflector(String name) throws ReflectionException {
         Class cls;
 
-        //  try {
-        cls = Class.forName(name);
+        try {
+            cls = Class.forName(name);
 
-        /*
-         * } catch (ClassNotFoundException e) { throw new
-         * NakedObjectRuntimeException("Could not load class " + name); }
-         */
+         } catch (ClassNotFoundException e) { 
+             throw new ReflectionException("Could not load class " + name, e);
+         }
         if (!Naked.class.isAssignableFrom(cls)) { throw new NakedObjectSpecificationException("A naked object must be based on the "
                 + "NakedObject interface, this is not the case with " + cls); }
 
         if (!Modifier.isPublic(cls.getModifiers())) { throw new NakedObjectSpecificationException(
                 "A NakedObject class must be marked as public.  Error in " + cls); }
-
         this.cls = cls;
-/*
- * NOTE some classes do not have a default constructor
-        if (!cls.isInterface()) {
-            try {
-                cls.getConstructor(new Class[0]);
-            } catch (NoSuchMethodException ex) {
-                throw new NakedObjectRuntimeException("Class " + name + " must have a default constructor");
-            }
-        }
-*/
         methods = cls.getMethods();
     }
 
@@ -293,7 +282,7 @@ public class JavaReflector implements Reflector {
             }
 
             // create Field
-            JavaValue attribute = new JavaValue(name, method.getReturnType(), method, aboutMethod, null, true);
+            JavaValueField attribute = new JavaValueField(name, method.getReturnType(), method, aboutMethod, null, true);
 
             fields.addElement(attribute);
         }
@@ -606,7 +595,6 @@ public class JavaReflector implements Reflector {
 
     public String shortName() {
         String name = cls.getName();
-
         return name.substring(name.lastIndexOf('.') + 1);
     }
 
@@ -656,11 +644,15 @@ public class JavaReflector implements Reflector {
             }
 
             // create Field
-            JavaValue attribute = new JavaValue(name, method.getReturnType(), method, aboutMethod, validMethod, false);
+            ValueField attribute = createValueField(method, name, aboutMethod, validMethod);
             fields.addElement(attribute);
         }
 
         return fields;
+    }
+
+    protected ValueField createValueField(Method method, String name, Method aboutMethod, Method validMethod) {
+        return new JavaValueField(name, method.getReturnType(), method, aboutMethod, validMethod, false);
     }
 
     public String getSuperclass() {

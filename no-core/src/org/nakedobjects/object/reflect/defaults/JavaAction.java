@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.TransactionException;
 import org.nakedobjects.object.control.About;
@@ -156,7 +157,7 @@ public class JavaAction extends JavaMember implements Action {
     }
 
     private NakedObjectSpecification nakedClass(Class returnType) {
-        return NakedObjectSpecification.getSpecification(returnType.getName());
+        return NakedObjectSpecificationLoader.getInstance().loadSpecification(returnType.getName());
     }
 
     public NakedObjectSpecification[] parameterTypes() {

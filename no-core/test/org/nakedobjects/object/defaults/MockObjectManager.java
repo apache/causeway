@@ -1,5 +1,6 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
@@ -24,7 +25,7 @@ public class MockObjectManager extends AbstractNakedObjectManager {
     }
 
     private Vector actions = new Vector();
- 
+    
     private MockObjectManager() {
     }
 
@@ -40,7 +41,7 @@ public class MockObjectManager extends AbstractNakedObjectManager {
     public void setupAddClass(Class cls) {
 //        classManager.setupAddNakedClass(cls);
     }
-
+   
     public void assertAction(int i, String action) {
         if (i >= actions.size()) {
             Assert.fail("No such action " + action);
@@ -71,7 +72,10 @@ public class MockObjectManager extends AbstractNakedObjectManager {
     }
 
     public NakedObject[] getInstances(NakedObjectSpecification cls) {
-        throw new NotImplementedException();
+        return new NakedObject[] {
+               new MockNakedObject(),
+               new MockNakedObject(),
+        };
     }
 
     public NakedObject[] getInstances(NakedObjectSpecification cls, String term) {
@@ -119,7 +123,8 @@ public class MockObjectManager extends AbstractNakedObjectManager {
     public void resolve(NakedObject object) {}
 
     public long serialNumber(String sequence) {
-        throw new NotImplementedException();
+        actions.addElement("serial number");
+        return 108;
     }
 
     public void shutdown() {

@@ -1,7 +1,7 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.io.Memento;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.io.Memento;
 
 import java.io.Serializable;
 

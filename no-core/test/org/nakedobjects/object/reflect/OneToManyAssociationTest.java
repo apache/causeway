@@ -3,6 +3,9 @@ package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationImpl;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Person;
@@ -11,6 +14,7 @@ import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.collection.InternalCollectionVector;
 import org.nakedobjects.object.defaults.value.TestClock;
+import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 import org.nakedobjects.object.security.Session;
 
 import junit.framework.TestSuite;
@@ -40,13 +44,15 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     	LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
     	manager = MockObjectManager.setup();
-        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+    	new NakedObjectSpecificationLoaderImpl();
+    	NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
+    	NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
     	new TestClock();
     	
        	session = new Session();
 
 		object = new Team();
-		object.setNakedClass(NakedObjectSpecification.getSpecification(object.getClass()));
+		object.setNakedClass(NakedObjectSpecificationLoader.getInstance().loadSpecification(object.getClass()));
 		object.setContext(manager.getContext());
         elements = new Person[3];
         for (int i = 0; i < elements.length; i++) {

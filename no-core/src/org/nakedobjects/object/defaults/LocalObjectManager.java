@@ -8,6 +8,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.NotPersistableException;
@@ -427,7 +428,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         LOG.debug("serialNumber " + sequence);
 
         try {
-            NakedObject[] instances = objectStore.getInstances(NakedObjectSpecification.getSpecification(Sequence.class.getName()), false);
+            NakedObject[] instances = objectStore.getInstances(NakedObjectSpecificationLoader.getInstance().loadSpecification(Sequence.class.getName()), false);
             Sequence number;
 
             for (int i = 0, len = instances.length; i < len; i++) {

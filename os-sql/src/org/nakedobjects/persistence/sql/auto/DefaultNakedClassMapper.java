@@ -4,6 +4,7 @@ import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.UnsupportedFindException;
@@ -50,7 +51,7 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
 
         Results rs = connector.select(statement);
         if(rs.next()) {
-            Oid oid = recreateOid(rs, NakedObjectSpecification.getSpecification(NakedObjectSpecification.class), idColumn);
+            Oid oid = recreateOid(rs, NakedObjectSpecificationLoader.getInstance().loadSpecification(NakedObjectSpecification.class), idColumn);
             LOG.debug("  instance  " + oid);
             if(loadedObjects.isLoaded(oid)) {
                 LOG.debug("  class already loaded   " + oid);
@@ -79,7 +80,7 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
     protected void createTables(DatabaseConnector connector) throws SqlObjectStoreException {
     	ValueMapperLookup mappers = ValueMapperLookup.getInstance();
         connector.update("create table " + table + " (" + idColumn + " " + "INT NOT NULL UNIQUE, " + nameColumn 
-        	+ " "	+ mappers.mapperFor(NakedObjectSpecification.getSpecification(TextString.class)).columnType() + " UNIQUE" 
+        	+ " "	+ mappers.mapperFor(NakedObjectSpecificationLoader.getInstance().loadSpecification(TextString.class)).columnType() + " UNIQUE" 
 			+ ")" );
     }
 

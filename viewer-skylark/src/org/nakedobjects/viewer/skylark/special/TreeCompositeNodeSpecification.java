@@ -45,7 +45,7 @@ public class TreeCompositeNodeSpecification implements CompositeViewSpecificatio
     }
 
     public boolean canDisplay(Naked object) {
-        return object instanceof NakedObject;
+        return TreeDisplayRules.canDisplay(object);
     }
 
     public boolean canOpen(Content content) {
@@ -55,6 +55,9 @@ public class TreeCompositeNodeSpecification implements CompositeViewSpecificatio
     public View createSubview(Content content, ViewAxis axis) {
         if (content instanceof ObjectContent) {
             NakedObject object = ((ObjectContent) content).getObject();
+            if(! TreeDisplayRules.canDisplay(object)) {
+                return null;
+            }
             if(object == null) {
             	return null;
             } else if (object instanceof NakedCollection) {

@@ -23,7 +23,7 @@ public class GetInstancesForCriteria extends AbstractGetInstances {
 
     protected void generateResponse(RequestContext context) {
     	NakedObjectManager objectManager = context.getObjectManager();
-		NakedObjectSpecification cls = NakedObjectSpecification.getNakedClass(className);
+		NakedObjectSpecification cls = NakedObjectSpecification.getSpecification(className);
 		
 		Vector instances;
 		try {

@@ -1,12 +1,14 @@
 package org.nakedobjects.xat;
 
 import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationImpl;
+import org.nakedobjects.object.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.value.Money;
 import org.nakedobjects.object.defaults.value.TestClock;
 import org.nakedobjects.object.defaults.value.TextString;
+import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Session;
 
@@ -35,8 +37,10 @@ public class TestObjectImplTest extends TestCase {
         new TestClock();
 
         om = MockObjectManager.setup();
-        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
-        
+        new NakedObjectSpecificationLoaderImpl();
+        NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
+        NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
+          
         NakedObjectContext context = new NakedObjectContext(om);
         
         Session session = ClientSession.getSession();

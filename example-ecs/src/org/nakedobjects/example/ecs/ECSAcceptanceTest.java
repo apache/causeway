@@ -193,9 +193,7 @@ public class ECSAcceptanceTest extends AcceptanceTestCase {
         customer.assertFieldContainsType("Preferred Payment Method", "CreditCard");
         customer.assertFieldContainsType(null, "Phone Numbers", "Mobile", "Telephone");
         
-        TestObject booking = customer.invokeAction("New Booking");
-
-        
+        customer.invokeAction("New Booking");
     }
 /*
     public void story3ReturnBooking() {

@@ -1,6 +1,7 @@
 package org.nakedobjects.persistence.file;
 
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Role;
 import org.nakedobjects.object.defaults.SerialOid;
@@ -19,7 +20,7 @@ public class TestValues {
 		
 		DataManager manager = new XmlDataManager("tmp/tests");
 
-		NakedObjectSpecification type = NakedObjectSpecification.getSpecification(Role.class.getName());
+		NakedObjectSpecification type = NakedObjectSpecificationLoader.getInstance().loadSpecification(Role.class.getName());
 		SerialOid oid = new SerialOid(99);
 		ObjectData data =  new ObjectData(type, oid);
 

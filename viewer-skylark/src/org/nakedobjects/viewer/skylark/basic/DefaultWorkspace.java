@@ -7,6 +7,7 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.collection.ArbitraryCollectionVector;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
@@ -218,11 +219,11 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
 
         options.add(MenuOptionSet.OBJECT, new MenuOption("Naked Classes...") {
             public void execute(Workspace workspace, View view, Location at) {
-                NakedObjectSpecification[] classes = NakedObjectSpecification.getAllSpecifications();
+                NakedObjectSpecification[] specs = NakedObjectSpecificationLoader.getInstance().getAllSpecifications();
                 NakedCollection classCollection = new ArbitraryCollectionVector();
                 NakedObjectManager objectManager = NakedObjectContext.getDefaultContext().getObjectManager();
-                for (int i = 0; i < classes.length; i++) {
-                    NakedObjectSpecification cls = classes[i];
+                for (int i = 0; i < specs.length; i++) {
+                    NakedObjectSpecification cls = specs[i];
                     if(cls.isObject()) {
                         classCollection.add(objectManager.getNakedClass(cls));
                     }

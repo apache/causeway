@@ -2,7 +2,7 @@ package org.nakedobjects.distribution.reflect;
 
 import org.nakedobjects.object.ReflectionFactory;
 import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.object.reflect.ActionDelegate;
+import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
@@ -17,8 +17,8 @@ import org.apache.log4j.Logger;
 public class ProxyReflectionFactory implements ReflectionFactory {
     private static final Logger LOG = Logger.getLogger(ProxyReflectionFactory.class);
 
-    public ActionSpecification createAction(ActionDelegate localDelegate) {
-        ActionDelegate fullDelegate = new RemoteAction(localDelegate);
+    public ActionSpecification createAction(Action localDelegate) {
+        Action fullDelegate = new RemoteAction(localDelegate);
         return new ActionSpecification(fullDelegate.getName(), fullDelegate);
     }
 

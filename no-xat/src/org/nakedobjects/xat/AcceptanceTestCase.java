@@ -5,6 +5,8 @@ import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationImpl;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.OidGenerator;
@@ -107,7 +109,7 @@ public abstract class AcceptanceTestCase extends TestCase {
 	        explorationSetUp.installFixtures();
 	        String[] cls = explorationSetUp.getClasses();
 	        for (int i = 0; i < cls.length; i++) {
-	            NakedObjectSpecification nc = NakedObjectSpecification.getSpecification(cls[i]);
+	            NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(cls[i]);
 	            
 	            NakedClass spec = new SimpleNakedClass(cls[i]);
 	            spec.setContext(context);
@@ -137,7 +139,7 @@ public abstract class AcceptanceTestCase extends TestCase {
     }
 
     protected LocalObjectManager createObjectManager() throws ConfigurationException, ComponentException {
-		NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+		NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
 
         NakedObjectStore nos;
         nos = new TransientObjectStore();

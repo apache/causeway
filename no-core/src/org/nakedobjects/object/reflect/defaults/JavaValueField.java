@@ -19,11 +19,11 @@ import java.lang.reflect.Method;
 import org.apache.log4j.Category;
 
 
-public class JavaValue extends JavaField implements ValueField {
-    private final static Category LOG = Category.getInstance(JavaValue.class);
+public class JavaValueField extends JavaField implements ValueField {
+    private final static Category LOG = Category.getInstance(JavaValueField.class);
     private Method validMethod;
 
-    public JavaValue(String name, Class type, Method get, Method about, Method validMethod,
+    public JavaValueField(String name, Class type, Method get, Method about, Method validMethod,
         boolean isDerived) {
         super(name, type, get, about, isDerived);
         this.validMethod = validMethod;

@@ -2,6 +2,7 @@ package org.nakedobjects.object.defaults.collection;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
@@ -12,7 +13,7 @@ public abstract class AbstractTypedNakedCollectionVector extends AbstractNakedCo
     private NakedObjectSpecification specification;
 
     public AbstractTypedNakedCollectionVector(Class type) {
-        this(NakedObjectSpecification.getSpecification(type));
+        this(NakedObjectSpecificationLoader.getInstance().loadSpecification(type));
     }
 
     public AbstractTypedNakedCollectionVector(NakedObjectSpecification specification) {
@@ -20,7 +21,7 @@ public abstract class AbstractTypedNakedCollectionVector extends AbstractNakedCo
     }
 
     public AbstractTypedNakedCollectionVector(String typeName) {
-        this(NakedObjectSpecification.getSpecification(typeName));
+        this(NakedObjectSpecificationLoader.getInstance().loadSpecification(typeName));
     }
 
     /**
@@ -33,7 +34,7 @@ public abstract class AbstractTypedNakedCollectionVector extends AbstractNakedCo
             return new Veto("Collection cannot have duplicate objects");
         }
 
-        if (getElementSpecification().isOfType(object.getSpecification())) {
+        if (object.getSpecification().isOfType(getElementSpecification())) {
             return Allow.DEFAULT;
         } else {
             return new Veto("Object cannot be added because it is not of the type " + getElementSpecification().getFullName());

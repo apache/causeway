@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Role;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
@@ -31,7 +31,7 @@ public class NakedCollectionTests extends TestCase {
 		PropertyConfigurator.configure("log4j.testing.properties");
 	
 		new TestClock();
-        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
+        NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
 
         manager = MockObjectManager.setup();
     

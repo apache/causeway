@@ -4,6 +4,7 @@ import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.defaults.AbstractNakedObject;
@@ -43,7 +44,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 	protected ValueMapperLookup typeMapper;
 
 	public AbstractAutoMapper(String nakedClassName, String parameterBase) throws SqlObjectStoreException {
-		nakedClass = NakedObjectSpecification.getSpecification(nakedClassName);
+		nakedClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(nakedClassName);
 		typeMapper = ValueMapperLookup.getInstance();
 
 		Configuration configParameters = Configuration.getInstance();
@@ -298,7 +299,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 
     protected String updateWhereClause(NakedObject object, boolean and) throws SqlObjectStoreException {
         TimeStamp lastActivity = ((AbstractNakedObject) object).getLastActivity();
-        ValueMapper mapper = typeMapper.mapperFor(NakedObjectSpecification.getSpecification(TimeStamp.class));
+        ValueMapper mapper = typeMapper.mapperFor(NakedObjectSpecificationLoader.getInstance().loadSpecification(TimeStamp.class));
         String dateString =  mapper.valueAsDBString(lastActivity);
         if(dateString.equals("NULL")) {
             return (and ? " and " +  lastActivityColumn + " is NULL" : "");

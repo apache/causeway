@@ -7,6 +7,11 @@
 	&properties;
 	
 	<property name="docs.javadocs.disable" value="true"/>
+	<path id="libs.external">
+		<fileset dir="../lib">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
 
 	<description>
 	</description>
@@ -38,6 +43,7 @@
 	
 	<target name="-create-all-distributions" depends="-build-core">
 		<antcall target="exploration-distribution"/>
+		<antcall target="development-distribution"/>
 		<antcall target="dotnet-distribution"/>
 		<antcall target="enterprise-distribution"/>
 		<antcall target="source-distribution"/>
@@ -48,37 +54,55 @@
 		
 		<mkdir dir="exploration"/>
 				
-		<jar jarfile="exploration/exploration.jar">
+		<jar jarfile="exploration/nakedobjects.jar">
 			<zipfileset src="../no-core/build/release/no-core.jar"/>
 			<zipfileset src="../viewer-skylark/build/release/viewer-skylark.jar"/>
 		</jar>
 
-		<jar jarfile="exploration/exploration-src.jar">
+		<jar jarfile="exploration/examples.jar">
+			<zipfileset src="../example-ecs/build/release/example-ecs.jar"/>
+			<zipfileset src="../example-expenses/build/release/example-expenses.jar"/>
+			<zipfileset src="../example-library/build/release/example-library.jar"/>
+		</jar>
+
+		<jar jarfile="exploration/nakedobjects-src.jar">
 			<zipfileset src="../no-core/build/release/no-core-src.jar"/>
 			<zipfileset src="../viewer-skylark/build/release/viewer-skylark-src.jar"/>
 		</jar>
 
+		<jar jarfile="exploration/examples-src.jar">
+			<zipfileset src="../example-ecs/build/release/example-ecs-src.jar"/>
+			<zipfileset src="../example-expenses/build/release/example-expenses-src.jar"/>
+			<zipfileset src="../example-library/build/release/example-library-src.jar"/>
+		</jar>
+
 		<copy todir="exploration/images">
-			<fileset dir="../no-core/src/images">
-			</fileset>
+			<fileset dir="../no-core/src/images"/>
+			<fileset dir="../example-ecs/src/images"/>
+			<fileset dir="../example-expenses/src/images"/>
+			<fileset dir="../example-library/src/images"/>
 		</copy>
 
 		<javadoc destDir="exploration/api"
 		         windowtitle="Naked Objects Exploration API version ${build.version}"
 		         additionalparam="-breakiterator -tag group -tag testpackage -tag testcase -tag testkind -tag testfamily -tag testsetup -tag testedclass">
 
-			<package name="org.nakedobjects.*"/>
+			<classpath refid="libs.internal"/>
+			<classpath refid="libs.external"/>
+		
+			<packageset dir="../no-core/build/src" defaultexcludes="yes">
+			      <include name="org/nakedobjects/object/**" />
+			</packageset>
 
-			<sourcepath location="../no-core/build/src" />
-			<sourcepath location="../example-ecs/build/src" />
-			<!-- is viewer doc necessary?? -->
-			<!-- sourcepath location="../viewer-skylark/build/src" /-->
+			<packageset dir="../example-ecs/build/src" />
+			<packageset dir="../example-expenses/build/src" />
+			<packageset dir="../example-library/build/src" />
 		</javadoc>
 
 		<mkdir dir="tmp"/>
 		<junitreport tofile="tmp/combined.xml">
-			<fileset dir="../no-core/build/test-run"/>
-			<fileset dir="../viewer-skylark/build/test-run"/>
+			<fileset dir="../no-core/build/test-run" includes="TEST*.xml"/>
+			<fileset dir="../viewer-skylark/build/test-run" includes="TEST*.xml"/>
 			<report format="frames" todir="exploration/tests"/>
 		</junitreport>
 
@@ -153,7 +177,7 @@
 		
 		<mkdir dir="enterprise"/>
 		
-		<jar jarfile="enterprise/enterprise.jar">
+		<jar jarfile="enterprise/nakedobjects.jar">
 			<zipfileset src="../no-core/build/release/no-core.jar"/>
 			<zipfileset src="../no-xat/build/release/no-xat.jar"/>
 			<zipfileset src="../os-cache/build/release/os-cache.jar"/>
@@ -163,7 +187,13 @@
 			<zipfileset src="../viewer-skylark/build/release/viewer-skylark.jar"/>
 		</jar>
 
-		<jar jarfile="enterprise/enterprise-src.jar">
+		<jar jarfile="enterprise/examples.jar">
+			<zipfileset src="../example-ecs/build/release/example-ecs.jar"/>
+			<zipfileset src="../example-expenses/build/release/example-expenses.jar"/>
+			<zipfileset src="../example-library/build/release/example-library.jar"/>
+		</jar>
+
+		<jar jarfile="enterprise/nakedobjects-src.jar">
 			<zipfileset src="../no-core/build/release/no-core-src.jar"/>
 			<zipfileset src="../no-xat/build/release/no-xat-src.jar"/>
 			<zipfileset src="../os-cache/build/release/os-cache-src.jar"/>
@@ -173,33 +203,46 @@
 			<zipfileset src="../viewer-skylark/build/release/viewer-skylark-src.jar"/>
 		</jar>
 
+		<jar jarfile="enterprise/examples-src.jar">
+			<zipfileset src="../example-ecs/build/release/example-ecs-src.jar"/>
+			<zipfileset src="../example-expenses/build/release/example-expenses-src.jar"/>
+			<zipfileset src="../example-library/build/release/example-library-src.jar"/>
+		</jar>
+
 		<copy todir="enterprise/images">
 			<fileset dir="../no-core/src/images">
 			</fileset>
 		</copy>
 
 		<javadoc destDir="enterprise/api"
-		         windowtitle="Naked Objects Exploration API version ${build.version}"
+		         windowtitle="Naked Objects Enterprise API version ${build.version}"
 		         additionalparam="-breakiterator -tag group -tag testpackage -tag testcase -tag testkind -tag testfamily -tag testsetup -tag testedclass">
 
-			<package name="org.nakedobjects.*"/>
+			<classpath refid="libs.internal"/>
+			<classpath refid="libs.external"/>
 
-			<sourcepath location="../no-core/build/src" />
-			<sourcepath location="../example-ecs/build/src" />
-			<!-- is viewer doc necessary?? -->
-			<!-- sourcepath location="../viewer-skylark/build/src" /-->
+			<packageset dir="../no-core/build/src" />
+			<packageset dir="../no-xat/build/src" />
+			<packageset dir="../os-cache/build/src" />
+			<packageset dir="../os-file/build/src" />
+			<packageset dir="../os-file/build/src" />
+			<packageset dir="../utility-xmlsnapshot/build/src" />
+			<packageset dir="../viewer-skylark/build/src" />
+			<packageset dir="../example-ecs/build/src" />
+			<packageset dir="../example-expenses/build/src" />
+			<packageset dir="../example-library/build/src" />
 		</javadoc>
 
 		<mkdir dir="tmp"/>
 		<junitreport tofile="tmp/combined.xml">
-			<fileset dir="../no-core/build/test-run"/>
-			<fileset dir="../no-xat/build/test-run"/>
-			<fileset dir="../os-cache/build/test-run"/>
-			<fileset dir="../os-file/build/test-run"/>
-			<fileset dir="../os-sql/build/test-run"/>
-			<fileset dir="../utility-xmlsnapshot/build/test-run"/>
-			<fileset dir="../viewer-skylark/build/test-run"/>
-			<fileset dir="../example-ecs/build/test-run"/>
+			<fileset dir="../no-core/build/test-run" includes="TEST*.xml"/>
+			<fileset dir="../no-xat/build/test-run" includes="TEST*.xml"/>
+			<fileset dir="../os-cache/build/test-run" includes="TEST*.xml"/>
+			<fileset dir="../os-file/build/test-run" includes="TEST*.xml"/>
+			<fileset dir="../os-sql/build/test-run" includes="TEST*.xml"/>
+			<fileset dir="../utility-xmlsnapshot/build/test-run" includes="TEST*.xml"/>
+			<fileset dir="../viewer-skylark/build/test-run" includes="TEST*.xml"/>
+			<fileset dir="../example-ecs/build/test-run" includes="TEST*.xml"/>
 			<report format="frames" todir="enterprise/tests"/>
 		</junitreport>
 
@@ -213,9 +256,142 @@
 		<zip zipfile="../release/nakedobjects-ep-${build.id}.zip" basedir="enterprise"/>
 	</target>
 	
+	
+	<target name="development-distribution">
+		<echo>Create development distribution</echo>
+		
+		<mkdir dir="development"/>
+		
+		<jar jarfile="development/nakedobjects.jar">
+			<zipfileset src="../no-core/build/release/no-core.jar"/>
+			<zipfileset src="../no-xat/build/release/no-xat.jar"/>
+			<zipfileset src="../utility-xmlsnapshot/build/release/utility-xmlsnapshot.jar"/>
+			<zipfileset src="../viewer-skylark/build/release/viewer-skylark.jar"/>
+		</jar>
+
+		<jar jarfile="development/examples.jar">
+			<zipfileset src="../example-ecs/build/release/example-ecs.jar"/>
+			<zipfileset src="../example-expenses/build/release/example-expenses.jar"/>
+			<zipfileset src="../example-library/build/release/example-library.jar"/>
+		</jar>
+
+		<jar jarfile="development/nakedobjects-src.jar">
+			<zipfileset src="../no-core/build/release/no-core-src.jar"/>
+			<zipfileset src="../no-xat/build/release/no-xat-src.jar"/>
+			<zipfileset src="../utility-xmlsnapshot/build/release/utility-xmlsnapshot-src.jar"/>
+			<zipfileset src="../viewer-skylark/build/release/viewer-skylark-src.jar"/>
+		</jar>
+
+		<jar jarfile="development/examples-src.jar">
+			<zipfileset src="../example-ecs/build/release/example-ecs-src.jar"/>
+			<zipfileset src="../example-expenses/build/release/example-expenses-src.jar"/>
+			<zipfileset src="../example-library/build/release/example-library-src.jar"/>
+		</jar>
+
+		<copy todir="development/images">
+			<fileset dir="../no-core/src/images">
+			</fileset>
+		</copy>
+
+		<javadoc destDir="development/api"
+		         windowtitle="Naked Objects Development API version ${build.version}"
+		         additionalparam="-breakiterator -tag group -tag testpackage -tag testcase -tag testkind -tag testfamily -tag testsetup -tag testedclass">
+
+			<classpath refid="libs.internal"/>
+			<classpath refid="libs.external"/>
+			<package name="org.nakedobjects.*"/>
+			
+			<packageset dir="../no-core/build/src" defaultexcludes="yes">
+			      <include name="org/nakedobjects/object/**" />
+				  <exclude name="org/nakedobjects/object/reflect/**"/>
+			</packageset>
+
+			<packageset dir="../no-xat/build/src" />
+			<packageset dir="../utility-xmlsnapshot/build/src" />
+			<packageset dir="../example-ecs/build/src" />
+			<packageset dir="../example-expenses/build/src" />
+			<packageset dir="../example-library/build/src" />
+		</javadoc>
+
+		<mkdir dir="tmp"/>
+		<junitreport tofile="tmp/combined.xml">
+			<fileset dir="../no-core/build/test-run" includes="TEST*.xml"/>
+			<fileset dir="../no-xat/build/test-run" includes="TEST*.xml"/>
+			<fileset dir="../utility-xmlsnapshot/build/test-run" includes="TEST*.xml"/>
+			<fileset dir="../viewer-skylark/build/test-run" includes="TEST*.xml"/>
+			<fileset dir="../example-ecs/build/test-run" includes="TEST*.xml"/>
+			<report format="frames" todir="development/tests"/>
+		</junitreport>
+
+
+		<!-- copy in:
+				properties files
+				examples & example code in html
+				docs
+				-->
+
+		<zip zipfile="../release/nakedobjects-dp-${build.id}.zip" basedir="development"/>
+	</target>
+	
+
 	<target name="source-distribution">
 		<echo>Create source distribution</echo>
 		
+		<zip zipfile="../release/nakedobjects-source-${build.id}.zip">
+			<zipfileset dir="../build-templates/" prefix="build-templates">
+			</zipfileset>
+
+			<zipfileset dir="../documentation/" prefix="documentation">
+				<exclude name="build/**"/>
+				<exclude name="tmp/**"/>
+			</zipfileset>
+			
+			<zipfileset dir="../example-ecs/" prefix="example-ecs">
+				<exclude name="build/**"/>
+				<exclude name="tmp/**"/>
+				<exclude name="nakedobjects.log*"/>
+			</zipfileset>
+
+			<zipfileset dir="../example-expenses/" prefix="example-expenses">
+				<exclude name="build/**"/>
+				<exclude name="tmp/**"/>
+				<exclude name="nakedobjects.log*"/>
+			</zipfileset>
+
+			<zipfileset dir="../example-library/" prefix="example-library">
+				<exclude name="build/**"/>
+				<exclude name="tmp/**"/>
+				<exclude name="nakedobjects.log*"/>
+			</zipfileset>
+
+			<zipfileset dir="../lib/" prefix="lib">
+			</zipfileset>
+
+			<zipfileset dir="../naked-objects/" prefix="naked-objects">
+				<exclude name="development/**"/>
+				<exclude name="enterprise/**"/>
+				<exclude name="exploration/**"/>
+			</zipfileset>
+
+			<zipfileset dir="../no-containers/" prefix="no-containers">
+				<exclude name="build/**"/>
+				<exclude name="tmp/**"/>
+				<exclude name="nakedobjects.log*"/>
+			</zipfileset>
+
+			<zipfileset dir="../no-core/" prefix="no-core">
+				<exclude name="build/**"/>
+				<exclude name="tmp/**"/>
+				<exclude name="nakedobjects.log*"/>
+			</zipfileset>
+
+
+
+		
+
+		</zip>
+		
+
 		
 	</target>
 
@@ -236,6 +412,7 @@
 		<antcall target="-viewer-skylark"/>
 		<antcall target="-example-ecs"/>
 		<antcall target="-example-expenses"/>
+		<antcall target="-example-library"/>
 		<antcall target="-utility-xmlsnapshot"/>
 	</target>
 
@@ -278,6 +455,10 @@
 	</target>
 
 	<target name="-example-expenses" >
+		<ant dir="../example-expenses" target="${target}" inheritAll="false"/>
+	</target>
+
+	<target name="-example-library" >
 		<ant dir="../example-expenses" target="${target}" inheritAll="false"/>
 	</target>
 

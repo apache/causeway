@@ -8,7 +8,7 @@ import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import org.nakedobjects.object.reflect.ValueField;
-import org.nakedobjects.security.SecurityContext;
+import org.nakedobjects.object.security.SecurityContext;
 import org.nakedobjects.utility.NotImplementedException;
 
 

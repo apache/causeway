@@ -53,7 +53,7 @@ class Instances {
             LOG.debug("read 2: " + i + " " + memento);
 
             NakedObject object = loadedObjects.getLoadedObject(memento.getOid());
-            memento.updateNakedObject(object, loadedObjects, context);
+            memento.updateObject(object, loadedObjects, context);
             LOG.debug("recreated " + object + " " + object.title());
             size++;
         }

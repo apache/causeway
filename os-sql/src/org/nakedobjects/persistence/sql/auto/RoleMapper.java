@@ -2,6 +2,7 @@ package org.nakedobjects.persistence.sql.auto;
 
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.defaults.SerialOid;
 import org.nakedobjects.object.security.Role;
@@ -61,7 +62,7 @@ public class RoleMapper extends NameBasedMapper {
 		    if (loadedObjects.isLoaded(oid)) {
 		        instance = (Role) loadedObjects.getLoadedObject(oid);
 		    } else {
-		        instance = (Role) NakedObjectSpecification.getSpecification(Role.class.getName()).acquireInstance();
+		        instance = (Role) NakedObjectSpecificationLoader.getInstance().loadSpecification(Role.class.getName()).acquireInstance();
 		        instance.setOid(oid);
 		        instance.getName().setValue(rs.getString("name"));
 		        instance.getDescription().setValue(

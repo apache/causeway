@@ -2,9 +2,11 @@ package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.MockOid;
-import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationImpl;
+import org.nakedobjects.object.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.Person;
 import org.nakedobjects.object.defaults.value.TestClock;
+import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 
 import junit.framework.TestCase;
 
@@ -19,8 +21,11 @@ public class LoadedObjectsTest extends TestCase {
 
     protected void setUp() throws Exception {
         new TestClock();
-        NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
-        
+
+        new NakedObjectSpecificationLoaderImpl();
+    	NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
+    	NakedObjectSpecificationImpl.setReflectorFactory(new JavaReflectorFactory());
+
         lookup = new LoadedObjectsHashtable();
         oid = new MockOid(1);
   }

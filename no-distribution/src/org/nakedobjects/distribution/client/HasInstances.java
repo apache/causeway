@@ -15,7 +15,7 @@ public class HasInstances extends Request {
     }
 
 	protected void generateResponse(RequestContext context) {
-		NakedObjectSpecification cls = NakedObjectSpecification.getNakedClass(className);
+		NakedObjectSpecification cls = NakedObjectSpecification.getSpecification(className);
 		response = new Boolean(context.getObjectManager().hasInstances(cls));
     }
 

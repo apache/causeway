@@ -1,7 +1,5 @@
 package org.nakedobjects.object.defaults.value;
 
-import org.nakedobjects.object.defaults.value.Date;
-
 import junit.framework.TestCase;
 
 public class DateTest extends TestCase {

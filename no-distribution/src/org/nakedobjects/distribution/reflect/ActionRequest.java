@@ -4,15 +4,15 @@ package org.nakedobjects.distribution.reflect;
 import org.nakedobjects.distribution.ObjectProxy;
 import org.nakedobjects.distribution.ObjectRequest;
 import org.nakedobjects.distribution.RequestContext;
-import org.nakedobjects.io.Memento;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.ObjectStoreException;
-import org.nakedobjects.object.collection.InstanceCollection;
+import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
+import org.nakedobjects.object.io.Memento;
 import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.object.reflect.ActionDelegate;
+import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionSpecification.Type;
 
 import java.util.Enumeration;
@@ -25,7 +25,7 @@ public class ActionRequest extends ObjectRequest {
     private ObjectProxy parameters[];
     private Type actionType;
     
-    public ActionRequest(NakedObject object, ActionDelegate action, Naked parameters[]) {
+    public ActionRequest(NakedObject object, Action action, Naked parameters[]) {
         super(object);
         this.actionName = action.getName();
         this.actionType = action.getType();
@@ -46,7 +46,7 @@ public class ActionRequest extends ObjectRequest {
         } else if (response instanceof ObjectProxy[]) {
         	Object[] array = (Object[]) response;
         	
-        	NakedObjectSpecification cls = NakedObjectSpecification.getNakedClass((String) array[0]);
+        	NakedObjectSpecification cls = NakedObjectSpecification.getSpecification((String) array[0]);
         	Vector elements = new Vector();
         	for (int i = 1; i < array.length; i++) {
         		ObjectProxy proxy = (ObjectProxy) array[i];
@@ -54,7 +54,7 @@ public class ActionRequest extends ObjectRequest {
 				elements.addElement(recreatedObject);
 			}
         	
-        	return new InstanceCollection(cls, elements);
+        	return new InstanceCollectionVector(cls, elements);
         } else if(response instanceof Memento) {
             Memento memento = (Memento) response;
             return memento.recreateObject(getLoadedObjects(), context);
@@ -86,11 +86,11 @@ public class ActionRequest extends ObjectRequest {
             	response = null;
             } else if (result.getOid() == null) {
                 response = new Memento(result);
-            } else if(result instanceof InstanceCollection) {
-            	InstanceCollection instances = (InstanceCollection) result;
+            } else if(result instanceof InstanceCollectionVector) {
+            	InstanceCollectionVector instances = (InstanceCollectionVector) result;
             	Object[] array = new Object[instances.size() + 1];
             	int index = 0;
-            	array[index] = instances.getType().getName();
+            	array[index] = instances.getElementSpecification().getName();
             	Enumeration e = instances.elements();
             	while (e.hasMoreElements()) {
             		index++;
