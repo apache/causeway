@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE project [
+	<!ENTITY properties SYSTEM "file:../build-templates/properties.xml">
+	<!ENTITY common SYSTEM "file:../build-templates/common.xml">
+]>
+
+<project name="Naked Objects framework - exploration edition"
+         default="idebuild"
+         basedir=".">
+	
+	<property name="distribution" value="development" />
+
+	
+	&common;
+
+	<target name="copy">
+		<copy todir="${build.src.dir}">
+			<fileset dir="../viewer-skylark/${src.dir}" />
+			<fileset dir="../no-xat/${src.dir}" />
+			<fileset dir="../os-file/${src.dir}" />
+		</copy>
+		
+		<copy todir="${build.example.dir}">
+			<fileset dir="../example-ecs/${src.dir}">
+				<exclude name="**/*AcceptanceTest*" />
+			</fileset>
+			<fileset dir="../example-expenses/${src.dir}">
+				<exclude name="**/*AcceptanceTest*" />
+			</fileset>
+			<fileset dir="../example-library/${src.dir}">
+				<exclude name="**/*AcceptanceTest*" />
+			</fileset>
+		</copy>
+
+		<copy todir="${build.test.dir}">
+			<fileset dir="../viewer-skylark/${test.dir}" />
+			<fileset dir="../no-xat/${test.dir}" />
+			<fileset dir="../os-file/${test.dir}" />
+
+			<fileset dir="../example-ecs/${test.dir}" />
+			<fileset dir="../example-expenses/${test.dir}" />
+			<fileset dir="../example-library/${test.dir}" />
+		</copy>
+
+		<copy todir="${dist.images.dir}">
+			<fileset dir="../example-ecs/src/images" />
+			<fileset dir="../example-expenses/src/images" />
+			<fileset dir="../example-library/src/images" />
+		</copy>
+		<!-- end copy other projects -->
+
+	</target>
+
+
+</project>
+
+

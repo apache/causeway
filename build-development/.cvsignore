@@ -1,0 +1,4 @@
+build
+release
+junit*.properties
+*.timer.log
