@@ -70,7 +70,7 @@ public abstract class NakedClassManager implements DebugInfo {
             throw new NullPointerException();
         }
         if (name.length() == 0) {
-            throw new IllegalArgumentException("Name is empty");
+            throw new IllegalArgumentException("Class name is empty");
         }
 
         if (classes.containsKey(name)) {

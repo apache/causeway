@@ -5,6 +5,7 @@ import org.nakedobjects.object.reflect.ActionDelegate;
 import org.nakedobjects.object.reflect.Field;
 import org.nakedobjects.object.reflect.Member;
 import org.nakedobjects.object.reflect.MemberIf;
+import org.nakedobjects.object.reflect.NameConvertor;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToManyAssociationIF;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
@@ -104,6 +105,10 @@ public class NakedClassLoader {
             return original;
 
         } else {
+            for (int i = 0; i < order.length; i++) {
+                order[i] = NameConvertor.simpleName(order[i]);
+            }
+            
 	        Member[] ordered = (Member[]) Array.newInstance(memberType, original.length);
 
 	        // work through each order element and find, if there is one, a

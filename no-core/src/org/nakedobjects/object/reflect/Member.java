@@ -39,21 +39,9 @@ public abstract class Member {
         if (name == null) {
             throw new IllegalArgumentException("Name must always be set");
         }
-        
-        int len = name.length();
-        StringBuffer labelBuffer = new StringBuffer(len + 3);
-        StringBuffer nameBuffer = new StringBuffer(len);
-        for (int c =0; c < len; c++) {
-			char ch = name.charAt(c);
-            if (c != 0 && Character.isUpperCase(ch)) {
-			    labelBuffer.append(' ');
-			}
-			labelBuffer.append(ch);
-			nameBuffer.append(Character.toLowerCase(ch));
-        }
-
-        label = labelBuffer.toString();
-        this.name = nameBuffer.toString();
+ 
+        this.label = name;
+        this.name = NameConvertor.simpleName(name);
     }
     
     public abstract boolean canAccess(SecurityContext context, NakedObject object);

@@ -24,6 +24,14 @@
 
 package org.nakedobjects.object.reflect.simple;
 
+import org.nakedobjects.object.ContactTestObject;
+import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.control.ClassAbout;
+import org.nakedobjects.object.reflect.ActionDelegate;
+import org.nakedobjects.object.reflect.MemberIf;
+import org.nakedobjects.object.reflect.NakedClassException;
+import org.nakedobjects.object.reflect.OneToOneAssociationIF;
+
 import java.util.Vector;
 
 import junit.framework.TestCase;
@@ -31,14 +39,6 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
-import org.nakedobjects.object.ContactTestObject;
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.ClassAbout;
-import org.nakedobjects.object.reflect.ActionDelegate;
-import org.nakedobjects.object.reflect.MemberIf;
-import org.nakedobjects.object.reflect.NakedClassException;
-import org.nakedobjects.object.reflect.OneToOneAssociationIF;
 
 import com.mockobjects.ExpectationList;
 import com.mockobjects.ExpectationSet;
@@ -138,14 +138,14 @@ public class JavaReflectorTest extends TestCase {
         ExpectationSet exp = new ExpectationSet("object actions");
 
         // 1 param actions
-        exp.addExpected("AddContact");
+        exp.addExpected("Add Contact");
         exp.addExpected("Renew");
 
         // 0 param actions
-        exp.addExpected("CreateInvoice");
+        exp.addExpected("Create Invoice");
         exp.addExpected("Duplicate");
-        exp.addExpected("SetUp");
-        exp.addExpected("ResetWorth");
+        exp.addExpected("Set Up");
+        exp.addExpected("Reset Worth");
 
         exp.addExpected("Class");
         exp.addExpected("Clone");
@@ -155,11 +155,11 @@ public class JavaReflectorTest extends TestCase {
         exp.verify();
 
         // check for about methods
-        exp = new ExpectationSet("abouts for processes");
-        exp.addExpected("AddContact");
+        exp = new ExpectationSet("abouts for actions");
+        exp.addExpected("Add Contact");
         exp.addExpected("Duplicate");
-        exp.addExpected("SetUp");
-        exp.addExpected("ResetWorth");
+        exp.addExpected("Set Up");
+        exp.addExpected("Reset Worth");
         exp.addExpected("Persist");
  
         exp.addActualMany(abouts(actions));
@@ -167,11 +167,11 @@ public class JavaReflectorTest extends TestCase {
     }
     
     public void testFieldSortOrder() throws NakedClassException {
-        ExpectationList exp = new ExpectationList("actions");
+        ExpectationList exp = new ExpectationList("fields");
         exp.addExpected("Name");
-        exp.addExpected("Address");
         exp.addExpected("Worth");
         exp.addExpected("Is Contact");
+        exp.addExpected("Address");
 
         String[] fields = c.fieldSortOrder();
         for (int i = 0; i < fields.length; i++) {
@@ -242,15 +242,15 @@ public class JavaReflectorTest extends TestCase {
         exp.addExpected("Example");
         
         // 0 param actions
-        exp.addExpected("ClassOp");
-        exp.addExpected("DoWhatever");
+        exp.addExpected("Class Op");
+        exp.addExpected("Do Whatever");
         exp.addActualMany(memberNames(actions));
         exp.verify();
 
 
         // check for about methods
         exp = new ExpectationSet("abouts for actions");
-        exp.addExpected("ClassOp");
+        exp.addExpected("Class Op");
         exp.addExpected("Example");
        exp.addActualMany(abouts(actions));
         exp.verify();
@@ -283,9 +283,11 @@ public class JavaReflectorTest extends TestCase {
 
         exp.addExpected("Favourite");
         exp.addExpected("Address");
-        exp.addExpected("IsContact");
+        exp.addExpected("Is Contact");
         exp.addExpected("Worth");
         exp.addExpected("Name");
+        exp.addExpected("Date Created");
+        exp.addExpected("Last Activity");
         exp.addActualMany(memberNames(fields));
         exp.verify();
 
@@ -301,8 +303,10 @@ public class JavaReflectorTest extends TestCase {
         exp = new ExpectationSet("abouts for fields");
         exp.addExpected("Name");
         exp.addExpected("Worth");
-        exp.addExpected("IsContact");
-        exp.addActualMany(abouts(fields));
+        exp.addExpected("Is Contact");
+        exp.addExpected("Date Created");
+        exp.addExpected("Last Activity");
+       exp.addActualMany(abouts(fields));
         exp.verify();
 
 
@@ -314,19 +318,9 @@ public class JavaReflectorTest extends TestCase {
     }
 
     public void testNameManipulations() {
-        assertEquals("CarRegistration", JavaReflector.baseName("getCarRegistration"));
-        assertEquals("Driver", JavaReflector.baseName("Driver"));
-        assertEquals("Register", JavaReflector.baseName("actionRegister"));
-        assertEquals("", JavaReflector.baseName("process"));
-
-        assertEquals("CarRegistration", JavaReflector.naturalName("CarRegistration"));
-        
-        assertEquals("ContactObject", JavaReflector.naturalName("ContactObject"));
-        assertEquals("getName", JavaReflector.naturalName("getName"));
-        assertEquals("getLastName", JavaReflector.naturalName("getLastName"));
-        
-   //     assertEquals("invalid name", JavaReflector.naturalName(""));
-
-
+        assertEquals("CarRegistration", JavaReflector.javaBaseName("getCarRegistration"));
+        assertEquals("Driver", JavaReflector.javaBaseName("Driver"));
+        assertEquals("Register", JavaReflector.javaBaseName("actionRegister"));
+        assertEquals("", JavaReflector.javaBaseName("action"));
     }
 }

@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectException;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectStore;
@@ -248,6 +249,9 @@ public abstract class Exploration {
             set.setContext(context);
         } else {
             InstanceCollection users = InstanceCollection.findInstances(User.class.getName(), name);
+            if(users.size() == 0) {
+                throw new NakedObjectRuntimeException("No users found: " + name);
+            }
             user = (User) users.elements().nextElement();
             context = (ExplorationContext) user.getRootObject();
         }

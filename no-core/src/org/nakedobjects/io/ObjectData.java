@@ -45,7 +45,7 @@ class ObjectData extends Data {
             Object value = fields.get(key);
 
             data.writeString(key);
-            if (value instanceof Data) {
+            if (value instanceof Data  || value instanceof Null) {
                 data.writeString("O");
                 data.writeObject((Transferable) value);
             } else {

@@ -2,7 +2,7 @@ package org.nakedobjects.viewer.skylark;
 
 public class ViewState implements Cloneable {
     private static final short CAN_DROP = 0x08;
-    private static final short CANT_DROP = 0x10;
+    private static final short CANT_DROP = 0x18;
     private static final short OBJECT_IDENTIFIED = 0x04;
     private static final short ROOT_VIEW_IDENTIFIED = 0x01;
     private static final short VIEW_IDENTIFIED = 0x02;

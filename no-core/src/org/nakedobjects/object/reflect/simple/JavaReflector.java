@@ -56,7 +56,7 @@ public class JavaReflector implements Reflector {
      *      
      * </pre>
      */
-    protected static String baseName(String javaName) {
+    protected static String javaBaseName(String javaName) {
         int pos = 0;
 
         // find first upper case character
@@ -85,64 +85,6 @@ public class JavaReflector implements Reflector {
     }
 
     /**
-     * Returns a human readable form of the specified name of a Java entity. The
-     * specified string is scanned for its first upper case letter; this marks
-     * the beginning of the name. The next instance of an uppercase letter is
-     * then sought; this marks the next work. This is repeated until no more
-     * uppercase letters are found and then a new string is created that
-     * contains all the found words, in the same order, but with spaces inserted
-     * between each. If no upper case letter is found then the text <i>invalid
-     * name </i> is returned.
-     * <p>
-     * Calling this method with the following Java names will produce these
-     * results:
-     * </p>
-     * 
-     * <pre>
-     * 
-     *      getCarRegistration        -&gt; Car Registration
-     *      CityMayor -&gt; City Mayor
-     *      isReady -&gt; Ready
-     *      
-     * </pre>
-     */
-    protected static String naturalName(String javaName) {
-        return javaName;
-        
-        /*            
-        int pos = 0;
-
-        // find first upper case character
-        while ((pos < javaName.length()) && Character.isLowerCase(javaName.charAt(pos))) {
-            pos++;
-        }
-
-        if (pos == javaName.length()) {
-            return "invalid name; no leading keyword before a capital lwttwe";
-        } else {
-            
-            StringBuffer s = new StringBuffer(javaName.length() - pos); // remove
-                                                                                              // is/get/set
-
-            for (int j = pos; j < javaName.length(); j++) { // process
-                                                                        // english
-                                                                        // javaName
-                                                                        // - add
-                                                                        // spaces
-
-                if ((j > pos) && Character.isUpperCase(javaName.charAt(j))) {
-                    s.append(' ');
-                }
-
-                s.append(javaName.charAt(j));
-            }
-
-            return s.toString();
-        }
-            */
-    }
-
-    /**
      * Invokes, by reflection, the Order method prefixed by the specified type
      * name. The returned string is tokenized - broken on the commas - and
      * returned in the array.
@@ -159,7 +101,7 @@ public class JavaReflector implements Reflector {
                     int element = 0;
 
                     while (st.hasMoreTokens()) {
-                        a[element] = st.nextToken().trim();
+                        a[element] =st.nextToken().trim();
                         element++;
                     }
                     return a;
@@ -298,15 +240,28 @@ public class JavaReflector implements Reflector {
                     LOG.debug("  with about method " + aboutMethod);
                 }
 
-                String nm = naturalName(name);
                 Action.Type action;
                 action = new Action.Type[] { Action.USER, Action.EXPLORATION, Action.DEBUG }[prefix];
-                ActionDelegate local = new JavaAction(nm, action, method, aboutMethod);
+                ActionDelegate local = new JavaAction(naturalName(name), action, method, aboutMethod);
                 actions.addElement(local);
             }
         }
 
         return convertToArray(actions);
+    }
+
+    private String naturalName(String name) {
+        int len = name.length();
+        StringBuffer labelBuffer = new StringBuffer(len);
+        for (int c =0; c < len; c++) {
+			char ch = name.charAt(c);
+            if (c != 0 && Character.isUpperCase(ch)) {
+			    labelBuffer.append(' ');
+			}
+			labelBuffer.append(ch);
+        }
+
+        return labelBuffer.toString();
     }
 
     public String[] actionSortOrder() {
@@ -358,7 +313,7 @@ public class JavaReflector implements Reflector {
         while (e.hasMoreElements()) {
             Method method = (Method) e.nextElement();
             LOG.debug("identified derived value method " + method);
-            String name = baseName(method.getName());
+            String name = javaBaseName(method.getName());
 
             Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class });
             if (aboutMethod == null) {
@@ -366,8 +321,7 @@ public class JavaReflector implements Reflector {
             }
 
             // create Field
-            String nm = naturalName(name);
-            JavaValue attribute = new JavaValue(nm, method.getReturnType(), method, aboutMethod, null, true);
+            JavaValue attribute = new JavaValue(name, method.getReturnType(), method, aboutMethod, null, true);
 
             fields.addElement(attribute);
         }
@@ -523,7 +477,7 @@ public class JavaReflector implements Reflector {
         while (e.hasMoreElements()) {
             Method method = (Method) e.nextElement();
 
-            names[i++] = naturalName(method.getName());
+            names[i++] = method.getName();
         }
 
         return names;
@@ -545,7 +499,7 @@ public class JavaReflector implements Reflector {
         while (e.hasMoreElements()) {
             Method getMethod = (Method) e.nextElement();
             LOG.debug("identified 1-many association method " + getMethod);
-            String name = baseName(getMethod.getName());
+            String name = javaBaseName(getMethod.getName());
 
             Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class, null, boolean.class });
             Class aboutType = (aboutMethod == null) ? null : aboutMethod.getParameterTypes()[1];
@@ -588,9 +542,8 @@ public class JavaReflector implements Reflector {
                         + "all deal with same type of object.  There are at least two different " + "types");
             }
 
-            String nm = naturalName(name);
             associations
-                    .addElement(new JavaOneToManyAssociation(nm, elementType, getMethod, addMethod, removeMethod, aboutMethod));
+                    .addElement(new JavaOneToManyAssociation(naturalName(name), elementType, getMethod, addMethod, removeMethod, aboutMethod));
         }
     }
 
@@ -617,7 +570,7 @@ public class JavaReflector implements Reflector {
             }
 
             //
-            String name = baseName(getMethod.getName());
+            String name = javaBaseName(getMethod.getName());
             Class[] params = new Class[] { getMethod.getReturnType() };
 
             Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class,
@@ -654,8 +607,7 @@ public class JavaReflector implements Reflector {
                         + getMethod.getName() + " method.");
             }
 
-            String nm = naturalName(name);
-            JavaOneToOneAssociation association = new JavaOneToOneAssociation(nm, getMethod.getReturnType(), getMethod,
+            JavaOneToOneAssociation association = new JavaOneToOneAssociation(naturalName(name), getMethod.getReturnType(), getMethod,
                     setMethod, addMethod, removeMethod, aboutMethod);
             associations.addElement(association);
         }
@@ -694,7 +646,7 @@ public class JavaReflector implements Reflector {
             ;
         }
 
-        return naturalName(shortClassName(className()));
+        return shortClassName(className());
     }
 
     private Vector valueFields(Vector fields) {
@@ -705,8 +657,7 @@ public class JavaReflector implements Reflector {
 
         while (e.hasMoreElements()) {
             Method method = (Method) e.nextElement();
-            LOG.debug("identified value field method " + method);
-            String name = baseName(method.getName());
+            String name = javaBaseName(method.getName());
 
             Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class });
             if (aboutMethod == null) {
@@ -732,8 +683,7 @@ public class JavaReflector implements Reflector {
             }
 
             // create Field
-            String nm = naturalName(name);
-            JavaValue attribute = new JavaValue(nm, method.getReturnType(), method, aboutMethod, validMethod, false);
+            JavaValue attribute = new JavaValue(naturalName(name), method.getReturnType(), method, aboutMethod, validMethod, false);
             fields.addElement(attribute);
         }
 

@@ -72,6 +72,22 @@ public class ButtonBorder extends AbstractBorder {
         }
     }
     
+    public void secondClick(Click click) {
+        UserAction action = overButton(click.getLocation());
+        if(action == null) {
+	        super.secondClick(click);
+        }
+    }
+   
+    
+    public void thirdClick(Click click) {
+        UserAction action = overButton(click.getLocation());
+        if(action == null) {
+	        super.thirdClick(click);
+        }
+    }
+    
+
     public Size getRequiredSize() {
         Size size = super.getRequiredSize();
         

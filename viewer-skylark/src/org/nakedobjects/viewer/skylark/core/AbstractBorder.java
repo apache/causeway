@@ -136,7 +136,7 @@ public class AbstractBorder extends AbstractViewDecorator {
 
     public void secondClick(Click click) {
         click.move(-getLeft(), -getTop());
-        super.secondClick(click);
+        wrappedView.secondClick(click);
     }
 
     public void setSize(Size size) {
@@ -147,7 +147,7 @@ public class AbstractBorder extends AbstractViewDecorator {
 
     public void thirdClick(Click click) {
         click.move(-getLeft(), -getTop());
-        super.thirdClick(click);
+        wrappedView.thirdClick(click);
     }
 
     public ViewAreaType viewAreaType(Location mouseLocation) {

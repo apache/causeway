@@ -64,8 +64,11 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
         public void execute(Workspace workspace, View view, Location at) {
             ActionContent actionContent = ((ActionContent) view.getContent());
             NakedObject result = actionContent.execute();
-            move(at);
-            workspace.addOpenViewFor(result, at);
+            actionContent.getObject().objectChanged();
+            if(result != null) {
+	            move(at);
+	            workspace.addOpenViewFor(result, at);
+            }
         }
 
         protected void move(Location at) {

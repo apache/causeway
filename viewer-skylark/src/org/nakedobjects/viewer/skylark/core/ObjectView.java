@@ -80,8 +80,13 @@ public abstract class ObjectView extends AbstractView {
         NakedObject target = getObject();
         Assert.assertNotNull(target);
 
-        Action action = target.getNakedClass().getObjectAction(Action.USER, null, new NakedClass[] {source.getNakedClass()});
-
+        Action action;
+        if(target instanceof NakedClass) {
+            action = ((NakedClass) target).getClassAction(Action.USER, null, new NakedClass[] {source.getNakedClass()});
+        } else {
+            action = target.getNakedClass().getObjectAction(Action.USER, null, new NakedClass[] {source.getNakedClass()});
+        }
+        
         if ((action != null) &&
                 action.getAbout(Session.getSession().getSecurityContext(), target, source).canUse().isAllowed()) {
             NakedObject result = action.execute(target, source);

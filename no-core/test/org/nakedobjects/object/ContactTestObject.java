@@ -144,7 +144,7 @@ public class ContactTestObject extends AbstractNakedObject {
     public static void actionExample(GenericTestObject o) {}
 
     public static String fieldOrder() {
-        return "Name, Address, Worth, Is Contact";
+        return "Name, Worth, Is Contact, Address";
     }
 
     public static String actionOrder() {

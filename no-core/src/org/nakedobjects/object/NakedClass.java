@@ -251,6 +251,26 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
         return text.toString();
     }
     
+    private Action getDefaultAction(Action[] availableActions, Action.Type type, NakedClass[] parameters) {
+        outer:
+            for (int i = 0; i < availableActions.length; i++) {
+            Action action = availableActions[i];
+            if (action.getType().equals(type)) {
+                if (action.parameters().length == parameters.length) {
+                    for (int j = 0; j < parameters.length; j++) {
+                        if (action.parameters()[j] != parameters[j]) {
+                            continue outer;
+                        }
+                    }
+                    return action;
+                }
+
+            }
+        }
+        
+    	return null;
+   }
+    
     private Action getAction(Action[] availableActions, Action.Type type, String name, NakedClass[] parameters) {
         if(name == null) {
            return null;
@@ -300,18 +320,18 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
         	return ClassAbout.INSTANTIABLE;
         }
     }
-    public Action getClassAction(Action.Type type, NakedClass[] parameters) {
-        reflector();
-    	return getAction(classActions, type, null, parameters);        
-    }
- 
+
     public Action getClassAction(Action.Type type, String name) {
         return getClassAction(type, name, new NakedClass[0]);
     }
    
     public Action getClassAction(Action.Type type, String name, NakedClass[] parameters) {
         reflector();
-    	return getAction(classActions, type, name, parameters);        
+        if(name == null) {
+            return getDefaultAction(classActions, type, parameters);
+        } else {
+            return getAction(classActions, type, name, parameters);
+        }
     }
  
     public Action[] getClassActions(Action.Type type) {
@@ -375,18 +395,17 @@ public final class NakedClass extends AbstractNakedObject implements Serializabl
         return getName().title().toString();
     }
     
-    public Action getObjectAction(Action.Type type, NakedClass[] parameters) {
-        reflector();
-    	return getAction(objectActions, type, null, parameters);
-    }
-    
     public Action getObjectAction(Action.Type type, String name) {
         return getObjectAction(type, name, new NakedClass[0]);
     }
     
     public Action getObjectAction(Action.Type type, String name, NakedClass[] parameters) {
         reflector();
-        return getAction(objectActions, type, name, parameters);
+        if(name == null) {
+            return getDefaultAction(objectActions, type, parameters);
+        } else {
+            return getAction(objectActions, type, name, parameters);
+        }
     }
 
     public Action[] getObjectActions(Action.Type type) {

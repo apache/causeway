@@ -7,7 +7,6 @@ import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.View;
-import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
 import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
 import org.nakedobjects.viewer.skylark.basic.TitleText;
@@ -87,9 +86,9 @@ public class WindowBorder extends AbstractBorder {
 		int w = BUTTON_WIDTH - 1;
 		int h = BUTTON_HEIGHT - 1;
 		canvas.drawRectangle(x + 1, y + 1, w, h, Style.WHITE);
-		canvas.drawRectangle(x, y, w, h, Style.SECONDARY1);
-		canvas.drawLine(x + 5, y + 9,  x + 10, y + 9, Style.SECONDARY2);
-		canvas.drawLine(x + 5, y + 10,  x + 11, y + 10, Style.SECONDARY2);
+		canvas.drawRectangle(x, y, w, h, Style.BLACK);
+		canvas.drawLine(x + 5, y + 9,  x + 10, y + 9, Style.BLACK);
+		canvas.drawLine(x + 5, y + 10,  x + 11, y + 10, Style.BLACK);
 
 		x += BUTTON_WIDTH + padding;
 		canvas.drawRectangle(x + 1, y + 1, w, h, Style.WHITE);
@@ -113,13 +112,22 @@ public class WindowBorder extends AbstractBorder {
 	
     public void firstClick(Click click) {
         Bounds bounds = new Bounds(getSize().getWidth() - right - 3 * (BUTTON_WIDTH + padding) - 1, LINE_THICKNESS + padding, BUTTON_WIDTH, BUTTON_WIDTH);
+        if(bounds.contains(click.getLocation())) {
+            View iconView = new RootIconSpecification().createView(getContent(), null);
+            iconView.setLocation(getView().getLocation());
+            getWorkspace().removeView(getView());
+            getWorkspace().addView(iconView);
+            return;
+        } 
+
         bounds.translate(BUTTON_WIDTH + padding, 0);
         bounds.translate(BUTTON_WIDTH + padding, 0);
         if(bounds.contains(click.getLocation())) {
             dispose();
-        } else {
-            super.firstClick(click);
+            return;
         }
+        
+        super.firstClick(click);
     }
     
     public int getBaseline() {
@@ -135,14 +143,16 @@ public class WindowBorder extends AbstractBorder {
 	}
 	
 	public void secondClick(Click click) {
-        if(click.getViewAreaType() == ViewAreaType.VIEW) {
+ /*       if(click.getViewAreaType() == ViewAreaType.VIEW) {
             View iconView = new RootIconSpecification().createView(getContent(), null);
             iconView.setLocation(getView().getLocation());
             getWorkspace().removeView(getView());
             getWorkspace().addView(iconView);
         } else {
-            super.secondClick(click);
+            
         }
+        */
+	    super.secondClick(click);
     }
 
  	public String toString() {

@@ -1,38 +1,27 @@
-package org.nakedobjects.object.control;
+package org.nakedobjects.object.reflect;
+
+public class NameConvertor {
+    public static String simpleName(String name) {
+        int len = name.length();
+        StringBuffer sb = new StringBuffer(len);
+        for (int pos = 0; pos < len; pos++) {
+            char ch = name.charAt(pos);
+            if (ch == ' ') {
+                continue;
+            }
+            sb.append(Character.toLowerCase(ch));
+        }
+        return sb.toString();
+    }
 
 
-/**
- An instance of this type is used to control an object, an attribute or an action within a NakedObject.
- */
-public interface About {
-
-    /**
-     Returns a Permission describing whether access is permitted.
-     */
-    public Permission canAccess();
-
-    /**
-     Returns a Permission describing whether use is permitted.
-     */
-    public Permission canUse();
-
-    /**
-     Return a description of this object domain.
-     */
-    public String getDescription();
-
-    /**
-     Returns the name of object
-     */
-    public String getName();
-
-	public String debug();
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

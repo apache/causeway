@@ -1,8 +1,6 @@
 package org.nakedobjects.object;
 
-public class UnsupportedFindException extends Exception {
-    private Throwable cause;
-
+public class UnsupportedFindException extends NakedObjectException {
     public UnsupportedFindException() {
         super();
     }
@@ -12,17 +10,11 @@ public class UnsupportedFindException extends Exception {
     }
 
     public UnsupportedFindException(Throwable cause) {
-       super();
-       this.cause = cause;
+       super(cause);
     }
 
     public UnsupportedFindException(String message, Throwable cause) {
-        super(message);
-        this.cause = cause;
-    }
-
-    public Throwable getCause() {
-        return cause;
+        super(message, cause);
     }
 }
 

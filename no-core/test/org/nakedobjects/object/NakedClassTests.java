@@ -107,30 +107,34 @@ public class NakedClassTests extends TestCase {
     // TODO the rest of the test need to use mocks - as the above three do
     public void testGetFields() {
         NakedClass c = nakedClass(ContactTestObject.class);
-        Field[] actions = c.getFields();
+        Field[] fields = c.getFields();
 
-        assertEquals(5, actions.length); // 1 NakedObject
+        assertEquals(7, fields.length); // 1 NakedObject
 
-        assertNotNull(actions[0]);
-        ExpectationSet exp = new ExpectationSet("action names");
+        assertNotNull(fields[0]);
+        ExpectationSet exp = new ExpectationSet("field names");
 
         exp.addExpected("iscontact");
         exp.addExpected("address");
         exp.addExpected("favourite");
         exp.addExpected("name");
         exp.addExpected("worth");
+        exp.addExpected("datecreated");
+        exp.addExpected("lastactivity");
 
-        com.mockobjects.ExpectationList exp2 = new com.mockobjects.ExpectationList("ordered action names");
+        com.mockobjects.ExpectationList exp2 = new com.mockobjects.ExpectationList("ordered field names");
 
         exp2.addExpected("name");
-        exp2.addExpected("address");
         exp2.addExpected("worth");
         exp2.addExpected("iscontact");
+        exp2.addExpected("address");
+        exp2.addExpected("datecreated");
+        exp2.addExpected("lastactivity");
         exp2.addExpected("favourite");
-
-        for (int i = 0; i < actions.length; i++) {
-            exp.addActual(actions[i].getName());
-            exp2.addActual(actions[i].getName());
+        
+        for (int i = 0; i < fields.length; i++) {
+            exp.addActual(fields[i].getName());
+            exp2.addActual(fields[i].getName());
         }
         exp.verify();
         exp2.verify();
@@ -140,14 +144,14 @@ public class NakedClassTests extends TestCase {
     public void testGetClassActionByParam() {
         NakedClass targetClass = nakedClass(GenericTestObject.class);
         NakedClass[] params = new NakedClass[] { nakedClass(ContactTestObject.class) };
-        Action action = targetClass.getClassAction(Action.USER, params);
+        Action action = targetClass.getClassAction(Action.USER, "accept contact", params);
         assertNotNull(action);
         assertEquals("acceptcontact", action.getName());
         assertEquals(Action.USER, action.getType());
         assertEquals(null, action.returns());
         
         params = new NakedClass[] { nakedClass(ProductTestObject.class) };
-        assertNull(targetClass.getClassAction(Action.USER, params));
+        assertNull(targetClass.getClassAction(Action.USER, "no method", params));
     }
 
     public void testGetClassActions() {
@@ -215,6 +219,8 @@ public class NakedClassTests extends TestCase {
 
         exp2.addExpected("customer");
         exp2.addExpected("products");
+        exp2.addExpected("datecreated");
+        exp2.addExpected("lastactivity");
         Field[] attributes = c.getFields();
 
         for (int i = 0; i < attributes.length; i++) {
