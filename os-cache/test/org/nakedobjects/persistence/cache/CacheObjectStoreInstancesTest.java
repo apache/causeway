@@ -6,8 +6,10 @@ import org.nakedobjects.object.ObjectStoreException;
 
 import java.io.File;
 
+import junit.framework.Test;
 
-public class CacheObjectStoreInstancesTest extends NakedObjectStoreInstancesTestCase {
+
+public class CacheObjectStoreInstancesTest extends NakedObjectStoreInstancesTestCase implements Test {
     String DIR = "tmp/test";
 
     public CacheObjectStoreInstancesTest(String name) {

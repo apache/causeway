@@ -8,6 +8,7 @@
          default="idebuild"
          basedir=".">
 
+	<property file="build.properties"/>
 	<property name="distribution" value="exploration" />
 
 	
@@ -49,7 +50,6 @@
 
 
 	<target name="changelog">
-
 		<cvschangelog cvsroot="pserver:rcm@81.168.57.193:/home/cvs"
 		              dir="../viewer-skylark/${src.dir}"
 		              destfile="changelog.xml" />

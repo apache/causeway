@@ -8,6 +8,7 @@
          default="idebuild"
          basedir=".">
 	
+	<property file="build.properties"/>
 	<property name="distribution" value="development" />
 
 	

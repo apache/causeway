@@ -1,4 +1,4 @@
-	<property file="../naked-objects/build.properties"/>
+	<property file="build.properties"/>
 
 	<property name="build.version" value="0_0_0"/>
 	<property name="zip.dir" value="."/>
@@ -28,5 +28,3 @@
 	<!-- need to exists for targets.xml -->
 	<path id="libs.internal">
 	</path>
-
-
