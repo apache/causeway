@@ -30,7 +30,23 @@ public class NakedObjects {
     }
 
     
-    // TODO add .NET property setters
+    /**
+     * Expose as a .NET property
+     * 
+     * @property
+     */
+    public static void set_Configuration(Configuration configuration) {
+        getInstance().configuration = configuration;
+    }
+    
+    /**
+     * Expose as a .NET property
+     * 
+     * @property
+     */
+    public static void set_ObjectManager(NakedObjectManager objectManager) {
+        getInstance().objectManager = objectManager;
+    }
 }
 
 

@@ -1,9 +1,6 @@
 package org.nakedobjects.object.fixture;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 
 import java.util.Vector;
@@ -12,69 +9,50 @@ import org.apache.log4j.Logger;
 
 
 public abstract class FixtureBuilder {
-    private static final Logger LOG = Logger.getLogger(FixtureBuilder.class);
+    private final static Logger LOG = Logger.getLogger(FixtureBuilder.class);
+    protected Vector classes = new Vector();
+    protected Vector fixtures = new Vector();
 
-    private Vector classes = new Vector();
-    private Vector fixtures = new Vector();
-    private Vector newInstances = new Vector();
-
-    
-    public void installFixtures() {
-        NakedObjectManager objectManager = NakedObjects.getObjectManager();
-        objectManager.startTransaction();
-
-        for (int i = 0, last = fixtures.size(); i < last; i++) {
-            Fixture fixture = (Fixture) fixtures.elementAt(i);
-            fixture.setBuilder(this);
-            fixture.install();
-        }
-
-        // make all new objects persistent
-        try {
-            for (int i = 0; i < newInstances.size(); i++) {
-                NakedObject object = (NakedObject) newInstances.elementAt(i);
-                LOG.info("Persisting " + object);
-
-                boolean notPersistent = object.getOid() == null;
-                if (notPersistent) {
-                    objectManager.makePersistent(object);
-                }
-            }
-            objectManager.endTransaction();
-        } catch (RuntimeException e) {
-            objectManager.abortTransaction();
-        }
-    }
-    
-    /**
-     * Helper method to create an instance of the given type. Provided for
-     * exploration programs that need to set up instances.
-     */
-    final Object createInstance(String className) {
-        NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
-        if (nc == null) {
-            NakedObjectManager objectManager = NakedObjects.getObjectManager();
-            return objectManager.generatorError("Could not create an object of class " + className, null);
-        }
-        NakedObjectManager objectManager = NakedObjects.getObjectManager();
-        NakedObject object = objectManager.createTransientInstance(nc);
-        LOG.info("Adding " + object);
-        newInstances.addElement(object);
-        return object.getObject();
+    public final void addFixture(Fixture fixture) {
+        fixtures.addElement(fixture);
     }
 
-    final void registerClass(String className) {
-        classes.addElement(className);
-    }
-
-    public String[] getClasses() {
+    public final String[] getClasses() {
         String[] classNames = new String[classes.size()];
         classes.copyInto(classNames);
         return classNames;
     }
 
-    public void addFixture(Fixture fixture) {
-        fixtures.addElement(fixture);
+    public final void installFixtures() {
+        NakedObjectManager objectManager = NakedObjects.getObjectManager();
+        
+        preInstallFixtures(objectManager);
+
+        for (int i = 0, last = fixtures.size(); i < last; i++) {
+            try {
+                Fixture fixture = (Fixture) fixtures.elementAt(i);
+                fixture.setBuilder(this);
+                LOG.info("Installing fixture: " + fixture);
+                installFixture(objectManager, fixture);
+            } catch (RuntimeException e) {
+                LOG.error("Fixture aborted", e);
+                objectManager.abortTransaction();
+                e.fillInStackTrace();
+                throw e;
+            }
+        }
+        
+        postInstallFixtures(objectManager);
+    }
+
+    protected void postInstallFixtures(NakedObjectManager objectManager) {}
+
+    protected void preInstallFixtures(NakedObjectManager objectManager) {}
+
+    protected abstract void installFixture(NakedObjectManager objectManager, Fixture fixture);
+
+    public final void registerClass(String className) {
+        classes.addElement(className);
     }
 }
 

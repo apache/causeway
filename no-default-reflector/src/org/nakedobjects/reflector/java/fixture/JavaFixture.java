@@ -4,10 +4,26 @@ import org.nakedobjects.object.fixture.Fixture;
 import org.nakedobjects.object.fixture.FixtureBuilder;
 
 
-public abstract class JavaFixture extends Fixture {
+public abstract class JavaFixture implements Fixture {
     private JavaFixtureBuilder builder;
 
-    protected FixtureBuilder getBuilder() {
+    public final Object createInstance(Class cls) {
+        return createInstance(cls.getName());
+    }
+
+    public final Object createInstance(String className) {
+        return builder.createInstance(className);
+    }
+
+    public final void registerClass(String className) {
+        builder.registerClass(className);
+    }
+
+    public final void registerClass(Class cls) {
+        builder.registerClass(cls.getName());
+    }
+
+    public FixtureBuilder getBuilder() {
         return builder;
     }
 

@@ -1,11 +1,26 @@
-package org.nakedobjects.object.fixture;
+package org.nakedobjects.object.exploration;
 
-public interface Fixture {
-    FixtureBuilder getBuilder();
+import org.nakedobjects.object.fixture.FixtureBuilder;
+import org.nakedobjects.utility.UnexpectedCallException;
 
-    void setBuilder(FixtureBuilder builder);        
-    
-    void install();
+
+
+public abstract class AbstractExplorationFixture implements ExplorationFixture {
+    private Object container;
+
+    protected Object getContainer() {
+        return container;
+    }
+
+    public void setContainer(Object container) {
+        this.container = container;
+    }
+
+    public FixtureBuilder getBuilder() {
+        throw new UnexpectedCallException();
+    }
+
+    public void setBuilder(FixtureBuilder builder) {}
 }
 
 /*

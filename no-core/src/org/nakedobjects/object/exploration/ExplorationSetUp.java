@@ -1,11 +1,18 @@
-package org.nakedobjects.object.fixture;
+package org.nakedobjects.object.exploration;
 
-public interface Fixture {
-    FixtureBuilder getBuilder();
+import org.nakedobjects.object.fixture.Fixture;
+import org.nakedobjects.object.fixture.FixtureBuilder;
+import org.nakedobjects.object.persistence.NakedObjectManager;
 
-    void setBuilder(FixtureBuilder builder);        
-    
-    void install();
+
+public abstract class ExplorationSetUp extends FixtureBuilder {
+
+    protected void installFixture(NakedObjectManager objectManager, Fixture fixture) {
+        ((ExplorationFixture) fixture).setContainer(this);
+        objectManager.startTransaction();
+        fixture.install();
+        objectManager.endTransaction();
+    }
 }
 
 /*
