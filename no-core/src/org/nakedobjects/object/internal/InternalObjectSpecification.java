@@ -4,11 +4,12 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.DefaultHint;
+import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.ObjectTitle;
+import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
 
@@ -144,6 +145,9 @@ public class InternalObjectSpecification implements NakedObjectSpecification {
         return null;
     }
 
+    public String unresolvedTitle(PojoAdapter pojo) {
+        return "";
+    }
 }
 
 /*

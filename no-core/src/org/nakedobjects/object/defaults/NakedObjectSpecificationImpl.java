@@ -1,5 +1,6 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
@@ -19,6 +20,7 @@ import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToManyPeer;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.OneToOnePeer;
+import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.Reflector;
 import org.nakedobjects.object.security.Session;
 
@@ -380,7 +382,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         }
         LOG.debug("NakedClass " + this);
         this.reflector = reflector;
-        NakedObjectSpecificationLoader loader = NakedObjectSpecificationLoader.getInstance();
+        NakedObjectSpecificationLoader loader = NakedObjects.getSpecificationLoader();
         if (superclass != null) {
             this.superclass = (NakedObjectSpecificationImpl) loader.loadSpecification(superclass);
             if (this.superclass != null) {
@@ -565,6 +567,10 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         return superclass;
     }
 
+    public String unresolvedTitle(PojoAdapter pojo) {
+        return reflector.unresolvedTitle(pojo);
+    }
+    
     public String toString() {
         StringBuffer s = new StringBuffer();
 

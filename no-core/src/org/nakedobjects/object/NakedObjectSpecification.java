@@ -4,6 +4,7 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.ObjectTitle;
+import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.security.Session;
 
 
@@ -98,6 +99,8 @@ public interface NakedObjectSpecification {
     NakedObjectSpecification[] subclasses();
 
     NakedObjectSpecification superclass();
+
+    String unresolvedTitle(PojoAdapter pojo);
 }
 
 /*

@@ -109,6 +109,10 @@ public class PrimitiveReflector implements Reflector {
                 return "no title...";
             }};
     }
+    
+    public String unresolvedTitle(NakedObject pojo) {
+        return "no title";
+    }
 }
 
 
