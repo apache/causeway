@@ -1,6 +1,11 @@
 package org.nakedobjects.viewer.skylark.special;
 
+import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
+import org.nakedobjects.object.security.ClientSession;
+import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.View;
 
 
@@ -14,6 +19,19 @@ public class LookupBorder extends OpenOptionFieldBorder {
     protected View createOverlay() {
         ObjectContent content = (ObjectContent) getContent();
         return spec.createView(getContent(), new LookupAxis(content, getParent()));
+    }
+    
+    protected boolean isAvailable() {
+        Content content = getContent();
+        if(content instanceof OneToOneField) {
+            OneToOneField oneToOneField = ((OneToOneField) content);
+            About about = ((OneToOneAssociationSpecification) oneToOneField.getField()).getAbout(ClientSession.getSession(), oneToOneField.getParent(), null);
+            oneToOneField.getParent();
+            return about.canUse().isAllowed();
+        } else {
+            return false;
+        }
+        
     }
 }
 

@@ -15,7 +15,7 @@ public abstract class OpenOptionFieldBorder extends AbstractBorder {
 
     public OpenOptionFieldBorder(View wrappedView) {
         super(wrappedView);
-        right = 16;
+        right = 18;
     }
 
     public void draw(Canvas canvas) {
@@ -25,10 +25,13 @@ public abstract class OpenOptionFieldBorder extends AbstractBorder {
         Color color = over ?  Style.SECONDARY1 : Style.PRIMARY2;
 
         Shape triangle = new Shape(0, 0);
-        triangle.addVertex(5, 6);
-        triangle.addVertex(11, 0);
+        triangle.addVertex(6, 6);
+        triangle.addVertex(12, 0);
 
-        canvas.drawSolidShape(triangle, x, y, color);
+        canvas.drawShape(triangle, x, y, Style.SECONDARY2);
+        if(isAvailable()) {
+	        canvas.drawSolidShape(triangle, x, y, color); 
+        }
         
         super.draw(canvas);
     }
@@ -58,24 +61,30 @@ public abstract class OpenOptionFieldBorder extends AbstractBorder {
     }
     
     public void firstClick(Click click) {
-        float x = click.getLocation().getX() - 2;
-        float boundary = getSize().getWidth() - right;
-        if (x >= boundary) {
-            View overlay = createOverlay();
-
-            Size size = overlay.getRequiredSize();
-            size.ensureWidth(getSize().getWidth());
-            overlay.setSize(size);
-
-            Location location = getAbsoluteLocation();
-            location.add(getView().getPadding().getLeft(), getSize().getHeight());
-            overlay.setLocation(location);
-
-            overlay.markDamaged();
-            getViewManager().setOverlayView(overlay);
-            
-            overlay.layout();
+        if(isAvailable()) {
+	        float x = click.getLocation().getX() - 2;
+	        float boundary = getSize().getWidth() - right;
+	        if (x >= boundary) {
+	            View overlay = createOverlay();
+	
+	            Size size = overlay.getRequiredSize();
+	            size.ensureWidth(getSize().getWidth());
+	            overlay.setSize(size);
+	
+	            Location location = getAbsoluteLocation();
+	            location.add(getView().getPadding().getLeft(), getSize().getHeight());
+	            overlay.setLocation(location);
+	
+	            overlay.markDamaged();
+	            getViewManager().setOverlayView(overlay);
+	            
+	            overlay.layout();
+	        }
         }
+    }
+    
+    protected boolean isAvailable() {
+        return true;
     }
 
     public Size getRequiredSize() {
