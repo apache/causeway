@@ -71,13 +71,18 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
                 // place object onto desktop as icon
                 //getSubviews();
                 View icon = drag.getSource();
-                if(! icon.getSpecification().isOpen() && contains(icon)) {
-                    icon.markDamaged();
-                    Location at = drag.getTargetLocation();
-                    at.translate(drag.getOffset());
-                    icon.setLocation(at);
-                    icon.markDamaged();
-                    return;
+                if(! icon.getSpecification().isOpen() ) {
+                    View[] subviews = getSubviews();
+                    for (int i = 0; i < subviews.length; i++) {
+                        if(subviews[i] ==icon) {
+                            icon.markDamaged();
+                            Location at = drag.getTargetLocation();
+                            at.translate(drag.getOffset());
+                            icon.setLocation(at);
+                            icon.markDamaged();
+                            return;
+                        }
+                    }
                 }
                 newView = ViewFactory.getViewFactory().createIconizedRootView(source);
             }

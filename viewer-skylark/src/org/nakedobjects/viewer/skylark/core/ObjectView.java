@@ -174,6 +174,18 @@ public abstract class ObjectView extends AbstractView {
         return ((ObjectContent) getContent()).getObject();
     }
 
+    public void secondClick(Click click) {
+        View subview = subviewFor(click.getLocation());
+        if (subview != null) {
+            click.subtract(subview.getLocation());
+            subview.secondClick(click);
+        } else {
+                Location location = getAbsoluteLocation();
+                location.translate(click.getLocation());
+                getWorkspace().addOpenViewFor(getObject(), location);
+        }
+    }
+    
     public void viewMenuOptions(MenuOptionSet options) {
         if (getObject() instanceof UserContext) {
             options.add(MenuOptionSet.VIEW, new MenuOption("New Workspace") {
