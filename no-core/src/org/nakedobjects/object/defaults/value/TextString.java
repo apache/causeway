@@ -285,11 +285,11 @@ public class TextString extends AbstractNakedValue {
     }
 
     public String stringValue() {
-        return text;
+        return isEmpty() ? "" : text;
     }
 
     public Title title() {
-        return new Title(isEmpty() ? "" : text);
+        return new Title(stringValue());
     }
 
     /**
