@@ -81,7 +81,7 @@ public class XmlClient implements ClientDistribution {
         return request.getFlag();
     }
 
-    public Oid[] makePersistentRequest(Session session, ObjectData data) {
+    public Oid[] makePersistent(Session session, ObjectData data) {
         MakePersistent request = new MakePersistent(session, data);
         remoteExecute(request);
         return request.getOids();
@@ -125,7 +125,7 @@ public class XmlClient implements ClientDistribution {
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

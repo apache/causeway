@@ -7,16 +7,16 @@ import org.nakedobjects.object.security.Session;
 public class AllInstances extends AbstractRequest {
 
     private final String name;
-    private boolean includeInstances;
+    private boolean includeSubclasses;
 
     public AllInstances(Session session, String name, boolean includeSubclasses) {
         super(session);
         this.name = name;
-        this.includeInstances = includeSubclasses;
+        this.includeSubclasses = includeSubclasses;
     }
 
     public void execute(ServerDistribution sd) {
-        ObjectData[] instances = sd.allInstances(session, name, includeInstances);
+        ObjectData[] instances = sd.allInstances(session, name, includeSubclasses);
         setResponse(instances);
     }
 
@@ -29,7 +29,7 @@ public class AllInstances extends AbstractRequest {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -14,7 +14,7 @@ public class MakePersistent extends AbstractRequest {
     }
 
     public void execute(ServerDistribution sd) {
-        response = sd.makePersistentRequest(session, object);
+        response = sd.makePersistent(session, object);
     }
 
     public Oid[] getOids() {
@@ -27,7 +27,7 @@ public class MakePersistent extends AbstractRequest {
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
