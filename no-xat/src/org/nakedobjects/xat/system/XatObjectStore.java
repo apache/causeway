@@ -26,13 +26,13 @@ import java.util.Vector;
 import org.apache.log4j.Category;
 
 
-public class ObjectStore implements NakedObjectStore {
-    private final static Category LOG = Category.getInstance(ObjectStore.class);
+public class XatObjectStore implements NakedObjectStore {
+    private final static Category LOG = Category.getInstance(XatObjectStore.class);
     private final Hashtable classes;
     private final LoadedObjects loaded;
     private final Hashtable objectInstances;
 
-    public ObjectStore() {
+    public XatObjectStore() {
         loaded = new LoadedObjectsHashtable();
         objectInstances = new Hashtable();
         classes = new Hashtable(30);
@@ -279,7 +279,7 @@ public class ObjectStore implements NakedObjectStore {
         return noInstances;
     }
 
-    public void resolve(NakedObject object) throws ObjectStoreException {
+    public void resolveImmediately(NakedObject object) throws ObjectStoreException {
         LOG.debug("resolve " + object);
 
         NakedObject o = getObject(object.getOid(), null);
