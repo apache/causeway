@@ -13,6 +13,7 @@ import org.nakedobjects.object.reflect.NakedClassException;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.security.SecurityContext;
+import org.nakedobjects.security.Session;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -125,7 +126,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         TestNaked actual = getField(fieldName);
         NakedValue actualValue = ((NakedValue) actual.getForObject());
 
-        if (!actualValue.equals(expectedValue)) {
+        if (!actualValue.isSameAs(expectedValue)) {
             Assert.fail(expected(message) + " value of " + expectedValue + " but got " + actualValue);
         }
     }
@@ -266,7 +267,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
     public void assertFieldInvisible(String fieldName) {
         Field field = fieldFor(fieldName);
-        boolean canAccess = field.canAccess(new SecurityContext(), (NakedObject) getForObject());
+        boolean canAccess = field.canAccess(Session.getSession().getSecurityContext(), (NakedObject) getForObject());
         assertFalse("Field " + fieldName + " is visible", canAccess);
     }
 
@@ -723,7 +724,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     }
     
     private void assertFieldVisible(String fieldName, Field field) {
-        boolean canAccess = field.canAccess(new SecurityContext(), (NakedObject) getForObject());
+        boolean canAccess = field.canAccess(Session.getSession().getSecurityContext(), (NakedObject) getForObject());
         assertTrue("Field " + fieldName + " is invisible", canAccess);    
     }
 
@@ -733,8 +734,9 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     }
     
     private void assertFieldModifiable(String fieldName, Field field) {
-        boolean canAccess = field.canUse(new SecurityContext(), (NakedObject) getForObject());
-        assertTrue("Field " + fieldName + " is unmodifiable", canAccess);
+        SecurityContext securityContext = Session.getSession().getSecurityContext();
+        boolean canAccess = field.canUse(securityContext, (NakedObject) getForObject());
+        assertTrue("Field " + fieldName + " is unmodifiable for " + securityContext.getUser(), canAccess);
     }
    
     private void assertFalse(String message, boolean condition) {
@@ -751,7 +753,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
     public void assertFieldUnmodifiable(String fieldName) {      
         Field field = fieldFor(fieldName);
-        boolean canAccess = field.canUse(new SecurityContext(), (NakedObject) getForObject());
+        boolean canAccess = field.canUse(Session.getSession().getSecurityContext(), (NakedObject) getForObject());
         assertFalse("Field " + fieldName + " is modifiable", canAccess);
     }
 }

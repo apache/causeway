@@ -3,6 +3,7 @@ package org.nakedobjects.xat;
 import org.nakedobjects.object.MockObjectManager;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.security.SecurityContext;
+import org.nakedobjects.security.Session;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
@@ -27,7 +28,7 @@ public class TestObjectImplTest extends TestCase {
         om.setupAddClass(NakedObject.class);
         om.setupAddClass(TestObjectExample.class);
 
-        SecurityContext context = new SecurityContext();
+        SecurityContext context = Session.getSession().getSecurityContext();
         object = new TestObjectExample();
 
         testObject = new TestObjectImpl(context, object);

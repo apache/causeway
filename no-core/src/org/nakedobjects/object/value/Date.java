@@ -24,6 +24,8 @@
 
 package org.nakedobjects.object.value;
 
+import org.nakedobjects.Clock;
+import org.nakedobjects.SystemClock;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.Title;
 import org.nakedobjects.object.ValueParseException;
@@ -43,29 +45,16 @@ import org.apache.log4j.Logger;
  * </p>
  */
 
-/* other methods to implement
-   add(int hour, int mins)
-   
+/* other methods to implement 
    comparision methods
    
-   sameDayAs() day == day
-   sameMonthAs() month == month
-   sameWeekAs() month == month
-   sameYearAs() year == year
    sameDateAs() day == day & mont == month & year ==  year
-   sameHourAs() hour ==hour
-   sameMinuteAs() minutes = minutes
-   sameTimeAs(hour, min) hour == hour & minutes == minutes
-   withinNextTimePeriod(int hours, int minutes); 
-   withinTimePeriod(Date d, int hours, int minutes);  
-   withinPreviousTimePeriod(int hours, int minutes); d.hour >= this.hour >= d.hour + hours & d.minutes >= this.minutes >= d.minutes + minutes
-   
+  
    withinNextDatePeriod(int days, int months, int years)
    withinDatePeriod(int days, int months, int years)
    withinPreviousDatePeriod(int days, int months, int years)
  */
 public class Date extends Magnitude {
-
    private static final long serialVersionUID = 1L;
    private static final DateFormat SHORT_FORMAT = DateFormat.getDateInstance(DateFormat.SHORT);
    private static final DateFormat MEDIUM_FORMAT = DateFormat.getDateInstance(DateFormat.MEDIUM);
@@ -74,14 +63,18 @@ public class Date extends Magnitude {
    private static final DateFormat ISO_SHORT = new SimpleDateFormat("yyyyMMdd");
    private transient DateFormat format = MEDIUM_FORMAT;
    private boolean isNull = true;
-   private java.util.Date date;
+   private java.util.Date date;   
+	private static Clock clock;
+	
+	public static void setClock(Clock clock) {
+	    Date.clock = clock;
+	}
 
    /*
       Create a Date object for storing a date.  The date is set to today's date.
     */
    public Date() {
-      set(createCalendar());
-//      isNull = false; // moved to set(Calendar)
+      today();
    }
 
    /*
@@ -149,23 +142,18 @@ public class Date extends Magnitude {
 		setValue( (Date)object );
    }
 
-   /**
-      Returns a Calendar object with the irrelevant field (determined by this objects type) set to zero.
-    */
-   private Calendar createCalendar() {
-      Calendar cal = Calendar.getInstance();
-
-      // clear all aspects of the time that are not used
+    /**
+     *  clear all aspects of the time that are not used
+     */
+   private void clearTime(Calendar cal) {
       cal.set(Calendar.HOUR, 0);
       cal.set(Calendar.MINUTE, 0);
       cal.set(Calendar.SECOND, 0);
       cal.set(Calendar.AM_PM, 0);
       cal.set(Calendar.MILLISECOND, 0);
+}
 
-      return cal;
-   }
-
-   public java.util.Date dateValue() {
+public java.util.Date dateValue() {
       return isNull ? null : date;
    }
 
@@ -237,9 +225,13 @@ public class Date extends Magnitude {
          clear();
       } else {
          String str = dateString.toLowerCase();
-         Calendar cal = createCalendar();
+         Calendar cal = Calendar.getInstance();
+         cal.setTime(date);
+         clearTime(cal);
 
          if (str.equals("today") || str.equals("now")) {
+             today();
+             return;
          } else if (str.startsWith("+")) {
             int days;
 
@@ -356,7 +348,8 @@ public class Date extends Magnitude {
    public void setValue(int year, int month, int day) {
       checkDate(year, month, day);
 
-      Calendar cal = createCalendar();
+      Calendar cal = Calendar.getInstance();
+      clearTime(cal);
 
       cal.set(year, month - 1, day);
       set(cal);
@@ -373,17 +366,11 @@ public class Date extends Magnitude {
          cal.set(Calendar.MINUTE, 0);
          cal.set(Calendar.SECOND, 0);
          cal.set(Calendar.MILLISECOND, 0);
-//         this.date = cal.getTime();
          set(cal);
       }
    }
 
    public void setValue(Date date) {
-//      if (date == null) {
-//         isNull = true;
-//      } else {
-//         this.date = new java.util.Date(date.getDate().getTime());
-//      }
       if (date == null || date.isEmpty()) {
          clear();
       } else {
@@ -457,7 +444,12 @@ public class Date extends Magnitude {
 	 * Sets this date value to todays date
 	 */
 	public void today() {
-		Calendar cal = createCalendar();
+	     Calendar cal = Calendar.getInstance();
+
+	     long time = clock.getTime();
+	     cal.setTimeInMillis(time);
+	      
+	      clearTime(cal);
 		set(cal);
 	}
 

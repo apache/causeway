@@ -1,18 +1,31 @@
 package org.nakedobjects.xat;
 
+import org.nakedobjects.ExplorationClock;
+import org.nakedobjects.ExplorationFixture;
+import org.nakedobjects.ExplorationSetUp;
+import org.nakedobjects.MutableContainer;
 import org.nakedobjects.object.LocalObjectManager;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NullUpdateNotifier;
 import org.nakedobjects.object.TransientObjectStore;
+import org.nakedobjects.object.collection.InstanceCollection;
+import org.nakedobjects.object.value.Date;
+import org.nakedobjects.object.value.Time;
+import org.nakedobjects.object.value.TimeStamp;
 import org.nakedobjects.security.SecurityContext;
 import org.nakedobjects.security.Session;
+import org.nakedobjects.security.User;
 import org.nakedobjects.utility.ComponentException;
 import org.nakedobjects.utility.ConfigurationException;
+import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Hashtable;
+import java.util.Locale;
+import java.util.Vector;
 
 import junit.framework.TestCase;
 
@@ -20,17 +33,17 @@ import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 
 
-public abstract class AcceptanceTestCase extends TestCase {
+public abstract class AcceptanceTestCase extends TestCase implements MutableContainer {
     private Hashtable classes = new Hashtable();
     private SecurityContext context;
     private Documentor documentor;
+    private ExplorationClock clock;
+    private LocalObjectManager objectManager;
+    private Vector fixtures = new Vector();
 
     public AcceptanceTestCase(String name) {
         super(name);
-
-        // TODO modify to reflect a real user
-        context = new SecurityContext();
-    }
+     }
 
     /**
      * Register a class as being available to the user.
@@ -66,15 +79,21 @@ public abstract class AcceptanceTestCase extends TestCase {
         docln(text);
     }
 
-    protected void registerClass(Class cls) {
+    /** @deprecated */
+    public void registerClass(Class cls) {
         registerClass(cls.getName());
     }
 
-    protected void registerClass(String className) {
+    /** @deprecated */
+    public void registerClass(String className) {
         NakedClass nc = NakedClassManager.getInstance().getNakedClass(className);
         TestClass view = TestObjectFactory.getInstance().createTestClass(context, nc);
 
         classes.put(nc.getPluralName(), view);
+    }
+    
+    public void addFixture(ExplorationFixture fixture) {
+        fixtures.addElement(fixture);
     }
 
     protected void setUp() throws ConfigurationException, ComponentException {
@@ -82,12 +101,32 @@ public abstract class AcceptanceTestCase extends TestCase {
         NakedObjectStore nos;
         nos = new TransientObjectStore();
 
-        NakedObjectManager objectManager = new LocalObjectManager(nos, new NullUpdateNotifier());
+        objectManager = new LocalObjectManager(nos, new NullUpdateNotifier());
 
         // TODO ensure logon
         Session.initSession();
+        
+        context = Session.getSession().getSecurityContext();
+
+        
+        clock = new ExplorationClock();
+        Date.setClock(clock);
+        Time.setClock(clock);
+        TimeStamp.setClock(clock);
+        
+        ExplorationSetUp fs = new ExplorationSetUp();
+        fs.init(fixtures, NakedClassManager.getInstance(), objectManager, clock);
 
         documentor = TestObjectFactory.getInstance().getDocumentor(getName().substring(4));
+        
+        String[] cls = fs.getClasses();
+        for (int i = 0; i < cls.length; i++) {
+            NakedClass nc = NakedClassManager.getInstance().getNakedClass(cls[i]);
+            TestClass view = TestObjectFactory.getInstance().createTestClass(context, nc);
+
+            classes.put(nc.getPluralName(), view);
+        }
+        
     }
 
     protected void startDocumenting() {
@@ -96,8 +135,6 @@ public abstract class AcceptanceTestCase extends TestCase {
 
     /**
      * Marks the start of a new step within a story.
-     * 
-     * @group headings
      */
     protected void nextStep() {
         documentor.step("");
@@ -107,9 +144,7 @@ public abstract class AcceptanceTestCase extends TestCase {
      * Marks the start of a new step within a story. Adds the specified text to
      * the script documentation, which will then be followed by the generated
      * text from the action methods.
-     * 
-     * @group headings
-     */
+      */
     protected void nextStep(String text) {
         documentor.step(text);
     }
@@ -130,9 +165,7 @@ public abstract class AcceptanceTestCase extends TestCase {
 
     /**
      * Gives a story a subtitle in the script documentation.
-     * 
-     * @group headings
-     */
+      */
     protected void subtitle(String text) {
         documentor.subtitle(text);
     }
@@ -145,13 +178,48 @@ public abstract class AcceptanceTestCase extends TestCase {
 
     /**
      * Gives a story a subtitle in the script documentation.
-     * 
-     * @group headings
-     */
+    */
     protected void title(String text) {
         documentor.title(text);
     }
+
+    public ExplorationClock getClock() {
+        return clock;
+    }
+
+    public NakedObjectManager getObjectManager() {
+        return objectManager;
+    }
+
+    
+    public void setUser(String name) {
+        Session.logoff();
+        NakedClass cls = NakedClassManager.getInstance().getNakedClass(User.class.getName());
+        InstanceCollection coll = InstanceCollection.findInstances(cls, name);
+        if(coll.size() == 0) {
+            throw new NakedObjectRuntimeException("No user " + name);
+        }
+        User user = (User) coll.elements().nextElement();
+        Session.setLoggedOn(new SecurityContext(null, user));
+    }
+    
+    public void setUser(User user) {
+        throw new NotImplementedException();
+    }
+
+    public NakedClassManager getClassManager() {
+        throw new NotImplementedException();
+    }
+
+    public Locale getLocale() {
+        throw new NotImplementedException();
+    }
+
+    public Session getSession() {
+        throw new NotImplementedException();
+    }
 }
+
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business

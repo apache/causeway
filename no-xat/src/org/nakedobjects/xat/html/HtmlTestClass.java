@@ -18,8 +18,9 @@ public class HtmlTestClass extends TestClassDecorator {
     public TestObject findInstance(String title) {
         NakedObject object = (NakedObject) getForObject();
         String shortName = object.getNakedClass().getSingularName();
+        TestObject result = super.findInstance(title);
         doc.doc("Find the <b>" + shortName + "</b> instance " + doc.simpleObjectString(object) + ". ");
-        return super.findInstance(title);
+        return result;
     }
 
     public TestObject instances() {

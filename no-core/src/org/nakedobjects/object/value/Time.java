@@ -1,5 +1,7 @@
 package org.nakedobjects.object.value;
 
+import org.nakedobjects.Clock;
+import org.nakedobjects.SystemClock;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.Title;
 import org.nakedobjects.object.ValueParseException;
@@ -46,6 +48,11 @@ public class Time extends Magnitude {
 	public static final int MINUTE = 60;
 	public static final int HOUR = 60 * MINUTE;
 	public static final int DAY = 24 * HOUR;
+	private static Clock clock;
+	
+	public static void setClock(Clock clock) {
+	    Time.clock = clock;
+	}
 
     static {
    //     zoneOffset = TimeZone.getDefault().getRawOffset();
@@ -83,7 +90,7 @@ public class Time extends Magnitude {
     Create a Time object for storing a time with the time set to the current time.
     */
     public Time() {
-        setValue(new java.util.Date());
+        setValue(new java.util.Date(clock.getTime()));
     }
 
     /*
@@ -277,7 +284,7 @@ public class Time extends Magnitude {
      * @see org.nakedobjects.object.NakedValue#reset()
      */
     public void reset() {
-        setValue(new Date());
+        setValue(new Date(clock.getTime()));
     }
 
     public void restoreString(String data) {

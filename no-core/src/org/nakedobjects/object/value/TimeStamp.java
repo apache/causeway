@@ -24,6 +24,7 @@
 
 package org.nakedobjects.object.value;
 
+import org.nakedobjects.Clock;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.Title;
 import org.nakedobjects.object.ValueParseException;
@@ -56,12 +57,18 @@ public class TimeStamp extends Magnitude {
     private transient DateFormat format = MEDIUM_FORMAT;
     private boolean isNull = true;
     private java.util.Date date;
+	private static Clock clock;
+	
+	public static void setClock(Clock clock) {
+	    TimeStamp.clock = clock;
+	}
+
 
     /**
      Create a Time object for storing a timeStamp set to the current time.
      */
     public TimeStamp() {
-        setValue(new java.util.Date());
+        setValue(new java.util.Date(clock.getTime()));
         isNull = false;
     }
 
@@ -262,7 +269,7 @@ public class TimeStamp extends Magnitude {
      * @see org.nakedobjects.object.NakedValue#reset()
      */
     public void reset() {
-        date = new Date();
+        date = new Date(clock.getTime());
         isNull = false;
     }
 

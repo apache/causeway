@@ -1,6 +1,6 @@
 package org.nakedobjects;
 
-import org.nakedobjects.object.DefaultUserContext;
+import org.nakedobjects.object.AbstractUserContext;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedClassManager;
 
@@ -21,7 +21,7 @@ class NakedClassList {
         classes.addElement(clsName);
     }
     
-    public void setContext(DefaultUserContext context) {
+    public void setContext(AbstractUserContext context) {
         for (int i = 0; i < classes.size(); i++) {
             String name = (String) classes.elementAt(i);
             NakedClass nc = NakedClassManager.getInstance().getNakedClass(name);

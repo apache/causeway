@@ -11,6 +11,10 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.TransientObjectStore;
 import org.nakedobjects.object.collection.InstanceCollection;
+import org.nakedobjects.object.collection.InternalCollection;
+import org.nakedobjects.object.value.Date;
+import org.nakedobjects.object.value.Time;
+import org.nakedobjects.object.value.TimeStamp;
 import org.nakedobjects.security.Role;
 import org.nakedobjects.security.SecurityContext;
 import org.nakedobjects.security.Session;
@@ -18,6 +22,7 @@ import org.nakedobjects.security.User;
 import org.nakedobjects.utility.ComponentLoader;
 import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.utility.ConfigurationException;
+import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.utility.SplashWindow;
 import org.nakedobjects.utility.StartupException;
 
@@ -37,10 +42,12 @@ public abstract class Exploration {
     public static final String OBJECT_STORE = "object-store";
     private static final String SHOW_EXPLORATION_OPTIONS = "viewer.lightweight.show-exploration";
     private final static String VIEWING_MECHANISM = "viewer";
-    private DefaultUserContext context;
+    private ExplorationContext context;
     private Vector newInstances = new Vector();
     protected NakedObjectManager objectManager;
-
+    private Vector fixtures = new Vector();
+    private ExplorationClock clock;
+    
     protected Exploration() {
         try {
             Properties p = Configuration.loadProperties("log4j.properties");
@@ -60,11 +67,13 @@ public abstract class Exploration {
         }
     }
 
+    /** @deprecated */
     private void addInstance(NakedObject object) {
         LOG.info("Adding " + object);
         newInstances.addElement(object);
     }
 
+    /** @deprecated */
     private NakedClassManager classManager() {
         return NakedClassManager.getInstance();
     }
@@ -80,6 +89,8 @@ public abstract class Exploration {
     /**
      * Helper method to create an instance of the given type. Provided for
      * exploration programs that need to set up instances.
+     * 
+     *@deprecated
      */
     protected final NakedObject createInstance(Class type) {
         NakedClass nc = classManager().getNakedClass(type.getName());
@@ -93,6 +104,8 @@ public abstract class Exploration {
     /**
      * Helper method to create an instance of the given type. Provided for
      * exploration programs that need to set up instances.
+     * 
+     * @deprecated
      */
     protected final NakedObject createInstance(String className) {
         NakedClass nc = classManager().getNakedClass(className);
@@ -128,6 +141,8 @@ public abstract class Exploration {
     /**
      * Convenience method provided for subclasses, indicating whether there are
      * any instances of the specified class
+     * 
+     * @deprecated
      */
     protected final boolean needsInstances(Class cls) {
         return needsInstances(cls.getName());
@@ -136,24 +151,49 @@ public abstract class Exploration {
     /**
      * Convenience method provided for subclasses, indicating whether there are
      * any instances of the specified class
+     * 
+     * @deprecated
      */
     protected final boolean needsInstances(String className) {
         return !objectManager.hasInstances(classManager().getNakedClass(className));
     }
 
-    protected void registerClass(Class cls) {
+    /** @deprecated */
+        public void registerClass(Class cls) {
         registerClass(cls.getName());
     }
 
-    protected void registerClass(String className) {
+        /** @deprecated */
+           public void registerClass(String className) {
         NakedClass nc = NakedClassManager.getInstance().getNakedClass(className);
         context.getClasses().add(nc);
     }
 
+    public void addFixture(ExplorationFixture fixture) {
+        fixtures.addElement(fixture);
+    }
+    
     protected abstract void setUp();
 
     private void setUpExploration() {
+        clock = new ExplorationClock();
+        Date.setClock(clock);
+        Time.setClock(clock);
+        TimeStamp.setClock(clock);
+        
         setUp();
+        
+        ExplorationSetUp fs = new ExplorationSetUp();
+        fs.init(fixtures, NakedClassManager.getInstance(), objectManager, clock);
+        
+        String[] classes = fs.getClasses();
+        for (int i = 0; i < classes.length; i++) {
+            NakedClass nc = NakedClassManager.getInstance().getNakedClass(classes[i]);
+            context.getClasses().add(nc);
+        }
+        
+        InstanceCollection coll = InstanceCollection.allInstances(User.class.getName());
+        context.setUpUsers(coll);
 
         // make all new objects persistent
         for (int i = 0; i < newInstances.size(); i++) {
@@ -164,6 +204,7 @@ public abstract class Exploration {
                 objectManager.makePersistent(object);
             }
         }
+
     }
 
     private void setUpLocale() {
@@ -199,8 +240,8 @@ public abstract class Exploration {
             user.getRoles().add(new Role("explorer"));
             user.makePersistent();
 
-            context = new DefaultUserContext();
-            context.getName().setValue(name);
+            context = new ExplorationContext();
+   //         context.getName().setValue(name);
             context.makePersistent();
             context.associateUser(user);
 
@@ -265,6 +306,33 @@ public abstract class Exploration {
 
         viewer.start();
     }
+
+    
+    public NakedObjectManager getObjectManager() {
+        return objectManager;
+        }
+
+    public NakedClassManager getClassManager() {
+        throw new NotImplementedException();
+        }
+
+    public Locale getLocale() {
+        throw new NotImplementedException();
+    }
+
+    public Session getSession() {
+        throw new NotImplementedException();
+        }
+    
+    public ExplorationClock getClock() {
+      return clock;  
+    }
+    
+     public void setUser(User user) {
+        throw new NotImplementedException();        
+    }
+
+
 
 }
 
