@@ -1,21 +1,21 @@
 package org.nakedobjects.viewer.skylark.special;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.reflect.NakedObjectField;
 
 import java.util.Hashtable;
 
 
 public class TypeBasedColumnWidthStrategy implements ColumnWidthStrategy {
-    private static final NakedObjectSpecification NAKEDOBJECT = NakedObjectSpecificationLoader.getInstance().loadSpecification(
+    private static final NakedObjectSpecification NAKEDOBJECT = NakedObjects.getSpecificationLoader().loadSpecification(
             NakedObject.class);
     private Hashtable types = new Hashtable();
 
     public TypeBasedColumnWidthStrategy() {
 /*
-        NakedObjectSpecificationLoader loader = NakedObjectSpecificationLoader.getInstance();
+        NakedObjectSpecificationLoader loader = NakedObjects.getSpecificationLoader();
         addWidth(loader.loadSpecification(Logical.class), 25);
         addWidth(loader.loadSpecification(Date.class), 65);
         addWidth(loader.loadSpecification(Time.class), 38);

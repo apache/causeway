@@ -1,8 +1,11 @@
 package org.nakedobjects.viewer.skylark.core;
 
+import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 
@@ -36,6 +39,13 @@ public abstract class AbstractCompositeViewSpecification implements CompositeVie
 	public boolean isSubView() {
 		return false;
 	}
+	
+
+    protected void resolveObject(Content content) {
+        NakedObject object = ((ObjectContent) content).getObject();
+        NakedObjects.getObjectManager().resolveImmediately(object);
+    }
+
 }
 
 

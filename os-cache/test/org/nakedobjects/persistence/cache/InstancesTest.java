@@ -48,7 +48,7 @@ public class InstancesTest extends TestCase {
         NakedObjectSpecificationLoaderImpl.setReflectorFactory(new InternalReflectorFactory());
         
         
-        NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(Person.class.getName());
+        NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(Person.class.getName());
         LoadedObjects loaded = new MockLoadedObjects();
         ins = new Instances(nc, loaded);
         assertEquals(0, ins.numberInstances());
@@ -88,7 +88,7 @@ public class InstancesTest extends TestCase {
         ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
         ObjectInputStream ois = new ObjectInputStream(bais);
         
-        NakedObjectSpecification personClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(Person.class);
+        NakedObjectSpecification personClass = NakedObjects.getSpecificationLoader().loadSpecification(Person.class);
         Instances ins2 = new Instances(personClass, new MockLoadedObjects());
         ins2.loadIdentities(ois);
         ois.close();
@@ -117,7 +117,7 @@ public class InstancesTest extends TestCase {
         MockObjectManager manager = MockObjectManager.setup();
         
         
-        NakedObjectSpecification personClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(Person.class);
+        NakedObjectSpecification personClass = NakedObjects.getSpecificationLoader().loadSpecification(Person.class);
         MockLoadedObjects loadedWithOids = new MockLoadedObjects();
         
         // skeleton objects - loaded objects
@@ -146,7 +146,7 @@ public class InstancesTest extends TestCase {
 
     public void testPersistData2() throws Exception {
         LoadedObjects loaded = new MockLoadedObjects();
-        NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(Person.class);
+        NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(Person.class);
         ins = new Instances(nc, loaded);
        
         Role r = new Role();
@@ -166,7 +166,7 @@ public class InstancesTest extends TestCase {
         MockObjectManager manager = MockObjectManager.setup();
         
         
-        NakedObjectSpecification roleClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(Person.class);
+        NakedObjectSpecification roleClass = NakedObjects.getSpecificationLoader().loadSpecification(Person.class);
         MockLoadedObjects loadedWithOids = new MockLoadedObjects();
         
         // skeleton objects - loaded objects

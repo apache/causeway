@@ -44,6 +44,7 @@ public class TreeBrowserFormSpecification extends AbstractCompositeViewSpecifica
     }
 
     public View createView(Content content, ViewAxis axis) {
+        resolveObject(content);
         View form = super.createView(content, new LabelAxis());
         return new ScrollBorder(form);
     }

@@ -50,6 +50,7 @@ public class FormSpecification extends AbstractCompositeViewSpecification implem
     }
 
     public View createView(Content content, ViewAxis axis) {
+        resolveObject(content);
         return new WindowBorder(new IconBorder(super.createView(content, new LabelAxis())), true);
     }
 

@@ -1,8 +1,8 @@
 package org.nakedobjects.viewer.skylark.special;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
@@ -46,11 +46,12 @@ public class TableSpecification extends AbstractCompositeViewSpecification imple
     }
 
     public View createView(Content content, ViewAxis axis) {
+ //       resolveCollection(content);
         //     NakedObjectSpecification elementSpecification = ((CollectionContent)
         // content).getCollection().getElementType();
         TypedNakedCollection coll = (TypedNakedCollection) ((CollectionContent) content)
                 .getCollection();
-        NakedObjectSpecification elementSpecification = NakedObjectSpecificationLoader.getInstance().loadSpecification(
+        NakedObjectSpecification elementSpecification = NakedObjects.getSpecificationLoader().loadSpecification(
                 coll.getElementSpecification().getFullName());
         NakedObject exampleObject = (NakedObject) elementSpecification.acquireInstance();
         NakedObjectField[] viewFields = elementSpecification.getVisibleFields(exampleObject, ClientSession.getSession());

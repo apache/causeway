@@ -48,8 +48,8 @@ public class TableRowSpecification extends AbstractCompositeViewSpecification {
     }
 
     public View createView(Content content, ViewAxis axis) {
+        resolveObject(content);
         View view = super.createView(content, axis);
-
         return new TableRowBorder(view);
     }
 

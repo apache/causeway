@@ -46,7 +46,7 @@ class ScheduleLayout extends AbstractBuilderDecorator {
                 for (int j = 0; j < fields.length; j++) {
                     field = fields[j];
 
-                    if (field.getType().isOfType(NakedObjectSpecificationLoader.getInstance().loadSpecification(TimePeriod.class))) {
+                    if (field.getType().isOfType(NakedObjects.getSpecificationLoader().loadSpecification(TimePeriod.class))) {
                         break;
                     }
                 }

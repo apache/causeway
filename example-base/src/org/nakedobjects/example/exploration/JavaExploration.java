@@ -1,6 +1,7 @@
 package org.nakedobjects.example.exploration;
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
@@ -23,6 +24,7 @@ import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
 import org.nakedobjects.reflector.java.reflect.JavaReflectorFactory;
 import org.nakedobjects.system.AboutNakedObjects;
 import org.nakedobjects.system.SplashWindow;
+import org.nakedobjects.utility.StartupException;
 import org.nakedobjects.viewer.skylark.SkylarkViewer;
 
 import java.util.Locale;
@@ -107,8 +109,10 @@ public class JavaExploration {
 
             container.setObjectManger(objectManager);
 
-            new NakedObjectSpecificationLoaderImpl();
+            NakedObjectSpecificationLoaderImpl specificationLoader = new NakedObjectSpecificationLoaderImpl();
 
+            NakedObjects.setSpecificationLoader(specificationLoader);
+            
             LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
 
             JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
@@ -116,11 +120,17 @@ public class JavaExploration {
             PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
             PojoAdapter.setReflectorFactory(reflectorFactory);
 
-            //    new NakedObjectSpecificationImpl();
             NakedObjectSpecificationImpl.setReflectionFactory(reflectionFactory);
-            NakedObjectSpecificationLoaderImpl.setReflectorFactory(reflectorFactory);
+            specificationLoader.setReflectorFactory(reflectorFactory);
 
             reflectorFactory.setObjectFactory(objectFactory);
+
+            
+            try {
+                objectManager.init();
+            } catch (StartupException e) {
+                throw new NakedObjectRuntimeException(e);
+            }
 
             builder = new JavaFixtureBuilder();
 //            explorationFixture = new ExplorationFixture(builder);

@@ -5,7 +5,6 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapter;
@@ -223,7 +222,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
 
         options.add(MenuOptionSet.DEBUG, new MenuOption("Naked Classes...") {
             public void execute(Workspace workspace, View view, Location at) {
-                NakedObjectSpecification[] specs = NakedObjectSpecificationLoader.getInstance().getAllSpecifications();
+                NakedObjectSpecification[] specs = NakedObjects.getSpecificationLoader().getAllSpecifications();
                 //ArbitraryCollectionVector classCollection = new ArbitraryCollectionVector("Naked Classes");
                 Vector classCollection = new Vector();
                 NakedObjectManager objectManager = NakedObjects.getObjectManager();

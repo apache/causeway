@@ -18,6 +18,7 @@ public class ListSpecification extends AbstractCompositeViewSpecification implem
 	}
 	
     public View createView(Content content, ViewAxis axis) {
+  //      resolveCollection(content);
         return new WindowBorder(super.createView(content, axis), true);
     }
 	

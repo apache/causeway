@@ -1,7 +1,7 @@
 package org.nakedobjects.example.xat;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
+import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
@@ -16,11 +16,14 @@ import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
 import org.nakedobjects.reflector.java.reflect.JavaReflectorFactory;
+import org.nakedobjects.utility.StartupException;
 import org.nakedobjects.xat.AcceptanceTestCase;
+import org.nakedobjects.xat.ClearableLoadedObjectsHashtable;
 
 
 
 public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
+    private ClearableLoadedObjectsHashtable loadedObjectsHashtable;
 
     public JavaAcceptanceTestCase(String name) {
         super(name);
@@ -30,16 +33,22 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
         return new JavaFixtureBuilder();
     }
 
+    protected void setUp() throws Exception {
+        super.setUp();
+        clearLoadedObjects();
+    }
+    
     protected final void setupFramework() {
         JavaBusinessObjectContainer container = new JavaBusinessObjectContainer();
 
-        LoadedObjectsHashtable loadedObjectsHashtable = new LoadedObjectsHashtable();
+        loadedObjectsHashtable = new ClearableLoadedObjectsHashtable();
 
         JavaObjectFactory objectFactory = new JavaObjectFactory();
         objectFactory.setContainer(container);
 
         container.setObjectFactory(objectFactory);
         
+	  //      XatObjectStore objectStore = new XatObjectStore();
         TransientObjectStore objectStore = new TransientObjectStore();
         objectStore.setLoadedObjects(loadedObjectsHashtable);
 
@@ -56,19 +65,33 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
         
         container.setObjectManger(objectManager);
 
-        new NakedObjectSpecificationLoaderImpl();
+        NakedObjectSpecificationLoaderImpl specificationLoader = new NakedObjectSpecificationLoaderImpl();
 
+        NakedObjects.setSpecificationLoader(specificationLoader);
+        
         LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
 
         JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
         
         PojoAdapter.setReflectorFactory(reflectorFactory);
 
-        //    new NakedObjectSpecificationImpl();
         NakedObjectSpecificationImpl.setReflectionFactory(reflectionFactory);
-        NakedObjectSpecificationLoaderImpl.setReflectorFactory(reflectorFactory);
+        specificationLoader.setReflectorFactory(reflectorFactory);
 
         reflectorFactory.setObjectFactory(objectFactory);
+        
+        try {
+            objectManager.init();
+        } catch (StartupException e) {
+            throw new NakedObjectRuntimeException(e);
+        }
+        
+        
+        Runtime.getRuntime().gc();
+    }
+    
+    protected void clearLoadedObjects() {
+        loadedObjectsHashtable.clear();
     }
     
 }

@@ -23,11 +23,11 @@ public class ScheduleBlockSpecification extends AbstractCompositeViewSpecificati
     	NakedObjectField colorField = null;
     	for (int i = 0; i < flds.length; i++) {
 			NakedObjectField field = flds[i];
-			if(field.getType().isOfType(NakedObjectSpecificationLoader.getInstance().loadSpecification(TimePeriod.class))) {
+			if(field.getType().isOfType(NakedObjects.getSpecificationLoader().loadSpecification(TimePeriod.class))) {
 				LOG.debug("Found TimePeriod field " + field);
 				timePeriodField = field;
 			}
-			if(field.getType().isOfType(NakedObjectSpecificationLoader.getInstance().loadSpecification(org.nakedobjects.application.value.Color.class))) {
+			if(field.getType().isOfType(NakedObjects.getSpecificationLoader().loadSpecification(org.nakedobjects.application.value.Color.class))) {
 				LOG.debug("Found Color field " + field);
 				colorField = field;
 			}

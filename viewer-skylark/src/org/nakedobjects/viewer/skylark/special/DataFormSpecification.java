@@ -46,6 +46,7 @@ public class DataFormSpecification extends AbstractCompositeViewSpecification {
     }
 
     public View createView(Content content, ViewAxis axis) {
+        resolveObject(content);
         return super.createView(content, new LabelAxis());
     }
 
