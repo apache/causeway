@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/no-core"/>
+	<classpathentry kind="src" path="/viewer-skylark"/>
+	<classpathentry kind="src" path="/no-application-library"/>
+	<classpathentry kind="src" path="/no-default-reflector"/>
+	<classpathentry kind="src" path="/no-exploration"/>
+	<classpathentry kind="output" path=""/>
+</classpath>
