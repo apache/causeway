@@ -1,0 +1,237 @@
+
+	<!-- allow compliation for Java 1.2 & with debug -->
+	<property name="compile.debug" value="no" />
+	<property name="compile.target" value="1.1" />
+
+	<!-- classpath -->
+	<path id="libs.external">
+		<fileset dir="../lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!-- subdirectories -->
+	<property name="src.dir" value="src"/>
+	<property name="test.dir" value="test"/>
+		
+	<!-- resources -->
+	<property name="core.dir" value="../no-core"/>
+
+	<!-- output directories -->
+	<!-- build directories -->
+	<property name="build.dir" value="build" />
+	<property name="build.src.dir" value="${build.dir}/src" />
+	<property name="build.example.dir" value="${build.dir}/example" />
+	<property name="build.test.dir" value="${build.dir}/test" />
+	<property name="build.classes.src" value="${build.dir}/classes/src" />
+	<property name="build.classes.test" value="${build.dir}/classes/test" />
+	<property name="build.classes.example" value="${build.dir}/classes/example" />
+	
+	<!-- test directories -->
+	<property name="test.run.dir" value="${build.dir}/test-run" />
+	<property name="test.results.dir" value="${build.relase.dir}/tests" />
+
+	<!-- distribution directories -->
+	<property name="dist.dir" value="build/dist" />
+	<property name="release.dir" value="release" />
+	<property name="dist.images.dir" value="${dist.dir}/images" />
+	<property name="dist.test.dir" value="${dist.dir}/test" />
+	<property name="dist.example.dir" value="${dist.dir}/example" />
+	<property name="dist.api.dir" value="${dist.dir}/api" />
+
+	<property environment="env" />
+
+	<target name="idebuild" depends=" new-release-number, distribution">
+	</target>
+
+	<target name="lundbuild" depends="-lundbuild-init, distribution">
+	</target>
+
+	<target name="-lundbuild-init">
+		<property name="build.id" value="${buildId}" />
+	</target>
+
+
+	<target name="new-release-number">
+		<tstamp>
+			<format property="build.id" pattern="yyyyMMdd-HH00" locale="en" />
+		</tstamp>
+		<echo>Build number: ${build.id}</echo>
+	</target>
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="distribution">
+		<echo>Create ${distribution} distribution</echo>
+		<echo>Version ${build.version}  ${build.id}</echo>
+
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build.src.dir}" />
+		<mkdir dir="${build.test.dir}" />
+
+		<!-- copy across source and add version -->
+		<copy todir="${build.src.dir}">
+			<fileset dir="${core.dir}/${src.dir}" />
+		</copy>
+
+		<replace dir="${build.src.dir}">
+			<include name="**/AboutNakedObjects.java" />
+			<replacefilter token="%VERSION%" value="${build.version}" />
+			<replacefilter token="%BUILD_ID%" value="${build.id}" />
+			<replacefilter token="%NAME%" value="${build.name}" />
+			<replacefilter token="%COPYRIGHT_NOTICE%" value="${build.copyright}" />
+			<replacefilter token="%IMAGE_FILE%" value="${build.image-file}" />
+		</replace>
+
+		<copy todir="${build.test.dir}">
+			<fileset dir="${core.dir}/${test.dir}" />
+		</copy>
+
+		<copy todir="${dist.images.dir}">
+			<fileset dir="${core.dir}/${src.dir}/images" />
+		</copy>
+
+
+
+
+
+		<!-- other projects -->
+		<antcall target="copy"/>
+		<!-- end copy other projects -->
+
+
+		<!-- compile  framework -->
+		<mkdir dir="${build.classes.src}" />
+		<javac srcdir="${build.src.dir}"
+		       destdir="${build.classes.src}"
+		       includes="**/*.java"
+		       target="${compile.target}"
+		       debug="${compile.debug}"
+		       deprecation="false">
+
+			<classpath refid="libs.external" />
+		</javac>
+
+
+		<!-- compile  examples -->
+		<mkdir dir="${build.classes.example}" />
+		<javac srcdir="${build.example.dir}"
+		       destdir="${build.classes.example}"
+		       includes="**/*.java"
+		       target="${compile.target}"
+		       debug="${compile.debug}"
+		       deprecation="false">
+
+			<classpath refid="libs.external" />
+			<classpath path="${build.classes.src}"/>
+		</javac>
+
+		
+		<!--                              -->
+		<!--  compile the test srcs  -->
+		<!--                              -->
+		<mkdir dir="${build.classes.test}" />
+		<javac destdir="${build.classes.test}"
+		       includes="**/*.java"
+		       target="${compile.target}"
+		       debug="${compile.debug}"
+		       deprecation="false">
+
+			<src path="${build.test.dir}" />
+
+			<classpath refid="libs.external" />
+			<classpath path="${build.classes.src}" />
+		</javac>
+
+		<!-- Run the tests -->
+		<delete failonerror="false" dir="${test.run.dir}" />
+		<mkdir dir="${test.run.dir}" />
+
+		<patternset id="test.sources">
+			<include name="**/*Test.java" />
+			<include name="**/*Tests.java" />
+		</patternset>
+
+		<junit fork="yes"
+		       printsummary="yes"
+		       errorproperty="failure"
+		       failureproperty="failure"
+		       haltonfailure="no"
+		       dir="${test.run.dir}">
+			<classpath refid="libs.external" />
+			<classpath path="${build.classes.src}" />
+			<classpath path="${build.classes.test}" />
+
+			<formatter type="xml" />
+
+			<batchtest todir="${test.run.dir}">
+				<fileset dir="${build.test.dir}">
+					<patternset refid="test.sources" />
+				</fileset>
+			</batchtest>
+		</junit>
+
+		<echo>Test results ${failure}</echo>
+
+		<mkdir dir="${dist.dir}" />
+
+		<mkdir dir="${build.dir}/tmp" />
+		<junitreport tofile="${build.dir}/tmp/combined.xml">
+			<fileset dir="build/test-run" includes="TEST*.xml" />
+			<report format="frames" todir="${dist.test.dir}" />
+		</junitreport>
+		<delete dir="${build.dir}/tmp" />
+
+		<!-- copy in:
+				properties files
+				examples & example code in html
+				docs
+				-->
+
+		<!-- generate javadocs -->
+		<javadoc destDir="${dist.api.dir}"
+		         windowtitle="Naked Objects ${distribution} API version ${build.version}"
+		         additionalparam="-breakiterator -tag group -tag testpackage -tag testcase -tag testkind -tag testfamily -tag testsetup -tag testedclass">
+
+			<classpath refid="libs.external" />
+
+			<packageset dir="${build.src.dir}" defaultexcludes="yes">
+				<include name="org/nakedobjects/object/**" />
+			</packageset>
+		</javadoc>
+
+		<!-- create jars -->
+		<jar jarfile="${dist.dir}/nakedobjects.jar">
+			<fileset dir="${build.classes.src}" />
+		</jar>
+
+		<jar jarfile="${dist.dir}/${distribution}-test.jar">
+			<fileset dir="${build.classes.test}" />
+		</jar>
+
+		<jar jarfile="${dist.dir}/${distribution}-src.jar">
+			<fileset dir="${build.src.dir}" />
+		</jar>
+
+		<jar jarfile="${dist.dir}/examples.jar">
+			<fileset dir="${build.classes.example}" />
+		</jar>
+
+		<mkdir dir="${dist.example.dir}"/>
+		<copy todir="${dist.example.dir}">
+			<fileset dir="${build.example.dir}"/>
+		</copy>
+		
+		<!-- produce release zip -->
+		<mkdir dir="${release.dir}" />
+		<zip zipfile="${release.dir}/nakedobjects-${distribution}-${build.id}.zip"
+		     basedir="${dist.dir}" />
+
+		<echo>Test results ${failure}</echo>
+		<fail if="${failure}" message="Tests failed" />
+
+	</target>
+
+
