@@ -9,8 +9,15 @@ import org.nakedobjects.utility.Assert;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import org.apache.log4j.Logger;
+
 public class LoadedObjectsHashtable implements LoadedObjects {
+    private static final Logger LOG = Logger.getLogger(LoadedObjectsHashtable.class);
     private Hashtable loaded = new Hashtable();
+    
+    public LoadedObjectsHashtable() {
+        LOG.info("create loaded object lookup " + hashCode());
+    }
     
     public NakedObject getLoadedObject(Oid oid) {
         if(oid == null) {
@@ -62,6 +69,13 @@ public class LoadedObjectsHashtable implements LoadedObjects {
             }
         };
     }
+    
+
+    protected void finalize() throws Throwable {
+        super.finalize();
+        LOG.info("finalizing loaded objects");
+    }
+
 }
 
 

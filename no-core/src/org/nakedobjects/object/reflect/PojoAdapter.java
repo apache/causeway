@@ -8,17 +8,26 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.AbstractNakedObject;
-import org.nakedobjects.object.reflect.valueadapter.BooleanPrimitiveAdapter;
+import org.nakedobjects.object.reflect.valueadapter.BooleanAdapter;
+import org.nakedobjects.object.reflect.valueadapter.ByteAdapter;
 import org.nakedobjects.object.reflect.valueadapter.DateAdapter;
+import org.nakedobjects.object.reflect.valueadapter.DoubleAdapter;
 import org.nakedobjects.object.reflect.valueadapter.FloatAdapter;
 import org.nakedobjects.object.reflect.valueadapter.IntAdapter;
+import org.nakedobjects.object.reflect.valueadapter.LongAdapter;
+import org.nakedobjects.object.reflect.valueadapter.ShortAdapter;
 import org.nakedobjects.object.reflect.valueadapter.StringAdapter;
 import org.nakedobjects.object.security.Session;
 
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
 public class PojoAdapter extends AbstractNakedObject {
+    private static final Logger LOG = Logger.getLogger(PojoAdapter.class);
     private static PojoAdapterHash pojos;
+    private static long next = 0;
+    private long id = next++;
     private static ReflectorFactory reflectorFactory;
     
     public static Naked createAdapter(Object pojo) {
@@ -39,10 +48,18 @@ public class PojoAdapter extends AbstractNakedObject {
                 nakedObject = new DateAdapter((Date) pojo);
             } else if(pojo instanceof Float) {
                 nakedObject = new FloatAdapter();
+            } else if(pojo instanceof Double) {
+                nakedObject = new DoubleAdapter();
             } else if(pojo instanceof Boolean) {
-                nakedObject = new BooleanPrimitiveAdapter();
+                nakedObject = new BooleanAdapter();
+            } else if(pojo instanceof Byte) {
+                nakedObject = new ByteAdapter();
+            } else if(pojo instanceof Short) {
+                nakedObject = new ShortAdapter();
             } else if(pojo instanceof Integer) {
                 nakedObject = new IntAdapter();
+            } else if(pojo instanceof Long) {
+                nakedObject = new LongAdapter();
            } else {
                 nakedObject = reflectorFactory.createAdapter(pojo);
             }
@@ -54,7 +71,7 @@ public class PojoAdapter extends AbstractNakedObject {
     }
     
     public static NakedObject createNOAdapter(Object pojo) {
-        return (NakedObject) createAdapter(pojo);
+         return (NakedObject) createAdapter(pojo);
     }
     
     /**
@@ -89,12 +106,14 @@ public class PojoAdapter extends AbstractNakedObject {
     protected PojoAdapter(Object pojo) {
         this.pojo= pojo;
         pojos.add(pojo, this);
+        
+        LOG.info("Object created " + id + " " + pojo);
     }
 
     public boolean canAccess(Session session, Action action) {
         return action.canAccess(session, this);
     }
-
+    
     public boolean canAccess(Session session, NakedObjectField specification) {
         return specification.canAccess(session, this);
     }
@@ -217,6 +236,13 @@ public class PojoAdapter extends AbstractNakedObject {
     public String toString() {
         return "POJO " + super.toString() + " " + titleString();
     }
+    
+
+    protected void finalize() throws Throwable {
+        super.finalize();
+        LOG.info("finalizing pojo " + this);
+    }
+
 }
 
 

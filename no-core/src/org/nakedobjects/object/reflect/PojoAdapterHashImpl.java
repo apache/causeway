@@ -4,6 +4,8 @@ import org.nakedobjects.object.Naked;
 
 import java.util.Hashtable;
 
+import org.apache.log4j.Logger;
+
 
 public class PojoAdapterHashImpl implements PojoAdapterHash {
     protected Hashtable pojos = new Hashtable();
@@ -20,6 +22,10 @@ public class PojoAdapterHashImpl implements PojoAdapterHash {
         return (Naked) pojos.get(pojo);
     }
 
+    protected void finalize() throws Throwable {
+        super.finalize();
+        Logger.getLogger(PojoAdapterHashImpl.class).info("finalizing hash of pojos");
+    }
 }
 
 /*
