@@ -37,6 +37,9 @@ public class InstanceCollectionVector extends AbstractTypedNakedCollectionVector
     }
 
     public NakedObject elementAt(int i) {
+        if(i < 0 || i >= size()) {
+            throw new IllegalArgumentException("No such element: " + i);
+        }
         return (NakedObject) elements.elementAt(i);
     }
 
