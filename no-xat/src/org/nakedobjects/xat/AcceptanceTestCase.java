@@ -1,5 +1,6 @@
 package org.nakedobjects.xat;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.container.configuration.ComponentLoader;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
@@ -107,13 +108,13 @@ public abstract class AcceptanceTestCase extends TestCase {
         String methodName = getName().substring(4);
         testObjectFactory.testStarting(className, methodName);
 
+        PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
         setupFramework();
 
         // fixtureBuilder = explorationSetup();
         ClientSession.setSession(new Session());
         Session session = ClientSession.getSession();
 
-        PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
         setUpFixtures();
 
         try {
@@ -186,10 +187,15 @@ public abstract class AcceptanceTestCase extends TestCase {
     }
 
     protected void tearDown() throws Exception {
-        //        objectManager.shutdown();
+       	NakedObjects.getObjectManager().shutdown();
+        NakedObjects.setObjectManager(null);
+
         ClientSession.end();
         testObjectFactory.testEnding();
         documentor.stop();
+        
+        PojoAdapter.setPojoAdapterHash(null);
+
     }
 
     /**
