@@ -47,7 +47,6 @@ import org.apache.log4j.PropertyConfigurator;
 public abstract class Exploration implements ObjectViewingMechanismListener {
     private static final String DEFAULT_CONFIG = "nakedobjects.properties";
     private static final Logger LOG = Logger.getLogger(Exploration.class);
-    public static final String OBJECT_STORE = "object-store";
     private static final String SHOW_EXPLORATION_OPTIONS = "viewer.lightweight.show-exploration";
     private final static String VIEWING_MECHANISM = "viewer";
     private static final String REFLECTOR_FACTORY = "reflector";
@@ -90,9 +89,6 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
             context = new NakedObjectContext(objectManager);
             explorationSetUp = new ExplorationSetUp(context);
             setUpFixtures();
-            setUpFixture();
-
-  //          Session.getSession().setSecurityContext(context);
 
             ExplorationContext applicationContext;
             User user;
@@ -181,8 +177,7 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
     }
 
     private NakedObjectManager installObjectManager(UpdateNotifier updateNotifier) throws StartupException {
-        NakedObjectStore objectStore = (NakedObjectStore) ComponentLoader.loadComponent(OBJECT_STORE, TransientObjectStore.class,
-                NakedObjectStore.class);
+        NakedObjectStore objectStore = new TransientObjectStore();
         OidGenerator oidGenerator = (OidGenerator) ComponentLoader.loadComponent("oidgenerator", SimpleOidGenerator.class, OidGenerator.class);
         LocalObjectManager objectManager = new LocalObjectManager(objectStore, updateNotifier, oidGenerator);
         objectManager.init();
@@ -217,9 +212,6 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
     }
     
     protected abstract void setUpFixtures();
-
-    /** @deprecated use plural version */
-    protected void setUpFixture(){}
 
      private void setUpLocale() {
         String localeSpec = Configuration.getInstance().getString("locale");
