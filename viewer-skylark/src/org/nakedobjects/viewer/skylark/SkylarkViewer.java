@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ApplicationContext;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;

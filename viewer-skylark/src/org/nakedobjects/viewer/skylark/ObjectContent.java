@@ -1,11 +1,11 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.object.ApplicationContext;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.ApplicationContext;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
