@@ -9,7 +9,7 @@ import java.text.ParseException;
 
 
 public class IntAdapter extends AbstractNakedValue implements IntegerValue {
-    private static NumberFormat FORMAT = NumberFormat.getIntegerInstance();
+    private static NumberFormat FORMAT = NumberFormat.getNumberInstance();
 
     private int value;
 
@@ -26,7 +26,7 @@ public class IntAdapter extends AbstractNakedValue implements IntegerValue {
     }
 
     public Object getObject() {
-        return new Double(value);
+        return new Integer(value);
     }
 
     public void parseTextEntry(String entry) throws InvalidEntryException {
