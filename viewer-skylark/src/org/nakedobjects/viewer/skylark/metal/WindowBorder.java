@@ -1,12 +1,15 @@
 package org.nakedobjects.viewer.skylark.metal;
 
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
+import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
@@ -24,6 +27,7 @@ import org.nakedobjects.viewer.skylark.core.AbstractBorder;
 import org.nakedobjects.viewer.skylark.core.DragViewOutline;
 import org.nakedobjects.viewer.skylark.special.ResizeBorder;
 import org.nakedobjects.viewer.skylark.special.ScrollBorder;
+import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 public class WindowBorder extends AbstractBorder {
 	private final static Text TITLE_STYLE = Style.TITLE;
@@ -108,11 +112,25 @@ public class WindowBorder extends AbstractBorder {
 		x += icon.getSize().getWidth();
 		text.draw(canvas, x, baseline);
 
-		// window buttons
-		x = width - right - 3 * (BUTTON_WIDTH + padding) - 1;
+		x = width - right - 4 * (BUTTON_WIDTH + padding) - 1;
 		y = LINE_THICKNESS + padding;
 		int w = BUTTON_WIDTH - 1;
 		int h = BUTTON_HEIGHT - 1;
+
+		// transient marker
+		NakedObject object = ((ObjectContent) getContent()).getObject();
+        if(object != null && object.getOid() == null) {
+            Image icon = ImageFactory.getInstance().createIcon("transient", BUTTON_HEIGHT, null);
+            if(icon == null) {
+                canvas.drawText("*", x, y, Style.BLACK, Style.NORMAL);
+            } else {
+                canvas.drawIcon(icon, x, y, BUTTON_HEIGHT, BUTTON_HEIGHT);
+            }
+            //canvas.drawRectangle(x, y, w, h, Style.WHITE);
+        }
+        
+		// window buttons
+		x += BUTTON_WIDTH + padding;
 		canvas.drawRectangle(x + 1, y + 1, w, h, Style.WHITE);
 		canvas.drawRectangle(x, y, w, h, Style.BLACK);
 		canvas.drawLine(x + 3, y + 9,  x + 8, y + 9, Style.BLACK);
@@ -175,7 +193,7 @@ public class WindowBorder extends AbstractBorder {
 		Size size = super.getRequiredSize();
 		
 		size.ensureWidth(left + icon.getSize().getWidth() + text.getSize().getWidth() + 
-		        padding + 3 * (padding + BUTTON_WIDTH)  + right);
+		        padding + 4 * (padding + BUTTON_WIDTH)  + right);
 		return size;
 	}
 	

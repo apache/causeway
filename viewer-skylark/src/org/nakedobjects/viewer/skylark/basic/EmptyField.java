@@ -10,6 +10,7 @@ import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
+import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -21,6 +22,7 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.special.LookupBorder;
+import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
 public class EmptyField extends AbstractView {
@@ -123,8 +125,14 @@ public class EmptyField extends AbstractView {
 
         int xi = getPadding().getLeft() + HPADDING;
         int yi = iconCentre - (iconHeight / 2);
-
-        canvas.drawSolidOval(xi, yi, iconWidth, iconHeight, color);
+        
+        Image icon = ImageFactory.getInstance().createIcon("emptyField", iconHeight, null);
+        if(icon == null) {
+            canvas.drawSolidOval(xi, yi, iconWidth, iconHeight, color);
+        } else {
+            canvas.drawIcon(icon, xi, yi, iconWidth, iconHeight);
+        }
+        
         canvas.drawText(name(), xt, yt, color, style);
 
         if (AbstractView.DEBUG) {

@@ -3,12 +3,14 @@ package org.nakedobjects.viewer.skylark.basic;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
+import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewState;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
+import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 public class ObjectBorder extends AbstractBorder {
 	public ObjectBorder(View wrappedView) {
@@ -55,6 +57,19 @@ public class ObjectBorder extends AbstractBorder {
             color = Style.IDENTIFIED;
 		}
 		
+		NakedObject object = ((ObjectContent) getContent()).getObject();
+        if(object != null && object.getOid() == null) {
+		    // canvas.drawRectangle(1, 1, width - 3, s.getHeight() - 3, Style.WHITE);
+            int x = getSize().getWidth() - 13;
+            int y = 0;
+            Image icon = ImageFactory.getInstance().createIcon("transient", 8, null);
+            if(icon == null) {
+                canvas.drawText("*", x, y, Style.BLACK, Style.NORMAL);
+            } else {
+                canvas.drawIcon(icon, x, y, 12, 12);
+            }
+		}
+        
 		Size s  = getSize();
 		int width = s.getWidth();
 		if(color != null) {
@@ -63,16 +78,18 @@ public class ObjectBorder extends AbstractBorder {
 			}
 		}
 		
-		NakedObject object = ((ObjectContent) getContent()).getObject();
-        if(object != null && object.getOid() == null) {
-		    canvas.drawRectangle(1, 1, width - 3, s.getHeight() - 3, Style.WHITE);
-		}
 		super.draw(canvas);
 	}
 	
 	public String toString() {
 		return wrappedView.toString() + "/ObjectBorder";
 	}
+	
+	public Size getRequiredSize() {
+        Size size = super.getRequiredSize();
+        size.extendWidth(13);
+        return size; 
+    }
 }
 
 
