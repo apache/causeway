@@ -177,8 +177,7 @@ public class ECSAcceptanceTest extends AcceptanceTestCase {
     }
     
     public void testNewMethods() {
-//      setup
-        testBasicBooking();
+       testBasicBooking();
         // end of setup
        
         TestObject customer = getTestClass(Customer.class.getName()).findInstance("Pawson");
