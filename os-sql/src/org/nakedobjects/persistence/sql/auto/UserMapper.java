@@ -22,7 +22,7 @@ public class UserMapper extends NameBasedMapper {
 
 	public void createObject(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
 		User user = (User) object;
-		long id = primaryKey(user.getOid());
+		String id = primaryKey(user.getOid());
 		NakedObject rootObject = user.getRootObject();
 		String rootObjectId = "NULL";
 		String rootObjectClass = "NULL";
@@ -108,7 +108,7 @@ public class UserMapper extends NameBasedMapper {
 
 	public void resolve(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
 		User user = (User) object;
-		long key = primaryKey(user.getOid());
+		String key = primaryKey(user.getOid());
 		Results rs = connector.select("select * from " + table + " where id = " + key);
 		rs.next();
         loadUser(rs, user);

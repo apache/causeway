@@ -26,6 +26,7 @@ package org.nakedobjects.object.value;
 
 import org.nakedobjects.Clock;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.Title;
 import org.nakedobjects.object.ValueParseException;
 
@@ -447,6 +448,9 @@ public java.util.Date dateValue() {
     public void today() {
         Calendar cal = Calendar.getInstance();
         
+        if(clock == null) {
+            throw new NakedObjectRuntimeException("Clock not set up");
+        }
         long time = clock.getTime();
         java.util.Date d = new java.util.Date(time);
         cal.setTime(d);

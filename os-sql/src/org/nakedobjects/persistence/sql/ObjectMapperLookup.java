@@ -35,17 +35,17 @@ public class ObjectMapperLookup {
         this.loadedObjects = loadedObjects;
     }
     
-    public ObjectMapper getMapper(NakedClass cls) throws SqlObjectStoreException {
+    public ObjectMapper getMapper(DatabaseConnector connection, NakedClass cls) throws SqlObjectStoreException {
         ObjectMapper mapper = (ObjectMapper) mappers.get(cls);
         if (mapper == null) {
             AutoMapper autoMapper = (AutoMapper) mapperFactory.createMapper(cls.fullName(), SqlObjectStore.BASE_NAME + ".automapper.default");
-            DatabaseConnector connection = connectionPool.acquire();
+           // DatabaseConnector connection = connectionPool.acquire();
             autoMapper.startup(connection, this, loadedObjects);
             if(autoMapper.needsTables(connection)) {
                 autoMapper.createTables(connection);
             }
             mapper = autoMapper;
-            connectionPool.release(connection);
+           // connectionPool.release(connection);
         }
         LOG.debug("  mapper for " + cls.getSingularName() + " -> " + mapper);
         if(mapper == null) {
@@ -54,12 +54,12 @@ public class ObjectMapperLookup {
         return mapper;
     }
 
-    public ObjectMapper getMapper(NakedObject object) throws SqlObjectStoreException {
+    public ObjectMapper getMapper(DatabaseConnector connection, NakedObject object) throws SqlObjectStoreException {
         if (object instanceof InternalCollection) {
             object = ((InternalCollection) object).forParent();
-            return getMapper(object.getNakedClass());
+            return getMapper(connection, object.getNakedClass());
         } else {
-            return getMapper(object.getNakedClass());
+            return getMapper(connection, object.getNakedClass());
         }
     }
 
@@ -91,8 +91,8 @@ public class ObjectMapperLookup {
         mappers.put(cls, mapper);
 	}
 
-	public NakedClassMapper getNakedClassMapper() throws SqlObjectStoreException {
-        return (NakedClassMapper) getMapper(nakedClass);
+	public NakedClassMapper getNakedClassMapper(DatabaseConnector connection) throws SqlObjectStoreException {
+        return (NakedClassMapper) getMapper(connection, nakedClass);
     }
 
     public void init() throws ConfigurationException, ComponentException, SqlObjectStoreException {

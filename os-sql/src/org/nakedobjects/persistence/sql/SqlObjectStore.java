@@ -30,26 +30,26 @@ public final class SqlObjectStore implements NakedObjectStore {
 
     public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
         DatabaseConnector connection = getDatabaseConnector();
-        NakedClass cls = mapperLookup.getNakedClassMapper().getNakedClass(connection, name);
+        NakedClass cls = mapperLookup.getNakedClassMapper(connection).getNakedClass(connection, name);
         releaseConnectionIfNotInTransaction(connection);
         return cls;
     }
     
     public void createNakedClass(NakedClass cls) throws ObjectStoreException {
         DatabaseConnector connection = getDatabaseConnector();
-        mapperLookup.getNakedClassMapper().createNakedClass(connection, cls);
+        mapperLookup.getNakedClassMapper(connection).createNakedClass(connection, cls);
         releaseConnectionIfNotInTransaction(connection);
     }
     
     public void createObject(NakedObject object) throws ObjectStoreException {
         DatabaseConnector connection = getDatabaseConnector();
-        mapperLookup.getMapper(object).createObject(connection, object);
+        mapperLookup.getMapper(connection, object).createObject(connection, object);
         releaseConnectionIfNotInTransaction(connection);
     }
 
     public void destroyObject(NakedObject object) throws ObjectStoreException {
         DatabaseConnector connection = getDatabaseConnector();
-        mapperLookup.getMapper(object).destroyObject(connection, object);
+        mapperLookup.getMapper(connection, object).destroyObject(connection, object);
         releaseConnectionIfNotInTransaction(connection);
     }
 
@@ -63,28 +63,28 @@ public final class SqlObjectStore implements NakedObjectStore {
 
     public Vector getInstances(NakedClass cls, boolean includeSubclasses) throws ObjectStoreException {
         DatabaseConnector connection = getDatabaseConnector();
-        Vector instances = mapperLookup.getMapper(cls).getInstances(connection, cls);
+        Vector instances = mapperLookup.getMapper(connection, cls).getInstances(connection, cls);
         releaseConnectionIfNotInTransaction(connection);
         return instances;
     }
 
     public Vector getInstances(NakedClass cls, String pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
         DatabaseConnector connection = getDatabaseConnector();
-        Vector instances = mapperLookup.getMapper(cls).getInstances(connection, cls, pattern);
+        Vector instances = mapperLookup.getMapper(connection, cls).getInstances(connection, cls, pattern);
         releaseConnectionIfNotInTransaction(connection);
         return instances;
     }
 
     public Vector getInstances(NakedObject pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
         DatabaseConnector connection = getDatabaseConnector();
-        Vector instances = mapperLookup.getMapper(pattern).getInstances(connection, pattern);
+        Vector instances = mapperLookup.getMapper(connection, pattern).getInstances(connection, pattern);
         releaseConnectionIfNotInTransaction(connection);
         return instances;
     }
 
     public NakedObject getObject(Object oid, NakedClass hint) throws ObjectNotFoundException, ObjectStoreException {
         DatabaseConnector connection = getDatabaseConnector();
-        NakedObject object = mapperLookup.getMapper(hint).getObject(connection, oid, hint);
+        NakedObject object = mapperLookup.getMapper(connection, hint).getObject(connection, oid, hint);
         releaseConnectionIfNotInTransaction(connection);
         return object;
     }
@@ -95,7 +95,7 @@ public final class SqlObjectStore implements NakedObjectStore {
     
     public boolean hasInstances(NakedClass cls, boolean includeSubclasses) throws ObjectStoreException {
         DatabaseConnector connection = getDatabaseConnector();
-        boolean hasInstances = mapperLookup.getMapper(cls).hasInstances(connection, cls);
+        boolean hasInstances = mapperLookup.getMapper(connection, cls).hasInstances(connection, cls);
         releaseConnectionIfNotInTransaction(connection);
         return hasInstances;
     }
@@ -125,14 +125,14 @@ public final class SqlObjectStore implements NakedObjectStore {
 
     public int numberOfInstances(NakedClass cls, boolean includedSubclasses) throws ObjectStoreException {
         DatabaseConnector connection = getDatabaseConnector();
-        int number = mapperLookup.getMapper(cls).numberOfInstances(connection, cls);
+        int number = mapperLookup.getMapper(connection, cls).numberOfInstances(connection, cls);
         releaseConnectionIfNotInTransaction(connection);
         return number;
     }
 
     public void resolve(NakedObject object) throws ObjectStoreException {
         DatabaseConnector connection = getDatabaseConnector();
-       mapperLookup.getMapper(object).resolve(connection, object);
+       mapperLookup.getMapper(connection, object).resolve(connection, object);
         releaseConnectionIfNotInTransaction(connection);
     }
 
@@ -145,7 +145,7 @@ public final class SqlObjectStore implements NakedObjectStore {
             // TODO a better plan would be ask the mapper to save the collection
             // - saveCollection(parent, collection)
         }
-        mapperLookup.getMapper(object).save(connection, object);
+        mapperLookup.getMapper(connection, object).save(connection, object);
         releaseConnectionIfNotInTransaction(connection);
     }
 
@@ -161,11 +161,11 @@ public final class SqlObjectStore implements NakedObjectStore {
         DatabaseConnector connector;
         if(transactionOrientedConnections.containsKey(thread)) {
             connector = (DatabaseConnector) transactionOrientedConnections.get(thread);
-            connector.startTransaction();
         } else {
 	        connector = connectionPool.acquire();
 	        transactionOrientedConnections.put(thread, connector);
         }
+        connector.startTransaction();
     }
 
     private DatabaseConnector getDatabaseConnector() throws SqlObjectStoreException {

@@ -23,7 +23,7 @@ public class RoleMapper extends NameBasedMapper {
 
 	public void createObject(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
 		Role user = (Role) object;
-		long id = primaryKey(user.getOid());
+		String id = primaryKey(user.getOid());
 		connector.update("Insert into " + table + " (" + columns + ") values ('"
 				+ user.getName().stringValue() + "', '"
 				+ user.getDescription().stringValue() + "'," + id + ")");

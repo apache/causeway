@@ -5,14 +5,14 @@ public class LocalNakedClassManager extends NakedClassManager {
     
     protected LocalNakedClassManager(NakedObjectStore objectStore) {
         this.objectStore = objectStore;
-    }
+     }
 
     protected boolean accessRemotely() {
         return false;
     }
 
     protected void createClass(NakedClass cls) throws ObjectStoreException {
-        cls.setOid(NakedObjectManager.getInstance().createOid());
+        cls.setOid(NakedObjectManager.getInstance().createOid(cls));
         objectStore.createNakedClass(cls);
     }
 
@@ -20,6 +20,16 @@ public class LocalNakedClassManager extends NakedClassManager {
         return objectStore.getNakedClass(name);
     }
 
+/*
+    public void init() {
+        try {
+            objectStore.createNakedClass(NakedClass.SELF);
+
+        } catch (ObjectStoreException e) {
+            throw new NakedObjectRuntimeException(e);
+        }
+    }
+*/
 }
 
 

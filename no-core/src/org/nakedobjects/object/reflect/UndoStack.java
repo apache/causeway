@@ -1,22 +1,41 @@
-package org.nakedobjects.object;
+package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.utility.StartupException;
+import java.util.Vector;
 
+public class UndoStack {
+    private Vector commands = new Vector();
+    
+    public void add(Command command) {
+        commands.addElement(command);
+        command.execute();
+    }
+    
+    public void  undoLastCommand() {
+        Command lastCommand = (Command) commands.lastElement();
+        lastCommand.undo();
+        commands.removeElement(lastCommand);
+    }
+    
+    public String descriptionOfUndo() {
+        Command lastCommand = (Command) commands.lastElement();
+        return lastCommand.getDescription();
+    }
+    
+    public boolean isEmpty() {
+        return commands.isEmpty();
+    }
 
-public interface OidGenerator {
-	Object next(NakedObject object);
-
-	String name();
-	
-	void init() throws StartupException;
-	
-	void shutdown();
+    public String getNameOfUndo() {
+        Command lastCommand = (Command) commands.lastElement();
+        return lastCommand.getName();
+    }
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

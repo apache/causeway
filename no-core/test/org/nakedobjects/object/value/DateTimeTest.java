@@ -2,45 +2,45 @@ package org.nakedobjects.object.value;
 
 import junit.framework.TestCase;
 
-public class TimeStampTest extends TestCase {
+public class DateTimeTest extends TestCase {
     
     protected void setUp() throws Exception {
         super.setUp();
         
-        TimeStamp.setClock(new TestClock());
+        DateTime.setClock(new TestClock());
     }
 
     public void testSaveRestore() throws Exception {
-    	TimeStamp timeStamp1 = new TimeStamp();
+    	DateTime timeStamp1 = new DateTime();
     	timeStamp1.parse("2003-1-4 10:45");
     	assertFalse(timeStamp1.isEmpty());
     	
-    	TimeStamp timeStamp2 = new TimeStamp();
+    	DateTime timeStamp2 = new DateTime();
     	timeStamp2.restoreString(timeStamp1.saveString());
     	assertEquals(timeStamp1.longValue(), timeStamp2.longValue());
     	assertFalse(timeStamp2.isEmpty());
     }
     
     public void testSaveRestorOfNull() throws Exception {
-    	TimeStamp timeStamp1 = new TimeStamp();
+    	DateTime timeStamp1 = new DateTime();
     	timeStamp1.clear();
-    	assertTrue("TimeStamp isEmpty", timeStamp1.isEmpty());
+    	assertTrue("DateTime isEmpty", timeStamp1.isEmpty());
     	
-    	TimeStamp timeStamp2 = new TimeStamp();
+    	DateTime timeStamp2 = new DateTime();
     	timeStamp2.restoreString(timeStamp1.saveString());
     	assertEquals(timeStamp1.longValue(), timeStamp2.longValue());
     	assertTrue(timeStamp2.isEmpty());
     }
 
     public void testNew() {
-        TimeStamp expected = new TimeStamp(2003, 8, 17, 21, 30, 25);
-        TimeStamp actual = new TimeStamp();
+        DateTime expected = new DateTime(2003, 8, 17, 21, 30, 25);
+        DateTime actual = new DateTime();
         assertEquals(expected, actual);
     }
     
     public void testNow() {
-        TimeStamp expected = new TimeStamp(2003, 8, 17, 21, 30, 25);
-        TimeStamp actual = new TimeStamp();
+        DateTime expected = new DateTime(2003, 8, 17, 21, 30, 25);
+        DateTime actual = new DateTime();
         actual.reset();
         assertEquals(expected, actual);
     }

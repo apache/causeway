@@ -1,38 +1,43 @@
 package org.nakedobjects.persistence.sql;
 
+import java.io.Serializable;
 
-public class SqlOid {
+
+public final class SqlOid implements Serializable {
 	private final String className;
-	private final int primaryKey;
+    private final PrimaryKey primaryKey;
 
-	public SqlOid(int primaryKey, String className) {
-		//super(primaryKey);
-		this.primaryKey = primaryKey;
+	public SqlOid(String className, PrimaryKey primaryKey) {
 		this.className = className;
+		this.primaryKey = primaryKey;
 	}
 
 	public String getClassName() {
 		return className;
 	}
+
+	public PrimaryKey getPrimaryKey() {
+	    return primaryKey;
+	}
 	
+	public String stringValue() {
+	    return primaryKey.stringValue();    
+	}
+		
 	public boolean equals(Object obj) {
         if (obj == this) {
             return true;
         }
         if (obj instanceof SqlOid) {
             SqlOid o = ((SqlOid) obj);
-			return primaryKey == o.primaryKey && className.equals(o.className);
+			return className.equals(o.className) && primaryKey.equals(o.primaryKey);
         }
         return false;
     }
-
-	public int getPrimaryKey() {
-		return primaryKey;
-	}
 	
     public int hashCode() {
     	int hash = 17;
-    	hash = 37 * hash + primaryKey;
+    	hash = 37 * hash + primaryKey.hashCode();
     	hash = 37 * hash + className.hashCode();
         return hash;
     }

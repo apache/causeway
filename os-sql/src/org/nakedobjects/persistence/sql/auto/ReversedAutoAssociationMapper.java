@@ -8,7 +8,6 @@ import org.nakedobjects.persistence.sql.CollectionMapper;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
-import org.nakedobjects.persistence.sql.SqlOid;
 
 import org.apache.log4j.Logger;
 
@@ -46,14 +45,14 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 			throws ResolveException, SqlObjectStoreException {
 		InternalCollection collection = (InternalCollection) field.get(parent);
 		LOG.debug("Loading internal collection " + collection);
-		long parentId = primaryKey(parent.getOid());
+		String parentId = primaryKey(parent.getOid());
 		
 		String statement = "select " + elementIdColumn + "," + columnList() + " from " + table + " where "
 				+ parentColumn + " = " + parentId;
 		Results rs = connector.select(statement);
 		while (rs.next()) {
-			int id = rs.getInt(elementIdColumn);
-			NakedObject element = loadObject(nakedClass, new SqlOid(id, nakedClass.fullName()));
+			Object oid = recreateOid(rs, nakedClass, elementIdColumn);
+			NakedObject element = loadObject(nakedClass, oid);
 			LOG.debug("  element  " + element);
 			collection.added(element);
 		}
@@ -64,7 +63,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 	public void saveInternalCollection(DatabaseConnector connector, NakedObject parent) throws SqlObjectStoreException {
 		InternalCollection collection = (InternalCollection) field.get(parent);
 		LOG.debug("Saving internal collection " + collection);
-		long parentId = primaryKey(parent.getOid());
+		String parentId = primaryKey(parent.getOid());
 		
 		connector.update("delete from " + table + " where " + parentColumn + " = " + parentId);
 		
@@ -73,7 +72,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 		for (int i = 0; i < size; i++) {
 			NakedObject element = collection.elementAt(i);
 			
-			long elementId = primaryKey(element.getOid());
+			String elementId = primaryKey(element.getOid());
 			String cls = element.getNakedClass().fullName();
 			String values = parentId + "," + elementId + ", '" + cls + "'";
 			String statement = "insert into " + table + " (" + columns + ") values (" + values + ")";

@@ -45,7 +45,7 @@ public class MockObjectManager extends NakedObjectManager {
 
     protected void createClass(NakedClass nc) throws ObjectStoreException {}
 
-    public Object createOid() {
+    public Object createOid(NakedObject object) {
         throw new NotImplementedException();
     }
 

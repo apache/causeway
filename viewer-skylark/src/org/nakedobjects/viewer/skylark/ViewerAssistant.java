@@ -7,6 +7,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.reflect.UndoStack;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.DebugFrame;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
@@ -22,7 +23,8 @@ public class ViewerAssistant {
 
     private final ViewUpdateNotifier updateNotifier;
     private final Viewer viewer;
-
+    private final UndoStack undoStack = new UndoStack();
+    
     protected ViewerAssistant(Viewer topView,
         ViewUpdateNotifier updateNotifier) {
         this.viewer = topView;
@@ -195,6 +197,10 @@ public class ViewerAssistant {
 
     public void showWaitCursor() {
         viewer.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+    }
+
+    public UndoStack getUndoStack() {
+        return undoStack;
     }
 }
 

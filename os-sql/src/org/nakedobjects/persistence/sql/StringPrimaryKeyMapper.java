@@ -1,22 +1,19 @@
-package org.nakedobjects.object;
+package org.nakedobjects.persistence.sql;
 
-import org.nakedobjects.utility.StartupException;
+public class StringPrimaryKeyMapper implements PrimaryKeyMapper {
 
+    public PrimaryKey generateKey(Results rs, String column) throws SqlObjectStoreException {
+        String id = rs.getString(column);
+        return new StringPrimaryKey(id);
+    }
 
-public interface OidGenerator {
-	Object next(NakedObject object);
-
-	String name();
-	
-	void init() throws StartupException;
-	
-	void shutdown();
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

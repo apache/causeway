@@ -43,7 +43,7 @@ import org.nakedobjects.object.value.Option;
 import org.nakedobjects.object.value.Percentage;
 import org.nakedobjects.object.value.TextString;
 import org.nakedobjects.object.value.Time;
-import org.nakedobjects.object.value.TimeStamp;
+import org.nakedobjects.object.value.DateTime;
 import org.nakedobjects.object.value.URLString;
 import org.nakedobjects.object.value.WholeNumber;
 
@@ -260,7 +260,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 		TextString textString1 = new TextString("Fred");
 		data.saveValue("Text String", textString1);
 		
-		TimeStamp timestamp1 = new TimeStamp();
+		DateTime timestamp1 = new DateTime();
 		timestamp1.add(1,2,3);
 		data.saveValue("Time Stamp", timestamp1);
 
@@ -314,7 +314,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 		object.restoreValue("Time", time2);
 		assertEquals(time1, time2);
 		
-		TimeStamp timestamp2 = new TimeStamp();
+		DateTime timestamp2 = new DateTime();
 		object.restoreValue("Time Stamp", timestamp2);
 		assertEquals(timestamp1, timestamp2);
 		
@@ -370,7 +370,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 		TextString textString1 = new TextString("Fred");
 		data.saveValue("Text String", textString1);
 		
-		TimeStamp timestamp1 = new TimeStamp();
+		DateTime timestamp1 = new DateTime();
 		timestamp1.add(1,2,3);
 		data.saveValue("Time Stamp", timestamp1);
 
@@ -424,7 +424,7 @@ public abstract class DataManagerTestCase extends NakedObjectTestCase {
 		object.restoreValue("Time", time2);
 		assertEquals(time1, time2);
 		
-		TimeStamp timestamp2 = new TimeStamp();
+		DateTime timestamp2 = new DateTime();
 		object.restoreValue("Time Stamp", timestamp2);
 		assertEquals(timestamp1, timestamp2);
 		

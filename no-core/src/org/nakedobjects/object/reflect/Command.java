@@ -1,22 +1,20 @@
-package org.nakedobjects.object;
+package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.utility.StartupException;
+public interface Command {
+    String getDescription();
+    
+    void undo();
+    
+    void execute();
 
-
-public interface OidGenerator {
-	Object next(NakedObject object);
-
-	String name();
-	
-	void init() throws StartupException;
-	
-	void shutdown();
+    String getName();
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

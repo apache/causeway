@@ -9,6 +9,7 @@ import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.Value;
 import org.nakedobjects.object.value.Snapshot;
+import org.nakedobjects.object.value.TimeStamp;
 
 import org.apache.log4j.Logger;
 
@@ -76,6 +77,16 @@ public abstract class AbstractNakedObject implements NakedObject {
     private boolean isFinder = false;
     private transient boolean isResolved = false;
     private Object oid;
+    private TimeStamp dateCreated  = new TimeStamp();
+    private TimeStamp lastActivity = new TimeStamp();
+    
+    public TimeStamp getDateCreated() {
+    	return dateCreated;
+    }
+    
+    public TimeStamp getLastActivity() {
+		return lastActivity;
+	}
 
     /**
        Return a standard READ/WRITE About, specifically: ObjectAbout.READ_WRITE

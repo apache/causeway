@@ -5,6 +5,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.reflect.Field;
+import org.nakedobjects.object.reflect.SetValueCommand;
 import org.nakedobjects.object.reflect.Value;
 import org.nakedobjects.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
@@ -229,6 +230,7 @@ public abstract class AbstractField extends AbstractView {
     protected void parseEntry(final String entryText) throws InvalidEntryException {
          try {
 	        NakedObject parent = ((ObjectContent) getParent().getContent()).getObject();
+	        getViewManager().getUndoStack().add(new SetValueCommand(parent, getObjectField()));
 	        getObjectField().parseAndSave(parent, entryText);
 	        getState().setValid();
         } catch(InvalidEntryException e) {

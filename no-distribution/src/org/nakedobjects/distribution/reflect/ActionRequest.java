@@ -8,6 +8,7 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectMemento;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.collection.InstanceCollection;
 import org.nakedobjects.object.reflect.Action;
@@ -54,6 +55,9 @@ public class ActionRequest extends ObjectRequest {
 			}
         	
         	return new InstanceCollection(cls, elements);
+        } else if(response instanceof NakedObjectMemento) {
+            NakedObjectMemento memento = (NakedObjectMemento) response;
+            return memento.recreateObject(getLoadedObjects());
         } else {
         	ObjectProxy proxy = (ObjectProxy) response;
             return proxy.recreateObject(getLoadedObjects());
@@ -80,6 +84,8 @@ public class ActionRequest extends ObjectRequest {
             
             if(result == null) {
             	response = null;
+            } else if (result.getOid() == null) {
+                response = new NakedObjectMemento(result);
             } else if(result instanceof InstanceCollection) {
             	InstanceCollection instances = (InstanceCollection) result;
             	Object[] array = new Object[instances.size() + 1];

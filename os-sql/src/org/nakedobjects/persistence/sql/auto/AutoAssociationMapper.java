@@ -1,6 +1,5 @@
 package org.nakedobjects.persistence.sql.auto;
 
-import org.apache.log4j.Logger;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedObject;
@@ -12,7 +11,8 @@ import org.nakedobjects.persistence.sql.CollectionMapper;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
-import org.nakedobjects.persistence.sql.SqlOid;
+
+import org.apache.log4j.Logger;
 
 public class AutoAssociationMapper extends AbstractObjectMapper implements CollectionMapper {
 	private static final Logger LOG = Logger.getLogger(AutoAssociationMapper.class);
@@ -58,16 +58,16 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 			throws ResolveException, SqlObjectStoreException {
 		InternalCollection collection = (InternalCollection) field.get(parent);
 		LOG.debug("Loading internal collection " + collection);
-		long parentId = mapper.primaryKey(parent.getOid());
+		String parentId = mapper.primaryKey(parent.getOid());
 		
 		String statement = "select " + elementIdColumn + "," + elementClassColumn + " from " + table + " where "
 				+ parentColumn + " = " + parentId;
 		Results rs = connector.select(statement);
 		while (rs.next()) {
-			int id = rs.getInt(elementIdColumn);
 			String cls = rs.getString(elementClassColumn);
 			NakedClass elementCls = NakedClassManager.getInstance().getNakedClass(cls);
-			NakedObject element = mapper.loadObject(elementCls, new SqlOid(id, cls));
+			Object oid = recreateOid(rs, elementCls, elementIdColumn);
+			NakedObject element = mapper.loadObject(elementCls, oid);
 			LOG.debug("  element  " + element.getOid());
 			collection.added(element);
 		}
@@ -77,7 +77,7 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 	public void saveInternalCollection(DatabaseConnector connector, NakedObject parent) throws SqlObjectStoreException {
 		InternalCollection collection = (InternalCollection) field.get(parent);
 		LOG.debug("Saving internal collection " + collection);
-		long parentId = mapper.primaryKey(parent.getOid());
+		String parentId = mapper.primaryKey(parent.getOid());
 		
 		connector.update("delete from " + table + " where " + parentColumn + " = " + parentId);
 		
@@ -86,7 +86,7 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 		for (int i = 0; i < size; i++) {
 			NakedObject element = collection.elementAt(i);
 			
-			long elementId = mapper.primaryKey(element.getOid());
+			String elementId = mapper.primaryKey(element.getOid());
 			String cls = element.getNakedClass().fullName();
 			String values = parentId + "," + elementId + ", '" + cls + "'";
 			String statement = "insert into " + table + " (" + columns + ") values (" + values + ")";

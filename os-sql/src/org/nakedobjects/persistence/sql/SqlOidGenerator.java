@@ -1,5 +1,6 @@
 package org.nakedobjects.persistence.sql;
 
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.OidGenerator;
@@ -37,8 +38,10 @@ public class SqlOidGenerator implements OidGenerator {
         return "Sql Oids";
     }
 
-    public synchronized Object next() {
-        return new SqlOid((int) number++, "");
+    public synchronized Object next(NakedObject object) {
+        String className = object.getNakedClass().fullName();
+        IntegerPrimaryKey primaryKey = new IntegerPrimaryKey((int) number++);
+        return new SqlOid(className, primaryKey);
     }
 
     public void shutdown() {

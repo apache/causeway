@@ -3,6 +3,7 @@ package org.nakedobjects.object.value;
 import org.nakedobjects.Clock;
 import org.nakedobjects.SystemClock;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.Title;
 import org.nakedobjects.object.ValueParseException;
 
@@ -90,6 +91,9 @@ public class Time extends Magnitude {
     Create a Time object for storing a time with the time set to the current time.
     */
     public Time() {
+        if(clock == null) {
+            throw new NakedObjectRuntimeException("Clock not set up");
+        }
         setValue(new java.util.Date(clock.getTime()));
     }
 

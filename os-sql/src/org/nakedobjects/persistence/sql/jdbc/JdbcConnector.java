@@ -166,13 +166,14 @@ public class JdbcConnector extends AbstractDatabaseConnector {
         }   
     }
 
-    public void update(String sql) throws SqlObjectStoreException {
+    public int update(String sql) throws SqlObjectStoreException {
         LOG.debug("SQL: " + sql);
         PreparedStatement statement;
         try {
             statement = connection.prepareStatement(sql);
-            statement.executeUpdate();
+            int updateCount = statement.executeUpdate();
             statement.close();
+            return updateCount;
         } catch (SQLException e) {
             throw new SqlObjectStoreException("SQL error", e);
         }

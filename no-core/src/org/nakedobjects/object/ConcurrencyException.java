@@ -1,22 +1,33 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.utility.StartupException;
+/**
+  * TODO this should probably be an expected exception, and passed through the object manager to the client
+  */
+public class ConcurrencyException extends NakedObjectRuntimeException {
 
+	public ConcurrencyException() {
+		super();
+	}
 
-public interface OidGenerator {
-	Object next(NakedObject object);
+	public ConcurrencyException(String message) {
+		super(message);
+	}
 
-	String name();
-	
-	void init() throws StartupException;
-	
-	void shutdown();
+	public ConcurrencyException(Throwable cause) {
+		super(cause);
+	}
+
+	public ConcurrencyException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2003  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

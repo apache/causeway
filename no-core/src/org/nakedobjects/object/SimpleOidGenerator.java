@@ -17,7 +17,7 @@ public class SimpleOidGenerator implements OidGenerator {
         return "Simple OID Generator";
     }
 
-    public synchronized Object next() {
+    public synchronized Object next(NakedObject object) {
         return new SimpleOid(next++);
     }
 

@@ -16,7 +16,7 @@ import org.nakedobjects.object.value.Option;
 import org.nakedobjects.object.value.Percentage;
 import org.nakedobjects.object.value.TextString;
 import org.nakedobjects.object.value.Time;
-import org.nakedobjects.object.value.TimeStamp;
+import org.nakedobjects.object.value.DateTime;
 import org.nakedobjects.object.value.URLString;
 import org.nakedobjects.object.value.WholeNumber;
 
@@ -184,12 +184,12 @@ public class ObjectDataTest extends NakedObjectTestCase {
     	assertEquals(original, restored);
     }
 
-    public void testTimeStamp() {
+    public void testDateTime() {
     	String fieldName = "Date";
-    	TimeStamp original = new TimeStamp(2004, 3, 12, 10, 35, 30);
+    	DateTime original = new DateTime(2004, 3, 12, 10, 35, 30);
     	data.saveValue(fieldName, original);
 
-    	TimeStamp restored = new TimeStamp();
+    	DateTime restored = new DateTime();
     	data.restoreValue(fieldName, restored);
     	assertEquals(original, restored);
     }

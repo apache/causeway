@@ -1,5 +1,6 @@
 package org.nakedobjects.persistence.sql.auto;
 
+import org.nakedobjects.object.AbstractNakedObject;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedClassManager;
@@ -9,12 +10,14 @@ import org.nakedobjects.object.reflect.Field;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.Value;
+import org.nakedobjects.object.value.TimeStamp;
 import org.nakedobjects.persistence.sql.AbstractObjectMapper;
 import org.nakedobjects.persistence.sql.CollectionMapper;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.FieldNameMapper;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
-import org.nakedobjects.persistence.sql.TypeMapper;
+import org.nakedobjects.persistence.sql.ValueMapper;
+import org.nakedobjects.persistence.sql.ValueMapperLookup;
 import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.utility.NotImplementedException;
 
@@ -34,13 +37,14 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 	protected FieldNameMapper fieldMapper = new FieldNameMapper();
 	protected Field fields[];
 	protected String idColumn;
+	protected String lastActivityColumn;
 	protected NakedClass nakedClass;
 	protected String table;
-	protected TypeMapper typeMapper;
+	protected ValueMapperLookup typeMapper;
 
 	public AbstractAutoMapper(String nakedClassName, String parameterBase) throws SqlObjectStoreException {
 		nakedClass = NakedClassManager.getInstance().getNakedClass(nakedClassName);
-		typeMapper = TypeMapper.getInstance();
+		typeMapper = ValueMapperLookup.getInstance();
 
 		Configuration configParameters = Configuration.getInstance();
 
@@ -61,7 +65,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 		if (configParameters.getBoolean(parameterBase + "all-fields", true)) {
 			setupFullMapping(nakedClassName, configParameters, parameterBase);
 		} else {
-			setupSpecifiedMapping(nakedClass, configParameters, parameterBase);
+		    setupSpecifiedMapping(nakedClass, configParameters, parameterBase);
 		}
 		
 		LOG.info("Table mapping: " + table +  " " + idColumn + " (" + columnList() + ")");
@@ -81,17 +85,19 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 	public void createTables(DatabaseConnector connection) throws SqlObjectStoreException {
 		if (!connection.hasTable(table)) {
 			StringBuffer columns = new StringBuffer();
-			TypeMapper types = TypeMapper.getInstance();
 			for (int f = 0; f < fields.length; f++) {
 				Field field = fields[f];
 				String type;
 				if (field instanceof Value) {
-					type = types.typeFor(fields[f].getType().getName());
-					if (type == null) {
+					ValueMapperLookup mappers = ValueMapperLookup.getInstance();
+					ValueMapper mapper = mappers.mapperFor(fields[f].getType());
+					if (mapper == null) {
 						throw new SqlObjectStoreException("No type specified for " + fields[f].getType().getName());
 					}
+					type = mapper.columnType();
 				} else if (field instanceof OneToOneAssociation) {
-					type = types.id();
+				    // TODO make this externally settable
+					type = "INT";
 				} else {
 					throw new SqlObjectStoreException("Can't map field to column: " + field);
 				}
@@ -179,11 +185,11 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 				String type = collectionMappings.getProperty(allFields[i].getName());
 				if(type == null || type.equals("association-table")) {
 					collectionMappers[collectionFieldNo] = new AutoAssociationMapper(this, nakedClass, collectionFields[collectionFieldNo]);
-				} else 	if(type.equals("fk-table")) 	{
+				} else if(type.equals("fk-table")) 	{
 					String property = parameterBase + allFields[i].getName() + ".element-type";
 					String elementType = configParameters.getString(property);
 					if(elementType == null) {
-						throw new SqlObjectStoreException("Expected porperty " + property);
+						throw new SqlObjectStoreException("Expected property " + property);
 					}
 					collectionMappers[collectionFieldNo] = new ReversedAutoAssociationMapper(elementType, collectionFields[collectionFieldNo], parameterBase);
 				
@@ -203,12 +209,19 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 				simpleFieldNo++;
 			}
 		}
+
+		lastActivityColumn = "lastActivity";
 		
 		Properties columnMappings = configParameters.getPropertySubset(parameterBase + "column");
 		for(Enumeration keys = columnMappings.keys(); keys.hasMoreElements();) {
 			String columnName = (String) keys.nextElement();
 			String fieldName = columnMappings.getProperty(columnName);
 			columnNames[findMatchingField(fieldName)] = columnName;
+			
+			// store the column name to be used for the "Last Activity" field
+		    if(fieldName.equalsIgnoreCase("lastActivity")) {
+				lastActivityColumn = columnName;
+		    }
 		}
 	}
 
@@ -226,6 +239,12 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 
 			String fieldName = columnMappings.getProperty(columnName);
 			fields[i] = nakedClass.getField(fieldName);
+			
+			// store the column name to be used for the "Last Activity" field
+		    if(fieldName.equalsIgnoreCase("lastActivity")) {
+				lastActivityColumn = fieldName;
+		    }
+
 		}
 
 		Properties collectionMappings = configParameters.getProperties(parameterBase + "collection");
@@ -267,13 +286,20 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 			if (fieldValue == null) {
 				sb.append("NULL");
 			} else if (fields[i].isValue()) {
-				sb.append(typeMapper.valueAsDBString(fields[i], (NakedValue) fieldValue));
+				ValueMapper mapper = typeMapper.mapperFor(fields[i].getType());
+                sb.append(mapper.valueAsDBString((NakedValue) fieldValue));
 			} else {
 				NakedObject ref = (NakedObject) fieldValue;
-				long id = primaryKey(ref.getOid());
-				sb.append(id);
+				sb.append(primaryKey(ref.getOid()));
 			}
 		}
 		return sb.toString();
 	}
+
+    protected String updateWhereClause(NakedObject object, boolean and) throws SqlObjectStoreException {
+        TimeStamp lastActivity = ((AbstractNakedObject) object).getLastActivity();
+        ValueMapper mapper = typeMapper.mapperFor(TimeStamp.class);
+        String dateString =  mapper.valueAsDBString(lastActivity);
+        return (and ? " and " : "") +  lastActivityColumn + " = " + dateString;
+    }
 }

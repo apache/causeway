@@ -57,8 +57,8 @@ public class LocalObjectManager extends NakedObjectManager {
         }
     }
 
-    public final Object createOid() {
-        Object oid = oidGenerator.next();
+    public final Object createOid(NakedObject object) {
+        Object oid = oidGenerator.next(object);
         LOG.debug("createOid " + oid);
 
         return oid;
@@ -202,6 +202,7 @@ public class LocalObjectManager extends NakedObjectManager {
         try {
             oidGenerator.init();
             objectStore.init();
+            NakedClassManager.getInstance().init();
         } catch (ObjectStoreException e) {
             throw new StartupException(e);
         }
@@ -229,7 +230,7 @@ public class LocalObjectManager extends NakedObjectManager {
 
         if (object.isPersistent()) { throw new IllegalArgumentException(); }
 
-        object.setOid(createOid());
+        object.setOid(createOid(object));
 
         if (!object.isResolved()) {
             object.setResolved();
@@ -246,7 +247,7 @@ public class LocalObjectManager extends NakedObjectManager {
                 continue;
             } else if (field.isPart()) {
                 InternalCollection collection = (InternalCollection) field.get(object);
-                collection.setOid(createOid());
+                collection.setOid(createOid(collection));
                 collection.setResolved();
 
                 for (int j = 0; j < collection.size(); j++) {
@@ -353,7 +354,7 @@ public class LocalObjectManager extends NakedObjectManager {
         LOG.debug("serialNumber " + sequence);
 
         try {
-            Vector instances = objectStore.getInstances(getNakedClass(Sequence.class.getName()), false);
+            Vector instances = objectStore.getInstances(NakedClassManager.getInstance().getNakedClass(Sequence.class.getName()), false);
             Sequence number;
 
             for (int i = 0; i < instances.size(); i++) {

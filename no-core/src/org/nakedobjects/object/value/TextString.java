@@ -280,7 +280,7 @@ public class TextString extends AbstractNakedValue {
 	}
 
     public void restoreString(String data) {
-    	if(data.equals("NULL")) {
+    	if(data == null || data.equals("NULL")) {
     		clear();
     	} else {
 	        text = data;

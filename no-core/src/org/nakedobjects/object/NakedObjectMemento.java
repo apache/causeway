@@ -144,7 +144,7 @@ public class NakedObjectMemento implements Serializable {
         if (state == null) {
             return null;
         } else {
-            NakedClass nc = NakedObjectManager.getInstance().getNakedClass(state.className);
+            NakedClass nc = NakedClassManager.getInstance().getNakedClass(state.className);
             NakedObject object = nc.acquireInstance();
             object.setOid(state.oid);
             LOG.debug("Recreated object " + object.getOid());
@@ -159,7 +159,7 @@ public class NakedObjectMemento implements Serializable {
             NakedObject ref;
             Object oid = data.oid;
 
-            NakedClass nakedClass = NakedObjectManager.getInstance().getNakedClass(data.className);
+            NakedClass nakedClass = NakedClassManager.getInstance().getNakedClass(data.className);
             if (oid == null) {
                 ref = null;
             } else if (objectManager.isLoaded(oid)) {

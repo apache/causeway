@@ -33,7 +33,7 @@ import org.nakedobjects.object.value.Date;
 import org.nakedobjects.object.value.Logical;
 import org.nakedobjects.object.value.Money;
 import org.nakedobjects.object.value.TextString;
-import org.nakedobjects.object.value.TimeStamp;
+import org.nakedobjects.object.value.DateTime;
 
 import org.apache.log4j.PropertyConfigurator;
 
@@ -57,7 +57,7 @@ public class TestValues {
 		data.saveValue("date", d1);
 		System.out.println(d1 + " " + d1.saveString());
 		
-		TimeStamp ts1 = new TimeStamp();
+		DateTime ts1 = new DateTime();
 		ts1.add(1,2,3);
 		data.saveValue("timestamp", ts1);
 		System.out.println(ts1 + " " + ts1.saveString());
@@ -94,7 +94,7 @@ public class TestValues {
 
 		System.out.println(d2 + " " + d2.saveString());
 
-		TimeStamp ts2 = new TimeStamp();
+		DateTime ts2 = new DateTime();
 		object.restoreValue("timestamp", ts2);
 
 		System.out.println(ts2 + " " + ts2.saveString());

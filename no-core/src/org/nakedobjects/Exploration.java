@@ -176,12 +176,7 @@ public abstract class Exploration {
     protected abstract void setUpFixture();
 
     private void setUpExploration() {
-        clock = new ExplorationClock();
-        Date.setClock(clock);
-        Time.setClock(clock);
-        TimeStamp.setClock(clock);
-        
-        setUpFixture();
+         setUpFixture();
         ExplorationSetUp fs = new ExplorationSetUp();
         fs.init(fixtures, NakedClassManager.getInstance(), objectManager, clock);
         
@@ -273,6 +268,11 @@ public abstract class Exploration {
         showSplash();
         setUpLocale();
 
+        clock = new ExplorationClock();
+        Date.setClock(clock);
+        Time.setClock(clock);
+        TimeStamp.setClock(clock);
+        
         NakedObjectStore objectStore = (NakedObjectStore) ComponentLoader.loadComponent(OBJECT_STORE, TransientObjectStore.class,
                 NakedObjectStore.class);
 

@@ -1,6 +1,5 @@
 package org.nakedobjects.persistence.sql.auto;
 
-import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
@@ -21,7 +20,8 @@ import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.ObjectMapper;
 import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
-import org.nakedobjects.persistence.sql.TypeMapper;
+import org.nakedobjects.persistence.sql.ValueMapper;
+import org.nakedobjects.persistence.sql.ValueMapperLookup;
 
 import java.util.Vector;
 
@@ -32,10 +32,10 @@ import org.apache.log4j.Logger;
  */
 public class NameBasedMapper extends AbstractObjectMapper implements ObjectMapper {
     private static final Logger LOG = Logger.getLogger(NameBasedMapper.class);
-	private TypeMapper typeMapper;
+	private ValueMapperLookup typeMapper;
 
 	public NameBasedMapper() {
-		typeMapper = TypeMapper.getInstance();
+		typeMapper = ValueMapperLookup.getInstance();
 	}
 	
 
@@ -137,7 +137,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         return numberOfInstances(connector, cls) > 0;
     }
 
-    private void loadInternalCollection(DatabaseConnector connector, long id, Field field, InternalCollection collection) throws ResolveException, SqlObjectStoreException {
+    private void loadInternalCollection(DatabaseConnector connector, String id, Field field, InternalCollection collection) throws ResolveException, SqlObjectStoreException {
         NakedClass cls = collection.forParent().getNakedClass();
         NakedClass elementCls = NakedClassManager.getInstance().getNakedClass(collection.getType().getName());
 
@@ -182,7 +182,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         NakedClass cls = object.getNakedClass();
         String table = table(cls);
         String columns = columns(cls);
-        long id = primaryKey(object.getOid());
+        String id = primaryKey(object.getOid());
         
         LOG.debug("loading data from SQL " + table + " for " + object);
         String statement = "select " + columns + " from " + table + " where id = " + id;
@@ -197,12 +197,9 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
                     loadInternalCollection(connection, id, fields[i], (InternalCollection) fields[i].get(object));
                     connector.getConnectionPool().release(connection);
                 } else if (fields[i] instanceof Value) {
-                    try {
-                        ((Value) fields[i]).parseAndSave(object, rs.getString(columnName(fields[i])));
-                    } catch (InvalidEntryException e) {
-                        LOG.error(e);
-                    }
-                } else if (fields[i] instanceof OneToOneAssociation) {
+                    ValueMapper mapper = ValueMapperLookup.getInstance().mapperFor(fields[i].getType());
+                    mapper.setFromDBColumn(columnName(fields[i]), fields[i], object, rs);
+               } else if (fields[i] instanceof OneToOneAssociation) {
                     NakedClass associatedCls = NakedClassManager.getInstance().getNakedClass(fields[i].getType().getName());
                     NakedObject reference = setupReference(loadedObjects, associatedCls, rs.getInt(columnName(fields[i])));
                     ((OneToOneAssociation) fields[i]).setAssociation(object, reference);
@@ -243,7 +240,8 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
                         sb.append(primaryKey((NakedObject) fieldValue));
                     }
                 } else if (fieldValue instanceof NakedValue) {
-                    sb.append(typeMapper.valueAsDBString(fields[i], (NakedValue) fieldValue));
+                    ValueMapper mapper = typeMapper.mapperFor(fields[i].getType());
+                    sb.append(mapper.valueAsDBString((NakedValue) fieldValue));
                 } else {
                     sb.append("NULL");
                 }

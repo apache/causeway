@@ -2,11 +2,11 @@ package org.nakedobjects.object.value;
 
 import org.nakedobjects.Clock;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.Title;
 import org.nakedobjects.object.ValueParseException;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -20,17 +20,12 @@ import java.util.Date;
  */
 public class TimeStamp extends Magnitude {
 	private static final long serialVersionUID = 1L;
-    private static final DateFormat SHORT_FORMAT = DateFormat.getDateTimeInstance(DateFormat.SHORT,
-            DateFormat.SHORT);
-    private static final DateFormat MEDIUM_FORMAT = DateFormat.getDateTimeInstance(DateFormat.MEDIUM,
-            DateFormat.SHORT);
-    private static final DateFormat LONG_FORMAT = DateFormat.getDateTimeInstance(DateFormat.LONG,
-            DateFormat.LONG);
-    private static final DateFormat ISO_LONG = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    private static final DateFormat ISO_SHORT = new SimpleDateFormat("yyyyMMdd'T'HHmm");
+	// TODO check the ISO representations
+    private static final DateFormat ISO_LONG = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    private static final DateFormat ISO_SHORT = new SimpleDateFormat("yyyyMMdd'T'HHmmssSSS");
 
  
-    private transient DateFormat format = MEDIUM_FORMAT;
+    private transient DateFormat format = ISO_LONG;
     private boolean isNull = true;
     private java.util.Date date;
 	private static Clock clock;
@@ -44,24 +39,10 @@ public class TimeStamp extends Magnitude {
      Create a Time object for storing a timeStamp set to the current time.
      */
     public TimeStamp() {
-        setValue(new java.util.Date(clock.getTime()));
-        isNull = false;
-    }
-
-    /**
-     Create a Time object for storing a timeStamp set to the specified hours and minutes.
-     @deprecated replaced by TimeStamp(int year, int month, int day, int hour, int minute, int second)
-     */
-    public TimeStamp(int year, int month, int day, int hour, int minute) {
-        this(year, month, day, hour, minute, 0);
-    }
-
-    /**
-     Create a Time object for storing a timeStamp set to the specified hours and minutes.
-     */
-    public TimeStamp(int year, int month, int day, int hour, int minute,
-        int second) {
-        setValue(year, month, day, hour, minute, second);
+        if(clock == null) {
+            throw new NakedObjectRuntimeException("Clock not set up");
+        }
+       reset();
         isNull = false;
     }
 
@@ -71,55 +52,6 @@ public class TimeStamp extends Magnitude {
     public TimeStamp(TimeStamp timeStamp) {
         date = timeStamp.date;
         isNull = timeStamp.isNull;
-    }
-
-    /**
-     Add the specified days, years and months to this date value.
-     */
-    public void add(int hours, int minutes, int seconds) {
-        checkCanOperate();
-
-        Calendar cal = Calendar.getInstance();
-
-        cal.setTime(date);
-        cal.add(Calendar.SECOND, seconds);
-        cal.add(Calendar.MINUTE, minutes);
-        cal.add(Calendar.HOUR_OF_DAY, hours);
-        set(cal);
-    }
-
-    private void checkTime(int year, int month, int day, int hour, int minute,
-        int second) {
-        if ((month < 1) || (month > 12)) {
-            throw new IllegalArgumentException(
-                "Month must be in the range 1 - 12 inclusive " + month);
-        }
-
-        Calendar cal = Calendar.getInstance();
-
-        cal.set(year, month - 1, 0);
-
-        int lastDayOfMonth = cal.getMaximum(Calendar.DAY_OF_MONTH);
-
-        if ((day < 1) || (day > lastDayOfMonth)) {
-            throw new IllegalArgumentException("Day must be in the range 1 - " +
-                lastDayOfMonth + " inclusive " + day);
-        }
-
-        if ((hour < 0) || (hour > 23)) {
-            throw new IllegalArgumentException(
-                "Hour must be in the range 0 - 23 inclusive " + hour);
-        }
-
-        if ((minute < 0) || (minute > 59)) {
-            throw new IllegalArgumentException(
-                "Minute must be in the range 0 - 59 inclusive " + minute);
-        }
-
-        if ((second < 0) || (second > 59)) {
-            throw new IllegalArgumentException(
-                "Second must be in the range 0 - 59 inclusive " + second);
-        }
     }
 
     public void clear() {
@@ -141,10 +73,6 @@ public class TimeStamp extends Magnitude {
      */
     private Calendar createCalendar() {
         Calendar cal = Calendar.getInstance();
-
-        // clear all aspects of the time that are not used
-        cal.set(Calendar.MILLISECOND, 0);
-
         return cal;
     }
 
@@ -195,49 +123,6 @@ public class TimeStamp extends Magnitude {
     }
 
     public void parse(String text) throws ValueParseException {
-        if (text.trim().equals("")) {
-            clear();
-        } else {
-            text = text.trim();
-
-            String str = text.toLowerCase();
-            Calendar cal = createCalendar();
-
-            if (str.equals("today") || str.equals("now")) {
-            } else if (str.startsWith("+")) {
-                int hours;
-
-                hours = Integer.valueOf(str.substring(1)).intValue();
-                cal.setTime(date);
-                cal.add(Calendar.HOUR, hours);
-            } else if (str.startsWith("-")) {
-                int hours;
-
-                hours = Integer.valueOf(str.substring(1)).intValue();
-                cal.setTime(date);
-                cal.add(Calendar.HOUR, -hours);
-            } else {
-                DateFormat[] formats = new DateFormat[] {
-                        LONG_FORMAT, MEDIUM_FORMAT, SHORT_FORMAT, ISO_LONG, ISO_SHORT
-                    };
-
-                for (int i = 0; i < formats.length; i++) {
-                    try {
-                        cal.setTime(formats[i].parse(text));
-
-                        break;
-                    } catch (ParseException e) {
-                        if ((i + 1) == formats.length) {
-                            throw new ValueParseException(e,
-                                "Invalid timeStamp " + text);
-                        }
-                    }
-                }
-            }
-
-            set(cal);
-            isNull = false;
-        }
     }
 
     /**
@@ -251,49 +136,6 @@ public class TimeStamp extends Magnitude {
 
     private void set(Calendar cal) {
         date = cal.getTime();
-    }
-
-    public void setValue(java.util.Date date) {
-        if (date == null) {
-            isNull = true;
-        } else {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-            cal.set(Calendar.MILLISECOND, 0);
-            this.date = cal.getTime();
-        }
-    }
-
-    public void setValue(long time) {
-        isNull = false;
-        this.date.setTime(time);
-    }
-
-    public void setValue(TimeStamp timeStamp) {
-        if (timeStamp == null) {
-            isNull = true;
-        } else {
-            date = new Date(timeStamp.date.getTime());
-        }
-    }
-
-    /*
-     Sets this object's timeStamp to be the same as the specified hour, minute and second.
-     */
-    public void setValue(int year, int month, int day, int hour, int minute,
-        int second) {
-        checkTime(year, month, day, hour, minute, second);
-
-        Calendar cal = createCalendar();
-
-        cal.set(Calendar.DAY_OF_MONTH, day);
-        cal.set(Calendar.MONTH, month - 1);
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.HOUR_OF_DAY, hour);
-        cal.set(Calendar.MINUTE, minute);
-        cal.set(Calendar.SECOND, second);
-        cal.set(Calendar.MILLISECOND, 0);
-        set(cal);
     }
 
     public Title title() {
@@ -321,7 +163,18 @@ public class TimeStamp extends Magnitude {
             int hour = Integer.valueOf(data.substring(8, 10)).intValue();
             int minute = Integer.valueOf(data.substring(10, 12)).intValue();
             int second = Integer.valueOf(data.substring(12,14)).intValue();
-            setValue(year, month, day, hour, minute, second);
+            int millisecond = Integer.valueOf(data.substring(14,17)).intValue();
+            
+            Calendar cal = createCalendar();
+            
+            cal.set(Calendar.DAY_OF_MONTH, day);
+            cal.set(Calendar.MONTH, month - 1);
+            cal.set(Calendar.YEAR, year);
+            cal.set(Calendar.HOUR_OF_DAY, hour);
+            cal.set(Calendar.MINUTE, minute);
+            cal.set(Calendar.SECOND, second);
+            cal.set(Calendar.MILLISECOND, millisecond);
+            set(cal);
         }
     }
 
@@ -354,6 +207,11 @@ public class TimeStamp extends Magnitude {
             int second = cal.get(Calendar.SECOND);
             data.append((second <= 9) ? "0" : "");
             data.append(second);
+
+            int millisecond = cal.get(Calendar.MILLISECOND);
+            data.append((millisecond <= 99) ? "0" : "");
+            data.append((millisecond <= 9) ? "0" : "");
+            data.append(millisecond);
 
             return data.toString();
         }

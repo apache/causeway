@@ -1,58 +1,61 @@
 package org.nakedobjects.persistence.sql;
 
-import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.reflect.Field;
-import org.nakedobjects.object.value.Date;
-import org.nakedobjects.object.value.FloatingPointNumber;
-import org.nakedobjects.object.value.Logical;
-import org.nakedobjects.object.value.Money;
-import org.nakedobjects.object.value.Option;
-import org.nakedobjects.object.value.Password;
-import org.nakedobjects.object.value.Percentage;
-import org.nakedobjects.object.value.SerialNumber;
-import org.nakedobjects.object.value.TextString;
-import org.nakedobjects.object.value.Time;
-import org.nakedobjects.object.value.TimeStamp;
-import org.nakedobjects.object.value.URLString;
-import org.nakedobjects.object.value.WholeNumber;
-import org.nakedobjects.utility.Configuration;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 
-import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Properties;
 
 
-public class TypeMapper {
-	private final static String PREFIX = "sql-object-store.typemapper";
-	private static TypeMapper instance;
-	private String id;
-	private Hashtable types = new Hashtable();
+public class ValueMapperLookup {
+	private final static String PREFIX = "sql-object-store.value-mapper";
+	private static ValueMapperLookup instance;
 	
-	public static TypeMapper getInstance() {
+	
+	private Hashtable mappers = new Hashtable();
+	
+	public static ValueMapperLookup getInstance() {
 		if(instance == null) {
-			instance = new TypeMapper();
+			instance = new ValueMapperLookup();
 		}
-		
-		instance.id = "id";
-		
+		return instance;
+	}
+	/*
+	public ValueMapperLookup() {
+		if(instance != null) {
+			throw new NakedObjectRuntimeException("Instance already created");
+		}
+/*
 		Configuration params = Configuration.getInstance();
 		Properties properties = params.getPropertySubset(PREFIX);
 		Enumeration e = properties.keys();
 		while (e.hasMoreElements()) {
 			String key = (String) e.nextElement();
-			if(key.equals("OID")) {
-				instance.id = properties.getProperty("OID");
-			} else {
-				instance.types.put(key, properties.getProperty(key));
-			}
+			ValueMapper mapper = (ValueMapper) ComponentLoader.loadComponent(key, ValueMapper.class);
+			instance.mappers.put(key, mapper);
 		}
-		return instance;
+	
+		instance = this;
+	}
+	*/
+	
+	public void add(Class valueType, ValueMapper mapper) {
+	    if(!mappers.containsKey(valueType.getName())) {
+	        mappers.put(valueType.getName(), mapper);    
+	    }
 	}
 	
-	public String typeFor(String type) {
-		return (String) types.get(type);
+	public void add(String  cls, ValueMapper mapper) {
+	    if(!mappers.containsKey(cls)) {
+	        mappers.put(cls, mapper);    
+	    }
 	}
 	
+	public ValueMapper mapperFor(Class valueType) {
+	    if(!mappers.containsKey(valueType.getName())) {
+	        throw new NakedObjectRuntimeException("No mapper for " + valueType.getName());
+	    }
+	    return (ValueMapper) mappers.get(valueType.getName());
+	}
+	/*
     public String valueAsDBString(Field field, NakedValue value) throws SqlObjectStoreException {
         Class type = field.getType();
 
@@ -182,11 +185,11 @@ public class TypeMapper {
         throw new SqlObjectStoreException(e);
     }
 }
-*/
     
 	public String id() {
 		return id;
 	}
+*/
 }
 
 

@@ -39,7 +39,7 @@ public abstract class NakedObjectManager implements DebugInfo {
         return cls.createInstance();
     }
 
-    public abstract Object createOid();
+    public abstract Object createOid(NakedObject object);
 
     /**
      * Removes the specified object from the system. The specified object's data should be

@@ -10,8 +10,7 @@ import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.NakedClassMapper;
 import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
-import org.nakedobjects.persistence.sql.SqlOid;
-import org.nakedobjects.persistence.sql.TypeMapper;
+import org.nakedobjects.persistence.sql.ValueMapperLookup;
 import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.utility.NotImplementedException;
 
@@ -52,8 +51,7 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
 
         Results rs = connector.select(statement);
         if(rs.next()) {
-            int id = rs.getInt(idColumn);
-            SqlOid oid = new SqlOid(id, NakedClass.class.getName());
+            Object oid = recreateOid(rs, NakedClass.SELF, idColumn);
             LOG.debug("  instance  " + oid);
             if(loadedObjects.isLoaded(oid)) {
                 LOG.debug("  class already loaded   " + oid);
@@ -81,10 +79,10 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
     }
 
     protected void createTables(DatabaseConnector connector) throws SqlObjectStoreException {
-    	TypeMapper types = TypeMapper.getInstance();
-        connector.update("create table " + table + " (" + idColumn + " " + types.id() + " NOT NULL UNIQUE, " + nameColumn 
-        	+ " "	+ types.typeFor(TextString.class.getName()) + " UNIQUE, " + reflectorColumn + " " + 
-			types.typeFor(TextString.class.getName()) + ")" );
+    	ValueMapperLookup mappers = ValueMapperLookup.getInstance();
+        connector.update("create table " + table + " (" + idColumn + " " + "INT NOT NULL UNIQUE, " + nameColumn 
+        	+ " "	+ mappers.mapperFor(TextString.class).columnType() + " UNIQUE, " + reflectorColumn + " " + 
+			mappers.mapperFor(TextString.class).columnType() + ")" );
     }
 
 	public void createObject(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
@@ -106,7 +104,7 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
 	public void resolve(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
 	    NakedClass cls = (NakedClass) object;
 	    String columns = nameColumn + "," + reflectorColumn;
-	    long id = primaryKey(object.getOid());
+	    String id = primaryKey(object.getOid());
 	    
 	    LOG.debug("loading data from SQL " + table + " for " + object);
 	    String statement = "select " + columns + " from " + table + " where " + idColumn + "=" + id;

@@ -152,16 +152,20 @@ public class JavaReflector implements Reflector {
 
             if (Modifier.isStatic(method.getModifiers())) {
                 String s = (String) method.invoke(null, new Object[0]);
-                java.util.StringTokenizer st = new java.util.StringTokenizer(s, ",");
-                String[] a = new String[st.countTokens()];
-                int element = 0;
+                if (s.trim().length() > 0) {
+                    java.util.StringTokenizer st = new java.util.StringTokenizer(s, ",");
+                    String[] a = new String[st.countTokens()];
+                    int element = 0;
 
-                while (st.hasMoreTokens()) {
-                    a[element] = st.nextToken().trim();
-                    element++;
+                    while (st.hasMoreTokens()) {
+                        a[element] = st.nextToken().trim();
+                        element++;
+                    }
+                    return a;
+                } else {
+                    return null;
                 }
-
-                return a;
+                
             } else {
                 LOG.warn("Method " + aClass.getName() + "." + type + "Order() must be decared as static");
             }

@@ -22,7 +22,10 @@ public interface DatabaseConnector {
 
     Results select(String sql);
 
-    void update(String sql) throws SqlObjectStoreException;
+    /**
+     * Updates the database using the specified sql statement, and returns the number of rows affected.
+     */
+    int update(String sql) throws SqlObjectStoreException;
     
     void setUsed(boolean isUsed);
     

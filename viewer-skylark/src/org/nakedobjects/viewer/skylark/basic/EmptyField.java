@@ -5,6 +5,7 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedClassManager;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.reflect.AssociateCommand;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.security.Session;
 import org.nakedobjects.viewer.skylark.Canvas;
@@ -135,10 +136,8 @@ public class EmptyField extends AbstractView {
                 associatedObject = source;
             }
             
-            OneToOneContent content = new OneToOneContent(target, associatedObject, field);
- //           View iconView = ViewFactory.getViewFactory().createIconizedSubview(content);
- //           getParent().replaceView(getView(), iconView);
-            field.setAssociation(target, associatedObject);
+            getViewManager().getUndoStack().add(new AssociateCommand(target, associatedObject, field));
+            // field.setAssociation(target, associatedObject);
                         
             if(! target.isPersistent()) {
                 getParent().invalidateContent();

@@ -43,10 +43,10 @@ public final class ProxyObjectManager extends NakedObjectManager {
     }
 
     public void abortTransaction() {
-        throw new NakedObjectRuntimeException();
+        LOG.debug("transactions (abort) IGNORED in proxy");
     }
 
-    public final Object createOid() {
+    public final Object createOid(NakedObject object) {
     	throw new NakedObjectRuntimeException();
     }
    
@@ -57,7 +57,7 @@ public final class ProxyObjectManager extends NakedObjectManager {
     }
     
     public void endTransaction() {
-    	LOG.debug("transactions IGNORED in proxy");
+    	LOG.debug("transactions (end) IGNORED in proxy");
     }
 
     public Vector getInstances(NakedClass cls) {
@@ -160,7 +160,7 @@ public final class ProxyObjectManager extends NakedObjectManager {
     }
 
     public void startTransaction() {
-    	LOG.debug("transactions IGNORED in proxy");
+    	LOG.debug("transactions (start) IGNORED in proxy");
     }
 	
     public LoadedObjects getLoadedObjects() {
