@@ -204,7 +204,7 @@ public class InternalCollectionAdapter implements InternalCollection {
 
     public void clear() {}
     
-    public void clear(NakedObjectAssociation specification, NakedObject ref) {}
+    public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
 
     public boolean canAccess(Session session, NakedObjectField specification) {
         return false;

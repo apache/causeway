@@ -1,4 +1,3 @@
-
 package org.nakedobjects.object;
 
 import org.nakedobjects.object.reflect.Action;
@@ -10,8 +9,6 @@ import org.nakedobjects.object.reflect.ActionParameterSet;
 import org.nakedobjects.object.security.Session;
 
 
-
-
 /**
  * Definition of an naked reference object.
  * <p>
@@ -20,35 +17,76 @@ import org.nakedobjects.object.security.Session;
  * @see org.nakedobjects.object.defaults.AbstractNakedObject
  */
 public interface NakedObject extends Naked {
+
+    void clearCollection(OneToManyAssociation association);
+
+    void clearPersistDirty();
+
+    void clearValue(OneToOneAssociation association);
+
+    void clearViewDirty();
+
     /**
-     * A lifecycle method called when the object is first created to intialised the object. This
-     * will not be called when the object is recreated when retrieved from the
-     * object store.
+     * A lifecycle method called when the object is first created to intialised
+     * the object. This will not be called when the object is recreated when
+     * retrieved from the object store.
      */
     void created();
 
     /**
-     * A lifecycle method called when the object is delete, after it is removed from the object
-     * store.
+     * A lifecycle method called when the object is delete, after it is removed
+     * from the object store.
      */
     void deleted();
 
+    NakedObject getAssociation(OneToOneAssociation field);
+
+    NakedObjectContext getContext();
+
+    Naked getField(NakedObjectField field);
+
     String getIconName();
-  
-     /**
+
+    String getLabel(Session session, Action action);
+
+    String getLabel(Session session, NakedObjectField field);
+
+    ActionParameterSet getParameters(Session session, Action action, NakedObjectSpecification[] parameterTypes);
+
+    NakedValue getValue(OneToOneAssociation field);
+
+    void initAssociation(NakedObjectAssociation field, NakedObject associatedObject);
+
+    void initOneToManyAssociation(OneToManyAssociation association, NakedObject[] instances);
+
+    void initValue(OneToOneAssociation field, Object object);
+
+    boolean isEmpty(NakedObjectField field);
+
+    boolean isParsable();
+
+    boolean isPersistDirty();
+
+    /**
+     * Returns true when the object is persistent.
+     */
+    boolean isPersistent();
+
+    /**
      * Returns true once the object has been completely read into memory and all
      * it attributes can be validly accessed.
      */
     boolean isResolved();
 
-    boolean isParsable();
-    
+    boolean isViewDirty();
+
+    void markDirty();
+
+    void setAssociation(NakedObjectAssociation field, NakedObject associatedObject);
+
+    void setContext(NakedObjectContext context);
+
     /**
-     * Returns true when the object is persistent.
-     */
-    boolean isPersistent();
-    
-      /**
      * Sets the OID for this object. This id must be unique.
      */
     void setOid(Oid oid);
@@ -58,45 +96,7 @@ public interface NakedObject extends Naked {
      */
     void setResolved();
 
-    NakedObjectContext getContext();
-    
-    void setContext(NakedObjectContext context);
-
-    boolean isEmpty(NakedObjectField field);
-
-    void clear(OneToOneAssociation specification);
-
-    Naked getField(NakedObjectField field);
-    
-    NakedObject getAssociation(OneToOneAssociation field);
-
-    NakedValue getValue(OneToOneAssociation field);
-
-    void setAssociation(NakedObjectAssociation field, NakedObject associatedObject);
-    
-    void initAssociation(NakedObjectAssociation field, NakedObject associatedObject);
-
-   void setValue(OneToOneAssociation field, Object object);
-   
-   void initValue(OneToOneAssociation field, Object object);
-
-    String getLabel(Session session, NakedObjectField field);
-
-    String getLabel(Session session, Action action);
-
-    void initOneToManyAssociation(OneToManyAssociation association, NakedObject[] instances);
-
-    void markDirty();
-    
-    void clearViewDirty();
-    
-    boolean isViewDirty();
-    
-    boolean isPersistDirty();
-    
-    ActionParameterSet getParameters(Session session, Action action, NakedObjectSpecification[] parameterTypes);
-
-    void clearPersistDirty();
+    void setValue(OneToOneAssociation field, Object object);
 
 }
 

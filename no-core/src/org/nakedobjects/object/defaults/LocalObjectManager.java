@@ -120,19 +120,16 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         for (int i = 0; i < fields.length; i++) {
             NakedObjectField field = fields[i];
 
-            if (field instanceof OneToManyAssociation) {
-                InternalCollection coll = (InternalCollection) object.getField(field);
-                coll.clear();
-            } else if (field instanceof OneToOneAssociation) {
+            if (field.isCollection()) {
+                object.clearCollection((OneToManyAssociation) field);
+            } else if(field.isValue()) {
+                object.clearValue((OneToOneAssociation) field);
+            } else if (field.isObject()) {
                 NakedObject ref = (NakedObject) object.getField(field);
-
                 if (ref != null) {
-                    object.clear((OneToOneAssociation) field, ref);
+                    object.clearAssociation((OneToOneAssociation) field, ref);
                 }
-            } else {
-  //              ((OneToOneAssociationSpecification) field).clearAssociation(object, null);
-//                ((NakedValue) field.get(object)).clear();
-            }
+            } 
         }
     }
 

@@ -28,7 +28,7 @@ public class AssociateCommand implements Command {
     }
 
     public void undo() {
-        object.clear(field, associatedObject);
+        object.clearAssociation(field, associatedObject);
     }
 
     public void execute() {

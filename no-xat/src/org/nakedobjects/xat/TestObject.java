@@ -8,9 +8,9 @@ public interface TestObject extends TestNaked {
 
     public void assertActionExists(String name);
 
-    public void assertActionExists(String name, TestNaked[] parameters);
-
     public void assertActionExists(String name, TestNaked parameter);
+
+    public void assertActionExists(String name, TestNaked[] parameters);
 
     /**
      * Check that the specified object menu item is currently invisible. If it
@@ -18,13 +18,13 @@ public interface TestObject extends TestNaked {
      */
     void assertActionInvisible(String name);
 
-    void assertActionInvisible(String name, TestNaked[] parameters);
-
     /**
      * Check that the specified object menu item is currently invisible. If it
      * is visible the test fails.
      */
     void assertActionInvisible(String name, TestNaked parameter);
+
+    void assertActionInvisible(String name, TestNaked[] parameters);
 
     /**
      * Check that the specified object menu item is currently disabled. If it is
@@ -32,13 +32,13 @@ public interface TestObject extends TestNaked {
      */
     void assertActionUnusable(String name);
 
-    void assertActionUnusable(String name, TestNaked[] parameters);
-
     /**
      * Check that dragged object cannot be dropped on this object. If it can be
      * dropped the test fails.
      */
     void assertActionUnusable(String name, TestNaked parameter);
+
+    void assertActionUnusable(String name, TestNaked[] parameters);
 
     /**
      * Check that the specified object menu item is currently available. If it
@@ -46,13 +46,13 @@ public interface TestObject extends TestNaked {
      */
     void assertActionUsable(String name);
 
-    void assertActionUsable(String name, TestNaked[] parameter);
-
     /**
      * Check that dragged object can be dropped on this object. If it cannot be
      * dropped the test fails.
      */
     void assertActionUsable(String name, TestNaked parameter);
+
+    void assertActionUsable(String name, TestNaked[] parameter);
 
     /**
      * Check that the specified object menu item is currently visible. If it is
@@ -60,13 +60,13 @@ public interface TestObject extends TestNaked {
      */
     void assertActionVisible(String name);
 
-    void assertActionVisible(String name, TestNaked[] parameters);
-
     /**
      * Check that the specified object menu item is currently visible. If it is
      * invisible the test fails.
      */
     void assertActionVisible(String name, TestNaked parameter);
+
+    void assertActionVisible(String name, TestNaked[] parameters);
 
     void assertEmpty(String fieldName);
 
@@ -79,25 +79,6 @@ public interface TestObject extends TestNaked {
      * not contain the expected value the test fails.
      */
     void assertFieldContains(String fieldName, String expected);
-
-    
-    
-    void assertFirstElementInField(String message, String fieldName, String expected);
-    
-    void assertFirstElementInField(String message, String fieldName, TestObject expected);
-    
-    void assertFirstElementInField(String fieldName, TestObject expected);
-
-    void assertFirstElementInField(String fieldName, String expected);
-
-    
-    void assertLastElementInField(String message, String fieldName, TestObject expected);
-    
-    void assertLastElementInField(String message, String fieldName, String expected);
-    
-    void assertLastElementInField(String fieldName, String expected);
-    
-    void assertLastElementInField(String fieldName, TestObject expected);
     
     
     
@@ -177,6 +158,10 @@ public interface TestObject extends TestNaked {
      * object the test fails.
      */
     void assertFieldDoesNotContain(String fieldName, TestObject expected);
+    
+    public void assertFieldEntryCantParse(String fieldName, String value);
+
+    public void assertFieldEntryInvalid(String fieldName, String value);
 
     void assertFieldExists(String fieldName);
 
@@ -187,6 +172,25 @@ public interface TestObject extends TestNaked {
     void assertFieldUnmodifiable(String fieldName);
 
     void assertFieldVisible(String fieldName);
+
+    void assertFirstElementInField(String fieldName, String expected);
+
+    
+    
+    void assertFirstElementInField(String message, String fieldName, String expected);
+    
+    void assertFirstElementInField(String message, String fieldName, TestObject expected);
+    
+    void assertFirstElementInField(String fieldName, TestObject expected);
+    
+    void assertLastElementInField(String fieldName, String expected);
+    
+    void assertLastElementInField(String message, String fieldName, String expected);
+
+    
+    void assertLastElementInField(String message, String fieldName, TestObject expected);
+    
+    void assertLastElementInField(String fieldName, TestObject expected);
 
     void assertNoOfElements(String collectionName, int noOfElements);
 
@@ -215,10 +219,6 @@ public interface TestObject extends TestNaked {
     void assertType(String expected);
 
     void assertType(String message, String expected);
-
-    public void assertFieldEntryInvalid(String fieldName, String value);
-    
-    public void assertFieldEntryCantParse(String fieldName, String value);
 
     /**
      * Drop the specified view (object) into the specified field.
@@ -291,8 +291,6 @@ public interface TestObject extends TestNaked {
      */
     TestObject invokeAction(String name);
 
-    TestObject invokeAction(String name, TestNaked[] parameter);
-
     /**
      * Drop the specified view (object) onto this object and invoke the
      * corresponding <code>action</code> method. A new view representing the
@@ -302,6 +300,8 @@ public interface TestObject extends TestNaked {
      * @group action
      */
     TestObject invokeAction(String name, TestNaked parameter);
+
+    TestObject invokeAction(String name, TestNaked[] parameter);
 
     /**
      * Test the named field by calling fieldEntry with the specifed value and

@@ -24,7 +24,7 @@ public class OneToOneAssociation extends NakedObjectAssociation {
     	return getHint(session, object, null).canUse().isAllowed();
     }
     
-    protected void clear(NakedObject inObject) {
+    protected void clearValue(NakedObject inObject) {
     	Naked associate = get(inObject);
     	if(associate != null) {
     		clearAssociation(inObject, (NakedObject) associate);

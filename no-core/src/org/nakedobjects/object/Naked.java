@@ -59,7 +59,7 @@ public interface Naked {
 
     Object getObject();
 
-    abstract void clear(NakedObjectAssociation specification, NakedObject ref);
+    abstract void clearAssociation(NakedObjectAssociation specification, NakedObject ref);
     
     boolean canAccess(Session session, NakedObjectField specification);
     

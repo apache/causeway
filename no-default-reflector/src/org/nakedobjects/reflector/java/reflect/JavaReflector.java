@@ -806,8 +806,6 @@ public class JavaReflector implements Reflector {
 
             Method setMethod = findMethod(OBJECT, SET_PREFIX + name, null, new Class[] { returnType });
 
-            //Method validMethod = findMethod(OBJECT, VALID_PREFIX + name, null, new Class[] { Validity.class });
-
             // check for invalid methods
             Class[] params = new Class[] { returnType };
 

@@ -32,10 +32,6 @@ public class MockNakedObject implements NakedObject {
         return null;
     }
 
-    public boolean isFinder() {
-        return false;
-    }
-
     public boolean isPersistent() {
         return false;
     }
@@ -62,10 +58,6 @@ public class MockNakedObject implements NakedObject {
         return new DummyNakedObjectSpecification();//NakedObjectSpecification.getSpecification(MockNakedObject.class);
     }
 
-    public boolean isEmpty() {
-        return false;
-    }
-
     public boolean isSameAs(Naked object) {
         return false;
     }
@@ -78,8 +70,10 @@ public class MockNakedObject implements NakedObject {
         return false;
     }
 
-    public void clear(OneToOneAssociation specification) {}
+    public void clearValue(OneToOneAssociation specification) {}
 
+    public void clearCollection(OneToManyAssociation association) {}
+    
     public Naked getField(NakedObjectField field) {
         return null;
     }
@@ -98,7 +92,7 @@ public class MockNakedObject implements NakedObject {
 
     public void parseTextEntry(OneToOneAssociation specification, String text) throws TextEntryParseException, InvalidEntryException {}
 
-    public void clear(NakedObjectAssociation specification, NakedObject ref) {}
+    public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
 
     public boolean canAccess(Session session, NakedObjectField specification) {
         return false;

@@ -22,14 +22,6 @@ public abstract class NakedObjectField extends NakedObjectMember {
         return specification;
     }
 
-    /**
-     * Determines if this field hold a part, i.e. an object that is part of a composite object.
-     * @return boolean
-     */
-    public boolean isPart() {
-        return specification != null && specification.isPartOf();
-    }
-
     public boolean isCollection() {
         return false;
     }
@@ -40,14 +32,24 @@ public abstract class NakedObjectField extends NakedObjectMember {
      */
     // TODO confirm that Value is the only type that can be derived.  If so move it?
     public abstract boolean isDerived();
+
+    public abstract boolean isEmpty(NakedObject adapter);
+
+    public boolean isObject() {
+        return specification != null && specification.isObject();
+    }
+
+    /**
+     * Determines if this field hold a part, i.e. an object that is part of a composite object.
+     * @return boolean
+     */
+    public boolean isPart() {
+        return specification != null && specification.isPartOf();
+    }
     
     public boolean isValue() {
         return specification != null && specification.isValue();
     }
-
-	protected abstract void clear(NakedObject inObject);
-
-    public abstract boolean isEmpty(NakedObject adapter);
 }
 
 

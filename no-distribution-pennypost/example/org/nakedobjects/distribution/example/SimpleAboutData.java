@@ -5,6 +5,7 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.utility.NotImplementedException;
 
 public class SimpleAboutData implements HintData {
     private SimpleAbout serializableAbout;
@@ -53,6 +54,10 @@ class SimpleAbout implements Hint {
         } else {
             return new Veto(canUseReason);
         }
+    }
+    
+    public Consent isValid() {
+        throw new NotImplementedException();
     }
 
     public String getDescription() {

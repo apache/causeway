@@ -46,7 +46,7 @@ public class ServerDistribution implements ClientDistribution {
         if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
             throw new NakedObjectRuntimeException();
         }
-        inObject.clear(association, associate);
+        inObject.clearAssociation(association, associate);
     }
 
     private ObjectData[] convertToNakedCollection(TypedNakedCollection instances) {

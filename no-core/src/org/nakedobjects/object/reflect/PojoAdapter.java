@@ -107,7 +107,7 @@ public class PojoAdapter extends AbstractNakedObject {
         return action.getLabel(session, this);
     }
     
-    public void clear(NakedObjectAssociation specification, NakedObject associate) {
+    public void clearAssociation(NakedObjectAssociation specification, NakedObject associate) {
         specification.clearAssociation(this, associate);
     }
     
@@ -123,10 +123,14 @@ public class PojoAdapter extends AbstractNakedObject {
         return (NakedValue) field.get(this);
     }
 
-    public void clear(OneToOneAssociation specification) {
-        specification.clear(this);    
+    public void clearValue(OneToOneAssociation association) {
+        association.clearValue(this);    
     }
 
+    public void clearCollection(OneToManyAssociation association) {
+        association.clearCollection(this);
+    }
+    
     public void initOneToManyAssociation(OneToManyAssociation field, NakedObject[] instances) {
         field.initOneToManyAssociation(this, instances);
     }

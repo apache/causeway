@@ -3,7 +3,16 @@ package org.nakedobjects.object.exploration;
 public interface ExplorationFixture {
     void install();
 
-    void setContainer(ExplorationSetUp callback);
+    /**
+	 * Set the container for this fixture.
+	 *
+	 * <p>
+	 * From the point-of-view of the framework, it knows nothing about the
+	 * Container, so we just use Object.  Most applications that need to use
+	 * a container will use an implementation of this interface that downcasts
+	 * the Container into an application-specific type.
+	 */
+    void setContainer(Object container);
 }
 
 

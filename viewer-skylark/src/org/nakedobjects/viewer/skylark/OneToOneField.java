@@ -68,7 +68,7 @@ public class OneToOneField extends ObjectField implements ObjectContent {
     }
 
     public void clear() {
-        getParent().clear(getOneToOneAssociation(), object);
+        getParent().clearAssociation(getOneToOneAssociation(), object);
         //        getOneToOneAssociation().clearAssociation(getParent(), object);
     }
 

@@ -5,6 +5,8 @@ import org.nakedobjects.application.value.TextString;
 import org.nakedobjects.application.value.Time;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.exploration.AbstractExplorationFixture;
+import org.nakedobjects.xat.IllegalActionError;
+import org.nakedobjects.xat.NakedAssertionFailedError;
 import org.nakedobjects.xat.TestClass;
 import org.nakedobjects.xat.TestNaked;
 import org.nakedobjects.xat.TestObject;
@@ -237,7 +239,7 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
     
     public void testInvalidEntry() {
         TestObject creditCard = getTestClass(CreditCard.class.getName()).newInstance();
-        creditCard.assertFieldEntryInvalid("expires", "12/12");
+        creditCard.assertFieldEntryInvalid("expires", "0/12"); // expected 'nn/nn'
     }
 
     
@@ -312,7 +314,78 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
     }
     
     public void testMethodWithNullParameter() {
+        TestObject customer = getTestClass(Customer.class.getName()).newInstance();
+        TestObject location =  getTestClass(Location.class.getName()).newInstance();
+        TextString textEntry = new TextString("002");
+        TestValue value1 = createParameterTestValue(textEntry);
+        Date dateEntry = new Date(2001, 1, 23);
+        TestValue value2 = createParameterTestValue(dateEntry);
         
+        TestObject booking = customer.invokeAction("create booking", new TestNaked[] {location, createNullParameter(Location.class), value1, value2});
+        customer.assertFieldContains("bookings", booking);
+        booking.assertFieldContains("pick up", location);
+        booking.assertFieldContains("drop off", (Object) null);
+        booking.assertEmpty("dropoff");
+        booking.assertFieldContains("reference", "002");
+        booking.assertFieldContains("date", "Jan 23, 2001");     
+    }
+    
+    public void testContains() {
+        TestObject customer = getTestClass(Customer.class.getName()).newInstance();
+        TestObject location =  getTestClass(Location.class.getName()).newInstance();
+        TestObject paymentMethod =  getTestClass(CreditCard.class.getName()).newInstance();
+ 
+        customer.assertFieldDoesNotContain("locations", location);
+        customer.assertFieldDoesNotContain("preferred payment method", location);
+        
+        customer.associate("locations", location);
+        customer.assertFieldContains("locations", location);
+        
+        customer.associate("preferred payment method", paymentMethod);
+        customer.assertFieldContains("preferred payment method", paymentMethod);
+    }
+    
+    public void testGetFromCollection() {
+        TestObject customer = getTestClass(Customer.class.getName()).newInstance();
+        TestObject location1 =  getTestClass(Location.class.getName()).newInstance();
+        location1.fieldEntry("knownas", "one");
+        TestObject location2 =  getTestClass(Location.class.getName()).newInstance();
+        location2.fieldEntry("knownas", "two");
+        TestObject location3 =  getTestClass(Location.class.getName()).newInstance();
+        location3.fieldEntry("knownas", "one");
+                
+        customer.associate("locations", location1);
+        customer.assertFieldContains("locations", location1);
+        customer.associate("locations", location2);
+        customer.assertFieldContains("locations", location2);
+        customer.associate("locations", location3);
+        customer.assertFieldContains("locations", location3);
+        
+        customer.assertNoOfElements("locations", 3);
+        
+        customer.assertFieldContains("locations", "one");
+        customer.assertFieldContains("locations", "two");
+    //    customer.assertFieldContains("locations", "three");
+
+        TestObject pick = customer.getField("locations", "two");
+        assertEquals(location2, pick);
+        
+        try{
+            customer.getField("locations", "one");
+        } catch(IllegalActionError expected){}
+    }
+    
+    public void testValids() {
+        TestObject creditCard = getTestClass(CreditCard.class.getName()).newInstance();
+        creditCard.fieldEntry("Number", "12345678901234567");
+        
+        creditCard.assertFieldEntryInvalid("Number", "1234");
+        try{
+	        creditCard.assertFieldEntryInvalid("Number", "1234567890123456");
+	        fail();
+        } catch (NakedAssertionFailedError expected) {}
+
+        creditCard.assertFieldEntryCantParse("Color", "RED");
     }
     
 /*

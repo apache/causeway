@@ -18,7 +18,7 @@ public class MockField extends NakedObjectField {
         return false;
     }
 
-    public void clear(NakedObject inObject) {}
+    public void clearValue(NakedObject inObject) {}
 
     public boolean canAccess(Session session, NakedObject object) {
         return false;

@@ -142,10 +142,20 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     public void assertFieldContains(final String message, final String fieldName, final Object expected) {
         TestNaked actual = retrieveField(fieldName);
         Naked actualValue = actual.getForObject();
-
-        if (!actualValue.getObject().equals(expected)) {
-            throw new NakedAssertionFailedError(expected(message) + " value of " + expected + " but got " + actualValue.getObject());
+        
+        if(actualValue == null && expected == null) {
+            return;
         }
+        
+        if(actualValue == null && expected instanceof TestNakedNullParameter) {
+            return;
+        }
+
+        if (actualValue.getObject().equals(expected)) {
+            return;
+        }
+        
+        throw new NakedAssertionFailedError(expected(message) + " value of " + expected + " but got " + actualValue.getObject());
     }
 
     /**
@@ -457,16 +467,17 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
                     + "' contains null, but should contain an NakedValue object");
         }
         try {
-            NakedValue ref = (NakedValue) field.getSpecification().acquireInstance();
-            Hint about = getForObject().getHint(ClientSession.getSession(), field, ref);
-            if(about.isValid().isAllowed()) {
-                throw new NakedAssertionFailedError("Value was unexpectedly validated");
-            }
+         //   NakedValue ref = (NakedValue) field.getSpecification().acquireInstance();
             NakedValue nakedValue = (NakedValue) valueObject;
             if(nakedValue == null) {			
                 nakedValue = (NakedValue) field.getSpecification().acquireInstance();
             } 
             nakedValue.parseTextEntry(value);
+
+            Hint about = getForObject().getHint(ClientSession.getSession(), field, nakedValue);
+            if(about.isValid().isAllowed()) {
+                throw new NakedAssertionFailedError("Value was unexpectedly validated");
+            }
         } catch (InvalidEntryException expected) {}
     }
 
@@ -674,7 +685,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         NakedObjectField field = fieldFor(fieldName);
         assertFieldVisible(fieldName, field);
         assertFieldModifiable(fieldName, field);
-        assertEmpty(fieldName);
+        
         
         TestNaked targetField = getField(fieldName);
 
@@ -697,6 +708,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         NakedObject nakedObject = (NakedObject) getForObject();
         Hint about;
         if(association instanceof OneToOneAssociation) {
+            assertEmpty(fieldName);
             about = nakedObject.getHint(session, association, obj);
         } else if(association instanceof OneToManyAssociation) {
             about = ((OneToManyAssociation) association).getHint(session, nakedObject, obj, true);
@@ -734,7 +746,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         } else {
             NakedObject ref = (NakedObject) forObject.getField(field);
             if (ref != null) {
-                getForObject().clear((OneToOneAssociation) fieldFor(fieldName), ref);
+                getForObject().clearAssociation((OneToOneAssociation) fieldFor(fieldName), ref);
             }
         }
     }

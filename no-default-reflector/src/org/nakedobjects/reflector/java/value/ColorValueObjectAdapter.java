@@ -1,8 +1,8 @@
 package org.nakedobjects.reflector.java.value;
 
-import org.nakedobjects.application.ValueParseException;
 import org.nakedobjects.application.value.Color;
 import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;
 import org.nakedobjects.object.value.ColorValue;
 
@@ -44,7 +44,7 @@ public class ColorValueObjectAdapter extends AbstractNakedValue implements Color
                 	    setColor(Integer.parseInt(text));
             	}
             } catch (NumberFormatException e) {
-                throw new ValueParseException("Invalid number", e);
+                throw new TextEntryParseException("Invalid number", e);
             }
         }
     }

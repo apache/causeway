@@ -55,8 +55,10 @@ class DummyNakedObject implements NakedObject {
         return false;
     }
 
-    public void clear(OneToOneAssociation specification) {}
+    public void clearValue(OneToOneAssociation specification) {}
 
+    public void clearCollection(OneToManyAssociation association) {}
+    
     public Naked getField(NakedObjectField field) {
         return null;
     }
@@ -90,7 +92,7 @@ class DummyNakedObject implements NakedObject {
         return null;
     }
 
-    public void clear(NakedObjectAssociation specification, NakedObject ref) {}
+    public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
 
     public boolean canAccess(Session session, NakedObjectField specification) {
         return false;

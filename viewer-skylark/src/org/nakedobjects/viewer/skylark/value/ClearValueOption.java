@@ -29,7 +29,7 @@ public class ClearValueOption extends AbstractValueOption {
 
     public void execute(Workspace frame, View view, Location at) {
         ValueField vc = (ValueField) view.getContent();        
-        vc.getParent().clear((OneToOneAssociation) vc.getField());
+        vc.getParent().clearValue((OneToOneAssociation) vc.getField());
         updateParent(view);
     }
 

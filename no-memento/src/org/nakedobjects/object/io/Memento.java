@@ -178,7 +178,7 @@ public class Memento implements Transferable, Serializable {
                 LOG.debug("  association " + field + " changed, added " + element.getOid());
                 object.setAssociation(field, element);
             } else {
-                object.clear(field, element);
+                object.clearAssociation(field, element);
 //                original.removeElement(element);
             }
         }
@@ -187,7 +187,7 @@ public class Memento implements Transferable, Serializable {
         for (int i = 0; i < size; i++) {
             NakedObject element = (NakedObject) original.elementAt(i);
             LOG.debug("  association " + field + " changed, removed " + element.getOid());
-            object.clear(field, element);
+            object.clearAssociation(field, element);
         }
     }
 

@@ -171,7 +171,7 @@ public class Booking {
     }
 
     public Booking actionReturnBooking() {
-        Booking returnBooking = new Booking();
+        Booking returnBooking = (Booking) container.createTransientInstance(Booking.class);
 
         returnBooking.associateCustomer(getCustomer());
         returnBooking.setPickUp(getDropOff());

@@ -201,7 +201,11 @@ abstract class AbstractTestObject {
         final int noParameters = parameters.length;
         final NakedObjectSpecification[] parameterClasses = new NakedObjectSpecification[noParameters];
         for (int i = 0; i < noParameters; i++) {
-            parameterClasses[i] = parameterObjects[i].getSpecification();
+            if(parameterObjects[i] == null) {
+                parameterClasses[i] = ((TestNakedNullParameter) parameters[i]).getSpecification();
+            } else {
+                parameterClasses[i] = parameterObjects[i].getSpecification();
+            }
         }
     
         try {

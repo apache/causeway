@@ -24,7 +24,7 @@ public class OneToManyAssociation extends NakedObjectAssociation {
         return getHint(session, object, null, true).canUse().isAllowed();
     }
 
-    public void clear(NakedObject inObject) {
+    public void clearCollection(NakedObject inObject) {
         reflectiveAdapter.removeAllAssociations(inObject);
     }
 

@@ -99,18 +99,25 @@ public abstract class ExplorationSetUp {
     public void addFixture(ExplorationFixture fixture) {
         fixtures.addElement(fixture);
     }
-
+    
+/*
     public abstract void resetClock() ;
 
     public abstract void setTime(int hour, int minute);
 
     public abstract  void setDate(int year, int month, int day) ;
-
+*/
     public void setContext(NakedObjectContext context) {
         this.context = context;
     }
     
-
+    /**
+	 * Expose as a .NET property
+	 * @property
+	 */
+    public void set_Context(NakedObjectContext context) {
+        this.context = context;
+    }
 }
 
 

@@ -3,29 +3,44 @@ package org.nakedobjects.object.exploration;
 
 
 public abstract class AbstractExplorationFixture implements ExplorationFixture {
-    private ExplorationSetUp container;
+    private Object container;
     
+    /**
+     * @deprecated
+     */
     protected final Object createInstance(Class type) {
-        return container.createInstance(type);
+        return ((ExplorationSetUp) container).createInstance(type);
     }
 
+    /**
+     * @deprecated
+     */
     protected final Object createInstance(String className) {
-        return container.createInstance(className);
+        return ((ExplorationSetUp) container).createInstance(className);
     }
     
+    /**
+     * @deprecated
+     */
     protected void resetClock() {
-        getContainer().resetClock();
+ //       getContainer().resetClock();
     }
 
+    /**
+     * @deprecated
+     */
     public void setTime(int hour, int minute) {
-        getContainer().setTime(hour, minute);
+   //     getContainer().setTime(hour, minute);
     }
 
+    /**
+     * @deprecated
+     */
     public void setDate(int year, int month, int day) {
-        getContainer().setDate(year, month, day);
+   //     getContainer().setDate(year, month, day);
     }
 
-    protected ExplorationSetUp getContainer() {
+    protected Object getContainer() {
         return container;
     }
 
@@ -39,15 +54,21 @@ public abstract class AbstractExplorationFixture implements ExplorationFixture {
         return true;
     }
 
-    protected void registerClass(Class cls) {
+    /**
+     * @deprecated
+     */
+   protected void registerClass(Class cls) {
         registerClass(cls.getName());
     }
 
+   /**
+    * @deprecated
+    */
     protected void registerClass(String className) {
-        container.registerClass(className);
+        ((ExplorationSetUp) container).registerClass(className);
     }
 
-    public void setContainer(ExplorationSetUp container) {
+    public void setContainer(Object container) {
         this.container = container;
     }
 /*
