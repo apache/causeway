@@ -7,9 +7,11 @@ import org.nakedobjects.application.valueholder.Time;
 import org.nakedobjects.example.xat.JavaAcceptanceTestCase;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.reflector.java.fixture.JavaFixture;
+import org.nakedobjects.reflector.java.reflect.VectorCollectionAdapter;
 import org.nakedobjects.xat.IllegalActionError;
 import org.nakedobjects.xat.NakedAssertionFailedError;
 import org.nakedobjects.xat.TestClass;
+import org.nakedobjects.xat.TestCollection;
 import org.nakedobjects.xat.TestNaked;
 import org.nakedobjects.xat.TestObject;
 import org.nakedobjects.xat.TestValue;
@@ -123,12 +125,12 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
         //
         nextStep("Specify pick up and drop off locations");
 
-        TestObject pickup = city.invokeAction("New Location");
+        TestObject pickup = city.invokeActionReturnObject("New Location", NO_PARAMETERS);
 
         pickup.fieldEntry("Street Address", "234 E 42nd Street");
         booking.associate("Pick Up", pickup);
         
-        TestObject dropoff = city.invokeAction("New Location");
+        TestObject dropoff = city.invokeActionReturnObject("New Location", NO_PARAMETERS);
 
         dropoff.fieldEntry("Street Address", "JFK Airport, BA Terminal");
         booking.associate("Drop Off", dropoff);
@@ -171,13 +173,13 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
 
         //
         nextStep("Check it is available.");
-        booking.invokeAction("Check Availability");
+        booking.invokeAction("Check Availability", NO_PARAMETERS);
         booking.assertFieldContains("Status", "Available");
 
 
         //
         nextStep("And then confirm.");
-        booking.invokeAction("Confirm");
+        booking.invokeAction("Confirm", NO_PARAMETERS);
         booking.assertFieldContains("Status", "Confirmed");
 
 
@@ -202,6 +204,12 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
         */
     }
 
+    public void testCollectionFromAction() {
+        testBasicBooking();
+        TestObject customer = getTestClass(Customer.class.getName()).findInstance("Pawson");
+        TestCollection collection = customer.invokeActionReturnCollection("Locations", NO_PARAMETERS);
+        assertEquals(2, ((VectorCollectionAdapter) collection.getForNaked()).size());
+    }
     
     public void testReuseBooking() {
         // setup
@@ -214,7 +222,7 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
 
         nextStep("Create a booking for this customer.");
 
-        TestObject booking = customer.invokeAction("New Booking");
+        TestObject booking = customer.invokeActionReturnObject("New Booking", NO_PARAMETERS);
 
         booking.assertFieldContains("Customer", customer);
         nextStep("Retrieve the customer's home and office as the pick-up and drop-off locations.");
@@ -238,10 +246,10 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
 
 
         nextStep("Check it is available");
-        booking.invokeAction("Check Availability");
+        booking.invokeAction("Check Availability", NO_PARAMETERS);
         booking.assertFieldContains("Status", "Available");
         nextStep("And then confrm");
-        booking.invokeAction("Confirm");
+        booking.invokeAction("Confirm", NO_PARAMETERS);
         booking.assertFieldContains("Status", "Confirmed");
     }
     
@@ -319,7 +327,7 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
 
         customer.assertFieldContains("Phone Numbers", "Mobile");
         
-        customer.invokeAction("New Booking");
+        customer.invokeAction("New Booking", NO_PARAMETERS);
     }
     
     public void testSingleParameterMethod() {
@@ -331,7 +339,7 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
        TestObject location2 = locationClass.newInstance();
        location2.associate("city", city);
        
-       TestObject newObject = location1.invokeAction("new booking", location2);
+       TestObject newObject = location1.invokeActionReturnObject("new booking", parameters(location2));
        newObject.assertFieldContains("pickup", location2);
        newObject.assertFieldContains("dropoff", location1);
        
@@ -345,7 +353,7 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
         Date dateEntry = new Date(2001, 1, 23);
         TestValue value2 = createParameterTestValue(dateEntry);
         
-        TestObject booking = customer.invokeAction("create booking", new TestNaked[] {location, location, value1, value2});
+        TestObject booking = customer.invokeActionReturnObject("create booking", new TestNaked[] {location, location, value1, value2});
         customer.assertFieldContains("bookings", booking);
         booking.assertFieldContains("pick up", location);
         booking.assertFieldContains("reference", "002");
@@ -360,7 +368,7 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
         Date dateEntry = new Date(2001, 1, 23);
         TestValue value2 = createParameterTestValue(dateEntry);
         
-        TestObject booking = customer.invokeAction("create booking", new TestNaked[] {location, createNullParameter(Location.class), value1, value2});
+        TestObject booking = customer.invokeActionReturnObject("create booking", new TestNaked[] {location, createNullParameter(Location.class), value1, value2});
         customer.assertFieldContains("bookings", booking);
         booking.assertFieldContains("pick up", location);
         booking.assertFieldContains("drop off", (Object) null);
@@ -441,10 +449,10 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
         TestObject customer = getTestClass(Customer.class.getName()).newInstance();
         
         bookingClass.assertActionExists("create booking");
-        bookingClass.invokeAction("create booking");
+        bookingClass.invokeAction("create booking", NO_PARAMETERS);
 
         bookingClass.assertActionExists("new booking", customer);
-        bookingClass.invokeAction("new booking", customer);
+        bookingClass.invokeAction("new booking", parameters(customer));
      }
 
 /*

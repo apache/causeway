@@ -26,10 +26,18 @@ public class TestClassDecorator implements TestClass {
         return wrappedObject.instances();
     }
 
-    public TestObject invokeAction(String name) {
-        return wrappedObject.invokeAction(name);
+    public TestNaked invokeAction(String name, TestNaked[] parameters) {
+        return wrappedObject.invokeAction(name, parameters);
     }
 
+    public TestCollection invokeActionReturnCollection(String name, TestNaked[] parameters) {
+        return wrappedObject.invokeActionReturnCollection(name, parameters);
+    }
+    
+    public TestObject invokeActionReturnObject(String name, TestNaked[] parameters) {
+        return wrappedObject.invokeActionReturnObject(name, parameters);
+    }
+    
     public TestObject newInstance() {
         return wrappedObject.newInstance();
     }
@@ -97,15 +105,6 @@ public class TestClassDecorator implements TestClass {
     public void assertActionVisible(String name, TestNaked parameter) {
         wrappedObject.assertActionVisible(name, parameter);
     }
-
-    public TestObject invokeAction(String name, TestNaked[] parameters) {
-        return wrappedObject.invokeAction(name, parameters);
-    }
-
-    public TestObject invokeAction(String name, TestNaked parameter) {
-        return wrappedObject.invokeAction(name, parameter);
-    }
-
 }
 
 /*

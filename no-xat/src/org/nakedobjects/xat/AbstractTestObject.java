@@ -1,6 +1,7 @@
 package org.nakedobjects.xat;
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationException;
@@ -30,53 +31,33 @@ abstract class AbstractTestObject {
     
     public abstract void setForNaked(Naked object);
 
-    
-
-    /**
-     * Invokes this object's zero-parameter action method of the the given name.
-     * This mimicks the right-clicking on an object and subsequent selection of
-     * a menu item.
-     */
-    public TestObject invokeAction(final String name) {
-        Action action = getAction(name);
-        assertActionUsable(name, action, new TestNaked[0]);
-        assertActionVisible(name, action, new TestNaked[0]);
-
-        NakedObject result = (NakedObject) getForNaked().execute(action, null);
-        return ((result == null) ? null : factory.createTestObject(session, result));
-    }
-
-    public TestObject invokeAction(final String name, final TestNaked[] parameters) {
+  
+    public TestNaked invokeAction(final String name, final TestNaked[] parameters) {
         Action action = getAction(simpleName(name), parameters);
         assertActionUsable(name, action, parameters);
         assertActionVisible(name, action, parameters);
 
         Naked[] parameterObjects = nakedObjects(parameters);
-/*        boolean allowed = action.getAbout(session, (NakedObject) getForObject(), parameterObjects).canUse().isAllowed();
-        assertTrue("action '" + name + "' is unusable", allowed);
-
-        allowed = action.getAbout(session, (NakedObject) getForObject(), parameterObjects).canAccess().isAllowed();
-        assertTrue("action '" + name + "' is invisible", allowed);
-*/
-        NakedObject result = (NakedObject) getForNaked().execute(action, parameterObjects);
+        Naked result = getForNaked().execute(action, parameterObjects);
         if (result == null) {
             return null;
+        } else if(result instanceof NakedCollection) {
+            return factory.createTestCollection(session, (NakedCollection) result);
         } else {
-            return factory.createTestObject(session, result);
+            return factory.createTestObject(session, (NakedObject) result);
         }
 
     }
 
-    /**
-     * Drop the specified view (object) onto this object and invoke the
-     * corresponding <code>action</code> method. A new view representing the
-     * returned object, if any is returned, from the invoked <code>action</code>
-     * method is returned by this method.
-     */
-    public TestObject invokeAction(final String name, final TestNaked parameter) {
-        return invokeAction(name, new TestNaked[] {parameter});
+    public TestCollection invokeActionReturnCollection(String name, TestNaked[] parameters) {
+        return (TestCollection) invokeAction(name, parameters);
     }
 
+    public TestObject invokeActionReturnObject(String name, TestNaked[] parameters) {
+        return (TestObject) invokeAction(name, parameters);
+    }
+
+    
     public String toString() {
         if (getForNaked() == null) {
             return  super.toString() + " " + "null";

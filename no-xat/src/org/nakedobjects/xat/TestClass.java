@@ -85,29 +85,13 @@ public interface TestClass extends TestNaked {
      * Check that the specified object menu item is currently visible. If it is
      * invisible the test fails.
      */
-    void assertActionVisible(String name, TestNaked parameter);
+    void assertActionVisible(String name, TestNaked parameters);
 
+    TestNaked invokeAction(String name, TestNaked[] parameters);
 
-    /**
-     * Invokes this object's zero-parameter action method of the the given name.
-     * This mimicks the right-clicking on an object and subsequent selection of
-     * a menu item.
-      */
-    TestObject invokeAction(String name);
+    TestObject invokeActionReturnObject(String name, TestNaked[] parameters);
 
-    TestObject invokeAction(String name, TestNaked[] parameter);
-
-    /**
-     * Drop the specified view (object) onto this object and invoke the
-     * corresponding <code>action</code> method. A new view representing the
-     * returned object, if any is returned, from the invoked <code>action</code>
-     * method is returned by this method.
-     * 
-     * @group action
-     */
-    TestObject invokeAction(String name, TestNaked parameter);
-
-
+    TestCollection invokeActionReturnCollection(String name, TestNaked[] parameters);
 }
 
 /*

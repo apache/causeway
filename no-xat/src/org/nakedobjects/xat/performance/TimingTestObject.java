@@ -31,28 +31,8 @@ public class TimingTestObject extends TestObjectDecorator {
         timer.stop();
         doc.record(timer);
     }
-
-    public TestObject invokeAction(final String name) {
-        Timer timer = new Timer("action '" + name + "'");
-        timer.userDelay(1, 4);
-        timer.start();
-        TestObject result = super.invokeAction(name);
-        timer.stop();
-        doc.record(timer);
-        return result;
-    }
-
-    public TestObject invokeAction(final String name, final TestObject parameter) {
-        Timer timer = new Timer("action '" + name + "' with " + parameter.getTitle());
-        timer.userDelay(2, 4);
-        timer.start();
-        TestObject result = super.invokeAction(name, parameter);
-        timer.stop();
-        doc.record(timer);
-        return result;
-    }
     
-    public TestObject invokeAction(final String name, final TestNaked[] parameters) {
+    public TestNaked invokeAction(final String name, final TestNaked[] parameters) {
         String parameterList = "";
         for (int i = 0, l = parameters.length; i < l; i++) {
             parameterList += (i > 0 ? "," : "") + parameters[i].getTitle();
@@ -60,7 +40,7 @@ public class TimingTestObject extends TestObjectDecorator {
         Timer timer = new Timer("action '" + name + "' with " + parameters);
         timer.userDelay(2, 4);
         timer.start();
-        TestObject result = super.invokeAction(name, parameters);
+        TestNaked result = super.invokeAction(name, parameters);
         timer.stop();
         doc.record(timer);
         return result;

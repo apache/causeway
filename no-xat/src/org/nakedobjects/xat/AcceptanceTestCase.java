@@ -28,6 +28,7 @@ import org.apache.log4j.PropertyConfigurator;
 
 public abstract class AcceptanceTestCase extends TestCase {
     private static final String TEST_OBJECT_FACTORY = "test-object-factory";
+    protected static final TestNaked[] NO_PARAMETERS = new TestNaked[0];
     private Hashtable classes = new Hashtable();
     private Documentor documentor;
     private TestObjectFactory testObjectFactory;
@@ -68,83 +69,54 @@ public abstract class AcceptanceTestCase extends TestCase {
     public TestValue createParameterTestValue(Object value) {
         return testObjectFactory.createParamerTestValue(value);
     }
-    
+
     public TestNaked createNullParameter(Class cls) {
         return new TestNakedNullParameter(cls);
     }
-    
+
     public TestNaked createNullParameter(String cls) {
         return new TestNakedNullParameter(cls);
     }
 
     protected void setUp() throws Exception {
         File f = new File("xat.properties");
-        if(f.exists()) {
-            ConfigurationFactory.setConfiguration(new Configuration(new ConfigurationPropertiesLoader(f.getAbsolutePath(), true)));
+        if (f.exists()) {
+            ConfigurationFactory
+                    .setConfiguration(new Configuration(new ConfigurationPropertiesLoader(f.getAbsolutePath(), true)));
         } else {
             ConfigurationFactory.setConfiguration(new Configuration());
         }
         Properties logProperties = ConfigurationFactory.getConfiguration().getProperties("log4j");
-        if(logProperties.size() == 0) {
+        if (logProperties.size() == 0) {
             LogManager.getRootLogger().setLevel(Level.OFF);
         } else {
             PropertyConfigurator.configure(logProperties);
         }
-        
+
         Logger.getLogger(AcceptanceTestCase.class).debug("XAT Logging enabled - new test: " + getName());
 
-        
-        
         fixtureBuilder = createFixtureBuilder();
-        /*
-         * TODO Refactor
-         * 
-         * When tests are run they need to execute against a specific object
-         * manager, and create test objects that generate specific output. The
-         * following need to be provided to the case: NakedObjectManager
-         * TestObjectFactory
-         * 
-         * These need to be provide differently for different runs of the tests.
-         */
-        
-        /*
-        ReflectorFactory reflectorFactory = loadReflector();
-        objectManager = createObjectManager(reflectorFactory.getObjectFactory());
- //       reflectorFactory.setObjectManager(objectManager);
 
- //       objectManager.setFactory(objectFactory);
-        
-        try {
-            explorationSetUp = (ExplorationSetUp) ComponentLoader.loadComponent("exploration-setup", ExplorationSetUp.class);
-            NakedObjectContext context = new NakedObjectContext(objectManager);
-            explorationSetUp.setContext(context);
-            Session session = ClientSession.getSession();
+        if (testObjectFactory == null) {
+            testObjectFactory = (TestObjectFactory) ComponentLoader.loadComponent(TEST_OBJECT_FACTORY,
+                    NonDocumentingTestObjectFactory.class, TestObjectFactory.class);
+        }
+        documentor = testObjectFactory.getDocumentor();
+        documentor.start();
+        String className = getClass().getName();
+        String methodName = getName().substring(4);
+        testObjectFactory.testStarting(className, methodName);
 
+        setupFramework();
 
-            new NakedObjectSpecificationLoaderImpl();
-*/
-
-            if (testObjectFactory == null) {
-                 testObjectFactory = (TestObjectFactory) ComponentLoader.loadComponent(TEST_OBJECT_FACTORY,
-                        NonDocumentingTestObjectFactory.class, TestObjectFactory.class);
-            }
-            documentor = testObjectFactory.getDocumentor();
-            documentor.start();
-            String className = getClass().getName();
-            String methodName = getName().substring(4);
-            testObjectFactory.testStarting(className, methodName);
-        
-
-           setupFramework();
-            
-       // fixtureBuilder = explorationSetup();
+        // fixtureBuilder = explorationSetup();
         ClientSession.setSession(new Session());
         Session session = ClientSession.getSession();
-        
+
         PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
-        setUpFixtures(); 
-            
-        try{
+        setUpFixtures();
+
+        try {
             fixtureBuilder.installFixtures();
             String[] cls = fixtureBuilder.getClasses();
             for (int i = 0; i < cls.length; i++) {
@@ -157,7 +129,7 @@ public abstract class AcceptanceTestCase extends TestCase {
             // If an exception is thrown in setUp then tearDown is not called,
             // hence object manager is left running, but shouldn't be.
             e.printStackTrace();
- //           objectManager.shutdown();
+            //           objectManager.shutdown();
             throw e;
         }
     }
@@ -166,23 +138,6 @@ public abstract class AcceptanceTestCase extends TestCase {
 
     protected abstract void setupFramework();
 
-    /*
-    protected ReflectorFactory loadReflector() throws ConfigurationException, ComponentException {
-        NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
-        
-        ReflectorFactory reflectorFactory = (ReflectorFactory) ComponentLoader.loadComponent(REFLECTOR_FACTORY, ReflectorFactory.class);
-        NakedObjectSpecificationImpl.setReflectorFactory(reflectorFactory);    
-        
-        return reflectorFactory;
-    }
-    
-    protected LocalObjectManager createObjectManager( ObjectFactory objectFactory) throws ConfigurationException, ComponentException {
-        NakedObjectStore nos;
-        nos = new TransientObjectStore();
-        OidGenerator oidGenerator = new SimpleOidGenerator();
-       return new LocalObjectManager(nos, new NullUpdateNotifier(), oidGenerator, objectFactory);
-    }
-*/
     protected abstract void setUpFixtures();
 
     protected void startDocumenting() {
@@ -214,11 +169,11 @@ public abstract class AcceptanceTestCase extends TestCase {
         startDocumenting();
         nextStep(text);
     }
-/*
-    public void setTestObjectFactory(TestObjectFactory testObjectFactory) {
-        this.testObjectFactory = testObjectFactory;
-    }
-*/
+
+    /*
+     * public void setTestObjectFactory(TestObjectFactory testObjectFactory) {
+     * this.testObjectFactory = testObjectFactory; }
+     */
     protected void stopDocumenting() {
         documentor.stop();
     }
@@ -231,7 +186,7 @@ public abstract class AcceptanceTestCase extends TestCase {
     }
 
     protected void tearDown() throws Exception {
-//        objectManager.shutdown();
+        //        objectManager.shutdown();
         ClientSession.end();
         testObjectFactory.testEnding();
         documentor.stop();
@@ -242,6 +197,42 @@ public abstract class AcceptanceTestCase extends TestCase {
      */
     protected void title(String text) {
         documentor.title(text);
+    }
+
+    protected TestNaked[] parameters(Object parameter1) {
+        return new TestNaked[] { asTestNaked(parameter1) };
+    }
+
+    protected TestNaked[] parameters(Object parameter1, Object parameter2) {
+        return new TestNaked[] { asTestNaked(parameter1), asTestNaked(parameter2) };
+    }
+
+    protected TestNaked[] parameters(Object parameter1, Object parameter2, Object parameter3) {
+        return new TestNaked[] { asTestNaked(parameter1), asTestNaked(parameter2), asTestNaked(parameter3) };
+    }
+
+    protected TestNaked[] parameters(Object parameter1, Object parameter2, Object parameter3, Object parameter4) {
+        return new TestNaked[] { asTestNaked(parameter1), asTestNaked(parameter2), asTestNaked(parameter3),
+                asTestNaked(parameter4) };
+    }
+
+    protected TestNaked[] parameters(Object parameter1, Object parameter2, Object parameter3, Object parameter4, Object parameter5) {
+        return new TestNaked[] { asTestNaked(parameter1), asTestNaked(parameter2), asTestNaked(parameter3),
+                asTestNaked(parameter4), asTestNaked(parameter5) };
+    }
+
+    protected TestNaked[] parameters(Object parameter1, Object parameter2, Object parameter3, Object parameter4,
+            Object parameter5, Object parameter6) {
+        return new TestNaked[] { asTestNaked(parameter1), asTestNaked(parameter2), asTestNaked(parameter3),
+                asTestNaked(parameter4), asTestNaked(parameter5), asTestNaked(parameter6) };
+    }
+
+    protected TestNaked asTestNaked(Object parameter) {
+        if (parameter instanceof TestNaked) {
+            return (TestNaked) parameter;
+        } else {
+            return null;
+        }
     }
 }
 

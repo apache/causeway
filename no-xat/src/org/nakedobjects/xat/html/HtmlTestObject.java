@@ -130,29 +130,21 @@ public class HtmlTestObject extends TestObjectDecorator {
         return result;
     }
 
-    public TestObject invokeAction(String name) {
-        TestObject result = super.invokeAction(name);
-        doc("Right click on the " + doc.objectString(getForNaked()));
-        doc(" and select the <strong>" + name);
-        doc(getAction(name).hasReturn() ? "..." : "");
-        doc("</strong> action");
+    public TestNaked invokeAction(String name, TestNaked[] parameters) {
+        TestNaked result = super.invokeAction(name, parameters);
+        if(parameters.length == 1) {
+            doc("drop it onto the ");
+            doc(doc.objectString(this.getForNaked()));
+        } else {
+	        doc("Right click on the " + doc.objectString(getForNaked()));
+	        doc(" and select the <strong>" + name);
+	        doc(getAction(name).hasReturn() ? "..." : "");
+	        doc("</strong> action");
+        }
         doc((result == null) ? "." : ", which returns " + objectString(result.getForNaked()) + ". ");
         return result;
     }
-
-    public TestObject invokeAction(String name, TestNaked parameter) {
-        doc("drop it onto the ");
-        doc(doc.objectString(this.getForNaked()));
-        TestObject result = super.invokeAction(name, parameter);
-        NakedObject object = (NakedObject) result.getForNaked();
-        if (object == null) {
-            docln(". ");
-        } else {
-            docln(", which returns " + objectString(object) + ". ");
-        }
-        return result;
-    }
-
+    
     private String objectString(Naked object) {
         return doc.objectString(object);
     }

@@ -5,7 +5,6 @@ import org.nakedobjects.object.reflect.Action;
 
 
 public interface TestObject extends TestNaked {
-
     void assertActionExists(String name);
 
     void assertActionExists(String name, TestNaked parameter);
@@ -290,7 +289,7 @@ public interface TestObject extends TestNaked {
      * 
      * @group action
      */
-    TestObject invokeAction(String name);
+   // TestNaked invokeAction(String name);
 
     /**
      * Drop the specified view (object) onto this object and invoke the
@@ -300,10 +299,15 @@ public interface TestObject extends TestNaked {
      * 
      * @group action
      */
-    TestObject invokeAction(String name, TestNaked parameter);
+   // TestNaked invokeAction(String name, TestNaked parameter);
 
-    TestObject invokeAction(String name, TestNaked[] parameter);
+    TestNaked invokeAction(String name, TestNaked[] parameter);
 
+    TestObject invokeActionReturnObject(String string, TestNaked[] parameter);
+
+    TestCollection invokeActionReturnCollection(String string, TestNaked[] parameter);
+
+    
     /**
      * Test the named field by calling fieldEntry with the specifed value and
      * then check the value stored is the same.
@@ -321,6 +325,7 @@ public interface TestObject extends TestNaked {
      * check the value stored against the expected value.
      */
     void testField(String fieldName, TestObject expected);
+
 }
 
 /*

@@ -74,12 +74,12 @@ public class ECSAcceptanceTestUsingFixtures extends JavaAcceptanceTestCase {
         //
         nextStep("Specify pick up and drop off locations");
 
-        TestObject pickup = city.invokeAction("New Location");
+        TestObject pickup = city.invokeActionReturnObject("New Location", NO_PARAMETERS);
 
         pickup.fieldEntry("Street Address", "234 E 42nd Street");
         booking.associate("Pick Up", pickup);
 
-        TestObject dropoff = city.invokeAction("New Location");
+        TestObject dropoff = city.invokeActionReturnObject("New Location", NO_PARAMETERS);
 
         dropoff.fieldEntry("Street Address", "JFK Airport, BA Terminal");
         booking.associate("Drop Off", dropoff);
@@ -122,13 +122,13 @@ public class ECSAcceptanceTestUsingFixtures extends JavaAcceptanceTestCase {
 
         //
         nextStep("Check it is available.");
-        booking.invokeAction("Check Availability");
+        booking.invokeAction("Check Availability", NO_PARAMETERS);
         booking.assertFieldContains("Status", "Available");
 
 
         //
         nextStep("And then confirm.");
-        booking.invokeAction("Confirm");
+        booking.invokeAction("Confirm", NO_PARAMETERS);
         booking.assertFieldContains("Status", "Confirmed");
 
 
@@ -144,7 +144,7 @@ public class ECSAcceptanceTestUsingFixtures extends JavaAcceptanceTestCase {
 
         nextStep("Create a booking for this customer.");
 
-        TestObject booking = customer.invokeAction("New Booking");
+        TestObject booking = customer.invokeActionReturnObject("New Booking", NO_PARAMETERS);
 
         booking.assertFieldContains("Customer", customer);
         nextStep("Retrieve the customer's home and office as the pick-up and drop-off locations.");
@@ -168,10 +168,10 @@ public class ECSAcceptanceTestUsingFixtures extends JavaAcceptanceTestCase {
 
 
         nextStep("Check it is available");
-        booking.invokeAction("Check Availability");
+        booking.invokeAction("Check Availability", NO_PARAMETERS);
         booking.assertFieldContains("Status", "Available");
         nextStep("And then confrm");
-        booking.invokeAction("Confirm");
+        booking.invokeAction("Confirm", NO_PARAMETERS);
         booking.assertFieldContains("Status", "Confirmed");
     }
     
@@ -188,7 +188,7 @@ public class ECSAcceptanceTestUsingFixtures extends JavaAcceptanceTestCase {
         customer.assertFieldContainsType("Preferred Payment Method", "CreditCard");
         customer.assertFieldContainsType(null, "Phone Numbers", "Mobile", "Telephone");
         
-        customer.invokeAction("New Booking");
+        customer.invokeAction("New Booking", NO_PARAMETERS);
     }
 /*
     public void story3ReturnBooking() {

@@ -2,6 +2,7 @@ package org.nakedobjects.xat.performance;
 
 import org.nakedobjects.xat.TestClass;
 import org.nakedobjects.xat.TestClassDecorator;
+import org.nakedobjects.xat.TestNaked;
 import org.nakedobjects.xat.TestObject;
 
 
@@ -34,41 +35,24 @@ public class TimingTestClass extends TestClassDecorator {
         return instance;
     }
     
-    public TestObject invokeAction(final String name) {
-        Timer timer = new Timer("c;lass action '" + name + "'");
-        timer.userDelay(4, 8);
-       timer.start();
-        TestObject result = super.invokeAction(name);
-        timer.stop();
-        doc.record(timer);
-        return result;
-    }
 
-    public TestObject invokeAction(final String name, final TestObject parameter) {
-        Timer timer = new Timer("class action '" + name + "' with " + parameter.getTitle());
+    public TestNaked invokeAction(final String name, final TestNaked[] parameters) {
+        StringBuffer parameterList = new StringBuffer();
+        for (int i = 0; i < parameters.length; i++) {
+            if(i > 0) {
+                parameterList.append(", ");
+            }
+            parameterList.append(parameters[i].getTitle());
+        }
+        
+        Timer timer = new Timer("class action '" + name + "' with " + parameterList);
         timer.userDelay(4, 8);
        timer.start();
-        TestObject result = super.invokeAction(name, parameter);
+        TestNaked result = super.invokeAction(name, parameters);
         timer.stop();
         doc.record(timer);
         return result;
     }
-    
-    /*
-      TODO not implemented yet
-    public TestObject invokeAction(final String name, final TestNaked[] parameters) {
-        String parameterList = "";
-        for (int i = 0, l = parameters.length; i < l; i++) {
-            parameterList += (i > 0 ? "," : "") + parameters[i].getTitle();
-        }
-        Timer timer = new Timer("class action '" + name + "' with " + parameters);
-        timer.start();
-        TestObject result = super.invokeAction(name, parameters);
-        timer.stop();
-        doc.record(timer);
-        return result;
-    }
-    */
 }
 
 /*
