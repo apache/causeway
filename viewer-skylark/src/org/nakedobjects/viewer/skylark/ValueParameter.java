@@ -6,7 +6,7 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.viewer.skylark.basic.ActionContent;
 
 
-public class ValueParameter extends ActionField implements ValueContent {
+public class ValueParameter extends ActionParameter implements ValueContent {
     private final NakedValue value;
 
     public ValueParameter(String label, Naked value, ActionContent content, int parameter) {

@@ -7,6 +7,7 @@ public class Color {
     public static Color DEBUG_BASELINE = new Color(java.awt.Color.magenta);
     public static Color DEBUG_DRAW_BOUNDS = new Color(java.awt.Color.cyan);
     public static Color DEBUG_VIEW_BOUNDS = new Color(java.awt.Color.orange);
+    public static Color DEBUG_REPAINT_BOUNDS = new Color(java.awt.Color.red);
 	protected static Color NULL = new Color(0);
     private static final String PROPERTY_STEM = Viewer.PROPERTY_BASE + "color.";
     private java.awt.Color color;

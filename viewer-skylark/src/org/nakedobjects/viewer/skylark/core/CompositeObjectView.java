@@ -8,7 +8,6 @@ import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
@@ -87,16 +86,25 @@ public class CompositeObjectView extends ObjectView {
     }
 
     public void draw(Canvas canvas) {
-        Padding padding = getPadding();
-
         View views[] = getSubviews();
-
         for (int i = 0; i < views.length; i++) {
             View subview = views[i];
-            Bounds bounds = subview.getBounds();
-            bounds.translate(padding.getLeft(), padding.getTop());
-            Canvas subCanvas = canvas.createSubcanvas(bounds);
-            subview.draw(subCanvas);
+            Bounds subviewBounds = subview.getBounds();
+            if (AbstractView.DEBUG) {	                   
+                LOG.debug("compare: " + subviewBounds +"  " + canvas);
+            }
+            if(canvas.overlaps(subviewBounds)) {
+	            Canvas subCanvas = canvas.createSubcanvas();
+	            subCanvas.offset(subview.getBounds().getX(), subview.getBounds().getY());
+	            if (AbstractView.DEBUG) {
+	                LOG.debug("-- repainting " + subview );
+	                LOG.debug("subcanvas " + subCanvas);
+	            }
+	            subview.draw(subCanvas);
+	            if (AbstractView.DEBUG) {	                   
+	       //        canvas.drawRectangle(subviewBounds.getX(), subviewBounds.getY(), subviewBounds.getWidth() - 1, subviewBounds.getHeight() - 1, org.nakedobjects.viewer.skylark.Color.DEBUG_REPAINT_BOUNDS);
+	            }
+            }
         }
     }
 

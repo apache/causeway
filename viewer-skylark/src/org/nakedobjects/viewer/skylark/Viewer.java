@@ -170,11 +170,15 @@ public class Viewer {
         Canvas c = new Canvas(bufferGraphics, r.x, r.y, r.width, r.height);
         // Canvas c = new Canvas(bufferGraphics, 0, 0, w, h);
 
+        if (AbstractView.DEBUG) {
+            LOG.debug("------ repaint viewer #" + redrawCount + " " + r.x + "," +  r.y + " " + r.width + "x" + r.height);
+        }
+
         //paint icons
 
         // paint views
         if (rootView != null) {
-            rootView.draw(c.createSubcanvas(rootView.getBounds()));
+            rootView.draw(c.createSubcanvas()); //rootView.getBounds()));
         }
 
         // paint overlay
@@ -189,9 +193,8 @@ public class Viewer {
         if (doubleBuffering) {
             g.drawImage(doubleBuffer, 0, 0, null);
         }
-
         if (AbstractView.DEBUG) {
-            g.setColor(Color.pink);
+            g.setColor(Color.green);
             g.drawRect(r.x, r.y, r.width - 1, r.height - 1);
             g.drawString("#" + redrawCount, r.x + 3, r.y + 15);
         }

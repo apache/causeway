@@ -20,7 +20,7 @@ public abstract class OpenOptionFieldBorder extends AbstractBorder {
 
     public void draw(Canvas canvas) {
         Size size = getSize();
-        int x = size.getWidth() - right + 5;
+        int x = size.getWidth() - right + 5 - HPADDING;
         int y = (size.getHeight() - 6) / 2;
         Color color = over ?  Style.SECONDARY1 : Style.PRIMARY2;
 
@@ -78,6 +78,12 @@ public abstract class OpenOptionFieldBorder extends AbstractBorder {
         }
     }
 
+    public Size getRequiredSize() {
+        Size size = super.getRequiredSize();
+        size.extendWidth(HPADDING);
+        return size;
+    }
+    
     protected abstract View createOverlay();
 }
 

@@ -114,7 +114,11 @@ public class DebugView implements DebugInfo {
 
 
     public String getDebugTitle() {
-        return "Debug: " + view + "/" + view.getContent();
+        if (view == null) {
+            return "Debug";
+        } else {
+            return "Debug: " + view + "/" + view.getContent();
+        }
     }
 
     public String debugGraph(NakedObject object, String name, int level, Vector recursiveElements) {

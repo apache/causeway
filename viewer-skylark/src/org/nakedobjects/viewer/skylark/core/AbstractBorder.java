@@ -52,7 +52,8 @@ public class AbstractBorder extends AbstractViewDecorator {
     }
     
     public void draw(Canvas canvas) {
-        canvas.reduce(getLeft(), getTop(), getRight(), getBottom());
+  //      canvas.reduce(getLeft(), getTop(), getRight(), getBottom());
+        canvas.offset(getLeft(), getTop());
         wrappedView.draw(canvas);
     }
 

@@ -129,9 +129,11 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
                     subview.update((NakedObject) value);
                 } else {
                     NakedObject existing = ((ObjectContent) subviews[i].getContent()).getObject();
-                    boolean changeToNull = value == null && existing != null;
-                    boolean changedFromNull = value != null && existing == null;
-                    if (changeToNull || changedFromNull) {
+//                    boolean changeToNull = value == null && existing != null;
+//                    boolean changedFromNull = value != null && existing == null;
+//                    if (changeToNull || changedFromNull) {
+                    if (existing != value) {
+                        LOG.debug("field changed: " + field);
                         View fieldView = subviewDesign.createSubview(createContent(object, value, field), view.getViewAxis());
                         if (fieldView != null) {
                             view.replaceView(subview, decorateSubview(fieldView));

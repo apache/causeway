@@ -4,7 +4,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.control.defaults.Allow;
-import org.nakedobjects.viewer.skylark.ActionField;
+import org.nakedobjects.viewer.skylark.ActionParameter;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
@@ -14,7 +14,7 @@ import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.ActionContent;
 
 
-public class ObjectParameter extends ActionField implements ObjectContent {
+public class ObjectParameter extends ActionParameter implements ObjectContent {
     private final NakedObject object;
 
     public ObjectParameter(String name, Naked naked, ActionContent content, int parameter) {

@@ -1,11 +1,17 @@
 package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.utility.Assert;
-import org.nakedobjects.viewer.skylark.ActionField;
+import org.nakedobjects.viewer.skylark.ActionParameter;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.viewer.skylark.ValueContent;
+import org.nakedobjects.viewer.skylark.ValueField;
+import org.nakedobjects.viewer.skylark.ValueParameter;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.basic.ActionContent;
@@ -41,7 +47,7 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
         return new CompositeObjectView(content, specification, axis);
     }
 
-    private View createFieldView(View view, ActionField parameter) {
+    private View createFieldView(View view, ActionParameter parameter) {
         View fieldView = subviewDesign.createSubview(parameter, view.getViewAxis());
         if (fieldView == null) {
             throw new NakedObjectRuntimeException("All parameters must be shown");
@@ -53,9 +59,9 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
         LOG.debug("build new view " + view + " for " + actionContent);
         view.addView(new TextView(actionContent.getName()));
 
-        ActionField[] parameters = actionContent.getParameterContents();
+        ActionParameter[] parameters = actionContent.getParameterSet().getParameters();
         for (int f = 0; f < parameters.length; f++) {
-            ActionField parameter = parameters[f];
+            ActionParameter parameter = parameters[f];
             View fieldView = createFieldView(view, parameter);
             String label = parameter.getName();
             view.addView(decorateSubview(new LabelBorder(label, fieldView)));
@@ -66,21 +72,22 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
         LOG.debug("rebuild view " + view + " for " + actionContent);
         View[] subviews = view.getSubviews();
 
-        //       	ActionField[] parameters = actionContent.getParameters();
-        for (int i = 0; i < subviews.length - 1; i++) {
+        for (int i = 0; i < subviews.length - 1; i++) {            
             View subview = subviews[i + 1];
-            Content content = subview.getContent();
-
-            if (content instanceof ObjectParameter) {
-                Naked parameterValue = actionContent.getParameterSet().getParameterValues()[i];
-                boolean emptyField = subview.getSpecification().canDisplay(null);
-                boolean changeToNull = !emptyField && parameterValue == null;
-                boolean changedFromNull = emptyField && parameterValue != null;
-                if (changeToNull || changedFromNull) {
-                    ObjectParameter parameter = (ObjectParameter) content;
+            Naked value = actionContent.getParameterSet().getParameterValues()[i];
+            if (subview.getContent() instanceof ValueParameter) {
+                NakedValue existing = ((ValueContent) subview.getContent()).getValue();
+                if (value != existing) {
+                    ((ValueField) subview.getContent()).updateDerivedValue((NakedValue) value);
+                }
+                subview.refresh();
+            } else if (subview.getContent() instanceof ObjectParameter) {
+                NakedObject existing = ((ObjectContent) subview.getContent()).getObject();
+                if (value != existing) {
+                    ObjectParameter parameter = (ObjectParameter) subview.getContent();
                     String label = parameter.getName();
 
-                    ObjectParameter pa = new ObjectParameter(label, parameterValue, actionContent, i);
+                    ObjectParameter pa = new ObjectParameter(label, value, actionContent, i);
                     View fieldView = createFieldView(view, pa);
                     view.replaceView(subview, decorateSubview(new LabelBorder(label, fieldView)));
                 }

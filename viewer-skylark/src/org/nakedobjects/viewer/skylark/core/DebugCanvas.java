@@ -20,7 +20,7 @@ public class DebugCanvas extends Canvas {
 	}
 	
 	private DebugCanvas(StringBuffer buffer, int level) {
-		super(null, 0, 0, 0, 0);
+		super(null);
 		this.level = level;
 		this.buffer = buffer;
 	}
@@ -138,9 +138,13 @@ public class DebugCanvas extends Canvas {
 		buffer.append("Shape " + shape + " " + color);
 	}
 	
-	public void reduce(int left, int top, int right, int bottom) {
-		indent();
-		buffer.append("Reduce by " + left + "/" + right + " " + top + "/" + bottom +  " (left/right top/bottom)");
+	public boolean overlaps(Bounds bounds) {
+        return true;
+    } 
+	
+	public void offset(int x, int y) {
+ 		indent();
+		buffer.append("Offset by " + x + "/" + y + " (left, top)");
 	}	
 	
 	public void setClip(int x, int y, int width, int height) {

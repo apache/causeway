@@ -3,14 +3,15 @@ package org.nakedobjects.viewer.skylark;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.viewer.skylark.basic.ActionContent;
+import org.nakedobjects.viewer.skylark.basic.ParameterSet;
 
 
-public abstract class ActionField implements Content {
+public abstract class ActionParameter implements Content {
     private final ActionContent action;
     private final String name;
     protected final int parameter;
 
-    public ActionField(String name, ActionContent content, int parameter) {
+    public ActionParameter(String name, ActionContent content, int parameter) {
         this.name = name;
 
         this.action = content;

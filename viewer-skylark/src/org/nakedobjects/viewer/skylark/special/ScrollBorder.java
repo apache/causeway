@@ -80,9 +80,11 @@ public class ScrollBorder extends AbstractBorder {
 	                SCROLLBAR_WIDTH - 1, contents.getHeight(),  Style.SECONDARY2);
         }
 
-        Offset offset = offset();
-        canvas.setClip(offset.getDeltaX(), offset.getDeltaY(), contents.getWidth(), contents.getHeight());
-        super.draw(canvas);
+ //       wrappedView.draw(canvas);
+
+	       Offset offset = offset();
+	       canvas.setClip(offset.getDeltaX(), offset.getDeltaY(), contents.getWidth(), contents.getHeight());
+	       super.draw(canvas);
     }
 	
     public Size getSize() {

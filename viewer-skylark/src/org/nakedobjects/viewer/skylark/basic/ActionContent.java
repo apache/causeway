@@ -1,21 +1,15 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.About;
-import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.control.defaults.Veto;
 import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.security.ClientSession;
-import org.nakedobjects.viewer.skylark.ActionField;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.ParameterSet;
-import org.nakedobjects.viewer.skylark.ValueParameter;
-import org.nakedobjects.viewer.skylark.special.ObjectParameter;
 
 
 /**
@@ -23,44 +17,13 @@ import org.nakedobjects.viewer.skylark.special.ObjectParameter;
  */
 public class ActionContent implements ObjectContent {
     private final ActionSpecification action;
-    private final ActionField[] parameters;
     private final ParameterSet parameterSet;
     private final NakedObject target;
 
     public ActionContent(NakedObject target, ActionSpecification action) {
         this.target = target;
         this.action = action;
-
-        parameterSet = new ParameterSet(action);
-
-        Naked[] parameterValues;
-        parameterValues = parameterSet.getParameterValues();
-
-        About about = action.getAbout(ClientSession.getSession(), target, parameterValues);
-        String[] labels;
-        Naked[] defaultValues;
-        if (about instanceof ActionAbout) {
-            ActionAbout a = (ActionAbout) about;
-            labels = a.getParameterLabels();
-            defaultValues = a.getDefaultParameterValues();
-        } else {
-            labels = new String[parameterSet.length()];
-            defaultValues = new Naked[parameterSet.length()];
-        }
-
-        parameters = new ActionField[parameterSet.length()];
-
-        for (int i = 0; i < parameterSet.length(); i++) {
-            // change name using the about
-            String label = labels[i] == null ? parameterSet.type(i).getShortName() : labels[i];
-            Naked value = defaultValues[i] == null ? parameterValues[i] : defaultValues[i];
-
-            if (parameterSet.type(i).isValue()) {
-                parameters[i] = new ValueParameter(label, value, this, i);
-            } else {
-                parameters[i] = new ObjectParameter(label, value, this, i);
-            }
-        }
+        parameterSet = new ParameterSet(action, target, this);
     }
 
     public Permission canClear() {
@@ -94,10 +57,6 @@ public class ActionContent implements ObjectContent {
 
     public NakedObject getObject() {
         return target;
-    }
-
-    public ActionField[] getParameterContents() {
-        return parameters;
     }
 
     public ParameterSet getParameterSet() {

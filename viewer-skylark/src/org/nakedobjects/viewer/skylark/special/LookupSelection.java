@@ -18,12 +18,12 @@ class LookupSelection extends AbstractViewDecorator {
     }
 
     public void draw(Canvas canvas) {
-        super.draw(canvas);
         if (getState().isViewIdentified()) {
-            Color color = Style.SECONDARY2;
+            Color color = Style.SECONDARY3;
             Size s = getSize();
-            canvas.drawRectangle(s, color);
+            canvas.drawSolidRectangle(s, color);
         }
+        super.draw(canvas);
     }
 
     public void entered() {

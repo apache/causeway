@@ -1,16 +1,23 @@
-package org.nakedobjects.viewer.skylark;
+package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.reflect.ActionSpecification;
+import org.nakedobjects.object.security.ClientSession;
+import org.nakedobjects.viewer.skylark.ActionParameter;
+import org.nakedobjects.viewer.skylark.ValueParameter;
+import org.nakedobjects.viewer.skylark.special.ObjectParameter;
 
 
 public class ParameterSet {
+    private final ActionParameter[] parameters;
     private final NakedObjectSpecification[] types;
     private final Naked[] values;
 
-    public ParameterSet(ActionSpecification action) {
+    ParameterSet(ActionSpecification action, NakedObject target, ActionContent parent) {
         types = action.parameters();
         values = new Naked[types.length];
         for (int i = 0; i < types.length; i++) {
@@ -20,6 +27,40 @@ public class ParameterSet {
                 values[i] = null;
             }
         }
+        
+        
+        
+        
+
+        Naked[] parameterValues = getParameterValues();
+
+        About about = action.getAbout(ClientSession.getSession(), target, parameterValues);
+        String[] labels;
+        Naked[] defaultValues;
+        int length = length();
+        if (about instanceof ActionAbout) {
+            ActionAbout a = (ActionAbout) about;
+            labels = a.getParameterLabels();
+            defaultValues = a.getDefaultParameterValues();
+        } else {
+            labels = new String[length];
+            defaultValues = new Naked[length];
+        }
+
+        parameters = new ActionParameter[length];
+
+        for (int i = 0; i < length; i++) {
+            // change name using the about
+            String label = labels[i] == null ? type(i).getShortName() : labels[i];
+            values[i] = defaultValues[i] == null ? values[i] : defaultValues[i];
+
+            if (type(i).isValue()) {
+                parameters[i] = new ValueParameter(label, values[i], parent, i);
+            } else {
+                parameters[i] = new ObjectParameter(label, values[i], parent, i);
+            }
+        }
+
     }
 
     public void clear(int parameter) {
@@ -49,7 +90,7 @@ public class ParameterSet {
             if (i > 0) {
                 buff.append(',');
             }
-            buff.append(values[i].titleString());
+	            buff.append(values[i] == null ? "null" : values[i].titleString());
         }
         buff.append(')');
         return buff.toString();
@@ -58,6 +99,11 @@ public class ParameterSet {
     public NakedObjectSpecification type(int i) {
         return types[i];
     }
+
+    public ActionParameter[] getParameters() {
+        return parameters;
+    }
+
 
 }
 

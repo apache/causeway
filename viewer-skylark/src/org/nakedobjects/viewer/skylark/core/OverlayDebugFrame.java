@@ -1,7 +1,10 @@
 package org.nakedobjects.viewer.skylark.core;
 
 import org.nakedobjects.utility.DebugInfo;
+import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.ViewAxis;
+import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Viewer;
 
 public class OverlayDebugFrame extends DebugFrame {
@@ -14,7 +17,15 @@ public class OverlayDebugFrame extends DebugFrame {
     
     protected DebugInfo getInfo() {
         View overlay = viewer.getOverlayView();
-        return new DebugView(overlay);
+        return new DebugView(overlay == null ? new EmptyView() : overlay);
+    }
+    
+    class EmptyView extends AbstractView {
+
+        protected EmptyView() {
+            super(null, null, null);
+        }
+        
     }
 
 }

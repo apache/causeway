@@ -7,8 +7,16 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.core.AbstractBuilderDecorator;
 
 public class StackLayout extends AbstractBuilderDecorator {
-	public StackLayout(CompositeViewBuilder design) {
+	private boolean fixedWidth;
+
+    public StackLayout(CompositeViewBuilder design) {
 		super(design);
+		this.fixedWidth = false;
+	}
+	
+	public StackLayout(CompositeViewBuilder design, boolean fixedWidth) {
+		super(design);
+		this.fixedWidth = fixedWidth;
 	}
 	
 	public Size getRequiredSize(View view) {
@@ -34,9 +42,20 @@ public class StackLayout extends AbstractBuilderDecorator {
 		int x = 0, y = 0;
         View views[] = view.getSubviews();
 
+        int maxWidth = 0;
+        if(fixedWidth) {
+            for (int i = 0; i < views.length; i++) {
+                View v = views[i];
+    			Size s = v.getRequiredSize();
+    			maxWidth = Math.max(maxWidth, s.getWidth());
+    		}
+
+        }
+        
         for (int i = 0; i < views.length; i++) {
             View v = views[i];
 			Size s = v.getRequiredSize();
+			s.ensureWidth(maxWidth);
 			v.setSize(s);
 			v.setLocation(new Location(x, y));
 			y += s.getHeight();

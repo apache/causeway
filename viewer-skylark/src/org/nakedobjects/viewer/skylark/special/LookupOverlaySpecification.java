@@ -8,19 +8,21 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.RootCollection;
+import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
-import org.nakedobjects.viewer.skylark.ViewSpecification;
+import org.nakedobjects.viewer.skylark.basic.IconView;
 import org.nakedobjects.viewer.skylark.basic.LineBorder;
 import org.nakedobjects.viewer.skylark.basic.PlainBackground;
 import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
-import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 
 class LookupOverlaySpecification extends AbstractCompositeViewSpecification implements SubviewSpec {
 
+
+    
     public LookupOverlaySpecification() {
-        builder = new StackLayout(new CollectionElementBuilder(this, true));
+        builder = new StackLayout(new CollectionElementBuilder(this, true), true);
     }
 
     public boolean canDisplay(Naked object) {
@@ -28,8 +30,7 @@ class LookupOverlaySpecification extends AbstractCompositeViewSpecification impl
     }
 
     public View createSubview(Content content, ViewAxis lookupAxis) {
-        ViewSpecification specification = ViewFactory.getViewFactory().getIconizedSubViewSpecification((ObjectContent) content);
-        return new LookupSelection(specification.createView(content, lookupAxis));
+        return new LookupSelection(new IconView(content, this, lookupAxis, Style.NORMAL));
     }
 
     public View createView(final Content content, final ViewAxis axis) {
