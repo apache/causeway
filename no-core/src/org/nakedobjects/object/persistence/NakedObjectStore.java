@@ -175,7 +175,7 @@ public interface NakedObjectStore extends DebugInfo {
      * associations. The object should be set up in the same manner as in
      * <method>getObject </method> above.
      */
-    void resolve(NakedObject object) throws ObjectStoreException;
+    void resolveImmediately(NakedObject object) throws ObjectStoreException;
 
     public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException;
 

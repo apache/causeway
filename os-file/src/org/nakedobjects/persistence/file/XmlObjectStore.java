@@ -310,7 +310,7 @@ public class XmlObjectStore implements NakedObjectStore {
         return object;
     }
 
-    public void resolve(NakedObject object) throws ObjectStoreException {
+    public void resolveImmediately(NakedObject object) throws ObjectStoreException {
         ObjectData data = (ObjectData) dataManager.loadData((SerialOid) object.getOid());
         if (data == null) {
             LOG.warn("Not able to read in data - during resolve - for " + object);

@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.TypedNakedCollection;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.utility.StartupException;
 
@@ -147,15 +148,24 @@ public interface NakedObjectManager extends DebugInfo {
  //   void objectChanged(NakedObject object);
 
     /**
-     * Re-initialises the fields of an object. This method should return
-     * immediately if the object's resolved flag (determined by calling
-     * <method>isResolved </method> on the object) is already set. If the object
+     * Re-initialises the fields of an object. If the object
      * is unresolved then the object's missing data should be retreieved from
      * the persistence mechanism and be used to set up the value objects and
-     * associations. The object should be set up in the same manner as in
-     * <method>getObject </method> above.
+     * associations.
      */
-    void resolve(NakedObject object);
+    void resolveImmediately(NakedObject object);
+
+    /**
+     * Hint that specified field within the specified object is likely to be needed soon.  This allows the 
+     * object's data to be eagerly loaded, ready for use.  
+     * 
+     * <p>This method need to do anything, but offers the object store the opportunity to eagerly load 
+     * in objects before their use.  Contrast this with resolveImmediately, which requires an object to be 
+     * loaded before continuing.
+     * 
+     * @see #resolveImmediately(NakedObject)
+     */
+    void resolveEagerly(NakedObject object, NakedObjectField field);
 
     void shutdown();
 

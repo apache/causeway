@@ -103,7 +103,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
 		if(object != null) {
 	        NakedObject adapter = PojoAdapter.createNOAdapter(object);
 	        if(!adapter.isResolved()) {
-	            objectManger.resolve(adapter);
+	            objectManger.resolveImmediately(adapter);
 	        }
 	    }
     }
@@ -139,6 +139,10 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
         return number.getSerialNumber().longValue();
     }
 
+    protected void finalize() throws Throwable {
+        super.finalize();
+        LOG.info("finalizing java business object container " + this);
+    }
 }
 
 /*
