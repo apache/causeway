@@ -1,5 +1,6 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.ReflectionFactory;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionPeer;
@@ -23,7 +24,7 @@ public class MockReflectionFactory implements ReflectionFactory {
     }
 
     public NakedObjectField createField(OneToOnePeer local) {
-        return new OneToOneAssociation("field one", null, local);
+        return new OneToOneAssociation("field one", new DummyNakedObjectSpecification(), local);
     }
 
 }
