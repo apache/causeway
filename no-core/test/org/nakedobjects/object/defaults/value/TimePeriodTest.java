@@ -6,6 +6,10 @@ import java.util.Locale;
 
 
 public class TimePeriodTest extends ValueTestCase {
+	static{
+	    Locale.setDefault(Locale.UK);    
+	}
+	
     private TimePeriod tp1;
     private TimePeriod tp2;
     private TimePeriod tp3;
@@ -13,9 +17,7 @@ public class TimePeriodTest extends ValueTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        
-        Locale.setDefault(Locale.UK);
-
+  
         tp1 = new TimePeriod();
         tp2 = new TimePeriod();
         tp3 = new TimePeriod();

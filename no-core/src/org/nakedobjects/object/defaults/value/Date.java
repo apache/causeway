@@ -193,7 +193,7 @@ public java.util.Date dateValue() {
 
    public void parse(String dateString) throws ValueParseException {
       dateString = dateString.trim();
-
+      
       if (dateString.equals("")) {
          clear();
       } else {
@@ -222,7 +222,6 @@ public java.util.Date dateValue() {
 
             days = Integer.valueOf(str.substring(1)).intValue();
             cal.setTime(date);
-//            cal.add(Calendar.DATE, days);
             cal.add(unit, days * multiplier);
 
          } else if (str.startsWith("-")) {
@@ -242,7 +241,6 @@ public java.util.Date dateValue() {
 
             days = Integer.valueOf(str.substring(1)).intValue();
             cal.setTime(date);
-//            cal.add(Calendar.DATE, -days);
             cal.add(unit, -days * multiplier);
 
          } else {
@@ -263,7 +261,6 @@ public java.util.Date dateValue() {
          }
 
          set(cal);
-//         isNull = false;  // moved to set(Calendar)
       }
    }
 

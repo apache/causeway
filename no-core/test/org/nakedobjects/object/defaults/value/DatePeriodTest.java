@@ -6,13 +6,15 @@ import java.util.Locale;
 
 
 public class DatePeriodTest extends ValueTestCase {
+	static{
+	    Locale.setDefault(Locale.UK);    
+	}
 	
 	private DatePeriod mayJul, junAug, junJul, dp1, dp2;
 
 	protected void setUp() throws Exception {
 	    super.setUp();
 
-	    Locale.setDefault(Locale.UK);
 		
 		mayJul = new DatePeriod();
 		mayJul.getStart().setValue(2003,5,1);
@@ -28,6 +30,11 @@ public class DatePeriodTest extends ValueTestCase {
 		
 		dp1 = new DatePeriod();
 		dp2 = new DatePeriod();
+	}
+	
+	public void testLocale() {
+	    assertEquals(Locale.UK, Locale.getDefault());
+	    
 	}
 
 	protected void tearDown() throws Exception {
