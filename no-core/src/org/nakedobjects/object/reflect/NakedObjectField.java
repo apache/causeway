@@ -10,6 +10,10 @@ public abstract class NakedObjectField extends NakedObjectMember {
     
     public NakedObjectField(String name, NakedObjectSpecification type) {
         super(name);
+        if(type == null)
+        {
+            throw new IllegalArgumentException("type cannot be null");
+        }
         this.specification = type;
     }
 
@@ -48,7 +52,8 @@ public abstract class NakedObjectField extends NakedObjectMember {
     }
     
     public boolean isValue() {
-        return specification != null && specification.isValue();
+        //return specification != null && specification.isValue();
+        return  specification.isValue();
     }
 }
 

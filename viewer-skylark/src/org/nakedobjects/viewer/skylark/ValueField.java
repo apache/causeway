@@ -6,7 +6,10 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.TextEntryParseException;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.security.ClientSession;
@@ -51,7 +54,16 @@ public class ValueField extends ObjectField implements ValueContent {
     }
 
     public Hint getValueHint(Session session, String entryText) {
-        Naked example = (Naked) getSpecification().acquireInstance();
+        NakedValue example = (NakedValue) getSpecification().acquireInstance();
+        try {
+            example.parseTextEntry(entryText);
+        } catch (final InvalidEntryException e) {
+            return new DefaultHint() {
+                public Consent isValid() {
+                    return new Veto(e.getMessage());
+                }
+            };
+        }
         // TODO need the Value object to parse the entry string
         return getParent().getHint(ClientSession.getSession(), (NakedObjectField) getField(), example);
     }
