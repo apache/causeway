@@ -1,7 +1,9 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
+import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
@@ -51,18 +53,23 @@ public class ObjectBorder extends AbstractBorder {
             color = Style.SECONDARY2;
 		}
 		
+		Size s  = getSize();
+		int width = s.getWidth();
 		if(color != null) {
-			Size s  = getSize();
-			int width = s.getWidth();
 			for (int i = 0; i < left; i++) {
 				canvas.drawRectangle(i, i, width - 2 * i - 1, s.getHeight() - 2 * i - 1, color);
 			}
+		}
+		
+		NakedObject object = ((ObjectContent) getContent()).getObject();
+        if(object != null && object.getOid() == null) {
+		    canvas.drawRectangle(1, 1, width - 3, s.getHeight() - 3, Style.WHITE);
 		}
 		super.draw(canvas);
 	}
 	
 	public String toString() {
-		return wrappedView.toString() + "/SimpleBorder";
+		return wrappedView.toString() + "/ObjectBorder";
 	}
 }
 

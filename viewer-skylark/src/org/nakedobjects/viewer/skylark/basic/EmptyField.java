@@ -5,6 +5,8 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.defaults.Allow;
+import org.nakedobjects.object.control.defaults.Veto;
 import org.nakedobjects.object.reflect.AssociateCommand;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.object.security.ClientSession;
@@ -29,60 +31,82 @@ import org.apache.log4j.Logger;
 
 
 public class EmptyField extends AbstractView {
-	private static final Logger LOG = Logger.getLogger(EmptyField.class);
-	private static Text style = Style.NORMAL;
-    
-	public EmptyField(Content content, ViewSpecification specification, ViewAxis axis) {
-		super(content, specification, axis);
-		if(!(content instanceof OneToOneField)) {
-			throw new IllegalArgumentException("Content for EmptyField must be NullValueField: " + content);
-		}
-		NakedObject object = ((OneToOneField) getContent()).getObject();
-		if(object != null) {
-		    throw new IllegalArgumentException("Content for EmptyField must be null: " + object);
-		}
-	}
-    
-    private boolean canDrop(ContentDrag drag) {
-        NakedObject dragSource = ((ObjectContent) drag.getSourceContent()).getObject();
-        
-        if (dragSource instanceof NakedClass) {
-            return true;
-        } else {
-           NakedObjectSpecification targetType = forSpecification(); //((OneToOneField) getContent()).getField().getType();
-           NakedObject parent = ((ObjectContent) getParent().getContent()).getObject();
-            
-            NakedObjectSpecification sourceType = dragSource.getSpecification();
-            if(!sourceType.isOfType(targetType)) {
-                return false;
-            }
-            
-            Permission perm = getEmptyField().getAbout(ClientSession.getSession(), parent, dragSource).canUse();
-            if (perm.getReason() != null) {
-                getViewManager().setStatus(perm.getReason());
-            }
 
-            return perm.isAllowed();
+    public static class Specification implements ViewSpecification {
+        public boolean canDisplay(Naked object) {
+            return object == null;
+        }
+
+        public View createView(Content content, ViewAxis axis) {
+            EmptyField emptyField = new EmptyField(content, this, axis);
+            if (((OneToOneField) content).isLookup()) {
+                return new ObjectBorder(new LookupBorder(emptyField));
+            } else {
+                return new ObjectBorder(emptyField);
+            }
+        }
+
+        public String getName() {
+            return "empty field";
+        }
+
+        public boolean isOpen() {
+            return false;
+        }
+
+        public boolean isReplaceable() {
+            return true;
+        }
+
+        public boolean isSubView() {
+            return true;
+        }
+    }
+    private static final Logger LOG = Logger.getLogger(EmptyField.class);
+    private static Text style = Style.NORMAL;
+
+    public EmptyField(Content content, ViewSpecification specification, ViewAxis axis) {
+        super(content, specification, axis);
+        if (!(content instanceof OneToOneField)) {
+            throw new IllegalArgumentException("Content for EmptyField must be NullValueField: " + content);
+        }
+        NakedObject object = ((OneToOneField) getContent()).getObject();
+        if (object != null) {
+            throw new IllegalArgumentException("Content for EmptyField must be null: " + object);
         }
     }
 
+    private Permission canDrop(NakedObject dragSource, NakedObject parent) {
+        if (dragSource instanceof NakedClass) {
+            return new Allow();
+        } else {
+            NakedObjectSpecification targetType = forSpecification(); //((OneToOneField)
+                                                                                                                               // getContent()).getField().getType();
 
+            NakedObjectSpecification sourceType = dragSource.getSpecification();
+            if (!sourceType.isOfType(targetType)) {
+                return new Veto("Can only drop objects of type " + targetType.getSingularName());
+            }
 
-    private OneToOneAssociationSpecification getEmptyField() {
-    	return (OneToOneAssociationSpecification) ((OneToOneField) getContent()).getField();
-	}
-    
-    protected String iconName() {
-        String clsName = getEmptyField().getType().getFullName();
-        return clsName.substring(clsName.lastIndexOf('.') + 1);
-	}
+            if (parent.getOid() != null && dragSource.getOid() == null) {
+                return new Veto("Can't drop a non-persistent into this persistent object");
+            }
 
-    public String toString() {
-		return "EmptyField" + getId();
-	}
-    
+            Permission perm = getEmptyField().getAbout(ClientSession.getSession(), parent, dragSource).canUse();
+            return perm;
+        }
+    }
+
     public void dragIn(ContentDrag drag) {
-        if (canDrop(drag)) {
+        NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
+        NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
+
+        Permission perm = canDrop(source, target);
+        if (perm.getReason() != null) {
+            getViewManager().setStatus(perm.getReason());
+        }
+
+        if (perm.isAllowed()) {
             getState().setCanDrop();
         } else {
             getState().setCantDrop();
@@ -93,10 +117,10 @@ public class EmptyField extends AbstractView {
 
     public void dragOut(ContentDrag drag) {
         getState().clearObjectIdentified();
-        
+
         markDamaged();
     }
-    
+
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
@@ -128,32 +152,31 @@ public class EmptyField extends AbstractView {
 
         if (AbstractView.DEBUG) {
             Size size = getSize();
-            canvas.drawRectangle(0, 0, size.getWidth() - 1,
-                size.getHeight() - 1, Color.DEBUG3);
-            canvas.drawLine(0, size.getHeight() / 2, size.getWidth() - 1,
-                size.getHeight() / 2, Color.DEBUG3);
+            canvas.drawRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, Color.DEBUG3);
+            canvas.drawLine(0, size.getHeight() / 2, size.getWidth() - 1, size.getHeight() / 2, Color.DEBUG3);
         }
     }
 
     public void drop(ContentDrag drag) {
-        if (canDrop(drag)) {
-	        NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
-            NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
-            
+        NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
+        NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
+
+        if (canDrop(source, target).isAllowed()) {
+
             NakedObject associatedObject;
-            OneToOneAssociationSpecification field = getEmptyField();      
+            OneToOneAssociationSpecification field = getEmptyField();
             LOG.debug("drop " + source + " on " + field + "/" + target);
             if (source instanceof NakedClass) {
                 associatedObject = ((NakedClass) source).newInstance();
             } else {
                 associatedObject = source;
             }
-            
+
             getViewManager().getUndoStack().add(new AssociateCommand(target, associatedObject, field));
             // field.setAssociation(target, associatedObject);
-                        
+
             boolean isNotPersistent = target.getOid() == null;
-            if(isNotPersistent) {
+            if (isNotPersistent) {
                 getParent().invalidateContent();
             }
         }
@@ -174,8 +197,12 @@ public class EmptyField extends AbstractView {
         return yt;
     }
 
+    private OneToOneAssociationSpecification getEmptyField() {
+        return (OneToOneAssociationSpecification) ((OneToOneField) getContent()).getField();
+    }
+
     public Size getRequiredSize() {
-        Size size = new Size(0,0);
+        Size size = new Size(0, 0);
         int iconHeight = (style.getHeight() * 120) / 100;
         size.extendWidth((iconHeight * 80) / 100);
         size.extendWidth(HPADDING * 2);
@@ -184,6 +211,17 @@ public class EmptyField extends AbstractView {
         size.setHeight(iconHeight);
         size.extendHeight(VPADDING * 2);
         return size;
+    }
+
+    protected String iconName() {
+        String clsName = getEmptyField().getType().getFullName();
+        return clsName.substring(clsName.lastIndexOf('.') + 1);
+    }
+
+    public void menuOptions(MenuOptionSet options) {
+        ClassOption.menuOptions(forSpecification(), options);
+
+        options.setColor(Style.CONTENT_MENU);
     }
 
     private String name() {
@@ -203,75 +241,41 @@ public class EmptyField extends AbstractView {
     public void objectActionResult(Naked result, Location at) {
         NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
         OneToOneAssociationSpecification field = getEmptyField();
-        if(field.getType().isOfType(result.getSpecification())) {
-        	field.setAssociation(target, (NakedObject) result);
+        if (field.getType().isOfType(result.getSpecification())) {
+            field.setAssociation(target, (NakedObject) result);
         }
         super.objectActionResult(result, at);
     }
 
-    protected String  title() {
-		return  name();
-	}
-
-    public void menuOptions(MenuOptionSet options) {
-        ClassOption.menuOptions(forSpecification(), options);
-        
-        options.setColor(Style.CONTENT_MENU);
+    protected String title() {
+        return name();
     }
-    
-    public static class Specification implements ViewSpecification {
-    	public boolean canDisplay(Naked object) {
-    		return object == null;
-    	}
 
-    	public View createView(Content content, ViewAxis axis) {
-    		EmptyField emptyField = new EmptyField(content, this, axis);
-    	    if(((OneToOneField) content).isLookup()) {
-    	        return new ObjectBorder(new LookupBorder(emptyField));
-    	    } else {
-    	        return new ObjectBorder(emptyField);
-    	    }
-    	}
-
-    	public boolean isOpen() {
-    		return false;
-    	}
-
-    	public boolean isReplaceable() {
-    		return true;
-    	}
-
-    	public String getName() {
-    		return "empty field";
-    	}
-
-    	public boolean isSubView() {
-    		return true;
-    	}
+    public String toString() {
+        return "EmptyField" + getId();
     }
 }
 
-
 /*
-    Naked Objects - a framework that exposes behaviourally complete
-    business objects directly to the user.
-    Copyright (C) 2000 - 2003  Naked Objects Group Ltd
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-    The authors can be contacted via www.nakedobjects.org (the
-    registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-    Road, Woking GU21 1NR, UK).
-*/
+ * Naked Objects - a framework that exposes behaviourally complete business
+ * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * Ltd
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * The authors can be contacted via www.nakedobjects.org (the registered address
+ * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
+ * 1NR, UK).
+ */

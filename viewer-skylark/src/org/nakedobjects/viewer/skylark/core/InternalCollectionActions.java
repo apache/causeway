@@ -1,8 +1,10 @@
 package org.nakedobjects.viewer.skylark.core;
 
+import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.control.defaults.Veto;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.ContentDrag;
@@ -17,16 +19,27 @@ public class InternalCollectionActions extends CollectionActions {
     }
 
     public void dragIn(ContentDrag drag) {
-        ObjectContent content = (ObjectContent) drag.getSourceContent();
+        NakedObject object = ((ObjectContent) drag.getSourceContent()).getObject();
         NakedObject parent = ((ObjectContent) getParent().getContent()).getObject();
-        About about = getAssociation().getAbout(ClientSession.getSession(), parent, content.getObject(), true);
-        Permission perm = about.canUse();
+        Permission perm = canDrop(parent, object);
         if (perm.isVetoed()) {
             getState().setCantDrop();
             getViewManager().setStatus(perm.getReason());
         } else {
             getState().setCanDrop();
         }
+    }
+
+    private Permission canDrop(NakedObject parent, NakedObject object) {
+        InternalCollection collection = (InternalCollection) getAssociation().get(parent);
+        if(!object.getSpecification().isOfType(collection.getElementSpecification())) {
+            return new Veto("Only objects of type " + collection.getElementSpecification().getSingularName() + " are allowed in this collection");
+        }
+        if(parent.getOid() != null && object.getOid() == null) {
+            return new Veto("Can't set field in persistent object with reference to non-persistent object");
+        }
+        About about = getAssociation().getAbout(ClientSession.getSession(), parent, object, true);
+        return about.canUse();
     }
 
     public void dragOut(ContentDrag drag) {
@@ -36,10 +49,13 @@ public class InternalCollectionActions extends CollectionActions {
     }
 
     public void drop(ContentDrag drag) {
-        ObjectContent content = (ObjectContent) drag.getSourceContent();
+        NakedObject object = ((ObjectContent) drag.getSourceContent()).getObject();
         NakedObject parent = ((ObjectContent) getParent().getContent()).getObject();
-        getAssociation().setAssociation(parent, content.getObject());
-        layout();
+        Permission perm = canDrop(parent, object);
+        if (perm.isAllowed()) {
+	        getAssociation().setAssociation(parent, object);
+	        layout();
+        }
     }
 
 

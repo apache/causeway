@@ -88,7 +88,7 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
 	public View createCompositeView(Content content, CompositeViewSpecification specification, ViewAxis axis) {
     	CompositeObjectView view = new CompositeObjectView(content, specification, axis);
     	view.setCanDragView(canDragView);
-		return content instanceof OneToManyElement ? new InternalCollectionActions(view) : new CollectionActions(view);
+		return content instanceof OneToManyField ? new InternalCollectionActions(view) : new CollectionActions(view);
     }
 
 	public void setCanDragView(boolean canDragView) {

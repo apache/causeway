@@ -33,7 +33,7 @@ public class ViewerApplet extends Applet implements RenderingArea {
 	        LocalObjectManager objectManager = new LocalObjectManager(new TransientObjectStore(), viewer
 	                .getUpdateNotifier(), new SimpleOidGenerator());
 	
-	        NakedObject root = (NakedObject) objectManager.allInstances(User.class.getName())
+	        NakedObject root = (NakedObject) objectManager.allInstances(User.class.getName(), false)
 	                .elements().nextElement();
 	
 	        viewer.init(this, root, null);

@@ -55,8 +55,7 @@ public class ViewUpdateNotifier implements UpdateNotifier, DebugInfo {
         } else {
             for (int i = 0; i < viewsToNotify.size(); i++) {
                 View view = (View) viewsToNotify.elementAt(i);
-                LOG.info("object change notifications to: " + view.getSpecification().getName() + view.getId()
-                        + " for " + object);
+                LOG.info("object change notifications to: " + view + " for " + object);
                 view.update(object);
             }
         }

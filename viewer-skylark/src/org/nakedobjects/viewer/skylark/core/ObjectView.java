@@ -7,6 +7,8 @@ import org.nakedobjects.object.UserContext;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.control.defaults.AbstractPermission;
+import org.nakedobjects.object.control.defaults.Allow;
+import org.nakedobjects.object.control.defaults.Veto;
 import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.AssociationSpecification;
 import org.nakedobjects.object.reflect.FieldSpecification;
@@ -51,31 +53,38 @@ public abstract class ObjectView extends AbstractView {
     public void dragIn(ContentDrag drag) {
         NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
         NakedObject target = getObject();
-        ActionSpecification action = dropAction(source, target);
-        if (action != null) {
-            About about = action.getAbout(ClientSession.getSession(), target, source);
-
-            if (about.canUse().isAllowed()) {
-                getViewManager().setStatus(about.getDescription());
-                getState().setCanDrop();
-            } else {
-                getViewManager().setStatus(about.getDescription() + ": " + about.canUse().getReason());
-                getState().setCantDrop();
-            }
+        Permission perm = canDrop(source, target);
+        if (perm.isAllowed()) {
+            getViewManager().setStatus(perm.getReason());
+            getState().setCanDrop();
         } else {
-            getViewManager().setStatus("");
+            getViewManager().setStatus(perm.getReason());
             getState().setCantDrop();
-
-            FieldSpecification[] fields = target.getSpecification().getVisibleFields(target, ClientSession.getSession());       
-            for (int i = 0; i < fields.length; i++) {
-                if(source.getSpecification().isOfType(fields[i].getType()) && ((AssociationSpecification) fields[i]).get(target) == null) {
-                    getState().setCanDrop();
-                    getViewManager().setStatus("Set field " + fields[i].getLabel());
-                    break;
-                }
-            }
         }
         markDamaged();
+    }
+
+    private Permission canDrop(NakedObject source, NakedObject target) {
+         ActionSpecification action = dropAction(source, target);
+        if (action != null) {
+            About about = action.getAbout(ClientSession.getSession(), target, source);
+            return about.canUse();
+
+        } else {
+            if(target.getOid() != null && source.getOid() == null) {
+	            return new Veto("Can't set field in persistent object with reference to non-persistent object");
+	            
+            } else {
+	            FieldSpecification[] fields = target.getSpecification().getVisibleFields(target, ClientSession.getSession());       
+	            for (int i = 0; i < fields.length; i++) {
+	                if(source.getSpecification().isOfType(fields[i].getType()) && ((AssociationSpecification) fields[i]).get(target) == null) {
+	                    return new Allow("Set field " + fields[i].getLabel());
+	                }
+	            }
+	            return new Veto("No empty field accepting object of type " + source.getSpecification().getSingularName());
+	
+            }
+        }
     }
 
     public void dragOut(ContentDrag drag) {
@@ -112,7 +121,8 @@ public abstract class ObjectView extends AbstractView {
 
         NakedObject target = getObject();
         Assert.assertNotNull(target);
-
+        
+        if(canDrop(source, target).isAllowed()) {
         ActionSpecification action = dropAction(source, target);
 
         if ((action != null) && action.getAbout(ClientSession.getSession(), target, source).canUse().isAllowed()) {
@@ -136,6 +146,7 @@ public abstract class ObjectView extends AbstractView {
                     break;
                 }
             }
+        }
         }
     }
 

@@ -34,7 +34,7 @@ class LookupOverlaySpecification extends AbstractCompositeViewSpecification impl
         OneToOneField field = (OneToOneField) content;
         NakedObjectSpecification type = field.getOneToOneAssociation().getType();
         NakedObjectManager manager = field.getParent().getContext().getObjectManager();
-        RootCollection instanceContent = new RootCollection(manager.allInstances(type));
+        RootCollection instanceContent = new RootCollection(manager.allInstances(type, true));
         return new PlainBackground(new LineBorder(super.createView(instanceContent, axis)));
     }
 

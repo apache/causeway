@@ -20,7 +20,7 @@ public class FindFirstOption extends MenuOption {
     public void execute(Workspace frame, View view, Location at) {
         NakedObjectManager objectManager = NakedObjectContext.getDefaultContext().getObjectManager();
         NakedObject pattern = ((ObjectContent) view.getContent()).getObject();
-        NakedCollection instances = objectManager.findInstances(pattern);
+        NakedCollection instances = objectManager.findInstances(pattern, true);
 
         NakedObject object = (instances.size() >= 1) ? (NakedObject) instances.elements().nextElement() : instances;
 
