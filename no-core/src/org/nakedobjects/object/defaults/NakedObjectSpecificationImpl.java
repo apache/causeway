@@ -53,7 +53,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
     private Reflector reflector;
     private SubclassList subclasses = new SubclassList();
     private NakedObjectSpecificationImpl superclass;
-    private NakedObjectSpecification[] interfaces;
+    private NakedObjectSpecificationImpl[] interfaces;
 	
 	NakedObjectSpecificationImpl() {	}
 
@@ -340,9 +340,10 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
 	    	this.superclass.subclasses.addSubclass(this);
     	}
     	
-    	this.interfaces = new NakedObjectSpecification[interfaces.length];
+    	this.interfaces = new NakedObjectSpecificationImpl[interfaces.length];
     	for (int i = 0; i < interfaces.length; i++) {
-            this.interfaces[i] = loader.loadSpecification(interfaces[i]);                            
+            this.interfaces[i] = (NakedObjectSpecificationImpl) loader.loadSpecification(interfaces[i]);
+            this.interfaces[i].subclasses.addSubclass(this);
         }
     	
     	if(isValue() && fields.length > 0) {
@@ -386,7 +387,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         return superclass;
     }
     
-    public NakedObjectSpecification[] getInterfaces() {
+    public NakedObjectSpecification[] interfaces() {
         return interfaces;
     }
     

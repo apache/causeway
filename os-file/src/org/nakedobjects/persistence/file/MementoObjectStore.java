@@ -3,10 +3,10 @@ package org.nakedobjects.persistence.file;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedValue;
@@ -30,7 +30,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
     private static final Logger LOG = Logger.getLogger(MementoObjectStore.class);
     private DataManager dataManager;
     private LoadedObjects loadedObjects;
-    private static final NakedObjectSpecification NAKED_CLASS_CLASS = NakedObjectSpecificationLoader.getInstance().loadSpecification(NakedClass.class);
+    private static final NakedObjectSpecification NAKED_CLASS_SPEC = NakedObjectSpecificationLoader.getInstance().loadSpecification(NakedClass.class);
 
     public MementoObjectStore(DataManager manager) {
         this.dataManager = manager;
@@ -114,6 +114,26 @@ public abstract class MementoObjectStore implements NakedObjectStore {
 
     public NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses) throws ObjectStoreException {
         LOG.debug("getInstances of " + cls);
+        if(includeSubclasses) {
+            NakedObject[] instances = getInstances(cls);
+            NakedObjectSpecification[] subclasses = cls.subclasses();
+            for (int i = 0; i < subclasses.length; i++) {
+                NakedObject[] subclassInstances = getInstances(subclasses[i], true);
+                if(subclassInstances != null) {
+                    NakedObject[] in = new NakedObject[instances.length + subclassInstances.length];
+                    System.arraycopy(instances, 0, in, 0, instances.length);
+                    System.arraycopy(subclassInstances, 0, in, 0, subclassInstances.length);
+                    instances = in;
+                }
+            }
+            return instances;
+        } else {
+            return getInstances(cls);
+        }
+    }
+
+    private NakedObject[] getInstances(NakedObjectSpecification cls) throws ObjectStoreException {
+        LOG.debug("getInstances of " + cls);
         ObjectData patternData = new ObjectData(cls, null);
         NakedObject[] instances = getInstances(patternData, null);
         return instances;
@@ -171,7 +191,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
     }
 
     public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
-        NakedObject[] instances = getInstances(NAKED_CLASS_CLASS, false);
+        NakedObject[] instances = getInstances(NAKED_CLASS_SPEC, true);
         for (int i = 0, len = instances.length; i < len; i++) {
            NakedClass cls = (NakedClass) instances[i];
            if(cls.getName().equals(name)) {
@@ -203,7 +223,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
 
     public boolean hasInstances(NakedObjectSpecification cls, boolean includeSubclasses) {
         LOG.debug("checking instance of " + cls);
-        return numberOfInstances(cls, false) > 0;
+        return numberOfInstances(cls, includeSubclasses) > 0;
     }
 
     public void init() throws ObjectStoreException {}

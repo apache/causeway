@@ -1,5 +1,6 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.object.defaults.AbstractNakedObject;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
@@ -248,6 +249,14 @@ public class NakedObjectSpecificationTests extends TestCase {
         assertEquals(cls, subclass1.superclass());
     }
 
+    public void testInterfaceSubclasses() {
+        NakedObjectSpecification cls = nakedClass(AbstractNakedObject.class);
+        NakedObjectSpecification inter = nakedClass(NakedObject.class);
+        
+        assertEquals(1, cls.interfaces().length);
+        assertEquals(inter, cls.interfaces()[0]);
+    }
+    
     public void testSubclasses() {
         NakedObjectSpecification cls = nakedClass(Person.class);
         NakedObjectSpecification subclass1 = nakedClass(LittlePerson.class);

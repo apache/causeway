@@ -27,7 +27,6 @@ import org.nakedobjects.object.system.TestClock;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
-import org.apache.log4j.PropertyConfigurator;
 
 
 public class ObjectDataTest extends NakedObjectTestCase {
@@ -44,7 +43,7 @@ public class ObjectDataTest extends NakedObjectTestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        PropertyConfigurator.configure("log4j.testing.properties");
+ //       PropertyConfigurator.configure("log4j.testing.properties");
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
         MockObjectManager.setup();

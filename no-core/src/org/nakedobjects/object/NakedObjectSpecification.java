@@ -73,6 +73,8 @@ public interface NakedObjectSpecification {
 
     NakedObjectSpecification superclass();
 
+    NakedObjectSpecification[] interfaces();
+    
     NakedObjectSpecification[] subclasses();
 
     boolean isAbstract();

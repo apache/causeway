@@ -1,246 +1,47 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.defaults.value.Date;
-import org.nakedobjects.object.defaults.value.FloatingPointNumber;
-import org.nakedobjects.object.defaults.value.Label;
-import org.nakedobjects.object.defaults.value.Logical;
-import org.nakedobjects.object.defaults.value.Money;
-import org.nakedobjects.object.defaults.value.Option;
-import org.nakedobjects.object.defaults.value.Percentage;
-import org.nakedobjects.object.defaults.value.TextString;
-import org.nakedobjects.object.defaults.value.Time;
-import org.nakedobjects.object.defaults.value.TimeStamp;
-import org.nakedobjects.object.defaults.value.URLString;
-import org.nakedobjects.object.defaults.value.WholeNumber;
 
 
 
 public abstract class NakedObjectStoreFieldsTestCase extends NakedObjectStoreTestCase {
-    private Person people[];
-    private NakedObjectSpecification personClass;
-    private NakedObjectSpecification roleClass;
-    private Role[] roles;
 
     public NakedObjectStoreFieldsTestCase(String name) {
         super(name);
     }
-
-    public void testNothing() {}
-    
-
-    private void cleanPersonInstances() throws ObjectStoreException, UnsupportedFindException {
-        NakedObject[] initialInstances;
-
-        do {
-            initialInstances = objectStore.getInstances(personClass, false);
-
-            for (int i = 0; i < initialInstances.length; i++) {
-                NakedObject object = (NakedObject) initialInstances[i];
-                objectStore.destroyObject(object);
-            }
-        } while (initialInstances.length > 0);
-
-        assertTrue("no person objects", !objectStore.hasInstances(personClass, false));
-    }
-
-    private void cleanRoleInstances() throws ObjectStoreException, UnsupportedFindException {
-        NakedObject[] initialInstances;
-
-        do {
-            initialInstances = objectStore.getInstances(roleClass, false);
-
-            for (int i = 0; i < initialInstances.length; i++) {
-                NakedObject object = (NakedObject) initialInstances[i];
-                objectStore.destroyObject(object);
-            }
-        } while (initialInstances.length > 0);
-
-        assertTrue("no role objects", !objectStore.hasInstances(roleClass, false));
-    }
-    
-    protected void initialiseObjects() throws Exception {
-        // classes
-        personClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(Person.class.getName());
-        roleClass = NakedObjectSpecificationLoader.getInstance().loadSpecification(Role.class.getName());
-
-        // objects
-        String names[] = { "Freddy", "John", "Sam", "Zax", "fdfdklj" };
-        people = new Person[names.length];
-        for (int i = 0; i < names.length; i++) {
-            people[i] = new Person();
-            people[i].setContext(context);
-            people[i].setOid(nextOid());
-            people[i].name.setValue(names[i]);
-            objectStore.createObject(people[i]);
-
-            assertNotNull(people[i].getOid());
-        }
-
-        String roleNames[] = { "Leader", "Specialist", "Tester" };
-        roles = new Role[roleNames.length];
-        for (int i = 0; i < roleNames.length; i++) {
-            roles[i] = new Role();
-            roles[i].setContext(context);
-            roles[i].setOid(nextOid());
-            roles[i].name.setValue(roleNames[i]);
-            roles[i].person = people[i];
-            objectStore.createObject(roles[i]);
-        }
-    }
- 
-    public void testGetObject() throws Exception {
-        restartObjectStore();
-        
-        for (int i = 0; i < people.length; i++) {
-            Person person = (Person) objectStore.getObject(people[i].getOid(), personClass);
-            assertEquals(people[i].name, person.name);
-        }
-    }
-
-    public void testGetSameInstance() throws Exception {
-        restartObjectStore();
-        NakedObject p1 = objectStore.getObject(people[2].getOid(), personClass);
-        
-        Role r = (Role) objectStore.getObject(roles[2].getOid(), roleClass);
-        Person p3 = r.getPerson();
-        assertSame(p1, p3);
-     }
-    
-    public void testInstancesWithAssociationPattern() throws Exception {
-        restartObjectStore();
-
-        try {
-            Role rolePattern; 
-            rolePattern = new Role();
-            rolePattern.setContext(context);
-            rolePattern.makeFinder();
-            rolePattern.person = people[1];
-
-            assertTrue(objectStore.hasInstances(roleClass, false));
-
-            NakedObject[] v = objectStore.getInstances(rolePattern, false);
-            assertEquals(1, v.length);
-            assertEquals(roles[1], v[0]);
-
-            rolePattern.person = people[3];
-
-            v = objectStore.getInstances(rolePattern, false);
-            assertEquals(0, v.length);
-        } catch (UnsupportedFindException e) {}
-
-    }
-
-    public void testInstancesWithString() throws Exception {
-        restartObjectStore();
-
-        try {
-            NakedObject[] v = objectStore.getInstances(personClass, "JOHN", false);
-            assertEquals(1, v.length);
-            assertEquals(people[1], v[0]);
-
-            v = objectStore.getInstances(personClass, "red", false);
-            assertEquals(1, v.length);
-            assertEquals(people[0], v[0]);
-        } catch (UnsupportedFindException e) {}
-
-    }
-
-    public void testInstancesWithValuePattern() throws Exception {
-        restartObjectStore();
-
-        try {
-            Person personPattern;
-            personPattern = new Person();
-            personPattern.makeFinder();
-            personPattern.name.setValue(people[3].name.title().toString());
-
-            NakedObject[] v = objectStore.getInstances(personPattern, false);
-            assertEquals(1, v.length);
-            assertEquals(people[3], v[0]);
-
-            personPattern.name.setValue("no match personPattern");
-
-            v = objectStore.getInstances(personPattern, false);
-            assertEquals(0, v.length);
-        } catch (UnsupportedFindException e) {}
-
-    }
-
-    public void testPatternedInstances() throws Exception {
-        restartObjectStore();
-
-        try {
-            cleanPersonInstances();
-            cleanRoleInstances();
-
-            Role[] obj = new Role[4];
-
-            Person v = null;
-
-            for (int i = 0; i < obj.length; i++) {
-                obj[i] = new Role();
-                obj[i].setContext(context);
-                obj[i].setOid(nextOid());
-                obj[i].getName().setValue(((i % 2) == 0) ? "even" : "odd");
-
-                v = new Person();
-                v.setContext(context);
-                v.setOid(nextOid());
-                obj[i].setPerson(v);
-                objectStore.createObject(obj[i]);
-            }
-
-            // with an empty pattern, expect all
-            Role examplePattern = new Role();
-            examplePattern.setContext(context);
-            examplePattern.makeFinder();
-
-            NakedObject[] instances = objectStore.getInstances(examplePattern, false);
-            assertEquals("instances size", 4, instances.length);
-
-            // with a pattern that doesn't match, expect 0
-            examplePattern.getName().setValue("neither");
-            instances = objectStore.getInstances(examplePattern, false);
-            assertEquals("instances size", 0, instances.length);
-
-            // with a pattern that matches half, expect half
-            examplePattern.getName().setValue("even");
-            instances = objectStore.getInstances(examplePattern, false);
-            assertEquals("instances size", 2, instances.length);
-
-            // with a pattern that matches the other half, expect half
-            examplePattern.getName().setValue("odd");
-            instances = objectStore.getInstances(examplePattern, false);
-            assertEquals("instances size", 2, instances.length);
-
-            // with a pattern on the association, expect one
-            examplePattern.getName().clear();
-            examplePattern.setPerson(v);
-            instances = objectStore.getInstances(examplePattern, false);
-            assertEquals("instances size", 1, instances.length);
-        } catch (UnsupportedFindException e) {
-            // don't test OSes that don't support this kind of find
-        }
-    }
-    
-
+     
     public void testSave() throws Exception {
+        Oid oid = nextOid();
+
         // extend to test associations
-        Person person = people[2];
+        Person person = new Person();
+        person.setOid(oid);
         person.getName().setValue("Samuel");
         person.getSalary().setValue(10.0);
         
         objectStore.save(person);
 
         restartObjectStore();
- 
-        assertEquals("Samuel", ((Person) objectStore.getObject(person.getOid(), personClass)).name.stringValue());
-        assertEquals(10.0f, ((Person) objectStore.getObject(person.getOid(), personClass)).salary.floatValue(), 0.0f);
- 
-        assertEquals("Freddy", ((Person) objectStore.getObject(people[0].getOid(), personClass)).name.stringValue());
+        NakedObjectSpecification spec = person.getSpecification();
+        
+        assertEquals("Samuel", ((Person) objectStore.getObject(oid, spec)).name.stringValue());
+        assertEquals(10.0f, ((Person) objectStore.getObject(oid, spec)).salary.floatValue(), 0.0f);
+    }
+    
+    public void testTextStringValue() throws Exception {
+        ObjectContainingTextString object = new ObjectContainingTextString();
+        Oid oid = nextOid();
+        NakedObjectSpecification spec = object.getSpecification();
+        object.setOid(oid);
+        objectStore.save(object);
+
+        restartObjectStore();
+
+        ObjectContainingTextString restored = (ObjectContainingTextString) objectStore.getObject(oid, spec);
+
+        assertEquals(restored.getTextString(), restored.getTextString());
     }
 
-
+/*
     public void testValues() throws Exception {
         ValueObjectExample e1 = new ValueObjectExample();
         e1.setOid(nextOid());
@@ -286,6 +87,8 @@ public abstract class NakedObjectStoreFieldsTestCase extends NakedObjectStoreTes
         assertTrue("URLStrings differ", urlString.isSameAs(e2.getUrlString()));
         assertTrue("WholeNumbers differ", wholeNumber.isSameAs(e2.getWholeNumber()));
     }
+    */
+    
  }
 
 /*

@@ -110,6 +110,10 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     public NakedObject createPattern() {
         return null;
     }
+
+    public NakedObjectSpecification[] interfaces() {
+        return null;
+    }
 }
 
 
