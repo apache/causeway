@@ -13,13 +13,13 @@ public class LoadClassRequest extends Request {
 
 	protected void generateResponse(RequestContext context) {
 		NakedClass cls = NakedClassManager.getInstance().getNakedClass(name.getValue());
-		response = cls.getReflector().stringValue();
+		response = new WrappedString(cls.getReflector().stringValue());
 	}
 
 	public NakedClass getNakedClass() {
 		NakedClass cls = new NakedClass();
 		cls.getName().setValue(name.getValue());
-		cls.getReflector().setValue((String) response);
+		cls.getReflector().setValue(((WrappedString) response).getValue());
 		return cls;
 	}
 

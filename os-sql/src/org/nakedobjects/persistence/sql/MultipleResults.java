@@ -1,23 +1,7 @@
-package org.nakedobjects.distribution;
+package org.nakedobjects.persistence.sql;
 
-import java.io.Serializable;
-
-public class WrappedString implements Serializable {
-    private String value;
-
-    public WrappedString() {}
-    
-    public WrappedString(String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return value;
-    }
-    
-    public String toString() {
-        return value;
-    }
+public interface MultipleResults {
+    Results nextResults();
 }
 
 

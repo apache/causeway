@@ -5,9 +5,11 @@ import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.Parameter;
 import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
+import org.nakedobjects.persistence.sql.StoredProcedure;
 import org.nakedobjects.utility.Configuration;
 import org.nakedobjects.utility.NotImplementedException;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -88,9 +90,40 @@ public class JdbcConnector implements DatabaseConnector {
         }
     }
 
-    public Results  executeStoredProcedure(String name, Parameter[] parameters) {
-        throw new NotImplementedException();
-/*
+   public void executeStoredProcedure(StoredProcedure storedProcedure) {
+       Parameter[] parameters = storedProcedure.getParameters();
+    	StringBuffer sql = new StringBuffer("{call ");
+    	sql.append(storedProcedure.getName());
+    	sql.append(" (");
+    	for (int i = 0, no = parameters.length; i < no; i++) {
+    		sql.append(i == 0 ? "?" : ",?");
+		}
+    	sql.append(")}");
+        LOG.debug("SQL: " + sql);
+ 
+       CallableStatement statement;
+         try {
+         	statement = connection.prepareCall(sql.toString());
+          	
+         	for (int i = 0; i < parameters.length; i++) {
+         		LOG.debug("  setup param " + i + " " + parameters[i]);
+         		parameters[i].setupParameter(i + 1, parameters[i].getName(), storedProcedure);
+     		}
+         	 LOG.debug("   execute ");
+              statement.execute();
+         	 for (int i = 0; i < parameters.length; i++) {
+ 	        	parameters[i].retrieve(i + 1, parameters[i].getName(), storedProcedure);
+         		LOG.debug("  retrieve param " + i + " " + parameters[i]);
+     		}
+          } catch (SQLException e) {
+            throw new NakedObjectRuntimeException(e);
+         }   
+
+
+   }
+    
+    
+    public MultipleResults executeStoredProcedure(String name, Parameter[] parameters) {
      	StringBuffer sql = new StringBuffer("{call ");
     	sql.append(name);
     	sql.append(" (");
@@ -103,15 +136,17 @@ public class JdbcConnector implements DatabaseConnector {
        CallableStatement statement;
         try {
         	statement = connection.prepareCall(sql.toString());
+        	
         	StoredProcedure storedProcedure = new JdbcStoredProcedure(statement);
+        	
         	for (int i = 0; i < parameters.length; i++) {
         		LOG.debug("  setup param " + i + " " + parameters[i]);
-        		parameters[i].setupParameter(i + 1, storedProcedure);
+        		parameters[i].setupParameter(i + 1, parameters[i].getName(), storedProcedure);
     		}
         	 LOG.debug("   execute ");
              statement.execute();
         	 for (int i = 0; i < parameters.length; i++) {
-	        	parameters[i].retrieve(i + 1, storedProcedure);
+	        	parameters[i].retrieve(i + 1, parameters[i].getName(), storedProcedure);
         		LOG.debug("  retrieve param " + i + " " + parameters[i]);
     		}
         	 
@@ -119,23 +154,11 @@ public class JdbcConnector implements DatabaseConnector {
         } catch (SQLException e) {
            throw new NakedObjectRuntimeException(e);
         }   
-        */
+        
     }
 
 
-    public Results callStoredProcedure(String name, Parameter[] parameters) {
-        throw new NotImplementedException();
-//             return executeStoredProcedure(name, parameters);
-             /*
-         try {
-        	 return executeStoredProcedure(name, parameters).getResultSet();
-        } catch (SQLException e) {
-           throw new NakedObjectRuntimeException(e);
-        }   
-        */
-    }
-
-    public Results select(String sql) {
+     public Results select(String sql) {
         LOG.debug("SQL: " + sql);
         PreparedStatement statement;
         try {

@@ -28,9 +28,9 @@ public final class Connection {
         pool.release(connection);
     }
 
-    public Results executeStoredProcedure(String name, Parameter[] parameters) {
+    public MultipleResults executeStoredProcedure(String name, Parameter[] parameters) {
         DatabaseConnector connection = pool.acquire();
-        Results results = connection.executeStoredProcedure(name, parameters);
+        MultipleResults results = connection.executeStoredProcedure(name, parameters);
         pool.release(connection);
         return results;
     }
