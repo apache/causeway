@@ -49,6 +49,14 @@ public interface Naked {
 
     String titleString();
     
+    String getIconName();
+
+    /**
+     * The objects unique id. This id allows the object to added to, stored by,
+     * and retrieved from the object store.
+     */
+    Oid getOid();
+
     Object getObject();
 
     abstract void clear(NakedObjectAssociation specification, NakedObject ref);
@@ -60,12 +68,11 @@ public interface Naked {
     abstract boolean canUse(Session session, NakedObjectField field);
     
 
-    NakedObject execute(Action action, Naked[] parameters);
+    Naked execute(Action action, Naked[] parameters);
     
     Hint getHint(Session session, Action action, Naked[] parameters);
     
-    Hint getHint(Session session, NakedObjectField field, NakedObject value);
-
+    Hint getHint(Session session, NakedObjectField field, Naked value);abstract void clearViewDirty();
 }
 
 /*

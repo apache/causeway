@@ -57,8 +57,7 @@ public class ObjectBorder extends AbstractBorder {
             color = Style.IDENTIFIED;
 		}
 		
-		NakedObject object = ((ObjectContent) getContent()).getObject();
-        if(object != null && object.getOid() == null) {
+		if(getContent().isTransient()) {
 		    // canvas.drawRectangle(1, 1, width - 3, s.getHeight() - 3, Style.WHITE);
             int x = getSize().getWidth() - 13;
             int y = 0;

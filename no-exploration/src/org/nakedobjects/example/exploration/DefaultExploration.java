@@ -107,18 +107,14 @@ public abstract class DefaultExploration extends Exploration {
  
         
         AbstractUserContext applicationContext = applicationContext();
-        if(applicationContext != null) {
-            applicationContext.created();
-        } else {
-            ExplorationContext explorationContext = new ExplorationContext();
-            String[] classes = explorationSetUp.getClasses();
-            for (int i = 0; i < classes.length; i++) {
-                explorationContext.addClass(classes[i]);
-             }            
-            applicationContext = explorationContext;
-        }
+        ExplorationContext explorationContext = new ExplorationContext();
+        String[] classes = explorationSetUp.getClasses();
+        for (int i = 0; i < classes.length; i++) {
+            explorationContext.addClass(classes[i]);
+        }            
+        applicationContext = explorationContext;
         
-        NakedObject rootObject = PojoAdapter.createAdapter(applicationContext);
+        NakedObject rootObject = PojoAdapter.createNOAdapter(applicationContext);
         RootWorkspaceSpecification spec = new RootWorkspaceSpecification();
         View view = spec.createView(new RootObject(rootObject), null);
         viewer.setRootView(view);

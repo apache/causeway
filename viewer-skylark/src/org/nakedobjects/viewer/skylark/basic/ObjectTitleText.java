@@ -1,32 +1,21 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.View;
 
 public class ObjectTitleText extends TitleText {
-    private ObjectContent content;
+    private Content content;
 
     public ObjectTitleText(View view, Text style) {
         super(view, style);
-        content = (ObjectContent) view.getContent();
+        content =view.getContent();
     }
 
     protected String title() {
-        if(content instanceof OneToManyField) {
-	        return ((OneToManyField) content).getName();
-        } else {
-	        NakedObject object = content.getObject();
-	        String title = object.titleString();
-	
-	        if ((title == null) || title.equals("")) {
-	            return "A " + object.getSpecification().getSingularName().toLowerCase();
-	        } else {
-	            return title.toString();
-	        }
-        }
+        return content.title();
     }
 
 }

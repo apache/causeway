@@ -29,7 +29,7 @@ public class SnapshotBuilderTest extends TestCase {
         
         
         TestObject testObject = new TestObject();
-        XmlSnapshot builder = new XmlSnapshot(PojoAdapter.createAdapter(testObject));
+        XmlSnapshot builder = new XmlSnapshot(PojoAdapter.createNOAdapter(testObject));
         
         Element e = builder.getXmlElement();
 

@@ -16,6 +16,8 @@ public class EcsContext extends AbstractUserContext {
         addClass(CreditCard.class);
         addClass(City.class);
         addClass(LocationGroup.class);
+        
+        addClass(CompanyAccount.class);
     }
 
     public static String singleName() {

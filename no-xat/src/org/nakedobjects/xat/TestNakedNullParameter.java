@@ -1,6 +1,6 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
@@ -16,11 +16,11 @@ class TestNakedNullParameter implements TestNaked {
         specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(cls);
     }
 
-    public NakedObject getForObject() {
+    public Naked getForObject() {
         return null;
     }
 
-    public void setForObject(NakedObject object) {
+    public void setForObject(Naked object) {
         throw new NakedObjectRuntimeException();
     }
     

@@ -40,15 +40,15 @@ public abstract class ObjectDataFactory {
             if (fields[i].isValue()) {
                 fieldContent[i] = object.getField(fields[i]).getObject();
             } else if (fields[i].isCollection()) {
-                fieldContent[i] = createCollectionData(object.getField(fields[i]), savedObjects, depth - 1);
+                fieldContent[i] = createCollectionData((NakedCollection) object.getField(fields[i]), savedObjects, depth - 1);
             } else {
-                fieldContent[i] = createObjectData(object.getField(fields[i]), savedObjects, depth - 1);
+                fieldContent[i] = createObjectData((NakedObject) object.getField(fields[i]), savedObjects, depth - 1);
             }
         }
         return createObjectData(oid, type, fieldContent);
     }
 
-    private ObjectData createCollectionData(NakedObject object, Vector savedObjects, int depth) {
+    private ObjectData createCollectionData(NakedCollection object, Vector savedObjects, int depth) {
         Oid oid = null;
         String type = null;
         NakedCollection collection = (NakedCollection) object;

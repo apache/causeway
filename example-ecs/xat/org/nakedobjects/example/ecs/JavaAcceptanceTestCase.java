@@ -10,6 +10,7 @@ import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.defaults.TimeBasedOidGenerator;
 import org.nakedobjects.object.defaults.TransientObjectStore;
 import org.nakedobjects.object.exploration.ExplorationSetUp;
+import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.SimpleExplorationSetup;
@@ -58,6 +59,8 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
         LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
 
         JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
+        
+        PojoAdapter.setReflectorFactory(reflectorFactory);
 
         //    new NakedObjectSpecificationImpl();
         NakedObjectSpecificationImpl.setReflectionFactory(reflectionFactory);

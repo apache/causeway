@@ -1,7 +1,6 @@
 package org.nakedobjects.viewer.skylark.core;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
@@ -577,7 +576,7 @@ public abstract class AbstractView implements View {
         return name.substring(name.lastIndexOf('.') + 1) + getId() + " " + getContent();
     }
 
-    public void update(NakedObject object) {}
+    public void update(Naked object) {}
 
     public void updateView() {}
 

@@ -1,5 +1,6 @@
 package org.nakedobjects.xat;
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.Action;
 
@@ -235,7 +236,7 @@ public abstract class TestObjectDecorator implements TestObject {
         return wrappedObject.getFieldTitle(field);
     }
 
-    public NakedObject getForObject() {
+    public Naked getForObject() {
         return wrappedObject.getForObject();
     }
 
@@ -255,7 +256,7 @@ public abstract class TestObjectDecorator implements TestObject {
         return wrappedObject.invokeAction(name, parameter);
     }
 
-    public void setForObject(NakedObject object) {
+    public void setForObject(Naked object) {
         wrappedObject.setForObject(object);
     }
 

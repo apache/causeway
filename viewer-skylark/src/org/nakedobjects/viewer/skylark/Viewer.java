@@ -23,6 +23,8 @@ import org.nakedobjects.viewer.skylark.special.TableSpecification;
 import org.nakedobjects.viewer.skylark.special.TreeBrowserSpecification;
 import org.nakedobjects.viewer.skylark.special.WorkspaceSpecification;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
+import org.nakedobjects.viewer.skylark.value.CheckboxField;
+import org.nakedobjects.viewer.skylark.value.ColorField;
 import org.nakedobjects.viewer.skylark.value.TextField;
 
 import java.awt.Color;
@@ -205,6 +207,7 @@ public class Viewer {
     }
 
     void repaint() {
+        LOG.debug("Repaint viewer");
         updateNotifier.checkViewsForUpdates();
         rootView.layout();
         if (redrawArea != null) {
@@ -301,12 +304,12 @@ public class Viewer {
         LOG.debug("Setting up default views (provided by the framework)");
 
 /*
-        viewFactory.addValueFieldSpecification(loadSpecification("field.color", ColorField.Specification.class));
-        viewFactory.addValueFieldSpecification(loadSpecification("field.checkbox", CheckboxField.Specification.class));
         viewFactory.addValueFieldSpecification(loadSpecification("field.option", OptionSelectionField.Specification.class));
         viewFactory.addValueFieldSpecification(loadSpecification("field.percentage", PercentageBarField.Specification.class));
         viewFactory.addValueFieldSpecification(loadSpecification("field.timeperiod", TimePeriodBarField.Specification.class));
 */
+        viewFactory.addValueFieldSpecification(loadSpecification("field.color", ColorField.Specification.class));
+        viewFactory.addValueFieldSpecification(loadSpecification("field.checkbox", CheckboxField.Specification.class));
         viewFactory.addValueFieldSpecification(loadSpecification("field.text", TextField.Specification.class));
         viewFactory.addRootWorkspaceSpecification(new org.nakedobjects.viewer.skylark.metal.WorkspaceSpecification());
         viewFactory.addWorkspaceSpecification(new InnerWorkspaceSpecification());

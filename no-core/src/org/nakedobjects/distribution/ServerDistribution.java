@@ -23,13 +23,13 @@ import org.nakedobjects.object.security.Session;
 
 public class ServerDistribution implements ClientDistribution {
     private static final int OBJECT_DATA_DEPTH = 3;
-    private ObjectFactory objectFactory;
-    private LocalObjectManager objectManager;
     private LoadedObjects loadedObjects;
     private ObjectDataFactory objectDataFactory;
+    private ObjectFactory objectFactory;
+    private LocalObjectManager objectManager;
 
     public ServerDistribution() {
-   //     objectDataFactory = new DefaultObjectDataFactory();
+    //     objectDataFactory = new DefaultObjectDataFactory();
     }
 
     public ObjectData[] allInstances(Session session, String fullName, boolean includeSubclasses) {
@@ -72,19 +72,18 @@ public class ServerDistribution implements ClientDistribution {
         Type type = Action.getType(actionType);
         Action action = (Action) object.getSpecification().getObjectAction(type, actionIdentifier, parameterSpecifiactions);
 
-        
         Hint about = getActionHint(session, actionType, actionIdentifier, parameterTypes, objectOid, objectType, parameterData);
         if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
             throw new NakedObjectRuntimeException();
         }
         Naked[] parameters = new Naked[parameterData.length];
         for (int i = 0; i < parameters.length; i++) {
-            if(parameterData[i] != null) {
+            if (parameterData[i] != null) {
                 parameters[i] = parameterData[i].recreate(loadedObjects);
             }
         }
-        NakedObject result = object.execute(action, parameters);
-        return objectDataFactory.createObjectData(result, OBJECT_DATA_DEPTH); 
+        NakedObject result = (NakedObject) object.execute(action, parameters);
+        return objectDataFactory.createObjectData(result, OBJECT_DATA_DEPTH);
     }
 
     public ObjectData[] findInstances(Session session, String fullName, String criteria, boolean includeSubclasses) {
@@ -101,14 +100,14 @@ public class ServerDistribution implements ClientDistribution {
         return null;
     }
 
-    public ObjectData getObject(Session session, Oid oid, String fullName) {
-        NakedObject object = getNakedObject(session, oid, fullName);
-        return objectDataFactory.createObjectData(object, OBJECT_DATA_DEPTH);
-    }
-
     private NakedObject getNakedObject(Session session, Oid oid, String fullName) {
         NakedObject object = objectManager.getObject(oid, getSpecification(fullName));
         return object;
+    }
+
+    public ObjectData getObject(Session session, Oid oid, String fullName) {
+        NakedObject object = getNakedObject(session, oid, fullName);
+        return objectDataFactory.createObjectData(object, OBJECT_DATA_DEPTH);
     }
 
     private NakedObjectSpecification getSpecification(String fullName) {
@@ -134,6 +133,42 @@ public class ServerDistribution implements ClientDistribution {
         return objectManager.serialNumber(name);
     }
 
+    /**
+     * .NET property
+     * 
+     * @property
+     */
+    public void set_LoadedObjects(LoadedObjects loadedObjects) {
+        this.loadedObjects = loadedObjects;
+    }
+
+    /**
+     * .NET property
+     * 
+     * @property
+     */
+    public void set_LocalObjectManager(LocalObjectManager objectManager) {
+        this.objectManager = objectManager;
+    }
+
+    /**
+     * .NET property
+     * 
+     * @property
+     */
+    public void set_ObjectDataFactory(ObjectDataFactory objectDataFactory) {
+        this.objectDataFactory = objectDataFactory;
+    }
+
+    /**
+     * .NET property
+     * 
+     * @property
+     */
+    public void set_ObjectFactory(ObjectFactory objectFactory) {
+        this.objectFactory = objectFactory;
+    }
+
     public void setAssociation(Session session, String fieldIdentifier, NakedObject inObject, NakedObject associate) {
         NakedObjectAssociation association = (NakedObjectAssociation) inObject.getSpecification().getField(fieldIdentifier);
         Hint about = inObject.getHint(session, association, associate);
@@ -155,18 +190,18 @@ public class ServerDistribution implements ClientDistribution {
         inObject.setAssociation(association, associate);
     }
 
+    public void setLoadedObjects(LoadedObjects loadedObjects) {
+        this.loadedObjects = loadedObjects;
+    }
+
     public void setLocalObjectManager(LocalObjectManager objectManager) {
         this.objectManager = objectManager;
     }
 
-    public void setLoadedObjects(LoadedObjects loadedObjects) {
-        this.loadedObjects = loadedObjects;
-    }
-    
     public void setObjectDataFactory(ObjectDataFactory objectDataFactory) {
         this.objectDataFactory = objectDataFactory;
     }
-    
+
     public void setObjectFactory(ObjectFactory objectFactory) {
         this.objectFactory = objectFactory;
     }

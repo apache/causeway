@@ -25,7 +25,7 @@ public class MockAction implements ActionPeer {
         this.action = action;    
     }
 
-    public NakedObject execute(NakedObject object, Naked[] parameters) {
+    public Naked execute(NakedObject object, Naked[] parameters) {
         return null;
     }
 

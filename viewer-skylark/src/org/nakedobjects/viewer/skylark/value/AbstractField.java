@@ -2,6 +2,7 @@ package org.nakedobjects.viewer.skylark.value;
 
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.NotImplementedException;
@@ -36,7 +37,8 @@ public abstract class AbstractField extends AbstractView {
     }
 
     public boolean canChangeValue() {
-        return true; //getValueContent().canChangeValue();
+        // TODO need to check whether a value can be edited
+        return getValueContent().getValueHint(ClientSession.getSession(), "").canUse().isAllowed(); //canChangeValue();
     }
     
     /**
@@ -121,7 +123,7 @@ public abstract class AbstractField extends AbstractView {
         throw new NotImplementedException();
     }
 
-    public final NakedObject getValue() {
+    public final NakedValue getValue() {
         return ((ValueContent) getContent()).getObject();
     }
 
@@ -190,15 +192,15 @@ public abstract class AbstractField extends AbstractView {
     protected void parseEntry(String entryText) throws InvalidEntryException {
         ValueContent valueContent = getValueContent();
         Hint about = valueContent.getValueHint(ClientSession.getSession(), entryText);
-        if(about.canUse().isVetoed()) {
-            throw new InvalidEntryException(about.canUse().getReason());
+        if(about.isValid().isVetoed()) {
+            throw new InvalidEntryException(about.isValid().getReason());
         }
         valueContent.parseEntry(entryText);
     }
 
     public String toString() {
         String cls = getClass().getName();
-        NakedObject value = null;
+        NakedValue value = null;
 
         try {
             value = getValue();

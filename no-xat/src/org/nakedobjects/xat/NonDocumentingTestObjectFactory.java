@@ -1,7 +1,9 @@
 package org.nakedobjects.xat;
 
 import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.security.Session;
 
 import java.util.Hashtable;
@@ -10,8 +12,16 @@ import java.util.Hashtable;
 
 
 public class NonDocumentingTestObjectFactory implements TestObjectFactory {
+
+    public TestValue createParamerTestValue(Object value) {
+        return new ParameterValueImpl(value);
+    }
     public TestClass createTestClass(Session session, NakedClass cls) {
         return new TestClassImpl(session, cls, this);
+    }
+
+    public TestCollection createTestCollection(Session session, NakedCollection instances) {
+        return new TestCollectionImpl(session, instances);
     }
 
     public TestObject createTestObject(Session session, NakedObject object) {
@@ -21,19 +31,19 @@ public class NonDocumentingTestObjectFactory implements TestObjectFactory {
     public TestObject createTestObject(Session session, NakedObject field, Hashtable viewCache) {
         return new TestObjectImpl(session, field, viewCache, this);
     }
+    
+    public TestValue createTestValue(Session session, NakedValue object) {
+        return new TestValueImpl(session, object);
+    }
 
-    public void testStarting(String className, String methodName) {
+    public Documentor getDocumentor() {
+        return new NullDocumentor();
     }
 
     public void testEnding() {
     }
 
-    public TestValue createParamerTestValue(Object value) {
-        return new ParameterValueImpl(value);
-    }
-
-    public Documentor getDocumentor() {
-        return new NullDocumentor();
+    public void testStarting(String className, String methodName) {
     }
 }
 

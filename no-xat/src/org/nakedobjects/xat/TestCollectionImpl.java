@@ -1,20 +1,44 @@
-package org.nakedobjects.reflector.java.reflect;
+package org.nakedobjects.xat;
 
-public class StringAdapter implements JavaValueAdapter {
-    public Object parse(String entry) {
-        return entry;
+import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedCollection;
+import org.nakedobjects.object.security.Session;
+
+public class TestCollectionImpl implements TestCollection {
+
+    private NakedCollection collection;
+
+    public TestCollectionImpl() {
+        super();
     }
-    
-    public String asString(Object value) {
-        return (String) value;
+
+    public TestCollectionImpl(Session session, NakedCollection collection) {
+        this.collection = collection;
     }
+
+    public Naked getForObject() {
+        return collection;
+    }
+
+    public void setForObject(Naked object) {
+        if(object instanceof NakedCollection) {
+            collection = (NakedCollection) object;
+        } else {
+            throw new IllegalArgumentException("Object must be a NakedCollection");
+        }    
+    }
+
+    public String getTitle() {
+        return "collection";
+    }
+
 }
 
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2005  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

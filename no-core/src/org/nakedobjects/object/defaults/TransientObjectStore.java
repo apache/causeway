@@ -249,8 +249,8 @@ public class TransientObjectStore implements NakedObjectStore {
 
             if (fld.isValue()) {
                 // find the objects
-                NakedObject reqd = pattern.getField(fld);
-                NakedObject search = object.getField(fld);
+                NakedObject reqd = (NakedObject) pattern.getField(fld);
+                NakedObject search = (NakedObject) object.getField(fld);
 
                 // if pattern contains empty value then it matches anything
                 if (reqd.isEmpty(fld)) {
@@ -265,8 +265,8 @@ public class TransientObjectStore implements NakedObjectStore {
                 if (s.indexOf(r) == -1) { return false; }
             } else {
                 // find the objects
-                NakedObject reqd = pattern.getField(fld);
-                NakedObject search = object.getField(fld);
+                NakedObject reqd = (NakedObject) pattern.getField(fld);
+                NakedObject search = (NakedObject) object.getField(fld);
 
                 // if pattern contains null reference then it matches anything
                 if (reqd == null) {

@@ -4,6 +4,7 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.xat.TestClass;
 import org.nakedobjects.xat.TestClassDecorator;
+import org.nakedobjects.xat.TestCollection;
 import org.nakedobjects.xat.TestObject;
 
 
@@ -23,7 +24,7 @@ public class HtmlTestClass extends TestClassDecorator {
         return result;
     }
 
-    public TestObject instances() {
+    public TestCollection instances() {
         NakedClass nakedClass = (NakedClass) getForObject();
         String className = nakedClass.getFullName();
         String shortName = className.substring(className.lastIndexOf(".") + 1);
@@ -31,7 +32,7 @@ public class HtmlTestClass extends TestClassDecorator {
         doc.doc("Get the instances of the " + shortName + " (<img width=\"16\" height=\"16\" align=\"Center\" src=\"images/"
                 + shortName + "16.gif\">) " + " class");
 
-        TestObject instances = super.instances();
+        TestCollection instances = super.instances();
         doc.docln(", which returns " + doc.objectString(instances.getForObject()) + ". ");
         return instances;
     }

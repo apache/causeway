@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.InvalidEntryException;
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.security.Session;
@@ -12,7 +12,7 @@ public interface ValueContent extends Content {
 
     Hint getValueHint(Session session, String entryText);
     
-    NakedObject getObject();
+    NakedValue getObject();
 }
 
 

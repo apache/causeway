@@ -3,6 +3,7 @@ package org.nakedobjects.persistence.file;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
@@ -70,8 +71,8 @@ public abstract class MementoObjectStore implements NakedObjectStore {
                 continue;
             }
 
-            NakedObject field = object.getField(fields[i]);
-            NakedObject fieldContent = field;
+            Naked field = object.getField(fields[i]);
+            Naked fieldContent = field;
             String fieldName = fields[i].getName();
 
             if (fieldContent instanceof InternalCollection) {
@@ -79,7 +80,7 @@ public abstract class MementoObjectStore implements NakedObjectStore {
             } else if (fields[i].isValue()) {
                 data.saveValue(fieldName, object.isEmpty(fields[i]), field == null ? null : field.getObject().toString());
             } else {
-                data.addAssociation(fieldContent, fieldName, ensurePersistent);
+                data.addAssociation((NakedObject) fieldContent, fieldName, ensurePersistent);
             }
         }
 

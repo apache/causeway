@@ -1,13 +1,13 @@
 package org.nakedobjects.viewer.skylark.core;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 
 public abstract class AbstractFieldSpecification implements ViewSpecification {
 	    public boolean canDisplay(Naked object) {
     	//return object instanceof NakedValue;
-	        return object instanceof NakedObject; // && ((NakedObject) object).getObject() instanceof BusinessValue;
+	        return object instanceof NakedValue; // && ((NakedObject) object).getObject() instanceof BusinessValue;
 	}
 
 	public boolean isOpen() {

@@ -5,10 +5,12 @@ import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObjectContext;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 import org.nakedobjects.object.security.Session;
 
 import java.lang.reflect.Method;
@@ -26,8 +28,9 @@ public class JavaOneToOneAssociationTest extends TestCase {
 	private JavaOneToOneAssociation personField;
 	private JavaReferencedObject referencedObject;
     private MockNakedObjectSpecificationLoader loader;
-    private PojoAdapter nakedObject;
-    private PojoAdapter associatedNakedObject;
+    private NakedObject nakedObject;
+    private NakedObject associatedNakedObject;
+    private DummyNakedObjectSpecification spec;
     
     public static void main(String[] args) {
         junit.textui.TestRunner.run(new TestSuite(JavaOneToOneAssociationTest.class));
@@ -39,14 +42,15 @@ public class JavaOneToOneAssociationTest extends TestCase {
     	
     	Logger.getRootLogger().setLevel(Level.OFF);
     	loader = new MockNakedObjectSpecificationLoader();
-    	loader.addSpec(new DummyNakedObjectSpecification());  // for String
+    	loader.addSpec(spec = new DummyNakedObjectSpecification());  // for String
         loader.addSpec(new DummyNakedObjectSpecification()); // for Date
         loader.addSpec(new DummyNakedObjectSpecification()); // for float
             	
     	ConfigurationFactory.setConfiguration(new TestConfiguration());
     	
         objectWithOneToOneAssoications = new JavaObjectWithOneToOneAssociations();
-        nakedObject = PojoAdapter.createAdapter(objectWithOneToOneAssoications);
+        PojoAdapter.setReflectorFactory(new NullReflectorFactory());
+        nakedObject = PojoAdapter.createNOAdapter(objectWithOneToOneAssoications);
         
         Class cls = JavaObjectWithOneToOneAssociations.class;
         Method get = cls.getDeclaredMethod("getReferencedObject", new Class[0]);
@@ -56,12 +60,12 @@ public class JavaOneToOneAssociationTest extends TestCase {
         personField = new JavaOneToOneAssociation(PERSON_FIELD_NAME, JavaReferencedObject.class, get, set, null, null, about);
         
         referencedObject = new JavaReferencedObject();
-        associatedNakedObject = PojoAdapter.createAdapter(referencedObject);
+        associatedNakedObject = PojoAdapter.createNOAdapter(referencedObject);
     }
 
     public void testType() {
-        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
-        loader.addSpec(spec);
+     //   DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
+      //  loader.addSpec(spec);
     	assertEquals(spec, personField.getType());
     }
     	

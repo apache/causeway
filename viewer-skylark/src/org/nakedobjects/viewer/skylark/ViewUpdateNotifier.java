@@ -22,7 +22,7 @@ public class ViewUpdateNotifier implements UpdateNotifier, DebugInfo {
     public void add(View view) {
         Content content = view.getContent();
         if (content instanceof ObjectContent) {
-            Naked object = ((ObjectContent) content).getObject();
+            Naked object = content.getNaked();
 
             if (object != null) {
                 Vector viewsToNotify;

@@ -1,59 +1,76 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.TextEntryParseException;
+import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.AbstractNakedObject;
+import org.nakedobjects.object.reflect.valueadapter.DateAdapter;
+import org.nakedobjects.object.reflect.valueadapter.StringAdapter;
 import org.nakedobjects.object.security.Session;
 
+import java.util.Date;
 import java.util.Hashtable;
 
 public class PojoAdapter extends AbstractNakedObject {
     protected static Hashtable pojos = new Hashtable();
+    private static ReflectorFactory reflectorFactory;
     private Object pojo;
- //   private NakedObjectSpecification specification;
 
-    public static PojoAdapter createAdapter(Object pojo, Oid oid) {
+
+    public static void setReflectorFactory(ReflectorFactory reflectorFactory) {
+        PojoAdapter.reflectorFactory = reflectorFactory;
+    }
+    
+    public static void set_ReflectorFactory(ReflectorFactory reflectorFactory) {
+        PojoAdapter.reflectorFactory = reflectorFactory;
+    }
+    
+    public static NakedObject createNOAdapter(Object pojo) {
+        return (NakedObject) createAdapter(pojo);
+    }
+
+    private static Naked createAdapter(Object pojo, Oid oid) {
         if(pojo == null) {
             return null;
         }
-        PojoAdapter nakedObject;
+        Naked nakedObject;
         if(pojos.containsKey(pojo)) {
             nakedObject = (PojoAdapter) pojos.get(pojo);
         } else {
             if(pojo instanceof PojoAdapter) {
                 throw new NakedObjectRuntimeException("Warning: adapter is wrapping an adapter: " + pojo);
             }
-            nakedObject = new PojoAdapter(pojo);
-        }
-        
-        if (oid != null) {
-            if (nakedObject.getOid() == null) {
-                nakedObject.setOid(oid);
+            
+            if(pojo instanceof String) {
+                nakedObject = new StringAdapter((String) pojo);
+            } else if(pojo instanceof Date) {
+                    nakedObject = new DateAdapter((Date) pojo);
             } else {
-                if (!nakedObject.getOid().equals(oid)) {
-                    throw new NakedObjectRuntimeException("Different OID for same Pojo");
-                }
+                nakedObject = reflectorFactory.createAdapter(pojo);
+            }
+            if(nakedObject == null) {
+                nakedObject = new PojoAdapter(pojo);
             }
         }
-        
-  //      nakedObject.setContext(NakedObjectContext.getDefaultContext());
-        
         return nakedObject;       
     }
     
-    public static PojoAdapter createAdapter(Object pojo) {
+    public static Naked createAdapter(Object pojo) {
        return createAdapter(pojo, null);
     }
     
     protected PojoAdapter(Object pojo) {
         this.pojo= pojo;
         pojos.put(pojo, this);
+        
+        if(pojo.getClass().getName().endsWith("String")) {
+            new RuntimeException().printStackTrace();
+        }
     }
 
     public Object getObject() {
@@ -62,7 +79,12 @@ public class PojoAdapter extends AbstractNakedObject {
 
     public String titleString() {
         NakedObjectSpecification specification = getSpecification();
-        return specification == null ? "" : specification.getTitle().title(this);
+        String title =  specification == null ? null : specification.getTitle().title(this);
+        if (title == null) {
+            return "A " + specification.getSingularName().toLowerCase();
+        } else {
+            return title;
+        }
     }
     
     public String toString() {
@@ -89,8 +111,16 @@ public class PojoAdapter extends AbstractNakedObject {
         specification.clearAssociation(this, associate);
     }
     
-    public NakedObject getField(NakedObjectField field) {
+    public Naked getField(NakedObjectField field) {
+        return field.get(this);
+    }
+    
+    public NakedObject getAssociation(OneToOneAssociation field) {
         return (NakedObject) field.get(this);
+    }
+
+    public NakedValue getValue(OneToOneAssociation field) {
+        return (NakedValue) field.get(this);
     }
 
     public void clear(OneToOneAssociation specification) {
@@ -134,8 +164,8 @@ public class PojoAdapter extends AbstractNakedObject {
         return  field.canAccess(session, this);
     }
 
-    public NakedObject execute(Action action, Naked[] parameters) {
-        NakedObject result = action.execute(this, parameters);
+    public Naked execute(Action action, Naked[] parameters) {
+        Naked result = action.execute(this, parameters);
         getObjectManager().saveChanges();
         return result;
     }
@@ -144,7 +174,7 @@ public class PojoAdapter extends AbstractNakedObject {
         return action.getHint(session, this, parameterValues);
     }
 
-    public Hint getHint(Session session, NakedObjectField field, NakedObject value) {
+    public Hint getHint(Session session, NakedObjectField field, Naked value) {
         if(field instanceof OneToOneAssociation) {
             return ((OneToOneAssociation) field).getHint(session, this, value);
         } else if(field instanceof OneToManyAssociation) {
@@ -152,13 +182,6 @@ public class PojoAdapter extends AbstractNakedObject {
         } else {
             throw new NakedObjectRuntimeException();
         }
-    }
-
-    public void parseTextEntry(OneToOneAssociation field, String text) throws TextEntryParseException, InvalidEntryException {
-        field.parseTextEntry(this, text);
-        //getObjectManager().objectChanged(this);
-        markDirty();
-        getObjectManager().saveChanges();
     }
     
     public boolean isEmpty(NakedObjectField field) {

@@ -4,6 +4,7 @@ import org.nakedobjects.application.BusinessObjectContainer;
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.control.ActionAbout;
 import org.nakedobjects.application.control.FieldAbout;
+import org.nakedobjects.application.value.Option;
 import org.nakedobjects.application.value.TextString;
 
 
@@ -14,6 +15,12 @@ public class Location {
     private Customer customer;
     private boolean isDirty;
     private transient BusinessObjectContainer container;
+    
+    private Option type = new Option(new String[] {"One", "Two", "Threee"});
+    
+    public Option getType() {
+        return type;
+    }
     
     public Location() {
         streetAddress = new TextString();

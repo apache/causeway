@@ -2,6 +2,7 @@ package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.LoadedObjects;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
@@ -27,17 +28,8 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     private NakedObjectContext context;
     private LoadedObjects loadedObjects;
     private final Hashtable nakedClasses = new Hashtable();
-    private Session session;
     private ObjectDataFactory objectDataFactory;
-    
-
-	public void setLoadedObjects(LoadedObjects loadedObjects) {
-        this.loadedObjects = loadedObjects;
-    }
-	
-	public void setObjectDataFactory(ObjectDataFactory factory) {
-	    this.objectDataFactory = factory;
-	}
+    private Session session;
 
     public void abortTransaction() {
         LOG.debug("transactions (abort) IGNORED in proxy");
@@ -52,7 +44,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     private TypedNakedCollection convertToNakedObjects(NakedObjectSpecification specification, ObjectData[] data) {
         NakedObject[] instances = new NakedObject[data.length];
         for (int i = 0; i < data.length; i++) {
-            	instances[i] = data[i].recreate(loadedObjects);
+            instances[i] = data[i].recreate(loadedObjects);
         }
         return new InstanceCollectionVector(specification, instances);
     }
@@ -62,12 +54,11 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
      * oid = memento.getOid(); LOG.debug("Update for " + oid + " ~ " + memento);
      * if (loadedObjects.isLoaded(oid)) { NakedObject object =
      * loadedObjects.getLoadedObject(oid); memento.updateObject(object,
-     * loadedObjects, context); notifier.broadcastObjectChanged(object, this);
-     *  } else { LOG.debug("Notify for (" + oid + ") ignored; OID not
-     * recognised"); } }
+     * loadedObjects, context); notifier.broadcastObjectChanged(object, this); }
+     * else { LOG.debug("Notify for (" + oid + ") ignored; OID not recognised"); } }
      */
 
-    public Oid createOid(NakedObject object) {
+    public Oid createOid(Naked object) {
         throw new NotExpectedException();
     }
 
@@ -79,7 +70,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
 
     public void endTransaction() {
         LOG.debug("transactions (end) IGNORED in proxy");
-      }
+    }
 
     public TypedNakedCollection findInstances(NakedObject pattern, boolean includeSubclasses) throws UnsupportedFindException {
         throw new NotImplementedException("distribution version of this method has been removed");
@@ -173,22 +164,58 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
             return;
         }
 
-/*        if (object instanceof InternalCollection) {
-            //	new DataForInternalCollectionRequest((InternalCollection)
-            // object).update(this);
-        } else {
-            object.setResolved();
-            connection.resolve(session, object.getOid());
-            objectData.update(object, loadedObjects, context);
-        }
-*/
-   //     throw new NotImplementedException();
+        /*
+         * if (object instanceof InternalCollection) { // new
+         * DataForInternalCollectionRequest((InternalCollection) //
+         * object).update(this); } else { object.setResolved();
+         * connection.resolve(session, object.getOid());
+         * objectData.update(object, loadedObjects, context); }
+         */
+        //     throw new NotImplementedException();
         LOG.warn("Not yet resolving");
+    }
+
+    public void saveChanges() {
+        LOG.debug("Saving changes");
+        Enumeration e = loadedObjects.dirtyObjects();
+        while (e.hasMoreElements()) {
+            NakedObject object = (NakedObject) e.nextElement();
+            LOG.debug("  " + object);
+            objectChanged(object);
+            object.clearPersistDirty();
+        }
     }
 
     public long serialNumber(String name) {
         LOG.debug("serialNumber " + name);
         return connection.serialNumber(session, name);
+    }
+
+    /**
+     * .NET property
+     * 
+     * @property
+     */
+    public void set_Connection(ClientDistribution connection) {
+        this.connection = connection;
+    }
+
+    /**
+     * .NET property
+     * 
+     * @property
+     */
+    public void set_LoadedObjects(LoadedObjects loadedObjects) {
+        this.loadedObjects = loadedObjects;
+    }
+
+    /**
+     * .NET property
+     * 
+     * @property
+     */
+    public void set_ObjectDataFactory(ObjectDataFactory factory) {
+        this.objectDataFactory = factory;
     }
 
     public void setConnection(ClientDistribution connection) {
@@ -199,23 +226,20 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         this.context = context;
     }
 
+    public void setLoadedObjects(LoadedObjects loadedObjects) {
+        this.loadedObjects = loadedObjects;
+    }
+
+    public void setObjectDataFactory(ObjectDataFactory factory) {
+        this.objectDataFactory = factory;
+    }
+
     public void shutdown() {
         super.shutdown();
     }
 
     public void startTransaction() {
         LOG.debug("transactions (start) IGNORED in proxy");
-    }
-
-    public void saveChanges() {
-       LOG.debug("Saving changes");
-       Enumeration e = loadedObjects.dirtyObjects();
-       while (e.hasMoreElements()) {
-           NakedObject object = (NakedObject) e.nextElement();
-           LOG.debug("  " + object);
-           objectChanged(object);
-           object.clearPersistDirty();
-       }
     }
 }
 

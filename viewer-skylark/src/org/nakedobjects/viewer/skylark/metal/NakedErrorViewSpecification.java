@@ -99,7 +99,7 @@ class ErrorView extends AbstractView {
         top += Style.TITLE.getHeight();
         canvas.drawText("ERROR", left, top, Style.INVALID, Style.TITLE);
         
-        Error error = (Error) ((PojoAdapter) ((ObjectContent) getContent()).getObject()).getObject();
+        Error error = (Error) ((PojoAdapter) getContent().getNaked()).getObject();
         top += 30;
         canvas.drawText(error.getError() ,left, top, Style.INVALID, Style.NORMAL);
 

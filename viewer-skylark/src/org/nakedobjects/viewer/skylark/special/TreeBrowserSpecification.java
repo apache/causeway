@@ -40,7 +40,7 @@ public class TreeBrowserSpecification implements ViewSpecification {
         View view = addBorder(frame);
 		View rootNode;
 		axis = frame;
-		if(((ObjectContent) content).getObject() instanceof NakedCollection) {
+		if(content.getNaked() instanceof NakedCollection) {
 	    	rootNode = collectionCompositeNode.createView(content, axis);
 	    } else {
 	        rootNode = objectCompositeNode.createView(content, axis);

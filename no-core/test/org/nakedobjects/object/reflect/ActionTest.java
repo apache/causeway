@@ -63,7 +63,7 @@ public class ActionTest extends NakedObjectTestCase {
 
         NakedObject nakedObject = new DummyNakedObject();
         Naked[] parameters = new Naked[2];
-        NakedObject returnObject = action.execute(nakedObject, parameters);
+        Naked returnObject = action.execute(nakedObject, parameters);
 
         actionDelegate.assertAction(0, "execute " + nakedObject);
         actionDelegate.assertAction(1, "execute " + parameters);

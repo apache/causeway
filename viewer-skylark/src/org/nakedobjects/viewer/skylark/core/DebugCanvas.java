@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.core;
 
+import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
@@ -12,14 +13,14 @@ import org.nakedobjects.viewer.skylark.Text;
 
 
 public class DebugCanvas extends Canvas {
-	private StringBuffer buffer;
+	private DebugString buffer;
 	private int level;
 
-	public DebugCanvas(StringBuffer buffer, Bounds bounds) {
+	public DebugCanvas(DebugString buffer, Bounds bounds) {
 		this(buffer, 0);
 	}
 	
-	private DebugCanvas(StringBuffer buffer, int level) {
+	private DebugCanvas(DebugString buffer, int level) {
 		super(null);
 		this.level = level;
 		this.buffer = buffer;

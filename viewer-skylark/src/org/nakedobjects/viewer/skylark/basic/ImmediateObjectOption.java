@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Allow;
@@ -62,7 +63,7 @@ class ImmediateObjectOption extends MenuOption {
     }
 
     public void execute(Workspace workspace, View view, Location at) {
-        NakedObject returnedObject;
+        Naked returnedObject;
         try {
 	        returnedObject = object.execute(action, null);
 	    } catch (Exception e) {
@@ -73,7 +74,7 @@ class ImmediateObjectOption extends MenuOption {
                 Logger.getLogger(getClass()).error(((NakedError)returnedObject));
                 workspace.addOpenViewFor(returnedObject, at);
             } else {
-                if(!(returnedObject instanceof NakedObject)) {
+                if(!(returnedObject instanceof Naked)) {
                     returnedObject = PojoAdapter.createAdapter(returnedObject);
                 }
                 view.objectActionResult(returnedObject, at);

@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.Aggregated;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -13,6 +14,7 @@ import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.basic.ClassOption;
 import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 import org.nakedobjects.viewer.skylark.basic.RemoveOneToOneAssociationOption;
+import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
 public class OneToOneField extends ObjectField implements ObjectContent {
@@ -37,7 +39,7 @@ public class OneToOneField extends ObjectField implements ObjectContent {
             return new Veto(edit.getReason());
         }
     }
-    
+
     public Consent canSet(NakedObject object) {
         if (object.getObject() instanceof NakedClass) {
             return new Allow();
@@ -52,9 +54,9 @@ public class OneToOneField extends ObjectField implements ObjectContent {
                 return new Veto("Can't drop a non-persistent into this persistent object");
             }
 
-            if(object instanceof Aggregated) {
+            if (object instanceof Aggregated) {
                 Aggregated aggregated = ((Aggregated) object);
-                if(aggregated.isAggregated() && aggregated.parent() != getParent()) {
+                if (aggregated.isAggregated() && aggregated.parent() != getParent()) {
                     return new Veto("Object is already associated with another object: " + aggregated.parent());
                 }
             }
@@ -64,14 +66,27 @@ public class OneToOneField extends ObjectField implements ObjectContent {
         }
 
     }
-    
+
     public void clear() {
         getParent().clear(getOneToOneAssociation(), object);
-//        getOneToOneAssociation().clearAssociation(getParent(), object);
+        //        getOneToOneAssociation().clearAssociation(getParent(), object);
     }
 
     public String debugDetails() {
         return super.debugDetails() + "  object:    " + object + "\n" + "  parent:    " + getParent() + "\n";
+    }
+
+    public String getIconName() {
+        return object.getIconName();
+    }
+
+    public Image getIconPicture(int iconHeight) {
+        NakedObjectSpecification specification = object.getSpecification();
+        return ImageFactory.getInstance().loadIcon(specification, "", iconHeight);
+    }
+
+    public Naked getNaked() {
+        return object;
     }
 
     public NakedObject getObject() {
@@ -90,9 +105,13 @@ public class OneToOneField extends ObjectField implements ObjectContent {
         return getOneToOneAssociation().getSpecification().isLookup();
     }
 
+    public boolean isTransient() {
+        return object != null && !object.isPersistent();
+    }
+
     public void menuOptions(MenuOptionSet options) {
         super.menuOptions(options);
-        if(getObject() == null) {
+        if (getObject() == null) {
             ClassOption.menuOptions(getOneToOneAssociation().getSpecification(), options);
         } else {
             ObjectOption.menuOptions(object, options);
@@ -108,18 +127,18 @@ public class OneToOneField extends ObjectField implements ObjectContent {
             associatedObject = object;
         }
 
- //       getViewManager().getUndoStack().add(new AssociateCommand(target, associatedObject, field));
+        //       getViewManager().getUndoStack().add(new AssociateCommand(target,
+        // associatedObject, field));
         getParent().setAssociation(getOneToOneAssociation(), associatedObject);
+    }
+
+    public String title() {
+        return object.titleString();
     }
 
     public String toString() {
         return getObject() + "/" + getField();
     }
-    /*
-    public String getName() {
-        return getOneToOneAssociation().getType().getSingularName();
-    }
-    */
 }
 
 /*

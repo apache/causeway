@@ -45,6 +45,15 @@ public class SingleResponseUpdateNotifier implements UpdateNotifier {
         this.factory = factory;
     }
 
+    /**
+     * .NET property
+     * 
+     * @property
+     */
+    public void set_Factory(ObjectDataFactory factory) {
+        this.factory = factory;
+    }
+
     public void shutdown() {}
 }
 

@@ -42,7 +42,7 @@ public class InternalCollectionVectorAdapter implements InternalCollection {
 
     public NakedObject elementAt(int index) {
         Object element = collection.elementAt(index);
-        return PojoAdapter.createAdapter(element);
+        return PojoAdapter.createNOAdapter(element);
     }
 
     public Enumeration elements() {
@@ -55,7 +55,7 @@ public class InternalCollectionVectorAdapter implements InternalCollection {
 
             public Object nextElement() {
                 Object element = elements.nextElement();
-                return element instanceof NakedObject ? element : PojoAdapter.createAdapter(element);
+                return element instanceof NakedObject ? element : PojoAdapter.createNOAdapter(element);
             }
         };
     }
@@ -181,7 +181,7 @@ public class InternalCollectionVectorAdapter implements InternalCollection {
         return false;
     }
 
-    public NakedObject execute(Action action, Naked[] parameters) {
+    public Naked execute(Action action, Naked[] parameters) {
         return null;
     }
 
@@ -189,7 +189,7 @@ public class InternalCollectionVectorAdapter implements InternalCollection {
         return null;
     }
 
-    public Hint getHint(Session session, NakedObjectField field, NakedObject value) {
+    public Hint getHint(Session session, NakedObjectField field, Naked value) {
         return null;
     }
 

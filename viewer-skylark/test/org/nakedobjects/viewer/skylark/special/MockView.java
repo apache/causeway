@@ -1,7 +1,6 @@
 package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
@@ -197,7 +196,7 @@ public class MockView implements View
 
     public void thirdClick(Click click) {}
 
-    public void update(NakedObject object) {}
+    public void update(Naked object) {}
 
     public ViewAreaType viewAreaType(Location mouseLocation) {
         return null;

@@ -1,8 +1,8 @@
 package org.nakedobjects.viewer.skylark.value;
 
 import org.nakedobjects.object.InvalidEntryException;
-import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.Bounds;
@@ -396,7 +396,7 @@ public class TextField extends AbstractField {
         this.showLines = showLines;
         setMaxTextWidth(25);
 
-        NakedObject value = getValue();
+        NakedValue value = getValue();
         cursor = new CursorPosition(0, 0);
         selection = new Selection();
         textContent = new TextFieldContent(this);
@@ -636,7 +636,7 @@ public class TextField extends AbstractField {
         int baseline = getBaseline();
 
         if (getState().isInvalid()) {
-            textColor = Style.INVALID;
+            textColor = Style.BLACK;
         } else if (hasFocus()) {
             if (isSaved) {
                 textColor = Style.PRIMARY1;
@@ -699,7 +699,7 @@ public class TextField extends AbstractField {
         String entry = textContent.getText();
         
         // do nothing if entry is same as the value object
-        NakedObject value = getValue();
+        NakedValue value = getValue();
         if (!entry.equals(value == null ? "" : value.titleString())) {
             LOG.debug("Field edited: \'" + entry + "\' to replace \'" + (value == null ? "" : value.titleString()) + "\'");
             
@@ -710,6 +710,7 @@ public class TextField extends AbstractField {
                 getViewManager().getSpy().addAction("VALID ENTRY: " + entry);
                 getState().setValid();
                 markDamaged();
+                getParent().invalidateContent();
                 //getParent().invalidateLayout();
             } catch (NakedObjectRuntimeException e) {
                 invalidReason = "UPDATE FAILURE: " + e.getMessage();
@@ -1080,7 +1081,7 @@ public class TextField extends AbstractField {
 
     public void refresh() {
         super.refresh();
-        NakedObject object = getValueContent().getObject();
+        NakedValue object = getValueContent().getObject();
         if(object == null) {
             textContent.setText("");
         } else {

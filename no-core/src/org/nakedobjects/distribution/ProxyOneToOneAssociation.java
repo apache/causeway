@@ -1,9 +1,8 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.object.security.ClientSession;
@@ -32,7 +31,7 @@ public final class ProxyOneToOneAssociation implements OneToOnePeer {
         }
     }
 
-    public Hint getHint(Session session, NakedObject inObject, NakedObject associate) {
+    public Hint getHint(Session session, NakedObject inObject, Naked associate) {
         if (isPersistent(inObject) && fullProxy) {
             throw new NotExpectedException();
         } else {
@@ -40,7 +39,7 @@ public final class ProxyOneToOneAssociation implements OneToOnePeer {
         }
     }
 
-    public NakedObject getAssociation(NakedObject inObject) {
+    public Naked getAssociation(NakedObject inObject) {
         if (isPersistent(inObject) && fullProxy) {
           //  return connection.getOneToOneAssociation(ClientSession.getSession(), inObject);
             throw new NotExpectedException();
@@ -85,15 +84,7 @@ public final class ProxyOneToOneAssociation implements OneToOnePeer {
         return inObject.getOid() != null;
     }
 
-    public void parseTextEntry(NakedObject inObject, String text) throws TextEntryParseException, InvalidEntryException {
-        local.parseTextEntry(inObject, text);
- //       Object associate = local.getAssociation(inObject).getObject();
-        if (isPersistent(inObject)) {
-            connection.setValue(ClientSession.getSession(), getName(), inObject.getOid(), inObject.getSpecification().getFullName(),  text);
-        } 
-    }
-
-    public void setAssociation(NakedObject inObject, NakedObject associate) {
+     public void setAssociation(NakedObject inObject, NakedObject associate) {
         LOG.debug("remote set association " + getName() + " in " + inObject + " with " + associate);
         if (isPersistent(inObject)) {
             connection.setAssociation(ClientSession.getSession(), getName(), inObject.getOid(), inObject.getSpecification().getFullName(), associate.getOid(), associate.getSpecification().getFullName());

@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.special;
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.utility.Assert;
@@ -7,7 +8,6 @@ import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.CollectionElement;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.OneToManyFieldElement;
 import org.nakedobjects.viewer.skylark.View;
@@ -46,10 +46,7 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
         if(showAll) {
             elements = collectionContent.allElements();
         } else {
-            //CollectionDisplayIterator iterator = collectionContent.getIterator();
-            //elements = iterator.displayElements();
-            
-            elements = collectionContent.allElements();
+             elements = collectionContent.allElements();
         }
          
         /*
@@ -58,10 +55,10 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
          * element already exists it should be reused. 
          */
         View[] subviews = view.getSubviews();
-        NakedObject[] existingElements = new NakedObject[subviews.length];
+        Naked[] existingElements = new NakedObject[subviews.length];
         for (int i = 0; i < subviews.length; i++) {
 			view.removeView(subviews[i]);
-			existingElements[i] = ((ObjectContent) subviews[i].getContent()).getObject();
+			existingElements[i] = subviews[i].getContent().getNaked();
 		}
 
         while (elements.hasMoreElements()) {

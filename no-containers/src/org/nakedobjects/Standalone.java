@@ -2,9 +2,7 @@ package org.nakedobjects;
 
 import org.nakedobjects.container.configuration.ComponentException;
 import org.nakedobjects.container.configuration.ComponentLoader;
-import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.container.configuration.ConfigurationException;
-import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -22,8 +20,6 @@ import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.defaults.TransientObjectStore;
 import org.nakedobjects.object.reflect.PojoAdapter;
-import org.nakedobjects.object.security.ClientSession;
-import org.nakedobjects.security.User;
 import org.nakedobjects.utility.StartupException;
 import org.nakedobjects.viewer.ObjectViewingMechanism;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;
@@ -56,7 +52,7 @@ public class Standalone extends NakedObjectsContainer implements ObjectViewingMe
      */
     protected final NakedObject createInstance(Class type) {
         NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(type.getName());
-        if (nc == null) { return PojoAdapter.createAdapter(objectManager.generatorError("Could not create an object of class " + type, null)); }
+        if (nc == null) { return PojoAdapter.createNOAdapter(objectManager.generatorError("Could not create an object of class " + type, null)); }
         return createInstance(nc);
     }
 
@@ -66,7 +62,7 @@ public class Standalone extends NakedObjectsContainer implements ObjectViewingMe
      */
     protected final NakedObject createInstance(String className) {
         NakedObjectSpecification nc = NakedObjectSpecificationLoader.getInstance().loadSpecification(className);
-        if (nc == null) { return PojoAdapter.createAdapter(objectManager.generatorError("Could not create an object of class " + className, null)); }
+        if (nc == null) { return PojoAdapter.createNOAdapter(objectManager.generatorError("Could not create an object of class " + className, null)); }
         return createInstance(nc);
     }
 

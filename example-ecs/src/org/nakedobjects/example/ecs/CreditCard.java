@@ -8,7 +8,7 @@ import org.nakedobjects.application.value.Color;
 import org.nakedobjects.application.value.TextString;
 
 
-public class CreditCard extends PaymentMethod {
+public class CreditCard implements PaymentMethod {
     private final TextString nameOnCard;
     private final TextString number;
     private final TextString expires;
@@ -29,6 +29,10 @@ public class CreditCard extends PaymentMethod {
         return expires;
     }
     
+    public void aboutColor(FieldAbout about, Color color) {
+        about.unmodifiable("Can't change colour");
+    }
+    
     public Color getColor() {
         return color;
     }
@@ -36,7 +40,7 @@ public class CreditCard extends PaymentMethod {
     public void aboutExpires(FieldAbout about, TextString value) {
        // validity.cannotBeEmpty();
         if (value == null || value.isEmpty()) {
-            about.unmodifiable("Cannot be empty");
+            about.invalid("Cannot be empty");
         } else {
             String s = value.stringValue().trim();
             boolean valid = true;
@@ -49,15 +53,11 @@ public class CreditCard extends PaymentMethod {
             } else {
                 valid = false;
             }
-            // validity.invalidOnCondition(!valid, "date must be MM/YY e.g.
-            // 03/05");
-            if (!valid) {
-                about.unmodifiable("date must be MM/YY e.g. 03/05");
-            }
+            about.invalidOnCondition(!valid, "date must be MM/YY e.g. 03/05");
         }
     }
     
-    
+    /*
     public void validExpires(Validity validity) {
         validity.cannotBeEmpty();
         String s = expires.stringValue().trim();
@@ -73,7 +73,7 @@ public class CreditCard extends PaymentMethod {
         }
         validity.invalidOnCondition(!valid, "date must be MM/YY e.g. 03/05");
      }
- 
+ */
 
     public final TextString getNameOnCard() {
         return nameOnCard;
@@ -87,10 +87,14 @@ public class CreditCard extends PaymentMethod {
         return number;
     }
 
-    public void validNumber(Validity validity) {
-        validity.cannotBeEmpty();
-        int len = number.stringValue().length();
-        validity.invalidOnCondition(len != 16, "Card numbers are 16 digits (not " + len + ")");
+    public void aboutNumber(FieldAbout about, TextString number) {
+        //validity.cannotBeEmpty();
+        if(number == null) {
+            about.invalid("Cannot be empty");
+        } else {
+	        int len = number.stringValue().length();
+	        about.invalidOnCondition(len != 16, "Card numbers are 16 digits (not " + len + ")");
+        }
     }
     
     public Title title() {

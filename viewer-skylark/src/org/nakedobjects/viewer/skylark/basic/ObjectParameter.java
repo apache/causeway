@@ -6,12 +6,14 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.utility.ToString;
+import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
+import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
 class ObjectParameter extends ActionParameter implements ObjectContent {
@@ -37,6 +39,15 @@ class ObjectParameter extends ActionParameter implements ObjectContent {
     public String debugDetails() {
         return "  object:" + object + "\n";
     }
+    
+    public String getIconName() {
+        return object.getIconName();
+    }
+    
+    public Image getIconPicture(int iconHeight) {
+        NakedObjectSpecification specification = object.getSpecification();
+        return  ImageFactory.getInstance().loadIcon(specification, "", iconHeight);
+    }
 
     public Naked getNaked() {
         return object;
@@ -44,6 +55,10 @@ class ObjectParameter extends ActionParameter implements ObjectContent {
 
     public NakedObject getObject() {
         return object;
+    }
+    
+    public boolean isTransient() {
+        return object != null && !object.isPersistent();
     }
     
     public void menuOptions(MenuOptionSet options) {
@@ -62,13 +77,16 @@ class ObjectParameter extends ActionParameter implements ObjectContent {
         this.object = object;
     }
     
+    public String title() {
+        return object.titleString();
+    }
+    
     public String toString() {
         ToString toString = new ToString(this);
         toString.append("object", object);
         toString.append("spec", getSpecification());
         return toString.toString();
     }
-
 }
 
 /*

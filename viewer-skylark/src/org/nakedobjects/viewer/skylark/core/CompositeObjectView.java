@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark.core;
 
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
@@ -222,14 +222,14 @@ public class CompositeObjectView extends ObjectView {
     }
 
     protected String title() {
-        return getObject().titleString();
+        return getContent().title();
     }
 
     public String toString() {
         return "ObjectCompositeView" + getId();
     }
 
-    public void update(NakedObject object) {
+    public void update(Naked object) {
         LOG.debug("update notify on " + this);
         invalidateContent();
         //builder.build(getView());

@@ -15,6 +15,10 @@ public class Option extends BusinessValue {
     private String[] options;
     private int selection;
 
+    public Option() {
+       this(new String[] {""}, 0);
+    }
+    
     public Option(String[] options) {
         this(options, 0);
     }

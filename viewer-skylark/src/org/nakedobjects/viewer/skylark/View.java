@@ -2,7 +2,6 @@ package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
 
 
 public interface View extends Cloneable {
@@ -306,7 +305,7 @@ public interface View extends Cloneable {
     /**
      * notification that the content of this view has changed
      */
-    void update(NakedObject object);
+    void update(Naked object);
 
     /**
      * Determines if the user is invoking an action relating to this view,

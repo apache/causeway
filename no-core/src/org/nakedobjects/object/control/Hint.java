@@ -17,6 +17,8 @@ public interface Hint extends Serializable {
      Returns a Permission describing whether use is permitted.
      */
     public Consent canUse();
+    
+    public Consent isValid();
 
     /**
      Return a description of this object domain.

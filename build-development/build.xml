@@ -39,7 +39,7 @@
 
 		<copy todir="${build.test.dir}">
 			<fileset dir="../viewer-skylark/${test.dir}" />
-			<fileset dir="../no-xat/${test.dir}" />
+			<!--fileset dir="../no-xat/${test.dir}" /-->
 			<fileset dir="../os-file/${test.dir}" />
 		</copy>
 

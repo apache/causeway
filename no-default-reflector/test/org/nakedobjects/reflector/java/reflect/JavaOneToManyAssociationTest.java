@@ -11,6 +11,7 @@ import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 
 import java.lang.reflect.Method;
 import java.util.Vector;
@@ -27,7 +28,7 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
 	private JavaOneToManyAssociation collectionField;
 	private JavaReferencedObject elements[];
     private MockNakedObjectSpecificationLoader loader;
-    private PojoAdapter nakedObject;
+    private NakedObject nakedObject;
 
     public JavaOneToManyAssociationTest(String name) {
         super(name);
@@ -45,7 +46,8 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
     	ConfigurationFactory.setConfiguration(new TestConfiguration());
         
 		objectWithVector = new JavaObjectWithVector();
-		nakedObject = PojoAdapter.createAdapter(objectWithVector);
+		PojoAdapter.setReflectorFactory(new NullReflectorFactory());
+		nakedObject = PojoAdapter.createNOAdapter(objectWithVector);
         elements = new JavaReferencedObject[3];
         for (int i = 0; i < elements.length; i++) {
 			elements[i] = new JavaReferencedObject();
@@ -70,7 +72,7 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         loader.addSpec(spec);
         
         JavaReferencedObject associate = new JavaReferencedObject();
-        NakedObject nakedObjectAssoicate =PojoAdapter.createAdapter(associate);
+        NakedObject nakedObjectAssoicate =PojoAdapter.createNOAdapter(associate);
         
         NakedObjectContext context = new MockNakedObjectContext(MockObjectManager.setup());
         nakedObject.setContext(context);
@@ -88,7 +90,7 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         loader.addSpec(spec);
         
         JavaReferencedObject associate = new JavaReferencedObject();
-        NakedObject nakedObjectAssoicate =PojoAdapter.createAdapter(associate);
+        NakedObject nakedObjectAssoicate =PojoAdapter.createNOAdapter(associate);
         
         spec = new DummyNakedObjectSpecification();
         loader.addSpec(spec);

@@ -10,7 +10,7 @@ import org.nakedobjects.viewer.skylark.MenuOptionSet;
 
 public class ClassOption {
     public static void menuOptions(NakedObjectSpecification specificaton, MenuOptionSet menuOptionSet) {
-        PojoAdapter nakedClass = PojoAdapter.createAdapter(NakedObjectContext.getDefaultContext().getObjectManager().getNakedClass(specificaton));
+        PojoAdapter nakedClass = (PojoAdapter) PojoAdapter.createAdapter(NakedObjectContext.getDefaultContext().getObjectManager().getNakedClass(specificaton));
         
         Action[] actions;
         actions = specificaton.getClassActions(Action.USER);

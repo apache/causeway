@@ -137,6 +137,8 @@ public abstract class AbstractNakedObject implements NakedObject {
 
      /**
      * Returns the short name from this objects NakedObjectSpecification
+     * 
+     * TODO allow the reflector to set up a icon name
      */
     public String getIconName() {
         return null;

@@ -18,8 +18,6 @@ import org.nakedobjects.reflector.java.control.SimpleFieldAbout;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Date;
-import java.util.Hashtable;
 
 import org.apache.log4j.Category;
 
@@ -37,7 +35,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         removeMethod = remove;
     }
 
-    public Hint getHint(Session session, NakedObject object, NakedObject associate) {
+    public Hint getHint(Session session, NakedObject object, Naked associate) {
         Method aboutMethod = getAboutMethod();
 
         //Class parameter = setMethod.getParameterTypes()[0];
@@ -94,7 +92,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
                 }
                 
             } else {
-                setMethod.invoke(inObject.getObject(), new Object[] { adaptValue(setValue == null ? null : setValue.toString()) });
+                setMethod.invoke(inObject.getObject(), new Object[] { setValue == null ? null : setValue.toString() });
             }
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + setMethod, e);
@@ -114,8 +112,8 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
             objectManager.startTransaction();
 
             if (setMethod == null) {
-                BusinessValue value = (BusinessValue) getMethod.invoke(inObject.getObject(), new Object[] {});
-                value.parseUserEntry((String) setValue);
+ //               BusinessValue value = (BusinessValue) getMethod.invoke(inObject.getObject(), new Object[] {});
+ // value.parseUserEntry((String) setValue);
             } else {
                 setMethod.invoke(inObject.getObject(), new Object[] { setValue });
             }
@@ -214,8 +212,8 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
                 + methods + ", type=" + getType() + " ]";
     }
 
-    public NakedObject getAssociation(NakedObject fromObject) {
-        return (NakedObject) get(fromObject);
+    public Naked getAssociation(NakedObject fromObject) {
+        return get(fromObject);
     }
 
     private Naked get(NakedObject fromObject) {
@@ -255,7 +253,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
 
         } else {
             try {
-                setMethod.invoke(fromObject.getObject(), new Object[] { adaptValue(text) });
+                setMethod.invoke(fromObject.getObject(), new Object[] { text });
             } catch (InvocationTargetException e) {
                 invocationException("Exception executing " + setMethod, e);
             } catch (IllegalAccessException ignore) {
@@ -265,22 +263,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
 
         }
     }
-
-    private Hashtable adapters = new Hashtable();
-    {
-        adapters.put(NakedObjectSpecificationLoader.getInstance().loadSpecification(java.lang.String.class) , new StringAdapter());
-        adapters.put(NakedObjectSpecificationLoader.getInstance().loadSpecification(Date.class), new DateAdapter());
-        adapters.put(NakedObjectSpecificationLoader.getInstance().loadSpecification(float.class), new FloatAdapter());
-    }
     
-    private Object adaptValue(String text) {
-        JavaValueAdapter adapter = (JavaValueAdapter) adapters.get(getType()); 
-        if(adapter == null) {
-            throw new NakedObjectRuntimeException("No adapter found for " + getType());
-        }
-        return adapter.parse(text);
-    }
-
     public boolean isEmpty(NakedObject fromObject) {
         try {
             Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);

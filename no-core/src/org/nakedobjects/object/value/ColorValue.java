@@ -1,16 +1,18 @@
-package org.nakedobjects.reflector.java.reflect;
+package org.nakedobjects.object.value;
 
-public interface JavaValueAdapter {
-    Object parse(String entry);
+import org.nakedobjects.object.NakedValue;
+
+public interface ColorValue extends NakedValue {
+    int color();
     
-    String asString(Object value);
+    void setColor(int color);
 }
 
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2005  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

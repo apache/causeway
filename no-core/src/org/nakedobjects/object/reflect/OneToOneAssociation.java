@@ -1,12 +1,10 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.TextEntryParseException;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.DefaultHint;
+import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.security.Session;
 
 
@@ -44,7 +42,7 @@ public class OneToOneAssociation extends NakedObjectAssociation {
 		return reflectiveAdapter.getAssociation(fromObject);
 	}
     
-    protected Hint getHint(Session session, NakedObject object, NakedObject value) {
+    protected Hint getHint(Session session, NakedObject object, Naked value) {
         if(hasHint()) {
             return reflectiveAdapter.getHint(session, object, value);
         } else {
@@ -54,7 +52,7 @@ public class OneToOneAssociation extends NakedObjectAssociation {
     }
 
     protected String getLabel(Session session, NakedObject object) {
-      	Hint about = getHint(session, object, (NakedObject) get(object));
+      	Hint about = getHint(session, object, get(object));
 
         return getLabel(about);
     }
@@ -85,10 +83,6 @@ public class OneToOneAssociation extends NakedObjectAssociation {
 	
     public String toString() {
         return "OneToOne " + (isValue() ? "VALUE" : "OBJECT") + " [" + super.toString() + ",type=" + getSpecification().getShortName() + "]";
-    }
-
-    protected void parseTextEntry(NakedObject inObject, String text) throws TextEntryParseException, InvalidEntryException {
-        reflectiveAdapter.parseTextEntry(inObject, text);    
     }
     
     public boolean isEmpty(NakedObject inObject) {

@@ -1,28 +1,21 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
-import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.View;
-import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewDrag;
 import org.nakedobjects.viewer.skylark.Workspace;
-import org.nakedobjects.viewer.skylark.basic.DragContentIcon;
-import org.nakedobjects.viewer.skylark.basic.IconGraphic;
-import org.nakedobjects.viewer.skylark.basic.ObjectTitleText;
 import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
-import org.nakedobjects.viewer.skylark.basic.TitleText;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
 import org.nakedobjects.viewer.skylark.core.DragViewOutline;
 import org.nakedobjects.viewer.skylark.special.ResizeBorder;
@@ -34,26 +27,20 @@ public class WindowBorder extends AbstractBorder {
 	private final static int LINE_THICKNESS = 5;
 	private final static int BUTTON_HEIGHT = 13;
 	private final static int BUTTON_WIDTH = BUTTON_HEIGHT + 2;
-	private int baseline;
-    private int titlebarHeight;
-    private int padding = 2;
+    private final int titlebarHeight;
+    private final int padding = 2;
+    private final int baseline;
 
-	private IconGraphic icon;
-	private TitleText text;
-	
 	public WindowBorder(View wrappedView, boolean scrollable) {
 		super(scrollable ? new ResizeBorder(new ScrollBorder(wrappedView)) : wrappedView);
 		
-		icon = new IconGraphic(this, TITLE_STYLE);
-		text = new ObjectTitleText(this, TITLE_STYLE);
-		titlebarHeight = icon.getSize().getHeight() + 1;
+		titlebarHeight = Math.max(BUTTON_HEIGHT + 2 * VPADDING +TITLE_STYLE.getDescent() , TITLE_STYLE.getHeight());
+		baseline = LINE_THICKNESS + padding  + BUTTON_HEIGHT ;
 
 		left = LINE_THICKNESS;
 		right = LINE_THICKNESS;
         top = LINE_THICKNESS + titlebarHeight;
 		bottom = LINE_THICKNESS;
-
-		baseline = icon.getBaseline() + LINE_THICKNESS;
 	}
 	
     public void debugDetails(StringBuffer b) {
@@ -64,10 +51,6 @@ public class WindowBorder extends AbstractBorder {
     
     public Drag dragStart(DragStart drag) {
         if(overBorder(drag.getLocation())) {
-            if(viewAreaType(drag.getLocation()) == ViewAreaType.CONTENT) {
-                View dragOverlay = new DragContentIcon(getContent());
-                return new ContentDrag(this, drag.getLocation(), dragOverlay);
-            } 
             Location location = drag.getLocation();
             DragViewOutline dragOverlay = new DragViewOutline(getView());
             return new ViewDrag(this, new Offset(location.getX(), location.getY()), dragOverlay);
@@ -93,7 +76,6 @@ public class WindowBorder extends AbstractBorder {
 		for (int i = 2; i < left; i++) {
 			canvas.drawRectangle(i, i, width - 2 * i - 1, height - 2 * i - 1,Style.SECONDARY1);
 		}
-		canvas.drawLine(x, top - 1, width - right, top - 1, Style.SECONDARY1);
 
 		// vertical lines within border
 		canvas.drawLine(2, 15, 2, height - 15, Style.BLACK);
@@ -107,19 +89,18 @@ public class WindowBorder extends AbstractBorder {
 		canvas.drawLine(15, height - 3, width - 15, height - 3, Style.BLACK);
 		canvas.drawLine(16, height - 2, width - 14, height - 2, Style.PRIMARY1);
 		
-		// icon & title
-		icon.draw(canvas, x, baseline);
-		x += icon.getSize().getWidth();
-		text.draw(canvas, x, baseline);
-
+		canvas.drawSolidRectangle(left, LINE_THICKNESS , width - left - right, titlebarHeight, Style.SECONDARY2);
+		canvas.drawLine(x, top - 1, width - right, top - 1, Style.BLACK);
+		
+		canvas.drawText(getContent().windowTitle(), x + HPADDING, baseline, Style.BLACK, TITLE_STYLE);
+		
 		x = width - right - 4 * (BUTTON_WIDTH + padding) - 1;
 		y = LINE_THICKNESS + padding;
 		int w = BUTTON_WIDTH - 1;
 		int h = BUTTON_HEIGHT - 1;
 
 		// transient marker
-		NakedObject object = ((ObjectContent) getContent()).getObject();
-        if(object != null && object.getOid() == null) {
+        if(getContent().isTransient()) {
             Image icon = ImageFactory.getInstance().createIcon("transient", BUTTON_HEIGHT, null);
             if(icon == null) {
                 canvas.drawText("*", x, y, Style.BLACK, Style.NORMAL);
@@ -192,23 +173,12 @@ public class WindowBorder extends AbstractBorder {
 	public Size getRequiredSize() {
 		Size size = super.getRequiredSize();
 		
-		size.ensureWidth(left + icon.getSize().getWidth() + text.getSize().getWidth() + 
+		size.ensureWidth(left + TITLE_STYLE.stringWidth(getContent().windowTitle()) + 
 		        padding + 4 * (padding + BUTTON_WIDTH)  + right);
 		return size;
 	}
-	
-	public ViewAreaType viewAreaType(Location mouseLocation) {
-	    Bounds title = new Bounds(new Location(), icon.getSize());
-	    title.extendWidth(left);
-	    title.extendWidth(text.getSize().getWidth());
-	    if(title.contains(mouseLocation)) {
-	        return ViewAreaType.CONTENT;
-	    } else {
-	        return super.viewAreaType(mouseLocation);
-	    }
-    }
 
- 	public String toString() {
+    public String toString() {
 		return wrappedView.toString() + "/WindowBorder [" + getSpecification() + "]";
 	}
 }

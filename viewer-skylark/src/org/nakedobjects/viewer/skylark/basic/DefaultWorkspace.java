@@ -42,7 +42,7 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
 
     public View addOpenViewFor(Naked object, Location at) {
         ViewFactory factory = ViewFactory.getViewFactory();
-        View view = factory.createOpenRootView((NakedObject) object);
+        View view = factory.createOpenRootView(object);
         view.setLocation(at);
         view.setSize(view.getRequiredSize());
         getWorkspace().addView(view);
@@ -147,7 +147,7 @@ public class DefaultWorkspace extends CompositeObjectView implements Workspace {
     }
 
     private View newInstance(NakedObjectSpecification cls, boolean openAView) {
-        NakedObject object =  getObject().getContext().getObjectManager().createInstance(cls);
+        NakedObject object =  ((NakedObject) getObject()).getContext().getObjectManager().createInstance(cls);
 
         return openAView ? ViewFactory.getViewFactory().createOpenRootView(object) : ViewFactory.getViewFactory()
                 .createIconizedRootView(object);

@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.core;
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
@@ -14,7 +15,9 @@ import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.Debug;
 import org.nakedobjects.utility.DebugInfo;
+import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.viewer.skylark.Bounds;
+import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.View;
@@ -22,88 +25,104 @@ import org.nakedobjects.viewer.skylark.View;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
-
 
 public class DebugView implements DebugInfo {
-	private static final Logger LOG = Logger.getLogger(AbstractView.class);
-	 
-	
-	private View view;
+	private final View view;
 
-    public DebugView(View display) {
+    public DebugView(final View display) {
         this.view = display;
     }
 
     public String getDebugData() {
-        StringBuffer info = new StringBuffer();
+        DebugString debug = new DebugString();
 
-        info.append(view.getView());
-        info.append("\n\n");
+        debug.append(view.getView());
+        debug.blankLine();
+        debug.blankLine();
 
         // display details
-        info.append("VIEW\n");
-        info.append("----\n");
+        debug.appendTitle("VIEW");
 
-        info.append(view.debugDetails());
-        info.append("\n");
+        debug.append(view.debugDetails());
+        debug.append("\n");
 
         // content
         Content content = view.getContent();
-        info.append("CONTENT\n");
-        info.append("------\n");
-        info.append("Content:     " + (content == null ? "none" : content.debugDetails()) + "\n");
+        debug.appendTitle("CONTENT");
+        debug.append("Content:     " + (content == null ? "none" : content.debugDetails()) + "\n");
 
         if(content instanceof ObjectContent) {
         	NakedObject object = ((ObjectContent) content).getObject();
-        	info.append(dumpObjectMethods(object));
-	        info.append(dumpObject(object));
-	        info.append("\n");
-	        info.append(dumpGraph(object));
+        	dumpObjectMethods(object, debug);
+	        dumpObject(object, debug);
+	        debug.blankLine();
+	        dumpGraph(object, debug);
         }
 
-        info.append("\n\nDRAWING\n");
-        info.append("------\n");
-		view.draw(new DebugCanvas(info, new Bounds(view.getBounds())));
+        if(content instanceof CollectionContent) {
+        	NakedCollection collection = ((CollectionContent) content).getCollection();
+	        dumpObject(collection, debug);
+	        debug.blankLine();
+	        dumpGraph(collection, debug);
+        }
 
-        return info.toString();
+        debug.append("\n\nDRAWING\n");
+        debug.append("------\n");
+		view.draw(new DebugCanvas(debug, new Bounds(view.getBounds())));
+
+        return debug.toString();
     }
 
-    private String dumpObjectMethods(NakedObject object) {
-        StringBuffer text = new StringBuffer();
+    private String dumpObjectMethods(final NakedObject object, final DebugString debug) {
 
         if (object != null) {
-            NakedObjectField[] fields = object.getSpecification().getVisibleFields(object, ClientSession.getSession());
+            NakedObjectSpecification specification = object.getSpecification();
+            listRelatedClasses(specification, debug);
+            
+            NakedObjectField[] fields = specification.getVisibleFields(object, ClientSession.getSession());
             Session session = ClientSession.getSession();
             for (int i = 0; i < fields.length; i++) {
-                //text.append(" " + attributes[i].toString() + "\n");
                 if (fields[i] instanceof OneToManyAssociation) {
                     OneToManyAssociation f = (OneToManyAssociation) fields[i];
-                    debugAboutDetail(text, f, f.getHint(session, (NakedObject) object));
+                    debugAboutDetail(debug, f, f.getHint(session, (NakedObject) object));
                 } else if (fields[i] instanceof OneToOneAssociation) {
                     OneToOneAssociation f = (OneToOneAssociation) fields[i];
-                    debugAboutDetail(text, f, object.getHint(session, f, null));
+                    debugAboutDetail(debug, f, object.getHint(session, f, null));
                 }
             }
  		}
-        
-
-        return text.toString();
+        return debug.toString();
     }
 
-    private void debugAboutDetail(StringBuffer text, NakedObjectMember member, Hint about) {
-        text.append("    " + member.toString() + "\n");
+    private void listRelatedClasses(NakedObjectSpecification specification, DebugString debug) {
+        if(specification.superclass() != null) {
+            debug.appendln(0, "Superclass", specification.superclass().getFullName());
+        }
+        debug.appendln(0, "Subclasses", specificationNames(specification.subclasses()));
+        debug.appendln(0, "Interfaces", specificationNames(specification.interfaces()));
+    }
 
-        String desc = about.getDescription();
+    private String[] specificationNames(NakedObjectSpecification[] specifications) {
+        String[] names = new String[specifications.length];
+        for (int i = 0; i < names.length; i++) {
+            names[i] = specifications[i].getFullName();
+        }
+        return names;
+    }
+
+    private void debugAboutDetail(final DebugString debug, final NakedObjectMember member, final Hint hint) {
+        debug.appendln(2, member.toString());
+
+        String desc = hint.getDescription();
 
         if (desc != null && !desc.equals("")) {
-            text.append("       desc:  " + desc + "\n");
+            debug.appendln(4, "description", desc);
         }
 
-        String aboutDesc = about.debug();
+        String aboutDesc = hint.debug();
 
         if (aboutDesc != null && !aboutDesc.equals("")) {
-            text.append("       about: " + aboutDesc + "\n");
+            debug.appendln(4, "about", aboutDesc);
         }
     }
 
@@ -112,55 +131,48 @@ public class DebugView implements DebugInfo {
         return "Debug: " + view + view == null ? "" : ("/" + view.getContent());
     }
 
-    public String debugGraph(NakedObject object, String name, int level, Vector recursiveElements) {
+    public void debugGraph(final Naked object, final String name, final int level, final Vector recursiveElements, DebugString info) {
         if (level > 3) {
-            return "...\n"; // only go 3 levels?
-        }
-
-        if (recursiveElements == null) {
-            recursiveElements = new Vector(25, 10);
-        }
-
-        if (object instanceof NakedCollection) {
-            return "\n" +
-            debugCollectionGraph((NakedCollection) object, name, level, recursiveElements);
+            info.appendln("..."); // only go 3 levels?
         } else {
-            return "\n" + debugObjectGraph(object, name, level, recursiveElements);
+	        Vector elements;
+	        if (recursiveElements == null) {
+	            elements = new Vector(25, 10);
+	        } else {
+	            elements = recursiveElements;
+	        }
+	
+	        info.blankLine();
+	        if (object instanceof NakedCollection) {
+	            debugCollectionGraph((NakedCollection) object, name, level, elements, info);
+	        } else {
+	            debugObjectGraph((NakedObject) object, level, elements, info);
+	        }
         }
     }
 
-    public String dumpGraph(NakedObject object) {
-        StringBuffer info = new StringBuffer();
-
+    public void dumpGraph(final Naked object, DebugString info) {
         if (object != null) {
             // object details - exploded/recursive
-            info.append("GRAPH\n");
-            info.append("------\n");
+            info.appendTitle("GRAPH");
             info.append(object);
-            info.append(debugGraph(object, object.getSpecification().getShortName(), 0, new Vector()));
+            debugGraph(object, object.getSpecification().getShortName(), 0, new Vector(), info);
         }
-        
-        return info.toString();
     }
 
-    public String dumpObject(NakedObject object) {
+    public String dumpObject(final Naked object, DebugString info) {
         // compile details
-        StringBuffer info = new StringBuffer();
-
-        // object
-//        info.append(object);
-
-        info.append("\n");
+        
+        info.blankLine();
 
         // object details - summary
-        info.append(dumpSummary(object));
-        info.append("\n");
+        dumpSummary(object, info);
+        info.blankLine();
 
         // object interface
         if (object != null) {
             NakedObjectSpecification spec = object.getSpecification();
-            info.append("Class:        " + spec + "\n");
-            LOG.debug("Class details for " + spec);
+            info.appendln(0, "Specification", spec);
             if (!(object.getObject() instanceof NakedClass || object.getObject() instanceof InstanceCollectionVector)) {
                 info.append(spec.debugInterface());
             }
@@ -168,41 +180,33 @@ public class DebugView implements DebugInfo {
         return info.toString();
     }
 
-    public String dumpSummary(NakedObject object) {
-        StringBuffer text = new StringBuffer();
+    private String dumpSummary(final Naked naked, DebugString text) {
+        if (naked != null) {
+            text.appendln("Summary");
 
-        if (object != null) {
-            text.append("Summary" + "\n");
-
-            text.append("  Hash:       " + object.hashCode() + "\n");
-            text.append("  ID:         " + object.getOid() + "\n");
-            text.append("  Class:      " + object.getClass().getName() + "\n");
-            text.append("  NakedClass: " + object.getSpecification() + "\n");
-            text.append("  Context:    " + object.getClass().getName() + "\n");
+            text.appendln(2, "  Hash", naked.hashCode());
+            text.appendln(2, "  Adapter", naked.getClass().getName());
+            text.appendln(2, "  Specification", naked.getSpecification());
+            text.appendln(2, "  Class", naked.getObject() == null ? "none" : naked.getObject().getClass().getName());
             
-            StringBuffer types = new StringBuffer();
+            Session session = ClientSession.getSession();
+            text.appendln(2, "  Session", session);
+            text.appendln(2, "  Title", naked.titleString());
 
-            if (object instanceof NakedCollection) {
-                types.append("Collection ");
-            } else {
-                types.append("Object ");
+            if(naked instanceof NakedObject) {
+                NakedObject object = (NakedObject) naked;
+	            text.appendln(2, "  Context", object.getContext());
+	            text.appendln(2, "  ID", object.getOid());
+	            text.appendln(2, "  Persistent", (object.getOid() != null));
+	            text.appendln(2, "  Resolved", object.isResolved());
             }
-
-            Session context = ClientSession.getSession();
-            text.append("  Type:       " + types + "\n");
-            text.append("  Cojntext:    " + object.getContext() + "\n");
-            text.append("  Session:    " + context + "\n");
-            text.append("  Persistent: " + object.getOid() != null + "\n");
-            text.append("  Resolved:   " + object.isResolved() + "\n");
-            text.append("  Title:      '" + object.titleString() + "'\n");
         }
         return text.toString();
     }
 
 
-    private String debugCollectionGraph(NakedCollection collection, String name, int level,
-        Vector recursiveElements) {
-        StringBuffer s = new StringBuffer();
+    private String debugCollectionGraph(final NakedCollection collection, final String name, final int level,
+        final Vector recursiveElements, DebugString s) {
 
         //	indent(s, level - 1);
         if (recursiveElements.contains(collection)) {
@@ -214,22 +218,20 @@ public class DebugView implements DebugInfo {
             Enumeration e = ((NakedCollection) collection).elements();
 
             while (e.hasMoreElements()) {
-                indent(s, level);
+                graphIndent(s, level);
 
                 NakedObject element = ((NakedObject) e.nextElement());
 
                 s.append(element);
-                s.append(debugGraph(element, name, level + 1, recursiveElements));
+                debugGraph(element, name, level + 1, recursiveElements, s);
             }
         }
 
         return s.toString();
     }
 
-    private String debugObjectGraph(NakedObject object, String name, int level,
-        Vector recursiveElements) {
-        StringBuffer s = new StringBuffer();
-
+    private String debugObjectGraph(final NakedObject object, final int level,
+        final Vector recursiveElements, DebugString s) {
         recursiveElements.addElement(object);
 
         // work through all its fields
@@ -241,15 +243,15 @@ public class DebugView implements DebugInfo {
             NakedObjectField field = fields[i];
             Object obj = object.getField(field);
 
-            name = field.getName();
-            indent(s, level);
+            String name = field.getName();
+            graphIndent(s, level);
 
              if (obj instanceof NakedObject) {
                 if (recursiveElements.contains(obj)) {
                     s.append(name + ": " + obj + "*\n");
                 } else {
                     s.append(name + ": " + obj);
-                    s.append(debugGraph((NakedObject) obj, name, level + 1, recursiveElements));
+                   debugGraph((NakedObject) obj, name, level + 1, recursiveElements, s);
                 }
             } else {
                 s.append(name + ": " + obj);
@@ -260,7 +262,7 @@ public class DebugView implements DebugInfo {
         return s.toString();
     }
 
-    private void indent(StringBuffer s, int level) {
+    private void graphIndent(DebugString s, int level) {
         for (int indent = 0; indent < level; indent++) {
             s.append(Debug.indentString(4) + "|");
         }

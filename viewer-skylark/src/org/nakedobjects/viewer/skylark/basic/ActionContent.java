@@ -11,8 +11,10 @@ import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionParameterSet;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.security.ClientSession;
+import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
+import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
 /**
@@ -21,7 +23,6 @@ import org.nakedobjects.viewer.skylark.ObjectContent;
 public class ActionContent implements ObjectContent {
     private final Action action;
     private final ActionParameter[] parameters;
-    //   private final ParameterSet parameterSet;
     private final NakedObject target;
 
     public ActionContent(NakedObject target, Action action) {
@@ -103,6 +104,53 @@ public class ActionContent implements ObjectContent {
         return about.canUse();
     }
 
+    public Naked execute() {
+        return target.execute(action, parameterValues());
+    }
+
+    public String getIconName() {
+        return target.getIconName();
+    }
+
+    public Image getIconPicture(int iconHeight) {
+        NakedObjectSpecification specification = target.getSpecification();
+        return  ImageFactory.getInstance().loadIcon(specification, "", iconHeight);
+    }
+
+    public String getName() {
+        return target.getLabel(ClientSession.getSession(), action);
+    }
+
+    public int getNoParameters() {
+        return parameters.length;
+    }
+
+    public NakedObject getObject() {
+        return target;
+    }
+    
+    public Naked getNaked() {
+        return target;
+    }
+
+    public ActionParameter getParameter(int index) {
+        return parameters[index];
+    }
+
+    public Naked getParameteValue(int index) {
+        return parameters[index].getNaked();
+    }
+
+    public NakedObjectSpecification getSpecification() {
+        return target.getSpecification();
+    }
+
+    public boolean isTransient() {
+        return true;
+    }
+    
+    public void menuOptions(MenuOptionSet options) {}
+
     private Naked[] parameterValues() {
         Naked[] objects = new Naked[parameters.length];
         for (int i = 0; i < parameters.length; i++) {
@@ -111,40 +159,17 @@ public class ActionContent implements ObjectContent {
         return objects;
     }
 
-    public Naked getParameteValue(int index) {
-        return parameters[index].getNaked();
-    }
-
-    public NakedObject execute() {
-        return target.execute(action, parameterValues());
-    }
-
-    public String getName() {
-        return target.getLabel(ClientSession.getSession(), action);
-    }
-
-    public NakedObject getObject() {
-        return target;
-    }
-
-    public ActionParameter getParameter(int index) {
-        return parameters[index];
-    }
-
-    public NakedObjectSpecification getSpecification() {
-        return target.getSpecification();
-    }
-
-    public void menuOptions(MenuOptionSet options) {}
-
     public void setObject(NakedObject object) {
         throw new NakedObjectRuntimeException("Invalid call");
     }
 
-    public int getNoParameters() {
-        return parameters.length;
+    public String windowTitle() {
+        return action.getName();
     }
-
+    
+    public String title() {
+        return "";
+    }
 }
 
 /*

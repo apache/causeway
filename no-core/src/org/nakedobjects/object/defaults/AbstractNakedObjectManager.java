@@ -1,6 +1,7 @@
 package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.InstancesCriteria;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
@@ -61,7 +62,7 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
 
     public NakedObject createInstance(NakedObjectSpecification specification) {
        Object object = factory.createObject(specification);
-       NakedObject nakedObject = PojoAdapter.createAdapter(object);
+       NakedObject nakedObject = PojoAdapter.createNOAdapter(object);
        makePersistent(nakedObject);
        return nakedObject;
        
@@ -92,11 +93,11 @@ public abstract class AbstractNakedObjectManager implements DebugInfo, NakedObje
         return createInstance(cls);
     }
 
-    public abstract Oid createOid(NakedObject object);
+    public abstract Oid createOid(Naked object);
 
     public NakedObject createTransientInstance(NakedObjectSpecification nc) {
         Object object = factory.createObject(nc);
-        return PojoAdapter.createAdapter(object);
+        return PojoAdapter.createNOAdapter(object);
     }
 
     public NakedObject createTransientInstance(String className) {

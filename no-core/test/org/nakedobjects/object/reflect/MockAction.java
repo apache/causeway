@@ -8,6 +8,7 @@ import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
+import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Vector;
 
@@ -24,7 +25,7 @@ final class MockAction implements ActionPeer {
     Hint about;
     
   
-    public NakedObject execute(NakedObject object, Naked[] parameters) {
+    public Naked execute(NakedObject object, Naked[] parameters) {
         actions.addElement("execute " + object);
         actions.addElement("execute " + parameters);
        return returnObject;
@@ -51,7 +52,12 @@ final class MockAction implements ActionPeer {
 
             public String debug() {
                 return null;
-            }};
+            }
+
+            public Consent isValid() {
+                throw new NotImplementedException();
+            }
+        };
         return about;
     }
 

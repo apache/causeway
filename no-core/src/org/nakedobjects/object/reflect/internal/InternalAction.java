@@ -37,7 +37,7 @@ public class InternalAction extends InternalMember implements ActionPeer {
         paramCount = action.getParameterTypes().length;
     }
 
-    public NakedObject execute(NakedObject inObject, Naked[] parameters) {
+    public Naked execute(NakedObject inObject, Naked[] parameters) {
         if (parameters.length != paramCount) {
             LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);
         }
@@ -76,7 +76,7 @@ public class InternalAction extends InternalMember implements ActionPeer {
             LOG.debug(" action result " + result);
 
             objectManager.endTransaction();
-            if (result != null && result instanceof NakedObject) { return (NakedObject) result; }
+            if (result != null && result instanceof Naked) { return (Naked) result; }
             if (result != null) { return PojoAdapter.createAdapter(result); }
 
         } catch (InvocationTargetException e) {

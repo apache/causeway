@@ -1,12 +1,12 @@
 package org.nakedobjects.viewer.skylark.value;
 
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.OneToOneField;
+import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
@@ -17,7 +17,7 @@ public class ClearValueOption extends AbstractValueOption {
     }
 
     public Consent disabled(View view) {
-        NakedObject value = getValue(view);
+        NakedValue value = getValue(view);
         if (!view.canChangeValue()) {
             return new Veto("Field cannot be edited");
         } else if (isEmpty(view)) {
@@ -28,7 +28,7 @@ public class ClearValueOption extends AbstractValueOption {
     }
 
     public void execute(Workspace frame, View view, Location at) {
-        OneToOneField vc = (OneToOneField) view.getContent();        
+        ValueField vc = (ValueField) view.getContent();        
         vc.getParent().clear((OneToOneAssociation) vc.getField());
         updateParent(view);
     }

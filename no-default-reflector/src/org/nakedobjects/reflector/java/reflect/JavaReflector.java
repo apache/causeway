@@ -7,6 +7,8 @@ import org.nakedobjects.application.control.ClassAbout;
 import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.application.object.InternalCollection;
 import org.nakedobjects.application.value.BusinessValue;
+import org.nakedobjects.application.value.Logical;
+import org.nakedobjects.application.value.TextString;
 import org.nakedobjects.object.Aggregated;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
@@ -22,6 +24,8 @@ import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.Reflector;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.control.SimpleClassAbout;
+import org.nakedobjects.reflector.java.value.LogicalValueObjectAdapter;
+import org.nakedobjects.reflector.java.value.TextStringAdapter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -164,7 +168,15 @@ public class JavaReflector implements Reflector {
     public Naked acquireInstance() {
         if (Modifier.isAbstract(cls.getModifiers())) {
             throw new IllegalStateException("Handling of abstract naked classes is not yet supported: " + cls);
-        } else {
+        } 
+        
+        Object object = objectFactory.createObject(cls);
+            
+         if (object instanceof TextString ){
+            return new TextStringAdapter((TextString) object);
+         } else if (object instanceof Logical ){
+                return new LogicalValueObjectAdapter((Logical) object);
+         } else {
             return PojoAdapter.createAdapter(objectFactory.createObject(cls));
         }
     }

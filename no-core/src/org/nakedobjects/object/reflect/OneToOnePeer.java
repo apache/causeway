@@ -1,9 +1,8 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.security.Session;
 
@@ -13,9 +12,9 @@ public interface OneToOnePeer extends FieldPeer {
 
 	void clearAssociation(NakedObject inObject, NakedObject associate);
 
-	Hint getHint(Session session, NakedObject object, NakedObject value);
+	Hint getHint(Session session, NakedObject object, Naked value);
 
-	NakedObject getAssociation(NakedObject inObject);
+	Naked getAssociation(NakedObject inObject);
 	
 	/** TODO do we need to get the type from here? **/
 	NakedObjectSpecification getType();
@@ -31,8 +30,6 @@ public interface OneToOnePeer extends FieldPeer {
 	void setAssociation(NakedObject inObject, NakedObject associate);
 
 	void initAssociation(NakedObject inObject, NakedObject associate);
-
-    void parseTextEntry(NakedObject inObject, String text) throws TextEntryParseException, InvalidEntryException;
 
     boolean isEmpty(NakedObject inObject);
 }

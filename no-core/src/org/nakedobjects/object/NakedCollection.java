@@ -3,7 +3,7 @@ package org.nakedobjects.object;
 import java.util.Enumeration;
 
 
-public interface NakedCollection extends NakedObject {
+public interface NakedCollection extends Naked {
     /**
      * Returns true if the logical collection contains the specified object.
      */
@@ -32,6 +32,13 @@ public interface NakedCollection extends NakedObject {
     int size();
     
     void clear();
+    
+
+    void setOid(Oid oid);
+
+    void setResolved();
+    
+    Oid getOid();
 }
 
 /*

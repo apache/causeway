@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 
 
@@ -7,9 +8,21 @@ public interface Content {
 
     String debugDetails();
 
+    String getIconName();
+
+    Image getIconPicture(int iconHeight);
+    
+    Naked getNaked();
+
     NakedObjectSpecification getSpecification();
 
+    boolean isTransient();
+
     void menuOptions(MenuOptionSet options);
+
+    String title();
+
+    String windowTitle();
 }
 
 /*

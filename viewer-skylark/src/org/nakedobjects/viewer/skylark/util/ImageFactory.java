@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.util;
 
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.UiConfiguration;
@@ -25,6 +26,8 @@ public class ImageFactory {
      */
     private Hashtable templateImages = new Hashtable();
 
+    private String directory;
+
     private ImageFactory() {
         loader = new TemplateImageLoader();
     }
@@ -49,7 +52,7 @@ public class ImageFactory {
             return (Image) templateImages.get(id);
 
         } else {
-            final String directory = UiConfiguration.getInstance().imageDirectory();
+            final String directory = directory();
             TemplateImage template = loader.getTemplateImage(directory + name);
             if (template == null) {
                 return null;
@@ -61,11 +64,18 @@ public class ImageFactory {
         }
     }
 
+    private String directory() {
+        if(directory == null) {
+            directory = UiConfiguration.getInstance().imageDirectory();
+        }
+        return directory;
+    }
+
     /**
      * Load a picture from the given file path.
      */
     public Image createImage(String path) {
-        final String directory = UiConfiguration.getInstance().imageDirectory();
+        final String directory = directory();
         TemplateImage template = loader.getTemplateImage(directory + path);
         if (template == null) {
             return null;
@@ -82,7 +92,7 @@ public class ImageFactory {
             return true;
 
         } else {
-            String directory = UiConfiguration.getInstance().imageDirectory();
+            String directory = directory();
             TemplateImage template = loader.getTemplateImage(directory + name);
             if (template == null) {
                 return false;
@@ -92,6 +102,33 @@ public class ImageFactory {
                 return true;
             }
         }
+    }
+    
+    
+    public Image loadIcon(final NakedObjectSpecification specification, final String type, int iconHeight) {
+        String className = specification.getFullName().replace('.', '_') + type;
+        Image loadIcon = loadIcon(className, iconHeight);
+        if (loadIcon == null) {
+            className = specification.getShortName();
+            loadIcon = loadIcon(className, iconHeight);
+            if (loadIcon == null) {
+                NakedObjectSpecification superclass = specification.superclass();
+                if (superclass == null) {
+                    return loadUnknownIcon(iconHeight);
+                }
+                return loadIcon(superclass, type, iconHeight);
+            }
+        }
+
+        return loadIcon;
+    }
+
+    private Image loadIcon(final String iconName, int iconHeight) {
+        return ImageFactory.getInstance().createIcon(iconName, iconHeight, null);
+    }
+
+    private Image loadUnknownIcon(int iconHeight) {
+        return ImageFactory.getInstance().createFallbackIcon(iconHeight, null);
     }
 
 }

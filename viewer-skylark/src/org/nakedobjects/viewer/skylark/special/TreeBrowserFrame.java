@@ -1,12 +1,11 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
@@ -213,7 +212,7 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     }
 
     public void setSelectedNode(View view) {
-        NakedObject object = ((ObjectContent) view.getContent()).getObject();
+        Naked object = view.getContent().getNaked();
         if (object != null) {
             if (mainViewFormSpec.canDisplay(object)) {
                 selectedNode = view;

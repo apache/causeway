@@ -7,7 +7,8 @@ import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
 
 public class DummyNakedObjectSpecification implements NakedObjectSpecification {
-
+    private static int next = 100;
+    private final int id = next++;
     public String fullName;
     public NakedObjectField[] fields;
     
@@ -142,6 +143,10 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     public void clearDirty(NakedObject object) {}
 
     public void markDirty(NakedObject object) {}
+    
+    public String toString() {
+        return "DummyNakedObjectSpecification" + id + " " + fullName;
+    }
 }
 
 

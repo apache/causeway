@@ -8,6 +8,7 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Canvas;
+import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -42,8 +43,8 @@ public class InternalCollectionBorder extends AbstractBorder {
 	public void draw(Canvas canvas) {
 		icon.draw(canvas, 0, getBaseline());
 		
-		ObjectContent content = (ObjectContent) getContent();
-		NakedCollection collection = (NakedCollection) content.getObject();
+		CollectionContent content = (CollectionContent) getContent();
+		NakedCollection collection = content.getCollection();
 		if(collection.size() == 0) {
 			canvas.drawText("empty", left, getBaseline(), Style.SECONDARY2, Style.NORMAL);
 		} else {

@@ -51,7 +51,7 @@ public class FormSpecification extends AbstractCompositeViewSpecification implem
     }
 
     public View createView(Content content, ViewAxis axis) {
-        return new WindowBorder(super.createView(content, new LabelAxis()), true);
+        return new WindowBorder(new IconBorder(super.createView(content, new LabelAxis())), true);
     }
 
     public View decorateSubview(View view) {

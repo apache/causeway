@@ -3,6 +3,7 @@ package org.nakedobjects.object.reflect.internal;
 
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObjectContext;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.MockObjectManager;
@@ -21,10 +22,10 @@ import org.apache.log4j.Logger;
 public class InternalOneToOneAssociationTest extends TestCase {
     private static final String PERSON_FIELD_NAME = "person";
 	private InternalObjectWithOneToOneAssociations objectWithOneToOneAssoications;
-	private PojoAdapter nakedObject;
+	private NakedObject nakedObject;
 	private InternalOneToOneAssociation personField;
 	private InternalObjectForReferencing referencedObject;
-	private PojoAdapter associate;
+	private NakedObject associate;
     private Session session;
     private MockNakedObjectSpecificationLoader loader;
     private DummyNakedObjectSpecification spec;
@@ -47,7 +48,8 @@ public class InternalOneToOneAssociationTest extends TestCase {
 		
     	session = new Session();
         objectWithOneToOneAssoications = new InternalObjectWithOneToOneAssociations();
-        nakedObject = PojoAdapter.createAdapter(objectWithOneToOneAssoications);
+        PojoAdapter.setReflectorFactory(new NullReflectorFactory());
+        nakedObject = PojoAdapter.createNOAdapter(objectWithOneToOneAssoications);
         nakedObject.setContext(context);
         
         Class cls = InternalObjectWithOneToOneAssociations.class;
@@ -58,7 +60,7 @@ public class InternalOneToOneAssociationTest extends TestCase {
         personField = new InternalOneToOneAssociation(PERSON_FIELD_NAME, InternalObjectForReferencing.class, get, set, null, null, about);
         
         referencedObject = new InternalObjectForReferencing();
-        associate = PojoAdapter.createAdapter(referencedObject);
+        associate = PojoAdapter.createNOAdapter(referencedObject);
     }
 
     public void testType() {

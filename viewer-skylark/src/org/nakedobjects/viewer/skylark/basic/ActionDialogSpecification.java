@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Consent;
@@ -61,7 +62,7 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
         
         public void execute(Workspace workspace, View view, Location at) {
             ActionContent actionContent = ((ActionContent) view.getContent());
-            NakedObject result = actionContent.execute();
+            Naked result = actionContent.execute();
             NakedObject actionObject = actionContent.getObject();
             if(! (actionObject.getObject() instanceof NakedClass)) {
                 //actionObject.getContext().getObjectManager().objectChanged(actionObject);
@@ -101,7 +102,7 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
                 return specification.createView(content, axis);
             } else if (content instanceof ObjectParameter) {
                 ObjectParameter parameterContent = (ObjectParameter) content;
-                if (parameterContent.getObject() == null) {
+                if (parameterContent.getNaked() == null) {
                     return (new EmptyField.Specification()).createView(content, axis);
                 } else {
                     //return new SubviewIconSpecification().createView(content,

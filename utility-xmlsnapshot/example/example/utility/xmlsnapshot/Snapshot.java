@@ -11,7 +11,7 @@ public class Snapshot {
     // fields excluded for clarity
 
     public void actionCreateSnapshot() {
-        XmlSnapshot builder = new XmlSnapshot(PojoAdapter.createAdapter(this));
+        XmlSnapshot builder = new XmlSnapshot(PojoAdapter.createNOAdapter(this));
         builder.include("fieldname/fieldname");
         Element e = builder.getXmlElement();
         

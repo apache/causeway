@@ -132,7 +132,7 @@ class DummyNakedCollection implements NakedCollection {
         return false;
     }
 
-    public NakedObject execute(Action action, Naked[] parameters) {
+    public Naked execute(Action action, Naked[] parameters) {
         return null;
     }
 
@@ -140,7 +140,7 @@ class DummyNakedCollection implements NakedCollection {
         return null;
     }
 
-    public Hint getHint(Session session, NakedObjectField field, NakedObject value) {
+    public Hint getHint(Session session, NakedObjectField field, Naked value) {
         return null;
     }
 

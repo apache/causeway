@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.core;
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -17,6 +18,7 @@ import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
+import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
@@ -45,7 +47,7 @@ public abstract class ObjectView extends AbstractView {
     public ObjectView(Content content, ViewSpecification design, ViewAxis axis) {
         super(content, design, axis);
 
-        if (!(content instanceof ObjectContent)) {
+        if (!(content instanceof ObjectContent) && !(content instanceof CollectionContent)) {
             throw new IllegalArgumentException("Content must be ObjectContent or AssociateContent: " + content);
         }
 
@@ -85,7 +87,7 @@ public abstract class ObjectView extends AbstractView {
 
     public void dragIn(ContentDrag drag) {
         NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
-        NakedObject target = getObject();
+        NakedObject target = (NakedObject) getObject();
         Consent perm = canDrop(source, target);
         if (perm.isAllowed()) {
             getViewManager().setStatus(perm.getReason());
@@ -140,14 +142,14 @@ public abstract class ObjectView extends AbstractView {
         NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
         Assert.assertNotNull(source);
 
-        NakedObject target = getObject();
+        NakedObject target = (NakedObject) getObject();
         Assert.assertNotNull(target);
 
         if (canDrop(source, target).isAllowed()) {
             Action action = dropAction(source, target);
 
             if ((action != null) && target.getHint(ClientSession.getSession(), action, new NakedObject[] {source}).canUse().isAllowed()) {
-                NakedObject result = target.execute(action, new NakedObject[] {source});
+                Naked result = target.execute(action, new NakedObject[] {source});
 
                 if (result != null) {
                     View view = ViewFactory.getViewFactory().createOpenRootView(result);
@@ -203,8 +205,8 @@ public abstract class ObjectView extends AbstractView {
         }
     }
 
-    protected NakedObject getObject() {
-        return ((ObjectContent) getContent()).getObject();
+    protected Naked getObject() {
+        return getContent().getNaked();
     }
 
     public void secondClick(Click click) {
@@ -219,18 +221,6 @@ public abstract class ObjectView extends AbstractView {
         }
     }
     
-    public void menuOptions(MenuOptionSet options) {
-        if (!getObject().isPersistent()) {
-            options.add(MenuOptionSet.OBJECT, new MenuOption("Make Persistent") {
-                public void execute(Workspace workspace, View view, Location at) {
-                    getObject().getContext().getObjectManager().makePersistent(getObject());
-                }
-            });
-        }
-
-        super.menuOptions(options);
-    }
-
     public void viewMenuOptions(MenuOptionSet options) {
         if (getObject() instanceof UserContext) {
             options.add(MenuOptionSet.VIEW, new MenuOption("New Workspace") {
@@ -240,7 +230,7 @@ public abstract class ObjectView extends AbstractView {
 
                 public void execute(Workspace workspace, View view, Location at) {
                     View newWorkspace;
-                    newWorkspace = ViewFactory.getViewFactory().createInnerWorkspace(getObject());
+                    newWorkspace = ViewFactory.getViewFactory().createInnerWorkspace((NakedObject) getObject());
                     newWorkspace.setLocation(at);
                     getWorkspace().addView(newWorkspace);
                     newWorkspace.markDamaged();
@@ -276,16 +266,16 @@ public abstract class ObjectView extends AbstractView {
     }
     
     public void updateView() {
-        if(getObject().isViewDirty()) {
+        if(((NakedObject) getObject()).isViewDirty()) {
             LOG.debug("object changed; view updated: " + getView());
             getView().refresh();
-            getObject().clearViewDirty();
+            ((NakedObject) getObject()).clearViewDirty();
         }
         super.updateView();
     }
     
     public String toString() {
-       return super.toString() + ": " + getObject(); 
+       return super.toString() + ": " + getContent(); 
     }
 
 }

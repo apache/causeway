@@ -1,7 +1,6 @@
 package org.nakedobjects.viewer.skylark.core;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
@@ -311,7 +310,7 @@ public class AbstractViewDecorator implements View {
 		return wrappedView + "/" + name.substring(name.lastIndexOf('.') + 1);
 	}
 
-	public void update(NakedObject object) {
+	public void update(Naked object) {
 		wrappedView.update(object);
 	}
 

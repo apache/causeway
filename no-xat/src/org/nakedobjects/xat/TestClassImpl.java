@@ -1,5 +1,6 @@
 package org.nakedobjects.xat;
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedError;
@@ -47,7 +48,7 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
     /**
      * Returns the NakedClass that this view represents.
      */
-    public final NakedObject getForObject() {
+    public final Naked getForObject() {
         return PojoAdapter.createAdapter(nakedClass);
     }
 
@@ -58,13 +59,13 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
     /**
      * Get the instances of this class.
      */
-    public TestObject instances() {
+    public TestCollection instances() {
         NakedObjectContext context = NakedObjectContext.getDefaultContext();
         NakedCollection instances = context.getObjectManager().allInstances(((NakedClass) getForObject()).forObjectType(), false);
         if (instances.size() == 0) {
             throw new IllegalActionError("Find must find at least one object");
         } else {
-            return factory.createTestObject(session, instances);
+            return factory.createTestCollection(session, instances);
         }
     }
 
@@ -91,7 +92,7 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
         } catch (NotPersistableException e) {
             NakedError error = context.getObjectManager().generatorError(
                     "Failed to create instance of " + cls.forObjectType().getFullName(), e);
-            object = PojoAdapter.createAdapter(error);
+            object = PojoAdapter.createNOAdapter(error);
 
             System.out.println("Failed to create instance of " + cls.forObjectType().getFullName());
             e.printStackTrace();
@@ -100,7 +101,7 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
         return object;
     }
 
-    public void setForObject(NakedObject object) {
+    public void setForObject(Naked object) {
         throw new NakedObjectRuntimeException();
     }
   

@@ -4,7 +4,7 @@ import org.nakedobjects.utility.StartupException;
 
 
 public interface OidGenerator {
-	Oid next(NakedObject object);
+	Oid next(Naked object);
 
 	String name();
 	

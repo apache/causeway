@@ -21,14 +21,14 @@ abstract class AbstractTestObject {
         this.factory = factory;
     }
     
-    public abstract NakedObject getForObject();
+    public abstract Naked getForObject();
       
     /**
      Return the title sting from the object this mock is showing
      */
     public abstract String getTitle();
     
-    public abstract void setForObject(NakedObject object);
+    public abstract void setForObject(Naked object);
 
     
 
@@ -42,7 +42,7 @@ abstract class AbstractTestObject {
         assertActionUsable(name, action, new TestNaked[0]);
         assertActionVisible(name, action, new TestNaked[0]);
 
-        NakedObject result = getForObject().execute(action, null);
+        NakedObject result = (NakedObject) getForObject().execute(action, null);
         return ((result == null) ? null : factory.createTestObject(session, result));
     }
 
@@ -58,7 +58,7 @@ abstract class AbstractTestObject {
         allowed = action.getAbout(session, (NakedObject) getForObject(), parameterObjects).canAccess().isAllowed();
         assertTrue("action '" + name + "' is invisible", allowed);
 */
-        NakedObject result = getForObject().execute(action, parameterObjects);
+        NakedObject result = (NakedObject) getForObject().execute(action, parameterObjects);
         if (result == null) {
             return null;
         } else {

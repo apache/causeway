@@ -2,15 +2,17 @@ package org.nakedobjects.viewer.skylark.value;
 
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.security.ClientSession;
+import org.nakedobjects.object.value.ColorValue;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
+import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
@@ -30,7 +32,7 @@ public class ColorField extends AbstractField {
 	    }
 	    
 	    public boolean canDisplay(Naked object) {
-	    	return object.getObject() instanceof org.nakedobjects.application.value.Color;
+	    	return object instanceof ColorValue;
 		}
 	}
 	
@@ -62,18 +64,20 @@ public class ColorField extends AbstractField {
     	top++;
     	w -= 1;
     	h -= 1;
-        canvas.drawSolidRectangle(left, top, w, h, new Color(getColor().intValue()));
+        canvas.drawSolidRectangle(left, top, w, h, new Color(getColor()));
     }
 
     public void firstClick(Click click) {
-        View overlay = new ColorFieldOverlay(this);
-        Location location = click.getLocation();
-        // TODO offset by constant amount
-        location.move(10, 10);
-		overlay.setLocation(location);
-        overlay.setSize(overlay.getRequiredSize());
-        overlay.markDamaged();
-        getViewManager().setOverlayView(overlay);
+        if(getValueContent().getValueHint(ClientSession.getSession(), "").canUse().isAllowed()) {
+	        View overlay = new ColorFieldOverlay(this);
+	        Location location = click.getLocation();
+	        // TODO offset by constant amount
+	        location.move(10, 10);
+			overlay.setLocation(location);
+	        overlay.setSize(overlay.getRequiredSize());
+	        overlay.markDamaged();
+	        getViewManager().setOverlayView(overlay);
+        }
     }
 
     public int getBaseline() {
@@ -86,11 +90,10 @@ public class ColorField extends AbstractField {
         return size; 
   }
 
-    org.nakedobjects.application.value.Color getColor() {
-        OneToOneField content = ((OneToOneField) getContent());
-        org.nakedobjects.application.value.Color value = (org.nakedobjects.application.value.Color) content.getObject().getObject();
-
-        return value;
+    int getColor() {
+        ValueField content = ((ValueField) getContent());
+        ColorValue value = (ColorValue) content.getObject();
+        return value.color();
     }
 /*
     public void refresh() {

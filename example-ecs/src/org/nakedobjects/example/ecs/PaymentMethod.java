@@ -2,7 +2,7 @@ package org.nakedobjects.example.ecs;
 
 
 
-public abstract class PaymentMethod {
+public abstract interface PaymentMethod {
 }
 
 /*

@@ -77,7 +77,7 @@ public class Action extends NakedObjectMember {
         return getHint(session, object, null).canUse().isAllowed();
     }
 
-    protected NakedObject execute(final NakedObject object, final Naked[] parameters) {
+    protected Naked execute(final NakedObject object, final Naked[] parameters) {
         if(parameters == null) {
             return actionDelegate.execute(object, new NakedObject[0]);
         } else {

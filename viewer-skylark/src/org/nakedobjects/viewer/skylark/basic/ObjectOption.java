@@ -6,13 +6,16 @@ import org.nakedobjects.object.defaults.FastFinder;
 import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.Action.Type;
+import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.Workspace;
 
 
 public class ObjectOption {
 
-    public static void menuOptions(NakedObject object, MenuOptionSet options) {
+    public static void menuOptions(final NakedObject object, MenuOptionSet options) {
         if (object != null) {
             if (object.getObject() instanceof FastFinder) {
                 options.add(MenuOptionSet.OBJECT, new FindFirstOption());
@@ -23,6 +26,15 @@ public class ObjectOption {
             }
 
             boolean isPersistent = object.getOid() != null;
+
+            if (!isPersistent) {
+                options.add(MenuOptionSet.OBJECT, new MenuOption("Make Persistent") {
+                    public void execute(Workspace workspace, View view, Location at) {
+                        object.getContext().getObjectManager().makePersistent(object);
+                    }
+                });
+            }
+
             if (!(object.getObject() instanceof NakedClass) && !(object.getObject() instanceof InstanceCollectionVector) && isPersistent) {
                 options.add(MenuOptionSet.DEBUG, new DestroyObjectOption());
             }

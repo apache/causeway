@@ -5,6 +5,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Hint;
@@ -62,7 +63,7 @@ public class TestNakedObject implements NakedObject {
 
     public void clear(OneToOneAssociation specification) {}
 
-    public NakedObject getField(NakedObjectField field) {
+    public Naked getField(NakedObjectField field) {
         return null;
     }
 
@@ -108,7 +109,7 @@ public class TestNakedObject implements NakedObject {
         return false;
     }
 
-    public NakedObject execute(Action action, Naked[] parameters) {
+    public Naked execute(Action action, Naked[] parameters) {
         return null;
     }
 
@@ -116,7 +117,7 @@ public class TestNakedObject implements NakedObject {
         return null;
     }
 
-    public Hint getHint(Session session, NakedObjectField field, NakedObject value) {
+    public Hint getHint(Session session, NakedObjectField field, Naked value) {
         return null;
     }
 
@@ -147,6 +148,14 @@ public class TestNakedObject implements NakedObject {
     }
 
     public void clearPersistDirty() {}
+
+    public NakedObject getAssociation(OneToOneAssociation field) {
+        return null;
+    }
+
+    public NakedValue getValue(OneToOneAssociation field) {
+        return null;
+    }
 
 }
 

@@ -4,6 +4,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.security.ClientSession;
+import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
 public abstract class ObjectField implements Content, FieldContent {
@@ -25,6 +26,11 @@ public abstract class ObjectField implements Content, FieldContent {
         return field;
     }
 
+    public Image getIconPicture(int iconHeight) {
+        NakedObjectSpecification specification = field.getSpecification();
+        return  ImageFactory.getInstance().loadIcon(specification, "", iconHeight);
+    }
+
     public final String getName() {
         return parent.getLabel(ClientSession.getSession(), field);
     }
@@ -38,6 +44,14 @@ public abstract class ObjectField implements Content, FieldContent {
     }
 
     public void menuOptions(MenuOptionSet options) {}
+
+    public String title() {
+        return getName();
+    }
+    
+    public String windowTitle() {
+        return "Field";
+    }
 
 }
 

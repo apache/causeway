@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
@@ -22,6 +23,12 @@ public class RootCollection implements CollectionContent {
         return getCollection().elements();
     }
 
+    public Consent canClear() {
+        return Veto.DEFAULT;    }
+
+    public Consent canSet(NakedObject dragSource) {
+        return Veto.DEFAULT;    }
+
     public void clear() {
         throw new NakedObjectRuntimeException("Invalid call");
     }
@@ -35,35 +42,50 @@ public class RootCollection implements CollectionContent {
     public NakedCollection getCollection() {
         return collection;
     }
-
-    public NakedObject getObject() {
-        return collection;
+    
+    public String getIconName() {
+        return "root-collection";
     }
-
-    public void menuOptions(MenuOptionSet options) {}
-
-    public void setObject(NakedObject object) {
-        throw new NakedObjectRuntimeException("Invalid call");
+    
+    public Image getIconPicture(int iconHeight) {
+       throw new NotImplementedException();
     }
-
-    public String toString() {
-        return "" + collection;
-    }
-
-    public Consent canSet(NakedObject dragSource) {
-        return Veto.DEFAULT;    }
-
-    public Consent canClear() {
-        return Veto.DEFAULT;    }
 
     public String getName() {
         return "";
     }
     
+    public Naked getNaked() {
+        return collection;
+    }
+
+
     public NakedObjectSpecification getSpecification() {
-        throw new NotImplementedException();
+      	return null;
+    }
+
+
+    public boolean isTransient() {
+        return collection != null;
     }
     
+    public void menuOptions(MenuOptionSet options) {}
+
+    public void setObject(NakedObject object) {
+        throw new NakedObjectRuntimeException("Invalid call");
+    }
+    
+    public String title() {
+        return collection.titleString();
+    }
+    
+    public String windowTitle() {
+        return "Instances";
+    }
+
+    public String toString() {
+        return "Root Collection: " + collection;
+    }
 }
 
 /*

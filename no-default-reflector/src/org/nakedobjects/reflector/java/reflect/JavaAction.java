@@ -38,7 +38,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
         paramCount = action.getParameterTypes().length;
     }
 
-    public NakedObject execute(NakedObject inObject, Naked[] parameters) {
+    public Naked execute(NakedObject inObject, Naked[] parameters) {
         if (parameters.length != paramCount) {
             LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);
         }
@@ -68,7 +68,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
 	            
 	            Object[] transactionParameters = new Object[parameters.length];
 	            for (int i = 0; i < parameters.length; i++) {
-	                NakedObject parameter = (NakedObject) parameters[i];
+	                Naked parameter = (Naked) parameters[i];
 	                Oid parameterOid = parameter == null ? null : parameter.getOid();
 	                parameter = parameterOid == null ? parameter : objectManager.getObject(parameterOid, parameter.getSpecification());
 	                transactionParameters[i] = parameter == null ? null : parameter.getObject();
@@ -142,7 +142,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
                  //   if(parameters[i - 1] instanceof Naked) {
                   //      longParams[i] = parameters[i - 1];
                  //   } else {
-                        longParams[i] = parameters[i - 1] == null ? null : ((NakedObject) parameters[i - 1]).getObject();
+                        longParams[i] = parameters[i - 1] == null ? null : ((Naked) parameters[i - 1]).getObject();
                   //  }
                 }
                 aboutMethod.invoke(object.getObject(), longParams);

@@ -18,18 +18,6 @@ public class ProxyReflectionFactory implements ReflectionFactory {
 
     public ProxyReflectionFactory() {}
 
-    public void setConnection(ClientDistribution connection) {
-        this.connection = connection;
-    }
-    
-    public void setLoadedObjects(LoadedObjects loadedObjects) {
-        this.loadedObjects = loadedObjects;
-    }
-    
-    public void setObjectDataFactory(ObjectDataFactory objectDataFactory) {
-        this.objectDataFactory = objectDataFactory;
-    }
-    
     public Action createAction(ActionPeer localDelegate) {
         ActionPeer fullDelegate = new ProxyAction(localDelegate, connection, loadedObjects, objectDataFactory);
         return new Action(fullDelegate.getName(), fullDelegate);
@@ -47,6 +35,36 @@ public class ProxyReflectionFactory implements ReflectionFactory {
         OneToOneAssociation association = new OneToOneAssociation(oneToOneDelegate.getName(), oneToOneDelegate.getType(),
                 oneToOneDelegate);
         return association;
+    }
+
+    /**
+     * .NET property
+     * 
+     * @property
+     */
+    public void set_LoadedObjects(LoadedObjects loadedObjects) {
+        this.loadedObjects = loadedObjects;
+    }
+
+    /**
+     * .NET property
+     * 
+     * @property
+     */
+    public void set_ObjectDataFactory(ObjectDataFactory objectDataFactory) {
+        this.objectDataFactory = objectDataFactory;
+    }
+
+    public void setConnection(ClientDistribution connection) {
+        this.connection = connection;
+    }
+
+    public void setLoadedObjects(LoadedObjects loadedObjects) {
+        this.loadedObjects = loadedObjects;
+    }
+
+    public void setObjectDataFactory(ObjectDataFactory objectDataFactory) {
+        this.objectDataFactory = objectDataFactory;
     }
 }
 

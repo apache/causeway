@@ -8,10 +8,10 @@ import org.nakedobjects.object.defaults.collection.AbstractTypedNakedCollectionV
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.security.ClientSession;
+import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
@@ -39,7 +39,8 @@ public class TableSpecification extends AbstractCompositeViewSpecification imple
     }
 
     public View createView(Content content, ViewAxis axis) {
-        AbstractTypedNakedCollectionVector coll = (AbstractTypedNakedCollectionVector) ((ObjectContent) content).getObject();
+   //     NakedObjectSpecification elementSpecification = ((CollectionContent) content).getCollection().getElementType();
+        AbstractTypedNakedCollectionVector coll = (AbstractTypedNakedCollectionVector) ((CollectionContent) content).getCollection();
         NakedObjectSpecification elementSpecification = NakedObjectSpecificationLoader.getInstance().loadSpecification(
                 coll.getElementSpecification().getFullName());
         NakedObject exampleObject = (NakedObject) elementSpecification.acquireInstance();

@@ -60,6 +60,10 @@ class MockOneToManyAssociation implements OneToManyPeer {
             public String getName() {
                 return label;
             }
+
+            public Consent isValid() {
+                throw new NotImplementedException();
+            }
         };
         return about;
     }

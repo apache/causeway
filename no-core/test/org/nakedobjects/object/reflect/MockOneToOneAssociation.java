@@ -1,6 +1,7 @@
 package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.TextEntryParseException;
@@ -30,7 +31,7 @@ class MockOneToOneAssociation implements OneToOnePeer {
         actions.addElement("clear " + associate);    
     }
 
-    public Hint getHint(Session session, NakedObject object, NakedObject value) {
+    public Hint getHint(Session session, NakedObject object, Naked value) {
             about = new Hint() {
                 public Consent canAccess() {
                     return canAccess;
@@ -50,12 +51,17 @@ class MockOneToOneAssociation implements OneToOnePeer {
 
                 public String debug() {
                     return null;
-                }};
+                }
+
+                public Consent isValid() {
+                    throw new NotImplementedException();
+                }
+            };
             return about;
         }
 
 
-    public NakedObject getAssociation(NakedObject inObject) {
+    public Naked getAssociation(NakedObject inObject) {
         actions.addElement("get " + inObject);
         return getObject;
     }

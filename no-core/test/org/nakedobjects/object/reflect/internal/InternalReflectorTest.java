@@ -8,6 +8,7 @@ import org.nakedobjects.object.defaults.InternalNakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.FieldPeer;
+import org.nakedobjects.object.reflect.PojoAdapter;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -29,6 +30,8 @@ public class InternalReflectorTest extends TestCase {
         
     	new MockNakedObjectSpecificationLoader();     	
     	
+    	PojoAdapter.setReflectorFactory(new NullReflectorFactory());
+		
         reflector = new MockInternalReflector(InternalObjectForReflector.class.getName());
     }
 

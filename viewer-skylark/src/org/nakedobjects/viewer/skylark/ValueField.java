@@ -1,8 +1,10 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.NakedObjectField;
@@ -12,19 +14,28 @@ import org.nakedobjects.object.security.Session;
 
 
 public class ValueField extends ObjectField implements ValueContent {
-    private final NakedObject object;
+    // TODO change to NakedValue
+    private NakedValue object;
 
-    public ValueField(NakedObject parent, NakedObject object, OneToOneAssociation association) {
+    public ValueField(NakedObject parent, NakedValue object, OneToOneAssociation association) {
         super(parent, association);
         this.object = object;
-    }
-    
-    public NakedObject getObject() {
-        return object;
     }
 
     public String debugDetails() {
         return super.debugDetails() + "  object:    " + object + "\n" + "  parent:    " + getParent() + "\n";
+    }
+
+    public String getIconName() {
+        return object.getIconName();
+    }
+
+    public Naked getNaked() {
+        return object;
+    }
+
+    public NakedValue getObject() {
+        return object;
     }
 
     private OneToOneAssociation getOneToOneAssociation() {
@@ -35,21 +46,32 @@ public class ValueField extends ObjectField implements ValueContent {
         return getOneToOneAssociation().getSpecification();
     }
 
-    public String toString() {
-        return getValue() + "/" + getField();
-    }
-
     private String getValue() {
         return null;
     }
 
-    public void parseEntry(String entryText) throws TextEntryParseException, InvalidEntryException {
-        getParent().parseTextEntry(getOneToOneAssociation(), entryText);
+    public Hint getValueHint(Session session, String entryText) {
+        Naked example = (Naked) getSpecification().acquireInstance();
+        // TODO need the Value object to parse the entry string
+        return getParent().getHint(ClientSession.getSession(), (NakedObjectField) getField(), example);
     }
 
-    public Hint getValueHint(Session session, String entryText) {
-        NakedObject example = (NakedObject) getSpecification().acquireInstance();
-        return getParent().getHint(ClientSession.getSession(), (NakedObjectField) getField(), example);
+    public boolean isTransient() {
+        return false;
+    }
+
+    public void parseEntry(String entryText) throws TextEntryParseException, InvalidEntryException {
+        //getParent().parseTextEntry(getOneToOneAssociation(), entryText);
+        if(object == null) {			
+            object = (NakedValue) getSpecification().acquireInstance();
+        } 
+        object.parseTextEntry(entryText);
+        getParent().setValue(getOneToOneAssociation(), object.getObject());
+        
+    }
+
+    public String toString() {
+        return getValue() + "/" + getField();
     }
 }
 

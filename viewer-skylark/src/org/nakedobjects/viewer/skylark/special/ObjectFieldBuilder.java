@@ -7,6 +7,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectDefinitionException;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
@@ -82,7 +83,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         if (field instanceof OneToManyAssociation) {
             content = new OneToManyField(parent, (InternalCollection) object, (OneToManyAssociation) field);
         } else if (field.isValue()) {
-            content = new ValueField(parent, (NakedObject) object, (OneToOneAssociation) field);
+            content = new ValueField(parent, (NakedValue) object, (OneToOneAssociation) field);
         } else if (field instanceof OneToOneAssociation) {
             content = new OneToOneField(parent, (NakedObject) object, (OneToOneAssociation) field);
         } else {
@@ -132,18 +133,20 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
             try {
                 Naked value = object.getField(field);
                 if (field.isValue()) {
-                    NakedObject existing = ((ValueField) subview.getContent()).getObject();
+                    NakedValue existing = ((ValueField) subview.getContent()).getObject();
                     if (value != existing) {
-  //                      ((OneToOneField) subview.getContent()).updateDerivedValue((NakedObject) value);
+               //         ((OneToOneField) subview.getContent()).updateDerivedValue((NakedObject) value);
                     }
                     subview.refresh();
                 } else if (value instanceof NakedCollection) {
-                    subview.update((NakedObject) value);
+                    subview.update(value);
                 } else {
                     NakedObject existing = ((ObjectContent) subviews[i].getContent()).getObject();
-                    boolean changeToNull = value == null && existing != null;
-                    boolean changedFromNull = value != null && existing == null;
-                    if (changeToNull || changedFromNull) {
+         //           boolean changeToNull = value == null && existing != null;
+         //           boolean changedFromNull = value != null && existing == null;
+                    boolean changedValue = value != existing;
+          //          if (changeToNull || changedFromNull || changedValue) {
+                    if (changedValue) {
                         View fieldView = subviewDesign.createSubview(createContent(object, value, field), view.getViewAxis());
                         if (fieldView != null) {
                             view.replaceView(subview, decorateSubview(fieldView));

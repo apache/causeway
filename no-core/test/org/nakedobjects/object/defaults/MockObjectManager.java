@@ -2,6 +2,7 @@ package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.MockNakedObject;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
@@ -55,7 +56,7 @@ public class MockObjectManager extends AbstractNakedObjectManager {
 
     protected void createClass(NakedObjectSpecification nc) throws ObjectStoreException {}
 
-    public Oid createOid(NakedObject object) {
+    public Oid createOid(Naked object) {
         throw new NotImplementedException();
     }
 

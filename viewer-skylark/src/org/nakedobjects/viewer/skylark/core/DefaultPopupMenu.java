@@ -293,7 +293,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
 		option = Math.min(option, items.length - 1);
 		if(option >= 0 && optionIdentified != option) {
 			setOption(option);
-			//getViewManager().forceRepaint();
+			getViewManager().forceRepaint();
 			markDamaged();
 		}
     }

@@ -5,6 +5,7 @@ import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
@@ -143,7 +144,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         objectStore.createObject(object);
     }
 
-    public final Oid createOid(NakedObject object) {
+    public final Oid createOid(Naked object) {
         Oid oid = oidGenerator.next(object);
         LOG.debug("createOid " + oid);
 

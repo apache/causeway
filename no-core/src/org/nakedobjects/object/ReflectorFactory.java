@@ -7,6 +7,10 @@ public abstract class ReflectorFactory {
     public abstract Reflector createReflector(String className) throws ReflectionException;
 
     public abstract ObjectFactory getObjectFactory();
+
+    public Naked createAdapter(Object pojo) {
+        return null;
+    }
     
 //    public abstract void setObjectManager(NakedObjectManager objectManager);
 }

@@ -50,6 +50,14 @@ public interface FieldAbout {
     void visibleOnlyToUser(User user);
 
     void visibleOnlyToUsers(User[] users);
+    
+    void invalid();
+    
+    void invalid(String reason);
+    
+    void invalidOnCondition(boolean condition, String reason);
+    
+    
 }
 
 /*

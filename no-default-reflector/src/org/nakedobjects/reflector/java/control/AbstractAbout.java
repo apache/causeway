@@ -21,57 +21,8 @@ public abstract class AbstractAbout implements Hint {
     private String name;
     private StatefulObject statefulObject;
     private StringBuffer unusableReason;
+    private StringBuffer invalidReason;
     private StringBuffer debug = new StringBuffer();
-    
-    /**
-     An About for showing that an attribute is can not be changed.
-     */
-    protected static final Hint UNUSEABLE = new Hint(){
-    	public Consent canAccess() {
-    		return Allow.DEFAULT;
-    	}
-
-    	public Consent canUse() {
-    		return Veto.DEFAULT;
-    	}
-
-    	public String getDescription() {
-    		return "";
-    	}
-
-    	public String getName() {
-    		return null;
-    	}
-    	
-    	public String debug() {
-			return "";
-		}
-    };
-
-    /**
-     An About for showing that an attribute is can be changed.
-     */
-    protected static final Hint USEABLE = new Hint(){
-    	public Consent canAccess() {
-    		return Allow.DEFAULT;
-    	}
-
-    	public Consent canUse() {
-    		return Allow.DEFAULT;
-    	}
-
-    	public String getDescription() {
-    		return "";
-    	}
-
-    	public String getName() {
-    		return null;
-    	}
-    	
-    	public String debug() {
-    		return "";
-    	}
-    };
 
     public AbstractAbout(Session session, Object object) {
     	this.session = session;
@@ -91,6 +42,14 @@ public abstract class AbstractAbout implements Hint {
             return Allow.DEFAULT;
         } else {
             return new Veto(unusableReason.toString());
+        }
+    }
+    
+    public Consent isValid() {
+        if (invalidReason == null) {
+            return Allow.DEFAULT;
+        } else {
+            return new Veto(invalidReason.toString());
         }
     }
 
@@ -281,7 +240,8 @@ public abstract class AbstractAbout implements Hint {
     }
 
     protected void usableOnlyInStates(State[] states) {
-        boolean inUsableState = false;
+       	concatDebug("usable only to certain roles");
+       	boolean inUsableState = false;
         StringBuffer listOfValidStates = new StringBuffer();
 
         for (int i = 0; i < states.length; ++i) {
@@ -302,10 +262,13 @@ public abstract class AbstractAbout implements Hint {
     }
 
     protected void vetoAccess() {
+       	concatDebug("Access unconditionally vetoed");
         isAccessible = false;
     }
 
     protected void vetoUse(String reason) {
+    	concatDebug("Use unconditionally vetoed; " + reason);
+
         if (unusableReason == null) {
         	unusableReason = new StringBuffer();
         } else {
@@ -357,6 +320,30 @@ public abstract class AbstractAbout implements Hint {
 
         vetoAccess();
     }
+    
+    protected void invalidOnCondition(boolean conditionMet, String reasonNotMet) {
+        	concatDebug("Conditionally invalid; " + reasonNotMet);
+        	if (conditionMet) {
+                invalid(reasonNotMet);
+            }
+        }
+
+
+    protected void invalid(String reason) {
+    	concatDebug("unconditionally invalid; " + reason);
+        if (invalidReason == null) {
+            invalidReason = new StringBuffer();
+        } else {
+            invalidReason.append("; ");
+        }
+
+        invalidReason.append(reason);
+    }
+
+    protected void invalid() {
+        invalid("unconditionally invalid");
+    }
+
 }
 
 

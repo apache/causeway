@@ -40,7 +40,8 @@ public class Color {
     }
 
     public String toString() {
-        return name + " " + color;
+        
+        return name + " (#" + Integer.toHexString(color.getRGB()) + ")";
     }
 }
 

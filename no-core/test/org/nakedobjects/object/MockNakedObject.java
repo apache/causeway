@@ -80,7 +80,7 @@ public class MockNakedObject implements NakedObject {
 
     public void clear(OneToOneAssociation specification) {}
 
-    public NakedObject getField(NakedObjectField field) {
+    public Naked getField(NakedObjectField field) {
         return null;
     }
 
@@ -112,7 +112,7 @@ public class MockNakedObject implements NakedObject {
         return false;
     }
 
-    public NakedObject execute(Action action, Naked[] parameters) {
+    public Naked execute(Action action, Naked[] parameters) {
         return null;
     }
 
@@ -120,7 +120,7 @@ public class MockNakedObject implements NakedObject {
         return null;
     }
 
-    public Hint getHint(Session session, NakedObjectField field, NakedObject value) {
+    public Hint getHint(Session session, NakedObjectField field, Naked value) {
         return null;
     }
 
@@ -151,6 +151,14 @@ public class MockNakedObject implements NakedObject {
     }
 
     public void clearPersistDirty() {}
+
+    public NakedObject getAssociation(OneToOneAssociation field) {
+        return null;
+    }
+
+    public NakedValue getValue(OneToOneAssociation field) {
+        return null;
+    }
 
 }
 

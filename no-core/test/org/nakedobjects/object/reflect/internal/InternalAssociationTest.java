@@ -3,6 +3,7 @@ package org.nakedobjects.object.reflect.internal;
 
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObjectContext;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.MockObjectManager;
@@ -23,10 +24,10 @@ public class InternalAssociationTest extends TestCase {
 	private InternalObjectWithOneToOneAssociations objectWithOneToOneAssoications;
 	private InternalObjectForReferencing referencedObject;
 	private InternalOneToOneAssociation personField;
-	private PojoAdapter associate;
+	private NakedObject associate;
     private Session session;
     private MockNakedObjectSpecificationLoader loader;
-    private PojoAdapter object;
+    private NakedObject object;
     private DummyNakedObjectSpecification spec;
     
     public static void main(String[] args) {
@@ -47,7 +48,8 @@ public class InternalAssociationTest extends TestCase {
 		
     	session = new Session();
         objectWithOneToOneAssoications = new InternalObjectWithOneToOneAssociations();
-        object = PojoAdapter.createAdapter(objectWithOneToOneAssoications);
+        PojoAdapter.setReflectorFactory(new NullReflectorFactory());
+        object = PojoAdapter.createNOAdapter(objectWithOneToOneAssoications);
         object.setContext(context);
         
         Class cls = InternalObjectWithOneToOneAssociations.class;
@@ -58,7 +60,7 @@ public class InternalAssociationTest extends TestCase {
         personField = new InternalOneToOneAssociation(PERSON_FIELD_NAME, InternalObjectForReferencing.class, get, set, null, null, about);
         
         referencedObject = new InternalObjectForReferencing();
-        associate = PojoAdapter.createAdapter(referencedObject);
+        associate = PojoAdapter.createNOAdapter(referencedObject);
     }
 
     

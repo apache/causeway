@@ -11,10 +11,10 @@ public class InvalidEntryException extends NakedObjectException {
 	}
 
     public InvalidEntryException(Throwable cause) {
-        this(cause, "Invalid value");
+        this("Invalid value", cause);
     }
 
-    public InvalidEntryException(Throwable cause, String message) {
+    public InvalidEntryException(String message, Throwable cause) {
         super(message, cause);
     }
 }

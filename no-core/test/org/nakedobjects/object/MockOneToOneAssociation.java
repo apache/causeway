@@ -20,11 +20,11 @@ public class MockOneToOneAssociation implements OneToOnePeer {
 
     public void clearAssociation(NakedObject inObject, NakedObject associate) {}
 
-    public Hint getHint(Session session, NakedObject object, NakedObject value) {
+    public Hint getHint(Session session, NakedObject object, Naked value) {
         return null;
     }
 
-    public NakedObject getAssociation(NakedObject inObject) {
+    public Naked getAssociation(NakedObject inObject) {
         return null;
     }
 

@@ -26,7 +26,6 @@ import org.nakedobjects.viewer.skylark.basic.ClassTitleText;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
 import org.nakedobjects.viewer.skylark.basic.ObjectBorder;
 import org.nakedobjects.viewer.skylark.core.ObjectView;
-import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 
 public class ClassIcon extends ObjectView {
@@ -122,18 +121,28 @@ public class ClassIcon extends ObjectView {
     public void secondClick(Click click) {
         Hint classAbout = getNakedClass().forObjectType().getClassAbout();
             if (classAbout == null || classAbout.canAccess().isAllowed()) {
-            View view = null;
+          //  View view = null;
+            Naked object = null;
             if (click.isCtrl()) {
                 NakedCollection instances = getNakedClass().allInstances();
-                view = ViewFactory.getViewFactory().createOpenRootView(instances);
+                object = instances;
+//                view = ViewFactory.getViewFactory().createOpenRootView(instances);
+                
             } else {
                 if (getNakedClass() instanceof NakedClass) {
 
-                    FastFinder finder = ((NakedClass) getNakedClass()).actionFind();
-                    view = ViewFactory.getViewFactory().createOpenRootView(PojoAdapter.createAdapter(finder));
+                    FastFinder finder = getNakedClass().actionFind();
+                    object = PojoAdapter.createAdapter(finder);
+                    //view = ViewFactory.getViewFactory().createOpenRootView(PojoAdapter.createAdapter(finder));
                 }
             }
-
+            if(object != null) {
+                Location location = getView().getAbsoluteLocation();
+                location.subtract(getWorkspace().getAbsoluteLocation());
+                location.add(getSize().getWidth() + 10, 0);
+                getWorkspace().addOpenViewFor(object, location);
+            }
+            /*
             if (view != null) {
                 Location location = getView().getAbsoluteLocation();
                 location.subtract(getWorkspace().getAbsoluteLocation());
@@ -141,6 +150,7 @@ public class ClassIcon extends ObjectView {
                 view.setLocation(location);
                 getWorkspace().addView(view);
             }
+            */
         }
     }
     

@@ -72,7 +72,7 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
             public void execute(Workspace workspace, View view, Location at) {
                 NakedObject target = ((ObjectContent) view.getContent()).getObject();
                 Action action = target.getSpecification().getObjectAction(Action.USER, "Find");
-                NakedObject result = target.execute(action, null);
+                Naked result = target.execute(action, null);
                 at.move(30, 60);
                 workspace.addOpenViewFor(result, at);
             }

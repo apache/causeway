@@ -19,6 +19,8 @@ public class EcsApplication {
         classes.addElement(new NakedClass(Booking.class.getName()));
         classes.addElement(new NakedClass(Customer.class.getName()));
         
+        classes.addElement(new NakedClass(CompanyAccount.class.getName()));
+      
     }
     
     public void addToClasses(NakedClass cls) {

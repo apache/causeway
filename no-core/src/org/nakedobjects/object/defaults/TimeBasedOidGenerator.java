@@ -1,6 +1,6 @@
 package org.nakedobjects.object.defaults;
 
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.OidGenerator;
 import org.nakedobjects.utility.StartupException;
@@ -18,7 +18,7 @@ public class TimeBasedOidGenerator implements OidGenerator {
         return "Simple OID Generator";
     }
 
-    public synchronized Oid next(NakedObject object) {
+    public synchronized Oid next(Naked object) {
         return new SerialOid(next++);
     }
 

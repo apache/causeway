@@ -2,7 +2,6 @@ package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.reflect.NakedObjectField;
 
 import junit.framework.TestCase;
@@ -289,10 +288,10 @@ public class NakedObjectSpecificationImplTests extends TestCase {
         assertFalse(cls.isOfType(subclass3));
 
     }
-*/
     private NakedObjectSpecification nakedObjectSpecification(Class cls) {
         return NakedObjectSpecificationLoader.getInstance().loadSpecification(cls.getName());
     }
+*/
 }
 
 /*

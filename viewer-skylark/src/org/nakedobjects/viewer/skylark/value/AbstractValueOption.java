@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark.value;
 
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.ValueField;
@@ -16,9 +17,9 @@ public abstract class AbstractValueOption extends MenuOption {
 		super(name);
 	}
 	
-    protected NakedObject getValue(View view) {
+    protected NakedValue getValue(View view) {
 		ValueField vc = (ValueField) view.getContent();
-        NakedObject value = vc.getObject();
+        NakedValue value = vc.getObject();
 		return value;
 	}
 

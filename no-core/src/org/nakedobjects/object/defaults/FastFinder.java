@@ -1,5 +1,6 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
@@ -28,7 +29,7 @@ public class FastFinder implements InternalNakedObject {
 		about.unusableOnCondition(term == null || term.trim().length() == 0, "Search term needed");
 	}
 	
-	public NakedObject actionFind() {
+	public Naked actionFind() {
 		NakedCollection instances = objectManager.findInstances(forClass, term, true);
 		if(instances.size() == 1) { 
 			return (NakedObject) instances.elements().nextElement();

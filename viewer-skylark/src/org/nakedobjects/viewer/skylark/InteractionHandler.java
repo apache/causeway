@@ -243,7 +243,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                 viewer.mouseMoved(location);
                 spy.addTrace(overView, " mouse location", location);
 
-                redraw();
+  //              redraw();
             }
         }
     }

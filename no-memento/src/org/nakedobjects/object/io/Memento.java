@@ -2,6 +2,7 @@ package org.nakedobjects.object.io;
 
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectRuntimeException;
@@ -36,7 +37,7 @@ public class Memento implements Transferable, Serializable {
 
     public Memento() {}
 
-    private Data createData(NakedObject object) {
+    private Data createData(Naked object) {
         if (object instanceof InternalCollection) {
             InternalCollection coll = (InternalCollection) object;
             Data[] collData = new Data[coll.size()];
@@ -47,7 +48,7 @@ public class Memento implements Transferable, Serializable {
 
             return new InternalCollectionData(coll.getOid(), InternalCollection.class.getName(), collData);
         } else {
-            return createObjectData(object);
+            return createObjectData((NakedObject) object);
         }
     }
 
@@ -64,7 +65,7 @@ public class Memento implements Transferable, Serializable {
                     InternalCollection coll = (InternalCollection) object.getField(field);
                     d.addField(field.getName(), createData(coll));
                 } else if (field instanceof OneToOneAssociation) {
-                    NakedObject ref = object.getField(field);
+                    NakedObject ref = object.getAssociation((OneToOneAssociation) field);
                     Object refOid = ref == null ? null : new Data(ref.getOid(), ref.getSpecification().getFullName());
                     d.addField(field.getName(), refOid);
                 }
@@ -160,7 +161,7 @@ public class Memento implements Transferable, Serializable {
     private void updateOneToManyAssociation(NakedObject object, LoadedObjects loadedObjects, OneToManyAssociation field,
             InternalCollectionData collectionData, NakedObjectContext context) {
         InternalCollection collection = (InternalCollection) object.getField(field);
-        collection.setContext(context);
+ //       collection.setContext(context);
         if (collection.getOid() == null) {
             collection.setOid(collectionData.getOid());
         }

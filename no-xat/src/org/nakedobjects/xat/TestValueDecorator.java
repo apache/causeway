@@ -1,6 +1,6 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Naked;
 
 
 public class TestValueDecorator implements TestValue {
@@ -14,7 +14,7 @@ public class TestValueDecorator implements TestValue {
         wrappedObject.fieldEntry(value);
     }
 
-    public NakedObject getForObject() {
+    public Naked getForObject() {
         return wrappedObject.getForObject();
     }
 
@@ -22,7 +22,7 @@ public class TestValueDecorator implements TestValue {
         return wrappedObject.getTitle();
     }
 
-    public void setForObject(NakedObject object) {
+    public void setForObject(Naked object) {
         wrappedObject.setForObject(object);
     }
 

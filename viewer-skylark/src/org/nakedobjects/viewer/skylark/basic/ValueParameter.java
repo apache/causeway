@@ -1,58 +1,78 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.utility.ToString;
+import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.ValueContent;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 
 class ValueParameter extends ActionParameter implements ValueContent {
-    private final NakedObject object;
+    private final NakedValue object;
 
     public ValueParameter(String name, Naked naked, NakedObjectSpecification specification, ActionContent content, int parameter) {
         super(name, specification);
-        object = (NakedObject) naked;
+        object = (NakedValue) naked;
     }
 
     public String debugDetails() {
         return "  object:" + object + "\n";
     }
 
+    public String getIconName() {
+        throw new NotImplementedException();
+    }
+
+    public Image getIconPicture(int iconHeight) {
+        throw new NotImplementedException();
+    }
+
     public Naked getNaked() {
         return object;
     }
 
-    public NakedObject getObject() {
+    public NakedValue getObject() {
         return object;
-    }
-
-    public void parseEntry(String entryText) {
-	    //  TODO V IMPORTANT - this really is smelly - need to sort out the reflectors ans specs
-        Object pojo = object.getObject();
-        Class cls = pojo.getClass();
-        Method method;
-        try {
-            method = cls.getMethod("parseUserEntry", new Class[] {String.class});
-            method.invoke(pojo, new Object[] {entryText});
-        } catch (Exception e) {
-            throw new NakedObjectRuntimeException(e);
-        }
     }
 
     public Hint getValueHint(Session session, String entryText) {
         return new DefaultHint();
     }
+
+    public boolean isTransient() {
+        return true;
+    }
     
-     public String toString() {
+    public void parseEntry(String entryText) throws InvalidEntryException {
+        object.parseTextEntry(entryText);
+        /*
+        
+        //  TODO V IMPORTANT - this really is smelly - need to sort out the
+        // reflectors ans specs
+        Object pojo = object.getObject();
+        Class cls = pojo.getClass();
+        Method method;
+        try {
+            method = cls.getMethod("parseUserEntry", new Class[] { String.class });
+            method.invoke(pojo, new Object[] { entryText });
+        } catch (Exception e) {
+            throw new NakedObjectRuntimeException(e);
+        }
+        
+        */
+    }
+
+    public String title() {
+        return object.titleString();
+    }
+
+    public String toString() {
         ToString toString = new ToString(this);
         toString.append("object", object);
         return toString.toString();

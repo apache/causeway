@@ -1,20 +1,43 @@
 package org.nakedobjects.reflector.java.reflect;
 
+import org.nakedobjects.application.value.BusinessValue;
+import org.nakedobjects.application.value.Color;
+import org.nakedobjects.application.value.Logical;
+import org.nakedobjects.application.value.TextString;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.Reflector;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
+import org.nakedobjects.reflector.java.value.BusinessValueAdapter;
+import org.nakedobjects.reflector.java.value.ColorValueObjectAdapter;
+import org.nakedobjects.reflector.java.value.LogicalValueObjectAdapter;
+import org.nakedobjects.reflector.java.value.TextStringAdapter;
 
 public class JavaReflectorFactory extends ReflectorFactory {
     private JavaObjectFactory objectFactory;
-
-    public ObjectFactory getObjectFactory() {
-        return objectFactory;
-    }
     
     public Reflector createReflector(String className) throws ReflectionException {
          return new JavaReflector(className, objectFactory);
+    }
+    
+    public Naked createAdapter(Object object) {
+        if (object instanceof TextString ){
+            return new TextStringAdapter((TextString) object);
+        } else if (object instanceof Logical ){
+            return new LogicalValueObjectAdapter((Logical) object);
+        } else if (object instanceof Color){
+            return new ColorValueObjectAdapter((Color) object);
+        } else if (object instanceof BusinessValue ){
+            return new BusinessValueAdapter((BusinessValue) object);
+         } else {
+            return null;
+        }
+    }
+
+    public ObjectFactory getObjectFactory() {
+        return objectFactory;
     }
     
     public void setObjectFactory(JavaObjectFactory objectFactory) {

@@ -49,14 +49,26 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
          } );
      }
      
+     public void testTelephone() {
+         TestObject city = getTestClass(Telephone.class.getName()).newInstance();
+         city.fieldEntry("KNOWNAS", "Home");
+         city.fieldEntry("NUMBER", "623761278378");
+         
+         city.assertNotEmpty("KNOWNAS");
+         city.assertFieldContains("KNOWNAS", "Home");
+         
+         city.assertNotEmpty("NUMBER");
+         city.assertFieldContains("NUMBER", "623761278378");
+     }
+     
      public void testCity() {
          TestObject city = getTestClass(City.class.getName()).newInstance();
-         city.fieldEntry("name", "London");
-  //       city.fieldEntry("date opened", "23-10-03");
+         city.fieldEntry("NAME", "London");
+         city.fieldEntry("date opened", "23-10-03");
   //       city.fieldEntry("population", "8000000");
          
-         city.assertNotEmpty("name");
-         city.assertFieldContains("name", "London");
+         city.assertNotEmpty("NAME");
+         city.assertFieldContains("NAME", "London");
      }
      
      
@@ -206,7 +218,7 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
          customer.assertFieldContains("Preferred Payment Method", paymentMethod.getTitle());
          customer.assertFieldContains("Preferred Payment Method", paymentMethod.getForObject().getObject());
 
-         NakedObject original = paymentMethod.getForObject();
+         NakedObject original = (NakedObject) paymentMethod.getForObject();
          
          TestObject newCard = getTestClass(CreditCard.class.getName()).newInstance();
           customer.clearAssociation("Preferred Payment Method");
@@ -297,6 +309,10 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
         booking.assertFieldContains("pick up", location);
         booking.assertFieldContains("reference", "002");
         booking.assertFieldContains("date", "Jan 23, 2001");
+    }
+    
+    public void testMethodWithNullParameter() {
+        
     }
     
 /*

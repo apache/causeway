@@ -65,6 +65,9 @@ public class InternalAbout implements Hint {
         unusable = true;
     }
 
+    public Consent isValid() {
+        return Allow.DEFAULT;
+    }
 }
 
 /*

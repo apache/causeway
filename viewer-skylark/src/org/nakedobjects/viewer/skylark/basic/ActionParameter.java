@@ -33,6 +33,9 @@ public abstract class ActionParameter implements Content {
         return specification;
     }
     
+    public String windowTitle() {
+        return "Parameter";
+    }
 
 }
 

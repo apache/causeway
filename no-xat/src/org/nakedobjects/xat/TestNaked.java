@@ -1,12 +1,12 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Naked;
 
 public interface TestNaked {
 
-    NakedObject getForObject();
+    Naked getForObject();
 
-    void setForObject(NakedObject object);
+    void setForObject(Naked object);
 
     /**
      * returns the title of the object as a String

@@ -4,7 +4,6 @@ import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.application.control.Role;
 import org.nakedobjects.application.control.State;
 import org.nakedobjects.application.control.User;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.security.Session;
 
 
@@ -16,38 +15,39 @@ public class SimpleFieldAbout extends AbstractAbout implements FieldAbout {
     /**
      * An Hint for showing that an attribute is can not be changed.
      */
-    public static final Hint READ_ONLY = UNUSEABLE;
+ //   public static final Hint READ_ONLY = UNUSEABLE;
 
     /**
      * An Hint for showing that an attribute is can be changed.
      */
-    public static final Hint READ_WRITE = USEABLE;
+ //   public static final Hint READ_WRITE = USEABLE;
     private final static long serialVersionUID = 1L;
 
     /**
      * Returns a read only Hint (FieldAbout.READ_ONLY) if true; read-only
      * (FieldAbout.READ_WRITE) if false.
      */
-    public static Hint readOnly(boolean isReadOnly) {
+/*    public static Hint readOnly(boolean isReadOnly) {
         if (isReadOnly) {
             return READ_ONLY;
         } else {
             return READ_WRITE;
         }
     }
-
+*/
+    
     /**
      * Returns a read/write Hint (FieldAbout.READ_WRITE) if true; read-only
      * (FieldAbout.READ_ONLY) if false.
      */
-    public static Hint readWrite(boolean isReadWrite) {
+ /*  public static Hint readWrite(boolean isReadWrite) {
         if (isReadWrite) {
             return READ_WRITE;
         } else {
             return READ_ONLY;
         }
     }
-
+*/
     private boolean isPersistent = true;
 
     public SimpleFieldAbout(Session session, Object object) {
@@ -140,6 +140,18 @@ public class SimpleFieldAbout extends AbstractAbout implements FieldAbout {
 
     public void visibleOnlyToUsers(User[] users) {
         super.visibleOnlyToUsers(users);
+    }
+
+    public void invalid() {
+        super.invalid();
+    }
+    
+    public void invalid(String reason) {
+        super.invalid(reason);
+    }
+    
+    public void invalidOnCondition(boolean condition, String reason) {
+        super.invalidOnCondition(condition, reason);
     }
 }
 

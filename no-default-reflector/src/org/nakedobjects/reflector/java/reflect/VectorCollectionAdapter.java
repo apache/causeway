@@ -75,7 +75,7 @@ public class VectorCollectionAdapter implements InternalCollection {
 
     public NakedObject elementAt(int index) {
         Object element = collection.elementAt(index);
-        return PojoAdapter.createAdapter(element);
+        return PojoAdapter.createNOAdapter(element);
     }
 
     public Enumeration elements() {
@@ -216,7 +216,7 @@ public class VectorCollectionAdapter implements InternalCollection {
         return false;
     }
 
-    public NakedObject execute(Action action, Naked[] parameters) {
+    public Naked execute(Action action, Naked[] parameters) {
         return null;
     }
 
@@ -224,7 +224,7 @@ public class VectorCollectionAdapter implements InternalCollection {
         return null;
     }
 
-    public Hint getHint(Session session, NakedObjectField field, NakedObject value) {
+    public Hint getHint(Session session, NakedObjectField field, Naked value) {
         return null;
     }
 

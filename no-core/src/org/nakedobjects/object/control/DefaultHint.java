@@ -32,6 +32,10 @@ public class DefaultHint implements Hint {
     public String getName() {
         return name;
     }
+
+    public Consent isValid() {
+        return Allow.DEFAULT;
+    }
 }
 
 /*

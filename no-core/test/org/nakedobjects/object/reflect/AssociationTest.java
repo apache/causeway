@@ -113,14 +113,6 @@ public class AssociationTest extends NakedObjectTestCase {
         associationDelegate.assertAction(1, "empty " + nakedObject);
     }
     
-    
-    public void testParseText() throws TextEntryParseException, InvalidEntryException {
-        association.parseTextEntry(nakedObject, "text");
-        associationDelegate.assertAction(0, "parse " + nakedObject);
-        associationDelegate.assertAction(1, "parse " + "text");
-    }
-    
-
     public void testInitValue() throws TextEntryParseException, InvalidEntryException {
         association.initValue(nakedObject, "text");
         associationDelegate.assertAction(0, "init " + nakedObject);

@@ -1,5 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.object.InternalCollection;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
@@ -13,7 +15,7 @@ import java.util.Enumeration;
 public class OneToManyField extends ObjectField implements CollectionContent {
     private final NakedCollection collection;
 
-    public OneToManyField(NakedObject parent, NakedObject object, OneToManyAssociation association) {
+    public OneToManyField(NakedObject parent, InternalCollection object, OneToManyAssociation association) {
         super(parent, association);
         this.collection = (NakedCollection) object;
     }
@@ -23,42 +25,48 @@ public class OneToManyField extends ObjectField implements CollectionContent {
         return getCollection().elements();
     }
 
-    public String debugDetails() {
-        return super.debugDetails() + "  object: collection\n";
-    }
-
-    public NakedCollection getCollection() {
-        return (NakedCollection) getObject();
-    }
-
-    public NakedObject getObject() {
-        return collection;
-//        return getParent().getField(getOneToManyAssociation());
-    }
-
-    public OneToManyAssociation getOneToManyAssociation() {
-        return (OneToManyAssociation) getField();
-    }
-
-    public String toString() {
-        return getObject() + "/" + getField();
-    }
-    
-
-    public void setObject(NakedObject object) {
-        throw new NakedObjectRuntimeException("Invalid call");
-    }
-
-    public void clear() {
-        throw new NakedObjectRuntimeException("Invalid call");    
-    }
-
     public Consent canClear() {
         return Veto.DEFAULT;
     }
     
     public Consent canSet(NakedObject dragSource) {
         return Veto.DEFAULT;
+    }
+
+    public void clear() {
+        throw new NakedObjectRuntimeException("Invalid call");    
+    }
+
+    public String debugDetails() {
+        return super.debugDetails() + "  object: collection\n";
+    }
+
+    public String getIconName() {
+        return "internal-collection";
+    }
+    
+    public NakedCollection getCollection() {
+        return collection;
+    }
+
+    public Naked getNaked() {
+        return collection;
+    }
+
+    public OneToManyAssociation getOneToManyAssociation() {
+        return (OneToManyAssociation) getField();
+    }
+    
+    public boolean isTransient() {
+        return false;
+    }
+    
+    public void setObject(NakedObject object) {
+        throw new NakedObjectRuntimeException("Invalid call");
+    }
+
+    public String toString() {
+        return collection + "/" + getField();
     }
 }
 

@@ -4,6 +4,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -107,12 +108,12 @@ public class ViewFactory implements DebugInfo {
         return view;
     }
 
-	 private View createRootView(NakedObject object, ViewSpecification spec) {
+	 private View createRootView(Naked object, ViewSpecification spec) {
         Content content;
         if(object instanceof NakedCollection) {
             content = new RootCollection((NakedCollection) object);
         } else {
-            content = new RootObject(object);
+            content = new RootObject((NakedObject) object);
         }
         return createView(spec, content);
     }
@@ -125,7 +126,7 @@ public class ViewFactory implements DebugInfo {
 	        return view;
 	    }
 
-     public View createOpenRootView(NakedObject object) {
+     public View createOpenRootView(Naked object) {
         ViewSpecification spec = getOpenRootViewSpecification(object);
         View view = createRootView(object, spec);
         LOG.debug("creating " + view + " (open root) for " + object);
@@ -263,7 +264,7 @@ public class ViewFactory implements DebugInfo {
     	}
     }
 
-    private ViewSpecification getOpenRootViewSpecification(NakedObject object) {
+    private ViewSpecification getOpenRootViewSpecification(Naked object) {
     	return defaultViewSpecification(rootViews, object);
     }
 
@@ -274,7 +275,7 @@ public class ViewFactory implements DebugInfo {
     }
 
     public ViewSpecification getValueFieldSpecification(ValueContent content) {
-    	NakedObject object = content.getObject();
+    	NakedValue object = content.getObject();
     	
    	    if(object == null || object.getObject() instanceof String || object.getObject() instanceof Date) {
    	        return new TextFieldSpecification();

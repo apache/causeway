@@ -1,25 +1,32 @@
 package org.nakedobjects.xat;
 
 import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.security.Session;
 
 import java.util.Hashtable;
 
 public interface TestObjectFactory {
+
+    TestValue createParamerTestValue(Object value);
+    
     TestClass createTestClass(Session session, NakedClass cls);
+
+    TestCollection createTestCollection(Session session, NakedCollection instances);
     
     TestObject createTestObject(Session session, NakedObject object);
 
     TestObject createTestObject(Session session, NakedObject field, Hashtable viewCache);
-    
-    void testStarting(String className, String methodName);
 
-    void testEnding();
+    TestValue createTestValue(Session session, NakedValue object);
 
     Documentor getDocumentor();
 
-    TestValue createParamerTestValue(Object value);
+    void testEnding();
+    
+    void testStarting(String className, String methodName);
 }
 
 /*

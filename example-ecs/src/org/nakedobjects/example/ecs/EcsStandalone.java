@@ -30,13 +30,15 @@ import org.nakedobjects.viewer.skylark.ViewerAssistant;
 import org.nakedobjects.viewer.skylark.ViewerFrame;
 import org.nakedobjects.viewer.skylark.special.RootWorkspaceSpecification;
 
+import java.util.Locale;
+
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 
 public class EcsStandalone {
-    //    private static final Logger LOG = Logger.getLogger(XmlClient.class);
+    private static final Logger LOG = Logger.getLogger(EcsStandalone.class);
     private static final String DEFAULT_CONFIG = "nakedobjects.properties";
     private static final String SHOW_EXPLORATION_OPTIONS = "viewer.lightweight.show-exploration";
 
@@ -54,6 +56,8 @@ public class EcsStandalone {
         log.info(AboutNakedObjects.getVersion());
         log.info(AboutNakedObjects.getBuildId());
 
+        setUpLocale();
+        
         SplashWindow splash = null;
         boolean noSplash = ConfigurationFactory.getConfiguration().getBoolean("nosplash", false);
         if (!noSplash) {
@@ -73,7 +77,6 @@ public class EcsStandalone {
             container.setObjectFactory(objectFactory);
 
 
-            
             TransientObjectStore objectStore = new TransientObjectStore();
             objectStore.setLoadedObjects(loadedObjectsHashtable);
 
@@ -94,6 +97,8 @@ public class EcsStandalone {
 
             JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
 
+            PojoAdapter.setReflectorFactory(reflectorFactory);
+            
             //    new NakedObjectSpecificationImpl();
             NakedObjectSpecificationImpl.setReflectionFactory(reflectionFactory);
             NakedObjectSpecificationLoaderImpl.setReflectorFactory(reflectorFactory);
@@ -134,7 +139,7 @@ public class EcsStandalone {
             EcsContext applicationContext = new EcsContext();
             applicationContext.created();
 
-            NakedObject rootObject = PojoAdapter.createAdapter(applicationContext);
+            NakedObject rootObject = PojoAdapter.createNOAdapter(applicationContext);
             RootWorkspaceSpecification spec = new RootWorkspaceSpecification();
             View view = spec.createView(new RootObject(rootObject), null);
             viewer.setRootView(view);
@@ -155,7 +160,29 @@ public class EcsStandalone {
             }
         }
     }
+    
+    
+    private static void setUpLocale() {
+        String localeSpec = ConfigurationFactory.getConfiguration().getString("locale");
+        if (localeSpec != null) {
+            int pos = localeSpec.indexOf('_');
+            Locale locale;
+            if (pos == -1) {
+                locale = new Locale(localeSpec, "");
+            } else {
+                String language = localeSpec.substring(0, pos);
+                String country = localeSpec.substring(pos + 1);
+                locale = new Locale(language, country);
+            }
+            Locale.setDefault(locale);
+            LOG.info("Locale set to " + locale);
+        }
+        
+        LOG.debug("locale is " + Locale.getDefault());
+    }
+
 }
+
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business

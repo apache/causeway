@@ -3,17 +3,12 @@ package org.nakedobjects.container.exploration;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
-import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.UpdateNotifier;
-import org.nakedobjects.object.exploration.ExplorationContext;
 import org.nakedobjects.object.exploration.ExplorationFixture;
 import org.nakedobjects.object.exploration.ExplorationSetUp;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.system.AboutNakedObjects;
 import org.nakedobjects.system.SplashWindow;
-import org.nakedobjects.utility.StartupException;
 import org.nakedobjects.viewer.ObjectViewingMechanism;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 

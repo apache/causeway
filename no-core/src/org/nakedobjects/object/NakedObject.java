@@ -34,16 +34,8 @@ public interface NakedObject extends Naked {
     void deleted();
 
     String getIconName();
-
-    Object getObject();
-    
-    /**
-     * The objects unique id. This id allows the object to added to, stored by,
-     * and retrieved from the object store.
-     */
-    Oid getOid();
-
-    /**
+  
+     /**
      * Returns true once the object has been completely read into memory and all
      * it attributes can be validly accessed.
      */
@@ -74,7 +66,11 @@ public interface NakedObject extends Naked {
 
     void clear(OneToOneAssociation specification);
 
-    NakedObject getField(NakedObjectField field);
+    Naked getField(NakedObjectField field);
+    
+    NakedObject getAssociation(OneToOneAssociation field);
+
+    NakedValue getValue(OneToOneAssociation field);
 
     void setAssociation(NakedObjectAssociation field, NakedObject associatedObject);
     
@@ -87,8 +83,6 @@ public interface NakedObject extends Naked {
     String getLabel(Session session, NakedObjectField field);
 
     String getLabel(Session session, Action action);
-
-    void parseTextEntry(OneToOneAssociation specification, String text) throws TextEntryParseException, InvalidEntryException;
 
     void initOneToManyAssociation(OneToManyAssociation association, NakedObject[] instances);
 

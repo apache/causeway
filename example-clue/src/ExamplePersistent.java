@@ -132,7 +132,7 @@ public class ExamplePersistent {
             ExampleContext applicationContext = new ExampleContext();
             applicationContext.created();
 
-            NakedObject rootObject = PojoAdapter.createAdapter(applicationContext);
+            NakedObject rootObject = PojoAdapter.createNOAdapter(applicationContext);
             RootWorkspaceSpecification spec = new RootWorkspaceSpecification();
             View view = spec.createView(new RootObject(rootObject), null);
             viewer.setRootView(view);

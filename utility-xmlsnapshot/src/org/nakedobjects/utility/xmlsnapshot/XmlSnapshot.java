@@ -304,7 +304,7 @@ eachPreviousField:
 			} else if (field instanceof OneToOneAssociation) {
 
 				OneToOneAssociation oneToOneAssocSpec = ((OneToOneAssociation) field);
-				NakedObject referencedNakedObject = object.getField(oneToOneAssocSpec);
+				NakedObject referencedNakedObject = object.getAssociation(oneToOneAssocSpec);
 				String fullyQualifiedClassName = oneToOneAssocSpec.getSpecification().getFullName();
 				Element xmlReferenceElement = xmlFieldElement; // more meaningful locally scoped name
 
@@ -481,7 +481,7 @@ eachPreviousField:
             
 		} else if (field instanceof OneToOneAssociation) {
 			OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
-			NakedObject referencedObject = fieldPlace.getObject().getField(oneToOneAssociation);
+			NakedObject referencedObject = fieldPlace.getObject().getAssociation(oneToOneAssociation);
 
 			if (referencedObject == null) {
 				return true; // not a failure if the reference was null
@@ -496,7 +496,8 @@ eachPreviousField:
 			boolean allFieldsNavigated = true;
 			for (int i = 0; i < collection.size(); i++) {
 				NakedObject referencedObject = (NakedObject) collection.elementAt(i);
-				allFieldsNavigated = allFieldsNavigated && appendXmlThenIncludeRemaining(fieldPlace, referencedObject, fieldNames, annotation);
+				boolean hasRemaining = appendXmlThenIncludeRemaining(fieldPlace, referencedObject, fieldNames, annotation);
+                allFieldsNavigated = allFieldsNavigated && hasRemaining;
 			}
 			return allFieldsNavigated;
 		}

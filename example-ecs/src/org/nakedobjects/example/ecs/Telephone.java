@@ -1,6 +1,7 @@
 package org.nakedobjects.example.ecs;
 
 import org.nakedobjects.application.Title;
+import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.application.value.Logical;
 import org.nakedobjects.application.value.TextString;
 
@@ -16,15 +17,24 @@ public class Telephone {
         temporary = new Logical();
     }
 
+    public void aboutKnownAs(FieldAbout about, TextString entry) {
+        about.unmodifiableOnCondition(temporary.isSet(), "Flag set");
+    }
+    
     public final TextString getKnownAs() {
         return knownAs;
     }
+
+    public void aboutNumber(FieldAbout about, TextString entry) {
+        about.unmodifiableOnCondition(temporary.isSet(), "Flag set");
+    }
+    
 
     public final TextString getNumber() {
         return number;
     }
     
-    public final Logical getTemporary() {
+    public final Logical getUnmodifiable() {
         return temporary;
     }
 

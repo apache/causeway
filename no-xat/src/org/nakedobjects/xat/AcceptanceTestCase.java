@@ -6,7 +6,6 @@ import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.defaults.LocalObjectManager;
 import org.nakedobjects.object.exploration.ExplorationFixture;
 import org.nakedobjects.object.exploration.ExplorationSetUp;
 import org.nakedobjects.object.security.ClientSession;
@@ -28,7 +27,7 @@ public abstract class AcceptanceTestCase extends TestCase {
  //  private static final String REFLECTOR_FACTORY = "reflector";
     private Hashtable classes = new Hashtable();
     private Documentor documentor;
-    private LocalObjectManager objectManager;
+ //   private LocalObjectManager objectManager;
     private TestObjectFactory testObjectFactory;
     private ExplorationSetUp explorationSetUp;
 
@@ -143,7 +142,7 @@ public abstract class AcceptanceTestCase extends TestCase {
             // If an exception is thrown in setUp then tearDown is not called,
             // hence object manager is left running, but shouldn't be.
             e.printStackTrace();
-            objectManager.shutdown();
+ //           objectManager.shutdown();
             throw e;
         }
     }

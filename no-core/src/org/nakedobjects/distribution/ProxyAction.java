@@ -30,7 +30,7 @@ public final class ProxyAction implements ActionPeer {
         this.objectDataFactory = objectDataFactory;
     }
 
-    public NakedObject execute(NakedObject target, Naked[] parameters) {
+    public Naked execute(NakedObject target, Naked[] parameters) {
         if (isPersistent(target)) {
             String[] parameterTypes = pararmeterTypes();
             ObjectData[] parameterObjectData = parameterValues(parameters);

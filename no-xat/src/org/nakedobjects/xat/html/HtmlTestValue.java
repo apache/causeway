@@ -1,11 +1,10 @@
 package org.nakedobjects.xat.html;
 
-import org.nakedobjects.xat.TestValue;
 import org.nakedobjects.xat.TestValueDecorator;
+import org.nakedobjects.xat.TestValueImpl;
 
 public class HtmlTestValue extends TestValueDecorator {
-
-    public HtmlTestValue(TestValue wrappedObject) {
+    public HtmlTestValue(TestValueImpl wrappedObject, HtmlDocumentor documentor) {
         super(wrappedObject);
     }
 

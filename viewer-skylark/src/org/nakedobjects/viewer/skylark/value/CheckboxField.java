@@ -1,8 +1,7 @@
 package org.nakedobjects.viewer.skylark.value;
 
-import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.value.BooleanValue;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
@@ -20,7 +19,7 @@ public class CheckboxField extends AbstractField {
 
     public static class Specification extends AbstractFieldSpecification {
         public boolean canDisplay(Naked object) {
-            return object.getObject() instanceof Logical;
+            return object instanceof BooleanValue;
         }
 
         public View createView(Content content, ViewAxis axis) {
@@ -69,8 +68,7 @@ public class CheckboxField extends AbstractField {
     }
 
     private boolean isSet() {
-        Logical value = (Logical) getValueContent().getObject().getObject();
-
+        BooleanValue value = (BooleanValue) getValueContent().getObject();
         return value.isSet();
     }
 /*
@@ -85,12 +83,9 @@ public class CheckboxField extends AbstractField {
 */
     protected void save() {
         if (canChangeValue()) {
-            try {
-                parseEntry(isSet() ? Logical.FALSE : Logical.TRUE);
-                markDamaged();
-            } catch (InvalidEntryException e) {
-                throw new NakedObjectRuntimeException(e);
-            }
+            BooleanValue value = (BooleanValue) getValueContent().getObject();
+            value.toggle();
+            markDamaged();
         }
     }
 }

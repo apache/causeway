@@ -5,11 +5,14 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.valueadapter.StringAdapter;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
 
@@ -33,7 +36,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
         removeMethod = remove;
     }
     
-    public Hint getHint(Session session, NakedObject object, NakedObject associate) {
+    public Hint getHint(Session session, NakedObject object, Naked associate) {
         Method aboutMethod = getAboutMethod();
 		
 		//Class parameter = setMethod.getParameterTypes()[0];
@@ -218,8 +221,8 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
         getAboutMethod() + ", methods=" + methods + ", type=" + getType() + " ]";
     }
 
-	public NakedObject getAssociation(NakedObject fromObject) {
-		return (NakedObject) get(fromObject);
+	public Naked getAssociation(NakedObject fromObject) {
+		return get(fromObject);
 	}
 	
 
@@ -228,7 +231,11 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
              Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
             
             if(obj == null)  {
-                return null;
+                if(getType().isOfType(NakedObjectSpecificationLoader.getInstance().loadSpecification(String.class)) ) {
+                    return new StringAdapter("");
+                }
+                
+                throw new NakedObjectRuntimeException(getType().getFullName());
             } else {
                 return PojoAdapter.createAdapter(obj);
             }
@@ -243,7 +250,10 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
     }
 
     public void parseTextEntry(NakedObject inObject, String text) throws TextEntryParseException, InvalidEntryException {
-        throw new NotImplementedException();
+        NakedValue object = (NakedValue) get(inObject);
+        object.parseTextEntry(text);
+        
+        setValue(inObject, object.getObject());
     }
 
     public boolean isEmpty(NakedObject inObject) {

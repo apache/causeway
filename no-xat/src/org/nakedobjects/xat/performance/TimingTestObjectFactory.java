@@ -1,16 +1,21 @@
 package org.nakedobjects.xat.performance;
 
 import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.xat.Documentor;
 import org.nakedobjects.xat.ParameterValueImpl;
 import org.nakedobjects.xat.TestClass;
 import org.nakedobjects.xat.TestClassImpl;
+import org.nakedobjects.xat.TestCollection;
+import org.nakedobjects.xat.TestCollectionImpl;
 import org.nakedobjects.xat.TestObject;
 import org.nakedobjects.xat.TestObjectFactory;
 import org.nakedobjects.xat.TestObjectImpl;
 import org.nakedobjects.xat.TestValue;
+import org.nakedobjects.xat.TestValueImpl;
 
 import java.util.Hashtable;
 
@@ -26,8 +31,16 @@ public class TimingTestObjectFactory implements TestObjectFactory {
         return new TimingTestObject(new TestObjectImpl(session, object, this), documentor);
     }
 
+    public TestCollection createTestCollection(Session session, NakedCollection collection) {
+        return new TestCollectionImpl(session, collection);
+    }
+    
     public TestObject createTestObject(Session session, NakedObject field, Hashtable viewCache) {
         return new TimingTestObject(new TestObjectImpl(session, field, viewCache, this), documentor);
+    }
+    
+    public TestValue createTestValue(Session session, NakedValue object) {
+        return new TestValueImpl(session, object);
     }
 
     public void testStarting(String className, String methodName) {}

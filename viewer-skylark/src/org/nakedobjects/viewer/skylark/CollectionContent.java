@@ -4,7 +4,7 @@ import org.nakedobjects.object.NakedCollection;
 
 import java.util.Enumeration;
 
-public interface CollectionContent extends ObjectContent {
+public interface CollectionContent extends Content {
     NakedCollection getCollection();
     
     Enumeration allElements();

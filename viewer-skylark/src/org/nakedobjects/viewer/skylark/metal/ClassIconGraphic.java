@@ -1,9 +1,5 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
 
@@ -14,6 +10,7 @@ public class ClassIconGraphic extends IconGraphic {
         super(view, height);
     }
 
+    /*
     protected Image iconPicture(NakedObject object) {
         final NakedClass cls = (NakedClass) object.getObject();
         final NakedObjectSpecification spec = cls.forObjectType();
@@ -23,6 +20,7 @@ public class ClassIconGraphic extends IconGraphic {
         }
         return icon;
     }
+    */
 }
 
 /*

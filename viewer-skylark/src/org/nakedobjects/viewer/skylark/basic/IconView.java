@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Size;
@@ -49,7 +49,7 @@ public class IconView extends ObjectView {
         return "Icon" + getId();
     }
     
-    public void update(NakedObject object) {
+    public void update(Naked object) {
         View p = getParent();
         if(p != null) {
             p.invalidateLayout();

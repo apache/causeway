@@ -12,7 +12,7 @@ public interface ActionPeer {
 
 	String getName();
 
-    NakedObject execute(NakedObject object, Naked[] parameters);
+    Naked execute(NakedObject object, Naked[] parameters);
 
     Hint getHint(Session session, NakedObject object, Naked[] parameters);
 

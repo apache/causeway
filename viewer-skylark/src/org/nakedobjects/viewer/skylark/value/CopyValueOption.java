@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.value;
 
 
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
@@ -20,7 +20,7 @@ public class CopyValueOption extends AbstractValueOption {
     }
 
     public Consent disabled(View view) {
-    	NakedObject value = getValue(view);
+    	NakedValue value = getValue(view);
     	
     	if(isEmpty(view)) {
     		return new Veto("Field is empty");

@@ -1,6 +1,6 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Naked;
 
 
 public class TestClassDecorator implements TestClass {
@@ -14,7 +14,7 @@ public class TestClassDecorator implements TestClass {
         return wrappedObject.findInstance(title);
     }
 
-    public NakedObject getForObject() {
+    public Naked getForObject() {
         return wrappedObject.getForObject();
     }
 
@@ -22,7 +22,7 @@ public class TestClassDecorator implements TestClass {
         return wrappedObject.getTitle();
     }
 
-    public TestObject instances() {
+    public TestCollection instances() {
         return wrappedObject.instances();
     }
 
@@ -34,7 +34,7 @@ public class TestClassDecorator implements TestClass {
         return wrappedObject.newInstance();
     }
 
-    public void setForObject(NakedObject object) {
+    public void setForObject(Naked object) {
         wrappedObject.setForObject(object);
     }
 

@@ -75,7 +75,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     }
 
     public void destroyObject(Object object) {
-        objectManger.destroyObject(PojoAdapter.createAdapter(object));
+        objectManger.destroyObject(PojoAdapter.createNOAdapter(object));
     }
 
     public Vector findInstances(InstancesCriteria criteria, boolean includeSubclasses) throws UnsupportedFindException {
@@ -92,7 +92,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
 
 
     public void makePersistent(Object transientObject) {
-        objectManger.makePersistent(PojoAdapter.createAdapter(transientObject));
+        objectManger.makePersistent(PojoAdapter.createNOAdapter(transientObject));
     }
 
     public int numberOfInstances(Class cls) {
@@ -101,7 +101,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
 
     public void resolve(Object object) {
 		if(object != null) {
-	        PojoAdapter adapter = PojoAdapter.createAdapter(object);
+	        NakedObject adapter = PojoAdapter.createNOAdapter(object);
 	        if(!adapter.isResolved()) {
 	            objectManger.resolve(adapter);
 	        }

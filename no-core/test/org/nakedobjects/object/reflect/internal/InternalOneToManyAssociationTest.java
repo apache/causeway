@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
 public class InternalOneToManyAssociationTest extends NakedObjectTestCase {
     private static final String MEMBERS_FIELD_NAME = "members";
  	private InternalObjectWithVector objectWithVector;
- 	private PojoAdapter nakedObject;
+ 	private NakedObject nakedObject;
 	private InternalOneToManyAssociation oneToOneAssociation;
 	private InternalObjectForReferencing elements[];
     private MockNakedObjectSpecificationLoader loader;
@@ -46,7 +46,8 @@ public class InternalOneToManyAssociationTest extends NakedObjectTestCase {
         loader.addSpec(spec);
         
 		objectWithVector = new InternalObjectWithVector();
-		nakedObject = PojoAdapter.createAdapter(objectWithVector);
+		PojoAdapter.setReflectorFactory(new NullReflectorFactory());
+		nakedObject = PojoAdapter.createNOAdapter(objectWithVector);
         elements = new InternalObjectForReferencing[3];
         for (int i = 0; i < elements.length; i++) {
 			elements[i] = new InternalObjectForReferencing();
@@ -68,7 +69,7 @@ public class InternalOneToManyAssociationTest extends NakedObjectTestCase {
     public void testAdd() {
         loader.addSpec(new DummyNakedObjectSpecification()); // for object
         
-        NakedObject associate = PojoAdapter.createAdapter(new InternalObjectForReferencing());
+        NakedObject associate = PojoAdapter.createNOAdapter(new InternalObjectForReferencing());
 
         NakedObjectContext context = new MockNakedObjectContext(MockObjectManager.setup());
         nakedObject.setContext(context);
@@ -81,7 +82,7 @@ public class InternalOneToManyAssociationTest extends NakedObjectTestCase {
     public void testRemove() {
         loader.addSpec(spec);
         
-        NakedObject associate = PojoAdapter.createAdapter(new InternalObjectForReferencing());
+        NakedObject associate = PojoAdapter.createNOAdapter(new InternalObjectForReferencing());
         oneToOneAssociation.removeAssociation(nakedObject, associate);
         
         assertEquals(associate.getObject(), objectWithVector.removed);

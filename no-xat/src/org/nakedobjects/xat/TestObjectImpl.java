@@ -8,6 +8,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationException;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
@@ -36,15 +37,17 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
    /**
     Return  the object this mock is showing
     */
-   public final NakedObject getForObject() {
+   public final Naked getForObject() {
        return forObject;
    }
    
-   
-   public final void setForObject(NakedObject object) {
-       forObject = object;
+   public final void setForObject(Naked object) {
+       if(object == null || object instanceof NakedObject) {
+           forObject = (NakedObject) object;
+       } else {
+           throw new IllegalArgumentException("Object must be a NakedObject");
+       }
    }
-
 
     public TestObjectImpl(final Session session, final NakedObject object, final Hashtable viewCache,
             final TestObjectFactory factory) {
@@ -61,21 +64,27 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
                 NakedObjectField att = a[i];
 
                 if (att instanceof NakedObjectAssociation) {
-                    TestObject associatedView = null;
+                    TestNaked associatedView = null;
 
-                    NakedObject associate;
+                    Naked associate;
                     associate = ((PojoAdapter) object).getField(att);
-//                    associate = (NakedObject) ((AssociationSpecification) a[i]).get(object);
-                    if (null != associate) {
-                        // if object is not null, use the view in the cache
-                        associatedView = (TestObject) viewCache.get(associate);
+                    if(att.isValue()) {
+                    	associatedView = factory.createTestValue(session, (NakedValue) associate);
+                    } else {
+	                    if (associate != null) {
+	                        // if object is not null, use the view in the cache
+	                        associatedView = (TestObject) viewCache.get(associate);
+	                    }
+	
+	                    if ( associatedView == null) {
+	                        if(att.isCollection()) {
+	                            associatedView = factory.createTestCollection(session, (NakedCollection) associate);
+	                        } else {
+		                        associatedView = factory.createTestObject(session, (NakedObject) associate, viewCache);
+		                        // this puts it into the viewCache	                            
+	                        }
+	                    }
                     }
-
-                    if (null == associatedView) {
-                        associatedView = factory.createTestObject(session, associate, viewCache);
-                        // this puts it into the viewCache
-                    }
-
                     fields.put(a[i].getName(), associatedView);
                 }
             }
@@ -95,13 +104,12 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         assertFieldVisible(fieldName, field);
 
         TestNaked actual = getField(fieldName);
-        NakedObject object = (NakedObject) actual.getForObject();
+        Naked object = actual.getForObject();
 
-        if (object != null && !getForObject().isEmpty(field)) {
+        if (object != null && !forObject.isEmpty(field)) {
             throw new NakedAssertionFailedError(expected(message) + " '" + fieldName + "' to be empty, but contained "
                     + object.titleString());
-        }
-        
+        }        
     }
 
     private void assertFalse(String message, boolean condition) {
@@ -111,7 +119,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     }
 
     public void assertFieldContains(final String fieldName, final Object expected) {
-        assertFieldContains(null, simpleName(fieldName), expected);
+        assertFieldContains(null, fieldName, expected);
     }
 
     /**
@@ -121,7 +129,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
      * @group assert
      */
     public void assertFieldContains(final String fieldName, final String expected) {
-        assertFieldContains(null, simpleName(fieldName), expected);
+        assertFieldContains(null, fieldName, expected);
     }
 
     /**
@@ -133,7 +141,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
      */
     public void assertFieldContains(final String message, final String fieldName, final Object expected) {
         TestNaked actual = retrieveField(fieldName);
-        NakedObject actualValue = actual.getForObject();
+        Naked actualValue = actual.getForObject();
 
         if (!actualValue.getObject().equals(expected)) {
             throw new NakedAssertionFailedError(expected(message) + " value of " + expected + " but got " + actualValue.getObject());
@@ -238,7 +246,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         assertFieldVisible(fieldName, field);
 
         TestNaked actual = getField(fieldName);
-        NakedObject nakedObject = actual.getForObject();
+        Naked nakedObject = actual.getForObject();
         if (nakedObject == null && !(expected == null || expected.equals(""))) {
             throw new NakedAssertionFailedError(expected(message) + " type " + expected + " but got nothing");
         }        
@@ -407,19 +415,23 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         assertFieldVisible(fieldName, field);
         assertFieldModifiable(fieldName, field);
 
-        TestObject view = (TestObject) fields.get(simpleName(fieldName));
-        if (!view.getForObject().isParsable()) {
+        TestValue view = (TestValue) fields.get(simpleName(fieldName));
+        if (!(view.getForObject() instanceof NakedValue)) {
             throw new IllegalActionError("Can only make an entry (eg by keyboard) into a parsable field");
         }
 
-        NakedObject valueObject = getForObject().getField(field);
+        Naked valueObject = forObject.getField(field);
         //NakedObject valueObject = (NakedObject) field.get((NakedObject) getForObject());
         if (valueObject == null) {
             throw new NakedAssertionFailedError("Field '" + fieldName
                     + "' contains null, but should contain an NakedValue object");
         }
         try {
-            getForObject().parseTextEntry((OneToOneAssociation) field, value);
+            NakedValue nakedValue = (NakedValue) valueObject;
+            if(nakedValue == null) {			
+                nakedValue = (NakedValue) field.getSpecification().acquireInstance();
+            } 
+            nakedValue.parseTextEntry(value);
             throw new NakedAssertionFailedError("Value was unexpectedly parsed");
         } catch (TextEntryParseException expected) {
         }catch (InvalidEntryException e) {
@@ -433,26 +445,28 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         assertFieldVisible(fieldName, field);
         assertFieldModifiable(fieldName, field);
 
-        TestObject view = (TestObject) fields.get(simpleName(fieldName));
-        if (!view.getForObject().isParsable()) {
+        TestValue view = (TestValue) fields.get(simpleName(fieldName));
+        if (!(view.getForObject() instanceof NakedValue)) {
             throw new IllegalActionError("Can only make an entry (eg by keyboard) into a value field");
         }
 
-        NakedObject valueObject = getForObject().getField(field);
+        Naked valueObject = forObject.getField(field);
 //        NakedObject valueObject = (NakedObject) field.get((NakedObject) getForObject());
         if (valueObject == null) {
             throw new NakedAssertionFailedError("Field '" + fieldName
                     + "' contains null, but should contain an NakedValue object");
         }
         try {
-            // SimpleFieldAbout about = new SimpleFieldAbout(null, (NakedObject) getForObject());
-            NakedObject ref = (NakedObject) field.getSpecification().acquireInstance();
+            NakedValue ref = (NakedValue) field.getSpecification().acquireInstance();
             Hint about = getForObject().getHint(ClientSession.getSession(), field, ref);
-           // ((ValueFieldSpecification) field).parseAndSave((NakedObject) getForObject(), value);
-            if(about.canUse().isAllowed()) {
+            if(about.isValid().isAllowed()) {
                 throw new NakedAssertionFailedError("Value was unexpectedly validated");
             }
-            getForObject().parseTextEntry((OneToOneAssociation) field, value);
+            NakedValue nakedValue = (NakedValue) valueObject;
+            if(nakedValue == null) {			
+                nakedValue = (NakedValue) field.getSpecification().acquireInstance();
+            } 
+            nakedValue.parseTextEntry(value);
         } catch (InvalidEntryException expected) {}
     }
 
@@ -602,7 +616,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
      //   NakedObject object = actual.getForObject();
 
         // TODO refactor to remove redundancy
-        if (getForObject().isEmpty(field)) {
+        if (forObject.isEmpty(field)) {
             throw new NakedAssertionFailedError(expected(message) + " '" + fieldName
                     + "' to contain something but it was empty");
         }
@@ -718,11 +732,9 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         if (targetField instanceof TestValue) {
             throw new IllegalActionError("set(..) not allowed on value target field; use fieldEntry(..) instead");
         } else {
-            NakedObject ref = getForObject().getField(field);
-            //NakedObject ref = (NakedObject) fieldFor(fieldName).get((NakedObject) getForObject());
+            NakedObject ref = (NakedObject) forObject.getField(field);
             if (ref != null) {
                 getForObject().clear((OneToOneAssociation) fieldFor(fieldName), ref);
-//                ((OneToOneAssociationSpecification) fieldFor(fieldName)).clearAssociation((NakedObject) getForObject(), ref);
             }
         }
     }
@@ -777,20 +789,24 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
      * other interaction, e.g. a checkbox, then the correct textual form must be
      * used (for the checkbox this is 'TRUE' and 'FALSE').
      */
-    public void fieldEntry(final String fieldName, final String value) {
+    public void fieldEntry(final String fieldName, final String textEntry) {
         NakedObjectField field = fieldFor(fieldName);
         assertFieldVisible(fieldName, field);
         assertFieldModifiable(fieldName, field);
 
         NakedObject object = ((NakedObject) getForObject());
         try {
-            object.parseTextEntry((OneToOneAssociation) field, value);
+            NakedValue value = object.getValue((OneToOneAssociation) field);
+            if(value == null) {			
+                value = (NakedValue) field.getSpecification().acquireInstance();
+            } 
+            value.parseTextEntry(textEntry);      
+            object.setValue((OneToOneAssociation) field, value.getObject());
         } catch (TextEntryParseException e) {
             throw new IllegalActionError("");
         } catch (InvalidEntryException e) {
             throw new IllegalActionError("");
         }
-        //object.getContext().getObjectManager().objectChanged(object);
         object.getContext().getObjectManager().saveChanges();
     }
 
@@ -867,7 +883,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
         TestNaked testObject = (TestNaked) fields.get(simpleName(fieldName));
 
-        testObject.setForObject(getForObject().getField( fieldFor(fieldName)));
+        testObject.setForObject(forObject.getField( fieldFor(fieldName)));
 //        testObject.setForObject((Naked) fieldFor(fieldName).get((NakedObject) getForObject()));
 
         return testObject;
@@ -980,8 +996,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     }
 
     public String toString() {
-        NakedObject object = getForObject();
-        return object == null ? null : object.toString();
+        return forObject == null ? null : forObject.toString();
     }
     
     protected Action getAction(NakedObjectSpecification nakedClass, String name) {

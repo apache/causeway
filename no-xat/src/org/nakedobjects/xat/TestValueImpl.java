@@ -1,38 +1,39 @@
-package org.nakedobjects.reflector.java.reflect;
+package org.nakedobjects.xat;
 
-import org.nakedobjects.application.ValueParseException;
+import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.security.Session;
+import org.nakedobjects.utility.NotImplementedException;
 
-import java.text.NumberFormat;
-import java.text.ParseException;
 
-public class FloatAdapter implements JavaValueAdapter {
-    private static NumberFormat FORMAT = NumberFormat.getNumberInstance();
+public class TestValueImpl implements TestValue {
+    private NakedValue object;
 
-    public Object parse(String entry) {
-        if(entry == null) {
-            return null;
-        }
-        if (entry.trim().equals("")) {
-            return null;
-        } else {
-            try {
-                return new Float(FORMAT.parse(entry).floatValue());
-            } catch (ParseException e) {
-                throw new ValueParseException("Invalid number", e);
-            }
-        }
+    public TestValueImpl(Session session, NakedValue object) {
+        this.object = object;}
+
+    public void fieldEntry(String value) {
+        throw new NotImplementedException();
     }
-    
-    public String asString(Object value) {
-        return  value == null ? "" : FORMAT.format(value);
+
+    public Naked getForObject() {
+        return object;
     }
+
+    public void setForObject(Naked object) {
+        this.object = (NakedValue) object;
+    }
+
+    public String getTitle() {
+        return object.titleString();
+    }
+ 
 }
-
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2005  Naked Objects Group Ltd
+Copyright (C) 2000 - 2004  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -14,7 +14,7 @@ public interface TestClass extends TestNaked {
     /**
      * Get the instances of this class.
      */
-    TestObject instances();
+    TestCollection instances();
 
     /**
      * Creates a new instance of this class.
