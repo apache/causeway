@@ -3,6 +3,7 @@ package org.nakedobjects.object.defaults;
 import org.nakedobjects.object.ArbitraryNakedCollection;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
@@ -229,14 +230,14 @@ public abstract class AbstractNakedObject implements NakedObject {
         }
     }
 
-    public NakedObjectSpecification explorationActionClass() {
-        return getSpecification();
+    public NakedClass debugActionClass() {
+        return getObjectManager().getNakedClass(getSpecification());
     }
 
     /**
      * Clones the current object.
      */
-    public AbstractNakedObject explorationActionClone() {
+    public AbstractNakedObject debugActionClone() {
         AbstractNakedObject clone = (AbstractNakedObject) createInstance(getClass());
 
         clone.copyObject(this);
@@ -259,7 +260,7 @@ public abstract class AbstractNakedObject implements NakedObject {
      * Returns the short name from this objects NakedObjectSpecification
      */
     public String getIconName() {
-        return getSpecification().getShortName();
+        return null;
     }
 
     public TimeStamp getLastActivity() {

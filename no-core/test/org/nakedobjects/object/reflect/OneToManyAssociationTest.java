@@ -2,7 +2,6 @@ package org.nakedobjects.object.reflect;
 
 
 import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.ObjectStoreException;
@@ -12,6 +11,7 @@ import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.collection.InternalCollectionVector;
 import org.nakedobjects.object.defaults.value.TestClock;
+import org.nakedobjects.object.security.Session;
 
 import junit.framework.TestSuite;
 
@@ -26,6 +26,7 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
 	private OneToManyAssociationSpecification collectionField;
 	private Person elements[];
     private MockObjectManager manager;
+    private Session session;
 	
     public OneToManyAssociationTest(String name) {
         super(name);
@@ -42,6 +43,8 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
         NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
     	new TestClock();
     	
+       	session = new Session();
+
 		object = new Team();
 		object.setNakedClass(NakedObjectSpecification.getSpecification(object.getClass()));
 		object.setContext(manager.getContext());
@@ -87,13 +90,13 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     }
     
     public void testLabel() {
-    	assertEquals(MEMBERS_FIELD_LABEL, collectionField.getLabel(new NakedObjectContext(manager), object));
+    	assertEquals(MEMBERS_FIELD_LABEL, collectionField.getLabel(session, object));
     }
     
     public void testAbout() {
     	assertTrue(collectionField.hasAbout());
 
-    	assertNotNull(collectionField.getAbout(new NakedObjectContext(manager), object));
+    	assertNotNull(collectionField.getAbout(session, object));
     }
 }
 

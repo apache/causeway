@@ -1,21 +1,33 @@
-package org.nakedobjects.object.security;
+package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.viewer.skylark.Picture;
+import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.basic.IconGraphic;
 
 
-public class NakedObjectSecurityException extends NakedObjectRuntimeException {
-    public NakedObjectSecurityException() {
-        super();
+public class ClassIconGraphic extends IconGraphic {
+
+    public ClassIconGraphic(View view, int height) {
+        super(view, height);
     }
 
-    public NakedObjectSecurityException(String message) {
-        super(message);
+    protected Picture iconPicture(NakedObject object) {
+        final NakedClass cls = (NakedClass) object;
+        final NakedObjectSpecification spec = cls.forNakedClass();
+        Picture icon = loadIcon(spec, "_class");
+        if(icon == null) {
+            icon = loadIcon(spec, "");
+        }
+        return icon;
     }
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2003 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under

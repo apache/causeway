@@ -425,6 +425,10 @@ public class Viewer {
 		statusBarHeight = 2 + Style.STATUS.getHeight() + 2;
 		rootViewSize.contractHeight(statusBarHeight);
 		((WorkspaceSpecification) rootView.getSpecification()).setRequiredSize(rootViewSize);
+		
+		Bounds bounds = new Bounds(internalDisplaySize);
+		markDamaged(bounds);
+		repaint();
    }
     
     public String toString() {

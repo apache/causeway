@@ -6,7 +6,7 @@ import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.User;
 
 import java.util.Vector;
@@ -141,7 +141,7 @@ public class ExplorationSetUp {
 	            throw new NakedObjectRuntimeException("No user " + user);
 	        }
 	        User user = (User) coll.elements().nextElement();
-	        Session.getSession().getContext().setUser(user);
+	        ClientSession.getSession().setUser(user);
         }
     }
 

@@ -21,13 +21,6 @@ import org.apache.log4j.Logger;
  * Within this cache there is also a viewing window, which the user is expected
  * to be viewing. As the user pages through the cache more items will be
  * retrieved as the bounds of the cache are hit.
- * 
- * @see #setDisplaySize(int) to set the size of the viewing window. To move
- *              through the collection on a page-by-page basis
- * @see #first()
- * @see #next()
- * @see #last()
- * @see #previous()
  */
 public abstract class AbstractNakedCollectionVector extends AbstractNakedObject implements NakedCollection {
     final static Logger LOG = Logger.getLogger(AbstractNakedCollectionVector.class);

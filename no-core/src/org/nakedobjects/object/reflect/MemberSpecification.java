@@ -2,10 +2,10 @@ package org.nakedobjects.object.reflect;
 
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
+import org.nakedobjects.object.security.Session;
 
 
 public abstract class MemberSpecification {
@@ -40,13 +40,13 @@ public abstract class MemberSpecification {
             throw new IllegalArgumentException("Name must always be set");
         }
  
-        this.label = name;
+        this.label = NameConvertor.naturalName(name);
         this.name = NameConvertor.simpleName(name);
     }
     
-    public abstract boolean canAccess(NakedObjectContext context, NakedObject object);
+    public abstract boolean canAccess(Session session, NakedObject object);
     
-    public abstract boolean canUse(NakedObjectContext context, NakedObject object);
+    public abstract boolean canUse(Session session, NakedObject object);
     
     /**
      * Return the default label for this member.  This is based on the name of this member.
@@ -74,7 +74,7 @@ public abstract class MemberSpecification {
      * 
      * @see #getLabel()
      */
-    public abstract String getLabel(NakedObjectContext context, NakedObject object);
+    public abstract String getLabel(Session session, NakedObject object);
 
     /**
      Returns the name of the member.

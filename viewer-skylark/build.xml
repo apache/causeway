@@ -10,7 +10,6 @@
 	&properties;
 
 	<property name="component" value="viewer-skylark"/>
-	<property name="no-core.release.dir" location="../no-core/build/release"/>
 	
 	<!-- classpath -->
 	<path id="libs.internal">

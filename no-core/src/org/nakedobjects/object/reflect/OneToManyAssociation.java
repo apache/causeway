@@ -1,17 +1,17 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.security.Session;
 
 
 public interface OneToManyAssociation extends Member {
 
 	void removeAssociation(NakedObject inObject, NakedObject associate);
 
-	About getAbout(NakedObjectContext context, NakedObject inObject, NakedObject associate, boolean add);
+	About getAbout(Session session, NakedObject inObject, NakedObject associate, boolean add);
 
 	NakedCollection getAssociations(NakedObject inObject);
 	

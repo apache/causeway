@@ -11,6 +11,7 @@ import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NotPersistableException;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.reflect.ActionSpecification;
+import org.nakedobjects.object.security.Session;
 
 import java.util.Enumeration;
 
@@ -19,12 +20,12 @@ public class TestClassImpl implements TestClass {
 
     public static void init(NakedObjectStore objectStore) {}
 
-    private NakedObjectContext context;
+    private Session session;
     private NakedClass nakedClass;
     private final TestObjectFactory factory;
 
-    public TestClassImpl(NakedObjectContext context, NakedClass cls, TestObjectFactory factory) {
-        this.context = context;
+    public TestClassImpl(Session session, NakedClass cls, TestObjectFactory factory) {
+        this.session = session;
         nakedClass = cls;
         this.factory = factory;
     }
@@ -43,7 +44,7 @@ public class TestClassImpl implements TestClass {
             NakedObject object = ((NakedObject) e.nextElement());
 
             if (object.titleString().toString().indexOf(title) >= 0) {
-                return factory.createTestObject(context, object);
+                return factory.createTestObject(session, object);
             }
         }
         throw new IllegalActionError("No instance found with title " + title);
@@ -67,7 +68,7 @@ public class TestClassImpl implements TestClass {
         NakedClass nakedClass = (NakedClass) getForObject();
         NakedCollection instances = instances((NakedClass) getForObject());
         if (instances.size() == 0) { throw new IllegalActionError("Find must find at least one object"); }
-        return factory.createTestObject(context, instances);
+        return factory.createTestObject(session, instances);
     }
 
     private TypedNakedCollection instances(NakedClass cls) {
@@ -87,7 +88,7 @@ public class TestClassImpl implements TestClass {
         if (result == null) {
             return null;
         } else {
-            return factory.createTestObject(context, result);
+            return factory.createTestObject(session, result);
         }
     }
 
@@ -102,7 +103,7 @@ public class TestClassImpl implements TestClass {
         if (result == null) {
             return null;
         } else {
-            return factory.createTestObject(context, result);
+            return factory.createTestObject(session, result);
         }
     }
 
@@ -112,7 +113,7 @@ public class TestClassImpl implements TestClass {
     public TestObject newInstance() {
         NakedObject object = newInstance(nakedClass);
 
-         return factory.createTestObject(context, object);
+         return factory.createTestObject(session, object);
     }
 
     private NakedObject newInstance(NakedClass cls) {

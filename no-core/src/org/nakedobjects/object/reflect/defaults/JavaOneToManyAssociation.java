@@ -3,11 +3,11 @@ package org.nakedobjects.object.reflect.defaults;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.FieldAbout;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.security.Session;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -49,11 +49,11 @@ public class JavaOneToManyAssociation extends JavaAssociation implements OneToMa
 
     }
 
-    public About getAbout(NakedObjectContext context, NakedObject object, NakedObject element, boolean add) {
+    public About getAbout(Session session, NakedObject object, NakedObject element, boolean add) {
         if (hasAbout()) {
             Method aboutMethod = getAboutMethod();
             try {
-                FieldAbout about = new FieldAbout(context, object);
+                FieldAbout about = new FieldAbout(session, object);
                 Object[] parameters;
                 if (aboutMethod.getParameterTypes().length == 3) {
                     parameters = new Object[] { about, element, new Boolean(add) };

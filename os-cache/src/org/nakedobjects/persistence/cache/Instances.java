@@ -1,11 +1,11 @@
 package org.nakedobjects.persistence.cache;
 
-import org.nakedobjects.io.Memento;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.io.Memento;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

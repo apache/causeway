@@ -4,9 +4,7 @@ import org.nakedobjects.object.NakedObjectException;
 
 
 public class StartupException extends NakedObjectException {
-	private Throwable cause;
-
-    public StartupException() {
+	public StartupException() {
         super();
     }
 

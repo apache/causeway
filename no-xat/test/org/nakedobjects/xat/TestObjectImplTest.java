@@ -7,6 +7,7 @@ import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.value.Money;
 import org.nakedobjects.object.defaults.value.TestClock;
 import org.nakedobjects.object.defaults.value.TextString;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Session;
 
 import junit.framework.AssertionFailedError;
@@ -23,7 +24,6 @@ public class TestObjectImplTest extends TestCase {
     private TestObject singleParameter;
     private TestNaked[] multipleParameters;
     private MockObjectManager om;
-    private TestElement elementOne;
     private TestElement elementTwo;
 
     public static void main(String[] args) {}
@@ -39,25 +39,27 @@ public class TestObjectImplTest extends TestCase {
         
         NakedObjectContext context = new NakedObjectContext(om);
         
-        Session.getSession().setSecurityContext(context);
+        Session session = ClientSession.getSession();
+        
+//        Session.getSession().setSecurityContext(context);
         
         targetObject = new TestObjectExample();
         targetObject.setContext(context);
-     context = null; //tmp
+//     context = null; //tmp
         TestObjectFactory factory = new DefaultTestObjectFactory();
-        target = factory.createTestObject(context, targetObject);
+        target = factory.createTestObject(session, targetObject);
         
-        singleParameter = factory.createTestObject(context, new TestObjectExample());
-        TestObject parameter2 = factory.createTestObject(context, new TestObjectExample());
+        singleParameter = factory.createTestObject(session, new TestObjectExample());
+        TestObject parameter2 = factory.createTestObject(session, new TestObjectExample());
 		TestValue valueParameter = factory.createParamerTestValue(new TextString("a value"));
        multipleParameters = new TestNaked[] {singleParameter, parameter2, valueParameter};
         
-        targetObject.getCollection().add(elementOne = new TestElement("one"));
+        targetObject.getCollection().add(new TestElement("one"));
         targetObject.getCollection().add(elementTwo = new TestElement("two"));
     }
     
     protected void tearDown() throws Exception {
-        Session.getSession().shutdown();
+        ClientSession.end();
         om.shutdown();
         super.tearDown();
     }

@@ -7,7 +7,6 @@ public class SetValueCommand implements Command {
     private final String description;
     private final ValueFieldSpecification value;
     private NakedObject object;
-    private String textEntry;
     private String oldValue;
 
     public SetValueCommand(NakedObject object, ValueFieldSpecification value) {

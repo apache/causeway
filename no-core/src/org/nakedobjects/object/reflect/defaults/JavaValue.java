@@ -1,7 +1,6 @@
 package org.nakedobjects.object.reflect.defaults;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
@@ -12,6 +11,7 @@ import org.nakedobjects.object.control.Validity;
 import org.nakedobjects.object.reflect.NakedObjectApplicationException;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.ValueField;
+import org.nakedobjects.object.security.Session;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -29,12 +29,12 @@ public class JavaValue extends JavaField implements ValueField {
         this.validMethod = validMethod;
     }
 
-    public About getAbout(NakedObjectContext context, NakedObject object) {
+    public About getAbout(Session session, NakedObject object) {
         if (hasAbout()) {
             Method aboutMethod = getAboutMethod();
             
             try {
-                FieldAbout about = new FieldAbout(context, object);
+                FieldAbout about = new FieldAbout(session, object);
                 aboutMethod.invoke(object, new Object[] { about });
                 return about; 
             } catch (InvocationTargetException e) {

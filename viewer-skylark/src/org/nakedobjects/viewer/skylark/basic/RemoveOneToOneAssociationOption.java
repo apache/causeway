@@ -1,19 +1,20 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.apache.log4j.Logger;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
+
+import org.apache.log4j.Logger;
 
 
 public class RemoveOneToOneAssociationOption extends MenuOption {
@@ -32,7 +33,7 @@ public class RemoveOneToOneAssociationOption extends MenuOption {
         NakedObject associatedObject = content.getObject();
         
 
-        About about = association.getAbout(Session.getSession().getContext(), parentObject, associatedObject);
+        About about = association.getAbout(ClientSession.getSession(), parentObject, associatedObject);
 
         Permission edit = about.canUse();
 

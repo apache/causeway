@@ -36,6 +36,7 @@ import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.Member;
 import org.nakedobjects.object.reflect.NakedObjectSpecificationException;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.Reflector;
 import org.nakedobjects.object.reflect.defaults.JavaReflector;
 import org.nakedobjects.system.SystemClock;
 
@@ -243,7 +244,7 @@ public class JavaReflectorTest extends TestCase {
 
     public void testClassActions() throws NakedObjectSpecificationException, ClassNotFoundException {
         JavaReflector c = new JavaReflector(ContactTestObject.class.getName());
-        Action[] actions = c.actions(JavaReflector.CLASS);
+        Action[] actions = c.actions(Reflector.CLASS);
 
         // check for all actions
         ExpectationSet exp = new ExpectationSet("actions");

@@ -1,6 +1,7 @@
 package org.nakedobjects.object.transaction;
 
-import org.nakedobjects.object.LocalObjectManager;
+import org.nakedobjects.container.configuration.ComponentException;
+import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectStore;
@@ -9,8 +10,7 @@ import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.OidGenerator;
 import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.UpdateNotifier;
-import org.nakedobjects.utility.ComponentException;
-import org.nakedobjects.utility.ConfigurationException;
+import org.nakedobjects.object.defaults.LocalObjectManager;
 import org.nakedobjects.utility.StartupException;
 
 import java.io.FileOutputStream;

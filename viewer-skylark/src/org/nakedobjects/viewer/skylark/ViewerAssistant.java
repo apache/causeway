@@ -2,7 +2,7 @@ package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.reflect.UndoStack;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.DebugFrame;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
@@ -99,7 +99,7 @@ public class ViewerAssistant {
             new MenuOption("Vew context details...") {
                 public void execute(Workspace frame, View view, Location at) {
                     DebugFrame f = new DebugFrame();
-                    f.setInfo(Session.getSession().getContext());
+                    f.setInfo(ClientSession.getSession());
                     f.show(at.x + 50, frame.getBounds().y + 6);
                 }
             });

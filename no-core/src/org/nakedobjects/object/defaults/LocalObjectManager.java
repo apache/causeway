@@ -217,9 +217,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
      * @return the requested naked object
      * @param oid
      *                       of the object to be retrieved
-     * @throws ObjectNotFoundException
-     *                       when no object corresponding to the oid can be found
-     */
+      */
     public NakedObject getObject(Oid oid, NakedObjectSpecification hint) {
         LOG.debug("getObject " + oid);
         try {

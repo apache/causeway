@@ -1,11 +1,11 @@
 package org.nakedobjects.viewer.skylark.core;
 
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
@@ -49,7 +49,7 @@ public abstract class ObjectView extends AbstractView {
         ActionSpecification action = dropAction(source, target); //object.getNakedClass().getObjectAction(Action.USER, null, new NakedClass[] {source.getNakedClass()});
 
         if (action != null) {
-            About about = action.getAbout(Session.getSession().getContext(), target, source);
+            About about = action.getAbout(ClientSession.getSession(), target, source);
 
             if (about.canUse().isAllowed()) {
                 getViewManager().setStatus(about.getDescription());
@@ -88,7 +88,7 @@ public abstract class ObjectView extends AbstractView {
         ActionSpecification action = dropAction(source, target);
         
         if ((action != null) &&
-                action.getAbout(Session.getSession().getContext(), target, source).canUse().isAllowed()) {
+                action.getAbout(ClientSession.getSession(), target, source).canUse().isAllowed()) {
             NakedObject result = action.execute(target, source);
 
             if (result != null) {

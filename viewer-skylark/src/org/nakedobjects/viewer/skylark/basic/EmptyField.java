@@ -8,7 +8,7 @@ import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.defaults.SimpleNakedClass;
 import org.nakedobjects.object.reflect.AssociateCommand;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
@@ -57,7 +57,7 @@ public class EmptyField extends AbstractView {
                 return false;
             }
             
-            Permission perm = getEmptyField().getAbout(Session.getSession().getContext(), parent, dragSource).canUse();
+            Permission perm = getEmptyField().getAbout(ClientSession.getSession(), parent, dragSource).canUse();
             if (perm.getReason() != null) {
                 getViewManager().setStatus(perm.getReason());
             }

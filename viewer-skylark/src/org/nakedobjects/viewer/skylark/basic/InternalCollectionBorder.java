@@ -15,6 +15,7 @@ import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
+import org.nakedobjects.viewer.skylark.metal.InternalCollectionIconGraphic;
 
 public class InternalCollectionBorder extends AbstractBorder {
 	private IconGraphic icon;
@@ -22,7 +23,7 @@ public class InternalCollectionBorder extends AbstractBorder {
 	protected InternalCollectionBorder(View wrappedView) {
 		super(wrappedView);
 		
-		icon = new IconGraphic(this, Style.NORMAL);
+		icon = new InternalCollectionIconGraphic(this, Style.NORMAL);
 		left = icon.getSize().getWidth();
 	}
 	
@@ -59,7 +60,7 @@ public class InternalCollectionBorder extends AbstractBorder {
         super.menuOptions(options);
         
         InternalCollection collection = (InternalCollection) ((OneToManyField) getContent()).getCollection();
-        NakedObjectSpecification nakedClass = NakedObjectSpecification.getSpecification(collection.getType().getFullName());
+        NakedObjectSpecification nakedClass = NakedObjectSpecification.getSpecification(collection.getElementSpecification().getFullName());
         
         ClassOption.menuOptions(nakedClass, options);
     }

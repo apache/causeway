@@ -13,18 +13,13 @@ import org.apache.log4j.Logger;
 
 
 public abstract class JavaField extends JavaMember {
-    final static Logger LOG = Logger.getLogger(JavaField.class);
-
+    private final static Logger LOG = Logger.getLogger(JavaField.class);
     protected final Method getMethod;
-
-    private Class type;
     private NakedObjectSpecification nakedClass;
     private boolean isDerived;
 
     public JavaField(String name, Class type, Method get, Method about, boolean isDerived) {
         super(name, about);
-        // note that internal collections can have their element types set to null
-        this.type = type;
         this.nakedClass = type == null ? null : NakedObjectSpecification.getSpecification(type);
         this.isDerived = isDerived;
         this.getMethod = get;

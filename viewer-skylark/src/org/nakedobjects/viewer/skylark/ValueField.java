@@ -4,7 +4,7 @@ import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.reflect.ValueFieldSpecification;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.security.ClientSession;
 
 
 public class ValueField extends ObjectField implements ValueContent {
@@ -18,7 +18,7 @@ public class ValueField extends ObjectField implements ValueContent {
     public boolean canChangeValue() {
         ValueFieldSpecification objectField = getValueField();
         boolean persistent = !objectField.isDerived();
-        boolean fieldReadable = objectField.getAbout(Session.getSession().getContext(), getParent()).canUse().isAllowed();
+        boolean fieldReadable = objectField.getAbout(ClientSession.getSession(), getParent()).canUse().isAllowed();
         boolean objectEditable = getValue().userChangeable();
 
         return persistent && fieldReadable && objectEditable;

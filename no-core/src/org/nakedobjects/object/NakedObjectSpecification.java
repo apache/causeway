@@ -2,21 +2,22 @@ package org.nakedobjects.object;
 
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ClassAbout;
-import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.reflect.MemberSpecification;
 import org.nakedobjects.object.reflect.Member;
+import org.nakedobjects.object.reflect.MemberSpecification;
 import org.nakedobjects.object.reflect.NakedObjectSpecificationException;
 import org.nakedobjects.object.reflect.NameConvertor;
-import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.object.reflect.Reflector;
-import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import org.nakedobjects.object.reflect.ValueField;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import org.nakedobjects.object.reflect.defaults.JavaReflector;
+import org.nakedobjects.object.security.Session;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -76,20 +77,8 @@ public final class NakedObjectSpecification {
         return finder;
     }
 
-    private void debugAboutDetail(StringBuffer text, MemberSpecification member, About about) {
+    private void debugAboutDetail(StringBuffer text, MemberSpecification member) {
         text.append("    " + member.toString() + "\n");
-
-        String desc = about.getDescription();
-
-        if (desc != null && !desc.equals("")) {
-            text.append("       desc:  " + desc + "\n");
-        }
-
-        String aboutDesc = about.debug();
-
-        if (aboutDesc != null && !aboutDesc.equals("")) {
-            text.append("       about: " + aboutDesc + "\n");
-        }
     }
 
     public String debugInterface() {
@@ -104,20 +93,17 @@ public final class NakedObjectSpecification {
             text.append("    none\n");
         }
 
-        NakedObjectContext context = NakedObjectContext.getDefaultContext();
-        NakedObject example = (NakedObject) acquireInstance();
-        example.setContext(context);
- 		for (int i = 0; i < fields.length; i++) {
+        for (int i = 0; i < fields.length; i++) {
             //text.append("    " + attributes[i].toString() + "\n");
             if (fields[i] instanceof ValueFieldSpecification) {
                 ValueFieldSpecification f = (ValueFieldSpecification) fields[i];
-                debugAboutDetail(text, f, f.getAbout(context, (NakedObject) example));
+                debugAboutDetail(text, f);
             } else if (fields[i] instanceof OneToManyAssociationSpecification) {
                 OneToManyAssociationSpecification f = (OneToManyAssociationSpecification) fields[i];
-                debugAboutDetail(text, f, f.getAbout(context, (NakedObject) example));
+                debugAboutDetail(text, f);
             } else if (fields[i] instanceof OneToOneAssociationSpecification) {
                 OneToOneAssociationSpecification f = (OneToOneAssociationSpecification) fields[i];
-                debugAboutDetail(text, f, f.getAbout(context, (NakedObject) example, null));
+                debugAboutDetail(text, f);
             }
         }
         
@@ -129,9 +115,7 @@ public final class NakedObjectSpecification {
 
         for (int i = 0; i < objectActions.length; i++) {
             ActionSpecification action = objectActions[i];
-            int paramCount = action.getParameterCount();
-            NakedObject[] params = new NakedObject[paramCount];
-            debugAboutDetail(text, action, action.getAbout(context, (NakedObject) example, params));
+            debugAboutDetail(text, action);
         }
 
         text.append("\n  Class Actions" + "\n");
@@ -141,10 +125,7 @@ public final class NakedObjectSpecification {
         }
 
         for (int i = 0; i < classActions.length; i++) {
-            ActionSpecification action = classActions[i];
-            int paramCount = action.getParameterCount();
-            NakedObject[] params = new NakedObject[paramCount];
-            debugAboutDetail(text, classActions[i], action.getAbout(context, (NakedObject) example));
+            debugAboutDetail(text, classActions[i]);
         }
 
         // return as string
@@ -302,17 +283,7 @@ public final class NakedObjectSpecification {
         if (pluralName != null) {
             return pluralName;
         } else {
-            String name = getSingularName();
-
-            if (name.endsWith("y")) {
-                name = name.substring(0, name.length() - 1) + "ies";
-            } else if (name.endsWith("s")) {
-                name += "es";
-            } else {
-                name += 's';
-            }
-
-            return name;
+            return NameConvertor.pluralName(getSingularName());
         }
     }
 
@@ -331,10 +302,10 @@ public final class NakedObjectSpecification {
     public String getSingularName() {
         String singularName = reflector.singularName();
 
-        return singularName != null ? singularName: getShortName();
+        return singularName != null ? singularName: NameConvertor.naturalName(getShortName());
     }
 
-    public FieldSpecification[] getVisibleFields(NakedObject object, NakedObjectContext context) {
+    public FieldSpecification[] getVisibleFields(NakedObject object, Session session) {
         if (this.viewFields != null) {
             return viewFields;
         }
@@ -342,7 +313,7 @@ public final class NakedObjectSpecification {
         FieldSpecification[] viewFields = new FieldSpecification[fields.length];
         int v = 0;
         for (int i = 0; i < fields.length; i++) {
-            boolean useField = fields[i].canAccess(context, object);
+            boolean useField = fields[i].canAccess(session, object);
 
             if (useField) {
                 viewFields[v++] = fields[i];
@@ -414,7 +385,7 @@ public final class NakedObjectSpecification {
     public String toString() {
         StringBuffer s = new StringBuffer();
 
-        s.append("NakedClass");
+        s.append("NakedObjectSpecification");
         if(reflector != null) {
             s.append(" [name=");
             s.append(getFullName());
@@ -425,6 +396,8 @@ public final class NakedObjectSpecification {
             s.append(",class methods=");
             s.append(classActions.length);
             s.append("]");
+        } else {
+            s.append("[no relector set up]");
         }
        
         s.append("  " + Long.toHexString(super.hashCode()).toUpperCase());
@@ -482,7 +455,7 @@ public final class NakedObjectSpecification {
         }
     }    
 
-    public static NakedObjectSpecification[] getNakedClasses() {
+    public static NakedObjectSpecification[] getAllSpecifications() {
         int size = classes.size();
         NakedObjectSpecification[] cls = new NakedObjectSpecification[size];
         Enumeration e = classes.elements();

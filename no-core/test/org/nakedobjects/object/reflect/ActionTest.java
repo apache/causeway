@@ -2,7 +2,6 @@ package org.nakedobjects.object.reflect;
 
 
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Person;
@@ -11,6 +10,7 @@ import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.value.TestClock;
+import org.nakedobjects.object.security.Session;
 
 import junit.framework.TestSuite;
 
@@ -24,6 +24,7 @@ public class ActionTest extends NakedObjectTestCase {
 	private Team object;
 	private ActionSpecification action;
     private MockObjectManager manager;
+    private Session session;
     
     public ActionTest(String name) {
         super(name);
@@ -44,6 +45,8 @@ public class ActionTest extends NakedObjectTestCase {
         object.setContext(manager.getContext());
         NakedObjectSpecification c = object.getSpecification();
         
+        session = new Session();
+        
         action = (ActionSpecification) c.getObjectAction(ActionSpecification.USER, DISOLVE_ACTION_NAME);
     }
     
@@ -62,7 +65,7 @@ public class ActionTest extends NakedObjectTestCase {
     }
     
     public void testLabel() {
-    	assertEquals(DISOLVE_ACTION_LABEL, action.getLabel(new NakedObjectContext(manager), object));
+    	assertEquals(DISOLVE_ACTION_LABEL, action.getLabel(session, object));
     }
     
     public void testAction() {
@@ -77,7 +80,7 @@ public class ActionTest extends NakedObjectTestCase {
     }
     
     public void testIsVisible() {
-    	action.canAccess(new NakedObjectContext(manager), object);
+    	action.canAccess(session, object);
     }
     
     public void test() {
@@ -87,7 +90,7 @@ public class ActionTest extends NakedObjectTestCase {
     public void testAboutAssignment() {
     	assertTrue(action.hasAbout());
 
-    	About about = action.getAbout(new NakedObjectContext(manager), object);
+    	About about = action.getAbout(session, object);
     	assertNotNull(about);
     }
 }

@@ -2,7 +2,7 @@ package org.nakedobjects.object.exploration;
 
 import org.nakedobjects.object.defaults.AbstractNakedObject;
 import org.nakedobjects.object.defaults.Title;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.User;
 
 public class ExplorationUser extends AbstractNakedObject {
@@ -17,7 +17,7 @@ public class ExplorationUser extends AbstractNakedObject {
     }
     
     public void actionChangeToThisUser() {
-        Session.getSession().getContext().setUser(user);
+        ClientSession.getSession().setUser(user);
     }
 
     public String getIconName() {

@@ -2,13 +2,13 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.viewer.skylark.Canvas;
-import org.nakedobjects.viewer.skylark.Icon;
+import org.nakedobjects.viewer.skylark.Picture;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
-import org.nakedobjects.viewer.skylark.util.ImageFactory;
+import org.nakedobjects.viewer.skylark.util.PictureFactory;
 
 public class CopyOfInternalCollectionBorder extends AbstractBorder {
 
@@ -29,7 +29,7 @@ public class CopyOfInternalCollectionBorder extends AbstractBorder {
 	}
 	
 	public void draw(Canvas canvas) {
-		Icon icon = ImageFactory.getImageFactory().createIcon("InternalCollection", 18, null);
+		Picture icon = PictureFactory.getInstance().loadIcon("InternalCollection", 18, null);
 		canvas.drawIcon(icon, 2, 4);
 		
 		ObjectContent content = (ObjectContent) getContent();

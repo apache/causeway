@@ -3,11 +3,16 @@ package org.nakedobjects.viewer.skylark.core;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
 import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.MemberSpecification;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.Debug;
 import org.nakedobjects.utility.DebugInfo;
@@ -53,6 +58,7 @@ public class DebugView implements DebugInfo {
 
         if(content instanceof ObjectContent) {
         	NakedObject object = ((ObjectContent) content).getObject();
+        	info.append(dumpObjectMethods(object));
 	        info.append(dumpObject(object));
 	        info.append("\n");
 	        info.append(dumpGraph(object));
@@ -64,6 +70,46 @@ public class DebugView implements DebugInfo {
 
         return info.toString();
     }
+
+    private String dumpObjectMethods(NakedObject object) {
+        StringBuffer text = new StringBuffer();
+
+        FieldSpecification[] fields = object.getSpecification().getVisibleFields(object, ClientSession.getSession());
+        Session session = ClientSession.getSession();
+ 		for (int i = 0; i < fields.length; i++) {
+            //text.append("    " + attributes[i].toString() + "\n");
+            if (fields[i] instanceof ValueFieldSpecification) {
+                ValueFieldSpecification f = (ValueFieldSpecification) fields[i];
+                debugAboutDetail(text, f, f.getAbout(session, (NakedObject) object));
+            } else if (fields[i] instanceof OneToManyAssociationSpecification) {
+                OneToManyAssociationSpecification f = (OneToManyAssociationSpecification) fields[i];
+                debugAboutDetail(text, f, f.getAbout(session, (NakedObject) object));
+            } else if (fields[i] instanceof OneToOneAssociationSpecification) {
+                OneToOneAssociationSpecification f = (OneToOneAssociationSpecification) fields[i];
+                debugAboutDetail(text, f, f.getAbout(session, (NakedObject) object, null));
+            }
+        }
+        
+
+        return text.toString();
+    }
+
+    private void debugAboutDetail(StringBuffer text, MemberSpecification member, About about) {
+        text.append("    " + member.toString() + "\n");
+
+        String desc = about.getDescription();
+
+        if (desc != null && !desc.equals("")) {
+            text.append("       desc:  " + desc + "\n");
+        }
+
+        String aboutDesc = about.debug();
+
+        if (aboutDesc != null && !aboutDesc.equals("")) {
+            text.append("       about: " + aboutDesc + "\n");
+        }
+    }
+
 
     public String getDebugTitle() {
         return "Debug: " + view + "/" + view.getContent();
@@ -145,9 +191,10 @@ public class DebugView implements DebugInfo {
                 types.append("Object ");
             }
 
-            NakedObjectContext context = Session.getSession().getContext();
+            Session context = ClientSession.getSession();
             text.append("  Type:       " + types + "\n");
-            text.append("  Context:    " + context + "\n");
+            text.append("  Cojntext:    " + object.getContext() + "\n");
+            text.append("  Session:    " + context + "\n");
             text.append("  Persistent: " + object.getOid() != null + "\n");
             text.append("  Resolved:   " + object.isResolved() + "\n");
             text.append("  Title:      '" + object.titleString() + "'\n");
@@ -191,7 +238,7 @@ public class DebugView implements DebugInfo {
         // work through all its fields
         FieldSpecification[] fields;
         
-        fields = object.getSpecification().getVisibleFields(object, Session.getSession().getContext());
+        fields = object.getSpecification().getVisibleFields(object, ClientSession.getSession());
 
         for (int i = 0; i < fields.length; i++) {
             FieldSpecification field = fields[i];

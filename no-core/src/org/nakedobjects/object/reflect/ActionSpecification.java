@@ -1,10 +1,10 @@
 package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.security.Session;
 
 import java.io.Serializable;
 
@@ -53,12 +53,12 @@ public class ActionSpecification extends MemberSpecification {
         this.actionDelegate = actionDelegate;
     }
 
-    public boolean canAccess(NakedObjectContext context, NakedObject object) {
-        return getAbout(context, object).canAccess().isAllowed();
+    public boolean canAccess(Session session, NakedObject object) {
+        return getAbout(session, object).canAccess().isAllowed();
     }
     
-    public boolean canUse(NakedObjectContext context, NakedObject object) {
-        return getAbout(context, object).canUse().isAllowed();
+    public boolean canUse(Session session, NakedObject object) {
+        return getAbout(session, object).canUse().isAllowed();
     }
 
     public NakedObject execute(NakedObject object) {
@@ -73,17 +73,17 @@ public class ActionSpecification extends MemberSpecification {
         return actionDelegate.execute(object, parameters);
     }
 
-    public About getAbout(NakedObjectContext context, NakedObject object) {
-        return getAbout(context, object, new Naked[0]);
+    public About getAbout(Session session, NakedObject object) {
+        return getAbout(session, object, new Naked[0]);
     }
 
-    public About getAbout(NakedObjectContext context, NakedObject object, Naked parameter1) {
-        return getAbout(context, object, new Naked[] { parameter1 });
+    public About getAbout(Session session, NakedObject object, Naked parameter1) {
+        return getAbout(session, object, new Naked[] { parameter1 });
     }
 
-    public About getAbout(NakedObjectContext context, NakedObject object, Naked[] parameters) {
+    public About getAbout(Session session, NakedObject object, Naked[] parameters) {
         if (hasAbout()) {
-            return actionDelegate.getAbout(context, object, parameters);
+            return actionDelegate.getAbout(session, object, parameters);
         } else {
             return new DefaultAbout();
         }
@@ -94,8 +94,8 @@ public class ActionSpecification extends MemberSpecification {
      * is derived from method name, if there is no About or its name is set to
      * null.
      */
-    public String getLabel(NakedObjectContext context, NakedObject object) {
-        About about = getAbout(context, object, new NakedObject[getParameterCount()]);
+    public String getLabel(Session session, NakedObject object) {
+        About about = getAbout(session, object, new NakedObject[getParameterCount()]);
 
         return getLabel(about);
     }

@@ -1,13 +1,13 @@
 package org.nakedobjects.object.reflect;
 
 
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.Person;
 import org.nakedobjects.object.Role;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
+import org.nakedobjects.object.security.Session;
 
 import junit.framework.TestSuite;
 
@@ -22,6 +22,7 @@ public class AssociationTest extends NakedObjectTestCase {
 	private OneToOneAssociationSpecification personField;
 	private Person associate;
     private MockObjectManager manager;
+    private Session session;
     
     public AssociationTest(String name) {
         super(name);
@@ -38,6 +39,8 @@ public class AssociationTest extends NakedObjectTestCase {
     	manager = MockObjectManager.setup();
     	NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
         
+    	session = new Session();
+    	
         object = new Role();
         object.setContext(manager.getContext());
         NakedObjectSpecification c = object.getSpecification();
@@ -86,13 +89,13 @@ public class AssociationTest extends NakedObjectTestCase {
     }
     
     public void testLabel() {
-    	assertEquals(PERSON_FIELD_LABEL, personField.getLabel(new NakedObjectContext(manager), object));
+    	assertEquals(PERSON_FIELD_LABEL, personField.getLabel(session, object));
     }
     
     public void testAboutAssignment() {
     	assertTrue(personField.hasAbout());
 
-    	assertNotNull(personField.getAbout(new NakedObjectContext(manager), object, associate));
+    	assertNotNull(personField.getAbout(session, object, associate));
     }
 }
 

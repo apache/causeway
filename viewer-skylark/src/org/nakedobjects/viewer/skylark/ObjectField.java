@@ -2,7 +2,7 @@ package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.security.ClientSession;
 
 public abstract class ObjectField implements Content, FieldContent {
     private final FieldSpecification field;
@@ -30,7 +30,7 @@ public abstract class ObjectField implements Content, FieldContent {
 	}
 	
 	public final String getFieldLabel() {
-	    return field.getLabel(Session.getSession().getContext(), parent);
+	    return field.getLabel(ClientSession.getSession(), parent);
 	}
 
 

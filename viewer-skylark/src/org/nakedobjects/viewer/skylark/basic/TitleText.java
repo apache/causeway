@@ -44,7 +44,7 @@ public abstract class TitleText {
         int maxWidth = view.getSize().getWidth() - view.getPadding().getLeft() - view.getPadding().getRight();
 
          String text = title();
-        int xt = x + AbstractView.HPADDING;
+        int xt = x + View.HPADDING;
         int yt = baseline;
 
         if (style.stringWidth(text) > maxWidth) {

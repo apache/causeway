@@ -1,12 +1,12 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
@@ -24,13 +24,13 @@ public class DialogedObjectOption extends MenuOption {
     public static DialogedObjectOption createOption(ActionSpecification action, NakedObject object) {
         int paramCount = action.getParameterCount();
         Assert.assertTrue("Only for actions taking one or more params", paramCount > 0);
-    	About about = action.getAbout(Session.getSession().getContext(), object, new NakedObject[paramCount]);
+    	About about = action.getAbout(ClientSession.getSession(), object, new NakedObject[paramCount]);
     
     	if(about.canAccess().isVetoed()) {
     		return null;
     	}
 
-    	String label =  action.getLabel(Session.getSession().getContext(), object) + " (";
+    	String label =  action.getLabel(ClientSession.getSession(), object) + " (";
     	NakedObjectSpecification[] parameters = action.parameters();
     	for (int i = 0; i < parameters.length; i++) {
             label += (i > 0 ? ", " : "") + parameters[i].getShortName();
@@ -52,7 +52,7 @@ public class DialogedObjectOption extends MenuOption {
     public Permission disabled(View view) {
         NakedObject object = ((ObjectContent) view.getContent()).getObject();
         
-		About about = action.getAbout(Session.getSession().getContext(), object, new NakedObject[action
+		About about = action.getAbout(ClientSession.getSession(), object, new NakedObject[action
                 .getParameterCount()]);
         // ignore the details from the About about useablility this will be
         // checked in the dialog

@@ -1,12 +1,12 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.ActionField;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -74,12 +74,12 @@ public class ActionContent implements ObjectContent {
     }
     
     public Permission disabled() {
-         About about = action.getAbout(Session.getSession().getContext(), target, getParameterValues());
+         About about = action.getAbout(ClientSession.getSession(), target, getParameterValues());
         return about.canUse();
     }
 
     public String getLabel() {
-        return action.getLabel(Session.getSession().getContext(), target);
+        return action.getLabel(ClientSession.getSession(), target);
     }
 
     public ActionField[] getParameters() {

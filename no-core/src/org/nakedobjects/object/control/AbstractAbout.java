@@ -1,15 +1,15 @@
 package org.nakedobjects.object.control;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.security.Role;
+import org.nakedobjects.object.security.Session;
 import org.nakedobjects.object.security.User;
 
 
 public abstract class AbstractAbout implements About {
     private final static long serialVersionUID = 1L;
    
-    private NakedObjectContext context;
+    private Session session;
     private String description;
     private boolean isAccessible;
     private String name;
@@ -67,8 +67,8 @@ public abstract class AbstractAbout implements About {
     	}
     };
 
-    public AbstractAbout(NakedObjectContext context, NakedObject object) {
-    	this.context = context;
+    public AbstractAbout(Session session, NakedObject object) {
+    	this.session = session;
     	isAccessible = true;
     	description = "";
     	if(object instanceof StatefulObject) {
@@ -89,7 +89,7 @@ public abstract class AbstractAbout implements About {
     }
 
     private boolean currentUserHasRole(Role role) {
-    	return context.hasRole(role);
+    	return session.hasRole(role);
     }
 
     public String debug() {
@@ -118,7 +118,7 @@ public abstract class AbstractAbout implements About {
 
 	protected AbstractAbout invisibleToUser(User user) {
 		concatDebug("Invisible to user " + user);
-        if (context.getUser() == user) {
+        if (session.getUser() == user) {
             vetoAccess();
         }
 
@@ -132,7 +132,7 @@ public abstract class AbstractAbout implements About {
    		}
     	    	
     	for (int i = 0; i < users.length; ++i) {
-            if(context.getUser() == users[i]) {
+            if(session.getUser() == users[i]) {
             	vetoAccess();
             	break;
             }
@@ -165,7 +165,7 @@ public abstract class AbstractAbout implements About {
     }
 
     protected AbstractAbout unusableByUser(User user) {
-        if (context.getUser() == user) {
+        if (session.getUser() == user) {
             vetoUse("Not available to current user");
         }
 
@@ -179,7 +179,7 @@ public abstract class AbstractAbout implements About {
         	if(users[i] == null) {
         		continue;
         	}
-            validUser = validUser && (context.getUser() != users[i]);
+            validUser = validUser && (session.getUser() != users[i]);
         }
 
         if (!validUser) {
@@ -263,7 +263,7 @@ public abstract class AbstractAbout implements About {
     }
 
     protected AbstractAbout usableOnlyByUser(User user) {
-        if (context.getUser() != user) {
+        if (session.getUser() != user) {
             vetoUse("Not available to current user");
         }
 
@@ -278,7 +278,7 @@ public abstract class AbstractAbout implements About {
         		continue;
         	}
         	
-            validUser = validUser || (context.getUser() == users[i]);
+            validUser = validUser || (session.getUser() == users[i]);
         }
 
         if (!validUser) {
@@ -372,7 +372,7 @@ public abstract class AbstractAbout implements About {
         		continue;
         	}
         	
-        	if(context.isCurrentUser(users[i])) {
+        	if(session.isCurrentUser(users[i])) {
         		return this;
         	}
         }

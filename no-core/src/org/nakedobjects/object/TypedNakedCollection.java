@@ -8,7 +8,7 @@ public interface TypedNakedCollection extends NakedCollection {
     /**
      * The type of object that can be stored in this collection.
      */
-    NakedObjectSpecification getType();
+    NakedObjectSpecification getElementSpecification();
 }
 
 /*

@@ -3,44 +3,32 @@ package org.nakedobjects.viewer.skylark.basic;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
-import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
-import org.nakedobjects.object.reflect.ValueFieldSpecification;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.FieldContent;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.OneToManyField;
-import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.Size;
-import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
-import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractViewBuilder;
-import org.nakedobjects.viewer.skylark.special.InternalListSpecification;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 import java.util.Enumeration;
 
 public class WorkspaceBuilder extends AbstractViewBuilder {
-	private static final Location ZERO = new Location(0, 0);
-	private static final ViewSpecification internalList = new InternalListSpecification();
+	private static final int PADDING = 10;
+    private static final Location ZERO = new Location(0, 0);
 	private boolean layoutInvalid = true;
 
 	public void build(View view) {
 	       NakedObject object = ((ObjectContent) view.getContent()).getObject();
 
 	       if(object != null && view.getSubviews().length == 0) {
-		        FieldSpecification[] flds = object.getSpecification().getVisibleFields(object, Session.getSession().getContext());
+		        FieldSpecification[] flds = object.getSpecification().getVisibleFields(object, ClientSession.getSession());
 		        ViewFactory factory = ViewFactory.getViewFactory();
 		        
 		        for (int f = 0; f < flds.length; f++) {
@@ -63,40 +51,6 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
 								View objectIcon = factory.createIconizedRootView(obj);
 								view.addView(objectIcon);
 							}
-					
-						
-					} else {
-						ViewSpecification specification;
-						View fieldView;
-						
-						ViewAxis axis = view.getViewAxis();
-						
-						if(attribute instanceof NakedCollection) {
-							OneToManyField content;
-							content = new OneToManyField(object, (InternalCollection) attribute, (OneToManyAssociationSpecification) field);
-							specification = internalList;
-							fieldView =specification.createView(content, axis);
-						
-						} else if(attribute instanceof NakedObject || attribute == null) {
-							OneToOneField content;
-							content = new OneToOneField(object, (NakedObject) attribute, (OneToOneAssociationSpecification) field);
-							specification = factory.getIconizedSubViewSpecification(content);
-							fieldView =specification.createView(content, axis);
-						
-						} else if(attribute instanceof NakedValue) { 
-							ValueField content;
-							content = new ValueField(object, (NakedValue) attribute, (ValueFieldSpecification) field);  
-							specification = factory.getValueFieldSpecification(content);
-							fieldView =specification.createView(content, axis);
-							
-						} else {
-						    throw new NakedObjectRuntimeException();
-						}
-						
-						String label = field.getLabel(Session.getSession().getContext(), object);
-						fieldView = new LabelBorder(label, fieldView);
-						fieldView =  new SimpleBorder(1, fieldView);
-						view.addView(fieldView);
 					}
 		        }
 	       }
@@ -126,47 +80,48 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
 			Size size = view.getSize();
 			size.contract(view.getPadding());
 			
-			int xClass = 10;
-			int yClass = 10;
+			int maxHeight = size.getHeight();
 			
-			int xObject = size.getWidth() - 10; 
-			int yObject = 10;
-
-			int xField= 10; 
-			int yField = size.getHeight() - 10;
+			int xClass = PADDING;
+			int yClass = PADDING;
+		    int maxClassWidth = 0;
+			
+			int xObject = size.getWidth() - PADDING; 
+			int yObject = PADDING;
 			
 			int xWindow= 150; 
-			int yWindow = 10;
+			int yWindow = PADDING;
 
 	        for (int i = 0; i < views.length; i++) {
 	            View v = views[i];
 				Size componentSize = v.getRequiredSize();
 				v.setSize(componentSize);
 				if(v.getLocation().equals(ZERO)) {
-					if(v.getSpecification().isOpen()) {
+					int height = componentSize.getHeight() + 6;
+                    if(v.getSpecification().isOpen()) {
 						v.setLocation(new Location(xWindow, yWindow));
-						yWindow += componentSize.getHeight() + 6;
-						
-					} else if(v.getContent() instanceof FieldContent) {
-						v.setLocation(new Location(xField, yField - componentSize.getHeight()));
-						xField += componentSize.getWidth() + 6;
-					
+						yWindow += height;
 						
 					} else {
 						NakedObject object = ((ObjectContent) v.getContent()).getObject();
 						if(object instanceof NakedClass) {
+                            if(yClass + height > maxHeight) {
+						        yClass = PADDING;
+						        xClass += maxClassWidth + PADDING;
+						        maxClassWidth = 0;
+						    }
 							v.setLocation(new Location(xClass, yClass));
-							yClass += componentSize.getHeight() + 6;
+							maxClassWidth = Math.max(maxClassWidth, componentSize.getWidth());
+							yClass += height;
 							
 						} else {
 							v.setLocation(new Location(xObject - componentSize.getWidth(), yObject));
-							yObject += componentSize.getHeight() + 6;
+							yObject += height;
 							
 						}
 					}
 					
 				}
-//				((Workspace) this).limitBounds(view);
 			}
 		}
 	}

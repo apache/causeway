@@ -1,43 +1,17 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.security.Certificate;
-import org.nakedobjects.object.security.Role;
-import org.nakedobjects.object.security.User;
 import org.nakedobjects.utility.DebugInfo;
 
-import java.util.Enumeration;
-
-import org.apache.log4j.Logger;
-
 public class NakedObjectContext implements DebugInfo {
-    private static final Logger LOG = Logger.getLogger(NakedObjectContext.class);
     private static NakedObjectContext defaultContext;
 
     private NakedObjectManager objectManager;
-	private Certificate certificate;
-	private User user;
-	private Role roles[];
 
     public NakedObjectContext(NakedObjectManager objectManager) {
         this.objectManager = objectManager;
         defaultContext = this;
     }
-    
-    public void setCertificate(Certificate certificate) {
-        this.certificate = certificate;
-    }
-    
-    public void setUser(User user) {
-		this.user = user;
-		
-		roles = new Role[user.getRoles().size()];
-		Enumeration e = user.getRoles().elements();
-		int i = 0;
-		while (e.hasMoreElements()) {
-			roles[i++]= (Role) e.nextElement();
-		}
-	}
-
+ 
     public NakedObjectManager getObjectManager() {
         return objectManager;
     }
@@ -49,73 +23,11 @@ public class NakedObjectContext implements DebugInfo {
     public static NakedObjectContext getDefaultContext() {
         return defaultContext;
     }
-    
-	public User getUser() {
-		return user;
-	}
-
-	public boolean hasRole(Role role) {
-		String roleName = role.getName().stringValue();
-		for (int i = 0; i < roles.length; i++) {
-			if(roles[i].getName().isSameAs(roleName)) {
-				LOG.debug("Role " + roleName + " matches for " + this);
-				return true;
-			}
-		}
-		LOG.debug("Role " + roleName + " not matched for " + this);
-		return false; 
-	}
-
-	public boolean isCurrentUser(User user) {
-		return this.user == user;
-	}
-	
-	public String toString() {
-		String rls = "";
-		for (int i = 0; roles != null && i < roles.length; i++) {
-			rls += roles[i].getName().stringValue() + " ";
-		}
-		return "NakedObjectContext [user=" + (user == null ? "none" : user.getName().stringValue()) + ",roles=" + rls + "]";
-	}
-
-	public Certificate getCertificate() {
-		return certificate;
-	}
 
     public String getDebugData() {
         StringBuffer sb = new StringBuffer();
 
-        sb.append("User\n");
-		sb.append("  Name:     ");
-		sb.append(user.getName());
-		sb.append("\n");
-
-		sb.append("  Roles:     ");
-		sb.append(user.getName());
-        Enumeration fields = user.getRoles().elements();
-		while (fields.hasMoreElements()) {
-			Role role = (Role) fields.nextElement();
-			sb.append("           ");
-			sb.append(role);
-			sb.append("\n");
-		}
-		sb.append("\n");
-		
-		sb.append("Root object\n");
-		sb.append("  Root object: ");
-		NakedObject rootObject = user.getRootObject();
-        sb.append(rootObject);
-		if(rootObject instanceof DebugInfo) {
-			sb.append("\n");
-		    sb.append(((DebugInfo) rootObject).getDebugData());
-		}
-		sb.append("\n\n");
-		
-		sb.append("Other\n");
-		sb.append("  Certificate: ");
-		sb.append(certificate);
-		sb.append("\n");
-
+ 		sb.append("Other\n");
 		sb.append("  Object manager: ");
 		sb.append(objectManager);
 		sb.append("\n\n");

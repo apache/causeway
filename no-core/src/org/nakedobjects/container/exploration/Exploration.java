@@ -21,8 +21,8 @@ import org.nakedobjects.object.defaults.TransientObjectStore;
 import org.nakedobjects.object.exploration.ExplorationContext;
 import org.nakedobjects.object.exploration.ExplorationFixture;
 import org.nakedobjects.object.exploration.ExplorationSetUp;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Role;
-import org.nakedobjects.object.security.Session;
 import org.nakedobjects.object.security.User;
 import org.nakedobjects.system.SplashWindow;
 import org.nakedobjects.utility.StartupException;
@@ -69,12 +69,12 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
             NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
             objectManager = installObjectManager(viewer.getUpdateNotifier());
             
-            NakedObjectContext context = new NakedObjectContext(objectManager);
+            context = new NakedObjectContext(objectManager);
             explorationSetUp = new ExplorationSetUp(context);
             setUpFixtures();
             setUpFixture();
 
-            Session.getSession().setSecurityContext(context);
+  //          Session.getSession().setSecurityContext(context);
 
             ExplorationContext applicationContext;
             User user;
@@ -114,7 +114,8 @@ public abstract class Exploration implements ObjectViewingMechanismListener {
             
             
             // this is already part of ExplorationSetup??
-            context.setUser(user);
+ //           context.setUser(user);
+            ClientSession.getSession().setUser(user);
             
             //User user = context.getUser();
             NakedObject rootObject = user.getRootObject();

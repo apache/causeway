@@ -1,7 +1,7 @@
 package org.nakedobjects.object.control;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.security.Session;
 
 
 /**
@@ -9,8 +9,8 @@ import org.nakedobjects.object.NakedObjectContext;
  */
 public class ClassAbout extends AbstractAbout {
 
-    public ClassAbout(NakedObjectContext context, NakedObject object) {
-        super(context, object);
+    public ClassAbout(Session session, NakedObject object) {
+        super(session, object);
     }
 
     /**

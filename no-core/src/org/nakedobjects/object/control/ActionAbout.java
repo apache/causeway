@@ -1,8 +1,8 @@
 package org.nakedobjects.object.control;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.security.Role;
+import org.nakedobjects.object.security.Session;
 import org.nakedobjects.object.security.User;
 
 
@@ -46,8 +46,8 @@ public class ActionAbout extends AbstractAbout {
         this(actionName, Permission.allow(allow));
     }
 
-    public ActionAbout(NakedObjectContext context, NakedObject object) {
-    	super(context, object);
+    public ActionAbout(Session session, NakedObject object) {
+    	super(session, object);
     }
 
     

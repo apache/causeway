@@ -1,17 +1,17 @@
 package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.security.Session;
 
 
 public interface Action extends Member {
 
     NakedObject execute(NakedObject object, Naked[] parameters);
 
-    About getAbout(NakedObjectContext context, NakedObject object, Naked[] parameters);
+    About getAbout(Session session, NakedObject object, Naked[] parameters);
 
     int getParameterCount();
 

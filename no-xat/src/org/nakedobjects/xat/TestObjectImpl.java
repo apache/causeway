@@ -2,10 +2,9 @@ package org.nakedobjects.xat;
 
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.AssociationSpecification;
@@ -15,6 +14,7 @@ import org.nakedobjects.object.reflect.NameConvertor;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.object.reflect.ValueFieldSpecification;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Session;
 
 import java.util.Enumeration;
@@ -24,16 +24,16 @@ import junit.framework.Assert;
 
 
 public class TestObjectImpl extends AbstractTestObject implements TestObject {
-    private NakedObjectContext context;
+    private Session session;
     private Hashtable fields;
     private TestObjectFactory factory;
 
-    public TestObjectImpl(final NakedObjectContext context, final NakedObject object, final TestObjectFactory factory) {
-        this(context, object, new Hashtable(), factory);
+    public TestObjectImpl(final Session session, final NakedObject object, final TestObjectFactory factory) {
+        this(session, object, new Hashtable(), factory);
     }
 
-    public TestObjectImpl(final NakedObjectContext context, final NakedObject object, final Hashtable viewCache, final TestObjectFactory factory) {
-        this.context = context;
+    public TestObjectImpl(final Session session, final NakedObject object, final Hashtable viewCache, final TestObjectFactory factory) {
+        this.session = session;
         this.factory = factory;
         setForObject(object);
         fields = new Hashtable();
@@ -56,7 +56,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
                     }
 
                     if (null == associatedView) {
-                        associatedView = factory.createTestObject(context, associate, viewCache);
+                        associatedView = factory.createTestObject(session, associate, viewCache);
                         // this puts it into the viewCache
                     }
 
@@ -289,7 +289,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
     public void assertFieldInvisible(final String fieldName) {
         FieldSpecification field = fieldFor(fieldName);
-        boolean canAccess = field.canAccess(Session.getSession().getContext(), (NakedObject) getForObject());
+        boolean canAccess = field.canAccess(ClientSession.getSession(), (NakedObject) getForObject());
         assertFalse("Field '" + fieldName + "' is visible", canAccess);
     }
 
@@ -546,7 +546,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
             throw new IllegalActionError("selectByTitle must select only one object within " + collection);
         }
 
-        return factory.createTestObject(context, object);
+        return factory.createTestObject(session, object);
     }
 
     public TestNaked getField(final String fieldName) {
@@ -592,7 +592,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
                     + "' within it");
         }
 
-        return factory.createTestObject(context, selectedObject);
+        return factory.createTestObject(session, selectedObject);
     }
 
     /**
@@ -631,7 +631,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         assertActionVisible(name, action, new TestNaked[0]);
 
         NakedObject result = action.execute((NakedObject) getForObject());
-        return ((result == null) ? null : factory.createTestObject(context, result));
+        return ((result == null) ? null : factory.createTestObject(session, result));
     }
 
     /**
@@ -644,17 +644,17 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         ActionSpecification action = getAction(name, new TestNaked[] { parameter });
 
         NakedObject dropObject = (NakedObject) parameter.getForObject();
-        boolean allowed = action.getAbout(context, (NakedObject) getForObject(), dropObject).canUse().isAllowed();
+        boolean allowed = action.getAbout(session, (NakedObject) getForObject(), dropObject).canUse().isAllowed();
         assertTrue("action '" + name + "' is unusable", allowed);
 
-        allowed = action.getAbout(context, (NakedObject) getForObject(), dropObject).canAccess().isAllowed();
+        allowed = action.getAbout(session, (NakedObject) getForObject(), dropObject).canAccess().isAllowed();
         assertTrue("action '" + name + "' is invisible", allowed);
 
         NakedObject result = action.execute((NakedObject) getForObject(), dropObject);
         if (result == null) {
             return null;
         } else {
-            return factory.createTestObject(context, result);
+            return factory.createTestObject(session, result);
         }
     }
 
@@ -694,7 +694,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
     private void assertActionUnusable(String name, ActionSpecification action, TestNaked[] parameters) {
         Naked[] parameterObjects = nakedObjects(parameters);
-        boolean vetoed = action.getAbout(context, (NakedObject) getForObject(), parameterObjects).canUse().isVetoed();
+        boolean vetoed = action.getAbout(session, (NakedObject) getForObject(), parameterObjects).canUse().isVetoed();
         Assert.assertTrue("action '" + name + "' is usable", vetoed);
     }
 
@@ -703,7 +703,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     }
 
     private void assertActionVisible(String name, ActionSpecification action, TestNaked[] parameters) {
-        boolean allowed = action.getAbout(context, (NakedObject) getForObject(), nakedObjects(parameters)).canAccess().isAllowed();
+        boolean allowed = action.getAbout(session, (NakedObject) getForObject(), nakedObjects(parameters)).canAccess().isAllowed();
         assertTrue("action '" + name + "' is invisible", allowed);
     }
 
@@ -712,7 +712,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     }
 
     private void assertActionInvisible(String name, ActionSpecification action,TestNaked[] parameters) {
-        boolean vetoed = action.getAbout(context, (NakedObject) getForObject(), nakedObjects(parameters)).canAccess().isVetoed();
+        boolean vetoed = action.getAbout(session, (NakedObject) getForObject(), nakedObjects(parameters)).canAccess().isVetoed();
         Assert.assertTrue("action '" + name + "' is visible", vetoed);
     }
 
@@ -739,7 +739,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
     private void assertActionUsable(String name, ActionSpecification action, final TestNaked[] parameters) {
         Naked[] paramaterObjects = nakedObjects(parameters);
-        boolean allowed = action.getAbout(context, (NakedObject) getForObject(), paramaterObjects).canUse().isAllowed();
+        boolean allowed = action.getAbout(session, (NakedObject) getForObject(), paramaterObjects).canUse().isAllowed();
         assertTrue("action '" + name + "' is unusable", allowed);
     }
 
@@ -788,7 +788,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     }
 
     private void assertFieldVisible(String fieldName, FieldSpecification field) {
-        boolean canAccess = field.canAccess(Session.getSession().getContext(), (NakedObject) getForObject());
+        boolean canAccess = field.canAccess(session, (NakedObject) getForObject());
         assertTrue("Field '" + fieldName + "' is invisible", canAccess);
     }
 
@@ -798,9 +798,8 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     }
 
     private void assertFieldModifiable(String fieldName, FieldSpecification field) {
-        NakedObjectContext context = Session.getSession().getContext();
-        boolean canAccess = field.canUse(context, (NakedObject) getForObject());
-        assertTrue("Field '" + fieldName + "' is unmodifiable for " + context.getUser(), canAccess);
+        boolean canAccess = field.canUse(session, (NakedObject) getForObject());
+        assertTrue("Field '" + fieldName + "' is unmodifiable for " + session.getUser(), canAccess);
     }
 
     private void assertFalse(String message, boolean condition) {
@@ -817,7 +816,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
     public void assertFieldUnmodifiable(final String fieldName) {
         FieldSpecification field = fieldFor(fieldName);
-        boolean canAccess = field.canUse(Session.getSession().getContext(), (NakedObject) getForObject());
+        boolean canAccess = field.canUse(session, (NakedObject) getForObject());
         assertFalse("Field '" + fieldName + "' is modifiable", canAccess);
     }
 
@@ -841,17 +840,17 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         ActionSpecification action = getAction(simpleName(name), parameters);
 
         Naked[] parameterObjects = nakedObjects(parameters);
-        boolean allowed = action.getAbout(context, (NakedObject) getForObject(), parameterObjects).canUse().isAllowed();
+        boolean allowed = action.getAbout(session, (NakedObject) getForObject(), parameterObjects).canUse().isAllowed();
         assertTrue("action '" + name + "' is unusable", allowed);
 
-        allowed = action.getAbout(context, (NakedObject) getForObject(), parameterObjects).canAccess().isAllowed();
+        allowed = action.getAbout(session, (NakedObject) getForObject(), parameterObjects).canAccess().isAllowed();
         assertTrue("action '" + name + "' is invisible", allowed);
 
         NakedObject result = action.execute((NakedObject) getForObject(), parameterObjects);
         if (result == null) {
             return null;
         } else {
-            return factory.createTestObject(context, result);
+            return factory.createTestObject(session, result);
         }
 
     }

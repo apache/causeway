@@ -2,9 +2,9 @@ package org.nakedobjects.xat;
 
 import org.nakedobjects.container.configuration.ComponentException;
 import org.nakedobjects.container.configuration.ConfigurationException;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.OidGenerator;
@@ -16,6 +16,7 @@ import org.nakedobjects.object.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.defaults.TransientObjectStore;
 import org.nakedobjects.object.exploration.ExplorationFixture;
 import org.nakedobjects.object.exploration.ExplorationSetUp;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Role;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.object.security.User;
@@ -42,16 +43,6 @@ public abstract class AcceptanceTestCase extends TestCase {
         super(name);
      }
 
-    /**
-     * Register a class as being available to the user.
-     * @deprecated
-     * /
-    protected void addClass(Class cls) {
-        registerClass(cls.getName());
-    }
-
-*/
-    
     protected void append(String text) {
         docln(text);
     }
@@ -99,10 +90,11 @@ public abstract class AcceptanceTestCase extends TestCase {
         objectManager = createObjectManager();
         
         try {        
-	        NakedObjectContext con = new NakedObjectContext(objectManager);
-	        Session.getSession().setSecurityContext(con);
+	        NakedObjectContext context = new NakedObjectContext(objectManager);
+	        Session session = ClientSession.getSession();
+//	        Session.getSession().setSecurityContext(con);
 
-	        explorationSetUp = new ExplorationSetUp(con);
+	        explorationSetUp = new ExplorationSetUp(context);
 	        setUpFixtures();
 	       
 	        // TODO replace dynamically
@@ -118,19 +110,19 @@ public abstract class AcceptanceTestCase extends TestCase {
 	            NakedObjectSpecification nc = NakedObjectSpecification.getSpecification(cls[i]);
 	            
 	            NakedClass spec = new SimpleNakedClass(cls[i]);
-	            spec.setContext(con);
+	            spec.setContext(context);
 	            spec.setNakedClass(nc);
 	            
-	            TestClass view = testObjectFactory.createTestClass(con, spec);
+	            TestClass view = testObjectFactory.createTestClass(session, spec);
 	
 	            classes.put(nc.getFullName().toLowerCase(), view);
 	        }
 
-	        if(con.getUser() == null) {
+	        if(session.getUser() == null) {
              User user = new User("exploration user");
-            user.setContext(con);
+            user.setContext(context);
             user.getRoles().add(new Role("explorer"));
-            con.setUser(user);
+            session.setUser(user);
         }
         } catch(Exception e) {
             // If an exception is thrown in setUp then tearDown is not called, hence object manager is
@@ -202,7 +194,7 @@ public abstract class AcceptanceTestCase extends TestCase {
 
     protected void tearDown() throws Exception {
         objectManager.shutdown();
-        Session.getSession().shutdown();
+        ClientSession.end();
         documentor.close();
     }
 

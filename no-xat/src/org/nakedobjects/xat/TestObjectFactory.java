@@ -2,18 +2,18 @@ package org.nakedobjects.xat;
 
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.reflect.ValueFieldSpecification;
+import org.nakedobjects.object.security.Session;
 
 import java.util.Hashtable;
 
 public interface TestObjectFactory {
-    TestClass createTestClass(NakedObjectContext context, NakedClass cls);
+    TestClass createTestClass(Session session, NakedClass cls);
     
-    TestObject createTestObject(NakedObjectContext context, NakedObject object);
+    TestObject createTestObject(Session session, NakedObject object);
 
-    TestObject createTestObject(NakedObjectContext context, NakedObject field, Hashtable viewCache);
+    TestObject createTestObject(Session session, NakedObject field, Hashtable viewCache);
     
     TestValue createTestValue(NakedObject parent, ValueFieldSpecification field);
 

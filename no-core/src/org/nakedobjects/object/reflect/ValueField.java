@@ -1,17 +1,17 @@
 package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.InvalidEntryException;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ValueParseException;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Validity;
+import org.nakedobjects.object.security.Session;
 
 
 public interface ValueField extends Member {
-	About getAbout(NakedObjectContext context, NakedObject object);
+	About getAbout(Session session, NakedObject object);
 
     NakedObjectSpecification getType();
 

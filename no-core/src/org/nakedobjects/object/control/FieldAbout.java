@@ -1,8 +1,8 @@
 package org.nakedobjects.object.control;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.security.Role;
+import org.nakedobjects.object.security.Session;
 import org.nakedobjects.object.security.User;
 
 /**
@@ -21,8 +21,8 @@ public class FieldAbout extends AbstractAbout {
 	 */
 	public static final About READ_WRITE = USEABLE;
 		
-     public FieldAbout(NakedObjectContext context, NakedObject object) {
-    	super(context, object);
+     public FieldAbout(Session session, NakedObject object) {
+    	super(session, object);
     }
  
     /**

@@ -32,10 +32,6 @@ public class SimpleNakedClass extends AbstractNakedObject implements NakedClass 
     
     public SimpleNakedClass() {}
     
-    public String getIconName() {
-        return forNakedClass().getShortName();
-    }
-    
 	public void aboutActionFind(ActionAbout about) throws ObjectStoreException {
 		about.setDescription("Get a simple finder object to start searches within the " + getSingularName() + " instances");
 		about.setName("Find " + getPluralName());

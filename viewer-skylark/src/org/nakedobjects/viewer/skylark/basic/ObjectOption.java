@@ -24,7 +24,7 @@ public class ObjectOption {
 
             boolean isPersistent = object.getOid() != null;
             if (!(object instanceof NakedClass) && !(object instanceof InstanceCollectionVector) && isPersistent) {
-                options.add(MenuOptionSet.EXPLORATION, new DestroyObjectOption());
+                options.add(MenuOptionSet.DEBUG, new DestroyObjectOption());
             }
         }
     }

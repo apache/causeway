@@ -52,7 +52,7 @@ public class InstanceCollectionVector extends AbstractTypedNakedCollectionVector
     public void resolve() {}
 
     public String titleString() {
-        return getType().getPluralName() + "(" + size() + ")";
+        return getElementSpecification().getPluralName() + "(" + size() + ")";
     }
 }
 

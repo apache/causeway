@@ -316,7 +316,6 @@ public class WholeNumber extends Magnitude {
 
     /**
      * if non-null, makes the value positive.
-     * @return this
      */
     public void abs() {
     	whole = Math.abs(whole);

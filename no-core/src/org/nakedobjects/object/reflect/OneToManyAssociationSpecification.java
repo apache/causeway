@@ -1,10 +1,10 @@
 package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.security.Session;
 
 
 public class OneToManyAssociationSpecification extends AssociationSpecification {
@@ -15,12 +15,12 @@ public class OneToManyAssociationSpecification extends AssociationSpecification 
         this.delegatedTo = association;
     }
 
-    public boolean canAccess(NakedObjectContext context, NakedObject object) {
-        return getAbout(context, object, null, true).canAccess().isAllowed();
+    public boolean canAccess(Session session, NakedObject object) {
+        return getAbout(session, object, null, true).canAccess().isAllowed();
     }
 
-    public boolean canUse(NakedObjectContext context, NakedObject object) {
-        return getAbout(context, object, null, true).canUse().isAllowed();
+    public boolean canUse(Session session, NakedObject object) {
+        return getAbout(session, object, null, true).canUse().isAllowed();
     }
 
     public void clear(NakedObject inObject) {
@@ -37,16 +37,16 @@ public class OneToManyAssociationSpecification extends AssociationSpecification 
         return delegatedTo.getAssociations(fromObject);
     }
 
-    public About getAbout(NakedObjectContext context, NakedObject object) {
-        return getAbout(context, object, null, true);
+    public About getAbout(Session session, NakedObject object) {
+        return getAbout(session, object, null, true);
     }
 
-    public About getAbout(NakedObjectContext context, NakedObject container, NakedObject element, boolean add) {
-        return delegatedTo.getAbout(context, container, element, add);
+    public About getAbout(Session session, NakedObject container, NakedObject element, boolean add) {
+        return delegatedTo.getAbout(session, container, element, add);
     }
 
-    public String getLabel(NakedObjectContext context, NakedObject object) {
-        About about = getAbout(context, object);
+    public String getLabel(Session session, NakedObject object) {
+        About about = getAbout(session, object);
 
         return getLabel(about);
     }

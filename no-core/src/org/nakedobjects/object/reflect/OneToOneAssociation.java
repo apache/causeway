@@ -1,16 +1,16 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.security.Session;
 
 
 public interface OneToOneAssociation extends Member {
 
 	void clearAssociation(NakedObject inObject, NakedObject associate);
 
-	About getAbout(NakedObjectContext context, NakedObject object, NakedObject value);
+	About getAbout(Session session, NakedObject object, NakedObject value);
 
 	NakedObject getAssociation(NakedObject inObject);
 	

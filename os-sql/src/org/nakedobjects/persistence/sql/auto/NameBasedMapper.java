@@ -144,7 +144,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
 
     private void loadInternalCollection(DatabaseConnector connector, String id, FieldSpecification field, InternalCollection collection) throws ResolveException, SqlObjectStoreException {
         NakedObjectSpecification cls = collection.forParent().getSpecification();
-        NakedObjectSpecification elementCls = NakedObjectSpecification.getSpecification(collection.getType().getFullName());
+        NakedObjectSpecification elementCls = NakedObjectSpecification.getSpecification(collection.getElementSpecification().getFullName());
 
         String table = table(cls) + "_" + field.getName().toLowerCase();
         LOG.debug("loading internal collection data from SQL " + table);

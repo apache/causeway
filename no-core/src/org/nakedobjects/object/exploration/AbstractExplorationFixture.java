@@ -4,16 +4,10 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.security.Role;
 import org.nakedobjects.object.security.User;
 
-import java.util.Vector;
-
-import org.apache.log4j.Logger;
-
 
 public abstract class AbstractExplorationFixture implements ExplorationFixture {
-    private static final Logger LOG = Logger.getLogger(AbstractExplorationFixture.class);
     private ExplorationSetUp container;
-    private Vector newInstances = new Vector();
-
+    
     protected final NakedObject createInstance(Class type) {
         return container.createInstance(type);
     }

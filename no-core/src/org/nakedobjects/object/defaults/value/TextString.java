@@ -220,7 +220,6 @@ public class TextString extends AbstractNakedValue {
 
     /**
        @deprecated replaced by isSameAs
-       @see #isSameAs
      */
     public boolean equals(Object object) {
         if (object instanceof TextString) {

@@ -33,10 +33,10 @@ public abstract class AbstractTypedNakedCollectionVector extends AbstractNakedCo
             return new Veto("Collection cannot have duplicate objects");
         }
 
-        if (getType().isOfType(object.getSpecification())) {
+        if (getElementSpecification().isOfType(object.getSpecification())) {
             return Allow.DEFAULT;
         } else {
-            return new Veto("Object cannot be added because it is not of the type " + getType().getFullName());
+            return new Veto("Object cannot be added because it is not of the type " + getElementSpecification().getFullName());
         }
     }
 
@@ -56,7 +56,7 @@ public abstract class AbstractTypedNakedCollectionVector extends AbstractNakedCo
     /**
      * The type of object that can be stored in this collection.
      */
-    public NakedObjectSpecification getType() {
+    public NakedObjectSpecification getElementSpecification() {
         return specification;
     }
 }

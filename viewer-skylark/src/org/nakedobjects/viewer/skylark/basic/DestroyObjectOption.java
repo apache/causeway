@@ -9,15 +9,11 @@ import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
-import org.apache.log4j.Logger;
-
 
 /**
    Destroy this object
  */
 public class DestroyObjectOption extends MenuOption {
-	private static final Logger LOG = Logger.getLogger(DestroyObjectOption.class);
-	
 	public DestroyObjectOption() {
 		super("Destroy Object");
 	}

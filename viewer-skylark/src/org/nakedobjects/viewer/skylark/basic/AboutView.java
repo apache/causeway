@@ -3,22 +3,22 @@ package org.nakedobjects.viewer.skylark.basic;
 import org.nakedobjects.system.AboutNakedObjects;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
-import org.nakedobjects.viewer.skylark.Icon;
+import org.nakedobjects.viewer.skylark.Picture;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
-import org.nakedobjects.viewer.skylark.util.ImageFactory;
+import org.nakedobjects.viewer.skylark.util.PictureFactory;
 
 public class AboutView extends AbstractView {
     private AboutNakedObjects about = new AboutNakedObjects();
     private final int padding = 6;
-    private final Icon image;
+    private final Picture image;
     private final int left;
     
     public AboutView() {
         super(null, null, null);
 
-        image = ImageFactory.getImageFactory().loadImage(AboutNakedObjects.getImageName());
+        image = PictureFactory.getInstance().loadPicture(AboutNakedObjects.getImageName());
         left = padding + image.getWidth() + padding;
     }
 

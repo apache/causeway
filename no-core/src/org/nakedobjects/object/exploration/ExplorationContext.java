@@ -7,11 +7,9 @@ import org.nakedobjects.object.defaults.Title;
 import org.nakedobjects.object.defaults.value.TextString;
 
 public class ExplorationContext extends AbstractUserContext  {
-    private NakedCollection users;
     private final TextString name = new TextString();
     
     public void setUpUsers(NakedCollection users) {
-        this.users = users;
     }
     
     public TextString getName() {

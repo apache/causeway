@@ -1,12 +1,13 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
@@ -19,7 +20,7 @@ public class ClassOption extends MenuOption {
 	private NakedClass classSpec;
 	
 	public static void menuOptions(NakedObjectSpecification nakedClass, MenuOptionSet menuOptionSet) {
-	    NakedClass classSpec = Session.getSession().getContext().getObjectManager().getNakedClass(nakedClass);
+	    NakedClass classSpec = NakedObjectContext.getDefaultContext().getObjectManager().getNakedClass(nakedClass);
         
 	    
 		ActionSpecification[] actions;
@@ -55,10 +56,10 @@ public class ClassOption extends MenuOption {
 	}
 
 	private static void addOption(NakedClass cls, MenuOptionSet menuOptionSet, ActionSpecification action, int type) {
-		About about = action.getAbout(Session.getSession().getContext(), cls);
+		About about = action.getAbout(ClientSession.getSession(), cls);
 
 		if(about.canAccess().isAllowed()) {
-			String labelName =  action.getLabel(Session.getSession().getContext(), cls);
+			String labelName =  action.getLabel(ClientSession.getSession(), cls);
 			ClassOption option = new ClassOption(cls, labelName, action);
 	
 			// if method returns something then add ... to indicate a new window is shown
@@ -78,7 +79,7 @@ public class ClassOption extends MenuOption {
 	}
 	
 	public final Permission disabled(View view) {
-			About about = action.getAbout(Session.getSession().getContext(), classSpec);
+			About about = action.getAbout(ClientSession.getSession(), classSpec);
 			return about.canUse();
 	}
 	

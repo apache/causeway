@@ -1,18 +1,18 @@
 package org.nakedobjects.object.reflect.defaults;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectManager;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.TransactionException;
 import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionSpecification.Type;
+import org.nakedobjects.object.security.Session;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -111,7 +111,7 @@ public class JavaAction extends JavaMember implements Action {
         
     }
 
-    public About getAbout(NakedObjectContext context, NakedObject object, Naked[] parameters) {
+    public About getAbout(Session session, NakedObject object, Naked[] parameters) {
         if (parameters.length != paramCount) {
             LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);
         }
@@ -122,7 +122,7 @@ public class JavaAction extends JavaMember implements Action {
 
         try {
             About about;
-            about = new ActionAbout(context, object);
+            about = new ActionAbout(session, object);
 
             if (aboutMethod.getName().equals("aboutActionDefault")) {
                 aboutMethod.invoke(object, new Object[] { about });

@@ -1,11 +1,13 @@
 <?xml version="1.0"?>
 <!DOCTYPE project [
-	<!ENTITY properties SYSTEM "file:../naked-objects/properties.xml">
+	<!ENTITY properties SYSTEM "file:../build-templates/properties.xml">
 ]>
 
 <project name="Naked Objects framework" default="release-rebuild" basedir=".">
 	&properties;
 	
+	<property name="docs.javadocs.disable" value="true"/>
+
 	<description>
 	</description>
 
@@ -225,7 +227,7 @@
 		<mkdir dir="exploration/images"/>
 
 		<antcall target="-core"/>
-		<!-- antcall target="-no-distribution"/-->
+		<antcall target="-no-distribution"/>
 		<antcall target="-no-containers"/>
 		<!-- antcall target="-os-cache"/-->
 		<antcall target="-os-file"/>

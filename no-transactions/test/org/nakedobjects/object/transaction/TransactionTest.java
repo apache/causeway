@@ -1,7 +1,7 @@
 package org.nakedobjects.object.transaction;
 
+import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.MockLoadedObjects;
-import org.nakedobjects.object.MockObjectManager;
 import org.nakedobjects.object.MockObjectStore;
 import org.nakedobjects.object.MockOid;
 import org.nakedobjects.object.NakedObject;
@@ -9,7 +9,7 @@ import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.Person;
 import org.nakedobjects.object.Role;
 import org.nakedobjects.object.Team;
-import org.nakedobjects.object.collection.InternalCollection;
+import org.nakedobjects.object.defaults.MockObjectManager;
 
 import java.util.Vector;
 
@@ -325,7 +325,7 @@ public class TransactionTest extends TestCase {
         
         t.commit(objectStore);
         
-        assertEquals(transactionalTeam.getMembers().firstElement(), team.getMembers().firstElement());
+        assertEquals(transactionalTeam.getMembers().elementAt(0), team.getMembers().elementAt(0));
     }
     
    public void test() {     

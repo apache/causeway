@@ -1,10 +1,10 @@
 package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.About;
+import org.nakedobjects.object.security.Session;
 
 
 public class OneToOneAssociationSpecification extends AssociationSpecification {
@@ -15,12 +15,12 @@ public class OneToOneAssociationSpecification extends AssociationSpecification {
         this.delegatedTo = association;
     }
     
-    public boolean canAccess(NakedObjectContext context, NakedObject object) {
-    	return getAbout(context, object, null).canAccess().isAllowed();
+    public boolean canAccess(Session session, NakedObject object) {
+    	return getAbout(session, object, null).canAccess().isAllowed();
     }
     
-    public boolean canUse(NakedObjectContext context, NakedObject object) {
-    	return getAbout(context, object, null).canUse().isAllowed();
+    public boolean canUse(Session session, NakedObject object) {
+    	return getAbout(session, object, null).canUse().isAllowed();
     }
     
     public void clear(NakedObject inObject) {
@@ -41,12 +41,12 @@ public class OneToOneAssociationSpecification extends AssociationSpecification {
 		return delegatedTo.getAssociation(fromObject);
 	}
     
-    public About getAbout(NakedObjectContext context, NakedObject object, NakedObject value) {
-    	return delegatedTo.getAbout(context, object, value);
+    public About getAbout(Session session, NakedObject object, NakedObject value) {
+    	return delegatedTo.getAbout(session, object, value);
     }
 
-    public String getLabel(NakedObjectContext context, NakedObject object) {
-      	About about = getAbout(context, object, (NakedObject) get(object));
+    public String getLabel(Session session, NakedObject object) {
+      	About about = getAbout(session, object, (NakedObject) get(object));
 
         return getLabel(about);
     }

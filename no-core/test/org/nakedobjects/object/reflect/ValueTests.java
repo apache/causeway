@@ -3,7 +3,6 @@ package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
@@ -11,6 +10,7 @@ import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.value.Money;
 import org.nakedobjects.object.defaults.value.TestClock;
 import org.nakedobjects.object.defaults.value.TextString;
+import org.nakedobjects.object.security.Session;
 
 import junit.framework.TestSuite;
 
@@ -27,6 +27,7 @@ public class ValueTests extends NakedObjectTestCase {
     
     private ValueFieldSpecification nameField, salaryField;
     private MockObjectManager manager;
+    private Session session;
     
     public ValueTests(String name) {
         super(name);
@@ -43,6 +44,8 @@ public class ValueTests extends NakedObjectTestCase {
         NakedObjectSpecification.setReflectionFactory(new LocalReflectionFactory());
     	new TestClock();
     	
+       	session = new Session();
+
         object = new ValueTestObject();
         object.setContext(manager.getContext());
         
@@ -93,16 +96,15 @@ public class ValueTests extends NakedObjectTestCase {
     }
     
     public void testLabel() {
-    	NakedObjectContext context = new NakedObjectContext(manager);
-    	assertEquals(NAME_FIELD_LABEL, nameField.getLabel(context, object));
-    	assertEquals(SALARY_FIELD_LABEL, salaryField.getLabel(context, object));
+    	assertEquals(NAME_FIELD_LABEL, nameField.getLabel(session, object));
+    	assertEquals(SALARY_FIELD_LABEL, salaryField.getLabel(session, object));
     }
     
     public void testAbout() {
     	assertFalse(nameField.hasAbout());
     	assertTrue(salaryField.hasAbout());
 
-    	assertNotNull(salaryField.getAbout(new NakedObjectContext(manager), object));
+    	assertNotNull(salaryField.getAbout(session, object));
     }
 }
 

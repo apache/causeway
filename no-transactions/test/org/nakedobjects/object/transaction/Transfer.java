@@ -24,14 +24,14 @@
 
 package org.nakedobjects.object.transaction;
 
-import org.nakedobjects.object.AbstractNakedObject;
-import org.nakedobjects.object.Title;
+import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.TransactionException;
-import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.control.FieldAbout;
-import org.nakedobjects.object.value.Date;
-import org.nakedobjects.object.value.Money;
+import org.nakedobjects.object.defaults.AbstractNakedObject;
+import org.nakedobjects.object.defaults.Title;
+import org.nakedobjects.object.defaults.value.Date;
+import org.nakedobjects.object.defaults.value.Money;
 
 
 public class Transfer extends AbstractNakedObject {

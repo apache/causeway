@@ -1,6 +1,7 @@
 package org.nakedobjects.object;
 
 import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.security.Session;
 
 
 public class MockFieldSpecification extends FieldSpecification {
@@ -19,15 +20,15 @@ public class MockFieldSpecification extends FieldSpecification {
 
     public void clear(NakedObject inObject) {}
 
-    public boolean canAccess(NakedObjectContext context, NakedObject object) {
+    public boolean canAccess(Session session, NakedObject object) {
         return false;
     }
 
-    public boolean canUse(NakedObjectContext context, NakedObject object) {
+    public boolean canUse(Session session, NakedObject object) {
         return false;
     }
 
-    public String getLabel(NakedObjectContext context, NakedObject object) {
+    public String getLabel(Session session, NakedObject object) {
         return null;
     }
 

@@ -2,12 +2,12 @@ package org.nakedobjects.object.transaction;
 
 import org.nakedobjects.object.MockObjectStore;
 import org.nakedobjects.object.MockUpdateNotifier;
-import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectNotFoundException;
-import org.nakedobjects.object.SimpleOidGenerator;
-import org.nakedobjects.object.collection.InstanceCollection;
+import org.nakedobjects.object.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.reflect.ActionSpecification;
 
 import java.io.File;
@@ -40,7 +40,7 @@ public class SimpleTransactionManagerTest extends TestCase {
     }
     
     private void assertInstanceEquals(String message, NakedObjectSpecification cls, NakedObject expected) {
-        InstanceCollection instances = objectManager.allInstances(cls);
+        NakedCollection instances = objectManager.allInstances(cls);
         NakedObject instance = (NakedObject) instances.elementAt(0);
         assertEquals(message, expected, instance);    
     }
@@ -50,7 +50,7 @@ public class SimpleTransactionManagerTest extends TestCase {
    }
    
    private void assertNoInstances(String message, int size, NakedObjectSpecification cls) {
-       InstanceCollection instances = objectManager.allInstances(cls);
+       NakedCollection instances = objectManager.allInstances(cls);
        assertEquals(message, size, instances.size());    
    }
 
@@ -99,7 +99,7 @@ public class SimpleTransactionManagerTest extends TestCase {
     public void test() {
         
         
-        NakedObjectSpecification accountClass = NakedObjectSpecification.getNakedClass(Account.class);
+        NakedObjectSpecification accountClass = NakedObjectSpecification.getSpecification(Account.class);
         
         //      transaction 4
         objectManager.startTransaction();

@@ -3,14 +3,14 @@ package org.nakedobjects.persistence.cache;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.MockClassManager;
 import org.nakedobjects.object.MockLoadedObjects;
-import org.nakedobjects.object.MockObjectManager;
 import org.nakedobjects.object.MockReflector;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.Person;
 import org.nakedobjects.object.Role;
-import org.nakedobjects.object.SimpleOid;
-import org.nakedobjects.object.reflect.simple.JavaReflector;
+import org.nakedobjects.object.defaults.MockObjectManager;
+import org.nakedobjects.object.defaults.SerialOid;
+import org.nakedobjects.object.reflect.defaults.JavaReflector;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -32,9 +32,9 @@ public class InstancesTest extends TestCase {
 
     private Instances ins;
     private Person p1;
-    private SimpleOid p1Oid;
+    private SerialOid p1Oid;
     private Person p2;
-    private SimpleOid p2Oid;
+    private SerialOid p2Oid;
 
     public void setUp() {
         Logger.getRoot().setLevel(Level.OFF);
@@ -47,14 +47,14 @@ public class InstancesTest extends TestCase {
         p1 = new Person();
         p1.getName().setValue("Harry");
         p1.getSalary().setValue(1234);
-        p1Oid = new SimpleOid(1);
+        p1Oid = new SerialOid(1);
         p1.setOid(p1Oid);
         ins.create(p1);
         
         p2 = new Person();
         p2.getName().setValue("Fred");
         p1.getSalary().setValue(2345);
-        p2Oid = new SimpleOid(2);
+        p2Oid = new SerialOid(2);
         p2.setOid(p2Oid);
         ins.create(p2);
       }
@@ -150,7 +150,7 @@ public class InstancesTest extends TestCase {
        
         Role r = new Role();
         r.setPerson(p1);
-        r.setOid(new SimpleOid(6));
+        r.setOid(new SerialOid(6));
         ins.create(r);
         
         MockClassManager classManager = MockClassManager.setup();

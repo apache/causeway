@@ -341,7 +341,7 @@ public final class SnapshotBuilder {
 
                 OneToManyAssociationSpecification oneToManyAssociation = (OneToManyAssociationSpecification) field;
                 InternalCollection collection = (InternalCollection) oneToManyAssociation.get(object);
-                String fullyQualifiedClassName = collection.getType().getFullName();
+                String fullyQualifiedClassName = collection.getElementSpecification().getFullName();
                 namespaceManager.addNamespaceIfRequired(parentElement, fullyQualifiedClassName);
                 setNofTypeAttr(fieldElement, namespaceManager, fullyQualifiedClassName);
 

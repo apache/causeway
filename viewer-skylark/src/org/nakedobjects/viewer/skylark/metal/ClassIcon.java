@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
@@ -13,6 +12,7 @@ import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
+import org.nakedobjects.viewer.skylark.UiConfiguration;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
@@ -55,30 +55,14 @@ public class ClassIcon extends ObjectView {
     private IconGraphic icon;
     private final ClassTitleText title;
 
-    public ClassIcon(Content content, ViewSpecification specification, ViewAxis axis) {
+    public ClassIcon(final Content content, ViewSpecification specification, ViewAxis axis) {
         super(content, specification, axis);
         
-        int iconSize = Configuration.getInstance().getInteger("viewer.skylark.class-icon-size", 85);
-
-        iconUnselected = new IconGraphic(this, iconSize) {
-        	protected String iconName(NakedObject object) {
-				return super.iconName(object) + "_class";
-			}
-        };
-        if(!iconUnselected.isImageAvailable()) {
-            iconUnselected = new IconGraphic(this, iconSize);
-        }
-        
-        iconSelected = new IconGraphic(this, iconSize) {
-        	protected String iconName(NakedObject object) {
-				return super.iconName(object) + "_class_selected";
-			}
-        };        
-        if(!iconSelected.isImageAvailable()) {
-            iconSelected = iconUnselected;
-        }
-        
-       icon = iconUnselected;
+        int iconSize = UiConfiguration.getInstance().classIconSize(); 
+            
+        iconUnselected = new ClassIconGraphic(this, iconSize); 
+        iconSelected = new ClassIconGraphic(this, iconSize); 
+        icon = iconUnselected;
        
        title = new ClassTitleText(this, Style.CLASS);
     }
@@ -119,8 +103,6 @@ public class ClassIcon extends ObjectView {
     public Size getRequiredSize() {
         final Size iconSize = icon.getSize();
         final Size textSize = title.getSize();
-        NakedObject object = ((ObjectContent) getContent()).getObject();
-        
         iconSize.extendHeight(VPADDING + textSize.getHeight()  + VPADDING);
         iconSize.ensureWidth(textSize.getWidth());
         return iconSize;

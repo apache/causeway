@@ -114,24 +114,11 @@ public class JavaReflector implements Reflector {
                 LOG.warn("Method " + aClass.getName() + "." + type + "Order() must be decared as static");
             }
         } catch (NoSuchMethodException ignore) {
-            ;
         } catch (IllegalAccessException ignore) {
-            ;
         } catch (InvocationTargetException ignore) {
-            ;
         }
 
         return null;
-    }
-
-    /**
-     * Returns the name without its prefix by removing the same number of
-     * characters from the name string as there are in the specified prefix. No
-     * comparision is made of the specified prefix and the start of the name
-     * string.
-     */
-    private static String removePrefix(String prefix, String fromName) {
-        return fromName.substring(prefix.length());
     }
 
     /**
@@ -244,26 +231,12 @@ public class JavaReflector implements Reflector {
 
                 ActionSpecification.Type action;
                 action = new ActionSpecification.Type[] { ActionSpecification.USER, ActionSpecification.EXPLORATION, ActionSpecification.DEBUG }[prefix];
-                Action local = new JavaAction(naturalName(name), action, method, aboutMethod);
+                Action local = new JavaAction(name, action, method, aboutMethod);
                 actions.addElement(local);
             }
         }
 
         return convertToArray(actions);
-    }
-
-    private String naturalName(String name) {
-        int len = name.length();
-        StringBuffer labelBuffer = new StringBuffer(len);
-        for (int c =0; c < len; c++) {
-			char ch = name.charAt(c);
-            if (c != 0 && Character.isUpperCase(ch)) {
-			    labelBuffer.append(' ');
-			}
-			labelBuffer.append(ch);
-        }
-
-        return labelBuffer.toString();
     }
 
     public String[] actionSortOrder() {
@@ -276,11 +249,8 @@ public class JavaReflector implements Reflector {
         try {
             return (About) cls.getMethod(ABOUT_PREFIX + shortName(), new Class[0]).invoke(null, new Object[0]);
         } catch (NoSuchMethodException ignore) {
-            ;
         } catch (IllegalAccessException ignore) {
-            ;
         } catch (InvocationTargetException ignore) {
-            ;
         }
 
         return null;
@@ -549,7 +519,7 @@ public class JavaReflector implements Reflector {
             }
 
             associations
-                    .addElement(new JavaOneToManyAssociation(naturalName(name), elementType, getMethod, addMethod, removeMethod, aboutMethod));
+                    .addElement(new JavaOneToManyAssociation(name, elementType, getMethod, addMethod, removeMethod, aboutMethod));
         }
     }
 
@@ -613,7 +583,7 @@ public class JavaReflector implements Reflector {
                         + getMethod.getName() + " method.");
             }
 
-            JavaOneToOneAssociation association = new JavaOneToOneAssociation(naturalName(name), getMethod.getReturnType(), getMethod,
+            JavaOneToOneAssociation association = new JavaOneToOneAssociation(name, getMethod.getReturnType(), getMethod,
                     setMethod, addMethod, removeMethod, aboutMethod);
             associations.addElement(association);
         }
@@ -623,11 +593,8 @@ public class JavaReflector implements Reflector {
         try {
             return (String) cls.getMethod("pluralName", new Class[0]).invoke(null, new Object[0]);
         } catch (NoSuchMethodException ignore) {
-            ;
         } catch (IllegalAccessException ignore) {
-            ;
         } catch (InvocationTargetException ignore) {
-            ;
         }
 
         return null;
@@ -646,17 +613,13 @@ public class JavaReflector implements Reflector {
     public String singularName() {
         try {
             Method method = cls.getMethod("singularName", new Class[0]);
-
             return (String) method.invoke(null, new Object[0]);
         } catch (NoSuchMethodException ignore) {
-            ;
         } catch (IllegalAccessException ignore) {
-            ;
         } catch (InvocationTargetException ignore) {
-            ;
         }
 
-        return shortClassName(className());
+        return null;
     }
 
     private Vector valueFields(Vector fields) {
@@ -693,7 +656,7 @@ public class JavaReflector implements Reflector {
             }
 
             // create Field
-            JavaValue attribute = new JavaValue(naturalName(name), method.getReturnType(), method, aboutMethod, validMethod, false);
+            JavaValue attribute = new JavaValue(name, method.getReturnType(), method, aboutMethod, validMethod, false);
             fields.addElement(attribute);
         }
 

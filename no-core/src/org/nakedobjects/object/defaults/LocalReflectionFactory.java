@@ -1,22 +1,18 @@
 package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.ReflectionFactory;
-import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.ActionSpecification;
 import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
+import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.ValueFieldSpecification;
+import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
 import org.nakedobjects.object.reflect.ValueField;
-
-import org.apache.log4j.Logger;
+import org.nakedobjects.object.reflect.ValueFieldSpecification;
 
 
 public class LocalReflectionFactory implements ReflectionFactory {
-    private static final Logger LOG = Logger.getLogger(LocalReflectionFactory.class);
-
     public ActionSpecification createAction(Action action) {
         return new ActionSpecification(action.getName(), action);
     }

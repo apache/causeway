@@ -10,10 +10,10 @@ import org.nakedobjects.object.defaults.value.TextString;
 
 public class FastFinder extends AbstractNakedObject {
 	private final TextString term = new TextString();
-	private NakedObjectSpecification nakedClass;
+	private NakedObjectSpecification forClass;
 	
 	public String getIconName() {
-		return "Find";
+		return forClass.getShortName();
 	}
 
 	public TextString getTerm() {
@@ -25,7 +25,7 @@ public class FastFinder extends AbstractNakedObject {
 	}
 	
 	public NakedObject actionFind() {
-		NakedCollection instances = getObjectManager().findInstances(nakedClass, term.stringValue());
+		NakedCollection instances = getObjectManager().findInstances(forClass, term.stringValue());
 		if(instances.size() == 1) { 
 			return (NakedObject) instances.elements().nextElement();
 		} else {
@@ -38,11 +38,11 @@ public class FastFinder extends AbstractNakedObject {
 	}
 	
 	public NakedObjectSpecification getFromClass() {
-		return nakedClass;
+		return forClass;
 	}
 	
 	public void setFromClass(NakedObjectSpecification nakedClass) {
-		this.nakedClass = nakedClass;
+		this.forClass = nakedClass;
 	}
 	
 	public boolean isFinder() {

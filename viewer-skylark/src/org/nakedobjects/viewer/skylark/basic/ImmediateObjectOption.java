@@ -5,7 +5,7 @@ import org.nakedobjects.object.control.About;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.reflect.ActionSpecification;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
@@ -22,13 +22,13 @@ public class ImmediateObjectOption extends MenuOption {
     public static ImmediateObjectOption createOption(ActionSpecification action, NakedObject object) {
     	Assert.assertTrue("Only suitable for 0 param methods", action.parameters().length == 0);
         
-        About about = action.getAbout(Session.getSession().getContext(), object);
+        About about = action.getAbout(ClientSession.getSession(), object);
     
     	if(about.canAccess().isVetoed()) {
     		return null;
     	}
     	
-    	String labelName =  action.getLabel(Session.getSession().getContext(), object);
+    	String labelName =  action.getLabel(ClientSession.getSession(), object);
     	ImmediateObjectOption option = new ImmediateObjectOption(labelName);
     	option.action = action;
     
@@ -49,7 +49,7 @@ public class ImmediateObjectOption extends MenuOption {
     public Permission disabled(View view) {
         NakedObject object = ((ObjectContent) view.getContent()).getObject();
         
-		About about = action.getAbout(Session.getSession().getContext(), object);
+		About about = action.getAbout(ClientSession.getSession(), object);
 		if(about.canUse().isAllowed()) {
 			String description = about.getDescription();
 			if(action.hasReturn()) {

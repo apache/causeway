@@ -5,10 +5,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.defaults.Title;
 
-import org.apache.log4j.Logger;
-
 public abstract class AbstractNakedValue implements NakedValue {
-    private final static Logger logger = Logger.getLogger(AbstractNakedValue.class);
     private final NakedObjectSpecification specification;
     
     public AbstractNakedValue() {

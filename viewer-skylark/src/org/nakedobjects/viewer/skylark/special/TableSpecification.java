@@ -4,7 +4,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.defaults.collection.AbstractTypedNakedCollectionVector;
 import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
@@ -58,8 +58,8 @@ class TableHeaderBuilder extends AbstractBuilderDecorator {
 
     public View createCompositeView(Content content, CompositeViewSpecification specification, ViewAxis axis) {
         AbstractTypedNakedCollectionVector coll = (AbstractTypedNakedCollectionVector) ((ObjectContent) content).getObject();
-        FieldSpecification[] viewFields = NakedObjectSpecification.getSpecification(coll.getType().getFullName()).getVisibleFields(
-                null, Session.getSession().getContext());
+        FieldSpecification[] viewFields = NakedObjectSpecification.getSpecification(coll.getElementSpecification().getFullName()).getVisibleFields(
+                null, ClientSession.getSession());
         TableColumnAxis tableAxis = new TableColumnAxis(viewFields, 100);
 
         View view = wrappedBuilder.createCompositeView(content, specification, tableAxis);

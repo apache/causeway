@@ -2,9 +2,9 @@ package org.nakedobjects.xat;
 
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.reflect.ValueFieldSpecification;
+import org.nakedobjects.object.security.Session;
 
 import java.util.Hashtable;
 
@@ -12,16 +12,16 @@ import java.util.Hashtable;
 public class DefaultTestObjectFactory implements TestObjectFactory{
     Documentor documentor = new NullDocumentor();
     
-    public TestClass createTestClass(NakedObjectContext context, NakedClass cls) {
-        return new TestClassImpl(context, cls, this);
+    public TestClass createTestClass(Session session, NakedClass cls) {
+        return new TestClassImpl(session, cls, this);
 }
     
-    public TestObject createTestObject(NakedObjectContext context, NakedObject object) {
-        return new TestObjectImpl(context, object, this);
+    public TestObject createTestObject(Session session, NakedObject object) {
+        return new TestObjectImpl(session, object, this);
     }
 
-    public TestObject createTestObject(NakedObjectContext context, NakedObject field, Hashtable viewCache) {
-        return new TestObjectImpl(context, field, viewCache, this);
+    public TestObject createTestObject(Session session, NakedObject field, Hashtable viewCache) {
+        return new TestObjectImpl(session, field, viewCache, this);
     }
     
     public TestValue createTestValue(NakedObject parent, ValueFieldSpecification field) {	

@@ -1,5 +1,6 @@
 package org.nakedobjects.object.transaction;
 
+import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
@@ -8,7 +9,6 @@ import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.collection.InternalCollection;
 import org.nakedobjects.object.reflect.FieldSpecification;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
 import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;

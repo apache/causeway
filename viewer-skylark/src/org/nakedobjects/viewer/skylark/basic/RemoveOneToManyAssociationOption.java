@@ -7,7 +7,7 @@ import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Permission;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -35,7 +35,7 @@ public class RemoveOneToManyAssociationOption extends MenuOption {
         NakedObject associatedObject = content.getObject();
         
 
-        About about = association.getAbout(Session.getSession().getContext(), parentObject, associatedObject, false);
+        About about = association.getAbout(ClientSession.getSession(), parentObject, associatedObject, false);
 
         Permission edit = about.canUse();
 

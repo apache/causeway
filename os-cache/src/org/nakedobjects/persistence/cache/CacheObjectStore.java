@@ -1,8 +1,5 @@
 package org.nakedobjects.persistence.cache;
 
-import org.nakedobjects.io.Memento;
-import org.nakedobjects.io.Transferable;
-import org.nakedobjects.io.BinaryTransferableWriter;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedClass;
@@ -15,6 +12,9 @@ import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.ObjectStoreException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.UnsupportedFindException;
+import org.nakedobjects.object.io.BinaryTransferableWriter;
+import org.nakedobjects.object.io.Memento;
+import org.nakedobjects.object.io.Transferable;
 import org.nakedobjects.object.reflect.FieldSpecification;
 
 import java.io.BufferedInputStream;
