@@ -1,21 +1,33 @@
-package org.nakedobjects.viewer.skylark.metal;
+package org.nakedobjects.viewer.skylark.value;
 
-import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.View;
-import org.nakedobjects.viewer.skylark.ViewAxis;
-import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
-import org.nakedobjects.viewer.skylark.special.ResizeBorder;
-import org.nakedobjects.viewer.skylark.value.TextField;
-import org.nakedobjects.viewer.skylark.value.TextFieldBorder;
 
-public class TextFieldSpecification extends AbstractFieldSpecification {
-    public View createView(Content content, ViewAxis axis) {
-		//return new SimpleIdentifier(new TextFieldBorder(new TextField(content, this, axis, false)));
-        return new TextFieldBorder(new ResizeBorder(new TextField(content, this, axis, true)));
+public class TextFieldContentStub extends TextFieldContent {
+
+    public TextFieldContentStub() {
+        super(null, false);
+    }
+
+    void alignDisplay(int line) {
     }
     
-    public String getName() {
-        return "Text Field";
+    public int getNoLinesOfContent() {
+        return 16;
+    }
+    
+    public int getNoDisplayLines() {
+        return 3;
+    }
+    
+    public String getText(int forLine) {
+//      35 characters
+        // 0 - 3 Now
+        // 4 - 6 is
+        // 7 - 10 the
+        // 11 - 17 winter
+        // 18 - 20 of
+        // 21 - 25 our
+        // 24 - 34 discontent
+        return "Now is the winter of our discontent";
     }
 }
 

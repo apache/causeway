@@ -5,6 +5,7 @@ import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.core.AbstractBuilderDecorator;
+import org.nakedobjects.viewer.skylark.metal.TextFieldSpecification;
 
 public class StackLayout extends AbstractBuilderDecorator {
 	private boolean fixedWidth;
@@ -40,22 +41,21 @@ public class StackLayout extends AbstractBuilderDecorator {
 
     public void layout(View view) {
 		int x = 0, y = 0;
-        View views[] = view.getSubviews();
+        View subviews[] = view.getSubviews();
 
         int maxWidth = 0;
-        if(fixedWidth) {
-            for (int i = 0; i < views.length; i++) {
-                View v = views[i];
+            for (int i = 0; i < subviews.length; i++) {
+                View v = subviews[i];
     			Size s = v.getRequiredSize();
     			maxWidth = Math.max(maxWidth, s.getWidth());
     		}
-
-        }
         
-        for (int i = 0; i < views.length; i++) {
-            View v = views[i];
+        for (int i = 0; i < subviews.length; i++) {
+            View v = subviews[i];
 			Size s = v.getRequiredSize();
-			s.ensureWidth(maxWidth);
+		    if(fixedWidth || v.getSpecification() instanceof TextFieldSpecification) {
+		        s.ensureWidth(maxWidth);
+		    }
 			v.setSize(s);
 			v.setLocation(new Location(x, y));
 			y += s.getHeight();

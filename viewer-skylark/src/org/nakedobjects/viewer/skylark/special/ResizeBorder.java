@@ -7,8 +7,8 @@ import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.Shape;
 import org.nakedobjects.viewer.skylark.Size;
-import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
@@ -17,10 +17,15 @@ import org.apache.log4j.Logger;
 
 
 public class ResizeBorder extends AbstractBorder {
+    private static final Logger LOG = Logger.getLogger(ResizeBorder.class);
     private static final int BORDER_WIDTH = 3;
     private Size resize;
     private int direction;
+    private boolean resizing;
+    private int onBorder;
 
+    // TODO allow a minimum and maximum sizes to be specified and then ensure the user doesn't go outside them.
+    
     public ResizeBorder(View view) {
         super(view);
         bottom = right = BORDER_WIDTH;
@@ -35,19 +40,19 @@ public class ResizeBorder extends AbstractBorder {
         Size size = getSize();
         int width = size.getWidth();
         int height = size.getHeight();
-        Color color = Style.SECONDARY2;
-        for (int i = 0; i < BORDER_WIDTH; i++) {
-            int y = height - BORDER_WIDTH + i;
-            canvas.drawLine(0, y, width - 1, y, color);
-            int x = width - BORDER_WIDTH + i;
-            canvas.drawLine(x, 0, x, height - 1, color);
+        if (resizing) {
+            Shape shape = new Shape(0, 0);
+            int resizeMarkerSize = 10;
+            shape.addLine(resizeMarkerSize, 0);
+            shape.addLine(0, resizeMarkerSize);
+            shape.addLine(-resizeMarkerSize, -resizeMarkerSize);
+            Color color = new Color(0xffff00);
+            canvas.drawSolidShape(shape, size.getWidth() - resizeMarkerSize, size.getHeight(), color);
+            canvas.drawRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, color);
         }
-
+        
         Canvas subCanvas = canvas.createSubcanvas(0,0, width - BORDER_WIDTH, height - BORDER_WIDTH);
         wrappedView.draw(subCanvas);
-
-//        canvas.setClip(0,0, width - BORDER_WIDTH, height - BORDER_WIDTH);
-//        wrappedView.draw(canvas);
     }
 
     public ViewAreaType viewAreaType(Location mouseLocation) {
@@ -109,28 +114,43 @@ public class ResizeBorder extends AbstractBorder {
      * the cursor to show it can be resized.
      */
     public void mouseMoved(Location at) {
-        switch (onBorder(at)) {
-        case ResizeDrag.RIGHT:
-            getViewManager().showResizeRightCursor();
-            break;
+        int onBorder = onBorder(at);
+        if (this.onBorder != onBorder) {
+            switch (onBorder) {
+            case ResizeDrag.RIGHT:
+                getViewManager().showResizeRightCursor();
+                resizing = true;
+                markDamaged();
+                break;
 
-        case ResizeDrag.BOTTOM:
-            getViewManager().showResizeDownCursor();
-            break;
+            case ResizeDrag.BOTTOM:
+                getViewManager().showResizeDownCursor();
+                resizing = true;
+                markDamaged();
+                break;
 
-        case ResizeDrag.BOTTOM_RIGHT:
-            getViewManager().showResizeDownRightCursor();
-            break;
+            case ResizeDrag.BOTTOM_RIGHT:
+                getViewManager().showResizeDownRightCursor();
+                resizing = true;
+                markDamaged();
+                break;
 
-        default:
-            getViewManager().showDefaultCursor();
-        	break;
+            default:
+                getViewManager().showDefaultCursor();
+                super.mouseMoved(at);
+                resizing = false;
+                markDamaged();
+                break;
+            }
+            LOG.debug("on resize border " + onBorder + " " + resizing);
         }
-	        super.mouseMoved(at);
+        this.onBorder = onBorder;
     }
     
     public void exited() {
         getViewManager().showDefaultCursor();
+        resizing = false;
+        LOG.debug("off resize border " + onBorder + " " + resizing);
         super.exited();
     }
 

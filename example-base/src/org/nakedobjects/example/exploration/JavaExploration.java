@@ -60,6 +60,7 @@ public class JavaExploration {
             name = name.substring(name.lastIndexOf('.') + 1);
 
             Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(DEFAULT_CONFIG, false));
+            NakedObjects.setConfiguration(configuration);
             ConfigurationFactory.setConfiguration(configuration);
             if (configuration.getString(SHOW_EXPLORATION_OPTIONS) == null) {
                 configuration.add(SHOW_EXPLORATION_OPTIONS, "yes");

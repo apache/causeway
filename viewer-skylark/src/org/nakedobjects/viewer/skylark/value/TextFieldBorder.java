@@ -5,10 +5,14 @@ import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
 
+/**
+ * Border decorator to draw a white background and 3D style border around a text field.
+ */
 public class TextFieldBorder extends AbstractBorder {
     
     public TextFieldBorder(View view) {
         super(view);
+        top  = bottom = left = right = 2;
     }
 
     public void draw(Canvas canvas) {

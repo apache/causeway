@@ -1,21 +1,15 @@
-package org.nakedobjects.viewer.skylark.metal;
+package org.nakedobjects.viewer.skylark.value;
 
-import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.View;
-import org.nakedobjects.viewer.skylark.ViewAxis;
-import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
-import org.nakedobjects.viewer.skylark.special.ResizeBorder;
-import org.nakedobjects.viewer.skylark.value.TextField;
-import org.nakedobjects.viewer.skylark.value.TextFieldBorder;
+import junit.framework.TestCase;
 
-public class TextFieldSpecification extends AbstractFieldSpecification {
-    public View createView(Content content, ViewAxis axis) {
-		//return new SimpleIdentifier(new TextFieldBorder(new TextField(content, this, axis, false)));
-        return new TextFieldBorder(new ResizeBorder(new TextField(content, this, axis, true)));
+public class TextSelectionTest extends TestCase {
+
+    public static void main(String[] args) {
+        junit.textui.TestRunner.run(TextSelectionTest.class);
     }
+
+    public void testNone() {
     
-    public String getName() {
-        return "Text Field";
     }
 }
 

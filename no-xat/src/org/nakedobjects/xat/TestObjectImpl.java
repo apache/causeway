@@ -438,15 +438,11 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         }
 
         Naked valueObject = forObject.getField(field);
-        //        NakedObject valueObject = (NakedObject) field.get((NakedObject)
-        // getForObject());
         if (valueObject == null) {
             throw new NakedAssertionFailedError("Field '" + fieldName
                     + "' contains null, but should contain an NakedValue object");
         }
         try {
-            //   NakedValue ref = (NakedValue)
-            // field.getSpecification().acquireInstance();
             NakedValue nakedValue = (NakedValue) valueObject;
             if (nakedValue == null) {
                 nakedValue = (NakedValue) field.getSpecification().acquireInstance();
@@ -792,6 +788,12 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
                 value = (NakedValue) field.getSpecification().acquireInstance();
             }
             value.parseTextEntry(textEntry);
+            
+            Hint hint = object.getHint(session, field, value);
+            if(hint.isValid().isVetoed()) {
+                throw new NakedAssertionFailedError("Value is not valid: " + textEntry);
+            }
+            
             object.setValue((OneToOneAssociation) field, value.getObject());
         } catch (TextEntryParseException e) {
             throw new IllegalActionError("");

@@ -1,3 +1,4 @@
+
 package org.nakedobjects.viewer.skylark.value;
 
 import org.nakedobjects.object.InvalidEntryException;
@@ -5,7 +6,6 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
@@ -16,7 +16,6 @@ import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
-import org.nakedobjects.viewer.skylark.Shape;
 import org.nakedobjects.viewer.skylark.SimpleInternalDrag;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
@@ -30,7 +29,6 @@ import org.nakedobjects.viewer.skylark.basic.SimpleIdentifier;
 import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
 import org.nakedobjects.viewer.skylark.core.BackgroundTask;
 import org.nakedobjects.viewer.skylark.core.BackgroundThread;
-import org.nakedobjects.viewer.skylark.special.ResizeDrag;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -43,323 +41,7 @@ import java.awt.event.KeyEvent;
 import org.apache.log4j.Category;
 
 
-public class TextField extends AbstractField {
-
-    public class CursorPosition {
-        private int character;
-        private int line;
-
-        CursorPosition(CursorPosition pos) {
-            this(pos.line, pos.character);
-        }
-
-        CursorPosition(int line, int afterCharacter) {
-            this.line = line;
-            this.character = afterCharacter;
-        }
-
-        public void asFor(CursorPosition pos) {
-            line = pos.line;
-            character = pos.character;
-        }
-
-        /**
-         * Move the cursor to the bottom-right of the field
-         */
-        void bottom() {
-            line = textContent.noLines() - 1;
-            alignDisplay(line);
-            end();
-        }
-
-        public void cursorAt(Location atLocation) {
-            LOG.debug("At " + atLocation);
-
-            int x = atLocation.getX() - 3; /*
-                                                           * slight offsetting mouse helps the user
-                                                           * position the cursor between characters
-                                                           * near the pointer rather than always
-                                                           * after the pointer
-                                                           */
-
-            int y = atLocation.getY() - (getBaseline() - style.getAscent());
-
-            // work through the text lines and check if mouse is on that
-            int lineIndex = displayFromLine + y / lineHeight();
-            lineIndex = Math.max(lineIndex, 0);
-
-            int at = 0;
-
-            if ((displayFromLine + lineIndex) <= displayToLine) {
-                String text = textContent.getText(lineIndex);
-                int endAt = text.length();
-                int width = HPADDING;
-
-                while ((at < endAt) && (x > width)) {
-                    width += style.charWidth(text.charAt(at));
-                    at++;
-                }
-            } else {
-                lineIndex = displayToLine;
-                at = textContent.getText(lineIndex).length();
-            }
-
-            LOG.debug("Character at " + at + " line " + lineIndex);
-
-            line = lineIndex;
-            character = at;
-        }
-
-        /**
-         * Move the cursor to the end of the line
-         */
-        void end() {
-            character = textContent.getText(line).length();
-        }
-
-        /**
-         * @return the character within this line.
-         */
-        public int getCharacter() {
-            return character;
-        }
-
-        /**
-         * @return the line within the field
-         */
-        public int getLine() {
-            return line;
-        }
-
-        /**
-         * Move the cursor to the top-left hand of the field
-         */
-        public void home() {
-            character = 0;
-            line = 0;
-        }
-
-        /**
-         * Movet the cursor left by one character.
-         */
-        public void left() {
-            if (!((line == 0) && (character == 0))) {
-                character--;
-
-                if (character < 0) {
-                    line--;
-                    alignDisplay(line);
-                    end();
-                }
-            }
-        }
-
-        /**
-         * Move down one line.
-         */
-        public void lineDown() {
-            moveDown(1);
-        }
-
-        /**
-         * Move up one line.
-         */
-        public void lineUp() {
-            moveUp(1);
-        }
-
-        private void moveDown(int byLines) {
-            int size = textContent.noLines();
-
-            if (line < (size - 1)) {
-                line += byLines;
-                line = Math.min(size, line);
-
-                character = Math.min(character, textContent.getText(line).length());
-
-                alignDisplay(line);
-            }
-        }
-
-        /**
-         * Move the cursor right by one character.
-         */
-        public void moveForward(int characters) {
-            int length = textContent.getText(line).length();
-
-            if ((character + characters) > length) {
-                if ((line + 1) < textContent.noLines()) {
-                    line++;
-                    alignDisplay(line);
-
-                    int remainder = (character + characters) - length;
-                    character = 0;
-                    moveForward(remainder);
-                }
-            } else {
-                character += characters;
-            }
-        }
-
-        private void moveUp(int byLines) {
-            if (line > 0) {
-                line -= byLines;
-                line = Math.max(0, line);
-                alignDisplay(line);
-            }
-        }
-
-        /**
-         * Move down one line.
-         */
-        public void pageDown() {
-            moveDown(noDisplayLines - 1);
-            markDamaged();
-        }
-
-        /**
-         * Move cursor up by a page
-         */
-        public void pageUp() {
-            moveUp(noDisplayLines - 1);
-        }
-
-        /**
-         * Move the cursor right by one character.
-         */
-        public void right() {
-            moveForward(1);
-        }
-
-        /**
-         * Move the cursor to the top-left of the field
-         */
-        public void top() {
-            line = 0;
-            character = 0;
-            alignDisplay(line);
-        }
-
-        public String toString() {
-            return "CursorPosition [line=" + line + ",character=" + character + "]";
-        }
-
-        /**
-         * Move the cursor left to the beginning of the previous word.
-         */
-        public void wordLeft() {
-            if (!((line == 0) && (character == 0))) {
-                if (character == 0) {
-                    line--;
-                    end();
-                }
-
-                String text = textContent.getText(line);
-
-                do
-                    character--;
-                while ((character >= 0) && (text.charAt(character) == ' '));
-
-                while ((character >= 0) && (text.charAt(character) != ' ')) {
-                    character--;
-                }
-
-                character++;
-            }
-        }
-
-        /**
-         * Move the cursor right to the end of the current word.
-         */
-        public void wordRight() {
-            if (!((line == (textContent.noLines() - 1)) && (character == textContent.getText(line).length()))) {
-                if (character == textContent.getText(line).length()) {
-                    line++;
-                    character = 0;
-                }
-
-                int size = textContent.getText(line).length();
-
-                do {
-                    character++;
-                } while ((character < size) && (textContent.getText(line).charAt(character) == ' '));
-
-                while ((character < size) && (textContent.getText(line).charAt(character) != ' '))
-                    character++;
-            }
-        }
-    }
-
-    public class Selection {
-        private CursorPosition start = new CursorPosition(0, 0);
-
-        /**
-         * Determin if the selection is back to front. Returns true if the cursor postion is before
-         * the start postion.
-         */
-        private boolean backwardSelection() {
-            return cursor.line < start.line || (cursor.line == start.line && cursor.character < start.character);
-        }
-
-        public void extendTo(CursorPosition pos) {
-            cursor.asFor(pos);
-        }
-
-        /**
-         * extends the selection so the end point is the same as the cursor.
-         * 
-         * @param at
-         */
-        public void extendTo(Location at) {
-            cursor.cursorAt(at);
-        }
-
-        public CursorPosition from() {
-            return backwardSelection() ? cursor : start;
-        }
-
-        //		private CursorPosition end = new CursorPosition(0,0);
-
-        /**
-         * returns true is a selection exists - if the start and end locations are not the same
-         */
-        boolean hasSelection() {
-            return !(cursor.line == start.line && cursor.character == start.character);
-        }
-
-        /**
-         * clears the selection so nothing is selected. The start and end points are set to the same
-         * values as the cursor.
-         */
-        public void resetTo(CursorPosition pos) {
-            start.asFor(pos);
-            cursor.asFor(pos);
-        }
-
-        public void selectSentence() {
-            resetSelection();
-            start.character = 0;
-            cursor.end();
-        }
-
-        /**
-         * set the selection to be for the word marked by the current cursor
-         *  
-         */
-        public void selectWord() {
-            resetSelection();
-            start.wordLeft();
-            cursor.wordRight();
-        }
-
-        public CursorPosition to() {
-            return backwardSelection() ? start : cursor;
-        }
-
-        public String toString() {
-            return "Selection [from=" + start.line + "/" + start + ",to=" + cursor.line + "/" + cursor.character + "]";
-        }
-    }
+public class TextField extends AbstractField implements TextBlockUser {
 
     public static class Specification extends AbstractFieldSpecification {
 
@@ -374,21 +56,17 @@ public class TextField extends AbstractField {
 
     private static final int LINE_SPACING = 0;
     private static final Category LOG = Category.getInstance(TextField.class);
-    private static final int MULTILINE_FIELD_SIZE = 8;
     private static final Text style = Style.NORMAL;
     private CursorPosition cursor;
-    private int displayFromLine;
-    private int displayToLine;
 
     private boolean identified;
     private String invalidReason = null;
-    private boolean isResizing;
+ //   private boolean isResizing;
     private boolean isSaved = true;
     private int maxTextWidth;
     private boolean multiline = false;
-    private int noDisplayLines = 1; // number of lines to display
-    private int resizeMarkerSize;
-    private Selection selection;
+  //  private int resizeMarkerSize;
+    private TextSelection selection;
     private TextFieldContent textContent;
     private boolean showLines;
     private int maximumLength = 0;
@@ -397,26 +75,21 @@ public class TextField extends AbstractField {
     public TextField(Content content, ViewSpecification specification, ViewAxis axis, boolean showLines) {
         super(content, specification, axis);
         this.showLines = showLines;
-        setMaxTextWidth(25);
+        setMaxTextWidth(8);
 
         NakedValue value = getValue();
         if(value != null) {
             maximumLength = value.getMaximumLength();
             minumumLength = value.getMinumumLength();
         }
-        cursor = new CursorPosition(0, 0);
-        selection = new Selection();
-        textContent = new TextFieldContent(this);
-        multiline = false; //value instanceof MultilineTextString;
-        noDisplayLines = multiline ? MULTILINE_FIELD_SIZE : 1;
+        textContent = new TextFieldContent(this, false);
+        cursor = new CursorPosition(textContent, 0, 0);
+        selection = new TextSelection(cursor, cursor);
         textContent.setText(value == null ? "" : value.titleString());
         cursor.home();
-        displayFromLine = 0;
-        displayToLine = noDisplayLines - 1;
-        alignDisplay(0);
         isSaved = true;
 
-        resizeMarkerSize = lineHeight() * 3 / 5;
+        //resizeMarkerSize = lineHeight() * 3 / 5;
 
     }
 
@@ -424,36 +97,13 @@ public class TextField extends AbstractField {
         return (NakedValue) getContent().getNaked();
     }
 
-    private void alignDisplay(int line) {
-        int noContentLines = textContent.noLines();
-        int lastLine = noContentLines - 1;
-
-        if (noContentLines < noDisplayLines) {
-            displayFromLine = 0;
-            displayToLine = lastLine;
-        } else {
-            if (line > displayToLine) {
-                displayToLine = line + 3;
-                displayToLine = Math.min(displayToLine, lastLine);
-
-                displayFromLine = displayToLine - noDisplayLines;
-                displayFromLine = Math.max(displayFromLine, 0);
-            }
-
-            if (line < displayFromLine) {
-                displayFromLine = line;
-                displayToLine = (displayFromLine + noDisplayLines) - 1;
-
-                if (displayToLine >= noContentLines) {
-                    displayToLine = lastLine;
-                    displayFromLine = Math.max(0, displayToLine - noDisplayLines);
-                }
-            }
-        }
-
-        LOG.debug("display line " + line + " " + displayFromLine + "~" + displayToLine);
+    public void setSize(Size size) {
+        super.setSize(size);
+        
+        setMaxWidth(size.getWidth());
+        textContent.setNoDisplayLines(size.getHeight() / style.getHeight());
     }
-
+    
     public boolean canFocus() {
         return canChangeValue();
     }
@@ -474,6 +124,10 @@ public class TextField extends AbstractField {
         LOG.debug("copied " + text);
     }
 
+    public String debugDetails() {
+        return super.debugDetails() + "\n"+ textContent;
+    }
+    
     /**
      * Delete the character to the left of the cursor.
      */
@@ -506,12 +160,12 @@ public class TextField extends AbstractField {
     }
 
     public void drag(InternalDrag drag) {
-        if (!isResizing) {
+    //    if (!isResizing) {
             if (canChangeValue()) {
                 selection.extendTo(drag.getLocation());
                 markDamaged();
             }
-        }
+      //  }
     }
 
     public Drag dragStart(DragStart drag) {
@@ -526,17 +180,17 @@ public class TextField extends AbstractField {
             anchor.add(width, 0);
         }
         
-        if (isOnResize(at)) {
+/*        if (isOnResize(at)) {
             isResizing = true;
             
             return new ResizeDrag(this, new Bounds(anchor, size), ResizeDrag.BOTTOM_RIGHT, new Size(80, lineHeight()), null);
         } else {
-            if (canChangeValue()) {
-                isResizing = false;
+    */        if (canChangeValue()) {
+//                isResizing = false;
                 cursor.cursorAt(at);
                 resetSelection();
                 return new SimpleInternalDrag(this, anchor);
-            }
+        //    }
         }
         
         markDamaged();
@@ -545,7 +199,7 @@ public class TextField extends AbstractField {
     }
     
     public void dragTo(InternalDrag drag) {
-
+/*
         if (isResizing) {
             isResizing = false;
             getViewManager().showTextCursor();
@@ -562,12 +216,12 @@ public class TextField extends AbstractField {
 
             invalidateLayout();
         } else {
-	        Location at = drag.getLocation();
+	*/        Location at = drag.getLocation();
             if (canChangeValue()) {
                 selection.extendTo(at);
                 markDamaged();
             }
-        }
+       // }
     }
 
     public void draw(Canvas canvas) {
@@ -578,13 +232,13 @@ public class TextField extends AbstractField {
         drawLines(canvas, width);
         drawText(canvas, width);
 
-        if (isResizing) {
+     /*   if (isResizing) {
             Color color = Style.SECONDARY1;
             canvas.drawLine(0, 0, 10, 0, color);
             canvas.drawLine(0, 1, 10, 1, color);
             canvas.drawLine(0, 0, 0, 10, color);
             canvas.drawLine(1, 0, 1, 10, color);
-        }
+        } */
     }
 
     private void drawHighlight(Canvas canvas, int maxWidth) {
@@ -594,20 +248,20 @@ public class TextField extends AbstractField {
 
             CursorPosition from = selection.from();
             CursorPosition to = selection.to();
-
+/**
             for (int i = displayFromLine; i <= displayToLine; i++) {
-                if ((i >= from.line) && (i <= to.line)) {
+                if ((i >= from.getLine()) && (i <= to.getLine())) {
                     String line = textContent.getText(i);
                     int start = 0;
                     int end = style.stringWidth(line);
 
-                    if (from.line == i) {
-                        int at = Math.min(from.character, line.length());
+                    if (from.getLine() == i) {
+                        int at = Math.min(from.getCharacter(), line.length());
                         start = style.stringWidth(line.substring(0, at));
                     }
 
-                    if (to.line == i) {
-                        int at = Math.min(to.character, line.length());
+                    if (to.getLine() == i) {
+                        int at = Math.min(to.getCharacter(), line.length());
                         end = style.stringWidth(line.substring(0, at));
                     }
 
@@ -616,29 +270,34 @@ public class TextField extends AbstractField {
 
                 top += lineHeight();
             }
-        }
+     */
+            	}
     }
 
     private void drawLines(Canvas canvas, int width) {
         if (showLines == true && canChangeValue()) {
-            int baseline = 0;
+            int baseline = getBaseline();
 
             Color color = identified ? Style.IDENTIFIED : Style.SECONDARY2;
             color = hasFocus() ? Style.PRIMARY1 : color;
 
+            int noDisplayLines = textContent.getNoDisplayLines();
             for (int line = 0; line < noDisplayLines; line++) {
-                baseline += lineHeight();
                 canvas.drawLine(HPADDING, baseline, HPADDING + width, baseline, color);
+                baseline += lineHeight();
             }
-
-            if (identified) {
+/*
+            if (false && identified) {
                 Shape shape = new Shape(0, 0);
                 shape.addLine(resizeMarkerSize, 0);
                 shape.addLine(0, resizeMarkerSize);
                 shape.addLine(-resizeMarkerSize, -resizeMarkerSize);
-                canvas.drawSolidShape(shape, HPADDING + width + 1, baseline, color);
+        //        canvas.drawSolidShape(shape, HPADDING + width + 1, getBaseline() + (noDisplayLines -1) * lineHeight(), color);
+                Size size = getSize();
+                canvas.drawSolidShape(shape, size.getWidth() - resizeMarkerSize, size.getHeight(), Style.SECONDARY2);
+                canvas.drawRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, Style.SECONDARY2);
             }
-        }
+    */    }
 
     }
 
@@ -659,38 +318,35 @@ public class TextField extends AbstractField {
         }
 
         //LOG.debug(displayFromLine + " -> " + displayToLine);
-
-        for (int i = displayFromLine; i <= displayToLine; i++) {
-            String chars = textContent.getText(i);
-
+        
+        String[] lines = textContent.getDisplayLines();
+        for (int i = 0; i < lines.length; i++) {
+            String chars = lines[i];
+            if(chars == null) {
+                throw new NakedObjectRuntimeException();
+            }
+//        for (int i = displayFromLine; i <= displayToLine; i++) {
+//            String chars = textContent.getText(i);
             if (chars.endsWith("\n")) { throw new RuntimeException(); }
 
             // paint cursor
-            if (hasFocus() && (cursor.line == i) && canChangeValue()) {
-                //                g.setColor(Style.ACTIVE);
-                int at = Math.min(cursor.character, chars.length());
+            if (hasFocus() && (cursor.getLine() == i) && canChangeValue()) {
+                int at = Math.min(cursor.getCharacter(), chars.length());
                 int pos = style.stringWidth(chars.substring(0, at));
                 canvas.drawLine(pos + (HPADDING), (baseline + style.getDescent()), pos + (HPADDING),
                         baseline - style.getAscent(), Style.PRIMARY1);
-
-                // highlight cursor location for moving mouse
-                /*
-                 * g.setColor(Color.pink); at = Math.min(mouseOver.character, chars.length()); pos =
-                 * style.stringWidth(chars.substring(0, at)); g.drawLine(pos + (PADDING), (baseline +
-                 * style.getDescent()), pos + (PADDING), baseline - style.getAscent());
-                 */
             }
 
             // paint text
-            //LOG.debug(i + " painting: " + chars);
             canvas.drawText(chars, HPADDING, baseline, textColor, style);
             baseline += lineHeight();
         }
 
-        /*
-         * TODO re-instate if (end < entryLength) { int x = style.stringWidth(new String(buffer,
-         * start, end)); g.setColor(Color.red); g.drawString("\u00bb", x, baseline - lineHeight()); }
-         */
+        //TODO re-instate 
+  //      if (end < entryLength) { 
+   //         int x = style.stringWidth(new String(buffer, start, end)); g.setColor(Color.red);
+  //          g.drawString("\u00bb", x, baseline - lineHeight());
+    //        }
     }
 
     public void editComplete() {
@@ -762,12 +418,11 @@ public class TextField extends AbstractField {
     /**
      * Responds to first click by placing the cursor between the two characters nearest the point of
      * the mouse.
-     * 
-     * @see View#firstClick(Click)
      */
     public void firstClick(Click click) {
         if (canChangeValue()) {
             Location at = click.getLocation();
+            at.subtract(HPADDING, VPADDING);
             cursor.cursorAt(at);
             resetSelection();
             markDamaged();
@@ -788,17 +443,18 @@ public class TextField extends AbstractField {
         return style.getAscent() + VPADDING;
     }
 
+    public int getAscent() {
+        return style.getAscent();
+    }
+    
     public int getMaxWidth() {
         return maxTextWidth;
     }
 
-    public int getNoDisplayLines() {
-        return noDisplayLines;
-    }
-
     public Size getRequiredSize() {
-        int width = HPADDING + maxTextWidth + 1 + resizeMarkerSize + HPADDING;
-        int height = noDisplayLines * (style.getHeight() + LINE_SPACING) + VPADDING * 2;
+//        int width = HPADDING + maxTextWidth + 1 + resizeMarkerSize + HPADDING;
+        int width = HPADDING + maxTextWidth + HPADDING;
+        int height = textContent.getNoDisplayLines() * (style.getHeight() + LINE_SPACING) + VPADDING * 2;
         height = Math.max(height, Style.defaultFieldHeight());
 
         return new Size(width, height);
@@ -807,8 +463,6 @@ public class TextField extends AbstractField {
     /**
      * modifies the selection object so that text is selected if the flag is true, or text is
      * unselected if false.
-     * 
-     * @param select
      */
     private void highlight(boolean select) {
         if (canChangeValue()) {
@@ -835,8 +489,12 @@ public class TextField extends AbstractField {
 
     private void insert(String characters) {
         if(withinMaximum(characters.length())) {
+            int noLines = textContent.getNoDisplayLines();
 	        textContent.insert(cursor, characters);
-	        cursor.moveForward(characters.length());
+	        cursor.right(characters.length());
+	        if(textContent.getNoDisplayLines() != noLines) {
+	            invalidateLayout();
+	        }
 	        isSaved = false;
         } else {
             getViewManager().setStatus("Entry can be no longer than " + maximumLength + " characters");
@@ -846,7 +504,7 @@ public class TextField extends AbstractField {
     public boolean isIdentified() {
         return identified;
     }
-
+/*
     private boolean isOnResize(Location at) {
         int size = lineHeight() * 3 / 5;
         int x = View.HPADDING + getMaxWidth() + 1;
@@ -854,12 +512,9 @@ public class TextField extends AbstractField {
 
         return (at.getX() >= x) && (at.getY() >= y);
     }
-
+*/
     /**
      * Called when the user presses any key on the keyboard while this view has the focus.
-     * 
-     * @param keyCode
-     * @param modifiers
      */
     public void keyPressed(final int keyCode, final int modifiers) {
         if (!canChangeValue()) { return; }
@@ -876,8 +531,8 @@ public class TextField extends AbstractField {
         case KeyEvent.VK_PAGE_UP:
 
             if (ctrl) {
-                noDisplayLines++;
-                alignDisplay(cursor.line);
+                textContent.increaseDepth();        
+                textContent.alignDisplay(cursor.getLine());    
                 invalidateLayout();
             } else {
                 cursor.pageUp();
@@ -889,9 +544,8 @@ public class TextField extends AbstractField {
         case KeyEvent.VK_PAGE_DOWN:
 
             if (ctrl) {
-                if ((noDisplayLines > 1)) {
-                    noDisplayLines--;
-                    alignDisplay(cursor.line);
+                if( textContent.decreaseDepth()) {;
+                    textContent.alignDisplay(cursor.getLine());
                     invalidateLayout();
                 }
             } else {
@@ -1026,16 +680,12 @@ public class TextField extends AbstractField {
 
         markDamaged();
 
-        LOG.debug("Character at " + cursor.character + " line " + cursor.line + " (" + displayFromLine + "~" + displayToLine
-                + ")");
+        LOG.debug("Character at " + cursor.getCharacter() + " line " + cursor.getLine());
         LOG.debug(selection);
     }
 
     /**
      * Called when the user releases any key on the keyboard while this view has the focus.
-     * 
-     * @param keyCode
-     * @param modifiers
      */
     public void keyReleased(int keyCode, int modifiers) {}
 
@@ -1043,8 +693,6 @@ public class TextField extends AbstractField {
      * Called when the user presses a non-control key (i.e. data entry keys and not shift, up-arrow
      * etc). Such a key press will result in a prior call to <code>keyPressed</code> and a
      * subsequent call to <code>keyReleased</code>.
-     * 
-     * @param keyCode
      */
     public void keyTyped(char keyCode) {
         if (canChangeValue()) {
@@ -1077,20 +725,17 @@ public class TextField extends AbstractField {
      * @see View#mouseMoved(Location)
      */
     public void mouseMoved(Location at) {
-        if (isOnResize(at)) {
+ /*       if (isOnResize(at)) {
             getViewManager().showResizeDownRightCursor();
         } else {
-            getViewManager().showTextCursor();
-        }
+     */       getViewManager().showTextCursor();
+        //}
     }
 
     /**
      * Inserts a newline at the cursor
      */
     private void newline() {
-        if (!multiline) { throw new IllegalStateException(
-                "Newline can not be inserted into a one-line field (only in multiline fields)"); }
-
         textContent.breakBlock(cursor);
         cursor.lineDown();
         cursor.home();
@@ -1140,6 +785,17 @@ public class TextField extends AbstractField {
         maxTextWidth = charWidth('o') * noCharacters;
     }
 
+    public void setRequiredSize(Size size) {
+        int lines = Math.max(1, size.getHeight() / lineHeight());
+        setNoLines(lines);
+
+        int width = Math.max(80, size.getWidth() - HPADDING - lineHeight() * 3 / 5);
+        setMaxWidth(width);
+        LOG.debug(lines + " x " + width);
+
+        invalidateLayout();
+    }
+    
     /**
      * Set the maximum width of the field, as a number of pixels
      */
@@ -1151,7 +807,7 @@ public class TextField extends AbstractField {
      * Sets the number of lines to display
      */
     public void setNoLines(int noLines) {
-        noDisplayLines = noLines;
+        textContent.setNoDisplayLines(noLines);
     }
 
     public int stringWidth(String string) {

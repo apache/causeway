@@ -6,6 +6,7 @@ import org.nakedobjects.application.valueholder.TextString;
 import org.nakedobjects.application.valueholder.Time;
 import org.nakedobjects.example.xat.JavaAcceptanceTestCase;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.reflector.java.fixture.JavaFixture;
 import org.nakedobjects.reflector.java.reflect.VectorCollectionAdapter;
 import org.nakedobjects.xat.IllegalActionError;
@@ -287,6 +288,11 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
     public void testInvalidEntry() {
         TestObject creditCard = getTestClass(CreditCard.class.getName()).newInstance();
         creditCard.assertFieldEntryInvalid("expires", "0/12"); // expected 'nn/nn'
+        
+        try {
+            creditCard.fieldEntry("expires", "0/12"); // expected 'nn/nn'
+            fail();
+        } catch(NakedAssertionFailedError expected){}
     }
 
     
@@ -433,8 +439,7 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
     
     public void testValids() {
         TestObject creditCard = getTestClass(CreditCard.class.getName()).newInstance();
-        creditCard.fieldEntry("Number", "12345678901234567");
-        
+
         creditCard.assertFieldEntryInvalid("Number", "1234");
         try{
 	        creditCard.assertFieldEntryInvalid("Number", "1234567890123456");
@@ -442,6 +447,11 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
         } catch (NakedAssertionFailedError expected) {}
 
         creditCard.assertFieldEntryCantParse("Color", "RED");
+
+        try{
+            creditCard.fieldEntry("Number", "12345678901234567");
+            fail();
+        } catch (NakedAssertionFailedError expected) {}
     }
     
     public void testClassMethod() {

@@ -31,6 +31,16 @@ abstract class AbstractTestObject {
     
     public abstract void setForNaked(Naked object);
 
+
+    /** @deprecated */
+    public TestObject invokeAction(String name) {
+        return (TestObject) invokeAction(name, new TestNaked[0]);
+    }
+    
+    /** @deprecated */
+    public TestObject invokeAction(String name, TestNaked parameter) {
+        return (TestObject) invokeAction(name, new TestNaked[] {parameter} );
+   }
   
     public TestNaked invokeAction(final String name, final TestNaked[] parameters) {
         Action action = getAction(simpleName(name), parameters);

@@ -288,6 +288,14 @@ public abstract class TestObjectDecorator implements TestObject {
         return wrappedObject.getTitle();
     }
 
+    public TestObject invokeAction(String name) {
+        return wrappedObject.invokeAction(name);
+    }
+    
+    public TestObject invokeAction(String name, TestNaked parameter) {
+        return wrappedObject.invokeAction(name, parameter);
+    }
+    
     public TestNaked invokeAction(String name, TestNaked[] parameters) {
         return wrappedObject.invokeAction(name, parameters);
     }

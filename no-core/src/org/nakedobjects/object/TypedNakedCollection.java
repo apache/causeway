@@ -34,6 +34,8 @@ public interface TypedNakedCollection extends NakedCollection {
      */
 
     int size();
+
+    void sort();
 }
 
 /*

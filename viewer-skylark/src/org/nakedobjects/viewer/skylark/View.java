@@ -1,14 +1,14 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.container.configuration.ConfigurationFactory;
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 
 
 public interface View extends Cloneable {
     /** Horizontal padding (||) between two components */
-    public static final int HPADDING = ConfigurationFactory.getConfiguration().getInteger(Viewer.PROPERTY_BASE + "hpadding", 2);
+    public static final int HPADDING = NakedObjects.getConfiguration().getInteger(Viewer.PROPERTY_BASE + "hpadding", 2);
     /** Vertical padding (=) between two components */
-    public static final int VPADDING = ConfigurationFactory.getConfiguration().getInteger(Viewer.PROPERTY_BASE + "vpadding", 2);
+    public static final int VPADDING = NakedObjects.getConfiguration().getInteger(Viewer.PROPERTY_BASE + "vpadding", 2);
 
     void addView(View view);
 

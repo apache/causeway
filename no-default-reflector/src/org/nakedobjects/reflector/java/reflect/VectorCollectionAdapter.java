@@ -202,6 +202,10 @@ public class VectorCollectionAdapter implements InternalCollection {
 
 
     public void clearViewDirty() {}
+
+
+
+    public void sort() {}
     
 
 

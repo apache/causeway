@@ -199,17 +199,9 @@ public abstract class AbstractField extends AbstractView {
     public int getBaseline() {
         return Style.defaultBaseline();
     }
-/*
-    protected ValueContent getValueContent() {
-        return ((ValueContent) getContent());
-    }
-*/
+
     public Size getRequiredSize() {
         return new Size(0, Style.defaultFieldHeight());
-    }
-    
-    public void refresh() {
-       //getValueContent().refresh();
     }
 }
 

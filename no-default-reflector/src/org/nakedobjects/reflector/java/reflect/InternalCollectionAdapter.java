@@ -204,6 +204,10 @@ public class InternalCollectionAdapter implements InternalCollection {
 
     public void clearViewDirty() {}
 
+
+
+    public void sort() {}
+
 }
 
 

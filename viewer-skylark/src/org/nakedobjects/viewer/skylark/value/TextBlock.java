@@ -1,51 +1,27 @@
-/*
-    Naked Objects - a framework that exposes behaviourally complete
-    business objects directly to the user.
-    Copyright (C) 2000 - 2005  Naked Objects Group Ltd
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-    The authors can be contacted via www.nakedobjects.org (the
-    registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-    Road, Woking GU21 1NR, UK).
-*/
-
 package org.nakedobjects.viewer.skylark.value;
 
 import org.apache.log4j.Category;
 
-class TextFieldBlock {
-	private static final Category LOG = Category.getInstance(TextFieldBlock.class);
-	private final TextField forField;
+class TextBlock {
+	private static final Category LOG = Category.getInstance(TextBlock.class);
+	private final TextBlockUser forField;
 	private String text;
-	private int[] breaks;
-	private boolean formatted;
-	private int noBreaks;
+	private int[] lineBreaks;
+	private boolean isFormatted;
+	private int lineCount;
 
-	TextFieldBlock(TextField forField) {
+	TextBlock(TextBlockUser forField) {
 		this.forField = forField;
 	}
 
-	TextFieldBlock(TextField forField, String text) {
+	TextBlock(TextBlockUser forField, String text) {
 		this.forField = forField;
 		this.text = text;
-		formatted = false;
+		isFormatted = false;
 	}
 
 	public String getLine(int line) {
-		if (line < 0 || line > noBreaks) {
+		if (line < 0 || line > lineCount) {
 			throw new IllegalArgumentException("line outside of block " + line);
 		}
 
@@ -65,7 +41,7 @@ class TextFieldBlock {
 		int pos = pos(line, character);
 		if(pos > 0) {
 			text = text.substring(0, pos - 1) + text.substring(pos);
-			formatted = false;
+			isFormatted = false;
 		}
 	}
 
@@ -73,7 +49,7 @@ class TextFieldBlock {
 		int pos = pos(line, character);
 		if(pos < text.length()) {
 			text = text.substring(0, pos) + text.substring(pos + 1);
-			formatted = false;
+			isFormatted = false;
 		}
 	}
 
@@ -81,25 +57,25 @@ class TextFieldBlock {
 		int from = pos(line, fromCharacter);
 		int to = pos(line, toCharacter);
 		text = text.substring(0, from) + text.substring(to);
-		formatted = false;
+		isFormatted = false;
 	}
 
 	public int noLines() {
 		format();
 
-		return noBreaks + 1;
+		return lineCount + 1;
 	}
 
 	private void breakAt(int breakAt) {
 		// deal with growing array
-		breaks[noBreaks] = breakAt;
-		noBreaks++;
+		lineBreaks[lineCount] = breakAt;
+		lineCount++;
 	}
 
 	private void format() {
-		if (!formatted) {
-			breaks = new int[100];
-			noBreaks = 0;
+		if (!isFormatted) {
+			lineBreaks = new int[100];
+			lineCount = 0;
 
 			int length = text.length();
 
@@ -136,7 +112,7 @@ class TextFieldBlock {
 				}
 			}
 
-			formatted = true;
+			isFormatted = true;
 		}
 	}
 
@@ -146,7 +122,7 @@ class TextFieldBlock {
 		}
 		int pos = pos(line, character);
 		text = text.substring(0, pos) + characters + text.substring(pos);
-		formatted = false;
+		isFormatted = false;
 	}
 
 	private int pos(int line, int character) {
@@ -157,13 +133,13 @@ class TextFieldBlock {
 	}
 
 	private int lineStart(int line) {
-		int pos = line == 0 ? 0 : breaks[line - 1];
+		int pos = line == 0 ? 0 : lineBreaks[line - 1];
 		LOG.debug("line " + line + " starts at " + pos);
 		return pos;
 	}
 
 	private int lineEnd(int line) {
-		int pos = line >= noBreaks ? text.length() : breaks[line];
+		int pos = line >= lineCount ? text.length() : lineBreaks[line];
 		LOG.debug("line " + line + " ends at " + pos);
 		return pos;
 	}
@@ -171,11 +147,56 @@ class TextFieldBlock {
 	/**
 	 * breaks a block at the cursor position by truncating this block and creating a new block and adding the removed text.
 	 */
-	public TextFieldBlock breakBlock(int line, int character) {
+	public TextBlock breakBlock(int line, int character) {
+	    format();
 		int pos = pos(line, character);
-		TextFieldBlock newBlock = new TextFieldBlock(forField, text.substring(pos));
+		TextBlock newBlock = new TextBlock(forField, text.substring(pos));
 		text = text.substring(0, pos);
-		formatted = false;
+		isFormatted = false;
 		return newBlock;
 	}
+	
+	public String toString() {
+	    StringBuffer content = new StringBuffer();
+	    content.append("TextBlock [");
+	    content.append("formatted=");
+	    content.append(isFormatted);
+	    content.append(",lines=");
+	    content.append(lineCount);
+	    content.append(",text=");
+	    content.append(text);
+	    content.append(",breaks=");
+	    for (int i = 0; i < lineBreaks.length; i++) {
+            content.append(i == 0 ? "" : ",");
+            content.append(lineBreaks[i]);
+        }
+	    content.append("]");
+        return content.toString();
+    }
 }
+
+
+/*
+Naked Objects - a framework that exposes behaviourally complete
+business objects directly to the user.
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+The authors can be contacted via www.nakedobjects.org (the
+registered address of Naked Objects Group is Kingsway House, 123 Goldworth
+Road, Woking GU21 1NR, UK).
+*/
+

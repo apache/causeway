@@ -218,6 +218,8 @@ public class InternalCollectionVectorAdapter implements InternalCollection {
     }
 
     public void clearPersistDirty() {}
+
+    public void sort() {}
 }
 
 

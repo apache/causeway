@@ -21,7 +21,6 @@ import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
 import org.nakedobjects.viewer.skylark.core.DragViewOutline;
-import org.nakedobjects.viewer.skylark.special.ResizeBorder;
 import org.nakedobjects.viewer.skylark.special.ScrollBorder;
 import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
@@ -36,7 +35,7 @@ public class WindowBorder extends AbstractBorder {
     private final int titlebarHeight;
 
     public WindowBorder(View wrappedView, boolean scrollable) {
-        super(addTransientBorderIfNeccessary(scrollable ? new ResizeBorder(new ScrollBorder(wrappedView)) : wrappedView));
+        super(addTransientBorderIfNeccessary(scrollable ? new ScrollBorder(wrappedView) : wrappedView));
 
         titlebarHeight = Math.max(BUTTON_HEIGHT + 2 * VPADDING + TITLE_STYLE.getDescent(), TITLE_STYLE.getHeight());
         baseline = LINE_THICKNESS + padding + BUTTON_HEIGHT;
