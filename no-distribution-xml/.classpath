@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/no-core"/>
+	<classpathentry kind="lib" path="D:/nakedobjects/nakedobjects-pojo/no-distribution-xml/lib/xpp3-1.1.3.4d_b4_min.jar"/>
+	<classpathentry kind="lib" path="D:/nakedobjects/nakedobjects-pojo/no-distribution-xml/lib/xstream-1.0.2.jar"/>
+	<classpathentry sourcepath="LOG4J_SRC" kind="var" path="LOG4J"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
