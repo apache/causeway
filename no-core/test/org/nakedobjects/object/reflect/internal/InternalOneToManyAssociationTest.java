@@ -61,12 +61,13 @@ public class InternalOneToManyAssociationTest extends NakedObjectTestCase {
     }
     
     public void testType() {
-   //     DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
-        loader.addSpec(spec);
+         loader.addSpec(spec);
     	assertEquals(spec, oneToOneAssociation.getType());
     }
     	
     public void testAdd() {
+        loader.addSpec(new DummyNakedObjectSpecification()); // for object
+        
         NakedObject associate = PojoAdapter.createAdapter(new InternalObjectForReferencing());
 
         NakedObjectContext context = new MockNakedObjectContext(MockObjectManager.setup());
@@ -78,6 +79,8 @@ public class InternalOneToManyAssociationTest extends NakedObjectTestCase {
     }     	
     
     public void testRemove() {
+        loader.addSpec(spec);
+        
         NakedObject associate = PojoAdapter.createAdapter(new InternalObjectForReferencing());
         oneToOneAssociation.removeAssociation(nakedObject, associate);
         
@@ -85,7 +88,8 @@ public class InternalOneToManyAssociationTest extends NakedObjectTestCase {
     }     	
     
     public void testGet() {
-    	assertNull( oneToOneAssociation.getAssociations(nakedObject));
+        loader.addSpec(spec);
+        assertNull( oneToOneAssociation.getAssociations(nakedObject));
     	
     	objectWithVector.collection = new Vector();
     	assertNotNull( oneToOneAssociation.getAssociations(nakedObject));

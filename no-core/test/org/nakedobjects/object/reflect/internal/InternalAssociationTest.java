@@ -75,6 +75,8 @@ public class InternalAssociationTest extends TestCase {
     }
     	
     public void testSet() {
+        loader.addSpec(spec);
+        
         NakedObjectContext context = new MockNakedObjectContext(MockObjectManager.setup());
         object.setContext(context);
        
@@ -84,6 +86,8 @@ public class InternalAssociationTest extends TestCase {
     }     	
     
     public void testRemove() {
+        loader.addSpec(spec);
+        
     	objectWithOneToOneAssoications.setReferencedObject(referencedObject);
     	
     	personField.clearAssociation(object, associate);
