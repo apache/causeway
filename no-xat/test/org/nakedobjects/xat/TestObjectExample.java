@@ -1,5 +1,6 @@
 package org.nakedobjects.xat;
 
+import org.nakedobjects.object.DummyNakedValue;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.control.ActionAbout;
 import org.nakedobjects.object.control.FieldAbout;
@@ -77,16 +78,16 @@ public class TestObjectExample extends AbstractNakedObject {
         about.unmodifiable();
     }
 
-    public TextString getTwoUnmodifiable() {
-        return null;
+    public DummyNakedValue getTwoUnmodifiable() {
+        return new DummyNakedValue();
     }
 
     public void aboutThreeInvisible(FieldAbout about) {
         about.invisible();
     }
 
-    public TextString getThreeInvisible() {
-        return null;
+    public DummyNakedValue getThreeInvisible() {
+        return new DummyNakedValue();
     }
 
     public void associateFourDefault(TestObjectExample e) {
