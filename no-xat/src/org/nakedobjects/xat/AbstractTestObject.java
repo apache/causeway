@@ -192,14 +192,14 @@ abstract class AbstractTestObject {
         return action;
     }
 
-    protected abstract ActionSpecification getAction(NakedObjectSpecification nakedClass, final String name);
+    protected abstract ActionSpecification getAction(NakedObjectSpecification spec, final String name);
 
     public ActionSpecification getAction(final String name, final TestNaked[] parameters) {
-        final Naked[] parameterObjects = nakedObjects(parameters);
+   //     final Naked[] parameterObjects = nakedObjects(parameters);
         final int noParameters = parameters.length;
         final NakedObjectSpecification[] parameterClasses = new NakedObjectSpecification[noParameters];
         for (int i = 0; i < noParameters; i++) {
-            parameterClasses[i] = parameterObjects[i].getSpecification();
+            parameterClasses[i] = parameters[i].getSpecification();
         }
     
         try {

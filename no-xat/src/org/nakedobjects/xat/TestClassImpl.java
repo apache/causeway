@@ -50,6 +50,10 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
         return nakedClass;
     }
 
+    public NakedObjectSpecification getSpecification() {
+        return nakedClass.getSpecification();
+    }
+    
     public String getTitle() {
         return nakedClass.titleString().toString();
     }

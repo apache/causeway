@@ -2,6 +2,7 @@ package org.nakedobjects.xat;
 
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ValueParseException;
 
@@ -35,6 +36,10 @@ public class ParameterValueImpl implements TestValue {
 
     public void setForObject(Naked value) {
         this.value = (NakedValue) value;
+    }
+    
+    public NakedObjectSpecification getSpecification() {
+        return value.getSpecification();
     }
 }
 

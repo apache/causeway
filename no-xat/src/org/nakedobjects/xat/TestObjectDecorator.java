@@ -1,6 +1,7 @@
 package org.nakedobjects.xat;
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.reflect.ActionSpecification;
 
@@ -302,6 +303,10 @@ public abstract class TestObjectDecorator implements TestObject {
 
     public void assertLastElementInField(String fieldName, TestObject expected) {
         wrappedObject.assertLastElementInField(fieldName, expected);
+    }
+    
+    public NakedObjectSpecification getSpecification() {
+        return wrappedObject.getSpecification();
     }
 }
 

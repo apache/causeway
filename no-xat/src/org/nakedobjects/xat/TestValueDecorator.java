@@ -1,6 +1,7 @@
 package org.nakedobjects.xat;
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObjectSpecification;
 
 
 public class TestValueDecorator implements TestValue {
@@ -24,6 +25,10 @@ public class TestValueDecorator implements TestValue {
 
     public void setForObject(Naked object) {
         wrappedObject.setForObject(object);
+    }
+    
+    public NakedObjectSpecification getSpecification() {
+        return wrappedObject.getSpecification();
     }
 
 }

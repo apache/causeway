@@ -46,6 +46,9 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
        forObject = object;
    }
 
+   public NakedObjectSpecification getSpecification() {
+       return forObject.getSpecification();
+   }
 
     public TestObjectImpl(final Session session, final NakedObject object, final Hashtable viewCache,
             final TestObjectFactory factory) {
@@ -660,7 +663,9 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         FieldSpecification field = fieldFor(fieldName);
         assertFieldVisible(fieldName, field);
         assertFieldModifiable(fieldName, field);
-        assertEmpty(fieldName);
+        if(field instanceof OneToOneAssociationSpecification) {
+            assertEmpty(fieldName);
+        }
         
         TestNaked targetField = getField(fieldName);
 
@@ -684,7 +689,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         About about;
         if(association instanceof OneToOneAssociationSpecification) {
             about = ((OneToOneAssociationSpecification) association).getAbout(session, nakedObject, obj);
-        } else if(association instanceof OneToOneAssociationSpecification) {
+        } else if(association instanceof OneToManyAssociationSpecification) {
             about = ((OneToManyAssociationSpecification) association).getAbout(session, nakedObject, obj, true);
         } else {
             throw new NakedObjectRuntimeException();

@@ -80,6 +80,14 @@ public abstract class AcceptanceTestCase extends TestCase {
     public TestValue createParameterTestValue(NakedValue value) {
         return testObjectFactory.createParamerTestValue(value);
     }
+    
+    public TestNaked createNullParameter(Class cls) {
+        return new TestNakedNullParameter(cls);
+    }
+    
+    public TestNaked createNullParameter(String cls) {
+        return new TestNakedNullParameter(cls);
+    }
 
     protected void setUp() throws Exception {
         LogManager.getLoggerRepository().setThreshold(Level.ERROR);

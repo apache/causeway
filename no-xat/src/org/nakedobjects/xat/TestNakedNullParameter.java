@@ -1,22 +1,38 @@
 package org.nakedobjects.xat;
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 
-public interface TestNaked {
+class TestNakedNullParameter implements TestNaked {
+    private NakedObjectSpecification specification;
 
-    Naked getForObject();
+    public TestNakedNullParameter(Class cls) {
+        specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(cls);
+    }
 
-    void setForObject(Naked object);
+    public TestNakedNullParameter(String cls) {
+        specification = NakedObjectSpecificationLoader.getInstance().loadSpecification(cls);
+    }
 
-    /**
-     * returns the title of the object as a String
-     */
-    String getTitle();
+    public Naked getForObject() {
+        return null;
+    }
 
-    NakedObjectSpecification getSpecification();
+    public void setForObject(Naked object) {
+        throw new NakedObjectRuntimeException();
+    }
+    
+    public NakedObjectSpecification getSpecification() {
+        return specification;
+    }
+    
+    public String getTitle() {
+        return "empty";
+    }
+    
 }
-
 
 /*
 Naked Objects - a framework that exposes behaviourally complete

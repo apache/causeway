@@ -1,6 +1,7 @@
 package org.nakedobjects.xat;
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObjectSpecification;
 
 
 public class TestClassDecorator implements TestClass {
@@ -18,6 +19,10 @@ public class TestClassDecorator implements TestClass {
         return wrappedObject.getForObject();
     }
 
+    public NakedObjectSpecification getSpecification() {
+        return wrappedObject.getSpecification();
+    }
+    
     public String getTitle() {
         return wrappedObject.getTitle();
     }

@@ -4,6 +4,7 @@ package org.nakedobjects.xat;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ValueParseException;
 import org.nakedobjects.object.reflect.ValueFieldSpecification;
 
@@ -40,6 +41,10 @@ public class TestValueImpl implements TestValue {
     }
 
     public void setForObject(Naked object) {
+    }
+    
+    public NakedObjectSpecification getSpecification() {
+        return value.getType();
     }
 }
 
