@@ -93,6 +93,10 @@ public class NakedObjectSpecificationLoaderImpl extends NakedObjectSpecification
         super.finalize();
         LOG.info("finalizing specification loader " + this);
     }
+    
+    public void shutdown() {
+        classes.clear();
+    }
 }
 
 /*

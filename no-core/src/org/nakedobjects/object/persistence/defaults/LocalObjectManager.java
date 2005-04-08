@@ -489,6 +489,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
             oidGenerator = null;
             objectStore.shutdown();
             objectStore = null;
+            loadedObjects.shutdown();
             loadedObjects = null;
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);

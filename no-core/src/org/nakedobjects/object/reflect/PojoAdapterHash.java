@@ -11,6 +11,8 @@ public interface PojoAdapterHash extends DebugInfo {
     public boolean containsPojo(Object pojo);
 
     public Naked getPojo(Object pojo);
+
+    public void shutdown();
 }
 
 /*

@@ -88,6 +88,11 @@ public class PojoAdapterFactory {
      public void setReflectorFactory(ReflectorFactory reflectorFactory) {
         this.reflectorFactory = reflectorFactory;
     }
+
+    public void shutdown() {
+        pojos.shutdown();
+        reflectorFactory = null;
+    }
  
 }
 

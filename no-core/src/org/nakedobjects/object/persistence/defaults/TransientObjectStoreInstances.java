@@ -61,6 +61,11 @@ public class TransientObjectStoreInstances {
             array[i++] = (NakedObject) e.nextElement();
         }
         return array;
+    }
+
+    public void shutdown() {
+        objectInstances.clear();
+        titleIndex.clear();
     }    
     
 }

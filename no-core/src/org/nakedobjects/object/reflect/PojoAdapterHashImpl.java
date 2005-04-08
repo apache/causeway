@@ -46,6 +46,10 @@ public class PojoAdapterHashImpl implements PojoAdapterHash {
     public String getDebugTitle() {
         return "LoadedObjectsHashtable";
     }
+    
+    public void shutdown() {
+        pojos.clear();
+    }
 }
 
 /*

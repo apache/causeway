@@ -32,7 +32,7 @@ public class TransientObjectStore implements NakedObjectStore {
     private LoadedObjects loaded;
 
     public TransientObjectStore() {
-        LOG.info("new object store");
+        LOG.info("Creating object store");
         instances = new Hashtable();
         classes = new Hashtable(30);
     }
@@ -47,6 +47,10 @@ public class TransientObjectStore implements NakedObjectStore {
                 LOG.debug("  createObject " + object);
                 save(object);
             }
+            
+            public String toString() {
+                return "CreateObjectCommand [object=" + object + "]";
+            }
         };
     }
 
@@ -57,6 +61,10 @@ public class TransientObjectStore implements NakedObjectStore {
                  TransientObjectStoreInstances ins = instancesFor(object.getSpecification());
                 ins.remove(object.getOid());
             }
+            
+            public String toString() {
+                return "DestroyObjectCommand [object=" + object + "]";
+            }
         };
     }
 
@@ -64,6 +72,10 @@ public class TransientObjectStore implements NakedObjectStore {
         return new SaveObjectCommand() {
             public void execute() throws ObjectStoreException {
                 save(object);
+            }
+            
+            public String toString() {
+                return "SaveObjectCommand [object=" + object + "]";
             }
         };
     }
@@ -427,8 +439,14 @@ public class TransientObjectStore implements NakedObjectStore {
     }
 
     public void shutdown() throws ObjectStoreException {
+        loaded.shutdown();
         loaded = null;
+        for (Enumeration e = instances.elements(); e.hasMoreElements();) {
+            TransientObjectStoreInstances inst = (TransientObjectStoreInstances) e.nextElement();
+            inst.shutdown();
+        }
         instances.clear();
+       // instances = null;
         LOG.info("shutdown");
     }
 

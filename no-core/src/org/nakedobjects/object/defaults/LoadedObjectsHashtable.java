@@ -106,6 +106,10 @@ public class LoadedObjectsHashtable implements LoadedObjects {
     public String getDebugTitle() {
         return "LoadedObjectsHashtable";
     }
+    
+    public void shutdown() {
+        loaded.clear();
+    }
 }
 
 
