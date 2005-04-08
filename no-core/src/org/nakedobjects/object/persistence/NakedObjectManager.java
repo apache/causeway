@@ -14,15 +14,15 @@ import org.nakedobjects.utility.StartupException;
 public interface NakedObjectManager extends DebugInfo {
     void abortTransaction();
 
-    TypedNakedCollection allInstances(NakedObjectSpecification nakedClass);
+    TypedNakedCollection allInstances(NakedObjectSpecification specification);
 
     TypedNakedCollection allInstances(String className);
 
-   TypedNakedCollection allInstances(NakedObjectSpecification nakedClass, boolean includeSubclasses);
+   TypedNakedCollection allInstances(NakedObjectSpecification specification, boolean includeSubclasses);
 
     TypedNakedCollection allInstances(String className, boolean includeSubclasses);
 
-    NakedObject createInstance(NakedObjectSpecification nakedClass);
+    NakedObject createInstance(NakedObjectSpecification specification);
 
     /**
      * A utility method for creating new objects in the context of the system -
@@ -49,9 +49,9 @@ public interface NakedObjectManager extends DebugInfo {
 
     TypedNakedCollection findInstances(NakedObject pattern, boolean includeSubclasses);
 
-    TypedNakedCollection findInstances(NakedObjectSpecification nakedClass, String searchTerm);
+    TypedNakedCollection findInstances(NakedObjectSpecification specification, String searchTerm);
     
-    TypedNakedCollection findInstances(NakedObjectSpecification nakedClass, String searchTerm, boolean includeSubclasses);
+    TypedNakedCollection findInstances(NakedObjectSpecification specification, String searchTerm, boolean includeSubclasses);
 
     TypedNakedCollection findInstances(InstancesCriteria criteria, boolean includeSubclasses) throws UnsupportedFindException;
 

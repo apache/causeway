@@ -74,9 +74,9 @@ public interface NakedObjectStore extends DebugInfo {
     NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) throws ObjectStoreException,
             UnsupportedFindException;
 
-    NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses) throws ObjectStoreException;
+    NakedObject[] getInstances(NakedObjectSpecification specification, boolean includeSubclasses) throws ObjectStoreException;
 
-    NakedObject[] getInstances(NakedObjectSpecification cls, String pattern, boolean includeSubclasses)
+    NakedObject[] getInstances(NakedObjectSpecification specification, String pattern, boolean includeSubclasses)
             throws ObjectStoreException, UnsupportedFindException;
 
     public LoadedObjects getLoadedObjects();
@@ -131,7 +131,7 @@ public interface NakedObjectStore extends DebugInfo {
      * @param includeSubclasses
      *                       TODO
      */
-    boolean hasInstances(NakedObjectSpecification cls, boolean includeSubclasses) throws ObjectStoreException;
+    boolean hasInstances(NakedObjectSpecification specification, boolean includeSubclasses) throws ObjectStoreException;
 
     /**
      * Initialize the object store so that calls to this object store access
@@ -151,7 +151,7 @@ public interface NakedObjectStore extends DebugInfo {
     /**
      * A count of the number of instances matching the specified pattern.
      */
-    int numberOfInstances(NakedObjectSpecification cls, boolean includedSubclasses) throws ObjectStoreException;
+    int numberOfInstances(NakedObjectSpecification specification, boolean includedSubclasses) throws ObjectStoreException;
 
     /**
      * Called by the resolveImmediately method in NakedObjectManager.

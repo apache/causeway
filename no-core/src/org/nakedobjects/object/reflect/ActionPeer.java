@@ -12,7 +12,7 @@ public interface ActionPeer {
 
 	String getName();
 
-    Naked execute(MemberIdentifier identifier, NakedObject object, Naked[] parameters) throws ReflectriveActionException;
+    Naked execute(MemberIdentifier identifier, NakedObject object, Naked[] parameters) throws ReflectiveActionException;
 
     Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters);
 

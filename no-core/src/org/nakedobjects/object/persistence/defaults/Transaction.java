@@ -15,15 +15,15 @@ import org.apache.log4j.Logger;
 public class Transaction {
     private static final Logger LOG = Logger.getLogger(Transaction.class);
     private final Vector toNotify = new Vector();
-    private final Vector transactionCommands = new Vector();
+    private final Vector commands = new Vector();
     private boolean complete;
 
     public Transaction() {
-        LOG.debug("new transaction" + this);
+        LOG.debug("new transaction " + this);
     }
     
     public void abort() {
-        LOG.debug("abort transaction" + this);
+        LOG.info("abort transaction " + this);
         if(complete) {
             throw new TransactionException("Transaction already complete; cannot abort");
         }
@@ -32,7 +32,7 @@ public class Transaction {
 
     void addCommand(PersistenceCommand command) {
         LOG.debug("add command " + command);
-        transactionCommands.addElement(command);
+        commands.addElement(command);
     }
 
     void addNotify(NakedObject object) {
@@ -41,17 +41,17 @@ public class Transaction {
     }
 
     public void commit(NakedObjectStore objectStore, UpdateNotifier notifier) throws ObjectStoreException {
-        LOG.debug("commit transaction" + this);
+        LOG.info("commit transaction " + this);
         if(complete) {
             throw new TransactionException("Transaction already complete; cannot commit");
         }
         complete = true;
         
-        PersistenceCommand[] commands = new PersistenceCommand[transactionCommands.size()];
-        transactionCommands.copyInto(commands);
-        if(commands.length > 0) {
+        PersistenceCommand[] commandsArray = new PersistenceCommand[commands.size()];
+        commands.copyInto(commandsArray);
+        if(commandsArray.length > 0) {
 	        objectStore.startTransaction();
-	        objectStore.runTransaction(commands);
+	        objectStore.runTransaction(commandsArray);
 	        objectStore.endTransaction();
         }
         
@@ -61,6 +61,10 @@ public class Transaction {
             LOG.debug("broadcastObjectUpdate " + object);
             notifier.broadcastObjectChanged(object);
         }
+    }
+    
+    public String toString() {
+        return "Transaction [complete=" + complete + ",commands=" + commands.size() + "]";
     }
 }
 
