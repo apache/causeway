@@ -5,6 +5,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.ToString;
 import org.nakedobjects.viewer.skylark.Image;
@@ -32,7 +33,11 @@ class ObjectParameter extends ObjectContent implements ParameterContent {
     }
 
     public Consent canSet(NakedObject dragSource) {
-        return Allow.DEFAULT;
+        if (dragSource.getSpecification().isOfType(parameter.getSpecification())) {
+            return Allow.DEFAULT;
+        } else {
+            return new Veto("Object must be " + parameter.getSpecification().getShortName());
+        }
     }
 
     public void clear() {
