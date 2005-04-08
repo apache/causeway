@@ -109,9 +109,12 @@ public abstract class DebugFrame extends Frame {
     }
 
     private void closeDialog() {
+        dialogClosing();
         hide();
         dispose();
     }
+    
+    public void dialogClosing() {}
 
     public void dispose() {
         frames.removeElement(this);
