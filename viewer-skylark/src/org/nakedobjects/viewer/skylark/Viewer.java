@@ -1,9 +1,9 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.container.configuration.ComponentException;
 import org.nakedobjects.container.configuration.ComponentLoader;
 import org.nakedobjects.container.configuration.ConfigurationException;
-import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.UpdateNotifier;
 import org.nakedobjects.utility.DebugFrame;
@@ -66,7 +66,7 @@ public class Viewer {
     private InteractionSpy spy;
 
     public Viewer() {
-        doubleBuffering = ConfigurationFactory.getConfiguration().getBoolean(PROPERTY_BASE + "doublebuffering", true);
+        doubleBuffering = NakedObjects.getConfiguration().getBoolean(PROPERTY_BASE + "doublebuffering", true);
     
     }
     
@@ -159,7 +159,7 @@ public class Viewer {
         Canvas c = new Canvas(bufferGraphics, r.x, r.y, r.width, r.height);
         // Canvas c = new Canvas(bufferGraphics, 0, 0, w, h);
 
-        if (AbstractView.DEBUG) {
+        if (AbstractView.debug) {
             LOG.debug("------ repaint viewer #" + redrawCount + " " + r.x + "," +  r.y + " " + r.width + "x" + r.height);
         }
 
@@ -182,7 +182,7 @@ public class Viewer {
         if (doubleBuffering) {
             g.drawImage(doubleBuffer, 0, 0, null);
         }
-        if (AbstractView.DEBUG) {
+        if (AbstractView.debug) {
             g.setColor(Color.green);
             g.drawRect(r.x, r.y, r.width - 1, r.height - 1);
             g.drawString("#" + redrawCount, r.x + 3, r.y + 15);
@@ -325,7 +325,7 @@ public class Viewer {
         viewFactory.addRootWorkspaceSpecification(new org.nakedobjects.viewer.skylark.metal.WorkspaceSpecification());
         viewFactory.addWorkspaceSpecification(new InnerWorkspaceSpecification());
 
-        if (ConfigurationFactory.getConfiguration().getBoolean(SPECIFICATION_BASE + "defaults", true)) {
+        if (NakedObjects.getConfiguration().getBoolean(SPECIFICATION_BASE + "defaults", true)) {
             viewFactory.addCompositeRootViewSpecification(new FormSpecification());
             viewFactory.addCompositeRootViewSpecification(new DataFormSpecification());
             viewFactory.addCompositeRootViewSpecification(new ListSpecification());
@@ -341,7 +341,7 @@ public class Viewer {
         viewFactory.addObjectIconSpecification(loadSpecification("icon.object", RootIconSpecification.class));
         viewFactory.addClassIconSpecification(loadSpecification("icon.class", ClassIcon.Specification.class));
 
-        String viewParams = ConfigurationFactory.getConfiguration().getString(SPECIFICATION_BASE + "view");
+        String viewParams = NakedObjects.getConfiguration().getString(SPECIFICATION_BASE + "view");
 
         if (viewParams != null) {
             StringTokenizer st = new StringTokenizer(viewParams, ",");
@@ -370,6 +370,9 @@ public class Viewer {
     }
 
     public void close() {
+        if(spy != null) {
+            spy.close();
+        }
         DebugFrame.disposeAll();
         renderingArea.dispose();
         if (listener != null) {
@@ -386,7 +389,7 @@ public class Viewer {
 //        new ViewerAssistant(this, updateNotifier, spy);
 
         popup = new DefaultPopupMenu();
-        explorationMode = ConfigurationFactory.getConfiguration().getBoolean(PROPERTY_BASE + "show-exploration");
+        explorationMode = NakedObjects.getConfiguration().getBoolean(PROPERTY_BASE + "show-exploration");
 
         InteractionHandler interactionHandler = new InteractionHandler(this, spy);
         renderingArea.addMouseMotionListener(interactionHandler);
@@ -403,7 +406,7 @@ public class Viewer {
             e.printStackTrace();
         }
         
-        if (ConfigurationFactory.getConfiguration().getBoolean(PROPERTY_BASE + "debugstatus", false)) {
+        if (NakedObjects.getConfiguration().getBoolean(PROPERTY_BASE + "debugstatus", false)) {
             spy.open();
         }
 

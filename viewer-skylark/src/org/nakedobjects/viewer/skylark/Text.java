@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.container.configuration.ConfigurationFactory;
 
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -17,7 +17,7 @@ public class Text {
     private Frame fontMetricsComponent = new Frame();
 
     protected Text(String propertyName, String defaultFont) {
-        Configuration cfg = ConfigurationFactory.getConfiguration();
+        Configuration cfg = NakedObjects.getConfiguration();
         font = cfg.getFont(PROPERTY_STEM + propertyName, Font.decode(defaultFont));
         LOG.info("font " + propertyName + " loaded as " + font);
 

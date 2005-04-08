@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.container.configuration.ConfigurationFactory;
+import org.nakedobjects.NakedObjects;
 
 
 public class Color {
@@ -23,7 +23,7 @@ public class Color {
 
     Color(String propertyName, String defaultColor) {
         this.name = propertyName;
-        color = ConfigurationFactory.getConfiguration().getColor(PROPERTY_STEM + propertyName,
+        color = NakedObjects.getConfiguration().getColor(PROPERTY_STEM + propertyName,
                 java.awt.Color.decode(defaultColor));
     }
 
