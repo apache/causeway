@@ -4,9 +4,9 @@ import org.nakedobjects.object.reflect.MemberIdentifier;
 
 public interface AuthorisationManager {
 
-    boolean isUsable(MemberIdentifier identifier);
+    boolean isUsable(Session session, MemberIdentifier identifier);
 
-    boolean isVisible(MemberIdentifier identifier);
+    boolean isVisible(Session session, MemberIdentifier identifier);
 
 }
 

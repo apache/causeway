@@ -20,8 +20,8 @@ public class ActionAuthorisation extends AbstractActionPeer {
     }
 
     public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
-        boolean isUsable = authorisationManager.isUsable(identifier);
-        boolean isVisible = authorisationManager.isVisible(identifier);
+        boolean isUsable = authorisationManager.isUsable(session, identifier);
+        boolean isVisible = authorisationManager.isVisible(session, identifier);
         if (!isVisible) {
             return new DefaultHint() {
                 public Consent canAccess() {
