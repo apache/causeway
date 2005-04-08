@@ -1,6 +1,9 @@
 package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.ReflectionFactory;
+import org.nakedobjects.object.persistence.ActionTransaction;
+import org.nakedobjects.object.persistence.OneToManyTransaction;
+import org.nakedobjects.object.persistence.OneToOneTransaction;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.NakedObjectField;
@@ -12,16 +15,28 @@ import org.nakedobjects.object.reflect.OneToOnePeer;
 
 public class LocalReflectionFactory implements ReflectionFactory {
     public Action createAction(String className, ActionPeer peer) {
-        return new Action(className, peer.getName(), peer);
+        ActionPeer fullDelegate = new ActionTransaction(peer);
+        return new Action(className, fullDelegate.getName(), fullDelegate);
+
+    //    return new Action(className, peer.getName(), peer);
     }
 
     public NakedObjectField createField(String className, OneToManyPeer peer) {
-        return new OneToManyAssociation(className, peer.getName(), peer.getType(), peer);
+        OneToManyPeer oneToManyDelegate = new OneToManyTransaction(peer);
+        OneToManyAssociation association = new OneToManyAssociation(className, oneToManyDelegate.getName(), oneToManyDelegate.getType(),
+                oneToManyDelegate);
+        return association;    
+        
+      //  return new OneToManyAssociation(className, peer.getName(), peer.getType(), peer);
     }
 
     public NakedObjectField createField(String className, OneToOnePeer peer) {
-        return new OneToOneAssociation(className, peer.getName(), peer.getType(), peer);
-
+        OneToOnePeer oneToOneDelegate = new OneToOneTransaction(peer);
+        OneToOneAssociation association = new OneToOneAssociation(className, oneToOneDelegate.getName(), oneToOneDelegate.getType(),
+                oneToOneDelegate);
+        return association;
+        
+       // return new OneToOneAssociation(className, peer.getName(), peer.getType(), peer);
     }
 }
 
