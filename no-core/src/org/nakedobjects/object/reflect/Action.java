@@ -1,14 +1,11 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.persistence.ObjectNotFoundException;
-import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.security.Session;
 
 import java.io.Serializable;
@@ -48,12 +45,9 @@ public class Action extends NakedObjectMember {
         }
     }
 
+    private final static Category LOG = Category.getInstance(Action.class);
     public final static Type DEBUG = new Type("DEBUG");
-
     public final static Type EXPLORATION = new Type("EXPLORATION");
-
-    final static Category LOG = Category.getInstance(Action.class);
-
     public final static Type USER = new Type("USER");
 
     private ActionPeer actionDelegate;
@@ -65,7 +59,6 @@ public class Action extends NakedObjectMember {
                 return types[i];
             }
         }
-
         throw new IllegalArgumentException();
     }
 
@@ -75,54 +68,14 @@ public class Action extends NakedObjectMember {
     }
 
     protected Naked execute(final NakedObject object, final Naked[] parameters) {
-        NakedObjectManager objectManager = NakedObjects.getObjectManager();
-
+        LOG.debug("Action: invoke " + object + "." + getName());
         try {
-            LOG.debug("Action: invoke " + object + "." + getName());
-            objectManager.startTransaction();
-
-            /*
-             * TODO the object that we are invoking this method on, and the
-             * parameters, need to be part of the transaction, and not the same
-             * objects that other clients are using.
-             */
-            NakedObject transactionObject;
-            Naked[] transactionParameters = new Naked[parameters == null ?0 : parameters.length];
-            if (object.isPersistent()) {
-                transactionObject = objectManager.getObject(object.getOid(), object.getSpecification());
-                for (int i = 0; i < transactionParameters.length; i++) {
-                    Naked parameter = (Naked) parameters[i];
-                    Oid parameterOid = parameter == null ? null : parameter.getOid();
-                    transactionParameters[i] = parameterOid == null ? parameter : objectManager.getObject(parameterOid, parameter
-                            .getSpecification());
-                }
-
-            } else {
-                // non-persistent
-                transactionObject = object;
-                transactionParameters = parameters == null ? new Naked[0] : parameters;
-            }
-
-            Naked result = actionDelegate.execute(getIdentifier(), transactionObject, transactionParameters);
-
-            objectManager.saveChanges();
-            objectManager.endTransaction();
-
+            Naked result = actionDelegate.execute(getIdentifier(), object, parameters == null ?  new Naked[0] : parameters);
             return result;
-
-        } catch (ObjectNotFoundException e) {
-            LOG.error("Non-existing target or parameter used in " + getName(), e);
-            objectManager.abortTransaction();
-            return null;
-        } catch (ReflectriveActionException e) {
-            LOG.error("Failed to execute action " + getName(), e);
-            objectManager.abortTransaction();
-            return null;
-        } catch (RuntimeException e) {
-            objectManager.abortTransaction();
-            throw e;
+        } catch (ReflectiveActionException e) {
+            // TODO Sort out how to deal with exception during reflection
+            throw new NakedObjectRuntimeException(e);
         }
-
     }
 
     protected Hint getHint(Session session, NakedObject object, Naked[] parameters) {
@@ -212,7 +165,9 @@ public class Action extends NakedObjectMember {
     }
 
     public ActionParameterSet getParameters(Session session, NakedObject object) {
-        return actionDelegate.getParameters(getIdentifier(), session, object, parameterStubs());
+        ActionParameterSet parameters = actionDelegate.getParameters(getIdentifier(), session, object, parameterStubs());
+        parameters.checkParameters(getIdentifier().toString(), parameters());
+        return parameters;
     }
 }
 

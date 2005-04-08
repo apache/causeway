@@ -1,13 +1,11 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.security.Session;
 
 
@@ -19,30 +17,17 @@ public class OneToOneAssociation extends NakedObjectAssociation {
         this.reflectiveAdapter = association;
     }
 
-    protected void clearValue(NakedObject inObject) {
-        NakedValue associate = (NakedValue) get(inObject);
-        if (associate != null) {
-            setValue(inObject, null);
-        }
-    }
-
     protected void clearAssociation(NakedObject inObject, NakedObject associate) {
         if (associate == null) {
             throw new NullPointerException("Must specify the item to remove/dissociate");
         }
-        NakedObjectManager objectManager = NakedObjects.getObjectManager();
-        try{
-        if (inObject.isPersistent()) {
-                objectManager.startTransaction();
-            }
-            reflectiveAdapter.clearAssociation(inObject, associate);
-            objectManager.saveChanges();
-            if (inObject.isPersistent()) {
-                objectManager.endTransaction();
-            }
-        } catch (RuntimeException e) {
-            objectManager.abortTransaction();
-            throw e;
+        reflectiveAdapter.clearAssociation(inObject, associate);
+    }
+
+    protected void clearValue(NakedObject inObject) {
+        NakedValue associate = (NakedValue) get(inObject);
+        if (associate != null) {
+            setValue(inObject, null);
         }
     }
 
@@ -68,21 +53,8 @@ public class OneToOneAssociation extends NakedObjectAssociation {
         return reflectiveAdapter.hasHint();
     }
 
-    protected void setValue(NakedObject inObject, Object associate) {
-        NakedObjectManager objectManager = NakedObjects.getObjectManager();
-        try {
-            if (inObject.isPersistent()) {
-                objectManager.startTransaction();
-            }
-            reflectiveAdapter.setValue(inObject, associate);
-            objectManager.saveChanges();
-            if (inObject.isPersistent()) {
-                objectManager.endTransaction();
-            }
-        } catch (RuntimeException e) {
-            objectManager.abortTransaction();
-            throw e;
-        }
+    protected void initAssociation(NakedObject inObject, NakedObject associate) {
+        reflectiveAdapter.initAssociation(inObject, associate);
     }
 
     protected void initValue(NakedObject inObject, Object associate) {
@@ -93,34 +65,21 @@ public class OneToOneAssociation extends NakedObjectAssociation {
         return reflectiveAdapter.isDerived();
     }
 
-    protected void setAssociation(NakedObject inObject, NakedObject associate) {
-        NakedObjectManager objectManager = NakedObjects.getObjectManager();
-        try {
-            if (inObject.isPersistent()) {
-                objectManager.startTransaction();
-            }
-            reflectiveAdapter.setAssociation(inObject, associate);
-            objectManager.saveChanges();
-            if (inObject.isPersistent()) {
-                objectManager.endTransaction();
-            }
-        } catch (RuntimeException e) {
-            objectManager.abortTransaction();
-            throw e;
-        }
+    public boolean isEmpty(NakedObject inObject) {
+        return reflectiveAdapter.isEmpty(inObject);
     }
 
-    protected void initAssociation(NakedObject inObject, NakedObject associate) {
-        reflectiveAdapter.initAssociation(inObject, associate);
+    protected void setAssociation(NakedObject inObject, NakedObject associate) {
+        reflectiveAdapter.setAssociation(inObject, associate);
     }
+
+    protected void setValue(NakedObject inObject, Object associate) {
+        reflectiveAdapter.setValue(inObject, associate);
+     }
 
     public String toString() {
         return "OneToOne " + (isValue() ? "VALUE" : "OBJECT") + " [" + super.toString() + ",type="
                 + getSpecification().getShortName() + "]";
-    }
-
-    public boolean isEmpty(NakedObject inObject) {
-        return reflectiveAdapter.isEmpty(inObject);
     }
 }
 

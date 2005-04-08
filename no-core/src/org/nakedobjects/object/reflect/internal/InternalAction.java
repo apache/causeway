@@ -4,12 +4,9 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.persistence.defaults.TransactionException;
 import org.nakedobjects.object.reflect.ActionParameterSet;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
@@ -41,8 +38,6 @@ public class InternalAction extends InternalMember implements ActionPeer {
         if (parameters.length != paramCount) {
             LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);
         }
-        NakedObjectManager objectManager = NakedObjects.getObjectManager();
-
         try {
             LOG.debug("Action: invoke " + inObject + "." + getName());
             Object[] executionParameters = new Object[parameters.length];
@@ -56,18 +51,8 @@ public class InternalAction extends InternalMember implements ActionPeer {
             if (result != null) { return PojoAdapter.createAdapter(result); }
         } catch (InvocationTargetException e) {
             e.fillInStackTrace();
-            
-            if(e.getTargetException() instanceof TransactionException) {
-        	    LOG.info("TransactionException thrown while executing " + actionMethod + " " + e.getTargetException().getMessage());
-	            objectManager.abortTransaction();
-        	} else {
-	            String error = "Exception executing " + actionMethod + "; aborted";
-	        	LOG.error(error);
-	        	throw new NakedObjectRuntimeException(error, e.getTargetException());
-        	}
         } catch (IllegalAccessException e) {
             LOG.error("Illegal access of " + actionMethod, e);
-            objectManager.abortTransaction();
         }
 
         return null;
