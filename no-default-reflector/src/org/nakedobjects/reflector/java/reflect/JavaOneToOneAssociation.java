@@ -11,7 +11,6 @@ import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.OneToOnePeer;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.reflector.java.control.SimpleFieldAbout;
 
@@ -108,6 +107,10 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
 
         try {
             if (setMethod == null) {
+          /*     if(get(inObject).getObject() != setValue) {
+                   // value object is different!
+               }
+           */
                 inObject.markDirty();
             } else {
                 setMethod.invoke(inObject.getObject(), new Object[] { setValue });
@@ -208,7 +211,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
             if (obj == null) {
                 return null;
             } else {
-                return PojoAdapter.createAdapter(obj);
+                return NakedObjects.getPojoAdapterFactory().createAdapter(obj);
             }
 
         } catch (InvocationTargetException e) {

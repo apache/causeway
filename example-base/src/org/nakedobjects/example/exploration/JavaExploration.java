@@ -14,7 +14,7 @@ import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
-import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
@@ -116,9 +116,11 @@ public class JavaExploration {
 
             JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
 
-            PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
-            PojoAdapter.setReflectorFactory(reflectorFactory);
-
+            PojoAdapterFactory pojoAdapterFactory = new PojoAdapterFactory();
+            pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
+            pojoAdapterFactory.setReflectorFactory(reflectorFactory);
+            NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+            
             NakedObjectSpecificationImpl.setReflectionFactory(reflectionFactory);
             specificationLoader.setReflectorFactory(reflectorFactory);
 

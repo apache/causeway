@@ -71,6 +71,8 @@ public class MockLoadedObjects implements LoadedObjects {
     }
 
     public void shutdown() {}
+
+    public void reset() {}
 }
 
 

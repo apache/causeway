@@ -95,7 +95,7 @@ public class LoadedObjectsHashtable implements LoadedObjects {
         Enumeration e = loaded.keys();
         while (e.hasMoreElements()) {
             Oid oid = (Oid) e.nextElement();
-            NakedObjects object = (NakedObjects) loaded.get(oid);
+            NakedObject object = (NakedObject) loaded.get(oid);
             debug.append(oid.toString());
             debug.append("    ");
             debug.appendln(object.toString());
@@ -108,6 +108,10 @@ public class LoadedObjectsHashtable implements LoadedObjects {
     }
     
     public void shutdown() {
+        loaded.clear();
+    }
+    
+    public void reset() {
         loaded.clear();
     }
 }

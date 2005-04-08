@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
@@ -9,7 +10,6 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionParameterSet;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.viewer.skylark.Image;
@@ -70,7 +70,7 @@ public class ActionContent extends ObjectContent {
             // change name using the hint
             NakedObjectSpecification type = types[i];
             String label = labels[i] == null ? type.getShortName() : labels[i];
-            Object value = defaultValues[i] == null ? parameterValues[i] : PojoAdapter.createAdapter(defaultValues[i]);
+            Object value = defaultValues[i] == null ? parameterValues[i] : NakedObjects.getPojoAdapterFactory().createAdapter(defaultValues[i]);
 
             if (type.isValue()) {
                 parameters[i] = new ValueParameter(label, (Naked) value, type, this);

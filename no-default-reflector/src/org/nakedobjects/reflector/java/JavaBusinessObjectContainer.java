@@ -8,7 +8,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Enumeration;
@@ -75,7 +74,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     }
 
     public void destroyObject(Object object) {
-        objectManger.destroyObject(PojoAdapter.createNOAdapter(object));
+        objectManger.destroyObject(NakedObjects.getPojoAdapterFactory().createNOAdapter(object));
     }
 
     public Vector findInstances(InstancesCriteria criteria, boolean includeSubclasses) throws UnsupportedFindException {
@@ -92,7 +91,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
 
 
     public void makePersistent(Object transientObject) {
-        objectManger.makePersistent(PojoAdapter.createNOAdapter(transientObject));
+        objectManger.makePersistent(NakedObjects.getPojoAdapterFactory().createNOAdapter(transientObject));
     }
 
     public int numberOfInstances(Class cls) {
@@ -101,7 +100,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
 
     public void resolve(Object object) {
 		if(object != null) {
-	        NakedObject adapter = PojoAdapter.createNOAdapter(object);
+	        NakedObject adapter = NakedObjects.getPojoAdapterFactory().createNOAdapter(object);
 	        if(!adapter.isResolved()) {
 	            objectManger.resolveImmediately(adapter);
 	        }

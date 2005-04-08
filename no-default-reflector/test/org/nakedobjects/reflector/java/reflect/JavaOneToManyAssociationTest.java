@@ -8,7 +8,7 @@ import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
-import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 
@@ -28,6 +28,7 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
 	private JavaReferencedObject elements[];
     private MockNakedObjectSpecificationLoader loader;
     private NakedObject nakedObject;
+    private PojoAdapterFactory pojoAdapterFactory;
 
     public JavaOneToManyAssociationTest(String name) {
         super(name);
@@ -46,9 +47,10 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
     	ConfigurationFactory.setConfiguration(new TestConfiguration());
         
 		objectWithVector = new JavaObjectWithVector();
-    	PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
-    	PojoAdapter.setReflectorFactory(new NullReflectorFactory());
-		nakedObject = PojoAdapter.createNOAdapter(objectWithVector);
+    	pojoAdapterFactory = new PojoAdapterFactory();
+		pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
+		pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
+		nakedObject = pojoAdapterFactory.createNOAdapter(objectWithVector);
         elements = new JavaReferencedObject[3];
         for (int i = 0; i < elements.length; i++) {
 			elements[i] = new JavaReferencedObject();
@@ -73,7 +75,7 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         loader.addSpec(spec);
         
         JavaReferencedObject associate = new JavaReferencedObject();
-        NakedObject nakedObjectAssoicate =PojoAdapter.createNOAdapter(associate);
+        NakedObject nakedObjectAssoicate =pojoAdapterFactory.createNOAdapter(associate);
         
         spec = new DummyNakedObjectSpecification();
         loader.addSpec(spec);
@@ -88,7 +90,7 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         loader.addSpec(spec);
         
         JavaReferencedObject associate = new JavaReferencedObject();
-        NakedObject nakedObjectAssoicate =PojoAdapter.createNOAdapter(associate);
+        NakedObject nakedObjectAssoicate =pojoAdapterFactory.createNOAdapter(associate);
         
         spec = new DummyNakedObjectSpecification();
         loader.addSpec(spec);

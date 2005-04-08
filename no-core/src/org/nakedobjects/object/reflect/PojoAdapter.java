@@ -6,33 +6,21 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Persistable;
-import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.AbstractNakedObject;
-import org.nakedobjects.object.reflect.valueadapter.BooleanAdapter;
-import org.nakedobjects.object.reflect.valueadapter.ByteAdapter;
-import org.nakedobjects.object.reflect.valueadapter.DateAdapter;
-import org.nakedobjects.object.reflect.valueadapter.DoubleAdapter;
-import org.nakedobjects.object.reflect.valueadapter.FloatAdapter;
-import org.nakedobjects.object.reflect.valueadapter.IntAdapter;
-import org.nakedobjects.object.reflect.valueadapter.LongAdapter;
-import org.nakedobjects.object.reflect.valueadapter.ShortAdapter;
-import org.nakedobjects.object.reflect.valueadapter.StringAdapter;
 import org.nakedobjects.object.security.Session;
-
-import java.util.Date;
 
 import org.apache.log4j.Logger;
 
 
 public class PojoAdapter extends AbstractNakedObject {
     private static final Logger LOG = Logger.getLogger(PojoAdapter.class);
-    private static PojoAdapterHash pojos;
+//    private static PojoAdapterHash pojos;
     private static long next = 0;
     private long id = next++;
-    private static ReflectorFactory reflectorFactory;
+//    private static ReflectorFactory reflectorFactory;
 
-    public static Naked createAdapter(Object pojo) {
+ /*   public static Naked createAdapter(Object pojo) {
         if (pojo == null) {
             return null;
         }
@@ -76,11 +64,11 @@ public class PojoAdapter extends AbstractNakedObject {
         return (NakedObject) createAdapter(pojo);
     }
 
-    /**
+    /* *
      * Expose as a .Net property.
      * 
      * @property
-     */
+     * /
     public static void set_PojoAdapterHash(PojoAdapterHash pojos) {
         PojoAdapter.pojos = pojos;
     }
@@ -89,7 +77,7 @@ public class PojoAdapter extends AbstractNakedObject {
      * Expose as a .Net property.
      * 
      * @property
-     */
+     * /
     public static void set_ReflectorFactory(ReflectorFactory reflectorFactory) {
         PojoAdapter.reflectorFactory = reflectorFactory;
     }
@@ -104,14 +92,14 @@ public class PojoAdapter extends AbstractNakedObject {
     public static void setReflectorFactory(ReflectorFactory reflectorFactory) {
         PojoAdapter.reflectorFactory = reflectorFactory;
     }
-
+*/
     private Object pojo;
 
     public PojoAdapter() {}
 
     protected PojoAdapter(Object pojo) {
         this.pojo = pojo;
-        pojos.add(pojo, this);
+ //       pojos.add(pojo, this);
 
         LOG.debug("Object created " + id + " " + pojo);
     }

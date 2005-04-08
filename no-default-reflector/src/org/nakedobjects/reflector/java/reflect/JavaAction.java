@@ -12,7 +12,6 @@ import org.nakedobjects.object.persistence.defaults.TransactionException;
 import org.nakedobjects.object.reflect.ActionParameterSet;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.ReflectiveActionException;
 import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
@@ -50,7 +49,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
             Object result = actionMethod.invoke(inObject.getObject(), executionParameters);
             LOG.debug(" action result " + result);
             if (result != null) { 
-                return PojoAdapter.createAdapter(result);
+                return NakedObjects.getPojoAdapterFactory().createAdapter(result);
             }
 
         } catch (InvocationTargetException e) {

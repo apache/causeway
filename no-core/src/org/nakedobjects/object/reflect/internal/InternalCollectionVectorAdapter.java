@@ -15,7 +15,6 @@ import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.utility.UnexpectedCallException;
@@ -41,7 +40,7 @@ public class InternalCollectionVectorAdapter implements InternalCollection {
 
     public NakedObject elementAt(int index) {
         Object element = collection.elementAt(index);
-        return PojoAdapter.createNOAdapter(element);
+        return NakedObjects.getPojoAdapterFactory().createNOAdapter(element);
     }
 
     public Enumeration elements() {
@@ -54,7 +53,7 @@ public class InternalCollectionVectorAdapter implements InternalCollection {
 
             public Object nextElement() {
                 Object element = elements.nextElement();
-                return element instanceof NakedObject ? element : PojoAdapter.createNOAdapter(element);
+                return element instanceof NakedObject ? element : NakedObjects.getPojoAdapterFactory().createNOAdapter(element);
             }
         };
     }

@@ -25,8 +25,9 @@ public class ObjectManagerLogger extends Logger implements NakedObjectManager {
     }
 
     public TypedNakedCollection allInstances(NakedObjectSpecification specification) {
-        log("All instances of " + specification.getShortName());
-        return decorated.allInstances(specification);
+        TypedNakedCollection instances = decorated.allInstances(specification);
+        log("All instances of " + specification.getShortName(), "" + instances.size());
+        return instances;
     }
 
     public TypedNakedCollection allInstances(String className) {
@@ -57,13 +58,13 @@ public class ObjectManagerLogger extends Logger implements NakedObjectManager {
     }
 
     public NakedObject createTransientInstance(NakedObjectSpecification specification) {
-        NakedObject instance = decorated.createInstance(specification);
+        NakedObject instance = decorated.createTransientInstance(specification);
         log("Create a transient instances of " + specification.getShortName(), instance.getObject());
         return instance;
     }
 
     public NakedObject createTransientInstance(String className) {
-        NakedObject instance = decorated.createInstance(className);
+        NakedObject instance = decorated.createTransientInstance(className);
         log("Create a transient instances of " + className, instance.getObject());
         return instance;
     }
@@ -185,6 +186,11 @@ public class ObjectManagerLogger extends Logger implements NakedObjectManager {
 
     public String getDebugTitle() {
         return decorated.getDebugTitle();
+    }
+    
+    public void reset() {
+        log("reset object manager");
+        decorated.reset();      
     }
 
 }

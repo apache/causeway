@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.metal;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
@@ -7,7 +8,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.FastFinder;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
@@ -132,8 +132,8 @@ public class ClassIcon extends ObjectView {
                 if (getNakedClass() instanceof NakedClass) {
 
                     FastFinder finder = getNakedClass().explorationActionFind();
-                    object = PojoAdapter.createAdapter(finder);
-                    //view = Skylark.getViewFactory().createOpenRootView(PojoAdapter.createAdapter(finder));
+                    object = NakedObjects.getPojoAdapterFactory().createAdapter(finder);
+                    //view = Skylark.getViewFactory().createOpenRootView(NakedObjects.getPojoAdapterFactory(finder));
                 }
             }
             if(object != null) {

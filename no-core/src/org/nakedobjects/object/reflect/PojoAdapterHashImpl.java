@@ -1,7 +1,7 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.utility.DebugString;
 
 import java.util.Enumeration;
@@ -21,32 +21,36 @@ public class PojoAdapterHashImpl implements PojoAdapterHash {
         return pojos.containsKey(pojo);
     }
 
-    public Naked getPojo(Object pojo) {
-        return (Naked) pojos.get(pojo);
-    }
-
     protected void finalize() throws Throwable {
         super.finalize();
         Logger.getLogger(PojoAdapterHashImpl.class).info("finalizing hash of pojos");
     }
-    
+
     public String getDebugData() {
         DebugString debug = new DebugString();
         Enumeration e = pojos.keys();
         while (e.hasMoreElements()) {
             Object pojo = (Object) e.nextElement();
-            NakedObjects object = (NakedObjects) pojos.get(pojo);
+            NakedObject object = (NakedObject) pojos.get(pojo);
             debug.append(pojo.toString());
             debug.append("    ");
             debug.appendln(object.toString());
         }
         return debug.toString();
     }
-    
+
     public String getDebugTitle() {
-        return "LoadedObjectsHashtable";
+        return "POJO Adapter Hashtable";
     }
-    
+
+    public Naked getPojo(Object pojo) {
+        return (Naked) pojos.get(pojo);
+    }
+
+    public void reset() {
+        pojos.clear();
+    }
+
     public void shutdown() {
         pojos.clear();
     }

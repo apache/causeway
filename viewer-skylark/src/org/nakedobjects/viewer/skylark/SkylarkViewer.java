@@ -1,9 +1,9 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.ApplicationContext;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.special.RootWorkspaceSpecification;
 
@@ -51,7 +51,7 @@ public class SkylarkViewer {
     }
 
     public void setApplication(ApplicationContext applicationContext) {
-        NakedObject rootObject = PojoAdapter.createNOAdapter(applicationContext);
+        NakedObject rootObject = NakedObjects.getPojoAdapterFactory().createNOAdapter(applicationContext);
         RootWorkspaceSpecification spec = new RootWorkspaceSpecification();
         View view = spec.createView(new RootObject(rootObject), null);
         viewer.setRootView(view);

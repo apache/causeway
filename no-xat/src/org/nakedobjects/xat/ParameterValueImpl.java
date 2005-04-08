@@ -1,9 +1,9 @@
 package org.nakedobjects.xat;
 
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.reflect.PojoAdapter;
 
 
 public class ParameterValueImpl implements TestValue {
@@ -34,8 +34,8 @@ public class ParameterValueImpl implements TestValue {
     }
 
     public Naked getForNaked() {
-        return PojoAdapter.createAdapter(object);
- //       return PojoAdapter.createAdapter(value);
+        return NakedObjects.getPojoAdapterFactory().createAdapter(object);
+ //       return NakedObjects.getPojoAdapterFactory(value);
     }
 
     public void setForNaked(Naked value) {

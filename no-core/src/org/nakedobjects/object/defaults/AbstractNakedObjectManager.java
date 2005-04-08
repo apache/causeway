@@ -13,7 +13,6 @@ import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
-import org.nakedobjects.object.reflect.PojoAdapter;
 
 
 public abstract class AbstractNakedObjectManager implements NakedObjectManager {
@@ -60,7 +59,7 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
 
     public NakedObject createInstance(NakedObjectSpecification specification) {
        Object object = objectFactory.createObject(specification);
-       NakedObject nakedObject = PojoAdapter.createNOAdapter(object);
+       NakedObject nakedObject = NakedObjects.getPojoAdapterFactory().createNOAdapter(object);
        makePersistent(nakedObject);
        return nakedObject;
        
@@ -73,7 +72,7 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
             object.created();
             objectChanged(object);
         } catch (NakedObjectRuntimeException e) {
-            object = PojoAdapter.createAdapter(getContext().getObjectManager().generatorError("Failed to create instance of " + specification, e));
+            object = NakedObjects.getPojoAdapterFactory(getContext().getObjectManager().generatorError("Failed to create instance of " + specification, e));
 
             LOG.error("Failed to create instance of " + specification, e);
         }
@@ -95,7 +94,7 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
 
     public NakedObject createTransientInstance(NakedObjectSpecification nc) {
         Object object = objectFactory.createObject(nc);
-        return PojoAdapter.createNOAdapter(object);
+        return NakedObjects.getPojoAdapterFactory().createNOAdapter(object);
     }
 
     public NakedObject createTransientInstance(String className) {

@@ -1,9 +1,10 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.MockOid;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 
@@ -23,8 +24,10 @@ public class LoadedObjectsTest extends TestCase {
     	NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
   //  	NakedObjectSpecificationImpl.setReflectorFactory(new InternalReflectorFactory());
     	
-    	PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
-    	PojoAdapter.setReflectorFactory(new NullReflectorFactory());
+    	PojoAdapterFactory pojoAdapterFactory = new PojoAdapterFactory();
+    	NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+    	NakedObjects.getPojoAdapterFactory().setPojoAdapterHash(new PojoAdapterHashImpl());
+    	NakedObjects.getPojoAdapterFactory().setReflectorFactory(new NullReflectorFactory());
 		
         lookup = new LoadedObjectsHashtable();
         oid = new MockOid(1);
@@ -35,7 +38,7 @@ public class LoadedObjectsTest extends TestCase {
     }
     
     public void testLoaded() {
-        NakedObject person = PojoAdapter.createNOAdapter(new LoadedObject());
+        NakedObject person = NakedObjects.getPojoAdapterFactory().createNOAdapter(new LoadedObject());
         person.setOid(oid);
         lookup.loaded(person);
 
@@ -43,7 +46,7 @@ public class LoadedObjectsTest extends TestCase {
     }
     
     public void testUnloaded() {
-        NakedObject person = PojoAdapter.createNOAdapter(new LoadedObject());
+        NakedObject person = NakedObjects.getPojoAdapterFactory().createNOAdapter(new LoadedObject());
         person.setOid(oid);
         lookup.loaded(person);
         lookup.unloaded(person);

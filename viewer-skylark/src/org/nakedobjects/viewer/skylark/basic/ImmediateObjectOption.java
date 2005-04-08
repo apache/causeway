@@ -8,7 +8,6 @@ import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Location;
@@ -73,7 +72,7 @@ class ImmediateObjectOption extends MenuOption {
 		        try {
 			        returnedObject = object.execute(action, null);
 			    } catch (Exception e) {
-		        	returnedObject = PojoAdapter.createAdapter(NakedObjects.getObjectManager().generatorError("System error",e));
+		        	returnedObject = NakedObjects.getPojoAdapterFactory().createAdapter(NakedObjects.getObjectManager().generatorError("System error",e));
 		        }
 		        if (returnedObject != null) {
 		            if(returnedObject instanceof NakedError) {
@@ -81,7 +80,7 @@ class ImmediateObjectOption extends MenuOption {
 		                workspace.addOpenViewFor(returnedObject, at);
 		            } else {
 		                if(!(returnedObject instanceof Naked)) {
-		                    returnedObject = PojoAdapter.createAdapter(returnedObject);
+		                    returnedObject = NakedObjects.getPojoAdapterFactory().createAdapter(returnedObject);
 		                }
 		                view.objectActionResult(returnedObject, at);
 		            }

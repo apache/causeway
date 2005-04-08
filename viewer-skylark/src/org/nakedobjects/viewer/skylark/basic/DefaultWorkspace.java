@@ -7,7 +7,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
@@ -229,10 +228,10 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
                 for (int i = 0; i < specs.length; i++) {
                     NakedObjectSpecification cls = specs[i];
                     if(cls.isObject()) {
-                        classCollection.addElement(PojoAdapter.createAdapter(objectManager.getNakedClass(cls)));
+                        classCollection.addElement(NakedObjects.getPojoAdapterFactory().createAdapter(objectManager.getNakedClass(cls)));
                     }
                 }
-                View classesView = createSubviewFor(PojoAdapter.createAdapter(classCollection), false);
+                View classesView = createSubviewFor(NakedObjects.getPojoAdapterFactory().createAdapter(classCollection), false);
                 classesView.setLocation(at);
                 addView(classesView);
             }

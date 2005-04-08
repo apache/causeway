@@ -12,7 +12,6 @@ import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.NotPersistableException;
 import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.security.Session;
 
 
@@ -45,7 +44,7 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
      * Returns the NakedClass that this view represents.
      */
     public final Naked getForNaked() {
-        return PojoAdapter.createAdapter(nakedClass);
+        return NakedObjects.getPojoAdapterFactory().createAdapter(nakedClass);
     }
   
     public String getTitle() {
@@ -85,7 +84,7 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
         } catch (NotPersistableException e) {
             NakedError error = objectManager.generatorError(
                     "Failed to create instance of " + cls.forObjectType().getFullName(), e);
-            object = PojoAdapter.createNOAdapter(error);
+            object = NakedObjects.getPojoAdapterFactory().createNOAdapter(error);
 
             System.out.println("Failed to create instance of " + cls.forObjectType().getFullName());
             e.printStackTrace();

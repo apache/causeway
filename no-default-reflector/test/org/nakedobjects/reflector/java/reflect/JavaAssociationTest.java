@@ -7,7 +7,7 @@ import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
-import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 
@@ -45,9 +45,12 @@ public class JavaAssociationTest extends TestCase {
     	ConfigurationFactory.setConfiguration(new TestConfiguration());
         
         javaObjectWithOneToOneAssociations = new JavaObjectWithOneToOneAssociations();
-    	PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
-    	PojoAdapter.setReflectorFactory(new NullReflectorFactory());
-        nakedObjectHoldingObjectWithAssociations = PojoAdapter.createNOAdapter(javaObjectWithOneToOneAssociations);        
+    	PojoAdapterFactory pojoAdapterFactory = new PojoAdapterFactory();
+        pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
+        pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
+		NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+
+        nakedObjectHoldingObjectWithAssociations = pojoAdapterFactory.createNOAdapter(javaObjectWithOneToOneAssociations);        
         
         Class cls = JavaObjectWithOneToOneAssociations.class;
         Method get = cls.getDeclaredMethod("getReferencedObject", new Class[0]);
@@ -57,7 +60,7 @@ public class JavaAssociationTest extends TestCase {
         personField = new JavaOneToOneAssociation(PERSON_FIELD_NAME, JavaReferencedObject.class, get, set, null, null, about);
         
         javaObjectForReferencing = new JavaReferencedObject();
-        associate = PojoAdapter.createNOAdapter(javaObjectForReferencing);
+        associate = pojoAdapterFactory.createNOAdapter(javaObjectForReferencing);
     }
 
     

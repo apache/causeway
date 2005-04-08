@@ -1,5 +1,6 @@
 package org.nakedobjects.reflector.java.reflect;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.Naked;
@@ -8,7 +9,7 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.FieldPeer;
-import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 
@@ -37,8 +38,10 @@ public class JavaReflectorTest extends TestCase {
     	loader = new MockNakedObjectSpecificationLoader();     	
     	loader.addSpec(new DummyNakedObjectSpecification());
     	
-    	PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
-    	PojoAdapter.setReflectorFactory(new NullReflectorFactory());
+    	PojoAdapterFactory pojoAdapterFactory = new PojoAdapterFactory();
+    	pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
+    	pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
+		NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
 		
     	objectFactory = new MockObjectFactory();
         reflector = new MockJavaReflector(JavaObjectForReflector.class.getName(), objectFactory);

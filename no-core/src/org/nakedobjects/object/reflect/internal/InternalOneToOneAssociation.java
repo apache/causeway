@@ -10,7 +10,6 @@ import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.OneToOnePeer;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.valueadapter.StringAdapter;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
@@ -226,7 +225,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
                 
                 throw new NakedObjectRuntimeException(getType().getFullName());
             } else {
-                return PojoAdapter.createAdapter(obj);
+                return NakedObjects.getPojoAdapterFactory().createAdapter(obj);
             }
             
         } catch (InvocationTargetException e) {

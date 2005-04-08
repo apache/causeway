@@ -7,7 +7,7 @@ import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
-import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 
 import java.lang.reflect.Method;
@@ -46,9 +46,13 @@ public class InternalOneToManyAssociationTest extends NakedObjectTestCase {
         loader.addSpec(spec);
         
 		objectWithVector = new InternalObjectWithVector();
-    	PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
-		PojoAdapter.setReflectorFactory(new NullReflectorFactory());
-		nakedObject = PojoAdapter.createNOAdapter(objectWithVector);
+		
+		PojoAdapterFactory pojoAdapterFactory = new PojoAdapterFactory();
+		pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
+		pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
+		NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+		
+		nakedObject = pojoAdapterFactory.createNOAdapter(objectWithVector);
         elements = new InternalObjectForReferencing[3];
         for (int i = 0; i < elements.length; i++) {
 			elements[i] = new InternalObjectForReferencing();
@@ -70,7 +74,7 @@ public class InternalOneToManyAssociationTest extends NakedObjectTestCase {
     public void testAdd() {
         loader.addSpec(new DummyNakedObjectSpecification()); // for object
         
-        NakedObject associate = PojoAdapter.createNOAdapter(new InternalObjectForReferencing());
+        NakedObject associate = NakedObjects.getPojoAdapterFactory().createNOAdapter(new InternalObjectForReferencing());
         oneToOneAssociation.addAssociation(nakedObject, associate);
         
         assertEquals(associate.getObject(), objectWithVector.added);
@@ -79,7 +83,7 @@ public class InternalOneToManyAssociationTest extends NakedObjectTestCase {
     public void testRemove() {
         loader.addSpec(spec);
         
-        NakedObject associate = PojoAdapter.createNOAdapter(new InternalObjectForReferencing());
+        NakedObject associate = NakedObjects.getPojoAdapterFactory().createNOAdapter(new InternalObjectForReferencing());
         oneToOneAssociation.removeAssociation(nakedObject, associate);
         
         assertEquals(associate.getObject(), objectWithVector.removed);

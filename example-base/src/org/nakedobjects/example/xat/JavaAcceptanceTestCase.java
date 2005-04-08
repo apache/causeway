@@ -11,7 +11,8 @@ import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.TimeBasedOidGenerator;
 import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
-import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.PojoAdapterFactory;
+import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
@@ -73,7 +74,10 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
 
         JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
         
-        PojoAdapter.setReflectorFactory(reflectorFactory);
+        PojoAdapterFactory pojoAdapterFactory = new PojoAdapterFactory();
+        pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
+        pojoAdapterFactory.setReflectorFactory(reflectorFactory);
+        NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
 
         NakedObjectSpecificationImpl.setReflectionFactory(reflectionFactory);
         specificationLoader.setReflectorFactory(reflectorFactory);

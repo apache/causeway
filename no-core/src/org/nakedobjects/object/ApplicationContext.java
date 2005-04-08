@@ -2,7 +2,6 @@ package org.nakedobjects.object;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.defaults.InternalNakedObject;
-import org.nakedobjects.object.reflect.PojoAdapter;
 
 import java.util.Vector;
 
@@ -47,7 +46,7 @@ public abstract class ApplicationContext implements InternalNakedObject {
     }
 
     public void associateUser(UserId user) {
-        user.setRootObject(PojoAdapter.createAdapter(this));
+        user.setRootObject(NakedObjects.getPojoAdapterFactory().createAdapter(this));
         this.setUser(user);
     }
 

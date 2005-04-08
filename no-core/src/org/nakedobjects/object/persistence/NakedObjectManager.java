@@ -16,9 +16,9 @@ public interface NakedObjectManager extends DebugInfo {
 
     TypedNakedCollection allInstances(NakedObjectSpecification specification);
 
-    TypedNakedCollection allInstances(String className);
+    TypedNakedCollection allInstances(NakedObjectSpecification specification, boolean includeSubclasses);
 
-   TypedNakedCollection allInstances(NakedObjectSpecification specification, boolean includeSubclasses);
+    TypedNakedCollection allInstances(String className);
 
     TypedNakedCollection allInstances(String className, boolean includeSubclasses);
 
@@ -35,8 +35,6 @@ public interface NakedObjectManager extends DebugInfo {
 
     NakedObject createTransientInstance(String className);
 
-    NakedError generatorError(String message, Exception e);
-    
     /**
      * Removes the specified object from the system. The specified object's data
      * should be removed from the persistence mechanism.
@@ -45,19 +43,22 @@ public interface NakedObjectManager extends DebugInfo {
 
     void endTransaction();
 
+    TypedNakedCollection findInstances(InstancesCriteria criteria, boolean includeSubclasses) throws UnsupportedFindException;
+
     TypedNakedCollection findInstances(NakedObject pattern);
 
     TypedNakedCollection findInstances(NakedObject pattern, boolean includeSubclasses);
 
     TypedNakedCollection findInstances(NakedObjectSpecification specification, String searchTerm);
-    
+
     TypedNakedCollection findInstances(NakedObjectSpecification specification, String searchTerm, boolean includeSubclasses);
 
-    TypedNakedCollection findInstances(InstancesCriteria criteria, boolean includeSubclasses) throws UnsupportedFindException;
-
-    TypedNakedCollection findInstances(String className, String searchTerm, boolean includeSubclasses) throws UnsupportedFindException;
-
     TypedNakedCollection findInstances(String className, String searchTerm) throws UnsupportedFindException;
+
+    TypedNakedCollection findInstances(String className, String searchTerm, boolean includeSubclasses)
+            throws UnsupportedFindException;
+
+    NakedError generatorError(String message, Exception e);
 
     NakedClass getNakedClass(NakedObjectSpecification specification);
 
@@ -68,8 +69,8 @@ public interface NakedObjectManager extends DebugInfo {
      * method is called again, while the originally returned object is in
      * working memory, then this method must return that same Java object.
      * 
-     * <para>Assuming that the object is not cached then the data for the
-     * object should be retreived from the persistence mechanism and the object
+     * <para>Assuming that the object is not cached then the data for the object
+     * should be retreived from the persistence mechanism and the object
      * recreated (as describe previously). The specified OID should then be
      * assigned to the recreated object by calling its <method>setOID </method>.
      * Before returning the object its resolved flag should also be set by
@@ -136,6 +137,23 @@ public interface NakedObjectManager extends DebugInfo {
      */
     int numberOfInstances(NakedObjectSpecification specification);
 
+    void reset();
+
+    /**
+     * Hint that specified field within the specified object is likely to be
+     * needed soon. This allows the object's data to be eagerly loaded, ready
+     * for use.
+     * 
+     * <p>
+     * This method need to do anything, but offers the object store the
+     * opportunity to eagerly load in objects before their use. Contrast this
+     * with resolveImmediately, which requires an object to be loaded before
+     * continuing.
+     * 
+     * @see #resolveImmediately(NakedObject)
+     */
+    void resolveEagerly(NakedObject object, NakedObjectField field);
+
     /**
      * Persists the specified object's state. Essentially the data held by the
      * persistence mechanism should be updated to reflect the state of the
@@ -145,33 +163,19 @@ public interface NakedObjectManager extends DebugInfo {
      * AbstractObjectStore </class> by calling its <method>broadcastObjectUpdate
      * </method> method.
      */
- //   void objectChanged(NakedObject object);
-
+    //   void objectChanged(NakedObject object);
     /**
-     * Re-initialises the fields of an object. If the object
-     * is unresolved then the object's missing data should be retreieved from
-     * the persistence mechanism and be used to set up the value objects and
-     * associations.
+     * Re-initialises the fields of an object. If the object is unresolved then
+     * the object's missing data should be retreieved from the persistence
+     * mechanism and be used to set up the value objects and associations.
      */
     void resolveImmediately(NakedObject object);
 
-    /**
-     * Hint that specified field within the specified object is likely to be needed soon.  This allows the 
-     * object's data to be eagerly loaded, ready for use.  
-     * 
-     * <p>This method need to do anything, but offers the object store the opportunity to eagerly load 
-     * in objects before their use.  Contrast this with resolveImmediately, which requires an object to be 
-     * loaded before continuing.
-     * 
-     * @see #resolveImmediately(NakedObject)
-     */
-    void resolveEagerly(NakedObject object, NakedObjectField field);
+    void saveChanges();
 
     void shutdown();
 
     void startTransaction();
-
-    void saveChanges();
 
 }
 

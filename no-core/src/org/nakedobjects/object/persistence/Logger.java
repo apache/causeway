@@ -6,27 +6,35 @@ import java.io.PrintStream;
 
 
 public abstract class Logger {
-    private PrintStream file;
+    private PrintStream stream;
+    private final long start;
     private final String fileName;
     
     public Logger(final String fileName) {
         this.fileName = fileName;
+        start = time();
+    }
+
+    private long time() {
+        return System.currentTimeMillis();
     }
 
     public void log(String message) {
-        if (file == null) {
+        if (stream == null) {
             try {
-                file = new PrintStream(new FileOutputStream(fileName));
+                stream = new PrintStream(new FileOutputStream(fileName));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        file.println(message);
-        file.flush();
+        stream.print(time() - start);
+        stream.print("  ");
+        stream.println(message);
+        stream.flush();
     }
 
     public void close() {
-        file.close();
+        stream.close();
     }
     
     public void log(String request, Object result) {

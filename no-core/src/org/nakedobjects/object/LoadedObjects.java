@@ -17,6 +17,8 @@ public interface LoadedObjects extends DebugInfo {
     Enumeration dirtyObjects();
 
     void shutdown();
+
+    void reset();
 }
 
 /*

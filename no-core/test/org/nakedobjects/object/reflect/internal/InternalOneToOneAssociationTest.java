@@ -5,7 +5,7 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
-import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.security.Session;
 
@@ -33,32 +33,36 @@ public class InternalOneToOneAssociationTest extends TestCase {
         junit.textui.TestRunner.run(new TestSuite(InternalOneToOneAssociationTest.class));
     }
 
-    protected void setUp()  throws Exception {
-    	super.setUp();
+    protected void setUp() throws Exception {
+        super.setUp();
 
-    	
-    	Logger.getRootLogger().setLevel(Level.OFF);
-    	loader = new MockNakedObjectSpecificationLoader();
-        
+        Logger.getRootLogger().setLevel(Level.OFF);
+        loader = new MockNakedObjectSpecificationLoader();
+
         spec = new DummyNakedObjectSpecification();
         loader.addSpec(spec);
         NakedObjects.setSpecificationLoader(loader);
-        
-    	session = new Session();
+
+        session = new Session();
         objectWithOneToOneAssoications = new InternalObjectWithOneToOneAssociations();
-    	PojoAdapter.setPojoAdapterHash(new PojoAdapterHashImpl());
-        PojoAdapter.setReflectorFactory(new NullReflectorFactory());
-        nakedObject = PojoAdapter.createNOAdapter(objectWithOneToOneAssoications);
-        
+        PojoAdapterFactory pojoAdapterFactory = new PojoAdapterFactory();
+
+        pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
+        pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
+        nakedObject = pojoAdapterFactory.createNOAdapter(objectWithOneToOneAssoications);
+        NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+
         Class cls = InternalObjectWithOneToOneAssociations.class;
         Method get = cls.getDeclaredMethod("getReferencedObject", new Class[0]);
-        Method set = cls.getDeclaredMethod("setReferencedObject", new Class[] {InternalObjectForReferencing.class});
-        Method about = cls.getDeclaredMethod("aboutReferencedObject", new Class[] {InternalAbout.class, InternalObjectForReferencing.class});
-        
-        personField = new InternalOneToOneAssociation(PERSON_FIELD_NAME, InternalObjectForReferencing.class, get, set, null, null, about);
-        
+        Method set = cls.getDeclaredMethod("setReferencedObject", new Class[] { InternalObjectForReferencing.class });
+        Method about = cls.getDeclaredMethod("aboutReferencedObject", new Class[] { InternalAbout.class,
+                InternalObjectForReferencing.class });
+
+        personField = new InternalOneToOneAssociation(PERSON_FIELD_NAME, InternalObjectForReferencing.class, get, set, null,
+                null, about);
+
         referencedObject = new InternalObjectForReferencing();
-        associate = PojoAdapter.createNOAdapter(referencedObject);
+        associate = pojoAdapterFactory.createNOAdapter(referencedObject);
     }
 
     public void testType() {

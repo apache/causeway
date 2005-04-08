@@ -1,6 +1,6 @@
 package example.utility.xmlsnapshot;
 
-import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.utility.xmlsnapshot.DomSerializer;
 import org.nakedobjects.utility.xmlsnapshot.DomSerializerCrimson;
 import org.nakedobjects.utility.xmlsnapshot.XmlSnapshot;
@@ -11,7 +11,7 @@ public class Snapshot {
     // fields excluded for clarity
 
     public void actionCreateSnapshot() {
-        XmlSnapshot builder = new XmlSnapshot(PojoAdapter.createNOAdapter(this));
+        XmlSnapshot builder = new XmlSnapshot(NakedObjects.getPojoAdapterFactory().createNOAdapter(this));
         builder.include("fieldname/fieldname");
         Element e = builder.getXmlElement();
         

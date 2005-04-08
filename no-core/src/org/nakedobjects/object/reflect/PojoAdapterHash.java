@@ -12,6 +12,8 @@ public interface PojoAdapterHash extends DebugInfo {
 
     public Naked getPojo(Object pojo);
 
+    public void reset();
+
     public void shutdown();
 }
 

@@ -1,5 +1,6 @@
 package org.nakedobjects.reflector.java.reflect;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.application.Lookup;
 import org.nakedobjects.application.NonPersistable;
 import org.nakedobjects.application.Title;
@@ -22,7 +23,6 @@ import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.FieldPeer;
 import org.nakedobjects.object.reflect.ObjectTitle;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.Reflector;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
@@ -182,7 +182,7 @@ public class JavaReflector implements Reflector {
          } else if (object instanceof Logical ){
                 return new LogicalValueObjectAdapter((Logical) object);
          } else {
-            return PojoAdapter.createAdapter(objectFactory.createObject(cls));
+            return NakedObjects.getPojoAdapterFactory().createAdapter(objectFactory.createObject(cls));
         }
     }
 

@@ -10,7 +10,7 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.ActionParameterSet;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
-import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.UnexpectedCallException;
@@ -48,9 +48,10 @@ public class InternalAction extends InternalMember implements ActionPeer {
             LOG.debug(" action result " + result);
 
             if (result != null && result instanceof Naked) { return (Naked) result; }
-            if (result != null) { return PojoAdapter.createAdapter(result); }
+            if (result != null) { return NakedObjects.getPojoAdapterFactory().createAdapter(result); }
         } catch (InvocationTargetException e) {
             e.fillInStackTrace();
+            throw new ReflectionException(e);
         } catch (IllegalAccessException e) {
             LOG.error("Illegal access of " + actionMethod, e);
         }

@@ -154,19 +154,19 @@ public interface NakedObjectStore extends DebugInfo {
     int numberOfInstances(NakedObjectSpecification specification, boolean includedSubclasses) throws ObjectStoreException;
 
     /**
+     * Called by the resolveEagerly method in NakedObjectManager.
+     * 
+     * @see NakedObjectManager#resolveEagerly(NakedObject, NakedObjectField)
+     */
+    void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectStoreException;
+
+    /**
      * Called by the resolveImmediately method in NakedObjectManager.
      * 
      * @see NakedObjectManager#resolveImmediately(NakedObject)
      */
     void resolveImmediately(NakedObject object) throws ObjectStoreException;
 
-    /**
-    * Called by the resolveEagerly method in NakedObjectManager.
-    * 
-    * @see NakedObjectManager#resolveEagerly(NakedObject, NakedObjectField)	
-    */
-    void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectStoreException;
-    
     public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException;
 
     public void shutdown() throws ObjectStoreException;

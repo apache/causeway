@@ -16,7 +16,6 @@ import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
 
@@ -204,7 +203,7 @@ public class ServerDistribution implements ClientDistribution {
     public void setValue(Session session, String fieldIdentifier, Oid objectOid, String objectType, Object value) {
         NakedObject inObject = getNakedObject(session, objectOid, objectType);
         OneToOneAssociation association = (OneToOneAssociation) inObject.getSpecification().getField(fieldIdentifier);
-        Hint about = inObject.getHint(session, association, PojoAdapter.createAdapter(value));
+        Hint about = inObject.getHint(session, association, NakedObjects.getPojoAdapterFactory().createNOAdapter(value));
         if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
             throw new NakedObjectRuntimeException();
         }

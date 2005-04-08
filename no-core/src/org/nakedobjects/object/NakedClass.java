@@ -7,7 +7,6 @@ import org.nakedobjects.object.defaults.FastFinder;
 import org.nakedobjects.object.defaults.InternalNakedObject;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.NotPersistableException;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.internal.InternalAbout;
 
 import org.apache.log4j.Logger;
@@ -115,7 +114,7 @@ public class NakedClass implements InternalNakedObject {
             try {
                 getObjectManager().makePersistent(object);
             } catch (NotPersistableException e) {
-                object = PojoAdapter.createNOAdapter(getObjectManager().generatorError("Failed to create instance of " + this, e));
+                object = NakedObjects.getPojoAdapterFactory().createNOAdapter(getObjectManager().generatorError("Failed to create instance of " + this, e));
                 LOG.error("Failed to create instance of " + this, e);
             }
         }

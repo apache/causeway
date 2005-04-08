@@ -1,5 +1,6 @@
 package org.nakedobjects.object.reflect.internal;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Aggregated;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
@@ -14,7 +15,6 @@ import org.nakedobjects.object.reflect.FieldPeer;
 import org.nakedobjects.object.reflect.ObjectTitle;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.Reflector;
 
@@ -106,7 +106,7 @@ public class InternalReflector implements Reflector {
             throw new IllegalStateException("Handling of abstract naked classes is not yet supported: " + cls);
         } else {
             try {
-                return PojoAdapter.createAdapter(cls.newInstance());
+                return NakedObjects.getPojoAdapterFactory().createAdapter(cls.newInstance());
             } catch (NoSuchMethodError ex) {
                 throw new NakedObjectRuntimeException("No accessible default constructor in " + className());
             } catch (IllegalAccessException e) {
