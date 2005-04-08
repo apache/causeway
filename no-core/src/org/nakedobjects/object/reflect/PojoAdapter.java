@@ -5,6 +5,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.AbstractNakedObject;
@@ -112,7 +113,7 @@ public class PojoAdapter extends AbstractNakedObject {
         this.pojo = pojo;
         pojos.add(pojo, this);
 
-        LOG.info("Object created " + id + " " + pojo);
+        LOG.debug("Object created " + id + " " + pojo);
     }
 
     public void clearAssociation(NakedObjectAssociation specification, NakedObject associate) {
@@ -202,6 +203,14 @@ public class PojoAdapter extends AbstractNakedObject {
         return field.isEmpty(this);
     }
 
+    public boolean isPersistable() {
+        return getSpecification().isPersistable();
+    }
+    
+    public Persistable persistable() {
+        return getSpecification().persistable();
+    }
+
     public boolean isParsable() {
         return getSpecification().isParsable();
     }
@@ -214,17 +223,26 @@ public class PojoAdapter extends AbstractNakedObject {
         field.setValue(this, object);
     }
 
+    /**
+     * Returns the title from the underlying business object. If the object has
+     * not yet been resolved the specification will be asked for a unresolved
+     * title, which could of been persisted by the persistence mechanism. If
+     * either of the above provides null as the title then this method will
+     * return a title relating to the name of the object type, e.g. "A
+     * Customer", "A Product".
+     */
     public String titleString() {
         NakedObjectSpecification specification = getSpecification();
-        String title;
-        if (isResolved()) {
-            title = specification == null ? null : specification.getTitle().title(this);
+        if (specification == null) {
+            return "";
         } else {
-            title = specification == null ? null : specification.unresolvedTitle(this);
-        }
-        if (title == null) {
-            return "A " + specification.getSingularName().toLowerCase();
-        } else {
+            String title = specification.getTitle().title(this);
+            if (title == null && !isResolved()) {
+                title = specification.unresolvedTitle(this);
+            }
+            if (title == null) {
+                title = "A " + specification.getSingularName().toLowerCase();
+            }
             return title;
         }
     }
@@ -235,7 +253,7 @@ public class PojoAdapter extends AbstractNakedObject {
 
     protected void finalize() throws Throwable {
         super.finalize();
-        LOG.info("finalizing pojo: " + pojo);
+        LOG.debug("finalizing pojo: " + pojo);
     }
 
 }
