@@ -1,26 +1,40 @@
 package org.nakedobjects.utility;
 
+import java.text.NumberFormat;
 import java.util.Hashtable;
 
 
 public class Profiler {
     private final static String DELIMITER = "\t";
-    private static long creationTime;
-    private static long memoryBase;
+    private static NumberFormat floatFormat = NumberFormat.getNumberInstance();
+    private static NumberFormat integerFormat = NumberFormat.getNumberInstance();
     private static int nextId = 0;
     private static int nextThread = 0;
+    protected static ProfilerSystem profilerSystem = new ProfilerSystem();
     private static Hashtable threads = new Hashtable();
+
+    public static String freeMemoryLog() {
+        long free = memory();
+        return integerFormat.format(free) + " bytes";
+    }
+
+    private static long memory() {
+        return profilerSystem.memory();
+    }
+
+    private static long time() {
+        return profilerSystem.time();
+    }
+
+    
+    
+    private long elapsedTime = 0;
+    private final int id;
+    private long memory;
     private final String name;
     private long start = 0;
-    private long end = 0;
-    private final int id;
     private final String thread;
-    private final long memory;
-
-    public static void reset() {
-        creationTime = time();
-        memoryBase = memory();
-    }
+    private boolean timing = false;
 
     public Profiler(final String name) {
         this.name = name;
@@ -37,49 +51,51 @@ public class Profiler {
         memory = memory();
     }
 
-    private static long memory() {
-        return Runtime.getRuntime().freeMemory();
+    public long getElapsedTime() {
+        return timing ? time() - start : elapsedTime;
+    }
+
+    public long getMemoryUsage() {
+        return memory() - memory;
     }
 
     public String getName() {
         return name;
     }
 
-    public void start() {
-        start = time();
+    public String log() {
+        return id + DELIMITER + thread + DELIMITER + getName() + DELIMITER + getMemoryUsage()
+                + DELIMITER + getElapsedTime();
     }
 
-    private static long time() {
-        return System.currentTimeMillis();
+    public void reset() {
+        elapsedTime = 0;
+        start = time();
+        memory = memory();
+    }
+
+    public void start() {
+        start = time();
+        timing = true;
     }
 
     public void stop() {
-        end = time();
+        timing = false;
+        long end = time();
+        elapsedTime += end - start;
     }
 
-    private long getTimeInMilliseconds() {
-        return end - start;
-    }
 
-    public long getStart() {
-        return start - creationTime;
+    public String memoryUsageLog() {
+        return integerFormat.format(getMemoryUsage()) + " bytes";
     }
-
-    public long getEnd() {
-        return end - creationTime;
-    }
-
-    public long getMemoryUsage() {
-        return memoryBase - memory;
-    }
-
-    public String logRecord() {
-        return id + DELIMITER + thread + DELIMITER + getName() + DELIMITER + getMemoryUsage() + DELIMITER + getStart()
-                + DELIMITER + getEnd() + DELIMITER + getTimeInMilliseconds();
+    
+    public String timeLog() {
+        return floatFormat.format(getElapsedTime() / 1000.0) + " secs";
     }
 
     public String toString() {
-        return getTimeInMilliseconds() + "ms - " + name;
+        return getElapsedTime() + "ms - " + name;
     }
 
 }
