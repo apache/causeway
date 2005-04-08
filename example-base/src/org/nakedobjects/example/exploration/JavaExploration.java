@@ -44,7 +44,6 @@ public class JavaExploration {
     private SplashWindow splash;
     private JavaFixtureBuilder builder;
     private LocalObjectManager objectManager;
- //   private ExplorationFixture explorationFixture;
 
     public JavaExploration() {
         ConfigurationPropertiesLoader loadedProperties = new ConfigurationPropertiesLoader("log4j.properties", false);

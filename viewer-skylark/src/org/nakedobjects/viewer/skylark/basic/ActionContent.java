@@ -140,7 +140,7 @@ public class ActionContent extends ObjectContent {
         return parameters[index];
     }
 
-    public Naked getParameteValue(int index) {
+    public Naked getParameterValue(int index) {
         return parameters[index].getNaked();
     }
 

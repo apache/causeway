@@ -132,11 +132,11 @@ public class ViewerAssistant {
                 }
             });
 
-        String debug = "Debug graphics " + (AbstractView.DEBUG ? "off" : "on");
+        String debug = "Debug graphics " + (AbstractView.debug ? "off" : "on");
         options.add(MenuOptionSet.DEBUG,
             new MenuOption(debug) {
                 public void execute(Workspace workspace, View view, Location at) {
-                    AbstractView.DEBUG = !AbstractView.DEBUG;
+                    AbstractView.debug = !AbstractView.debug;
                     view.markDamaged();
                 }
             });

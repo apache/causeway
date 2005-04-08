@@ -37,7 +37,7 @@ public class IconGraphic {
         int yi = baseline - getBaseline() + View.VPADDING;
         canvas.drawIcon(icon, xi, yi);
 
-        if (AbstractView.DEBUG) {
+        if (AbstractView.debug) {
             Size size = getSize();
             canvas.drawRectangle(x, baseline - getBaseline(), size.getWidth() - 1, size.getHeight() - 1, Color.DEBUG_DRAW_BOUNDS);
             canvas.drawLine(x, baseline - getBaseline() - size.getHeight() / 2, x + size.getWidth(), baseline - getBaseline()

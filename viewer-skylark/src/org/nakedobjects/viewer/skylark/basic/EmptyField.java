@@ -135,7 +135,7 @@ public class EmptyField extends AbstractView {
 
         canvas.drawText(name(), xt, yt, color, style);
 
-        if (AbstractView.DEBUG) {
+        if (AbstractView.debug) {
             Size size = getSize();
             canvas.drawRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, Color.DEBUG_VIEW_BOUNDS);
             canvas.drawLine(0, size.getHeight() / 2, size.getWidth() - 1, size.getHeight() / 2, Color.DEBUG_VIEW_BOUNDS);
@@ -146,7 +146,6 @@ public class EmptyField extends AbstractView {
     public void drop(ContentDrag drag) {
         NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
         NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
-
         setField(target, source);
     }
 

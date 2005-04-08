@@ -1,10 +1,12 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.ParameterContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -66,22 +68,34 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
         View[] subviews = view.getSubviews();
 
         for (int i = 0; i < subviews.length - 1; i++) {
+            // Note the first view is the text field, hence we get the i+1 subview for the parameter i
             View subview = subviews[i + 1];
             Content content = subview.getContent();
 
+            //TODO need to fix this so it recognises when a field has been cleared
             if (content instanceof ObjectParameter) {
+                Naked parameterValue = actionContent.getParameterValue(i);
+ /*               ObjectContent objectContent = ((ObjectContent) subview.getContent());
+                NakedObject existing = objectContent == null ? null : objectContent.getObject();
+                boolean changedValue = parameterValue != existing;
+                if (changedValue) {
+/*
+                
                 Naked parameterValue = actionContent.getParameteValue(i);
-                boolean emptyField = subview.getSpecification().canDisplay(null);
+              //  boolean emptyField = subview.getSpecification().canDisplay(null);
+                boolean emptyField = subview.getContent().getNaked() == null;
                 boolean changeToNull = !emptyField && parameterValue == null;
                 boolean changedFromNull = emptyField && parameterValue != null;
                 if (changeToNull || changedFromNull) {
+                */
                     ObjectParameter parameter = (ObjectParameter) content;
                     String label = parameter.getParameterName();
 
-                    ObjectParameter pa = new ObjectParameter(label, parameterValue, parameter.getSpecification(), actionContent);
+            //        ObjectParameter pa = new ObjectParameter(label, parameterValue, parameter.getSpecification(), actionContent);
+                    ObjectParameter pa = new ObjectParameter(label, parameter.getNaked(), parameter.getSpecification(), actionContent);
                     View fieldView = createFieldView(view, pa);
                     view.replaceView(subview, decorateSubview(new LabelBorder(label, fieldView)));
-                }
+ //               }
             }
         }
     }
