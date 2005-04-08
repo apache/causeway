@@ -117,7 +117,9 @@ public class ServerDistribution implements ClientDistribution {
     public Oid[] makePersistent(Session session, ObjectData data) {
         NakedObject object = ObjectDataHelper.recreate(loadedObjects, data);
         objectFactory.recreatedObject(object.getObject());
+        objectManager.startTransaction();
         objectManager.makePersistent(object);
+        objectManager.endTransaction();
         return new Oid[] { object.getOid() };
     }
 
@@ -199,14 +201,14 @@ public class ServerDistribution implements ClientDistribution {
         this.objectFactory = objectFactory;
     }
 
-    public void setValue(Session session, String fieldIdentifier, Oid objectOid, String objectType, Object associate) {
+    public void setValue(Session session, String fieldIdentifier, Oid objectOid, String objectType, Object value) {
         NakedObject inObject = getNakedObject(session, objectOid, objectType);
         OneToOneAssociation association = (OneToOneAssociation) inObject.getSpecification().getField(fieldIdentifier);
-        Hint about = inObject.getHint(session, association, PojoAdapter.createAdapter(associate));
+        Hint about = inObject.getHint(session, association, PojoAdapter.createAdapter(value));
         if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
             throw new NakedObjectRuntimeException();
         }
-        inObject.setValue(association, associate);
+        inObject.setValue(association, value);
     }
 
     public void abortTransaction(Session session) {
