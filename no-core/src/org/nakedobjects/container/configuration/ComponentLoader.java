@@ -1,5 +1,7 @@
 package org.nakedobjects.container.configuration;
 
+import org.nakedobjects.NakedObjects;
+
 public class ComponentLoader {
     /**
      * Loads a component required by the system, as specfied in the
@@ -91,7 +93,7 @@ public class ComponentLoader {
     }
 
     private static Configuration params() {
-        return ConfigurationFactory.getConfiguration();
+        return NakedObjects.getConfiguration();
     }
 }
 
