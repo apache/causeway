@@ -1,7 +1,12 @@
+
 package org.nakedobjects.object.reflect;
+import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.NakedObjectSpecification;
+
 
 /**
- * Details the intial states of, and the labels for, the parameters for an action method.
+ * Details the intial states of, and the labels for, the parameters for an
+ * action method.
  */
 public class ActionParameterSet {
     private final Object[] defaultValues;
@@ -19,6 +24,21 @@ public class ActionParameterSet {
 
     public String[] getParameterLabels() {
         return labels;
+    }
+
+    public void checkParameters(String name, NakedObjectSpecification requiredTypes[]) {
+        for (int i = 0; i < requiredTypes.length; i++) {
+            NakedObjectSpecification specification = requiredTypes[i];
+            if(defaultValues[i] == null) {
+                continue;
+            }
+            NakedObjectSpecification parameterSpec = NakedObjects.getSpecificationLoader().loadSpecification(
+                    defaultValues[i].getClass());
+            if (!parameterSpec.isOfType(specification)) {
+                throw new ReflectionException("Parameter " + (i + 1) + " in " + name + " is not of required type; expected type "
+                        + specification.getFullName() + " but got " + parameterSpec.getFullName() + ".  Check the related about method");
+            }
+        }
     }
 }
 
