@@ -8,7 +8,7 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.AbstractActionPeer;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
-import org.nakedobjects.object.reflect.ReflectriveActionException;
+import org.nakedobjects.object.reflect.ReflectiveActionException;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Session;
 
@@ -30,7 +30,7 @@ public final class ProxyAction extends AbstractActionPeer {
         this.objectDataFactory = objectDataFactory;
     }
 
-    public Naked execute(MemberIdentifier identifier, NakedObject target, Naked[] parameters) throws ReflectriveActionException {
+    public Naked execute(MemberIdentifier identifier, NakedObject target, Naked[] parameters) throws ReflectiveActionException {
         if (isPersistent(target)) {
             String[] parameterTypes = pararmeterTypes();
             ObjectData[] parameterObjectData = parameterValues(parameters);

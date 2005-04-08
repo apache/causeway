@@ -2,21 +2,21 @@ package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.NakedObjectException;
 
-public class ReflectriveActionException extends NakedObjectException {
+public class ReflectiveActionException extends NakedObjectException {
 
-    public ReflectriveActionException() {
+    public ReflectiveActionException() {
         super();
     }
 
-    public ReflectriveActionException(String msg) {
+    public ReflectiveActionException(String msg) {
         super(msg);
     }
 
-    public ReflectriveActionException(Throwable cause) {
+    public ReflectiveActionException(Throwable cause) {
         super(cause);
     }
 
-    public ReflectriveActionException(String msg, Throwable cause) {
+    public ReflectiveActionException(String msg, Throwable cause) {
         super(msg, cause);
     }
 
