@@ -80,13 +80,16 @@ public abstract class AcceptanceTestCase extends TestCase {
 
     protected void setUp() throws Exception {
         File f = new File("xat.properties");
+        Configuration configuration;
         if (f.exists()) {
-            ConfigurationFactory
-                    .setConfiguration(new Configuration(new ConfigurationPropertiesLoader(f.getAbsolutePath(), true)));
+            configuration = new Configuration(new ConfigurationPropertiesLoader(f.getAbsolutePath(), true));
         } else {
-            ConfigurationFactory.setConfiguration(new Configuration());
+            configuration = new Configuration();
         }
-        Properties logProperties = ConfigurationFactory.getConfiguration().getProperties("log4j");
+        NakedObjects.setConfiguration(configuration);
+        ConfigurationFactory.setConfiguration(configuration);
+        
+        Properties logProperties = NakedObjects.getConfiguration().getProperties("log4j");
         if (logProperties.size() == 0) {
             LogManager.getRootLogger().setLevel(Level.OFF);
         } else {
@@ -188,8 +191,15 @@ public abstract class AcceptanceTestCase extends TestCase {
     protected void tearDown() throws Exception {
        	NakedObjects.getObjectManager().shutdown();
         NakedObjects.setObjectManager(null);
-
+        NakedObjects.getPojoAdapterFactory().shutdown();
+        NakedObjects.setPojoAdapterFactory(null);
+  //      NakedObjects.getSpecificationLoader().shutdown();
+        NakedObjects.setSpecificationLoader(null);
+        NakedObjects.setConfiguration(null);
+        
         ClientSession.end();
+        ClientSession.setSession(null);
+        
         testObjectFactory.testEnding();
         documentor.stop();
         
