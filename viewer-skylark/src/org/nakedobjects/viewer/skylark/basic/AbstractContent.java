@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.object.Persistable;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
@@ -30,7 +31,7 @@ public abstract class AbstractContent implements Content {
 
     
     public boolean isPersistable() {
-        return getSpecification().isPersistable();
+        return getSpecification().persistable() == Persistable.USER_PERSISTABLE;
     }
 }
 
