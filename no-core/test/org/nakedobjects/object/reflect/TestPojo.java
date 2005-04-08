@@ -1,20 +1,10 @@
-package org.nakedobjects.object;
+package org.nakedobjects.object.reflect;
 
-public class DummyNakedObjectSpecificationLoader extends NakedObjectSpecificationLoader {
+public class TestPojo {
 
-    public NakedObjectSpecification loadSpecification(String name) {
-        return null;
+    public TestPojo() {
+        super();
     }
-
-    public NakedObjectSpecification loadSpecification(Class cls) {
-        return null;
-    }
-
-    public NakedObjectSpecification[] getAllSpecifications() {
-        return null;
-    }
-
-    public void shutdown() {}
 
 }
 

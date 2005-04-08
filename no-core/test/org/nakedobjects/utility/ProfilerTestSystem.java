@@ -1,21 +1,18 @@
-package org.nakedobjects.object;
+package org.nakedobjects.utility;
 
-public class DummyNakedObjectSpecificationLoader extends NakedObjectSpecificationLoader {
-
-    public NakedObjectSpecification loadSpecification(String name) {
-        return null;
+public class ProfilerTestSystem extends ProfilerSystem {
+    long[] memory = new long[] {10000, 20300, 30000};
+    int memoryIndex = 0;
+    long[] time = new long[] {1000, 1100, 1300, 1600, 2000};
+    int timeIndex = 0;
+    
+    long memory() {
+        return memory[memoryIndex++];
     }
-
-    public NakedObjectSpecification loadSpecification(Class cls) {
-        return null;
+    
+    long time() {
+        return time[timeIndex++];
     }
-
-    public NakedObjectSpecification[] getAllSpecifications() {
-        return null;
-    }
-
-    public void shutdown() {}
-
 }
 
 

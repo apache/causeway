@@ -10,6 +10,7 @@ import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
 
+import java.util.Date;
 import java.util.Vector;
 
 import junit.framework.Assert;
@@ -90,7 +91,7 @@ final class MockAction implements ActionPeer {
     }
 
     public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
-        return null;
+        return new ActionParameterSet(new Object[] {new String(), new Date(), new Vector()}, new String[] {"one", "two", "three"});
     }
 }
 

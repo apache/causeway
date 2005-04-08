@@ -1,42 +1,50 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.utility.NotImplementedException;
 
-import java.util.Vector;
+import java.util.Hashtable;
 
-public class MockNakedObjectSpecificationLoader extends NakedObjectSpecificationLoader {
-    private Vector specs = new Vector();
+public class MockNakedObjectSpecificationLoaderNew extends NakedObjectSpecificationLoader {
+    private Hashtable specs = new Hashtable();
     
-    public MockNakedObjectSpecificationLoader() {
+    public MockNakedObjectSpecificationLoaderNew() {
         super();
     }
 
     public NakedObjectSpecification loadSpecification(String name) {
-        return nextSpec(name);
+        return spec(name);
     }
 
     public NakedObjectSpecification loadSpecification(Class cls) {
-        return nextSpec(cls.getName());
+        return spec(cls.getName());
     }
 
-    private NakedObjectSpecification nextSpec(String name) {
-        if(specs.isEmpty()) {
-            throw new NakedObjectRuntimeException("No spec for " + name);
+    private NakedObjectSpecification spec(String name) {
+        if(specs.containsKey(name)) {
+	        NakedObjectSpecification object = (NakedObjectSpecification) specs.get(name);
+	        return object;
+        } else {
+            throw new NakedObjectRuntimeException("No specification registered for " + name);
         }
-        NakedObjectSpecification object = (NakedObjectSpecification) specs.firstElement();
-        specs.removeElementAt(0);
-        return object;
     }
 
     public NakedObjectSpecification[] getAllSpecifications() {
         throw new NotImplementedException();
     }
 
-    public void addSpec(NakedObjectSpecification spec) {
-        specs.addElement(spec);
+    public void addSpec(String name, NakedObjectSpecification spec) {
+        if(specs.containsKey(name)) {
+            throw new AssertionError("Can't add spec twice");
+        }
+        specs.put(name, spec);
+    }
+
+    public void addSpec(String name) {
+        addSpec(name, new DummyNakedObjectSpecification(name));
     }
 
     public void shutdown() {}

@@ -1,20 +1,22 @@
-package org.nakedobjects.object;
+package org.nakedobjects.object.reflect;
 
-public class DummyNakedObjectSpecificationLoader extends NakedObjectSpecificationLoader {
+import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.ObjectFactory;
+import org.nakedobjects.object.ReflectorFactory;
 
-    public NakedObjectSpecification loadSpecification(String name) {
+public class DummyReflectorFactory extends ReflectorFactory {
+
+    public Reflector createReflector(String className) throws ReflectionException {
         return null;
     }
 
-    public NakedObjectSpecification loadSpecification(Class cls) {
+    public ObjectFactory getObjectFactory() {
         return null;
     }
 
-    public NakedObjectSpecification[] getAllSpecifications() {
+    public Naked createAdapter(Object pojo) {
         return null;
     }
-
-    public void shutdown() {}
 
 }
 

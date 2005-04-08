@@ -2,6 +2,7 @@ package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
+import org.nakedobjects.object.DummyNakedObjectSpecificationLoader;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectTestCase;
@@ -10,6 +11,9 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.object.security.Session;
+
+import java.util.Date;
+import java.util.Vector;
 
 import junit.framework.TestSuite;
 
@@ -24,6 +28,7 @@ public class ActionTest extends NakedObjectTestCase {
     public static void main(String[] args) {
         junit.textui.TestRunner.run(new TestSuite(ActionTest.class));
     }
+
     private Action action;
 
     private MockAction actionDelegate;
@@ -37,6 +42,7 @@ public class ActionTest extends NakedObjectTestCase {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
         NakedObjects.setObjectManager(new MockObjectManager());
+        NakedObjects.setSpecificationLoader(new DummyNakedObjectSpecificationLoader());
         
         actionDelegate = new MockAction();
         action = new Action("", ACTION_NAME, actionDelegate);
@@ -100,6 +106,21 @@ public class ActionTest extends NakedObjectTestCase {
         actionDelegate.returnType = new DummyNakedObjectSpecification();
         assertTrue(action.hasReturn());
         assertEquals(actionDelegate.returnType, action.getReturnType());
+    }
+
+    public void testGetParameters() {
+        NakedObject nakedObject = new DummyNakedObject();
+        ActionParameterSet parameters = action.getParameters(null, nakedObject);
+
+        String[] parameterLabels = parameters.getParameterLabels();
+        assertEquals("one", parameterLabels[0]);
+        assertEquals("two", parameterLabels[1]);
+        assertEquals("three", parameterLabels[2]);
+
+        Object[] defaultParameterValues = parameters.getDefaultParameterValues();
+        assertEquals(new String(), defaultParameterValues[0]);
+        assertEquals(new Date(), defaultParameterValues[1]);
+        assertEquals(new Vector(), defaultParameterValues[2]);
     }
 }
 /*

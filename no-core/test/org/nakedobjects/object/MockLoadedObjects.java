@@ -69,6 +69,8 @@ public class MockLoadedObjects implements LoadedObjects {
     public String getDebugTitle() {
         return null;
     }
+
+    public void shutdown() {}
 }
 
 

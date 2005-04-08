@@ -3,6 +3,7 @@ package org.nakedobjects.object.defaults;
 import org.nakedobjects.object.MockOneToOneAssociation;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.FieldPeer;
@@ -93,6 +94,10 @@ public class MockReflector implements Reflector {
     }
 
     public void markDirty(NakedObject object2) {}
+
+    public Persistable persistable() {
+        return null;
+    }
 
     public String pluralName() {
         return "plural";

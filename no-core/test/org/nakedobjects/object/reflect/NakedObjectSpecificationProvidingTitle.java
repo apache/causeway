@@ -1,35 +1,21 @@
-package org.nakedobjects.object;
+package org.nakedobjects.object.reflect;
 
+import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.ObjectTitle;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
 
 
-public class DummyNakedObjectSpecification implements NakedObjectSpecification {
-    private static int next = 100;
-    public NakedObjectField[] fields;
-    public String fullName;
-    private final int id = next++;
-
-    public DummyNakedObjectSpecification() {}
-
-    public DummyNakedObjectSpecification(String fullName) {
-        this.fullName = fullName;
-    }
+public class NakedObjectSpecificationProvidingTitle implements NakedObjectSpecification {
 
     public Naked acquireInstance() {
         return null;
     }
 
     public void clearDirty(NakedObject object) {}
-
-    public NakedObject createPattern() {
-        return null;
-    }
 
     public String debugInterface() {
         return null;
@@ -56,11 +42,11 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     }
 
     public NakedObjectField[] getFields() {
-        return fields;
+        return null;
     }
 
     public String getFullName() {
-        return fullName;
+        return null;
     }
 
     public Action getObjectAction(Type type, String name) {
@@ -84,14 +70,13 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     }
 
     public String getSingularName() {
-        return "singular name";
+        return null;
     }
 
     public ObjectTitle getTitle() {
         return new ObjectTitle() {
-
             public String title(NakedObject object) {
-                return "";
+                return "object title from specification";
             }
         };
     }
@@ -112,10 +97,6 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         return false;
     }
 
-    public boolean isCollection() {
-        return false;
-    }
-
     public boolean isDirty(NakedObject object) {
         return false;
     }
@@ -129,14 +110,10 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     }
 
     public boolean isOfType(NakedObjectSpecification cls) {
-        return cls == this;
-    }
-
-    public boolean isParsable() {
         return false;
     }
 
-    public boolean isPartOf() {
+    public boolean isParsable() {
         return false;
     }
 
@@ -162,13 +139,10 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         return null;
     }
 
-    public String toString() {
-        return "DummyNakedObjectSpecification" + id + " " + fullName;
-    }
-
     public String unresolvedTitle(PojoAdapter pojo) {
         return null;
     }
+
 }
 
 /*
