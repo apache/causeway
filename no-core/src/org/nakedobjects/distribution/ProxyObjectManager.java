@@ -229,6 +229,8 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     }
 
     public void resolveEagerly(NakedObject object, NakedObjectField field) {}
+
+    public void reset() {}
 }
 
 /*

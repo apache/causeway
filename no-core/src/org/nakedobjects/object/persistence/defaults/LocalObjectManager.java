@@ -1,5 +1,6 @@
 package org.nakedobjects.object.persistence.defaults;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.LoadedObjects;
@@ -392,6 +393,11 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
     }
 
+    public void reset() {
+        loadedObjects.reset();
+        NakedObjects.getPojoAdapterFactory().reset();
+    }
+    
     public void resolveEagerly(NakedObject object, NakedObjectField field) {
         if (object.isResolved() || !isPersistent(object)) {
             return;

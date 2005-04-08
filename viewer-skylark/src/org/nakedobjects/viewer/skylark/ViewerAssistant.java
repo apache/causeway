@@ -132,6 +132,23 @@ public class ViewerAssistant {
                 }
             });
 
+        options.add(MenuOptionSet.DEBUG,
+                new MenuOption("Vew context details...") {
+                    public void execute(Workspace workspace, View view, Location at) {
+                        InfoDebugFrame f = new InfoDebugFrame();
+                        f.setInfo(ClientSession.getSession());
+                        f.show(at.x + 50, workspace.getBounds().y + 6);
+                    }
+                });
+
+
+        
+        options.add(MenuOptionSet.DEBUG, loggingOption("Off", Level.OFF));
+        options.add(MenuOptionSet.DEBUG, loggingOption("Error", Level.ERROR));
+        options.add(MenuOptionSet.DEBUG, loggingOption("Warn", Level.WARN));
+        options.add(MenuOptionSet.DEBUG, loggingOption("Info", Level.INFO));
+        options.add(MenuOptionSet.DEBUG, loggingOption("Debug", Level.DEBUG));
+
         String debug = "Debug graphics " + (AbstractView.debug ? "off" : "on");
         options.add(MenuOptionSet.DEBUG,
             new MenuOption(debug) {
@@ -140,48 +157,31 @@ public class ViewerAssistant {
                     view.markDamaged();
                 }
             });
-
-        options.add(MenuOptionSet.DEBUG,
-            new MenuOption("Vew context details...") {
-                public void execute(Workspace workspace, View view, Location at) {
-                    InfoDebugFrame f = new InfoDebugFrame();
-                    f.setInfo(ClientSession.getSession());
-                    f.show(at.x + 50, workspace.getBounds().y + 6);
-                }
-            });
-
-        options.add(MenuOptionSet.DEBUG,
-            new MenuOption("List prototypes...") {
-                public void execute(Workspace workspace, View view, Location at) {
-                    InfoDebugFrame f = new InfoDebugFrame();
-                    f.setInfo(Skylark.getViewFactory());
-                    f.show(at.x + 50, workspace.getBounds().y + 6);
-                }
-            });
-
-
-        options.add(MenuOptionSet.DEBUG,
-                new MenuOption("Debug overlay...") {
-                    public void execute(Workspace workspace, View view, Location at) {
-                        DebugFrame f = new OverlayDebugFrame(viewer);
-                        f.show(at.x + 50, workspace.getBounds().y + 6);
-                    }
-                });
+        
+        String action = viewer.isShowingDeveloperStatus() ? "Hide" : "Show";
+        options.add(MenuOptionSet.DEBUG, new MenuOption(action + " developer status") {
+            public void execute(Workspace workspace, View view, Location at) {
+                viewer.setShowDeveloperStatus(!viewer.isShowingDeveloperStatus());
+            }
+        });
 
         options.add(MenuOptionSet.DEBUG,
                 new MenuOption("Restart object manager") {
                     public void execute(Workspace workspace, View view, Location at) {
-                        try {
-	                        NakedObjectManager om = NakedObjects.getObjectManager();
-	                        om.shutdown();
-                            om.init();
-                        } catch (StartupException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
+	                    NakedObjects.getObjectManager().reset();
+	         //           NakedObjects.getPojoAdapterFactory().reset();
                     }
                 });
 
+
+        options.add(MenuOptionSet.DEBUG,
+                new MenuOption("Debug notification receivers...") {
+                    public void execute(Workspace workspace, View view, Location at) {
+                        InfoDebugFrame f = new InfoDebugFrame();
+                        f.setInfo(updateNotifier);
+                        f.show(at.x + 50, workspace.getBounds().y + 6);
+                    }
+                });
 
         options.add(MenuOptionSet.DEBUG,
                 new MenuOption("Debug object manager") {
@@ -194,27 +194,23 @@ public class ViewerAssistant {
                 });
 
         options.add(MenuOptionSet.DEBUG,
-                new MenuOption("List notification receivers...") {
+                new MenuOption("Debug overlay...") {
                     public void execute(Workspace workspace, View view, Location at) {
-                        InfoDebugFrame f = new InfoDebugFrame();
-                        f.setInfo(updateNotifier);
+                        DebugFrame f = new OverlayDebugFrame(viewer);
                         f.show(at.x + 50, workspace.getBounds().y + 6);
                     }
                 });
-        
-        String action = viewer.isShowingDeveloperStatus() ? "Hide" : "Show";
-        options.add(MenuOptionSet.DEBUG, new MenuOption(action + " developer status") {
-            public void execute(Workspace workspace, View view, Location at) {
-                viewer.setShowDeveloperStatus(!viewer.isShowingDeveloperStatus());
-            }
-        });
-        
-        options.add(MenuOptionSet.DEBUG, loggingOption("Off", Level.OFF));
-        options.add(MenuOptionSet.DEBUG, loggingOption("Error", Level.ERROR));
-        options.add(MenuOptionSet.DEBUG, loggingOption("Warn", Level.WARN));
-        options.add(MenuOptionSet.DEBUG, loggingOption("Info", Level.INFO));
-        options.add(MenuOptionSet.DEBUG, loggingOption("Debug", Level.DEBUG));
-    }
+
+        options.add(MenuOptionSet.DEBUG,
+                new MenuOption("Debug prototypes...") {
+                    public void execute(Workspace workspace, View view, Location at) {
+                        InfoDebugFrame f = new InfoDebugFrame();
+                        f.setInfo(Skylark.getViewFactory());
+                        f.show(at.x + 50, workspace.getBounds().y + 6);
+                    }
+                });
+
+}
 
     public void removeFromNotificationList(View view) {
         updateNotifier.remove(view);

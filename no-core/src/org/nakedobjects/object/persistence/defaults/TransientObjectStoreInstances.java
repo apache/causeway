@@ -1,11 +1,13 @@
 package org.nakedobjects.object.persistence.defaults;
 
+import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.Oid;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Vector;
 
 /*
  * The objects need to store in a repeatable sequence so the elements and
@@ -16,33 +18,53 @@ import java.util.Hashtable;
 public class TransientObjectStoreInstances {
     private final Hashtable objectInstances = new Hashtable();
     private final Hashtable titleIndex = new Hashtable();
+    private final LoadedObjects loaded;
+    
+    public TransientObjectStoreInstances(final LoadedObjects loaded) {
+        this.loaded = loaded;
+    }
     
     public void remove(Oid oid) {
-        objectInstances.remove(oid);
+        NakedObject object;
+        object = getObject(oid);
+	    objectInstances.remove(oid);
+	    loaded.unloaded(object);
     }
 
     public Enumeration elements() {
-        return objectInstances.elements();
+        Vector v = new Vector(objectInstances.size());
+        for (Enumeration e = objectInstances.keys(); e.hasMoreElements();) {
+            Oid oid = (Oid) e.nextElement();
+            v.addElement(getObject(oid));
+        }
+        return v.elements();
     }
 
     public NakedObject instanceMatching(String title) {
-        return (NakedObject) titleIndex.get(title);
+        Oid oid = (Oid) titleIndex.get(title);
+        return oid == null ? null : getObject(oid);
     }
 
 
     public void save(NakedObject object) {
-        objectInstances.put(object.getOid(), object);    
-        titleIndex.put(object.titleString().toLowerCase(), object);
+        objectInstances.put(object.getOid(), object.getObject());    
+        titleIndex.put(object.titleString().toLowerCase(), object.getOid());
     }
 
-    public NakedObject getObject(Oid oid) throws ObjectNotFoundException {
-        NakedObject object = (NakedObject) objectInstances.get(oid);
-        if(object == null) {
-	        throw new ObjectNotFoundException(oid);
+    public NakedObject getObject(Oid oid) {
+        if(loaded.isLoaded(oid)) {
+          return loaded.getLoadedObject(oid);  
         } else {
-            return object;
+            Object pojo = objectInstances.get(oid);
+            NakedObject object = NakedObjects.getPojoAdapterFactory().createNOAdapter(pojo);
+            //NakedObject object = NakedObjects.getPojoAdapterFactory().createNOAdapter(objectInstances.get(oid));
+	        if(object.getOid() == null) {
+			    object.setOid(oid);
+			    loaded.loaded(object);
+			    object.setResolved();
+	        }
+	        return object;
         }
-        
     }
 
     public boolean hasInstances() {
