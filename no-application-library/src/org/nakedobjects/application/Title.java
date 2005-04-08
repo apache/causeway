@@ -130,7 +130,6 @@ public class Title {
      */
     public Title append(String joiner, TitledObject object) {
         append(joiner, object, "");
-
         return this;
     }
 
@@ -146,7 +145,7 @@ public class Title {
        @return a reference to the called object (itself).
      */
     public Title append(String joiner, TitledObject object, String defaultValue) {
-        if (string.length() > 0 && (object != null && object.title().toString().length() > 0) ||
+        if (string.length() > 0 && (object != null && titleString(object).length() > 0) ||
                 (defaultValue != null && defaultValue.length() > 0)) {
             concat(joiner);
             appendSpace();
@@ -154,6 +153,10 @@ public class Title {
 		concat(object, defaultValue);
 
         return this;
+    }
+
+    private static String titleString(TitledObject object) {
+        return object == null ? "" : object.title().toString();
     }
 
     /**
@@ -164,9 +167,9 @@ public class Title {
        @return a reference to the called object (itself).
      */
     public Title append(TitledObject object) {
-        if (object != null && object.title() != null && !object.title().toString().equals("")) {
+        if (object != null && object.title() != null && !titleString(object).equals("")) {
             appendSpace();
-            string.append(object.title().toString());
+            string.append(titleString(object));
         }
 
         return this;
@@ -211,7 +214,7 @@ public class Title {
     }
 
 	public final Title concat(String joiner, TitledObject object) {
-		if (string.length() > 0 && (object != null && object.title().toString().length() > 0)) {
+		if (string.length() > 0 && (object != null && titleString(object).length() > 0)) {
 			concat(joiner);
 		}
 		concat(object, "");
@@ -233,7 +236,7 @@ public class Title {
     }
 
 	public final Title concat(String joiner, TitledObject object, String defaultValue) {
-		if (string.length() > 0 && (object != null && object.title().toString().length() > 0)) {
+		if (string.length() > 0 && (object != null && titleString(object).length() > 0)) {
 			concat(joiner);
 		}
 		concat(object, defaultValue);
@@ -249,7 +252,7 @@ public class Title {
        @return a reference to the called object (itself).
      */
     public final Title concat(TitledObject object, String defaultValue) {
-        if (object == null || object.title().toString().length() == 0) {
+        if (object == null || titleString(object).length() == 0) {
             string.append(defaultValue);
         } else {
             string.append(object.title());
@@ -296,7 +299,7 @@ public class Title {
     }
 
     public static Title title(TitledObject object) {
-        return object == null ? new Title() : new Title(object.title().toString());
+        return object == null ? new Title() : new Title(titleString(object));
     }
 }
 
