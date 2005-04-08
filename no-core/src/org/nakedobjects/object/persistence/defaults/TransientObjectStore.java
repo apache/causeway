@@ -48,6 +48,10 @@ public class TransientObjectStore implements NakedObjectStore {
                 save(object);
             }
             
+            public NakedObject onObject() {
+                return object;
+            }
+            
             public String toString() {
                 return "CreateObjectCommand [object=" + object + "]";
             }
@@ -60,8 +64,12 @@ public class TransientObjectStore implements NakedObjectStore {
                 LOG.info("  delete requested on '" + object + "'");
                  TransientObjectStoreInstances ins = instancesFor(object.getSpecification());
                 ins.remove(object.getOid());
-            }
+            }       
             
+            public NakedObject onObject() {
+                return object;
+            }
+
             public String toString() {
                 return "DestroyObjectCommand [object=" + object + "]";
             }
@@ -74,6 +82,10 @@ public class TransientObjectStore implements NakedObjectStore {
                 save(object);
             }
             
+            public NakedObject onObject() {
+                return object;
+            }
+
             public String toString() {
                 return "SaveObjectCommand [object=" + object + "]";
             }

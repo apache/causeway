@@ -2,8 +2,12 @@ package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.object.MockObjectStore;
 import org.nakedobjects.object.MockUpdateNotifier;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.persistence.CreateObjectCommand;
+import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.ObjectStoreException;
-import org.nakedobjects.object.persistence.PersistenceCommand;
+import org.nakedobjects.object.persistence.SaveObjectCommand;
+import org.nakedobjects.object.reflect.DummyNakedObject;
 
 import junit.framework.TestCase;
 
@@ -12,12 +16,59 @@ import org.apache.log4j.Logger;
 
 
 public class TransactionTest extends TestCase {
-    private Transaction t;
-    MockObjectStore os;
-    MockUpdateNotifier updates;
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(TransactionTest.class);
+    }
+
+    NakedObject object1;
+    NakedObject object2;
+    MockObjectStore os;
+    private Transaction t;
+    MockUpdateNotifier updates;
+
+    private CreateObjectCommand createCreateCommand(final NakedObject object, final String name) {
+        return new CreateObjectCommand() {
+
+            public void execute() throws ObjectStoreException {}
+
+            public NakedObject onObject() {
+                return object;
+            }
+
+            public String toString() {
+                return name;
+            }
+        };
+    }
+
+    private DestroyObjectCommand createDestroyCommand(final NakedObject object, final String name) {
+        return new DestroyObjectCommand() {
+
+            public void execute() throws ObjectStoreException {}
+
+            public NakedObject onObject() {
+                return object;
+            }
+
+            public String toString() {
+                return name;
+            }
+        };
+    }
+
+    private SaveObjectCommand createSaveCommand(final NakedObject object, final String name) {
+        return new SaveObjectCommand() {
+            public void execute() throws ObjectStoreException {}
+
+            public NakedObject onObject() {
+                return object;
+            }
+
+            public String toString() {
+                return name;
+            }
+        };
     }
 
     protected void setUp() throws Exception {
@@ -26,31 +77,22 @@ public class TransactionTest extends TestCase {
         t = new Transaction();
         os = new MockObjectStore();
         updates = new MockUpdateNotifier();
+
+        object1 = new DummyNakedObject();
+        object2 = new DummyNakedObject();
     }
 
-    public void testNoCommands() throws Exception {
-        t.commit(os, updates);
+    public void testAbort() throws Exception {
+        t.addCommand(createSaveCommand(object1, "command 1"));
+        t.addCommand(createSaveCommand(object2, "command 2"));
+        t.abort();
 
         assertEquals(0, os.getActions().size());
     }
 
     public void testAddCommands() throws Exception {
-        t.addCommand(new PersistenceCommand() {
-            public void execute() throws ObjectStoreException {}
-            
-            public String toString() {
-                return "command 1";
-            }
-        });
-        
-        t.addCommand(new PersistenceCommand() {
-            public void execute() throws ObjectStoreException {}
-            
-            public String toString() {
-                return "command 2";
-            }
-        });
-        
+        t.addCommand(createSaveCommand(object1, "command 1"));
+        t.addCommand(createSaveCommand(object2, "command 2"));
         t.commit(os, updates);
 
         os.assertAction(0, "start");
@@ -60,13 +102,66 @@ public class TransactionTest extends TestCase {
         assertEquals(4, os.getActions().size());
     }
 
-    public void testAbort() throws Exception {
-        PersistenceCommand command = new PersistenceCommand() {
-            public void execute() throws ObjectStoreException {}
-        };
+    public void testAddCreateCommandsButIgnoreSaveForSameObject() throws Exception {
+        t.addCommand(createCreateCommand(object1, "create object 1"));
+        /*
+         * The next command should be ignored as the above create will have
+         * already saved the next object
+         */
+        t.addCommand(createSaveCommand(object1, "save object 1"));
+        t.addCommand(createSaveCommand(object2, "save object 2"));
+        t.commit(os, updates);
 
-        t.addCommand(command);
-        t.abort();
+        os.assertAction(0, "start");
+        os.assertAction(1, "run create object 1");
+        os.assertAction(2, "run save object 2");
+        os.assertAction(3, "end");
+        assertEquals(4, os.getActions().size());
+    }
+
+    public void testAddDestoryCommandsButRemovePreviousSaveForSameObject() throws Exception {
+        t.addCommand(createSaveCommand(object1, "save object 1"));
+        t.addCommand(createDestroyCommand(object1, "destroy object 1"));
+        t.commit(os, updates);
+
+        os.assertAction(0, "start");
+        os.assertAction(1, "run destroy object 1");
+        os.assertAction(2, "end");
+        assertEquals(3, os.getActions().size());
+    }
+
+    public void testIgnoreBothCreateAndDestroyCommandsWhenForSameObject() throws Exception {
+        t.addCommand(createCreateCommand(object1, "create object 1"));
+        t.addCommand(createDestroyCommand(object1, "destroy object 1"));
+        t.addCommand(createDestroyCommand(object2, "destroy object 2"));
+        t.commit(os, updates);
+
+        os.assertAction(0, "start");
+        os.assertAction(1, "run destroy object 2");
+        os.assertAction(2, "end");
+        assertEquals(3, os.getActions().size());
+    }
+
+    public void testIgnoreSaveAfterDeleteForSameObject() throws Exception {
+        t.addCommand(createDestroyCommand(object1, "destroy object 1"));
+        t.addCommand(createSaveCommand(object1, "save object 1"));
+        t.commit(os, updates);
+
+        os.assertAction(0, "start");
+        os.assertAction(1, "run destroy object 1");
+        os.assertAction(2, "end");
+        assertEquals(3, os.getActions().size());
+    }
+
+    public void testNoCommands() throws Exception {
+        t.commit(os, updates);
+        assertEquals(0, os.getActions().size());
+    }
+
+    public void testNoTransactionsWhenCommandCancelEachOtherOut() throws Exception {
+        t.addCommand(createCreateCommand(object1, "create object 1"));
+        t.addCommand(createDestroyCommand(object1, "destroy object 1"));
+        t.commit(os, updates);
 
         assertEquals(0, os.getActions().size());
     }
@@ -78,13 +173,12 @@ public class TransactionTest extends TestCase {
             t.abort();
             fail();
         } catch (TransactionException expected) {}
-        
+
         try {
             t.commit(os, updates);
             fail();
         } catch (TransactionException expected) {}
     }
-    
 
     public void testTransactionAlreadyCompleteAfterCommit() throws Exception {
         t.commit(os, updates);
@@ -93,12 +187,13 @@ public class TransactionTest extends TestCase {
             t.abort();
             fail();
         } catch (TransactionException expected) {}
-        
+
         try {
             t.commit(os, updates);
             fail();
         } catch (TransactionException expected) {}
     }
+
 }
 
 /*

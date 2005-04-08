@@ -358,13 +358,29 @@ public class XmlObjectStore implements NakedObjectStore {
                 Data data = createObjectData(object, true);
                 dataManager.insert(data);
             }
-        };
+            
+            public NakedObject onObject() {
+                return object;
+            }
+            
+            public String toString() {
+                return "CreateObjectCommand [object=" + object + "]";
+            }
+       };
     }
 
     public DestroyObjectCommand createDestroyObjectCommand(final NakedObject object) {
         return new DestroyObjectCommand() {
             public void execute() throws ObjectStoreException {
                 dataManager.remove((SerialOid) object.getOid());
+            }
+                        
+            public NakedObject onObject() {
+                return object;
+            }
+
+            public String toString() {
+                return "DestroyObjectCommand [object=" + object + "]";
             }
         };
     }
@@ -383,6 +399,15 @@ public class XmlObjectStore implements NakedObjectStore {
                     dataManager.save(data);
                 }
             }
+            
+            public NakedObject onObject() {
+                return object;
+            }
+
+            public String toString() {
+                return "SaveObjectCommand [object=" + object + "]";
+            }
+
         };
     }
 

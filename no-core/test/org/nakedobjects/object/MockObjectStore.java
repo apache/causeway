@@ -163,7 +163,13 @@ public class MockObjectStore implements NakedObjectStore {
 
     public CreateObjectCommand createCreateObjectCommand(NakedObject object) {
         actions.addElement("createObject " + object);
-        return null;
+        return new CreateObjectCommand() {
+
+            public void execute() throws ObjectStoreException {}
+
+            public NakedObject onObject() {
+                return null;
+            }};
     }
 
     public DestroyObjectCommand createDestroyObjectCommand(final NakedObject object) {
@@ -174,6 +180,10 @@ public class MockObjectStore implements NakedObjectStore {
         
             public String toString() {
                 return "DestroyObjectCommand " + object.toString();
+            }
+
+            public NakedObject onObject() {
+                return null;
             }
         };
     }
