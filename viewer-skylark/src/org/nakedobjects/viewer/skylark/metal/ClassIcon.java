@@ -88,7 +88,7 @@ public class ClassIcon extends ObjectView {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
-        if(DEBUG) {
+        if(debug) {
             canvas.drawRectangle(getSize(), Color.DEBUG_BASELINE);
         }
        

@@ -790,6 +790,9 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
         NakedObject object = ((NakedObject) getForNaked());
         try {
+            if(!field.isValue()) {
+                throw new NakedAssertionFailedError("Field is not a value");
+            }
             NakedValue value = object.getValue((OneToOneAssociation) field);
             if (value == null) {
                 value = (NakedValue) field.getSpecification().acquireInstance();

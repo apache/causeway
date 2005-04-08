@@ -63,7 +63,7 @@ public class IconBorder extends AbstractBorder {
 		x += icon.getSize().getWidth();
 		text.draw(canvas, x, baseline);
 
-		if(AbstractView.DEBUG) {
+		if(AbstractView.debug) {
 		    canvas.drawRectangle(0,0,getSize().getWidth() - 1, getSize().getHeight() - 1, Color.DEBUG_DRAW_BOUNDS);
 		}
 	    

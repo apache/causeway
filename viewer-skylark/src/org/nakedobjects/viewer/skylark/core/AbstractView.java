@@ -39,7 +39,7 @@ import org.apache.log4j.Logger;
 public abstract class AbstractView implements View {
     private static final UserAction CLOSE_ALL_OPTION = new CloseAllViewsOption();
     private static final UserAction CLOSE_OPTION = new CloseViewOption();
-    public static boolean DEBUG = false;
+    public static boolean debug = false;
     private static final Logger LOG = Logger.getLogger(AbstractView.class);
 
     private static int nextId = 0;

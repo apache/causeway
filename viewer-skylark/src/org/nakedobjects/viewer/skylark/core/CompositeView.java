@@ -91,19 +91,19 @@ public class CompositeView extends ObjectView {
         for (int i = 0; i < views.length; i++) {
             View subview = views[i];
             Bounds bounds = subview.getBounds();
-            if (AbstractView.DEBUG) {	                   
+            if (AbstractView.debug) {	                   
                 LOG.debug("compare: " + bounds +"  " + canvas);
             }
             if(canvas.overlaps(bounds)) {
 	            //Canvas subCanvas = canvas.createSubcanvas();
 	            Canvas subCanvas = canvas.createSubcanvas(bounds.getX(), bounds.getY(), bounds.getWidth() - 0 , bounds.getSize().getHeight());
 	         //   subCanvas.offset(subview.getBounds().getX(), subview.getBounds().getY());
-	            if (AbstractView.DEBUG) {
+	            if (AbstractView.debug) {
 	                LOG.debug("-- repainting " + subview );
 	                LOG.debug("subcanvas " + subCanvas);
 	            }
 	            subview.draw(subCanvas);
-	            if (AbstractView.DEBUG) {	                   
+	            if (AbstractView.debug) {	                   
 	       //        canvas.drawRectangle(subviewBounds.getX(), subviewBounds.getY(), subviewBounds.getWidth() - 1, subviewBounds.getHeight() - 1, org.nakedobjects.viewer.skylark.Color.DEBUG_REPAINT_BOUNDS);
 	            }
             }
@@ -208,11 +208,11 @@ public class CompositeView extends ObjectView {
     public void replaceView(View toReplace, View replacement) {
         for (int i = 0; i < views.size(); i++) {
             if (views.elementAt(i) == toReplace) {
-                toReplace.dispose();
                 replacement.setParent(getView());
                 replacement.setLocation(toReplace.getLocation());
                 views.insertElementAt(replacement, i);
                 invalidateLayout();
+                toReplace.dispose();
 
                 return;
             }

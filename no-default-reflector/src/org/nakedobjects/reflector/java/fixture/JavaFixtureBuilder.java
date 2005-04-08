@@ -24,7 +24,7 @@ public final class JavaFixtureBuilder extends FixtureBuilder {
         try {
             for (int i = 0; i < newInstances.size(); i++) {
                 NakedObject object = (NakedObject) newInstances.elementAt(i);
-                LOG.info("Persisting " + object);
+                LOG.debug("Persisting " + object);
 
                 boolean notPersistent = object.getOid() == null;
                 if (notPersistent) {
@@ -71,7 +71,7 @@ public final class JavaFixtureBuilder extends FixtureBuilder {
         }
         NakedObjectManager objectManager = NakedObjects.getObjectManager();
         NakedObject object = objectManager.createTransientInstance(nc);
-        LOG.info("Adding " + object);
+        LOG.debug("Adding " + object);
         newInstances.addElement(object);
         return object.getObject();
     }

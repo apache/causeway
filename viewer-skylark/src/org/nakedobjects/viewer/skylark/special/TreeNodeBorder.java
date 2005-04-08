@@ -119,7 +119,7 @@ public class TreeNodeBorder extends AbstractBorder {
         x += icon.getSize().getWidth();
         text.draw(canvas, x, baseline);
 
-        if (AbstractView.DEBUG) {
+        if (AbstractView.debug) {
             canvas.drawRectangle(getSize(), Color.DEBUG_BASELINE);
         }
 
@@ -161,7 +161,7 @@ public class TreeNodeBorder extends AbstractBorder {
         return wrappedView.toString() + "/TreeNodeBorder";
     }
 
-    public ViewAreaType viewAreaType(Location location) {
+ /*    public ViewAreaType viewAreaType(Location location) {
         View subview = subviewFor(location);
         if(subview == null) {
             Size size = wrappedView.getSize();
@@ -191,6 +191,21 @@ public class TreeNodeBorder extends AbstractBorder {
 
         }
         */
+ //   }
+    
+    
+    public ViewAreaType viewAreaType(Location mouseLocation) {
+        int iconWidth = icon.getSize().getWidth();
+        int textWidth = text.getSize().getWidth();
+
+        Bounds bounds = new Bounds(0, 0, iconWidth + textWidth, top);
+
+        if (bounds.contains(mouseLocation)) {
+            return ViewAreaType.CONTENT;
+        } else {
+            return super.viewAreaType(mouseLocation);
+
+        }
     }
 
     public void contentMenuOptions(MenuOptionSet options) {

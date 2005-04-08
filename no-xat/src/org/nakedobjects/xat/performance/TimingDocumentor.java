@@ -17,7 +17,6 @@ public class TimingDocumentor extends AbstractDocumentor {
   
     public TimingDocumentor(final String directory) {
         this.directory = directory;
-        Profiler.reset();
     }
 
     public void close() {
@@ -48,7 +47,7 @@ public class TimingDocumentor extends AbstractDocumentor {
             
             for (int i = 0, max = timings.size(); i < max; i++) {
                 Profiler timer = (Profiler) timings.elementAt(i);
-                writer.println(timer.logRecord());
+                writer.println(timer.log());
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -20,12 +20,8 @@ public class JavaObjectTitle implements ObjectTitle {
 
     public String title(NakedObject object) {
         try {
-    /*        if(object == null) {
-                return "";
-            }
-        */
             Object title = titleMethod.invoke(object.getObject(), new Object[0]);
-            return title == null ? "" : title.toString();
+            return title == null ? null : title.toString();
         } catch (InvocationTargetException e) {
             LOG.error("Exception executing " + titleMethod, e.getTargetException());
         } catch (IllegalAccessException ignore) {

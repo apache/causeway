@@ -16,6 +16,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecificationException;
+import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionPeer;
@@ -505,6 +506,18 @@ public class JavaReflector implements Reflector {
     
     public boolean isPersistable() {
         return !(NonPersistable.class.isAssignableFrom(cls));
+    }
+    
+    public Persistable persistable() {
+        if(NonPersistable.class.isAssignableFrom(cls)) {
+            return Persistable.TRANSIENT;
+ /*       } else if(Immutable.class.isAssignableFrom(cls)) {
+            return Persistable.IMMUTABLE;
+        } else if(ProgramPersistable.class.isAssignableFrom(cls)) {
+            return Persistable.PROGRAM_PERSISTABLE;
+ */       } else {
+            return Persistable.USER_PERSISTABLE;
+        }
     }
     
     public boolean isAbstract() {

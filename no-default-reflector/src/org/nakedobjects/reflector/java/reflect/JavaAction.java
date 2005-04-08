@@ -13,7 +13,7 @@ import org.nakedobjects.object.reflect.ActionParameterSet;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.PojoAdapter;
-import org.nakedobjects.object.reflect.ReflectriveActionException;
+import org.nakedobjects.object.reflect.ReflectiveActionException;
 import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.reflector.java.control.SimpleActionAbout;
@@ -37,7 +37,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
         paramCount = action.getParameterTypes().length;
     }
 
-    public Naked execute(MemberIdentifier identifier, NakedObject inObject, Naked[] parameters) throws ReflectriveActionException {
+    public Naked execute(MemberIdentifier identifier, NakedObject inObject, Naked[] parameters) throws ReflectiveActionException {
         if (parameters.length != paramCount) {
             LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);
         }
@@ -56,13 +56,13 @@ public class JavaAction extends JavaMember implements ActionPeer {
         } catch (InvocationTargetException e) {
             e.fillInStackTrace();
             if(e.getTargetException() instanceof TransactionException) {
-        	    throw new ReflectriveActionException("TransactionException thrown while executing " + actionMethod + " " + e.getTargetException().getMessage(), e.getTargetException());
+        	    throw new ReflectiveActionException("TransactionException thrown while executing " + actionMethod + " " + e.getTargetException().getMessage(), e.getTargetException());
         	} else {
 	            invocationException("Exception executing " + actionMethod, e);
         	}
         	
         } catch (IllegalAccessException e) {
-            throw new ReflectriveActionException("Illegal access of " + actionMethod, e);
+            throw new ReflectiveActionException("Illegal access of " + actionMethod, e);
         }
 
         return null;

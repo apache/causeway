@@ -80,7 +80,7 @@ public abstract class AbstractField extends AbstractView {
         }
 
         // outline bounds
-        if (DEBUG) {
+        if (debug) {
             canvas.drawRectangle(getBounds().getSize(), Color.DEBUG_DRAW_BOUNDS);
             canvas.drawLine(0, getSize().getHeight() / 2, getSize().getWidth(), getSize().getHeight() / 2, Color.DEBUG_DRAW_BOUNDS);
             canvas.drawLine(0, getBaseline(), getSize().getWidth(), getBaseline(), Color.DEBUG_BASELINE);

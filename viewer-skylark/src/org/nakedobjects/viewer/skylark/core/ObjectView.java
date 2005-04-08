@@ -77,7 +77,7 @@ public abstract class ObjectView extends AbstractView {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
-        if (AbstractView.DEBUG) {
+        if (AbstractView.debug) {
             Size size = getSize();
             canvas.drawRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, Color.DEBUG_VIEW_BOUNDS);
             canvas.drawLine(0, size.getHeight() / 2, size.getWidth() - 1, size.getHeight() / 2, Color.DEBUG_VIEW_BOUNDS);
