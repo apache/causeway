@@ -72,6 +72,13 @@ public interface NakedObject extends Naked {
     boolean isPersistent();
 
     /**
+     * @deprecated
+     */
+    boolean isPersistable();
+    
+    Persistable persistable();
+    
+    /**
      * Returns true once the object has been completely read into memory and all
      * it attributes can be validly accessed.
      */

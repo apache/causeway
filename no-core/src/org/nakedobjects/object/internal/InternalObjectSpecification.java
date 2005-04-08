@@ -4,6 +4,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
@@ -129,6 +130,10 @@ public class InternalObjectSpecification implements NakedObjectSpecification {
 
     public boolean isPersistable() {
         return false;
+    }
+    
+    public Persistable persistable() {
+        return Persistable.TRANSIENT;
     }
 
     public boolean isValue() {

@@ -7,6 +7,7 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ReflectionFactory;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
@@ -460,8 +461,12 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         return reflector.isPartOf();
     }
 
-    public boolean isPersistable() {
+     public boolean isPersistable() {
         return reflector.isPersistable();
+    }
+    
+    public Persistable persistable() {
+        return reflector.persistable();
     }
 
     public boolean isValue() {

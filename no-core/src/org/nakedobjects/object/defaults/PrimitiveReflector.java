@@ -2,6 +2,7 @@ package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.FieldPeer;
@@ -83,6 +84,10 @@ public class PrimitiveReflector implements Reflector {
 
     public boolean isPersistable() {
         return false;
+    }
+    
+    public Persistable persistable() {
+        return Persistable.TRANSIENT;
     }
 
     public boolean isValue() {
