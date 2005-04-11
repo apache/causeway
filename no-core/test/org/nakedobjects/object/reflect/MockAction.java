@@ -91,7 +91,7 @@ final class MockAction implements ActionPeer {
     }
 
     public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
-        return new ActionParameterSet(new Object[] {new String(), new Date(), new Vector()}, new String[] {"one", "two", "three"});
+        return new ActionParameterSet(new Object[] {new String(), new Integer(123), new Vector()}, new String[] {"one", "two", "three"});
     }
 }
 

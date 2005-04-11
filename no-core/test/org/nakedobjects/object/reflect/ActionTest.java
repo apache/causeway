@@ -119,7 +119,7 @@ public class ActionTest extends NakedObjectTestCase {
 
         Object[] defaultParameterValues = parameters.getDefaultParameterValues();
         assertEquals(new String(), defaultParameterValues[0]);
-        assertEquals(new Date(), defaultParameterValues[1]);
+        assertEquals(new Integer(123), defaultParameterValues[1]);
         assertEquals(new Vector(), defaultParameterValues[2]);
     }
 }
