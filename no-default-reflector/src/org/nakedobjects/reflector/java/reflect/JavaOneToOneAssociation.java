@@ -90,7 +90,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
                 }
 
             } else {
-                setMethod.invoke(inObject.getObject(), new Object[] { setValue == null ? null : setValue.toString() });
+                setMethod.invoke(inObject.getObject(), new Object[] { setValue == null ? null : setValue });
             }
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + setMethod, e);
@@ -107,10 +107,10 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
 
         try {
             if (setMethod == null) {
-          /*     if(get(inObject).getObject() != setValue) {
+           /*    if(get(inObject).getObject() != setValue) {
+                   (AbstractNakedValue) get(inObject).getObject();
                    // value object is different!
-               }
-           */
+               }*/
                 inObject.markDirty();
             } else {
                 setMethod.invoke(inObject.getObject(), new Object[] { setValue });

@@ -7,6 +7,7 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.control.DefaultHint;
@@ -203,10 +204,16 @@ public class ServerDistribution implements ClientDistribution {
     public void setValue(Session session, String fieldIdentifier, Oid objectOid, String objectType, Object value) {
         NakedObject inObject = getNakedObject(session, objectOid, objectType);
         OneToOneAssociation association = (OneToOneAssociation) inObject.getSpecification().getField(fieldIdentifier);
-        Hint about = inObject.getHint(session, association, NakedObjects.getPojoAdapterFactory().createNOAdapter(value));
+        Hint about = inObject.getHint(session, association, NakedObjects.getPojoAdapterFactory().createAdapter(value));
         if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
             throw new NakedObjectRuntimeException();
         }
+        
+        NakedValue fieldValue = (NakedValue) inObject.getValue(association);
+        if(fieldValue != null) {
+            fieldValue.restoreFromEncodedString(((NakedValue) NakedObjects.getPojoAdapterFactory().createAdapter(value)).asEncodedString());
+        }
+        
         inObject.setValue(association, value);
     }
 
