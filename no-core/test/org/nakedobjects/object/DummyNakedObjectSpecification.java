@@ -125,7 +125,7 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     }
 
     public boolean isObject() {
-        return false;
+        return true;
     }
 
     public boolean isOfType(NakedObjectSpecification cls) {

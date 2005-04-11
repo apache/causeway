@@ -8,12 +8,16 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.persistence.defaults.TestObject;
 import org.nakedobjects.object.security.Session;
 
 
 public class DummyNakedObject implements NakedObject {
 
     private DummyNakedObjectSpecification spec;
+    private Oid oid;
+    private TestObject object;
+    private String title;
 
     public DummyNakedObject() {
         super();
@@ -68,11 +72,11 @@ public class DummyNakedObject implements NakedObject {
     }
 
     public Object getObject() {
-        return null;
+        return object;
     }
 
     public Oid getOid() {
-        return null;
+        return oid;
     }
 
     public ActionParameterSet getParameters(Session session, Action action) {
@@ -133,7 +137,9 @@ public class DummyNakedObject implements NakedObject {
 
     public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {}
 
-    public void setOid(Oid oid) {}
+    public void setOid(Oid oid) {
+        this.oid = oid;
+    }
 
     public void setResolved() {}
 
@@ -144,6 +150,18 @@ public class DummyNakedObject implements NakedObject {
     public void setValue(OneToOneAssociation field, Object object) {}
 
     public String titleString() {
+        return title;
+    }
+
+    public void setupTitle(String title) {
+        this.title = title;
+    }
+
+    public void setupObject(TestObject object) {
+        this.object = object;
+    }
+
+    public NakedObjectField[] getFields() {
         return null;
     }
 

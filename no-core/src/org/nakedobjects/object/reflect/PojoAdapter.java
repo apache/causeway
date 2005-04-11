@@ -141,6 +141,15 @@ public class PojoAdapter extends AbstractNakedObject {
         return field.get(this);
     }
 
+    public NakedObjectField[] getFields() {
+        return getSpecification().getFields();
+    }
+
+    public NakedObjectField[] getVisibleFields(Session session) {
+        return getSpecification().getVisibleFields(this, session);
+    }
+
+    
     public Hint getHint(Session session, Action action, Naked[] parameterValues) {
         return action.getHint(session, this, parameterValues);
     }

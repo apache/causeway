@@ -15,7 +15,7 @@ import java.util.Vector;
  * one subset of instances follows on the previous. This is done by keeping
  * the objects in the order that they where created.
  */
-public class TransientObjectStoreInstances {
+class TransientObjectStoreInstances {
     private final Hashtable objectInstances = new Hashtable();
     private final Hashtable titleIndex = new Hashtable();
     private final LoadedObjects loaded;
@@ -57,12 +57,12 @@ public class TransientObjectStoreInstances {
         } else {
             Object pojo = objectInstances.get(oid);
             NakedObject object = NakedObjects.getPojoAdapterFactory().createNOAdapter(pojo);
-            //NakedObject object = NakedObjects.getPojoAdapterFactory().createNOAdapter(objectInstances.get(oid));
 	        if(object.getOid() == null) {
 			    object.setOid(oid);
-			    loaded.loaded(object);
 			    object.setResolved();
 	        }
+		    loaded.loaded(object);
+		    
 	        return object;
         }
     }
@@ -88,6 +88,18 @@ public class TransientObjectStoreInstances {
     public void shutdown() {
         objectInstances.clear();
         titleIndex.clear();
+    }
+
+    public Oid getOidFor(Object object) {
+        Enumeration enumeration = objectInstances.keys();
+        while (enumeration.hasMoreElements()) {
+            Oid oid = (Oid) enumeration.nextElement();
+            if(objectInstances.get(oid).equals(object)) {
+                return oid;
+            }
+        }    
+        
+        return null;
     }    
     
 }

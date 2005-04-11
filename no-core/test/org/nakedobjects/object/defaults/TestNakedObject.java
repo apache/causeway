@@ -157,6 +157,10 @@ public class TestNakedObject implements NakedObject {
         return null;
     }
 
+    public NakedObjectField[] getFields() {
+        return null;
+    }
+
 }
 
 /*

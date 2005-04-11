@@ -6,6 +6,7 @@ import java.io.PrintStream;
 
 
 public abstract class Logger {
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(Logger.class);
     private PrintStream stream;
     private final long start;
     private final String fileName;
@@ -20,8 +21,12 @@ public abstract class Logger {
     }
 
     public void log(String message) {
+        LOG.info(message);
         if (stream == null) {
             try {
+                if(fileName == null) {
+                    return;
+                }
                 stream = new PrintStream(new FileOutputStream(fileName));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -34,7 +39,9 @@ public abstract class Logger {
     }
 
     public void close() {
-        stream.close();
+        if(fileName != null) {
+            stream.close();
+        }
     }
     
     public void log(String request, Object result) {

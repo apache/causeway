@@ -102,6 +102,8 @@ public interface NakedObject extends Naked {
 
     void setValue(OneToOneAssociation field, Object object);
 
+    NakedObjectField[] getFields();
+
 }
 
 /*

@@ -4,6 +4,7 @@ import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Hashtable;
@@ -43,8 +44,11 @@ public class MockNakedObjectSpecificationLoaderNew extends NakedObjectSpecificat
         specs.put(name, spec);
     }
 
-    public void addSpec(String name) {
-        addSpec(name, new DummyNakedObjectSpecification(name));
+    public DummyNakedObjectSpecification addSpec(String name) {
+        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification(name);
+        spec.fields = new NakedObjectField[0];
+        addSpec(name, spec);
+        return spec;
     }
 
     public void shutdown() {}

@@ -282,7 +282,12 @@ public class TransientObjectStore implements NakedObjectStore {
 
     public NakedObject[] getInstances(NakedObjectSpecification spec, boolean includeSubclasses) {
         LOG.debug("get instances" + (includeSubclasses ? " (included subclasses)" : "") + ": " + spec.getFullName());
-        return instancesFor(spec).instances();
+        NakedObject[] ins = instancesFor(spec).instances();
+        for (int i = 0; i < ins.length; i++) {
+            NakedObject object = ins[i];
+            setupReferencedObjects(object);
+        }
+        return ins;
     }
 
     public NakedObject[] getInstances(NakedObjectSpecification spec, String pattern, boolean includeSubclasses)
@@ -329,7 +334,32 @@ public class TransientObjectStore implements NakedObjectStore {
         if(object == null) {
             throw new ObjectNotFoundException(oid);
         } else {
+		    setupReferencedObjects(object);
             return object;
+        }
+    }
+
+    private void setupReferencedObjects(NakedObject object) {
+        NakedObjectField[] fields = object.getFields();
+        for (int i = 0; i < fields.length; i++) {
+            NakedObjectField field = fields[i];
+            if(field.isCollection()) {
+                NakedCollection col = (NakedCollection) object.getField(field);
+                for(Enumeration e = col.elements(); e.hasMoreElements();) {
+                    NakedObject element = (NakedObject) e.nextElement();
+                    setupReference(element);
+                }
+            } else if(field.isObject()) {
+                NakedObject fieldContent = (NakedObject) object.getField(field);
+                setupReference(fieldContent);
+            }
+        }
+    }
+
+    private void setupReference(NakedObject fieldContent) {
+        if(fieldContent != null && fieldContent.getOid() == null) {
+            Oid fieldOid = instancesFor(fieldContent.getSpecification()).getOidFor(fieldContent.getObject());
+            fieldContent.setOid(fieldOid);
         }
     }
 
@@ -427,9 +457,10 @@ public class TransientObjectStore implements NakedObjectStore {
 
     public void resolveImmediately(NakedObject object) throws ObjectStoreException {
         LOG.debug("resolve " + object);
-        NakedObject o = getObject(object.getOid(), null);
-        object.setResolved();
-        object.copyObject(o);
+        setupReferencedObjects(object);
+  //      NakedObject o = getObject(object.getOid(), object.getSpecification());
+ //       object.setResolved();
+   //     object.copyObject(o);
     }
 
     public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectStoreException {}

@@ -150,6 +150,10 @@ public class MockNakedObject implements NakedObject {
         return super.toString() + " " + titleString;
     }
 
+    public NakedObjectField[] getFields() {
+        return null;
+    }
+
 }
 
 /*
