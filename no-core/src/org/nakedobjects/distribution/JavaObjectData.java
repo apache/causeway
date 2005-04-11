@@ -25,6 +25,27 @@ public class JavaObjectData implements ObjectData {
     public String getType() {
         return type;
     }
+    
+    public String toString() {
+        StringBuffer str = new StringBuffer();
+        str.append("JavaDataObject [type=");
+        str.append(type);
+        str.append(",oid=");
+        str.append(oid); 
+        str.append(",fields=");
+        for (int i = 0; i < fieldContent.length; i++) {
+            if(i > 0) {
+                str.append(";");
+            }
+	        if(fieldContent[i] == null) {
+	            str.append("null");
+	        } else {
+	            String name = fieldContent[i].getClass().getName();
+                str.append(name.substring(name.lastIndexOf('.') + 1));
+	        }
+        }
+        return str.toString();
+    }
 }
 
 /*

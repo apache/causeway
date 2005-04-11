@@ -26,8 +26,6 @@ public interface ClientDistribution {
     Hint getActionHint(Session session, String actionType, String actionIdentifier, String[] parameterTypes, Oid objectOid,
             String objectType, ObjectData[] parameters);
 
-    //   NakedClass getNakedClass(String fullName);
-
     ObjectData getObject(Session session, Oid oid, String fullName);
 
     boolean hasInstances(Session session, String fullName);

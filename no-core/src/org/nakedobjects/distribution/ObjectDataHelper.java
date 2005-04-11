@@ -12,11 +12,11 @@ import org.nakedobjects.object.reflect.OneToOneAssociation;
 
 
 public class ObjectDataHelper {
-      public static NakedObject recreate(LoadedObjects loadedObjects, ObjectData data) {
+    public static NakedObject recreate(LoadedObjects loadedObjects, ObjectData data) {
         Oid oid = data.getOid();
         Object[] fieldContent = data.getFieldContent();
         String type = data.getType();
-        
+
         NakedObject object;
         if (oid != null && loadedObjects.isLoaded(oid)) {
             object = loadedObjects.getLoadedObject(oid);
@@ -25,7 +25,7 @@ public class ObjectDataHelper {
             object = (NakedObject) specification.acquireInstance();
             if (oid != null) {
                 object.setOid(oid);
-	            loadedObjects.loaded(object);
+                loadedObjects.loaded(object);
             }
         }
 
@@ -54,7 +54,8 @@ public class ObjectDataHelper {
                         object.initValue((OneToOneAssociation) fields[i], fieldContent[i]);
                     } else {
                         if (fieldContent[i] != null) {
-                            object.initAssociation((NakedObjectAssociation) fields[i], recreate(loadedObjects, ((ObjectData) fieldContent[i])));
+                            object.initAssociation((NakedObjectAssociation) fields[i], recreate(loadedObjects,
+                                    ((ObjectData) fieldContent[i])));
                         }
                     }
                 }
@@ -63,11 +64,6 @@ public class ObjectDataHelper {
 
         return object;
     }
-    /*
-    public String toString() {
-        return "ObjectData [oid=" + oid + ",type=" + type + "]";
-    }
-    */
 
     public static void update(LoadedObjects loadedObjects, ObjectData data) {
         Oid oid = data.getOid();
@@ -82,40 +78,41 @@ public class ObjectDataHelper {
             object = (NakedObject) specification.acquireInstance();
             if (oid != null) {
                 object.setOid(oid);
-	            loadedObjects.loaded(object);
+                loadedObjects.loaded(object);
             }
         }
 
-            NakedObjectField[] fields = object.getSpecification().getFields();
-            if (fields.length == 0) {
-                for (int i = 0; i < fieldContent.length; i++) {
+        NakedObjectField[] fields = object.getSpecification().getFields();
+        if (fields.length == 0) {
+            for (int i = 0; i < fieldContent.length; i++) {
 
-                }
+            }
 
-            } else {
-                for (int i = 0; i < fields.length; i++) {
-                    if (fields[i].isCollection()) {
-                        /*
-                        if (fieldContent[i] != null) {
-                            ObjectData collection = (ObjectData) fieldContent[i];
-                            NakedObject[] instances = new NakedObject[collection.fieldContent.length];
-                            for (int j = 0; j < instances.length; j++) {
-                                instances[j] = ((ObjectData) collection.fieldContent[j]).update(loadedObjects);
-                            }
-                            object.initOneToManyAssociation((OneToManyAssociation) fields[i], instances);
+        } else {
+            for (int i = 0; i < fields.length; i++) {
+                if (fields[i].isCollection()) {
+                    if (fieldContent[i] != null) {
+                        ObjectData collection = (ObjectData) fieldContent[i];
+                        Object[] elements = collection.getFieldContent();
+                        NakedObject[] instances = new NakedObject[elements.length];
+                        for (int j = 0; j < instances.length; j++) {
+                            NakedObject instance = recreate(loadedObjects, (ObjectData) elements[j]);
+                            instances[j] = instance;
                         }
-                        */
-                    } else if (fields[i].isValue()) {
-                        object.initValue((OneToOneAssociation) fields[i], fieldContent[i]);
-                    } else {
-                        if (fieldContent[i] != null) {
-                            NakedObject field =recreate(loadedObjects,  (ObjectData) fieldContent[i]);
-                            object.initAssociation((NakedObjectAssociation) fields[i], field);
-                        }
+                        object.initOneToManyAssociation((OneToManyAssociation) fields[i], instances);
+                    }
+
+                } else if (fields[i].isValue()) {
+                    object.initValue((OneToOneAssociation) fields[i], fieldContent[i]);
+                } else {
+                    if (fieldContent[i] != null) {
+                        NakedObject field = recreate(loadedObjects, (ObjectData) fieldContent[i]);
+                        object.initAssociation((NakedObjectAssociation) fields[i], field);
                     }
                 }
             }
         }
+    }
 }
 
 /*

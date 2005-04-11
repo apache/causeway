@@ -48,15 +48,6 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         return new InstanceCollectionVector(specification, instances);
     }
 
-    /*
-     * protected synchronized void updateFromServer(Memento memento) { Object
-     * oid = memento.getOid(); LOG.debug("Update for " + oid + " ~ " + memento);
-     * if (loadedObjects.isLoaded(oid)) { NakedObject object =
-     * loadedObjects.getLoadedObject(oid); memento.updateObject(object,
-     * loadedObjects, context); notifier.broadcastObjectChanged(object, this); }
-     * else { LOG.debug("Notify for (" + oid + ") ignored; OID not recognised"); } }
-     */
-
     public Oid createOid(Naked object) {
         throw new NotExpectedException();
     }
