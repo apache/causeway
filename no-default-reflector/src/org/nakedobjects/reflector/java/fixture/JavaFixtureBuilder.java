@@ -35,6 +35,7 @@ public final class JavaFixtureBuilder extends FixtureBuilder {
         } catch (RuntimeException e) {
             objectManager.abortTransaction();
         }
+        newInstances.removeAllElements();
     }
 
     protected void installFixture(NakedObjectManager objectManager, Fixture fixture) {
