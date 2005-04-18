@@ -75,8 +75,6 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
         objectManager.setLoadedObjects(loadedObjectsHashtable);
 
         NakedObjects.setObjectManager(objectManager);
-        
-        container.setObjectManger(objectManager);
 
         NakedObjectSpecificationLoaderImpl specificationLoader = new NakedObjectSpecificationLoaderImpl();
 

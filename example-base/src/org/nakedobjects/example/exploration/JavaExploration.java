@@ -105,8 +105,6 @@ public class JavaExploration {
 
             NakedObjects.setObjectManager(objectManager);
 
-            container.setObjectManger(objectManager);
-
             NakedObjectSpecificationLoaderImpl specificationLoader = new NakedObjectSpecificationLoaderImpl();
 
             NakedObjects.setSpecificationLoader(specificationLoader);
