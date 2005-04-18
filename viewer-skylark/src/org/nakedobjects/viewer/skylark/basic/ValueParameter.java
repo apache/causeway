@@ -20,10 +20,12 @@ import org.nakedobjects.viewer.skylark.ValueContent;
 
 class ValueParameter extends ValueContent implements ParameterContent {
     private final NakedValue object;
-    private ActionParameter parameter;
+    private final String name;
+    private final NakedObjectSpecification specification;
     
-    public ValueParameter(String name, Naked naked, NakedObjectSpecification specification, ActionContent content) {
-        parameter = new ActionParameter(name, specification);
+    public ValueParameter(String name, Naked naked, NakedObjectSpecification specification) {
+        this.name = name;
+        this.specification = specification;
         object = (NakedValue) naked;
     }
 
@@ -61,15 +63,6 @@ class ValueParameter extends ValueContent implements ParameterContent {
 
     public void parseEntry(String entryText) throws InvalidEntryException {
         object.parseTextEntry(entryText);
-        /*
-         *  // TODO V IMPORTANT - this really is smelly - need to sort out the //
-         * reflectors ans specs Object pojo = object.getObject(); Class cls =
-         * pojo.getClass(); Method method; try { method =
-         * cls.getMethod("parseUserEntry", new Class[] { String.class });
-         * method.invoke(pojo, new Object[] { entryText }); } catch (Exception
-         * e) { throw new NakedObjectRuntimeException(e); }
-         *  
-         */
     }
 
     public String title() {
@@ -83,11 +76,11 @@ class ValueParameter extends ValueContent implements ParameterContent {
     }
 
     public String getParameterName() {
-        return parameter.getName();
+        return name;
     }
 
     public NakedObjectSpecification getSpecification() {
-        return parameter.getSpecification();
+        return specification;
     }
 
     public boolean objectChanged() {

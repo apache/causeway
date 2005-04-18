@@ -20,12 +20,26 @@ import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
 class ObjectParameter extends ObjectContent implements ParameterContent {
-    private NakedObject object;
-    private ActionParameter parameter;
+    private final NakedObject object;
+    private final String name;
+    private final NakedObjectSpecification specification;
+    private final ActionHelper invocation;
+    private final int i;
 
-    public ObjectParameter(String name, Naked naked, NakedObjectSpecification specification, ActionContent content) {
-        parameter = new ActionParameter(name, specification);
+    public ObjectParameter(String name, Naked naked, NakedObjectSpecification specification, int i, ActionHelper invocation) {
+        this.name = name;
+        this.specification = specification;
+        this.i = i;
+        this.invocation = invocation;
         object = (NakedObject) naked;
+    }
+
+    public ObjectParameter(ObjectParameter content, NakedObject object) {
+        name = content.name;
+        specification = content.specification;
+        i = content.i;
+        invocation = content.invocation;
+        this.object = object;
     }
 
     public Consent canClear() {
@@ -33,15 +47,15 @@ class ObjectParameter extends ObjectContent implements ParameterContent {
     }
 
     public Consent canSet(NakedObject dragSource) {
-        if (dragSource.getSpecification().isOfType(parameter.getSpecification())) {
+        if (dragSource.getSpecification().isOfType(specification)) {
             return Allow.DEFAULT;
         } else {
-            return new Veto("Object must be " + parameter.getSpecification().getShortName());
+            return new Veto("Object must be " + specification.getShortName());
         }
     }
 
     public void clear() {
-        object = null;
+        setObject(null);
     }
 
     public void debugDetails(DebugString debug) {
@@ -86,7 +100,7 @@ class ObjectParameter extends ObjectContent implements ParameterContent {
     }
 
     public void setObject(NakedObject object) {
-        this.object = object;
+        invocation.setParameter(i, object);
     }
 
     public String title() {
@@ -101,11 +115,11 @@ class ObjectParameter extends ObjectContent implements ParameterContent {
     }
 
     public String getParameterName() {
-        return parameter.getName();
+        return name;
     }
 
     public NakedObjectSpecification getSpecification() {
-        return parameter.getSpecification();
+        return specification;
     }
 }
 

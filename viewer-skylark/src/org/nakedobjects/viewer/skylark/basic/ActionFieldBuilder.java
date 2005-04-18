@@ -6,7 +6,6 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.ParameterContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -56,7 +55,7 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
 
         int noParameters = actionContent.getNoParameters();
         for (int f = 0; f < noParameters; f++) {
-            ParameterContent parameter = actionContent.getParameter(f);
+            ParameterContent parameter = actionContent.getParameterContent(f);
             View fieldView = createFieldView(view, parameter);
             String label = parameter.getParameterName();
             view.addView(decorateSubview(new LabelBorder(label, fieldView)));
@@ -72,30 +71,16 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
             View subview = subviews[i + 1];
             Content content = subview.getContent();
 
-            //TODO need to fix this so it recognises when a field has been cleared
+            Naked subviewsObject = subview.getContent().getNaked();
+            Naked invocationsObject = ((ActionContent) view.getContent()).getParameterObject(i); 
+            
             if (content instanceof ObjectParameter) {
-                Naked parameterValue = actionContent.getParameterValue(i);
- /*               ObjectContent objectContent = ((ObjectContent) subview.getContent());
-                NakedObject existing = objectContent == null ? null : objectContent.getObject();
-                boolean changedValue = parameterValue != existing;
-                if (changedValue) {
-/*
-                
-                Naked parameterValue = actionContent.getParameteValue(i);
-              //  boolean emptyField = subview.getSpecification().canDisplay(null);
-                boolean emptyField = subview.getContent().getNaked() == null;
-                boolean changeToNull = !emptyField && parameterValue == null;
-                boolean changedFromNull = emptyField && parameterValue != null;
-                if (changeToNull || changedFromNull) {
-                */
-                    ObjectParameter parameter = (ObjectParameter) content;
+                if(subviewsObject != invocationsObject) {
+                    ObjectParameter parameter = new ObjectParameter((ObjectParameter) content, (NakedObject) invocationsObject);
+                    View fieldView = createFieldView(view, parameter);
                     String label = parameter.getParameterName();
-
-            //        ObjectParameter pa = new ObjectParameter(label, parameterValue, parameter.getSpecification(), actionContent);
-                    ObjectParameter pa = new ObjectParameter(label, parameter.getNaked(), parameter.getSpecification(), actionContent);
-                    View fieldView = createFieldView(view, pa);
-                    view.replaceView(subview, decorateSubview(new LabelBorder(label, fieldView)));
- //               }
+                    view.replaceView(subview, decorateSubview(new LabelBorder(label, fieldView)));                    
+                }
             }
         }
     }

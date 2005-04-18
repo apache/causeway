@@ -1,16 +1,11 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.ActionParameterSet;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
@@ -23,61 +18,12 @@ import org.nakedobjects.viewer.skylark.util.ImageFactory;
  * Links an action on an object to a view.
  */
 public class ActionContent extends ObjectContent {
-    private final Action action;
+    private final ActionHelper invocation;
     private final ParameterContent[] parameters;
-    private final NakedObject target;
-
-    public ActionContent(NakedObject target, Action action) {
-        this.target = target;
-        this.action = action;
-
-        int numberParameters = action.parameters().length;
-        ActionParameterSet parameterHints = target.getParameters(ClientSession.getSession(), action);
-        String[] labels;
-        Object[] defaultValues;
-        if (parameterHints != null) {
-            labels = parameterHints.getParameterLabels();
-            defaultValues = parameterHints.getDefaultParameterValues();
-        } else {
-            labels = new String[numberParameters];
-            defaultValues = new Naked[numberParameters];
-        }
-
-        Naked[] parameterValues;
-
-        NakedObjectSpecification[] types;
-        Naked[] values;
-        types = action.parameters();
-        values = new Naked[types.length];
-        for (int i = 0; i < types.length; i++) {
-            if (types[i].isValue()) {
-                values[i] = types[i].acquireInstance();
-            } else {
-                values[i] = null;
-            }
-        }
-
-        parameterValues = new Naked[types.length];
-        for (int i = 0; i < parameterValues.length; i++) {
-            parameterValues[i] = values[i];
-        }
-
-        // parameterSet = new ParameterSet(action);
-        //parameterValues = parameterSet.getParameterValues();
-        parameters = new ParameterContent[numberParameters];
-
-        for (int i = 0; i < numberParameters; i++) {
-            // change name using the hint
-            NakedObjectSpecification type = types[i];
-            String label = labels[i] == null ? type.getShortName() : labels[i];
-            Object value = defaultValues[i] == null ? parameterValues[i] : NakedObjects.getPojoAdapterFactory().createAdapter(defaultValues[i]);
-
-            if (type.isValue()) {
-                parameters[i] = new ValueParameter(label, (Naked) value, type, this);
-            } else {
-                parameters[i] = new ObjectParameter(label, (Naked) value, type, this);
-            }
-        }
+    
+    public ActionContent(ActionHelper invocation) {
+        this.invocation = invocation;
+        parameters = invocation.createParameters();
     }
 
     public Consent canClear() {
@@ -93,8 +39,8 @@ public class ActionContent extends ObjectContent {
     }
 
     public void debugDetails(DebugString debug) {
-        debug.appendln(4, "action", action);
-        debug.appendln(4, "target", target);
+        debug.appendln(4, "action", getActionName());
+        debug.appendln(4, "target", getNaked());
         String parameterSet = "";
         for (int i = 0; i < parameters.length; i++) {
             parameterSet += parameters[i];
@@ -103,29 +49,28 @@ public class ActionContent extends ObjectContent {
     }
 
     public Consent disabled() {
-        Hint about = target.getHint(ClientSession.getSession(), action, parameterValues());
-        return about.canUse();
+        return invocation.disabled();
     }
 
     public Naked execute() {
-        return target.execute(action, parameterValues());
+        return invocation.invoke();
     }
 
     public String getActionName() {
-        return target.getLabel(ClientSession.getSession(), action);
+        return invocation.getName();
     }
 
     public String getIconName() {
-        return target.getIconName();
+        return getNaked().getIconName();
     }
 
     public Image getIconPicture(int iconHeight) {
-        NakedObjectSpecification specification = target.getSpecification();
+        NakedObjectSpecification specification = getNaked().getSpecification();
         return ImageFactory.getInstance().loadIcon(specification, "", iconHeight);
     }
 
     public Naked getNaked() {
-        return target;
+        return invocation.getTarget();
     }
 
     public int getNoParameters() {
@@ -133,23 +78,19 @@ public class ActionContent extends ObjectContent {
     }
 
     public NakedObject getObject() {
-        return target;
+        return invocation.getTarget();
     }
 
-    public ParameterContent getParameter(int index) {
+    public ParameterContent getParameterContent(int index) {
         return parameters[index];
     }
 
-    public Naked getParameterValue(int index) {
-        return parameters[index].getNaked();
+    public Naked getParameterObject(int index) {
+        return invocation.getParameter(index);
     }
 
     public NakedObjectSpecification getSpecification() {
-        return target.getSpecification();
-    }
-
-    public boolean isTransient() {
-        return true;
+        return getObject().getSpecification();
     }
     
     /**
@@ -159,18 +100,18 @@ public class ActionContent extends ObjectContent {
         return false;
     }
 
-    public void menuOptions(MenuOptionSet options) {}
-
-    private Naked[] parameterValues() {
-        Naked[] objects = new Naked[parameters.length];
-        for (int i = 0; i < parameters.length; i++) {
-            objects[i] = parameters[i].getNaked();
-        }
-        return objects;
+    public boolean isTransient() {
+        return true;
     }
+
+    public void menuOptions(MenuOptionSet options) {}
 
     public void setObject(NakedObject object) {
         throw new NakedObjectRuntimeException("Invalid call");
+    }
+    
+    public void setParameter(int number, ParameterContent parameter) {
+        parameters[number] = parameter;
     }
 
     public String title() {

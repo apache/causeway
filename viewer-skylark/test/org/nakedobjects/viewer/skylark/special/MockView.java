@@ -22,9 +22,33 @@ import org.nakedobjects.viewer.skylark.ViewState;
 import org.nakedobjects.viewer.skylark.ViewerAssistant;
 import org.nakedobjects.viewer.skylark.Workspace;
 
-public class MockView implements View
-{
-    public void addView(View view) {}
+import java.util.Vector;
+
+
+public class MockView implements View {
+    public static int next = 0;
+    private int id = next++;
+
+    private Vector expected = new Vector();
+    private int addNo = 0;
+
+    private View[] subviews;
+    private Content content;
+
+    public void addView(View view) {
+        addActual("add " + view);
+    }
+
+    protected void addActual(Object actual) {
+        if (addNo >= expected.size()) {
+            throw new AssertionError("No more expected objects, but got <" + actual + ">");
+        }
+        Object e = expected.elementAt(addNo);
+        if (!e.equals(actual)) {
+            throw new AssertionError("Expected <" + e + ">, but got <" + actual + ">");
+        }
+        addNo++;
+    }
 
     public boolean canChangeValue() {
         return false;
@@ -85,7 +109,11 @@ public class MockView implements View
     }
 
     public Content getContent() {
-        return null;
+        return content;
+    }
+
+    public void setUpContent(Content content) {
+        this.content = content;
     }
 
     public int getId() {
@@ -121,11 +149,15 @@ public class MockView implements View
     }
 
     public View[] getSubviews() {
-        return null;
+        return subviews;
+    }
+
+    public void setUpSubviews(View[] subviews) {
+        this.subviews = subviews;
     }
 
     public View getView() {
-        return null;
+        return this;
     }
 
     public ViewAxis getViewAxis() {
@@ -180,7 +212,9 @@ public class MockView implements View
 
     public void removeView(View view) {}
 
-    public void replaceView(View toReplace, View replacement) {}
+    public void replaceView(View toReplace, View replacement) {
+        addActual("replace " + toReplace + " with " + replacement);
+    }
 
     public void secondClick(Click click) {}
 
@@ -207,7 +241,7 @@ public class MockView implements View
     public View subviewFor(Location location) {
         return null;
     }
-    
+
     public View identify(Location location) {
         return null;
     }
@@ -229,29 +263,42 @@ public class MockView implements View
     public void updateView() {}
 
     public void viewMenuOptions(MenuOptionSet menuOptions) {}
+
+    public void verify() {
+        if (expected.size() != addNo) {
+            throw new AssertionError("Expected " + expected.size() + " objects, but got " + addNo);
+        }
+    }
+
+    public void addAction(Object expected) {
+        this.expected.addElement(expected);
+    }
+
+    public String toString() {
+        return "MockView" + id;
+    }
 }
 
-
 /*
-Naked Objects - a framework that exposes behaviourally complete
-business objects directly to the user.
-Copyright (C) 2000 - 2005  Naked Objects Group Ltd
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-The authors can be contacted via www.nakedobjects.org (the
-registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-Road, Woking GU21 1NR, UK).
-*/
+ * Naked Objects - a framework that exposes behaviourally complete business
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
+ * Ltd
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * The authors can be contacted via www.nakedobjects.org (the registered address
+ * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
+ * 1NR, UK).
+ */
