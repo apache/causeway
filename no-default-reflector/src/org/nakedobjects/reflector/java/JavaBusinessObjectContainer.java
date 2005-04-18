@@ -18,14 +18,8 @@ import org.apache.log4j.Logger;
 
 public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     private static final Logger LOG = Logger.getLogger(JavaBusinessObjectContainer.class);
-    private NakedObjectManager objectManger;
     private JavaObjectFactory objectFactory;
 
-    public JavaBusinessObjectContainer() {
-//        this.objectFactory = new JavaObjectFactory(this);
-        LOG.info("Object container set up");
-    }
-    
     public void setObjectFactory(JavaObjectFactory objectFactory) {
         this.objectFactory = objectFactory;
     }
@@ -34,16 +28,13 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
         return objectFactory;
     }
     
-    public void setObjectManger(NakedObjectManager objectManger) {
-        this.objectManger = objectManger;
-    }
-
     public Vector allInstances(Class cls) {
         return allInstances(cls, false);
     }
 
     public Vector allInstances(Class cls, boolean includeSubclasses) {
-        TypedNakedCollection nakedObjectInstances = objectManger.allInstances(getSpecification(cls), includeSubclasses);
+        
+        TypedNakedCollection nakedObjectInstances = objectManger().allInstances(getSpecification(cls), includeSubclasses);
         Vector objectInstances = new Vector(nakedObjectInstances.size());
         Enumeration e = nakedObjectInstances.elements();
         while (e.hasMoreElements()) {
@@ -51,6 +42,10 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
             objectInstances.addElement(instance.getObject());
         }
         return objectInstances;
+    }
+
+    private NakedObjectManager objectManger() {
+        return NakedObjects.getObjectManager();
     }
 
     /**
@@ -74,7 +69,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     }
 
     public void destroyObject(Object object) {
-        objectManger.destroyObject(NakedObjects.getPojoAdapterFactory().createNOAdapter(object));
+        objectManger().destroyObject(NakedObjects.getPojoAdapterFactory().createNOAdapter(object));
     }
 
     public Vector findInstances(InstancesCriteria criteria, boolean includeSubclasses) throws UnsupportedFindException {
@@ -86,29 +81,29 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     }
 
     public boolean hasInstances(Class cls) {
-        return objectManger.hasInstances(getSpecification(cls));
+        return objectManger().hasInstances(getSpecification(cls));
     }
 
 
     public void makePersistent(Object transientObject) {
-        objectManger.makePersistent(NakedObjects.getPojoAdapterFactory().createNOAdapter(transientObject));
+        objectManger().makePersistent(NakedObjects.getPojoAdapterFactory().createNOAdapter(transientObject));
     }
 
     public int numberOfInstances(Class cls) {
-        return objectManger.numberOfInstances(getSpecification(cls));
+        return objectManger().numberOfInstances(getSpecification(cls));
     }
 
     public void resolve(Object object) {
 		if(object != null) {
 	        NakedObject adapter = NakedObjects.getPojoAdapterFactory().createNOAdapter(object);
 	        if(!adapter.isResolved()) {
-	            objectManger.resolveImmediately(adapter);
+	            objectManger().resolveImmediately(adapter);
 	        }
 	    }
     }
 
     public void save(Object object) {
-        objectManger.saveChanges();
+        objectManger().saveChanges();
     }
 
     /**
@@ -132,7 +127,6 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
         }
 
         number = new Sequence();
-        //            number.setNakedClass(NakedObjects.getSpecificationLoader().loadSpecification(Sequence.class));
         number.getName().setValue(sequence);
         makePersistent(number);
         return number.getSerialNumber().longValue();

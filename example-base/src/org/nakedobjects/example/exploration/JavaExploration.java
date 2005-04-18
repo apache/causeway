@@ -43,7 +43,6 @@ public class JavaExploration {
 
     private SplashWindow splash;
     private JavaFixtureBuilder builder;
-    private LocalObjectManager objectManager;
 
     public JavaExploration() {
         ConfigurationPropertiesLoader loadedProperties = new ConfigurationPropertiesLoader("log4j.properties", false);
@@ -97,7 +96,7 @@ public class JavaExploration {
             //                      OidGenerator oidGenerator = new TimeBasedOidGenerator();
             OidGenerator oidGenerator = new SimpleOidGenerator();
 
-            objectManager = new LocalObjectManager();
+            LocalObjectManager objectManager = new LocalObjectManager();
             objectManager.setObjectStore(objectStore);
             //        objectManager.setNotifier(updateNotifier);
             objectManager.setObjectFactory(objectFactory);
@@ -180,7 +179,7 @@ public class JavaExploration {
             context.addClass(classes[i]);
         }
         viewer.setApplication(context);
-        viewer.setObjectManager(objectManager);
+        viewer.setObjectManager((LocalObjectManager) NakedObjects.getObjectManager());
         viewer.show();
 
         if (splash != null) {
