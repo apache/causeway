@@ -497,7 +497,8 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
             objectStore = null;
             loadedObjects.shutdown();
             loadedObjects = null;
-        } catch (ObjectStoreException e) {
+            nakedClasses.clear();
+         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
         super.shutdown();

@@ -9,6 +9,8 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 /*
  * The objects need to store in a repeatable sequence so the elements and
  * instances method return the same data for any repeated call, and so that
@@ -18,7 +20,7 @@ import java.util.Vector;
 class TransientObjectStoreInstances {
     private final Hashtable objectInstances = new Hashtable();
     private final Hashtable titleIndex = new Hashtable();
-    private final LoadedObjects loaded;
+    private LoadedObjects loaded;
     
     public TransientObjectStoreInstances(final LoadedObjects loaded) {
         this.loaded = loaded;
@@ -40,6 +42,11 @@ class TransientObjectStoreInstances {
         return v.elements();
     }
 
+    protected void finalize() throws Throwable {
+        super.finalize();
+        Logger.getLogger(TransientObjectStoreInstances.class).info("finalizing instances");
+    }
+    
     public NakedObject instanceMatching(String title) {
         Oid oid = (Oid) titleIndex.get(title);
         return oid == null ? null : getObject(oid);
@@ -86,6 +93,7 @@ class TransientObjectStoreInstances {
     }
 
     public void shutdown() {
+        loaded = null;
         objectInstances.clear();
         titleIndex.clear();
     }

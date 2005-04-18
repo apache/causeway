@@ -27,6 +27,7 @@ import org.apache.log4j.PropertyConfigurator;
 
 
 public abstract class AcceptanceTestCase extends TestCase {
+    private static final Logger LOG = Logger.getLogger(AcceptanceTestCase.class);
     private static final String TEST_OBJECT_FACTORY = "test-object-factory";
     protected static final TestNaked[] NO_PARAMETERS = new TestNaked[0];
     private Hashtable classes = new Hashtable();
@@ -34,10 +35,13 @@ public abstract class AcceptanceTestCase extends TestCase {
     private TestObjectFactory testObjectFactory;
     private FixtureBuilder fixtureBuilder;
 
-    public AcceptanceTestCase() {}
+    public AcceptanceTestCase() {
+        LOG.info("creating acceptance test");
+    }
 
     public AcceptanceTestCase(String name) {
         super(name);
+        LOG.info("creating acceptance test " + name);
     }
 
     protected void append(String text) {
@@ -48,6 +52,11 @@ public abstract class AcceptanceTestCase extends TestCase {
         documentor.docln(string);
     }
 
+    protected void finalize() throws Throwable {
+        super.finalize();
+        LOG.info("finalizing acceptance test");
+    }
+    
     protected TestClass getTestClass(String name) {
         TestClass view = (TestClass) classes.get(name.toLowerCase());
 
@@ -192,19 +201,29 @@ public abstract class AcceptanceTestCase extends TestCase {
     }
 
     protected void tearDown() throws Exception {
-       	NakedObjects.getObjectManager().shutdown();
+        documentor.stop();
+
+        LOG.info("tear down " + getName());
+        NakedObjects.getObjectManager().shutdown();
         NakedObjects.setObjectManager(null);
         NakedObjects.getPojoAdapterFactory().shutdown();
         NakedObjects.setPojoAdapterFactory(null);
-  //      NakedObjects.getSpecificationLoader().shutdown();
+        NakedObjects.getSpecificationLoader().shutdown();
         NakedObjects.setSpecificationLoader(null);
         NakedObjects.setConfiguration(null);
         
         ClientSession.end();
         ClientSession.setSession(null);
         
+        classes.clear();
+        classes = null;
+        fixtureBuilder = null;
+        documentor = null;
+        
         testObjectFactory.testEnding();
-        documentor.stop();
+        
+        testObjectFactory = null;
+        super.tearDown();
     }
 
     /**

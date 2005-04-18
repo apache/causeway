@@ -1,6 +1,5 @@
 package org.nakedobjects.object.defaults;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ResolveException;
@@ -16,7 +15,7 @@ import org.apache.log4j.Logger;
 
 public class LoadedObjectsHashtable implements LoadedObjects {
     private static final Logger LOG = Logger.getLogger(LoadedObjectsHashtable.class);
-    protected final Hashtable loaded = new Hashtable();
+    protected Hashtable loaded = new Hashtable();
     
     public LoadedObjectsHashtable() {
         LOG.info("create loaded object lookup " + hashCode());
@@ -61,27 +60,6 @@ public class LoadedObjectsHashtable implements LoadedObjects {
             }
         }
         return v.elements();
-       /*
-        return new Enumeration() {
-            Enumeration allObjects = loaded.elements();
-            private NakedObject dirtyObject;
-
-            public boolean hasMoreElements() {
-                while (allObjects.hasMoreElements()) {
-                    NakedObject object = (NakedObject) allObjects.nextElement();
-                    if (object.isPersistDirty()) {
-                        dirtyObject = object;
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            public Object nextElement() {
-                return dirtyObject;
-            }
-        };
-        */
     }
     
 
@@ -109,6 +87,7 @@ public class LoadedObjectsHashtable implements LoadedObjects {
     
     public void shutdown() {
         loaded.clear();
+        loaded = null;
     }
     
     public void reset() {

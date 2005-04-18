@@ -16,7 +16,7 @@ public class ProfilerTest extends TestCase {
     }
 
     public void testFreeMemory() {
-        assertEquals("20,300 bytes", Profiler.freeMemoryLog());
+        assertEquals("20,300 bytes", Profiler.memoryLog());
     }
     
     public void testMemoryUsage() {

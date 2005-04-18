@@ -15,93 +15,10 @@ import org.apache.log4j.Logger;
 
 public class PojoAdapter extends AbstractNakedObject {
     private static final Logger LOG = Logger.getLogger(PojoAdapter.class);
-//    private static PojoAdapterHash pojos;
-    private static long next = 0;
-    private long id = next++;
-//    private static ReflectorFactory reflectorFactory;
-
- /*   public static Naked createAdapter(Object pojo) {
-        if (pojo == null) {
-            return null;
-        }
-        Naked nakedObject;
-        if (pojos.containsPojo(pojo)) {
-            nakedObject = pojos.getPojo(pojo);
-        } else {
-            if (pojo instanceof PojoAdapter) {
-                throw new NakedObjectRuntimeException("Warning: adapter is wrapping an adapter: " + pojo);
-            }
-
-            if (pojo instanceof String) {
-                nakedObject = new StringAdapter((String) pojo);
-            } else if (pojo instanceof Date) {
-                nakedObject = new DateAdapter((Date) pojo);
-            } else if (pojo instanceof Float) {
-                nakedObject = new FloatAdapter();
-            } else if (pojo instanceof Double) {
-                nakedObject = new DoubleAdapter();
-            } else if (pojo instanceof Boolean) {
-                nakedObject = new BooleanAdapter();
-            } else if (pojo instanceof Byte) {
-                nakedObject = new ByteAdapter();
-            } else if (pojo instanceof Short) {
-                nakedObject = new ShortAdapter();
-            } else if (pojo instanceof Integer) {
-                nakedObject = new IntAdapter();
-            } else if (pojo instanceof Long) {
-                nakedObject = new LongAdapter();
-            } else {
-                nakedObject = reflectorFactory.createAdapter(pojo);
-            }
-            if (nakedObject == null) {
-                nakedObject = new PojoAdapter(pojo);
-            }
-        }
-        return nakedObject;
-    }
-
-    public static NakedObject createNOAdapter(Object pojo) {
-        return (NakedObject) createAdapter(pojo);
-    }
-
-    /* *
-     * Expose as a .Net property.
-     * 
-     * @property
-     * /
-    public static void set_PojoAdapterHash(PojoAdapterHash pojos) {
-        PojoAdapter.pojos = pojos;
-    }
-
-    /**
-     * Expose as a .Net property.
-     * 
-     * @property
-     * /
-    public static void set_ReflectorFactory(ReflectorFactory reflectorFactory) {
-        PojoAdapter.reflectorFactory = reflectorFactory;
-    }
-
-    public static void setPojoAdapterHash(PojoAdapterHash pojos) {
-        PojoAdapter.pojos = pojos;
-    }
-
-    // TODO is the pojo hashmap the same thing as the loaded objects; can they
-    // be combined
-
-    public static void setReflectorFactory(ReflectorFactory reflectorFactory) {
-        PojoAdapter.reflectorFactory = reflectorFactory;
-    }
-*/
     private Object pojo;
-
-    public PojoAdapter() {}
 
     protected PojoAdapter(Object pojo) {
         this.pojo = pojo;
- //       pojos.add(pojo, this);
-
-        LOG.debug("Object created " + id + " " + pojo);
     }
 
     public void clearAssociation(NakedObjectAssociation specification, NakedObject associate) {
@@ -250,7 +167,11 @@ public class PojoAdapter extends AbstractNakedObject {
 
     protected void finalize() throws Throwable {
         super.finalize();
-        LOG.debug("finalizing pojo: " + pojo);
+  //      LOG.info("finalizing pojo: " + pojo);
+    }
+    
+    public void dispose() {
+        pojo = null;
     }
 
 }

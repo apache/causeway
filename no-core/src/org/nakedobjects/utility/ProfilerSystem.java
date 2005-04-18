@@ -2,7 +2,7 @@ package org.nakedobjects.utility;
 
 class ProfilerSystem {
     long memory() {
-        return Runtime.getRuntime().freeMemory();
+        return Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
     }
 
     long time() {

@@ -3,6 +3,8 @@ package org.nakedobjects.reflector.java.fixture;
 import org.nakedobjects.object.fixture.Fixture;
 import org.nakedobjects.object.fixture.FixtureBuilder;
 
+import org.apache.log4j.Logger;
+
 
 public abstract class JavaFixture implements Fixture {
     private JavaFixtureBuilder builder;
@@ -41,6 +43,11 @@ public abstract class JavaFixture implements Fixture {
 
     public void setTime(int hour, int minute) {
         builder.setTime(hour, minute);
+    }
+    
+    protected void finalize() throws Throwable {
+        super.finalize();
+        Logger.getLogger(JavaFixture.class).info("finalizing fixture");
     }
 }
 

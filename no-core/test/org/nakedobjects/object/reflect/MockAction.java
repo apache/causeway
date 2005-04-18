@@ -10,7 +10,6 @@ import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
 
-import java.util.Date;
 import java.util.Vector;
 
 import junit.framework.Assert;

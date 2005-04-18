@@ -21,6 +21,8 @@ import org.nakedobjects.utility.StartupException;
 import org.nakedobjects.xat.AcceptanceTestCase;
 import org.nakedobjects.xat.ClearableLoadedObjectsHashtable;
 
+import org.apache.log4j.Logger;
+
 
 
 public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
@@ -34,9 +36,19 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
         return new JavaFixtureBuilder();
     }
 
+    protected void finalize() throws Throwable {
+        super.finalize();
+        Logger.getLogger(JavaAcceptanceTestCase.class).info("finalizing test case");
+    }
+    
     protected void setUp() throws Exception {
         super.setUp();
         clearLoadedObjects();
+    }
+    
+    protected void tearDown() throws Exception {
+        super.tearDown();
+      loadedObjectsHashtable = null;
     }
     
     protected final void setupFramework() {

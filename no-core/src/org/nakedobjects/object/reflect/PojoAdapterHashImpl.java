@@ -52,6 +52,9 @@ public class PojoAdapterHashImpl implements PojoAdapterHash {
     }
 
     public void shutdown() {
+        for(Enumeration e = pojos.elements(); e.hasMoreElements();) {
+            ((PojoAdapter) e.nextElement()).dispose();
+        }
         pojos.clear();
     }
 }

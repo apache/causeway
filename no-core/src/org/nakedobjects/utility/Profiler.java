@@ -13,7 +13,7 @@ public class Profiler {
     protected static ProfilerSystem profilerSystem = new ProfilerSystem();
     private static Hashtable threads = new Hashtable();
 
-    public static String freeMemoryLog() {
+    public static String memoryLog() {
         long free = memory();
         return integerFormat.format(free) + " bytes";
     }

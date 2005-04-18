@@ -42,10 +42,10 @@ public class MemberIdentifier {
         str.append(name);
         str.append('(');
         for (int i = 0; i < parameters.length; i++) {
-            str.append(parameters[i]);
             if(i > 0) {
                 str.append(", ");
             }
+            str.append(parameters[i]);
         }
         str.append(')');
         return str.toString();

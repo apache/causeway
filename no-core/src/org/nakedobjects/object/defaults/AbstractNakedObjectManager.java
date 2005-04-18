@@ -183,7 +183,9 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
         return getObject(object.getOid(), object.getSpecification());
     }
 
-    public void shutdown() {}
+    public void shutdown() {
+        objectFactory = null;
+    }
 }
 /*
  * Naked Objects - a framework that exposes behaviourally complete business

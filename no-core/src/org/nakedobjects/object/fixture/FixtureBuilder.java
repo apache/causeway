@@ -43,6 +43,8 @@ public abstract class FixtureBuilder {
         }
         
         postInstallFixtures(objectManager);
+        
+        fixtures.removeAllElements();
     }
 
     protected void postInstallFixtures(NakedObjectManager objectManager) {}

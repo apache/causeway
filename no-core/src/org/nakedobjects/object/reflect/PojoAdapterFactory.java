@@ -16,6 +16,7 @@ import org.nakedobjects.object.reflect.valueadapter.StringAdapter;
 import org.nakedobjects.utility.DebugInfo;
 
 import java.util.Date;
+import java.util.Enumeration;
 
 
 // TODO is the pojo hashmap the same thing as the loaded objects; can they be

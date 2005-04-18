@@ -496,7 +496,6 @@ public class TransientObjectStore implements NakedObjectStore {
     }
 
     public void shutdown() throws ObjectStoreException {
-        loaded.shutdown();
         loaded = null;
         for (Enumeration e = instances.elements(); e.hasMoreElements();) {
             TransientObjectStoreInstances inst = (TransientObjectStoreInstances) e.nextElement();
