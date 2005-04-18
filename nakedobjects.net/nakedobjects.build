@@ -226,15 +226,13 @@
 	</vbc-->
 	
 	
-	<!--zip zipfile="build/src.zip">
-		<fileset basedir=".">
-			<includes name="core/src/**/*.*" />
-			<includes name="components/dot-net-refelector/reflection/**/*.*"/>
-			<includes name="core/libs/**/*.*"/>
+	<zip zipfile="build/src.zip">
+		<fileset basedir="build">
+			<includes name="src/**/*.*" />
 		</fileset>
 	</zip>
 	
-	<zip zipfile="../../no-builds/nakedobjects.net-${build.id}.zip">
+	<!-- zip zipfile="../../no-builds/nakedobjects.net-${build.id}.zip">
 		<fileset basedir="build">
 			<includes name="*.dll"/>
 			<includes name="*.pdb"/>
@@ -246,7 +244,8 @@
 		<fileset basedir="build">
 			<include name="*.dll"/>
 			<include name="*.pdb"/>
-			<include name="src/**/*"/>
+			<!--include name="src/**/*"/-->
+			<include name="src.zip"/>
 		</fileset>
 	</zip>
         
