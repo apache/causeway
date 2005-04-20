@@ -166,7 +166,9 @@ public class Action extends NakedObjectMember {
 
     public ActionParameterSet getParameters(Session session, NakedObject object) {
         ActionParameterSet parameters = actionDelegate.getParameters(getIdentifier(), session, object, parameterStubs());
-        parameters.checkParameters(getIdentifier().toString(), parameters());
+        if(parameters != null) {
+            parameters.checkParameters(getIdentifier().toString(), parameters());
+        }
         return parameters;
     }
 }
