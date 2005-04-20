@@ -19,12 +19,12 @@ public interface ClientDistribution {
     void endTransaction(Session session);
 
     ObjectData executeAction(Session session, String actionType, String actionIdentifier, String[] parameterTypes, Oid objectOid,
-            String objectType, ObjectData[] parameters);
+            String objectType, Data[] parameters);
 
     ObjectData[] findInstances(Session session, String fullName, String criteria, boolean includeSubclasses);
 
     Hint getActionHint(Session session, String actionType, String actionIdentifier, String[] parameterTypes, Oid objectOid,
-            String objectType, ObjectData[] parameters);
+            String objectType, Data[] parameters);
 
     ObjectData getObject(Session session, Oid oid, String fullName);
 

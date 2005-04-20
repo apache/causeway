@@ -27,7 +27,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     private ClientDistribution connection;
     private LoadedObjects loadedObjects;
     private final Hashtable nakedClasses = new Hashtable();
-    private ObjectDataFactory objectDataFactory;
+    private DataFactory objectDataFactory;
     private Session session;
 
     public void abortTransaction() {
@@ -43,7 +43,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     private TypedNakedCollection convertToNakedObjects(NakedObjectSpecification specification, ObjectData[] data) {
         NakedObject[] instances = new NakedObject[data.length];
         for (int i = 0; i < data.length; i++) {
-            instances[i] = ObjectDataHelper.recreate(loadedObjects, data[i]);
+            instances[i] = DataHelper.recreateObject(loadedObjects, data[i]);
         }
         return new InstanceCollectionVector(specification, instances);
     }
@@ -117,7 +117,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         } else {
             LOG.debug("getObject (remotely from server)" + oid);
             ObjectData data = connection.getObject(session, oid, hint.getFullName());
-            return ObjectDataHelper.recreate(loadedObjects, data);
+            return DataHelper.recreateObject(loadedObjects, data);
         }
     }
 
@@ -195,7 +195,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
      * 
      * @property
      */
-    public void set_ObjectDataFactory(ObjectDataFactory factory) {
+    public void set_ObjectDataFactory(DataFactory factory) {
         this.objectDataFactory = factory;
     }
 
@@ -207,7 +207,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         this.loadedObjects = loadedObjects;
     }
 
-    public void setObjectDataFactory(ObjectDataFactory factory) {
+    public void setObjectDataFactory(DataFactory factory) {
         this.objectDataFactory = factory;
     }
 

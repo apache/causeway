@@ -20,11 +20,14 @@ import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
 
+import org.apache.log4j.Logger;
+
 
 public class ServerDistribution implements ClientDistribution {
+    private static final Logger LOG = Logger.getLogger(ServerDistribution.class);
     private static final int OBJECT_DATA_DEPTH = 3;
     private LoadedObjects loadedObjects;
-    private ObjectDataFactory objectDataFactory;
+    private DataFactory objectDataFactory;
     private ObjectFactory objectFactory;
     private LocalObjectManager objectManager;
 
@@ -59,7 +62,7 @@ public class ServerDistribution implements ClientDistribution {
     }
 
     public ObjectData executeAction(Session session, String actionType, String actionIdentifier, String[] parameterTypes,
-            Oid objectOid, String objectType, ObjectData[] parameterData) {
+            Oid objectOid, String objectType, Data[] parameterData) {
         NakedObject object = getNakedObject(session, objectOid, objectType);
         NakedObjectSpecification[] parameterSpecifiactions = new NakedObjectSpecification[parameterTypes.length];
         for (int i = 0; i < parameterSpecifiactions.length; i++) {
@@ -75,11 +78,16 @@ public class ServerDistribution implements ClientDistribution {
         Naked[] parameters = new Naked[parameterData.length];
         for (int i = 0; i < parameters.length; i++) {
             if (parameterData[i] != null) {
-                parameters[i] = ObjectDataHelper.recreate(loadedObjects, parameterData[i]);
+                parameters[i] = DataHelper.recreate(loadedObjects, parameterData[i]);
             }
         }
-        NakedObject result = (NakedObject) object.execute(action, parameters);
-        return objectDataFactory.createObjectData(result, OBJECT_DATA_DEPTH);
+        try {
+	        NakedObject result = (NakedObject) object.execute(action, parameters);
+	        return objectDataFactory.createObjectData(result, OBJECT_DATA_DEPTH);
+        } catch(Exception e) {
+            LOG.error(e);
+            return objectDataFactory.createObjectData(null, OBJECT_DATA_DEPTH);
+        }
     }
 
     public ObjectData[] findInstances(Session session, String fullName, String criteria, boolean includeSubclasses) {
@@ -88,7 +96,7 @@ public class ServerDistribution implements ClientDistribution {
     }
 
     public Hint getActionHint(Session session, String actionType, String actionIdentifier, String[] parameterTypes,
-            Oid objectOid, String objectType, ObjectData[] parameters) {
+            Oid objectOid, String objectType, Data[] parameters) {
         return new DefaultHint();
     }
 
@@ -115,7 +123,7 @@ public class ServerDistribution implements ClientDistribution {
     }
 
     public Oid[] makePersistent(Session session, ObjectData data) {
-        NakedObject object = ObjectDataHelper.recreate(loadedObjects, data);
+        NakedObject object = DataHelper.recreateObject(loadedObjects, data);
         objectFactory.recreatedObject(object.getObject());
         objectManager.startTransaction();
         objectManager.makePersistent(object);
@@ -151,7 +159,7 @@ public class ServerDistribution implements ClientDistribution {
      * 
      * @property
      */
-    public void set_ObjectDataFactory(ObjectDataFactory objectDataFactory) {
+    public void set_ObjectDataFactory(DataFactory objectDataFactory) {
         this.objectDataFactory = objectDataFactory;
     }
 
@@ -193,7 +201,7 @@ public class ServerDistribution implements ClientDistribution {
         this.objectManager = objectManager;
     }
 
-    public void setObjectDataFactory(ObjectDataFactory objectDataFactory) {
+    public void setObjectDataFactory(DataFactory objectDataFactory) {
         this.objectDataFactory = objectDataFactory;
     }
 

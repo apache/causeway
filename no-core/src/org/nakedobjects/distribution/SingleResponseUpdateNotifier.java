@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 
 public class SingleResponseUpdateNotifier implements UpdateNotifier {
    private static final Logger LOG = Logger.getLogger(SingleResponseUpdateNotifier.class);
-    private ObjectDataFactory factory;
+    private DataFactory factory;
     private Vector updates = new Vector();
 
     public void broadcastObjectChanged(NakedObject object) {
@@ -40,7 +40,7 @@ public class SingleResponseUpdateNotifier implements UpdateNotifier {
         updates.removeElement(updatePackager);
     }
     
-    public void setFactory(ObjectDataFactory factory) {
+    public void setFactory(DataFactory factory) {
         this.factory = factory;
     }
 
@@ -49,7 +49,7 @@ public class SingleResponseUpdateNotifier implements UpdateNotifier {
      * 
      * @property
      */
-    public void set_Factory(ObjectDataFactory factory) {
+    public void set_Factory(DataFactory factory) {
         this.factory = factory;
     }
 

@@ -1,5 +1,6 @@
 package org.nakedobjects.distribution.xml.request;
 
+import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.object.persistence.Oid;
@@ -12,10 +13,10 @@ public class ExecuteAction extends AbstractRequest {
     private final String[] parameterTypes;
     private final Oid objectOid;
     private final String objectType;
-    private ObjectData[] parameters;
+    private Data[] parameters;
 
     public ExecuteAction(Session session, String actionType, String actionIdentifier, String[] parameterTypes, Oid objectOid,
-            String objectType, ObjectData[] parameters) {
+            String objectType, Data[] parameters) {
         super(session);
         this.actionType = actionType;
         this.actionIdentifier = actionIdentifier;

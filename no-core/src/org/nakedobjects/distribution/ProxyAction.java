@@ -20,36 +20,35 @@ public final class ProxyAction extends AbstractActionPeer {
     private ClientDistribution connection;
     private boolean fullProxy = false;
     private final LoadedObjects loadedObjects;
-    private final ObjectDataFactory objectDataFactory;
+    private final DataFactory dataFactory;
 
     public ProxyAction(final ActionPeer local, final ClientDistribution connection, final LoadedObjects loadedObjects,
-            ObjectDataFactory objectDataFactory) {
+            DataFactory objectDataFactory) {
         super(local);
         this.connection = connection;
         this.loadedObjects = loadedObjects;
-        this.objectDataFactory = objectDataFactory;
+        this.dataFactory = objectDataFactory;
     }
 
     public Naked execute(MemberIdentifier identifier, NakedObject target, Naked[] parameters) throws ReflectiveActionException {
         if (isPersistent(target)) {
             String[] parameterTypes = pararmeterTypes();
-            ObjectData[] parameterObjectData = parameterValues(parameters);
+            Data[] parameterObjectData = parameterValues(parameters);
             ObjectData targetObjectData = connection.executeAction(ClientSession.getSession(), getType().getName(), getName(),
                     parameterTypes, target.getOid(), target.getSpecification().getFullName(), parameterObjectData);
             NakedObject returnedObject;
-            returnedObject = targetObjectData == null ? null : ObjectDataHelper.recreate(loadedObjects, targetObjectData);
+            returnedObject = targetObjectData == null ? null : DataHelper.recreateObject(loadedObjects, targetObjectData);
             return returnedObject;
         } else {
             return super.execute(identifier, target, parameters);
         }
     }
 
-    private ObjectData[] parameterValues(Naked[] parameters) {
-        ObjectData parameterObjectData[] = new ObjectData[parameters.length];
+    private Data[] parameterValues(Naked[] parameters) {
+        Data parameterObjectData[] = new Data[parameters.length];
         for (int i = 0; i < parameters.length; i++) {
-            if(parameters[i] != null) {
-                parameterObjectData[i] = objectDataFactory.createObjectData((NakedObject) parameters[i], 0);
-            }
+            Naked parameter = parameters[i];
+            parameterObjectData[i] = dataFactory.createData(parameter, 0);
         }
         return parameterObjectData;
     }
@@ -66,7 +65,7 @@ public final class ProxyAction extends AbstractActionPeer {
     public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
         if (isPersistent(object) && fullProxy) {
             String[] parameterTypes = pararmeterTypes();
-            ObjectData[] parameterObjectData = parameterValues(parameters);
+            Data[] parameterObjectData = parameterValues(parameters);
             return connection.getActionHint(session, getType().getName(), getName(), parameterTypes, object.getOid(), object
                     .getSpecification().getFullName(), parameterObjectData);
         } else {

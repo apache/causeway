@@ -1,16 +1,6 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.persistence.Oid;
-
-public class JavaObjectDataFactory extends DataFactory {
-
-    public ObjectData createObjectData(Oid oid, String type, Object[] fieldContent) {
-        return new JavaObjectData(oid, type, fieldContent);
-    }
-
-    public ValueData createValueData(String type, Object value) {
-        return new JavaValueData(type, value);
-    }
+public interface Data {
 
 }
 

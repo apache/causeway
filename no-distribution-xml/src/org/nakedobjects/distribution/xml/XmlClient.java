@@ -1,8 +1,9 @@
 package org.nakedobjects.distribution.xml;
 
 import org.nakedobjects.distribution.ClientDistribution;
+import org.nakedobjects.distribution.Data;
+import org.nakedobjects.distribution.DataHelper;
 import org.nakedobjects.distribution.ObjectData;
-import org.nakedobjects.distribution.ObjectDataHelper;
 import org.nakedobjects.distribution.xml.request.AbortTransaction;
 import org.nakedobjects.distribution.xml.request.AllInstances;
 import org.nakedobjects.distribution.xml.request.ClearAssociation;
@@ -50,7 +51,7 @@ public class XmlClient implements ClientDistribution {
     }
 
     public ObjectData executeAction(Session session, String actionType, String actionIdentifier, String[] parameterTypes,
-            Oid objectOid, String objectType, ObjectData[] parameters) {
+            Oid objectOid, String objectType, Data[] parameters) {
         ExecuteAction request = new ExecuteAction(session, actionType, actionIdentifier, parameterTypes, objectOid, objectType,
                 parameters);
         remoteExecute(request);
@@ -64,7 +65,7 @@ public class XmlClient implements ClientDistribution {
     }
 
     public Hint getActionHint(Session session, String actionType, String actionIdentifier, String[] parameterTypes,
-            Oid objectOid, String objectType, ObjectData[] parameters) {
+            Oid objectOid, String objectType, Data[] parameters) {
         throw new NotImplementedException();
     }
 
@@ -102,7 +103,7 @@ public class XmlClient implements ClientDistribution {
         
         ObjectData[] updates = response.getUpdates();
         for (int i = 0; i < updates.length; i++) {
-            ObjectDataHelper.update(loadedObjects, updates[i]);
+            DataHelper.update(loadedObjects, updates[i]);
         }
 //        response.update();
     }

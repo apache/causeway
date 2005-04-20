@@ -1,16 +1,13 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.persistence.Oid;
 
 
 /**
- * ObjectData is data transfer object that contains all the data for an object
+ * ObjectValue is data transfer object that contains the data for a value object
  * in a form that can be passed over the network between a client and a server.
  */
-public interface ObjectData extends Data{
-    Object[] getFieldContent();
-
-    Oid getOid();
+public interface ValueData extends Data{
+    Object getValue();
 
     String getType();
 }

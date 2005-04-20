@@ -1,15 +1,25 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.persistence.Oid;
 
-public class JavaObjectDataFactory extends DataFactory {
+public class JavaValueData implements ValueData {
+    private String type;
+    private Object value;
 
-    public ObjectData createObjectData(Oid oid, String type, Object[] fieldContent) {
-        return new JavaObjectData(oid, type, fieldContent);
+    public JavaValueData(String type, Object value) {
+        this.type = type;
+        this.value = value;
+    }
+    
+    public Object getValue() {
+        return value;
     }
 
-    public ValueData createValueData(String type, Object value) {
-        return new JavaValueData(type, value);
+    public String getType() {
+        return type;
+    }
+    
+    public String toString() {
+        return "JavaValueData [type=" + type + ",value" + value + "]";
     }
 
 }
