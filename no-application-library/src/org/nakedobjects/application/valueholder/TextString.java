@@ -288,7 +288,7 @@ public class TextString extends BusinessValueHolder {
      * Sets this object text to be same as the specified text.
      */
     public void setValue(TextString text) {
-        if (text.isEmpty()) {
+        if (text == null || text.isEmpty()) {
             clear();
         } else {
             setValue(text.text);
