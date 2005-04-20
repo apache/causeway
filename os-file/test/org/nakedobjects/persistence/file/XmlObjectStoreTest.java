@@ -29,7 +29,6 @@ public class XmlObjectStoreTest extends TestCase {
     
     public void testNumberOfInstances() {
         DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
-        spec.fullName = "type";
         int number = objectStore.numberOfInstances(spec, false);
         
         dataManager.assertAction(0, "type");
@@ -38,13 +37,11 @@ public class XmlObjectStoreTest extends TestCase {
 
     public void testSaveObject() throws Exception {
         DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
-        spec.fullName = "type";
         spec.fields = new NakedObjectField[0];
         
         DummyNakedObject nakedObject = new DummyNakedObject();
         nakedObject.setupSpecification(spec);
-  //      objectStore.save(nakedObject);
-        
+
    //     dataManager.assertAction(0, "");
         
     }

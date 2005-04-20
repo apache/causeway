@@ -24,9 +24,7 @@ public class SnapshotBuilderTest extends TestCase {
       	MockNakedObjectSpecificationLoader loader = new MockNakedObjectSpecificationLoader();
         DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
         loader.addSpec(spec);
-        spec.fullName = "xxx";
         spec.fields = new NakedObjectField[0];
-        
         
         TestObject testObject = new TestObject();
         XmlSnapshot builder = new XmlSnapshot(NakedObjects.getPojoAdapterFactory().createNOAdapter(testObject));

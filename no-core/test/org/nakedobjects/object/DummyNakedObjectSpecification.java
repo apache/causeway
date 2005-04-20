@@ -12,14 +12,9 @@ import org.nakedobjects.object.security.Session;
 public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     private static int next = 100;
     public NakedObjectField[] fields;
-    public String fullName;
     private final int id = next++;
 
     public DummyNakedObjectSpecification() {}
-
-    public DummyNakedObjectSpecification(String fullName) {
-        this.fullName = fullName;
-    }
 
     public Naked acquireInstance() {
         return null;
@@ -60,7 +55,7 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     }
 
     public String getFullName() {
-        return fullName;
+        return "DummyNakedObjectSpecification" + id;
     }
 
     public Action getObjectAction(Type type, String name) {
@@ -163,7 +158,7 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     }
 
     public String toString() {
-        return "DummyNakedObjectSpecification" + id + " " + fullName;
+        return getFullName();
     }
 
     public String unresolvedTitle(PojoAdapter pojo) {

@@ -12,14 +12,14 @@ import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.ParameterContent;
 
 
-class ActionHelper {
+public class ActionHelper {
     private final NakedObject target;
     private final Naked[] parameters;
     private final NakedObjectSpecification[] parameterTypes;
     private final Action action;
     private final String[] labels;
 
-    ActionHelper(NakedObject target, Action action) {
+    public ActionHelper(NakedObject target, Action action) {
         this.target = target;
         this.action = action;
 
@@ -62,20 +62,20 @@ class ActionHelper {
         }
     }
 
-    Naked invoke() {
+    public Naked invoke() {
         return target.execute(action, parameters);
     }
 
-    void setParameter(int index, Naked parameter) {
+    public void setParameter(int index, Naked parameter) {
         this.parameters[index] = parameter;
     }
 
-    Consent disabled() {
+    public Consent disabled() {
         Hint about = target.getHint(ClientSession.getSession(), action, parameters);
         return about.canUse();
     }
 
-    ParameterContent[] createParameters() {
+    public ParameterContent[] createParameters() {
         ParameterContent[] parameterContents = new ParameterContent[parameters.length];
         for (int i = 0; i < parameters.length; i++) {
             if (parameterTypes[i].isValue()) {
@@ -88,15 +88,15 @@ class ActionHelper {
         return parameterContents;
     }
 
-    String getName() {
+    public String getName() {
         return target.getLabel(ClientSession.getSession(), action);
     }
 
-    NakedObject getTarget() {
+    public NakedObject getTarget() {
         return target;
     }
 
-    Naked getParameter(int index) {
+    public Naked getParameter(int index) {
         return parameters[index];
     }
 }

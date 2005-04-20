@@ -1,5 +1,6 @@
 package org.nakedobjects.object.reflect.internal;
 
+import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
@@ -36,13 +37,16 @@ public class InternalActionTest extends TestCase {
     }
 
     public void testAbout() {
-        Hint about = javaAction.getHint(null, null, new InternalActionTestObject(), new Naked[0]);
+        MockNakedObject object = new MockNakedObject();
+        object.setupObject(new InternalActionTestObject());
+        Hint about = javaAction.getHint(null, null, object, new Naked[0]);
         assertNotNull(about);
         assertEquals("about for test", about.getName());
     }
 
     public void testAction() {
-        InternalActionTestObject object = new InternalActionTestObject();
+        MockNakedObject object = new MockNakedObject();
+        object.setupObject(new InternalActionTestObject());
         javaAction.execute(null, object, new Naked[0]);
 
   //      manager.assertAction(0, "start transaction");

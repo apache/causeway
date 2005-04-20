@@ -1,45 +1,42 @@
-package org.nakedobjects.object;
+package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.utility.NotImplementedException;
 
 
-public class MockField extends NakedObjectField {
-
-    public MockField(String name) {
-        super(name, null, null);
+class TestingObjectDataFactory extends DataFactory {
+    protected ObjectData createObjectData(Oid oid, String type, Object[] fieldContent) {
+        return new TestingObjectData(oid, type, fieldContent);
     }
 
-    public Naked get(NakedObject fromObject) {
-        return null;
+    public ValueData createValueData(String fullName, Object object) {
+        throw new NotImplementedException();
+    }
+}
+
+class TestingObjectData implements ObjectData {
+
+    private final Oid oid;
+    private final String type;
+    private final Object[] fieldContent;
+
+    public TestingObjectData(Oid oid, String type, Object[] fieldContent) {
+        this.oid = oid;
+        this.type = type;
+        this.fieldContent = fieldContent;
     }
 
-    public boolean isDerived() {
-        return false;
+    public Object[] getFieldContent() {
+        return fieldContent;
     }
 
-    public void clearValue(NakedObject inObject) {}
-
-    public boolean canAccess(Session session, NakedObject object) {
-        return false;
+    public Oid getOid() {
+        return oid;
     }
 
-    public boolean canUse(Session session, NakedObject object) {
-        return false;
+    public String getType() {
+        return type;
     }
-
-    public String getLabel(Session session, NakedObject object) {
-        return null;
-    }
-
-    public boolean hasHint() {
-        return false;
-    }
-
-    public boolean isEmpty(NakedObject adapter) {
-        return false;
-    }
-
 }
 
 

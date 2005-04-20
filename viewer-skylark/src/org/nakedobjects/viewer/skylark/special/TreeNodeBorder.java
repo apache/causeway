@@ -134,6 +134,7 @@ public class TreeNodeBorder extends AbstractBorder {
                 && x <= BOX_X_OFFSET + BOX_SIZE && y >= (top - BOX_SIZE) / 2 && y <= (top + BOX_SIZE) / 2) {
             if(getContent() instanceof FieldContent) {
                 NakedObjectField field = ((FieldContent) getContent()).getFieldReflector();
+                // TODO fails when parent is a collectiion - need to get parent of the parent (when the parent is internal collection
                 NakedObject parent = (NakedObject) getParent().getContent().getNaked();
                 NakedObjects.getObjectManager().resolveEagerly(parent, field);
             }

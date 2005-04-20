@@ -73,9 +73,7 @@ public class TransientObjectStoreInstancesTest extends TestCase {
         transientObjectStore.setLoadedObjects(loadedObjects);
 
         objectStore = transientObjectStore;
- //       objectStore = new ObjectStoreLogger(transientObjectStore, null);
         objectStore.init();
-        
     }
 
     protected void tearDown() throws Exception {
@@ -145,7 +143,9 @@ public class TransientObjectStoreInstancesTest extends TestCase {
 
         objectStore.runTransaction(commands);
         
-        objectSpec.fields = new NakedObjectField[] {new MockField(objectSpec)};
+        MockField field = new MockField(objectSpec);
+        field.setupFieldContent(referenced);
+        objectSpec.fields = new NakedObjectField[] {field};
         
         NakedObjectField fields[] = object.getFields();
         assertEquals(referenced, object.getField(fields[0]));
@@ -167,7 +167,6 @@ public class TransientObjectStoreInstancesTest extends TestCase {
         assertFalse(retrievedReferenced.isResolved());
 
         assertEquals(referenced, retrievedReferenced);
-        assertNotSame(referenced, retrievedReferenced);
         
         objectStore.resolveImmediately(object);
         assertFalse(retrievedReferenced.isResolved());
@@ -190,7 +189,9 @@ public class TransientObjectStoreInstancesTest extends TestCase {
 
         objectStore.runTransaction(commands);
         
-        objectSpec.fields = new NakedObjectField[] {new MockField(objectSpec)};
+        MockField field = new MockField(objectSpec);
+        field.setupFieldContent(referenced);
+        objectSpec.fields = new NakedObjectField[] {field};
                
         restartObjectStore();
         
@@ -213,7 +214,6 @@ public class TransientObjectStoreInstancesTest extends TestCase {
         assertFalse(retrievedReferenced.isResolved());
 
         assertEquals(referenced, retrievedReferenced);
-        assertNotSame(referenced, retrievedReferenced);
         
         objectStore.resolveImmediately(object);
         assertFalse(retrievedReferenced.isResolved());

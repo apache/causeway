@@ -12,7 +12,10 @@ import org.nakedobjects.object.security.Session;
 
 
 public class MockNakedObject implements NakedObject {
-
+    private NakedObject field;
+    private Object object;
+    private Oid oid;
+    private NakedObjectSpecification specification;
     private String titleString;
 
     public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
@@ -40,6 +43,10 @@ public class MockNakedObject implements NakedObject {
     }
 
     public Naked getField(NakedObjectField field) {
+        return this.field;
+    }
+
+    public NakedObjectField[] getFields() {
         return null;
     }
 
@@ -64,11 +71,11 @@ public class MockNakedObject implements NakedObject {
     }
 
     public Object getObject() {
-        return this;
+        return object;
     }
 
-    public org.nakedobjects.object.persistence.Oid getOid() {
-        return null;
+    public Oid getOid() {
+        return oid;
     }
 
     public ActionParameterSet getParameters(Session session, Action action) {
@@ -76,7 +83,7 @@ public class MockNakedObject implements NakedObject {
     }
 
     public NakedObjectSpecification getSpecification() {
-        return new DummyNakedObjectSpecification();//NakedObjectSpecification.getSpecification(MockNakedObject.class);
+        return specification;
     }
 
     public NakedValue getValue(OneToOneAssociation field) {
@@ -132,9 +139,23 @@ public class MockNakedObject implements NakedObject {
 
     public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {}
 
-    public void setOid(Oid oid) {}
+    public void setOid(Oid oid) {
+        this.oid = oid;
+    }
 
     public void setResolved() {}
+
+    public void setupField(NakedObject field) {
+        this.field = field;
+    }
+
+    public void setupObject(Object object) {
+        this.object = object;
+    }
+
+    public void setupSpecification(NakedObjectSpecification specification) {
+        this.specification = specification;
+    }
 
     public void setupTitleString(String titleString) {
         this.titleString = titleString;
@@ -145,15 +166,6 @@ public class MockNakedObject implements NakedObject {
     public String titleString() {
         return titleString;
     }
-
-    public String toString() {
-        return super.toString() + " " + titleString;
-    }
-
-    public NakedObjectField[] getFields() {
-        return null;
-    }
-
 }
 
 /*

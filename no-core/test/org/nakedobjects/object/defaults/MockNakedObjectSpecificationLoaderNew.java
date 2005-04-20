@@ -45,7 +45,7 @@ public class MockNakedObjectSpecificationLoaderNew extends NakedObjectSpecificat
     }
 
     public DummyNakedObjectSpecification addSpec(String name) {
-        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification(name);
+        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
         spec.fields = new NakedObjectField[0];
         addSpec(name, spec);
         return spec;

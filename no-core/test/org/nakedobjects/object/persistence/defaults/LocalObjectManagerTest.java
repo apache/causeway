@@ -1,10 +1,10 @@
 package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.object.DummyNakedObjectSpecification;
+import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.MockObjectStore;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.MockObjectFactory;
-import org.nakedobjects.object.defaults.TestNakedObject;
 import org.nakedobjects.object.reflect.NakedObjectField;
 
 import junit.framework.TestCase;
@@ -16,7 +16,7 @@ public class LocalObjectManagerTest extends TestCase {
 
     private LocalObjectManager objectManager;
     private MockObjectStore objectStore;
-    private TestNakedObject testNakedObject;
+    private MockNakedObject testNakedObject;
     private DummyNakedObjectSpecification objectSpecification;
 
     public static void main(String[] args) {
@@ -69,7 +69,7 @@ public class LocalObjectManagerTest extends TestCase {
         objectManager.setObjectStore(objectStore);
         objectManager.setOidGenerator(new MockOidGenerator());
         
-        testNakedObject = new TestNakedObject();
+        testNakedObject = new MockNakedObject();
         objectSpecification = new DummyNakedObjectSpecification();
         testNakedObject.setupSpecification(objectSpecification);
 
