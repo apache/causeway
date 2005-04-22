@@ -15,6 +15,7 @@
 	<!-- classpath -->
 	<path id="libs.internal">
 		<pathelement location="../no-core/build/classes/src"/>
+		<pathelement location="../no-core/build/classes/test"/>
 	</path>
 
 	&project-build;	
