@@ -156,7 +156,11 @@ public class Title {
     }
 
     private static String titleString(TitledObject object) {
-        return object == null ? "" : object.title().toString();
+        if( object == null || object.title() == null) {
+            return ""; 
+        } else {
+            return object.title().toString();
+        }
     }
 
     /**
