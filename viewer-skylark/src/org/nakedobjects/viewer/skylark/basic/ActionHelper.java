@@ -13,21 +13,15 @@ import org.nakedobjects.viewer.skylark.ParameterContent;
 
 
 public class ActionHelper {
-    private final NakedObject target;
-    private final Naked[] parameters;
-    private final NakedObjectSpecification[] parameterTypes;
-    private final Action action;
-    private final String[] labels;
 
-    public ActionHelper(NakedObject target, Action action) {
-        this.target = target;
-        this.action = action;
-
+    public static ActionHelper createInstance(NakedObject target, Action action) {
         int numberParameters = action.parameters().length;
+        Naked[] parameters;
         parameters = new Naked[numberParameters];
 
         ActionParameterSet parameterHints = target.getParameters(ClientSession.getSession(), action);
         Object[] defaultValues;
+        String[] labels;
         if (parameterHints != null) {
             labels = parameterHints.getParameterLabels();
             defaultValues = parameterHints.getDefaultParameterValues();
@@ -38,6 +32,7 @@ public class ActionHelper {
 
         Naked[] parameterValues;
         Naked[] values;
+        NakedObjectSpecification[] parameterTypes;
         parameterTypes = action.parameters();
         values = new Naked[parameterTypes.length];
         for (int i = 0; i < parameterTypes.length; i++) {
@@ -60,19 +55,22 @@ public class ActionHelper {
             parameters[i] = defaultValues[i] == null ? parameterValues[i] : NakedObjects.getPojoAdapterFactory().createAdapter(
                     defaultValues[i]);
         }
+
+        return new ActionHelper(target, action, labels, parameters, parameterTypes);
     }
 
-    public Naked invoke() {
-        return target.execute(action, parameters);
-    }
+    private final Action action;
+    private final String[] labels;
+    private final Naked[] parameters;
+    private final NakedObjectSpecification[] parameterTypes;
+    private final NakedObject target;
 
-    public void setParameter(int index, Naked parameter) {
-        this.parameters[index] = parameter;
-    }
-
-    public Consent disabled() {
-        Hint about = target.getHint(ClientSession.getSession(), action, parameters);
-        return about.canUse();
+    protected ActionHelper(NakedObject target, Action action, String[] labels, Naked[] parameters, NakedObjectSpecification[] parameterTypes) {
+        this.target = target;
+        this.action = action;
+        this.labels = labels;
+        this.parameters = parameters;
+        this.parameterTypes = parameterTypes;
     }
 
     public ParameterContent[] createParameters() {
@@ -88,16 +86,29 @@ public class ActionHelper {
         return parameterContents;
     }
 
+    public Consent disabled() {
+        Hint about = target.getHint(ClientSession.getSession(), action, parameters);
+        return about.canUse();
+    }
+
     public String getName() {
         return target.getLabel(ClientSession.getSession(), action);
+    }
+
+    public Naked getParameter(int index) {
+        return parameters[index];
     }
 
     public NakedObject getTarget() {
         return target;
     }
 
-    public Naked getParameter(int index) {
-        return parameters[index];
+    public Naked invoke() {
+        return target.execute(action, parameters);
+    }
+
+    public void setParameter(int index, Naked parameter) {
+        this.parameters[index] = parameter;
     }
 }
 

@@ -14,10 +14,10 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.special.MockView;
 import org.nakedobjects.viewer.skylark.special.SubviewSpec;
 
+import junit.framework.TestCase;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-
-import junit.framework.TestCase;
 
 
 public class ActionFieldBuilderTest extends TestCase {
@@ -54,7 +54,7 @@ public class ActionFieldBuilderTest extends TestCase {
         MockActionPeer mockActionPeer = new MockActionPeer();
         mockActionPeer.setUpParamterTypes(new NakedObjectSpecification[] { new DummyNakedObjectSpecification(), new DummyNakedObjectSpecification() });
         Action action = new Action("cls name", "method name", mockActionPeer);
-        actionContent = new ActionHelper(object, action);
+        actionContent = ActionHelper.createInstance(object, action);
 
         view = new MockView();
         view.setUpContent(new ActionContent(actionContent));

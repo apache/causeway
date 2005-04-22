@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.reflect.Action;
@@ -15,12 +16,15 @@ import org.apache.log4j.Logger;
 
 
 public class ActionHelperTest extends TestCase {
-    private ActionHelper actionInvocation;
-    private DummyNakedObject target;
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(ActionHelperTest.class);
     }
+
+    private ActionHelper actionHelper;
+    private DummyNakedObject target;
+    private DummyNakedObject param1;
+    private DummyNakedObject param2;
 
     protected void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
@@ -29,47 +33,47 @@ public class ActionHelperTest extends TestCase {
 
         MockActionPeer mockActionPeer = new MockActionPeer();
         mockActionPeer.setUpParamterTypes(new NakedObjectSpecification[] {});
-        
-  //      mockActionPeer.setUpParamterTypes(new NakedObjectSpecification[] { new DummyNakedObjectSpecification(),
-  //              new DummyNakedObjectSpecification() });
+
         Action action = new Action("cls name", "method name", mockActionPeer);
 
         target = new DummyNakedObject();
 
-        actionInvocation = new ActionHelper(target, action);
+        param1 = new DummyNakedObject();
+        param2 = new DummyNakedObject();
+        Naked[] values = new Naked[] { param1, param2 };
+        NakedObjectSpecification[] types = new DummyNakedObjectSpecification[] { new DummyNakedObjectSpecification(),
+                new DummyNakedObjectSpecification() };
+        String[] labels = {"one", "two"};
+        actionHelper = new ActionHelper(target, action, labels, values, types);
     }
 
-    public void testTarget() {
-        assertEquals(target, actionInvocation.getTarget());
+    public void testInvokeAction() {
+        actionHelper.invoke();
     }
 
-
-	public void testParam() {
-	   ParameterContent[] p = actionInvocation.createParameters();
-	   assertEquals(0, p.length);
-    }
-	
-	public void testInvokeAction() {
-	    actionInvocation.invoke();
-    }
-	
-    public void xxxtestNumberOfParameters() {
-        actionInvocation.getParameter(0);
-        actionInvocation.getParameter(1);
+    public void testNumberOfParameters() {
+        actionHelper.getParameter(0);
+        actionHelper.getParameter(1);
 
         try {
-            actionInvocation.getParameter(2);
+            actionHelper.getParameter(2);
             fail();
         } catch (ArrayIndexOutOfBoundsException expected) {}
 
     }
 
-    public void xxtestParameters() {
-        Naked param1 = actionInvocation.getParameter(0);
-        Naked param2 = actionInvocation.getParameter(1);
+    public void testParam() {
+        ParameterContent[] p = actionHelper.createParameters();
+        assertEquals(2, p.length);
+    }
 
-        assertEquals(null, param1);
-        assertEquals(null, param2);
+    public void testParameters() {
+        assertEquals(param1, actionHelper.getParameter(0));
+        assertEquals(param2, actionHelper.getParameter(1));
+    }
+
+    public void testTarget() {
+        assertEquals(target, actionHelper.getTarget());
     }
 }
 

@@ -67,7 +67,7 @@ class DialogedObjectOption extends MenuOption {
     }
 
     public void execute(Workspace workspace, View view, Location at) {
-        ActionHelper ai = new ActionHelper(object, action);
+        ActionHelper ai = ActionHelper.createInstance(object, action);
         ActionContent content = new ActionContent(ai);
         View dialog = dialogSpec.createView(content, null);
         dialog.setLocation(at);
