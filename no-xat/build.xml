@@ -14,10 +14,7 @@
 	
 	<!-- classpath -->
 	<path id="libs.internal">
-		<fileset dir="${no-core.release.dir}">
-			<include name="no-core.jar"/>
-			<include name="no-core-test.jar"/>
-		</fileset>
+		<pathelement location="../no-core/build/classes/src"/>
 	</path>
 
 	&project-build;	
