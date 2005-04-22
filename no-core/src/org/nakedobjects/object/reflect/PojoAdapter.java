@@ -162,7 +162,9 @@ public class PojoAdapter extends AbstractNakedObject {
     }
 
     public String toString() {
-        return "POJO " + super.toString() + " " + titleString();
+        // TODO figure out how to get some form of title from object
+        //return "POJO " + super.toString() + " title string disabled";// + titleString();
+        return "POJO " + super.toString() +" " + titleString();
     }
 
     protected void finalize() throws Throwable {
