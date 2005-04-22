@@ -105,8 +105,14 @@ public class TransientObjectStore implements NakedObjectStore {
             while (e.hasMoreElements()) {
                 indent(s, level);
 
-                NakedObject element = ((NakedObject) e.nextElement());
-
+                NakedObject element;
+                try {
+                element = ((NakedObject) e.nextElement());
+                } catch (ClassCastException ex) {
+                    LOG.error(ex);
+                    return s.toString();
+                }
+                
                 s.append(element);
                 s.append(debugGraph(element, name, level + 1, recursiveElements));
             }
