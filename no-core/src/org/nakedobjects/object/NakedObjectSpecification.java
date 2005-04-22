@@ -112,7 +112,7 @@ public interface NakedObjectSpecification {
      * the object is persistent or not. If they cannot be persisted then
      * NakedObject.persistable() should be ignored.
      * 
-     * @see NakedObject#persisable()
+     * @see NakedObject#persistable()
      */
     Persistable persistable();
 
