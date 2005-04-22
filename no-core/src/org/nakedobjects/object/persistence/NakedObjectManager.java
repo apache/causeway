@@ -177,6 +177,9 @@ public interface NakedObjectManager extends DebugInfo {
 
     void startTransaction();
 
+    /** @deprecated */
+    void debugCheckObjectForOid(Oid oid, NakedObject object);
+
 }
 
 /*
