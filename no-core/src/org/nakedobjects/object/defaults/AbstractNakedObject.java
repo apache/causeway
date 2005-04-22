@@ -216,6 +216,8 @@ public abstract class AbstractNakedObject implements NakedObject {
     public void setOid(Oid oid) {
         if (this.oid == null) {
             this.oid = oid;
+            
+ //           NakedObjects.getObjectManager().debugCheckObjectForOid(oid, this);
         } else {
             throw new IllegalStateException("The OID is already set (" + this + ")");
         }
