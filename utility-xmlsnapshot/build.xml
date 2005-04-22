@@ -4,9 +4,8 @@
 	<!ENTITY project-build SYSTEM "file:../build-templates/project-build.xml">
 ]>
 
-<project name="Naked Object Cache Object Store" default="all" basedir=".">
-	<description>Prevalyer style object store that journals all changes to the objects, and captures a snapshot
-		at shutdown.</description>
+<project name="Naked Object XML Snapshot Utility" default="all" basedir=".">
+	<description></description>
 
 	&properties;
 
@@ -14,12 +13,12 @@
 	
 	<!-- classpath -->
 	<path id="libs.internal">
-		<fileset dir="${no-core.release.dir}">
-			<include name="no-core.jar"/>
-			<include name="no-core-test.jar"/>
-		</fileset>
-	</path>
+			<pathelement location="../no-core/build/classes/src"/>
+			<pathelement location="../no-core/build/classes/test"/>
 
+			<pathelement location="../no-memento/build/classes/src"/>
+	</path>
+	
 	&project-build;	
 </project>
 

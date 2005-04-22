@@ -4,12 +4,12 @@
 	<!ENTITY project-build SYSTEM "file:../build-templates/project-build.xml">
 ]>
 
-<project name="Naked Object Acceptance Test (XAT) Framework" default="all" basedir=".">
+<project name="Naked Object Memento" default="all" basedir=".">
 	<description></description>
 
 	&properties;
 
-	<property name="component" value="no-xat"/>
+	<property name="component" value="no-memento"/>
 	
 	<!-- classpath -->
 	<path id="libs.internal">
