@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE project [
 	<!ENTITY properties SYSTEM "file:../build-templates/properties.xml">
-	<!ENTITY common SYSTEM "file:../build-templates/common.xml">
+	<!ENTITY distribution SYSTEM "file:../build-templates/distribution-build.xml">
 ]>
 
 <project name="Naked Objects framework - exploration edition"
@@ -12,7 +12,7 @@
 	<property name="distribution" value="development" />
 
 	
-	&common;
+	&distribution;
 
 	<target name="copy">
 		<copy todir="${build.src.dir}">

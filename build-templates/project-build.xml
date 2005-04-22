@@ -27,11 +27,10 @@
 
 	<!-- test directories -->
 	<property name="test.run.dir" value="${build.dir}/test-run"/>
-	<property name="test.results.dir" value="${build.relase.dir}/tests"/>
+	<!--property name="test.results.dir" value="${build.relase.dir}/tests"/-->
+	<property name="test.results.dir" value="${build.dir}/test-results"/>
 	
 	<property environment="env"/>
-
-
 
 
 
@@ -39,8 +38,6 @@
 	<!--        init            -->
 	<!--                        -->
 	<target name="-init">
-		<echo message="Version ${build.version}  ${build.id}"/>
-
 		<mkdir dir="${build.dir}"/>
 		
 		<!-- copy across source and add version -->
@@ -54,20 +51,11 @@
 			<fileset dir="${test.dir}"/>
 		</copy>
 
-		<replace dir="${build.src.dir}">
-			<include name="**/AboutNakedObjects.java"/>
-			<replacefilter token="%VERSION%" value="${build.version}"/>
-			<replacefilter token="%BUILD_ID%" value="${build.id}"/>
-			<replacefilter token="%NAME%" value="${build.name}"/>
-			<replacefilter token="%COPYRIGHT_NOTICE%" value="${build.copyright}"/>
-			<replacefilter token="%IMAGE_FILE%" value="${build.image-file}"/>
-		</replace>
-
 		<tstamp/>
 	</target>
 
 
-	<target name="set.flags">
+	<!--target name="set.flags">
 		<condition property="environment.ok">
 			<and>
 				<available file="${env.ANT_HOME}/lib"             type="dir"/>
@@ -80,16 +68,16 @@
 	<target name="check.env" depends="set.flags" unless="environment.ok">
 		<echo message="Environment variable(s) not set."/>
 		<fail message="Aborting"/>
-	</target>
+	</target-->
 
 
 	<!--                              -->
 	<!--  configure ANT               -->
 	<!--                              -->
-	<target name="ant" depends="check.env"
+	<!--target name="ant" depends="check.env"
 	        description="Configure ant to allow builds to be created">
 		<copy file="${env.XALAN_HOME}/bin/xalan.jar" todir="${env.ANT_HOME}/lib"/>
-	</target>
+	</target-->
 
 
 	<target name="all" depends="clean, test"/>
@@ -141,31 +129,8 @@
 		</javac>
 	</target>
 
-	<!--                              -->
-	<!--  create packages    -->
-	<!--                              -->
-	<target name="package" depends="compile.src,compile.tests" description="Create jar/zip files containing the component, its tests, and its source">
-		<mkdir dir="${build.relase.dir}"/>
-		
-		<jar jarfile="${build.relase.dir}/${component}.jar">
-			<fileset dir="${build.classes.src}"/>
-		</jar>
 
-		<jar jarfile="${build.relase.dir}/${component}-test.jar">
-			<fileset dir="${build.classes.test}"/>
-		</jar>
-		
-		<jar jarfile="${build.relase.dir}/${component}-src.jar">
-			<fileset dir="${build.src.dir}"/>
-		</jar>
-		
-		<!--zip zipfile="${build.relase.dir}/${component}-api.zip">
-			<fileset dir="${build.doc.api}"/>
-		</zip-->
-	</target>
-
-
-	<target name="docs.javadoc" depends="-docs.javadocs-check" 
+	<!--ttarget name="docs.javadoc" depends="-docs.javadocs-check" 
 		unless="docs.javadocs.disable" description="Create the JavaDoc api documentation file.">
 		<mkdir dir="${build.doc.api}"/>
 		<javadoc 
@@ -181,24 +146,23 @@
 	</target>
 
 
-	<target name="-docs.javadocs-check" depends="-init">
-		<!-- if index.html is newer than the sources we are up to date -->
+	<target name="-docs.javadocs-check" depends="-init"-->
+		<!-- if index.html is newer than the sources we are up to date - ->
 		<uptodate property="docs.javadocs.disable"
 	      targetfile="${build.doc.dir}/api/index.html">
 			<srcfiles dir="src" includes="**/*.java"/>
 		</uptodate>
-	</target>
+	</target-->
 
 
 
 	<!--                              -->
 	<!--    run all the unit tests    -->
 	<!--                              -->
-	<target name="test" depends="package" description="Runs all unit tests">
+	<target name="test" depends="compile.src, compile.tests" description="Runs all unit tests">
 		<delete failonerror="false" dir="${test.run.dir}"/>
 
 		<mkdir dir="${test.run.dir}"/>
-		<mkdir dir="${build.relase.dir}/tests"/>
 
 		<patternset id="test.sources">
 			<include name="**/*Test.java"/>
@@ -209,8 +173,9 @@
 			<classpath refid="libs.internal"/>
 			<classpath refid="libs.external"/>
 			<classpath path="${build.classes.src}"/>
-			<classpath path="${build.relase.dir}/${component}.jar"/>
-			<classpath path="${build.relase.dir}/${component}-test.jar"/>
+			<classpath path="${build.classes.test}"/>
+			<!--classpath path="${build.relase.dir}/${component}.jar"/>
+			<classpath path="${build.relase.dir}/${component}-test.jar"/-->
 
 			<formatter type="xml"/>
 
@@ -221,12 +186,12 @@
 			</batchtest>
 		</junit>
 
-		<!-- junitreport tofile="${test.run.dir}/all-tests.xml">
+		<junitreport tofile="${test.run.dir}/all-tests.xml">
 			<fileset dir="${test.run.dir}">
 				<include name="TEST-*.xml"/>
 			</fileset>
 			<report format="frames" todir="${test.results.dir}"/>
-		</junitreport-->
+		</junitreport>
 	</target>
 
 
@@ -240,7 +205,7 @@
 	<!--                              -->
 	<!--    generate documentation    -->
 	<!--                              -->
-	<target name="docs.docs" description="Generate user documentation">
+	<!--target name="docs.docs" description="Generate user documentation">
 		<copy todir="${build.doc.dir}">
 			<fileset dir="${doc.dir}">
 				<include name="**/*.css"/>
@@ -258,7 +223,7 @@
 
 
 	<target name="docs.all" description="build all documentation"
-	  depends="docs.javadoc, docs.docs"/>
+	  depends="docs.javadoc, docs.docs"/-->
 
 
 

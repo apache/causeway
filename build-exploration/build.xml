@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE project [
 	<!ENTITY properties SYSTEM "file:../build-templates/properties.xml">
-<!ENTITY common SYSTEM "file:../build-templates/common.xml">
+<!ENTITY distribution SYSTEM "file:../build-templates/distribution-build.xml">
 ]>
 
 <project name="Naked Objects framework - exploration edition"
@@ -10,10 +10,11 @@
 
 	<property file="build.properties" />
 	<property name="distribution" value="exploration" />
-	<property name="example-class" value="org.nakedobjects.example.ecs.exploration.EcsExploration" />
+	<property name="example-class"
+	          value="org.nakedobjects.example.ecs.exploration.EcsExploration" />
 
 	
-	&common;
+	&distribution;
 
 	<target name="copy">
 		<copy todir="${build.src.dir}">
@@ -23,9 +24,9 @@
 		</copy>
 
 		<copy todir="${build.example.dir}">
-			<fileset dir="../example-ecs/${src.dir}"/>
-			<fileset dir="../example-expenses/${src.dir}"/>
-			<fileset dir="../example-library/${src.dir}"/>
+			<fileset dir="../example-ecs/${src.dir}" />
+			<fileset dir="../example-expenses/${src.dir}" />
+			<fileset dir="../example-library/${src.dir}" />
 		</copy>
 
 		<copy todir="${build.test.dir}">
@@ -84,8 +85,6 @@
 
 
 	</target>
-
-
 </project>
 
 

@@ -1,25 +1,31 @@
 <?xml version="1.0"?>
 <!DOCTYPE project [
 	<!ENTITY properties SYSTEM "file:../build-templates/properties.xml">
-	<!ENTITY targets SYSTEM "file:../build-templates/targets.xml">
+<!ENTITY project-build SYSTEM "file:../build-templates/project-build.xml">
 ]>
 
 <project name="Naked Object Skylark GUI" default="all" basedir=".">
-	<description></description>
+	<description>
+	</description>
 
 	&properties;
 
-	<property name="component" value="viewer-skylark"/>
-	
+	<property name="component" value="viewer-skylark" />
+
 	<!-- classpath -->
 	<path id="libs.internal">
-		<fileset dir="${no-core.release.dir}">
+		<!--fileset dir="${no-core.release.dir}">
 			<include name="no-core.jar"/>
 			<include name="no-core-test.jar"/>
+		</fileset-->
+		<fileset dir="${no-core.build.dir}/classes/src">
+			<include name="**/*.class" />
 		</fileset>
 	</path>
+	
+	<echo>${libs.internal}</echo>
 
-	&targets;	
+	&project-build;	
 </project>
 
 

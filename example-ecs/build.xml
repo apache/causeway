@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE project [
 	<!ENTITY properties SYSTEM "file:../build-templates/properties.xml">
-	<!ENTITY targets SYSTEM "file:../build-templates/targets.xml">
+	<!ENTITY project-build SYSTEM "file:../build-templates/project-build.xml">
 ]>
 
 <project name="Naked Object Example - ECS, a system for an Excutive Car Service" default="all" basedir=".">
@@ -23,7 +23,7 @@
 		</fileset>
 	</path>
 
-	&targets;	
+	&project-build;	
 </project>
 
 

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE project [
 	<!ENTITY properties SYSTEM "file:../build-templates/properties.xml">
-	<!ENTITY targets SYSTEM "file:../build-templates/targets.xml">
+	<!ENTITY project-build SYSTEM "file:../build-templates/project-build.xml">
 ]>
 
 <project name="Naked Objects Core Framework" default="all" basedir=".">
@@ -15,7 +15,7 @@
 	
 	<property name="component" value="no-core"/>
 	
-	&targets;	
+	&project-build;	
 </project>
 
 

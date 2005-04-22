@@ -34,7 +34,7 @@
 
 	<property environment="env" />
 
-	<target name="idebuild" depends=" new-release-number, distribution">
+	<target name="idebuild" depends=" new-release-number, distribution, install">
 	</target>
 
 	<target name="lundbuild" depends="-lundbuild-init, distribution">
@@ -261,4 +261,25 @@
 		<fail if="failure" message="Tests failed" />
 
 	</target>
+
+
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: install  - installs the latest build in the install directory
+         - - - - - - - - - - - - - - - - - -->
+	<target name="install">
+
+		<property name="dir.base" location="D:/" />
+		<property name="install.dir" location="${dir.base}/no-release-${distribution}" />
+
+		<!-- delete dir="${install.dir}" failonerror="false"/-->
+		<copy todir="${install.dir}">
+			<fileset dir="build/dist">
+			</fileset>
+		</copy>
+	
+		<touch file="${install.dir}/version-${build.id}"/>
+	</target>
+
+
 
