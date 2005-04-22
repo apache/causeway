@@ -22,6 +22,7 @@ import org.nakedobjects.object.persistence.UnsupportedFindException;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.utility.StartupException;
 
@@ -377,7 +378,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
-        objectStore.getLoadedObjects().loaded(object);
+       	loadedObjects.loaded(object);
     }
 
     /**
@@ -510,6 +511,12 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
     public String toString() {
         return "LocalObjectManager [objectStore=" + objectStore.name() + ",oidGenerator=" + oidGenerator.name() + "]";
+    }
+
+    public void debugCheckObjectForOid(Oid oid, NakedObject object) {
+        if(loadedObjects.isLoaded(oid)) {
+            Assert.assertEquals(object, loadedObjects.getLoadedObject(oid));
+        }
     }
 
 }
