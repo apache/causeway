@@ -14,8 +14,6 @@ public class PojoAdapterTest extends TestCase {
 
     private PojoAdapterFactory pojoAdapterFactory;
 
-
-
     public static void main(String[] args) {
         junit.textui.TestRunner.run(PojoAdapterTest.class);
     }
@@ -38,6 +36,7 @@ public class PojoAdapterTest extends TestCase {
         specLoader.addSpec(new NakedObjectSpecificationProvidingTitle());
         NakedObjects.setSpecificationLoader(specLoader);
         NakedObject pa = pojoAdapterFactory.createNOAdapter(new TestPojo());
+        pa.getSpecification();
         pa.setResolved();
         assertEquals("object title from specification",  pa.titleString());
     }
@@ -47,22 +46,20 @@ public class PojoAdapterTest extends TestCase {
         specLoader.addSpec(new NakedObjectSpecificationProvidingNullTitle());
         NakedObjects.setSpecificationLoader(specLoader);
         NakedObject pa = pojoAdapterFactory.createNOAdapter(new TestPojo());
+        pa.getSpecification();
         assertFalse(pa.isResolved());
         assertEquals("unresolved title",  pa.titleString());
     }
     
-
-
     public void testTitleStringWhereSpecificationReturnNullAsTitle() {
         MockNakedObjectSpecificationLoader specLoader = new MockNakedObjectSpecificationLoader();
         specLoader.addSpec(new NakedObjectSpecificationProvidingNullTitle());
         NakedObjects.setSpecificationLoader(specLoader);
         NakedObject pa = pojoAdapterFactory.createNOAdapter(new TestPojo());
+        pa.getSpecification();
         pa.setResolved();
         assertEquals("A singlar name from specification",  pa.titleString());
     }
-
-
 }
 
 

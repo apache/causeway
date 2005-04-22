@@ -22,7 +22,7 @@ public abstract class AbstractNakedObject implements NakedObject {
     private transient boolean isResolved = false;
     private boolean isViewDirty;
     private Oid oid;
-    private NakedObjectSpecification specification;
+    protected NakedObjectSpecification specification;
 
     public NakedError actionPersist() {
         makePersistent();
@@ -235,8 +235,7 @@ public abstract class AbstractNakedObject implements NakedObject {
         StringBuffer s = new StringBuffer();
 
         // datatype
-        NakedObjectSpecification spec = getSpecification();
-        s.append(spec == null ? getClass().getName() : spec.getShortName());
+         s.append(specification == null ? getClass().getName() : specification.getShortName());
         s.append(" [");
 
         // type of object - EO, Primitive, Collection, with Status etc

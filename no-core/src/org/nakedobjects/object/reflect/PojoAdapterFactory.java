@@ -16,7 +16,6 @@ import org.nakedobjects.object.reflect.valueadapter.StringAdapter;
 import org.nakedobjects.utility.DebugInfo;
 
 import java.util.Date;
-import java.util.Enumeration;
 
 
 // TODO is the pojo hashmap the same thing as the loaded objects; can they be
@@ -24,7 +23,7 @@ import java.util.Enumeration;
 public class PojoAdapterFactory implements DebugInfo {
     private PojoAdapterHash pojos;
     private ReflectorFactory reflectorFactory;
-
+    
     public Naked createAdapter(Object pojo) {
         if (pojo == null) {
             return null;
@@ -33,7 +32,7 @@ public class PojoAdapterFactory implements DebugInfo {
         if (pojos.containsPojo(pojo)) {
             nakedObject = pojos.getPojo(pojo);
         } else {
-            if (pojo instanceof PojoAdapter) {
+            if (pojo instanceof Naked) {
                 throw new NakedObjectRuntimeException("Warning: adapter is wrapping an adapter: " + pojo);
             }
 

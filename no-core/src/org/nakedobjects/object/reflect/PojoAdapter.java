@@ -3,18 +3,14 @@ package org.nakedobjects.object.reflect;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.AbstractNakedObject;
 import org.nakedobjects.object.security.Session;
 
-import org.apache.log4j.Logger;
-
 
 public class PojoAdapter extends AbstractNakedObject {
-    private static final Logger LOG = Logger.getLogger(PojoAdapter.class);
     private Object pojo;
 
     protected PojoAdapter(Object pojo) {
@@ -146,8 +142,7 @@ public class PojoAdapter extends AbstractNakedObject {
      * Customer", "A Product".
      */
     public String titleString() {
-        NakedObjectSpecification specification = getSpecification();
-        if (specification == null) {
+         if (specification == null) {
             return "";
         } else {
             String title = specification.getTitle().title(this);
