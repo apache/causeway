@@ -1,5 +1,7 @@
 package org.nakedobjects.xat;
 
+import org.nakedobjects.object.MockNakedValue;
+
 import junit.framework.TestCase;
 
 public class TestValueImplTest extends TestCase {
@@ -8,6 +10,16 @@ public class TestValueImplTest extends TestCase {
         junit.textui.TestRunner.run(TestValueImplTest.class);
     }
 
+    public void testConstructor() {
+        MockNakedValue value = new MockNakedValue();
+        value.setupObject("test");
+        TestValueImpl valueImpl = new TestValueImpl(null, value);
+        
+        assertEquals(value, valueImpl.getForNaked());
+        assertEquals("test", valueImpl.getForObject());
+        
+        
+    }
 }
 
 

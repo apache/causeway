@@ -10,7 +10,8 @@ public class TestValueImpl implements TestValue {
     private NakedValue object;
 
     public TestValueImpl(Session session, NakedValue object) {
-        this.object = object;}
+        this.object = object;
+    }
 
     public void fieldEntry(String value) {
         throw new NotImplementedException();
@@ -31,7 +32,6 @@ public class TestValueImpl implements TestValue {
     public String getTitle() {
         return object.titleString();
     }
- 
 }
 
 /*
