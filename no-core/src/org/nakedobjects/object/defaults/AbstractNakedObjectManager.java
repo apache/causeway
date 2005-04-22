@@ -19,6 +19,8 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
     protected ObjectFactory objectFactory;
     public abstract void abortTransaction();
     
+    public void debugCheckObjectForOid(Oid oid, NakedObject object) {}
+    
     public AbstractNakedObjectManager() {}
     
     public AbstractNakedObjectManager(final ObjectFactory objectFactory) {

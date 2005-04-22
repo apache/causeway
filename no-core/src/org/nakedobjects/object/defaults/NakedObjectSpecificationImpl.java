@@ -75,7 +75,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
     private ObjectTitle title;
     private NakedObjectField[] viewFields;
 
-    NakedObjectSpecificationImpl() {}
+    public NakedObjectSpecificationImpl() {}
 
     /**
      * Creates an object of the type represented by this object. This method
@@ -477,7 +477,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         reflector.markDirty(object);
     }
 
-    void nonReflect(String className) {
+    public void nonReflect(String className) {
         reflector = new PrimitiveReflector(className);
         title = reflector.title();
     }
@@ -534,7 +534,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         }
     }
 
-    void reflect(String className, Reflector reflector) {
+    public void reflect(String className, Reflector reflector) {
         LOG.debug("creating reflector for " + className + " using " + reflector);
 
         ActionPeer delegates[];
