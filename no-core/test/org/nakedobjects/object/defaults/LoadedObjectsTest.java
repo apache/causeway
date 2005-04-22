@@ -1,9 +1,11 @@
 package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.DummyNakedObjectSpecificationLoader;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.MockOid;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
@@ -22,13 +24,15 @@ public class LoadedObjectsTest extends TestCase {
     protected void setUp() throws Exception {
         new NakedObjectSpecificationLoaderImpl();
     	NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
-  //  	NakedObjectSpecificationImpl.setReflectorFactory(new InternalReflectorFactory());
     	
     	PojoAdapterFactory pojoAdapterFactory = new PojoAdapterFactory();
     	NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
     	NakedObjects.getPojoAdapterFactory().setPojoAdapterHash(new PojoAdapterHashImpl());
     	NakedObjects.getPojoAdapterFactory().setReflectorFactory(new NullReflectorFactory());
 		
+    	NakedObjectSpecificationLoader loader = new DummyNakedObjectSpecificationLoader();
+        NakedObjects.setSpecificationLoader(loader);
+    	
         lookup = new LoadedObjectsHashtable();
         oid = new MockOid(1);
   }

@@ -1,6 +1,7 @@
 package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.object.DummyNakedObjectSpecification;
+import org.nakedobjects.object.MockLoadedObjects;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.MockObjectStore;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
@@ -30,9 +31,7 @@ public class LocalObjectManagerTest extends TestCase {
         
         LocalObjectManager om = new LocalObjectManager();
         om.setObjectFactory(new MockObjectFactory());
-        
-  //      om.createInstance(TestObject.class.getName());
-    }
+     }
     
 
     public void testMakePersistent() {
@@ -68,7 +67,8 @@ public class LocalObjectManagerTest extends TestCase {
         objectManager = new LocalObjectManager();
         objectManager.setObjectStore(objectStore);
         objectManager.setOidGenerator(new MockOidGenerator());
-        
+        objectManager.setLoadedObjects(new MockLoadedObjects());
+
         testNakedObject = new MockNakedObject();
         objectSpecification = new DummyNakedObjectSpecification();
         testNakedObject.setupSpecification(objectSpecification);
