@@ -100,7 +100,7 @@ public class TextField extends AbstractField implements TextBlockUser {
     public void setSize(Size size) {
         super.setSize(size);
         
-        setMaxWidth(size.getWidth());
+        setMaxWidth(size.getWidth() - 2 * HPADDING);
         textContent.setNoDisplayLines(size.getHeight() / style.getHeight());
     }
     
@@ -544,7 +544,7 @@ public class TextField extends AbstractField implements TextBlockUser {
         case KeyEvent.VK_PAGE_DOWN:
 
             if (ctrl) {
-                if( textContent.decreaseDepth()) {;
+                if( textContent.decreaseDepth()) {
                     textContent.alignDisplay(cursor.getLine());
                     invalidateLayout();
                 }
