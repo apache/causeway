@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE project [
+	<!ENTITY properties SYSTEM "file:../build-templates/properties.xml">
+	<!ENTITY project-build SYSTEM "file:../build-templates/project-build.xml">
+]>
+
+<project name="Naked Object Default Reflector" default="all" basedir=".">
+	<description></description>
+
+	&properties;
+
+	<property name="component" value="no-default-reflector"/>
+	
+	<!-- classpath -->
+	<path id="libs.internal">
+		<pathelement location="../no-core/build/classes/src"/>
+		<pathelement location="../no-core/build/classes/test"/>
+
+		<pathelement location="../no-application-library/build/classes/src"/>
+
+	</path>
+
+	&project-build;	
+</project>
+
+
