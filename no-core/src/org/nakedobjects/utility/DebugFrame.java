@@ -50,7 +50,7 @@ public abstract class DebugFrame extends Frame {
             }
         });
 
-        TextArea area = new TextArea("", 40, 80, TextArea.SCROLLBARS_BOTH);
+        TextArea area = new TextArea("", 60, 110, TextArea.SCROLLBARS_BOTH);
 
         area.setForeground(Color.black);
 
@@ -121,10 +121,6 @@ public abstract class DebugFrame extends Frame {
         super.dispose();
     }
 
-    public TextArea getField() {
-        return field;
-    }
-
     public void refresh() {
         DebugInfo info = getInfo();
         if(info != null) {
@@ -134,10 +130,6 @@ public abstract class DebugFrame extends Frame {
     }
 
     protected abstract DebugInfo getInfo();
-
-    void setField(java.awt.TextArea newField) {
-        field = newField;
-    }
 
     /**
      * show the frame at the specified coordinates
