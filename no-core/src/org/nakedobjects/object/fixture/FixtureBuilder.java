@@ -44,6 +44,7 @@ public abstract class FixtureBuilder {
         
         postInstallFixtures(objectManager);
         
+        objectManager.reset();
         fixtures.removeAllElements();
     }
 
