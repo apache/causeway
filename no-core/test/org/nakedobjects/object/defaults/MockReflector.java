@@ -85,10 +85,6 @@ public class MockReflector implements Reflector {
         return false;
     }
 
-    public boolean isPersistable() {
-        return false;
-    }
-
     public boolean isValue() {
         return false;
     }

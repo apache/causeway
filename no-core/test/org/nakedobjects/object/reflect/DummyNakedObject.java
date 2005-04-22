@@ -105,10 +105,6 @@ public class DummyNakedObject implements NakedObject {
         return false;
     }
 
-    public boolean isPersistable() {
-        return false;
-    }
-
     public boolean isPersistDirty() {
         return false;
     }

@@ -54,11 +54,6 @@ public interface Reflector {
 
     boolean isPartOf();
 
-    /**
-     * @deprecated
-     */
-    boolean isPersistable();
-
     Persistable persistable();
 
     boolean isValue();

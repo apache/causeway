@@ -442,10 +442,6 @@ public class InternalReflector implements Reflector {
     public boolean isPartOf() {
         return Aggregated.class.isAssignableFrom(cls);
     }
-
-    public boolean isPersistable() {
-        return false;
-    }
     
     public Persistable persistable() {
         return Persistable.TRANSIENT;

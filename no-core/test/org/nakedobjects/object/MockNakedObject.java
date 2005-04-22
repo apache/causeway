@@ -17,6 +17,7 @@ public class MockNakedObject implements NakedObject {
     private Oid oid;
     private NakedObjectSpecification specification;
     private String titleString;
+    private boolean persistDirty;
 
     public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
 
@@ -104,12 +105,8 @@ public class MockNakedObject implements NakedObject {
         return false;
     }
 
-    public boolean isPersistable() {
-        return false;
-    }
-
     public boolean isPersistDirty() {
-        return false;
+        return persistDirty;
     }
 
     public boolean isPersistent() {
@@ -165,6 +162,10 @@ public class MockNakedObject implements NakedObject {
 
     public String titleString() {
         return titleString;
+    }
+
+    public void setupDirty() {
+        persistDirty = true;    
     }
 }
 

@@ -71,11 +71,6 @@ public interface NakedObject extends Naked {
      */
     boolean isPersistent();
 
-    /**
-     * @deprecated
-     */
-    boolean isPersistable();
-    
     Persistable persistable();
     
     /**

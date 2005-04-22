@@ -135,10 +135,6 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         return false;
     }
 
-    public boolean isPersistable() {
-        return false;
-    }
-
     public boolean isValue() {
         return false;
     }

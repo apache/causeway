@@ -81,10 +81,6 @@ public class PrimitiveReflector implements Reflector {
     public boolean isPartOf() {
         return false;
     }
-
-    public boolean isPersistable() {
-        return false;
-    }
     
     public Persistable persistable() {
         return Persistable.TRANSIENT;

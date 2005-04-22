@@ -504,10 +504,6 @@ public class JavaReflector implements Reflector {
         return Lookup.class.isAssignableFrom(cls);
     }
     
-    public boolean isPersistable() {
-        return !(NonPersistable.class.isAssignableFrom(cls));
-    }
-    
     public Persistable persistable() {
         if(NonPersistable.class.isAssignableFrom(cls)) {
             return Persistable.TRANSIENT;

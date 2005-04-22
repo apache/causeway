@@ -117,10 +117,6 @@ public class NakedObjectSpecificationProvidingTitle implements NakedObjectSpecif
         return false;
     }
 
-    public boolean isPersistable() {
-        return false;
-    }
-
     public boolean isValue() {
         return false;
     }

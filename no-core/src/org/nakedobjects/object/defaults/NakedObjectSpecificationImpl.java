@@ -461,10 +461,6 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         return reflector.isPartOf();
     }
 
-     public boolean isPersistable() {
-        return reflector.isPersistable();
-    }
-    
     public Persistable persistable() {
         return reflector.persistable();
     }

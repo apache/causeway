@@ -127,10 +127,6 @@ public class InternalObjectSpecification implements NakedObjectSpecification {
     public boolean isPartOf() {
         return false;
     }
-
-    public boolean isPersistable() {
-        return false;
-    }
     
     public Persistable persistable() {
         return Persistable.TRANSIENT;

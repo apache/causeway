@@ -74,10 +74,6 @@ public class DummyReflectorFactoryCreatingTitle extends ReflectorFactory {
                 return false;
             }
 
-            public boolean isPersistable() {
-                return false;
-            }
-
             public boolean isValue() {
                 return false;
             }

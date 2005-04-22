@@ -112,10 +112,6 @@ public class PojoAdapter extends AbstractNakedObject {
     public boolean isEmpty(NakedObjectField field) {
         return field.isEmpty(this);
     }
-
-    public boolean isPersistable() {
-        return getSpecification().isPersistable();
-    }
     
     public Persistable persistable() {
         return getSpecification().persistable();
