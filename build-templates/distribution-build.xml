@@ -42,9 +42,7 @@
 
 	<target name="-serverbuild-init">
 		<property name="build.id" value="${label}" />
-		<property name="dist.dir" value="../../artifacts/builds" />
 	</target>
-
 
 	<target name="new-release-number">
 		<tstamp>
