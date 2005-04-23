@@ -37,12 +37,12 @@
 	<target name="idebuild" depends=" new-release-number, distribution, install">
 	</target>
 
-	<target name="lundbuild" depends="-lundbuild-init, distribution">
+	<target name="serverbuild" depends="-serverbuild-init, distribution">
 	</target>
 
-	<target name="-lundbuild-init">
-		<property name="build.id" value="${buildVersion}" />
-		<property name="dist.dir" value="${publishDir}" />
+	<target name="-serverbuild-init">
+		<property name="build.id" value="${label}" />
+		<property name="dist.dir" value="../../artifacts/builds" />
 	</target>
 
 
