@@ -139,7 +139,7 @@
 			<report format="frames" todir="${test.results.dir}"/>
 		</junitreport>
 
-		<fail unless="${junit-failure}" message="JUnit tests failed"/>
+		<fail if="junit-failure" message="JUnit tests failed"/>
 	</target>
 
 
