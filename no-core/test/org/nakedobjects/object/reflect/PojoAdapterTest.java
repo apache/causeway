@@ -5,14 +5,14 @@ import org.nakedobjects.object.DummyNakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 
+import junit.framework.TestCase;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import junit.framework.TestCase;
-
 public class PojoAdapterTest extends TestCase {
 
-    private PojoAdapterFactory pojoAdapterFactory;
+    private PojoAdapterFactoryImpl pojoAdapterFactory;
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(PojoAdapterTest.class);
@@ -20,7 +20,7 @@ public class PojoAdapterTest extends TestCase {
 
     protected void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
-		pojoAdapterFactory = new PojoAdapterFactory();
+		pojoAdapterFactory = new PojoAdapterFactoryImpl();
 		pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
         pojoAdapterFactory.setReflectorFactory(new DummyReflectorFactory());
     }

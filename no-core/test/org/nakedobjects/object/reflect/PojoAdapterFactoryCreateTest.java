@@ -8,18 +8,18 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 
 
-public class PojoAdapterFactoryTest extends TestCase {
+public class PojoAdapterFactoryCreateTest extends TestCase {
 
-    private PojoAdapterFactory factory;
+    private PojoAdapterFactoryImpl factory;
     private Cache cache;
 
     public static void main(String[] args) {
-        junit.textui.TestRunner.run(PojoAdapterFactoryTest.class);
+        junit.textui.TestRunner.run(PojoAdapterFactoryCreateTest.class);
     }
 
     protected void setUp() throws Exception {
         cache = new Cache();
-        factory = new PojoAdapterFactory();
+        factory = new PojoAdapterFactoryImpl();
         factory.setPojoAdapterHash(cache);
         factory.setReflectorFactory(new DummyReflectorFactory());
     }
