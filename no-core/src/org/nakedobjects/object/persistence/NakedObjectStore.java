@@ -3,7 +3,6 @@ package org.nakedobjects.object.persistence;
 import org.nakedobjects.container.configuration.ComponentException;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.InstancesCriteria;
-import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -78,8 +77,6 @@ public interface NakedObjectStore extends DebugInfo {
 
     NakedObject[] getInstances(NakedObjectSpecification specification, String pattern, boolean includeSubclasses)
             throws ObjectStoreException, UnsupportedFindException;
-
-    public LoadedObjects getLoadedObjects();
 
     NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException;
 

@@ -2,7 +2,6 @@ package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InstancesCriteria;
-import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
@@ -30,8 +29,7 @@ import org.apache.log4j.Category;
 public class TransientObjectStore implements NakedObjectStore {
     private final static Category LOG = Category.getInstance(TransientObjectStore.class);
     private final Hashtable instances;
-    private LoadedObjects loaded;
-
+ 
     public TransientObjectStore() {
         LOG.info("Creating object store");
         instances = new Hashtable();
@@ -62,7 +60,7 @@ public class TransientObjectStore implements NakedObjectStore {
         return new DestroyObjectCommand() {
             public void execute() throws ObjectStoreException {
                 LOG.info("  delete requested on '" + object + "'");
-                 TransientObjectStoreInstances ins = instancesFor(object.getSpecification());
+                TransientObjectStoreInstances ins = instancesFor(object.getSpecification());
                 ins.remove(object.getOid());
             }       
             
@@ -192,9 +190,6 @@ public class TransientObjectStore implements NakedObjectStore {
     public String getDebugData() {
         DebugString debug = new DebugString();
 
-        debug.appendTitle(loaded.getDebugTitle());
-        debug.appendln(loaded.getDebugData());
-
         debug.appendTitle(NakedObjects.getPojoAdapterFactory().getDebugTitle());
         debug.appendln(NakedObjects.getPojoAdapterFactory().getDebugData());
 
@@ -317,10 +312,6 @@ public class TransientObjectStore implements NakedObjectStore {
         }
     }
 
-    public LoadedObjects getLoadedObjects() {
-        return loaded;
-    }
-
     public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
         throw new ObjectNotFoundException();
         /*LOG.debug("getNakedClass " + name);
@@ -389,10 +380,14 @@ public class TransientObjectStore implements NakedObjectStore {
         if (instances.containsKey(spec)) {
             return (TransientObjectStoreInstances) instances.get(spec);
         } else {
-            TransientObjectStoreInstances ins = new TransientObjectStoreInstances(loaded);
+            TransientObjectStoreInstances ins = createInstances();
             instances.put(spec, ins);
             return ins;
         }
+    }
+
+    protected TransientObjectStoreInstances createInstances() {
+        return new TransientObjectStoreInstances();
     }
 
     private boolean matchesPattern(NakedObject pattern, NakedObject instance) {
@@ -488,27 +483,12 @@ public class TransientObjectStore implements NakedObjectStore {
         ins.save(object);
     }
 
-    /**
-     * Expose as a .NET property
-     * 
-     * @property
-     */
-    public void set_LoadedObjects(LoadedObjects loaded) {
-        this.loaded = loaded;
-    }
-
-    public void setLoadedObjects(LoadedObjects loaded) {
-        this.loaded = loaded;
-    }
-
     public void shutdown() throws ObjectStoreException {
-        loaded = null;
         for (Enumeration e = instances.elements(); e.hasMoreElements();) {
             TransientObjectStoreInstances inst = (TransientObjectStoreInstances) e.nextElement();
             inst.shutdown();
         }
         instances.clear();
-       // instances = null;
         LOG.info("shutdown");
     }
 

@@ -1,7 +1,6 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -10,15 +9,16 @@ import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.PojoAdapterFactory;
 
 
 public class DataHelper {
 
-    public static Naked recreate(LoadedObjects loadedObjects, Data data) {
+    public static Naked recreate(Data data) {
         if(data instanceof ValueData) {
             return recreateValue((ValueData) data);
         } else {
-            return recreateObject(loadedObjects, (ObjectData) data);
+            return recreateObject((ObjectData) data);
         }
     }
     
@@ -27,25 +27,25 @@ public class DataHelper {
         return value;
     }
 
-    public  static NakedObject recreateObject(LoadedObjects loadedObjects, ObjectData data) {
+    public  static NakedObject recreateObject(ObjectData data) {
         Oid oid = data.getOid();
         String type = data.getType();
         NakedObject object;
-        if (oid != null && loadedObjects.isLoaded(oid)) {
-            object = loadedObjects.getLoadedObject(oid);
+        if (oid != null && loadedObjects().isLoaded(oid)) {
+            object = loadedObjects().getLoadedObject(oid);
         } else {
             NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
             object = (NakedObject) specification.acquireInstance();
             if (oid != null) {
                 object.setOid(oid);
-                loadedObjects.loaded(object);
+                loadedObjects().loaded(object);
             }
         }
-        recreateObjectsInFields(loadedObjects, data, object);
+        recreateObjectsInFields(data, object);
         return object;
     }
 
-    private static void recreateObjectsInFields(LoadedObjects loadedObjects, ObjectData data, NakedObject object) {
+    private static void recreateObjectsInFields(ObjectData data, NakedObject object) {
       Object[] fieldContent = data.getFieldContent();
       if (!object.isResolved() && fieldContent != null) {
         object.setResolved();
@@ -56,7 +56,7 @@ public class DataHelper {
                     ObjectData collection = (ObjectData) fieldContent[i];
                     NakedObject[] instances = new NakedObject[collection.getFieldContent().length];
                     for (int j = 0; j < instances.length; j++) {
-                        instances[j] = (NakedObject) recreateObject(loadedObjects, ((ObjectData) collection.getFieldContent()[j]));
+                        instances[j] = (NakedObject) recreateObject(((ObjectData) collection.getFieldContent()[j]));
                     }
                     object.initOneToManyAssociation((OneToManyAssociation) fields[i], instances);
                 }
@@ -65,7 +65,7 @@ public class DataHelper {
             } else {
                 if (fieldContent[i] != null) {
                     NakedObjectAssociation field = (NakedObjectAssociation) fields[i];
-                    NakedObject value = (NakedObject) recreateObject(loadedObjects, ((ObjectData) fieldContent[i]));
+                    NakedObject value = (NakedObject) recreateObject(((ObjectData) fieldContent[i]));
                     object.initAssociation(field, value);
                 }
             }
@@ -73,20 +73,20 @@ public class DataHelper {
       }
     }
 
-    public static void update(LoadedObjects loadedObjects, ObjectData data) {
+    public static void update(ObjectData data) {
         Oid oid = data.getOid();
         Object[] fieldContent = data.getFieldContent();
         String type = data.getType();
 
         NakedObject object;
-        if (oid != null && loadedObjects.isLoaded(oid)) {
-            object = loadedObjects.getLoadedObject(oid);
+        if (oid != null && loadedObjects().isLoaded(oid)) {
+            object = loadedObjects().getLoadedObject(oid);
         } else {
             NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
             object = (NakedObject) specification.acquireInstance();
             if (oid != null) {
                 object.setOid(oid);
-                loadedObjects.loaded(object);
+                loadedObjects().loaded(object);
             }
         }
 
@@ -104,7 +104,7 @@ public class DataHelper {
                         Object[] elements = collection.getFieldContent();
                         NakedObject[] instances = new NakedObject[elements.length];
                         for (int j = 0; j < instances.length; j++) {
-                            NakedObject instance = recreateObject(loadedObjects, (ObjectData) elements[j]);
+                            NakedObject instance = recreateObject((ObjectData) elements[j]);
                             instances[j] = instance;
                         }
                         object.initOneToManyAssociation((OneToManyAssociation) fields[i], instances);
@@ -114,12 +114,16 @@ public class DataHelper {
                     object.initValue((OneToOneAssociation) fields[i], fieldContent[i]);
                 } else {
                     if (fieldContent[i] != null) {
-                        NakedObject field = recreateObject(loadedObjects, (ObjectData) fieldContent[i]);
+                        NakedObject field = recreateObject((ObjectData) fieldContent[i]);
                         object.initAssociation((NakedObjectAssociation) fields[i], field);
                     }
                 }
             }
         }
+    }
+
+    private static PojoAdapterFactory loadedObjects() {
+        return NakedObjects.getPojoAdapterFactory();
     }
 }
 

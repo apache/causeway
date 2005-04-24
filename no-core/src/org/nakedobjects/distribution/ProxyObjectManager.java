@@ -1,7 +1,7 @@
 package org.nakedobjects.distribution;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InstancesCriteria;
-import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
@@ -13,6 +13,7 @@ import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
 import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
 
@@ -25,7 +26,6 @@ import org.apache.log4j.Logger;
 public final class ProxyObjectManager extends AbstractNakedObjectManager {
     final static Logger LOG = Logger.getLogger(ProxyObjectManager.class);
     private ClientDistribution connection;
-    private LoadedObjects loadedObjects;
     private final Hashtable nakedClasses = new Hashtable();
     private DataFactory objectDataFactory;
     private Session session;
@@ -43,7 +43,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     private TypedNakedCollection convertToNakedObjects(NakedObjectSpecification specification, ObjectData[] data) {
         NakedObject[] instances = new NakedObject[data.length];
         for (int i = 0; i < data.length; i++) {
-            instances[i] = DataHelper.recreateObject(loadedObjects, data[i]);
+            instances[i] = DataHelper.recreateObject(data[i]);
         }
         return new InstanceCollectionVector(specification, instances);
     }
@@ -55,7 +55,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     public synchronized void destroyObject(NakedObject object) {
         LOG.debug("destroyObject " + object);
         connection.destroyObject(session, object.getOid(), object.getSpecification().getFullName());
-        loadedObjects.unloaded(object);
+        loadedObjects().unloaded(object);
     }
 
     public void endTransaction() {
@@ -111,13 +111,13 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     }
 
     public synchronized NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException {
-        if (loadedObjects.isLoaded(oid)) {
+        if (loadedObjects().isLoaded(oid)) {
             LOG.debug("getObject (from already loaded objects) " + oid);
-            return loadedObjects.getLoadedObject(oid);
+            return loadedObjects().getLoadedObject(oid);
         } else {
             LOG.debug("getObject (remotely from server)" + oid);
             ObjectData data = connection.getObject(session, oid, hint.getFullName());
-            return DataHelper.recreateObject(loadedObjects, data);
+            return DataHelper.recreateObject(data);
         }
     }
 
@@ -132,7 +132,11 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         LOG.debug("makePersistent " + object);
         Oid[] oid = connection.makePersistent(session, objectDataFactory.createObjectData(object, 0));
         object.setOid(oid[0]);
-        loadedObjects.loaded(object);
+        loadedObjects().loaded(object);
+    }
+
+    private PojoAdapterFactory loadedObjects() {
+        return NakedObjects.getPojoAdapterFactory();
     }
 
     public int numberOfInstances(NakedObjectSpecification specification) {
@@ -163,7 +167,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
 
     public void saveChanges() {
         LOG.debug("Saving changes");
-        Enumeration e = loadedObjects.dirtyObjects();
+        Enumeration e = loadedObjects().dirtyObjects();
         while (e.hasMoreElements()) {
             NakedObject object = (NakedObject) e.nextElement();
             LOG.debug("  " + object);
@@ -181,14 +185,6 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         this.connection = connection;
     }
 
-    /**
-     * .NET property
-     * 
-     * @property
-     */
-    public void set_LoadedObjects(LoadedObjects loadedObjects) {
-        this.loadedObjects = loadedObjects;
-    }
 
     /**
      * .NET property
@@ -201,10 +197,6 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
 
     public void setConnection(ClientDistribution connection) {
         this.connection = connection;
-    }
-
-    public void setLoadedObjects(LoadedObjects loadedObjects) {
-        this.loadedObjects = loadedObjects;
     }
 
     public void setObjectDataFactory(DataFactory factory) {

@@ -1,6 +1,5 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.ReflectionFactory;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionPeer;
@@ -13,13 +12,12 @@ import org.nakedobjects.object.reflect.OneToOnePeer;
 
 public class ProxyReflectionFactory implements ReflectionFactory {
     private ClientDistribution connection;
-    private LoadedObjects loadedObjects;
     private DataFactory objectDataFactory;
 
     public ProxyReflectionFactory() {}
 
     public Action createAction(String className, ActionPeer localDelegate) {
-        ActionPeer fullDelegate = new ProxyAction(localDelegate, connection, loadedObjects, objectDataFactory);
+        ActionPeer fullDelegate = new ProxyAction(localDelegate, connection, objectDataFactory);
         return new Action(className, fullDelegate.getName(), fullDelegate);
     }
 
@@ -42,15 +40,6 @@ public class ProxyReflectionFactory implements ReflectionFactory {
      * 
      * @property
      */
-    public void set_LoadedObjects(LoadedObjects loadedObjects) {
-        this.loadedObjects = loadedObjects;
-    }
-
-    /**
-     * .NET property
-     * 
-     * @property
-     */
     public void set_ObjectDataFactory(DataFactory objectDataFactory) {
         this.objectDataFactory = objectDataFactory;
     }
@@ -66,10 +55,6 @@ public class ProxyReflectionFactory implements ReflectionFactory {
 
     public void setConnection(ClientDistribution connection) {
         this.connection = connection;
-    }
-
-    public void setLoadedObjects(LoadedObjects loadedObjects) {
-        this.loadedObjects = loadedObjects;
     }
 
     public void setObjectDataFactory(DataFactory objectDataFactory) {

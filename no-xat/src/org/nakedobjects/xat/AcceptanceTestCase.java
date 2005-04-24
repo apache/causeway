@@ -9,7 +9,7 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.fixture.Fixture;
 import org.nakedobjects.object.fixture.FixtureBuilder;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
+import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Session;
@@ -119,7 +119,7 @@ public abstract class AcceptanceTestCase extends TestCase {
         String methodName = getName().substring(4);
         testObjectFactory.testStarting(className, methodName);
 
-        PojoAdapterFactory pojoAdapterFactory = new PojoAdapterFactory();
+        PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
 		pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
 		NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
 		

@@ -1,13 +1,32 @@
-package org.nakedobjects.xat;
+package org.nakedobjects.object.persistence.defaults;
 
-import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
+import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.reflect.PojoAdapterFactory;
 
-public class ClearableLoadedObjectsHashtable extends LoadedObjectsHashtable {
+public class MockTransientObjectStoreInstances extends TransientObjectStoreInstances {
 
-    public void clear() {
-        loaded.clear();
+    private PojoAdapterFactory factory;
+    
+    protected PojoAdapterFactory loaded() {
+        return factory;
     }
 
+    public void addElement(Oid oid, Object object, String title) {
+        objectInstances.put(oid, object);
+        titleIndex.put(title, oid);
+    }
+
+    public boolean contains(Oid oid) {
+        return objectInstances.containsKey(oid);
+    }
+
+    public int size() {
+        return objectInstances.size();
+    }
+
+    public void setLoaded(PojoAdapterFactory factory) {
+        this.factory = factory;}
+    
 }
 
 

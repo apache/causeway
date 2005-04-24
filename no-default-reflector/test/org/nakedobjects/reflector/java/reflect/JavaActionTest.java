@@ -8,7 +8,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
+import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 
@@ -39,7 +39,7 @@ public class JavaActionTest extends TestCase {
     	loader = new MockNakedObjectSpecificationLoader();
         
 		javaObject = new JavaActionTestObject();
-    	PojoAdapterFactory pojoAdapterFactory = new PojoAdapterFactory();
+    	PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
 		pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
 		pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
 		nakedObject = pojoAdapterFactory.createNOAdapter(javaObject);

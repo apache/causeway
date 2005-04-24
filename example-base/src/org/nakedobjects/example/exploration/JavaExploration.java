@@ -5,7 +5,6 @@ import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
-import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
@@ -14,7 +13,7 @@ import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
+import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
@@ -81,19 +80,13 @@ public class JavaExploration {
 
             JavaBusinessObjectContainer container = new JavaBusinessObjectContainer();
 
-            //          ViewUpdateNotifier updateNotifier = new ViewUpdateNotifier();
-
-            LoadedObjectsHashtable loadedObjectsHashtable = new LoadedObjectsHashtable();
-
             JavaObjectFactory objectFactory = new JavaObjectFactory();
             objectFactory.setContainer(container);
 
             container.setObjectFactory(objectFactory);
 
             TransientObjectStore objectStore = new TransientObjectStore();
-            objectStore.setLoadedObjects(loadedObjectsHashtable);
 
-            //                      OidGenerator oidGenerator = new TimeBasedOidGenerator();
             OidGenerator oidGenerator = new SimpleOidGenerator();
 
             LocalObjectManager objectManager = new LocalObjectManager();
@@ -101,7 +94,6 @@ public class JavaExploration {
             //        objectManager.setNotifier(updateNotifier);
             objectManager.setObjectFactory(objectFactory);
             objectManager.setOidGenerator(oidGenerator);
-            objectManager.setLoadedObjects(loadedObjectsHashtable);
 
             NakedObjects.setObjectManager(objectManager);
 
@@ -113,7 +105,7 @@ public class JavaExploration {
 
             JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
 
-            PojoAdapterFactory pojoAdapterFactory = new PojoAdapterFactory();
+            PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
             pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
             pojoAdapterFactory.setReflectorFactory(reflectorFactory);
             NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);

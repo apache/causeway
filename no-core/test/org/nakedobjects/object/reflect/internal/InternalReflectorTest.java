@@ -8,9 +8,10 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.InternalNakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.reflect.ActionPeer;
+import org.nakedobjects.object.reflect.DummyNakedObject;
+import org.nakedobjects.object.reflect.DummyPojoAdapterFactory;
 import org.nakedobjects.object.reflect.FieldPeer;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
-import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -32,9 +33,9 @@ public class InternalReflectorTest extends TestCase {
         
     	new MockNakedObjectSpecificationLoader();     	
     	
-    	PojoAdapterFactory pojoAdapterFactory = new PojoAdapterFactory();
-    	pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
-    	pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
+    	PojoAdapterFactory pojoAdapterFactory = new DummyPojoAdapterFactory();
+ //   	pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
+  //  	pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
 		NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
 		
         reflector = new MockInternalReflector(InternalObjectForReflector.class.getName());
@@ -77,7 +78,7 @@ public class InternalReflectorTest extends TestCase {
     public void testAcquire() {
         Naked instance = reflector.acquireInstance();
         assertNotNull(instance);
-        assertTrue(instance.getObject() instanceof InternalObjectForReflector);
+        assertTrue(instance instanceof DummyNakedObject);
     }
     
    public void testShortName() {

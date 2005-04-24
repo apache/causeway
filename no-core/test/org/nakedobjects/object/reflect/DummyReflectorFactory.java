@@ -1,13 +1,108 @@
 package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ObjectFactory;
+import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ReflectorFactory;
+import org.nakedobjects.object.control.Hint;
 
 public class DummyReflectorFactory extends ReflectorFactory {
 
     public Reflector createReflector(String className) throws ReflectionException {
-        return null;
+        return new Reflector() {
+
+            public Naked acquireInstance() {
+                return null;
+            }
+
+            public ActionPeer[] actions(boolean forClass) {
+                return null;
+            }
+
+            public String[] actionSortOrder() {
+                return null;
+            }
+
+            public String[] classActionSortOrder() {
+                return null;
+            }
+
+            public Hint classHint() {
+                return null;
+            }
+
+            public void clearDirty(NakedObject object2) {}
+
+            public FieldPeer[] fields() {
+                return null;
+            }
+
+            public String[] fieldSortOrder() {
+                return null;
+            }
+
+            public String fullName() {
+                return null;
+            }
+
+            public String[] getInterfaces() {
+                return null;
+            }
+
+            public String getSuperclass() {
+                return null;
+            }
+
+            public boolean isAbstract() {
+                return false;
+            }
+
+            public boolean isDirty(NakedObject object) {
+                return false;
+            }
+
+            public boolean isLookup() {
+                return false;
+            }
+
+            public boolean isObject() {
+                return false;
+            }
+
+            public boolean isPartOf() {
+                return false;
+            }
+
+            public Persistable persistable() {
+                return null;
+            }
+
+            public boolean isValue() {
+                return false;
+            }
+
+            public void markDirty(NakedObject object2) {}
+
+            public String pluralName() {
+                return null;
+            }
+
+            public String shortName() {
+                return null;
+            }
+
+            public String singularName() {
+                return null;
+            }
+
+            public ObjectTitle title() {
+                return null;
+            }
+
+            public String unresolvedTitle(NakedObject pojo) {
+                return null;
+            }};
     }
 
     public ObjectFactory getObjectFactory() {

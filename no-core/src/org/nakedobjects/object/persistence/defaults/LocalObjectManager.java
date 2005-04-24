@@ -3,7 +3,6 @@ package org.nakedobjects.object.persistence.defaults;
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
@@ -22,7 +21,7 @@ import org.nakedobjects.object.persistence.UnsupportedFindException;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.utility.Assert;
+import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.utility.StartupException;
 
@@ -34,7 +33,6 @@ import org.apache.log4j.Logger;
 
 public class LocalObjectManager extends AbstractNakedObjectManager {
     private static final Logger LOG = Logger.getLogger(LocalObjectManager.class);
-    private LoadedObjects loadedObjects;
     private final Hashtable nakedClasses = new Hashtable();
     private UpdateNotifier notifier;
     private NakedObjectStore objectStore;
@@ -105,9 +103,9 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         object.deleted();
         clear(object);
 
-        if (objectStore.getLoadedObjects().isLoaded(object.getOid())) {
-            objectStore.getLoadedObjects().unloaded(object);
-        }
+  //      if (NakedObjects.getPojoAdapterFactory().isLoaded(object.getOid())) {
+            NakedObjects.getPojoAdapterFactory().unloaded(object);
+  //      }
     }
 
     public void endTransaction() {
@@ -243,8 +241,8 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     public NakedObject getObject(Oid oid, NakedObjectSpecification hint) {
         LOG.debug("getObject " + oid);
         try {
-            if (objectStore.getLoadedObjects().isLoaded(oid)) {
-                return objectStore.getLoadedObjects().getLoadedObject(oid);
+            if (NakedObjects.getPojoAdapterFactory().isLoaded(oid)) {
+                return NakedObjects.getPojoAdapterFactory().getLoadedObject(oid);
             }
             NakedObject object = objectStore.getObject(oid, hint);
             return object;
@@ -378,7 +376,11 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
-       	loadedObjects.loaded(object);
+       	loadedObjects().loaded(object);
+    }
+
+    private PojoAdapterFactory loadedObjects() {
+        return NakedObjects.getPojoAdapterFactory();
     }
 
     /**
@@ -395,7 +397,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     public void reset() {
-        loadedObjects.reset();
         NakedObjects.getPojoAdapterFactory().reset();
     }
     
@@ -426,7 +427,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
     public void saveChanges() {
         LOG.debug("collating changes");
-        Enumeration e = loadedObjects.dirtyObjects();
+        Enumeration e = loadedObjects().dirtyObjects();
         while (e.hasMoreElements()) {
             NakedObject object = (NakedObject) e.nextElement();
             LOG.debug("  changed " + object);
@@ -436,15 +437,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
             getTransaction().addNotify(object);
             object.clearPersistDirty();
         }
-    }
-
-    /**
-     * Expose as a .NET property
-     * 
-     * @property
-     */
-    public void set_LoadedObjects(LoadedObjects loadedObjects) {
-        this.loadedObjects = loadedObjects;
     }
 
     /**
@@ -474,10 +466,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         this.oidGenerator = oidGenerator;
     }
 
-    public void setLoadedObjects(LoadedObjects loadedObjects) {
-        this.loadedObjects = loadedObjects;
-    }
-
     public void setNotifier(UpdateNotifier notifier) {
         this.notifier = notifier;
     }
@@ -496,8 +484,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
             oidGenerator = null;
             objectStore.shutdown();
             objectStore = null;
-            loadedObjects.shutdown();
-            loadedObjects = null;
             nakedClasses.clear();
          } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
@@ -512,13 +498,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     public String toString() {
         return "LocalObjectManager [objectStore=" + objectStore.name() + ",oidGenerator=" + oidGenerator.name() + "]";
     }
-
-    public void debugCheckObjectForOid(Oid oid, NakedObject object) {
-        if(loadedObjects.isLoaded(oid)) {
-            Assert.assertEquals(object, loadedObjects.getLoadedObject(oid));
-        }
-    }
-
 }
 
 /*

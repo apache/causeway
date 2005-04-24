@@ -23,7 +23,6 @@ public class MockObjectStore implements NakedObjectStore {
     private NakedObject getObject;
     private int instanceCount;
     private NakedObject[] instances = null;
-    private MockLoadedObjects mockLoadedObjects = new MockLoadedObjects();
     private boolean hasInstances;
 
     public MockObjectStore() {
@@ -87,10 +86,6 @@ public class MockObjectStore implements NakedObjectStore {
         return instances;
     }
 
-    public LoadedObjects getLoadedObjects() {
-        return mockLoadedObjects;
-    }
-
     public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
         throw new NotImplementedException("Getting naked class " + name);
     }
@@ -136,17 +131,8 @@ public class MockObjectStore implements NakedObjectStore {
         this.instances = instances;
         this.expectedClass = cls;
     }
-
-    public void setupIsLoaded(boolean flag) {
-        mockLoadedObjects.setupIsLoaded(flag);
-    }
-
     public void setupHasInstances(boolean flag) {
         hasInstances = flag;
-    }
-
-    public void setupLoaded(NakedObject[] objects) {
-        mockLoadedObjects.setupLoadedObjects(objects);
     }
 
     public void shutdown() throws ObjectStoreException {

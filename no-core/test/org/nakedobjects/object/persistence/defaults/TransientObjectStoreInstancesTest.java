@@ -1,19 +1,13 @@
 package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.DummyNakedObjectSpecification;
-import org.nakedobjects.object.LoadedObjects;
+import org.nakedobjects.object.MockNakedObject;
+import org.nakedobjects.object.MockOid;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
-import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoaderNew;
-import org.nakedobjects.object.persistence.NakedObjectStore;
-import org.nakedobjects.object.persistence.PersistenceCommand;
-import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
-import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
-import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
+import org.nakedobjects.object.reflect.DummyNakedObject;
 
-import junit.framework.Assert;
+import java.util.Enumeration;
+
 import junit.framework.TestCase;
 
 import org.apache.log4j.BasicConfigurator;
@@ -22,203 +16,139 @@ import org.apache.log4j.Logger;
 
 
 public class TransientObjectStoreInstancesTest extends TestCase {
-    private LoadedObjects loadedObjects;
-    private DummyNakedObjectSpecification objectSpec;
-    private NakedObjectStore objectStore;
+    private MockOid oid;
+    private MockTransientObjectStoreInstances instances;
+    private MockPojoAdapterFactory mockPojoAdapterFactory;
+    private TestObject object;
 
-    private void assertEquals(NakedObject object, NakedObject v) {
-        assertEquals(object.getObject(), v.getObject());
-        assertEquals(object.getOid(), v.getOid());
-    }
-
-    private NakedObject createTestObject() {
-        TestObject object = new TestObject();
-        NakedObject nakedObject = NakedObjects.getPojoAdapterFactory().createNOAdapter(object);
-        nakedObject.setOid(new DummyOid());
-        return nakedObject;
-    }
-
-    private NakedObject createReferencedObject() {
-        ReferencedObject object = new ReferencedObject();
-        NakedObject nakedObject = NakedObjects.getPojoAdapterFactory().createNOAdapter(object);
-        nakedObject.setOid(new DummyOid());
-        return nakedObject;
-    }
-
-    protected void restartObjectStore() throws Exception {
-        loadedObjects.reset();
-        NakedObjects.getPojoAdapterFactory().reset();
-    }
+    /*
+     * private void assertEquals(NakedObject object, NakedObject v) {
+     * assertEquals(object.getObject(), v.getObject());
+     * assertEquals(object.getOid(), v.getOid()); }
+     */
 
     protected void setUp() throws Exception {
         BasicConfigurator.configure();
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        PojoAdapterFactory pojoAdapterFactory = new PojoAdapterFactory();
-        pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
-        pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
-        NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+        instances = new MockTransientObjectStoreInstances();
+        mockPojoAdapterFactory = new MockPojoAdapterFactory();
+        NakedObjects.setPojoAdapterFactory(mockPojoAdapterFactory);
+        instances.setLoaded(mockPojoAdapterFactory);
 
-        MockNakedObjectSpecificationLoaderNew specificationLoader = new MockNakedObjectSpecificationLoaderNew();
-        specificationLoader.addSpec(ReferencedObject.class.getName());
-        objectSpec =  specificationLoader.addSpec(TestObject.class.getName());
-        NakedObjects.setSpecificationLoader(specificationLoader);
+        instances.addElement(new MockOid(1), new TestObject(), "one");
 
-        setupObjectStore();
+        oid = new MockOid(2);
+        object = new TestObject();
+        instances.addElement(oid, object, "two");
+
+        instances.addElement(new MockOid(3), new TestObject(), "three");
     }
 
-    private void setupObjectStore() throws Exception {
-        TransientObjectStore transientObjectStore = new TransientObjectStore();
-        loadedObjects = new LoadedObjectsHashtable();
-        transientObjectStore.setLoadedObjects(loadedObjects);
+    public void testGetObjectWhichIsAlreadyLoaded() {
+        mockPojoAdapterFactory.setupLoaded(true);
+        DummyNakedObject object = new DummyNakedObject();
+        mockPojoAdapterFactory.setupLoadedObject(object);
+        mockPojoAdapterFactory.setupExpectedOid(oid);
 
-        objectStore = transientObjectStore;
-        objectStore.init();
+        assertEquals(object, instances.getObject(oid));
     }
 
-    protected void tearDown() throws Exception {
-        objectStore.shutdown();
-    }
-    
-    public void testDestroyObject() throws Exception {
-        NakedObject object = createTestObject();
-        NakedObject objectToDelete = createTestObject();
+    public void testGetNoObject() throws Exception {
+        mockPojoAdapterFactory.setupLoaded(false);
 
-        PersistenceCommand[] commands = new PersistenceCommand[] { objectStore.createCreateObjectCommand(objectToDelete),
-                objectStore.createCreateObjectCommand(object) };
-        objectStore.runTransaction(commands);
-
-        loadedObjects.loaded(objectToDelete);
-        commands = new PersistenceCommand[] { objectStore.createDestroyObjectCommand(objectToDelete) };
-        objectStore.runTransaction(commands);
-
-        restartObjectStore();
-
-        NakedObject[] v = objectStore.getInstances(objectSpec, false);
-        assertEquals(1, v.length);
-        assertEquals(object, v[0]);
+        assertEquals(null, instances.getObject(new MockOid(0)));
     }
 
-    public void testGetInstances() throws Exception {
-        NakedObject object = createTestObject();
+    public void testGetObjectWhichIsNotYetLoaded() throws Exception {
+        mockPojoAdapterFactory.setupLoaded(false);
+        mockPojoAdapterFactory.setupExpectedPojo(object);
+        DummyNakedObject nakedObject = new DummyNakedObject();
+        mockPojoAdapterFactory.setupCreatedAdapter(nakedObject);
 
-        PersistenceCommand[] commands = new PersistenceCommand[] { objectStore.createCreateObjectCommand(object) };
-        objectStore.runTransaction(commands);
+        assertEquals(nakedObject, instances.getObject(oid));
+    }
 
-        restartObjectStore();
+    public void testRemoveObject() throws Exception {
+        mockPojoAdapterFactory.setupLoaded(true);
+        DummyNakedObject object = new DummyNakedObject();
+        mockPojoAdapterFactory.setupLoadedObject(object);
+        mockPojoAdapterFactory.setupExpectedOid(oid);
 
-        NakedObject[] v = objectStore.getInstances(objectSpec, false);
-        assertEquals(1, v.length);
-        assertEquals(object, v[0]);
+        instances.remove(oid);
+
+        assertFalse(instances.contains(oid));
+        assertEquals(2, instances.size());
     }
 
     public void testHasInstances() throws Exception {
-        NakedObject object = createTestObject();
-        NakedObject objectToDelete = createTestObject();
-
-        PersistenceCommand[] commands = new PersistenceCommand[] { objectStore.createCreateObjectCommand(objectToDelete),
-                objectStore.createCreateObjectCommand(object) };
-
-        objectStore.runTransaction(commands);
-
-        assertTrue(objectStore.hasInstances(objectSpec, false));
-        assertEquals(2, objectStore.numberOfInstances(objectSpec, false));
+        assertTrue(instances.hasInstances());
+        assertEquals(3, instances.numberOfInstances());
     }
 
     public void testHasNoInstances() throws Exception {
-        assertFalse(objectStore.hasInstances(objectSpec, false));
+        instances.objectInstances.clear();
 
-        assertEquals(0, objectStore.numberOfInstances(objectSpec, false));
+        assertFalse(instances.hasInstances());
+        assertEquals(0, instances.numberOfInstances());
     }
 
-    public void testGetObjectWithGraph() throws Exception {
-        NakedObject object = createTestObject();
-        NakedObject referenced = createReferencedObject();
-       ((TestObject) object.getObject()).setReferencedObject((ReferencedObject) referenced.getObject());
-    
-        PersistenceCommand[] commands = new PersistenceCommand[] { 
-                objectStore.createCreateObjectCommand(object),
-                objectStore.createCreateObjectCommand(referenced)
-               };
+    public void testElements() {
+        /*
+        mockPojoAdapterFactory.setupLoaded(false);
+        mockPojoAdapterFactory.setupExpectedPojo(object);
+        DummyNakedObject nakedObject = new DummyNakedObject();
+        mockPojoAdapterFactory.setupCreatedAdapter(nakedObject);
 
-        objectStore.runTransaction(commands);
-        
-        MockField field = new MockField(objectSpec);
-        field.setupFieldContent(referenced);
-        objectSpec.fields = new NakedObjectField[] {field};
-        
-        NakedObjectField fields[] = object.getFields();
-        assertEquals(referenced, object.getField(fields[0]));
-        
-        restartObjectStore();
-        
-        NakedObject retrievedObject = objectStore.getObject(object.getOid(), objectSpec);
-        assertEquals(object, retrievedObject);
-        assertNotSame(object, retrievedObject);
-         
-        assertTrue(retrievedObject.isResolved());
-        assertTrue(retrievedObject.isPersistent());
-  
-        
-        NakedObject retrievedReferenced = (NakedObject) retrievedObject.getField(fields[0]);
-        Assert.assertEquals(referenced, retrievedReferenced);
-              
-        assertTrue(retrievedReferenced.isPersistent());
-        assertFalse(retrievedReferenced.isResolved());
+        Enumeration e = instances.elements();
 
-        assertEquals(referenced, retrievedReferenced);
-        
-        objectStore.resolveImmediately(object);
-        assertFalse(retrievedReferenced.isResolved());
-
+        e.nextElement();
+        e.nextElement();
+        e.nextElement();
+        assertFalse(e.hasMoreElements());
+        */
     }
-    
-    
-    
 
+    public void testNoElements() {
+        instances.objectInstances.clear();
 
-    public void testInstancesWithGraph() throws Exception {
-        NakedObject object = createTestObject();
-        NakedObject referenced = createReferencedObject();
-       ((TestObject) object.getObject()).setReferencedObject((ReferencedObject) referenced.getObject());
-    
-        PersistenceCommand[] commands = new PersistenceCommand[] { 
-                objectStore.createCreateObjectCommand(object),
-                objectStore.createCreateObjectCommand(referenced)
-               };
-
-        objectStore.runTransaction(commands);
-        
-        MockField field = new MockField(objectSpec);
-        field.setupFieldContent(referenced);
-        objectSpec.fields = new NakedObjectField[] {field};
-               
-        restartObjectStore();
-        
-        NakedObject instances[] = objectStore.getInstances(objectSpec, false);
-        assertEquals(1, instances.length);
-        NakedObject retrievedObject = instances[0];
-        
-        assertEquals(object, retrievedObject);
-        assertNotSame(object, retrievedObject);
-         
-        assertTrue(retrievedObject.isResolved());
-        assertTrue(retrievedObject.isPersistent());
-  
-        
-        NakedObjectField fields[] = object.getFields();
-        NakedObject retrievedReferenced = (NakedObject) retrievedObject.getField(fields[0]);
-        Assert.assertEquals(referenced, retrievedReferenced);
-              
-        assertTrue(retrievedReferenced.isPersistent());
-        assertFalse(retrievedReferenced.isResolved());
-
-        assertEquals(referenced, retrievedReferenced);
-        
-        objectStore.resolveImmediately(object);
-        assertFalse(retrievedReferenced.isResolved());
-
+        Enumeration e = instances.elements();
+        assertFalse(e.hasMoreElements());
     }
+
+    public void testOidForObject() {
+        assertEquals(oid, instances.getOidFor(object));
+    }
+
+    public void testInstanceMatching() {
+        mockPojoAdapterFactory.setupLoaded(false);
+        mockPojoAdapterFactory.setupExpectedPojo(object);
+        DummyNakedObject nakedObject = new DummyNakedObject();
+        mockPojoAdapterFactory.setupCreatedAdapter(nakedObject);
+
+        NakedObject result = instances.instanceMatching("two");
+        assertEquals(nakedObject, result);
+
+        result = instances.instanceMatching("four");
+        assertEquals(null, result);
+    }
+
+    public void testSave() {
+        MockNakedObject mockNakedObject = new MockNakedObject();
+        MockOid oid = new MockOid(0);
+        mockNakedObject.setOid(oid);
+        TestObject object = new TestObject();
+        mockNakedObject.setupObject(object);
+        mockNakedObject.setupTitleString("four");
+
+        instances.save(mockNakedObject);
+
+        assertTrue(instances.objectInstances.containsKey(oid));
+        assertTrue(instances.objectInstances.contains(object));
+        assertTrue(instances.titleIndex.containsKey("four"));
+        assertTrue(instances.titleIndex.contains(oid));
+    }
+
 }
 
 /*

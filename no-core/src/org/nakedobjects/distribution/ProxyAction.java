@@ -1,6 +1,5 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -19,14 +18,11 @@ public final class ProxyAction extends AbstractActionPeer {
     final static Logger LOG = Logger.getLogger(ProxyAction.class);
     private ClientDistribution connection;
     private boolean fullProxy = false;
-    private final LoadedObjects loadedObjects;
     private final DataFactory dataFactory;
 
-    public ProxyAction(final ActionPeer local, final ClientDistribution connection, final LoadedObjects loadedObjects,
-            DataFactory objectDataFactory) {
+    public ProxyAction(final ActionPeer local, final ClientDistribution connection, DataFactory objectDataFactory) {
         super(local);
         this.connection = connection;
-        this.loadedObjects = loadedObjects;
         this.dataFactory = objectDataFactory;
     }
 
@@ -37,7 +33,7 @@ public final class ProxyAction extends AbstractActionPeer {
             ObjectData targetObjectData = connection.executeAction(ClientSession.getSession(), getType().getName(), getName(),
                     parameterTypes, target.getOid(), target.getSpecification().getFullName(), parameterObjectData);
             NakedObject returnedObject;
-            returnedObject = targetObjectData == null ? null : DataHelper.recreateObject(loadedObjects, targetObjectData);
+            returnedObject = targetObjectData == null ? null : DataHelper.recreateObject(targetObjectData);
             return returnedObject;
         } else {
             return super.execute(identifier, target, parameters);

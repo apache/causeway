@@ -97,15 +97,11 @@ public interface TestClass extends TestNaked {
      */
    TestObject invokeAction(String name, TestNaked parameter);
 
-   /**
-   * @deprecated
-   */
-    TestObject invokeAction(String name, TestNaked[] parameter);
+   TestObject invokeAction(String name, TestNaked[] parameter);
+   
+   TestObject invokeActionReturnObject(String name, TestNaked[] parameters);
 
-
-    TestObject invokeActionReturnObject(String name, TestNaked[] parameters);
-
-    TestCollection invokeActionReturnCollection(String name, TestNaked[] parameters);
+   TestCollection invokeActionReturnCollection(String name, TestNaked[] parameters);
 }
 
 /*

@@ -11,7 +11,7 @@ import org.nakedobjects.object.security.Session;
 
 public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     private static int next = 100;
-    public NakedObjectField[] fields;
+    public NakedObjectField[] fields = new NakedObjectField[0];
     private final int id = next++;
 
     public DummyNakedObjectSpecification() {}

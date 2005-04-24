@@ -15,7 +15,6 @@ import org.nakedobjects.distribution.xml.request.MakePersistent;
 import org.nakedobjects.distribution.xml.request.SetAssociation;
 import org.nakedobjects.distribution.xml.request.SetValue;
 import org.nakedobjects.distribution.xml.request.StartTransaction;
-import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.Oid;
@@ -27,7 +26,6 @@ import com.thoughtworks.xstream.XStream;
 
 public class XmlClient implements ClientDistribution {
     private ClientConnection connection;
-    private LoadedObjects loadedObjects;
 
     public XmlClient() {
         connection = new ClientConnection();
@@ -103,7 +101,7 @@ public class XmlClient implements ClientDistribution {
         
         ObjectData[] updates = response.getUpdates();
         for (int i = 0; i < updates.length; i++) {
-            DataHelper.update(loadedObjects, updates[i]);
+            DataHelper.update(updates[i]);
         }
 //        response.update();
     }
@@ -119,10 +117,6 @@ public class XmlClient implements ClientDistribution {
         remoteExecute(request);
     }
     
-    public void setLoadedObjects(LoadedObjects loadedObjects) {
-        this.loadedObjects = loadedObjects;
-    }
-
     public void abortTransaction(Session session) {
         Request request = new AbortTransaction(session);
         remoteExecute(request);    

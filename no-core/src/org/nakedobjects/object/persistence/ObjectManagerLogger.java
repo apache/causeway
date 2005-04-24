@@ -7,7 +7,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.utility.StartupException;
 
 public class ObjectManagerLogger extends Logger implements NakedObjectManager {
@@ -193,11 +192,6 @@ public class ObjectManagerLogger extends Logger implements NakedObjectManager {
         log("reset object manager");
         decorated.reset();      
     }
-
-    public void debugCheckObjectForOid(Oid oid, NakedObject object) {
-        throw new NotImplementedException();
-    }
-
 }
 
 

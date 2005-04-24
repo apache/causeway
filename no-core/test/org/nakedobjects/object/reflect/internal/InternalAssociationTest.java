@@ -5,8 +5,8 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
+import org.nakedobjects.object.reflect.DummyPojoAdapterFactory;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
-import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.security.Session;
 
 import java.lang.reflect.Method;
@@ -46,11 +46,11 @@ public class InternalAssociationTest extends TestCase {
 
     	session = new Session();
         objectWithOneToOneAssoications = new InternalObjectWithOneToOneAssociations();
-    	PojoAdapterFactory pojoAdapterFactory = new PojoAdapterFactory();
+    	PojoAdapterFactory pojoAdapterFactory = new DummyPojoAdapterFactory();
     	NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
     	
-        pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
-        pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
+     //   pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
+    //    pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
         object = pojoAdapterFactory.createNOAdapter(objectWithOneToOneAssoications);
         
         Class cls = InternalObjectWithOneToOneAssociations.class;
@@ -91,12 +91,6 @@ public class InternalAssociationTest extends TestCase {
     	personField.clearAssociation(object, associate);
     	
     	assertNull(objectWithOneToOneAssoications.getReferencedObject());
-    }     	
-    
-    public void testGet() {
-    	objectWithOneToOneAssoications.setReferencedObject(referencedObject);
-    	
-    	assertEquals(associate, personField.getAssociation(object));
     }     	
     
     public void testInitGet() {

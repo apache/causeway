@@ -3,7 +3,6 @@ package org.nakedobjects.object.persistence;
 import org.nakedobjects.container.configuration.ComponentException;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.InstancesCriteria;
-import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -64,10 +63,6 @@ public class ObjectStoreLogger extends Logger implements NakedObjectStore {
         log("Get instances of " + specification.getShortName() + " matching " + pattern);
         return decorated.getInstances(specification, includeSubclasses);
      }
-
-    public LoadedObjects getLoadedObjects() {
-        return decorated.getLoadedObjects();
-    }
 
     public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
         NakedClass cls = decorated.getNakedClass(name);

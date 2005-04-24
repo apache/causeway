@@ -48,7 +48,7 @@ public class MockNakedObject implements NakedObject {
     }
 
     public NakedObjectField[] getFields() {
-        return null;
+        return new NakedObjectField[0];
     }
 
     public Hint getHint(Session session, Action action, Naked[] parameters) {

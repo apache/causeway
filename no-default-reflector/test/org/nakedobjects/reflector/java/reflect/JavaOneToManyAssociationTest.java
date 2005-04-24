@@ -8,7 +8,7 @@ import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
+import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 
@@ -28,7 +28,7 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
 	private JavaReferencedObject elements[];
     private MockNakedObjectSpecificationLoader loader;
     private NakedObject nakedObject;
-    private PojoAdapterFactory pojoAdapterFactory;
+    private PojoAdapterFactoryImpl pojoAdapterFactory;
 
     public JavaOneToManyAssociationTest(String name) {
         super(name);
@@ -47,7 +47,7 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
     	ConfigurationFactory.setConfiguration(new TestConfiguration());
         
 		objectWithVector = new JavaObjectWithVector();
-    	pojoAdapterFactory = new PojoAdapterFactory();
+    	pojoAdapterFactory = new PojoAdapterFactoryImpl();
 		pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
 		pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
 		nakedObject = pojoAdapterFactory.createNOAdapter(objectWithVector);

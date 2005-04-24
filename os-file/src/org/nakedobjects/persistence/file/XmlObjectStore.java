@@ -3,7 +3,6 @@ package org.nakedobjects.persistence.file;
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
@@ -22,15 +21,14 @@ import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.PojoAdapterFactory;
 
 import org.apache.log4j.Logger;
 
 
 public class XmlObjectStore implements NakedObjectStore {
     private static final Logger LOG = Logger.getLogger(XmlObjectStore.class);
-
     private DataManager dataManager;
-    private LoadedObjects loadedObjects;
 
     public void abortTransaction() {}
 
@@ -69,8 +67,8 @@ public class XmlObjectStore implements NakedObjectStore {
     }
 
     private Object createSkeletalObject(Oid oid, String type) {
-        if (loadedObjects.isLoaded(oid)) {
-            return loadedObjects.getLoadedObject(oid);
+        if (loadedObjects().isLoaded(oid)) {
+            return loadedObjects().getLoadedObject(oid);
         } else {
             LOG.debug("Creating skeletal object of " + type + " " + oid);
             NakedObjectSpecification cls = NakedObjects.getSpecificationLoader().loadSpecification(type);
@@ -81,12 +79,16 @@ public class XmlObjectStore implements NakedObjectStore {
         }
     }
 
+    private PojoAdapterFactory loadedObjects() {
+        return NakedObjects.getPojoAdapterFactory();
+    }
+
     public void endTransaction() {}
 
     public String getDebugData() {
         StringBuffer data = new StringBuffer();
         data.append("DataManager " + dataManager);
-        data.append("ObjectManager " + loadedObjects);
+        data.append("AdapterFactory " + NakedObjects.getPojoAdapterFactory().getDebugData());
         return data.toString();
     }
 
@@ -154,12 +156,12 @@ public class XmlObjectStore implements NakedObjectStore {
 
             SerialOid oid = instanceData.getOid();
             NakedObject instance;
-            if (loadedObjects.isLoaded(oid)) {
-                instance = loadedObjects.getLoadedObject(oid);
+            if (loadedObjects().isLoaded(oid)) {
+                instance = loadedObjects().getLoadedObject(oid);
             } else {
                 instance = (NakedObject) createSkeletalObject(oid, instanceData.getClassName());
                 //                instance.setContext(NakedObjectContext.getDefaultContext());
-                loadedObjects.loaded(instance);
+                loadedObjects().loaded(instance);
             }
             initObject(instance, instanceData);
             if (!instance.isResolved()) {
@@ -174,10 +176,6 @@ public class XmlObjectStore implements NakedObjectStore {
         NakedObject[] array = new NakedObject[count];
         System.arraycopy(instances, 0, array, 0, count);
         return array;
-    }
-
-    public LoadedObjects getLoadedObjects() {
-        return loadedObjects;
     }
 
     public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
@@ -236,8 +234,8 @@ public class XmlObjectStore implements NakedObjectStore {
                 if (refs != null) {
                     for (int j = 0; j < refs.size(); j++) {
                         try {
-                            if (loadedObjects.isLoaded(refs.elementAt(j))) {
-                                object.initAssociation((NakedObjectAssociation) field, loadedObjects.getLoadedObject(refs
+                            if (loadedObjects().isLoaded(refs.elementAt(j))) {
+                                object.initAssociation((NakedObjectAssociation) field, loadedObjects().getLoadedObject(refs
                                         .elementAt(j)));
                             } else {
                                 object.initAssociation((NakedObjectAssociation) field, getObject(refs.elementAt(j), null));
@@ -253,8 +251,8 @@ public class XmlObjectStore implements NakedObjectStore {
                 LOG.debug("setting field " + field + " with " + reference);
 
                 if (reference != null) {
-                    if (loadedObjects.isLoaded(reference)) {
-                        NakedObject loadedObject = loadedObjects.getLoadedObject(reference);
+                    if (loadedObjects().isLoaded(reference)) {
+                        NakedObject loadedObject = loadedObjects().getLoadedObject(reference);
                         LOG.debug("using loaded object " + loadedObject);
                         object.initAssociation((OneToOneAssociation) field, loadedObject);
                     } else {
@@ -274,7 +272,7 @@ public class XmlObjectStore implements NakedObjectStore {
                             fieldObject.setResolved();
                         }
 
-                        loadedObjects.loaded(fieldObject);
+                        loadedObjects().loaded(fieldObject);
                         object.initAssociation((OneToOneAssociation) field, fieldObject);
                     }
                 }
@@ -297,14 +295,14 @@ public class XmlObjectStore implements NakedObjectStore {
      */
     private NakedObject recreateObject(ObjectData data) throws ObjectStoreException {
         SerialOid oid = data.getOid();
-        if (loadedObjects.isLoaded(oid)) {
-            return loadedObjects.getLoadedObject(oid);
+        if (loadedObjects().isLoaded(oid)) {
+            return loadedObjects().getLoadedObject(oid);
         }
         NakedObjectSpecification nc = classFor(data.getClassName());
         NakedObject object = (NakedObject) nc.acquireInstance();
         LOG.debug("Recreating object " + nc.getFullName() + "/" + oid);
         object.setOid(oid);
-        loadedObjects.loaded(object);
+        loadedObjects().loaded(object);
         initObject(object, data);
         object.setResolved();
         return object;
@@ -332,19 +330,6 @@ public class XmlObjectStore implements NakedObjectStore {
      */
     public void set_DataManager(DataManager dataManager) {
         this.dataManager = dataManager;
-    }
-
-    public void setLoadedObjects(LoadedObjects loadedObjects) {
-        this.loadedObjects = loadedObjects;
-    }
-
-    /**
-     * Expose as a .NET property
-     * 
-     * @property
-     */
-    public void set_LoadedObjects(LoadedObjects loadedObjects) {
-        this.loadedObjects = loadedObjects;
     }
 
     public void shutdown() throws ObjectStoreException {}

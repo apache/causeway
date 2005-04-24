@@ -16,7 +16,7 @@ public class DummyNakedObject implements NakedObject {
 
     private DummyNakedObjectSpecification spec;
     private Oid oid;
-    private TestObject object;
+    private Object object;
     private String title;
 
     public DummyNakedObject() {
@@ -153,7 +153,7 @@ public class DummyNakedObject implements NakedObject {
         this.title = title;
     }
 
-    public void setupObject(TestObject object) {
+    public void setupObject(Object object) {
         this.object = object;
     }
 

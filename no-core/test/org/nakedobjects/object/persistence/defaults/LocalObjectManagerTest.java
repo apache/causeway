@@ -1,12 +1,14 @@
 package org.nakedobjects.object.persistence.defaults;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
-import org.nakedobjects.object.MockLoadedObjects;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.MockObjectStore;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.defaults.MockObjectFactory;
+import org.nakedobjects.object.reflect.DummyPojoAdapterFactory;
 import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.reflect.PojoAdapterFactory;
 
 import junit.framework.TestCase;
 
@@ -19,6 +21,7 @@ public class LocalObjectManagerTest extends TestCase {
     private MockObjectStore objectStore;
     private MockNakedObject testNakedObject;
     private DummyNakedObjectSpecification objectSpecification;
+    private PojoAdapterFactory pojoAdapterFactory;
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(LocalObjectManagerTest.class);
@@ -46,6 +49,7 @@ public class LocalObjectManagerTest extends TestCase {
     public void testDestroy() {
         objectSpecification.fields = new NakedObjectField[0];
 
+        pojoAdapterFactory.createAdapter(testNakedObject);
         
         objectManager.startTransaction();
         objectManager.destroyObject(testNakedObject);
@@ -67,12 +71,12 @@ public class LocalObjectManagerTest extends TestCase {
         objectManager = new LocalObjectManager();
         objectManager.setObjectStore(objectStore);
         objectManager.setOidGenerator(new MockOidGenerator());
-        objectManager.setLoadedObjects(new MockLoadedObjects());
-
+ 
+        pojoAdapterFactory = new DummyPojoAdapterFactory();
+        NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
         testNakedObject = new MockNakedObject();
         objectSpecification = new DummyNakedObjectSpecification();
         testNakedObject.setupSpecification(objectSpecification);
-
     }
 }
 

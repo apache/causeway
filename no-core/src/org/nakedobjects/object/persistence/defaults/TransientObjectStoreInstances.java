@@ -1,10 +1,10 @@
 package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.reflect.PojoAdapterFactory;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -20,20 +20,8 @@ import org.apache.log4j.Logger;
  * objects in the order that they where created.
  */
 class TransientObjectStoreInstances {
-    private final Hashtable objectInstances = new Hashtable();
-    private final Hashtable titleIndex = new Hashtable();
-    private LoadedObjects loaded;
-
-    public TransientObjectStoreInstances(final LoadedObjects loaded) {
-        this.loaded = loaded;
-    }
-
-    public void remove(Oid oid) {
-        NakedObject object;
-        object = getObject(oid);
-        objectInstances.remove(oid);
-        loaded.unloaded(object);
-    }
+    protected final Hashtable objectInstances = new Hashtable();
+    protected final Hashtable titleIndex = new Hashtable();
 
     public Enumeration elements() {
         Vector v = new Vector(objectInstances.size());
@@ -49,21 +37,14 @@ class TransientObjectStoreInstances {
         Logger.getLogger(TransientObjectStoreInstances.class).info("finalizing instances");
     }
 
-    public NakedObject instanceMatching(String title) {
-        Oid oid = (Oid) titleIndex.get(title);
-        return oid == null ? null : getObject(oid);
-    }
-
-    public void save(NakedObject object) {
-        objectInstances.put(object.getOid(), object.getObject());
-        titleIndex.put(object.titleString().toLowerCase(), object.getOid());
-    }
-
     public NakedObject getObject(Oid oid) {
-        if (loaded.isLoaded(oid)) {
-            return loaded.getLoadedObject(oid);
+        if (loaded().isLoaded(oid)) {
+            return loaded().getLoadedObject(oid);
         } else {
             Object pojo = objectInstances.get(oid);
+            if (pojo == null) {
+                return null;
+            }
             NakedObject object = NakedObjects.getPojoAdapterFactory().createNOAdapter(pojo);
             if (object.getOid() == null) {
                 object.setOid(oid);
@@ -72,34 +53,10 @@ class TransientObjectStoreInstances {
                 throw new NakedObjectRuntimeException("Requested object with OID " + oid
                         + ", but got object (with different oid): " + object);
             }
-            loaded.loaded(object);
+            loaded().loaded(object);
 
             return object;
         }
-    }
-
-    public boolean hasInstances() {
-        return numberOfInstances() > 0;
-    }
-
-    public int numberOfInstances() {
-        return objectInstances.size();
-    }
-
-    public NakedObject[] instances() {
-        NakedObject[] array = new NakedObject[objectInstances.size()];
-        Enumeration e = elements();
-        int i = 0;
-        while (e.hasMoreElements()) {
-            array[i++] = (NakedObject) e.nextElement();
-        }
-        return array;
-    }
-
-    public void shutdown() {
-        loaded = null;
-        objectInstances.clear();
-        titleIndex.clear();
     }
 
     public Oid getOidFor(Object object) {
@@ -112,6 +69,50 @@ class TransientObjectStoreInstances {
         }
 
         return null;
+    }
+
+    public boolean hasInstances() {
+        return numberOfInstances() > 0;
+    }
+
+    public NakedObject instanceMatching(String title) {
+        Oid oid = (Oid) titleIndex.get(title);
+        return oid == null ? null : getObject(oid);
+    }
+
+    public NakedObject[] instances() {
+        NakedObject[] array = new NakedObject[objectInstances.size()];
+        Enumeration e = elements();
+        int i = 0;
+        while (e.hasMoreElements()) {
+            array[i++] = (NakedObject) e.nextElement();
+        }
+        return array;
+    }
+
+    protected PojoAdapterFactory loaded() {
+        return NakedObjects.getPojoAdapterFactory();
+    }
+
+    public int numberOfInstances() {
+        return objectInstances.size();
+    }
+
+    public void remove(Oid oid) {
+        NakedObject object;
+        object = getObject(oid);
+        objectInstances.remove(oid);
+        loaded().unloaded(object);
+    }
+
+    public void save(NakedObject object) {
+        objectInstances.put(object.getOid(), object.getObject());
+        titleIndex.put(object.titleString().toLowerCase(), object.getOid());
+    }
+
+    public void shutdown() {
+        objectInstances.clear();
+        titleIndex.clear();
     }
 
 }

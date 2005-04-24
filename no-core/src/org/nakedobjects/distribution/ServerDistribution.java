@@ -1,7 +1,6 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
@@ -26,7 +25,6 @@ import org.apache.log4j.Logger;
 public class ServerDistribution implements ClientDistribution {
     private static final Logger LOG = Logger.getLogger(ServerDistribution.class);
     private static final int OBJECT_DATA_DEPTH = 3;
-    private LoadedObjects loadedObjects;
     private DataFactory objectDataFactory;
     private ObjectFactory objectFactory;
     private LocalObjectManager objectManager;
@@ -78,7 +76,7 @@ public class ServerDistribution implements ClientDistribution {
         Naked[] parameters = new Naked[parameterData.length];
         for (int i = 0; i < parameters.length; i++) {
             if (parameterData[i] != null) {
-                parameters[i] = DataHelper.recreate(loadedObjects, parameterData[i]);
+                parameters[i] = DataHelper.recreate(parameterData[i]);
             }
         }
         try {
@@ -123,7 +121,7 @@ public class ServerDistribution implements ClientDistribution {
     }
 
     public Oid[] makePersistent(Session session, ObjectData data) {
-        NakedObject object = DataHelper.recreateObject(loadedObjects, data);
+        NakedObject object = DataHelper.recreateObject(data);
         objectFactory.recreatedObject(object.getObject());
         objectManager.startTransaction();
         objectManager.makePersistent(object);
@@ -133,16 +131,6 @@ public class ServerDistribution implements ClientDistribution {
 
     public int numberOfInstances(Session sessionId, String fullName) {
         return objectManager.numberOfInstances(getSpecification(fullName));
-    }
-
-
-    /**
-     * .NET property
-     * 
-     * @property
-     */
-    public void set_LoadedObjects(LoadedObjects loadedObjects) {
-        this.loadedObjects = loadedObjects;
     }
 
     /**
@@ -191,10 +179,6 @@ public class ServerDistribution implements ClientDistribution {
             throw new NakedObjectRuntimeException();
         }
         inObject.setAssociation(association, associate);
-    }
-
-    public void setLoadedObjects(LoadedObjects loadedObjects) {
-        this.loadedObjects = loadedObjects;
     }
 
     public void setLocalObjectManager(LocalObjectManager objectManager) {
