@@ -12,7 +12,7 @@
 	<property name="dist.icon.dir" value="${dist.dir}/icon-library"/>
 	<property name="dist.example.dir" value="${dist.dir}/examples"/>
 	<!-- allow compliation for Java 1.2 & with debug -->
-	<property name="compile.debug" value="no"/>
+	<property name="compile.debug" value="yes"/>
 	<property name="compile.target" value="1.1"/>
 
 	<!-- classpath -->
