@@ -1,10 +1,10 @@
 package org.nakedobjects.utility.xmlsnapshot;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
+import org.nakedobjects.object.reflect.DummyNakedObject;
 import org.nakedobjects.object.reflect.NakedObjectField;
 
 import junit.framework.TestCase;
@@ -26,8 +26,11 @@ public class SnapshotBuilderTest extends TestCase {
         loader.addSpec(spec);
         spec.fields = new NakedObjectField[0];
         
-        TestObject testObject = new TestObject();
-        XmlSnapshot builder = new XmlSnapshot(NakedObjects.getPojoAdapterFactory().createNOAdapter(testObject));
+ //       TestObject testObject = new TestObject();
+        
+        DummyNakedObject object = new DummyNakedObject();
+        object.setupSpecification(spec);
+        XmlSnapshot builder = new XmlSnapshot(object);
         
         Element e = builder.getXmlElement();
 
