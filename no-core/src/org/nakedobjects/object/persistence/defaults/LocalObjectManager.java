@@ -2,6 +2,7 @@ package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DirtyObjectSet;
+import org.nakedobjects.object.DirtyObjectSetImpl;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
@@ -35,7 +36,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     private static final Logger LOG = Logger.getLogger(LocalObjectManager.class);
     private boolean checkObjectsForDirtyFlag;
     private final Hashtable nakedClasses = new Hashtable();
-    private DirtyObjectSet objectsToBeSaved = new DirtyObjectSet();
+    private DirtyObjectSetImpl objectsToBeSaved = new DirtyObjectSetImpl();
     private NakedObjectStore objectStore;
     private DirtyObjectSet objectsToRefreshViewsFor;
     private OidGenerator oidGenerator;
@@ -439,7 +440,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     public void saveChanges() {
-        LOG.debug("collating changes");
+        LOG.debug("saving changes");
         if (checkObjectsForDirtyFlag) {
             collateChanges();
         }
@@ -454,13 +455,14 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     private void collateChanges() {
+        LOG.debug("collating changed objects");
         PojoAdapterFactory factory = loadedObjects();
         Enumeration e = factory.getLoadedObjects();
         while (e.hasMoreElements()) {
             NakedObject object = (NakedObject) e.nextElement();
             if (object.getSpecification().isDirty(object)) {
+                LOG.debug("  found dirty object " + object);
                 objectChanged(object);
-                
                 object.getSpecification().clearDirty(object);
             }
         }

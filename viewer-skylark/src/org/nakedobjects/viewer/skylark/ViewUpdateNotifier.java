@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.object.DirtyObjectSet;
+import org.nakedobjects.object.DirtyObjectSetImpl;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
@@ -13,7 +13,7 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 
 
-public class ViewUpdateNotifier extends DirtyObjectSet implements DebugInfo {
+public class ViewUpdateNotifier extends DirtyObjectSetImpl implements DebugInfo {
     private static final Logger LOG = Logger.getLogger(ViewUpdateNotifier.class);
     protected Hashtable views = new Hashtable();
 //    private DirtyObjectSet viewChanges = new DirtyObjectSet();
