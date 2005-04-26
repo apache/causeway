@@ -74,11 +74,6 @@ public interface Content {
      */
     void menuOptions(MenuOptionSet options);
 
-    /**
-     * Flags that the object represented by this content has had it state changed by the viewer.
-     */
-    boolean objectChanged();
-
     void parseTextEntry(String entryText) throws InvalidEntryException;
 
     String title();

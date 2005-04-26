@@ -1,7 +1,6 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.UpdateNotifier;
 
 import java.util.Enumeration;
 import java.util.Vector;
@@ -9,12 +8,12 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 
 
-public class SingleResponseUpdateNotifier implements UpdateNotifier {
+public class SingleResponseUpdateNotifier {
    private static final Logger LOG = Logger.getLogger(SingleResponseUpdateNotifier.class);
     private DataFactory factory;
     private Vector updates = new Vector();
 
-    public void broadcastObjectChanged(NakedObject object) {
+    public void objectChanged(NakedObject object) {
         LOG.debug("Update captured for " + object);
         
         Vector copy;

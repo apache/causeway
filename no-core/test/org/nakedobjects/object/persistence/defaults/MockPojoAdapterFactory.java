@@ -71,6 +71,10 @@ public class MockPojoAdapterFactory implements PojoAdapterFactory {
     public void setupExpectedPojo(Object expectedPojo) {
         this.expectedPojo = expectedPojo;
     }
+
+    public Enumeration getLoadedObjects() {
+        return null;
+    }
 }
 
 

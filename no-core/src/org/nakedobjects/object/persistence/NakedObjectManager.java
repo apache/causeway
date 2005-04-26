@@ -1,5 +1,6 @@
 package org.nakedobjects.object.persistence;
 
+import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedError;
@@ -14,6 +15,8 @@ import org.nakedobjects.utility.StartupException;
 public interface NakedObjectManager extends DebugInfo {
     void abortTransaction();
 
+    void addObjectChangedListener(DirtyObjectSet listener);
+        
     TypedNakedCollection allInstances(NakedObjectSpecification specification);
 
     TypedNakedCollection allInstances(NakedObjectSpecification specification, boolean includeSubclasses);
@@ -136,6 +139,8 @@ public interface NakedObjectManager extends DebugInfo {
      * A count of the number of instances matching the specified pattern.
      */
     int numberOfInstances(NakedObjectSpecification specification);
+
+    void objectChanged(NakedObject object);
 
     void reset();
 

@@ -1,5 +1,6 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.Naked;
@@ -153,6 +154,8 @@ public class MockObjectManager extends AbstractNakedObjectManager {
     public void saveChanges() {}
 
     public void resolveEagerly(NakedObject object, NakedObjectField field) {}
+
+    public void addObjectChangedListener(DirtyObjectSet listener) {}
 }
 
 /*

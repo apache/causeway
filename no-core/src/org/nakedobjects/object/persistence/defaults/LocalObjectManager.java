@@ -1,6 +1,7 @@
 package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
@@ -8,7 +9,6 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.UpdateNotifier;
 import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
 import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.NakedObjectStore;
@@ -33,9 +33,11 @@ import org.apache.log4j.Logger;
 
 public class LocalObjectManager extends AbstractNakedObjectManager {
     private static final Logger LOG = Logger.getLogger(LocalObjectManager.class);
+    private boolean checkObjectsForDirtyFlag;
     private final Hashtable nakedClasses = new Hashtable();
-    private UpdateNotifier notifier;
+    private DirtyObjectSet objectsToBeSaved = new DirtyObjectSet();
     private NakedObjectStore objectStore;
+    private DirtyObjectSet objectsToRefreshViewsFor;
     private OidGenerator oidGenerator;
     private Transaction transaction;
 
@@ -50,6 +52,10 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         } catch (ObjectStoreException e) {
             e.printStackTrace();
         }
+    }
+
+    public void addObjectChangedListener(DirtyObjectSet listener) {
+        this.objectsToRefreshViewsFor = listener;
     }
 
     /**
@@ -103,14 +109,14 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         object.deleted();
         clear(object);
 
-  //      if (NakedObjects.getPojoAdapterFactory().isLoaded(object.getOid())) {
-            NakedObjects.getPojoAdapterFactory().unloaded(object);
-  //      }
+        //      if (NakedObjects.getPojoAdapterFactory().isLoaded(object.getOid())) {
+        NakedObjects.getPojoAdapterFactory().unloaded(object);
+        //      }
     }
 
     public void endTransaction() {
         try {
-            getTransaction().commit(objectStore, notifier);
+            getTransaction().commit(objectStore);
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
@@ -290,6 +296,10 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         return object.getOid() != null;
     }
 
+    private PojoAdapterFactory loadedObjects() {
+        return NakedObjects.getPojoAdapterFactory();
+    }
+
     /**
      * Makes a naked object persistent. The specified object should be stored
      * away via this object store's persistence mechanism, and have an new and
@@ -376,11 +386,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
-       	loadedObjects().loaded(object);
-    }
-
-    private PojoAdapterFactory loadedObjects() {
-        return NakedObjects.getPojoAdapterFactory();
+        loadedObjects().loaded(object);
     }
 
     /**
@@ -396,10 +402,17 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
     }
 
+    public void objectChanged(NakedObject object) {
+        objectsToBeSaved.addDirty(object);
+        if (objectsToRefreshViewsFor != null) {
+            objectsToRefreshViewsFor.addDirty(object);
+        }
+    }
+
     public void reset() {
         NakedObjects.getPojoAdapterFactory().reset();
     }
-    
+
     public void resolveEagerly(NakedObject object, NakedObjectField field) {
         if (object.isResolved() || !isPersistent(object)) {
             return;
@@ -427,15 +440,29 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
     public void saveChanges() {
         LOG.debug("collating changes");
-        Enumeration e = loadedObjects().dirtyObjects();
+        if (checkObjectsForDirtyFlag) {
+            collateChanges();
+        }
+        Enumeration e = objectsToBeSaved.dirtyObjects();
         while (e.hasMoreElements()) {
             NakedObject object = (NakedObject) e.nextElement();
             LOG.debug("  changed " + object);
             if (isPersistent(object)) {
                 getTransaction().addCommand(objectStore.createSaveObjectCommand(object));
             }
-            getTransaction().addNotify(object);
-            object.clearPersistDirty();
+        }
+    }
+
+    private void collateChanges() {
+        PojoAdapterFactory factory = loadedObjects();
+        Enumeration e = factory.getLoadedObjects();
+        while (e.hasMoreElements()) {
+            NakedObject object = (NakedObject) e.nextElement();
+            if (object.getSpecification().isDirty(object)) {
+                objectChanged(object);
+                
+                object.getSpecification().clearDirty(object);
+            }
         }
     }
 
@@ -444,8 +471,8 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
      * 
      * @property
      */
-    public void set_Notifier(UpdateNotifier notifier) {
-        this.notifier = notifier;
+    public void set_CheckObjectsForDirtyFlag(boolean checkObjectsForDirtyFlag) {
+        this.checkObjectsForDirtyFlag = checkObjectsForDirtyFlag;
     }
 
     /**
@@ -466,8 +493,8 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         this.oidGenerator = oidGenerator;
     }
 
-    public void setNotifier(UpdateNotifier notifier) {
-        this.notifier = notifier;
+    public void setCheckObjectsForDirtyFlag(boolean checkObjectsForDirtyFlag) {
+        this.checkObjectsForDirtyFlag = checkObjectsForDirtyFlag;
     }
 
     public void setObjectStore(NakedObjectStore objectStore) {
@@ -485,7 +512,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
             objectStore.shutdown();
             objectStore = null;
             nakedClasses.clear();
-         } catch (ObjectStoreException e) {
+        } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
         super.shutdown();

@@ -9,8 +9,6 @@ import org.nakedobjects.object.reflect.DummyNakedObject;
 import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 
-import java.util.Enumeration;
-
 import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
@@ -104,20 +102,6 @@ public class PojoAdapterFactoryLoadedTest extends TestCase {
         loaded.reset();
         assertEquals(0, loaded.size());
     }
-
-    public void testCheckForDirtyObjects() {
-        Enumeration enumeration = loaded.dirtyObjects();
-        assertFalse(enumeration.hasMoreElements());
-
-        MockNakedObject dirtyObject = new MockNakedObject();
-        dirtyObject.setupDirty();
-        loaded.setup(new DummyOid(), dirtyObject);
-
-        enumeration = loaded.dirtyObjects();
-        assertTrue(enumeration.hasMoreElements());
-        assertEquals(dirtyObject, enumeration.nextElement());
-    }
-
 }
 
 class Cache extends PojoAdapterFactoryImpl {

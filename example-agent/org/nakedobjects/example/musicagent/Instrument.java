@@ -5,12 +5,13 @@ import org.nakedobjects.application.valueholder.TextString;
 
 import java.util.Vector;
 
-public class Instrument {
+public class Instrument extends BaseObject {
     private final Vector musicians =new Vector();
     private final TextString name = new TextString();
 
     public void addToPlayers(Musician player) {
         player.addToInstruments(this);
+		objectChanged();
     }
 
     public TextString getName() {
@@ -24,6 +25,7 @@ public class Instrument {
 
     public void removeFromPlayers(Musician player) {
         player.removeFromInstruments(this);
+		objectChanged();
     }
 
     public Title title() {

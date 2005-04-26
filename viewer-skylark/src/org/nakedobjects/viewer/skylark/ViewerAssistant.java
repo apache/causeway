@@ -8,7 +8,6 @@ import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.undo.UndoStack;
 import org.nakedobjects.utility.DebugFrame;
 import org.nakedobjects.utility.InfoDebugFrame;
-import org.nakedobjects.utility.StartupException;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.OverlayDebugFrame;
 
@@ -40,35 +39,12 @@ public class ViewerAssistant {
         this.updateNotifier = updateNotifier;
     }
     
-	/**
-	 * Expose as a .NET property
-	 * @property
-	 */
-    public void set_UpdateNotifier(ViewUpdateNotifier updateNotifier) {
-        this.updateNotifier = updateNotifier;
-    }
     
     public void setViewer(Viewer viewer) {
         this.viewer = viewer;
     }
     
-	/**
-	 * Expose as a .NET property
-	 * @property
-	 */
-    public void set_Viewer(Viewer viewer) {
-        this.viewer = viewer;
-    }
-    
     public void setDebugFrame(InteractionSpy debugFrame) {
-        this.debugFrame = debugFrame;
-    }
-    
-    /**
-	 * Expose as a .NET property
-	 * @property
-	 */
-    public void set_DebugFrame(InteractionSpy debugFrame) {
         this.debugFrame = debugFrame;
     }
     

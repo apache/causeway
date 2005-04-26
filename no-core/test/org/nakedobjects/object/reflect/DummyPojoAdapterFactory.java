@@ -61,6 +61,10 @@ public class DummyPojoAdapterFactory implements PojoAdapterFactory {
         return null;
     }
 
+    public Enumeration getLoadedObjects() {
+        return null;
+    }
+
 }
 
 

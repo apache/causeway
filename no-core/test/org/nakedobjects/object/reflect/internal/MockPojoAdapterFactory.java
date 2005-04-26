@@ -52,6 +52,10 @@ public class MockPojoAdapterFactory implements PojoAdapterFactory {
         this.adapter = adapter;
     }
 
+    public Enumeration getLoadedObjects() {
+        return null;
+    }
+
 }
 
 

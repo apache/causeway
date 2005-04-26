@@ -28,23 +28,7 @@ public abstract class AbstractNakedObject implements NakedObject {
         makePersistent();
         return null;
     }
-     
 
-     private void checkIsPojoDirty() {
-        NakedObjectSpecification spec = getSpecification();
-        if(spec.isDirty(this)) {
-            markDirty();
-        }
-     }
-
-    public void clearPersistDirty() {
-        isPersistDirty = false;
-    }
-
-    public void clearViewDirty() {
-        isViewDirty = false;
-    }
- 
     /**
      * Copies the fields from the specified instance to the current instance.
      * Each NakedObject object reference is copied across and values for each
@@ -67,12 +51,14 @@ public abstract class AbstractNakedObject implements NakedObject {
             } else if (field instanceof OneToOneAssociation) {
                 setValue((OneToOneAssociation) field, (NakedObject) object.getField(field));
             } else {
-  //              ((NakedValue) field.get(this)).copyObject((Naked) field.get(object));
+                //              ((NakedValue) field.get(this)).copyObject((Naked)
+                // field.get(object));
             }
         }
     }
 
-     public void created() {}
+    public void created() {}
+
     /**
      * A utility method for creating new objects in the context of the system -
      * that is, it is added to the pool of objects the enterprise system
@@ -117,7 +103,7 @@ public abstract class AbstractNakedObject implements NakedObject {
         }
     }
 
-     /**
+    /**
      * Returns the short name from this objects NakedObjectSpecification
      * 
      * TODO allow the reflector to set up a icon name
@@ -129,13 +115,17 @@ public abstract class AbstractNakedObject implements NakedObject {
     public Object getObject() {
         return this;
     }
-    
+
+    private NakedObjectManager getObjectManager() {
+        return NakedObjects.getObjectManager();
+    }
+
     public Oid getOid() {
         return oid;
     }
 
     public NakedObjectSpecification getSpecification() {
-        if(specification == null) {
+        if (specification == null) {
             specification = NakedObjects.getSpecificationLoader().loadSpecification(getObject().getClass());
         }
         return specification;
@@ -151,11 +141,6 @@ public abstract class AbstractNakedObject implements NakedObject {
     public boolean isFinder() {
         return isFinder;
     }
-     
-     public boolean isPersistDirty() {
-         checkIsPojoDirty();
-         return isPersistDirty;
-     }
 
     /**
      * Returns true if this object has an OID set.
@@ -177,11 +162,6 @@ public abstract class AbstractNakedObject implements NakedObject {
     public boolean isSameAs(Naked object) {
         return object == this;
     }
-     
-     public boolean isViewDirty() {
-         checkIsPojoDirty();
-         return isViewDirty;
-     }
 
     public void makeFinder() {
         if (isPersistent()) {
@@ -198,17 +178,6 @@ public abstract class AbstractNakedObject implements NakedObject {
         }
     }
 
-
-    public void markDirty() {
-        isViewDirty = true;
-        isPersistDirty = true;
-        getSpecification().clearDirty(this);
-    }
-
-    private NakedObjectManager getObjectManager() {
-        return NakedObjects.getObjectManager();
-    } 
-    
     public void setNakedClass(NakedObjectSpecification nakedClass) {
         this.specification = nakedClass;
     }
@@ -216,8 +185,9 @@ public abstract class AbstractNakedObject implements NakedObject {
     public void setOid(Oid oid) {
         if (this.oid == null) {
             this.oid = oid;
-            
- //           NakedObjects.getObjectManager().debugCheckObjectForOid(oid, this);
+
+            //           NakedObjects.getObjectManager().debugCheckObjectForOid(oid,
+            // this);
         } else {
             throw new IllegalStateException("The OID is already set (" + this + ")");
         }
@@ -230,12 +200,12 @@ public abstract class AbstractNakedObject implements NakedObject {
             isResolved = true;
         }
     }
-    
-     public String toString() {
+
+    public String toString() {
         StringBuffer s = new StringBuffer();
 
         // datatype
-         s.append(specification == null ? getClass().getName() : specification.getShortName());
+        s.append(specification == null ? getClass().getName() : specification.getShortName());
         s.append(" [");
 
         // type of object - EO, Primitive, Collection, with Status etc
@@ -269,7 +239,7 @@ public abstract class AbstractNakedObject implements NakedObject {
 
         return s.toString();
     }
-    
+
 }
 
 /*

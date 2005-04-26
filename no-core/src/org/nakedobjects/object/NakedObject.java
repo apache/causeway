@@ -21,11 +21,7 @@ public interface NakedObject extends Naked {
 
     void clearCollection(OneToManyAssociation association);
 
-    void clearPersistDirty();
-
     void clearValue(OneToOneAssociation association);
-
-    void clearViewDirty();
 
     /**
      * A lifecycle method called when the object is first created to intialised
@@ -43,6 +39,8 @@ public interface NakedObject extends Naked {
     NakedObject getAssociation(OneToOneAssociation field);
 
     Naked getField(NakedObjectField field);
+
+    NakedObjectField[] getFields();
 
     String getIconName();
 
@@ -64,24 +62,18 @@ public interface NakedObject extends Naked {
 
     boolean isParsable();
 
-    boolean isPersistDirty();
-
     /**
      * Returns true when the object is persistent.
      */
     boolean isPersistent();
 
-    Persistable persistable();
-    
     /**
      * Returns true once the object has been completely read into memory and all
      * it attributes can be validly accessed.
      */
     boolean isResolved();
 
-    boolean isViewDirty();
-
-    void markDirty();
+    Persistable persistable();
 
     void setAssociation(NakedObjectAssociation field, NakedObject associatedObject);
 
@@ -96,9 +88,6 @@ public interface NakedObject extends Naked {
     void setResolved();
 
     void setValue(OneToOneAssociation field, Object object);
-
-    NakedObjectField[] getFields();
-
 }
 
 /*

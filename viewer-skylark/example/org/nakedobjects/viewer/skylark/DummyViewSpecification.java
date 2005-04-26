@@ -1,16 +1,33 @@
-package org.nakedobjects.object.defaults;
+package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.UpdateNotifier;
+public class DummyViewSpecification implements ViewSpecification {
 
+    public View createView(Content content, ViewAxis axis) {
+        return null;
+    }
 
+    public String getName() {
+        return null;
+    }
 
-public class NullUpdateNotifier implements UpdateNotifier {
+    public boolean isOpen() {
+        return false;
+    }
 
-    public void broadcastObjectChanged(NakedObject object) {}
+    public boolean isReplaceable() {
+        return false;
+    }
 
-    public void shutdown() {}
+    public boolean isSubView() {
+        return false;
+    }
+
+    public boolean canDisplay(Content content) {
+        return false;
+    }
+
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete

@@ -1,11 +1,22 @@
 package org.nakedobjects.example.musicagent;
 
+import org.nakedobjects.application.BusinessObjectContainer;
+
 public class BaseObject {
 
-	public void resolve(Object object) {}
+	private BusinessObjectContainer container;
 
-    public void objectChanged() {}
+    public void resolve(Object object) {
+        container.resolve(object);
+    }
 
+    public void objectChanged() {
+        container.objectChanged(this);
+    }
+    
+     public void setContainer(BusinessObjectContainer container)
+    {
+        this.container = container;}
 }
 
 

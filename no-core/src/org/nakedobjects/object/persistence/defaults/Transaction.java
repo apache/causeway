@@ -1,7 +1,6 @@
 package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.UpdateNotifier;
 import org.nakedobjects.object.persistence.CreateObjectCommand;
 import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.NakedObjectStore;
@@ -114,7 +113,7 @@ public class Transaction {
         return alreadyHasCommand(SaveObjectCommand.class, onObject);
     }
 
-    public void commit(NakedObjectStore objectStore, UpdateNotifier notifier) throws ObjectStoreException {
+    public void commit(NakedObjectStore objectStore) throws ObjectStoreException {
         LOG.info("commit transaction " + this);
         if (complete) {
             throw new TransactionException("Transaction already complete; cannot commit");
@@ -127,13 +126,6 @@ public class Transaction {
             objectStore.startTransaction();
             objectStore.runTransaction(commandsArray);
             objectStore.endTransaction();
-        }
-
-        NakedObject object;
-        for (Enumeration e = toNotify.elements(); e.hasMoreElements();) {
-            object = (NakedObject) e.nextElement();
-            LOG.debug("broadcastObjectUpdate " + object);
-            notifier.broadcastObjectChanged(object);
         }
     }
 

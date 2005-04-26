@@ -140,15 +140,6 @@ public abstract class ObjectView extends AbstractView {
         }
     }
     
-    public void updateView() {
-        if(getContent().objectChanged()) {
-            LOG.debug("object changed; view updated: " + getView());
-            getView().refresh();
-        }
-
-        super.updateView();
-    }
-    
     public String toString() {
        return super.toString() + ": " + getContent(); 
     }

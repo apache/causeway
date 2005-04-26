@@ -1,9 +1,9 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.UpdateNotifier;
 import org.nakedobjects.utility.DebugInfo;
 
 import java.util.Enumeration;
@@ -13,10 +13,15 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 
 
-public class ViewUpdateNotifier implements UpdateNotifier, DebugInfo {
+public class ViewUpdateNotifier extends DirtyObjectSet implements DebugInfo {
     private static final Logger LOG = Logger.getLogger(ViewUpdateNotifier.class);
-    private Hashtable views = new Hashtable();
+    protected Hashtable views = new Hashtable();
+//    private DirtyObjectSet viewChanges = new DirtyObjectSet();
 
+    public ViewUpdateNotifier() {
+//        NakedObjects.getObjectManager().addObjectChangedListener(viewChanges);
+    }
+    
     public void add(View view) {
         Content content = view.getContent();
         if (content instanceof ObjectContent) {
@@ -40,8 +45,8 @@ public class ViewUpdateNotifier implements UpdateNotifier, DebugInfo {
             }
         }
     }
-
-    public void broadcastObjectChanged(NakedObject object) {
+/*
+    public void objectChanged(NakedObject object) {
         Vector viewsToNotify = (Vector) views.get(object);
 
         if (viewsToNotify == null || viewsToNotify.size() == 0) {
@@ -54,7 +59,7 @@ public class ViewUpdateNotifier implements UpdateNotifier, DebugInfo {
             }
         }
     }
-
+*/
     public String getDebugData() {
         StringBuffer buf = new StringBuffer();
         Enumeration f = views.keys();
@@ -71,10 +76,8 @@ public class ViewUpdateNotifier implements UpdateNotifier, DebugInfo {
                 buf.append("        " + view);
                 buf.append("\n");
             }
-
             buf.append("\n");
         }
-
         return buf.toString();
     }
 
@@ -104,22 +107,28 @@ public class ViewUpdateNotifier implements UpdateNotifier, DebugInfo {
         }
     }
 
-    public void shutdown() {}
+    public void shutdown() {
+        views.clear();
+        //viewChanges.shutdown();
+    }
 
-    public void checkViewsForUpdates() {
-        Enumeration objects = views.keys();
+    public void invalidateViewsForChangedObjects() {
+       Enumeration objects = dirtyObjects();
         while (objects.hasMoreElements()) {
             NakedObject object = (NakedObject) objects.nextElement();
-            if (object.isViewDirty()) {
-                Enumeration e = ((Vector) views.get(object)).elements();
-                while (e.hasMoreElements()) {
-                    View view = (View) e.nextElement();
-                    view.invalidateContent();
-                }
-                object.clearViewDirty();
+            LOG.debug("Invalidate views for " + object);
+            Object viewsVector = this.views.get(object);
+            if(viewsVector == null) {
+                continue;
+            }
+            Enumeration views = ((Vector) viewsVector).elements();
+            while (views.hasMoreElements()) {
+                View view = (View) views.nextElement();
+                LOG.debug("   - " + view);
+                view.invalidateContent();
             }
         }
-    }
+     }
 }
 /*
  * Naked Objects - a framework that exposes behaviourally complete business

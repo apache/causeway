@@ -5,10 +5,8 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.reflect.DummyNakedObject;
-import org.nakedobjects.object.reflect.DummyPojoAdapterFactory;
 import org.nakedobjects.object.security.Session;
 
 import java.lang.reflect.Method;

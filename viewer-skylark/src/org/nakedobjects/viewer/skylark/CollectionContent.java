@@ -19,10 +19,6 @@ public abstract class CollectionContent extends AbstractContent implements Conte
         throw new UnexpectedCallException();
     }
 
-    public boolean objectChanged() {
-        return false;
-    }
-
     public void parseTextEntry(String entryText) throws InvalidEntryException {
         throw new UnexpectedCallException();
     }

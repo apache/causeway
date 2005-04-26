@@ -1,7 +1,6 @@
 package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.object.MockObjectStore;
-import org.nakedobjects.object.MockUpdateNotifier;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.persistence.CreateObjectCommand;
 import org.nakedobjects.object.persistence.DestroyObjectCommand;
@@ -25,7 +24,6 @@ public class TransactionTest extends TestCase {
     NakedObject object2;
     MockObjectStore os;
     private Transaction t;
-    MockUpdateNotifier updates;
 
     private CreateObjectCommand createCreateCommand(final NakedObject object, final String name) {
         return new CreateObjectCommand() {
@@ -76,7 +74,6 @@ public class TransactionTest extends TestCase {
 
         t = new Transaction();
         os = new MockObjectStore();
-        updates = new MockUpdateNotifier();
 
         object1 = new DummyNakedObject();
         object2 = new DummyNakedObject();
@@ -93,7 +90,7 @@ public class TransactionTest extends TestCase {
     public void testAddCommands() throws Exception {
         t.addCommand(createSaveCommand(object1, "command 1"));
         t.addCommand(createSaveCommand(object2, "command 2"));
-        t.commit(os, updates);
+        t.commit(os);
 
         os.assertAction(0, "start");
         os.assertAction(1, "run command 1");
@@ -110,7 +107,7 @@ public class TransactionTest extends TestCase {
          */
         t.addCommand(createSaveCommand(object1, "save object 1"));
         t.addCommand(createSaveCommand(object2, "save object 2"));
-        t.commit(os, updates);
+        t.commit(os);
 
         os.assertAction(0, "start");
         os.assertAction(1, "run create object 1");
@@ -122,7 +119,7 @@ public class TransactionTest extends TestCase {
     public void testAddDestoryCommandsButRemovePreviousSaveForSameObject() throws Exception {
         t.addCommand(createSaveCommand(object1, "save object 1"));
         t.addCommand(createDestroyCommand(object1, "destroy object 1"));
-        t.commit(os, updates);
+        t.commit(os);
 
         os.assertAction(0, "start");
         os.assertAction(1, "run destroy object 1");
@@ -134,7 +131,7 @@ public class TransactionTest extends TestCase {
         t.addCommand(createCreateCommand(object1, "create object 1"));
         t.addCommand(createDestroyCommand(object1, "destroy object 1"));
         t.addCommand(createDestroyCommand(object2, "destroy object 2"));
-        t.commit(os, updates);
+        t.commit(os);
 
         os.assertAction(0, "start");
         os.assertAction(1, "run destroy object 2");
@@ -145,7 +142,7 @@ public class TransactionTest extends TestCase {
     public void testIgnoreSaveAfterDeleteForSameObject() throws Exception {
         t.addCommand(createDestroyCommand(object1, "destroy object 1"));
         t.addCommand(createSaveCommand(object1, "save object 1"));
-        t.commit(os, updates);
+        t.commit(os);
 
         os.assertAction(0, "start");
         os.assertAction(1, "run destroy object 1");
@@ -154,14 +151,14 @@ public class TransactionTest extends TestCase {
     }
 
     public void testNoCommands() throws Exception {
-        t.commit(os, updates);
+        t.commit(os);
         assertEquals(0, os.getActions().size());
     }
 
     public void testNoTransactionsWhenCommandCancelEachOtherOut() throws Exception {
         t.addCommand(createCreateCommand(object1, "create object 1"));
         t.addCommand(createDestroyCommand(object1, "destroy object 1"));
-        t.commit(os, updates);
+        t.commit(os);
 
         assertEquals(0, os.getActions().size());
     }
@@ -175,13 +172,13 @@ public class TransactionTest extends TestCase {
         } catch (TransactionException expected) {}
 
         try {
-            t.commit(os, updates);
+            t.commit(os);
             fail();
         } catch (TransactionException expected) {}
     }
 
     public void testTransactionAlreadyCompleteAfterCommit() throws Exception {
-        t.commit(os, updates);
+        t.commit(os);
 
         try {
             t.abort();
@@ -189,7 +186,7 @@ public class TransactionTest extends TestCase {
         } catch (TransactionException expected) {}
 
         try {
-            t.commit(os, updates);
+            t.commit(os);
             fail();
         } catch (TransactionException expected) {}
     }

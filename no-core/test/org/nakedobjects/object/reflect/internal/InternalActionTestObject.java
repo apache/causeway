@@ -1,6 +1,5 @@
 package org.nakedobjects.object.reflect.internal;
 
-import org.nakedobjects.object.MockNakedObject;
 
 public class InternalActionTestObject {
     public void actionMethod() {}

@@ -3,14 +3,13 @@ package org.nakedobjects.viewer.skylark;
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.ApplicationContext;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.special.RootWorkspaceSpecification;
 
 public class SkylarkViewer {
     private ViewUpdateNotifier updateNotifier;
-    ViewerFrame frame;
-    Viewer viewer;
+    private ViewerFrame frame;
+    private Viewer viewer;
     
     public SkylarkViewer() {
 
@@ -57,10 +56,6 @@ public class SkylarkViewer {
         viewer.setRootView(view);
         
         frame.setTitle(applicationContext.name());
-    }
-
-    public void setObjectManager(LocalObjectManager objectManager) {
-        objectManager.setNotifier(updateNotifier);
     }
 
     public void setShutdownListener(ObjectViewingMechanismListener listener) {

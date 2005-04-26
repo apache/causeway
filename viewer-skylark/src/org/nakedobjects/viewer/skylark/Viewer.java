@@ -5,7 +5,6 @@ import org.nakedobjects.container.configuration.ComponentException;
 import org.nakedobjects.container.configuration.ComponentLoader;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.UpdateNotifier;
 import org.nakedobjects.utility.DebugFrame;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.basic.EmptyField;
@@ -96,10 +95,6 @@ public class Viewer {
 
     public View getOverlayView() {
         return overlayView;
-    }
-
-    public UpdateNotifier getUpdateNotifier() {
-        return updateNotifier;
     }
 
     public void init(RenderingArea renderingArea, NakedObject object, ObjectViewingMechanismListener listener)
@@ -208,7 +203,7 @@ public class Viewer {
 
     void repaint() {
         LOG.debug("Repaint viewer");
-        updateNotifier.checkViewsForUpdates();
+        updateNotifier.invalidateViewsForChangedObjects();
         rootView.layout();
         if (redrawArea != null) {
             Bounds area;
@@ -567,14 +562,6 @@ public class Viewer {
         this.renderingArea = renderingArea;
     }
     
-    /**
-	 * Expose as a .NET property
-	 * @property
-	 */
-    public void set_RenderingArea(RenderingArea renderingArea) {
-        this.renderingArea = renderingArea;
-    }
-    
     public void setListener(ObjectViewingMechanismListener listener) {
         this.listener = listener;
     }
@@ -582,26 +569,11 @@ public class Viewer {
     public void setSpy(InteractionSpy spy) {
         this.spy = spy;
     }
-    
-    /**
-	 * Expose as a .NET property
-	 * @property
-	 */
-    public void set_Spy(InteractionSpy spy) {
-        this.spy = spy;
-    }
 
     public void setUpdateNotifier(ViewUpdateNotifier updateNotifier) {
         this.updateNotifier = updateNotifier;
     }
 
-    /**
-	 * Expose as a .NET property
-	 * @property
-	 */
-    public void set_UpdateNotifier(ViewUpdateNotifier updateNotifier) {
-        this.updateNotifier = updateNotifier;
-    }
 }
 
 /*

@@ -20,6 +20,8 @@ import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.UnexpectedCallException;
 import org.nakedobjects.viewer.skylark.basic.AbstractContent;
 
+import org.apache.log4j.Logger;
+
 
 public abstract class ObjectContent extends AbstractContent {
 
@@ -147,15 +149,6 @@ public abstract class ObjectContent extends AbstractContent {
             }
         });
 
-    }
-
-    public boolean objectChanged() {
-        if (((NakedObject) getObject()).isViewDirty()) {
-            ((NakedObject) getObject()).clearViewDirty();
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public void parseTextEntry(String entryText) throws InvalidEntryException {

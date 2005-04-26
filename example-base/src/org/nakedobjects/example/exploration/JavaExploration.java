@@ -169,8 +169,7 @@ public class JavaExploration {
             context.addClass(classes[i]);
         }
         viewer.setApplication(context);
-        viewer.setObjectManager((LocalObjectManager) NakedObjects.getObjectManager());
-        viewer.show();
+         viewer.show();
 
         if (splash != null) {
             splash.toFront();

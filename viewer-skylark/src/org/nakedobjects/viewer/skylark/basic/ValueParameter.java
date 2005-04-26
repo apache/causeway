@@ -83,10 +83,6 @@ class ValueParameter extends ValueContent implements ParameterContent {
         return specification;
     }
 
-    public boolean objectChanged() {
-        return false;
-    }
-
     public Naked drop(Content sourceContent) {
         return null;
     }

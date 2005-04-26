@@ -35,6 +35,8 @@ public class MockView implements View {
     private View[] subviews;
     private Content content;
 
+    public boolean invalidateContentCalled;
+
     public void addView(View view) {
         addActual("add " + view);
     }
@@ -112,7 +114,7 @@ public class MockView implements View {
         return content;
     }
 
-    public void setUpContent(Content content) {
+    public void setupContent(Content content) {
         this.content = content;
     }
 
@@ -152,7 +154,7 @@ public class MockView implements View {
         return subviews;
     }
 
-    public void setUpSubviews(View[] subviews) {
+    public void setupSubviews(View[] subviews) {
         this.subviews = subviews;
     }
 
@@ -176,7 +178,9 @@ public class MockView implements View {
         return false;
     }
 
-    public void invalidateContent() {}
+    public void invalidateContent() {
+        invalidateContentCalled = true;
+    }
 
     public void invalidateLayout() {}
 

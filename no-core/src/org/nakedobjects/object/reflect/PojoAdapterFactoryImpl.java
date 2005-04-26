@@ -21,18 +21,17 @@ import org.nakedobjects.utility.DebugString;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
 
 public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
     private static final Logger LOG = Logger.getLogger(PojoAdapterFactoryImpl.class);
+    protected Hashtable loaded = new Hashtable();
 
     private PojoAdapterHash pojos;
-    protected Hashtable loaded = new Hashtable();
     private ReflectorFactory reflectorFactory;
-    
+
     public Naked createAdapter(Object pojo) {
         if (pojo == null) {
             return null;
@@ -78,6 +77,66 @@ public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
         return (NakedObject) createAdapter(pojo);
     }
 
+    public String getDebugData() {
+        DebugString debug = new DebugString();
+        Enumeration e = loaded.keys();
+        while (e.hasMoreElements()) {
+            Oid oid = (Oid) e.nextElement();
+            NakedObject object = (NakedObject) loaded.get(oid);
+            debug.append(oid.toString());
+            debug.append("    ");
+            debug.appendln(object.toString());
+        }
+        debug.appendln();
+        debug.append(pojos.getDebugData());
+        return debug.toString();
+    }
+
+    public String getDebugTitle() {
+        return "Loaded objects and POJOs";
+    }
+
+    public NakedObject getLoadedObject(Oid oid) {
+        if (oid == null) {
+            throw new IllegalArgumentException("OID is null");
+        }
+        return (NakedObject) loaded.get(oid);
+    }
+
+    public Enumeration getLoadedObjects() {
+        return loaded.elements();
+    }
+
+    public boolean isLoaded(Oid oid) {
+        if (oid == null) {
+            throw new IllegalArgumentException("OID is null");
+        }
+        return loaded.containsKey(oid);
+    }
+
+    public void loaded(NakedObject object) throws ResolveException {
+        Oid oid = object.getOid();
+        if (oid == null) {
+            throw new IllegalArgumentException("OID is null");
+        }
+        if (isLoaded(oid)) {
+            throw new NakedObjectRuntimeException("cannot add as loaded object; oid " + oid + " already present: "
+                    + getLoadedObject(oid));
+        }
+        if (loaded.contains(object)) {
+            throw new NakedObjectRuntimeException(
+                    "cannot add as loaded object; object already present, but with a different oid: " + object);
+        }
+
+        LOG.debug("Added loaded object " + object + " as " + oid);
+        loaded.put(oid, object);
+    }
+
+    public void reset() {
+        loaded.clear();
+        pojos.reset();
+    }
+
     /**
      * Expose as a .Net property.
      * 
@@ -111,89 +170,11 @@ public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
         reflectorFactory = null;
     }
 
-
-    public String getDebugTitle() {
-        return "Loaded objects and POJOs";
-    }
-
-    public String getDebugData() {
-        DebugString debug = new DebugString();
-        Enumeration e = loaded.keys();
-        while (e.hasMoreElements()) {
-            Oid oid = (Oid) e.nextElement();
-            NakedObject object = (NakedObject) loaded.get(oid);
-            debug.append(oid.toString());
-            debug.append("    ");
-            debug.appendln(object.toString());
-        }
-        debug.appendln();
-        debug.append(pojos.getDebugData());
-        return debug.toString();
-    }
-
-    public void reset() {
-        loaded.clear();
-        pojos.reset();
-    }
-
-    
-    
-    
-    
-    
-    
-    
-
-    public NakedObject getLoadedObject(Oid oid) {
-        if (oid == null) {
-            throw new IllegalArgumentException("OID is null");
-        }
-        return (NakedObject) loaded.get(oid);
-    }
-
-    public boolean isLoaded(Oid oid) {
-        if (oid == null) {
-            throw new IllegalArgumentException("OID is null");
-        }
-        return loaded.containsKey(oid);
-    }
-
-    public void loaded(NakedObject object) throws ResolveException {
-        Oid oid = object.getOid();
-        if (oid == null) {
-            throw new IllegalArgumentException("OID is null");
-        }
-        if (isLoaded(oid)) {
-            throw new NakedObjectRuntimeException("cannot add as loaded object; oid " + oid + " already present: "
-                    + getLoadedObject(oid));
-        }
-        if (loaded.contains(object)) {
-            throw new NakedObjectRuntimeException("cannot add as loaded object; object already present, but with a different oid: " + object  );
-        }
-        
-        LOG.debug("Added loaded object " + object + " as " + oid);
-        loaded.put(oid, object);
-    }
-
     public void unloaded(NakedObject object) {
         Assert.assertTrue("cannot unload object as it is not loaded", loaded.contains(object));
         LOG.debug("Removed loaded object " + object);
         loaded.remove(object.getOid());
     }
-
-    public Enumeration dirtyObjects() {
-        Enumeration allObjects = loaded.elements();
-        Vector v = new Vector();
-        while (allObjects.hasMoreElements()) {
-            NakedObject object = (NakedObject) allObjects.nextElement();
-            if (object.isPersistDirty()) {
-                v.addElement(object);
-            }
-        }
-        return v.elements();
-    }
-
-
 }
 
 /*

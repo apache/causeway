@@ -27,8 +27,7 @@ public interface PojoAdapterFactory extends DebugInfo {
 
     void unloaded(NakedObject object);
 
-    Enumeration dirtyObjects();
-    
+    Enumeration getLoadedObjects();
 }
 
 /*

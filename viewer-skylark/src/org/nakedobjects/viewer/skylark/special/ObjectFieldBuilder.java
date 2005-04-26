@@ -66,7 +66,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         } else {
             updateBuild(view, object, flds);
         }
-        object.clearViewDirty();
+        // object.clearViewDirty();
     }
 
     public View createCompositeView(Content content, CompositeViewSpecification specification, ViewAxis axis) {

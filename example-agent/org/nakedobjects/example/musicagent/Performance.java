@@ -23,6 +23,7 @@ public class Performance extends BaseObject {
     public void addParts(Part part) {
         parts.add(part);
         part.setPerformance(this);
+		objectChanged();
     }
 
     public Date getDate() {
@@ -48,6 +49,7 @@ public class Performance extends BaseObject {
     public void removeParts(Part part) {
         parts.remove(part);
         part.setPerformance(null);
+		objectChanged();
     }
 
     public Title title() {

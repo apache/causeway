@@ -7,7 +7,7 @@ import java.util.Vector;
 
 
 
-public class Musician {
+public class Musician extends BaseObject {
 	private final TextString name = new TextString();
 	private final Vector instruments =  new Vector();
 	private final Vector parts = new Vector();
@@ -20,11 +20,13 @@ public class Musician {
 	public void addToParts(Part part) {
 		parts.add(part);
 		part.setMusician(this);
+		objectChanged();
 	}
 	
 	public void removeFromParts(Part part) {
 		parts.remove(part);	
 		part.setMusician(null);
+		objectChanged();
 	}
 	
 	public Vector getParts() {
@@ -34,11 +36,13 @@ public class Musician {
 	public void addToInstruments(Instrument instrument) {
 		instruments.add(instrument);
 		instrument.getPlayers().add(this);
+		objectChanged();
 	}
 	
 	public void removeFromInstruments(Instrument instrument) {
 		instruments.remove(instrument);	
 		instrument.getPlayers().remove(this);
+		objectChanged();
 	}
 	
 	public Vector getInstruments() {

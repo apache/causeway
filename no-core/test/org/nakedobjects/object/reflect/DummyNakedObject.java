@@ -8,7 +8,6 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.persistence.defaults.TestObject;
 import org.nakedobjects.object.security.Session;
 
 

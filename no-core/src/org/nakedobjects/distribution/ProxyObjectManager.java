@@ -1,6 +1,7 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
@@ -17,7 +18,6 @@ import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
 
-import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
@@ -34,6 +34,8 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         connection.abortTransaction(session);
     }
 
+    public void addObjectChangedListener(DirtyObjectSet listener) {}
+    
     public TypedNakedCollection allInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
         LOG.debug("getInstances of " + specification);
         ObjectData data[] = connection.allInstances(session, specification.getFullName(), false);
@@ -166,14 +168,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     }
 
     public void saveChanges() {
-        LOG.debug("Saving changes");
-        Enumeration e = loadedObjects().dirtyObjects();
-        while (e.hasMoreElements()) {
-            NakedObject object = (NakedObject) e.nextElement();
-            LOG.debug("  " + object);
-            objectChanged(object);
-            object.clearPersistDirty();
-        }
+        LOG.debug("saveChanges - ignored by proxy manager");
     }
 
     /**

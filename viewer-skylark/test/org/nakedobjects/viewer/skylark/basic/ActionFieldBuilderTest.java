@@ -57,12 +57,12 @@ public class ActionFieldBuilderTest extends TestCase {
         actionContent = ActionHelper.createInstance(object, action);
 
         view = new MockView();
-        view.setUpContent(new ActionContent(actionContent));
+        view.setupContent(new ActionContent(actionContent));
     }
 
     // TODO fails on server as cant load X11 for Text class
     public void xxxtestNewBuild() {
-        view.setUpSubviews(new View[0]);
+        view.setupSubviews(new View[0]);
 
         view.addAction("add TextView0 null");
         view.addAction("add MockView1/LabelBorder");
@@ -76,8 +76,8 @@ public class ActionFieldBuilderTest extends TestCase {
     public void testUpdateBuild() {
         MockView[] views = new MockView[2];
         views[1] = new MockView();
-        views[1].setUpContent(new ObjectParameter("name", null, null, 1, actionContent));
-        view.setUpSubviews(views);
+        views[1].setupContent(new ObjectParameter("name", null, null, 1, actionContent));
+        view.setupSubviews(views);
 
         builder.build(view);
 
@@ -90,8 +90,8 @@ public class ActionFieldBuilderTest extends TestCase {
         MockView[] views = new MockView[2];
         views[1] = new MockView();
         ObjectParameter objectParameter = new ObjectParameter("name", null, null, 1, actionContent);
-        views[1].setUpContent(objectParameter);
-        view.setUpSubviews(views);
+        views[1].setupContent(objectParameter);
+        view.setupSubviews(views);
         
         actionContent.setParameter(0, new DummyNakedObject());
         
@@ -107,8 +107,8 @@ public class ActionFieldBuilderTest extends TestCase {
         MockView[] views = new MockView[2];
         views[1] = new MockView();
         ObjectParameter objectParameter = new ObjectParameter("name", new DummyNakedObject(), null, 1, actionContent);
-        views[1].setUpContent(objectParameter);
-        view.setUpSubviews(views);
+        views[1].setupContent(objectParameter);
+        view.setupSubviews(views);
         
         objectParameter.setObject(null);
 
@@ -123,8 +123,8 @@ public class ActionFieldBuilderTest extends TestCase {
         MockView[] views = new MockView[2];
         views[1] = new MockView();
         ObjectParameter objectParameter = new ObjectParameter("name", new DummyNakedObject(), null, 1, actionContent);
-        views[1].setUpContent(objectParameter);
-        view.setUpSubviews(views);
+        views[1].setupContent(objectParameter);
+        view.setupSubviews(views);
         
         objectParameter.setObject(new DummyNakedObject());
 
@@ -140,8 +140,8 @@ public class ActionFieldBuilderTest extends TestCase {
         views[1] = new MockView();
         DummyNakedObject dummyNakedObject = new DummyNakedObject();
         ObjectParameter objectParameter = new ObjectParameter("name", dummyNakedObject, null, 1, actionContent);
-        views[1].setUpContent(objectParameter);
-        view.setUpSubviews(views);
+        views[1].setupContent(objectParameter);
+        view.setupSubviews(views);
         
         actionContent.setParameter(0, dummyNakedObject);
  //       objectParameter.setObject(dummyNakedObject);

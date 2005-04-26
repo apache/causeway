@@ -12,7 +12,6 @@ import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.object.security.Session;
 
-import java.util.Date;
 import java.util.Vector;
 
 import junit.framework.TestSuite;

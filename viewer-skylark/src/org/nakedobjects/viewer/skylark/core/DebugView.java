@@ -207,9 +207,7 @@ public class DebugView implements DebugInfo {
                 NakedObject object = (NakedObject) naked;
 	            text.appendln(2, "  ID", object.getOid());
 	            text.appendln(2, "  Persistent", object.isPersistent());
-	            text.appendln(2, "  Persist dirty", object.isPersistDirty());
 	            text.appendln(2, "  Resolved", object.isResolved());
-	            text.appendln(2, "  View dirty", object.isViewDirty());
             }
         }
         return text.toString();

@@ -18,6 +18,7 @@ public class MockNakedObject implements NakedObject {
     private NakedObjectSpecification specification;
     private String titleString;
     private boolean persistDirty;
+    private boolean viewDirty;
 
     public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
 
@@ -122,7 +123,7 @@ public class MockNakedObject implements NakedObject {
     }
 
     public boolean isViewDirty() {
-        return false;
+        return viewDirty;
     }
 
     public void markDirty() {}
@@ -166,6 +167,10 @@ public class MockNakedObject implements NakedObject {
 
     public void setupDirty() {
         persistDirty = true;    
+    }
+
+    public void setupViewDirty(boolean b) {
+        viewDirty = b;
     }
 }
 

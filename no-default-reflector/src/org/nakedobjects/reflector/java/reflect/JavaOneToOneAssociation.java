@@ -111,7 +111,8 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
                    (AbstractNakedValue) get(inObject).getObject();
                    // value object is different!
                }*/
-                inObject.markDirty();
+                NakedObjects.getObjectManager().objectChanged(inObject);
+                //inObject.markDirty();
             } else {
                 setMethod.invoke(inObject.getObject(), new Object[] { setValue });
             }
@@ -223,13 +224,14 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         }
     }
 
-    public void parseTextEntry(NakedObject fromObject, String text) throws TextEntryParseException, InvalidEntryException {
+    public void parseTextEntry(NakedObject inObject, String text) throws TextEntryParseException, InvalidEntryException {
         if (setMethod == null) {
             try {
-                Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
+                Object obj = getMethod.invoke(inObject.getObject(), new Object[0]);
                 BusinessValueHolder value = (BusinessValueHolder) obj;
                 value.parseUserEntry(text);
-                fromObject.markDirty();
+                NakedObjects.getObjectManager().objectChanged(inObject);
+               // fromObject.markDirty();
             } catch (InvocationTargetException e) {
                 invocationException("Exception executing " + getMethod, e);
             } catch (IllegalAccessException ignore) {
@@ -241,7 +243,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
 
         } else {
             try {
-                setMethod.invoke(fromObject.getObject(), new Object[] { text });
+                setMethod.invoke(inObject.getObject(), new Object[] { text });
             } catch (InvocationTargetException e) {
                 invocationException("Exception executing " + setMethod, e);
             } catch (IllegalAccessException ignore) {

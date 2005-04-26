@@ -28,6 +28,8 @@ public interface BusinessObjectContainer {
     void save(Object object);
 
     long serialNumber(String sequence);
+
+    void objectChanged(Object object);
 }
 
 /*

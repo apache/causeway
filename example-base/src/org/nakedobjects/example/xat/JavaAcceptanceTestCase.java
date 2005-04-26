@@ -5,7 +5,6 @@ import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
-import org.nakedobjects.object.defaults.NullUpdateNotifier;
 import org.nakedobjects.object.fixture.FixtureBuilder;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
@@ -61,7 +60,6 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
 
         LocalObjectManager objectManager = new LocalObjectManager();
         objectManager.setObjectStore(objectStore);
-        objectManager.setNotifier(new NullUpdateNotifier());
         objectManager.setObjectFactory(objectFactory);
         objectManager.setOidGenerator(oidGenerator);
 

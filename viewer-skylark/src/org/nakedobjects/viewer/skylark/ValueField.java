@@ -125,10 +125,6 @@ public class ValueField extends ValueContent implements FieldContent {
         return title();
     }
 
-    public boolean objectChanged() {
-        return false;
-    }
-
     public Naked drop(Content sourceContent) {
         return null;
     }
