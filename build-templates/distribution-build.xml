@@ -46,7 +46,7 @@
 
 	<target name="new-release-number">
 		<tstamp>
-			<format property="build.date" pattern="yyyyMMdd-HH00" locale="en" />
+			<format property="build.date" pattern="yyyyMMdd-HH00" locale="GMT" />
 		</tstamp>
 		<property name="build.id" value="pojo-${build.date}"/>
 		<echo>Build number: ${build.id}</echo>
