@@ -1,5 +1,6 @@
 package org.nakedobjects.distribution;
 
+import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.NakedObject;
 
 import java.util.Enumeration;
@@ -8,14 +9,13 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 
 
-public class SingleResponseUpdateNotifier {
+public class SingleResponseUpdateNotifier implements DirtyObjectSet {
    private static final Logger LOG = Logger.getLogger(SingleResponseUpdateNotifier.class);
     private DataFactory factory;
     private Vector updates = new Vector();
 
-    public void objectChanged(NakedObject object) {
+    public void addDirty(NakedObject object) {
         LOG.debug("Update captured for " + object);
-        
         Vector copy;
         synchronized(updates) {
             copy = (Vector) updates.clone();
@@ -31,6 +31,7 @@ public class SingleResponseUpdateNotifier {
     
     public UpdatePackager createUpdatePackager() {
         UpdatePackager updatePackager = new UpdatePackager();
+        LOG.debug("create update packager");
         updates.addElement(updatePackager);
         return updatePackager;
     }
@@ -38,7 +39,7 @@ public class SingleResponseUpdateNotifier {
     public void remove(UpdatePackager updatePackager) {
         updates.removeElement(updatePackager);
     }
-    
+
     public void setFactory(DataFactory factory) {
         this.factory = factory;
     }
