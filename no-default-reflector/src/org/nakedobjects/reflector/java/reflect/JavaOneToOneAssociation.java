@@ -97,8 +97,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         } catch (IllegalAccessException ignore) {
             LOG.error("Illegal access of " + setMethod, ignore);
         } catch (ValueParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOG.error("Parse error: " + setValue, e);
         }
     }
 
@@ -107,12 +106,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
 
         try {
             if (setMethod == null) {
-           /*    if(get(inObject).getObject() != setValue) {
-                   (AbstractNakedValue) get(inObject).getObject();
-                   // value object is different!
-               }*/
                 NakedObjects.getObjectManager().objectChanged(inObject);
-                //inObject.markDirty();
             } else {
                 setMethod.invoke(inObject.getObject(), new Object[] { setValue });
             }
