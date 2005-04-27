@@ -1,7 +1,6 @@
 package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.DummyNakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 
@@ -23,12 +22,6 @@ public class PojoAdapterTest extends TestCase {
 		pojoAdapterFactory = new PojoAdapterFactoryImpl();
 		pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
         pojoAdapterFactory.setReflectorFactory(new DummyReflectorFactory());
-    }
-
-    public void testTitleStringWhereThereIsNoSpecification() {
-        NakedObjects.setSpecificationLoader(new DummyNakedObjectSpecificationLoader());
-        NakedObject pa = pojoAdapterFactory.createNOAdapter(new TestPojo());
-        assertEquals("",  pa.titleString());
     }
 
     public void testTitleStringWhereSpecificationProvidesTitleFromObject() {
