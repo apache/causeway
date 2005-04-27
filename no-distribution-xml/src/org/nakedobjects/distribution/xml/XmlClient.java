@@ -103,7 +103,6 @@ public class XmlClient implements ClientDistribution {
         for (int i = 0; i < updates.length; i++) {
             DataHelper.update(updates[i]);
         }
-//        response.update();
     }
 
     public void setAssociation(Session session, String fieldIdentifier, Oid objectOid, String objectType, Oid associateOid,
