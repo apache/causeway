@@ -49,14 +49,18 @@
 			<format property="build.date" pattern="yyyyMMdd-HH00" locale="GMT" />
 		</tstamp>
 		<property name="build.id" value="pojo-${build.date}"/>
-		<echo>Build number: ${build.id}</echo>
+		<!--echo>Build number: ${build.id}</echo-->
 	</target>
 
 	<target name="clean">
 		<delete dir="${build.dir}" />
 	</target>
 
-	<target name="distribution">
+	<target name="distribution" depends="-init, prepare, compile, test, copy-images, dists">
+		<fail if="failure" message="Tests failed" />
+	</target>
+	
+	<target name="-init">
 		<echo>Create ${distribution} distribution</echo>
 		<echo>Version ${build.version}  ${build.id}</echo>
 
@@ -67,8 +71,13 @@
 		<property name="dist.test.dir" value="${dist.dir}/doc/test" />
 		<property name="dist.example.dir" value="${dist.dir}/example" />
 		<property name="dist.api.dir" value="${dist.dir}/doc/api" />
+	</target>
 
+	<target name="check" depends="prepare, compile, test">
+		<fail if="failure" message="Tests failed" />
+	</target>
 
+	<target name="prepare">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.src.dir}" />
 		<mkdir dir="${build.test.dir}" />
@@ -99,15 +108,12 @@
 			<fileset dir="${core.dir}/${src.dir}/images" />
 		</copy>
 
-
-
-
-
 		<!-- other projects -->
-		<antcall target="copy"/>
+		<antcall target="copy-src"/>
 		<!-- end copy other projects -->
+	</target>
 
-
+	<target name="compile">
 		<!-- compile  framework -->
 		<mkdir dir="${build.classes.src}" />
 		<javac srcdir="${build.src.dir}"
@@ -152,6 +158,9 @@
 			<classpath path="${build.classes.example}"/>
 		</javac>
 
+	</target>
+
+	<target name="test">
 		<!-- Run the tests -->
 		<delete failonerror="false" dir="${test.run.dir}" />
 		<mkdir dir="${test.run.dir}" />
@@ -159,7 +168,6 @@
 		<patternset id="test.sources">
 			<include name="**/*Test.java" />
 			<include name="**/*Tests.java" />
-
 			<exclude name="**/All*Tests.java" />
 		</patternset>
 
@@ -192,7 +200,12 @@
 			<report format="frames" todir="${dist.test.dir}" />
 		</junitreport>
 		<delete dir="${build.dir}/tmp" />
+	</target>
+		
 
+
+
+	<target name="dists">
 		<!-- copy in:
 				properties files
 				examples & example code in html
@@ -256,8 +269,6 @@
 			<zipfileset dir="${dist.dir}" prefix="nakedobjects-${distribution}-${build.id}"/>
 		</zip>
 
-		<fail if="failure" message="Tests failed" />
-
 	</target>
 
 
@@ -278,6 +289,3 @@
 	
 		<touch file="${install.dir}/version-${build.id}"/>
 	</target>
-
-
-

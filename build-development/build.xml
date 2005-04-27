@@ -14,7 +14,7 @@
 	
 	&distribution;
 
-	<target name="copy">
+	<target name="copy-src">
 		<copy todir="${build.src.dir}">
 			<fileset dir="../viewer-skylark/${src.dir}" />
 			<fileset dir="../no-xat/${src.dir}" />
@@ -43,13 +43,14 @@
 			<fileset dir="../os-file/${test.dir}" />
 		</copy>
 
+	</target>
+	
+	<target name="copy-images">
 		<copy todir="${dist.images.dir}">
 			<fileset dir="../example-ecs/src/images" />
 			<fileset dir="../example-expenses/src/images" />
 			<fileset dir="../example-library/src/images" />
 		</copy>
-		<!-- end copy other projects -->
-
 	</target>
 
 

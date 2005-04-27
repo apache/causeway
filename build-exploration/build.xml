@@ -16,7 +16,7 @@
 	
 	&distribution;
 
-	<target name="copy">
+	<target name="copy-src">
 		<copy todir="${build.src.dir}">
 			<fileset dir="../viewer-skylark/${src.dir}" />
 			<fileset dir="../no-xat/${src.dir}" />
@@ -37,19 +37,25 @@
 			<!-- fileset dir="../example-expenses/xat" /-->
 			<fileset dir="../example-library/xat" />
 		</copy>
-
+	</target>
+	
+	<target name="copy-images">
 		<copy todir="${dist.images.dir}">
 			<fileset dir="../example-ecs/src/images" />
 			<fileset dir="../example-expenses/src/images" />
 			<fileset dir="../example-library/src/images" />
 		</copy>
-
 	</target>
 
 
 
 	<target name="changelog">
-		<cvschangelog cvsroot="pserver:rcm@81.168.57.193:/home/cvs"
+		<cvschangelog cvsroot=":ext:rcm@81.168.57.193:/home/cvs"
+			              dir="../viewer-skylark/${src.dir}"
+			              command="log"
+						destfile="testcvs.txt"/>
+	
+		<cvschangelog cvsroot=":ext:rcm@81.168.57.193:/home/cvs"
 		              dir="../viewer-skylark/${src.dir}"
 		              destfile="changelog.xml" />
 	</target>
@@ -82,8 +88,6 @@
 			</fileset>
 
 		</jar>
-
-
 	</target>
 </project>
 
