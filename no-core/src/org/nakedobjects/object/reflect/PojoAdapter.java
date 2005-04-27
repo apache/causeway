@@ -3,6 +3,7 @@ package org.nakedobjects.object.reflect;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
@@ -138,24 +139,19 @@ public class PojoAdapter extends AbstractNakedObject {
      * Customer", "A Product".
      */
     public String titleString() {
-         if (specification == null) {
-            return "";
-        } else {
-            String title = specification.getTitle().title(this);
-            if (title == null && !isResolved()) {
-                title = specification.unresolvedTitle(this);
-            }
-            if (title == null) {
-                title = "A " + specification.getSingularName().toLowerCase();
-            }
-            return title;
+        NakedObjectSpecification specification = getSpecification();
+        String title = specification.getTitle().title(this);
+        if (title == null && !isResolved()) {
+            title = specification.unresolvedTitle(this);
         }
+        if (title == null) {
+            title = "A " + specification.getSingularName().toLowerCase();
+        }
+        return title;
     }
 
     public String toString() {
-        // TODO figure out how to get some form of title from object
-        //return "POJO " + super.toString() + " title string disabled";// + titleString();
-        return "POJO " + super.toString() +" " + titleString();
+        return "POJO " + super.toString() +" " + specification == null ? "" : titleString();
     }
 
     protected void finalize() throws Throwable {
