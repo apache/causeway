@@ -60,8 +60,7 @@ public class TransientObjectStore implements NakedObjectStore {
         return new DestroyObjectCommand() {
             public void execute() throws ObjectStoreException {
                 LOG.info("  delete requested on '" + object + "'");
-                TransientObjectStoreInstances ins = instancesFor(object.getSpecification());
-                ins.remove(object.getOid());
+                destroy(object);
             }       
             
             public NakedObject onObject() {
@@ -314,14 +313,6 @@ public class TransientObjectStore implements NakedObjectStore {
 
     public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
         throw new ObjectNotFoundException();
-        /*LOG.debug("getNakedClass " + name);
-        NakedObject object = (NakedObject) classes.get(name);
-        if (object == null) {
-            throw new ObjectNotFoundException();
-        } else {
-            NakedClass nc = (NakedClass) object.getObject();
-            return nc;
-        }*/
     }
 
     public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectStoreException {
@@ -474,13 +465,48 @@ public class TransientObjectStore implements NakedObjectStore {
         LOG.info("end execution");
     }
 
+
+    private void destroy(NakedObject object) {
+        destroy(object, object.getSpecification());
+    }
+
+    private void destroy(NakedObject object, NakedObjectSpecification specification) {
+        LOG.debug("   saving object " + object + " as instance of " + specification.getShortName());
+        TransientObjectStoreInstances ins = instancesFor(specification);
+        ins.remove(object.getOid());    
+        
+        NakedObjectSpecification superclass = specification.superclass();
+        if(superclass != null) {
+            destroy(object, superclass);
+        }
+        
+        NakedObjectSpecification[] interfaces = specification.interfaces();
+        for (int i = 0; i < interfaces.length; i++) {
+            destroy(object, interfaces[i]);
+        }
+    }
+    
     private void save(NakedObject object) throws ObjectStoreException {
-        LOG.debug("   saving object " + object);
         if (object.getObject() instanceof NakedClass) {
             throw new ObjectStoreException("Can't make changes to a NakedClass object");
         }
-        TransientObjectStoreInstances ins = instancesFor(object.getSpecification());
+        save(object, object.getSpecification());
+    }
+
+    private void save(NakedObject object, NakedObjectSpecification specification) {
+        LOG.debug("   saving object " + object + " as instance of " + specification.getShortName());
+        TransientObjectStoreInstances ins = instancesFor(specification);
         ins.save(object);
+        
+        NakedObjectSpecification superclass = specification.superclass();
+        if(superclass != null) {
+            save(object, superclass);
+        }
+        
+        NakedObjectSpecification[] interfaces = specification.interfaces();
+        for (int i = 0; i < interfaces.length; i++) {
+            save(object, interfaces[i]);
+        }
     }
 
     public void shutdown() throws ObjectStoreException {

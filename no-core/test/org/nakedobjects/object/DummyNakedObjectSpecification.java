@@ -100,7 +100,7 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     }
 
     public NakedObjectSpecification[] interfaces() {
-        return null;
+        return new NakedObjectSpecification[0];
     }
 
     public boolean isAbstract() {
@@ -146,7 +146,7 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     }
 
     public NakedObjectSpecification[] subclasses() {
-        return null;
+        return new NakedObjectSpecification[0];
     }
 
     public NakedObjectSpecification superclass() {
