@@ -27,6 +27,8 @@ import org.apache.log4j.Logger;
 
 public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
     private static final Logger LOG = Logger.getLogger(PojoAdapterFactoryImpl.class);
+    
+    // TODO follow same pattern as PojoAdapterHash - delegate to hash class
     protected Hashtable loaded = new Hashtable();
 
     private PojoAdapterHash pojos;

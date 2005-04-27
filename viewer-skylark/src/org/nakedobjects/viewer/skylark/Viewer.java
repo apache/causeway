@@ -344,7 +344,7 @@ public class Viewer {
             while (st.hasMoreTokens()) {
                 String specName = (String) st.nextToken();
 
-                if (specName != null) {
+                if (specName != null && !specName.equals("")) {
                     try {
                         ViewSpecification spec;
                         spec = (ViewSpecification) Class.forName(specName).newInstance();
