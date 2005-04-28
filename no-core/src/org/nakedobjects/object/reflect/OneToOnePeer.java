@@ -10,28 +10,28 @@ import org.nakedobjects.object.security.Session;
 public interface OneToOnePeer extends FieldPeer {
 	String getName();
 
-	void clearAssociation(NakedObject inObject, NakedObject associate);
+	void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate);
 
-	Hint getHint(Session session, NakedObject object, Naked value);
+	Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked value);
 
-	Naked getAssociation(NakedObject inObject);
+	Naked getAssociation(MemberIdentifier identifier, NakedObject inObject);
 	
 	/** TODO do we need to get the type from here? **/
 	NakedObjectSpecification getType();
 
 	boolean hasHint();
 
-	void initValue(NakedObject inObject, Object associate);
+	void initValue(MemberIdentifier identifier, NakedObject inObject, Object associate);
 
-	void setValue(NakedObject inObject, Object associate);
+	void setValue(MemberIdentifier identifier, NakedObject inObject, Object associate);
 
 	boolean isDerived();
 
-	void setAssociation(NakedObject inObject, NakedObject associate);
+	void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate);
 
-	void initAssociation(NakedObject inObject, NakedObject associate);
+	void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate);
 
-    boolean isEmpty(NakedObject inObject);
+    boolean isEmpty(MemberIdentifier identifier, NakedObject inObject);
 }
 
 

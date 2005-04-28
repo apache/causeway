@@ -12,25 +12,25 @@ public interface OneToManyPeer extends FieldPeer {
 
 	String getName();
 
-	void removeAssociation(NakedObject inObject, NakedObject associate);
+	void removeAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate);
 
-	Hint getHint(Session session, NakedObject inObject, NakedObject associate, boolean add);
+	Hint getHint(MemberIdentifier identifier, Session session, NakedObject inObject, NakedObject associate, boolean add);
 
-	NakedCollection getAssociations(NakedObject inObject);
+	NakedCollection getAssociations(MemberIdentifier identifier, NakedObject inObject);
 	
 	NakedObjectSpecification getType();
 
 	boolean isDerived();
 
-	void removeAllAssociations(NakedObject inObject);
+	void removeAllAssociations(MemberIdentifier identifier, NakedObject inObject);
 
-	void addAssociation(NakedObject inObject, NakedObject associate);
+	void addAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate);
 
-	void initAssociation(NakedObject inObject, NakedObject associate);
+	void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate);
 
-    boolean isEmpty(NakedObject inObject);
+    boolean isEmpty(MemberIdentifier identifier, NakedObject inObject);
 
-    void initOneToManyAssociation(NakedObject inObject, NakedObject[] instances);
+    void initOneToManyAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject[] instances);
 }
 
 

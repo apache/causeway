@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToManyPeer;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.reflector.java.control.SimpleFieldAbout;
@@ -29,7 +30,7 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
         this.removeMethod = remove;
    }
 
-    public void addAssociation(NakedObject inObject, NakedObject associate) {
+    public void addAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
         try {
             addMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
@@ -44,7 +45,7 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
         }
     }
     
-    public void initAssociation(NakedObject inObject, NakedObject associate) {
+    public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         LOG.debug("init association " + getName() + " in " + inObject + " with " + associate);
         try {
             Object obj = getMethod.invoke(inObject.getObject(), new Object[0]);
@@ -67,7 +68,7 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
         }
     }
 
-    public Hint getHint(Session session, NakedObject object, NakedObject element, boolean add) {
+    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, NakedObject element, boolean add) {
         if (hasHint()) {
             Method aboutMethod = getAboutMethod();
             try {
@@ -92,11 +93,11 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
         }
     }
 
-    public NakedCollection getAssociations(NakedObject fromObject) {
+    public NakedCollection getAssociations(MemberIdentifier identifier, NakedObject fromObject) {
         return (NakedCollection) get(fromObject);
     }
 
-    public void removeAllAssociations(NakedObject inObject) {
+    public void removeAllAssociations(MemberIdentifier identifier, NakedObject inObject) {
         try {
             clearMethod.invoke(inObject, null);
         } catch (InvocationTargetException e) {
@@ -111,7 +112,7 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
      * Remove an associated object (the element) from the specified NakedObject
      * in the association field represented by this object.
      */
-    public void removeAssociation(NakedObject inObject, NakedObject associate) {
+    public void removeAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         LOG.debug("local clear association " + associate + " from field " + getName() + " in " + inObject);
 
         try {
@@ -156,7 +157,7 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
         }
     }
    
-    public boolean isEmpty(NakedObject fromObject) {
+    public boolean isEmpty(MemberIdentifier identifier, NakedObject fromObject) {
         try {
             Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
             
@@ -177,7 +178,7 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
     }
     
 
-    public void initOneToManyAssociation(NakedObject fromObject, NakedObject[] instances) {
+    public void initOneToManyAssociation(MemberIdentifier identifier, NakedObject fromObject, NakedObject[] instances) {
         try {
             Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
            

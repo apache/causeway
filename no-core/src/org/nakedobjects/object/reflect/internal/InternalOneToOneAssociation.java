@@ -1,14 +1,12 @@
 package org.nakedobjects.object.reflect.internal;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.object.reflect.valueadapter.StringAdapter;
 import org.nakedobjects.object.security.Session;
@@ -34,7 +32,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
         removeMethod = remove;
     }
     
-    public Hint getHint(Session session, NakedObject object, Naked associate) {
+    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked associate) {
         Method aboutMethod = getAboutMethod();
 		
 		//Class parameter = setMethod.getParameterTypes()[0];
@@ -73,7 +71,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
         return addMethod != null;
     }
 
-    public void setValue(NakedObject inObject, Object value) {
+    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object value) {
         LOG.debug("local setValue() " + inObject.getOid() + "/" + value);
 
         try {
@@ -102,7 +100,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
     /**
      Set the data in an NakedObject.  Passes in an existing object to for the EO to reference.
      */
-    public void initValue(NakedObject inObject, Object setValue) {
+    public void initValue(MemberIdentifier identifier, NakedObject inObject, Object setValue) {
         LOG.debug("local initData() " + inObject.getOid() + "/" + setValue);
 
         try {
@@ -120,7 +118,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
         } 
     }
 
-     public void clearAssociation(NakedObject inObject, NakedObject associate) {
+     public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         LOG.debug("local clear association " + inObject + "/" + associate);
 
             try {
@@ -141,7 +139,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
             }
     }
 
-     public void initAssociation(NakedObject inObject, NakedObject associate) {
+     public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         LOG.debug("local init association " + getName() + " in " + inObject + " with " + associate);
 
         try {
@@ -166,7 +164,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
      * Set the data in an NakedObject. Passes in an existing object to for the
      * EO to reference.
      */
-    public void setAssociation(NakedObject inObject, NakedObject associate) {
+    public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
 
             try {
@@ -209,7 +207,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
         getAboutMethod() + ", methods=" + methods + ", type=" + getType() + " ]";
     }
 
-	public Naked getAssociation(NakedObject fromObject) {
+	public Naked getAssociation(MemberIdentifier identifier, NakedObject fromObject) {
 		return get(fromObject);
 	}
 	
@@ -237,14 +235,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
         }
     }
 
-    public void parseTextEntry(NakedObject inObject, String text) throws TextEntryParseException, InvalidEntryException {
-        NakedValue object = (NakedValue) get(inObject);
-        object.parseTextEntry(text);
-        
-        setValue(inObject, object.getObject());
-    }
-
-    public boolean isEmpty(NakedObject inObject) {
+    public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
         throw new NotImplementedException();
     }
 }

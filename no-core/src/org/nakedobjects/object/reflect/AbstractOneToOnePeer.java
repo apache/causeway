@@ -14,16 +14,16 @@ public class AbstractOneToOnePeer implements OneToOnePeer {
         this.decorated = local;
     }
 
-    public void clearAssociation(NakedObject inObject, NakedObject associate) {
-        decorated.clearAssociation(inObject, associate);
+    public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+        decorated.clearAssociation(identifier, inObject, associate);
     }
 
-    public Naked getAssociation(NakedObject inObject) {
-        return decorated.getAssociation(inObject);
+    public Naked getAssociation(MemberIdentifier identifier, NakedObject inObject) {
+        return decorated.getAssociation(identifier, inObject);
     }
 
-    public Hint getHint(Session session, NakedObject inObject, Naked associate) {
-        return decorated.getHint(session, inObject, associate);
+    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject inObject, Naked associate) {
+        return decorated.getHint(null, session, inObject, associate);
     }
 
     public String getName() {
@@ -38,28 +38,28 @@ public class AbstractOneToOnePeer implements OneToOnePeer {
         return decorated.hasHint();
     }
 
-    public void initAssociation(NakedObject inObject, NakedObject associate) {
-        decorated.initAssociation(inObject, associate);
+    public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+        decorated.initAssociation(identifier, inObject, associate);
     }
 
-    public void initValue(NakedObject inObject, Object associate) {
-        decorated.initValue(inObject, associate);
+    public void initValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {
+        decorated.initValue(identifier, inObject, associate);
     }
 
     public boolean isDerived() {
         return decorated.isDerived();
     }
 
-    public boolean isEmpty(NakedObject inObject) {
-        return decorated.isEmpty(inObject);
+    public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
+        return decorated.isEmpty(identifier, inObject);
     }
 
-    public void setAssociation(NakedObject inObject, NakedObject associate) {
-        decorated.setAssociation(inObject, associate);
+    public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+        decorated.setAssociation(identifier, inObject, associate);
     }
 
-    public void setValue(NakedObject inObject, Object associate) {
-        decorated.setValue(inObject, associate);
+    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {
+        decorated.setValue(identifier, inObject, associate);
     }
 }
 

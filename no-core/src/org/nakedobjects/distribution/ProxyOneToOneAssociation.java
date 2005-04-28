@@ -4,6 +4,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.AbstractOneToOnePeer;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Session;
@@ -21,37 +22,37 @@ public final class ProxyOneToOneAssociation extends AbstractOneToOnePeer {
         this.connection = connection;
     }
 
-    public void clearAssociation(NakedObject inObject, NakedObject associate) {
+    public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         LOG.debug("remote clear association " + inObject + "/" + associate);
         if (isPersistent(inObject)) {
             connection.clearAssociation(ClientSession.getSession(), getName(), inObject.getOid(), inObject.getSpecification().getFullName(), associate.getOid(), associate.getSpecification().getFullName());
         } else {
-            super.clearAssociation(inObject, associate);
+            super.clearAssociation(identifier, inObject, associate);
         }
     }
 
-    public Hint getHint(Session session, NakedObject inObject, Naked associate) {
+    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject inObject, Naked associate) {
         if (isPersistent(inObject) && fullProxy) {
             throw new NotExpectedException();
         } else {
-            return super.getHint(session, inObject, associate);
+            return super.getHint(identifier, session, inObject, associate);
         }
     }
 
-    public Naked getAssociation(NakedObject inObject) {
+    public Naked getAssociation(MemberIdentifier identifier, NakedObject inObject) {
         if (isPersistent(inObject) && fullProxy) {
           //  return connection.getOneToOneAssociation(ClientSession.getSession(), inObject);
             throw new NotExpectedException();
        } else {
-            return super.getAssociation(inObject);
+            return super.getAssociation(identifier, inObject);
         }
     }
 
-    public void setValue(NakedObject inObject, Object associate) {
+    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {
         if (isPersistent(inObject)) {
             connection.setValue(ClientSession.getSession(), getName(), inObject.getOid(), inObject.getSpecification().getFullName(),  associate);
         } else {
-	        super.setValue(inObject, associate);
+	        super.setValue(identifier, inObject, associate);
         }
     }
 
@@ -59,12 +60,12 @@ public final class ProxyOneToOneAssociation extends AbstractOneToOnePeer {
         return inObject.getOid() != null;
     }
 
-     public void setAssociation(NakedObject inObject, NakedObject associate) {
+     public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         LOG.debug("remote set association " + getName() + " in " + inObject + " with " + associate);
         if (isPersistent(inObject)) {
             connection.setAssociation(ClientSession.getSession(), getName(), inObject.getOid(), inObject.getSpecification().getFullName(), associate.getOid(), associate.getSpecification().getFullName());
         } else {
-            super.setAssociation(inObject, associate);
+            super.setAssociation(identifier, inObject, associate);
         }
     }
 }

@@ -10,6 +10,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.reflector.java.control.SimpleFieldAbout;
@@ -33,10 +34,9 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         removeMethod = remove;
     }
 
-    public Hint getHint(Session session, NakedObject object, Naked associate) {
+    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked associate) {
         Method aboutMethod = getAboutMethod();
 
-        //Class parameter = setMethod.getParameterTypes()[0];
         Class parameter = getMethod.getReturnType();
         if (associate != null && !parameter.isAssignableFrom(associate.getObject().getClass())) {
             SimpleFieldAbout about = new SimpleFieldAbout(session, object.getObject());
@@ -77,7 +77,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
      * Set the data in an NakedObject. Passes in an existing object to for the
      * EO to reference.
      */
-    public void initValue(NakedObject inObject, Object setValue) {
+    public void initValue(MemberIdentifier identifier, NakedObject inObject, Object setValue) {
         LOG.debug("local initValue() " + inObject.getOid() + "/" + setValue);
 
         try {
@@ -101,7 +101,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         }
     }
 
-    public void setValue(NakedObject inObject, Object setValue) {
+    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object setValue) {
         LOG.debug("local setValue() " + inObject.getOid() + "/" + getName() + "/" + setValue);
 
         try {
@@ -120,7 +120,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         }
     }
 
-    public void clearAssociation(NakedObject inObject, NakedObject associate) {
+    public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         LOG.debug("local clear association " + inObject + "/" + associate);
 
         try {
@@ -144,7 +144,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
      * Set the data in an NakedObject. Passes in an existing object to for the
      * EO to reference.
      */
-    public void initAssociation(NakedObject inObject, NakedObject associate) {
+    public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
 
         try {
@@ -159,7 +159,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         }
     }
 
-    public void setAssociation(NakedObject inObject, NakedObject associate) {
+    public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
 
         try {
@@ -195,7 +195,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
                 + methods + ", type=" + getType() + " ]";
     }
 
-    public Naked getAssociation(NakedObject fromObject) {
+    public Naked getAssociation(MemberIdentifier identifier, NakedObject fromObject) {
         return get(fromObject);
     }
 
@@ -248,7 +248,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         }
     }
 
-    public boolean isEmpty(NakedObject fromObject) {
+    public boolean isEmpty(MemberIdentifier identifier, NakedObject fromObject) {
         try {
             Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
             if (obj instanceof BusinessValueHolder) {

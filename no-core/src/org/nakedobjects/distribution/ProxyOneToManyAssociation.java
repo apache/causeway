@@ -5,6 +5,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.AbstractOneToManyPeer;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToManyPeer;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Session;
@@ -23,7 +24,7 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
         this.connection = connection;
     }
 
-    public void addAssociation(NakedObject inObject, NakedObject associate) {
+    public void addAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         if (isPersistent(inObject)) {
             LOG.debug("remote set association " + getName() + " in " + inObject + " with " + associate);
             try {
@@ -33,11 +34,11 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
                 throw (NakedObjectRuntimeException) e.getCause();
             }
         } else {
-            super.addAssociation(inObject, associate);
+            super.addAssociation(identifier, inObject, associate);
         }
     }
 
-    public Hint getHint(Session session, NakedObject inObject, NakedObject associate, boolean add) {
+    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject inObject, NakedObject associate, boolean add) {
         if (inObject.getOid() != null && fullProxy) {
             //    			try {
             // TODO implement
@@ -48,16 +49,16 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
             //    				return null;
             //    			}
         } else {
-            return super.getHint(session, inObject, associate, add);
+            return super.getHint(identifier, session, inObject, associate, add);
         }
     }
 
-    public NakedCollection getAssociations(NakedObject inObject) {
+    public NakedCollection getAssociations(MemberIdentifier identifier, NakedObject inObject) {
         if (isPersistent(inObject) && fullProxy) {
             LOG.debug("remote get association " + inObject);
             throw new NotImplementedException();
         } else {
-            return super.getAssociations(inObject);
+            return super.getAssociations(identifier, inObject);
         }
     }
 
@@ -69,7 +70,7 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
      * Remove an associated object (the element) from the specified NakedObject
      * in the association field represented by this object.
      */
-    public void removeAssociation(NakedObject inObject, NakedObject associate) {
+    public void removeAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         if (isPersistent(inObject) && fullProxy) {
             LOG.debug("remote clear association " + inObject + "/" + associate);
             try {
@@ -78,7 +79,7 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
                 throw (NakedObjectRuntimeException) e.getCause();
             }
         } else {
-            super.removeAssociation(inObject, associate);
+            super.removeAssociation(identifier, inObject, associate);
         }
     }
 }

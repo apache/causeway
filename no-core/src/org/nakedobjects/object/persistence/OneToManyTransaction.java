@@ -3,6 +3,7 @@ package org.nakedobjects.object.persistence;
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.AbstractOneToManyPeer;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToManyPeer;
 
 
@@ -12,13 +13,13 @@ public class OneToManyTransaction extends AbstractOneToManyPeer {
         super(peer);
     }
 
-    public void addAssociation(NakedObject inObject, NakedObject associate) {
+    public void addAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         NakedObjectManager objectManager = NakedObjects.getObjectManager(); //inObject.getContext().getObjectManager();
         try {
             if (inObject.isPersistent()) {
                 objectManager.startTransaction();
             }
-            super.addAssociation(inObject, associate);
+            super.addAssociation(identifier, inObject, associate);
             objectManager.saveChanges();
             if (inObject.isPersistent()) {
                 objectManager.endTransaction();
@@ -29,13 +30,13 @@ public class OneToManyTransaction extends AbstractOneToManyPeer {
         }
     }
 
-    public void removeAllAssociations(NakedObject inObject) {
+    public void removeAllAssociations(MemberIdentifier identifier, NakedObject inObject) {
         NakedObjectManager objectManager = NakedObjects.getObjectManager();
         try {
             if (inObject.isPersistent()) {
                 objectManager.startTransaction();
             }
-            super.removeAllAssociations(inObject);
+            super.removeAllAssociations(identifier, inObject);
             objectManager.saveChanges();
             if (inObject.isPersistent()) {
                 objectManager.endTransaction();
@@ -46,13 +47,13 @@ public class OneToManyTransaction extends AbstractOneToManyPeer {
         }
     }
 
-    public void removeAssociation(NakedObject inObject, NakedObject associate) {
+    public void removeAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         NakedObjectManager objectManager = NakedObjects.getObjectManager();
         try {
             if (inObject.isPersistent()) {
                 objectManager.startTransaction();
             }
-            super.removeAssociation(inObject, associate);
+            super.removeAssociation(identifier, inObject, associate);
             objectManager.saveChanges();
             if (inObject.isPersistent()) {
                 objectManager.endTransaction();

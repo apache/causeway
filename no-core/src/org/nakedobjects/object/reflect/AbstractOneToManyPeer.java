@@ -14,16 +14,16 @@ public class AbstractOneToManyPeer implements OneToManyPeer {
         this.decorated = local;
     }
 
-    public void addAssociation(NakedObject inObject, NakedObject associate) {
-        decorated.addAssociation(inObject, associate);
+    public void addAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+        decorated.addAssociation(identifier, inObject, associate);
     }
 
-    public NakedCollection getAssociations(NakedObject inObject) {
-        return decorated.getAssociations(inObject);
+    public NakedCollection getAssociations(MemberIdentifier identifier, NakedObject inObject) {
+        return decorated.getAssociations(identifier, inObject);
     }
 
-    public Hint getHint(Session session, NakedObject inObject, NakedObject associate, boolean add) {
-        return decorated.getHint(session, inObject, associate, add);
+    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject inObject, NakedObject associate, boolean add) {
+        return decorated.getHint(identifier, session, inObject, associate, add);
     }
 
     public String getName() {
@@ -38,28 +38,28 @@ public class AbstractOneToManyPeer implements OneToManyPeer {
         return decorated.hasHint();
     }
 
-    public void initAssociation(NakedObject inObject, NakedObject associate) {
-        decorated.initAssociation(inObject, associate);
+    public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+        decorated.initAssociation(identifier, inObject, associate);
     }
 
-    public void initOneToManyAssociation(NakedObject inObject, NakedObject[] instances) {
-        decorated.initOneToManyAssociation(inObject, instances);
+    public void initOneToManyAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject[] instances) {
+        decorated.initOneToManyAssociation(identifier, inObject, instances);
     }
 
     public boolean isDerived() {
         return decorated.isDerived();
     }
 
-    public boolean isEmpty(NakedObject inObject) {
-        return decorated.isEmpty(inObject);
+    public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
+        return decorated.isEmpty(identifier, inObject);
     }
 
-    public void removeAllAssociations(NakedObject inObject) {
-        decorated.removeAllAssociations(inObject);
+    public void removeAllAssociations(MemberIdentifier identifier, NakedObject inObject) {
+        decorated.removeAllAssociations(identifier, inObject);
     }
 
-    public void removeAssociation(NakedObject inObject, NakedObject associate) {
-        decorated.removeAssociation(inObject, associate);
+    public void removeAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+        decorated.removeAssociation(identifier, inObject, associate);
     }
 }
 

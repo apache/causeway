@@ -3,6 +3,7 @@ package org.nakedobjects.object.persistence;
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.AbstractOneToOnePeer;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 
 
@@ -12,14 +13,14 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
         super(local);
     }
 
-    public void clearAssociation(NakedObject inObject, NakedObject associate) {
+    public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         NakedObjectManager objectManager = NakedObjects.getObjectManager();
         try {
             if (inObject.isPersistent()) {
                 objectManager.startTransaction();
             }
 
-            super.clearAssociation(inObject, associate);
+            super.clearAssociation(identifier, inObject, associate);
             objectManager.saveChanges();
             if (inObject.isPersistent()) {
                 objectManager.endTransaction();
@@ -30,13 +31,13 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
         }
     }
 
-    public void setAssociation(NakedObject inObject, NakedObject associate) {
+    public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         NakedObjectManager objectManager = NakedObjects.getObjectManager();
         try {
             if (inObject.isPersistent()) {
                 objectManager.startTransaction();
             }
-            super.setAssociation(inObject, associate);
+            super.setAssociation(identifier, inObject, associate);
             objectManager.saveChanges();
             if (inObject.isPersistent()) {
                 objectManager.endTransaction();
@@ -47,13 +48,13 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
         }
     }
 
-    public void setValue(NakedObject inObject, Object value) {
+    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object value) {
         NakedObjectManager objectManager = NakedObjects.getObjectManager();
         try {
             if (inObject.isPersistent()) {
                 objectManager.startTransaction();
             }
-            super.setValue(inObject, value);
+            super.setValue(identifier, inObject, value);
             objectManager.saveChanges();
             if (inObject.isPersistent()) {
                 objectManager.endTransaction();
