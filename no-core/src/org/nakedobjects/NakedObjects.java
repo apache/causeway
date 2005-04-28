@@ -4,6 +4,7 @@ import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
+import org.nakedobjects.object.security.Session;
 
 
 public class NakedObjects {
@@ -19,6 +20,11 @@ public class NakedObjects {
 
     public static NakedObjectManager getObjectManager() {
         return getInstance().objectManager;
+    }
+    
+    public static Session getCurrentSession() {
+        SessionLookup sl = getInstance().sessionLookup;
+        return sl == null ? null : sl.getCurrentSession();
     }
 
     public static PojoAdapterFactory getPojoAdapterFactory() {
@@ -66,6 +72,16 @@ public class NakedObjects {
         getInstance().specificationLoader = specificationLoader;
     }
 
+    /**
+     * Expose as a .NET property
+     * 
+     * @property
+     */
+    public static void set_SessionLookup(SessionLookup sessionLookup) {
+        getInstance().sessionLookup = sessionLookup;
+    }
+
+
     public static void setConfiguration(Configuration configuration) {
         getInstance().configuration = configuration;
     }
@@ -81,11 +97,17 @@ public class NakedObjects {
     public static void setSpecificationLoader(NakedObjectSpecificationLoader specificationLoader) {
         getInstance().specificationLoader = specificationLoader;
     }
-    protected PojoAdapterFactory adapterFactory;
+    
+    public static void setSessionLookup(SessionLookup sessionLookup) {
+        getInstance().sessionLookup = sessionLookup;
+    }
 
+    protected PojoAdapterFactory adapterFactory;
     protected Configuration configuration;
     protected NakedObjectManager objectManager;
     protected NakedObjectSpecificationLoader specificationLoader;
+    protected SessionLookup sessionLookup;
+
 }
 
 /*

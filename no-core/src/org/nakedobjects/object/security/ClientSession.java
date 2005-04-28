@@ -2,6 +2,9 @@ package org.nakedobjects.object.security;
 
 import org.nakedobjects.object.NakedObjectRuntimeException;
 
+/**
+ * @deprecated
+ */
 public class ClientSession {
     // for each client JVm there is one user
     private static Session session;
