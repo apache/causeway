@@ -79,7 +79,7 @@ public class InternalAssociationTest extends TestCase {
     	
     public void testSet() {
         loader.addSpec(spec);
-     	personField.setAssociation(object, associate);
+     	personField.setAssociation(new DummyIdentifier(), object, associate);
      	assertEquals(associate.getObject(), objectWithOneToOneAssoications.getReferencedObject());
     }     	
     
@@ -88,14 +88,14 @@ public class InternalAssociationTest extends TestCase {
         
     	objectWithOneToOneAssoications.setReferencedObject(referencedObject);
     	
-    	personField.clearAssociation(object, associate);
+    	personField.clearAssociation(new DummyIdentifier(), object, associate);
     	
     	assertNull(objectWithOneToOneAssoications.getReferencedObject());
     }     	
     
     public void testInitGet() {
         
-    	personField.initValue(object, referencedObject);
+    	personField.initValue(new DummyIdentifier(), object, referencedObject);
     
     	assertEquals(associate.getObject(), objectWithOneToOneAssoications.getReferencedObject());
     }
@@ -107,7 +107,7 @@ public class InternalAssociationTest extends TestCase {
     public void testAboutAssignment() {
     	assertTrue(personField.hasHint());
 
-    	assertNotNull(personField.getHint(session, object, associate));
+    	assertNotNull(personField.getHint(null, session, object, associate));
     }
 }
 

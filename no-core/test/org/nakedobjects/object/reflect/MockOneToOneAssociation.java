@@ -26,12 +26,12 @@ class MockOneToOneAssociation implements OneToOnePeer {
     String name;
     boolean isEmpty;
 
-    public void clearAssociation(NakedObject inObject, NakedObject associate) {
+    public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         actions.addElement("clear " + inObject);
         actions.addElement("clear " + associate);    
     }
 
-    public Hint getHint(Session session, NakedObject object, Naked value) {
+    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked value) {
             about = new Hint() {
                 public Consent canAccess() {
                     return canAccess;
@@ -61,7 +61,7 @@ class MockOneToOneAssociation implements OneToOnePeer {
         }
 
 
-    public Naked getAssociation(NakedObject inObject) {
+    public Naked getAssociation(MemberIdentifier identifier, NakedObject inObject) {
         actions.addElement("get " + inObject);
         return getObject;
     }
@@ -74,7 +74,7 @@ class MockOneToOneAssociation implements OneToOnePeer {
         return hasAbout;
     }
 
-    public void initValue(NakedObject inObject, Object associate) {
+    public void initValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {
         actions.addElement("init " + inObject);
         actions.addElement("init " + associate);    
     }
@@ -83,7 +83,7 @@ class MockOneToOneAssociation implements OneToOnePeer {
         throw new NotImplementedException();
     }
 
-    public void setAssociation(NakedObject inObject, NakedObject associate) {
+    public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         actions.addElement("associate " + inObject);
         actions.addElement("associate " + associate);
     }
@@ -93,7 +93,7 @@ class MockOneToOneAssociation implements OneToOnePeer {
         actions.addElement("parse " + text);
     }
 
-    public boolean isEmpty(NakedObject inObject) {
+    public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
         actions.addElement("empty " + inObject);
         return isEmpty;
     }
@@ -107,9 +107,9 @@ class MockOneToOneAssociation implements OneToOnePeer {
         Assert.assertEquals(expected, actions.elementAt(index));
     }
 
-    public void setValue(NakedObject inObject, Object associate) {}
+    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {}
 
-    public void initAssociation(NakedObject inObject, NakedObject associate) {}
+    public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
 
 }
 

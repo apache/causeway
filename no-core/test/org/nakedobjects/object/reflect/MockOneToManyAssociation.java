@@ -26,7 +26,7 @@ class MockOneToManyAssociation implements OneToManyPeer {
     String label;
     String name;
 
-    public void addAssociation(NakedObject inObject, NakedObject associate) {
+    public void addAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         actions.addElement("add " + inObject);
         actions.addElement("add " + associate);
     }
@@ -35,7 +35,7 @@ class MockOneToManyAssociation implements OneToManyPeer {
         Assert.assertEquals(expected, actions.elementAt(index));
     }
 
-    public Hint getHint(Session session, NakedObject inObject, NakedObject associate, boolean add) {
+    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject inObject, NakedObject associate, boolean add) {
         actions.addElement("about " + inObject);
         actions.addElement("about " + associate);
         actions.addElement("about " + add);
@@ -68,7 +68,7 @@ class MockOneToManyAssociation implements OneToManyPeer {
         return about;
     }
 
-    public NakedCollection getAssociations(NakedObject inObject) {
+    public NakedCollection getAssociations(MemberIdentifier identifier, NakedObject inObject) {
         actions.addElement("get " + inObject);
         return getCollection;
     }
@@ -89,16 +89,16 @@ class MockOneToManyAssociation implements OneToManyPeer {
         throw new NotImplementedException();
     }
 
-    public boolean isEmpty(NakedObject inObject) {
+    public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
         actions.addElement("empty " + inObject);
         return isEmpty;
     }
 
-    public void removeAllAssociations(NakedObject inObject) {
+    public void removeAllAssociations(MemberIdentifier identifier, NakedObject inObject) {
         actions.addElement("removeall " + inObject);
     }
 
-    public void removeAssociation(NakedObject inObject, NakedObject associate) {
+    public void removeAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         actions.addElement("remove " + inObject);
         actions.addElement("remove " + associate);
 
@@ -110,9 +110,9 @@ class MockOneToManyAssociation implements OneToManyPeer {
         }
     }
 
-    public void initAssociation(NakedObject inObject, NakedObject associate) {}
+    public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
 
-    public void initOneToManyAssociation(NakedObject inObject, NakedObject[] instances) {}
+    public void initOneToManyAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject[] instances) {}
 }
 
 /*

@@ -1,6 +1,7 @@
 package org.nakedobjects.object;
 
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.object.security.Session;
 
@@ -18,13 +19,13 @@ public class MockOneToOneAssociation implements OneToOnePeer {
         return null;
     }
 
-    public void clearAssociation(NakedObject inObject, NakedObject associate) {}
+    public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
 
-    public Hint getHint(Session session, NakedObject object, Naked value) {
+    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked value) {
         return null;
     }
 
-    public Naked getAssociation(NakedObject inObject) {
+    public Naked getAssociation(MemberIdentifier identifier, NakedObject inObject) {
         return null;
     }
 
@@ -32,23 +33,23 @@ public class MockOneToOneAssociation implements OneToOnePeer {
         return null;
     }
 
-    public void initValue(NakedObject inObject, Object associate) {}
+    public void initValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {}
 
     public boolean isDerived() {
         return false;
     }
 
-    public void setAssociation(NakedObject inObject, NakedObject associate) {}
+    public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
 
     public void parseTextEntry(NakedObject inObject, String text) throws TextEntryParseException, InvalidEntryException {}
 
-    public boolean isEmpty(NakedObject inObject) {
+    public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
         return false;
     }
 
-    public void setValue(NakedObject inObject, Object associate) {}
+    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {}
 
-    public void initAssociation(NakedObject inObject, NakedObject associate) {}
+    public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
 
 }
 

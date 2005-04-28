@@ -10,6 +10,7 @@ import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
+import org.nakedobjects.object.reflect.internal.DummyIdentifier;
 import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 
 import java.lang.reflect.Method;
@@ -81,7 +82,7 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         loader.addSpec(spec);
         
         assertNull(objectWithVector.added);
-        collectionField.addAssociation(nakedObject, nakedObjectAssoicate);
+        collectionField.addAssociation(new DummyIdentifier(), nakedObject, nakedObjectAssoicate);
         assertEquals(associate, objectWithVector.added);
     }     	
     
@@ -96,7 +97,7 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         loader.addSpec(spec);
         
         assertNull(objectWithVector.removed);
-        collectionField.removeAssociation(nakedObject, nakedObjectAssoicate);
+        collectionField.removeAssociation(new DummyIdentifier(), nakedObject, nakedObjectAssoicate);
         assertEquals(associate, objectWithVector.removed);
     }     	
     
@@ -108,8 +109,8 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         loader.addSpec(spec);
         
     	//objectWithVector.collection = new DummyInternalCollection();
-    	assertNotNull(collectionField.getAssociations(nakedObject));
-    	assertEquals(new Vector(), collectionField.getAssociations(nakedObject).getObject());
+    	assertNotNull(collectionField.getAssociations(new DummyIdentifier(), nakedObject));
+    	assertEquals(new Vector(), collectionField.getAssociations(new DummyIdentifier(), nakedObject).getObject());
     }     	
     
     public void testName() {

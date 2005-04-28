@@ -76,7 +76,7 @@ public class InternalOneToOneAssociationTest extends TestCase {
     public void testSet() {
         loader.addSpec(spec);
        
-     	personField.setAssociation(nakedObject, associate);
+     	personField.setAssociation(new DummyIdentifier(), nakedObject, associate);
      	
      	assertEquals(associate.getObject(), objectWithOneToOneAssoications.getReferencedObject());
     }     	
@@ -87,7 +87,7 @@ public class InternalOneToOneAssociationTest extends TestCase {
     	objectWithOneToOneAssoications.setReferencedObject(referencedObject);
     	assertNotNull(objectWithOneToOneAssoications.getReferencedObject());
     	
-    	personField.clearAssociation(nakedObject, associate);
+    	personField.clearAssociation(new DummyIdentifier(), nakedObject, associate);
     	
     	assertNull(objectWithOneToOneAssoications.getReferencedObject());
     }     	
@@ -100,12 +100,12 @@ public class InternalOneToOneAssociationTest extends TestCase {
         
     	objectWithOneToOneAssoications.setReferencedObject(referencedObject);
     	
-    	Naked association = personField.getAssociation(nakedObject);
+    	Naked association = personField.getAssociation(new DummyIdentifier(), nakedObject);
         assertEquals(pojoFromAdapterFactory, association);
     }     	
     
     public void testInitGet() {
-    	personField.initValue(nakedObject, referencedObject);
+    	personField.initValue(new DummyIdentifier(), nakedObject, referencedObject);
     
     	assertEquals(associate.getObject(), objectWithOneToOneAssoications.getReferencedObject());
     }
@@ -117,7 +117,7 @@ public class InternalOneToOneAssociationTest extends TestCase {
     public void testAboutAssignment() {
     	assertTrue(personField.hasHint());
 
-    	assertNotNull(personField.getHint(session, nakedObject, associate));
+    	assertNotNull(personField.getHint(null, session, nakedObject, associate));
     }
 }
 
