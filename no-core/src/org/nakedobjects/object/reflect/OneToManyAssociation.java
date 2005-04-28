@@ -20,15 +20,15 @@ public class OneToManyAssociation extends NakedObjectAssociation {
         if (associate == null) {
             throw new IllegalArgumentException("element should not be null");
         }
-        reflectiveAdapter.removeAssociation(inObject, associate);
+        reflectiveAdapter.removeAssociation(getIdentifier(), inObject, associate);
     }
 
     public void clearCollection(NakedObject inObject) {
-        reflectiveAdapter.removeAllAssociations(inObject);
+        reflectiveAdapter.removeAllAssociations(getIdentifier(), inObject);
     }
 
     public Naked get(NakedObject fromObject) {
-        return reflectiveAdapter.getAssociations(fromObject);
+        return reflectiveAdapter.getAssociations(getIdentifier(), fromObject);
     }
 
     public Hint getHint(Session session, NakedObject object) {
@@ -37,7 +37,7 @@ public class OneToManyAssociation extends NakedObjectAssociation {
 
     public Hint getHint(Session session, NakedObject container, NakedObject element, boolean add) {
         if (hasHint()) {
-            return reflectiveAdapter.getHint(session, container, element, add);
+            return reflectiveAdapter.getHint(getIdentifier(), session, container, element, add);
         } else {
             return new DefaultHint();
         }
@@ -55,11 +55,11 @@ public class OneToManyAssociation extends NakedObjectAssociation {
     }
 
     public void initAssociation(NakedObject inObject, NakedObject associate) {
-        reflectiveAdapter.initAssociation(inObject, associate);
+        reflectiveAdapter.initAssociation(getIdentifier(), inObject, associate);
     }
 
     public void initOneToManyAssociation(NakedObject inObject, NakedObject[] instances) {
-        reflectiveAdapter.initOneToManyAssociation(inObject, instances);
+        reflectiveAdapter.initOneToManyAssociation(getIdentifier(), inObject, instances);
     }
 
     public boolean isCollection() {
@@ -71,7 +71,7 @@ public class OneToManyAssociation extends NakedObjectAssociation {
     }
 
     public boolean isEmpty(NakedObject inObject) {
-        return reflectiveAdapter.isEmpty(inObject);
+        return reflectiveAdapter.isEmpty(getIdentifier(), inObject);
     }
 
     public boolean isPart() {
@@ -82,7 +82,7 @@ public class OneToManyAssociation extends NakedObjectAssociation {
         if (associate == null) {
             throw new IllegalArgumentException("Can't use null to add an item to a collection");
         }
-        reflectiveAdapter.addAssociation(inObject, associate);
+        reflectiveAdapter.addAssociation(getIdentifier(), inObject, associate);
     }
 
     public String toString() {

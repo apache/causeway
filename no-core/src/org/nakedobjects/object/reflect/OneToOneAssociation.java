@@ -21,7 +21,7 @@ public class OneToOneAssociation extends NakedObjectAssociation {
         if (associate == null) {
             throw new NullPointerException("Must specify the item to remove/dissociate");
         }
-        reflectiveAdapter.clearAssociation(inObject, associate);
+        reflectiveAdapter.clearAssociation(getIdentifier(), inObject, associate);
     }
 
     protected void clearValue(NakedObject inObject) {
@@ -32,12 +32,12 @@ public class OneToOneAssociation extends NakedObjectAssociation {
     }
 
     protected Naked get(NakedObject fromObject) {
-        return reflectiveAdapter.getAssociation(fromObject);
+        return reflectiveAdapter.getAssociation(getIdentifier(), fromObject);
     }
 
     protected Hint getHint(Session session, NakedObject object, Naked value) {
         if (hasHint()) {
-            return reflectiveAdapter.getHint(session, object, value);
+            return reflectiveAdapter.getHint(getIdentifier(), session, object, value);
         } else {
             return new DefaultHint();
         }
@@ -54,11 +54,11 @@ public class OneToOneAssociation extends NakedObjectAssociation {
     }
 
     protected void initAssociation(NakedObject inObject, NakedObject associate) {
-        reflectiveAdapter.initAssociation(inObject, associate);
+        reflectiveAdapter.initAssociation(getIdentifier(), inObject, associate);
     }
 
     protected void initValue(NakedObject inObject, Object associate) {
-        reflectiveAdapter.initValue(inObject, associate);
+        reflectiveAdapter.initValue(getIdentifier(), inObject, associate);
     }
 
     public boolean isDerived() {
@@ -66,15 +66,15 @@ public class OneToOneAssociation extends NakedObjectAssociation {
     }
 
     public boolean isEmpty(NakedObject inObject) {
-        return reflectiveAdapter.isEmpty(inObject);
+        return reflectiveAdapter.isEmpty(getIdentifier(), inObject);
     }
 
     protected void setAssociation(NakedObject inObject, NakedObject associate) {
-        reflectiveAdapter.setAssociation(inObject, associate);
+        reflectiveAdapter.setAssociation(getIdentifier(), inObject, associate);
     }
 
     protected void setValue(NakedObject inObject, Object associate) {
-        reflectiveAdapter.setValue(inObject, associate);
+        reflectiveAdapter.setValue(getIdentifier(), inObject, associate);
      }
 
     public String toString() {
