@@ -115,7 +115,7 @@ public class JavaAssociationTest extends TestCase {
      
     public void testAboutAssignment() {
     	assertTrue(personField.hasHint());
-    	assertNotNull(personField.getHint(null, null, nakedObjectHoldingObjectWithAssociations, associate));
+    	assertNotNull(personField.getHint(null, nakedObjectHoldingObjectWithAssociations, associate));
     }
 }
 

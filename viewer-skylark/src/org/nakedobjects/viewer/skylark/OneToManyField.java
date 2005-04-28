@@ -12,7 +12,6 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.viewer.skylark.basic.ClassOption;
 
@@ -42,7 +41,7 @@ public class OneToManyField extends CollectionContent implements FieldContent {
                 return new Veto("Object is already associated with another object: " + aggregated.parent());
             }
         }
-        Hint about = getOneToManyAssociation().getHint(ClientSession.getSession(), parent, object, true);
+        Hint about = getOneToManyAssociation().getHint(parent, object, true);
         return about.canUse();
     }
     

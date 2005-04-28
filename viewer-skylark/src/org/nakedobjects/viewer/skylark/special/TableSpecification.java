@@ -6,7 +6,6 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
@@ -54,7 +53,7 @@ public class TableSpecification extends AbstractCompositeViewSpecification imple
         NakedObjectSpecification elementSpecification = NakedObjects.getSpecificationLoader().loadSpecification(
                 coll.getElementSpecification().getFullName());
         NakedObject exampleObject = (NakedObject) elementSpecification.acquireInstance();
-        NakedObjectField[] viewFields = elementSpecification.getVisibleFields(exampleObject, ClientSession.getSession());
+        NakedObjectField[] viewFields = exampleObject.getVisibleFields();
         TableAxis tableAxis = new TableAxis(tableFields(viewFields), exampleObject);
         tableAxis.setupColumnWidths(new TypeBasedColumnWidthStrategy());
 

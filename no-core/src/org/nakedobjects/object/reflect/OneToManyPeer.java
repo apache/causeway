@@ -4,7 +4,6 @@ import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.security.Session;
 
 
 public interface OneToManyPeer extends FieldPeer {
@@ -14,7 +13,7 @@ public interface OneToManyPeer extends FieldPeer {
 
 	void removeAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate);
 
-	Hint getHint(MemberIdentifier identifier, Session session, NakedObject inObject, NakedObject associate, boolean add);
+	Hint getHint(MemberIdentifier identifier, NakedObject inObject, NakedObject associate, boolean add);
 
 	NakedCollection getAssociations(MemberIdentifier identifier, NakedObject inObject);
 	

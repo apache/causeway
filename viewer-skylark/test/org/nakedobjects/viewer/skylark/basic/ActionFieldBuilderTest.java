@@ -6,8 +6,6 @@ import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.DummyNakedObject;
-import org.nakedobjects.object.security.ClientSession;
-import org.nakedobjects.object.security.Session;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -45,7 +43,6 @@ public class ActionFieldBuilderTest extends TestCase {
         };
 
         MockView.next = 0;
-        ClientSession.setSession(new Session());
         NakedObjects.setConfiguration(new Configuration());
 
         builder = new ActionFieldBuilder(subviewSpec);

@@ -1,5 +1,6 @@
 package org.nakedobjects.distribution;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
@@ -7,8 +8,6 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.AbstractOneToManyPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToManyPeer;
-import org.nakedobjects.object.security.ClientSession;
-import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
 
 import org.apache.log4j.Category;
@@ -28,7 +27,7 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
         if (isPersistent(inObject)) {
             LOG.debug("remote set association " + getName() + " in " + inObject + " with " + associate);
             try {
-                connection.setAssociation(ClientSession.getSession(), getName(), inObject.getOid(), inObject.getSpecification().getFullName(), associate.getOid(), associate.getSpecification().getFullName());
+                connection.setAssociation(NakedObjects.getCurrentSession(), getName(), inObject.getOid(), inObject.getSpecification().getFullName(), associate.getOid(), associate.getSpecification().getFullName());
             } catch (NakedObjectRuntimeException e) {
                 LOG.error("Problem with distribution ", e.getCause());
                 throw (NakedObjectRuntimeException) e.getCause();
@@ -38,7 +37,7 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
         }
     }
 
-    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject inObject, NakedObject associate, boolean add) {
+    public Hint getHint(MemberIdentifier identifier, NakedObject inObject, NakedObject associate, boolean add) {
         if (inObject.getOid() != null && fullProxy) {
             //    			try {
             // TODO implement
@@ -49,7 +48,7 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
             //    				return null;
             //    			}
         } else {
-            return super.getHint(identifier, session, inObject, associate, add);
+            return super.getHint(identifier, inObject, associate, add);
         }
     }
 
@@ -74,7 +73,7 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
         if (isPersistent(inObject) && fullProxy) {
             LOG.debug("remote clear association " + inObject + "/" + associate);
             try {
-                connection.clearAssociation(ClientSession.getSession(), getName(), inObject.getOid(), inObject.getSpecification().getFullName(), associate.getOid(), associate.getSpecification().getFullName());
+                connection.clearAssociation(NakedObjects.getCurrentSession(), getName(), inObject.getOid(), inObject.getSpecification().getFullName(), associate.getOid(), associate.getSpecification().getFullName());
             } catch (NakedObjectRuntimeException e) {
                 throw (NakedObjectRuntimeException) e.getCause();
             }

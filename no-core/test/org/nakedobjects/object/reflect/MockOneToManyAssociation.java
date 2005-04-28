@@ -5,7 +5,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.security.Session;
 
 import java.util.Vector;
 
@@ -35,7 +34,7 @@ class MockOneToManyAssociation implements OneToManyPeer {
         Assert.assertEquals(expected, actions.elementAt(index));
     }
 
-    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject inObject, NakedObject associate, boolean add) {
+    public Hint getHint(MemberIdentifier identifier, NakedObject inObject, NakedObject associate, boolean add) {
         actions.addElement("about " + inObject);
         actions.addElement("about " + associate);
         actions.addElement("about " + add);

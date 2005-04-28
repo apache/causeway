@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.core;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
@@ -11,7 +12,6 @@ import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.NakedObjectMember;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.Debug;
 import org.nakedobjects.utility.DebugInfo;
@@ -89,15 +89,14 @@ public class DebugView implements DebugInfo {
             NakedObjectSpecification specification = object.getSpecification();
             listRelatedClasses(specification, debug);
             
-            NakedObjectField[] fields = specification.getVisibleFields(object, ClientSession.getSession());
-            Session session = ClientSession.getSession();
+            NakedObjectField[] fields = specification.getVisibleFields(object);
             for (int i = 0; i < fields.length; i++) {
                 if (fields[i] instanceof OneToManyAssociation) {
                     OneToManyAssociation f = (OneToManyAssociation) fields[i];
-                    debugAboutDetail(debug, f, f.getHint(session, (NakedObject) object));
+                    debugAboutDetail(debug, f, f.getHint((NakedObject) object));
                 } else if (fields[i] instanceof OneToOneAssociation) {
                     OneToOneAssociation f = (OneToOneAssociation) fields[i];
-                    debugAboutDetail(debug, f, object.getHint(session, f, null));
+                    debugAboutDetail(debug, f, object.getHint(f, null));
                 }
             }
  		}
@@ -199,7 +198,7 @@ public class DebugView implements DebugInfo {
             text.appendln(2, "  Specification", naked.getSpecification());
             text.appendln(2, "  Class", naked.getObject() == null ? "none" : naked.getObject().getClass().getName());
             
-            Session session = ClientSession.getSession();
+            Session session = NakedObjects.getCurrentSession();
             text.appendln(2, "  Session", session);
             text.appendln(2, "  Title", naked.titleString());
 
@@ -246,7 +245,7 @@ public class DebugView implements DebugInfo {
         // work through all its fields
         NakedObjectField[] fields;
         
-        fields = object.getSpecification().getVisibleFields(object, ClientSession.getSession());
+        fields = object.getSpecification().getVisibleFields(object);
 
         for (int i = 0; i < fields.length; i++) {
             NakedObjectField field = fields[i];

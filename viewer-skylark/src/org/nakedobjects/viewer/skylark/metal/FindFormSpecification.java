@@ -6,7 +6,6 @@ import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.FastFinder;
 import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -65,7 +64,7 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
             public Consent disabled(View view) {
                 NakedObject target = ((ObjectContent) view.getContent()).getObject();
                 Action action = target.getSpecification().getObjectAction(Action.USER, "Find");
-                Hint about = target.getHint(ClientSession.getSession(), action, null);
+                Hint about = target.getHint(action, null);
                 return about.canUse();
             }
             

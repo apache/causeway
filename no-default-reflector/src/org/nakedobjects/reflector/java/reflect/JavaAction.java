@@ -14,7 +14,6 @@ import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.ReflectiveActionException;
 import org.nakedobjects.object.reflect.Action.Type;
-import org.nakedobjects.object.security.Session;
 import org.nakedobjects.reflector.java.control.SimpleActionAbout;
 
 import java.lang.reflect.InvocationTargetException;
@@ -69,7 +68,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
 
 
 
-    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
+    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
         if (parameters.length != paramCount) {
             LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);
         }
@@ -80,7 +79,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
 
         try {
             SimpleActionAbout about;
-            about = new SimpleActionAbout(session, object.getObject(), parameters);
+            about = new SimpleActionAbout(NakedObjects.getCurrentSession(), object.getObject(), parameters);
 
             if (aboutMethod.getName().equals("aboutActionDefault")) {
                 aboutMethod.invoke(object.getObject(), new Object[] { about });
@@ -134,8 +133,8 @@ public class JavaAction extends JavaMember implements ActionPeer {
         return hasReturn ? nakedClass(returnType) : null;
     }
     
-    public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
-        Hint hint= getHint(identifier, session, object, parameters);
+    public ActionParameterSet getParameters(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
+        Hint hint= getHint(identifier, object, parameters);
         if(hint instanceof SimpleActionAbout) {
             SimpleActionAbout about = (SimpleActionAbout) hint;
             return new ActionParameterSet(about.getDefaultParameterValues(), about.getParameterLabels());

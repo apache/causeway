@@ -1,5 +1,6 @@
 package org.nakedobjects.distribution;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -8,8 +9,6 @@ import org.nakedobjects.object.reflect.AbstractActionPeer;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.ReflectiveActionException;
-import org.nakedobjects.object.security.ClientSession;
-import org.nakedobjects.object.security.Session;
 
 import org.apache.log4j.Logger;
 
@@ -30,7 +29,7 @@ public final class ProxyAction extends AbstractActionPeer {
         if (isPersistent(target)) {
             String[] parameterTypes = pararmeterTypes();
             Data[] parameterObjectData = parameterValues(parameters);
-            ObjectData targetObjectData = connection.executeAction(ClientSession.getSession(), getType().getName(), getName(),
+            ObjectData targetObjectData = connection.executeAction(NakedObjects.getCurrentSession(), getType().getName(), getName(),
                     parameterTypes, target.getOid(), target.getSpecification().getFullName(), parameterObjectData);
             NakedObject returnedObject;
             returnedObject = targetObjectData == null ? null : DataHelper.recreateObject(targetObjectData);
@@ -58,14 +57,14 @@ public final class ProxyAction extends AbstractActionPeer {
         return parameterTypeNames;
     }
 
-    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
+    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
         if (isPersistent(object) && fullProxy) {
             String[] parameterTypes = pararmeterTypes();
             Data[] parameterObjectData = parameterValues(parameters);
-            return connection.getActionHint(session, getType().getName(), getName(), parameterTypes, object.getOid(), object
+            return connection.getActionHint(NakedObjects.getCurrentSession(), getType().getName(), getName(), parameterTypes, object.getOid(), object
                     .getSpecification().getFullName(), parameterObjectData);
         } else {
-            return super.getHint(identifier, session, object, parameters);
+            return super.getHint(identifier, object, parameters);
         }
     }
 

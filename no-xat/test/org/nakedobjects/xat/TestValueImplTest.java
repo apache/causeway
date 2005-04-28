@@ -13,7 +13,7 @@ public class TestValueImplTest extends TestCase {
     public void testConstructor() {
         MockNakedValue value = new MockNakedValue();
         value.setupObject("test");
-        TestValueImpl valueImpl = new TestValueImpl(null, value);
+        TestValueImpl valueImpl = new TestValueImpl(value);
         
         assertEquals(value, valueImpl.getForNaked());
         assertEquals("test", valueImpl.getForObject());

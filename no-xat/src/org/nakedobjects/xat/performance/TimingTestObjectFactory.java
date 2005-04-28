@@ -4,7 +4,6 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.security.Session;
 import org.nakedobjects.xat.Documentor;
 import org.nakedobjects.xat.ParameterValueImpl;
 import org.nakedobjects.xat.TestClass;
@@ -23,24 +22,24 @@ import java.util.Hashtable;
 public class TimingTestObjectFactory implements TestObjectFactory {
     private static TimingDocumentor documentor;
 
-    public TestClass createTestClass(Session session, NakedClass cls) {
-        return new TimingTestClass(new TestClassImpl(session, cls, this), documentor);
+    public TestClass createTestClass(NakedClass cls) {
+        return new TimingTestClass(new TestClassImpl(cls, this), documentor);
     }
 
-    public TestObject createTestObject(Session session, NakedObject object) {
-        return new TimingTestObject(new TestObjectImpl(session, object, this), documentor);
+    public TestObject createTestObject(NakedObject object) {
+        return new TimingTestObject(new TestObjectImpl(object, this), documentor);
     }
 
-    public TestCollection createTestCollection(Session session, NakedCollection collection) {
-        return new TestCollectionImpl(session, collection);
+    public TestCollection createTestCollection(NakedCollection collection) {
+        return new TestCollectionImpl(collection);
     }
     
-    public TestObject createTestObject(Session session, NakedObject field, Hashtable viewCache) {
-        return new TimingTestObject(new TestObjectImpl(session, field, viewCache, this), documentor);
+    public TestObject createTestObject(NakedObject field, Hashtable viewCache) {
+        return new TimingTestObject(new TestObjectImpl(field, viewCache, this), documentor);
     }
     
-    public TestValue createTestValue(Session session, NakedValue object) {
-        return new TestValueImpl(session, object);
+    public TestValue createTestValue(NakedValue object) {
+        return new TestValueImpl(object);
     }
 
     public void testStarting(String className, String methodName) {}

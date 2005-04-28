@@ -9,7 +9,6 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.object.reflect.valueadapter.StringAdapter;
-import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.lang.reflect.InvocationTargetException;
@@ -32,7 +31,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
         removeMethod = remove;
     }
     
-    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked associate) {
+    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked associate) {
         Method aboutMethod = getAboutMethod();
 		
 		//Class parameter = setMethod.getParameterTypes()[0];

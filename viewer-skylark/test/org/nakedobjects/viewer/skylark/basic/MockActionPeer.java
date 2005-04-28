@@ -9,7 +9,6 @@ import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.ReflectiveActionException;
 import org.nakedobjects.object.reflect.Action.Type;
-import org.nakedobjects.object.security.Session;
 
 class MockActionPeer implements ActionPeer {
 
@@ -31,7 +30,7 @@ class MockActionPeer implements ActionPeer {
         return null;
     }
 
-    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
+    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
         return null;
     }
 
@@ -55,7 +54,7 @@ class MockActionPeer implements ActionPeer {
         return null;
     }
 
-    public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
+    public ActionParameterSet getParameters(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
         return null;
     }
 

@@ -5,7 +5,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.security.Session;
 
 
 public class OneToManyAssociation extends NakedObjectAssociation {
@@ -31,21 +30,21 @@ public class OneToManyAssociation extends NakedObjectAssociation {
         return reflectiveAdapter.getAssociations(getIdentifier(), fromObject);
     }
 
-    public Hint getHint(Session session, NakedObject object) {
-        return getHint(session, object, null, true);
+    public Hint getHint(NakedObject object) {
+        return getHint(object, null, true);
     }
 
-    public Hint getHint(Session session, NakedObject container, NakedObject element, boolean add) {
+    public Hint getHint(NakedObject container, NakedObject element, boolean add) {
         if (hasHint()) {
-            return reflectiveAdapter.getHint(getIdentifier(), session, container, element, add);
+            return reflectiveAdapter.getHint(getIdentifier(), container, element, add);
         } else {
             return new DefaultHint();
         }
 
     }
 
-    protected String getLabel(Session session, NakedObject object) {
-        Hint about = getHint(session, object);
+    protected String getLabel(NakedObject object) {
+        Hint about = getHint(object);
 
         return getLabel(about);
     }

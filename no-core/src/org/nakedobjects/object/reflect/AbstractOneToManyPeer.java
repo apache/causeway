@@ -4,7 +4,6 @@ import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.security.Session;
 
 
 public class AbstractOneToManyPeer implements OneToManyPeer {
@@ -22,8 +21,8 @@ public class AbstractOneToManyPeer implements OneToManyPeer {
         return decorated.getAssociations(identifier, inObject);
     }
 
-    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject inObject, NakedObject associate, boolean add) {
-        return decorated.getHint(identifier, session, inObject, associate, add);
+    public Hint getHint(MemberIdentifier identifier, NakedObject inObject, NakedObject associate, boolean add) {
+        return decorated.getHint(identifier, inObject, associate, add);
     }
 
     public String getName() {

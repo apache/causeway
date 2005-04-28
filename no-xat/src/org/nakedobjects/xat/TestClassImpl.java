@@ -12,14 +12,13 @@ import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.NotPersistableException;
 import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.security.Session;
 
 
 public class TestClassImpl extends AbstractTestObject implements TestClass {
     private NakedClass nakedClass;
 
-    public TestClassImpl(Session session, NakedClass cls, TestObjectFactory factory) {
-        super(session, factory);
+    public TestClassImpl(NakedClass cls, TestObjectFactory factory) {
+        super(factory);
          nakedClass = cls;
     }
 
@@ -36,7 +35,7 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
             throw new IllegalActionError("No instance found with title " + title);
         } else {
             NakedObject foundObject = instances.elementAt(0);
-            return factory.createTestObject(session, foundObject);
+            return factory.createTestObject(foundObject);
         }
     }
 
@@ -59,7 +58,7 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
         if (instances.size() == 0) {
             throw new IllegalActionError("Find must find at least one object");
         } else {
-            return factory.createTestCollection(session, instances);
+            return factory.createTestCollection(instances);
         }
     }
 
@@ -69,7 +68,7 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
     public TestObject newInstance() {
         NakedObject object = newInstance(nakedClass);
 
-        return factory.createTestObject(session, object);
+        return factory.createTestObject(object);
     }
 
     private NakedObject newInstance(NakedClass cls) {

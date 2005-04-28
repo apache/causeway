@@ -7,7 +7,6 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
@@ -227,7 +226,7 @@ public class TreeNodeBorder extends AbstractBorder {
             OneToManyAssociation field = internalCollectionContent.getOneToManyAssociation();
             NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
 
-            Hint about = target.getHint(ClientSession.getSession(), field, result);
+            Hint about = target.getHint(field, result);
             if (about.canUse().isAllowed()) {
                 //	          if(field.canAssociate(target, (NakedObject) result)) {
                 target.setAssociation(field, (NakedObject) result);

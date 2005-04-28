@@ -4,7 +4,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.security.Session;
+
 
 
 public interface ActionPeer {
@@ -14,7 +14,7 @@ public interface ActionPeer {
 
     Naked execute(MemberIdentifier identifier, NakedObject object, Naked[] parameters) throws ReflectiveActionException;
 
-    Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters);
+    Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters);
 
     int getParameterCount();
 
@@ -24,7 +24,7 @@ public interface ActionPeer {
 
     NakedObjectSpecification returnType();
 
-    ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters);
+    ActionParameterSet getParameters(MemberIdentifier identifier, NakedObject object, Naked[] parameters);
 }
 
 /*

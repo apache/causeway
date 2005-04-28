@@ -9,7 +9,6 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 import org.nakedobjects.viewer.skylark.basic.RemoveOneToManyAssociationOption;
@@ -32,7 +31,7 @@ public class OneToManyFieldElement extends ObjectContent implements FieldContent
         NakedObject parentObject = getParent();
         OneToManyAssociation association = getOneToManyAssociation();
         NakedObject associatedObject = getObject();
-        Hint about = association.getHint(ClientSession.getSession(), parentObject, associatedObject, false);
+        Hint about = association.getHint(parentObject, associatedObject, false);
         Consent edit = about.canUse();
         if (edit.isAllowed()) {
             String status = "Clear the association to this object from '" + parentObject.titleString() + "'";

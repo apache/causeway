@@ -18,8 +18,6 @@ import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.PojoAdapter;
-import org.nakedobjects.object.security.ClientSession;
-import org.nakedobjects.object.security.Session;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -58,17 +56,17 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         }
     }
 
-    public TestObjectImpl(final Session session, final NakedObject object, final Hashtable viewCache,
+    public TestObjectImpl(final NakedObject object, final Hashtable viewCache,
             final TestObjectFactory factory) {
-        super(session, factory);
+        super(factory);
 
         LOG.debug("created test object for " + object);
         setForNaked(object);
         existingTestObjects = viewCache;
     }
 
-    public TestObjectImpl(final Session session, final NakedObject object, final TestObjectFactory factory) {
-        this(session, object, new Hashtable(), factory);
+    public TestObjectImpl(final NakedObject object, final TestObjectFactory factory) {
+        this(object, new Hashtable(), factory);
     }
 
     public void assertEmpty(final String fieldName) {
@@ -450,7 +448,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
             }
             nakedValue.parseTextEntry(value);
 
-            Hint about = getForNaked().getHint(ClientSession.getSession(), field, nakedValue);
+            Hint about = getForNaked().getHint(field, nakedValue);
             boolean isAllowed = about.isValid().isAllowed();
             if (isAllowed) {
                 throw new NakedAssertionFailedError("Value was unexpectedly validated");
@@ -472,7 +470,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         NakedObjectField field = fieldFor(fieldName);
         // boolean canAccess =
         // getForNaked().canAccess(ClientSession.getSession(), field);
-        boolean canAccess = getForNaked().getHint(session, field, null).canAccess().isAllowed();
+        boolean canAccess = getForNaked().getHint(field, null).canAccess().isAllowed();
         assertFalse("Field '" + fieldName + "' is visible", canAccess);
     }
 
@@ -483,14 +481,14 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
     private void assertFieldModifiable(String fieldName, NakedObjectField field) {
         //boolean canUse = getForNaked().canUse(session, field);
-        boolean canUse = getForNaked().getHint(session, field, null).canUse().isAllowed();
+        boolean canUse = getForNaked().getHint(field, null).canUse().isAllowed();
         assertTrue("Field '" + fieldName + "' in " + getForNaked() + " is unmodifiable", canUse);
     }
 
     public void assertFieldUnmodifiable(final String fieldName) {
         NakedObjectField field = fieldFor(fieldName);
         //boolean canUse = getForNaked().canUse(session, field);
-        boolean canUse = getForNaked().getHint(session, field, null).canUse().isAllowed();
+        boolean canUse = getForNaked().getHint(field, null).canUse().isAllowed();
         assertFalse("Field '" + fieldName + "' is modifiable", canUse);
     }
 
@@ -501,7 +499,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
     private void assertFieldVisible(String fieldName, NakedObjectField field) {
         //     boolean canAccess = getForNaked().canAccess(session, field);
-        boolean canAccess = getForNaked().getHint(session, field, null).canAccess().isAllowed();
+        boolean canAccess = getForNaked().getHint(field, null).canAccess().isAllowed();
         assertTrue("Field '" + fieldName + "' is invisible", canAccess);
     }
 
@@ -690,9 +688,9 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         Hint about;
         if (association instanceof OneToOneAssociation) {
             assertEmpty(fieldName);
-            about = nakedObject.getHint(session, association, obj);
+            about = nakedObject.getHint(association, obj);
         } else if (association instanceof OneToManyAssociation) {
-            about = ((OneToManyAssociation) association).getHint(session, nakedObject, obj, true);
+            about = ((OneToManyAssociation) association).getHint(nakedObject, obj, true);
         } else {
             throw new NakedObjectRuntimeException();
         }
@@ -799,7 +797,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
             }
             value.parseTextEntry(textEntry);
 
-            Hint hint = object.getHint(session, field, value);
+            Hint hint = object.getHint(field, value);
             if (hint.isValid().isVetoed()) {
                 throw new NakedAssertionFailedError("Value is not valid: " + textEntry);
             }
@@ -855,7 +853,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
             throw new IllegalActionError("selectByTitle must select only one object within " + collection);
         }
 
-        return factory.createTestObject(session, object);
+        return factory.createTestObject(object);
     }
 
     private InternalCollection getCollection(String message, String fieldName) {
@@ -900,7 +898,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
                         Naked associate;
                         associate = ((PojoAdapter) object).getField(att);
                         if (att.isValue()) {
-                            associatedView = factory.createTestValue(session, (NakedValue) associate);
+                            associatedView = factory.createTestValue((NakedValue) associate);
                         } else {
                             if (associate != null) {
                                 // if object is not null, use the view in the
@@ -910,10 +908,9 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
                             if (associatedView == null) {
                                 if (att.isCollection()) {
-                                    associatedView = factory.createTestCollection(session, (NakedCollection) associate);
+                                    associatedView = factory.createTestCollection((NakedCollection) associate);
                                 } else {
-                                    associatedView = factory.createTestObject(session, (NakedObject) associate,
-                                            existingTestObjects);
+                                    associatedView = factory.createTestObject((NakedObject) associate, existingTestObjects);
                                     // this puts it into the viewCache
                                 }
                             }
@@ -976,7 +973,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
                     + "' within it");
         }
 
-        return factory.createTestObject(session, selectedObject);
+        return factory.createTestObject(selectedObject);
     }
 
     /**

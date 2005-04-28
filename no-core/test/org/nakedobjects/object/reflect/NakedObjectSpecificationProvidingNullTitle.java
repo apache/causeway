@@ -6,7 +6,6 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action.Type;
-import org.nakedobjects.object.security.Session;
 
 
 public class NakedObjectSpecificationProvidingNullTitle implements NakedObjectSpecification {
@@ -81,7 +80,7 @@ public class NakedObjectSpecificationProvidingNullTitle implements NakedObjectSp
         };
     }
 
-    public NakedObjectField[] getVisibleFields(NakedObject object, Session session) {
+    public NakedObjectField[] getVisibleFields(NakedObject object) {
         return null;
     }
 

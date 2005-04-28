@@ -7,7 +7,6 @@ import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
@@ -52,7 +51,7 @@ public class SaveTransientObjectBorder extends ButtonBorder {
                 return Allow.DEFAULT;
             } else {
 		        Naked transientObject = (NakedObject) view.getContent().getNaked();
-                return transientObject.getHint(ClientSession.getSession(), action,new Naked[0]).canUse();
+                return transientObject.getHint(action, new Naked[0]).canUse();
             }
         }
         

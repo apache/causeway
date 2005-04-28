@@ -4,7 +4,6 @@ import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -27,7 +26,7 @@ class TreeLeafNodeSpecification implements ViewSpecification, TreeNodeSpecificat
 	        return  collection.size() > 0;
 	    } else if(content instanceof ObjectContent) {
 	        NakedObject object = ((ObjectContent) content).getObject();
-	        NakedObjectField[] fields = object.getSpecification().getVisibleFields(object, ClientSession.getSession());
+	        NakedObjectField[] fields = object.getVisibleFields();
 	        for (int i = 0; i < fields.length; i++) {
 	            if(fields[i] instanceof NakedObjectAssociation && !(object.getSpecification().isLookup())) {
 	                return true;

@@ -6,7 +6,6 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.security.Session;
 
 import java.io.Serializable;
 
@@ -78,12 +77,12 @@ public class Action extends NakedObjectMember {
         }
     }
 
-    protected Hint getHint(Session session, NakedObject object, Naked[] parameters) {
+    protected Hint getHint(NakedObject object, Naked[] parameters) {
         if (hasHint()) {
             if (parameters == null) {
-                return actionDelegate.getHint(getIdentifier(), session, object, new NakedObject[0]);
+                return actionDelegate.getHint(getIdentifier(), object, new NakedObject[0]);
             } else {
-                return actionDelegate.getHint(getIdentifier(), session, object, parameters);
+                return actionDelegate.getHint(getIdentifier(), object, parameters);
             }
         } else {
             return new DefaultHint(getLabel());
@@ -95,8 +94,8 @@ public class Action extends NakedObjectMember {
      * is derived from method name, if there is no About or its name is set to
      * null.
      */
-    protected String getLabel(Session session, NakedObject object) {
-        Hint about = getHint(session, object, parameterStubs());
+    protected String getLabel(NakedObject object) {
+        Hint about = getHint(object, parameterStubs());
 
         return getLabel(about);
     }
@@ -164,8 +163,8 @@ public class Action extends NakedObjectMember {
         return sb.toString();
     }
 
-    public ActionParameterSet getParameters(Session session, NakedObject object) {
-        ActionParameterSet parameters = actionDelegate.getParameters(getIdentifier(), session, object, parameterStubs());
+    public ActionParameterSet getParameters(NakedObject object) {
+        ActionParameterSet parameters = actionDelegate.getParameters(getIdentifier(), object, parameterStubs());
         if(parameters != null) {
             parameters.checkParameters(getIdentifier().toString(), parameters());
         }

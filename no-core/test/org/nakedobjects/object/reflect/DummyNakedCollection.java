@@ -117,11 +117,11 @@ class DummyNakedCollection implements NakedCollection {
         return null;
     }
 
-    public Hint getHint(Session session, Action action, Naked[] parameters) {
+    public Hint getHint(Action action, Naked[] parameters) {
         return null;
     }
 
-    public Hint getHint(Session session, NakedObjectField field, Naked value) {
+    public Hint getHint(NakedObjectField field, Naked value) {
         return null;
     }
 

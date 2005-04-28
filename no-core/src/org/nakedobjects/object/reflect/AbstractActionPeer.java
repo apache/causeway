@@ -5,7 +5,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action.Type;
-import org.nakedobjects.object.security.Session;
 
 public abstract class AbstractActionPeer implements ActionPeer {
     private final ActionPeer decorated;
@@ -27,8 +26,8 @@ public abstract class AbstractActionPeer implements ActionPeer {
         return decorated.execute(identifier, object, parameters);
     }
 
-    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
-        return decorated.getHint(identifier, session, object, parameters);
+    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
+        return decorated.getHint(identifier, object, parameters);
     }
 
     public int getParameterCount() {
@@ -47,8 +46,8 @@ public abstract class AbstractActionPeer implements ActionPeer {
         return decorated.returnType();
     }
 
-    public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
-        return decorated.getParameters(identifier, session, object, parameters);
+    public ActionParameterSet getParameters(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
+        return decorated.getParameters(identifier, object, parameters);
     }
 
 }

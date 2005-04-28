@@ -1,5 +1,6 @@
 package org.nakedobjects.object.security;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Consent;
@@ -19,7 +20,8 @@ public class ActionAuthorisation extends AbstractActionPeer {
         this.authorisationManager = authorisationManager;
     }
 
-    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
+    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
+        Session session = NakedObjects.getCurrentSession();
         boolean isUsable = authorisationManager.isUsable(session, identifier);
         boolean isVisible = authorisationManager.isVisible(session, identifier);
         if (!isVisible) {
@@ -29,7 +31,7 @@ public class ActionAuthorisation extends AbstractActionPeer {
                 }
             };
         }
-        final Hint hint = super.getHint(identifier, session, object, parameters);
+        final Hint hint = super.getHint(identifier, object, parameters);
         if (!isUsable) {
             return new DefaultHint() {
 

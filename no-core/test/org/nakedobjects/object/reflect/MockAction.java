@@ -7,7 +7,6 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action.Type;
-import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Vector;
@@ -31,7 +30,7 @@ final class MockAction implements ActionPeer {
        return returnObject;
     }
 
-    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
+    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
         about = new Hint() {
 
             public Consent canAccess() {
@@ -89,7 +88,7 @@ final class MockAction implements ActionPeer {
         Assert.assertEquals(expected, actions.elementAt(index));
     }
 
-    public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
+    public ActionParameterSet getParameters(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
         return new ActionParameterSet(new Object[] {new String(), new Integer(123), new Vector()}, new String[] {"one", "two", "three"});
     }
 }

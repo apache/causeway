@@ -4,23 +4,23 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.security.Session;
 
 import java.util.Hashtable;
+
 
 public interface TestObjectFactory {
 
     TestValue createParamerTestValue(Object value);
     
-    TestClass createTestClass(Session session, NakedClass cls);
+    TestClass createTestClass(NakedClass cls);
 
-    TestCollection createTestCollection(Session session, NakedCollection instances);
+    TestCollection createTestCollection(NakedCollection instances);
     
-    TestObject createTestObject(Session session, NakedObject object);
+    TestObject createTestObject(NakedObject object);
 
-    TestObject createTestObject(Session session, NakedObject field, Hashtable viewCache);
+    TestObject createTestObject(NakedObject field, Hashtable viewCache);
 
-    TestValue createTestValue(Session session, NakedValue object);
+    TestValue createTestValue(NakedValue object);
 
     Documentor getDocumentor();
 

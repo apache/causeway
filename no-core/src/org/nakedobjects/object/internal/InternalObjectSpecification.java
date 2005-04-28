@@ -12,7 +12,6 @@ import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.ObjectTitle;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.Action.Type;
-import org.nakedobjects.object.security.Session;
 
 
 public class InternalObjectSpecification implements NakedObjectSpecification {
@@ -88,7 +87,7 @@ public class InternalObjectSpecification implements NakedObjectSpecification {
         return null;
     }
 
-    public NakedObjectField[] getVisibleFields(NakedObject object, Session session) {
+    public NakedObjectField[] getVisibleFields(NakedObject object) {
         return getFields();
     }
 

@@ -6,7 +6,6 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.security.Session;
 
 
 public class OneToOneAssociation extends NakedObjectAssociation {
@@ -35,16 +34,16 @@ public class OneToOneAssociation extends NakedObjectAssociation {
         return reflectiveAdapter.getAssociation(getIdentifier(), fromObject);
     }
 
-    protected Hint getHint(Session session, NakedObject object, Naked value) {
+    protected Hint getHint(NakedObject object, Naked value) {
         if (hasHint()) {
-            return reflectiveAdapter.getHint(getIdentifier(), session, object, value);
+            return reflectiveAdapter.getHint(getIdentifier(), object, value);
         } else {
             return new DefaultHint();
         }
     }
 
-    protected String getLabel(Session session, NakedObject object) {
-        Hint about = getHint(session, object, get(object));
+    protected String getLabel(NakedObject object) {
+        Hint about = getHint(object, get(object));
 
         return getLabel(about);
     }

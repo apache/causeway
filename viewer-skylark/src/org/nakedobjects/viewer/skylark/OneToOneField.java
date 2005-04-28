@@ -11,7 +11,6 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.viewer.skylark.basic.ClassOption;
 import org.nakedobjects.viewer.skylark.basic.ObjectOption;
@@ -33,7 +32,7 @@ public class OneToOneField extends ObjectContent implements FieldContent {
         NakedObject parentObject = getParent();
         OneToOneAssociation association = getOneToOneAssociation();
         NakedObject associatedObject = getObject();
-        Hint about = parentObject.getHint(ClientSession.getSession(), association, associatedObject);
+        Hint about = parentObject.getHint(association, associatedObject);
         Consent edit = about.canUse();
         if (edit.isAllowed()) {
             String status = "Clear the association to this object from '" + parentObject.titleString() + "'";
@@ -64,7 +63,7 @@ public class OneToOneField extends ObjectContent implements FieldContent {
                 }
             }
 
-            Consent perm = getParent().getHint(ClientSession.getSession(), getOneToOneAssociation(), object).canUse();
+            Consent perm = getParent().getHint(getOneToOneAssociation(), object).canUse();
             return perm;
         }
 
@@ -93,7 +92,7 @@ public class OneToOneField extends ObjectContent implements FieldContent {
     }
 
     public Hint getHint() {
-        return getParent().getHint(ClientSession.getSession(), getField(), null);
+        return getParent().getHint(getField(), null);
     }
 
     public String getIconName() {

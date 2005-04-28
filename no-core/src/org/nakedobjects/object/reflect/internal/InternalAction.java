@@ -12,7 +12,6 @@ import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.Action.Type;
-import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.UnexpectedCallException;
 
 import java.lang.reflect.InvocationTargetException;
@@ -59,7 +58,7 @@ public class InternalAction extends InternalMember implements ActionPeer {
         return null;
     }
 
-    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
+    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
         if (parameters.length != paramCount) {
             LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);
         }
@@ -129,7 +128,7 @@ public class InternalAction extends InternalMember implements ActionPeer {
         return hasReturn ? nakedClass(returnType) : null;
     }
 
-    public ActionParameterSet getParameters(MemberIdentifier identifier, Session session, NakedObject object, Naked[] parameters) {
+    public ActionParameterSet getParameters(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
         throw new UnexpectedCallException();
     }
 }

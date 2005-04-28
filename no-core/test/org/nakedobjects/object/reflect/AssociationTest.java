@@ -11,7 +11,6 @@ import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.MockObjectFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
-import org.nakedobjects.object.security.Session;
 
 import junit.framework.TestSuite;
 
@@ -25,7 +24,6 @@ public class AssociationTest extends NakedObjectTestCase {
     private NakedObject nakedObject;
     private OneToOneAssociation association;
     private NakedObject associate;
-    private Session session;
     private DummyNakedObjectSpecification type;
     private MockOneToOneAssociation associationDelegate;
 
@@ -41,7 +39,6 @@ public class AssociationTest extends NakedObjectTestCase {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
         NakedObjects.setObjectManager(new MockObjectManager(new MockObjectFactory()));
-        session = new Session();
         nakedObject = new DummyNakedObject();
         associate = new DummyNakedObject();
         
@@ -87,24 +84,24 @@ public class AssociationTest extends NakedObjectTestCase {
     }
 
     public void testLabel() {
-        assertEquals(FIELD_NAME, association.getLabel(session, nakedObject));
+        assertEquals(FIELD_NAME, association.getLabel(nakedObject));
 
         associationDelegate.label = FIELD_LABEL;
         associationDelegate.hasAbout = true;
-        assertEquals(FIELD_LABEL, association.getLabel(session, nakedObject));
+        assertEquals(FIELD_LABEL, association.getLabel(nakedObject));
     }
 
     public void testAbout() {
         assertFalse(association.hasHint());
 
-         Hint about = association.getHint(new Session(), nakedObject, null);
+         Hint about = association.getHint(nakedObject, null);
         assertNull(associationDelegate.about);
         assertTrue(about instanceof DefaultHint);
 
         associationDelegate.hasAbout = true;
         assertTrue(association.hasHint());
 
-        about = association.getHint(new Session(), nakedObject, null);
+        about = association.getHint(nakedObject, null);
         assertEquals(associationDelegate.about, about);
     }
     

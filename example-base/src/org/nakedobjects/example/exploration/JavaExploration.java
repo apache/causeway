@@ -15,7 +15,7 @@ import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
 import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
-import org.nakedobjects.object.security.ClientSession;
+import org.nakedobjects.object.security.ClientSessionLookup;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.control.SimpleSession;
@@ -115,7 +115,9 @@ public class JavaExploration {
 
             reflectorFactory.setObjectFactory(objectFactory);
 
-            
+            NakedObjects.setSessionLookup(new ClientSessionLookup(new SimpleSession()));
+
+
             try {
                 objectManager.init();
             } catch (StartupException e) {
@@ -157,8 +159,6 @@ public class JavaExploration {
 
     public void display() {
         builder.installFixtures();
-
-        ClientSession.setSession(new SimpleSession());
 
         // Viewer
         SkylarkViewer viewer = new SkylarkViewer();

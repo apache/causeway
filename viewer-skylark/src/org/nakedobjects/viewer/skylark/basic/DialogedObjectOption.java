@@ -6,7 +6,6 @@ import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
@@ -23,12 +22,12 @@ class DialogedObjectOption extends MenuOption {
     public static DialogedObjectOption createOption(Action action, NakedObject object) {
         int paramCount = action.getParameterCount();
         Assert.assertTrue("Only for actions taking one or more params", paramCount > 0);
-    	Hint about = object.getHint(ClientSession.getSession(), action, action.parameterStubs());
+    	Hint about = object.getHint(action, action.parameterStubs());
     	if(about.canAccess().isVetoed()) {
     		return null;
     	}
 
-    	String label =  object.getLabel(ClientSession.getSession(), action) + "...";
+    	String label =  object.getLabel(action) + "...";
     	/*
     	 String label =  action.getLabel(ClientSession.getSession(), object) + " (";
     	NakedObjectSpecification[] parameters = action.parameters();
@@ -56,7 +55,7 @@ class DialogedObjectOption extends MenuOption {
         Naked[] parameterValues;
         parameterValues = action.parameterStubs();        
         
-		Hint about = object.getHint(ClientSession.getSession(), action, parameterValues);
+		Hint about = object.getHint(action, parameterValues);
         // ignore the details from the About about useablility this will be
         // checked in the dialog
         String description = about.getDescription();

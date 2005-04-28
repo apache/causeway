@@ -8,17 +8,15 @@ import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NameConvertor;
-import org.nakedobjects.object.security.Session;
 
 import junit.framework.Assert;
 
 
+
 abstract class AbstractTestObject {
-    protected final Session session;
     protected final TestObjectFactory factory;
 
-    public AbstractTestObject(Session session, TestObjectFactory factory) {
-        this.session = session;
+    public AbstractTestObject(TestObjectFactory factory) {
         this.factory = factory;
     }
     
@@ -56,9 +54,9 @@ abstract class AbstractTestObject {
         if (result == null) {
             return null;
         } else if(result instanceof NakedCollection) {
-            return factory.createTestCollection(session, (NakedCollection) result);
+            return factory.createTestCollection((NakedCollection) result);
         } else {
-            return factory.createTestObject(session, (NakedObject) result);
+            return factory.createTestObject((NakedObject) result);
         }
 
     }
@@ -101,7 +99,7 @@ abstract class AbstractTestObject {
     }
 
     private void assertActionInvisible(String name, Action action, TestNaked[] parameters) {
-        boolean vetoed = getForNaked().getHint(session, action, nakedObjects(parameters)).canAccess().isVetoed();
+        boolean vetoed = getForNaked().getHint(action, nakedObjects(parameters)).canAccess().isVetoed();
         Assert.assertTrue("action '" + name + "' is visible", vetoed);
     }
 
@@ -119,7 +117,7 @@ abstract class AbstractTestObject {
 
     private void assertActionUnusable(String name, Action action, TestNaked[] parameters) {
         Naked[] parameterObjects = nakedObjects(parameters);
-        boolean vetoed = getForNaked().getHint(session, action, parameterObjects).canUse().isVetoed();
+        boolean vetoed = getForNaked().getHint(action, parameterObjects).canUse().isVetoed();
         Assert.assertTrue("action '" + name + "' is usable", vetoed);
     }
 
@@ -137,7 +135,7 @@ abstract class AbstractTestObject {
 
     protected void assertActionUsable(String name, Action action, final TestNaked[] parameters) {
         Naked[] paramaterObjects = nakedObjects(parameters);
-        Consent canUse = getForNaked().getHint(session, action, paramaterObjects).canUse();
+        Consent canUse = getForNaked().getHint(action, paramaterObjects).canUse();
         boolean allowed = canUse.isAllowed();
         assertTrue("action '" + name + "' is unusable: " + canUse.getReason(), allowed);
     }
@@ -155,7 +153,7 @@ abstract class AbstractTestObject {
     }
 
     protected void assertActionVisible(String name, Action action, TestNaked[] parameters) {
-        boolean allowed = getForNaked().getHint(session, action, nakedObjects(parameters)).canAccess()
+        boolean allowed = getForNaked().getHint(action, nakedObjects(parameters)).canAccess()
                 .isAllowed();
         assertTrue("action '" + name + "' is invisible", allowed);
     }

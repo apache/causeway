@@ -14,13 +14,9 @@ import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.security.ClientSession;
-import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.UnexpectedCallException;
 import org.nakedobjects.viewer.skylark.basic.AbstractContent;
-
-import org.apache.log4j.Logger;
 
 
 public abstract class ObjectContent extends AbstractContent {
@@ -33,9 +29,8 @@ public abstract class ObjectContent extends AbstractContent {
         NakedObject target = (NakedObject) getObject();
 
         Action action = dropAction(source, target);
-        Session session = ClientSession.getSession();
         if (action != null) {
-            Hint about = target.getHint(session, action, new NakedObject[] { source });
+            Hint about = target.getHint(action, new NakedObject[] { source });
             return about.canUse();
 
         } else {
@@ -43,11 +38,11 @@ public abstract class ObjectContent extends AbstractContent {
                 return new Veto("Can't set field in persistent object with reference to non-persistent object");
 
             } else {
-                NakedObjectField[] fields = target.getSpecification().getVisibleFields(target, session);
+                NakedObjectField[] fields = target.getVisibleFields();
                 for (int i = 0; i < fields.length; i++) {
                     if (source.getSpecification().isOfType(fields[i].getSpecification())) {
                         if (target.getField(fields[i]) == null) {
-                            return new Allow("Set field " + target.getLabel(session, fields[i]));
+                            return new Allow("Set field " + target.getLabel(fields[i]));
                         }
                     }
                 }
@@ -72,11 +67,11 @@ public abstract class ObjectContent extends AbstractContent {
             Action action = dropAction(source, target);
 
             if ((action != null)
-                    && target.getHint(ClientSession.getSession(), action, new NakedObject[] { source }).canUse().isAllowed()) {
+                    && target.getHint(action, new NakedObject[] { source }).canUse().isAllowed()) {
                 return target.execute(action, new NakedObject[] { source });
 
             } else {
-                NakedObjectField[] fields = target.getSpecification().getVisibleFields(target, ClientSession.getSession());
+                NakedObjectField[] fields = target.getVisibleFields();
                 for (int i = 0; i < fields.length; i++) {
                     if (source.getSpecification().isOfType(fields[i].getSpecification()) && target.getField(fields[i]) == null) {
                         target.setAssociation(((NakedObjectAssociation) fields[i]), source);

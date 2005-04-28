@@ -2,7 +2,6 @@ package org.nakedobjects.xat;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
-import org.nakedobjects.object.security.Session;
 
 public class TestCollectionImpl implements TestCollection {
 
@@ -12,7 +11,7 @@ public class TestCollectionImpl implements TestCollection {
         super();
     }
 
-    public TestCollectionImpl(Session session, NakedCollection collection) {
+    public TestCollectionImpl(NakedCollection collection) {
         this.collection = collection;
     }
 

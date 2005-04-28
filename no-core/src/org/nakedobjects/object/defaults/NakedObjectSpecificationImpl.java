@@ -23,7 +23,6 @@ import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.Reflector;
-import org.nakedobjects.object.security.Session;
 
 import java.lang.reflect.Array;
 import java.util.Vector;
@@ -347,7 +346,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         return title;
     }
 
-    public NakedObjectField[] getVisibleFields(NakedObject object, Session session) {
+    public NakedObjectField[] getVisibleFields(NakedObject object) {
         if (this.viewFields != null) {
             return viewFields;
         }
@@ -356,7 +355,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         int v = 0;
         for (int i = 0; i < fields.length; i++) {
            // boolean useField = object.canAccess(session, fields[i]);
-            boolean useField = object.getHint(session, fields[i], null).canAccess().isAllowed();
+            boolean useField = object.getHint(fields[i], null).canAccess().isAllowed();
             
             if (useField) {
                 viewFields[v++] = fields[i];

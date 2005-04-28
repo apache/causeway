@@ -11,7 +11,6 @@ import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.internal.DummyIdentifier;
 import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
-import org.nakedobjects.object.security.Session;
 
 import java.lang.reflect.Method;
 
@@ -115,7 +114,7 @@ public class JavaOneToOneAssociationTest extends TestCase {
      
     public void testAboutAssignment() {
     	assertTrue(personField.hasHint());
-    	assertNotNull(personField.getHint(null, new Session(), nakedObject, associatedNakedObject));
+    	assertNotNull(personField.getHint(null, nakedObject, associatedNakedObject));
     }
 }
 

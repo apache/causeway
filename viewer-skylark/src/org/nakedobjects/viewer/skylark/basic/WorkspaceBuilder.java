@@ -5,7 +5,6 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
@@ -33,7 +32,7 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
         NakedObject object = ((ObjectContent) view.getContent()).getObject();
 
         if (object != null && view.getSubviews().length == 0) {
-            NakedObjectField[] flds = object.getSpecification().getVisibleFields(object, ClientSession.getSession());
+            NakedObjectField[] flds = object.getVisibleFields();
             ViewFactory viewFactory = Skylark.getViewFactory();
             ContentFactory contentFactory = Skylark.getContentFactory();
             

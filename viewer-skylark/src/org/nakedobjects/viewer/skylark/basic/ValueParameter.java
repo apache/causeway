@@ -8,7 +8,6 @@ import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
-import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.utility.ToString;
@@ -49,7 +48,7 @@ class ValueParameter extends ValueContent implements ParameterContent {
         return object;
     }
 
-    public Hint getValueHint(Session session, String entryText) {
+    public Hint getValueHint(String entryText) {
         return new DefaultHint();
     }
 

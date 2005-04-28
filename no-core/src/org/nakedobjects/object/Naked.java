@@ -5,7 +5,6 @@ import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.security.Session;
 
 
 /**
@@ -36,9 +35,9 @@ public interface Naked {
 
     Naked execute(Action action, Naked[] parameters);
 
-    Hint getHint(Session session, Action action, Naked[] parameters);
+    Hint getHint(Action action, Naked[] parameters);
 
-    Hint getHint(Session session, NakedObjectField field, Naked value);
+    Hint getHint(NakedObjectField field, Naked value);
 
     String getIconName();
 

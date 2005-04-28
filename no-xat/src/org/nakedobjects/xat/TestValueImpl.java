@@ -2,14 +2,13 @@ package org.nakedobjects.xat;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
 
 
 public class TestValueImpl implements TestValue {
     private NakedValue object;
 
-    public TestValueImpl(Session session, NakedValue object) {
+    public TestValueImpl(NakedValue object) {
         this.object = object;
     }
 

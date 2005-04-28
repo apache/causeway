@@ -8,7 +8,6 @@ import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToManyPeer;
-import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.lang.reflect.InvocationTargetException;
@@ -63,7 +62,7 @@ public class InternalOneToManyAssociation extends InternalField implements OneTo
         }
     }
 
-    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, NakedObject element, boolean add) {
+    public Hint getHint(MemberIdentifier identifier, NakedObject object, NakedObject element, boolean add) {
         if (hasHint()) {
             Method aboutMethod = getAboutMethod();
             try {

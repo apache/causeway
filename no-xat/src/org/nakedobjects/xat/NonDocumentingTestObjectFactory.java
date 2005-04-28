@@ -4,7 +4,6 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.security.Session;
 
 import java.util.Hashtable;
 
@@ -16,24 +15,24 @@ public class NonDocumentingTestObjectFactory implements TestObjectFactory {
     public TestValue createParamerTestValue(Object value) {
         return new ParameterValueImpl(value);
     }
-    public TestClass createTestClass(Session session, NakedClass cls) {
-        return new TestClassImpl(session, cls, this);
+    public TestClass createTestClass(NakedClass cls) {
+        return new TestClassImpl( cls, this);
     }
 
-    public TestCollection createTestCollection(Session session, NakedCollection instances) {
-        return new TestCollectionImpl(session, instances);
+    public TestCollection createTestCollection(NakedCollection instances) {
+        return new TestCollectionImpl(instances);
     }
 
-    public TestObject createTestObject(Session session, NakedObject object) {
-        return new TestObjectImpl(session, object, this);
+    public TestObject createTestObject(NakedObject object) {
+        return new TestObjectImpl(object, this);
     }
 
-    public TestObject createTestObject(Session session, NakedObject field, Hashtable viewCache) {
-        return new TestObjectImpl(session, field, viewCache, this);
+    public TestObject createTestObject(NakedObject field, Hashtable viewCache) {
+        return new TestObjectImpl(field, viewCache, this);
     }
     
-    public TestValue createTestValue(Session session, NakedValue object) {
-        return new TestValueImpl(session, object);
+    public TestValue createTestValue(NakedValue object) {
+        return new TestValueImpl(object);
     }
 
     public Documentor getDocumentor() {

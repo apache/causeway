@@ -11,7 +11,6 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
@@ -59,7 +58,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
             cls = object.getSpecification();
         }
         
-        NakedObjectField[] flds = cls.getVisibleFields(object, ClientSession.getSession());
+        NakedObjectField[] flds = cls.getVisibleFields(object);
 
         if (view.getSubviews().length == 0) {
             newBuild(view, object, flds);

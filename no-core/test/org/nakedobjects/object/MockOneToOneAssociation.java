@@ -3,7 +3,6 @@ package org.nakedobjects.object;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
-import org.nakedobjects.object.security.Session;
 
 public class MockOneToOneAssociation implements OneToOnePeer {
 
@@ -21,7 +20,7 @@ public class MockOneToOneAssociation implements OneToOnePeer {
 
     public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
 
-    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked value) {
+    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked value) {
         return null;
     }
 

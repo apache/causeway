@@ -7,7 +7,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.reflect.DummyPojoAdapterFactory;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
-import org.nakedobjects.object.security.Session;
 
 import java.lang.reflect.Method;
 
@@ -24,7 +23,6 @@ public class InternalAssociationTest extends TestCase {
 	private InternalObjectForReferencing referencedObject;
 	private InternalOneToOneAssociation personField;
 	private NakedObject associate;
-    private Session session;
     private MockNakedObjectSpecificationLoader loader;
     private NakedObject object;
     private DummyNakedObjectSpecification spec;
@@ -44,7 +42,6 @@ public class InternalAssociationTest extends TestCase {
         loader.addSpec(spec);
         NakedObjects.setSpecificationLoader(loader);
 
-    	session = new Session();
         objectWithOneToOneAssoications = new InternalObjectWithOneToOneAssociations();
     	PojoAdapterFactory pojoAdapterFactory = new DummyPojoAdapterFactory();
     	NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
@@ -107,7 +104,7 @@ public class InternalAssociationTest extends TestCase {
     public void testAboutAssignment() {
     	assertTrue(personField.hasHint());
 
-    	assertNotNull(personField.getHint(null, session, object, associate));
+    	assertNotNull(personField.getHint(null, object, associate));
     }
 }
 

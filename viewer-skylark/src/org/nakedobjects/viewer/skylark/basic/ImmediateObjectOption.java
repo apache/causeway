@@ -8,7 +8,6 @@ import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
@@ -28,11 +27,11 @@ class ImmediateObjectOption extends MenuOption {
     public static ImmediateObjectOption createOption(Action action, NakedObject object) {
     	Assert.assertTrue("Only suitable for 0 param methods", action.parameters().length == 0);
         
-        Hint about = object.getHint(ClientSession.getSession(), action, null);
+        Hint about = object.getHint(action, null);
     	if(about.canAccess().isVetoed()) {
     		return null;
     	}
-    	String labelName =  object.getLabel(ClientSession.getSession(), action);
+    	String labelName =  object.getLabel(action);
     	ImmediateObjectOption option = new ImmediateObjectOption(labelName, object, action);
     
     	// if method returns something then add ... to indicate a new window is shown
@@ -52,7 +51,7 @@ class ImmediateObjectOption extends MenuOption {
 	}
 
     public Consent disabled(View view) {
-		Hint about = object.getHint(ClientSession.getSession(), action, null);
+		Hint about = object.getHint(action, null);
 		if(about.canUse().isAllowed()) {
 			String description = about.getDescription();
 			if(action.hasReturn()) {

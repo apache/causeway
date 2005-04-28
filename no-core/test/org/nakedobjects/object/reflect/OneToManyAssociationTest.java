@@ -12,7 +12,6 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.MockObjectFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.persistence.ObjectStoreException;
-import org.nakedobjects.object.security.Session;
 
 import junit.framework.TestSuite;
 
@@ -26,7 +25,6 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
 	private NakedObject nakedObject;
 	private NakedObject associate;
 	private OneToManyAssociation association;
-    private Session session;
     private DummyNakedObjectSpecification type;
     private MockOneToManyAssociation associationDelegate;
 	
@@ -43,7 +41,6 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
 
     	NakedObjects.setObjectManager(new MockObjectManager(new MockObjectFactory()));
     	
-       	session = new Session();
        	nakedObject = new DummyNakedObject();
         associate = new DummyNakedObject();
         
@@ -100,17 +97,17 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     }
     
     public void testLabel() {
-        assertEquals(FIELD_NAME, association.getLabel(session, nakedObject));
+        assertEquals(FIELD_NAME, association.getLabel(nakedObject));
 
         associationDelegate.label = FIELD_LABEL;
         associationDelegate.hasAbout = true;
-        assertEquals(FIELD_LABEL, association.getLabel(session, nakedObject));
+        assertEquals(FIELD_LABEL, association.getLabel(nakedObject));
    }
     
     public void testAboutForSet() {
         assertFalse(association.hasHint());
 
-        Hint about = association.getHint(new Session(), nakedObject, associate, true);
+        Hint about = association.getHint(nakedObject, associate, true);
        assertNull(associationDelegate.about);
        assertTrue(about instanceof DefaultHint);
        associationDelegate.assertActions(0);
@@ -118,7 +115,7 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
        associationDelegate.hasAbout = true;
        assertTrue(association.hasHint());
 
-       about = association.getHint(new Session(), nakedObject, associate, true);
+       about = association.getHint(nakedObject, associate, true);
        assertEquals(associationDelegate.about, about);
        associationDelegate.assertAction(0, "about " + nakedObject);
        associationDelegate.assertAction(1, "about " + associate);
@@ -129,7 +126,7 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     public void testAboutForClear() {
         assertFalse(association.hasHint());
 
-        Hint about = association.getHint(new Session(), nakedObject, associate, false);
+        Hint about = association.getHint(nakedObject, associate, false);
        assertNull(associationDelegate.about);
        assertTrue(about instanceof DefaultHint);
        associationDelegate.assertActions(0);
@@ -137,7 +134,7 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
        associationDelegate.hasAbout = true;
        assertTrue(association.hasHint());
 
-       about = association.getHint(new Session(), nakedObject, associate, false);
+       about = association.getHint(nakedObject, associate, false);
        assertEquals(associationDelegate.about, about);
        associationDelegate.assertAction(0, "about " + nakedObject);
        associationDelegate.assertAction(1, "about " + associate);
@@ -147,14 +144,14 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     public void testFullAbout() {
         assertFalse(association.hasHint());
 
-        Hint about = association.getHint(new Session(), nakedObject);
+        Hint about = association.getHint(nakedObject);
        assertNull(associationDelegate.about);
        assertTrue(about instanceof DefaultHint);
 
        associationDelegate.hasAbout = true;
        assertTrue(association.hasHint());
 
-       about = association.getHint(new Session(), nakedObject);
+       about = association.getHint(nakedObject);
        assertEquals(associationDelegate.about, about);
     }
 

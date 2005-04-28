@@ -12,7 +12,6 @@ import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
-import org.nakedobjects.object.security.Session;
 import org.nakedobjects.reflector.java.control.SimpleFieldAbout;
 
 import java.lang.reflect.InvocationTargetException;
@@ -34,12 +33,12 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         removeMethod = remove;
     }
 
-    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked associate) {
+    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked associate) {
         Method aboutMethod = getAboutMethod();
 
         Class parameter = getMethod.getReturnType();
         if (associate != null && !parameter.isAssignableFrom(associate.getObject().getClass())) {
-            SimpleFieldAbout about = new SimpleFieldAbout(session, object.getObject());
+            SimpleFieldAbout about = new SimpleFieldAbout(NakedObjects.getCurrentSession(), object.getObject());
             about.unmodifiable("Invalid type: field must be set with a "
                     + NakedObjects.getSpecificationLoader().loadSpecification(parameter.getName()));
             return about;
@@ -50,7 +49,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         }
 
         try {
-            SimpleFieldAbout about = new SimpleFieldAbout(session, object.getObject());
+            SimpleFieldAbout about = new SimpleFieldAbout(NakedObjects.getCurrentSession(), object.getObject());
             Object[] parameters;
             if (aboutMethod.getParameterTypes().length == 2) {
                 parameters = new Object[] { about, associate == null ? null : associate.getObject() };

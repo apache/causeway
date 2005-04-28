@@ -11,7 +11,6 @@ import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToManyPeer;
-import org.nakedobjects.object.security.Session;
 import org.nakedobjects.reflector.java.control.SimpleFieldAbout;
 
 import java.lang.reflect.InvocationTargetException;
@@ -73,11 +72,11 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
         }
     }
 
-    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, NakedObject element, boolean add) {
+    public Hint getHint(MemberIdentifier identifier, NakedObject object, NakedObject element, boolean add) {
         if (hasHint()) {
             Method aboutMethod = getAboutMethod();
             try {
-                SimpleFieldAbout about = new SimpleFieldAbout(session, object.getObject());
+                SimpleFieldAbout about = new SimpleFieldAbout(NakedObjects.getCurrentSession(), object.getObject());
                 Object[] parameters;
                 if (aboutMethod.getParameterTypes().length == 3) {
                     parameters = new Object[] { about, element == null ? null : element.getObject(), new Boolean(add) };

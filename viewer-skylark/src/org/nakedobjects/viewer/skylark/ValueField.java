@@ -12,8 +12,6 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.security.ClientSession;
-import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.DebugString;
 
 
@@ -71,7 +69,7 @@ public class ValueField extends ValueContent implements FieldContent {
         return getOneToOneAssociation().getSpecification();
     }
 
-    public Hint getValueHint(Session session, String entryText) {
+    public Hint getValueHint(String entryText) {
         NakedValue example = (NakedValue) getSpecification().acquireInstance();
 
         if (example != null) {
@@ -85,7 +83,7 @@ public class ValueField extends ValueContent implements FieldContent {
 	            };
 	        }
 	        // TODO need the Value object to parse the entry string
-	        return getParent().getHint(ClientSession.getSession(), (NakedObjectField) getField(), example);
+	        return getParent().getHint((NakedObjectField) getField(), example);
         } else {
            // throw new NakedObjectRuntimeException("Can't create an instance of " + getSpecification());
             return new DefaultHint();

@@ -8,7 +8,6 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.security.Session;
 
 
 public class DummyNakedObject implements NakedObject {
@@ -50,11 +49,11 @@ public class DummyNakedObject implements NakedObject {
         return null;
     }
 
-    public Hint getHint(Session session, Action action, Naked[] parameters) {
+    public Hint getHint(Action action, Naked[] parameters) {
         return null;
     }
 
-    public Hint getHint(Session session, NakedObjectField field, Naked value) {
+    public Hint getHint(NakedObjectField field, Naked value) {
         return null;
     }
 
@@ -62,11 +61,11 @@ public class DummyNakedObject implements NakedObject {
         return null;
     }
 
-    public String getLabel(Session session, Action action) {
+    public String getLabel(Action action) {
         return null;
     }
 
-    public String getLabel(Session session, NakedObjectField field) {
+    public String getLabel(NakedObjectField field) {
         return null;
     }
 
@@ -78,7 +77,7 @@ public class DummyNakedObject implements NakedObject {
         return oid;
     }
 
-    public ActionParameterSet getParameters(Session session, Action action) {
+    public ActionParameterSet getParameters(Action action) {
         return null;
     }
 
@@ -157,6 +156,10 @@ public class DummyNakedObject implements NakedObject {
     }
 
     public NakedObjectField[] getFields() {
+        return null;
+    }
+
+    public NakedObjectField[] getVisibleFields() {
         return null;
     }
 

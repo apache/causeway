@@ -2,7 +2,6 @@ package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.security.Session;
 
 
 public abstract class NakedObjectMember {
@@ -52,7 +51,7 @@ public abstract class NakedObjectMember {
      * 
      * @see #getLabel()
      */
-    protected abstract String getLabel(Session session, NakedObject object);
+    protected abstract String getLabel(NakedObject object);
 
     /**
      * Returns the name of the member.

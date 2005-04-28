@@ -5,7 +5,6 @@ import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.ObjectTitle;
 import org.nakedobjects.object.reflect.PojoAdapter;
-import org.nakedobjects.object.security.Session;
 
 
 public interface NakedObjectSpecification {
@@ -71,7 +70,7 @@ public interface NakedObjectSpecification {
 
     ObjectTitle getTitle();
 
-    NakedObjectField[] getVisibleFields(NakedObject object, Session session);
+    NakedObjectField[] getVisibleFields(NakedObject object);
 
     boolean hasSubclasses();
 

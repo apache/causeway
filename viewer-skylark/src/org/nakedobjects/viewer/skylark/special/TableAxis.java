@@ -2,7 +2,6 @@ package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 
@@ -19,7 +18,7 @@ public class TableAxis implements ViewAxis {
         widths = new int[fields.length];
         names = new String[fields.length];
         for (int i = 0; i < widths.length; i++) {
-            names[i] = exampleObject.getLabel(ClientSession.getSession(), fields[i]);
+            names[i] = exampleObject.getLabel(fields[i]);
         }
     }
 

@@ -7,7 +7,6 @@ import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.reflect.DummyNakedObject;
-import org.nakedobjects.object.security.Session;
 
 import java.lang.reflect.Method;
 
@@ -25,7 +24,6 @@ public class InternalOneToOneAssociationTest extends TestCase {
 	private InternalOneToOneAssociation personField;
 	private InternalObjectForReferencing referencedObject;
 	private MockNakedObject associate;
-    private Session session;
     private MockNakedObjectSpecificationLoader loader;
     private DummyNakedObjectSpecification spec;
     
@@ -43,15 +41,9 @@ public class InternalOneToOneAssociationTest extends TestCase {
         loader.addSpec(spec);
         NakedObjects.setSpecificationLoader(loader);
 
-        session = new Session();
         objectWithOneToOneAssoications = new InternalObjectWithOneToOneAssociations();
-  //      PojoAdapterFactory pojoAdapterFactory = new DummyPojoAdapterFactory();
-
-//        pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
-//        pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
         nakedObject = new MockNakedObject();
         nakedObject.setupObject(objectWithOneToOneAssoications);
-//        NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
 
         Class cls = InternalObjectWithOneToOneAssociations.class;
         Method get = cls.getDeclaredMethod("getReferencedObject", new Class[0]);
@@ -117,7 +109,7 @@ public class InternalOneToOneAssociationTest extends TestCase {
     public void testAboutAssignment() {
     	assertTrue(personField.hasHint());
 
-    	assertNotNull(personField.getHint(null, session, nakedObject, associate));
+    	assertNotNull(personField.getHint(null, nakedObject, associate));
     }
 }
 

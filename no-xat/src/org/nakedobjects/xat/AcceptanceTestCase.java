@@ -11,7 +11,7 @@ import org.nakedobjects.object.fixture.Fixture;
 import org.nakedobjects.object.fixture.FixtureBuilder;
 import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
-import org.nakedobjects.object.security.ClientSession;
+import org.nakedobjects.object.security.ClientSessionLookup;
 import org.nakedobjects.object.security.Session;
 
 import java.io.File;
@@ -126,8 +126,7 @@ public abstract class AcceptanceTestCase extends TestCase {
         setupFramework();
 
         // fixtureBuilder = explorationSetup();
-        ClientSession.setSession(new Session());
-        Session session = ClientSession.getSession();
+        NakedObjects.setSessionLookup(new ClientSessionLookup(new Session()));
 
         setUpFixtures();
 
@@ -137,7 +136,7 @@ public abstract class AcceptanceTestCase extends TestCase {
             for (int i = 0; i < cls.length; i++) {
                 NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(cls[i]);
                 NakedClass spec = new NakedClass(cls[i]);
-                TestClass view = testObjectFactory.createTestClass(session, spec);
+                TestClass view = testObjectFactory.createTestClass(spec);
                 classes.put(nc.getFullName().toLowerCase(), view);
             }
         } catch (Exception e) {
@@ -211,9 +210,7 @@ public abstract class AcceptanceTestCase extends TestCase {
         NakedObjects.getSpecificationLoader().shutdown();
         NakedObjects.setSpecificationLoader(null);
         NakedObjects.setConfiguration(null);
-        
-        ClientSession.end();
-        ClientSession.setSession(null);
+        NakedObjects.setSessionLookup(null);
         
         classes.clear();
         classes = null;

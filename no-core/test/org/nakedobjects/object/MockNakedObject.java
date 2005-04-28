@@ -8,7 +8,6 @@ import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.security.Session;
 
 
 public class MockNakedObject implements NakedObject {
@@ -52,11 +51,11 @@ public class MockNakedObject implements NakedObject {
         return new NakedObjectField[0];
     }
 
-    public Hint getHint(Session session, Action action, Naked[] parameters) {
+    public Hint getHint(Action action, Naked[] parameters) {
         return null;
     }
 
-    public Hint getHint(Session session, NakedObjectField field, Naked value) {
+    public Hint getHint(NakedObjectField field, Naked value) {
         return null;
     }
 
@@ -64,11 +63,11 @@ public class MockNakedObject implements NakedObject {
         return null;
     }
 
-    public String getLabel(Session session, Action action) {
+    public String getLabel(Action action) {
         return null;
     }
 
-    public String getLabel(Session session, NakedObjectField field) {
+    public String getLabel(NakedObjectField field) {
         return null;
     }
 
@@ -80,7 +79,7 @@ public class MockNakedObject implements NakedObject {
         return oid;
     }
 
-    public ActionParameterSet getParameters(Session session, Action action) {
+    public ActionParameterSet getParameters(Action action) {
         return null;
     }
 
@@ -171,6 +170,10 @@ public class MockNakedObject implements NakedObject {
 
     public void setupViewDirty(boolean b) {
         viewDirty = b;
+    }
+
+    public NakedObjectField[] getVisibleFields() {
+        return null;
     }
 }
 

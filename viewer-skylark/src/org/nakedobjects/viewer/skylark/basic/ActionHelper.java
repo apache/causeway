@@ -8,7 +8,6 @@ import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionParameterSet;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.ParameterContent;
 
 
@@ -19,7 +18,7 @@ public class ActionHelper {
         Naked[] parameters;
         parameters = new Naked[numberParameters];
 
-        ActionParameterSet parameterHints = target.getParameters(ClientSession.getSession(), action);
+        ActionParameterSet parameterHints = target.getParameters(action);
         Object[] defaultValues;
         String[] labels;
         if (parameterHints != null) {
@@ -87,12 +86,12 @@ public class ActionHelper {
     }
 
     public Consent disabled() {
-        Hint about = target.getHint(ClientSession.getSession(), action, parameters);
+        Hint about = target.getHint(action, parameters);
         return about.canUse();
     }
 
     public String getName() {
-        return target.getLabel(ClientSession.getSession(), action);
+        return target.getLabel(action);
     }
 
     public Naked getParameter(int index) {

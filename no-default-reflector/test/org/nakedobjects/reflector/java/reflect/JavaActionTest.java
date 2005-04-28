@@ -52,7 +52,7 @@ public class JavaActionTest extends TestCase {
     }
 
     public void testAbout() {
-        Hint about = javaAction.getHint(null, null, nakedObject, new Naked[0]);
+        Hint about = javaAction.getHint(null, nakedObject, new Naked[0]);
         assertNotNull(about);
         assertEquals("about for test", about.getName());
     }

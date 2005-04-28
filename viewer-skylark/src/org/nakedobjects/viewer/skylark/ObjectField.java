@@ -3,7 +3,6 @@ package org.nakedobjects.viewer.skylark;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.utility.DebugString;
 
 
@@ -28,7 +27,7 @@ final class ObjectField {
     }
 
      public final String getName() {
-        return parent.getLabel(ClientSession.getSession(), field);
+        return parent.getLabel(field);
     }
 
     public NakedObject getParent() {

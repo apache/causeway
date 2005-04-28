@@ -8,7 +8,6 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.AbstractNakedObject;
-import org.nakedobjects.object.security.Session;
 
 
 public class PojoAdapter extends AbstractNakedObject {
@@ -59,39 +58,39 @@ public class PojoAdapter extends AbstractNakedObject {
         return getSpecification().getFields();
     }
 
-    public NakedObjectField[] getVisibleFields(Session session) {
-        return getSpecification().getVisibleFields(this, session);
+    public NakedObjectField[] getVisibleFields() {
+        return getSpecification().getVisibleFields(this);
     }
 
     
-    public Hint getHint(Session session, Action action, Naked[] parameterValues) {
-        return action.getHint(session, this, parameterValues);
+    public Hint getHint(Action action, Naked[] parameterValues) {
+        return action.getHint(this, parameterValues);
     }
 
-    public Hint getHint(Session session, NakedObjectField field, Naked value) {
+    public Hint getHint(NakedObjectField field, Naked value) {
         if (field instanceof OneToOneAssociation) {
-            return ((OneToOneAssociation) field).getHint(session, this, value);
+            return ((OneToOneAssociation) field).getHint(this, value);
         } else if (field instanceof OneToManyAssociation) {
-            return ((OneToManyAssociation) field).getHint(session, this);
+            return ((OneToManyAssociation) field).getHint(this);
         } else {
             throw new NakedObjectRuntimeException();
         }
     }
 
-    public String getLabel(Session session, Action action) {
-        return action.getLabel(session, this);
+    public String getLabel(Action action) {
+        return action.getLabel(this);
     }
 
-    public String getLabel(Session session, NakedObjectField field) {
-        return field.getLabel(session, this);
+    public String getLabel(NakedObjectField field) {
+        return field.getLabel(this);
     }
 
     public Object getObject() {
         return pojo;
     }
 
-    public ActionParameterSet getParameters(Session session, Action action) {
-        return action.getParameters(session, this);
+    public ActionParameterSet getParameters(Action action) {
+        return action.getParameters(this);
     }
 
     public NakedValue getValue(OneToOneAssociation field) {

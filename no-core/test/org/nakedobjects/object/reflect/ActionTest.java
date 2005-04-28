@@ -10,7 +10,6 @@ import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.persistence.ObjectStoreException;
-import org.nakedobjects.object.security.Session;
 
 import java.util.Vector;
 
@@ -54,14 +53,14 @@ public class ActionTest extends NakedObjectTestCase {
     public void testAbout() {
         assertFalse(action.hasHint());
 
-        Hint about = action.getHint(new Session(), nakedObject, null);
+        Hint about = action.getHint(nakedObject, null);
         assertNull(actionDelegate.about);
         assertTrue(about instanceof DefaultHint);
 
         actionDelegate.hasAbout = true;
         assertTrue(action.hasHint());
 
-        about = action.getHint(new Session(), nakedObject, null);
+        about = action.getHint(nakedObject, null);
         assertEquals(actionDelegate.about, about);
     }
 
@@ -85,13 +84,13 @@ public class ActionTest extends NakedObjectTestCase {
     }
 
     public void testLabel() {
-        assertEquals(ACTION_NAME, action.getLabel(new Session(), nakedObject));
+        assertEquals(ACTION_NAME, action.getLabel(nakedObject));
 
         actionDelegate.label = ACTION_LABEL;
-        assertEquals(ACTION_NAME, action.getLabel(new Session(), nakedObject));
+        assertEquals(ACTION_NAME, action.getLabel(nakedObject));
 
         actionDelegate.hasAbout = true;
-        assertEquals(ACTION_LABEL, action.getLabel(new Session(), nakedObject));
+        assertEquals(ACTION_LABEL, action.getLabel(nakedObject));
     }
 
     public void testName() {
@@ -109,7 +108,7 @@ public class ActionTest extends NakedObjectTestCase {
 
     public void testGetParameters() {
         NakedObject nakedObject = new DummyNakedObject();
-        ActionParameterSet parameters = action.getParameters(null, nakedObject);
+        ActionParameterSet parameters = action.getParameters(nakedObject);
 
         String[] parameterLabels = parameters.getParameterLabels();
         assertEquals("one", parameterLabels[0]);

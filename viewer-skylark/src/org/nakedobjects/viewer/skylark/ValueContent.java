@@ -4,26 +4,25 @@ import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.security.ClientSession;
-import org.nakedobjects.object.security.Session;
 import org.nakedobjects.viewer.skylark.basic.AbstractContent;
+
 
 
 public abstract class ValueContent extends AbstractContent {
 
     public Hint getHint() {
         //      TODO need to check whether a value can be edited
-        return getValueHint(ClientSession.getSession(), "");
+        return getValueHint("");
     }
 
     public abstract NakedValue getObject();
 
-    public abstract Hint getValueHint(Session session, String entryText);
+    public abstract Hint getValueHint(String entryText);
 
     public abstract void parseEntry(String entryText) throws TextEntryParseException, InvalidEntryException;
 
     public void parseTextEntry(String entryText) throws InvalidEntryException {
-        Hint about = getValueHint(ClientSession.getSession(), entryText);
+        Hint about = getValueHint(entryText);
         if (about.isValid().isVetoed()) {
             throw new InvalidEntryException(about.isValid().getReason());
         }

@@ -3,7 +3,6 @@ package org.nakedobjects.viewer.skylark.special;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
@@ -33,7 +32,7 @@ public class TreeBrowserSpecification implements ViewSpecification {
     public boolean canDisplay(Content content) {
         if(content.isObject()) {
             NakedObject object = (NakedObject) content.getNaked();
-	        NakedObjectField[] fields = content.getSpecification().getVisibleFields(object , ClientSession.getSession());
+	        NakedObjectField[] fields = object.getVisibleFields();
 	        for (int i = 0; i < fields.length; i++) {
                 if(fields[i].isCollection()) {
                     return true;

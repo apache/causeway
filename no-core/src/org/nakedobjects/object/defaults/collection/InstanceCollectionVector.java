@@ -18,7 +18,6 @@ import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.UnexpectedCallException;
 
 import java.util.Enumeration;
@@ -103,11 +102,11 @@ public class InstanceCollectionVector implements TypedNakedCollection, InternalN
 
     public void initValue(OneToOneAssociation field, Object object) {}
     
-    public String getLabel(Session session, NakedObjectField field) {
+    public String getLabel(NakedObjectField field) {
         return null;
     }
 
-    public String getLabel(Session session, Action action) {
+    public String getLabel(Action action) {
         return null;
     }
 
@@ -123,11 +122,11 @@ public class InstanceCollectionVector implements TypedNakedCollection, InternalN
         return null;
     }
 
-    public Hint getHint(Session session, Action action, Naked[] parameters) {
+    public Hint getHint(Action action, Naked[] parameters) {
         return null;
     }
 
-    public Hint getHint(Session session, NakedObjectField field, Naked value) {
+    public Hint getHint(NakedObjectField field, Naked value) {
         return null;
     }
 
@@ -208,7 +207,7 @@ public class InstanceCollectionVector implements TypedNakedCollection, InternalN
         return false;
     }
 
-    public ActionParameterSet getParameters(Session session, Action action, NakedObjectSpecification[] parameterTypes) {
+    public ActionParameterSet getParameters(Action action, NakedObjectSpecification[] parameterTypes) {
         throw new UnexpectedCallException();
     }
 

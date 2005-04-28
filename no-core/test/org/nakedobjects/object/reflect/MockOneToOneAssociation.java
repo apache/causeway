@@ -7,7 +7,6 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.security.Session;
 
 import java.util.Vector;
 
@@ -31,7 +30,7 @@ class MockOneToOneAssociation implements OneToOnePeer {
         actions.addElement("clear " + associate);    
     }
 
-    public Hint getHint(MemberIdentifier identifier, Session session, NakedObject object, Naked value) {
+    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked value) {
             about = new Hint() {
                 public Consent canAccess() {
                     return canAccess;

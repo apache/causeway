@@ -5,7 +5,6 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.security.Session;
 
 
 public class MockField extends NakedObjectField {
@@ -24,7 +23,7 @@ public class MockField extends NakedObjectField {
         return contentObject;
     }
 
-    protected String getLabel(Session session, NakedObject object) {
+    protected String getLabel(NakedObject object) {
         return null;
     }
 

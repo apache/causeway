@@ -39,7 +39,7 @@ public class InternalActionTest extends TestCase {
     public void testAbout() {
         MockNakedObject object = new MockNakedObject();
         object.setupObject(new InternalActionTestObject());
-        Hint about = javaAction.getHint(null, null, object, new Naked[0]);
+        Hint about = javaAction.getHint(null, object, new Naked[0]);
         assertNotNull(about);
         assertEquals("about for test", about.getName());
     }

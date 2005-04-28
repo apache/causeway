@@ -39,7 +39,7 @@ public class ServerDistribution implements ClientDistribution {
         NakedObject inObject = getNakedObject(session, objectOid, objectType);
         NakedObject associate = getNakedObject(session, associateOid, associateType);
         NakedObjectAssociation association = (NakedObjectAssociation) inObject.getSpecification().getField(fieldIdentifier);
-        Hint about = inObject.getHint(session, association, associate);
+        Hint about = inObject.getHint(association, associate);
         if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
             throw new NakedObjectRuntimeException();
         }
@@ -162,7 +162,7 @@ public class ServerDistribution implements ClientDistribution {
 
     public void setAssociation(Session session, String fieldIdentifier, NakedObject inObject, NakedObject associate) {
         NakedObjectAssociation association = (NakedObjectAssociation) inObject.getSpecification().getField(fieldIdentifier);
-        Hint about = inObject.getHint(session, association, associate);
+        Hint about = inObject.getHint(association, associate);
         if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
             throw new NakedObjectRuntimeException();
         }
@@ -174,7 +174,7 @@ public class ServerDistribution implements ClientDistribution {
         NakedObject inObject = getNakedObject(session, objectOid, objectType);
         NakedObject associate = getNakedObject(session, associateOid, associateType);
         NakedObjectAssociation association = (NakedObjectAssociation) inObject.getSpecification().getField(fieldIdentifier);
-        Hint about = inObject.getHint(session, association, associate);
+        Hint about = inObject.getHint(association, associate);
         if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
             throw new NakedObjectRuntimeException();
         }
@@ -196,7 +196,7 @@ public class ServerDistribution implements ClientDistribution {
     public void setValue(Session session, String fieldIdentifier, Oid objectOid, String objectType, Object value) {
         NakedObject inObject = getNakedObject(session, objectOid, objectType);
         OneToOneAssociation association = (OneToOneAssociation) inObject.getSpecification().getField(fieldIdentifier);
-        Hint about = inObject.getHint(session, association, NakedObjects.getPojoAdapterFactory().createAdapter(value));
+        Hint about = inObject.getHint(association, NakedObjects.getPojoAdapterFactory().createAdapter(value));
         if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
             throw new NakedObjectRuntimeException();
         }

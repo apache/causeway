@@ -10,7 +10,6 @@ import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.security.Session;
 
 public abstract class AbstractNakedValue implements NakedValue {
     private NakedObjectSpecification specification;
@@ -43,11 +42,11 @@ public abstract class AbstractNakedValue implements NakedValue {
         return null;
     }
 
-    public Hint getHint(Session session, Action action, Naked[] parameters) {
+    public Hint getHint(Action action, Naked[] parameters) {
         return null;
     }
 
-    public Hint getHint(Session session, NakedObjectField field, Naked value) {
+    public Hint getHint(NakedObjectField field, Naked value) {
         return null;
     }
     

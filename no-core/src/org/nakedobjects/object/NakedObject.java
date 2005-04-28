@@ -7,7 +7,6 @@ import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.security.Session;
 
 
 /**
@@ -44,13 +43,15 @@ public interface NakedObject extends Naked {
 
     String getIconName();
 
-    String getLabel(Session session, Action action);
+    String getLabel(Action action);
 
-    String getLabel(Session session, NakedObjectField field);
+    String getLabel(NakedObjectField field);
 
-    ActionParameterSet getParameters(Session session, Action action);
+    ActionParameterSet getParameters(Action action);
 
     NakedValue getValue(OneToOneAssociation field);
+    
+    NakedObjectField[] getVisibleFields();
 
     void initAssociation(NakedObjectAssociation field, NakedObject associatedObject);
 

@@ -4,7 +4,6 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.undo.UndoStack;
 import org.nakedobjects.utility.DebugFrame;
 import org.nakedobjects.utility.InfoDebugFrame;
@@ -112,7 +111,7 @@ public class ViewerAssistant {
                 new MenuOption("Vew context details...") {
                     public void execute(Workspace workspace, View view, Location at) {
                         InfoDebugFrame f = new InfoDebugFrame();
-                        f.setInfo(ClientSession.getSession());
+                        f.setInfo(NakedObjects.getCurrentSession());
                         f.show(at.x + 50, workspace.getBounds().y + 6);
                     }
                 });
