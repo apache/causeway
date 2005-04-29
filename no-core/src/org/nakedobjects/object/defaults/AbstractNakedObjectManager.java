@@ -76,6 +76,9 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
 
     public TypedNakedCollection findInstances(InstancesCriteria criteria)
             throws UnsupportedFindException {
+        if (criteria == null) {
+            throw new NullPointerException();
+        }
         NakedObject[] instances = getInstances(criteria);
         NakedObjectSpecification specification = criteria.getSpecification();
         TypedNakedCollection collection = new InstanceCollectionVector(specification, instances);

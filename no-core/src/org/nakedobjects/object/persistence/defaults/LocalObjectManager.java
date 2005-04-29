@@ -142,7 +142,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     protected NakedObject[] getInstances(InstancesCriteria criteria) {
         LOG.debug("getInstances matching " + criteria);
         try {
-            NakedObject[] instances = objectStore.getInstances(criteria, false);
+            NakedObject[] instances = objectStore.getInstances(criteria);
             return instances;
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);

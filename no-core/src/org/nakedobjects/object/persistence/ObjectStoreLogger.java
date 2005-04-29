@@ -40,28 +40,16 @@ public class ObjectStoreLogger extends Logger implements NakedObjectStore {
         decorated.endTransaction();
     }
 
-    public NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) throws ObjectStoreException,
+    public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectStoreException,
             UnsupportedFindException {
         log("Get instances matching " + criteria);
-        return decorated.getInstances(criteria, includeSubclasses);
-    }
-
-    public NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) throws ObjectStoreException,
-            UnsupportedFindException {
-        log("Get instances like " + pattern.getObject());
-        return decorated.getInstances(pattern, includeSubclasses);
+        return decorated.getInstances(criteria);
     }
 
     public NakedObject[] getInstances(NakedObjectSpecification specification, boolean includeSubclasses) throws ObjectStoreException {
         log("Get instances of " + specification.getShortName());
         return decorated.getInstances(specification, includeSubclasses);
     }
-
-    public NakedObject[] getInstances(NakedObjectSpecification specification, String pattern, boolean includeSubclasses)
-            throws ObjectStoreException, UnsupportedFindException {
-        log("Get instances of " + specification.getShortName() + " matching " + pattern);
-        return decorated.getInstances(specification, includeSubclasses);
-     }
 
     public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
         NakedClass cls = decorated.getNakedClass(name);

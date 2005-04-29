@@ -78,15 +78,6 @@ public class MockObjectStore implements NakedObjectStore {
         return instances;
     }
 
-    public NakedObject[] getInstances(NakedObjectSpecification cls, String pattern, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
-        return getInstances(cls, includeSubclasses);
-    }
-
-    public NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) {
-        actions.addElement("getInstances " + pattern);
-        return instances;
-    }
-
     public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
         throw new NotImplementedException("Getting naked class " + name);
     }
@@ -143,7 +134,7 @@ public class MockObjectStore implements NakedObjectStore {
         actions.addElement("startTransaction");
     }
 
-    public NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) throws ObjectStoreException, UnsupportedFindException {
+    public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectStoreException, UnsupportedFindException {
         actions.addElement("getInstances " + criteria);
         return instances;
     }

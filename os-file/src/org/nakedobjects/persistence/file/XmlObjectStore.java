@@ -96,21 +96,17 @@ public class XmlObjectStore implements NakedObjectStore {
         return "MementoObjectStore";
     }
 
-    public NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) throws ObjectStoreException,
+    public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectStoreException,
             UnsupportedFindException {
-        throw new UnsupportedFindException();
-    }
-
-    public NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) throws ObjectStoreException {
-        LOG.debug("getInstances like " + pattern);
-        ObjectData patternData = createObjectData(pattern, false);
-        NakedObject[] instances = getInstances(patternData, null);
+        LOG.debug("getInstances of " + criteria.getSpecification() + " where " + criteria);
+        ObjectData patternData = new ObjectData(criteria.getSpecification(), null);
+        NakedObject[] instances = getInstances(patternData, criteria);
         return instances;
     }
 
-    private NakedObject[] getInstances(NakedObjectSpecification cls) throws ObjectStoreException {
-        LOG.debug("getInstances of " + cls);
-        ObjectData patternData = new ObjectData(cls, null);
+    private NakedObject[] getInstances(NakedObjectSpecification specification) throws ObjectStoreException {
+        LOG.debug("getInstances of " + specification);
+        ObjectData patternData = new ObjectData(specification, null);
         NakedObject[] instances = getInstances(patternData, null);
         return instances;
     }
@@ -135,22 +131,12 @@ public class XmlObjectStore implements NakedObjectStore {
         }
     }
 
-    public NakedObject[] getInstances(NakedObjectSpecification cls, String pattern, boolean includeSubclasses)
-            throws ObjectStoreException, UnsupportedFindException {
-        LOG.debug("getInstances like " + pattern);
-        ObjectData patternData = new ObjectData(cls, null);
-        NakedObject[] instances = getInstances(patternData, pattern);
-        return instances;
-    }
-
-    private NakedObject[] getInstances(ObjectData patternData, String title) throws ObjectStoreException {
+    private NakedObject[] getInstances(ObjectData patternData, InstancesCriteria criteria) throws ObjectStoreException {
         ObjectDataVector data = dataManager.getInstances(patternData);
         NakedObject[] instances = new NakedObject[data.size()];
         int count = 0;
 
-        String titlePattern = title == null ? "" : title.toLowerCase();
-
-        for (int i = 0; i < data.size(); i++) {
+         for (int i = 0; i < data.size(); i++) {
             ObjectData instanceData = data.element(i);
             LOG.debug("instance data " + instanceData);
 
@@ -168,7 +154,7 @@ public class XmlObjectStore implements NakedObjectStore {
                 instance.setResolved();
             }
 
-            if (title == null || instance.titleString().toLowerCase().indexOf(titlePattern) >= 0) {
+            if (criteria == null || criteria.matches(instance)) {
                 instances[count++] = instance;
             }
         }

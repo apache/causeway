@@ -55,27 +55,10 @@ public interface NakedObjectStore extends DebugInfo {
 
     public void endTransaction() throws ObjectStoreException;
 
-    NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) throws ObjectStoreException,
-            UnsupportedFindException;
-
-    /**
-     * Gets the instances that match the specified pattern. The object store
-     * should create a vector and add to it those instances held by the
-     * persistence mechanism that:-
-     * 
-     * <para>1) are of the type that the pattern object is; </para>
-     * 
-     * <para>2) have the same content as the pattern object where the pattern
-     * object has values or references specified, i.e. empty value objects and
-     * <code>null</code> references are to be ignored; </para>
-     */
-    NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) throws ObjectStoreException,
+    NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectStoreException,
             UnsupportedFindException;
 
     NakedObject[] getInstances(NakedObjectSpecification specification, boolean includeSubclasses) throws ObjectStoreException;
-
-    NakedObject[] getInstances(NakedObjectSpecification specification, String pattern, boolean includeSubclasses)
-            throws ObjectStoreException, UnsupportedFindException;
 
     NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException;
 

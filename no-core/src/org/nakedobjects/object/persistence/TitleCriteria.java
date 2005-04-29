@@ -6,17 +6,18 @@ import org.nakedobjects.object.NakedObjectSpecification;
 public class TitleCriteria implements InstancesCriteria {
     
     private final NakedObjectSpecification specification;
-    private final String title;
+    private final String requiredTitle;
     private final boolean includeSubclasses;
 
     public TitleCriteria(NakedObjectSpecification specification, String title, boolean includeSubclasses) {
         this.specification = specification;
-        this.title = title;
+        this.requiredTitle = title.toLowerCase();
         this.includeSubclasses = includeSubclasses;
         }
 
     public boolean matches(NakedObject object) {
-        return object.titleString().toLowerCase().indexOf(title.toLowerCase()) >= 0;
+        String objectTitle = object.titleString().toLowerCase();
+        return objectTitle == requiredTitle || objectTitle.indexOf(requiredTitle) >= 0;
     }
 
     public NakedObjectSpecification getSpecification() {
@@ -27,8 +28,8 @@ public class TitleCriteria implements InstancesCriteria {
         return includeSubclasses;
     }
 
-    public String getTitle() {
-        return title;
+    public String getRequiredTitle() {
+        return requiredTitle;
     }
 
 }

@@ -14,6 +14,7 @@ import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.PersistenceCommand;
 import org.nakedobjects.object.persistence.SaveObjectCommand;
+import org.nakedobjects.object.persistence.TitleCriteria;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.Debug;
@@ -230,59 +231,29 @@ public class TransientObjectStore implements NakedObjectStore {
         return name();
     }
 
-    public NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) throws ObjectStoreException,
+    public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectStoreException,
             UnsupportedFindException {
-        if (criteria == null) {
-            throw new NullPointerException();
+        
+        if(criteria instanceof TitleCriteria) {
+            TitleCriteria titleCriteria = (TitleCriteria) criteria;
+            String title = titleCriteria.getRequiredTitle();
+	        NakedObject match = instancesFor(criteria.getSpecification()).instanceMatching(title);
+	        if(match != null) {
+	            LOG.debug("getInstances for " + criteria + " => " + match);
+	            return new NakedObject[] {match};
+	        }
         }
-
+        
         Vector instances = new Vector();
         Enumeration objects = elements(criteria.getSpecification());
-
-        NakedObjectSpecification requiredType = criteria.getSpecification();
         while (objects.hasMoreElements()) {
             NakedObject object = (NakedObject) objects.nextElement();
-
-            if (requiredType.equals(object.getSpecification()) && criteria.matches(object)) {
+            if (criteria.matches(object)) {
                 instances.addElement(object);
             }
         }
 
         LOG.debug("getInstances for " + criteria + " => " + instances);
-        return toInstancesArray(instances);
-    }
-
-    public NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) {
-        if (pattern == null) {
-            throw new NullPointerException();
-        }
-
-        Vector instances = new Vector();
-        if (pattern instanceof NakedClass) {
-            Enumeration objects = elements(pattern.getSpecification());
-
-            String name = ((NakedClass) pattern).getName();
-
-            while (objects.hasMoreElements()) {
-                NakedObject object = (NakedObject) objects.nextElement();
-
-                if (object.getObject() instanceof NakedClass && ((NakedClass) object.getObject()).getName().equals(name)) {
-                    instances.addElement(object);
-                }
-            }
-        } else {
-            NakedObjectSpecification requiredType = pattern.getSpecification();
-            Enumeration objects = elements(pattern.getSpecification());
-
-            while (objects.hasMoreElements()) {
-                NakedObject object = (NakedObject) objects.nextElement();
-
-                if (requiredType.equals(object.getSpecification()) && matchesPattern(pattern, object)) {
-                    instances.addElement(object);
-                }
-            }
-        }
-        LOG.debug("getInstances like " + pattern + " => " + instances);
         return toInstancesArray(instances);
     }
 
@@ -294,27 +265,6 @@ public class TransientObjectStore implements NakedObjectStore {
             setupReferencedObjects(object);
         }
         return ins;
-    }
-
-    public NakedObject[] getInstances(NakedObjectSpecification spec, String pattern, boolean includeSubclasses)
-            throws ObjectStoreException, UnsupportedFindException {
-        
-        String p = pattern.toLowerCase();
-        NakedObject match = instancesFor(spec).instanceMatching(p);
-        if(match == null) {
-            Vector instances = new Vector();
-            Enumeration e = instancesFor(spec).elements();
-            while (e.hasMoreElements()) {
-                NakedObject element = (NakedObject) e.nextElement();
-                String elementTitle = element.titleString().toLowerCase();
-                if (elementTitle == p || elementTitle.indexOf(p) >= 0) {
-                    instances.addElement(element);
-                } 
-            }
-            return toInstancesArray(instances);     
-        } else {
-            return new NakedObject[] {match};
-        }
     }
 
     public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
@@ -387,64 +337,6 @@ public class TransientObjectStore implements NakedObjectStore {
         return new TransientObjectStoreInstances();
     }
 
-    private boolean matchesPattern(NakedObject pattern, NakedObject instance) {
-        NakedObject object = instance;
-        NakedObjectSpecification nc = object.getSpecification();
-        NakedObjectField[] fields = nc.getFields();
-
-        for (int f = 0; f < fields.length; f++) {
-            NakedObjectField fld = fields[f];
-
-            // are ignoring internal collections - these probably should be
-            // considered
-            // ignore derived fields - there is no way to set up these fields
-            if (fld.isDerived()) {
-                continue;
-            }
-
-            if (fld.isValue()) {
-                // find the objects
-                NakedObject reqd = (NakedObject) pattern.getField(fld);
-                NakedObject search = (NakedObject) object.getField(fld);
-
-                // if pattern contains empty value then it matches anything
-                if (reqd.isEmpty(fld)) {
-                    continue;
-                }
-
-                // compare the titles
-                String r = reqd.titleString().toString().toLowerCase();
-                String s = search.titleString().toString().toLowerCase();
-
-                // if the pattern occurs in the object
-                if (s.indexOf(r) == -1) {
-                    return false;
-                }
-            } else {
-                // find the objects
-                NakedObject reqd = (NakedObject) pattern.getField(fld);
-                NakedObject search = (NakedObject) object.getField(fld);
-
-                // if pattern contains null reference then it matches anything
-                if (reqd == null) {
-                    continue;
-                }
-
-                // otherwise there must be a reference, else they can never
-                // match
-                if (search == null) {
-                    return false;
-                }
-
-                if (reqd != search) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
     public String name() {
         return "Transient Object Store";
     }
@@ -456,10 +348,7 @@ public class TransientObjectStore implements NakedObjectStore {
     public void resolveImmediately(NakedObject object) throws ObjectStoreException {
         LOG.debug("resolve " + object);
         setupReferencedObjects(object);
-  //      NakedObject o = getObject(object.getOid(), object.getSpecification());
- //       object.setResolved();
-   //     object.copyObject(o);
-    }
+     }
 
     public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectStoreException {}
 
