@@ -531,16 +531,13 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
 
     public void reflect(String className, Reflector reflector) {
         LOG.debug("creating reflector for " + className + " using " + reflector);
-
-        ActionPeer delegates[];
-
         this.reflector = reflector;
-        
-        delegates = reflector.actions(Reflector.OBJECT);
+
+        ActionPeer delegates[] = reflector.actionPeers(Reflector.OBJECT);
         String[] order = reflector.actionSortOrder();
         Action[] objectActions = createActions(reflector, className, delegates, order);
 
-        delegates = reflector.actions(Reflector.CLASS);
+        delegates = reflector.actionPeers(Reflector.CLASS);
         order = reflector.classActionSortOrder();
         Action[] classActions = createActions(reflector, className, delegates, order);
 

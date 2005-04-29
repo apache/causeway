@@ -12,7 +12,7 @@ public interface Reflector {
 
     Naked acquireInstance();
 
-    ActionPeer[] actions(boolean forClass);
+    ActionPeer[] actionPeers(boolean forClass);
 
     String[] actionSortOrder();
 

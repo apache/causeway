@@ -23,7 +23,7 @@ public class MockReflector implements Reflector {
         return acquireInstance;
     }
 
-    public ActionPeer[] actions(boolean forClass) {
+    public ActionPeer[] actionPeers(boolean forClass) {
         return new ActionPeer[0];
     }
 

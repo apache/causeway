@@ -144,6 +144,21 @@ public class JavaAction extends JavaMember implements ActionPeer {
             throw new NakedObjectRuntimeException();
         }
     }
+    
+    public String toString() {
+        StringBuffer parameters = new StringBuffer();
+        Class[] types = actionMethod.getParameterTypes();
+        if(types.length == 0) {
+            parameters.append("none");
+        }
+        for (int i = 0; i < types.length; i++) {
+            if(i > 0) {
+                parameters.append("/");
+            }
+            parameters.append(types[i]);
+        }
+        return "JavaAction [name=" + actionMethod.getName()  + ",type=" + type.getName() + ",parameters=" + parameters + "]";
+    }
 }
 
 /*

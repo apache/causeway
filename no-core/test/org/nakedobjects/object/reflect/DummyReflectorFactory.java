@@ -16,7 +16,7 @@ public class DummyReflectorFactory extends ReflectorFactory {
                 return null;
             }
 
-            public ActionPeer[] actions(boolean forClass) {
+            public ActionPeer[] actionPeers(boolean forClass) {
                 return null;
             }
 

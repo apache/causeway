@@ -118,7 +118,7 @@ public class InternalReflector implements Reflector {
         }
     }
 
-    public ActionPeer[] actions(boolean forClass) {
+    public ActionPeer[] actionPeers(boolean forClass) {
         LOG.debug("looking for action methods");
         Method defaultAboutMethod = findMethod(forClass, "aboutActionDefault", null, new Class[] { InternalAbout.class });
         LOG.debug(defaultAboutMethod == null ? "no default about method for actions" : defaultAboutMethod.toString());

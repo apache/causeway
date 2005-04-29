@@ -42,7 +42,7 @@ public class InternalReflectorTest extends TestCase {
     }
 
     public void testObjectActions() throws NakedObjectSpecificationException {
-         ActionPeer[] actions = reflector.actions(false);
+         ActionPeer[] actions = reflector.actionPeers(false);
          assertEquals(1, actions.length);
          
          MockAction member = (MockAction) actions[0];
