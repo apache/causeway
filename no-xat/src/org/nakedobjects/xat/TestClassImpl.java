@@ -11,6 +11,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.NotPersistableException;
+import org.nakedobjects.object.persistence.TitleCriteria;
 import org.nakedobjects.object.reflect.Action;
 
 
@@ -30,7 +31,7 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
      */
     public TestObject findInstance(String title) {
         NakedObjectSpecification type = ((NakedClass) getForNaked().getObject()).forObjectType();
-        TypedNakedCollection instances = NakedObjects.getObjectManager().findInstances(type, title, true);
+        TypedNakedCollection instances = NakedObjects.getObjectManager().findInstances(new TitleCriteria(type, title, true));
         if (instances.size() == 0) {
             throw new IllegalActionError("No instance found with title " + title);
         } else {

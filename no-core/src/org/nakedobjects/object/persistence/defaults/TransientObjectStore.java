@@ -1,13 +1,13 @@
 package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.persistence.CreateObjectCommand;
 import org.nakedobjects.object.persistence.DestroyObjectCommand;
+import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.ObjectStoreException;
@@ -118,7 +118,7 @@ public class TransientObjectStore implements NakedObjectStore {
         return s.toString();
     }
 
-    public String debugGraph(NakedObject object, String name, int level, Vector recursiveElements) {
+    private String debugGraph(NakedObject object, String name, int level, Vector recursiveElements) {
         if (level > 3) {
             return "...\n"; // only go 3 levels?
         }
@@ -192,14 +192,18 @@ public class TransientObjectStore implements NakedObjectStore {
         debug.appendTitle(NakedObjects.getPojoAdapterFactory().getDebugTitle());
         debug.appendln(NakedObjects.getPojoAdapterFactory().getDebugData());
 
-        debug.appendTitle("Objects");
+        debug.appendTitle("Business Objects");
         Enumeration e = instances.keys();
         while (e.hasMoreElements()) {
             NakedObjectSpecification spec = (NakedObjectSpecification) e.nextElement();
+            debug.appendln(0, spec.getFullName());
             TransientObjectStoreInstances instances = instancesFor(spec);
             Enumeration f = instances.elements();
+            if(!f.hasMoreElements()) {
+                debug.appendln(8, "no instances");
+            }
             while (f.hasMoreElements()) {
-                debug.appendln(f.nextElement().toString());
+                debug.appendln(8, f.nextElement().toString());
             }
         }
         debug.appendln();
@@ -213,6 +217,8 @@ public class TransientObjectStore implements NakedObjectStore {
             Enumeration f = instances.elements();
             while (f.hasMoreElements()) {
                 NakedObject object = (NakedObject) f.nextElement();
+                debug.append(spec.getFullName());
+                debug.append(": ");
                 debug.append(object);
                 debug.appendln(debugGraph(object, "name???", 0, dump));
             }

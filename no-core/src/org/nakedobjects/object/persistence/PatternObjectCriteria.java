@@ -1,19 +1,28 @@
-package org.nakedobjects.object;
+package org.nakedobjects.object.persistence;
 
-/**
- * Defines a criteria for including instances in set.
- */
-public interface InstancesCriteria {
-    
-    /**
-     * Returns true if the specified object is to be included in the set of instances.
-     */
-    boolean matches(NakedObject object);
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 
-    /**
-     * The type of instances in the resulting set.
-     */
-    NakedObjectSpecification getSpecification();
+public class PatternObjectCriteria implements InstancesCriteria {
+    private final boolean includeSubclasses;
+    private final NakedObject pattern;
+
+    public PatternObjectCriteria(NakedObject pattern, boolean includeSubclasses) {
+        this.pattern = pattern;
+        this.includeSubclasses = includeSubclasses;}
+
+    public boolean matches(NakedObject object) {
+        // TODO make this match the pattern object
+        return true;
+    }
+
+    public NakedObjectSpecification getSpecification() {
+        return pattern.getSpecification();
+    }
+
+    public boolean includeSubclasses() {
+        return includeSubclasses;
+    }
 }
 
 

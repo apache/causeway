@@ -15,8 +15,6 @@ public interface BusinessObjectContainer {
 
     void destroyObject(Object object);
 
-    Vector findInstances(InstancesCriteria criteria, boolean includeSubclasses) throws UnsupportedFindException;
-
     boolean hasInstances(Class cls);
 
     void makePersistent(Object transientObject);

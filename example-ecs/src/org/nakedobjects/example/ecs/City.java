@@ -1,15 +1,12 @@
 package org.nakedobjects.example.ecs;
 
 import org.nakedobjects.application.BusinessObjectContainer;
-import org.nakedobjects.application.InstancesCriteria;
 import org.nakedobjects.application.Lookup;
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.TitledObject;
-import org.nakedobjects.application.UnsupportedFindException;
 import org.nakedobjects.application.control.FieldAbout;
 
 import java.util.Date;
-import java.util.Vector;
 
 
 public class City implements Lookup, TitledObject {
@@ -18,13 +15,7 @@ public class City implements Lookup, TitledObject {
     private float population;
     private transient BusinessObjectContainer container;
 
-    public Vector actionLocationsForCity() throws UnsupportedFindException {
-        InstancesCriteria criteria = new InstancesCriteria() {
-        };
-        return container.findInstances(criteria, false);
-    }
-
-     public void setContainer(BusinessObjectContainer container) {
+    public void setContainer(BusinessObjectContainer container) {
         this.container = container;
     }
     

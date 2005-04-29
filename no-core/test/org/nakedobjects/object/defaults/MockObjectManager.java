@@ -1,7 +1,6 @@
 package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.DirtyObjectSet;
-import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
@@ -9,6 +8,7 @@ import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectFactory;
+import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.NakedObjectField;
@@ -147,7 +147,7 @@ public class MockObjectManager extends AbstractNakedObjectManager {
         return null;
     }
 
-    protected NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) {
+    protected NakedObject[] getInstances(InstancesCriteria criteria) {
         return null;
     }
 

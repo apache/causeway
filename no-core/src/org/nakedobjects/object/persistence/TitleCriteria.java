@@ -1,6 +1,35 @@
-package org.nakedobjects.application;
+package org.nakedobjects.object.persistence;
 
-public interface InstancesCriteria {
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
+
+public class TitleCriteria implements InstancesCriteria {
+    
+    private final NakedObjectSpecification specification;
+    private final String title;
+    private final boolean includeSubclasses;
+
+    public TitleCriteria(NakedObjectSpecification specification, String title, boolean includeSubclasses) {
+        this.specification = specification;
+        this.title = title;
+        this.includeSubclasses = includeSubclasses;
+        }
+
+    public boolean matches(NakedObject object) {
+        return object.titleString().toLowerCase().indexOf(title.toLowerCase()) >= 0;
+    }
+
+    public NakedObjectSpecification getSpecification() {
+        return specification;
+    }
+
+    public boolean includeSubclasses() {
+        return includeSubclasses;
+    }
+
+    public String getTitle() {
+        return title;
+    }
 
 }
 

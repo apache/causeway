@@ -1,7 +1,6 @@
 package org.nakedobjects.object.persistence;
 
 import org.nakedobjects.object.DirtyObjectSet;
-import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
@@ -17,13 +16,7 @@ public interface NakedObjectManager extends DebugInfo {
 
     void addObjectChangedListener(DirtyObjectSet listener);
         
- //   TypedNakedCollection allInstances(NakedObjectSpecification specification);
-
     TypedNakedCollection allInstances(NakedObjectSpecification specification, boolean includeSubclasses);
-
-//    TypedNakedCollection allInstances(String className);
-
-//    TypedNakedCollection allInstances(String className, boolean includeSubclasses);
 
     NakedObject createInstance(NakedObjectSpecification specification);
 
@@ -46,20 +39,7 @@ public interface NakedObjectManager extends DebugInfo {
 
     void endTransaction();
 
-    TypedNakedCollection findInstances(InstancesCriteria criteria, boolean includeSubclasses) throws UnsupportedFindException;
-
-    TypedNakedCollection findInstances(NakedObject pattern);
-
-    TypedNakedCollection findInstances(NakedObject pattern, boolean includeSubclasses);
-
-    TypedNakedCollection findInstances(NakedObjectSpecification specification, String searchTerm);
-
-    TypedNakedCollection findInstances(NakedObjectSpecification specification, String searchTerm, boolean includeSubclasses);
-
-    TypedNakedCollection findInstances(String className, String searchTerm) throws UnsupportedFindException;
-
-    TypedNakedCollection findInstances(String className, String searchTerm, boolean includeSubclasses)
-            throws UnsupportedFindException;
+    TypedNakedCollection findInstances(InstancesCriteria criteria) throws UnsupportedFindException;
 
     NakedError generatorError(String message, Exception e);
 

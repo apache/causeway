@@ -11,6 +11,7 @@ import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.reflect.Action;
@@ -88,8 +89,8 @@ public class ServerDistribution implements ClientDistribution {
         }
     }
 
-    public ObjectData[] findInstances(Session session, String fullName, String criteria, boolean includeSubclasses) {
-        TypedNakedCollection instances = objectManager.findInstances(getSpecification(fullName), criteria, includeSubclasses);
+    public ObjectData[] findInstances(Session session, InstancesCriteria criteria) {
+        TypedNakedCollection instances = objectManager.findInstances(criteria);
         return convertToNakedCollection(instances);
     }
 

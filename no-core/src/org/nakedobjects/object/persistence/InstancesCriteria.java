@@ -1,25 +1,24 @@
-package org.nakedobjects.object;
+package org.nakedobjects.object.persistence;
 
-public interface BaseNakedClass {
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 
-    String getName();
-
- //   void setNakedClass(NakedObjectSpecification nc);
-
-    // TODO is this the right name for this method.  See also setNakedClass()
-    NakedObjectSpecification forNakedClass();
-
-    String getPluralName();
-
-    String getFullName();
-
-    String getSingularName();
+/**
+ * Defines a criteria for including instances in set.
+ */
+public interface InstancesCriteria {
     
-    NakedCollection allInstances();
+    /**
+     * Returns true if the specified object is to be included in the set of instances.
+     */
+    boolean matches(NakedObject object);
+
+    /**
+     * The type of instances in the resulting set.
+     */
+    NakedObjectSpecification getSpecification();
     
-    NakedCollection findInstances(String searchTerm);
-    
-    NakedObject newInstance();
+    boolean includeSubclasses();
 }
 
 

@@ -3,7 +3,6 @@ package org.nakedobjects.object.persistence.defaults;
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.DirtyObjectSetImpl;
-import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
@@ -12,13 +11,13 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
 import org.nakedobjects.object.persistence.DestroyObjectCommand;
+import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.NotPersistableException;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.OidGenerator;
-import org.nakedobjects.object.persistence.UnsupportedFindException;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
@@ -140,7 +139,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         return objectStore.getDebugTitle();
     }
 
-    protected NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) {
+    protected NakedObject[] getInstances(InstancesCriteria criteria) {
         LOG.debug("getInstances matching " + criteria);
         try {
             NakedObject[] instances = objectStore.getInstances(criteria, false);
@@ -150,45 +149,10 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         }
     }
 
-    /**
-     * Gets the instances that match the specified pattern. The object store
-     * should create a vector and add to it those instances held by the
-     * persistence mechanism that:-
-     * 
-     * <para>1) are of the type that the pattern object is; </para>
-     * 
-     * <para>2) have the same content as the pattern object where the pattern
-     * object has values or references specified, i.e. empty value objects and
-     * <code>null</code> references are to be ignored; </para>
-     * 
-     * @throws UnsupportedFindException
-     */
-    protected NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) throws UnsupportedFindException {
-        LOG.debug("getInstances like " + pattern);
-        try {
-            NakedObject[] instances = objectStore.getInstances(pattern, false);
-            return instances;
-        } catch (ObjectStoreException e) {
-            throw new NakedObjectRuntimeException(e);
-        }
-
-    }
-
     protected NakedObject[] getInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
         LOG.debug("getInstances of " + specification);
         try {
             NakedObject[] instances = objectStore.getInstances(specification, false);
-            return instances;
-        } catch (ObjectStoreException e) {
-            throw new NakedObjectRuntimeException(e);
-        }
-    }
-
-    protected NakedObject[] getInstances(NakedObjectSpecification specification, String term, boolean includeSubclasses)
-            throws UnsupportedFindException {
-        LOG.debug("getInstances of " + specification + " with term " + term);
-        try {
-            NakedObject[] instances = objectStore.getInstances(specification, term, false);
             return instances;
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);

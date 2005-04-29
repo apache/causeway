@@ -5,16 +5,17 @@ import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.persistence.NakedObjectManager;
+import org.nakedobjects.object.persistence.TitleCriteria;
 import org.nakedobjects.object.reflect.internal.InternalAbout;
 
 
 public class FastFinder implements InternalNakedObject {
-	private NakedObjectSpecification forClass;
+	private NakedObjectSpecification specification;
 	private String term;
     private NakedObjectManager objectManager;
 	
 	public String getIconName() {
-		return forClass.getShortName();
+		return specification.getShortName();
 	}
 
 	public String getTerm() {
@@ -30,7 +31,7 @@ public class FastFinder implements InternalNakedObject {
 	}
 	
 	public Naked actionFind() {
-		NakedCollection instances = objectManager.findInstances(forClass, term, true);
+		NakedCollection instances = objectManager.findInstances(new TitleCriteria(specification, term, true));
 		if(instances.size() == 1) { 
 			return (NakedObject) instances.elements().nextElement();
 		} else {
@@ -47,11 +48,11 @@ public class FastFinder implements InternalNakedObject {
 	}
 	
 	public void setFromClass(NakedObjectSpecification nakedClass) {
-		this.forClass = nakedClass;
+		this.specification = nakedClass;
 	}
 	
-	public NakedObjectSpecification getForClass() {
-        return forClass;
+	public NakedObjectSpecification getSpecification() {
+        return specification;
     }
 	
 	public String titleString() {

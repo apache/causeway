@@ -1,7 +1,6 @@
 package org.nakedobjects.object.persistence;
 
 import org.nakedobjects.object.DirtyObjectSet;
-import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
@@ -69,41 +68,10 @@ public class ObjectManagerLogger extends Logger implements NakedObjectManager {
         decorated.endTransaction();
     }
 
-    public TypedNakedCollection findInstances(InstancesCriteria criteria, boolean includeSubclasses)
+    public TypedNakedCollection findInstances(InstancesCriteria criteria)
             throws UnsupportedFindException {
         log("Find instances matching " + criteria);
-        return decorated.findInstances(criteria, includeSubclasses);
-    }
-
-    public TypedNakedCollection findInstances(NakedObject pattern) {
-        log("Find instances like " + pattern.getObject());
-        return decorated.findInstances(pattern);
-    }
-
-    public TypedNakedCollection findInstances(NakedObject pattern, boolean includeSubclasses) {
-        log("Find instances like " + pattern.getObject());
-        return decorated.findInstances(pattern, includeSubclasses);
-    }
-
-    public TypedNakedCollection findInstances(NakedObjectSpecification specification, String searchTerm) {
-        log("Find instances of " + specification.getShortName() + " matching " + searchTerm);
-        return decorated.findInstances(specification, searchTerm);
-    }
-
-    public TypedNakedCollection findInstances(NakedObjectSpecification specification, String searchTerm, boolean includeSubclasses) {
-        log("Find instances of " + specification.getShortName() + " matching " + searchTerm);
-        return decorated.findInstances(specification, searchTerm, includeSubclasses);
-    }
-
-    public TypedNakedCollection findInstances(String className, String searchTerm) throws UnsupportedFindException {
-        log("Find instances of " + className + " matching " + searchTerm);
-        return decorated.findInstances(className, searchTerm);
-    }
-
-    public TypedNakedCollection findInstances(String className, String searchTerm, boolean includeSubclasses)
-            throws UnsupportedFindException {
-        log("Find instances of " + className + " matching " + searchTerm);
-        return decorated.findInstances(className, searchTerm, includeSubclasses);
+        return decorated.findInstances(criteria);
     }
 
     public NakedError generatorError(String message, Exception e) {

@@ -1,6 +1,7 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.security.Session;
 
@@ -21,7 +22,7 @@ public interface ClientDistribution {
     ObjectData executeAction(Session session, String actionType, String actionIdentifier, String[] parameterTypes, Oid objectOid,
             String objectType, Data[] parameters);
 
-    ObjectData[] findInstances(Session session, String fullName, String criteria, boolean includeSubclasses);
+    ObjectData[] findInstances(Session session, InstancesCriteria criteria);
 
     Hint getActionHint(Session session, String actionType, String actionIdentifier, String[] parameterTypes, Oid objectOid,
             String objectType, Data[] parameters);

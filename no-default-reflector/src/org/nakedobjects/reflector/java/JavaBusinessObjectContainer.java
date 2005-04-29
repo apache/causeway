@@ -2,13 +2,10 @@ package org.nakedobjects.reflector.java;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.application.BusinessObjectContainer;
-import org.nakedobjects.application.InstancesCriteria;
-import org.nakedobjects.application.UnsupportedFindException;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Enumeration;
 import java.util.Vector;
@@ -62,10 +59,6 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     protected void finalize() throws Throwable {
         super.finalize();
         LOG.info("finalizing java business object container " + this);
-    }
-
-    public Vector findInstances(InstancesCriteria criteria, boolean includeSubclasses) throws UnsupportedFindException {
-        throw new NotImplementedException();
     }
 
     public JavaObjectFactory getObjectFactory() {

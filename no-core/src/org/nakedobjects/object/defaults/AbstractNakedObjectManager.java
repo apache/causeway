@@ -1,7 +1,6 @@
 package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
@@ -9,6 +8,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
+import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.Oid;
@@ -74,46 +74,12 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
         return createTransientInstance(nc);
     }
 
-    public TypedNakedCollection findInstances(NakedObject pattern) {
-        return findInstances(pattern, false);
-    }
-    
-    public TypedNakedCollection findInstances(NakedObject pattern, boolean includeSubclasses) {
-        NakedObject[] instances = getInstances(pattern, includeSubclasses);
-        NakedObjectSpecification specification = pattern.getSpecification();
-        TypedNakedCollection collection = new InstanceCollectionVector(specification, instances);
-        return collection;
-    }
-
-    public TypedNakedCollection findInstances(NakedObjectSpecification specification, String searchTerm) {
-        return findInstances(specification, searchTerm, false);
-    }
-    
-    public TypedNakedCollection findInstances(NakedObjectSpecification specification, String searchTerm, boolean includeSubclasses) {
-        NakedObject[] instances = getInstances(specification, searchTerm, includeSubclasses);
-        TypedNakedCollection collection = new InstanceCollectionVector(specification, instances);
-        return collection;
-    }
-    
-    public TypedNakedCollection findInstances(InstancesCriteria criteria) {
-        return findInstances(criteria, false);
-	}
-    
-    public TypedNakedCollection findInstances(InstancesCriteria criteria, boolean includeSubclasses)
+    public TypedNakedCollection findInstances(InstancesCriteria criteria)
             throws UnsupportedFindException {
-        NakedObject[] instances = getInstances(criteria, includeSubclasses);
+        NakedObject[] instances = getInstances(criteria);
         NakedObjectSpecification specification = criteria.getSpecification();
         TypedNakedCollection collection = new InstanceCollectionVector(specification, instances);
         return collection;
-    }
-
-    public TypedNakedCollection findInstances(String className, String searchTerm) throws UnsupportedFindException {
-        return findInstances(className, searchTerm, false);
-    }
-    
-    public TypedNakedCollection findInstances(String className, String searchTerm, boolean includeSubclasses) throws UnsupportedFindException {
-        NakedObjectSpecification cls = NakedObjects.getSpecificationLoader().loadSpecification(className);
-        return findInstances(cls, searchTerm, includeSubclasses);
     }
 
     public NakedError generatorError(String message, Exception e) {
@@ -131,25 +97,9 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
         return "Naked Object Manager";
     }
 
-    /**
-     * Gets the instances that match the specified pattern. The object store
-     * should create a vector and add to it those instances held by the
-     * persistence mechanism that:-
-     * 
-     * <para>1) are of the type that the pattern object is; </para>
-     * 
-     * <para>2) have the same content as the pattern object where the pattern
-     * object has values or references specified, i.e. empty value objects and
-     * <code>null</code> references are to be ignored; </para>
-     * @param includeSubclasses TODO
-     */
-    protected abstract NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) throws UnsupportedFindException;
-
     protected abstract NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses);
 
-    protected abstract NakedObject[] getInstances(NakedObjectSpecification cls, String term, boolean includeSubclasses) throws UnsupportedFindException;
-
-    protected abstract NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses);
+    protected abstract NakedObject[] getInstances(InstancesCriteria criteria);
     
     public NakedObject getObject(NakedObject object) throws ObjectNotFoundException {
         return getObject(object.getOid(), object.getSpecification());

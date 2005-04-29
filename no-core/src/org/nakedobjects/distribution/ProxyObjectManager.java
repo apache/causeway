@@ -2,7 +2,6 @@ package org.nakedobjects.distribution;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DirtyObjectSet;
-import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
@@ -10,6 +9,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
 import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
+import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
@@ -22,7 +22,7 @@ import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
 
-
+// TODO this class replaces most of AbstractNakedObjectManager, therefore just implement NakedObjectManager
 public final class ProxyObjectManager extends AbstractNakedObjectManager {
     final static Logger LOG = Logger.getLogger(ProxyObjectManager.class);
     private ClientDistribution connection;
@@ -64,37 +64,20 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         connection.endTransaction(session);
       }
 
-    public TypedNakedCollection findInstances(NakedObject pattern, boolean includeSubclasses) throws UnsupportedFindException {
-        throw new NotImplementedException("distribution version of this method has been removed");
-    }
-
-    public TypedNakedCollection findInstances(NakedObjectSpecification specification, String criteria, boolean includeSubclasses)
+    public TypedNakedCollection findInstances(InstancesCriteria criteria)
             throws UnsupportedFindException {
-        LOG.debug("getInstances of " + specification + " with " + criteria);
-        ObjectData[] instances = connection.findInstances(session, specification.getFullName(), criteria, includeSubclasses);
-        return convertToNakedObjects(specification, instances);
+        LOG.debug("getInstances of " + criteria.getSpecification() + " with " + criteria);
+        ObjectData[] instances = connection.findInstances(session, criteria);
+        return convertToNakedObjects(criteria.getSpecification(), instances);
     }
 
-    protected NakedObject[] getInstances(InstancesCriteria criteria, boolean includeSubclasses) {
-        // TODO this is not required in PROXY; move the super class
-        // implementations down to LocalObjectManeger
-        throw new NotImplementedException();
-    }
-
-    protected NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) throws UnsupportedFindException {
+    protected NakedObject[] getInstances(InstancesCriteria criteria) {
         // TODO this is not required in PROXY; move the super class
         // implementations down to LocalObjectManeger
         throw new NotImplementedException();
     }
 
     protected NakedObject[] getInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
-        // TODO this is not required in PROXY; move the super class
-        // implementations down to LocalObjectManeger
-        throw new NotImplementedException();
-    }
-
-    protected NakedObject[] getInstances(NakedObjectSpecification specification, String term, boolean includeSubclasses)
-            throws UnsupportedFindException {
         // TODO this is not required in PROXY; move the super class
         // implementations down to LocalObjectManeger
         throw new NotImplementedException();
