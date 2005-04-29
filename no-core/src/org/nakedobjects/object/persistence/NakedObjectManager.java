@@ -17,13 +17,13 @@ public interface NakedObjectManager extends DebugInfo {
 
     void addObjectChangedListener(DirtyObjectSet listener);
         
-    TypedNakedCollection allInstances(NakedObjectSpecification specification);
+ //   TypedNakedCollection allInstances(NakedObjectSpecification specification);
 
     TypedNakedCollection allInstances(NakedObjectSpecification specification, boolean includeSubclasses);
 
-    TypedNakedCollection allInstances(String className);
+//    TypedNakedCollection allInstances(String className);
 
-    TypedNakedCollection allInstances(String className, boolean includeSubclasses);
+//    TypedNakedCollection allInstances(String className, boolean includeSubclasses);
 
     NakedObject createInstance(NakedObjectSpecification specification);
 

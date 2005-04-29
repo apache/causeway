@@ -38,25 +38,11 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
 	public void set_ObjectFactory(ObjectFactory objectFactory) {
 		setObjectFactory(objectFactory);
 	}
-
-    public TypedNakedCollection allInstances(NakedObjectSpecification specification) {
-        return allInstances(specification, false);
-    }
-    
-    public TypedNakedCollection allInstances(String className) {
-        return allInstances(className, false);
-    }
     
     public TypedNakedCollection allInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
         NakedObject[] instances = getInstances(specification, includeSubclasses);
         TypedNakedCollection collection = new InstanceCollectionVector(specification, instances);
- //       collection.setContext(getContext());
         return collection;
-    }
-
-    public TypedNakedCollection allInstances(String className, boolean includeSubclasses) {
-        NakedObjectSpecification cls = NakedObjects.getSpecificationLoader().loadSpecification(className);
-        return allInstances(cls, includeSubclasses);
     }
 
     public NakedObject createInstance(NakedObjectSpecification specification) {
@@ -64,22 +50,6 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
        NakedObject nakedObject = NakedObjects.getPojoAdapterFactory().createNOAdapter(object);
        makePersistent(nakedObject);
        return nakedObject;
-       
-      /* 
-        NakedObject object;
-        try {
-            object = (NakedObject) specification.acquireInstance();
-            object.setContext(getContext());
-            makePersistent(object);
-            object.created();
-            objectChanged(object);
-        } catch (NakedObjectRuntimeException e) {
-            object = NakedObjects.getPojoAdapterFactory(getContext().getObjectManager().generatorError("Failed to create instance of " + specification, e));
-
-            LOG.error("Failed to create instance of " + specification, e);
-        }
-        return object;
-        */
     }
 
     /**

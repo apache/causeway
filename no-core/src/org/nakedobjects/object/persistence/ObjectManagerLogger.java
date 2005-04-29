@@ -30,25 +30,9 @@ public class ObjectManagerLogger extends Logger implements NakedObjectManager {
 
     }
 
-    public TypedNakedCollection allInstances(NakedObjectSpecification specification) {
-        TypedNakedCollection instances = decorated.allInstances(specification);
-        log("All instances of " + specification.getShortName(), "" + instances.size());
-        return instances;
-    }
-
     public TypedNakedCollection allInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
         log("All instances of " + specification.getShortName() + (includeSubclasses ? " including subclasses" : ""));
         return decorated.allInstances(specification, includeSubclasses);
-    }
-
-    public TypedNakedCollection allInstances(String className) {
-        log("All instances of " + className);
-        return decorated.allInstances(className);
-    }
-
-    public TypedNakedCollection allInstances(String className, boolean includeSubclasses) {
-        log("All instances of " + className + (includeSubclasses ? " including subclasses" : ""));
-        return decorated.allInstances(className, includeSubclasses);
     }
 
     public NakedObject createInstance(NakedObjectSpecification specification) {
