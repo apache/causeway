@@ -26,7 +26,10 @@ public class KeyboardManager {
         }
 
         int action = 0;
-        if (keyCode == KeyEvent.VK_TAB) {
+
+        if (keyCode == KeyEvent.VK_F1) {
+            help(keyboardFocus);
+        } else if (keyCode == KeyEvent.VK_TAB) {
             if ((modifiers & InputEvent.CTRL_MASK) == InputEvent.CTRL_MASK) {
                 if ((modifiers & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK) {
                     action = KeyboardAction.PREVIOUS_WINDOW;
@@ -74,6 +77,19 @@ public class KeyboardManager {
         }
     }
 
+    private void help(View over) {
+        if (over != null) {
+            viewer.clearOverlayView();
+            View helpView = new HelpView(over);
+            helpView.setSize(helpView.getRequiredSize());
+            Location location = over.getAbsoluteLocation();
+            location.add(20, 20);
+            helpView.setLocation(location);
+            
+            viewer.setOverlayView(helpView);
+        }
+    }
+
     private void focusNextRootView(View focus) {
         View[] views = focus.getParent().getSubviews();
 
@@ -99,11 +115,11 @@ public class KeyboardManager {
         throw new NakedObjectRuntimeException();
     }
 
-private void focusNextSubview(View focus) {
+    private void focusNextSubview(View focus) {
         View parent = focus.getParent();
-       if(parent == null) {
-           return;
-       }
+        if (parent == null) {
+            return;
+        }
         View[] views = parent.getSubviews();
 
         for (int i = 0; i < views.length; i++) {
@@ -126,7 +142,9 @@ private void focusNextSubview(View focus) {
         }
 
         throw new NakedObjectRuntimeException();
-    }    private void focusPreviousSubview(View focus) {
+    }
+
+    private void focusPreviousSubview(View focus) {
         View[] views = focus.getParent().getSubviews();
 
         for (int i = 0; i < views.length; i++) {
