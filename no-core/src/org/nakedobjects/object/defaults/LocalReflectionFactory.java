@@ -1,11 +1,16 @@
 package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.ReflectionFactory;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.help.HelpManager;
+import org.nakedobjects.object.help.OneToOneHelp;
 import org.nakedobjects.object.persistence.ActionTransaction;
 import org.nakedobjects.object.persistence.OneToManyTransaction;
 import org.nakedobjects.object.persistence.OneToOneTransaction;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionPeer;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToManyPeer;
@@ -14,9 +19,42 @@ import org.nakedobjects.object.reflect.OneToOnePeer;
 
 
 public class LocalReflectionFactory implements ReflectionFactory {
+    HelpManager helpManager = new HelpManager() {
+
+        public Hint help(MemberIdentifier identifier) {
+            return new Hint() {
+                public Consent canAccess() {
+                    return null;
+                }
+
+                public Consent canUse() {
+                    return null;
+                }
+
+                public Consent isValid() {
+                    return null;
+                }
+
+                public String getDescription() {
+                    return "description from help manager";
+                }
+
+                public String getName() {
+                    return "name from help manager";
+                }
+
+                public String debug() {
+                    return null;
+                }
+                
+            };
+        }
+        
+    };
+    
     public Action createAction(String className, ActionPeer peer) {
         ActionPeer fullDelegate = new ActionTransaction(peer);
-        return new Action(className, fullDelegate.getName(), fullDelegate);
+       return new Action(className, fullDelegate.getName(), fullDelegate);
 
     //    return new Action(className, peer.getName(), peer);
     }
@@ -32,6 +70,7 @@ public class LocalReflectionFactory implements ReflectionFactory {
 
     public NakedObjectField createField(String className, OneToOnePeer peer) {
         OneToOnePeer oneToOneDelegate = new OneToOneTransaction(peer);
+        oneToOneDelegate = new OneToOneHelp(oneToOneDelegate, helpManager);
         OneToOneAssociation association = new OneToOneAssociation(className, oneToOneDelegate.getName(), oneToOneDelegate.getType(),
                 oneToOneDelegate);
         return association;
