@@ -9,15 +9,18 @@ import org.nakedobjects.distribution.xml.request.AllInstances;
 import org.nakedobjects.distribution.xml.request.ClearAssociation;
 import org.nakedobjects.distribution.xml.request.EndTransaction;
 import org.nakedobjects.distribution.xml.request.ExecuteAction;
-import org.nakedobjects.distribution.xml.request.FindInstances;
+import org.nakedobjects.distribution.xml.request.FindInstancesByTitle;
 import org.nakedobjects.distribution.xml.request.HasInstances;
 import org.nakedobjects.distribution.xml.request.MakePersistent;
 import org.nakedobjects.distribution.xml.request.SetAssociation;
 import org.nakedobjects.distribution.xml.request.SetValue;
 import org.nakedobjects.distribution.xml.request.StartTransaction;
+import org.nakedobjects.object.NakedObjectException;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.persistence.TitleCriteria;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
 
@@ -56,10 +59,14 @@ public class XmlClient implements ClientDistribution {
         return request.getActionResult();
     }
 
-    public ObjectData[] findInstances(Session session, String fullName, String criteria, boolean includeSubclasses) {
-        FindInstances request = new FindInstances(session, fullName, criteria, includeSubclasses);
-        remoteExecute(request);
-        return request.getInstances();
+    public ObjectData[] findInstances(Session session, InstancesCriteria criteria) {
+        if(criteria instanceof TitleCriteria) {
+	        FindInstancesByTitle request = new FindInstancesByTitle(session, (TitleCriteria) criteria);
+	        remoteExecute(request);
+	        return request.getInstances();
+        } else {
+            throw new NakedObjectRuntimeException();
+        }
     }
 
     public Hint getActionHint(Session session, String actionType, String actionIdentifier, String[] parameterTypes,

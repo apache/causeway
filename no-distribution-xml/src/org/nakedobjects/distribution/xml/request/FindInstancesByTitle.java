@@ -1,24 +1,28 @@
 package org.nakedobjects.distribution.xml.request;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ServerDistribution;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.persistence.TitleCriteria;
 import org.nakedobjects.object.security.Session;
 
-public class FindInstances extends AbstractRequest {
-
+public class FindInstancesByTitle extends AbstractRequest {
     private final String name;
-    private final boolean includeInstances;
-    private final String criteria;
-
-    public FindInstances(Session session, String name, String criteria, boolean includeSubclasses) {
+    private final String title;
+    private final boolean includeSubclasses;
+    
+    public FindInstancesByTitle(Session session, TitleCriteria criteria) {
         super(session);
-        this.name = name;
-        this.criteria = criteria;
-        this.includeInstances = includeSubclasses;
+        name = criteria.getSpecification().getFullName();
+        title = criteria.getRequiredTitle();
+        includeSubclasses = criteria.includeSubclasses();
     }
 
     public void execute(ServerDistribution sd) {
-        ObjectData[] instances = sd.findInstances(session, name, criteria, includeInstances);
+        NakedObjectSpecification spec = NakedObjects.getSpecificationLoader().loadSpecification(name);
+        TitleCriteria criteria = new TitleCriteria(spec,  title,includeSubclasses);
+        ObjectData[] instances = sd.findInstances(session, criteria);
         setResponse(instances);
     }
 
