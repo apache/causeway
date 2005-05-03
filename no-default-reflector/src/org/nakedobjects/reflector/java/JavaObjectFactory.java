@@ -53,6 +53,7 @@ public class JavaObjectFactory implements ObjectFactory {
         }
 
         invokeMethod(cls, object, "setContainer", new Class[] { BusinessObjectContainer.class }, new Object[] { container });
+        // FIX this should not be called here, but called independently if needed by the NakedObjectSpecification - only when an object is logically created.
         invokeMethod(cls, object, "created", new Class[0], new Object[0]);
 
         return object;

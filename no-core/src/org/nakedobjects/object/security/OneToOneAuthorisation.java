@@ -3,6 +3,7 @@ package org.nakedobjects.object.security;
 import org.nakedobjects.object.reflect.AbstractOneToOnePeer;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 
+//TODO create hint about access
 public class OneToOneAuthorisation extends AbstractOneToOnePeer {
     private final AuthorisationManager authorisationManager;
 

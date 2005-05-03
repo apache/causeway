@@ -6,6 +6,7 @@ import org.nakedobjects.object.reflect.AbstractOneToManyPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToManyPeer;
 
+// TODO create hint about access
 public class OneToManyAuthorisation extends AbstractOneToManyPeer {
     private final AuthorisationManager authorisationManager;
 
