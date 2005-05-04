@@ -15,7 +15,7 @@ public class MockJavaReflector extends JavaReflector {
     }
 
     ActionPeer createAction(Method method, String name, Method aboutMethod, Type action) {
-        return new MockAction(method, name, aboutMethod, action);
+        return new MockAction(name, action);
     }
 
     

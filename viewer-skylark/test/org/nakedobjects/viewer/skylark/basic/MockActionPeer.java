@@ -58,6 +58,10 @@ class MockActionPeer implements ActionPeer {
         return null;
     }
 
+    public Object getExtension(Class cls) {
+        return null;
+    }
+
 }
 
 
