@@ -33,6 +33,10 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         removeMethod = remove;
     }
 
+    public Object getExtension(Class cls) {
+        return null;
+    }
+    
     public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked associate) {
         Method aboutMethod = getAboutMethod();
 

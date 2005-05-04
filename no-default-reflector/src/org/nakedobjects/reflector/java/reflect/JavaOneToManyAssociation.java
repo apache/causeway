@@ -97,6 +97,10 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
         return (NakedCollection) get(fromObject);
     }
 
+    public Object getExtension(Class cls) {
+        return null;
+    }
+    
     public void removeAllAssociations(MemberIdentifier identifier, NakedObject inObject) {
         try {
             clearMethod.invoke(inObject, null);

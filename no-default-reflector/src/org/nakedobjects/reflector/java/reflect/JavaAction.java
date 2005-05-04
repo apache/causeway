@@ -66,7 +66,9 @@ public class JavaAction extends JavaMember implements ActionPeer {
         return null;
     }
 
-
+    public Object getExtension(Class cls) {
+        return null;
+    }
 
     public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
         if (parameters.length != paramCount) {

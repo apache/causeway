@@ -41,13 +41,13 @@ import org.apache.log4j.Logger;
 
 
 public class JavaReflector implements Reflector {
-    private static final Object[] NO_PARAMETERS = new Object[0];
-    private static final String DERIVE_PREFIX = "derive";
-    private static final String SET_PREFIX = "set";
-    private static final String ABOUT_PREFIX = "about";
     private static final String ABOUT_FIELD_DEFAULT = "aboutFieldDefault";
+    private static final String ABOUT_PREFIX = "about";
+    private static final String DERIVE_PREFIX = "derive";
     private static final String GET_PREFIX = "get";
     private final static Logger LOG = Logger.getLogger(JavaReflector.class);
+    private static final Object[] NO_PARAMETERS = new Object[0];
+    private static final String SET_PREFIX = "set";
 
     /**
      * Returns the name of a Java entity without any prefix. A prefix is defined
@@ -61,12 +61,14 @@ public class JavaReflector implements Reflector {
      * 
      * <pre>
      * 
-     *      getCarRegistration        -&gt; CarRegistration
-     *      CityMayor -&gt; CityMayor
-     *      isReady -&gt; Ready
-     *      
+     *  
+     *       getCarRegistration        -&gt; CarRegistration
+     *       CityMayor -&gt; CityMayor
+     *       isReady -&gt; Ready
+     *       
+     *  
      * </pre>
-     * 
+     *  
      */
     protected static String javaBaseName(String javaName) {
         int pos = 0;
@@ -78,13 +80,17 @@ public class JavaReflector implements Reflector {
             pos++;
         }
 
-        if (pos >= len) { return ""; }
+        if (pos >= len) {
+            return "";
+        }
 
         if (javaName.charAt(pos) == '_') {
             pos++;
         }
 
-        if (pos >= len) { return ""; }
+        if (pos >= len) {
+            return "";
+        }
 
         String baseName = javaName.substring(pos);
         char firstChar = baseName.charAt(0);
@@ -113,21 +119,18 @@ public class JavaReflector implements Reflector {
                     int element = 0;
 
                     while (st.hasMoreTokens()) {
-                        a[element] =st.nextToken().trim();
+                        a[element] = st.nextToken().trim();
                         element++;
                     }
                     return a;
                 } else {
                     return null;
                 }
-                
+
             } else {
                 LOG.warn("Method " + aClass.getName() + "." + type + "Order() must be decared as static");
             }
-        } catch (NoSuchMethodException ignore) {
-        } catch (IllegalAccessException ignore) {
-        } catch (InvocationTargetException ignore) {
-        }
+        } catch (NoSuchMethodException ignore) {} catch (IllegalAccessException ignore) {} catch (InvocationTargetException ignore) {}
 
         return null;
     }
@@ -140,13 +143,14 @@ public class JavaReflector implements Reflector {
         return fullyQualifiedClassName.substring(fullyQualifiedClassName.lastIndexOf('.') + 1);
     }
 
-    private Class cls;
-    private Method methods[];
-    private Method defaultAboutFieldMethod;
-    private final JavaObjectFactory objectFactory;
-    private Method isDirtyMethod;
     private Method clearDirtyMethod;
+
+    private Class cls;
+    private Method defaultAboutFieldMethod;
+    private Method isDirtyMethod;
     private Method markDirtyMethod;
+    private Method methods[];
+    private final JavaObjectFactory objectFactory;
 
     public JavaReflector(String name, JavaObjectFactory objectFactory) throws ReflectionException {
         this.objectFactory = objectFactory;
@@ -155,15 +159,16 @@ public class JavaReflector implements Reflector {
         try {
             cls = Class.forName(name);
 
-         } catch (ClassNotFoundException e) { 
-             throw new ReflectionException("Could not load class " + name, e);
-         }
+        } catch (ClassNotFoundException e) {
+            throw new ReflectionException("Could not load class " + name, e);
+        }
 
-        if (!Modifier.isPublic(cls.getModifiers())) { throw new NakedObjectSpecificationException (
-                "A NakedObject class must be marked as public.  Error in " + cls); }
+        if (!Modifier.isPublic(cls.getModifiers())) {
+            throw new NakedObjectSpecificationException("A NakedObject class must be marked as public.  Error in " + cls);
+        }
         this.cls = cls;
         methods = cls.getMethods();
-        
+
         isDirtyMethod = findMethod(false, "isDirty", boolean.class, new Class[0]);
         clearDirtyMethod = findMethod(false, "clearDirty", void.class, new Class[0]);
         markDirtyMethod = findMethod(false, "markDirty", void.class, new Class[0]);
@@ -172,16 +177,16 @@ public class JavaReflector implements Reflector {
     public Naked acquireInstance() {
         if (Modifier.isAbstract(cls.getModifiers())) {
             throw new IllegalStateException("Handling of abstract naked classes is not yet supported: " + cls);
-        } 
-        
+        }
+
         Object object = objectFactory.createObject(cls);
-            
+
         // TODO this code is duplicated in JavaReflectorFactory
-         if (object instanceof TextString ){
+        if (object instanceof TextString) {
             return new TextStringAdapter((TextString) object);
-         } else if (object instanceof Logical ){
-                return new LogicalValueObjectAdapter((Logical) object);
-         } else {
+        } else if (object instanceof Logical) {
+            return new LogicalValueObjectAdapter((Logical) object);
+        } else {
             return NakedObjects.getPojoAdapterFactory().createAdapter(objectFactory.createObject(cls));
         }
     }
@@ -211,54 +216,47 @@ public class JavaReflector implements Reflector {
                     break;
                 }
             }
-            
+
             if (prefix == -1) {
                 continue;
             }
 
             /*
-            Class returnType = method.getReturnType();
-            boolean returnIsValid = returnType == void.class || NakedObject.class.isAssignableFrom(returnType);
+             * Class returnType = method.getReturnType(); boolean returnIsValid =
+             * returnType == void.class ||
+             * NakedObject.class.isAssignableFrom(returnType);
+             * 
+             * if(! returnIsValid) { LOG.warn("action method " + method + "
+             * ignored as return type is not of type Naked" ); continue; }
+             */
 
-            if(! returnIsValid) {
-                LOG.warn("action method " + method + " ignored as return type is not of type Naked" );
-                continue;
-            }
-            */
-            
             Class[] params = method.getParameterTypes();
             /*
-            boolean paramsAreValid = true;
-            for (int j = 0; j < params.length; j++) {
-                Class param = params[j];
-                if(! Naked.class.isAssignableFrom(param)) {
-                    paramsAreValid = false;
-                }
-            }
-
-            if(! paramsAreValid) {
-                LOG.warn("action method " + method + " ignored as not all parameters are of type Naked" );
-                continue;
-            }
-            */
+             * boolean paramsAreValid = true; for (int j = 0; j < params.length;
+             * j++) { Class param = params[j]; if(!
+             * Naked.class.isAssignableFrom(param)) { paramsAreValid = false; } }
+             * 
+             * if(! paramsAreValid) { LOG.warn("action method " + method + "
+             * ignored as not all parameters are of type Naked" ); continue; }
+             */
             validMethods.addElement(method);
-            
+
             LOG.debug("identified action " + method);
             String methodName = method.getName();
             methods[i] = null;
-            
+
             String name = methodName.substring(prefixes[prefix].length());
             Class[] longParams = new Class[params.length + 1];
             longParams[0] = ActionAbout.class;
             System.arraycopy(params, 0, longParams, 1, params.length);
-            String aboutName = "about" + methodName.substring(0,1).toUpperCase() + methodName.substring(1);
+            String aboutName = "about" + methodName.substring(0, 1).toUpperCase() + methodName.substring(1);
             Method aboutMethod = findMethod(forClass, aboutName, null, longParams);
             if (aboutMethod == null) {
                 aboutMethod = defaultAboutMethod;
             } else {
                 LOG.debug("  with about method " + aboutMethod);
             }
-            
+
             Action.Type action;
             action = new Action.Type[] { Action.USER, Action.EXPLORATION, Action.DEBUG }[prefix];
             ActionPeer local = createAction(method, name, aboutMethod, action);
@@ -268,13 +266,14 @@ public class JavaReflector implements Reflector {
         return convertToArray(actions);
     }
 
-    ActionPeer createAction(Method method, String name, Method aboutMethod, Action.Type action) {
-        return new JavaAction(name, action, method, aboutMethod);
-    }
-
     public String[] actionSortOrder() {
         LOG.debug("looking for action sort order");
         return readSortOrder(cls, "action");
+    }
+
+    public String[] classActionSortOrder() {
+        LOG.debug("looking for class action sort order");
+        return readSortOrder(cls, "classAction");
     }
 
     public Hint classHint() {
@@ -283,31 +282,31 @@ public class JavaReflector implements Reflector {
             SimpleClassAbout about = new SimpleClassAbout(null, null);
             String className = shortName();
             Method aboutMethod = getAboutMethod(className);
-            aboutMethod.invoke(null, new Object[] {about});
-            return about; 
-        } catch (NoSuchMethodException ignore) {
-        } catch (IllegalAccessException ignore) {
-        } catch (InvocationTargetException ignore) {
-        }
+            aboutMethod.invoke(null, new Object[] { about });
+            return about;
+        } catch (NoSuchMethodException ignore) {} catch (IllegalAccessException ignore) {} catch (InvocationTargetException ignore) {}
 
         return null;
     }
 
-    private Method getAboutMethod(String className) throws NoSuchMethodException {
-        Method method = cls.getMethod(ABOUT_PREFIX + className, new Class[] {ClassAbout.class});
-        if(method == null) {
-            return getAboutMethod(getSuperclass());
-        }
-        return method;
-    }
-
-    public String[] classActionSortOrder() {
-        LOG.debug("looking for class action sort order");
-        return readSortOrder(cls, "classAction");
-    }
-
     private String className() {
         return cls.getName();
+    }
+
+    public void clearDirty(NakedObject object) {
+        if (clearDirtyMethod == null) {
+            return;
+        }
+
+        try {
+            clearDirtyMethod.invoke(object.getObject(), NO_PARAMETERS);
+        } catch (IllegalArgumentException e) {
+            throw new NakedObjectRuntimeException(e);
+        } catch (IllegalAccessException e) {
+            LOG.error("Illegal access of " + isDirtyMethod, e);
+        } catch (InvocationTargetException e) {
+            JavaMember.invocationException("Exception executing " + isDirtyMethod, e);
+        }
     }
 
     private ActionPeer[] convertToArray(Vector actions) {
@@ -319,6 +318,10 @@ public class JavaReflector implements Reflector {
 
         }
         return (ActionPeer[]) results;
+    }
+
+    ActionPeer createAction(Method method, String name, Method aboutMethod, Action.Type action) {
+        return new JavaAction(name, action, method, aboutMethod);
     }
 
     private void derivedFields(Vector fields) {
@@ -338,44 +341,27 @@ public class JavaReflector implements Reflector {
             }
 
             // create Field
-          //  JavaValueField attribute = new JavaValueField(name, method.getReturnType(), method, null, aboutMethod, null, true);
-//            fields.addElement(attribute);
-            
-            JavaOneToOneAssociation association = new JavaOneToOneAssociation(name, method.getReturnType(), method,
-                    null, null, null, aboutMethod);
+            //  JavaValueField attribute = new JavaValueField(name,
+            // method.getReturnType(), method, null, aboutMethod, null, true);
+            //            fields.addElement(attribute);
+
+            JavaOneToOneAssociation association = new JavaOneToOneAssociation(name, method.getReturnType(), method, null, null,
+                    null, aboutMethod);
             fields.addElement(association);
 
         }
     }
 
-    public ObjectTitle title() {
-        Method titleMethod = findMethod(OBJECT, "title", Title.class, null);
-  
-        if(titleMethod == null) {
-            titleMethod = findMethod(OBJECT, "title", String.class, null);
-        }
-    
-        if(titleMethod == null) {
-            return new ObjectTitle() {
-                public String title(NakedObject object) {
-                    return object.getObject().toString();
-                }
-                };
-        } else {
-            return new JavaObjectTitle(titleMethod);
-        }
-    }
-    
     public FieldPeer[] fields() {
-        if(cls.getName().startsWith("java.") || BusinessValueHolder.class.isAssignableFrom(cls)) {
+        if (cls.getName().startsWith("java.") || BusinessValueHolder.class.isAssignableFrom(cls)) {
             return new FieldPeer[0];
         }
-        
+
         LOG.debug("looking for fields for " + cls);
         Vector elements = new Vector();
         defaultAboutFieldMethod = findMethod(OBJECT, ABOUT_FIELD_DEFAULT, null, new Class[] { FieldAbout.class });
         valueFields(elements, BusinessValueHolder.class);
- 
+
         valueFields(elements, BusinessValue.class);
         valueFields(elements, String.class);
         valueFields(elements, Date.class);
@@ -383,7 +369,7 @@ public class JavaReflector implements Reflector {
         valueFields(elements, int.class);
         valueFields(elements, boolean.class);
 
-//        primitiveFields(elements);
+        //        primitiveFields(elements);
         derivedFields(elements);
         oneToManyAssociationFields(elements);
         oneToManyAssociationFieldsInternalCollection(elements);
@@ -400,6 +386,11 @@ public class JavaReflector implements Reflector {
         return readSortOrder(cls, "field");
     }
 
+    protected void finalize() throws Throwable {
+        super.finalize();
+        LOG.info("finalizing reflector " + this);
+    }
+
     /**
      * Returns a specific public methods that: have the specified prefix; have
      * the specified return type, or void, if canBeVoid is true; and has the
@@ -410,8 +401,8 @@ public class JavaReflector implements Reflector {
      * @param name
      * @param returnType
      * @param paramTypes
-     *                 the set of parameters the method should have, if null then is
-     *                 ignored
+     *                       the set of parameters the method should have, if null then is
+     *                       ignored
      * @return Method
      */
     private Method findMethod(boolean forClass, String name, Class returnType, Class[] paramTypes) {
@@ -499,32 +490,66 @@ public class JavaReflector implements Reflector {
     private Vector findPrefixedMethods(boolean forClass, String prefix, Class returnType, int paramCount) {
         return findPrefixedMethods(forClass, prefix, returnType, false, paramCount);
     }
-    
-    public boolean isLookup() {
-        return Lookup.class.isAssignableFrom(cls);
+
+    public String fullName() {
+        return cls.getName();
     }
-    
-    public Persistable persistable() {
-        if(NonPersistable.class.isAssignableFrom(cls)) {
-            return Persistable.TRANSIENT;
- /*       } else if(Immutable.class.isAssignableFrom(cls)) {
-            return Persistable.IMMUTABLE;
-        } else if(ProgramPersistable.class.isAssignableFrom(cls)) {
-            return Persistable.PROGRAM_PERSISTABLE;
- */       } else {
-            return Persistable.USER_PERSISTABLE;
+
+    private Method getAboutMethod(String className) throws NoSuchMethodException {
+        Method method = cls.getMethod(ABOUT_PREFIX + className, new Class[] { ClassAbout.class });
+        if (method == null) {
+            return getAboutMethod(getSuperclass());
         }
+        return method;
     }
-    
+
+    public Object getExtension(Class cls) {
+        return null;
+    }
+
+    public String[] getInterfaces() {
+        Class[] interfaces = cls.getInterfaces();
+        Class[] nakedInterfaces = new Class[interfaces.length];
+        int validInterfaces = 0;
+        for (int i = 0; i < interfaces.length; i++) {
+            nakedInterfaces[validInterfaces++] = interfaces[i];
+        }
+
+        String[] interfaceNames = new String[validInterfaces];
+        for (int i = 0; i < validInterfaces; i++) {
+            interfaceNames[i] = nakedInterfaces[i].getName();
+        }
+
+        return interfaceNames;
+    }
+
+    public String getSuperclass() {
+        Class superclass = cls.getSuperclass();
+
+        if (superclass == null) {
+            return null;
+        }
+        /*
+         * String naked = Naked.class.getName(); boolean isInstanceOfNaked =
+         * Naked.class.isAssignableFrom(superclass); return isInstanceOfNaked ?
+         * superclass.getName() : naked;
+         */
+        return superclass.getName();
+    }
+
     public boolean isAbstract() {
         return Modifier.isAbstract(cls.getModifiers());
     }
-    
+
+    public boolean isCollection() {
+        return Vector.class.isAssignableFrom(cls) || InternalCollection.class.isAssignableFrom(cls);
+    }
+
     public boolean isDirty(NakedObject object) {
-        if(isDirtyMethod == null) {
+        if (isDirtyMethod == null) {
             return false;
         }
-        
+
         try {
             Boolean isDirty = (Boolean) isDirtyMethod.invoke(object.getObject(), NO_PARAMETERS);
             return isDirty.booleanValue();
@@ -538,29 +563,28 @@ public class JavaReflector implements Reflector {
             return false;
         }
     }
-    
-    public void clearDirty(NakedObject object) {
-        if(clearDirtyMethod == null) {
-            return;
-        }
-        
-        try {
-            clearDirtyMethod.invoke(object.getObject(), NO_PARAMETERS);
-        } catch (IllegalArgumentException e) {
-            throw new NakedObjectRuntimeException(e);
-        } catch (IllegalAccessException e) {
-            LOG.error("Illegal access of " + isDirtyMethod, e);
-        } catch (InvocationTargetException e) {
-            JavaMember.invocationException("Exception executing " + isDirtyMethod, e);
-        }
+
+    public boolean isLookup() {
+        return Lookup.class.isAssignableFrom(cls);
     }
-    
-    
+
+    public boolean isObject() {
+        return !isValue() && !isCollection();
+    }
+
+    public boolean isPartOf() {
+        return Aggregated.class.isAssignableFrom(cls);
+    }
+
+    public boolean isValue() {
+        return BusinessValueHolder.class.isAssignableFrom(cls) || BusinessValue.class.isAssignableFrom(cls);
+    }
+
     public void markDirty(NakedObject object) {
-        if(markDirtyMethod == null) {
+        if (markDirtyMethod == null) {
             return;
         }
-        
+
         try {
             markDirtyMethod.invoke(object.getObject(), NO_PARAMETERS);
         } catch (IllegalArgumentException e) {
@@ -571,23 +595,7 @@ public class JavaReflector implements Reflector {
             JavaMember.invocationException("Exception executing " + isDirtyMethod, e);
         }
     }
-    
-    public boolean isCollection() {
-        return Vector.class.isAssignableFrom(cls) || InternalCollection.class.isAssignableFrom(cls);
-    }
-    
-    public boolean isObject() {
-        return !isValue() && !isCollection();
-    }
-    
-    public boolean isValue() {
-        return BusinessValueHolder.class.isAssignableFrom(cls) || BusinessValue.class.isAssignableFrom(cls) ;
-    }
 
-    public boolean isPartOf() {
-        return Aggregated.class.isAssignableFrom(cls);
-    }
-    
     String[] names(Vector methods) {
         String[] names = new String[methods.size()];
         Enumeration e = methods.elements();
@@ -606,11 +614,11 @@ public class JavaReflector implements Reflector {
      * Returns the details about the basic accessor/mutator methods. Based on
      * each suitable get... method a vector of OneToManyAssociation objects are
      * returned.
-     * 
+     *  
      */
     private void oneToManyAssociationFields(Vector associations) {
         Vector v = findPrefixedMethods(OBJECT, GET_PREFIX, Vector.class, 0);
- 
+
         // create vector of multiRoles from all get methods
         Enumeration e = v.elements();
 
@@ -619,7 +627,8 @@ public class JavaReflector implements Reflector {
             LOG.debug("identified 1-many association method " + getMethod);
             String name = javaBaseName(getMethod.getName());
 
-            Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class, null, boolean.class });
+            Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class, null,
+                    boolean.class });
             Class aboutType = (aboutMethod == null) ? null : aboutMethod.getParameterTypes()[1];
             if (aboutMethod == null) {
                 aboutMethod = defaultAboutFieldMethod;
@@ -642,10 +651,10 @@ public class JavaReflector implements Reflector {
                 removeMethod = findMethod(OBJECT, "dissociate" + name, void.class, null);
             }
 
-            if(addMethod == null || removeMethod == null) {
+            if (addMethod == null || removeMethod == null) {
                 LOG.error("There must be both add and remove methods for " + name + " in " + className());
             }
-            
+
             Class removeType = (removeMethod == null) ? null : removeMethod.getParameterTypes()[0];
             Class addType = (addMethod == null) ? null : addMethod.getParameterTypes()[0];
 
@@ -657,8 +666,8 @@ public class JavaReflector implements Reflector {
             Class elementType = (aboutType == null) ? null : aboutType;
             elementType = (addType == null) ? elementType : addType;
             elementType = (removeType == null) ? elementType : removeType;
-            
-            if(elementType == null) {
+
+            if (elementType == null) {
                 LOG.warn("Cannot determine a type for the collection " + name + "; not added as a field");
                 return;
             }
@@ -669,14 +678,14 @@ public class JavaReflector implements Reflector {
                         + "all deal with same type of object.  There are at least two different " + "types");
             }
 
-            associations
-                    .addElement(new JavaOneToManyAssociation(name, elementType, getMethod, addMethod, removeMethod, aboutMethod));
+            associations.addElement(new JavaOneToManyAssociation(name, elementType, getMethod, addMethod, removeMethod,
+                    aboutMethod));
         }
     }
 
     private void oneToManyAssociationFieldsInternalCollection(Vector associations) {
         Vector v = findPrefixedMethods(OBJECT, GET_PREFIX, InternalCollection.class, 0);
- 
+
         // create vector of multiRoles from all get methods
         Enumeration e = v.elements();
 
@@ -685,7 +694,8 @@ public class JavaReflector implements Reflector {
             LOG.debug("identified 1-many association method " + getMethod);
             String name = javaBaseName(getMethod.getName());
 
-            Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class, null, boolean.class });
+            Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class, null,
+                    boolean.class });
             Class aboutType = (aboutMethod == null) ? null : aboutMethod.getParameterTypes()[1];
             if (aboutMethod == null) {
                 aboutMethod = defaultAboutFieldMethod;
@@ -707,7 +717,7 @@ public class JavaReflector implements Reflector {
             if (removeMethod == null) {
                 removeMethod = findMethod(OBJECT, "dissociate" + name, void.class, null);
             }
-            
+
             Class removeType = (removeMethod == null) ? null : removeMethod.getParameterTypes()[0];
             Class addType = (addMethod == null) ? null : addMethod.getParameterTypes()[0];
 
@@ -719,7 +729,7 @@ public class JavaReflector implements Reflector {
             Class elementType = (aboutType == null) ? null : aboutType;
             elementType = (addType == null) ? elementType : addType;
             elementType = (removeType == null) ? elementType : removeType;
-            
+
             if (((aboutType != null) && (aboutType != elementType)) || ((addType != null) && (addType != elementType))
                     || ((removeType != null) && (removeType != elementType))) {
                 LOG.error("The add/remove/associate/dissociate/about methods in " + className() + " must "
@@ -739,7 +749,7 @@ public class JavaReflector implements Reflector {
      */
     private void oneToOneAssociationFields(Vector associations) throws ReflectionException {
         Vector v = findPrefixedMethods(OBJECT, GET_PREFIX, Object.class, 0);
-  
+
         // create vector of roles from all get methods
         Enumeration e = v.elements();
 
@@ -791,19 +801,25 @@ public class JavaReflector implements Reflector {
         }
     }
 
+    public Persistable persistable() {
+        if (NonPersistable.class.isAssignableFrom(cls)) {
+            return Persistable.TRANSIENT;
+            /*
+             * } else if(Immutable.class.isAssignableFrom(cls)) { return
+             * Persistable.IMMUTABLE; } else
+             * if(ProgramPersistable.class.isAssignableFrom(cls)) { return
+             * Persistable.PROGRAM_PERSISTABLE;
+             */} else {
+            return Persistable.USER_PERSISTABLE;
+        }
+    }
+
     public String pluralName() {
         try {
             return (String) cls.getMethod("pluralName", new Class[0]).invoke(null, NO_PARAMETERS);
-        } catch (NoSuchMethodException ignore) {
-        } catch (IllegalAccessException ignore) {
-        } catch (InvocationTargetException ignore) {
-        }
+        } catch (NoSuchMethodException ignore) {} catch (IllegalAccessException ignore) {} catch (InvocationTargetException ignore) {}
 
         return null;
-    }
-
-    public String fullName() {
-       return cls.getName();
     }
 
     public String shortName() {
@@ -815,17 +831,36 @@ public class JavaReflector implements Reflector {
         try {
             Method method = cls.getMethod("singularName", new Class[0]);
             return (String) method.invoke(null, NO_PARAMETERS);
-        } catch (NoSuchMethodException ignore) {
-        } catch (IllegalAccessException ignore) {
-        } catch (InvocationTargetException ignore) {
-        }
+        } catch (NoSuchMethodException ignore) {} catch (IllegalAccessException ignore) {} catch (InvocationTargetException ignore) {}
 
         return null;
     }
 
+    public ObjectTitle title() {
+        Method titleMethod = findMethod(OBJECT, "title", Title.class, null);
+
+        if (titleMethod == null) {
+            titleMethod = findMethod(OBJECT, "title", String.class, null);
+        }
+
+        if (titleMethod == null) {
+            return new ObjectTitle() {
+                public String title(NakedObject object) {
+                    return object.getObject().toString();
+                }
+            };
+        } else {
+            return new JavaObjectTitle(titleMethod);
+        }
+    }
+
+    public String unresolvedTitle(NakedObject pojo) {
+        return "no title";
+    }
+
     private Vector valueFields(Vector fields, Class type) {
         Vector v = findPrefixedMethods(OBJECT, GET_PREFIX, type, 0);
-        
+
         // create vector of attributes from all get methods
         Enumeration e = v.elements();
 
@@ -855,57 +890,17 @@ public class JavaReflector implements Reflector {
 
             // create Field
             LOG.info("Value " + name + " ->" + getMethod);
-           /*
-            ValueField attribute = createValueField(getMethod, setMethod, name, aboutMethod, validMethod);
-            fields.addElement(attribute);
-            */
-            
+            /*
+             * ValueField attribute = createValueField(getMethod, setMethod,
+             * name, aboutMethod, validMethod); fields.addElement(attribute);
+             */
+
             JavaOneToOneAssociation association = new JavaOneToOneAssociation(name, getMethod.getReturnType(), getMethod,
                     setMethod, null, null, aboutMethod);
             fields.addElement(association);
         }
 
         return fields;
-    }
-
-    public String[] getInterfaces() {
-        Class[] interfaces = cls.getInterfaces();
-        Class[] nakedInterfaces = new Class[interfaces.length];
-        int validInterfaces = 0;
-        for (int i = 0; i < interfaces.length; i++) {
-            nakedInterfaces[validInterfaces++] = interfaces[i];
-        }
-        
-        String[] interfaceNames = new String[validInterfaces];
-        for (int i = 0; i < validInterfaces; i++) {
-            interfaceNames[i] = nakedInterfaces[i].getName();
-        }
-
-        return interfaceNames;
-    }
-    
-    public String getSuperclass() { 
-        Class superclass = cls.getSuperclass();
-        
-        if(superclass == null) {
-            return null;
-        }
-        /*
-        String naked = Naked.class.getName();
-		boolean isInstanceOfNaked = Naked.class.isAssignableFrom(superclass);
-		return  isInstanceOfNaked ? superclass.getName() : naked;
-		*/
-		return superclass.getName();
-    }
-    
-
-    protected void finalize() throws Throwable {
-        super.finalize();
-        LOG.info("finalizing reflector " + this);
-    }
-
-    public String unresolvedTitle(NakedObject pojo) {
-        return "no title";
     }
 }
 
