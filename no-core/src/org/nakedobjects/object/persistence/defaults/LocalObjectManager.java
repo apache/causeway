@@ -49,6 +49,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         try {
             getTransaction().abort();
             objectStore.abortTransaction();
+            transaction = null;
         } catch (ObjectStoreException e) {
             e.printStackTrace();
         }
@@ -117,6 +118,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     public void endTransaction() {
         try {
             getTransaction().commit(objectStore);
+            transaction = null;
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
@@ -473,7 +475,12 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
     public void shutdown() {
         try {
-            oidGenerator.shutdown();
+            if (transaction != null) {
+    			abortTransaction();
+    		}
+            objectsToBeSaved.shutdown();
+            objectsToRefreshViewsFor.shutdown();
+    		oidGenerator.shutdown();
             oidGenerator = null;
             objectStore.shutdown();
             objectStore = null;
