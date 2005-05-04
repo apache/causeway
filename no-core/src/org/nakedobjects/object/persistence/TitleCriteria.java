@@ -13,7 +13,7 @@ public class TitleCriteria implements InstancesCriteria {
         this.specification = specification;
         this.requiredTitle = title.toLowerCase();
         this.includeSubclasses = includeSubclasses;
-        }
+    }
 
     public boolean matches(NakedObject object) {
         String objectTitle = object.titleString().toLowerCase();

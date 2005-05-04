@@ -3,6 +3,7 @@ package org.nakedobjects.object.persistence.defaults;
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
 
@@ -75,19 +76,26 @@ class TransientObjectStoreInstances {
         return numberOfInstances() > 0;
     }
 
-    public NakedObject instanceMatching(String title) {
+ /*   public NakedObject instanceMatching(String title) {
         Oid oid = (Oid) titleIndex.get(title);
         return oid == null ? null : getObject(oid);
     }
-
-    public NakedObject[] instances() {
-        NakedObject[] array = new NakedObject[objectInstances.size()];
+*/
+    public void instances(InstancesCriteria criteria, Vector instances) {
         Enumeration e = elements();
-        int i = 0;
         while (e.hasMoreElements()) {
-            array[i++] = (NakedObject) e.nextElement();
+            NakedObject element = (NakedObject) e.nextElement();
+            if(criteria.matches(element)) {
+                instances.addElement(element);
+            }
+        }    
+    }
+
+    public void instances(Vector instances) {
+        Enumeration e = elements();
+        while (e.hasMoreElements()) {
+            instances.addElement(e.nextElement());
         }
-        return array;
     }
 
     protected PojoAdapterFactory loaded() {

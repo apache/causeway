@@ -14,7 +14,6 @@ import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.PersistenceCommand;
 import org.nakedobjects.object.persistence.SaveObjectCommand;
-import org.nakedobjects.object.persistence.TitleCriteria;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.Debug;
@@ -29,8 +28,8 @@ import org.apache.log4j.Category;
 
 public class TransientObjectStore implements NakedObjectStore {
     private final static Category LOG = Category.getInstance(TransientObjectStore.class);
-    private final Hashtable instances;
- 
+    protected Hashtable instances;
+
     public TransientObjectStore() {
         LOG.info("Creating object store");
         instances = new Hashtable();
@@ -46,11 +45,11 @@ public class TransientObjectStore implements NakedObjectStore {
                 LOG.debug("  createObject " + object);
                 save(object);
             }
-            
+
             public NakedObject onObject() {
                 return object;
             }
-            
+
             public String toString() {
                 return "CreateObjectCommand [object=" + object + "]";
             }
@@ -62,8 +61,8 @@ public class TransientObjectStore implements NakedObjectStore {
             public void execute() throws ObjectStoreException {
                 LOG.info("  delete requested on '" + object + "'");
                 destroy(object);
-            }       
-            
+            }
+
             public NakedObject onObject() {
                 return object;
             }
@@ -79,7 +78,7 @@ public class TransientObjectStore implements NakedObjectStore {
             public void execute() throws ObjectStoreException {
                 save(object);
             }
-            
+
             public NakedObject onObject() {
                 return object;
             }
@@ -105,12 +104,12 @@ public class TransientObjectStore implements NakedObjectStore {
 
                 NakedObject element;
                 try {
-                element = ((NakedObject) e.nextElement());
+                    element = ((NakedObject) e.nextElement());
                 } catch (ClassCastException ex) {
                     LOG.error(ex);
                     return s.toString();
                 }
-                
+
                 s.append(element);
                 s.append(debugGraph(element, name, level + 1, recursiveElements));
             }
@@ -172,15 +171,29 @@ public class TransientObjectStore implements NakedObjectStore {
         return s.toString();
     }
 
-    private Enumeration elements(NakedObjectSpecification spec) {
-        TransientObjectStoreInstances ins = instancesFor(spec);
-        return ins.elements();
+    private void destroy(NakedObject object) {
+        destroy(object, object.getSpecification());
+    }
+
+    private void destroy(NakedObject object, NakedObjectSpecification specification) {
+        LOG.debug("   saving object " + object + " as instance of " + specification.getShortName());
+        TransientObjectStoreInstances ins = instancesFor(specification);
+        ins.remove(object.getOid());
+
+        NakedObjectSpecification superclass = specification.superclass();
+        if (superclass != null) {
+            destroy(object, superclass);
+        }
+
+        NakedObjectSpecification[] interfaces = specification.interfaces();
+        for (int i = 0; i < interfaces.length; i++) {
+            destroy(object, interfaces[i]);
+        }
     }
 
     public void endTransaction() {
         LOG.debug("end transaction");
     }
-
 
     protected void finalize() throws Throwable {
         super.finalize();
@@ -200,7 +213,7 @@ public class TransientObjectStore implements NakedObjectStore {
             debug.appendln(0, spec.getFullName());
             TransientObjectStoreInstances instances = instancesFor(spec);
             Enumeration f = instances.elements();
-            if(!f.hasMoreElements()) {
+            if (!f.hasMoreElements()) {
                 debug.appendln(8, "no instances");
             }
             while (f.hasMoreElements()) {
@@ -208,7 +221,7 @@ public class TransientObjectStore implements NakedObjectStore {
             }
         }
         debug.appendln();
-        
+
         debug.appendTitle("Object graphs");
         Vector dump = new Vector();
         e = instances.keys();
@@ -231,40 +244,39 @@ public class TransientObjectStore implements NakedObjectStore {
         return name();
     }
 
-    public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectStoreException,
-            UnsupportedFindException {
-        
-        if(criteria instanceof TitleCriteria) {
-            TitleCriteria titleCriteria = (TitleCriteria) criteria;
-            String title = titleCriteria.getRequiredTitle();
-	        NakedObject match = instancesFor(criteria.getSpecification()).instanceMatching(title);
-	        if(match != null) {
-	            LOG.debug("getInstances for " + criteria + " => " + match);
-	            return new NakedObject[] {match};
-	        }
-        }
-        
+    public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectStoreException, UnsupportedFindException {
         Vector instances = new Vector();
-        Enumeration objects = elements(criteria.getSpecification());
-        while (objects.hasMoreElements()) {
-            NakedObject object = (NakedObject) objects.nextElement();
-            if (criteria.matches(object)) {
-                instances.addElement(object);
+        getInstances(criteria, instances);
+        return toInstancesArray(instances);
+    }
+
+    private void getInstances(InstancesCriteria criteria, Vector instances) {
+        NakedObjectSpecification spec = criteria.getSpecification();
+        instancesFor(spec).instances(criteria, instances);
+        if (criteria.includeSubclasses()) {
+            NakedObjectSpecification[] subclasses = spec.subclasses();
+            for (int i = 0; i < subclasses.length; i++) {
+                getInstances(subclasses[i], instances, true);
             }
         }
-
-        LOG.debug("getInstances for " + criteria + " => " + instances);
-        return toInstancesArray(instances);
     }
 
     public NakedObject[] getInstances(NakedObjectSpecification spec, boolean includeSubclasses) {
         LOG.debug("get instances" + (includeSubclasses ? " (included subclasses)" : "") + ": " + spec.getFullName());
-        NakedObject[] ins = instancesFor(spec).instances();
-        for (int i = 0; i < ins.length; i++) {
-            NakedObject object = ins[i];
-            setupReferencedObjects(object);
-        }
+        Vector instances = new Vector();
+        getInstances(spec, instances, includeSubclasses);
+        NakedObject[] ins = toInstancesArray(instances);
         return ins;
+    }
+
+    private void getInstances(NakedObjectSpecification spec, Vector instances, boolean includeSubclasses) {
+        instancesFor(spec).instances(instances);
+        if (includeSubclasses) {
+            NakedObjectSpecification[] subclasses = spec.subclasses();
+            for (int i = 0; i < subclasses.length; i++) {
+                getInstances(subclasses[i], instances, true);
+            }
+        }
     }
 
     public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
@@ -275,40 +287,27 @@ public class TransientObjectStore implements NakedObjectStore {
         LOG.debug("getObject " + oid);
         TransientObjectStoreInstances ins = instancesFor(hint);
         NakedObject object = ins.getObject(oid);
-        if(object == null) {
+        if (object == null) {
             throw new ObjectNotFoundException(oid);
         } else {
-		    setupReferencedObjects(object);
+            setupReferencedObjects(object);
             return object;
         }
     }
 
-    private void setupReferencedObjects(NakedObject object) {
-        NakedObjectField[] fields = object.getFields();
-        for (int i = 0; i < fields.length; i++) {
-            NakedObjectField field = fields[i];
-            if(field.isCollection()) {
-                NakedCollection col = (NakedCollection) object.getField(field);
-                for(Enumeration e = col.elements(); e.hasMoreElements();) {
-                    NakedObject element = (NakedObject) e.nextElement();
-                    setupReference(element);
+    public boolean hasInstances(NakedObjectSpecification spec, boolean includeSubclasses) {
+        if (instancesFor(spec).hasInstances()) {
+            return true;
+        }
+        if (includeSubclasses) {
+            NakedObjectSpecification[] subclasses = spec.subclasses();
+            for (int i = 0; i < subclasses.length; i++) {
+                if (hasInstances(subclasses[i], includeSubclasses)) {
+                    return true;
                 }
-            } else if(field.isObject()) {
-                NakedObject fieldContent = (NakedObject) object.getField(field);
-                setupReference(fieldContent);
             }
         }
-    }
-
-    private void setupReference(NakedObject fieldContent) {
-        if(fieldContent != null && fieldContent.getOid() == null) {
-            Oid fieldOid = instancesFor(fieldContent.getSpecification()).getOidFor(fieldContent.getObject());
-            fieldContent.setOid(fieldOid);
-        }
-    }
-
-    public boolean hasInstances(NakedObjectSpecification spec, boolean includeSubclasses) {
-        return instancesFor(spec).hasInstances();
+        return false;
     }
 
     private void indent(StringBuffer s, int level) {
@@ -327,30 +326,33 @@ public class TransientObjectStore implements NakedObjectStore {
         if (instances.containsKey(spec)) {
             return (TransientObjectStoreInstances) instances.get(spec);
         } else {
-            TransientObjectStoreInstances ins = createInstances();
+            TransientObjectStoreInstances ins = new TransientObjectStoreInstances();
             instances.put(spec, ins);
             return ins;
         }
-    }
-
-    protected TransientObjectStoreInstances createInstances() {
-        return new TransientObjectStoreInstances();
     }
 
     public String name() {
         return "Transient Object Store";
     }
 
-    public int numberOfInstances(NakedObjectSpecification spec, boolean includedSubclasses) {
-        return instancesFor(spec).numberOfInstances();
+    public int numberOfInstances(NakedObjectSpecification spec, boolean includeSubclasses) {
+        int numberOfInstances = instancesFor(spec).numberOfInstances();
+        if (includeSubclasses) {
+            NakedObjectSpecification[] subclasses = spec.subclasses();
+            for (int i = 0; i < subclasses.length; i++) {
+                numberOfInstances += numberOfInstances(subclasses[i], true);
+            }
+        }
+        return numberOfInstances;
     }
+
+    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectStoreException {}
 
     public void resolveImmediately(NakedObject object) throws ObjectStoreException {
         LOG.debug("resolve " + object);
         setupReferencedObjects(object);
-     }
-
-    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectStoreException {}
+    }
 
     public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException {
         LOG.info("start execution of transaction");
@@ -360,27 +362,6 @@ public class TransientObjectStore implements NakedObjectStore {
         LOG.info("end execution");
     }
 
-
-    private void destroy(NakedObject object) {
-        destroy(object, object.getSpecification());
-    }
-
-    private void destroy(NakedObject object, NakedObjectSpecification specification) {
-        LOG.debug("   saving object " + object + " as instance of " + specification.getShortName());
-        TransientObjectStoreInstances ins = instancesFor(specification);
-        ins.remove(object.getOid());    
-        
-        NakedObjectSpecification superclass = specification.superclass();
-        if(superclass != null) {
-            destroy(object, superclass);
-        }
-        
-        NakedObjectSpecification[] interfaces = specification.interfaces();
-        for (int i = 0; i < interfaces.length; i++) {
-            destroy(object, interfaces[i]);
-        }
-    }
-    
     private void save(NakedObject object) throws ObjectStoreException {
         if (object.getObject() instanceof NakedClass) {
             throw new ObjectStoreException("Can't make changes to a NakedClass object");
@@ -392,15 +373,39 @@ public class TransientObjectStore implements NakedObjectStore {
         LOG.debug("   saving object " + object + " as instance of " + specification.getShortName());
         TransientObjectStoreInstances ins = instancesFor(specification);
         ins.save(object);
-        
+
         NakedObjectSpecification superclass = specification.superclass();
-        if(superclass != null) {
+        if (superclass != null) {
             save(object, superclass);
         }
-        
+
         NakedObjectSpecification[] interfaces = specification.interfaces();
         for (int i = 0; i < interfaces.length; i++) {
             save(object, interfaces[i]);
+        }
+    }
+
+    private void setupReference(NakedObject fieldContent) {
+        if (fieldContent != null && fieldContent.getOid() == null) {
+            Oid fieldOid = instancesFor(fieldContent.getSpecification()).getOidFor(fieldContent.getObject());
+            fieldContent.setOid(fieldOid);
+        }
+    }
+
+    private void setupReferencedObjects(NakedObject object) {
+        NakedObjectField[] fields = object.getFields();
+        for (int i = 0; i < fields.length; i++) {
+            NakedObjectField field = fields[i];
+            if (field.isCollection()) {
+                NakedCollection col = (NakedCollection) object.getField(field);
+                for (Enumeration e = col.elements(); e.hasMoreElements();) {
+                    NakedObject element = (NakedObject) e.nextElement();
+                    setupReference(element);
+                }
+            } else if (field.isObject()) {
+                NakedObject fieldContent = (NakedObject) object.getField(field);
+                setupReference(fieldContent);
+            }
         }
     }
 
@@ -418,9 +423,13 @@ public class TransientObjectStore implements NakedObjectStore {
     }
 
     private NakedObject[] toInstancesArray(Vector instances) {
-        NakedObject[] array = new NakedObject[instances.size()];
-        instances.copyInto(array);
-        return array;
+        NakedObject[] ins = new NakedObject[instances.size()];
+        for (int i = 0; i < ins.length; i++) {
+            NakedObject object = (NakedObject) instances.elementAt(i);
+            setupReferencedObjects(object);
+            ins[i] = object;
+        }
+        return ins;
     }
 }
 
