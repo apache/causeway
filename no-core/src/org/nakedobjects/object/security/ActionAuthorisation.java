@@ -1,12 +1,8 @@
 package org.nakedobjects.object.security;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.object.reflect.AbstractActionPeer;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
@@ -21,38 +17,8 @@ public class ActionAuthorisation extends AbstractActionPeer {
     }
 
     public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
-        Session session = NakedObjects.getCurrentSession();
-        boolean isUsable = authorisationManager.isUsable(session, identifier);
-        boolean isVisible = authorisationManager.isVisible(session, identifier);
-        if (!isVisible) {
-            return new DefaultHint() {
-                public Consent canAccess() {
-                    return new Veto("Cannot be seen for security reasons");
-                }
-            };
-        }
-        final Hint hint = super.getHint(identifier, object, parameters);
-        if (!isUsable) {
-            return new DefaultHint() {
-
-                public Consent canAccess() {
-                    return hint.canAccess();
-                }
-
-                public Consent canUse() {
-                    return new Veto("Cannot invoke for security reasons");
-                }
-
-                public String getDescription() {
-                    return hint.getDescription();
-                }
-
-                public String getName() {
-                    return hint.getName();
-                }
-            };
-        }
-        return hint;
+        Hint hint = super.getHint(identifier, object, parameters);
+        return AuthorisationHint.hint(identifier, hint, authorisationManager);
     }
 
     public boolean hasHint() {

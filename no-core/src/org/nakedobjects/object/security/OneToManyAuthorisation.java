@@ -6,7 +6,6 @@ import org.nakedobjects.object.reflect.AbstractOneToManyPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToManyPeer;
 
-// TODO create hint about access
 public class OneToManyAuthorisation extends AbstractOneToManyPeer {
     private final AuthorisationManager authorisationManager;
 
@@ -14,15 +13,14 @@ public class OneToManyAuthorisation extends AbstractOneToManyPeer {
         super(decorated);
         this.authorisationManager = authorisationManager;
     }
+    
+    public Hint getHint(MemberIdentifier identifier, NakedObject inObject, NakedObject associate, boolean add) {
+        Hint hint = super.getHint(identifier, inObject, associate, add);
+        return AuthorisationHint.hint(identifier, hint, authorisationManager);
+    }
 
     public boolean hasHint() {
         return true;
-    }
-    
-    public Hint getHint(MemberIdentifier identifier, NakedObject inObject, NakedObject associate, boolean add) {
-      //  authorisationManager.isUsable(ide)
-        
-        return super.getHint(identifier, inObject, associate, add);
     }
 }
 
