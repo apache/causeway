@@ -18,6 +18,10 @@ public abstract class AbstractActionPeer implements ActionPeer {
         return decorated.hasHint();
     }
 
+    public Object getExtension(Class cls) {
+        return decorated.getExtension(cls);
+    }
+    
     public String getName() {
         return decorated.getName();
     }

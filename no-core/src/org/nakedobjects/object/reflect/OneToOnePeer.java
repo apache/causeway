@@ -7,30 +7,33 @@ import org.nakedobjects.object.control.Hint;
 
 
 public interface OneToOnePeer extends FieldPeer {
-	String getName();
 
 	void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate);
 
-	Hint getHint(MemberIdentifier identifier, NakedObject object, Naked value);
-
 	Naked getAssociation(MemberIdentifier identifier, NakedObject inObject);
+
+    Object getExtension(Class cls);
+
+	Hint getHint(MemberIdentifier identifier, NakedObject object, Naked value);
+	
+	String getName();
 	
 	/** TODO do we need to get the type from here? **/
 	NakedObjectSpecification getType();
 
 	boolean hasHint();
 
-	void initValue(MemberIdentifier identifier, NakedObject inObject, Object associate);
+	void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate);
 
-	void setValue(MemberIdentifier identifier, NakedObject inObject, Object associate);
+	void initValue(MemberIdentifier identifier, NakedObject inObject, Object associate);
 
 	boolean isDerived();
 
+    boolean isEmpty(MemberIdentifier identifier, NakedObject inObject);
+
 	void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate);
 
-	void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate);
-
-    boolean isEmpty(MemberIdentifier identifier, NakedObject inObject);
+	void setValue(MemberIdentifier identifier, NakedObject inObject, Object associate);
 }
 
 

@@ -6,7 +6,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
 
 
-public class AbstractOneToManyPeer implements OneToManyPeer {
+public abstract class AbstractOneToManyPeer implements OneToManyPeer {
     private final OneToManyPeer decorated;
 
     public AbstractOneToManyPeer(OneToManyPeer local) {
@@ -21,6 +21,10 @@ public class AbstractOneToManyPeer implements OneToManyPeer {
         return decorated.getAssociations(identifier, inObject);
     }
 
+    public Object getExtension(Class cls) {
+        return decorated.getExtension(cls);
+    }
+    
     public Hint getHint(MemberIdentifier identifier, NakedObject inObject, NakedObject associate, boolean add) {
         return decorated.getHint(identifier, inObject, associate, add);
     }

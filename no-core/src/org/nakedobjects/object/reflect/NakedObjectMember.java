@@ -18,7 +18,9 @@ public abstract class NakedObjectMember {
         this.label = NameConvertor.naturalName(name);
         this.name = NameConvertor.simpleName(name);
     }
-
+    
+    public abstract Object getExtension(Class cls);
+        
     public MemberIdentifier getIdentifier() {
         return identifier;
     }

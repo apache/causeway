@@ -22,13 +22,17 @@ public class AbstractOneToOnePeer implements OneToOnePeer {
     }
 
     public Hint getHint(MemberIdentifier identifier, NakedObject inObject, Naked associate) {
-        return decorated.getHint(null, inObject, associate);
+        return decorated.getHint(identifier, inObject, associate);
     }
 
     public String getName() {
         return decorated.getName();
     }
 
+    public Object getExtension(Class cls) {
+        return decorated.getExtension(cls);
+    }
+    
     public NakedObjectSpecification getType() {
         return decorated.getType();
     }

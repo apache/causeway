@@ -26,8 +26,12 @@ public interface NakedObjectSpecification {
     Action[] getClassActions(Action.Type type);
 
     Hint getClassHint();
+    
+    Object getExtension(Class cls);
 
     NakedObjectField getField(String name);
+    
+    Object getFieldExtension(String name, Class cls);
 
     NakedObjectField[] getFields();
 

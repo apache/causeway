@@ -153,6 +153,10 @@ public class InternalOneToManyAssociation extends InternalField implements OneTo
             throw new NakedObjectRuntimeException(ignore);
         }
     }
+    
+    public Object getExtension(Class cls) {
+        return null;
+    }
 
     public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
         throw new NotImplementedException();

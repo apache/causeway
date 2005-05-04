@@ -47,7 +47,15 @@ public class InternalObjectSpecification implements NakedObjectSpecification {
         return new DefaultHint();
     }
 
+    public Object getExtension(Class cls) {
+        return null;
+    }
+
     public NakedObjectField getField(String name) {
+        return null;
+    }
+
+    public Object getFieldExtension(String name, Class cls) {
         return null;
     }
 
@@ -123,19 +131,15 @@ public class InternalObjectSpecification implements NakedObjectSpecification {
         return false;
     }
 
-    public boolean isPartOf() {
-        return false;
-    }
-    
-    public Persistable persistable() {
-        return Persistable.TRANSIENT;
-    }
-
     public boolean isValue() {
         return false;
     }
 
     public void markDirty(NakedObject object) {}
+
+    public Persistable persistable() {
+        return Persistable.TRANSIENT;
+    }
 
     public NakedObjectSpecification[] subclasses() {
         return new NakedObjectSpecification[0];

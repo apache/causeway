@@ -49,7 +49,7 @@ public class Action extends NakedObjectMember {
     public final static Type EXPLORATION = new Type("EXPLORATION");
     public final static Type USER = new Type("USER");
 
-    private ActionPeer actionDelegate;
+    private ActionPeer reflectiveAdapter;
 
     public static Type getType(String type) {
         Type[] types = new Type[] { DEBUG, EXPLORATION, USER };
@@ -63,13 +63,13 @@ public class Action extends NakedObjectMember {
 
     public Action(String className, String methodName, ActionPeer actionDelegate) {
         super(methodName, new MemberIdentifier(className, methodName, actionDelegate.parameterTypes()));
-        this.actionDelegate = actionDelegate;
+        this.reflectiveAdapter = actionDelegate;
     }
 
     protected Naked execute(final NakedObject object, final Naked[] parameters) {
         LOG.debug("Action: invoke " + object + "." + getName());
         try {
-            Naked result = actionDelegate.execute(getIdentifier(), object, parameters == null ?  new Naked[0] : parameters);
+            Naked result = reflectiveAdapter.execute(getIdentifier(), object, parameters == null ?  new Naked[0] : parameters);
             return result;
         } catch (ReflectiveActionException e) {
             // TODO Sort out how to deal with exception during reflection
@@ -80,9 +80,9 @@ public class Action extends NakedObjectMember {
     protected Hint getHint(NakedObject object, Naked[] parameters) {
         if (hasHint()) {
             if (parameters == null) {
-                return actionDelegate.getHint(getIdentifier(), object, new NakedObject[0]);
+                return reflectiveAdapter.getHint(getIdentifier(), object, new NakedObject[0]);
             } else {
-                return actionDelegate.getHint(getIdentifier(), object, parameters);
+                return reflectiveAdapter.getHint(getIdentifier(), object, parameters);
             }
         } else {
             return new DefaultHint(getLabel());
@@ -101,15 +101,19 @@ public class Action extends NakedObjectMember {
     }
 
     public int getParameterCount() {
-        return actionDelegate.getParameterCount();
+        return reflectiveAdapter.getParameterCount();
     }
 
     public Type getActionType() {
-        return actionDelegate.getType();
+        return reflectiveAdapter.getType();
+    }
+
+    public Object getExtension(Class cls) {
+        return reflectiveAdapter.getExtension(null);
     }
 
     public boolean hasHint() {
-        return actionDelegate.hasHint();
+        return reflectiveAdapter.hasHint();
     }
 
     /**
@@ -121,7 +125,7 @@ public class Action extends NakedObjectMember {
     }
 
     public NakedObjectSpecification[] parameters() {
-        return actionDelegate.parameterTypes();
+        return reflectiveAdapter.parameterTypes();
     }
 
     public Naked[] parameterStubs() {
@@ -141,7 +145,7 @@ public class Action extends NakedObjectMember {
     }
 
     public NakedObjectSpecification getReturnType() {
-        return actionDelegate.returnType();
+        return reflectiveAdapter.returnType();
     }
 
     public String toString() {
@@ -164,7 +168,7 @@ public class Action extends NakedObjectMember {
     }
 
     public ActionParameterSet getParameters(NakedObject object) {
-        ActionParameterSet parameters = actionDelegate.getParameters(getIdentifier(), object, parameterStubs());
+        ActionParameterSet parameters = reflectiveAdapter.getParameters(getIdentifier(), object, parameterStubs());
         if(parameters != null) {
             parameters.checkParameters(getIdentifier().toString(), parameters());
         }

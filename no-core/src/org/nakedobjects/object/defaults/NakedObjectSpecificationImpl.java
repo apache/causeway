@@ -262,6 +262,23 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
 
         return null;
     }
+    
+    public Object getExtension(Class cls) {
+        return reflector.getExtension(cls);
+    }
+    
+   
+    public Object getFieldExtension(String name, Class cls) {
+        String searchName = searchName(name);
+
+        for (int i = 0; i < fields.length; i++) {
+            if (fields[i].getName().equals(searchName)) {
+                return fields[i].getExtension(cls);
+            }
+        }
+
+        throw new NakedObjectSpecificationException("No field called '" + name + "' in '" + getSingularName() + "'");
+    }
 
     public NakedObjectField getField(String name) {
         String searchName = searchName(name);

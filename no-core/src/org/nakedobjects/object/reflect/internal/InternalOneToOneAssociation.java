@@ -210,7 +210,10 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
 		return get(fromObject);
 	}
 	
-
+	public Object getExtension(Class cls) {
+        return null;
+    }
+	
     private Naked get(NakedObject fromObject) {
         try {
              Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);

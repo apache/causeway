@@ -31,6 +31,8 @@ public interface Reflector {
      */
     String fullName();
 
+    Object getExtension(Class cls);
+
     /**
      * Returns a list of this class's interfaces where the interfaces are of
      * subtypes of Naked.
@@ -54,11 +56,11 @@ public interface Reflector {
 
     boolean isPartOf();
 
-    Persistable persistable();
-
     boolean isValue();
 
     void markDirty(NakedObject object2);
+
+    Persistable persistable();
 
     /**
      * The natural language (eg english, spanish) name in the plural form - for

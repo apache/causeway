@@ -58,6 +58,10 @@ public class InternalAction extends InternalMember implements ActionPeer {
         return null;
     }
 
+    public Object getExtension(Class cls) {
+        return null;
+    }
+    
     public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
         if (parameters.length != paramCount) {
             LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);

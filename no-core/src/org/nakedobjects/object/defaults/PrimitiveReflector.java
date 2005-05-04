@@ -54,6 +54,10 @@ public class PrimitiveReflector implements Reflector {
         return new String[0];
     }
 
+    public Object getExtension(Class cls) {
+        return null;
+    }
+    
     public String getSuperclass() {
         return null;
     }

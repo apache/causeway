@@ -395,6 +395,10 @@ public class InternalReflector implements Reflector {
         return cls.getName();
     }
 
+    public Object getExtension(Class cls) {
+        return null;
+    }
+    
     public String[] getInterfaces() {
         Class[] interfaces = cls.getInterfaces();
         Class[] nakedInterfaces = new Class[interfaces.length];
