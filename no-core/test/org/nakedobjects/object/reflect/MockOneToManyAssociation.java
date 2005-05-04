@@ -112,6 +112,10 @@ class MockOneToManyAssociation implements OneToManyPeer {
     public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
 
     public void initOneToManyAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject[] instances) {}
+
+    public Object getExtension(Class cls) {
+        return null;
+    }
 }
 
 /*

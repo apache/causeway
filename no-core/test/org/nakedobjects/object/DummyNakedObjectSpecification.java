@@ -21,10 +21,6 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
 
     public void clearDirty(NakedObject object) {}
 
-    public NakedObject createPattern() {
-        return null;
-    }
-
     public String debugInterface() {
         return null;
     }
@@ -45,7 +41,15 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         return null;
     }
 
+    public Object getExtension(Class cls) {
+        return null;
+    }
+
     public NakedObjectField getField(String name) {
+        return null;
+    }
+
+    public Object getFieldExtension(String name, Class cls) {
         return null;
     }
 
@@ -106,10 +110,6 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         return false;
     }
 
-    public boolean isCollection() {
-        return false;
-    }
-
     public boolean isDirty(NakedObject object) {
         return false;
     }
@@ -127,10 +127,6 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     }
 
     public boolean isParsable() {
-        return false;
-    }
-
-    public boolean isPartOf() {
         return false;
     }
 

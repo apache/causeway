@@ -1,18 +1,15 @@
-package org.nakedobjects.object;
+package org.nakedobjects.object.security;
 
+import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 
-public class MockOneToOneAssociation implements OneToOnePeer {
-
-    public MockOneToOneAssociation() {
-        super();
-    }
-
-    public boolean hasHint() {
-        return false;
-    }
+public class MockOneToOnePeer implements OneToOnePeer {
+    private ExpectedSet expectedActions = new ExpectedSet();
+    private Hint hint;
 
     public String getName() {
         return null;
@@ -21,7 +18,8 @@ public class MockOneToOneAssociation implements OneToOnePeer {
     public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
 
     public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked value) {
-        return null;
+        expectedActions.addActual("getHint " + identifier + " " + object + " "+  value);
+        return hint;
     }
 
     public Naked getAssociation(MemberIdentifier identifier, NakedObject inObject) {
@@ -32,7 +30,13 @@ public class MockOneToOneAssociation implements OneToOnePeer {
         return null;
     }
 
+    public boolean hasHint() {
+        return false;
+    }
+
     public void initValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {}
+
+    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {}
 
     public boolean isDerived() {
         return false;
@@ -40,18 +44,29 @@ public class MockOneToOneAssociation implements OneToOnePeer {
 
     public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
 
+    public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
+
     public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
         return false;
     }
 
-    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {}
 
-    public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
+    void expect(String string) {
+        expectedActions.addExpected(string);
+    }
+
+    void setupHint(Hint hint) {
+        this.hint = hint;
+        
+    }
+
+    void verify() {
+        expectedActions.verify();
+    }
 
     public Object getExtension(Class cls) {
         return null;
     }
-
 }
 
 

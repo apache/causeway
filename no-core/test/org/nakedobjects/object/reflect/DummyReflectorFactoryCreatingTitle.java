@@ -106,6 +106,10 @@ public class DummyReflectorFactoryCreatingTitle extends ReflectorFactory {
 
             public Persistable persistable() {
                 return null;
+            }
+
+            public Object getExtension(Class cls) {
+                return null;
             }};
     }
 

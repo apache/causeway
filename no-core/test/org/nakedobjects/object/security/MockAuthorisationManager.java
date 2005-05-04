@@ -1,18 +1,26 @@
-package org.nakedobjects.object.reflect.internal;
+package org.nakedobjects.object.security;
 
-import org.nakedobjects.object.reflect.ActionPeer;
-import org.nakedobjects.object.reflect.Action.Type;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 
-import java.lang.reflect.Method;
+public class MockAuthorisationManager implements AuthorisationManager {
 
-public class MockInternalReflector extends InternalReflector {
+    private boolean visible;
+    private boolean usable;
 
-    public MockInternalReflector(String name) {
-        super(name);
+    public boolean isUsable(Session session, MemberIdentifier identifier) {
+        return usable;
     }
 
-    ActionPeer createAction(Method method, String name, Method aboutMethod, Type action) {
-        return new MockAction(method, name, action);
+    public boolean isVisible(Session session, MemberIdentifier identifier) {
+        return visible;
+    }
+
+    public void setupVisible(boolean b) {
+        visible = b;
+    }
+
+    public void setupUsable(boolean usable) {
+        this.usable = usable;
     }
 }
 

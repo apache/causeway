@@ -43,6 +43,10 @@ public class MockField extends NakedObjectField {
         this.contentObject = contentObject;
     }
 
+    public Object getExtension(Class cls) {
+        return null;
+    }
+
 }
 
 /*

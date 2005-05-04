@@ -65,10 +65,6 @@ public class MockReflector implements Reflector {
         return false;
     }
 
-    public boolean isCollection() {
-        return false;
-    }
-
     public boolean isDirty(NakedObject object) {
         return false;
     }
@@ -116,6 +112,10 @@ public class MockReflector implements Reflector {
     }
 
     public String unresolvedTitle(NakedObject pojo) {
+        return null;
+    }
+
+    public Object getExtension(Class cls) {
         return null;
     }
 }

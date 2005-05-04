@@ -102,6 +102,10 @@ public class DummyReflectorFactory extends ReflectorFactory {
 
             public String unresolvedTitle(NakedObject pojo) {
                 return null;
+            }
+
+            public Object getExtension(Class cls) {
+                return null;
             }};
     }
 

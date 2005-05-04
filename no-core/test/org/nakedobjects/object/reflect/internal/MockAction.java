@@ -15,13 +15,11 @@ public class MockAction implements ActionPeer {
 
     private final Method method;
     private final String name;
-    private final Method aboutMethod;
     private final Type action;
 
-    public MockAction(Method method, String name, Method aboutMethod, Type action) {
+    public MockAction(Method method, String name, Type action) {
         this.method = method;
         this.name = name;
-        this.aboutMethod = aboutMethod;
         this.action = action;    
     }
 
@@ -61,11 +59,12 @@ public class MockAction implements ActionPeer {
         return method;
     }
     
-    public Method getAboutMethod() {
-        return aboutMethod;
-    }
 
     public ActionParameterSet getParameters(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
+        return null;
+    }
+
+    public Object getExtension(Class cls) {
         return null;
     }
 

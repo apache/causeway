@@ -1,19 +1,21 @@
-package org.nakedobjects.object.reflect.internal;
+package org.nakedobjects.object.security;
 
-import org.nakedobjects.object.reflect.ActionPeer;
-import org.nakedobjects.object.reflect.Action.Type;
+import org.nakedobjects.object.control.Consent;
 
-import java.lang.reflect.Method;
+public class DummyConsent implements Consent {
 
-public class MockInternalReflector extends InternalReflector {
-
-    public MockInternalReflector(String name) {
-        super(name);
+    public String getReason() {
+        return null;
     }
 
-    ActionPeer createAction(Method method, String name, Method aboutMethod, Type action) {
-        return new MockAction(method, name, action);
+    public boolean isAllowed() {
+        return false;
     }
+
+    public boolean isVetoed() {
+        return false;
+    }
+
 }
 
 

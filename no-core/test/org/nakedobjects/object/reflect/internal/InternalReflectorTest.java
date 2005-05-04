@@ -48,8 +48,7 @@ public class InternalReflectorTest extends TestCase {
          MockAction member = (MockAction) actions[0];
          assertEquals("MethodOne", member.getName());
          assertEquals("actionMethodOne", member.getMethod().getName());
-         assertEquals("aboutActionMethodOne", member.getAboutMethod().getName());
-     }
+      }
     
     public void testFieldSortOrder() throws NakedObjectSpecificationException {
         String[] fields = reflector.fieldSortOrder();

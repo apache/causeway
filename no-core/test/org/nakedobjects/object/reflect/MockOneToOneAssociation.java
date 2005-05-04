@@ -110,6 +110,10 @@ class MockOneToOneAssociation implements OneToOnePeer {
 
     public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
 
+    public Object getExtension(Class cls) {
+        return null;
+    }
+
 }
 
 

@@ -156,11 +156,11 @@ public class DummyNakedObject implements NakedObject {
     }
 
     public NakedObjectField[] getFields() {
-        return null;
+        return new NakedObjectField[0];
     }
 
     public NakedObjectField[] getVisibleFields() {
-        return null;
+        return  new NakedObjectField[0];
     }
 
 }

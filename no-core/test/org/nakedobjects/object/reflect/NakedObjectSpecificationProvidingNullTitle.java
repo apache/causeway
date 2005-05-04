@@ -36,7 +36,15 @@ public class NakedObjectSpecificationProvidingNullTitle implements NakedObjectSp
         return null;
     }
 
+    public Object getExtension(Class cls) {
+        return null;
+    }
+
     public NakedObjectField getField(String name) {
+        return null;
+    }
+
+    public Object getFieldExtension(String name, Class cls) {
         return null;
     }
 

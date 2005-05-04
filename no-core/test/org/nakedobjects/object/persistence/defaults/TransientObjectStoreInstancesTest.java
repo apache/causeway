@@ -3,7 +3,6 @@ package org.nakedobjects.object.persistence.defaults;
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.MockOid;
-import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.DummyNakedObject;
 
 import java.util.Enumeration;
@@ -118,19 +117,6 @@ public class TransientObjectStoreInstancesTest extends TestCase {
 
     public void testOidForObject() {
         assertEquals(oid, instances.getOidFor(object));
-    }
-
-    public void testInstanceMatching() {
-        mockPojoAdapterFactory.setupLoaded(false);
-        mockPojoAdapterFactory.setupExpectedPojo(object);
-        DummyNakedObject nakedObject = new DummyNakedObject();
-        mockPojoAdapterFactory.setupCreatedAdapter(nakedObject);
-
-        NakedObject result = instances.instanceMatching("two");
-        assertEquals(nakedObject, result);
-
-        result = instances.instanceMatching("four");
-        assertEquals(null, result);
     }
 
     public void testSave() {

@@ -1,19 +1,31 @@
-package org.nakedobjects.object.reflect.internal;
+package org.nakedobjects.object.security;
 
-import org.nakedobjects.object.reflect.ActionPeer;
-import org.nakedobjects.object.reflect.Action.Type;
+import java.util.Vector;
 
-import java.lang.reflect.Method;
+import junit.framework.Assert;
 
-public class MockInternalReflector extends InternalReflector {
-
-    public MockInternalReflector(String name) {
-        super(name);
+public class ExpectedSet {
+    private Vector expectedObjects = new Vector();
+    private Vector actualObjects = new Vector();
+    
+    public void addActual(Object object) {
+        actualObjects.addElement(object);
+        Assert.assertTrue("More actuals than expected;", actualObjects.size() <= expectedObjects.size());
+        Assert.assertEquals("Actual does not match expected", expectedObjects.elementAt(actualObjects.size() - 1), object);
     }
 
-    ActionPeer createAction(Method method, String name, Method aboutMethod, Type action) {
-        return new MockAction(method, name, action);
+    public void addExpected(Object object) {
+        expectedObjects.addElement(object);
     }
+
+    public void verify() {
+        Assert.assertTrue("Too few actuals added", actualObjects.size() == expectedObjects.size());
+    }
+
+  /*  private String expectedError() {
+        return "Expected: " + expectedObjects + "\n  but got: " + actualObjects+ "\n";
+    }
+*/
 }
 
 

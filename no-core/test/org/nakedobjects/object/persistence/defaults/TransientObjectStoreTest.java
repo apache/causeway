@@ -1,12 +1,15 @@
 package org.nakedobjects.object.persistence.defaults;
 
-import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
+import org.nakedobjects.object.MockNakedObjectSpecification;
 import org.nakedobjects.object.MockOid;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.persistence.NakedObjectStore;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.PersistenceCommand;
+import org.nakedobjects.object.persistence.TitleCriteria;
+import org.nakedobjects.object.reflect.DummyNakedObject;
 
 import java.util.Enumeration;
 import java.util.Vector;
@@ -21,14 +24,20 @@ import org.apache.log4j.Logger;
 
 class MockTransientObjectStoreInstances2 extends TransientObjectStoreInstances {
     private Vector actions = new Vector();
+    private boolean hasInstances;
     private NakedObject[] instances = new NakedObject[0];
     private NakedObject object;
-    
+    private int numberOfInstances;
+
     public void assertAction(int index, String expected) {
         if (index >= actions.size()) {
             throw new AssertionError("No such action: " + index);
         }
         Assert.assertEquals(expected, actions.elementAt(index).toString());
+    }
+
+    public void assertNoActions() {
+        Assert.assertEquals("actions", 0, actions.size());
     }
 
     public Enumeration elements() {
@@ -47,22 +56,32 @@ class MockTransientObjectStoreInstances2 extends TransientObjectStoreInstances {
 
     public boolean hasInstances() {
         actions.addElement("has instances");
-        return false;
+        return hasInstances;
     }
 
     public NakedObject instanceMatching(String title) {
         return null;
     }
 
-    public NakedObject[] instances() {
+    public void instances(Vector instanceVector) {
         actions.addElement("get instances");
-        return instances;
+        for(int i = 0; i < instances.length; i++) {
+            	instanceVector.addElement(instances[i]);
+        }
+    }
+    
+    public void instances(InstancesCriteria criteria, Vector instanceVector) {
+        instances(instanceVector);
     }
 
     public int numberOfInstances() {
-        return 0;
+        return numberOfInstances;
     }
 
+    public void setupNumberOfInstances(int numberOfInstances) {
+        this.numberOfInstances = numberOfInstances;
+    }
+    
     public void remove(Oid oid) {
         actions.addElement("remove " + oid);
     }
@@ -71,19 +90,29 @@ class MockTransientObjectStoreInstances2 extends TransientObjectStoreInstances {
         actions.addElement("save " + object);
     }
 
-    public void shutdown() {
-        actions.addElement("shutdown");
+    public void setupHasInstances(boolean hasInstances) {
+        this.hasInstances = hasInstances;
     }
 
+    public void setupInstances(NakedObject[] instances) {
+        this.instances = instances;
+    }
+    
     public void setupObject(NakedObject object) {
         this.object = object;
+    }
+
+    public void shutdown() {
+        actions.addElement("shutdown");
     }
 }
 
 public class TransientObjectStoreTest extends TestCase {
-    private DummyNakedObjectSpecification objectSpec;
-    private NakedObjectStore objectStore;
-    private MockTransientObjectStoreInstances2 transientObjectStoreInstances;
+    private MockNakedObjectSpecification objectSpec;
+    private TransientObjectStore objectStore;
+    private MockNakedObjectSpecification superClassObjectSpec;
+    private MockTransientObjectStoreInstances2 transientObjectStoreInstancesForClass;
+    private MockTransientObjectStoreInstances2 transientObjectStoreInstancesForSuperClass;
 
     private void assertEquals(NakedObject object, NakedObject v) {
         assertEquals(object.getObject(), v.getObject());
@@ -91,15 +120,8 @@ public class TransientObjectStoreTest extends TestCase {
     }
 
     private NakedObject createTestObject() {
-        //     TestObject object = new TestObject();
-        //       NakedObject nakedObject =
-        // NakedObjects.getPojoAdapterFactory().createNOAdapter(object);
         MockNakedObject nakedObject = new MockNakedObject();
         nakedObject.setupSpecification(objectSpec);
-        //    nakedObject.setupObject(new TestObject());
-        //      nakedObject.setupTitleString("object");
-        //       nakedObject.setOid(new DummyOid());
-
         return nakedObject;
     }
 
@@ -107,14 +129,15 @@ public class TransientObjectStoreTest extends TestCase {
         BasicConfigurator.configure();
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        objectSpec = new DummyNakedObjectSpecification();
+        superClassObjectSpec = new MockNakedObjectSpecification();
+        objectSpec = new MockNakedObjectSpecification();
+        superClassObjectSpec.setupSubclasses(new NakedObjectSpecification[] { objectSpec });
 
-        transientObjectStoreInstances = new MockTransientObjectStoreInstances2();
-        objectStore = new TransientObjectStore() {
-            protected TransientObjectStoreInstances createInstances() {
-                return transientObjectStoreInstances;
-            }
-        };
+        transientObjectStoreInstancesForSuperClass = new MockTransientObjectStoreInstances2();
+        transientObjectStoreInstancesForClass = new MockTransientObjectStoreInstances2();
+        objectStore = new TransientObjectStore();
+        objectStore.instances.put(superClassObjectSpec, transientObjectStoreInstancesForSuperClass);
+        objectStore.instances.put(objectSpec, transientObjectStoreInstancesForClass);
 
         objectStore.init();
     }
@@ -131,8 +154,8 @@ public class TransientObjectStoreTest extends TestCase {
                 objectStore.createCreateObjectCommand(object2) };
         objectStore.runTransaction(commands);
 
-        transientObjectStoreInstances.assertAction(0, "save " + object1);
-        transientObjectStoreInstances.assertAction(1, "save " + object2);
+        transientObjectStoreInstancesForClass.assertAction(0, "save " + object1);
+        transientObjectStoreInstancesForClass.assertAction(1, "save " + object2);
     }
 
     public void testDestroyObject() throws Exception {
@@ -141,34 +164,100 @@ public class TransientObjectStoreTest extends TestCase {
         PersistenceCommand[] commands = new PersistenceCommand[] { objectStore.createDestroyObjectCommand(objectToDelete) };
         objectStore.runTransaction(commands);
 
-        transientObjectStoreInstances.assertAction(0, "remove " + objectToDelete.getOid());
+        transientObjectStoreInstancesForClass.assertAction(0, "remove " + objectToDelete.getOid());
     }
 
-    public void testGetInstances() throws Exception {
-        objectStore.getInstances(objectSpec, false);
-        transientObjectStoreInstances.assertAction(0, "get instances");
+    public void testGetInstancesBySpecification() throws Exception {
+        DummyNakedObject object = new DummyNakedObject();
+        transientObjectStoreInstancesForClass.setupInstances(new NakedObject[] {object});
+        NakedObject[] instances = objectStore.getInstances(objectSpec, false);
+        transientObjectStoreInstancesForClass.assertAction(0, "get instances");
+        transientObjectStoreInstancesForSuperClass.assertNoActions();
+        assertEquals(1, instances.length);
+        assertEquals(object, instances[0]);
     }
+
+    public void testGetInstancesBySpecificationIncludingSubclasses() throws Exception {
+        DummyNakedObject object1 = new DummyNakedObject();
+        transientObjectStoreInstancesForClass.setupInstances(new NakedObject[] {object1});
+        DummyNakedObject object2 = new DummyNakedObject();
+        transientObjectStoreInstancesForSuperClass.setupInstances(new NakedObject[] {object2});
+        NakedObject[] instances = objectStore.getInstances(superClassObjectSpec, true);
+        transientObjectStoreInstancesForClass.assertAction(0, "get instances");
+        transientObjectStoreInstancesForSuperClass.assertAction(0, "get instances");
+        assertEquals(2, instances.length);
+        assertEquals(object1, instances[0]);
+        assertEquals(object2, instances[1]);
+    }
+
+
+    public void testGetInstancesByCriteria() throws Exception {
+        DummyNakedObject object = new DummyNakedObject();
+        transientObjectStoreInstancesForClass.setupInstances(new NakedObject[] {object});
+        NakedObject[] instances = objectStore.getInstances(new TitleCriteria(objectSpec, "test", false));
+        transientObjectStoreInstancesForClass.assertAction(0, "get instances");
+        transientObjectStoreInstancesForSuperClass.assertNoActions();
+        assertEquals(1, instances.length);
+        assertEquals(object, instances[0]);
+    }
+
+    public void testGetInstancesByCriteriaIncludingSubclasses() throws Exception {
+        DummyNakedObject object = new DummyNakedObject();
+        transientObjectStoreInstancesForClass.setupInstances(new NakedObject[] {object});
+        DummyNakedObject object2 = new DummyNakedObject();
+        transientObjectStoreInstancesForSuperClass.setupInstances(new NakedObject[] {object2});
+        NakedObject[] instances = objectStore.getInstances(new TitleCriteria(superClassObjectSpec, "test", true));
+        transientObjectStoreInstancesForClass.assertAction(0, "get instances");
+        transientObjectStoreInstancesForSuperClass.assertAction(0, "get instances");
+        assertEquals(2, instances.length);
+        assertEquals(object, instances[0]);
+        assertEquals(object2, instances[1]);
+    }
+
 
     public void testGetObject() throws Exception {
         Oid oid = new MockOid(0);
         MockNakedObject object = new MockNakedObject();
-        transientObjectStoreInstances.setupObject(object);
-        
+        transientObjectStoreInstancesForClass.setupObject(object);
+
         NakedObject result = objectStore.getObject(oid, objectSpec);
-        transientObjectStoreInstances.assertAction(0, "get object for " + oid);
+        transientObjectStoreInstancesForClass.assertAction(0, "get object for " + oid);
         assertEquals(object, result);
     }
-    
-    
+
     public void testHasInstances() throws Exception {
         objectStore.hasInstances(objectSpec, false);
-        transientObjectStoreInstances.assertAction(0, "has instances");
+        transientObjectStoreInstancesForClass.assertAction(0, "has instances");
+    }
+
+    public void testHasInstancesIncludingSubclasses() throws Exception {
+        assertEquals(false, objectStore.hasInstances(superClassObjectSpec, false));
+        transientObjectStoreInstancesForClass.assertNoActions();
+
+        transientObjectStoreInstancesForClass.setupHasInstances(true);
+        objectStore.hasInstances(superClassObjectSpec, true);
+        transientObjectStoreInstancesForClass.assertAction(0, "has instances");
     }
 
     public void testHasNoInstances() throws Exception {
         assertFalse(objectStore.hasInstances(objectSpec, false));
+    }
 
-        assertEquals(0, objectStore.numberOfInstances(objectSpec, false));
+    public void testHasNoInstancesIncludingSubclasses() throws Exception {
+        assertFalse(objectStore.hasInstances(superClassObjectSpec, false));
+    }    
+
+    public void testNumberOfInstances() {
+        transientObjectStoreInstancesForClass.setupNumberOfInstances(9);
+        assertEquals(9, objectStore.numberOfInstances(objectSpec, false));
+    }
+
+    public void testNumberOfInstancesIncludingSubclasses() throws Exception {
+        transientObjectStoreInstancesForSuperClass.setupNumberOfInstances(3);
+        assertEquals(3, objectStore.numberOfInstances(superClassObjectSpec, false));
+        
+        transientObjectStoreInstancesForClass.setupNumberOfInstances(6);
+        assertEquals(9, objectStore.numberOfInstances(superClassObjectSpec, true));
     }
 
     public void testSaveInstances() throws Exception {
@@ -179,15 +268,15 @@ public class TransientObjectStoreTest extends TestCase {
                 objectStore.createSaveObjectCommand(object2) };
         objectStore.runTransaction(commands);
 
-        transientObjectStoreInstances.assertAction(0, "save " + object1);
-        transientObjectStoreInstances.assertAction(1, "save " + object2);
+        transientObjectStoreInstancesForClass.assertAction(0, "save " + object1);
+        transientObjectStoreInstancesForClass.assertAction(1, "save " + object2);
     }
 
     public void testShutdown() throws Exception {
         objectStore.hasInstances(objectSpec, false);
 
         objectStore.shutdown();
-        transientObjectStoreInstances.assertAction(1, "shutdown");
+        transientObjectStoreInstancesForClass.assertAction(1, "shutdown");
     }
 }
 

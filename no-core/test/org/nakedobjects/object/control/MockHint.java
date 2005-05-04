@@ -1,18 +1,49 @@
-package org.nakedobjects.object.reflect.internal;
+package org.nakedobjects.object.control;
 
-import org.nakedobjects.object.reflect.ActionPeer;
-import org.nakedobjects.object.reflect.Action.Type;
+public class MockHint implements Hint {
+    private Consent canAccess;
+    private Consent canUse;
+    private String description;
+    private String name;
 
-import java.lang.reflect.Method;
-
-public class MockInternalReflector extends InternalReflector {
-
-    public MockInternalReflector(String name) {
-        super(name);
+    public Consent canAccess() {
+        return canAccess;
     }
 
-    ActionPeer createAction(Method method, String name, Method aboutMethod, Type action) {
-        return new MockAction(method, name, action);
+    public Consent canUse() {
+        return canUse;
+    }
+
+    public Consent isValid() {
+        return null;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String debug() {
+        return null;
+    }
+
+    public void setupCanAccess(Consent canAccess) {
+        this.canAccess = canAccess;
+    }
+    
+    public void setupCanUse(Consent canUse) {
+        this.canUse = canUse;
+    }
+    
+    public void setupName(String name) {
+        this.name = name;
+    }
+    
+    public void setupDescription(String description) {
+        this.description = description;
     }
 }
 
