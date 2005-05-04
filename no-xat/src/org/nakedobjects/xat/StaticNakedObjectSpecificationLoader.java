@@ -95,14 +95,11 @@ public class StaticNakedObjectSpecificationLoader extends NakedObjectSpecificati
 
 
     protected void finalize() throws Throwable {
-        classes = null;
-        
         super.finalize();
         LOG.info("finalizing specification loader " + this);
     }
     
     public void shutdown() {
-        classes.clear();
     }
 }
 
