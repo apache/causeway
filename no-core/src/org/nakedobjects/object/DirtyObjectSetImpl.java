@@ -1,6 +1,5 @@
 package org.nakedobjects.object;
 
-
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -10,37 +9,26 @@ import org.apache.log4j.Logger;
 public class DirtyObjectSetImpl implements DirtyObjectSet {
     private static final Logger LOG = Logger.getLogger(DirtyObjectSetImpl.class);
     private Vector changes = new Vector();
-    
-    /* *
-     * Checks whether the specified object has changed and returns true if it
-     * has, and false if it hasn't. After returning from this method a
-     * subsequent call - where no other changes have taken place - will return
-     * false.
-     */
-   /* public synchronized boolean hasChanged(NakedObject object) {
-        LOG.debug("Checking if " + object + " has changed");
-        if(changes.contains(object)) {
-            changes.removeElement(object);
-            return true;
-        } else {
-            return false;
-        }
-    }
-   */ 
-    public synchronized Enumeration dirtyObjects() {
-        Enumeration changedObjects = changes.elements();	
-        if(changes.size() > 0) {
-            LOG.debug("dirty objects " + changes);
-        }
-        changes= new Vector();
-        return changedObjects;
-    }
 
     public synchronized void addDirty(NakedObject object) {
         LOG.debug(object + " marked as dirty");
-        if(!changes.contains(object)) {
+        if (!changes.contains(object)) {
             changes.addElement(object);
         }
+    }
+
+    public synchronized Enumeration dirtyObjects() {
+        Enumeration changedObjects = changes.elements();
+        if (changes.size() > 0) {
+            LOG.debug("dirty objects " + changes);
+        }
+        changes = new Vector();
+        return changedObjects;
+    }
+
+    public void shutdown() {
+        changes.removeAllElements();
+        changes = null;
     }
 }
 

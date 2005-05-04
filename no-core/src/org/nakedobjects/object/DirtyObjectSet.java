@@ -4,6 +4,8 @@ package org.nakedobjects.object;
 
 public interface DirtyObjectSet {
     void addDirty(NakedObject object);
+
+    void shutdown();
 }
 
 /*
