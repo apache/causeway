@@ -479,7 +479,9 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     			abortTransaction();
     		}
             objectsToBeSaved.shutdown();
-            objectsToRefreshViewsFor.shutdown();
+            if(objectsToRefreshViewsFor != null) {
+                objectsToRefreshViewsFor.shutdown();
+            }
     		oidGenerator.shutdown();
             oidGenerator = null;
             objectStore.shutdown();
