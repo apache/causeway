@@ -1,113 +1,92 @@
 package org.nakedobjects;
 
 import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.security.Session;
 
 
-public class NakedObjects {
-    private final static NakedObjects singleton = new NakedObjects();
+public abstract class NakedObjects {
+    private static NakedObjects singleton;
 
     public static Configuration getConfiguration() {
-        return getInstance().configuration;
+        return getInstance().configuration();
     }
 
-    private static NakedObjects getInstance() {
+    public static Session getCurrentSession() {
+        return getInstance().currentSession();
+    }
+
+    protected static NakedObjects getInstance() {
         return singleton;
     }
 
     public static NakedObjectManager getObjectManager() {
-        return getInstance().objectManager;
-    }
-    
-    public static Session getCurrentSession() {
-        SessionLookup sl = getInstance().sessionLookup;
-        return sl == null ? null : sl.getCurrentSession();
+        return getInstance().objectManager();
     }
 
     public static PojoAdapterFactory getPojoAdapterFactory() {
-        return getInstance().adapterFactory;
+        return getInstance().pojoAdapterFactory();
     }
 
     public static NakedObjectSpecificationLoader getSpecificationLoader() {
-        return getInstance().specificationLoader;
+        return getInstance().specificationLoader();
     }
-
-    /**
-     * Expose as a .NET property
-     * 
-     * @property
-     */
-    public static void set_Configuration(Configuration configuration) {
-        getInstance().configuration = configuration;
-    }
-
-    /**
-     * Expose as a .NET property
-     * 
-     * @property
-     */
-    public static void set_ObjectManager(NakedObjectManager objectManager) {
-        getInstance().objectManager = objectManager;
-    }
-
-
-    /**
-     * Expose as a .NET property
-     * 
-     * @property
-     */
-    public static void set_PojoAdapterFactory(PojoAdapterFactory adapterFactory) {
-        getInstance().adapterFactory = adapterFactory;
-    }
-
-    /**
-     * Expose as a .NET property
-     * 
-     * @property
-     */
-    public static void set_SpecificationLoader(NakedObjectSpecificationLoader specificationLoader) {
-        getInstance().specificationLoader = specificationLoader;
-    }
-
-    /**
-     * Expose as a .NET property
-     * 
-     * @property
-     */
-    public static void set_SessionLookup(SessionLookup sessionLookup) {
-        getInstance().sessionLookup = sessionLookup;
-    }
-
 
     public static void setConfiguration(Configuration configuration) {
-        getInstance().configuration = configuration;
+        getInstance().configuration(configuration);
     }
 
     public static void setObjectManager(NakedObjectManager objectManager) {
-        getInstance().objectManager = objectManager;
+        getInstance().objectManager(objectManager);
     }
 
     public static void setPojoAdapterFactory(PojoAdapterFactory adapterFactory) {
-        getInstance().adapterFactory = adapterFactory;
+        getInstance().pojoAdapterFactory(adapterFactory);
+    }
+
+    public static void setSession(Session session) {
+        getInstance().currentSession(session);
     }
 
     public static void setSpecificationLoader(NakedObjectSpecificationLoader specificationLoader) {
-        getInstance().specificationLoader = specificationLoader;
-    }
-    
-    public static void setSessionLookup(SessionLookup sessionLookup) {
-        getInstance().sessionLookup = sessionLookup;
+        getInstance().specificationLoader(specificationLoader);
     }
 
-    protected PojoAdapterFactory adapterFactory;
-    protected Configuration configuration;
-    protected NakedObjectManager objectManager;
-    protected NakedObjectSpecificationLoader specificationLoader;
-    protected SessionLookup sessionLookup;
+    protected NakedObjects() {
+        // TODO remove once XAT test framework is updated
+        reset();
+        if (singleton != null) {
+            throw new NakedObjectRuntimeException("Naked Objects Repository already set up");
+        }
+        singleton = this;
+    }
 
+    protected abstract Configuration configuration();
+
+    protected abstract void configuration(Configuration configuration);
+
+    protected abstract Session currentSession();
+
+    protected abstract NakedObjectManager objectManager();
+
+    protected abstract void objectManager(NakedObjectManager objectManager);
+
+    protected abstract PojoAdapterFactory pojoAdapterFactory();
+
+    protected abstract void pojoAdapterFactory(PojoAdapterFactory adapterFactory);
+
+    protected abstract void currentSession(Session session);
+
+    protected abstract NakedObjectSpecificationLoader specificationLoader();
+
+    protected abstract void specificationLoader(NakedObjectSpecificationLoader specificationLoader);
+
+    public static void reset() {
+        singleton = null;
+    }
 }
 
 /*
