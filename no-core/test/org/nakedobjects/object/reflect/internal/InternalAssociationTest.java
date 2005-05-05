@@ -1,7 +1,7 @@
 package org.nakedobjects.object.reflect.internal;
 
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
@@ -40,11 +40,12 @@ public class InternalAssociationTest extends TestCase {
         
         spec = new DummyNakedObjectSpecification();
         loader.addSpec(spec);
-        NakedObjects.setSpecificationLoader(loader);
+        NakedObjectsClient nakedObjects = new NakedObjectsClient();
+        nakedObjects.setSpecificationLoader(loader);
 
         objectWithOneToOneAssoications = new InternalObjectWithOneToOneAssociations();
     	PojoAdapterFactory pojoAdapterFactory = new DummyPojoAdapterFactory();
-    	NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+    	nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
     	
      //   pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
     //    pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());

@@ -1,5 +1,6 @@
 package org.nakedobjects.object.security;
 
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Hint;
@@ -21,6 +22,7 @@ public class ActionAuthorisationTest extends TestCase {
     }
     
     public void testGetHint() {
+        new NakedObjectsClient();
         MockActionPeer peer = new MockActionPeer();
         MockAuthorisationManager manager = new MockAuthorisationManager();
         ActionAuthorisation action = new ActionAuthorisation(peer, manager);

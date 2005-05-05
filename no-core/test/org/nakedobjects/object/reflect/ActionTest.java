@@ -1,6 +1,6 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.DummyNakedObjectSpecificationLoader;
 import org.nakedobjects.object.Naked;
@@ -39,8 +39,9 @@ public class ActionTest extends NakedObjectTestCase {
     protected void setUp() throws ObjectStoreException {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
-        NakedObjects.setObjectManager(new MockObjectManager());
-        NakedObjects.setSpecificationLoader(new DummyNakedObjectSpecificationLoader());
+        NakedObjectsClient nakedObjects = new NakedObjectsClient();
+        nakedObjects.setObjectManager(new MockObjectManager());
+        nakedObjects.setSpecificationLoader(new DummyNakedObjectSpecificationLoader());
         
         actionDelegate = new MockAction();
         action = new Action("", ACTION_NAME, actionDelegate);

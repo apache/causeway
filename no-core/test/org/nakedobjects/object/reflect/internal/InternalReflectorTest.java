@@ -1,6 +1,6 @@
 package org.nakedobjects.object.reflect.internal;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObjectSpecificationException;
@@ -34,9 +34,7 @@ public class InternalReflectorTest extends TestCase {
     	new MockNakedObjectSpecificationLoader();     	
     	
     	PojoAdapterFactory pojoAdapterFactory = new DummyPojoAdapterFactory();
- //   	pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
-  //  	pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
-		NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+    	new NakedObjectsClient().setPojoAdapterFactory(pojoAdapterFactory);
 		
         reflector = new MockInternalReflector(InternalObjectForReflector.class.getName());
     }

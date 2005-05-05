@@ -1,7 +1,7 @@
 package org.nakedobjects.reflector.java.reflect;
 
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
@@ -44,7 +44,8 @@ public class JavaOneToOneAssociationTest extends TestCase {
     	loader.addSpec(spec = new DummyNakedObjectSpecification());  // for String
         loader.addSpec(new DummyNakedObjectSpecification()); // for Date
         loader.addSpec(new DummyNakedObjectSpecification()); // for float
-    	NakedObjects.setSpecificationLoader(loader);
+        NakedObjectsClient nakedObjects = new NakedObjectsClient();
+        nakedObjects.setSpecificationLoader(loader);
 
     	ConfigurationFactory.setConfiguration(new TestConfiguration());
     	
@@ -52,7 +53,7 @@ public class JavaOneToOneAssociationTest extends TestCase {
     	PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
     	pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
         pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
-        NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+        nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
         
         nakedObject = pojoAdapterFactory.createNOAdapter(objectWithOneToOneAssoications);
         

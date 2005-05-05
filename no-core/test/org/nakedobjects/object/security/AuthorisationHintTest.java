@@ -1,5 +1,6 @@
 package org.nakedobjects.object.security;
 
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.MockHint;
@@ -16,6 +17,7 @@ public class AuthorisationHintTest extends TestCase {
     }
 
     protected void setUp() throws Exception {
+        new NakedObjectsClient();
         originalHint = new MockHint();
         manager = new MockAuthorisationManager();
     }

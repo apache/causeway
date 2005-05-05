@@ -1,5 +1,6 @@
 package org.nakedobjects.reflector.java.reflect;
 
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.application.control.ActionAbout;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
@@ -34,6 +35,8 @@ public class JavaActionTest extends TestCase {
         super.setUp();
         
         ConfigurationFactory.setConfiguration(new TestConfiguration());
+        
+        new NakedObjectsClient(); 
         
        	Logger.getRootLogger().setLevel(Level.OFF);
     	loader = new MockNakedObjectSpecificationLoader();

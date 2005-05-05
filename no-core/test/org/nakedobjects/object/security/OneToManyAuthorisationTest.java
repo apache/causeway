@@ -1,5 +1,6 @@
 package org.nakedobjects.object.security;
 
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.MockHint;
@@ -20,6 +21,8 @@ public class OneToManyAuthorisationTest extends TestCase {
     }
     
     public void testGetHint() {
+        new NakedObjectsClient();
+        
         MockOneToManyPeer peer = new MockOneToManyPeer();
         MockAuthorisationManager manager = new MockAuthorisationManager();
         OneToManyAuthorisation oneToMany = new OneToManyAuthorisation(peer, manager);

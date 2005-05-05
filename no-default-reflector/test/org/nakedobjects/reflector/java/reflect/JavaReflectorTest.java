@@ -1,6 +1,7 @@
 package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.Naked;
@@ -35,6 +36,8 @@ public class JavaReflectorTest extends TestCase {
         
        	ConfigurationFactory.setConfiguration(new TestConfiguration());
 
+       	new NakedObjectsClient();
+       	
     	loader = new MockNakedObjectSpecificationLoader();     	
     	loader.addSpec(new DummyNakedObjectSpecification());
     	

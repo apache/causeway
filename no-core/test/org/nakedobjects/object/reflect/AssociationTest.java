@@ -1,6 +1,6 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
@@ -38,7 +38,7 @@ public class AssociationTest extends NakedObjectTestCase {
     protected void setUp() throws Exception {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
-        NakedObjects.setObjectManager(new MockObjectManager(new MockObjectFactory()));
+        new NakedObjectsClient().setObjectManager(new MockObjectManager(new MockObjectFactory()));
         nakedObject = new DummyNakedObject();
         associate = new DummyNakedObject();
         

@@ -1,6 +1,6 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoaderNew;
 
@@ -24,7 +24,7 @@ public class ActionParameterSetTest extends TestCase {
         loader.addSpec(Date.class.getName());
         loader.addSpec(String.class.getName());
         loader.addSpec(Vector.class.getName());
-        NakedObjects.setSpecificationLoader(loader);
+        new NakedObjectsClient().setSpecificationLoader(loader);
 
         parameterSpecs = new NakedObjectSpecification[] { loader.loadSpecification(Date.class),
                 loader.loadSpecification(String.class), loader.loadSpecification(Vector.class) };

@@ -1,6 +1,7 @@
 package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 
@@ -19,6 +20,7 @@ public class PojoAdapterTest extends TestCase {
 
     protected void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
+        new NakedObjectsClient();
 		pojoAdapterFactory = new PojoAdapterFactoryImpl();
 		pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
         pojoAdapterFactory.setReflectorFactory(new DummyReflectorFactory());

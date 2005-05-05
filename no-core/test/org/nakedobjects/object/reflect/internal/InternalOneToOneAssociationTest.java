@@ -2,6 +2,7 @@ package org.nakedobjects.object.reflect.internal;
 
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.Naked;
@@ -39,7 +40,7 @@ public class InternalOneToOneAssociationTest extends TestCase {
 
         spec = new DummyNakedObjectSpecification();
         loader.addSpec(spec);
-        NakedObjects.setSpecificationLoader(loader);
+        new NakedObjectsClient().setSpecificationLoader(loader);
 
         objectWithOneToOneAssoications = new InternalObjectWithOneToOneAssociations();
         nakedObject = new MockNakedObject();

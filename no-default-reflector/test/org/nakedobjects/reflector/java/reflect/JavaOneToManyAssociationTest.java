@@ -1,7 +1,7 @@
 package org.nakedobjects.reflector.java.reflect;
 
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.InternalCollection;
@@ -39,11 +39,11 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         junit.textui.TestRunner.run(new TestSuite(JavaOneToManyAssociationTest.class));
     }
 
-    public void setUp()  throws Exception {
+    protected void setUp()  throws Exception {
         
         Logger.getRootLogger().setLevel(Level.OFF);
     	loader = new MockNakedObjectSpecificationLoader();
-    	NakedObjects.setSpecificationLoader(loader);
+    	new NakedObjectsClient().setSpecificationLoader(loader);
 
     	ConfigurationFactory.setConfiguration(new TestConfiguration());
         

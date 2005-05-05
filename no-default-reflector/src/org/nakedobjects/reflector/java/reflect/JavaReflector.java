@@ -281,7 +281,7 @@ public class JavaReflector implements Reflector {
         try {
             SimpleClassAbout about = new SimpleClassAbout(null, null);
             String className = shortName();
-            Method aboutMethod = getAboutMethod(className);
+            Method aboutMethod = getClassAboutMethod(className);
             aboutMethod.invoke(null, new Object[] { about });
             return about;
         } catch (NoSuchMethodException ignore) {} catch (IllegalAccessException ignore) {} catch (InvocationTargetException ignore) {}
@@ -495,10 +495,10 @@ public class JavaReflector implements Reflector {
         return cls.getName();
     }
 
-    private Method getAboutMethod(String className) throws NoSuchMethodException {
+    private Method getClassAboutMethod(String className) throws NoSuchMethodException {
         Method method = cls.getMethod(ABOUT_PREFIX + className, new Class[] { ClassAbout.class });
         if (method == null) {
-            return getAboutMethod(getSuperclass());
+            return getClassAboutMethod(getSuperclass());
         }
         return method;
     }

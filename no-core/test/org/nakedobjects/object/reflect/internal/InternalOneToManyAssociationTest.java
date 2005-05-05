@@ -1,6 +1,6 @@
 package org.nakedobjects.object.reflect.internal;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.MockNakedObject;
@@ -33,11 +33,11 @@ public class InternalOneToManyAssociationTest extends NakedObjectTestCase {
         junit.textui.TestRunner.run(new TestSuite(InternalOneToManyAssociationTest.class));
     }
 
-    public void setUp() throws Exception {
+    protected void setUp() throws Exception {
 
         Logger.getRootLogger().setLevel(Level.OFF);
         loader = new MockNakedObjectSpecificationLoader();
-        NakedObjects.setSpecificationLoader(loader);
+        new NakedObjectsClient().setSpecificationLoader(loader);
 
         spec = new DummyNakedObjectSpecification();
         loader.addSpec(spec);

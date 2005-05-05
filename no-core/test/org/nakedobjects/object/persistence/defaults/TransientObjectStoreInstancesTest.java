@@ -1,6 +1,6 @@
 package org.nakedobjects.object.persistence.defaults;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.MockOid;
 import org.nakedobjects.object.reflect.DummyNakedObject;
@@ -32,7 +32,7 @@ public class TransientObjectStoreInstancesTest extends TestCase {
 
         instances = new MockTransientObjectStoreInstances();
         mockPojoAdapterFactory = new MockPojoAdapterFactory();
-        NakedObjects.setPojoAdapterFactory(mockPojoAdapterFactory);
+        new NakedObjectsClient().setPojoAdapterFactory(mockPojoAdapterFactory);
         instances.setLoaded(mockPojoAdapterFactory);
 
         instances.addElement(new MockOid(1), new TestObject(), "one");

@@ -1,6 +1,6 @@
 package org.nakedobjects.object.persistence.defaults;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.MockObjectStore;
@@ -66,6 +66,7 @@ public class LocalObjectManagerTest extends TestCase {
     protected void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
         
+        
         objectStore = new MockObjectStore();
 
         objectManager = new LocalObjectManager();
@@ -73,7 +74,7 @@ public class LocalObjectManagerTest extends TestCase {
         objectManager.setOidGenerator(new MockOidGenerator());
  
         pojoAdapterFactory = new DummyPojoAdapterFactory();
-        NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+        new NakedObjectsClient().setPojoAdapterFactory(pojoAdapterFactory);
         testNakedObject = new MockNakedObject();
         objectSpecification = new DummyNakedObjectSpecification();
         testNakedObject.setupSpecification(objectSpecification);

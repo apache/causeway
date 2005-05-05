@@ -14,13 +14,15 @@ public class NakedObjectsTest extends TestCase {
 
     public void testConfiguration() {
         Configuration configuration = new Configuration();
-        NakedObjects.setConfiguration(configuration);
+        NakedObjects.reset();
+        new NakedObjectsClient().setConfiguration(configuration);
         assertEquals(configuration, NakedObjects.getConfiguration());
     }
     
     public void testObjectManager() {
         MockObjectManager objectManager = new MockObjectManager(new MockObjectFactory());
-        NakedObjects.setObjectManager(objectManager);
+        NakedObjects.reset();
+        new NakedObjectsClient().setObjectManager(objectManager);
         assertEquals(objectManager, NakedObjects.getObjectManager());
     }
 }
