@@ -40,6 +40,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     private DirtyObjectSet objectsToRefreshViewsFor;
     private OidGenerator oidGenerator;
     private Transaction transaction;
+    private int transactionLevel;
 
     public LocalObjectManager() {
         LOG.info("creating object manager");
@@ -47,9 +48,12 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
     public void abortTransaction() {
         try {
-            getTransaction().abort();
-            objectStore.abortTransaction();
-            transaction = null;
+            if (transaction != null) {
+	            transaction.abort();
+	            objectStore.abortTransaction();
+	            transaction = null;
+	            transactionLevel = 0;
+            }
         } catch (ObjectStoreException e) {
             e.printStackTrace();
         }
@@ -116,11 +120,14 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     public void endTransaction() {
-        try {
-            getTransaction().commit(objectStore);
-            transaction = null;
-        } catch (ObjectStoreException e) {
-            throw new NakedObjectRuntimeException(e);
+        transactionLevel--;
+        if(transactionLevel == 0) {
+	        try {
+	            getTransaction().commit(objectStore);
+	            transaction = null;
+	        } catch (ObjectStoreException e) {
+	            throw new NakedObjectRuntimeException(e);
+	        }
         }
     }
 
@@ -494,7 +501,11 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     public void startTransaction() {
-        transaction = new Transaction();
+        if(transaction == null) {
+            transaction = new Transaction();
+            transactionLevel = 0;
+        } 
+        transactionLevel++;
     }
 
     public String toString() {
