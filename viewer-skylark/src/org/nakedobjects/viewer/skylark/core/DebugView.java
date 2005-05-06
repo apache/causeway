@@ -249,21 +249,23 @@ public class DebugView implements DebugInfo {
 
         for (int i = 0; i < fields.length; i++) {
             NakedObjectField field = fields[i];
-            Object obj = object.getField(field);
+            Naked obj = object.getField(field);
 
             String name = field.getName();
             graphIndent(s, level);
 
-             if (obj instanceof NakedObject) {
+            if(obj == null) {
+                s.append("null\n");
+            } else if (obj.getSpecification().isValue()) {
+                 s.append(name + ": " + obj);
+                 s.append("\n");
+            } else {
                 if (recursiveElements.contains(obj)) {
                     s.append(name + ": " + obj + "*\n");
                 } else {
                     s.append(name + ": " + obj);
-                   debugGraph((NakedObject) obj, name, level + 1, recursiveElements, s);
+                   debugGraph(obj, name, level + 1, recursiveElements, s);
                 }
-            } else {
-                s.append(name + ": " + obj);
-                s.append("\n");
             }
         }
 
