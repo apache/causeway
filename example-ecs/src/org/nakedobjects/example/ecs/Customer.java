@@ -128,6 +128,7 @@ public class Customer {
     }
 
     public Location getHome() {
+        container.resolve(home);
         return home;
     }
 
