@@ -24,6 +24,10 @@ public class OneToOneHelp extends AbstractOneToOnePeer {
         final Hint hint = super.getHint(identifier, object, association);
 
         return new DefaultHint() {
+            
+            public Consent isValid() {
+                return hint.isValid();
+            }
 
             public Consent canAccess() {
                 return hint.canAccess();
