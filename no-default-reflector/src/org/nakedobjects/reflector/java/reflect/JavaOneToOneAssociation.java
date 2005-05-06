@@ -41,7 +41,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         Method aboutMethod = getAboutMethod();
 
         Class parameter = getMethod.getReturnType();
-        if (associate != null && !parameter.isAssignableFrom(associate.getObject().getClass())) {
+        if (associate != null && associate.getObject() != null && !parameter.isAssignableFrom(associate.getObject().getClass())) {
             SimpleFieldAbout about = new SimpleFieldAbout(NakedObjects.getCurrentSession(), object.getObject());
             about.unmodifiable("Invalid type: field must be set with a "
                     + NakedObjects.getSpecificationLoader().loadSpecification(parameter.getName()));
