@@ -33,6 +33,9 @@ public class XmlDataManager implements DataManager {
         return ConfigurationFactory.getConfiguration().getString("xml-object-store.directory", "xml");
     }
 
+    public String getDebugData() {
+        return "Data directory " + directory();
+    }
 
     // TODO the following methods are being called repeatedly - is there no
     // caching? See the print statemens
@@ -438,17 +441,10 @@ public class XmlDataManager implements DataManager {
      * Save the data for latter retrieval.
      */
     public final void save(Data data) throws ObjectStoreException {
-        updateData(data.getOid(), data.getClassName(), data);
+        writeData(data.getOid(), data);
     }
 
     public void shutdown() {}
-
-    /**
-     * Write out the data for an existing instance.
-     */
-    protected void updateData(SerialOid oid, String type, Data data) throws ObjectStoreException {
-        writeData(oid, data);
-    }
 
     private void writeData(SerialOid xoid, Data data) throws ObjectStoreException {
         StringBuffer xml = new StringBuffer();
@@ -472,18 +468,18 @@ public class XmlDataManager implements DataManager {
                     xml.append("ref=\"" + encodedOid((SerialOid) entry) + "\"/>\n");
                 } else if (entry instanceof ReferenceVector) {
                     ReferenceVector references = (ReferenceVector) entry;
-                    xml.append("  <multiple-association field=\"" + field + "\" ");
-                    //               	xml.append("ref=\"" + encodedOid(references.getOid()) +
-                    // "\">\n");
-                    xml.append(">\n");
+                    int size = references.size();
 
-                    for (int i = 0; i < references.size(); i++) {
-                        Object oid = references.elementAt(i);
-                        xml.append("    <element ");
-                        xml.append("ref=\"" + encodedOid((SerialOid) oid) + "\"/>\n");
+                    if(size > 0) {
+                        xml.append("  <multiple-association field=\"" + field + "\" ");
+                        xml.append(">\n");
+                        for (int i = 0; i < size; i++) {
+                            Object oid = references.elementAt(i);
+                            xml.append("    <element ");
+                            xml.append("ref=\"" + encodedOid((SerialOid) oid) + "\"/>\n");
+                        }
+                        xml.append("  </multiple-association>\n");
                     }
-
-                    xml.append("  </multiple-association>\n");
                 } else {
                     xml.append("  <value field=\"" + field + "\">");
                     xml.append(getValueWithSpecialsEscaped(entry.toString()));

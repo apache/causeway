@@ -22,6 +22,7 @@ import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
+import org.nakedobjects.utility.DebugString;
 
 import org.apache.log4j.Logger;
 
@@ -86,14 +87,14 @@ public class XmlObjectStore implements NakedObjectStore {
     public void endTransaction() {}
 
     public String getDebugData() {
-        StringBuffer data = new StringBuffer();
-        data.append("DataManager " + dataManager);
-        data.append("AdapterFactory " + NakedObjects.getPojoAdapterFactory().getDebugData());
-        return data.toString();
+        DebugString debug = new DebugString();
+        debug.appendTitle("Business Objects");
+        debug.appendln(dataManager.getDebugData());
+        return debug.toString();
     }
 
     public String getDebugTitle() {
-        return "MementoObjectStore";
+        return "XML Object Store";
     }
 
     public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectStoreException,
@@ -199,7 +200,7 @@ public class XmlObjectStore implements NakedObjectStore {
     public void init() throws ObjectStoreException {}
 
     private void initObject(NakedObject object, ObjectData data) throws ObjectStoreException {
-        NakedObjectField[] fields = object.getSpecification().getFields();
+        NakedObjectField[] fields = object.getFields();
 
         for (int i = 0; i < fields.length; i++) {
             NakedObjectField field = fields[i];
@@ -209,7 +210,7 @@ public class XmlObjectStore implements NakedObjectStore {
             }
 
             if (field.isValue()) {
-                object.setValue((OneToOneAssociation) field, data.get(field.getName()));
+                object.initValue((OneToOneAssociation) field, data.get(field.getName()));
             } else if (field instanceof OneToManyAssociation) {
                 /*
                  * The internal collection is already a part of the object, and
@@ -300,6 +301,7 @@ public class XmlObjectStore implements NakedObjectStore {
             LOG.warn("Not able to read in data - during resolve - for " + object);
         } else {
             initObject(object, data);
+            
         }
     }
 

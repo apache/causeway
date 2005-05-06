@@ -45,6 +45,8 @@ public interface DataManager {
     * Return the number of instances that match the specified data
     */
    public int numberOfInstances(ObjectData pattern);
+
+    String getDebugData();
 }
 
 /*

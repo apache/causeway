@@ -62,6 +62,12 @@ public class MockDataManager implements DataManager {
         return 5;
     }
 
+
+
+    public String getDebugData() {
+        return null;
+    }
+
 }
 
 
