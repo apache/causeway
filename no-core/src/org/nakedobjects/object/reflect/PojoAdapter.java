@@ -150,7 +150,7 @@ public class PojoAdapter extends AbstractNakedObject {
     }
 
     public String toString() {
-        return "POJO " + super.toString() +" " + specification == null ? "" : titleString();
+        return "POJO " + super.toString() +" " + (specification == null ? "" : titleString());
     }
 
     protected void finalize() throws Throwable {
