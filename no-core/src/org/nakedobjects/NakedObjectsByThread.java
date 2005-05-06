@@ -48,7 +48,12 @@ public class NakedObjectsByThread extends NakedObjects {
     }
 
     private NakedObjectsData getLocal() {
-        return (NakedObjectsData) threads.get(Thread.currentThread());
+        NakedObjectsData local = (NakedObjectsData) threads.get(Thread.currentThread());
+        if(local == null) {
+            local = new NakedObjectsData();
+            threads.put(Thread.currentThread(), local);
+        }
+        return local;
     }
 
     protected NakedObjectManager objectManager() {
