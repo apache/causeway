@@ -31,6 +31,14 @@
 	<property name="test.run.dir" value="${build.dir}/test-run" />
 	<property name="test.results.dir" value="${build.relase.dir}/tests" />
 
+	<!-- distribution directories -->
+	<property name="dist.dir" value="build/dist" />
+	<property name="release.dir" value="release" />
+	<property name="dist.images.dir" value="${dist.dir}/resources/images" />
+	<property name="dist.test.dir" value="${dist.dir}/doc/test" />
+	<property name="dist.example.dir" value="${dist.dir}/example" />
+	<property name="dist.api.dir" value="${dist.dir}/doc/api" />
+
 
 	<property environment="env" />
 
@@ -63,14 +71,6 @@
 	<target name="-init">
 		<echo>Create ${distribution} distribution</echo>
 		<echo>Version ${build.version}  ${build.id}</echo>
-
-		<!-- distribution directories -->
-		<property name="dist.dir" value="build/dist" />
-		<property name="release.dir" value="release" />
-		<property name="dist.images.dir" value="${dist.dir}/resources/images" />
-		<property name="dist.test.dir" value="${dist.dir}/doc/test" />
-		<property name="dist.example.dir" value="${dist.dir}/example" />
-		<property name="dist.api.dir" value="${dist.dir}/doc/api" />
 	</target>
 
 	<target name="check" depends="prepare, compile, test">
@@ -224,6 +224,23 @@
 			</packageset>
 		</javadoc>
 
+		<!-- generate HTML browseable source -->
+		<taskdef name="java2html" classname="com.java2html.Java2HTMLTask"/>
+	
+		<java2html title="Naked Objects Framework - ${distribution}-${build.id}"
+			simple="no"
+	       	tabsize="4"
+			marginsize="6"
+			header="true"
+			footer="true"
+			destination="build/dist/doc/src">
+			<fileset dir="${build.src.dir}">
+				<include name="**/*.java"/>
+			</fileset>
+			<!--javadoc localRef="c:\jdk1.4\docs\api" httpRef="http://somewebsite.com/docs/api"/-->
+		</java2html>
+
+
 		<!-- create jars -->
 		<jar jarfile="${dist.dir}/lib/nakedobjects.jar">
 			<fileset dir="${build.classes.src}" />
@@ -270,22 +287,18 @@
 		</zip>
 
 	</target>
-
+	
 
 
 	<!-- - - - - - - - - - - - - - - - - - 
           target: install  - installs the latest build in the install directory
          - - - - - - - - - - - - - - - - - -->
 	<target name="install">
-
-		<property name="dir.base" location="D:/" />
-		<property name="install.dir" location="${dir.base}/no-release-${distribution}" />
-
-		<!-- delete dir="${install.dir}" failonerror="false"/-->
-		<copy todir="${install.dir}">
+		<delete dir="${latest.dir}" failonerror="false"/>
+		<copy todir="${latest.dir}">
 			<fileset dir="build/dist">
 			</fileset>
 		</copy>
 	
-		<touch file="${install.dir}/version-${build.id}"/>
+		<touch file="${latest.dir}/version-${build.id}"/>
 	</target>
