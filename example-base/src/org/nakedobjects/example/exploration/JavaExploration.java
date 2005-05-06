@@ -1,6 +1,7 @@
 package org.nakedobjects.example.exploration;
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
@@ -15,7 +16,6 @@ import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
 import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
-import org.nakedobjects.object.security.ClientSessionLookup;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.control.SimpleSession;
@@ -59,6 +59,7 @@ public class JavaExploration {
             name = name.substring(name.lastIndexOf('.') + 1);
 
             Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(DEFAULT_CONFIG, false));
+            new NakedObjectsClient();
             NakedObjects.setConfiguration(configuration);
             ConfigurationFactory.setConfiguration(configuration);
             if (configuration.getString(SHOW_EXPLORATION_OPTIONS) == null) {
@@ -115,7 +116,7 @@ public class JavaExploration {
 
             reflectorFactory.setObjectFactory(objectFactory);
 
-            NakedObjects.setSessionLookup(new ClientSessionLookup(new SimpleSession()));
+            NakedObjects.setSession(new SimpleSession());
 
 
             try {

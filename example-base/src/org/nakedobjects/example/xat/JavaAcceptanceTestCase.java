@@ -1,6 +1,6 @@
 package org.nakedobjects.example.xat;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
@@ -48,6 +48,7 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
     protected final void setupFramework() {
         JavaBusinessObjectContainer container = new JavaBusinessObjectContainer();
 
+        NakedObjectsClient nakedObjects = new NakedObjectsClient();
 
         JavaObjectFactory objectFactory = new JavaObjectFactory();
         objectFactory.setContainer(container);
@@ -63,11 +64,11 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
         objectManager.setObjectFactory(objectFactory);
         objectManager.setOidGenerator(oidGenerator);
 
-        NakedObjects.setObjectManager(objectManager);
+        nakedObjects.setObjectManager(objectManager);
 
         NakedObjectSpecificationLoaderImpl specificationLoader = new NakedObjectSpecificationLoaderImpl();
 
-        NakedObjects.setSpecificationLoader(specificationLoader);
+        nakedObjects.setSpecificationLoader(specificationLoader);
         
         LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
 
@@ -76,7 +77,7 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
         PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
         pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
         pojoAdapterFactory.setReflectorFactory(reflectorFactory);
-        NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+        nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
 
         NakedObjectSpecificationImpl.setReflectionFactory(reflectionFactory);
         specificationLoader.setReflectorFactory(reflectorFactory);

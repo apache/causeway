@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -43,7 +44,7 @@ public class ActionFieldBuilderTest extends TestCase {
         };
 
         MockView.next = 0;
-        NakedObjects.setConfiguration(new Configuration());
+        new NakedObjectsClient().setConfiguration(new Configuration());
 
         builder = new ActionFieldBuilder(subviewSpec);
 

@@ -2,6 +2,7 @@ package org.nakedobjects.viewer.skylark.value;
 
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.viewer.skylark.Location;
 
@@ -22,7 +23,7 @@ public class TextFieldContentTest extends TestCase {
     protected void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        NakedObjects.setConfiguration(new Configuration());
+        new NakedObjectsClient().setConfiguration(new Configuration());
         
         TextBlockUser user = new TextBlockUser() {
             /* with this configuration:

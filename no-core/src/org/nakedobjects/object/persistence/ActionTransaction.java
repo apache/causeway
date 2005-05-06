@@ -55,14 +55,6 @@ public class ActionTransaction extends AbstractActionPeer {
             LOG.error("Non-existing target or parameter used in " + getName(), e);
             objectManager.abortTransaction();
             return null;
-/*        } catch (ReflectiveActionException e) {
-            LOG.error("Failed to execute action " + getName(), e);
-            objectManager.abortTransaction();
-            return null;
-        } catch (RuntimeException e) {
-            objectManager.abortTransaction();
-            throw e;
-        }*/
         } catch (RuntimeException e) {
             objectManager.abortTransaction();
             throw e;

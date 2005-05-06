@@ -1,6 +1,7 @@
 package org.nakedobjects.xat;
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.ComponentLoader;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
@@ -11,7 +12,6 @@ import org.nakedobjects.object.fixture.Fixture;
 import org.nakedobjects.object.fixture.FixtureBuilder;
 import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
 import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
-import org.nakedobjects.object.security.ClientSessionLookup;
 import org.nakedobjects.object.security.Session;
 
 import java.io.File;
@@ -95,10 +95,12 @@ public abstract class AcceptanceTestCase extends TestCase {
         } else {
             configuration = new Configuration();
         }
-        NakedObjects.setConfiguration(configuration);
+        
+        NakedObjectsClient nakedObjects = new NakedObjectsClient();
+        nakedObjects.setConfiguration(configuration);
         ConfigurationFactory.setConfiguration(configuration);
         
-        Properties logProperties = NakedObjects.getConfiguration().getProperties("log4j");
+        Properties logProperties = configuration.getProperties("log4j");
         if (logProperties.size() == 0) {
             LogManager.getRootLogger().setLevel(Level.OFF);
         } else {
@@ -121,12 +123,11 @@ public abstract class AcceptanceTestCase extends TestCase {
 
         PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
 		pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
-		NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+		nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
 		
         setupFramework();
 
-        // fixtureBuilder = explorationSetup();
-        NakedObjects.setSessionLookup(new ClientSessionLookup(new Session()));
+        nakedObjects.setSession(new Session());
 
         setUpFixtures();
 
@@ -210,7 +211,7 @@ public abstract class AcceptanceTestCase extends TestCase {
         NakedObjects.getSpecificationLoader().shutdown();
         NakedObjects.setSpecificationLoader(null);
         NakedObjects.setConfiguration(null);
-        NakedObjects.setSessionLookup(null);
+        NakedObjects.setSession(null);
         
         classes.clear();
         classes = null;
