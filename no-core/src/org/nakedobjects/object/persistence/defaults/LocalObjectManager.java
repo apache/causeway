@@ -22,7 +22,7 @@ import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
-import org.nakedobjects.utility.NotImplementedException;
+import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.StartupException;
 
 import java.util.Enumeration;
@@ -35,7 +35,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     private static final Logger LOG = Logger.getLogger(LocalObjectManager.class);
     private boolean checkObjectsForDirtyFlag;
     private final Hashtable nakedClasses = new Hashtable();
-    private DirtyObjectSetImpl objectsToBeSaved = new DirtyObjectSetImpl();
+    private final DirtyObjectSetImpl objectsToBeSaved = new DirtyObjectSetImpl();
     private NakedObjectStore objectStore;
     private DirtyObjectSet objectsToRefreshViewsFor;
     private OidGenerator oidGenerator;
@@ -87,11 +87,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         }
     }
 
-    private void createNakedClassSpec(NakedObject object) throws ObjectStoreException {
-        throw new NotImplementedException();
-        //        objectStore.createNakedClass(object);
-    }
-
     private void createObject(NakedObject object) throws ObjectStoreException {
         getTransaction().addCommand(objectStore.createCreateObjectCommand(object));
     }
@@ -114,9 +109,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         object.deleted();
         clear(object);
 
-        //      if (NakedObjects.getPojoAdapterFactory().isLoaded(object.getOid())) {
         NakedObjects.getPojoAdapterFactory().unloaded(object);
-        //      }
     }
 
     public void endTransaction() {
@@ -137,11 +130,15 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     public String getDebugData() {
-        StringBuffer data = new StringBuffer();
-        data.append('\n');
-        data.append(objectStore.getDebugData());
-        data.append('\n');
-        return data.toString();
+        DebugString debug = new DebugString();
+
+        debug.appendTitle(NakedObjects.getPojoAdapterFactory().getDebugTitle());
+        debug.appendln(NakedObjects.getPojoAdapterFactory().getDebugData());
+        debug.appendln();
+
+        debug.append(objectStore.getDebugData());
+        debug.appendln();
+        return debug.toString();
     }
 
     public String getDebugTitle() {
@@ -152,6 +149,8 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         LOG.debug("getInstances matching " + criteria);
         try {
             NakedObject[] instances = objectStore.getInstances(criteria);
+            collateChanges();
+            objectsToBeSaved.remove(instances);
             return instances;
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
@@ -162,6 +161,8 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         LOG.debug("getInstances of " + specification);
         try {
             NakedObject[] instances = objectStore.getInstances(specification, false);
+            collateChanges();
+            objectsToBeSaved.remove(instances);
             return instances;
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
@@ -223,9 +224,12 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         try {
             if (NakedObjects.getPojoAdapterFactory().isLoaded(oid)) {
                 return NakedObjects.getPojoAdapterFactory().getLoadedObject(oid);
+            } else {
+	            NakedObject object = objectStore.getObject(oid, hint);
+	            collateChanges();
+	            objectsToBeSaved.remove(object);
+	            return object;
             }
-            NakedObject object = objectStore.getObject(oid, hint);
-            return object;
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
@@ -352,11 +356,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         }
 
         try {
-            if (object.getObject() instanceof NakedClass) {
-                createNakedClassSpec(object);
-            } else {
-                createObject(object);
-            }
+            createObject(object);
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
@@ -392,6 +392,8 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
             return;
         }
         LOG.info("resolve-eagerly" + object + "/" + field);
+        collateChanges();
+        objectsToBeSaved.remove(object);  // TODO is this enough or do we need to check the referenced fields?
         try {
             objectStore.resolveEagerly(object, field);
         } catch (ObjectStoreException e) {
@@ -403,9 +405,11 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         if (object.isResolved() || !isPersistent(object)) {
             return;
         }
-        LOG.info("resolve-immediately" + object);
+        LOG.info("resolve-immediately " + object);
         try {
             objectStore.resolveImmediately(object);
+            collateChanges();
+            objectsToBeSaved.remove(object);
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
@@ -414,9 +418,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
     public void saveChanges() {
         LOG.debug("saving changes");
-        if (checkObjectsForDirtyFlag) {
-            collateChanges();
-        }
+        collateChanges();
         Enumeration e = objectsToBeSaved.dirtyObjects();
         while (e.hasMoreElements()) {
             NakedObject object = (NakedObject) e.nextElement();
@@ -428,15 +430,17 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     private void collateChanges() {
-        LOG.debug("collating changed objects");
-        PojoAdapterFactory factory = loadedObjects();
-        Enumeration e = factory.getLoadedObjects();
-        while (e.hasMoreElements()) {
-            NakedObject object = (NakedObject) e.nextElement();
-            if (object.getSpecification().isDirty(object)) {
-                LOG.debug("  found dirty object " + object);
-                objectChanged(object);
-                object.getSpecification().clearDirty(object);
+        if (checkObjectsForDirtyFlag) {
+            LOG.debug("collating changed objects");
+            PojoAdapterFactory factory = loadedObjects();
+            Enumeration e = factory.getLoadedObjects();
+            while (e.hasMoreElements()) {
+                NakedObject object = (NakedObject) e.nextElement();
+                if (object.getSpecification().isDirty(object)) {
+                    LOG.debug("  found dirty object " + object);
+                    objectChanged(object);
+                    object.getSpecification().clearDirty(object);
+                }
             }
         }
     }

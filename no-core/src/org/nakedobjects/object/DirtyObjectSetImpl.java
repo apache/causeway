@@ -11,7 +11,7 @@ public class DirtyObjectSetImpl implements DirtyObjectSet {
     private Vector changes = new Vector();
 
     public synchronized void addDirty(NakedObject object) {
-        LOG.debug(object + " marked as dirty");
+        LOG.debug("mark as dirty " + object);
         if (!changes.contains(object)) {
             changes.addElement(object);
         }
@@ -29,6 +29,17 @@ public class DirtyObjectSetImpl implements DirtyObjectSet {
     public void shutdown() {
         changes.removeAllElements();
         changes = null;
+    }
+
+    public void remove(NakedObject object) {
+        LOG.debug("unmark as dirty " + object);
+        changes.removeElement(object);
+    }
+
+    public void remove(NakedObject[] instances) {
+        for (int i = 0; i < instances.length; i++) {
+            remove(instances[i]);
+        }
     }
 }
 
