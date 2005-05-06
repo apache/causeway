@@ -1,6 +1,7 @@
 package org.nakedobjects.persistence.file;
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
@@ -42,7 +43,7 @@ public class XmlDataManagerTest extends TestCase {
         //specificationLoader.setReflectorFactory(new DummyReflectorFactory());
 
 		MockNakedObjectSpecificationLoader specificationLoader = new MockNakedObjectSpecificationLoader();
-       NakedObjects.setSpecificationLoader(specificationLoader);
+		new NakedObjectsClient().setSpecificationLoader(specificationLoader);
         
         //ConfigurationFactory.setConfiguration(new Configuration());
         
