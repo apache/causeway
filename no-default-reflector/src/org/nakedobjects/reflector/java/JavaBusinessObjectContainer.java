@@ -74,7 +74,9 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     }
 
     public void makePersistent(Object transientObject) {
+        objectManger().startTransaction();
         objectManger().makePersistent(NakedObjects.getPojoAdapterFactory().createNOAdapter(transientObject));
+        objectManger().endTransaction();
     }
 
     public int numberOfInstances(Class cls) {

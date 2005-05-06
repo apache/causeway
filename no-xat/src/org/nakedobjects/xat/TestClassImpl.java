@@ -78,9 +78,11 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
         NakedObjectManager objectManager = NakedObjects.getObjectManager();
         try {
             object = objectManager.createTransientInstance(cls.forObjectType());
+            objectManager.startTransaction();
             objectManager.makePersistent(object);
             object.created();
             objectManager.saveChanges();
+            objectManager.endTransaction();
         } catch (NotPersistableException e) {
             NakedError error = objectManager.generatorError(
                     "Failed to create instance of " + cls.forObjectType().getFullName(), e);
