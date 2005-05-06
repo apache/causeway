@@ -49,7 +49,9 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
      * objects setContainer() and created() methods if they exist.
      */
     public Object createTransientInstance(Class cls) {
-        return objectFactory.createObject(cls);
+        Object object = objectFactory.createObject(cls);
+        objectFactory.logicalCreation(cls, object);
+        return object;
     }
 
     public void destroyObject(Object object) {

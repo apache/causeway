@@ -42,7 +42,6 @@ public class JavaObjectFactory implements ObjectFactory {
      * objects setContainer() and created() methods if they exist.
      */
     public Object createObject(Class cls) {
-        // create new object
         Object object;
         try {
             object = cls.newInstance();
@@ -51,16 +50,20 @@ public class JavaObjectFactory implements ObjectFactory {
         } catch (IllegalAccessException e) {
             throw new ReflectionException("Cannot access the default constructor in " + cls.getName());
         }
-
-        invokeMethod(cls, object, "setContainer", new Class[] { BusinessObjectContainer.class }, new Object[] { container });
-        // FIX this should not be called here, but called independently if needed by the NakedObjectSpecification - only when an object is logically created.
-        invokeMethod(cls, object, "created", new Class[0], new Object[0]);
-
+        setContainer(object, cls);
         return object;
+    }
+
+    protected void logicalCreation(Class cls, Object object) {
+        invokeMethod(cls, object, "created", new Class[0], new Object[0]);
     }
 
     public void recreatedObject(Object object) {
         Class cls = object.getClass();
+        setContainer(object, cls);
+    }
+
+    private void setContainer(Object object, Class cls) {
         invokeMethod(cls, object, "setContainer", new Class[] { BusinessObjectContainer.class }, new Object[] { container });
     }
 
