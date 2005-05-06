@@ -172,23 +172,10 @@ public class TransientObjectStore implements NakedObjectStore {
     }
 
     private void destroy(NakedObject object) {
-        destroy(object, object.getSpecification());
-    }
-
-    private void destroy(NakedObject object, NakedObjectSpecification specification) {
+        NakedObjectSpecification specification = object.getSpecification();
         LOG.debug("   saving object " + object + " as instance of " + specification.getShortName());
         TransientObjectStoreInstances ins = instancesFor(specification);
         ins.remove(object.getOid());
-
-        NakedObjectSpecification superclass = specification.superclass();
-        if (superclass != null) {
-            destroy(object, superclass);
-        }
-
-        NakedObjectSpecification[] interfaces = specification.interfaces();
-        for (int i = 0; i < interfaces.length; i++) {
-            destroy(object, interfaces[i]);
-        }
     }
 
     public void endTransaction() {
@@ -366,23 +353,10 @@ public class TransientObjectStore implements NakedObjectStore {
         if (object.getObject() instanceof NakedClass) {
             throw new ObjectStoreException("Can't make changes to a NakedClass object");
         }
-        save(object, object.getSpecification());
-    }
-
-    private void save(NakedObject object, NakedObjectSpecification specification) {
+        NakedObjectSpecification specification = object.getSpecification();
         LOG.debug("   saving object " + object + " as instance of " + specification.getShortName());
         TransientObjectStoreInstances ins = instancesFor(specification);
         ins.save(object);
-
-        NakedObjectSpecification superclass = specification.superclass();
-        if (superclass != null) {
-            save(object, superclass);
-        }
-
-        NakedObjectSpecification[] interfaces = specification.interfaces();
-        for (int i = 0; i < interfaces.length; i++) {
-            save(object, interfaces[i]);
-        }
     }
 
     private void setupReference(NakedObject fieldContent) {
