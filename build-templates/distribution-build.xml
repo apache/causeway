@@ -212,6 +212,11 @@
 				docs
 				-->
 
+		<!-- generate docs -->
+		<ant dir="../documentation" target="html">
+			<property name="dest.dir" value="${basedir}/build/dist/doc/docs"/>
+		</ant>
+
 		<!-- generate javadocs -->
 		<javadoc destDir="${dist.api.dir}"
 		         windowtitle="Naked Objects ${distribution} API version ${build.version}"
