@@ -18,9 +18,7 @@ import org.apache.log4j.Logger;
 public abstract class AbstractNakedObject implements NakedObject {
     private static final Logger LOG = Logger.getLogger(AbstractNakedObject.class);
     private boolean isFinder = false;
-    private boolean isPersistDirty;
     private transient boolean isResolved = false;
-    private boolean isViewDirty;
     private Oid oid;
     protected NakedObjectSpecification specification;
 
@@ -210,8 +208,6 @@ public abstract class AbstractNakedObject implements NakedObject {
 
         // type of object - EO, Primitive, Collection, with Status etc
         // Persistent/transient & Resolved or not
-        s.append(isViewDirty ? "V" : "-");
-        s.append(isPersistDirty ? "D" : "-");
         s.append(isPersistent() ? "P" : (isFinder() ? "F" : "T"));
         s.append(isResolved ? "R" : "-");
 

@@ -1,6 +1,5 @@
 package org.nakedobjects.object.persistence.defaults;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
@@ -189,10 +188,6 @@ public class TransientObjectStore implements NakedObjectStore {
 
     public String getDebugData() {
         DebugString debug = new DebugString();
-
-        debug.appendTitle(NakedObjects.getPojoAdapterFactory().getDebugTitle());
-        debug.appendln(NakedObjects.getPojoAdapterFactory().getDebugData());
-
         debug.appendTitle("Business Objects");
         Enumeration e = instances.keys();
         while (e.hasMoreElements()) {
