@@ -21,7 +21,7 @@ import org.nakedobjects.object.reflect.OneToOnePeer;
 public class LocalReflectionFactory implements ReflectionFactory {
     HelpManager helpManager = new HelpManager() {
 
-        public Hint help(MemberIdentifier identifier) {
+        public Hint help(final MemberIdentifier identifier) {
             return new Hint() {
                 public Consent canAccess() {
                     return null;
@@ -36,11 +36,11 @@ public class LocalReflectionFactory implements ReflectionFactory {
                 }
 
                 public String getDescription() {
-                    return "description from help manager";
+                    return "description from help manager - " + identifier;
                 }
 
                 public String getName() {
-                    return "name from help manager";
+                    return null;
                 }
 
                 public String debug() {
