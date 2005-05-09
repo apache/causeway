@@ -41,7 +41,7 @@ public class TransientObjectStore implements NakedObjectStore {
     public CreateObjectCommand createCreateObjectCommand(final NakedObject object) {
         return new CreateObjectCommand() {
             public void execute() throws ObjectStoreException {
-                LOG.debug("  createObject " + object);
+                LOG.debug("  create object " + object);
                 save(object);
             }
 
@@ -58,7 +58,7 @@ public class TransientObjectStore implements NakedObjectStore {
     public DestroyObjectCommand createDestroyObjectCommand(final NakedObject object) {
         return new DestroyObjectCommand() {
             public void execute() throws ObjectStoreException {
-                LOG.info("  delete requested on '" + object + "'");
+                LOG.info("  delete object '" + object + "'");
                 destroy(object);
             }
 
@@ -172,7 +172,7 @@ public class TransientObjectStore implements NakedObjectStore {
 
     private void destroy(NakedObject object) {
         NakedObjectSpecification specification = object.getSpecification();
-        LOG.debug("   saving object " + object + " as instance of " + specification.getShortName());
+        LOG.debug("   destroy object " + object + " as instance of " + specification.getShortName());
         TransientObjectStoreInstances ins = instancesFor(specification);
         ins.remove(object.getOid());
     }
