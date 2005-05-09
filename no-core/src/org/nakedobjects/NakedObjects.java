@@ -31,28 +31,26 @@ public abstract class NakedObjects {
         return getInstance().pojoAdapterFactory();
     }
 
+    /**
+     * @deprecated
+     */
+    public static void setAdapterFactory(PojoAdapterFactory factory) {
+        getInstance().setPojoAdapterFactory(factory);
+    }
+
     public static NakedObjectSpecificationLoader getSpecificationLoader() {
         return getInstance().specificationLoader();
     }
 
-    public static void setConfiguration(Configuration configuration) {
-        getInstance().configuration(configuration);
+    public static void reset() {
+        singleton = null;
     }
 
-    public static void setObjectManager(NakedObjectManager objectManager) {
-        getInstance().objectManager(objectManager);
-    }
-
-    public static void setPojoAdapterFactory(PojoAdapterFactory adapterFactory) {
-        getInstance().pojoAdapterFactory(adapterFactory);
-    }
-
-    public static void setSession(Session session) {
-        getInstance().currentSession(session);
-    }
-
-    public static void setSpecificationLoader(NakedObjectSpecificationLoader specificationLoader) {
-        getInstance().specificationLoader(specificationLoader);
+    public static void shutdown() {
+        getObjectManager().shutdown();
+        getPojoAdapterFactory().shutdown();
+        getSpecificationLoader().shutdown();
+        getInstance().clearReferences();
     }
 
     protected NakedObjects() {
@@ -64,29 +62,33 @@ public abstract class NakedObjects {
         singleton = this;
     }
 
-    protected abstract Configuration configuration();
+    private void clearReferences() {
+        setObjectManager(null);
+        setPojoAdapterFactory(null);
+        setSpecificationLoader(null);
+        setConfiguration(null);
+        setSession(null);
+    }
 
-    protected abstract void configuration(Configuration configuration);
+    protected abstract Configuration configuration();
 
     protected abstract Session currentSession();
 
     protected abstract NakedObjectManager objectManager();
 
-    protected abstract void objectManager(NakedObjectManager objectManager);
-
     protected abstract PojoAdapterFactory pojoAdapterFactory();
 
-    protected abstract void pojoAdapterFactory(PojoAdapterFactory adapterFactory);
+    protected abstract void setConfiguration(Configuration configuration);
 
-    protected abstract void currentSession(Session session);
+    protected abstract void setObjectManager(NakedObjectManager objectManager);
+
+    protected abstract void setPojoAdapterFactory(PojoAdapterFactory factory);
+
+    protected abstract void setSession(Session session);
+
+    protected abstract void setSpecificationLoader(NakedObjectSpecificationLoader loader);
 
     protected abstract NakedObjectSpecificationLoader specificationLoader();
-
-    protected abstract void specificationLoader(NakedObjectSpecificationLoader specificationLoader);
-
-    public static void reset() {
-        singleton = null;
-    }
 }
 
 /*

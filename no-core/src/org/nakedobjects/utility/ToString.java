@@ -9,8 +9,8 @@ public final class ToString {
         string = new StringBuffer();
         String name = forObject.getClass().getName();
         string.append(name.substring(name.lastIndexOf('.') + 1));
-    //    string.append("@");
-     //   string.append(Integer.toHexString(forObject.hashCode()));
+        string.append("@");
+        string.append(Integer.toHexString(forObject.hashCode()));
         string.append(" [");
     }
 
@@ -19,7 +19,7 @@ public final class ToString {
         return string.toString();
     }
 
-    public void append(final String name, final Object object) {
+    public ToString append(final String name, final Object object) {
         if(addComma) {
             string.append(',');
         } else {
@@ -28,10 +28,14 @@ public final class ToString {
         string.append(name);
         string.append('=');
         string.append(object);
+        
+        return this;
     }
 
-    public  void append(final String text) {
+    public  ToString append(final String text) {
         string.append(text);
+        
+        return this;
     }
 }
 

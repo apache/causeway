@@ -1,4 +1,4 @@
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.utility.InfoDebugFrame;
@@ -22,8 +22,10 @@ public class TestViews {
     public static void main(String[] args) {
         BasicConfigurator.configure();
         
+        NakedObjectsClient nakedObjects = new NakedObjectsClient();
+        
         Configuration configuration = new Configuration(new ConfigurationPropertiesLoader("nakedobjects.properties", false));
-        NakedObjects.setConfiguration(configuration);
+        nakedObjects.setConfiguration(configuration);
      
         Viewer viewer = new Viewer();
         ViewerFrame frame = new ViewerFrame();

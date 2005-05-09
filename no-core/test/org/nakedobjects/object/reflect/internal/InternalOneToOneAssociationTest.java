@@ -1,7 +1,6 @@
 package org.nakedobjects.object.reflect.internal;
 
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
@@ -27,6 +26,7 @@ public class InternalOneToOneAssociationTest extends TestCase {
 	private MockNakedObject associate;
     private MockNakedObjectSpecificationLoader loader;
     private DummyNakedObjectSpecification spec;
+    private NakedObjectsClient nakedObjects;
     
     public static void main(String[] args) {
         junit.textui.TestRunner.run(new TestSuite(InternalOneToOneAssociationTest.class));
@@ -40,7 +40,8 @@ public class InternalOneToOneAssociationTest extends TestCase {
 
         spec = new DummyNakedObjectSpecification();
         loader.addSpec(spec);
-        new NakedObjectsClient().setSpecificationLoader(loader);
+        nakedObjects = new NakedObjectsClient();
+        nakedObjects.setSpecificationLoader(loader);
 
         objectWithOneToOneAssoications = new InternalObjectWithOneToOneAssociations();
         nakedObject = new MockNakedObject();
@@ -89,7 +90,7 @@ public class InternalOneToOneAssociationTest extends TestCase {
         MockPojoAdapterFactory pojoAdapterFactory = new MockPojoAdapterFactory();
         DummyNakedObject pojoFromAdapterFactory = new DummyNakedObject();
         pojoAdapterFactory.setupAdapter(pojoFromAdapterFactory);
-        NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+        nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
         
     	objectWithOneToOneAssoications.setReferencedObject(referencedObject);
     	

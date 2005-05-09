@@ -1,5 +1,7 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.utility.ToString;
+
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -41,6 +43,10 @@ public class DirtyObjectSetImpl implements DirtyObjectSet {
         for (int i = 0; i < instances.length; i++) {
             remove(instances[i]);
         }
+    }
+    
+    public String toString() {
+        return new ToString(this).append("changes", changes).toString();
     }
 }
 

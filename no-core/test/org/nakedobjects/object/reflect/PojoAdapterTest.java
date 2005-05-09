@@ -1,6 +1,5 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
@@ -13,6 +12,7 @@ import org.apache.log4j.Logger;
 public class PojoAdapterTest extends TestCase {
 
     private PojoAdapterFactoryImpl pojoAdapterFactory;
+    private NakedObjectsClient nakedObjects;
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(PojoAdapterTest.class);
@@ -20,7 +20,7 @@ public class PojoAdapterTest extends TestCase {
 
     protected void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
-        new NakedObjectsClient();
+        nakedObjects = new NakedObjectsClient();
 		pojoAdapterFactory = new PojoAdapterFactoryImpl();
 		pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
         pojoAdapterFactory.setReflectorFactory(new DummyReflectorFactory());
@@ -29,7 +29,7 @@ public class PojoAdapterTest extends TestCase {
     public void testTitleStringWhereSpecificationProvidesTitleFromObject() {
         MockNakedObjectSpecificationLoader specLoader = new MockNakedObjectSpecificationLoader();
         specLoader.addSpec(new NakedObjectSpecificationProvidingTitle());
-        NakedObjects.setSpecificationLoader(specLoader);
+        nakedObjects.setSpecificationLoader(specLoader);
         NakedObject pa = pojoAdapterFactory.createNOAdapter(new TestPojo());
         pa.getSpecification();
         pa.setResolved();
@@ -39,7 +39,7 @@ public class PojoAdapterTest extends TestCase {
     public void testTitleFromUnresolvedObject() {
         MockNakedObjectSpecificationLoader specLoader = new MockNakedObjectSpecificationLoader();
         specLoader.addSpec(new NakedObjectSpecificationProvidingNullTitle());
-        NakedObjects.setSpecificationLoader(specLoader);
+        nakedObjects.setSpecificationLoader(specLoader);
         NakedObject pa = pojoAdapterFactory.createNOAdapter(new TestPojo());
         pa.getSpecification();
         assertFalse(pa.isResolved());
@@ -49,7 +49,7 @@ public class PojoAdapterTest extends TestCase {
     public void testTitleStringWhereSpecificationReturnNullAsTitle() {
         MockNakedObjectSpecificationLoader specLoader = new MockNakedObjectSpecificationLoader();
         specLoader.addSpec(new NakedObjectSpecificationProvidingNullTitle());
-        NakedObjects.setSpecificationLoader(specLoader);
+        nakedObjects.setSpecificationLoader(specLoader);
         NakedObject pa = pojoAdapterFactory.createNOAdapter(new TestPojo());
         pa.getSpecification();
         pa.setResolved();

@@ -1,6 +1,5 @@
 package org.nakedobjects.example.exploration;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.container.configuration.Configuration;
@@ -59,8 +58,8 @@ public class JavaExploration {
             name = name.substring(name.lastIndexOf('.') + 1);
 
             Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(DEFAULT_CONFIG, false));
-            new NakedObjectsClient();
-            NakedObjects.setConfiguration(configuration);
+            NakedObjectsClient nakedObjects = new NakedObjectsClient();
+            nakedObjects.setConfiguration(configuration);
             ConfigurationFactory.setConfiguration(configuration);
             if (configuration.getString(SHOW_EXPLORATION_OPTIONS) == null) {
                 configuration.add(SHOW_EXPLORATION_OPTIONS, "yes");
@@ -96,11 +95,11 @@ public class JavaExploration {
             objectManager.setObjectFactory(objectFactory);
             objectManager.setOidGenerator(oidGenerator);
 
-            NakedObjects.setObjectManager(objectManager);
+            nakedObjects.setObjectManager(objectManager);
 
             NakedObjectSpecificationLoaderImpl specificationLoader = new NakedObjectSpecificationLoaderImpl();
 
-            NakedObjects.setSpecificationLoader(specificationLoader);
+            nakedObjects.setSpecificationLoader(specificationLoader);
             
             LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
 
@@ -109,14 +108,14 @@ public class JavaExploration {
             PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
             pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
             pojoAdapterFactory.setReflectorFactory(reflectorFactory);
-            NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+            nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
             
             NakedObjectSpecificationImpl.setReflectionFactory(reflectionFactory);
             specificationLoader.setReflectorFactory(reflectorFactory);
 
             reflectorFactory.setObjectFactory(objectFactory);
 
-            NakedObjects.setSession(new SimpleSession());
+            nakedObjects.setSession(new SimpleSession());
 
 
             try {

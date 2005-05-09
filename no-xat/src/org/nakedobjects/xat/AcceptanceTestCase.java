@@ -204,14 +204,7 @@ public abstract class AcceptanceTestCase extends TestCase {
         documentor.stop();
 
         LOG.info("tear down " + getName());
-        NakedObjects.getObjectManager().shutdown();
-        NakedObjects.setObjectManager(null);
-        NakedObjects.getPojoAdapterFactory().shutdown();
-        NakedObjects.setPojoAdapterFactory(null);
-        NakedObjects.getSpecificationLoader().shutdown();
-        NakedObjects.setSpecificationLoader(null);
-        NakedObjects.setConfiguration(null);
-        NakedObjects.setSession(null);
+        NakedObjects.shutdown();
         
         classes.clear();
         classes = null;

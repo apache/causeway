@@ -24,32 +24,16 @@ public class NakedObjectsClient extends NakedObjects {
         return configuration;
     }
 
-    protected void configuration(Configuration configuration) {
-        this.configuration = configuration;
-    }
-
     protected Session currentSession() {
         return session;
-    }
-
-    protected void currentSession(Session session) {
-        this.session = session;
     }
 
     protected NakedObjectManager objectManager() {
         return objectManager;
     }
 
-    protected void objectManager(NakedObjectManager objectManager) {
-        this.objectManager = objectManager;
-    }
-
     protected PojoAdapterFactory pojoAdapterFactory() {
         return adapterFactory;
-    }
-
-    protected void pojoAdapterFactory(PojoAdapterFactory adapterFactory) {
-        this.adapterFactory = adapterFactory;
     }
 
     /**
@@ -97,12 +81,28 @@ public class NakedObjectsClient extends NakedObjects {
         setSpecificationLoader(specificationLoader);
     }
 
-    protected NakedObjectSpecificationLoader specificationLoader() {
-        return specificationLoader;
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
     }
 
-    protected void specificationLoader(NakedObjectSpecificationLoader specificationLoader) {
+    public void setObjectManager(NakedObjectManager objectManager) {
+        this.objectManager = objectManager;
+    }
+
+    public void setPojoAdapterFactory(PojoAdapterFactory adapterFactory) {
+        this.adapterFactory = adapterFactory;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+    public void setSpecificationLoader(NakedObjectSpecificationLoader specificationLoader) {
         this.specificationLoader = specificationLoader;
+    }
+
+    protected NakedObjectSpecificationLoader specificationLoader() {
+        return specificationLoader;
     }
 
 }

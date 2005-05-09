@@ -24,6 +24,7 @@ import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.StartupException;
+import org.nakedobjects.utility.ToString;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -514,7 +515,11 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     public String toString() {
-        return "LocalObjectManager [objectStore=" + objectStore.name() + ",oidGenerator=" + oidGenerator.name() + "]";
+        ToString toString = new ToString(this);
+        toString.append("objectStore", objectStore.name());
+        toString.append("oidGenerator", oidGenerator.name());
+        return toString.toString();
+        //return "LocalObjectManager [objectStore=" + objectStore.name() + ",oidGenerator=" + oidGenerator.name() + "]";
     }
 }
 
