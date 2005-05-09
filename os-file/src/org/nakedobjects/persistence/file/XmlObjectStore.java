@@ -31,10 +31,47 @@ public class XmlObjectStore implements NakedObjectStore {
     private static final Logger LOG = Logger.getLogger(XmlObjectStore.class);
     private DataManager dataManager;
 
-    public void abortTransaction() {}
+    public void abortTransaction() {
+        LOG.debug("transaction aborted");
+    }
 
     private NakedObjectSpecification classFor(String type) {
         return NakedObjects.getSpecificationLoader().loadSpecification(type);
+    }
+
+    public CreateObjectCommand createCreateObjectCommand(final NakedObject object) {
+        return new CreateObjectCommand() {
+            public void execute() throws ObjectStoreException {
+                LOG.debug("  create object " + object);
+                Data data = createObjectData(object, true);
+                dataManager.insert(data);
+            }
+
+            public NakedObject onObject() {
+                return object;
+            }
+
+            public String toString() {
+                return "CreateObjectCommand [object=" + object + "]";
+            }
+        };
+    }
+
+    public DestroyObjectCommand createDestroyObjectCommand(final NakedObject object) {
+        return new DestroyObjectCommand() {
+            public void execute() throws ObjectStoreException {
+                LOG.debug("  destroy object " + object);
+                dataManager.remove((SerialOid) object.getOid());
+            }
+
+            public NakedObject onObject() {
+                return object;
+            }
+
+            public String toString() {
+                return "DestroyObjectCommand [object=" + object + "]";
+            }
+        };
     }
 
     private ObjectData createObjectData(NakedObject object, boolean ensurePersistent) {
@@ -67,6 +104,32 @@ public class XmlObjectStore implements NakedObjectStore {
         return data;
     }
 
+    public SaveObjectCommand createSaveObjectCommand(final NakedObject object) {
+        return new SaveObjectCommand() {
+            public void execute() throws ObjectStoreException {
+                LOG.debug("  save object " + object);
+
+                if (object instanceof InternalCollection) {
+                    NakedObject parent = ((InternalCollection) object).parent();
+                    Data data = createObjectData(parent, true);
+                    dataManager.save(data);
+                } else {
+                    Data data = createObjectData(object, true);
+                    dataManager.save(data);
+                }
+            }
+
+            public NakedObject onObject() {
+                return object;
+            }
+
+            public String toString() {
+                return "SaveObjectCommand [object=" + object + "]";
+            }
+
+        };
+    }
+
     private Object createSkeletalObject(Oid oid, String type) {
         if (loadedObjects().isLoaded(oid)) {
             return loadedObjects().getLoadedObject(oid);
@@ -80,11 +143,9 @@ public class XmlObjectStore implements NakedObjectStore {
         }
     }
 
-    private PojoAdapterFactory loadedObjects() {
-        return NakedObjects.getPojoAdapterFactory();
+    public void endTransaction() {
+        LOG.debug("end transaction");
     }
-
-    public void endTransaction() {}
 
     public String getDebugData() {
         DebugString debug = new DebugString();
@@ -97,8 +158,7 @@ public class XmlObjectStore implements NakedObjectStore {
         return "XML Object Store";
     }
 
-    public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectStoreException,
-            UnsupportedFindException {
+    public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectStoreException, UnsupportedFindException {
         LOG.debug("getInstances of " + criteria.getSpecification() + " where " + criteria);
         ObjectData patternData = new ObjectData(criteria.getSpecification(), null);
         NakedObject[] instances = getInstances(patternData, criteria);
@@ -112,11 +172,11 @@ public class XmlObjectStore implements NakedObjectStore {
         return instances;
     }
 
-    public NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses) throws ObjectStoreException {
-        LOG.debug("getInstances of " + cls);
+    public NakedObject[] getInstances(NakedObjectSpecification specification, boolean includeSubclasses) throws ObjectStoreException {
+        LOG.debug("getInstances of " + specification);
         if (includeSubclasses) {
-            NakedObject[] instances = getInstances(cls);
-            NakedObjectSpecification[] subclasses = cls.subclasses();
+            NakedObject[] instances = getInstances(specification);
+            NakedObjectSpecification[] subclasses = specification.subclasses();
             for (int i = 0; i < subclasses.length; i++) {
                 NakedObject[] subclassInstances = getInstances(subclasses[i], true);
                 if (subclassInstances != null) {
@@ -128,7 +188,7 @@ public class XmlObjectStore implements NakedObjectStore {
             }
             return instances;
         } else {
-            return getInstances(cls);
+            return getInstances(specification);
         }
     }
 
@@ -137,7 +197,7 @@ public class XmlObjectStore implements NakedObjectStore {
         NakedObject[] instances = new NakedObject[data.size()];
         int count = 0;
 
-         for (int i = 0; i < data.size(); i++) {
+        for (int i = 0; i < data.size(); i++) {
             ObjectData instanceData = data.element(i);
             LOG.debug("instance data " + instanceData);
 
@@ -166,19 +226,13 @@ public class XmlObjectStore implements NakedObjectStore {
     }
 
     public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
-        /*
-         * NakedObject[] instances = getInstances(NAKED_CLASS_SPEC, true); for
-         * (int i = 0, len = instances.length; i < len; i++) { NakedClass cls =
-         * (NakedClass) instances[i]; if(cls.getName().equals(name)) { return
-         * cls; } }
-         */
-        throw new ObjectNotFoundException();
+         throw new ObjectNotFoundException();
     }
 
     public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectStoreException {
         LOG.debug("getObject " + oid);
         Data data = dataManager.loadData((SerialOid) oid);
-        LOG.debug("Data read " + data);
+        LOG.debug("  data read " + data);
 
         NakedObject object;
 
@@ -222,8 +276,8 @@ public class XmlObjectStore implements NakedObjectStore {
                     for (int j = 0; j < refs.size(); j++) {
                         try {
                             if (loadedObjects().isLoaded(refs.elementAt(j))) {
-                                object.initAssociation((NakedObjectAssociation) field, loadedObjects().getLoadedObject(refs
-                                        .elementAt(j)));
+                                object.initAssociation((NakedObjectAssociation) field, loadedObjects().getLoadedObject(
+                                        refs.elementAt(j)));
                             } else {
                                 object.initAssociation((NakedObjectAssociation) field, getObject(refs.elementAt(j), null));
                             }
@@ -267,6 +321,10 @@ public class XmlObjectStore implements NakedObjectStore {
         }
     }
 
+    private PojoAdapterFactory loadedObjects() {
+        return NakedObjects.getPojoAdapterFactory();
+    }
+
     public String name() {
         return "XML";
     }
@@ -295,20 +353,25 @@ public class XmlObjectStore implements NakedObjectStore {
         return object;
     }
 
+    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectStoreException {}
+
     public void resolveImmediately(NakedObject object) throws ObjectStoreException {
         ObjectData data = (ObjectData) dataManager.loadData((SerialOid) object.getOid());
         if (data == null) {
             LOG.warn("Not able to read in data - during resolve - for " + object);
         } else {
             initObject(object, data);
-            
+
         }
     }
 
-    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectStoreException {}
-    
-    public void setDataManager(DataManager dataManager) {
-        this.dataManager = dataManager;
+    public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException {
+        LOG.info("start execution of transaction");
+        for (int i = 0; i < commands.length; i++) {
+            PersistenceCommand command = commands[i];
+            command.execute();
+        }
+        LOG.info("end execution");
     }
 
     /**
@@ -320,75 +383,14 @@ public class XmlObjectStore implements NakedObjectStore {
         this.dataManager = dataManager;
     }
 
+    public void setDataManager(DataManager dataManager) {
+        this.dataManager = dataManager;
+    }
+
     public void shutdown() throws ObjectStoreException {}
 
-    public void startTransaction() {}
-
-    public CreateObjectCommand createCreateObjectCommand(final NakedObject object) {
-        return new CreateObjectCommand() {
-            public void execute() throws ObjectStoreException {
-                LOG.debug("createObject " + object);
-                Data data = createObjectData(object, true);
-                dataManager.insert(data);
-            }
-            
-            public NakedObject onObject() {
-                return object;
-            }
-            
-            public String toString() {
-                return "CreateObjectCommand [object=" + object + "]";
-            }
-       };
-    }
-
-    public DestroyObjectCommand createDestroyObjectCommand(final NakedObject object) {
-        return new DestroyObjectCommand() {
-            public void execute() throws ObjectStoreException {
-                dataManager.remove((SerialOid) object.getOid());
-            }
-                        
-            public NakedObject onObject() {
-                return object;
-            }
-
-            public String toString() {
-                return "DestroyObjectCommand [object=" + object + "]";
-            }
-        };
-    }
-
-    public SaveObjectCommand createSaveObjectCommand(final NakedObject object) {
-        return new SaveObjectCommand() {
-            public void execute() throws ObjectStoreException {
-                LOG.debug("Save object " + object);
-
-                if (object instanceof InternalCollection) {
-                    NakedObject parent = ((InternalCollection) object).parent();
-                    Data data = createObjectData(parent, true);
-                    dataManager.save(data);
-                } else {
-                    Data data = createObjectData(object, true);
-                    dataManager.save(data);
-                }
-            }
-            
-            public NakedObject onObject() {
-                return object;
-            }
-
-            public String toString() {
-                return "SaveObjectCommand [object=" + object + "]";
-            }
-
-        };
-    }
-
-    public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException {
-        for (int i = 0; i < commands.length; i++) {
-            PersistenceCommand command = commands[i];
-            command.execute();
-        }
+    public void startTransaction() {
+        LOG.debug("start transaction");    
     }
 }
 
