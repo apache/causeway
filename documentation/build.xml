@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE project [
+	<!ENTITY properties SYSTEM "file:../build-templates/properties.xml">
+<!ENTITY common SYSTEM "file:../build-templates/common.xml">
+]>
+
+<project name="Naked Objects framework - documentation"
+         default="html"
+         basedir=".">
+
+	<property name="dest.dir" value="build"/>
+
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+
+    <target name="html">
+        <mkdir dir="${dest.dir}"/>
+    
+        <xslt basedir="src" destdir="${dest.dir}"
+           extension=".html" style="html.xsl" includes="*.xml" excludes="build.xml">
+        </xslt>
+        
+        <copy todir="${dest.dir}">
+            <fileset file="src/*.css"/>
+            
+            <fileset dir="src">
+                <include name="**/*.png"/>
+            </fileset>
+        </copy>
+    </target>
+
+</project>

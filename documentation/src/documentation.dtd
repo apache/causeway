@@ -1,0 +1,179 @@
+<!-- existing entities -->
+<!ENTITY lt "">
+<!ENTITY gt "">
+<!ENTITY amp "">
+
+
+<!-- entities -->
+<!ENTITY % text "#PCDATA|em|ital|rephrase">
+
+<!ENTITY % code "class|variable|method|code">
+
+<!ENTITY % ui "object|field|menu">
+
+<!ENTITY % para-elements "%text;|%code;|%ui;|path|property|
+   note|anchor|comment|weblink|ref|see">
+
+<!ENTITY  % section-elements "subheading|para|list|program-listing|
+   command-listing|property-listing|inline-graphic|figure|panel|
+   comment|index|anchor|biblio">
+
+
+<!-- sections - each document is split into sections, each section can
+contain other sections -->
+<!ELEMENT section (title, comment?,index*,(intro|para),(section|(%section-elements;))*)>
+<!ATTLIST section
+        label CDATA #IMPLIED
+        numbered (on|off) "on">
+
+<!ELEMENT title (%text;)*>
+
+
+<!-- main textual elements
+   intro - introductory text
+   subheading - 
+   para - standard paragraph -->
+
+<!ELEMENT intro (para|index|comment)*>
+
+<!ELEMENT subheading (%text;)*>
+
+<!ELEMENT para (%para-elements;)*>
+
+<!ELEMENT list (para|item|comment|index|el)*>
+<!ELEMENT el (#PCDATA)*>
+<!ELEMENT item (para|index|program-listing|command-listing|screenshot|note)*>
+
+<!ELEMENT comment ANY> <!-- authors notes -->
+
+<!ELEMENT note (%para-elements;)*> <!-- footnotes -->
+
+<!ELEMENT program-listing (%text;|listing-note)*>
+
+<!ELEMENT listing-note (%para-elements;)*> 
+
+<!ELEMENT command-listing (%text;)*>
+
+<!ELEMENT screenshot (%text;)*>
+
+<!ELEMENT property-listing (%text;)*>
+
+<!ELEMENT biblio (%para-elements;)*> <!-- bibliographic reference -->
+<!ATTLIST biblio
+   name CDATA #REQUIRED
+   year CDATA #REQUIRED
+   url CDATA #IMPLIED>
+
+
+
+<!-- graphics/images 
+   - a figure is a standalone labelled images
+   - an inline graphic should be placed in-situ (without any label) -->
+<!ELEMENT figure (description?,(caption|%section-elements;)*)>
+<!ATTLIST figure
+	width CDATA  "100%"
+   	wrap (yes|no) "no"
+	side (left|centre|right|inside|outside) "right"	
+        fileref CDATA #REQUIRED
+        label CDATA #IMPLIED>
+
+<!ELEMENT description (%text;)*>
+
+<!ELEMENT inline-graphic (description?,(annotation)*)>
+<!ATTLIST inline-graphic
+   width CDATA  "80%"
+   	wrap (yes|no) "no"
+	side (left|centre|right|inside|outside) "centre"
+        fileref CDATA #REQUIRED>
+	
+<!ELEMENT annotation (para)*>
+<!ATTLIST annotation
+	x CDATA #REQUIRED
+	y CDATA #REQUIRED>
+	
+
+<!-- panel
+   - a standalone labelled section of text and image -->
+<!ELEMENT panel (caption,(subheading|para|list|program-listing|
+        command-listing|property-listing|inline-graphic|comment|index)*)>
+<!ATTLIST panel
+        label CDATA #IMPLIED>
+
+<!ELEMENT caption (%para-elements;)*>
+
+
+
+
+<!-- subelements - these are all found within paras, listings etc. -->
+<!ELEMENT em (#PCDATA)>  <!-- emphasis -->
+<!ELEMENT ital (#PCDATA)>  <!-- italics -->
+<!ELEMENT rephrase (#PCDATA)>  <!-- rephrase -->
+
+<!-- class definitions -->
+<!ELEMENT code (#PCDATA)>  <!-- Java code -->
+
+<!ELEMENT class (%text;)*>
+
+<!ELEMENT method (%text;)*>
+
+<!ELEMENT variable (%text;)*>
+
+<!-- visible aspects -->
+<!ELEMENT object (#PCDATA)>
+
+<!ELEMENT menu (#PCDATA)>
+
+<!ELEMENT field (#PCDATA)>
+
+<!-- other programming elements - filepaths and property entries -->
+<!ELEMENT path (%text;)*>
+
+<!ELEMENT property (%text;)*>
+
+
+<!-- links -->
+<!-- internal - to other parts of the document -->
+<!ELEMENT see (%para-elements;)*>
+<!ATTLIST see
+   file CDATA #IMPLIED
+   label CDATA #REQUIRED
+   comment CDATA #IMPLIED>
+
+<!ELEMENT anchor EMPTY>
+<!ATTLIST anchor
+        label CDATA #REQUIRED>
+
+<!-- external - to web sites -->
+<!ELEMENT weblink (#PCDATA)>
+<!ATTLIST weblink
+        address CDATA #REQUIRED>
+
+<!-- bibliographic reference -->
+<!ELEMENT ref EMPTY>
+<!ATTLIST ref
+        name CDATA #REQUIRED
+        year CDATA #REQUIRED>
+
+<!-- index references -->
+<!ELEMENT index (term, usage?)>
+
+<!ELEMENT term (%para-elements;)*>
+
+<!ELEMENT usage (%para-elements;)*>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
