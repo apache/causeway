@@ -47,8 +47,9 @@ public class NakedObjectSpecificationLoaderImpl extends NakedObjectSpecification
             throw new NullPointerException("No class name specified");
         }
 
-        if (classes.containsKey(className)) {
-            return (NakedObjectSpecification) classes.get(className);
+		NakedObjectSpecification nos = (NakedObjectSpecification) classes.get(className);
+        if (nos != null) {
+            return nos;
         } else {
             Reflector reflector;
             try {
@@ -65,7 +66,7 @@ public class NakedObjectSpecificationLoaderImpl extends NakedObjectSpecification
                 spec.reflect(className, reflector);
                 return spec;
             } catch (ClassNotFoundException e) {
-                LOG.debug("non class " + className);
+                 LOG.debug("non class " + className);
                 NakedObjectSpecificationImpl spec = new NakedObjectSpecificationImpl();
                 spec.nonReflect(className);
                 classes.put(className, spec);

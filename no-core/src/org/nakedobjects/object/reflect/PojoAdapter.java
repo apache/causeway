@@ -29,19 +29,32 @@ public class PojoAdapter extends AbstractNakedObject {
         association.clearValue(this);
     }
 
-    public boolean equals(Object obj) {
-        if (obj == this) {
+    public boolean equals(Object other) {
+        if (other == this) {
             return true;
         }
 
-        if (obj instanceof PojoAdapter) {
-            PojoAdapter object = (PojoAdapter) obj;
-            return object.getObject().equals(getObject());
-        }
+        if (other instanceof PojoAdapter) {
+			// we don't delegate to equals(PojoAdapter) because we
+			// don't want to do the identity test again.
+			PojoAdapter otherPojoAdapter = (PojoAdapter)other;
+			return otherPojoAdapter.pojo == pojo; // otherPojoAdapter.pojo.equals(pojo);
+		}
         return false;
     }
 
-    public Naked execute(Action action, Naked[] parameters) {
+	/**
+	 * Overloaded to allow compiler to link directly if we know the compile-time type.
+	 * (possible performance improvement - called 166,000 times in normal ref data fixture.
+	 */
+	public boolean equals(PojoAdapter otherPojoAdapter) {
+		if (otherPojoAdapter == this) {
+			return true;
+		}
+		return otherPojoAdapter.pojo == pojo; // otherPojoAdapter.pojo.equals(pojo);
+	}
+
+	public Naked execute(Action action, Naked[] parameters) {
         Naked result = action.execute(this, parameters);
         return result;
     }
@@ -129,6 +142,10 @@ public class PojoAdapter extends AbstractNakedObject {
         field.setValue(this, object);
     }
 
+	/**
+	 * Introduced during performance profiling; PojoAdapter#titleString often called.
+	 */
+	private String defaultTitle;
     /**
      * Returns the title from the underlying business object. If the object has
      * not yet been resolved the specification will be asked for a unresolved
@@ -144,14 +161,21 @@ public class PojoAdapter extends AbstractNakedObject {
             title = specification.unresolvedTitle(this);
         }
         if (title == null) {
-            title = "A " + specification.getSingularName().toLowerCase();
+			if (defaultTitle == null) {
+				defaultTitle = "A " + specification.getSingularName().toLowerCase();
+			}
+			title = defaultTitle;
         }
         return title;
     }
 
     public String toString() {
-        return "POJO " + super.toString() +" " + (specification == null ? "" : titleString());
-    }
+		// speculating on performance.  
+		// For MemoryTestCase, fixture set up went from 1.502 secs to 1.291 secs.
+
+        // return "POJO " + super.toString() +" " + specification == null ? "" : titleString();
+		return "POJO " + super.toString(); // +" " + specification == null ? "" : titleString();
+	}
 
     protected void finalize() throws Throwable {
         super.finalize();

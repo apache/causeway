@@ -199,8 +199,12 @@ public abstract class AbstractNakedObject implements NakedObject {
         }
     }
 
-    public String toString() {
-        StringBuffer s = new StringBuffer();
+	private StringBuffer toStringBuffer = new StringBuffer();
+	/**
+	 * This is no longer thread-safe (performance tuning), hence synchronized.
+	 */
+    public synchronized String toString() {
+        StringBuffer s = toStringBuffer;
 
         // datatype
         s.append(specification == null ? getClass().getName() : specification.getShortName());
@@ -233,7 +237,9 @@ public abstract class AbstractNakedObject implements NakedObject {
 
         s.append("  " + Long.toHexString(super.hashCode()).toUpperCase());
 
-        return s.toString();
+        String asString = s.toString();
+		s.setLength(0); // clears
+		return asString;
     }
 
 }

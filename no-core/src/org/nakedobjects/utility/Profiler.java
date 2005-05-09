@@ -42,11 +42,12 @@ public class Profiler {
             id = nextId++;
         }
         Thread t = Thread.currentThread();
-        if (threads.containsKey(t)) {
-            thread = (String) threads.get(t);
+		String thread = (String) threads.get(t);
+        if (thread != null) {
+            this.thread = thread;
         } else {
-            thread = "t" + nextThread++;
-            threads.put(t, thread);
+            this.thread = "t" + nextThread++;
+            threads.put(t, this.thread);
         }
         memory = memory();
     }

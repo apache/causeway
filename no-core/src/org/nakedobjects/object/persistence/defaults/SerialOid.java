@@ -5,32 +5,51 @@ import org.nakedobjects.object.persistence.Oid;
 
 
 public class SerialOid implements Oid {
-    private final long serialNo;
    
+	/**
+	 * For performance, we cache asString and hashCode.
+	 */
     public SerialOid(long serialNo) {
         this.serialNo = serialNo;
+		this.asString = "OID#" + Long.toHexString(serialNo).toUpperCase();
+		this.hashCode = 37 * 17 + (int) (serialNo ^ (serialNo >>> 32));
     }
     
     public boolean equals(Object obj) {
         if (obj == this) {
             return true;
         }
-        if (obj instanceof SerialOid) {
-            return ((SerialOid) obj).serialNo == serialNo;
+        if (obj instanceof SerialOid)  {
+			// we don't delegate to equals(PojoAdapter) because we
+			// don't want to do the identity test again.
+			return ((SerialOid) obj).serialNo == serialNo;
         }
         return false;
     }
+	/**
+	 * Overloaded to allow compiler to link directly if we know the compile-time type.
+	 * (possible performance improvement - called 166,000 times in normal ref data fixture.
+	 */
+	public boolean equals(SerialOid otherOid) {
+		if (otherOid == this) {
+			return true;
+		}
+		return otherOid.serialNo == serialNo;
+	}
 
-     public long getSerialNo() {
+	private final long serialNo;
+	public long getSerialNo() {
         return serialNo;
     }
 
+	private final int hashCode;
     public int hashCode() {
-        return 37 * 17 + (int) (serialNo ^ (serialNo >>> 32));
+        return hashCode;
     }
 
+	private final String asString;
     public String toString() {
-        return "OID#" + Long.toHexString(serialNo).toUpperCase();
+        return asString;
     }
 }
 
