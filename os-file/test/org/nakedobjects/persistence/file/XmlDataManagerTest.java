@@ -132,9 +132,7 @@ public class XmlDataManagerTest extends TestCase {
 		assertEquals(data.getClassName(), read.getClassName());
 		
 		ReferenceVector c = read.elements("Members");
-		assertNotNull(c);
-//		assertEquals(coid, c.getOid());
-		assertEquals(0, c.size());
+		assertNull(c);
 	}
 
 	public void testInsertObjectWithOneToManyAssociations() throws ObjectStoreException {
