@@ -27,6 +27,7 @@ public class DirtyObjectSetImpl implements DirtyObjectSet {
     }
 
     public void shutdown() {
+        LOG.info("  shutting down " + this);
         changes.removeAllElements();
         changes = null;
     }

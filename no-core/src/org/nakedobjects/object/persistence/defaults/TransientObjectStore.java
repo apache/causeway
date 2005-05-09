@@ -379,12 +379,12 @@ public class TransientObjectStore implements NakedObjectStore {
     }
 
     public void shutdown() throws ObjectStoreException {
+        LOG.info("shutdown " + this);
         for (Enumeration e = instances.elements(); e.hasMoreElements();) {
             TransientObjectStoreInstances inst = (TransientObjectStoreInstances) e.nextElement();
             inst.shutdown();
         }
         instances.clear();
-        LOG.info("shutdown");
     }
 
     public void startTransaction() {

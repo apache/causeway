@@ -387,7 +387,9 @@ public class XmlObjectStore implements NakedObjectStore {
         this.dataManager = dataManager;
     }
 
-    public void shutdown() throws ObjectStoreException {}
+    public void shutdown() throws ObjectStoreException {
+        LOG.info("shutdown " + this);        
+    }
 
     public void startTransaction() {
         LOG.debug("start transaction");    

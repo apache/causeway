@@ -486,6 +486,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
     public void shutdown() {
         try {
+            LOG.info("shutting down " + this);
             if (transaction != null) {
     			abortTransaction();
     		}
