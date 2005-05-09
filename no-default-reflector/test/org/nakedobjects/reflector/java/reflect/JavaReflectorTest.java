@@ -1,6 +1,5 @@
 package org.nakedobjects.reflector.java.reflect;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
@@ -36,7 +35,7 @@ public class JavaReflectorTest extends TestCase {
         
        	ConfigurationFactory.setConfiguration(new TestConfiguration());
 
-       	new NakedObjectsClient();
+       	NakedObjectsClient nakedObjects = new NakedObjectsClient();
        	
     	loader = new MockNakedObjectSpecificationLoader();     	
     	loader.addSpec(new DummyNakedObjectSpecification());
@@ -44,7 +43,7 @@ public class JavaReflectorTest extends TestCase {
     	PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
     	pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
     	pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
-		NakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+		nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
 		
     	objectFactory = new MockObjectFactory();
         reflector = new MockJavaReflector(JavaObjectForReflector.class.getName(), objectFactory);
