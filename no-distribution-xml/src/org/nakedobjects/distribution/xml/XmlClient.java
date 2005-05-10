@@ -15,7 +15,6 @@ import org.nakedobjects.distribution.xml.request.MakePersistent;
 import org.nakedobjects.distribution.xml.request.SetAssociation;
 import org.nakedobjects.distribution.xml.request.SetValue;
 import org.nakedobjects.distribution.xml.request.StartTransaction;
-import org.nakedobjects.object.NakedObjectException;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.InstancesCriteria;
