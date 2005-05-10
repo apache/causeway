@@ -393,7 +393,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
             return;
         }
         LOG.info("resolve-eagerly" + object + "/" + field);
-        collateChanges();
         objectsToBeSaved.remove(object);  // TODO is this enough or do we need to check the referenced fields?
         try {
             objectStore.resolveEagerly(object, field);
@@ -409,7 +408,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         LOG.info("resolve-immediately " + object);
         try {
             objectStore.resolveImmediately(object);
-            collateChanges();
             objectsToBeSaved.remove(object);
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
@@ -430,7 +428,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         }
     }
 
-    private void collateChanges() {
+    private synchronized void collateChanges() {
         if (checkObjectsForDirtyFlag) {
             LOG.debug("collating changed objects");
             PojoAdapterFactory factory = loadedObjects();
