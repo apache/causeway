@@ -22,6 +22,7 @@ public class SkylarkViewer {
         frame.setViewer(viewer);
         
         updateNotifier = new ViewUpdateNotifier();
+        NakedObjects.getObjectManager().addObjectChangedListener(updateNotifier);
         
         InteractionSpy spy = new InteractionSpy();
 
