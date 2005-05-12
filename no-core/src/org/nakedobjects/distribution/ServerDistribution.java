@@ -12,6 +12,8 @@ import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.InstancesCriteria;
+import org.nakedobjects.object.persistence.NakedObjectManager;
+import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.reflect.Action;
@@ -28,10 +30,11 @@ public class ServerDistribution implements ClientDistribution {
     private static final int OBJECT_DATA_DEPTH = 3;
     private DataFactory objectDataFactory;
     private ObjectFactory objectFactory;
-    private LocalObjectManager objectManager;
+
+    //   private LocalObjectManager objectManager;
 
     public ObjectData[] allInstances(Session session, String fullName, boolean includeSubclasses) {
-        TypedNakedCollection instances = objectManager.allInstances(getSpecification(fullName), includeSubclasses);
+        TypedNakedCollection instances = objectManager().allInstances(getSpecification(fullName), includeSubclasses);
         return convertToNakedCollection(instances);
     }
 
@@ -57,12 +60,16 @@ public class ServerDistribution implements ClientDistribution {
 
     public void destroyObject(Session session, Oid oid, String type) {
         NakedObject inObject = getNakedObject(session, oid, type);
-        objectManager.destroyObject(inObject);
+        objectManager().destroyObject(inObject);
     }
 
     public ObjectData executeAction(Session session, String actionType, String actionIdentifier, String[] parameterTypes,
             Oid objectOid, String objectType, Data[] parameterData) {
         NakedObject object = getNakedObject(session, objectOid, objectType);
+
+        // TEMP - TO BE REMOVED
+        ((LocalObjectManager) objectManager()).tempResetDirty();
+
         NakedObjectSpecification[] parameterSpecifiactions = new NakedObjectSpecification[parameterTypes.length];
         for (int i = 0; i < parameterSpecifiactions.length; i++) {
             parameterSpecifiactions[i] = getSpecification(parameterTypes[i]);
@@ -76,21 +83,37 @@ public class ServerDistribution implements ClientDistribution {
         }
         Naked[] parameters = new Naked[parameterData.length];
         for (int i = 0; i < parameters.length; i++) {
-            if (parameterData[i] != null) {
-                parameters[i] = DataHelper.recreate(parameterData[i]);
+            Data data = parameterData[i];
+            if (data == null) {
+                continue;
+            }
+            
+            if (data instanceof ObjectData) {
+                ObjectData objectData = (ObjectData) data;
+                if (objectData.getOid() != null) {
+                    parameters[i] = getNakedObject(session, objectData.getOid(), objectData.getType());
+                } else {
+                    parameters[i] = DataHelper.recreate(data);
+                }
+            } else if (data instanceof ValueData) {
+                ValueData valueData = (ValueData) data;
+                NakedObjects.getPojoAdapterFactory().createAdapter(valueData.getValue());
+            } else {
+                throw new NakedObjectRuntimeException();
             }
         }
+
         try {
-	        NakedObject result = (NakedObject) object.execute(action, parameters);
-	        return objectDataFactory.createObjectData(result, OBJECT_DATA_DEPTH);
-        } catch(Exception e) {
+            NakedObject result = (NakedObject) object.execute(action, parameters);
+            return objectDataFactory.createObjectData(result, OBJECT_DATA_DEPTH);
+        } catch (Exception e) {
             LOG.error(e);
             return objectDataFactory.createObjectData(null, OBJECT_DATA_DEPTH);
         }
     }
 
     public ObjectData[] findInstances(Session session, InstancesCriteria criteria) {
-        TypedNakedCollection instances = objectManager.findInstances(criteria);
+        TypedNakedCollection instances = objectManager().findInstances(criteria);
         return convertToNakedCollection(instances);
     }
 
@@ -104,7 +127,12 @@ public class ServerDistribution implements ClientDistribution {
     }
 
     private NakedObject getNakedObject(Session session, Oid oid, String fullName) {
-        NakedObject object = objectManager.getObject(oid, getSpecification(fullName));
+        NakedObject object;
+        try {
+            object = objectManager().getObject(oid, getSpecification(fullName));
+        } catch (ObjectNotFoundException e) {
+            throw new NakedObjectRuntimeException(e);
+        }
         return object;
     }
 
@@ -118,30 +146,28 @@ public class ServerDistribution implements ClientDistribution {
     }
 
     public boolean hasInstances(Session session, String fullName) {
-        return objectManager.hasInstances(getSpecification(fullName));
+        return objectManager().hasInstances(getSpecification(fullName));
     }
 
     public Oid[] makePersistent(Session session, ObjectData data) {
         NakedObject object = DataHelper.recreateObject(data);
         objectFactory.recreatedObject(object.getObject());
-        objectManager.startTransaction();
-        objectManager.makePersistent(object);
-        objectManager.endTransaction();
+        objectManager().startTransaction();
+        objectManager().makePersistent(object);
+        objectManager().endTransaction();
         return new Oid[] { object.getOid() };
     }
 
     public int numberOfInstances(Session sessionId, String fullName) {
-        return objectManager.numberOfInstances(getSpecification(fullName));
+        return objectManager().numberOfInstances(getSpecification(fullName));
     }
 
     /**
      * .NET property
      * 
-     * @property
+     * @property / public void set_LocalObjectManager(LocalObjectManager
+     *                       objectManager) { this.objectManager = objectManager; }
      */
-    public void set_LocalObjectManager(LocalObjectManager objectManager) {
-        this.objectManager = objectManager;
-    }
 
     /**
      * .NET property
@@ -182,10 +208,10 @@ public class ServerDistribution implements ClientDistribution {
         inObject.setAssociation(association, associate);
     }
 
-    public void setLocalObjectManager(LocalObjectManager objectManager) {
-        this.objectManager = objectManager;
-    }
-
+    /*
+     * public void setLocalObjectManager(LocalObjectManager objectManager) {
+     * this.objectManager = objectManager; }
+     */
     public void setObjectDataFactory(DataFactory objectDataFactory) {
         this.objectDataFactory = objectDataFactory;
     }
@@ -201,25 +227,30 @@ public class ServerDistribution implements ClientDistribution {
         if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
             throw new NakedObjectRuntimeException();
         }
-        
+
         NakedValue fieldValue = (NakedValue) inObject.getValue(association);
-        if(fieldValue != null) {
-            fieldValue.restoreFromEncodedString(((NakedValue) NakedObjects.getPojoAdapterFactory().createAdapter(value)).asEncodedString());
+        if (fieldValue != null) {
+            fieldValue.restoreFromEncodedString(((NakedValue) NakedObjects.getPojoAdapterFactory().createAdapter(value))
+                    .asEncodedString());
         }
-        
+
         inObject.setValue(association, value);
     }
 
     public void abortTransaction(Session session) {
-        objectManager.abortTransaction();
+        objectManager().abortTransaction();
     }
 
     public void endTransaction(Session session) {
-        objectManager.endTransaction();
+        objectManager().endTransaction();
     }
 
     public void startTransaction(Session session) {
-        objectManager.startTransaction();
+        objectManager().startTransaction();
+    }
+
+    private NakedObjectManager objectManager() {
+        return NakedObjects.getObjectManager();
     }
 
 }
