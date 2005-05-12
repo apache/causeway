@@ -1,5 +1,7 @@
 package org.nakedobjects.example.exploration;
 
+import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsByThread;
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.container.configuration.Configuration;
@@ -58,7 +60,7 @@ public class JavaExploration {
             name = name.substring(name.lastIndexOf('.') + 1);
 
             Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(DEFAULT_CONFIG, false));
-            NakedObjectsClient nakedObjects = new NakedObjectsClient();
+            NakedObjects nakedObjects = new  NakedObjectsClient();
             nakedObjects.setConfiguration(configuration);
             ConfigurationFactory.setConfiguration(configuration);
             if (configuration.getString(SHOW_EXPLORATION_OPTIONS) == null) {
