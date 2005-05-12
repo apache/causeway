@@ -199,6 +199,10 @@ public abstract class AbstractNakedObject implements NakedObject {
         }
     }
 
+    public void debugClearResolved() {
+        isResolved = false;
+    }
+    
 	private StringBuffer toStringBuffer = new StringBuffer();
 	/**
 	 * This is no longer thread-safe (performance tuning), hence synchronized.

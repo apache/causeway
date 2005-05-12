@@ -220,7 +220,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
      * @param oid
      *                       of the object to be retrieved
      */
-    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) {
+    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException {
         LOG.debug("getObject " + oid);
         try {
             if (NakedObjects.getPojoAdapterFactory().isLoaded(oid)) {
@@ -514,10 +514,17 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
     public String toString() {
         ToString toString = new ToString(this);
-        toString.append("objectStore", objectStore.name());
-        toString.append("oidGenerator", oidGenerator.name());
+        if(objectStore != null) {
+            toString.append("objectStore", objectStore.name());
+        }
+        if(oidGenerator != null) {
+            toString.append("oidGenerator", oidGenerator.name());
+        }
         return toString.toString();
-        //return "LocalObjectManager [objectStore=" + objectStore.name() + ",oidGenerator=" + oidGenerator.name() + "]";
+    }
+
+    public void tempResetDirty() {
+        objectsToBeSaved.dirtyObjects();
     }
 }
 
