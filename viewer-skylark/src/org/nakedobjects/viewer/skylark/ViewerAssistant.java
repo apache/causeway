@@ -5,6 +5,7 @@ import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.undo.UndoStack;
+import org.nakedobjects.utility.DebugFileDump;
 import org.nakedobjects.utility.DebugFrame;
 import org.nakedobjects.utility.InfoDebugFrame;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
@@ -165,6 +166,13 @@ public class ViewerAssistant {
                         InfoDebugFrame f = new InfoDebugFrame();
                         f.setInfo(om);
                         f.show(at.x + 50, workspace.getBounds().y + 6);                   
+                    }
+                });
+
+        options.add(MenuOptionSet.DEBUG,
+                new MenuOption("Dump all") {
+                    public void execute(Workspace workspace, View view, Location at) {
+                        DebugFileDump.dump(NakedObjects.debug());
                     }
                 });
 
