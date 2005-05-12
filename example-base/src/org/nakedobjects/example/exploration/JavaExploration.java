@@ -162,7 +162,6 @@ public class JavaExploration {
     public void display() {
         builder.installFixtures();
 
-        // Viewer
         SkylarkViewer viewer = new SkylarkViewer();
 
         String[] classes = builder.getClasses();
@@ -171,7 +170,7 @@ public class JavaExploration {
             context.addClass(classes[i]);
         }
         viewer.setApplication(context);
-         viewer.show();
+        viewer.show();
 
         if (splash != null) {
             splash.toFront();
