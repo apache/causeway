@@ -36,6 +36,10 @@ public class NakedObjectsClient extends NakedObjects {
         return adapterFactory;
     }
 
+    public String getDebugTitle() {
+        return "Naked Objects Client Repository";
+    }
+
     /**
      * Expose as a .NET property
      * 

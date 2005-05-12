@@ -2,13 +2,16 @@ package org.nakedobjects;
 
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.security.Session;
+import org.nakedobjects.utility.DebugInfo;
+import org.nakedobjects.utility.DebugString;
 
 
-public abstract class NakedObjects {
+public abstract class NakedObjects implements DebugInfo {
     private static NakedObjects singleton;
 
     public static Configuration getConfiguration() {
@@ -31,19 +34,19 @@ public abstract class NakedObjects {
         return getInstance().pojoAdapterFactory();
     }
 
-    /**
-     * @deprecated
-     */
-    public static void setAdapterFactory(PojoAdapterFactory factory) {
-        getInstance().setPojoAdapterFactory(factory);
-    }
-
     public static NakedObjectSpecificationLoader getSpecificationLoader() {
         return getInstance().specificationLoader();
     }
 
     public static void reset() {
         singleton = null;
+    }
+
+    /**
+     * @deprecated
+     */
+    public static void setAdapterFactory(PojoAdapterFactory factory) {
+        getInstance().setPojoAdapterFactory(factory);
     }
 
     public static void shutdown() {
@@ -74,21 +77,50 @@ public abstract class NakedObjects {
 
     protected abstract Session currentSession();
 
+    public String getDebugData() {
+        DebugString debug = new DebugString();
+
+        debug.appendln(0, "configuration", configuration());
+
+        debug.appendln(0, "session", currentSession());
+
+        debug.appendTitle("specification loader");
+        NakedObjectSpecificationLoader loader = specificationLoader();
+        debug.appendln(0, "instance", loader);
+        NakedObjectSpecification[] specs = loader.getAllSpecifications();
+        for (int i = 0; i < specs.length; i++) {
+            debug.appendln(4, i + ")", specs[i].toString());
+        }
+
+        debug.appendTitle(objectManager().getDebugTitle());
+        debug.append(objectManager().getDebugData());
+
+        debug.appendTitle(pojoAdapterFactory().getDebugTitle());
+        debug.append(pojoAdapterFactory().getDebugData());
+
+        return debug.toString();
+    }
+
     protected abstract NakedObjectManager objectManager();
 
     protected abstract PojoAdapterFactory pojoAdapterFactory();
 
-    protected abstract void setConfiguration(Configuration configuration);
+    public abstract void setConfiguration(Configuration configuration);
 
-    protected abstract void setObjectManager(NakedObjectManager objectManager);
+    public abstract void setObjectManager(NakedObjectManager objectManager);
 
-    protected abstract void setPojoAdapterFactory(PojoAdapterFactory factory);
+    public abstract void setPojoAdapterFactory(PojoAdapterFactory factory);
 
-    protected abstract void setSession(Session session);
+    public abstract void setSession(Session session);
 
-    protected abstract void setSpecificationLoader(NakedObjectSpecificationLoader loader);
+    public abstract void setSpecificationLoader(NakedObjectSpecificationLoader loader);
 
     protected abstract NakedObjectSpecificationLoader specificationLoader();
+
+    public static DebugInfo debug() {
+        return getInstance();
+    }
+
 }
 
 /*

@@ -5,18 +5,31 @@ import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.security.Session;
+import org.nakedobjects.utility.ToString;
 
 import java.util.Hashtable;
 
+import org.apache.log4j.Logger;
+
 
 public class NakedObjectsByThread extends NakedObjects {
-
+    private static final Logger LOG = Logger.getLogger(NakedObjectsByThread.class);
+    
     private static class NakedObjectsData {
         protected PojoAdapterFactory adapterFactory;
         protected Configuration configuration;
         protected NakedObjectManager objectManager;
         protected Session session;
         protected NakedObjectSpecificationLoader specificationLoader;
+        
+        public String toString() {
+            ToString toString = new ToString(this);
+            toString.append("thread", Thread.currentThread());
+            toString.append("objectManager", objectManager);
+            toString.append("session", session);
+            toString.append("adapterFactory", adapterFactory);
+            return toString.toString();
+        }
     }
 
     public static NakedObjects createInstance() {
@@ -40,10 +53,15 @@ public class NakedObjectsByThread extends NakedObjects {
     }
 
     private NakedObjectsData getLocal() {
-        NakedObjectsData local = (NakedObjectsData) threads.get(Thread.currentThread());
+        Thread thread = Thread.currentThread();
+        LOG.info("in " + thread);       
+        NakedObjectsData local = (NakedObjectsData) threads.get(thread);
         if (local == null) {
             local = new NakedObjectsData();
-            threads.put(Thread.currentThread(), local);
+            threads.put(thread, local);
+            LOG.info("  creating local " + local + "; now have " + threads.size() + " locals");
+        } else {
+            LOG.info("  using local " + local);            
         }
         return local;
     }
@@ -123,6 +141,10 @@ public class NakedObjectsByThread extends NakedObjects {
 
     protected NakedObjectSpecificationLoader specificationLoader() {
         return getLocal().specificationLoader;
+    }
+
+    public String getDebugTitle() {
+        return "Naked Objects Repository " + Thread.currentThread().getName();
     }
 
 }
