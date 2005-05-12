@@ -9,8 +9,11 @@ import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.AbstractNakedObject;
 
+import org.apache.log4j.Logger;
+
 
 public class PojoAdapter extends AbstractNakedObject {
+    private final static Logger LOG = Logger.getLogger(PojoAdapter.class);
     private Object pojo;
 
     protected PojoAdapter(Object pojo) {
@@ -18,14 +21,24 @@ public class PojoAdapter extends AbstractNakedObject {
     }
 
     public void clearAssociation(NakedObjectAssociation specification, NakedObject associate) {
+        mustBeResolved(this);
         specification.clearAssociation(this, associate);
     }
 
+    private void mustBeResolved(NakedObject object) {
+        if (!object.isResolved()) {
+            //throw new NakedObjectRuntimeException("Object not resolved when used with adapter: " + object);
+            LOG.error(new NakedObjectRuntimeException("Object not resolved when used with adapter: " + object));
+        }
+    }
+
     public void clearCollection(OneToManyAssociation association) {
+        mustBeResolved(this);
         association.clearCollection(this);
     }
 
     public void clearValue(OneToOneAssociation association) {
+        mustBeResolved(this);
         association.clearValue(this);
     }
 
@@ -35,35 +48,45 @@ public class PojoAdapter extends AbstractNakedObject {
         }
 
         if (other instanceof PojoAdapter) {
-			// we don't delegate to equals(PojoAdapter) because we
-			// don't want to do the identity test again.
-			PojoAdapter otherPojoAdapter = (PojoAdapter)other;
-			return otherPojoAdapter.pojo == pojo; // otherPojoAdapter.pojo.equals(pojo);
-		}
+            // we don't delegate to equals(PojoAdapter) because we
+            // don't want to do the identity test again.
+            PojoAdapter otherPojoAdapter = (PojoAdapter) other;
+            return otherPojoAdapter.pojo == pojo; // otherPojoAdapter.pojo.equals(pojo);
+        }
         return false;
     }
 
-	/**
-	 * Overloaded to allow compiler to link directly if we know the compile-time type.
-	 * (possible performance improvement - called 166,000 times in normal ref data fixture.
-	 */
-	public boolean equals(PojoAdapter otherPojoAdapter) {
-		if (otherPojoAdapter == this) {
-			return true;
-		}
-		return otherPojoAdapter.pojo == pojo; // otherPojoAdapter.pojo.equals(pojo);
-	}
+    /**
+     * Overloaded to allow compiler to link directly if we know the compile-time
+     * type. (possible performance improvement - called 166,000 times in normal
+     * ref data fixture.
+     */
+    public boolean equals(PojoAdapter otherPojoAdapter) {
+        if (otherPojoAdapter == this) {
+            return true;
+        }
+        return otherPojoAdapter.pojo == pojo; // otherPojoAdapter.pojo.equals(pojo);
+    }
 
-	public Naked execute(Action action, Naked[] parameters) {
+    public Naked execute(Action action, Naked[] parameters) {
+        mustBeResolved(this);
+        for (int i = 0; i < parameters.length; i++) {
+            if (parameters[i] instanceof NakedObject) {
+                mustBeResolved((NakedObject) parameters[i]);
+            }
+        }
+
         Naked result = action.execute(this, parameters);
         return result;
     }
 
     public NakedObject getAssociation(OneToOneAssociation field) {
+        mustBeResolved(this);
         return (NakedObject) field.get(this);
     }
 
     public Naked getField(NakedObjectField field) {
+        mustBeResolved(this);
         return field.get(this);
     }
 
@@ -75,12 +98,13 @@ public class PojoAdapter extends AbstractNakedObject {
         return getSpecification().getVisibleFields(this);
     }
 
-    
     public Hint getHint(Action action, Naked[] parameterValues) {
+        mustBeResolved(this);
         return action.getHint(this, parameterValues);
     }
 
     public Hint getHint(NakedObjectField field, Naked value) {
+        mustBeResolved(this);
         if (field instanceof OneToOneAssociation) {
             return ((OneToOneAssociation) field).getHint(this, value);
         } else if (field instanceof OneToManyAssociation) {
@@ -107,25 +131,30 @@ public class PojoAdapter extends AbstractNakedObject {
     }
 
     public NakedValue getValue(OneToOneAssociation field) {
+        mustBeResolved(this);
         return (NakedValue) field.get(this);
     }
 
     public void initAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
+        mustBeResolved(this);
         field.initAssociation(this, associatedObject);
     }
 
     public void initOneToManyAssociation(OneToManyAssociation field, NakedObject[] instances) {
+        mustBeResolved(this);
         field.initOneToManyAssociation(this, instances);
     }
 
     public void initValue(OneToOneAssociation field, Object object) {
+        mustBeResolved(this);
         field.initValue(this, object);
     }
 
     public boolean isEmpty(NakedObjectField field) {
+        mustBeResolved(this);
         return field.isEmpty(this);
     }
-    
+
     public Persistable persistable() {
         return getSpecification().persistable();
     }
@@ -135,17 +164,21 @@ public class PojoAdapter extends AbstractNakedObject {
     }
 
     public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
+        mustBeResolved(this);
         field.setAssociation(this, associatedObject);
     }
 
     public void setValue(OneToOneAssociation field, Object object) {
+        mustBeResolved(this);
         field.setValue(this, object);
     }
 
-	/**
-	 * Introduced during performance profiling; PojoAdapter#titleString often called.
-	 */
-	private String defaultTitle;
+    /**
+     * Introduced during performance profiling; PojoAdapter#titleString often
+     * called.
+     */
+    private String defaultTitle;
+
     /**
      * Returns the title from the underlying business object. If the object has
      * not yet been resolved the specification will be asked for a unresolved
@@ -161,27 +194,36 @@ public class PojoAdapter extends AbstractNakedObject {
             title = specification.unresolvedTitle(this);
         }
         if (title == null) {
-			if (defaultTitle == null) {
-				defaultTitle = "A " + specification.getSingularName().toLowerCase();
-			}
-			title = defaultTitle;
+            if (defaultTitle == null) {
+                defaultTitle = "A " + specification.getSingularName().toLowerCase();
+            }
+            title = defaultTitle;
         }
         return title;
     }
 
     public String toString() {
-		// speculating on performance.  
-		// For MemoryTestCase, fixture set up went from 1.502 secs to 1.291 secs.
+        // speculating on performance.
+        // For MemoryTestCase, fixture set up went from 1.502 secs to 1.291
+        // secs.
 
-        // return "POJO " + super.toString() +" " + specification == null ? "" : titleString();
-		return "POJO " + super.toString(); // +" " + specification == null ? "" : titleString();
-	}
+        // return "POJO " + super.toString() +" " + specification == null ? "" :
+        // titleString();
+        return "POJO " + super.toString(); // +" "
+                                                                         // +
+                                                                         // specification
+                                                                         // ==
+                                                                         // null
+                                                                         // ? ""
+                                                                         // :
+                                                                         // titleString();
+    }
 
     protected void finalize() throws Throwable {
         super.finalize();
-  //      LOG.info("finalizing pojo: " + pojo);
+        //      LOG.info("finalizing pojo: " + pojo);
     }
-    
+
     public void dispose() {
         pojo = null;
     }
