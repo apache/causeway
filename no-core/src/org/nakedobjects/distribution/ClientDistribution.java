@@ -27,6 +27,7 @@ public interface ClientDistribution {
     Hint getActionHint(Session session, String actionType, String actionIdentifier, String[] parameterTypes, Oid objectOid,
             String objectType, Data[] parameters);
 
+    // TODO change name to reflect the fact that it is being used in resolves - see ProxyObjectMan.resolve...()
     ObjectData getObject(Session session, Oid oid, String fullName);
 
     boolean hasInstances(Session session, String fullName);

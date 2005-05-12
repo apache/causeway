@@ -96,7 +96,9 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     }
 
     public synchronized NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException {
-        if (loadedObjects().isLoaded(oid)) {
+        throw new NotImplementedException();
+/*
+         if (loadedObjects().isLoaded(oid)) {
             LOG.debug("getObject (from already loaded objects) " + oid);
             return loadedObjects().getLoadedObject(oid);
         } else {
@@ -104,6 +106,9 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
             ObjectData data = connection.getObject(session, oid, hint.getFullName());
             return DataHelper.recreateObject(data);
         }
+ 
+    */
+        
     }
 
     public boolean hasInstances(NakedObjectSpecification specification) {
@@ -139,15 +144,18 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
             return;
         }
 
-        /*
-         * if (object instanceof InternalCollection) { // new
-         * DataForInternalCollectionRequest((InternalCollection) //
-         * object).update(this); } else { object.setResolved();
-         * connection.resolve(session, object.getOid());
-         * objectData.update(object, loadedObjects, context); }
-         */
-        //     throw new NotImplementedException();
-        LOG.warn("Not yet resolving");
+        Oid oid = object.getOid();
+        NakedObjectSpecification hint = object.getSpecification();
+        
+        LOG.debug("resolve object (remotely from server)" + oid);
+        ObjectData data = connection.getObject(session, oid, hint.getFullName());
+        DataHelper.update(data);
+
+        if(object.isResolved()) {
+            LOG.error("Object already resolved, no need to set resolve flag");
+        } else {
+            object.setResolved();
+        }
     }
 
     public void saveChanges() {
