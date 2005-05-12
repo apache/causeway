@@ -163,6 +163,8 @@ public class DummyNakedObject implements NakedObject {
         return  new NakedObjectField[0];
     }
 
+    public void debugClearResolved() {}
+
 }
 
 /*

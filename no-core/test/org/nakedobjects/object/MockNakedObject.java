@@ -175,6 +175,8 @@ public class MockNakedObject implements NakedObject {
     public NakedObjectField[] getVisibleFields() {
         return null;
     }
+
+    public void debugClearResolved() {}
 }
 
 /*

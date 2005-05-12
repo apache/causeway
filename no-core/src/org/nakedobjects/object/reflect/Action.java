@@ -9,7 +9,7 @@ import org.nakedobjects.object.control.Hint;
 
 import java.io.Serializable;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 
 public class Action extends NakedObjectMember {
@@ -44,7 +44,7 @@ public class Action extends NakedObjectMember {
         }
     }
 
-    private final static Category LOG = Category.getInstance(Action.class);
+    private final static Logger LOG = Logger.getLogger(Action.class);
     public final static Type DEBUG = new Type("DEBUG");
     public final static Type EXPLORATION = new Type("EXPLORATION");
     public final static Type USER = new Type("USER");
