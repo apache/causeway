@@ -8,7 +8,6 @@ import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.viewer.skylark.Image;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.ParameterContent;
 import org.nakedobjects.viewer.skylark.util.ImageFactory;
@@ -103,8 +102,6 @@ public class ActionContent extends ObjectContent {
     public boolean isTransient() {
         return true;
     }
-
-    public void menuOptions(MenuOptionSet options) {}
 
     public void setObject(NakedObject object) {
         throw new NakedObjectRuntimeException("Invalid call");

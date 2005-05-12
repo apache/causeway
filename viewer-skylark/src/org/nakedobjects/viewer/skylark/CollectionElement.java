@@ -69,11 +69,7 @@ public class CollectionElement extends ObjectContent {
     public boolean isTransient() {
         return ! object.isPersistent();
     }
-    
-    public void menuOptions(MenuOptionSet options) {
-        ObjectOption.menuOptions(object, options);
-    }
-
+ 
     public void setObject(NakedObject object) {
         throw new NakedObjectRuntimeException("Invalid call");
     }

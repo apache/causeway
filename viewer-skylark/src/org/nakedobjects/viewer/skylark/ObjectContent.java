@@ -17,6 +17,7 @@ import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.UnexpectedCallException;
 import org.nakedobjects.viewer.skylark.basic.AbstractContent;
+import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 
 
 public abstract class ObjectContent extends AbstractContent {
@@ -104,15 +105,18 @@ public abstract class ObjectContent extends AbstractContent {
     public abstract NakedObject getObject();
 
     public void menuOptions(MenuOptionSet options) {
-        if (getObject() instanceof ApplicationContext) {
+        final NakedObject object = getObject();
+        ObjectOption.menuOptions(object, options);
+
+        if (object instanceof ApplicationContext) {
             options.add(MenuOptionSet.VIEW, new MenuOption("New Workspace") {
                 public Consent disabled(View component) {
-                    return AbstractConsent.allow(getObject() instanceof ApplicationContext);
+                    return AbstractConsent.allow(object instanceof ApplicationContext);
                 }
 
                 public void execute(Workspace workspace, View view, Location at) {
                     View newWorkspace;
-                    Content content = Skylark.getContentFactory().createRootContent(getObject());
+                    Content content = Skylark.getContentFactory().createRootContent(object);
                     newWorkspace =  Skylark.getViewFactory().createInnerWorkspace(content);
                     newWorkspace.setLocation(at);
                     workspace.addView(newWorkspace);
@@ -121,7 +125,11 @@ public abstract class ObjectContent extends AbstractContent {
             });
         }
 
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Class") {
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Class...") {
+            public Consent disabled(View component) {
+                return AbstractConsent.allow(object != null);
+            }
+            
             public void execute(Workspace workspace, View view, Location at) {
             /*
              * TODO reimplement return
@@ -130,7 +138,11 @@ public abstract class ObjectContent extends AbstractContent {
             }
         });
 
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Clone") {
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Clone...") {
+            public Consent disabled(View component) {
+                return AbstractConsent.allow(object != null);
+            }
+            
             public void execute(Workspace workspace, View view, Location at) {
             /*
              * TODO reimplement AbstractNakedObject clone =
@@ -141,6 +153,16 @@ public abstract class ObjectContent extends AbstractContent {
              * newWorkspace.setLocation(at);
              * getWorkspace().addView(newWorkspace); newWorkspace.markDamaged();
              */
+            }
+        });
+        
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Clear resolved") {
+            public Consent disabled(View component) {
+                return AbstractConsent.allow(object != null && !object.isResolved());
+            }
+            
+            public void execute(Workspace workspace, View view, Location at) {
+                object.debugClearResolved();
             }
         });
 

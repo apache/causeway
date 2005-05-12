@@ -12,7 +12,6 @@ import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.utility.DebugString;
-import org.nakedobjects.viewer.skylark.basic.ClassOption;
 import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 import org.nakedobjects.viewer.skylark.basic.RemoveOneToOneAssociationOption;
 import org.nakedobjects.viewer.skylark.util.ImageFactory;
@@ -137,12 +136,16 @@ public class OneToOneField extends ObjectContent implements FieldContent {
     }
 
     public void menuOptions(MenuOptionSet options) {
+        /*
         if (getObject() == null) {
             ClassOption.menuOptions(getOneToOneAssociation().getSpecification(), options);
         } else {
             ObjectOption.menuOptions(object, options);
             options.add(MenuOptionSet.OBJECT, REMOVE_ASSOCIATION);
         }
+        */
+        super.menuOptions(options);
+        options.add(MenuOptionSet.OBJECT, REMOVE_ASSOCIATION);
     }
 
     public void setObject(NakedObject object) {

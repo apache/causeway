@@ -10,7 +10,6 @@ import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.utility.DebugString;
-import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 import org.nakedobjects.viewer.skylark.basic.RemoveOneToManyAssociationOption;
 
 import org.apache.log4j.Logger;
@@ -98,7 +97,8 @@ public class OneToManyFieldElement extends ObjectContent implements FieldContent
     }
 
     public void menuOptions(MenuOptionSet options) {
-        ObjectOption.menuOptions(element, options);
+        //ObjectOption.menuOptions(element, options);
+        super.menuOptions(options);
         options.add(MenuOptionSet.OBJECT, REMOVE_ASSOCIATION);
     }
 

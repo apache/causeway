@@ -8,7 +8,6 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.DebugString;
-import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
@@ -67,10 +66,6 @@ public class RootObject extends ObjectContent {
 
     public boolean isTransient() {
         return object != null && object.getOid() == null;
-    }
-
-    public void menuOptions(MenuOptionSet options) {
-        ObjectOption.menuOptions(object, options);
     }
 
     public void setObject(NakedObject object) {
