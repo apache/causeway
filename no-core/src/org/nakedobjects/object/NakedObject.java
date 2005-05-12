@@ -29,6 +29,8 @@ public interface NakedObject extends Naked {
      */
     void created();
 
+    public void debugClearResolved();
+    
     /**
      * A lifecycle method called when the object is delete, after it is removed
      * from the object store.
