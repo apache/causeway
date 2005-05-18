@@ -17,6 +17,7 @@ import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewDrag;
+import org.nakedobjects.viewer.skylark.ViewState;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
@@ -79,7 +80,7 @@ public class WindowBorder extends AbstractBorder {
         int height = s.getHeight();
 
         // blank background
-        canvas.drawSolidRectangle(x, x, width - x - 1, height - x - 1, Style.SECONDARY3);
+        canvas.drawSolidRectangle(x, x, width - x - 1, height - x - 1, Style.background(getSpecification()));
 
         // slightly rounded grey border
         canvas.drawRectangle(1, 0, width - 3, height - 1, Style.SECONDARY1);
@@ -89,6 +90,12 @@ public class WindowBorder extends AbstractBorder {
             canvas.drawRectangle(i, i, width - 2 * i - 1, height - 2 * i - 1, Style.SECONDARY1);
         }
 
+		ViewState state = getState();
+        if(state.isActive()) {
+            int i = left;
+            canvas.drawRectangle(i, top, width - 2 * i - 1, height - 2 * i - 1 - top, Style.ACTIVE);
+		}
+		
         // vertical lines within border
         canvas.drawLine(2, 15, 2, height - 15, Style.BLACK);
         canvas.drawLine(3, 16, 3, height - 14, Style.PRIMARY1);
@@ -102,7 +109,7 @@ public class WindowBorder extends AbstractBorder {
         canvas.drawLine(16, height - 2, width - 14, height - 2, Style.PRIMARY1);
 
         canvas.drawSolidRectangle(left, LINE_THICKNESS, width - left - right, titlebarHeight, Style.SECONDARY2);
-        canvas.drawLine(x, top - 1, width - right, top - 1, Style.BLACK);
+        canvas.drawLine(x, top - 1, width - right - 1, top - 1, Style.SECONDARY1);
 
         canvas.drawText(getContent().windowTitle(), x + HPADDING, baseline, Style.BLACK, TITLE_STYLE);
 

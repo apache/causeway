@@ -20,7 +20,7 @@ public class PlainBackground extends AbstractViewDecorator {
 	}
 	
 	public void draw(Canvas canvas) {
-		canvas.drawSolidRectangle(getSize(), color);
+		canvas.drawBackground(this, color);
 		super.draw(canvas);
 	}
 	
