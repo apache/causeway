@@ -24,12 +24,15 @@ public class HelpView extends AbstractView implements View {
     public void draw(Canvas canvas) {
         int x = 0;
         int y = 0;
-        int width = getSize().getWidth();
-        int height = getSize().getHeight();
+        int xEntent = getSize().getWidth() - 1;
+        int yExtent = getSize().getHeight() - 1;
 
-        canvas.drawSolidRectangle(x, y, width, height, Style.WHITE);
-        canvas.drawRoundedRectangle(x, y, width - 1, height - 1, 5, 5, Style.BLACK);
-        canvas.drawRoundedRectangle(x + 1, y + 1, width - 3, height - 3, 5, 5, Style.BLACK);
+       
+        int arc = 9;
+        canvas.drawSolidRectangle(x + 2, y + 2, xEntent - 4, yExtent - 4, Style.WHITE);
+        canvas.drawRoundedRectangle(x, y, xEntent, yExtent, arc, arc, Style.BLACK);
+        canvas.drawRoundedRectangle(x + 1, y + 1, xEntent - 2, yExtent - 2, arc, arc, Style.SECONDARY2);
+        canvas.drawRoundedRectangle(x + 2, y + 2, xEntent - 4, yExtent - 4, arc, arc, Style.BLACK);
 
         canvas.drawText("Help", x + 10, y + 20, Style.BLACK, Style.TITLE);
         canvas.drawText(name == null ? "no name" : name, x + 10, y + 40, Style.BLACK, Style.NORMAL);
