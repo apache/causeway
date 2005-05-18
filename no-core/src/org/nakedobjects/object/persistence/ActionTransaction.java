@@ -30,19 +30,23 @@ public class ActionTransaction extends AbstractActionPeer {
              */
             NakedObject transactionObject;
             Naked[] transactionParameters = new Naked[parameters == null ?0 : parameters.length];
-            if (object.isPersistent()) {
+           /* if (object.isPersistent()) {
                 transactionObject = objectManager.getObject(object.getOid(), object.getSpecification());
                 for (int i = 0; i < transactionParameters.length; i++) {
                     Naked parameter = (Naked) parameters[i];
+                    if(parameter != null) {
                     Oid parameterOid = parameter == null ? null : parameter.getOid();
                     transactionParameters[i] = parameterOid == null ? parameter : objectManager.getObject(parameterOid, parameter
                             .getSpecification());
+                    
+                    	Assert.assertEquals(parameters[i], NakedObjects.getPojoAdapterFactory().createAdapter(transactionParameters[i].getObject()));
+                    }
                 }
             } else {
-                // non-persistent
+*/                // non-persistent
                 transactionObject = object;
                 transactionParameters = parameters == null ? new Naked[0] : parameters;
-            }
+    //        }
 
             Naked result = super.execute(identifier, transactionObject, transactionParameters);
 
@@ -51,11 +55,12 @@ public class ActionTransaction extends AbstractActionPeer {
 
             return result;
 
-        } catch (ObjectNotFoundException e) {
+ /*       } catch (ObjectNotFoundException e) {
             LOG.error("Non-existing target or parameter used in " + getName(), e);
             objectManager.abortTransaction();
-            return null;
+            return null;*/
         } catch (RuntimeException e) {
+            LOG.error("Exception executing " + getName(), e);
             objectManager.abortTransaction();
             throw e;
         }
