@@ -17,6 +17,7 @@ import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.UnexpectedCallException;
 import org.nakedobjects.viewer.skylark.basic.AbstractContent;
+import org.nakedobjects.viewer.skylark.basic.ClassOption;
 import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 
 
@@ -107,6 +108,10 @@ public abstract class ObjectContent extends AbstractContent {
     public void menuOptions(MenuOptionSet options) {
         final NakedObject object = getObject();
         ObjectOption.menuOptions(object, options);
+        
+        if (getObject() == null) {
+            ClassOption.menuOptions(getSpecification(), options);
+        } 
 
         if (object instanceof ApplicationContext) {
             options.add(MenuOptionSet.VIEW, new MenuOption("New Workspace") {
