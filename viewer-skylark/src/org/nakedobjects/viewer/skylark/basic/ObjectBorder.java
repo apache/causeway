@@ -25,7 +25,7 @@ public class ObjectBorder extends AbstractBorder {
 	}
 
 	protected void debugDetails(StringBuffer b) {
-		b.append("ObjectBorder " + top + " pixels\n");
+		b.append("ObjectBorder " + top + " pixels");
     }
 	
 	public void entered() {
@@ -43,10 +43,12 @@ public class ObjectBorder extends AbstractBorder {
 	}
 	
 	public void draw(Canvas canvas) {
+	    super.draw(canvas);
+	    
 		Color color = null;
 		ViewState state = getState();
         if(state.isActive()) {
-		    color = new Color(0x0ff0000);
+		    color = Style.ACTIVE;
         } else if(state.canDrop()) {
 		    color = Style.VALID;
 		} else if(state.cantDrop()) {
@@ -56,39 +58,34 @@ public class ObjectBorder extends AbstractBorder {
 		}  else if(getViewManager().hasFocus(getView())) {
             color = Style.IDENTIFIED;
 		}
+		Size s  = getSize();
 		
 		if(getContent().isPersistable() && getContent().isTransient()) {
-		    // canvas.drawRectangle(1, 1, width - 3, s.getHeight() - 3, Style.WHITE);
-            int x = getSize().getWidth() - 13;
+            int x = s.getWidth() - 13;
             int y = 0;
             Image icon = ImageFactory.getInstance().createIcon("transient", 8, null);
             if(icon == null) {
-                canvas.drawText("*", x, y, Style.BLACK, Style.NORMAL);
+                canvas.drawText("*", x, y + Style.NORMAL.getAscent(), Style.BLACK, Style.NORMAL);
             } else {
                 canvas.drawIcon(icon, x, y, 12, 12);
             }
 		}
         
-		Size s  = getSize();
-		int width = s.getWidth();
 		if(color != null) {
+			int xExtent = s.getWidth() - 1;
+			int yExtent = s.getHeight() - 1;
+			
+			canvas.drawRectangle(0, 0, xExtent, yExtent, Color.GREEN);
+			
 			for (int i = 0; i < left; i++) {
-				canvas.drawRectangle(i, i, width - 2 * i - 1, s.getHeight() - 2 * i - 1, color);
+				canvas.drawRectangle(i, i, xExtent - 2 * i, s.getHeight() - 1 - 2 * i, color);
 			}
 		}
-		
-		super.draw(canvas);
 	}
 	
 	public String toString() {
 		return wrappedView.toString() + "/ObjectBorder [" + getSpecification() + "]";
 	}
-	
-	public Size getRequiredSize() {
-        Size size = super.getRequiredSize();
-        size.extendWidth(13);
-        return size; 
-    }
 }
 
 
