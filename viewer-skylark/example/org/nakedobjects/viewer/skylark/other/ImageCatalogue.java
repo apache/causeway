@@ -1,3 +1,4 @@
+package org.nakedobjects.viewer.skylark.other;
 import java.awt.Canvas;
 import java.awt.Font;
 import java.awt.Frame;

@@ -1,7 +1,6 @@
 package org.nakedobjects.example.exploration;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.NakedObjectsByThread;
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.container.configuration.Configuration;

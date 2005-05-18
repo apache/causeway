@@ -1,7 +1,9 @@
+package org.nakedobjects.viewer.skylark.example;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Size;
+import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
@@ -9,20 +11,32 @@ import org.nakedobjects.viewer.skylark.core.AbstractView;
 
 public class TestObjectView extends AbstractView {
 
-    protected TestObjectView(Content content, ViewSpecification specification, ViewAxis axis) {
+    private final int requiredWidth;
+    private final int requiredHeight;
+    private final String label;
+
+    public TestObjectView(Content content, ViewSpecification specification, ViewAxis axis, int width, int height, String label) {
         super(content, specification, axis);
+        this.requiredWidth = width;
+        this.requiredHeight = height;
+        this.label = label;
     }
     
     public void draw(Canvas canvas) {
-        super.draw(canvas);
-        
-        canvas.drawSolidRectangle(10, 10, 20, 40, new Color(0xff6600));
+        super.draw(canvas);       
+        int width = getSize().getWidth();
+        int height = getSize().getHeight();
+        canvas.drawBackground(this, Color.LIGHT_GRAY);
+        canvas.drawRectangle(0,0, width - 1, height - 1, Color.GRAY);
+        canvas.drawLine(0, 0, width - 1, height - 1, Color.RED);
+        canvas.drawLine(width - 1, 0, 0, height - 1, Color.RED);
+        canvas.drawText(label , 2, Style.NORMAL.getAscent() + 2, Color.BLACK, Style.NORMAL);
+       // canvas.drawSolidRectangle(10, 10, 20, 40, Color.GREEN);
     }
     
     public Size getRequiredSize() {
-        return new Size(30, 50);
+        return new Size(requiredWidth, requiredHeight);
     }
-    
 }
 
 

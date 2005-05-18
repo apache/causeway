@@ -57,7 +57,7 @@ public class Viewer {
 
     private ViewUpdateNotifier updateNotifier;
     private View keyboardFocus;
-    private View windowFocus;
+//    private View windowFocus;
     private Size internalDisplaySize;
     private Insets insets;
     private int statusBarHeight;
@@ -290,7 +290,7 @@ public class Viewer {
 
     public void makeWindowFocus(View view) {
         if (view != null && view.canFocus()) {
-            windowFocus = view;
+            // windowFocus = view;
             keyboardFocus.focusLost();
             keyboardFocus = null;
         }
@@ -380,9 +380,6 @@ public class Viewer {
     }
 
     public void start() {
-//        spy = new InteractionSpy();
-//        new ViewerAssistant(this, updateNotifier, spy);
-
         popup = new DefaultPopupMenu();
         explorationMode = NakedObjects.getConfiguration().getBoolean(PROPERTY_BASE + "show-exploration");
 
@@ -404,12 +401,6 @@ public class Viewer {
         if (NakedObjects.getConfiguration().getBoolean(PROPERTY_BASE + "debugstatus", false)) {
             spy.open();
         }
-
-   //
-   //      sizeChange();
-    //     repaint();
-        
- //       insets = renderingArea.getInsets();
     }
 
     public void sizeChange() {

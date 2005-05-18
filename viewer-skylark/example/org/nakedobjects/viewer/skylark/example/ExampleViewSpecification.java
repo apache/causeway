@@ -1,18 +1,11 @@
-import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
+package org.nakedobjects.viewer.skylark.example;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
-import org.nakedobjects.viewer.skylark.special.WorkspaceSpecification;
+import org.nakedobjects.viewer.skylark.ViewSpecification;
 
 
-public class TestWorkspaceSpecification implements WorkspaceSpecification {
-
-    public void setRequiredSize(Size size) {}
-
-    public CompositeViewBuilder getSubviewBuilder() {
-        return null;
-    }
+public class ExampleViewSpecification implements ViewSpecification {
 
     public View createView(Content content, ViewAxis axis) {
         return null;
