@@ -183,9 +183,6 @@ public abstract class AbstractNakedObject implements NakedObject {
     public void setOid(Oid oid) {
         if (this.oid == null) {
             this.oid = oid;
-
-            //           NakedObjects.getObjectManager().debugCheckObjectForOid(oid,
-            // this);
         } else {
             throw new IllegalStateException("The OID is already set (" + this + ")");
         }
@@ -212,7 +209,7 @@ public abstract class AbstractNakedObject implements NakedObject {
 
         // datatype
         s.append(specification == null ? getClass().getName() : specification.getShortName());
-        s.append(" [");
+   /*     s.append(" [");
 
         // type of object - EO, Primitive, Collection, with Status etc
         // Persistent/transient & Resolved or not
@@ -240,7 +237,7 @@ public abstract class AbstractNakedObject implements NakedObject {
         s.append("]");
 
         s.append("  " + Long.toHexString(super.hashCode()).toUpperCase());
-
+*/
         String asString = s.toString();
 		s.setLength(0); // clears
 		return asString;
