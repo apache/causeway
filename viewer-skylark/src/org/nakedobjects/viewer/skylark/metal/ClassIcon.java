@@ -17,10 +17,10 @@ import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
-import org.nakedobjects.viewer.skylark.UiConfiguration;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
+import org.nakedobjects.viewer.skylark.Viewer;
 import org.nakedobjects.viewer.skylark.basic.ClassOption;
 import org.nakedobjects.viewer.skylark.basic.ClassTitleText;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
@@ -29,7 +29,9 @@ import org.nakedobjects.viewer.skylark.core.ObjectView;
 
 
 public class ClassIcon extends ObjectView {
-    
+    private final static int CLASS_ICON_SIZE = 34;
+    private final static String CLASS_ICON_SIZE_PROPERTY = Viewer.PROPERTY_BASE + "class-icon-size";
+
     public static class Specification implements ViewSpecification {
 
 		public boolean canDisplay(Content content) {
@@ -64,8 +66,7 @@ public class ClassIcon extends ObjectView {
     public ClassIcon(final Content content, ViewSpecification specification, ViewAxis axis) {
         super(content, specification, axis);
         
-        int iconSize = UiConfiguration.getInstance().classIconSize(); 
-            
+        int iconSize = NakedObjects.getConfiguration().getInteger(CLASS_ICON_SIZE_PROPERTY, CLASS_ICON_SIZE);
         iconUnselected = new ClassIconGraphic(this, iconSize); 
         iconSelected = new ClassIconGraphic(this, iconSize); 
         icon = iconUnselected;
@@ -89,7 +90,7 @@ public class ClassIcon extends ObjectView {
         super.draw(canvas);
 
         if(debug) {
-            canvas.drawRectangle(getSize(), Color.DEBUG_BASELINE);
+            canvas.drawRectangleAround(this, Color.DEBUG_BASELINE);
         }
        
         int x = 0;
