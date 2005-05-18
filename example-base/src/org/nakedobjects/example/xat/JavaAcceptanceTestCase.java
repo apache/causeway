@@ -4,7 +4,6 @@ import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.fixture.FixtureBuilder;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
@@ -16,16 +15,29 @@ import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
 import org.nakedobjects.reflector.java.reflect.JavaReflectorFactory;
+import org.nakedobjects.utility.Profiler;
 import org.nakedobjects.utility.StartupException;
 import org.nakedobjects.xat.AcceptanceTestCase;
+import org.nakedobjects.xat.StaticNakedObjectSpecificationLoader;
 
 import org.apache.log4j.Logger;
 
 
 
 public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
+    private static final Logger LOG = Logger.getLogger(JavaAcceptanceTestCase.class);
+    private static Profiler classProfiler;
+    private Profiler methodProfiler = new Profiler("method");
+    
+
     public JavaAcceptanceTestCase(String name) {
         super(name);
+        if(classProfiler == null) {
+           classProfiler = new Profiler("class");
+        } else {
+	        classProfiler.reset();
+	        classProfiler.start();
+        }
     }
     
     protected FixtureBuilder createFixtureBuilder() {
@@ -38,17 +50,36 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
     }
     
     protected void setUp() throws Exception {
+        LOG.info("test set up " + getName());
+       methodProfiler.start();
         super.setUp();
+        methodProfiler.stop();
+        LOG.info("test set up complete " + getName() + " " + methodProfiler.timeLog());
+       System.out.print(getName() + ": \t" + methodProfiler.timeLog());
     }
     
     protected void tearDown() throws Exception {
-        super.tearDown();
+        LOG.info("test tear down " + getName());
+        methodProfiler.reset();
+        methodProfiler.start();
+       super.tearDown();
+        methodProfiler.stop();
+        LOG.info("test tear down complete " + getName() + " " + methodProfiler.timeLog());
+        System.out.println(" \t" + methodProfiler.timeLog());
     }
     
-    protected final void setupFramework() {
+   protected void runTest() throws Throwable {
+       LOG.info("test run " + getName());
+       methodProfiler.reset();
+       methodProfiler.start();
+       super.runTest();
+       methodProfiler.stop();
+       LOG.info("test run complete " + getName() + " " + methodProfiler.timeLog());
+       System.out.print(" \t" + methodProfiler.timeLog());
+   }
+   
+    protected final void setupFramework(NakedObjectsClient nakedObjects) {
         JavaBusinessObjectContainer container = new JavaBusinessObjectContainer();
-
-        NakedObjectsClient nakedObjects = new NakedObjectsClient();
 
         JavaObjectFactory objectFactory = new JavaObjectFactory();
         objectFactory.setContainer(container);
@@ -66,7 +97,7 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
 
         nakedObjects.setObjectManager(objectManager);
 
-        NakedObjectSpecificationLoaderImpl specificationLoader = new NakedObjectSpecificationLoaderImpl();
+        StaticNakedObjectSpecificationLoader specificationLoader = new StaticNakedObjectSpecificationLoader();
 
         nakedObjects.setSpecificationLoader(specificationLoader);
         
@@ -89,9 +120,6 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
         } catch (StartupException e) {
             throw new NakedObjectRuntimeException(e);
         }
-        
-        
-        Runtime.getRuntime().gc();
     }   
 }
 
