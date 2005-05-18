@@ -1,7 +1,6 @@
 package org.nakedobjects.object;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.FastFinder;
 import org.nakedobjects.object.defaults.InternalNakedObject;
@@ -19,7 +18,7 @@ public class NakedClass implements InternalNakedObject {
     private NakedObjectSpecification specification;
 
     {
-        createPersistentInstances = ConfigurationFactory.getConfiguration().getBoolean("nakedclass.create-persistent", true);
+        createPersistentInstances = NakedObjects.getConfiguration().getBoolean("nakedclass.create-persistent", true);
     }
 
     public NakedClass(String name) {
