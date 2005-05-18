@@ -15,7 +15,7 @@ import java.util.Hashtable;
 import org.apache.log4j.Logger;
 
 
-public class StaticNakedObjectSpecificationLoader extends NakedObjectSpecificationLoader {
+public class StaticNakedObjectSpecificationLoader implements NakedObjectSpecificationLoader {
     private final static Logger LOG = Logger.getLogger(StaticNakedObjectSpecificationLoader.class);
     private static Hashtable classes;
     private ReflectorFactory reflectorFactory;

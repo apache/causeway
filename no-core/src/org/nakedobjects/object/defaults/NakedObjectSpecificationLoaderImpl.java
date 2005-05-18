@@ -13,7 +13,7 @@ import java.util.Hashtable;
 import org.apache.log4j.Logger;
 
 
-public class NakedObjectSpecificationLoaderImpl extends NakedObjectSpecificationLoader {
+public class NakedObjectSpecificationLoaderImpl implements NakedObjectSpecificationLoader {
     private final static Logger LOG = Logger.getLogger(NakedObjectSpecificationLoaderImpl.class);
     private Hashtable classes;
     private ReflectorFactory reflectorFactory;

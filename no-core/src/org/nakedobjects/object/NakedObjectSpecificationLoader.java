@@ -1,6 +1,6 @@
 package org.nakedobjects.object;
 
-public abstract class NakedObjectSpecificationLoader {
+public interface NakedObjectSpecificationLoader {
     public abstract NakedObjectSpecification loadSpecification(String name);
     
     public abstract NakedObjectSpecification loadSpecification(Class cls);
