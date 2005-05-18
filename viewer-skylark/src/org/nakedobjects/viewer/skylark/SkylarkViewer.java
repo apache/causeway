@@ -46,8 +46,8 @@ public class SkylarkViewer {
     
     public void show() {        
         frame.setBounds(10, 10, 800, 600);
-        viewer.sizeChange();
         frame.show();    
+        viewer.sizeChange();
     }
 
     public void setApplication(ApplicationContext applicationContext) {

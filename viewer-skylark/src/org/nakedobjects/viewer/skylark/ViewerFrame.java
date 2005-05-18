@@ -16,10 +16,6 @@ import java.lang.reflect.Method;
 
 
 public class ViewerFrame extends Frame implements RenderingArea {
-    private static final int HEIGHT = 700;
-    private static final int WIDTH = 800;
-    private static final int Y = 10;
-    private static final int X = 50;
     private Viewer viewer;
  
     /**
@@ -82,13 +78,6 @@ public class ViewerFrame extends Frame implements RenderingArea {
 
     public void quit() {
         viewer.close();
-    }
-
-    public void start() {
-        setBounds(X, Y, WIDTH, HEIGHT);
-        viewer.start();
-        viewer.sizeChange();
-    	show();
     }
 
     /**
