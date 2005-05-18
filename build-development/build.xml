@@ -16,10 +16,14 @@
 
 	<target name="copy-src">
 		<copy todir="${build.src.dir}">
+			<fileset dir="../example-base/${src.dir}" />
 			<fileset dir="../viewer-skylark/${src.dir}" />
 			<fileset dir="../no-xat/${src.dir}" />
-			<fileset dir="../example-base/${src.dir}" />
 			<fileset dir="../os-file/${src.dir}" />
+		
+			<fileset dir="../no-distribution-xml/${src.dir}" />
+			<fileset dir="../no-memento/${src.dir}" />
+			<fileset dir="../utility-xmlsnapshot/${src.dir}" />
 		</copy>
 		
 		<copy todir="${build.example.dir}">
@@ -39,8 +43,12 @@
 
 		<copy todir="${build.test.dir}">
 			<fileset dir="../viewer-skylark/${test.dir}" />
-			<!--fileset dir="../no-xat/${test.dir}" /-->
+			<fileset dir="../no-xat/${test.dir}" />
 			<fileset dir="../os-file/${test.dir}" />
+		
+			<!--fileset dir="../no-distribution-xml/${test.dir}" /-->
+			<fileset dir="../no-memento/${test.dir}" />
+			<fileset dir="../utility-xmlsnapshot/${test.dir}" />
 		</copy>
 
 	</target>
