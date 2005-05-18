@@ -145,7 +145,9 @@ public class OneToOneField extends ObjectContent implements FieldContent {
         }
         */
         super.menuOptions(options);
-        options.add(MenuOptionSet.OBJECT, REMOVE_ASSOCIATION);
+        if (getObject() != null) {
+            options.add(MenuOptionSet.OBJECT, REMOVE_ASSOCIATION);
+        }
     }
 
     public void setObject(NakedObject object) {
