@@ -79,7 +79,9 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
         		}
         		elementView = subviewDesign.createSubview(elementContent, view.getViewAxis());
         	}
-             view.addView(elementView);
+        	if(elementView != null) {
+        	    view.addView(elementView);
+        	}
         }
     }
 
