@@ -43,6 +43,7 @@ import org.apache.log4j.Category;
 
 public class TextField extends AbstractField implements TextBlockUser {
 
+    private static final int ORIGINAL_WIDTH = 20;
     public static class Specification extends AbstractFieldSpecification {
 
         public View createView(Content content, ViewAxis axis) {
@@ -75,7 +76,7 @@ public class TextField extends AbstractField implements TextBlockUser {
     public TextField(Content content, ViewSpecification specification, ViewAxis axis, boolean showLines) {
         super(content, specification, axis);
         this.showLines = showLines;
-        setMaxTextWidth(8);
+        setMaxTextWidth(ORIGINAL_WIDTH);
 
         NakedValue value = getValue();
         if(value != null) {
@@ -452,7 +453,6 @@ public class TextField extends AbstractField implements TextBlockUser {
     }
 
     public Size getRequiredSize() {
-//        int width = HPADDING + maxTextWidth + 1 + resizeMarkerSize + HPADDING;
         int width = HPADDING + maxTextWidth + HPADDING;
         int height = textContent.getNoDisplayLines() * (style.getHeight() + LINE_SPACING) + VPADDING * 2;
         height = Math.max(height, Style.defaultFieldHeight());
@@ -788,8 +788,7 @@ public class TextField extends AbstractField implements TextBlockUser {
     public void setRequiredSize(Size size) {
         int lines = Math.max(1, size.getHeight() / lineHeight());
         setNoLines(lines);
-
-        int width = Math.max(80, size.getWidth() - HPADDING - lineHeight() * 3 / 5);
+	    int width = Math.max(180, size.getWidth() - HPADDING);
         setMaxWidth(width);
         LOG.debug(lines + " x " + width);
 
