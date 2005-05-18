@@ -168,7 +168,7 @@ public class TextString extends BusinessValueHolder {
      * Returns true if this object's text has no characters in it.
      */
     public boolean isEmpty() {
-        return text == null || text.equals("");
+        return text == null || text.length() == 0;
     }
 
     /**
