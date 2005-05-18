@@ -21,6 +21,7 @@ public class Style {
     public static final Color PRIMARY1 = new Color("primary1", "#666699"); //"#0066cc"
     public static final Color PRIMARY2 = new Color("primary2", "#9999cc");
     public static final Color PRIMARY3 = new Color("primary3", "#ccccff");
+    public static final Color ACTIVE = new Color("active", "#ff0000");
     public static final Color TEXT_EDIT = new Color("textedit", "#669966");
     public static final Color REVERSE_MENU = new Color("menu.reversed", "#FFFFFF");
     public static final Color SECONDARY1 = new Color("secondary1", "#666666");
@@ -50,6 +51,12 @@ public class Style {
         int height = View.VPADDING * 2 + iconSize;
 
         return height;
+    }
+    
+    public static Color background(ViewSpecification specification) {
+        String property = specification.getClass().getName() + ".background";
+        // TODO this should really be a fallback colour, not hardcoded.
+        return new Color(property, "#cccccc");
     }
 }
 
