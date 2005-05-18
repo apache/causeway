@@ -30,7 +30,7 @@ public class InternalOneToManyAssociation extends InternalField implements OneTo
    }
 
     public void addAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
+        LOG.debug("add association to " + getName() + " in " + inObject + " - " + associate);
         try {
             addMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
         } catch (IllegalArgumentException e) {
@@ -46,7 +46,7 @@ public class InternalOneToManyAssociation extends InternalField implements OneTo
     }
     
     public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
+        LOG.debug("init association " + getName() + " in " + inObject + " - " + associate);
 
         try {
             addMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
@@ -108,7 +108,7 @@ public class InternalOneToManyAssociation extends InternalField implements OneTo
      * in the association field represented by this object.
      */
     public void removeAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("local clear association " + associate + " from field " + getName() + " in " + inObject);
+        LOG.debug("remove association " + associate + " from field " + getName() + " in " + inObject);
 
         try {
             removeMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });

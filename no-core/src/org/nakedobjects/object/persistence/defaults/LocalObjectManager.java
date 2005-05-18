@@ -103,7 +103,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
      * should be removed from the persistence mechanism.
      */
     public void destroyObject(NakedObject object) {
-        LOG.debug("destroyObject " + object);
+        LOG.info("destroyObject " + object);
 
         DestroyObjectCommand command = objectStore.createDestroyObjectCommand(object);
         getTransaction().addCommand(command);
@@ -147,7 +147,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     protected NakedObject[] getInstances(InstancesCriteria criteria) {
-        LOG.debug("getInstances matching " + criteria);
+        LOG.info("getInstances matching " + criteria);
         try {
             NakedObject[] instances = objectStore.getInstances(criteria);
             collateChanges();
@@ -159,7 +159,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     protected NakedObject[] getInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
-        LOG.debug("getInstances of " + specification);
+        LOG.info("getInstances of " + specification.getShortName());
         try {
             NakedObject[] instances = objectStore.getInstances(specification, false);
             collateChanges();
@@ -221,7 +221,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
      *                       of the object to be retrieved
      */
     public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException {
-        LOG.debug("getObject " + oid);
+        LOG.info("getObject " + oid);
         try {
             if (NakedObjects.getPojoAdapterFactory().isLoaded(oid)) {
                 return NakedObjects.getPojoAdapterFactory().getLoadedObject(oid);
@@ -250,7 +250,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
      * <code>false</code> if there are not.
      */
     public boolean hasInstances(NakedObjectSpecification specification) {
-        LOG.debug("hasInstances of " + specification);
+        LOG.info("hasInstances of " + specification.getShortName());
         try {
             return objectStore.hasInstances(specification, false);
         } catch (ObjectStoreException e) {
@@ -300,7 +300,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
      *  
      */
     public void makePersistent(NakedObject object) {
-        LOG.debug("makePersistent " + object);
+        LOG.info("makePersistent " + object);
 
         if (isPersistent(object)) {
             throw new NotPersistableException("Object already persistent");
@@ -312,8 +312,8 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
             object.setResolved();
         }
 
-        NakedObjectSpecification specification = object.getSpecification();
-        NakedObjectField[] fields = specification.getFields();
+        //NakedObjectSpecification specification = object.getSpecification();
+        NakedObjectField[] fields = object.getFields();
 
         for (int i = 0; i < fields.length; i++) {
             NakedObjectField field = fields[i];
@@ -368,7 +368,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
      * A count of the number of instances matching the specified pattern.
      */
     public int numberOfInstances(NakedObjectSpecification specification) {
-        LOG.debug("numberOfInstances like " + specification);
+        LOG.info("numberOfInstances like " + specification.getShortName());
         try {
             return objectStore.numberOfInstances(specification, false);
         } catch (ObjectStoreException e) {
@@ -392,7 +392,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         if (object.isResolved() || !isPersistent(object)) {
             return;
         }
-        LOG.info("resolve-eagerly" + object + "/" + field);
+        LOG.info("resolve-eagerly" + object + "/" + field.getName());
         objectsToBeSaved.remove(object);  // TODO is this enough or do we need to check the referenced fields?
         try {
             objectStore.resolveEagerly(object, field);
@@ -416,7 +416,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     public void saveChanges() {
-        LOG.debug("saving changes");
+        LOG.info("saving changed objects");
         collateChanges();
         Enumeration e = objectsToBeSaved.dirtyObjects();
         while (e.hasMoreElements()) {

@@ -71,7 +71,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
     }
 
     public void setValue(MemberIdentifier identifier, NakedObject inObject, Object value) {
-        LOG.debug("local setValue() " + inObject.getOid() + "/" + value);
+        LOG.debug("set value "  + getName() + " in " + inObject + " - " + value);
 
         try {
             if (setMethod == null) {
@@ -100,7 +100,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
      Set the data in an NakedObject.  Passes in an existing object to for the EO to reference.
      */
     public void initValue(MemberIdentifier identifier, NakedObject inObject, Object setValue) {
-        LOG.debug("local initData() " + inObject.getOid() + "/" + setValue);
+        LOG.debug("init value " + getName() + " in " + inObject.getOid() + " - " + setValue);
 
         try {
             setMethod.invoke(inObject.getObject(), new Object[] { setValue });
@@ -118,7 +118,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
     }
 
      public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("local clear association " + inObject + "/" + associate);
+        LOG.debug("clear association " + getName() + " from " + inObject);
 
             try {
                 if (removeMethod != null) {
@@ -139,7 +139,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
     }
 
      public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("local init association " + getName() + " in " + inObject + " with " + associate);
+        LOG.debug("init association " + getName() + " in " + inObject + " - " + associate);
 
         try {
             setMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
@@ -164,7 +164,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
      * EO to reference.
      */
     public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
+        LOG.debug("set association " + getName() + " in " + inObject + " - " + associate);
 
             try {
                 if (associate == null) {

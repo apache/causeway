@@ -67,7 +67,7 @@ public class Action extends NakedObjectMember {
     }
 
     protected Naked execute(final NakedObject object, final Naked[] parameters) {
-        LOG.debug("Action: invoke " + object + "." + getName());
+        LOG.debug("execute action " + object + "." + getName());
         try {
             Naked result = reflectiveAdapter.execute(getIdentifier(), object, parameters == null ?  new Naked[0] : parameters);
             return result;

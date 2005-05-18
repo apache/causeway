@@ -44,7 +44,7 @@ public class InternalAction extends InternalMember implements ActionPeer {
                 executionParameters[i] = parameters[i] == null ? null : parameters[i].getObject();
             }
             Object result = actionMethod.invoke(inObject.getObject(), executionParameters);
-            LOG.debug(" action result " + result);
+            LOG.debug("  action result " + result);
 
             if (result != null && result instanceof Naked) { return (Naked) result; }
             if (result != null) { return NakedObjects.getPojoAdapterFactory().createAdapter(result); }

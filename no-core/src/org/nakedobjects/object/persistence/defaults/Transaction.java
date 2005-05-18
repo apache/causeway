@@ -63,7 +63,7 @@ public class Transaction {
         }
         
         
-        LOG.debug("add command " + command);
+        LOG.info("add command " + command);
         commands.addElement(command);
     }
 

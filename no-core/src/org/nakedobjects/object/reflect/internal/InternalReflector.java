@@ -82,8 +82,9 @@ public class InternalReflector implements Reflector {
     private Method methods[];
 
     public InternalReflector(String name) throws ReflectionException {
-        Class cls;
+        LOG.info("Introspecting " + name);
 
+        Class cls;
         try {
             cls = Class.forName(name);
 
@@ -119,9 +120,9 @@ public class InternalReflector implements Reflector {
     }
 
     public ActionPeer[] actionPeers(boolean forClass) {
-        LOG.debug("looking for action methods");
+        LOG.debug("  looking for action methods");
         Method defaultAboutMethod = findMethod(forClass, "aboutActionDefault", null, new Class[] { InternalAbout.class });
-        LOG.debug(defaultAboutMethod == null ? "no default about method for actions" : defaultAboutMethod.toString());
+        LOG.debug(defaultAboutMethod == null ? "  no default about method for actions" : defaultAboutMethod.toString());
 
         Vector validMethods = new Vector();
         Vector actions = new Vector();
@@ -168,7 +169,7 @@ public class InternalReflector implements Reflector {
              */
             validMethods.addElement(method);
 
-            LOG.debug("identified action " + method);
+            LOG.info("  identified action " + method);
             String methodName = method.getName();
             methods[i] = null;
 
@@ -194,17 +195,17 @@ public class InternalReflector implements Reflector {
     }
 
     public String[] actionSortOrder() {
-        LOG.debug("looking for action sort order");
+        LOG.debug("  looking  for action sort order");
         return readSortOrder(cls, "action");
     }
 
     public String[] classActionSortOrder() {
-        LOG.debug("looking for class action sort order");
+        LOG.debug("  looking  for class action sort order");
         return readSortOrder(cls, "classAction");
     }
 
     public Hint classHint() {
-        LOG.debug("looking for class about");
+        LOG.debug("  looking  for class about");
         try {
             InternalAbout about = new InternalAbout();
             cls.getMethod(ABOUT_PREFIX + shortName(), new Class[] { InternalAbout.class }).invoke(null, new Object[] { about });
@@ -243,7 +244,7 @@ public class InternalReflector implements Reflector {
 
         while (e.hasMoreElements()) {
             Method method = (Method) e.nextElement();
-            LOG.debug("identified derived value method " + method);
+            LOG.info("  identified derived value method " + method);
             String name = method.getName();
 
             Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { InternalAbout.class });
@@ -264,7 +265,7 @@ public class InternalReflector implements Reflector {
     }
 
     public FieldPeer[] fields() {
-        LOG.debug("looking for fields");
+        LOG.debug("  looking  for fields");
         Vector elements = new Vector();
 
         defaultAboutFieldMethod = findMethod(OBJECT, ABOUT_FIELD_DEFAULT, null, new Class[] { InternalAbout.class });
@@ -486,7 +487,7 @@ public class InternalReflector implements Reflector {
 
         while (e.hasMoreElements()) {
             Method getMethod = (Method) e.nextElement();
-            LOG.debug("identified 1-many association method " + getMethod);
+            LOG.info("  identified 1-many association method " + getMethod);
             String name = getMethod.getName().substring(GET_PREFIX.length());
 
             Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { InternalAbout.class, null,
@@ -556,7 +557,7 @@ public class InternalReflector implements Reflector {
 
         while (e.hasMoreElements()) {
             Method getMethod = (Method) e.nextElement();
-            LOG.debug("identified 1-1 association method " + getMethod);
+            LOG.info("  identified 1-1 association method " + getMethod);
 
             // ignore the getNakedClass method
             if (getMethod.getName().equals("getNakedClass")) {
@@ -676,7 +677,7 @@ public class InternalReflector implements Reflector {
             }
 
             // create Field
-            LOG.info("Value " + name + " ->" + getMethod);
+            LOG.info("  value " + name + " ->" + getMethod);
             /*
              * ValueField attribute = createValueField(getMethod, setMethod,
              * name, aboutMethod, validMethod); fields.addElement(attribute);
