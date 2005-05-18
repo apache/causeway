@@ -129,8 +129,8 @@ public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
             throw new NakedObjectRuntimeException(
                     "cannot add as loaded object; object already present, but with a different oid: " + object);
         }
-
-        LOG.debug("Added loaded object " + object + " as " + oid);
+    
+        LOG.debug("added loaded object as " + oid);
         loaded.put(oid, object);
     }
 
@@ -174,7 +174,7 @@ public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
 
     public void unloaded(NakedObject object) {
         Assert.assertTrue("cannot unload object as it is not loaded", loaded.contains(object));
-        LOG.debug("Removed loaded object " + object);
+        LOG.debug("removed loaded object " + object);
         loaded.remove(object.getOid());
     }
 }

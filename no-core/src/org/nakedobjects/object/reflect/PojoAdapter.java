@@ -8,6 +8,7 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.AbstractNakedObject;
+import org.nakedobjects.utility.ToString;
 
 import org.apache.log4j.Logger;
 
@@ -70,12 +71,11 @@ public class PojoAdapter extends AbstractNakedObject {
 
     public Naked execute(Action action, Naked[] parameters) {
         mustBeResolved(this);
-        for (int i = 0; i < parameters.length; i++) {
+        for (int i = 0; parameters != null && i < parameters.length; i++) {
             if (parameters[i] instanceof NakedObject) {
                 mustBeResolved((NakedObject) parameters[i]);
             }
         }
-
         Naked result = action.execute(this, parameters);
         return result;
     }
@@ -178,7 +178,7 @@ public class PojoAdapter extends AbstractNakedObject {
      * called.
      */
     private String defaultTitle;
-
+ 
     /**
      * Returns the title from the underlying business object. If the object has
      * not yet been resolved the specification will be asked for a unresolved
@@ -203,13 +203,23 @@ public class PojoAdapter extends AbstractNakedObject {
     }
 
     public String toString() {
+        ToString str = new ToString(this);
+        str.append("specification", specification == null ? "undetermined" : specification.getShortName());
+        str.append("title", titleString());
+        return str.toString();
+
+        
+        
         // speculating on performance.
         // For MemoryTestCase, fixture set up went from 1.502 secs to 1.291
         // secs.
 
         // return "POJO " + super.toString() +" " + specification == null ? "" :
         // titleString();
-        return "POJO " + super.toString(); // +" "
+        //return "PojoAdapter ";
+        //return "PojoAdapter " + titleString();
+       //return "POJO " + super.toString() +" " + specification == null ? "" : titleString();
+      //  return "POJO " + super.toString(); // +" "
                                                                          // +
                                                                          // specification
                                                                          // ==
