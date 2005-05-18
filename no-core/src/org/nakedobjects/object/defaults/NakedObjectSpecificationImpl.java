@@ -74,6 +74,8 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
     private ObjectTitle title;
     private NakedObjectField[] viewFields;
 
+    private String shortName;
+
     public NakedObjectSpecificationImpl() {}
 
     /**
@@ -82,7 +84,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
      * returned using the getJavaType method).
      */
     public Naked acquireInstance() {
-        LOG.debug("acquire instance of " + getShortName());
+        LOG.info("acquire instance of " + getShortName());
         return reflector.acquireInstance();
     }
 
@@ -342,7 +344,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
      * including the last period (".").
      */
     public String getShortName() {
-        return reflector.shortName();
+        return shortName;
     }
 
     /**
@@ -397,7 +399,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         if (reflector == null) {
             throw new NullPointerException("No reflector specified");
         }
-        LOG.debug("NakedClass " + this);
+        LOG.debug("Init specification " + this);
         this.reflector = reflector;
         NakedObjectSpecificationLoader loader = NakedObjects.getSpecificationLoader();
         if (superclass != null) {
@@ -423,7 +425,10 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         this.classActions = classActions;
 
         this.title = title;
-    }
+		this.isLookup = reflector.isLookup();
+		this.isObject = reflector.isObject();
+		shortName = reflector.shortName();
+	}
 
     public NakedObjectSpecification[] interfaces() {
         return interfaces;
@@ -437,12 +442,20 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         return reflector.isDirty(object);
     }
 
+	private boolean isLookup;
+	/**
+	 * locally cached since immutable; introduced during performance profiling.
+	 */
     public boolean isLookup() {
-        return reflector.isLookup();
-    }
+		return isLookup;
+	}
 
+	/**
+	 * locally cached since immutable; introduced during performance profiling.
+	 */
+	private boolean isObject;
     public boolean isObject() {
-        return reflector.isObject();
+        return isObject;
     }
 
     /**
@@ -584,31 +597,42 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
     public String unresolvedTitle(PojoAdapter pojo) {
         return reflector.unresolvedTitle(pojo);
     }
-    
+
+    private String asString;
     public String toString() {
-        StringBuffer s = new StringBuffer();
+		if (asString == null) {
+			asString = lazyToString();
+		}
 
-        s.append("NakedObjectSpecification");
-        if (reflector != null) {
-            s.append(" [name=");
-            s.append(getFullName());
-            s.append(",fields=");
-            s.append(fields.length);
-            s.append(",object methods=");
-            s.append(objectActions.length);
-            s.append(",class methods=");
-            s.append(classActions.length);
-            s.append(",reflector=");
-            s.append(reflector);
-            s.append("]");
-        } else {
-            s.append("[no relector set up]");
-        }
-
-        s.append("  " + Long.toHexString(super.hashCode()).toUpperCase());
-
-        return s.toString();
+		return asString;
     }
+	/**
+	 * Performance tuning.
+	 */
+	private String lazyToString() {
+		StringBuffer s = new StringBuffer();
+
+		s.append("NakedObjectSpecification");
+		if (reflector != null) {
+			s.append(" [name=");
+			s.append(getFullName());
+			s.append(",fields=");
+			s.append(fields.length);
+			s.append(",object methods=");
+			s.append(objectActions.length);
+			s.append(",class methods=");
+			s.append(classActions.length);
+			s.append(",reflector=");
+			s.append(reflector);
+			s.append("]");
+		} else {
+			s.append("[no relector set up]");
+		}
+
+		s.append("  " + Long.toHexString(super.hashCode()).toUpperCase());
+
+		return s.toString();
+	}
     
 
     protected void finalize() throws Throwable {
