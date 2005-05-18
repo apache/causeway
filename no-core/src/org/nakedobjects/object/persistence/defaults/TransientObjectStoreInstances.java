@@ -5,6 +5,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.persistence.TitleCriteria;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
 
 import java.util.Enumeration;
@@ -39,8 +40,9 @@ class TransientObjectStoreInstances {
     }
 
     public NakedObject getObject(Oid oid) {
-        if (loaded().isLoaded(oid)) {
-            return loaded().getLoadedObject(oid);
+        NakedObject loadedObject = loaded().getLoadedObject(oid);
+        if (loadedObject != null) {
+            return loadedObject;
         } else {
             Object pojo = objectInstances.get(oid);
             if (pojo == null) {
@@ -76,12 +78,16 @@ class TransientObjectStoreInstances {
         return numberOfInstances() > 0;
     }
 
- /*   public NakedObject instanceMatching(String title) {
-        Oid oid = (Oid) titleIndex.get(title);
-        return oid == null ? null : getObject(oid);
-    }
-*/
     public void instances(InstancesCriteria criteria, Vector instances) {
+        if(criteria instanceof TitleCriteria) {
+            String requiredTitle = ((TitleCriteria) criteria).getRequiredTitle();
+            Object object = titleIndex.get(requiredTitle);
+            if(object != null) {
+                instances.addElement(object);
+                return;
+            }
+        }
+        
         Enumeration e = elements();
         while (e.hasMoreElements()) {
             NakedObject element = (NakedObject) e.nextElement();
@@ -115,7 +121,7 @@ class TransientObjectStoreInstances {
 
     public void save(NakedObject object) {
         objectInstances.put(object.getOid(), object.getObject());
-        titleIndex.put(object.titleString().toLowerCase(), object.getOid());
+        titleIndex.put(object.titleString().toLowerCase(), object);
     }
 
     public void shutdown() {

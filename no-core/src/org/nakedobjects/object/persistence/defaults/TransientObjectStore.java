@@ -244,7 +244,7 @@ public class TransientObjectStore implements NakedObjectStore {
     }
 
     public NakedObject[] getInstances(NakedObjectSpecification spec, boolean includeSubclasses) {
-        LOG.debug("get instances" + (includeSubclasses ? " (included subclasses)" : "") + ": " + spec.getFullName());
+        LOG.debug("get instances" + (includeSubclasses ? " (included subclasses)" : ""));
         Vector instances = new Vector();
         getInstances(spec, instances, includeSubclasses);
         NakedObject[] ins = toInstancesArray(instances);
@@ -305,13 +305,12 @@ public class TransientObjectStore implements NakedObjectStore {
     }
 
     private TransientObjectStoreInstances instancesFor(NakedObjectSpecification spec) {
-        if (instances.containsKey(spec)) {
-            return (TransientObjectStoreInstances) instances.get(spec);
-        } else {
-            TransientObjectStoreInstances ins = new TransientObjectStoreInstances();
-            instances.put(spec, ins);
-            return ins;
-        }
+		TransientObjectStoreInstances ins = (TransientObjectStoreInstances) instances.get(spec);
+		if (ins == null) {
+			ins = new TransientObjectStoreInstances();
+			instances.put(spec, ins);
+		}
+        return ins;
     }
 
     public String name() {
@@ -337,7 +336,7 @@ public class TransientObjectStore implements NakedObjectStore {
     }
 
     public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException {
-        LOG.info("start execution of transaction");
+        LOG.info("start execution of transaction ");
         for (int i = 0; i < commands.length; i++) {
             commands[i].execute();
         }
