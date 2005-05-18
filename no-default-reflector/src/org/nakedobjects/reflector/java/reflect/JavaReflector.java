@@ -154,11 +154,11 @@ public class JavaReflector implements Reflector {
 
     public JavaReflector(String name, JavaObjectFactory objectFactory) throws ReflectionException {
         this.objectFactory = objectFactory;
-        Class cls;
+        LOG.info("Introspecting " + name);
 
+        Class cls;
         try {
             cls = Class.forName(name);
-
         } catch (ClassNotFoundException e) {
             throw new ReflectionException("Could not load class " + name, e);
         }
@@ -192,9 +192,9 @@ public class JavaReflector implements Reflector {
     }
 
     public ActionPeer[] actionPeers(boolean forClass) {
-        LOG.debug("looking for action methods");
+        LOG.debug("  looking  for action methods");
         Method defaultAboutMethod = findMethod(forClass, "aboutActionDefault", null, new Class[] { ActionAbout.class });
-        LOG.debug(defaultAboutMethod == null ? "no default about method for actions" : defaultAboutMethod.toString());
+        LOG.debug(defaultAboutMethod == null ? "  no default about method for actions" : defaultAboutMethod.toString());
 
         Vector validMethods = new Vector();
         Vector actions = new Vector();
@@ -241,7 +241,7 @@ public class JavaReflector implements Reflector {
              */
             validMethods.addElement(method);
 
-            LOG.debug("identified action " + method);
+            LOG.info("  identified action " + method);
             String methodName = method.getName();
             methods[i] = null;
 
@@ -267,17 +267,17 @@ public class JavaReflector implements Reflector {
     }
 
     public String[] actionSortOrder() {
-        LOG.debug("looking for action sort order");
+        LOG.debug("  looking  for action sort order");
         return readSortOrder(cls, "action");
     }
 
     public String[] classActionSortOrder() {
-        LOG.debug("looking for class action sort order");
+        LOG.debug("  looking  for class action sort order");
         return readSortOrder(cls, "classAction");
     }
 
     public Hint classHint() {
-        LOG.debug("looking for class about");
+        LOG.debug("  looking  for class about");
         try {
             SimpleClassAbout about = new SimpleClassAbout(null, null);
             String className = shortName();
@@ -332,7 +332,7 @@ public class JavaReflector implements Reflector {
 
         while (e.hasMoreElements()) {
             Method method = (Method) e.nextElement();
-            LOG.debug("identified derived value method " + method);
+            LOG.info("  identified derived value method " + method);
             String name = javaBaseName(method.getName());
 
             Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class });
@@ -357,7 +357,7 @@ public class JavaReflector implements Reflector {
             return new FieldPeer[0];
         }
 
-        LOG.debug("looking for fields for " + cls);
+        LOG.debug("  looking  for fields for " + cls);
         Vector elements = new Vector();
         defaultAboutFieldMethod = findMethod(OBJECT, ABOUT_FIELD_DEFAULT, null, new Class[] { FieldAbout.class });
         valueFields(elements, BusinessValueHolder.class);
@@ -624,7 +624,7 @@ public class JavaReflector implements Reflector {
 
         while (e.hasMoreElements()) {
             Method getMethod = (Method) e.nextElement();
-            LOG.debug("identified 1-many association method " + getMethod);
+            LOG.info("  identified 1-many association method " + getMethod);
             String name = javaBaseName(getMethod.getName());
 
             Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class, null,
@@ -691,7 +691,7 @@ public class JavaReflector implements Reflector {
 
         while (e.hasMoreElements()) {
             Method getMethod = (Method) e.nextElement();
-            LOG.debug("identified 1-many association method " + getMethod);
+            LOG.info("  identified 1-many association method " + getMethod);
             String name = javaBaseName(getMethod.getName());
 
             Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class, null,
@@ -755,7 +755,7 @@ public class JavaReflector implements Reflector {
 
         while (e.hasMoreElements()) {
             Method getMethod = (Method) e.nextElement();
-            LOG.debug("identified 1-1 association method " + getMethod);
+            LOG.info("  identified 1-1 association method " + getMethod);
 
             // ignore the getNakedClass method
             if (getMethod.getName().equals("getNakedClass")) {
@@ -889,7 +889,7 @@ public class JavaReflector implements Reflector {
             }
 
             // create Field
-            LOG.info("Value " + name + " ->" + getMethod);
+            LOG.info("  value " + name + " ->" + getMethod);
             /*
              * ValueField attribute = createValueField(getMethod, setMethod,
              * name, aboutMethod, validMethod); fields.addElement(attribute);
