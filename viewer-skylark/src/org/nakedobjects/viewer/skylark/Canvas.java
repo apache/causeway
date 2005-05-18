@@ -5,20 +5,18 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 
 
-
 public class Canvas {
     private java.awt.Color color;
     private Font font;
     private Graphics graphics;
 
-    protected Canvas(Graphics bufferGraphic, int x, int y, int width, int height) {
-        graphics = bufferGraphic;
-     //   graphics.setClip(x, y, width, height);
-        graphics.clipRect(x, y, width, height);
-    }
-
     protected Canvas(Graphics graphics) {
         this.graphics = graphics;
+    }
+
+    protected Canvas(Graphics bufferGraphic, int x, int y, int width, int height) {
+        graphics = bufferGraphic;
+        graphics.clipRect(x, y, width, height);
     }
 
     public Canvas createSubcanvas() {
@@ -31,27 +29,18 @@ public class Canvas {
 
     public Canvas createSubcanvas(int x, int y, int width, int height) {
         Graphics g = graphics.create();
- //       g.clipRect(x, y, width, height); // this form of clipping must go here!
+        // this form of clipping must go here!
         g.translate(x, y);
         return new Canvas(g, 0, 0, width, height);
     }
- 
-/*
-    public void setClip(int x, int y, int width, int height) {
-        graphics.translate(-x, -y);
-        graphics.setClip(x, y, width, height);
-    }
-*/
-    
-     public boolean overlaps(Bounds bounds) {
-       // return activeArea.intersects(bounds);
-         Rectangle clip = graphics.getClipBounds();
-         Bounds activeArea = new Bounds(clip.x, clip.y, clip.width, clip.height);
-         return bounds.intersects(activeArea);
-    }
-     
+
     public void draw3DRectangle(int x, int y, int width, int height, boolean raised) {
         graphics.draw3DRect(x, y, width, height, raised);
+    }
+
+    public void drawBackground(View view, Color color) {
+        Bounds bounds = view.getBounds();
+        drawSolidRectangle(0, 0, bounds.getWidth() - 1, bounds.getHeight() - 1, color);
     }
 
     public void drawIcon(Image icon, int x, int y) {
@@ -76,12 +65,9 @@ public class Canvas {
         graphics.drawRect(x, y, width, height);
     }
 
-    public void drawRectangle(Location at, Size size, Color color) {
-        drawRectangle(at.getX(), at.getY(), size.getWidth() - 1, size.getHeight() - 1, color);
-    }
-
-    public void drawRectangle(Size size, Color color) {
-        drawRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, color);
+    public void drawRectangleAround(View view, Color color) {
+        Bounds bounds = view.getBounds();
+        drawRectangle(0, 0, bounds.getWidth() - 1, bounds.getHeight() - 1, color);
     }
 
     public void drawRoundedRectangle(int x, int y, int width, int height, int arcWidth, int arcHeight, Color color) {
@@ -110,14 +96,6 @@ public class Canvas {
         graphics.fillRect(x, y, width, height);
     }
 
-    public void drawSolidRectangle(Location at, Size size, Color color) {
-        drawSolidRectangle(at.getX(), at.getY(), size.getWidth() - 1, size.getHeight() - 1, color);
-    }
-
-    public void drawSolidRectangle(Size size, Color color) {
-        drawSolidRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, color);
-    }
-
     public void drawSolidShape(Shape shape, Color color) {
         useColor(color);
         graphics.fillPolygon(shape.getX(), shape.getY(), shape.count());
@@ -129,15 +107,21 @@ public class Canvas {
         drawSolidShape(copy, color);
     }
 
-    /*
-     * public void drawRoundedRectangle(Bounds bounds, int arcWidth, int
-     * arcHeight, Color color) { drawRoundedRectangle(bounds.x, bounds.y,
-     * bounds.width, bounds.height, arcWidth, arcHeight, color); }
-     */
     public void drawText(String text, int x, int y, Color color, Text style) {
         useColor(color);
         useFont(style);
         graphics.drawString(text, x, y);
+    }
+
+    public void offset(int x, int y) {
+        graphics.translate(x, y);
+    }
+
+    public boolean overlaps(Bounds bounds) {
+        // return activeArea.intersects(bounds);
+        Rectangle clip = graphics.getClipBounds();
+        Bounds activeArea = new Bounds(clip.x, clip.y, clip.width, clip.height);
+        return bounds.intersects(activeArea);
     }
 
     public String toString() {
@@ -161,10 +145,6 @@ public class Canvas {
             this.font = font;
             graphics.setFont(font);
         }
-    }
-
-    public void offset(int x, int y) {
-       graphics.translate(x, y);
     }
 }
 
