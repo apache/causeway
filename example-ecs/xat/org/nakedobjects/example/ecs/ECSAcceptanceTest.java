@@ -6,7 +6,6 @@ import org.nakedobjects.application.valueholder.TextString;
 import org.nakedobjects.application.valueholder.Time;
 import org.nakedobjects.example.xat.JavaAcceptanceTestCase;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.reflector.java.fixture.JavaFixture;
 import org.nakedobjects.reflector.java.reflect.VectorCollectionAdapter;
 import org.nakedobjects.xat.IllegalActionError;

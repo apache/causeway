@@ -9,7 +9,7 @@ import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Hashtable;
 
-public class MockNakedObjectSpecificationLoaderNew extends NakedObjectSpecificationLoader {
+public class MockNakedObjectSpecificationLoaderNew implements NakedObjectSpecificationLoader {
     private Hashtable specs = new Hashtable();
     
     public MockNakedObjectSpecificationLoaderNew() {

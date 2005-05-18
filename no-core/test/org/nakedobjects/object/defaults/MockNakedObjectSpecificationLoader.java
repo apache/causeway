@@ -7,7 +7,7 @@ import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Vector;
 
-public class MockNakedObjectSpecificationLoader extends NakedObjectSpecificationLoader {
+public class MockNakedObjectSpecificationLoader implements NakedObjectSpecificationLoader {
     private Vector specs = new Vector();
     
     public MockNakedObjectSpecificationLoader() {

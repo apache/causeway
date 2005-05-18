@@ -1,6 +1,5 @@
 package org.nakedobjects.object.defaults;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;

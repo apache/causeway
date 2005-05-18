@@ -4,11 +4,8 @@ import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.MockOid;
 import org.nakedobjects.object.reflect.DummyNakedObject;
-
 import java.util.Enumeration;
-
 import junit.framework.TestCase;
-
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -19,12 +16,6 @@ public class TransientObjectStoreInstancesTest extends TestCase {
     private MockTransientObjectStoreInstances instances;
     private MockPojoAdapterFactory mockPojoAdapterFactory;
     private TestObject object;
-
-    /*
-     * private void assertEquals(NakedObject object, NakedObject v) {
-     * assertEquals(object.getObject(), v.getObject());
-     * assertEquals(object.getOid(), v.getOid()); }
-     */
 
     protected void setUp() throws Exception {
         BasicConfigurator.configure();
@@ -55,6 +46,7 @@ public class TransientObjectStoreInstancesTest extends TestCase {
 
     public void testGetNoObject() throws Exception {
         mockPojoAdapterFactory.setupLoaded(false);
+        mockPojoAdapterFactory.setupExpectedOid(new MockOid(0));
 
         assertEquals(null, instances.getObject(new MockOid(0)));
     }
@@ -64,6 +56,7 @@ public class TransientObjectStoreInstancesTest extends TestCase {
         mockPojoAdapterFactory.setupExpectedPojo(object);
         DummyNakedObject nakedObject = new DummyNakedObject();
         mockPojoAdapterFactory.setupCreatedAdapter(nakedObject);
+        mockPojoAdapterFactory.setupExpectedOid(oid);
 
         assertEquals(nakedObject, instances.getObject(oid));
     }
@@ -132,7 +125,7 @@ public class TransientObjectStoreInstancesTest extends TestCase {
         assertTrue(instances.objectInstances.containsKey(oid));
         assertTrue(instances.objectInstances.contains(object));
         assertTrue(instances.titleIndex.containsKey("four"));
-        assertTrue(instances.titleIndex.contains(oid));
+        assertTrue(instances.titleIndex.contains(mockNakedObject));
     }
 
 }

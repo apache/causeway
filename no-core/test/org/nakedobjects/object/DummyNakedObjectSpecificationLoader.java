@@ -1,6 +1,6 @@
 package org.nakedobjects.object;
 
-public class DummyNakedObjectSpecificationLoader extends NakedObjectSpecificationLoader {
+public class DummyNakedObjectSpecificationLoader implements NakedObjectSpecificationLoader {
 
     public NakedObjectSpecification loadSpecification(String name) {
         return null;
