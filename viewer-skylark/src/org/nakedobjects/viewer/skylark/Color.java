@@ -8,7 +8,18 @@ public class Color {
     public static Color DEBUG_DRAW_BOUNDS = new Color(java.awt.Color.cyan);
     public static Color DEBUG_VIEW_BOUNDS = new Color(java.awt.Color.orange);
     public static Color DEBUG_REPAINT_BOUNDS = new Color(java.awt.Color.red);
-	protected static Color NULL = new Color(0);
+    
+    public static Color RED = new Color(java.awt.Color.red);
+    public static Color GREEN = new Color(java.awt.Color.green);
+    public static Color BLUE = new Color(java.awt.Color.blue);
+    public static Color BLACK = new Color(java.awt.Color.black);
+    public static Color WHITE = new Color(java.awt.Color.white);
+    public static Color GRAY = new Color(java.awt.Color.gray);
+    public static Color LIGHT_GRAY = new Color(java.awt.Color.lightGray);
+    public static Color ORANGE = new Color(java.awt.Color.orange);
+    public static Color YELLOW = new Color(java.awt.Color.yellow);
+    
+    protected static Color NULL = new Color(0);
     private static final String PROPERTY_STEM = Viewer.PROPERTY_BASE + "color.";
     private java.awt.Color color;
     private String name;
