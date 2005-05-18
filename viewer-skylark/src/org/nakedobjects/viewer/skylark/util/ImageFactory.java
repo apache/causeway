@@ -1,14 +1,19 @@
 package org.nakedobjects.viewer.skylark.util;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Image;
-import org.nakedobjects.viewer.skylark.UiConfiguration;
+import org.nakedobjects.viewer.skylark.Viewer;
 
 import java.util.Hashtable;
 
 
 public class ImageFactory {
+    private static final String FALLBACK_IMAGE = "Unknown.gif";
+    private final static String FALLBACK_PARAM = Viewer.PROPERTY_BASE + "fallback-image";
+    private final static String IMAGE_DIRECTORY = "images/";
+    private final static String IMAGE_DIRECTORY_PARAM = Viewer.PROPERTY_BASE + "image-directory";
     private static ImageFactory instance;
 
     public static ImageFactory getInstance() {
@@ -18,6 +23,8 @@ public class ImageFactory {
         return instance;
     }
 
+    private String directory;
+
     private TemplateImageLoader loader;
 
     /**
@@ -25,8 +32,6 @@ public class ImageFactory {
      * where the key is the name of the icon and its size.
      */
     private Hashtable templateImages = new Hashtable();
-
-    private String directory;
 
     private ImageFactory() {
         loader = new TemplateImageLoader();
@@ -37,7 +42,7 @@ public class ImageFactory {
      * found
      */
     public Image createFallbackIcon(final int height, final Color tint) {
-        String fallbackImage = UiConfiguration.getInstance().fallbackIconImage();
+        String fallbackImage = NakedObjects.getConfiguration().getString(FALLBACK_PARAM, FALLBACK_IMAGE);
         return createIcon(fallbackImage, height, tint);
     }
 
@@ -64,13 +69,6 @@ public class ImageFactory {
         }
     }
 
-    private String directory() {
-        if(directory == null) {
-            directory = UiConfiguration.getInstance().imageDirectory();
-        }
-        return directory;
-    }
-
     /**
      * Load a picture from the given file path.
      */
@@ -81,6 +79,13 @@ public class ImageFactory {
             return null;
         }
         return template.getFullSizeImage();
+    }
+
+    private String directory() {
+        if (directory == null) {
+            directory = NakedObjects.getConfiguration().getString(IMAGE_DIRECTORY_PARAM, IMAGE_DIRECTORY);
+        }
+        return directory;
     }
 
     /**
@@ -103,8 +108,7 @@ public class ImageFactory {
             }
         }
     }
-    
-    
+
     public Image loadIcon(final NakedObjectSpecification specification, final String type, int iconHeight) {
         String className = specification.getFullName().replace('.', '_') + type;
         Image loadIcon = loadIcon(className, iconHeight);

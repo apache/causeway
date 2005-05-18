@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark.util;
 
-import org.nakedobjects.viewer.skylark.UiConfiguration;
+import org.nakedobjects.NakedObjects;
+import org.nakedobjects.viewer.skylark.Viewer;
 
 import java.awt.Canvas;
 import java.awt.Image;
@@ -30,7 +31,7 @@ class TemplateImageLoader {
      * Creates a PictureLoader and loads a fallback icon.
      */
     TemplateImageLoader() {
-        alsoLoadAsFiles = UiConfiguration.getInstance().alsoLoadImageAsFiles();
+        alsoLoadAsFiles = NakedObjects.getConfiguration().getBoolean(Viewer.PROPERTY_BASE + "load-images-from-files", true);;
     }
 
     /*
