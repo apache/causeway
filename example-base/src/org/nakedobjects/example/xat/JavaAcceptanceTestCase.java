@@ -1,6 +1,6 @@
 package org.nakedobjects.example.xat;
 
-import org.nakedobjects.NakedObjectsClient;
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
@@ -78,7 +78,7 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
        System.out.print(" \t" + methodProfiler.timeLog());
    }
    
-    protected final void setupFramework(NakedObjectsClient nakedObjects) {
+    protected final void setupFramework(NakedObjects nakedObjects) {
         JavaBusinessObjectContainer container = new JavaBusinessObjectContainer();
 
         JavaObjectFactory objectFactory = new JavaObjectFactory();

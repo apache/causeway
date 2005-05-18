@@ -125,7 +125,7 @@ public abstract class AcceptanceTestCase extends TestCase {
 		pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
 		nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
 		
-        setupFramework();
+        setupFramework(nakedObjects);
 
         nakedObjects.setSession(new Session());
 
@@ -137,6 +137,7 @@ public abstract class AcceptanceTestCase extends TestCase {
             for (int i = 0; i < cls.length; i++) {
                 NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(cls[i]);
                 NakedClass spec = new NakedClass(cls[i]);
+                NakedObjects.getPojoAdapterFactory().createNOAdapter(spec).setResolved();
                 TestClass view = testObjectFactory.createTestClass(spec);
                 classes.put(nc.getFullName().toLowerCase(), view);
             }
@@ -151,7 +152,7 @@ public abstract class AcceptanceTestCase extends TestCase {
 
     protected abstract FixtureBuilder createFixtureBuilder();
 
-    protected abstract void setupFramework();
+    protected abstract void setupFramework(NakedObjects nakedObjects);
 
     protected abstract void setUpFixtures();
 
