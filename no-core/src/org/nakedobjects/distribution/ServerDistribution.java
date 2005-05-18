@@ -21,6 +21,7 @@ import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
+import org.nakedobjects.utility.Assert;
 
 import org.apache.log4j.Logger;
 
@@ -92,12 +93,13 @@ public class ServerDistribution implements ClientDistribution {
                 ObjectData objectData = (ObjectData) data;
                 if (objectData.getOid() != null) {
                     parameters[i] = getNakedObject(session, objectData.getOid(), objectData.getType());
+                    Assert.assertEquals(parameters[i], NakedObjects.getPojoAdapterFactory().createAdapter(parameters[i].getObject()));
                 } else {
                     parameters[i] = DataHelper.recreate(data);
                 }
             } else if (data instanceof ValueData) {
                 ValueData valueData = (ValueData) data;
-                NakedObjects.getPojoAdapterFactory().createAdapter(valueData.getValue());
+                parameters[i] = NakedObjects.getPojoAdapterFactory().createAdapter(valueData.getValue());
             } else {
                 throw new NakedObjectRuntimeException();
             }
@@ -107,7 +109,7 @@ public class ServerDistribution implements ClientDistribution {
             NakedObject result = (NakedObject) object.execute(action, parameters);
             return objectDataFactory.createObjectData(result, OBJECT_DATA_DEPTH);
         } catch (Exception e) {
-            LOG.error(e);
+            LOG.error(e.getMessage(), e);
             return objectDataFactory.createObjectData(null, OBJECT_DATA_DEPTH);
         }
     }

@@ -32,7 +32,6 @@ public class InstanceCollectionVector implements TypedNakedCollection, InternalN
     private NakedObjectSpecification elementSpecification;
 
     public InstanceCollectionVector(NakedObjectSpecification elementSpecification, NakedObject[] instances) {
-//        super(cls.getFullName());
         this.elementSpecification = elementSpecification;
         name = elementSpecification.getPluralName();
         
@@ -41,8 +40,6 @@ public class InstanceCollectionVector implements TypedNakedCollection, InternalN
         for (int i = 0; i < size; i++) {
             elements.addElement(instances[i]);
         }
-        
-        
     }
 
     /**
