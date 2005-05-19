@@ -30,6 +30,10 @@ public class TreeBrowserSpecification implements ViewSpecification {
 	}
 	
     public boolean canDisplay(Content content) {
+        if(content.isCollection()) {
+            return true;
+        }
+        
         if(content.isObject()) {
             NakedObject object = (NakedObject) content.getNaked();
 	        NakedObjectField[] fields = object.getVisibleFields();
