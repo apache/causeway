@@ -172,6 +172,8 @@ public class JavaReflector implements Reflector {
         isDirtyMethod = findMethod(false, "isDirty", boolean.class, new Class[0]);
         clearDirtyMethod = findMethod(false, "clearDirty", void.class, new Class[0]);
         markDirtyMethod = findMethod(false, "markDirty", void.class, new Class[0]);
+        
+        //TODO optomize by caching isObject etc
     }
 
     public Naked acquireInstance() {

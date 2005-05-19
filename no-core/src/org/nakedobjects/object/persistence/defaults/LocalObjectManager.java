@@ -389,6 +389,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     public void resolveEagerly(NakedObject object, NakedObjectField field) {
+        // TODO skip this if field if alreay resolved?
         if (object.isResolved() || !isPersistent(object)) {
             return;
         }
