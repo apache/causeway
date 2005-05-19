@@ -15,8 +15,6 @@ public abstract class NakedObjectField extends NakedObjectMember {
             throw new IllegalArgumentException("type cannot be null");
         }
         this.specification = type;
-		this.isObject = specification.isObject();
-		this.isValue = specification.isValue();
 	}
 
    protected abstract Naked get(NakedObject fromObject);
@@ -41,20 +39,12 @@ public abstract class NakedObjectField extends NakedObjectMember {
 
     public abstract boolean isEmpty(NakedObject adapter);
 
-	private boolean isObject;
-	/**
-	 * Cached as result of performance profiling.
-	 */
     public boolean isObject() {
-		return isObject;
+		return specification.isObject();
     }
     
-	private boolean isValue;
-	/**
-	 * Cached as result of performance profiling.
-	 */
-	public boolean isValue() {
-        return isValue;
+    public boolean isValue() {
+	    return specification.isValue();
     }
 }
 

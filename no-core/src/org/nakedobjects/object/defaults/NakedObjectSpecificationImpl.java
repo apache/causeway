@@ -425,8 +425,6 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         this.classActions = classActions;
 
         this.title = title;
-		this.isLookup = reflector.isLookup();
-		this.isObject = reflector.isObject();
 		shortName = reflector.shortName();
 	}
 
@@ -442,20 +440,12 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         return reflector.isDirty(object);
     }
 
-	private boolean isLookup;
-	/**
-	 * locally cached since immutable; introduced during performance profiling.
-	 */
     public boolean isLookup() {
-		return isLookup;
+		return reflector.isLookup();
 	}
 
-	/**
-	 * locally cached since immutable; introduced during performance profiling.
-	 */
-	private boolean isObject;
     public boolean isObject() {
-        return isObject;
+		return reflector.isObject();
     }
 
     /**
