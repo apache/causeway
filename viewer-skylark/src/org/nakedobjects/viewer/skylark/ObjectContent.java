@@ -26,30 +26,32 @@ public abstract class ObjectContent extends AbstractContent {
     public abstract Consent canClear();
 
     public Consent canDrop(Content sourceContent) {
-
-        NakedObject source = ((ObjectContent) sourceContent).getObject();
-        NakedObject target = (NakedObject) getObject();
-
-        Action action = dropAction(source, target);
-        if (action != null) {
-            Hint about = target.getHint(action, new NakedObject[] { source });
-            return about.canUse();
-
+        if (!(sourceContent instanceof ObjectContent)) {
+            return new Veto("Can't drop " + sourceContent.getNaked());
         } else {
-            if (target.getOid() != null && source.getOid() == null) {
-                return new Veto("Can't set field in persistent object with reference to non-persistent object");
+            NakedObject source = ((ObjectContent) sourceContent).getObject();
+            NakedObject target = (NakedObject) getObject();
+
+            Action action = dropAction(source, target);
+            if (action != null) {
+                Hint about = target.getHint(action, new NakedObject[] { source });
+                return about.canUse();
 
             } else {
-                NakedObjectField[] fields = target.getVisibleFields();
-                for (int i = 0; i < fields.length; i++) {
-                    if (source.getSpecification().isOfType(fields[i].getSpecification())) {
-                        if (target.getField(fields[i]) == null) {
-                            return new Allow("Set field " + target.getLabel(fields[i]));
+                if (target.getOid() != null && source.getOid() == null) {
+                    return new Veto("Can't set field in persistent object with reference to non-persistent object");
+
+                } else {
+                    NakedObjectField[] fields = target.getVisibleFields();
+                    for (int i = 0; i < fields.length; i++) {
+                        if (source.getSpecification().isOfType(fields[i].getSpecification())) {
+                            if (target.getField(fields[i]) == null) {
+                                return new Allow("Set field " + target.getLabel(fields[i]));
+                            }
                         }
                     }
+                    return new Veto("No empty field accepting object of type " + source.getSpecification().getSingularName());
                 }
-                return new Veto("No empty field accepting object of type " + source.getSpecification().getSingularName());
-
             }
         }
     }
@@ -68,8 +70,7 @@ public abstract class ObjectContent extends AbstractContent {
         if (canDrop(sourceContent).isAllowed()) {
             Action action = dropAction(source, target);
 
-            if ((action != null)
-                    && target.getHint(action, new NakedObject[] { source }).canUse().isAllowed()) {
+            if ((action != null) && target.getHint(action, new NakedObject[] { source }).canUse().isAllowed()) {
                 return target.execute(action, new NakedObject[] { source });
 
             } else {
@@ -108,10 +109,10 @@ public abstract class ObjectContent extends AbstractContent {
     public void menuOptions(MenuOptionSet options) {
         final NakedObject object = getObject();
         ObjectOption.menuOptions(object, options);
-        
+
         if (getObject() == null) {
             ClassOption.menuOptions(getSpecification(), options);
-        } 
+        }
 
         if (object instanceof ApplicationContext) {
             options.add(MenuOptionSet.VIEW, new MenuOption("New Workspace") {
@@ -122,7 +123,7 @@ public abstract class ObjectContent extends AbstractContent {
                 public void execute(Workspace workspace, View view, Location at) {
                     View newWorkspace;
                     Content content = Skylark.getContentFactory().createRootContent(object);
-                    newWorkspace =  Skylark.getViewFactory().createInnerWorkspace(content);
+                    newWorkspace = Skylark.getViewFactory().createInnerWorkspace(content);
                     newWorkspace.setLocation(at);
                     workspace.addView(newWorkspace);
                     newWorkspace.markDamaged();
@@ -134,7 +135,7 @@ public abstract class ObjectContent extends AbstractContent {
             public Consent disabled(View component) {
                 return AbstractConsent.allow(object != null);
             }
-            
+
             public void execute(Workspace workspace, View view, Location at) {
             /*
              * TODO reimplement return
@@ -147,7 +148,7 @@ public abstract class ObjectContent extends AbstractContent {
             public Consent disabled(View component) {
                 return AbstractConsent.allow(object != null);
             }
-            
+
             public void execute(Workspace workspace, View view, Location at) {
             /*
              * TODO reimplement AbstractNakedObject clone =
@@ -160,12 +161,12 @@ public abstract class ObjectContent extends AbstractContent {
              */
             }
         });
-        
+
         options.add(MenuOptionSet.DEBUG, new MenuOption("Clear resolved") {
             public Consent disabled(View component) {
                 return AbstractConsent.allow(object != null && !object.isResolved());
             }
-            
+
             public void execute(Workspace workspace, View view, Location at) {
                 object.debugClearResolved();
             }
