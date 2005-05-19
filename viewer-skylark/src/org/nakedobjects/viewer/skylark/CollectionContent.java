@@ -1,8 +1,10 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.utility.UnexpectedCallException;
 import org.nakedobjects.viewer.skylark.basic.AbstractContent;
 
@@ -19,6 +21,32 @@ public abstract class CollectionContent extends AbstractContent implements Conte
         throw new UnexpectedCallException();
     }
 
+    public void menuOptions(MenuOptionSet options) {
+        Naked object = getNaked();
+        
+        Action[] actions = object.getSpecification().getObjectActions(Action.USER);
+
+        for (int i = 0; i < actions.length; i++) {
+            MenuOption option;
+          /*  if (actions[i].parameters().length == 0) {
+                option = ImmediateObjectOption.createOption(actions[i], object);
+            } else {
+                option = DialogedObjectOption.createOption(actions[i], object);
+            } */
+            
+            option = new MenuOption(actions[i].getName()) {
+
+                public void execute(Workspace workspace, View view, Location at) {}
+                
+            };
+            
+            if (option != null) {
+                options.add(MenuOptionSet.OBJECT, option);
+            }
+        }
+        
+    }
+    
     public void parseTextEntry(String entryText) throws InvalidEntryException {
         throw new UnexpectedCallException();
     }

@@ -71,9 +71,7 @@ public class RootCollection extends CollectionContent {
     public boolean isTransient() {
         return collection != null;
     }
-    
-    public void menuOptions(MenuOptionSet options) {}
-
+ 
     public void setObject(NakedObject object) {
         throw new NakedObjectRuntimeException("Invalid call");
     }

@@ -137,6 +137,7 @@ public class OneToManyField extends CollectionContent implements FieldContent {
 
 
     public void menuOptions(MenuOptionSet options) {
+        super.menuOptions(options);
         ClassOption.menuOptions(getOneToManyAssociation().getSpecification(), options);
     }
 }
