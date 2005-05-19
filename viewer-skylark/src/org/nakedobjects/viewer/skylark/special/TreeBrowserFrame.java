@@ -35,15 +35,29 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     public String debugDetails() {
         StringBuffer b = new StringBuffer();
         b.append(super.debugDetails());
- //       b.append("\nBuilt:     " + (buildInvalid ? "no" : "yes") + ", " + buildCount + " builds");
         b.append("\nLaid out:  " + (invalidLayout ? "no" : "yes") + ", " + layoutCount + " layouts");
         b.append("\nBrowser:   ");
         b.append(this);
-        b.append("\n           left: " + left.getBounds() + " " + left + ": " + left.getContent() );
-        b.append("\n           right: " + right.getBounds() + " " + right + ": " + right.getContent());
-
+        
+        b.append("\n           left: ");
+        b.append(left.getBounds());
+        b.append(" ");
+        b.append(left);
+        b.append(": ");
+        b.append(left.getContent() );
+        
+        b.append("\n           right: ");
+        if(right == null) {
+            b.append("nothing");
+        } else {
+            b.append(right.getBounds());
+            b.append(" ");
+            b.append(right );
+            b.append(": ");
+            b.append(right.getContent());
+        }
         b.append("\n\n");
-
+        
         return b.toString();
     }
 

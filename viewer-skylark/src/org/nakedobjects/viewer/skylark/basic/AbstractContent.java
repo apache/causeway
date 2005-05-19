@@ -28,7 +28,6 @@ public abstract class AbstractContent implements Content {
     }
 
     public void menuOptions(MenuOptionSet options) {}
-
     
     public boolean isPersistable() {
         return getSpecification().persistable() == Persistable.USER_PERSISTABLE;

@@ -26,8 +26,8 @@ public class ReplaceViewOption extends MenuOption {
 
     public void execute(Workspace workspace, View view, Location at) {
         View replacement = specification.createView(view.getContent(), view.getViewAxis());
-        replacement = ((CompositeViewSpecification) view.getParent().getSpecification()).getSubviewBuilder().decorateSubview(
-                replacement);
+        CompositeViewSpecification compositeViewSpecification = (CompositeViewSpecification) view.getParent().getSpecification();
+        replacement = compositeViewSpecification.getSubviewBuilder().decorateSubview(replacement);
         LOG.debug("replacement view " + replacement);
         view.getParent().replaceView(view, replacement);
     }
