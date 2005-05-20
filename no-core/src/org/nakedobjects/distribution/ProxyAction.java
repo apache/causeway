@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.AbstractActionPeer;
+import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.ReflectiveActionException;
@@ -26,7 +27,7 @@ public final class ProxyAction extends AbstractActionPeer {
     }
 
     public Naked execute(MemberIdentifier identifier, NakedObject target, Naked[] parameters) throws ReflectiveActionException {
-        if (isPersistent(target)) {
+        if (executeRemotely(target)) {
             String[] parameterTypes = pararmeterTypes();
             Data[] parameterObjectData = parameterValues(parameters);
             ObjectData targetObjectData = connection.executeAction(NakedObjects.getCurrentSession(), getType().getName(), getName(),
@@ -38,6 +39,22 @@ public final class ProxyAction extends AbstractActionPeer {
             return super.execute(identifier, target, parameters);
         }
     }
+
+    private boolean executeRemotely(NakedObject target) {
+        boolean remoteAsPersistent = target.getOid() != null;
+        boolean remoteOverride =  getTarget() == Action.REMOTE;
+        boolean localOverride =  getTarget() == Action.LOCAL;
+        
+        if(localOverride) {
+            return false;
+        }
+        
+        if(remoteOverride) {
+            return true;
+        }
+        
+        return remoteAsPersistent;
+   }
 
     private Data[] parameterValues(Naked[] parameters) {
         Data parameterObjectData[] = new Data[parameters.length];
@@ -57,19 +74,15 @@ public final class ProxyAction extends AbstractActionPeer {
         return parameterTypeNames;
     }
 
-    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
-        if (isPersistent(object) && fullProxy) {
+    public Hint getHint(MemberIdentifier identifier, NakedObject target, Naked[] parameters) {
+        if (executeRemotely(target) && fullProxy) {
             String[] parameterTypes = pararmeterTypes();
             Data[] parameterObjectData = parameterValues(parameters);
-            return connection.getActionHint(NakedObjects.getCurrentSession(), getType().getName(), getName(), parameterTypes, object.getOid(), object
+            return connection.getActionHint(NakedObjects.getCurrentSession(), getType().getName(), getName(), parameterTypes, target.getOid(), target
                     .getSpecification().getFullName(), parameterObjectData);
         } else {
-            return super.getHint(identifier, object, parameters);
+            return super.getHint(identifier, target, parameters);
         }
-    }
-
-    private boolean isPersistent(NakedObject object) {
-        return object.getOid() != null;
     }
 }
 
