@@ -1,4 +1,5 @@
 package org.nakedobjects.viewer.skylark.example;
+import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -8,13 +9,15 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionParameterSet;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.OneToOnePeer;
 
 
-public class ExampleObjectForView implements NakedObject {
+public class ExampleObjectForView2 implements NakedObject {
 
     private NakedObject object;
 
@@ -35,7 +38,57 @@ public class ExampleObjectForView implements NakedObject {
     }
 
     public NakedObjectField[] getFields() {
-        return new NakedObjectField[0];
+        final DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
+        
+        OneToOnePeer peer = new OneToOnePeer() {
+
+            public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
+
+            public Naked getAssociation(MemberIdentifier identifier, NakedObject inObject) {
+                return null;
+            }
+
+            public Object getExtension(Class cls) {
+                return null;
+            }
+
+            public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked value) {
+                return null;
+            }
+
+            public String getName() {
+                return "field";
+            }
+
+            public NakedObjectSpecification getType() {
+                return spec;
+            }
+
+            public boolean hasHint() {
+                return false;
+            }
+
+            public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
+
+            public void initValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {}
+
+            public boolean isDerived() {
+                return false;
+            }
+
+            public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
+                return false;
+            }
+
+            public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
+
+            public void setValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {}};
+        
+        NakedObjectField[] fields = new NakedObjectField[] {
+                new OneToOneAssociation("cls", "fld", spec, peer),
+/*                new OneToManyAssociation() */
+        };
+        return fields;
     }
 
     public String getIconName() {
@@ -43,11 +96,11 @@ public class ExampleObjectForView implements NakedObject {
     }
 
     public String getLabel(Action action) {
-        return null;
+        return "label";
     }
 
     public String getLabel(NakedObjectField field) {
-        return null;
+        return "label";
     }
 
     public ActionParameterSet getParameters(Action action) {

@@ -40,6 +40,18 @@ public class TestWorkspaceView extends AbstractView implements Workspace {
 	        view.draw(subcanvas);
         }
     }
+    
+    public View subviewFor(Location location) {
+        for (int i = 0; i < views.size(); i++) {
+            View view = (View) views.elementAt(i);
+            if(view.getBounds().contains(location)) {
+                return view;
+            }
+        }
+        
+        
+        return null;
+    }
 
     public Size getRequiredSize() {
         return new Size(600, 400);

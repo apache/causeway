@@ -3,6 +3,7 @@ import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoaderNew;
+import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.utility.InfoDebugFrame;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.InteractionSpy;
@@ -37,7 +38,9 @@ public class TestViews {
         MockNakedObjectSpecificationLoaderNew loader = new MockNakedObjectSpecificationLoaderNew();
         setupSpecificationLoader(loader);
         nakedObjects.setSpecificationLoader(loader);
-
+      
+        nakedObjects.setObjectManager(new MockObjectManager());
+        
         Viewer viewer = new Viewer();
         ViewerFrame frame = new ViewerFrame();
         frame.setViewer(viewer);
