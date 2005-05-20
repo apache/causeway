@@ -3,6 +3,7 @@ package org.nakedobjects.distribution;
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.AbstractActionPeer;
@@ -30,11 +31,17 @@ public final class ProxyAction extends AbstractActionPeer {
         if (executeRemotely(target)) {
             String[] parameterTypes = pararmeterTypes();
             Data[] parameterObjectData = parameterValues(parameters);
-            ObjectData targetObjectData = connection.executeAction(NakedObjects.getCurrentSession(), getType().getName(), getName(),
+            Data result = connection.executeAction(NakedObjects.getCurrentSession(), getType().getName(), getName(),
                     parameterTypes, target.getOid(), target.getSpecification().getFullName(), parameterObjectData);
-            NakedObject returnedObject;
-            returnedObject = targetObjectData == null ? null : DataHelper.recreateObject(targetObjectData);
-            return returnedObject;
+            if(result instanceof ExceptionData) {
+                DataHelper.throwRemoteException((ExceptionData) result);
+                
+                throw new NakedObjectRuntimeException("the above should have thrown an exception");
+            } else {
+	            NakedObject returnedObject;
+	            returnedObject = result == null ? null : DataHelper.recreateObject((ObjectData) result);
+	            return returnedObject;
+            }
         } else {
             return super.execute(identifier, target, parameters);
         }

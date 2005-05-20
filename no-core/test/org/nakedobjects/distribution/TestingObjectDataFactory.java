@@ -12,6 +12,10 @@ class TestingObjectDataFactory extends DataFactory {
     public ValueData createValueData(String fullName, Object object) {
         throw new NotImplementedException();
     }
+
+    protected ExceptionData createExceptionData(String type, String message, String trace) {
+        throw new NotImplementedException();
+    }
 }
 
 class TestingObjectData implements ObjectData {

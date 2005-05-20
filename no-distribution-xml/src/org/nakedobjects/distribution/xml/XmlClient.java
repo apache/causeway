@@ -50,7 +50,7 @@ public class XmlClient implements ClientDistribution {
         throw new NotImplementedException();
     }
 
-    public ObjectData executeAction(Session session, String actionType, String actionIdentifier, String[] parameterTypes,
+    public Data executeAction(Session session, String actionType, String actionIdentifier, String[] parameterTypes,
             Oid objectOid, String objectType, Data[] parameters) {
         ExecuteAction request = new ExecuteAction(session, actionType, actionIdentifier, parameterTypes, objectOid, objectType,
                 parameters);

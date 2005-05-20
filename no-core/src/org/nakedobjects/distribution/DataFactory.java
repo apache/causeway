@@ -35,16 +35,17 @@ public abstract class DataFactory {
         }
 
         if (object.getSpecification().isObject()) {
-            return createObjectData(object, depth);
+            return createObjectData((NakedObject) object, depth);
         } else if (object.getSpecification().isValue()) {
             return createValueData(object, depth);
         } else {
             throw new IllegalArgumentException("Expected a naked object or a naked value, but got " + object);
         }
     }
-
-    public final ObjectData createObjectData(Naked object, int depth) {
-        return createObjectData((NakedObject) object, new Vector(), depth);
+    
+    // TODO if specified object is transient then we need to pass back all it's children that are also transient, ie not  just to the specified depth
+    public final ObjectData createObjectData(NakedObject object, int depth) {
+        return createObjectData(object, new Vector(), depth);
     }
 
     private ObjectData createObjectData(NakedObject object, Vector savedObjects, int depth) {
@@ -64,16 +65,17 @@ public abstract class DataFactory {
         NakedObjectField[] fields = specification.getFields();
         Object[] fieldContent = new Object[fields.length];
         for (int i = 0; i < fields.length; i++) {
-            if (fields[i].isEmpty(object)) {
+            Naked field = object.getField(fields[i]);
+            if (field == null) {
                 continue;
             }
 
             if (fields[i].isValue()) {
-                fieldContent[i] = object.getField(fields[i]).getObject();
+                fieldContent[i] = field.getObject();
             } else if (fields[i].isCollection()) {
-                fieldContent[i] = createCollectionData((NakedCollection) object.getField(fields[i]), savedObjects, depth - 1);
+                fieldContent[i] = createCollectionData((NakedCollection) field, savedObjects, depth - 1);
             } else {
-                fieldContent[i] = createObjectData((NakedObject) object.getField(fields[i]), savedObjects, depth - 1);
+                fieldContent[i] = createObjectData((NakedObject) field, savedObjects, depth - 1);
             }
         }
         return createObjectData(oid, type, fieldContent, object.isResolved(), object.getVersion());
@@ -81,11 +83,13 @@ public abstract class DataFactory {
 
     protected abstract ObjectData createObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved, long version);
 
-    public final ValueData createValueData(Naked object, int depth) {
+    private final ValueData createValueData(Naked object, int depth) {
         return createValueData(object.getSpecification().getFullName(), ((NakedValue) object).getObject());
     }
 
-    public abstract ValueData createValueData(String fullName, Object object);
+    protected abstract ValueData createValueData(String fullName, Object object);
+
+    protected abstract ExceptionData createExceptionData(String type, String message, String trace);
 }
 
 /*

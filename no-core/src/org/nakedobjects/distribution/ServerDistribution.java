@@ -23,6 +23,10 @@ import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.Assert;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+
 import org.apache.log4j.Logger;
 
 
@@ -64,7 +68,7 @@ public class ServerDistribution implements ClientDistribution {
         objectManager().destroyObject(inObject);
     }
 
-    public ObjectData executeAction(Session session, String actionType, String actionIdentifier, String[] parameterTypes,
+    public Data executeAction(Session session, String actionType, String actionIdentifier, String[] parameterTypes,
             Oid objectOid, String objectType, Data[] parameterData) {
         NakedObject object = getNakedObject(session, objectOid, objectType);
 
@@ -108,9 +112,24 @@ public class ServerDistribution implements ClientDistribution {
         try {
             NakedObject result = (NakedObject) object.execute(action, parameters);
             return objectDataFactory.createObjectData(result, OBJECT_DATA_DEPTH);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             LOG.error(e.getMessage(), e);
-            return objectDataFactory.createObjectData(null, OBJECT_DATA_DEPTH);
+            
+            String exceptionType = e.getClass().getName();
+            String message = e.getMessage();
+            String trace;
+            
+            try {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                e.printStackTrace(new PrintStream(baos));
+                trace = baos.toString();
+                baos.close();
+            } catch (IOException ex) {
+                LOG.error(ex);
+                trace = "failed to get trace - see log";
+            }
+
+            return objectDataFactory.createExceptionData(exceptionType, message, trace);
         }
     }
 

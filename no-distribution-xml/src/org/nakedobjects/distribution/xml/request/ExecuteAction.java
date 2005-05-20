@@ -1,7 +1,6 @@
 package org.nakedobjects.distribution.xml.request;
 
 import org.nakedobjects.distribution.Data;
-import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.security.Session;
@@ -32,8 +31,8 @@ public class ExecuteAction extends AbstractRequest {
                 parameters));
     }
 
-    public ObjectData getActionResult() {
-        return (ObjectData) getResponse();
+    public Data getActionResult() {
+        return (Data) getResponse();
     }
 
 }

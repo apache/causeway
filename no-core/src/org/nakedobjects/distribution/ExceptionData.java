@@ -1,27 +1,13 @@
 package org.nakedobjects.distribution;
 
-
-public class JavaValueData implements ValueData {
-    private String type;
-    private Object value;
-
-    public JavaValueData(String type, Object value) {
-        this.type = type;
-        this.value = value;
-    }
+public interface ExceptionData extends Data {
+    // TODO not yet dealing with inner exception
     
-    public Object getValue() {
-        return value;
-    }
-
-    public String getType() {
-        return type;
-    }
+    String getType();
     
-    public String toString() {
-        return "JavaValueData [type=" + type + ",value" + value + "]";
-    }
-
+    String getMessage();
+    
+    String getStackTrace();
 }
 
 

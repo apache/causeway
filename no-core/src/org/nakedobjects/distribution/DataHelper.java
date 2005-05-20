@@ -10,6 +10,7 @@ import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
+import org.nakedobjects.object.reflect.ReflectiveActionException;
 
 
 public class DataHelper {
@@ -128,6 +129,10 @@ public class DataHelper {
     private static PojoAdapterFactory loadedObjects() {
         return NakedObjects.getPojoAdapterFactory();
     }
+
+    public static void throwRemoteException(ExceptionData data) throws ReflectiveActionException {
+        throw new NakedObjectsRemoteException(data.getType(), data.getMessage(), data.getStackTrace());
+    }
 }
 
 /*
@@ -139,6 +144,7 @@ public class DataHelper {
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
  * version.
+ * 
  * 
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS

@@ -1,5 +1,6 @@
-package org.nakedobjects.distribution;
+package org.nakedobjects.distribution.java;
 
+import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.object.persistence.Oid;
 
 
