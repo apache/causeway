@@ -2,6 +2,7 @@ package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.reflect.ActionPeer;
+import org.nakedobjects.object.reflect.MockActionPeer;
 import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.utility.NotImplementedException;
@@ -15,10 +16,8 @@ public class MockJavaReflector extends JavaReflector {
     }
 
     ActionPeer createAction(Method method, String name, Method aboutMethod, Type action) {
-        return new MockAction(name, action);
+        return new MockActionPeer();
     }
-
-    
 }
 
 class MockObjectFactory extends JavaObjectFactory {

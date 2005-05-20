@@ -58,7 +58,7 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     }
 
     public String getFullName() {
-        return "DummyNakedObjectSpecification" + id;
+        return "DummyNakedObjectSpecification#" + id;
     }
 
     public Action getObjectAction(Type type, String name) {

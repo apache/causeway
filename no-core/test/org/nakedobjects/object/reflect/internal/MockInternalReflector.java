@@ -1,6 +1,7 @@
 package org.nakedobjects.object.reflect.internal;
 
 import org.nakedobjects.object.reflect.ActionPeer;
+import org.nakedobjects.object.reflect.MockActionPeer;
 import org.nakedobjects.object.reflect.Action.Type;
 
 import java.lang.reflect.Method;
@@ -12,7 +13,9 @@ public class MockInternalReflector extends InternalReflector {
     }
 
     ActionPeer createAction(Method method, String name, Method aboutMethod, Type action) {
-        return new MockAction(method, name, action);
+        MockActionPeer peer = new MockActionPeer();
+        peer.setupName(name);
+        return peer;
     }
 }
 

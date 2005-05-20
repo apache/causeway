@@ -50,7 +50,7 @@ public class JavaActionTest extends TestCase {
         Class cls = Class.forName(getClass().getName() + "Object");
         Method action = cls.getDeclaredMethod("actionMethod", new Class[0]);
         Method about = cls.getDeclaredMethod("aboutMethod", new Class[] { ActionAbout.class });
-        javaAction = new JavaAction("methodName", Action.EXPLORATION, action, about);
+        javaAction = new JavaAction("methodName", Action.EXPLORATION, Action.LOCAL, action, about);
         assertNotNull(javaAction);
     }
 
@@ -84,6 +84,10 @@ public class JavaActionTest extends TestCase {
 
     public void testType() {
         assertEquals(Action.EXPLORATION, javaAction.getType());
+    }
+    
+    public void testTarget() {
+        assertEquals(Action.LOCAL, javaAction.getTarget());
     }
 
 }

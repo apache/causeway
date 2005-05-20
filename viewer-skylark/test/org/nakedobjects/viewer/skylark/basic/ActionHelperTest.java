@@ -5,6 +5,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.DummyNakedObject;
+import org.nakedobjects.object.reflect.MockActionPeer;
 import org.nakedobjects.viewer.skylark.ParameterContent;
 
 import junit.framework.TestCase;

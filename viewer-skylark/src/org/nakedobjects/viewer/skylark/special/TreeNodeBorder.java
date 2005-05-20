@@ -10,6 +10,8 @@ import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
+import org.nakedobjects.viewer.skylark.CollectionContent;
+import org.nakedobjects.viewer.skylark.CollectionElement;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.FieldContent;
 import org.nakedobjects.viewer.skylark.Location;
@@ -80,7 +82,10 @@ public class TreeNodeBorder extends AbstractBorder {
 
     public void draw(Canvas canvas) {
         boolean isOpen = getSpecification().isOpen();
-        boolean canOpen = isOpen || ((TreeNodeSpecification) getSpecification()).canOpen(getContent());
+        boolean canOpen = isOpen || canClick();
+
+        // blank background
+   //     canvas.drawSolidRectangle(0, 0, getSize().getWidth() - 1, getSize().getHeight() - 1, Style.background(getSpecification()));
 
         if (((TreeBrowserFrame) getViewAxis()).getSelectedNode() == getView()) {
             canvas.drawSolidRectangle(left, 0, getSize().getWidth() - left - 1, top - 1, Style.PRIMARY2);
@@ -96,11 +101,11 @@ public class TreeNodeBorder extends AbstractBorder {
         if (canOpen) {
             x += BOX_X_OFFSET;
             canvas.drawLine(x, y, x + BOX_SIZE, y, Style.SECONDARY3);
-            canvas.drawRectangle(x, y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE, Style.SECONDARY2);
-            canvas.drawLine(x + BOX_PADDING, y, x + BOX_SIZE - BOX_PADDING, y, Style.SECONDARY2);
+            canvas.drawRectangle(x, y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE, Style.SECONDARY1);
+            canvas.drawLine(x + BOX_PADDING, y, x + BOX_SIZE - BOX_PADDING, y, Style.BLACK);
             if (!isOpen) {
                 x += BOX_SIZE / 2;
-                canvas.drawLine(x, y - BOX_SIZE / 2 + BOX_PADDING, x, y + BOX_SIZE / 2 - BOX_PADDING, Style.SECONDARY2);
+                canvas.drawLine(x, y - BOX_SIZE / 2 + BOX_PADDING, x, y + BOX_SIZE / 2 - BOX_PADDING, Style.BLACK);
             }
         }
 
@@ -119,24 +124,19 @@ public class TreeNodeBorder extends AbstractBorder {
         text.draw(canvas, x, baseline);
 
         if (AbstractView.debug) {
-            canvas.drawRectangle(getSize(), Color.DEBUG_BASELINE);
+            canvas.drawRectangleAround(this, Color.DEBUG_BASELINE);
         }
 
-        // components
+        // draw components
         super.draw(canvas);
     }
 
     public void firstClick(Click click) {
         int x = click.getLocation().getX();
         int y = click.getLocation().getY();
-        if (((TreeNodeSpecification) getSpecification()).canOpen(getContent()) && x >= BOX_X_OFFSET
-                && x <= BOX_X_OFFSET + BOX_SIZE && y >= (top - BOX_SIZE) / 2 && y <= (top + BOX_SIZE) / 2) {
-            if(getContent() instanceof FieldContent) {
-                NakedObjectField field = ((FieldContent) getContent()).getFieldReflector();
-                // TODO fails when parent is a collectiion - need to get parent of the parent (when the parent is internal collection
-                NakedObject parent = (NakedObject) getParent().getContent().getNaked();
-                NakedObjects.getObjectManager().resolveEagerly(parent, field);
-            }
+        
+        if (withinBox(x, y) && canClick()) {
+            resolveContent();
             View newView = replaceWithSpecification.createView(getContent(), getViewAxis());
             getParent().replaceView(getView(), newView);
         } else if (y < top && x > left) {
@@ -144,6 +144,32 @@ public class TreeNodeBorder extends AbstractBorder {
         } else {
             super.firstClick(click);
         }
+    }
+
+    private void resolveContent() {
+        Naked parent = getParent().getContent().getNaked();
+        if(!(parent instanceof NakedObject)) {
+            parent = getParent().getParent().getContent().getNaked();
+        }
+        
+        if(getContent() instanceof FieldContent) {
+            NakedObjectField field = ((FieldContent) getContent()).getFieldReflector();
+            NakedObjects.getObjectManager().resolveEagerly((NakedObject) parent, field);
+        } else if(getContent() instanceof CollectionContent) {
+            NakedObjects.getObjectManager().resolveImmediately((NakedObject) parent);
+        } else if(getContent() instanceof CollectionElement) {
+            NakedObjects.getObjectManager().resolveImmediately((NakedObject) getContent().getNaked());
+        }
+    }
+
+    private boolean canClick() {
+    	return ((TreeNodeSpecification) getSpecification()).canOpen(getContent());
+    //    return true;
+    }
+
+    private boolean withinBox(int x, int y) {
+        return x >= BOX_X_OFFSET
+                && x <= BOX_X_OFFSET + BOX_SIZE && y >= (top - BOX_SIZE) / 2 && y <= (top + BOX_SIZE) / 2;
     }
 
     public int getBaseline() {
@@ -208,17 +234,11 @@ public class TreeNodeBorder extends AbstractBorder {
         }
     }
 
-    public void contentMenuOptions(MenuOptionSet options) {
-        /*
-         * if(getContent() instanceof OneToManyField) { NakedObjectSpecification
-         * nakedClass = ((OneToManyField) getContent()).getSpecification();
-         * ClassOption.menuOptions(nakedClass, options); // TODO same as
-         * InternalCollectionBorder }
-         */
-        super.contentMenuOptions(options);
+    public void viewMenuOptions(MenuOptionSet options) {
+        super.viewMenuOptions(options);
         TreeDisplayRules.menuOptions(options);
     }
-
+    
     public void objectActionResult(Naked result, Location at) {
         if (getContent() instanceof OneToManyField) {
             // same as InternalCollectionBorder

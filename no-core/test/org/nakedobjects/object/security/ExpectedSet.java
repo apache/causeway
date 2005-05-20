@@ -10,8 +10,8 @@ public class ExpectedSet {
     
     public void addActual(Object object) {
         actualObjects.addElement(object);
-        Assert.assertTrue("More actuals than expected;", actualObjects.size() <= expectedObjects.size());
-        Assert.assertEquals("Actual does not match expected", expectedObjects.elementAt(actualObjects.size() - 1), object);
+        Assert.assertTrue("More actuals than expected; only expected "+ expectedObjects.size(), actualObjects.size() <= expectedObjects.size());
+        Assert.assertEquals("Actual does not match expected.\n", expectedObjects.elementAt(actualObjects.size() - 1), object);
     }
 
     public void addExpected(Object object) {
@@ -19,7 +19,7 @@ public class ExpectedSet {
     }
 
     public void verify() {
-        Assert.assertTrue("Too few actuals added", actualObjects.size() == expectedObjects.size());
+        Assert.assertTrue("Too few actuals added\n  Expected " + expectedObjects, actualObjects.size() == expectedObjects.size());
     }
 
   /*  private String expectedError() {

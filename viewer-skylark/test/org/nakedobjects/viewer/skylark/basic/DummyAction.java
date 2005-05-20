@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.MockActionPeer;
 
 public class DummyAction extends Action {
 

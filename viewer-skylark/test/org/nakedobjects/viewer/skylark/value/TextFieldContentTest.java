@@ -1,7 +1,6 @@
 package org.nakedobjects.viewer.skylark.value;
 
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.viewer.skylark.Location;
