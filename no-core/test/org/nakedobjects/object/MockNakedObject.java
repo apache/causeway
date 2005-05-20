@@ -18,6 +18,8 @@ public class MockNakedObject implements NakedObject {
     private String titleString;
     private boolean persistDirty;
     private boolean viewDirty;
+    private boolean resolved;
+    private long version;
 
     public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
 
@@ -114,7 +116,7 @@ public class MockNakedObject implements NakedObject {
     }
 
     public boolean isResolved() {
-        return false;
+        return resolved;
     }
 
     public boolean isSameAs(Naked object) {
@@ -140,7 +142,9 @@ public class MockNakedObject implements NakedObject {
         this.oid = oid;
     }
 
-    public void setResolved() {}
+    public void setResolved() {
+        resolved = true;
+    }
 
     public void setupField(NakedObject field) {
         this.field = field;
@@ -177,6 +181,14 @@ public class MockNakedObject implements NakedObject {
     }
 
     public void debugClearResolved() {}
+
+    public void setVersion(long version) {
+        this.version = version;
+    }
+    
+    public long getVersion() {
+        return version;
+    }
 }
 
 /*

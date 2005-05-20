@@ -165,6 +165,10 @@ public class DummyNakedObject implements NakedObject {
 
     public void debugClearResolved() {}
 
+    public long getVersion() {
+        return 0;
+    }
+
 }
 
 /*

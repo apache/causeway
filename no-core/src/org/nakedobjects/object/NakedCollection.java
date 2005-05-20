@@ -41,6 +41,8 @@ public interface NakedCollection extends Naked {
     void setResolved();
     
     Oid getOid();
+
+    long getVersion();
 }
 
 /*

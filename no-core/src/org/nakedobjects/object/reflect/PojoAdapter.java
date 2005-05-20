@@ -16,7 +16,14 @@ import org.apache.log4j.Logger;
 public class PojoAdapter extends AbstractNakedObject {
     private final static Logger LOG = Logger.getLogger(PojoAdapter.class);
     private Object pojo;
+    private long version;
 
+    public long getVersion() {
+        return version;
+    }
+    public void setVersion(long version) {
+        this.version = version;
+    }
     protected PojoAdapter(Object pojo) {
         this.pojo = pojo;
     }

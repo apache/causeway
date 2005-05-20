@@ -153,6 +153,10 @@ class DummyNakedCollection implements NakedCollection {
 
     public void clearPersistDirty() {}
 
+    public long getVersion() {
+        return 0;
+    }
+
 }
 
 

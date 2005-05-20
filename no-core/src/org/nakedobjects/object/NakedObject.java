@@ -30,7 +30,7 @@ public interface NakedObject extends Naked {
     void created();
 
     public void debugClearResolved();
-    
+
     /**
      * A lifecycle method called when the object is delete, after it is removed
      * from the object store.
@@ -52,7 +52,9 @@ public interface NakedObject extends Naked {
     ActionParameterSet getParameters(Action action);
 
     NakedValue getValue(OneToOneAssociation field);
-    
+
+    long getVersion();
+
     NakedObjectField[] getVisibleFields();
 
     void initAssociation(NakedObjectAssociation field, NakedObject associatedObject);
@@ -91,6 +93,7 @@ public interface NakedObject extends Naked {
     void setResolved();
 
     void setValue(OneToOneAssociation field, Object object);
+
 }
 
 /*

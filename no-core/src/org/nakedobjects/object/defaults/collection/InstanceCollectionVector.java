@@ -28,6 +28,13 @@ public class InstanceCollectionVector implements TypedNakedCollection, InternalN
 
     private String name;
     private Vector elements;
+    private long version;
+    public long getVersion() {
+        return version;
+    }
+    public void setVersion(long version) {
+        this.version = version;
+    }
     private NakedObjectSpecification specification;
     private NakedObjectSpecification elementSpecification;
 
