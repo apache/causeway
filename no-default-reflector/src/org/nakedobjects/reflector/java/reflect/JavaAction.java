@@ -22,7 +22,13 @@ import java.lang.reflect.Method;
 
 import org.apache.log4j.Logger;
 
-
+/*
+ * TODO (in all Java...Peer classes) make all methods throw ReflectiveActionException when 
+ * an exception occurs when calling a method reflectively (see execute method).  Then instead of 
+ * calling invocationExcpetion() the exception will be passed though, and dealt with generally by 
+ * the reflection package (which will be the same for all reflectors and will allow the message to
+ * be better passed back to the client).
+ */
 public class JavaAction extends JavaMember implements ActionPeer {
     final static Logger LOG = Logger.getLogger(JavaAction.class);
     private final Method actionMethod;

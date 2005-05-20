@@ -22,7 +22,7 @@ public class Error implements NakedError {
     }
 
     public Error(String msg, Throwable e) {
-        error = msg + " " + e.getMessage();
+        error = msg;
         exception = e.getMessage();
 
         try {
@@ -33,8 +33,6 @@ public class Error implements NakedError {
         } catch (IOException ex) {
             LOG.error(ex);
         }
-
-        LOG.error(error, e);
     }
 
     public void aboutError(InternalAbout about, String entry) {

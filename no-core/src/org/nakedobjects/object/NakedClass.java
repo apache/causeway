@@ -113,7 +113,7 @@ public class NakedClass implements InternalNakedObject {
             try {
                 getObjectManager().makePersistent(object);
             } catch (NotPersistableException e) {
-                object = NakedObjects.getPojoAdapterFactory().createNOAdapter(getObjectManager().generatorError("Failed to create instance of " + this, e));
+                object = NakedObjects.getPojoAdapterFactory().createNOAdapter(new Error("Failed to create instance of " + this, e));
                 LOG.error("Failed to create instance of " + this, e);
             }
         }

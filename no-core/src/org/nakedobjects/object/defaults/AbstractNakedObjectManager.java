@@ -2,7 +2,6 @@ package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectFactory;
@@ -83,10 +82,6 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
         NakedObjectSpecification specification = criteria.getSpecification();
         TypedNakedCollection collection = new InstanceCollectionVector(specification, instances);
         return collection;
-    }
-
-    public NakedError generatorError(String message, Exception e) {
-        return new Error(message, e);
     }
 
     public String getDebugData() {
