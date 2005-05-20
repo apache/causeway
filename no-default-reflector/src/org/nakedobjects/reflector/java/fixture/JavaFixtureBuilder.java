@@ -67,8 +67,7 @@ public final class JavaFixtureBuilder extends FixtureBuilder {
     public final Object createInstance(String className) {
         NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(className);
         if (nc == null) {
-            NakedObjectManager objectManager = NakedObjects.getObjectManager();
-            return objectManager.generatorError("Could not create an object of class " + className, null);
+            return new Error("Could not create an object of class " + className, null);
         }
         NakedObjectManager objectManager = NakedObjects.getObjectManager();
         NakedObject object = objectManager.createTransientInstance(nc);

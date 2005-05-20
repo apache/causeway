@@ -9,6 +9,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.TypedNakedCollection;
+import org.nakedobjects.object.defaults.Error;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.NotPersistableException;
 import org.nakedobjects.object.persistence.TitleCriteria;
@@ -84,7 +85,7 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
             objectManager.saveChanges();
             objectManager.endTransaction();
         } catch (NotPersistableException e) {
-            NakedError error = objectManager.generatorError(
+            NakedError error = new Error(
                     "Failed to create instance of " + cls.forObjectType().getFullName(), e);
             object = NakedObjects.getPojoAdapterFactory().createNOAdapter(error);
 

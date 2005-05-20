@@ -2,7 +2,6 @@ package org.nakedobjects.object.persistence;
 
 import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.TypedNakedCollection;
@@ -40,8 +39,6 @@ public interface NakedObjectManager extends DebugInfo {
     void endTransaction();
 
     TypedNakedCollection findInstances(InstancesCriteria criteria) throws UnsupportedFindException;
-
-    NakedError generatorError(String message, Exception e);
 
     NakedClass getNakedClass(NakedObjectSpecification specification);
 

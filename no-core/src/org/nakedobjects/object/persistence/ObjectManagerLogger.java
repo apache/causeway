@@ -2,7 +2,6 @@ package org.nakedobjects.object.persistence;
 
 import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.TypedNakedCollection;
@@ -72,10 +71,6 @@ public class ObjectManagerLogger extends Logger implements NakedObjectManager {
             throws UnsupportedFindException {
         log("Find instances matching " + criteria);
         return decorated.findInstances(criteria);
-    }
-
-    public NakedError generatorError(String message, Exception e) {
-        return decorated.generatorError(message, e);
     }
 
     public String getDebugData() {
