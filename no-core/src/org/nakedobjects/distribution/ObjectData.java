@@ -11,6 +11,10 @@ public interface ObjectData extends Data{
     Object[] getFieldContent();
 
     Oid getOid();
+    
+    boolean isResolved();
+    
+    long getVersion();
 
     String getType();
 }

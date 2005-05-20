@@ -5,8 +5,8 @@ import org.nakedobjects.utility.NotImplementedException;
 
 
 class TestingObjectDataFactory extends DataFactory {
-    protected ObjectData createObjectData(Oid oid, String type, Object[] fieldContent) {
-        return new TestingObjectData(oid, type, fieldContent);
+    protected ObjectData createObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved, long version) {
+        return new TestingObjectData(oid, type, fieldContent, resolved, version);
     }
 
     public ValueData createValueData(String fullName, Object object) {
@@ -19,11 +19,15 @@ class TestingObjectData implements ObjectData {
     private final Oid oid;
     private final String type;
     private final Object[] fieldContent;
+    private final boolean resolved;
+    private final long version;
 
-    public TestingObjectData(Oid oid, String type, Object[] fieldContent) {
+    public TestingObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved, long version) {
         this.oid = oid;
         this.type = type;
         this.fieldContent = fieldContent;
+        this.resolved = resolved;
+        this.version = version;
     }
 
     public Object[] getFieldContent() {
@@ -36,6 +40,14 @@ class TestingObjectData implements ObjectData {
 
     public String getType() {
         return type;
+    }
+
+    public boolean isResolved() {
+        return resolved;
+    }
+
+    public long getVersion() {
+        return version;
     }
 }
 

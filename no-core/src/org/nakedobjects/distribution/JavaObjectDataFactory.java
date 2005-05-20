@@ -4,8 +4,8 @@ import org.nakedobjects.object.persistence.Oid;
 
 public class JavaObjectDataFactory extends DataFactory {
 
-    public ObjectData createObjectData(Oid oid, String type, Object[] fieldContent) {
-        return new JavaObjectData(oid, type, fieldContent);
+    public ObjectData createObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved, long version) {
+        return new JavaObjectData(oid, type, fieldContent, resolved);
     }
 
     public ValueData createValueData(String type, Object value) {

@@ -38,8 +38,28 @@ public class ObjectDataFactoryTest extends TestCase {
 
         assertEquals(oid, od.getOid());
         assertEquals(specification.getFullName(), od.getType());
+        assertEquals(false, od.isResolved());
+        assertEquals(0, od.getVersion());
         assertEquals(0, od.getFieldContent().length);
     }
+
+    public void testResolved() {
+        object.setResolved();
+        
+        ObjectData od = factory.createObjectData(object, 0);
+
+        assertEquals(true, od.isResolved());
+    }
+    
+    public void testVersion() {
+        object.setVersion(78821L);
+        
+        ObjectData od = factory.createObjectData(object, 0);
+
+        assertEquals(78821L, od.getVersion());
+     
+    }
+
 
     public void testObjectWithEmptyFields() {
         specification.fields = new NakedObjectField[] {
@@ -49,7 +69,6 @@ public class ObjectDataFactoryTest extends TestCase {
         ObjectData od = factory.createObjectData(object, 0);
 
         assertEquals(3, od.getFieldContent().length);
-  
     }
 
     public void testObjectWithFields() {

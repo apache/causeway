@@ -25,7 +25,8 @@ public abstract class DataFactory {
             NakedObject element = (NakedObject) e.nextElement();
             fieldContent[i++] = createObjectData(element, savedObjects, depth);
         }
-        return createObjectData(oid, type, fieldContent);
+        // TODO need to add resolved flag to NakedCollection
+        return createObjectData(oid, type, fieldContent, false, object.getVersion());
     }
 
     public final Data createData(Naked object, int depth) {
@@ -56,7 +57,7 @@ public abstract class DataFactory {
         String type = specification.getFullName();
 
         if (savedObjects.contains(object) || (depth <= 0 && object.isPersistent())) {
-            return createObjectData(oid, type, null);
+            return createObjectData(oid, type, null, object.isResolved(), object.getVersion());
         }
         savedObjects.addElement(object);
 
@@ -75,10 +76,10 @@ public abstract class DataFactory {
                 fieldContent[i] = createObjectData((NakedObject) object.getField(fields[i]), savedObjects, depth - 1);
             }
         }
-        return createObjectData(oid, type, fieldContent);
+        return createObjectData(oid, type, fieldContent, object.isResolved(), object.getVersion());
     }
 
-    protected abstract ObjectData createObjectData(Oid oid, String type, Object[] fieldContent);
+    protected abstract ObjectData createObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved, long version);
 
     public final ValueData createValueData(Naked object, int depth) {
         return createValueData(object.getSpecification().getFullName(), ((NakedValue) object).getObject());

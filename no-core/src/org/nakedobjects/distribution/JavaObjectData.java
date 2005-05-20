@@ -7,11 +7,14 @@ public class JavaObjectData implements ObjectData {
     private final Object fieldContent[];
     private final Oid oid;
     private final String type;
+    private boolean resolved;
+    private long version;
 
-    public JavaObjectData(Oid oid, String type, Object[] fieldContent) {
+    public JavaObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved) {
         this.oid = oid;
         this.type = type;
         this.fieldContent = fieldContent;
+        this.resolved = resolved;
     }
 
     public Object[] getFieldContent() {
@@ -24,6 +27,14 @@ public class JavaObjectData implements ObjectData {
 
     public String getType() {
         return type;
+    }
+    
+    public boolean isResolved() {
+        return resolved;
+    }
+    
+    public long getVersion() {
+        return version;
     }
     
     public String toString() {
