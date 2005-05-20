@@ -4,6 +4,7 @@ import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.defaults.Error;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.viewer.skylark.Canvas;
+import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -96,23 +97,18 @@ class ErrorView extends AbstractView {
 
         left = 20;
         top += Style.TITLE.getHeight();
-        canvas.drawText("ERROR", left, top, Style.INVALID, Style.TITLE);
+        canvas.drawText("ERROR", left, top, Color.RED, Style.TITLE);
         
         Error error = (Error) ((PojoAdapter) getContent().getNaked()).getObject();
         top += 30;
-        canvas.drawText(error.getError() ,left, top, Style.INVALID, Style.NORMAL);
+        canvas.drawText(error.getError() ,left, top, Color.RED, Style.NORMAL);
 
-        if(error.getException() != null) {
-	        top += 30;
-	        canvas.drawText(error.getException(),left, top, Style.INVALID, Style.NORMAL);
-        }
-        
-        top += 30;
+         top += 30;
         String trace = error.getTrace();
         StringTokenizer st = new StringTokenizer(trace, "\n\r");
         while (st.hasMoreTokens()) {
             String line = st.nextToken();
-            canvas.drawText(line,left + (line.startsWith("\t") ? 20 : 00), top, Style.INVALID, Style.NORMAL);
+            canvas.drawText(line,left + (line.startsWith("\t") ? 20 : 00), top, Color.BLACK, Style.NORMAL);
             top += Style.NORMAL.getHeight();
         }
         
