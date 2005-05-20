@@ -23,8 +23,15 @@ public class VectorCollectionAdapter implements InternalCollection {
     private Vector collection;
     private NakedObjectSpecification elementSpecification;
     private Oid oid;
+    private long version;
 
 
+    public long getVersion() {
+        return version;
+    }
+    public void setVersion(long version) {
+        this.version = version;
+    }
     public static Naked createAdapter(Vector pojo, Class type) {
         if(pojo == null) {
             return null;

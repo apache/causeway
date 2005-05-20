@@ -22,8 +22,15 @@ public class InternalCollectionAdapter implements InternalCollection {
     private org.nakedobjects.application.collection.InternalCollection collection;
     private NakedObjectSpecification elementSpecification;
     private Oid oid;
+    private long version;
 
 
+    public long getVersion() {
+        return version;
+    }
+    public void setVersion(long version) {
+        this.version = version;
+    }
     public static Naked createAdapter(org.nakedobjects.application.collection.InternalCollection pojo, Class type) {
         if(pojo == null) {
             return null;
