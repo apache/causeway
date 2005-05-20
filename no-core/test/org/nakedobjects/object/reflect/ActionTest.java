@@ -8,6 +8,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.MockHint;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.persistence.ObjectStoreException;
 
@@ -20,7 +21,7 @@ import org.apache.log4j.LogManager;
 
 
 public class ActionTest extends NakedObjectTestCase {
-    private static final String ACTION_LABEL = "Reduce Headcount";
+    private static final String ACTION_LABEL = "Headcount Down";
     private static final String ACTION_NAME = "reduceheadcount";
 
     public static void main(String[] args) {
@@ -29,7 +30,7 @@ public class ActionTest extends NakedObjectTestCase {
 
     private Action action;
 
-    private MockAction actionDelegate;
+    private MockActionPeer actionPeer;
     private NakedObject nakedObject;
 
     public ActionTest(String name) {
@@ -43,55 +44,65 @@ public class ActionTest extends NakedObjectTestCase {
         nakedObjects.setObjectManager(new MockObjectManager());
         nakedObjects.setSpecificationLoader(new DummyNakedObjectSpecificationLoader());
         
-        actionDelegate = new MockAction();
-        action = new Action("", ACTION_NAME, actionDelegate);
+        actionPeer = new MockActionPeer();
+        action = new Action("", ACTION_NAME, actionPeer);
     }
 
     protected void tearDown() throws Exception {
         super.tearDown();
     }
 
-    public void testAbout() {
+    public void testHint() {
+        actionPeer.setupHint(null);
         assertFalse(action.hasHint());
+        
+        Hint hint = action.getHint(nakedObject, null);
+        assertTrue(hint instanceof DefaultHint);
 
-        Hint about = action.getHint(nakedObject, null);
-        assertNull(actionDelegate.about);
-        assertTrue(about instanceof DefaultHint);
-
-        actionDelegate.hasAbout = true;
+        MockHint expectedHint = new MockHint();
+        actionPeer.setupHint(expectedHint);
         assertTrue(action.hasHint());
 
-        about = action.getHint(nakedObject, null);
-        assertEquals(actionDelegate.about, about);
+        actionPeer.expect("getHint #reduceheadcount() null");
+        hint = action.getHint(nakedObject, null);
+        assertEquals(expectedHint, hint);
+        
+        actionPeer.verify();
     }
 
     public void testAction() {
-        actionDelegate.returnObject = new DummyNakedObject();
+        DummyNakedObject expectedObject = new DummyNakedObject();
+        actionPeer.setupReturnObject(expectedObject);
 
-        NakedObject nakedObject = new DummyNakedObject();
+        NakedObject target = new DummyNakedObject();
         Naked[] parameters = new Naked[2];
-        Naked returnObject = action.execute(nakedObject, parameters);
+        actionPeer.expect("execute #reduceheadcount() " + target);
+        Naked returnObject = action.execute(target, parameters);
 
-        actionDelegate.assertAction(0, "execute " + nakedObject);
-        actionDelegate.assertAction(1, "execute " + parameters);
-        assertEquals(actionDelegate.returnObject, returnObject);
+        actionPeer.verify();
+        assertEquals(expectedObject, returnObject);
+        
     }
 
     public void testHasReturn() {
         assertFalse(action.hasReturn());
 
-        actionDelegate.returnType = new DummyNakedObjectSpecification();
+        actionPeer.setupReturnType(new DummyNakedObjectSpecification());
         assertTrue(action.hasReturn());
     }
 
     public void testLabel() {
         assertEquals(ACTION_NAME, action.getLabel(nakedObject));
 
-        actionDelegate.label = ACTION_LABEL;
-        assertEquals(ACTION_NAME, action.getLabel(nakedObject));
-
-        actionDelegate.hasAbout = true;
+        actionPeer.expect("getHint #reduceheadcount() null" );
+        
+        MockHint hint = new MockHint();
+        hint.setupName(ACTION_LABEL);
+        actionPeer.setupHint(hint);
+        
         assertEquals(ACTION_LABEL, action.getLabel(nakedObject));
+        
+        actionPeer.verify();
     }
 
     public void testName() {
@@ -102,9 +113,11 @@ public class ActionTest extends NakedObjectTestCase {
         assertFalse(action.hasReturn());
         assertNull(action.getReturnType());
 
-        actionDelegate.returnType = new DummyNakedObjectSpecification();
+        DummyNakedObjectSpecification returnType = new DummyNakedObjectSpecification();
+        actionPeer.setupReturnType(returnType);
+
         assertTrue(action.hasReturn());
-        assertEquals(actionDelegate.returnType, action.getReturnType());
+        assertEquals(returnType, action.getReturnType());
     }
 
     public void testGetParameters() {

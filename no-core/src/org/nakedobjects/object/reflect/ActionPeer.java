@@ -4,6 +4,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.Action.Target;
 
 
 public interface ActionPeer {
@@ -19,6 +20,8 @@ public interface ActionPeer {
     int getParameterCount();
 
     ActionParameterSet getParameters(MemberIdentifier identifier, NakedObject object, Naked[] parameters);
+
+    Target getTarget();
 
     Action.Type getType();
 

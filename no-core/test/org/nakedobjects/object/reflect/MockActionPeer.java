@@ -1,26 +1,31 @@
-package org.nakedobjects.object.security;
+package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.reflect.ActionParameterSet;
-import org.nakedobjects.object.reflect.ActionPeer;
-import org.nakedobjects.object.reflect.MemberIdentifier;
-import org.nakedobjects.object.reflect.ReflectiveActionException;
+import org.nakedobjects.object.reflect.Action.Target;
 import org.nakedobjects.object.reflect.Action.Type;
+import org.nakedobjects.object.security.ExpectedSet;
+
+import java.util.Vector;
 
 
-public class MockActionPeer implements ActionPeer {
+public final class MockActionPeer implements ActionPeer {
     private ExpectedSet expectedActions = new ExpectedSet();
     private Hint hint;
+    private Naked returnObject;
+    private NakedObjectSpecification returnType;
+    private NakedObjectSpecification[] paramterTypes = new NakedObjectSpecification[0];
+    private String name;
 
-    public Naked execute(MemberIdentifier identifier, NakedObject object, Naked[] parameters) throws ReflectiveActionException {
-        return null;
+    public Naked execute(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
+        expectedActions.addActual("execute " + identifier + " " + object);
+        return returnObject;
     }
 
-    void expect(String string) {
-        expectedActions.addExpected(string);
+    public Object getExtension(Class cls) {
+        return null;
     }
 
     public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
@@ -29,7 +34,7 @@ public class MockActionPeer implements ActionPeer {
     }
 
     public String getName() {
-        return null;
+        return name;
     }
 
     public int getParameterCount() {
@@ -37,6 +42,11 @@ public class MockActionPeer implements ActionPeer {
     }
 
     public ActionParameterSet getParameters(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
+        return new ActionParameterSet(new Object[] { new String(), new Integer(123), new Vector() }, new String[] { "one", "two",
+                "three" });
+    }
+
+    public Target getTarget() {
         return null;
     }
 
@@ -45,29 +55,48 @@ public class MockActionPeer implements ActionPeer {
     }
 
     public boolean hasHint() {
-        return false;
+        return hint != null;
     }
 
     public NakedObjectSpecification[] parameterTypes() {
-        return null;
+        return paramterTypes;
     }
 
     public NakedObjectSpecification returnType() {
-        return null;
+        return returnType;
     }
-
-    void setupHint(Hint hint) {
+    
+    
+    public void setupHint(Hint hint) {
         this.hint = hint;
 
     }
 
-    void verify() {
+    public void verify() {
         expectedActions.verify();
     }
-
-    public Object getExtension(Class cls) {
-        return null;
+    
+    public void expect(String string) {
+        expectedActions.addExpected(string);
     }
+
+    public void setupReturnType(NakedObjectSpecification returnType) {
+        this.returnType = returnType;
+    }
+
+    public void setupReturnObject(Naked returnObject) {
+        this.returnObject = returnObject;
+    }
+    
+    public void setUpParamterTypes(NakedObjectSpecification[] paramterTypes) {
+        this.paramterTypes = paramterTypes;
+    }
+
+    
+    public void setupName(String name) {
+        this.name = name;
+    }
+
 }
 
 /*

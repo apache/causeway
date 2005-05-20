@@ -4,6 +4,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.Action.Target;
 import org.nakedobjects.object.reflect.Action.Type;
 
 public abstract class AbstractActionPeer implements ActionPeer {
@@ -54,6 +55,9 @@ public abstract class AbstractActionPeer implements ActionPeer {
         return decorated.getParameters(identifier, object, parameters);
     }
 
+    public Target getTarget() {
+        return decorated.getTarget();
+    }
 }
 
 

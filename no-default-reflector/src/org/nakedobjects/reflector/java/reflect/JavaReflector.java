@@ -25,6 +25,7 @@ import org.nakedobjects.object.reflect.FieldPeer;
 import org.nakedobjects.object.reflect.ObjectTitle;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.Reflector;
+import org.nakedobjects.object.reflect.Action.Target;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.control.SimpleClassAbout;
 import org.nakedobjects.reflector.java.value.LogicalValueObjectAdapter;
@@ -198,7 +199,6 @@ public class JavaReflector implements Reflector {
         Method defaultAboutMethod = findMethod(forClass, "aboutActionDefault", null, new Class[] { ActionAbout.class });
         LOG.debug(defaultAboutMethod == null ? "  no default about method for actions" : defaultAboutMethod.toString());
 
-        Vector validMethods = new Vector();
         Vector actions = new Vector();
         for (int i = 0; i < methods.length; i++) {
             if (methods[i] == null) {
@@ -210,48 +210,41 @@ public class JavaReflector implements Reflector {
                 continue;
             }
 
+            String fullMethodName = method.getName();
             String[] prefixes = { "action", "explorationAction", "debugAction" };
-            int prefix = -1;
+            int actionPrefix = -1;
             for (int j = 0; j < prefixes.length; j++) {
-                if (method.getName().startsWith(prefixes[j])) {
-                    prefix = j;
+                if (fullMethodName.startsWith(prefixes[j])) {
+                    actionPrefix = j;
                     break;
                 }
             }
 
-            if (prefix == -1) {
+            if (actionPrefix == -1) {
                 continue;
             }
 
-            /*
-             * Class returnType = method.getReturnType(); boolean returnIsValid =
-             * returnType == void.class ||
-             * NakedObject.class.isAssignableFrom(returnType);
-             * 
-             * if(! returnIsValid) { LOG.warn("action method " + method + "
-             * ignored as return type is not of type Naked" ); continue; }
-             */
-
             Class[] params = method.getParameterTypes();
-            /*
-             * boolean paramsAreValid = true; for (int j = 0; j < params.length;
-             * j++) { Class param = params[j]; if(!
-             * Naked.class.isAssignableFrom(param)) { paramsAreValid = false; } }
-             * 
-             * if(! paramsAreValid) { LOG.warn("action method " + method + "
-             * ignored as not all parameters are of type Naked" ); continue; }
-             */
-            validMethods.addElement(method);
-
+      
             LOG.info("  identified action " + method);
-            String methodName = method.getName();
             methods[i] = null;
 
-            String name = methodName.substring(prefixes[prefix].length());
+            String actionName = fullMethodName.substring(prefixes[actionPrefix].length());
+            
+            Target target = Action.DEFAULT;
+            if(actionName.startsWith("Local")) {
+                target = Action.LOCAL;
+                actionName = actionName.substring(5);
+            } else if(actionName.startsWith("Remote")) {
+                target = Action.REMOTE;
+                actionName = actionName.substring(6);
+            }
+            
+            
             Class[] longParams = new Class[params.length + 1];
             longParams[0] = ActionAbout.class;
             System.arraycopy(params, 0, longParams, 1, params.length);
-            String aboutName = "about" + methodName.substring(0, 1).toUpperCase() + methodName.substring(1);
+            String aboutName = "about" + fullMethodName.substring(0, 1).toUpperCase() + fullMethodName.substring(1);
             Method aboutMethod = findMethod(forClass, aboutName, null, longParams);
             if (aboutMethod == null) {
                 aboutMethod = defaultAboutMethod;
@@ -260,8 +253,8 @@ public class JavaReflector implements Reflector {
             }
 
             Action.Type action;
-            action = new Action.Type[] { Action.USER, Action.EXPLORATION, Action.DEBUG }[prefix];
-            ActionPeer local = createAction(method, name, aboutMethod, action);
+            action = new Action.Type[] { Action.USER, Action.EXPLORATION, Action.DEBUG }[actionPrefix];
+            ActionPeer local = createAction(method, actionName, aboutMethod, action,target);
             actions.addElement(local);
         }
 
@@ -322,8 +315,8 @@ public class JavaReflector implements Reflector {
         return (ActionPeer[]) results;
     }
 
-    ActionPeer createAction(Method method, String name, Method aboutMethod, Action.Type action) {
-        return new JavaAction(name, action, method, aboutMethod);
+    ActionPeer createAction(Method method, String name, Method aboutMethod, Action.Type action, Action.Target target) {
+        return new JavaAction(name, action, target, method, aboutMethod);
     }
 
     private void derivedFields(Vector fields) {

@@ -13,6 +13,7 @@ import org.nakedobjects.object.reflect.ActionParameterSet;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.ReflectiveActionException;
+import org.nakedobjects.object.reflect.Action.Target;
 import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.reflector.java.control.SimpleActionAbout;
 
@@ -27,11 +28,13 @@ public class JavaAction extends JavaMember implements ActionPeer {
     private final Method actionMethod;
     private final int paramCount;
     private Type type;
+    private Target target;
 
-    public JavaAction(String name, Type type, Method action, Method about) {
+    public JavaAction(String name, Type type, Target target, Method action, Method about) {
         super(name, about);
         this.type = type;
         this.actionMethod = action;
+        this.target = target;
         paramCount = action.getParameterTypes().length;
     }
 
@@ -114,6 +117,10 @@ public class JavaAction extends JavaMember implements ActionPeer {
 
     public Type getType() {
         return type;
+    }
+    
+    public Target getTarget() {
+        return target;
     }
 
     private NakedObjectSpecification nakedClass(Class returnType) {

@@ -7,10 +7,12 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionParameterSet;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.ReflectionException;
+import org.nakedobjects.object.reflect.Action.Target;
 import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.utility.UnexpectedCallException;
 
@@ -113,6 +115,10 @@ public class InternalAction extends InternalMember implements ActionPeer {
         return type;
     }
 
+    public Target getTarget() {
+        return Action.DEFAULT;
+    }
+    
     private NakedObjectSpecification nakedClass(Class returnType) {
         return NakedObjects.getSpecificationLoader().loadSpecification(returnType.getName());
     }

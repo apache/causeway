@@ -7,6 +7,7 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.MockHint;
 import org.nakedobjects.object.reflect.DummyNakedObject;
 import org.nakedobjects.object.reflect.MemberIdentifier;
+import org.nakedobjects.object.reflect.MockActionPeer;
 
 import junit.framework.TestCase;
 

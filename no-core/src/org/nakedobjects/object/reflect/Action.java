@@ -44,10 +44,44 @@ public class Action extends NakedObjectMember {
         }
     }
 
+    public static class Target {
+        private String name;
+    
+        private Target(String name) {
+            this.name = name;
+        }
+    
+        public boolean equals(Object object) {
+            if (object instanceof Action.Target) {
+                Action.Target type = (Target) object;
+                return name.equals(type.name);
+            } else {
+                return false;
+            }
+        }
+    
+        public int hashCode() {
+            return name.hashCode();
+        }
+    
+        public String toString() {
+            return name;
+        }
+    
+        public String getName() {
+            return name;
+        }
+    }
+    
+    
     private final static Logger LOG = Logger.getLogger(Action.class);
     public final static Type DEBUG = new Type("DEBUG");
     public final static Type EXPLORATION = new Type("EXPLORATION");
     public final static Type USER = new Type("USER");
+
+    public final static Target LOCAL = new Target("LOCAL");
+    public final static Target REMOTE = new Target("REMOTE");
+    public final static Target DEFAULT = new Target("DEFAULT");
 
     private ActionPeer reflectiveAdapter;
 
@@ -106,6 +140,10 @@ public class Action extends NakedObjectMember {
 
     public Type getActionType() {
         return reflectiveAdapter.getType();
+    }
+
+    public Target getActionTarget() {
+        return reflectiveAdapter.getTarget();
     }
 
     public Object getExtension(Class cls) {
