@@ -1,4 +1,4 @@
-package org.nakedobjects.viewer.skylark.value;
+package org.nakedobjects.viewer.skylark.text;
 
 import org.nakedobjects.viewer.skylark.Location;
 
@@ -39,7 +39,7 @@ public class TextSelection {
     /**
      * returns true is a selection exists - if the start and end locations are not the same
      */
-    boolean hasSelection() {
+    public boolean hasSelection() {
         return ! cursor.samePosition(start);
     }
 

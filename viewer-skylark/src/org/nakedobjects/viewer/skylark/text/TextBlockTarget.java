@@ -1,6 +1,6 @@
-package org.nakedobjects.viewer.skylark.value;
+package org.nakedobjects.viewer.skylark.text;
 
-public interface TextBlockUser {
+public interface TextBlockTarget {
 
     int charWidth(char ch);
 

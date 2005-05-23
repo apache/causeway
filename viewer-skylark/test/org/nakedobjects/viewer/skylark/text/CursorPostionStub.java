@@ -1,16 +1,13 @@
-package org.nakedobjects.viewer.skylark.value;
+package org.nakedobjects.viewer.skylark.text;
 
-import junit.framework.TestCase;
+import org.nakedobjects.viewer.skylark.text.CursorPosition;
+import org.nakedobjects.viewer.skylark.text.TextContent;
 
-public class TextSelectionTest extends TestCase {
-
-    public static void main(String[] args) {
-        junit.textui.TestRunner.run(TextSelectionTest.class);
+public class CursorPostionStub extends CursorPosition {
+    public CursorPostionStub(TextContent content, int line, int afterCharacter) {
+        super(content, line, afterCharacter);
     }
 
-    public void testNone() {
-    
-    }
 }
 
 

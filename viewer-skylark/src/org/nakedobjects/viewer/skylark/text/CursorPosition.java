@@ -1,4 +1,4 @@
-package org.nakedobjects.viewer.skylark.value;
+package org.nakedobjects.viewer.skylark.text;
 
 import org.nakedobjects.viewer.skylark.Location;
 
@@ -6,13 +6,13 @@ import org.nakedobjects.viewer.skylark.Location;
 public class CursorPosition {
     private int character;
     private int line;
-    private final TextFieldContent textContent;
+    private final TextContent textContent;
 
-    public CursorPosition(final TextFieldContent content, final CursorPosition pos) {
+    public CursorPosition(final TextContent content, final CursorPosition pos) {
         this(content, pos.line, pos.character);
     }
 
-    public CursorPosition(final TextFieldContent content, final int line, final int afterCharacter) {
+    public CursorPosition(final TextContent content, final int line, final int afterCharacter) {
         this.textContent = content;
         this.line = line;
         this.character = afterCharacter;
@@ -40,7 +40,7 @@ public class CursorPosition {
     /**
      * Move the cursor to the end of the line
      */
-    void end() {
+    public void end() {
         character = textContent.getText(line).length();
     }
 

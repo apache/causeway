@@ -1,13 +1,15 @@
-package org.nakedobjects.viewer.skylark.value;
+package org.nakedobjects.viewer.skylark.text;
+
+import org.nakedobjects.viewer.skylark.text.TextContent;
 
 
-public class TextFieldContentStub extends TextFieldContent {
+public class TextFieldContentStub extends TextContent {
 
     public TextFieldContentStub() {
-        super(null, false);
+        super(null, 1);
     }
 
-    void alignDisplay(int line) {
+    public void alignDisplay(int line) {
     }
     
     public int getNoLinesOfContent() {

@@ -1,4 +1,7 @@
-package org.nakedobjects.viewer.skylark.value;
+package org.nakedobjects.viewer.skylark.text;
+
+import org.nakedobjects.viewer.skylark.text.TextBlock;
+import org.nakedobjects.viewer.skylark.text.TextBlockTarget;
 
 import junit.framework.TestCase;
 
@@ -8,23 +11,53 @@ import org.apache.log4j.LogManager;
 
 public class TextBlockTest extends TestCase {
 
-    private TextBlock block;
-
     public static void main(String[] args) {
         junit.textui.TestRunner.run(TextBlockTest.class);
     }
 
-    public void testCountLine() {
-        assertEquals(5, block.noLines());
-    }
+    private TextBlock block;
+    
 
-    public void testInsert() {
-        block.insert(0, 0, "Quote:");
-        assertEquals("Quote:Now is the ",block.getLine(0));
+    protected void setUp() throws Exception {
+        LogManager.getRootLogger().setLevel(Level.OFF);
         
-        block.insert(1, 10, "y");
-        assertEquals("Quote:Now is the ",block.getLine(0));
-        assertEquals("winter of your ", block.getLine(1));
+        	TextBlockTarget user = new TextBlockTarget() {
+
+            public int charWidth(char ch) {
+                return 10;
+            }
+
+            public int getAscent() {
+                return 0;
+            }
+
+            public int getBaseline() {
+                return 0;
+            }
+
+            public int getMaxWidth() {
+                return 200;
+            }
+
+            public int lineHeight() {
+                return 0;
+            }
+
+            public int stringWidth(String string) {
+                return 40;
+            }
+        };
+
+        block = new TextBlock(user, "Now is the winter of our discontent made summer by this glorious sun of York");
+    }
+    
+    public void testBreakBlock() {
+        TextBlock newBlock = block.breakBlock(1,11);
+        assertEquals("Now is the winter ", block.getLine(0));
+        assertEquals("of our disc", block.getLine(1));
+        
+        assertEquals("ontent made summer ", newBlock.getLine(0));
+        
     }
     
     public void testCantInsertNewline() {
@@ -34,14 +67,10 @@ public class TextBlockTest extends TestCase {
         } catch (IllegalArgumentException expected) {
         }
     }
-    
-    public void testGetLine() {
-        assertEquals("Now is the winter ", block.getLine(0));
-        assertEquals("of our discontent ", block.getLine(1));
-        assertEquals("made summer by ", block.getLine(2));
-        assertEquals("this glorious sun ", block.getLine(3));
-        assertEquals("of York", block.getLine(4));
-  }
+
+    public void testCountLine() {
+        assertEquals(5, block.noLines());
+    }
    
     
     public void testDelete() {
@@ -77,52 +106,27 @@ public class TextBlockTest extends TestCase {
        assertEquals("our discotent ", block.getLine(1));
     }
     
-    public void testBreakBlock() {
-        TextBlock newBlock = block.breakBlock(1,11);
+    public void testGetLine() {
         assertEquals("Now is the winter ", block.getLine(0));
-        assertEquals("of our disc", block.getLine(1));
-        
-        assertEquals("ontent made summer ", newBlock.getLine(0));
-        
-    }
+        assertEquals("of our discontent ", block.getLine(1));
+        assertEquals("made summer by ", block.getLine(2));
+        assertEquals("this glorious sun ", block.getLine(3));
+        assertEquals("of York", block.getLine(4));
+  }
     
     public void testGetText() {
 	    assertEquals("Now is the winter of our discontent made summer by this glorious sun of York", block.getText());
     }
-    
 
-    protected void setUp() throws Exception {
-        LogManager.getRootLogger().setLevel(Level.OFF);
+    public void testInsert() {
+        block.insert(0, 0, "Quote:");
+        assertEquals("Quote:Now is the ",block.getLine(0));
         
-       TextBlockUser user = new TextBlockUser() {
-
-            public int charWidth(char ch) {
-                return 10;
-            }
-
-            public int getMaxWidth() {
-                return 200;
-            }
-
-            public int stringWidth(String string) {
-                return 40;
-            }
-
-            public int getBaseline() {
-                return 0;
-            }
-
-            public int getAscent() {
-                return 0;
-            }
-
-            public int lineHeight() {
-                return 0;
-            }
-        };
-
-        block = new TextBlock(user, "Now is the winter of our discontent made summer by this glorious sun of York");
+        block.insert(1, 10, "y");
+        assertEquals("Quote:Now is the ",block.getLine(0));
+        assertEquals("winter of your ", block.getLine(1));
     }
+    
 }
 
 /*

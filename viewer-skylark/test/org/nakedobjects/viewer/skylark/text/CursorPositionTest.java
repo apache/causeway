@@ -1,4 +1,6 @@
-package org.nakedobjects.viewer.skylark.value;
+package org.nakedobjects.viewer.skylark.text;
+
+import org.nakedobjects.viewer.skylark.text.CursorPosition;
 
 import junit.framework.TestCase;
 

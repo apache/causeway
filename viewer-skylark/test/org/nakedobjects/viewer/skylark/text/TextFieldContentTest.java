@@ -1,9 +1,12 @@
-package org.nakedobjects.viewer.skylark.value;
+package org.nakedobjects.viewer.skylark.text;
 
 
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.text.CursorPosition;
+import org.nakedobjects.viewer.skylark.text.TextBlockTarget;
+import org.nakedobjects.viewer.skylark.text.TextContent;
 
 import junit.framework.TestCase;
 
@@ -17,14 +20,14 @@ public class TextFieldContentTest extends TestCase {
         junit.textui.TestRunner.run(TextFieldContentTest.class);
     }
 
-    private TextFieldContent content;
+    private TextContent content;
 
     protected void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
         new NakedObjectsClient().setConfiguration(new Configuration());
         
-        TextBlockUser user = new TextBlockUser() {
+        TextBlockTarget target = new TextBlockTarget() {
             /* with this configuration:
              * 
              * 		lines are 20 characters
@@ -60,7 +63,7 @@ public class TextFieldContentTest extends TestCase {
             }
         };
 
-        content = new TextFieldContent(user, false);
+        content = new TextContent(target, 4);
     }
 
     public void testCreate() {
@@ -68,8 +71,8 @@ public class TextFieldContentTest extends TestCase {
         assertEquals(1, content.getNoLinesOfContent());
     }
     
-    public void testOneDisplayLine() {
-        assertEquals(1, content.getNoDisplayLines());
+    public void testDisplayLineCount() {
+        assertEquals(4, content.getNoDisplayLines());
     }
 
     public void testMinimalTextEqualsOneLine() {
@@ -84,41 +87,86 @@ public class TextFieldContentTest extends TestCase {
         */
     }
     
-    public void testNumberOfDisplayLines() {
-        assertEquals(1, content.getNoDisplayLines());
-        assertEquals(1, content.getDisplayLines().length);
-        assertEquals("", content.getDisplayLines()[0]);
+    public void testLineBreaks() {
+        content.setText("Line one\nLine two\nLine three\nLine four that is long enough that it wraps");
+        assertEquals(6, content.getNoLinesOfContent());
 
-        content.setNoDisplayLines(4);
+        content.setNoDisplayLines(8);
+        String[] lines = content.getDisplayLines();
+        
+        assertEquals(8, lines.length);
+        assertEquals("Line one", lines[0]);
+        assertEquals("Line two", lines[1]);
+        assertEquals("Line three", lines[2]);
+        assertEquals("Line four that is ", lines[3]);
+        assertEquals("it wraps", lines[5]);
+        assertEquals("", lines[6]);
+        assertEquals("", lines[7]);
+
+    }
+    
+    public void testNumberOfDisplayLines() {
         assertEquals(4, content.getNoDisplayLines());
         assertEquals(4, content.getDisplayLines().length);
         assertEquals("", content.getDisplayLines()[0]);
-  //      assertEquals("", content.getDisplayLines()[1]);
-  //      assertEquals("", content.getDisplayLines()[2]);
-  //      assertEquals("", content.getDisplayLines()[3]);
+        assertEquals("", content.getDisplayLines()[1]);
+        assertEquals("", content.getDisplayLines()[2]);
+        assertEquals("", content.getDisplayLines()[3]);
 
+        content.setNoDisplayLines(6);
+        assertEquals(6, content.getNoDisplayLines());
+        assertEquals(6, content.getDisplayLines().length);
+        assertEquals("", content.getDisplayLines()[0]);
+        assertEquals("", content.getDisplayLines()[1]);
+        assertEquals("", content.getDisplayLines()[2]);
+        assertEquals("", content.getDisplayLines()[3]);
+        assertEquals("", content.getDisplayLines()[4]);
+        assertEquals("", content.getDisplayLines()[5]);
     }
 
     public void testAlignField() {
+        // the following text wraps so it takes up 9 line
         content.setText("Naked Objects - a framework that exposes behaviourally complete business objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group");
         
-        assertEquals(1, content.getNoDisplayLines());
         assertEquals(9, content.getNoLinesOfContent());
         
-        
-        content.alignDisplay(3);
+        String[] lines = content.getDisplayLines();
+        assertEquals(4, lines.length);
+        assertEquals("Naked Objects - a ", lines[0]);
+        assertEquals("framework that ", lines[1]);
+        assertEquals("exposes ", lines[2]);
+        assertEquals("behaviourally complete ", lines[3]);
+            
+        content.alignDisplay(6);
+        assertEquals(4, content.getNoDisplayLines());
+        lines = content.getDisplayLines();
+        assertEquals(4, lines.length);
+        assertEquals("business objects ", lines[0]);
+        assertEquals("directly to the user. ", lines[1]);
+        assertEquals("Copyright (C) 2000 ", lines[2]);
+        assertEquals("- 2005 Naked ", lines[3]);
     }
     
     
-    
     public void testInstert() {
+        content.setText("at");
         CursorPosition cursor = new CursorPosition(content, 0, 0);
-        content.insert(cursor, "test insert that is longer than a single line");
-        content.alignDisplay(1);
-        content.getDisplayLines();
+        content.insert(cursor, "fl");
         
-        assertEquals(2, content.getDisplayLines().length);
+        assertEquals("flat", content.getText());
+        assertEquals(4, content.getNoDisplayLines());
+        assertEquals(1, content.getNoLinesOfContent());
+    }
+    
+
+    
+    public void testInstertOverTheEndOfLine() {
+        CursorPosition cursor = new CursorPosition(content, 0, 0);
+        content.insert(cursor, "test insert that is longer than the four lines that were originally allocated for this test");
         
+        assertEquals("test insert that is longer than the four lines that were originally allocated for this test", content.getText());
+        assertEquals(4, content.getNoDisplayLines());
+        assertEquals(6, content.getNoLinesOfContent());
     }
     
     public void testCursorPostioningAtCorner() {
@@ -165,6 +213,8 @@ public class TextFieldContentTest extends TestCase {
     
     public void testCursorPostioningByCharacterPastEnd() {
         content.setText("test insert that");
+        assertEquals(16, content.cursorAtCharacter(new Location(190, 0), 0));
+        assertEquals(0, content.cursorAtCharacter(new Location(0, 0), 0));
         assertEquals(16, content.cursorAtCharacter(new Location(35, 0), 2));
     }
     
@@ -180,8 +230,8 @@ public class TextFieldContentTest extends TestCase {
         assertEquals(2, content.cursorAtCharacter(new Location(14, 1000), 2));
         assertEquals(2, content.cursorAtCharacter(new Location(23, 1000), 2));
 
-        assertEquals(0, content.cursorAtCharacter(new Location(14, 1000), 3));
-        assertEquals(0, content.cursorAtCharacter(new Location(23, 1000), 3));
+        assertEquals(10, content.cursorAtCharacter(new Location(14, 1000), 3));
+        assertEquals(10, content.cursorAtCharacter(new Location(23, 1000), 3));
 
     }
 

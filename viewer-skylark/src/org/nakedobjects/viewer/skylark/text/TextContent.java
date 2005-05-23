@@ -1,4 +1,4 @@
-package org.nakedobjects.viewer.skylark.value;
+package org.nakedobjects.viewer.skylark.text;
 
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.Location;
@@ -10,52 +10,55 @@ import java.util.Vector;
 import org.apache.log4j.Category;
 
 
-class TextFieldContent {
-    private static final Category LOG = Category.getInstance(TextFieldContent.class);
-    private static final int MULTILINE_FIELD_SIZE = 8;
+public class TextContent {
+    private static final Category LOG = Category.getInstance(TextContent.class);
     private Vector blocks;
-    private TextBlockUser forField;
+    private TextBlockTarget target;
     private int displayFromLine;
-    private int displayToLine;
-    private int noDisplayLines = 1; // number of lines to display
+    //    private int displayToLine;
+    private int noDisplayLines = 1; // number of
+                                                               // lines to
+                                                               // display
 
-    public TextFieldContent(final TextBlockUser field, final boolean multiline) {
-        this.forField = field;
+    public TextContent(final TextBlockTarget target, final int noLines) {
+        this.target = target;
         this.blocks = new Vector();
-        
-        //multiline = false; //value instanceof MultilineTextString;
-        noDisplayLines = multiline ? MULTILINE_FIELD_SIZE : 1;
+
+        noDisplayLines = noLines;
         displayFromLine = 0;
-        displayToLine = noDisplayLines - 1;
+        //    displayToLine = noDisplayLines - 1;
         addBlock("");
         alignDisplay(0);
     }
 
     private void addBlock(String text) {
-        blocks.addElement(new TextBlock(forField, text));
+        TextBlock block = new TextBlock(target, text);
+        LOG.debug("add block " + block);
+        blocks.addElement(block);
     }
 
     /**
-     * Returns the number of lines that this field will display the content. This can 
-     * be smaller than the actual number of lines of content, but will be at least one.
+     * Returns the number of lines that this field will display the content.
+     * This can be smaller than the actual number of lines of content, but will
+     * be at least one.
      */
     public int getNoDisplayLines() {
         return noDisplayLines;
     }
-    
+
     /**
-     * Aligns the lines of content so that the specified line is within the array of lines returned
-     * by getDisplayLines().
+     * Aligns the lines of content so that the specified line is within the
+     * array of lines returned by getDisplayLines().
      * 
      * @see #getDisplayLines()
      */
-    void alignDisplay(int line) {
+    public void alignDisplay(int line) {
         int noContentLines = getNoLinesOfContent();
         int lastLine = noContentLines - 1;
 
+        int displayToLine = Math.min(displayFromLine + noDisplayLines, noContentLines);
         if (noContentLines < noDisplayLines) {
             displayFromLine = 0;
-            displayToLine = lastLine;
         } else {
             if (line > displayToLine) {
                 displayToLine = line + 3;
@@ -64,8 +67,6 @@ class TextFieldContent {
                 displayFromLine = displayToLine - noDisplayLines;
                 displayFromLine = Math.max(displayFromLine, 0);
             }
-            
-           noDisplayLines = Math.max(noDisplayLines, displayToLine - displayFromLine + 1);
 
             if (line < displayFromLine) {
                 displayFromLine = line;
@@ -117,19 +118,19 @@ class TextFieldContent {
         if (line < 0) {
             throw new IllegalArgumentException("Line must be greater than, or equal to, zero: " + line);
         }
-        
-        int l = line;
+
+        int lineWithinBlock = line;
         for (int i = 0; i < blocks.size(); i++) {
             TextBlock block = (TextBlock) blocks.elementAt(i);
             int noLines = block.noLines();
-            if (l < noLines) {
-                LOG.debug("Block " + i + ", line " + l);
-                return new TextBlockReference(i, (TextBlock) blocks.elementAt(i), line);
+            if (lineWithinBlock < noLines) {
+                LOG.debug("Block " + i + ", line " + lineWithinBlock);
+                return new TextBlockReference(i, block, lineWithinBlock);
             }
-            l -= noLines;
+            lineWithinBlock -= noLines;
         }
         return null;
-      //  throw new IllegalArgumentException("line number not valid " + line);
+        //  throw new IllegalArgumentException("line number not valid " + line);
 
     }
 
@@ -155,8 +156,8 @@ class TextFieldContent {
      */
     public String getText(int forLine) {
         TextBlockReference block = getBlockFor(forLine);
-        if(block == null) {
-            return "";
+        if (block == null) {
+            return null;
         }
         return block.block.getLine(block.line);
     }
@@ -181,9 +182,10 @@ class TextFieldContent {
         TextBlockReference block = getBlockFor(cursorAt.getLine());
         block.block.insert(block.line, cursorAt.getCharacter(), characters);
     }
-    
+
     /**
-     * Returns the number of lines required to display the content text in it entirety.
+     * Returns the number of lines required to display the content text in it
+     * entirety.
      */
     public int getNoLinesOfContent() {
         int lineCount = 0;
@@ -212,7 +214,7 @@ class TextFieldContent {
         StringBuffer content = new StringBuffer();
         content.append("TextFieldContent [");
         content.append("field=");
-        content.append(forField);
+        content.append(target);
         content.append(",no blocks=");
         content.append(blocks.size());
         content.append("]\n");
@@ -227,31 +229,30 @@ class TextFieldContent {
 
     public String[] getDisplayLines() {
         String[] lines = new String[noDisplayLines];
-        for (int i = displayFromLine; i <= displayToLine; i++) {
-            String line = getText(i);
-            lines[i - displayFromLine] = line == null ? "" : line;
+        for (int i = 0, j = displayFromLine; i < lines.length; i++, j++) {
+            String line = getText(j);
+            lines[i] = line == null ? "" : line;
         }
         return lines;
     }
 
     public void setNoDisplayLines(int noDisplayLines) {
         this.noDisplayLines = noDisplayLines;
-        displayToLine = displayFromLine + noDisplayLines - 1;
+        //       displayToLine = displayFromLine + noDisplayLines - 1;
     }
-    
+
     public void increaseDepth() {
         noDisplayLines++;
-     }
+    }
 
     public boolean decreaseDepth() {
-        if(noDisplayLines > 1) {
+        if (noDisplayLines > 1) {
             noDisplayLines--;
             return true;
         } else {
             return false;
         }
     }
-    
 
     private static class TextBlockReference {
         TextBlock block;
@@ -264,40 +265,50 @@ class TextFieldContent {
             this.line = line;
         }
     }
-    
+
     int cursorAtLine(Location atLocation) {
         LOG.debug("Pointer at " + atLocation);
-        int y = atLocation.getY(); // - (forField.getBaseline() - forField.getAscent());
-        int lineIndex = displayFromLine + (y / forField.lineHeight());
+        int y = atLocation.getY(); // -
+                                                       // (forField.getBaseline()
+                                                       // -
+                                                       // forField.getAscent());
+        int lineIndex = displayFromLine + (y / target.lineHeight());
         lineIndex = Math.max(lineIndex, 0);
         return lineIndex;
     }
-    
-    
 
-    int cursorAtCharacter(Location atLocation, int line) {
+    int cursorAtCharacter(Location atLocation, int lineOffset) {
+        //       if ((displayFromLine + lineOffset) <= displayToLine) {
+
+        String text = getText(lineOffset);
+        if (text == null) {
+            for (int i = lineOffset; i >= 0; i--) {
+                String text2 = getText(i);
+                if (text2 != null) {
+                    int at =  text2.length();
+                    LOG.debug("Character at " + at + " line " + lineOffset);
+                   return at;
+                }
+            }
+        }
+
         /*
          * slightly offsetting mouse helps the user position the cursor between
          * characters near the pointer rather than always after the pointer
          */
         int x = atLocation.getX() - 3;
-        
-        int at = 0;
-        if ((displayFromLine + line) <= displayToLine) {
-            String text = getText(line);
-            int endAt = text.length();
-            int width = 0;
 
-            while (at < endAt && x > width) {
-                width += forField.charWidth(text.charAt(at));
-                at++;
-            }
-        } else {
-            line = displayToLine;
-            at = getText(line).length();
+        int at = 0;
+        int endAt = text.length();
+
+        int width = 0;
+
+        while (at < endAt && x > width) {
+            width += target.charWidth(text.charAt(at));
+            at++;
         }
 
-        LOG.debug("Character at " + at + " line " + line);
+        LOG.debug("Character at " + at + " line " + lineOffset);
         return at;
     }
 

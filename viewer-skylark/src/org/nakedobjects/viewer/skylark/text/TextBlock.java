@@ -1,20 +1,20 @@
-package org.nakedobjects.viewer.skylark.value;
+package org.nakedobjects.viewer.skylark.text;
 
 import org.apache.log4j.Category;
 
 class TextBlock {
 	private static final Category LOG = Category.getInstance(TextBlock.class);
-	private final TextBlockUser forField;
+	private final TextBlockTarget forField;
 	private String text;
 	private int[] lineBreaks;
 	private boolean isFormatted;
 	private int lineCount;
 
-	TextBlock(TextBlockUser forField) {
+	TextBlock(TextBlockTarget forField) {
 		this.forField = forField;
 	}
 
-	TextBlock(TextBlockUser forField, String text) {
+	TextBlock(TextBlockTarget forField, String text) {
 		this.forField = forField;
 		this.text = text;
 		isFormatted = false;
@@ -62,12 +62,11 @@ class TextBlock {
 
 	public int noLines() {
 		format();
-
 		return lineCount + 1;
 	}
 
 	private void breakAt(int breakAt) {
-		// deal with growing array
+		// TODO deal with growing array
 		lineBreaks[lineCount] = breakAt;
 		lineCount++;
 	}
@@ -166,10 +165,14 @@ class TextBlock {
 	    content.append(",text=");
 	    content.append(text);
 	    content.append(",breaks=");
-	    for (int i = 0; i < lineBreaks.length; i++) {
-            content.append(i == 0 ? "" : ",");
-            content.append(lineBreaks[i]);
-        }
+	    if(lineBreaks == null) {
+	        content.append("none");
+	    } else {
+		    for (int i = 0; i < lineBreaks.length; i++) {
+	            content.append(i == 0 ? "" : ",");
+	            content.append(lineBreaks[i]);
+	        }
+	    }
 	    content.append("]");
         return content.toString();
     }

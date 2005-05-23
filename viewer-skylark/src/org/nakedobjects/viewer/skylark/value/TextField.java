@@ -29,6 +29,10 @@ import org.nakedobjects.viewer.skylark.basic.SimpleIdentifier;
 import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
 import org.nakedobjects.viewer.skylark.core.BackgroundTask;
 import org.nakedobjects.viewer.skylark.core.BackgroundThread;
+import org.nakedobjects.viewer.skylark.text.CursorPosition;
+import org.nakedobjects.viewer.skylark.text.TextBlockTarget;
+import org.nakedobjects.viewer.skylark.text.TextContent;
+import org.nakedobjects.viewer.skylark.text.TextSelection;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -41,7 +45,7 @@ import java.awt.event.KeyEvent;
 import org.apache.log4j.Category;
 
 
-public class TextField extends AbstractField implements TextBlockUser {
+public class TextField extends AbstractField implements TextBlockTarget {
 
     private static final int ORIGINAL_WIDTH = 20;
     public static class Specification extends AbstractFieldSpecification {
@@ -68,7 +72,7 @@ public class TextField extends AbstractField implements TextBlockUser {
     private boolean multiline = false;
   //  private int resizeMarkerSize;
     private TextSelection selection;
-    private TextFieldContent textContent;
+    private TextContent textContent;
     private boolean showLines;
     private int maximumLength = 0;
     private int minumumLength = 0;
@@ -83,7 +87,7 @@ public class TextField extends AbstractField implements TextBlockUser {
             maximumLength = value.getMaximumLength();
             minumumLength = value.getMinumumLength();
         }
-        textContent = new TextFieldContent(this, false);
+        textContent = new TextContent(this, 1);
         cursor = new CursorPosition(textContent, 0, 0);
         selection = new TextSelection(cursor, cursor);
         textContent.setText(value == null ? "" : value.titleString());
