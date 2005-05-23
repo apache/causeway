@@ -8,6 +8,12 @@ public class MemberIdentifier {
     private final String name;
     private final String[] parameters;
     
+    public MemberIdentifier(String className) {
+        this.className = className;
+        name = "";
+        parameters = new String[0];
+    }
+
     public MemberIdentifier(String className, String fieldName) {
         this.className = className;
         name = fieldName;
