@@ -2,8 +2,6 @@ package org.nakedobjects.object.help;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.AbstractOneToOnePeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
@@ -11,49 +9,16 @@ import org.nakedobjects.object.reflect.OneToOnePeer;
 
 
 public class OneToOneHelp extends AbstractOneToOnePeer {
-    private final HelpManager helpManager;
+    private final HelpLookup helpLookup;
 
-    public OneToOneHelp(OneToOnePeer local, HelpManager helpManager) {
+    public OneToOneHelp(OneToOnePeer local, HelpLookup helpLookup) {
         super(local);
-        this.helpManager = helpManager;
+        this.helpLookup = helpLookup;
     }
 
     public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked association) {
-        final Hint importedHint = helpManager.help(identifier);
-
-        final Hint hint = super.getHint(identifier, object, association);
-
-        return new DefaultHint() {
-            
-            public Consent isValid() {
-                return hint.isValid();
-            }
-
-            public Consent canAccess() {
-                return hint.canAccess();
-            }
-
-            public Consent canUse() {
-                return hint.canUse();
-            }
-
-            public String getDescription() {
-                if (importedHint.getDescription() != null) {
-                    return importedHint.getDescription();
-                } else {
-                    return hint.getDescription();
-                }
-            }
-
-            public String getName() {
-                if (importedHint.getName() != null) {
-                    return importedHint.getName();
-                } else {
-                    return hint.getName();
-                }
-            }
-        };
-
+        Hint hint = super.getHint(identifier, object, association);
+        return helpLookup.getHint(identifier, hint);
     }
 
     public boolean hasHint() {

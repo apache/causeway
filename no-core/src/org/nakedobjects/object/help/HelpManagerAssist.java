@@ -2,20 +2,29 @@ package org.nakedobjects.object.help;
 
 import org.nakedobjects.object.reflect.MemberIdentifier;
 
-public interface HelpManager {
+public class HelpManagerAssist implements HelpManager {
+    private HelpManager decorated;
+    
+    public void setDecorated(HelpManager decorated) {
+        this.decorated = decorated;
+    }
+    
+    public String help(MemberIdentifier identifier) {
+        String help = "";
+        if(decorated != null) {
+            help = decorated.help(identifier);
+        }
+        return identifier.toString() + "\n\n" + help;
+    }
 
-    /**
-     * Returns help text for the specified identifier.  If no help text is available 
-     * then an empty String should be returned.
-     */
-    String help(MemberIdentifier identifier);
+    
 }
 
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
 business objects directly to the user.
-Copyright (C) 2000 - 2004  Naked Objects Group Ltd
+Copyright (C) 2000 - 2005  Naked Objects Group Ltd
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

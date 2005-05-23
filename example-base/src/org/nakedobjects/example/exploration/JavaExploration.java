@@ -10,6 +10,9 @@ import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.fixture.Fixture;
+import org.nakedobjects.object.help.HelpManager;
+import org.nakedobjects.object.help.HelpManagerAssist;
+import org.nakedobjects.object.help.SimpleHelpManager;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
@@ -92,7 +95,6 @@ public class JavaExploration {
 
             LocalObjectManager objectManager = new LocalObjectManager();
             objectManager.setObjectStore(objectStore);
-            //        objectManager.setNotifier(updateNotifier);
             objectManager.setObjectFactory(objectFactory);
             objectManager.setOidGenerator(oidGenerator);
 
@@ -103,7 +105,10 @@ public class JavaExploration {
             nakedObjects.setSpecificationLoader(specificationLoader);
             
             LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
-
+            HelpManagerAssist helpManager = new HelpManagerAssist();
+            helpManager.setDecorated(new SimpleHelpManager());
+            reflectionFactory.setHelpManager(helpManager);
+            
             JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
 
             PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
