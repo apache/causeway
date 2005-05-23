@@ -1,14 +1,18 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.viewer.skylark.core.AbstractView;
+import org.nakedobjects.viewer.skylark.text.TextBlockTarget;
+import org.nakedobjects.viewer.skylark.text.TextContent;
 
 
-public class HelpView extends AbstractView implements View {
-    private String description;
-    private String name;
+public class HelpView extends AbstractView implements View, TextBlockTarget {
+    private TextContent content;
 
     protected HelpView(View forView) {
         super(null, null, null);
+
+        String description = null;
+        String name = null;
 
         if (forView != null) {
 	        Content content = forView.getContent();
@@ -19,6 +23,11 @@ public class HelpView extends AbstractView implements View {
 	            name = content.getNaked().titleString();
 	        }
         }
+        
+        String text = (name == null ? "(no name)" : name)  + "\n\n" + (description == null ? "(no description)" : description);
+        content = new TextContent(this, 10);
+        content.setText(text);
+   //     content.setNoDisplayLines(2);
     }
 
     public void draw(Canvas canvas) {
@@ -35,14 +44,49 @@ public class HelpView extends AbstractView implements View {
         canvas.drawRoundedRectangle(x + 2, y + 2, xEntent - 4, yExtent - 4, arc, arc, Style.BLACK);
 
         canvas.drawText("Help", x + 10, y + 20, Style.BLACK, Style.TITLE);
-        canvas.drawText(name == null ? "no name" : name, x + 10, y + 40, Style.BLACK, Style.NORMAL);
-        canvas.drawText(description == null ? "no description" : description, x + 10, y + 55, Style.BLACK, Style.NORMAL);
+        canvas.drawText(content.getText(), x + 10, y + 40, Style.BLACK, Style.NORMAL);
+   //     canvas.drawText(description == null ? "(no description)" : description, x + 10, y + 55, Style.BLACK, Style.NORMAL);
+        
+        y += 65;
+        String[] lines = content.getDisplayLines();
+        for (int i = 0; i < lines.length; i++) {
+            canvas.drawText(lines[i], x + 10, y, Style.BLACK, Style.NORMAL);
+            y += 20;
+        }
     }
 
     public Size getRequiredSize() {
-        return new Size(200, 150);
+        return new Size(400, 350);
     }
 
+    /**
+     * Removes the help view when clicked on.
+     */
+    public void firstClick(Click click) {
+        getViewManager().clearOverlayView(this);
+    }
+
+    
+    
+    public int charWidth(char ch) {
+        return 10;
+    }
+
+    public int getMaxWidth() {
+        return 300;
+    }
+
+    public int stringWidth(String string) {
+        return 40;
+    }
+
+    public int getAscent() {
+        return 4;
+    }
+
+    public int lineHeight() {
+        return 14;
+    }
 }
 
 /*
