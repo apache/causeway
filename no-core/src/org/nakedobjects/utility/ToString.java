@@ -32,6 +32,10 @@ public final class ToString {
         return this;
     }
 
+    public void setAddComma() {
+        this.addComma = true;
+    }
+    
     public  ToString append(final String text) {
         string.append(text);
         
