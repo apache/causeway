@@ -6,10 +6,9 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NameConvertor;
-
-import junit.framework.Assert;
 
 
 
@@ -99,8 +98,10 @@ abstract class AbstractTestObject {
     }
 
     private void assertActionInvisible(String name, Action action, TestNaked[] parameters) {
-        boolean vetoed = getForNaked().getHint(action, nakedObjects(parameters)).canAccess().isVetoed();
-        Assert.assertTrue("action '" + name + "' is visible", vetoed);
+        Hint hint = getForNaked().getHint(action, nakedObjects(parameters));
+        if (hint.canAccess().isAllowed()) {
+            throw new NakedAssertionFailedError("Action '" + name + "' is visible");
+        }
     }
 
     public void assertActionInvisible(String name, TestNaked[] parameters) {
@@ -117,8 +118,11 @@ abstract class AbstractTestObject {
 
     private void assertActionUnusable(String name, Action action, TestNaked[] parameters) {
         Naked[] parameterObjects = nakedObjects(parameters);
-        boolean vetoed = getForNaked().getHint(action, parameterObjects).canUse().isVetoed();
-        Assert.assertTrue("action '" + name + "' is usable", vetoed);
+        Consent canUse = getForNaked().getHint(action, parameterObjects).canUse();
+        boolean allowed = canUse.isAllowed();
+        if (allowed) {
+            throw new NakedAssertionFailedError("Action '" + name + "' is usable: " + canUse.getReason());
+        }
     }
 
     public void assertActionUnusable(String name, TestNaked[] parameters) {
@@ -136,8 +140,10 @@ abstract class AbstractTestObject {
     protected void assertActionUsable(String name, Action action, final TestNaked[] parameters) {
         Naked[] paramaterObjects = nakedObjects(parameters);
         Consent canUse = getForNaked().getHint(action, paramaterObjects).canUse();
-        boolean allowed = canUse.isAllowed();
-        assertTrue("action '" + name + "' is unusable: " + canUse.getReason(), allowed);
+        boolean vetoed = canUse.isVetoed();
+        if (vetoed) {
+            throw new NakedAssertionFailedError("Action '" + name + "' is unusable: " + canUse.getReason());
+        }
     }
 
     public void assertActionUsable(String name, TestNaked[] parameters) {
