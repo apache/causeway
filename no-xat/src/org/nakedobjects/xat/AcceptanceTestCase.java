@@ -7,6 +7,7 @@ import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.fixture.Fixture;
 import org.nakedobjects.object.fixture.FixtureBuilder;
@@ -59,7 +60,10 @@ public abstract class AcceptanceTestCase extends TestCase {
     
     protected TestClass getTestClass(String name) {
         TestClass view = (TestClass) classes.get(name.toLowerCase());
-
+        
+        NakedObject object = (NakedObject) view.getForNaked();
+        NakedObjects.getObjectManager().resolveImmediately(object);
+        
         if (view == null) {
             throw new IllegalArgumentException("Invalid class name " + name);
         } else {
@@ -148,6 +152,8 @@ public abstract class AcceptanceTestCase extends TestCase {
             //           objectManager.shutdown();
             throw e;
         }
+        
+        NakedObjects.getObjectManager().reset();
     }
 
     protected abstract FixtureBuilder createFixtureBuilder();
