@@ -65,11 +65,11 @@ public class AwtText implements Text {
     }
 
     public int getLineHeight() {
-        return 0;
+        return getTextHeight() + getLineSpacing();
     }
 
     public int getLineSpacing() {
-        return 0;
+        return lineSpacing;
     }
 }
 
