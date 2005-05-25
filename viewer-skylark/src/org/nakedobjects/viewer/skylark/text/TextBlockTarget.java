@@ -1,19 +1,12 @@
 package org.nakedobjects.viewer.skylark.text;
 
-public interface TextBlockTarget {
+import org.nakedobjects.viewer.skylark.Text;
 
-    int charWidth(char ch);
+public interface TextBlockTarget {
 
     int getMaxWidth();
 
-    int stringWidth(String string);
-
-    int getBaseline();
-
-    int getAscent();
-
-    int lineHeight();
-
+    Text getText();
 }
 
 

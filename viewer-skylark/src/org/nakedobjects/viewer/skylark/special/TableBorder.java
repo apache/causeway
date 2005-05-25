@@ -21,7 +21,7 @@ class TableBorder extends AbstractBorder {
 
     public TableBorder(View view) {
         super(view);
-        top = VPADDING + Style.LABEL.getHeight() + VPADDING;
+        top = VPADDING + Style.LABEL.getTextHeight() + VPADDING;
     }
 
     public Drag dragStart(DragStart drag) {

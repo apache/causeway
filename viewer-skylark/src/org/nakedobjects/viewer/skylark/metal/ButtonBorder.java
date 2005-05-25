@@ -24,7 +24,7 @@ public class ButtonBorder extends AbstractBorder {
         super(view);
         
         this.actions = actions;
-        buttonHeight = VPADDING + Style.NORMAL.getHeight() + VPADDING;
+        buttonHeight = VPADDING + Style.NORMAL.getTextHeight() + VPADDING;
         bottom = HPADDING * 2 + buttonHeight + HPADDING * 2;
 
         int width = 0;

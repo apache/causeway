@@ -272,7 +272,7 @@ public class TextContent {
                                                        // (forField.getBaseline()
                                                        // -
                                                        // forField.getAscent());
-        int lineIndex = displayFromLine + (y / target.lineHeight());
+        int lineIndex = displayFromLine + (y / target.getText().getLineHeight());
         lineIndex = Math.max(lineIndex, 0);
         return lineIndex;
     }
@@ -304,7 +304,7 @@ public class TextContent {
         int width = 0;
 
         while (at < endAt && x > width) {
-            width += target.charWidth(text.charAt(at));
+            width += target.getText().charWidth(text.charAt(at));
             at++;
         }
 

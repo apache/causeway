@@ -38,7 +38,7 @@ public class WindowBorder extends AbstractBorder {
     public WindowBorder(View wrappedView, boolean scrollable) {
         super(addTransientBorderIfNeccessary(scrollable ? new ScrollBorder(wrappedView) : wrappedView));
 
-        titlebarHeight = Math.max(BUTTON_HEIGHT + 2 * VPADDING + TITLE_STYLE.getDescent(), TITLE_STYLE.getHeight());
+        titlebarHeight = Math.max(BUTTON_HEIGHT + 2 * VPADDING + TITLE_STYLE.getDescent(), TITLE_STYLE.getTextHeight());
         baseline = LINE_THICKNESS + padding + BUTTON_HEIGHT;
 
         left = LINE_THICKNESS;

@@ -6,6 +6,8 @@ import org.nakedobjects.viewer.skylark.text.TextContent;
 
 
 public class HelpView extends AbstractView implements View, TextBlockTarget {
+    private static final int HEIGHT = 350;
+    private static final int WIDTH = 400;
     private TextContent content;
 
     protected HelpView(View forView) {
@@ -56,7 +58,7 @@ public class HelpView extends AbstractView implements View, TextBlockTarget {
     }
 
     public Size getRequiredSize() {
-        return new Size(400, 350);
+        return new Size(WIDTH, HEIGHT);
     }
 
     /**
@@ -68,24 +70,12 @@ public class HelpView extends AbstractView implements View, TextBlockTarget {
 
     
     
-    public int charWidth(char ch) {
-        return 10;
-    }
-
     public int getMaxWidth() {
-        return 300;
+        return WIDTH - 20;
     }
-
-    public int stringWidth(String string) {
-        return 40;
-    }
-
-    public int getAscent() {
-        return 4;
-    }
-
-    public int lineHeight() {
-        return 14;
+    
+    public Text getText() {
+        return Style.NORMAL;
     }
 }
 

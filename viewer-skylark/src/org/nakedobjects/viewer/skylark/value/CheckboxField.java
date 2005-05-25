@@ -14,7 +14,7 @@ import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
 
 
 public class CheckboxField extends AbstractField {
-    private static final int size = Style.NORMAL.getHeight();
+    private static final int size = Style.NORMAL.getTextHeight();
 
     public static class Specification extends AbstractFieldSpecification {
         public boolean canDisplay(Content content) {

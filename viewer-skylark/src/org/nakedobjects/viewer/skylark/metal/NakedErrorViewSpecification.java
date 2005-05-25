@@ -56,19 +56,19 @@ class ErrorView extends AbstractView {
     
     public Size getRequiredSize() {
         Size size = new Size();
-       size.extendHeight(Style.TITLE.getHeight());
+       size.extendHeight(Style.TITLE. getTextHeight());
        size.extendHeight(30);
 
        Error error = (Error) ((PojoAdapter) ((ObjectContent) getContent()).getObject()).getObject();
        
        size.ensureWidth(Style.NORMAL.stringWidth(error.getError()));
-       size.extendHeight(Style.NORMAL.getHeight());
+       size.extendHeight(Style.NORMAL.getTextHeight());
        size.extendHeight(30);
        
        if(error.getException() != null) {
            size.ensureWidth(Style.NORMAL.stringWidth(error.getException()));
        }
-       size.extendHeight(Style.NORMAL.getHeight());
+       size.extendHeight(Style.NORMAL.getTextHeight());
        size.extendHeight(30);
 
 
@@ -77,7 +77,7 @@ class ErrorView extends AbstractView {
         while (st.hasMoreTokens()) {
             String line = st.nextToken();
             size.ensureWidth((line.startsWith("\t") ? 20 : 0) + Style.NORMAL.stringWidth(line));
-            size.extendHeight(Style.NORMAL.getHeight());
+            size.extendHeight(Style.NORMAL.getTextHeight());
         }
 
         size.extend(40, 20);
@@ -96,7 +96,7 @@ class ErrorView extends AbstractView {
         canvas.drawRectangle(left, top, width - 1, height - 1, Style.BLACK);
 
         left = 20;
-        top += Style.TITLE.getHeight();
+        top += Style.TITLE.getTextHeight();
         canvas.drawText("ERROR", left, top, Color.RED, Style.TITLE);
         
         Error error = (Error) ((PojoAdapter) getContent().getNaked()).getObject();
@@ -109,7 +109,7 @@ class ErrorView extends AbstractView {
         while (st.hasMoreTokens()) {
             String line = st.nextToken();
             canvas.drawText(line,left + (line.startsWith("\t") ? 20 : 00), top, Color.BLACK, Style.NORMAL);
-            top += Style.NORMAL.getHeight();
+            top += Style.NORMAL.getTextHeight();
         }
         
 

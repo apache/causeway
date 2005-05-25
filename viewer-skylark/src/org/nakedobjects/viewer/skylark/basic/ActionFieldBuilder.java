@@ -51,7 +51,7 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
 
     private void newBuild(View view, ActionContent actionContent) {
         LOG.debug("build new view " + view + " for " + actionContent);
-        view.addView(new TextView(actionContent.getActionName()));
+        view.addView(new TextView( "ACTION: " + actionContent.getActionName()));
 
         int noParameters = actionContent.getNoParameters();
         for (int f = 0; f < noParameters; f++) {

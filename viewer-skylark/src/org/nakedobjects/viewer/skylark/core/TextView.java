@@ -14,7 +14,7 @@ public class TextView extends AbstractView {
 
     public TextView(String text) {
         super(null, null, null);
-        this.text = "ACTION: " + text;
+        this.text = text;
     }
     
     public void draw(Canvas canvas) {

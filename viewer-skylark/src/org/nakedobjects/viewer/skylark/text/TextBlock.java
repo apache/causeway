@@ -89,7 +89,7 @@ class TextBlock {
 					throw new IllegalStateException("Block must not contain newline characters");
 				}
 
-				lineWidth += forField.charWidth(ch);
+				lineWidth += forField.getText().charWidth(ch);
 
 				if (lineWidth > forField.getMaxWidth()) {
 					breakAt = (breakAt == -1) ? pos - 1 : breakAt;
@@ -97,7 +97,7 @@ class TextBlock {
 					breakAt(breakAt);
 
 					// include the remaining chars in the starting width.
-					lineWidth = forField.stringWidth(text.substring(breakAt - 1, pos + 1));
+					lineWidth = forField.getText().stringWidth(text.substring(breakAt - 1, pos + 1));
 
 					// reset for next line
 					//start = breakAt;

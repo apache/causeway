@@ -46,8 +46,8 @@ import org.apache.log4j.Category;
 
 
 public class TextField extends AbstractField implements TextBlockTarget {
-
     private static final int ORIGINAL_WIDTH = 20;
+
     public static class Specification extends AbstractFieldSpecification {
 
         public View createView(Content content, ViewAxis axis) {
@@ -59,18 +59,14 @@ public class TextField extends AbstractField implements TextBlockTarget {
         }
     }
 
-    private static final int LINE_SPACING = 0;
     private static final Category LOG = Category.getInstance(TextField.class);
-    private static final Text style = Style.NORMAL;
+    private static final Text style = Style.NORMAL;        
     private CursorPosition cursor;
-
     private boolean identified;
     private String invalidReason = null;
- //   private boolean isResizing;
     private boolean isSaved = true;
     private int maxTextWidth;
     private boolean multiline = false;
-  //  private int resizeMarkerSize;
     private TextSelection selection;
     private TextContent textContent;
     private boolean showLines;
@@ -106,18 +102,11 @@ public class TextField extends AbstractField implements TextBlockTarget {
         super.setSize(size);
         
         setMaxWidth(size.getWidth() - 2 * HPADDING);
-        textContent.setNoDisplayLines(size.getHeight() / style.getHeight());
+        textContent.setNoDisplayLines(size.getHeight() / style.getTextHeight());
     }
     
     public boolean canFocus() {
         return canChangeValue();
-    }
-
-    /**
-     * returns the width (in pixels) of the specified character if it were used in this field.
-     */
-    public int charWidth(char ch) {
-        return style.charWidth(ch);
     }
 
     private void copy() {
@@ -289,7 +278,7 @@ public class TextField extends AbstractField implements TextBlockTarget {
             int noDisplayLines = textContent.getNoDisplayLines();
             for (int line = 0; line < noDisplayLines; line++) {
                 canvas.drawLine(HPADDING, baseline, HPADDING + width, baseline, color);
-                baseline += lineHeight();
+                baseline += getText().getLineHeight();
             }
 /*
             if (false && identified) {
@@ -344,7 +333,7 @@ public class TextField extends AbstractField implements TextBlockTarget {
 
             // paint text
             canvas.drawText(chars, HPADDING, baseline, textColor, style);
-            baseline += lineHeight();
+            baseline += getText().getLineHeight();
         }
 
         //TODO re-instate 
@@ -447,10 +436,6 @@ public class TextField extends AbstractField implements TextBlockTarget {
     public int getBaseline() {
         return style.getAscent() + VPADDING;
     }
-
-    public int getAscent() {
-        return style.getAscent();
-    }
     
     public int getMaxWidth() {
         return maxTextWidth;
@@ -458,12 +443,16 @@ public class TextField extends AbstractField implements TextBlockTarget {
 
     public Size getRequiredSize() {
         int width = HPADDING + maxTextWidth + HPADDING;
-        int height = textContent.getNoDisplayLines() * (style.getHeight() + LINE_SPACING) + VPADDING * 2;
+        int height = textContent.getNoDisplayLines() * getText().getLineHeight() + VPADDING * 2;
         height = Math.max(height, Style.defaultFieldHeight());
 
         return new Size(width, height);
     }
 
+    public Text getText() {
+        return style;
+    }
+    
     /**
      * modifies the selection object so that text is selected if the flag is true, or text is
      * unselected if false.
@@ -704,10 +693,6 @@ public class TextField extends AbstractField implements TextBlockTarget {
         }
     }
 
-    public int lineHeight() {
-        return style.getHeight() + LINE_SPACING;
-    }
-
     public void contentMenuOptions(MenuOptionSet options) {
         options.add(MenuOptionSet.OBJECT, new MenuOption("Refresh") {
             public void execute(Workspace workspace, View view, Location at) {
@@ -786,11 +771,11 @@ public class TextField extends AbstractField implements TextBlockTarget {
      * Set the maximum width of the field, as a number of characters
      */
     public void setMaxTextWidth(int noCharacters) {
-        maxTextWidth = charWidth('o') * noCharacters;
+        maxTextWidth = getText().charWidth('o') * noCharacters;
     }
 
     public void setRequiredSize(Size size) {
-        int lines = Math.max(1, size.getHeight() / lineHeight());
+        int lines = Math.max(1, size.getHeight() / getText().getLineHeight());
         setNoLines(lines);
 	    int width = Math.max(180, size.getWidth() - HPADDING);
         setMaxWidth(width);
@@ -811,10 +796,6 @@ public class TextField extends AbstractField implements TextBlockTarget {
      */
     public void setNoLines(int noLines) {
         textContent.setNoDisplayLines(noLines);
-    }
-
-    public int stringWidth(String string) {
-        return style.stringWidth(string);
     }
 
     public void thirdClick(Click click) {
