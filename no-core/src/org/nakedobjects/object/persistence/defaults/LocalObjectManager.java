@@ -403,17 +403,25 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     public void resolveImmediately(NakedObject object) {
-        if (object.isResolved() || !isPersistent(object)) {
+        if (object.isResolved()) {
+            LOG.debug("resolve requested, but already resolved: " + object);
+           return;
+        }
+
+        if (!isPersistent(object)) {
+            LOG.debug("resolve requested, but not persistent: " + object);
             return;
         }
-        LOG.info("resolve-immediately " + object);
+
+        LOG.info("resolve-immediately: " + object);
         try {
+            object.setResolved();
             objectStore.resolveImmediately(object);
             objectsToBeSaved.remove(object);
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
-        object.setResolved();
+      //  object.setResolved();
     }
 
     public void saveChanges() {
