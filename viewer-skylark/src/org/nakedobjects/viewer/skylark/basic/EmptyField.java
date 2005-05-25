@@ -115,7 +115,7 @@ public class EmptyField extends AbstractView {
             color = Style.SECONDARY1;
         }
 
-        int iconHeight = (style.getHeight() * 120) / 100;
+        int iconHeight = (style.getTextHeight() * 120) / 100;
         int iconWidth = (iconHeight * 80) / 100;
         int containerHeight = getSize().getHeight();
         int iconCentre = containerHeight / 2;
@@ -158,7 +158,7 @@ public class EmptyField extends AbstractView {
 
     public Size getRequiredSize() {
         Size size = new Size(0, 0);
-        int iconHeight = (style.getHeight() * 120) / 100;
+        int iconHeight = (style.getTextHeight() * 120) / 100;
         size.extendWidth((iconHeight * 80) / 100);
         size.extendWidth(HPADDING * 3);
         size.extendWidth(style.stringWidth(name()));

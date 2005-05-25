@@ -28,7 +28,7 @@ public class TextView extends AbstractView {
     
     public Size getRequiredSize() {
         int width = style.stringWidth(text)+ HPADDING * 2;
-        int height = style.getHeight() + VPADDING * 2;
+        int height = style.getTextHeight() + VPADDING * 2;
         return new Size(width, height);
     }
 }

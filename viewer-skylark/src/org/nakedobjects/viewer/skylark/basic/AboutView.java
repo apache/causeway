@@ -36,11 +36,11 @@ public class AboutView extends AbstractView {
         }
         int line = padding + Style.LABEL.getAscent();
         canvas.drawText(AboutNakedObjects.getName(), left, line, Style.BLACK, Style.TITLE);
-        line += Style.TITLE.getHeight();
+        line += Style.TITLE.getLineHeight();
         canvas.drawText(AboutNakedObjects.getVersion(), left, line, Style.BLACK, Style.LABEL);
-        line += Style.LABEL.getHeight();
+        line += Style.LABEL.getLineHeight();
         canvas.drawText(AboutNakedObjects.getBuildId(), left, line, Style.BLACK, Style.LABEL);
-        line += Style.LABEL.getHeight();
+        line += Style.LABEL.getLineHeight();
         canvas.drawText(AboutNakedObjects.getCopyrightNotice(), left, line, Style.BLACK, Style.LABEL);
     }
     
@@ -50,8 +50,8 @@ public class AboutView extends AbstractView {
 
     public Size getRequiredSize() {
         int height = Style.TITLE.getAscent();
-        height += Style.LABEL.getHeight();
-        height += Style.LABEL.getHeight();
+        height += Style.LABEL.getLineHeight();
+        height += Style.LABEL.getLineHeight();
         
         int width = Style.TITLE.stringWidth(AboutNakedObjects.getName());
         width = Math.max(width, Style.LABEL.stringWidth(AboutNakedObjects.getName()));

@@ -12,7 +12,7 @@ public class DebugBorder extends AbstractBorder {
 	public DebugBorder(View wrappedView) {
 		super(wrappedView);
 		
-		bottom = Style.DEBUG.getHeight();
+		bottom = Style.DEBUG.getTextHeight();
 	}
 
 	protected void debugDetails(StringBuffer b) {

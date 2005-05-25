@@ -26,7 +26,7 @@ public class IconGraphic {
     }
 
     public IconGraphic(View view, Text style) {
-        this(view, (style.getHeight() * 120) / 100);
+        this(view, (style.getTextHeight() * 120) / 100);
     }
 
     public void draw(Canvas canvas, int x, int baseline) {

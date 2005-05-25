@@ -109,7 +109,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
                 if (items[i].isDisabled || items[i].action == null) {
                     color = disabledColor();
                 } else if (getOption() == i) {
-                    canvas.drawSolidRectangle(2, baseLine - style().getAscent(), width - 4, style().getHeight() + 2,
+                    canvas.drawSolidRectangle(2, baseLine - style().getAscent(), width - 4, style().getTextHeight() + 2,
                             backgroundColor.darker());
                     color = reversedColor();
                 } else {
@@ -119,7 +119,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
                 canvas.drawText(items[i].name, left, baseLine, color, style());
             }
 
-            baseLine += style().getHeight() + VPADDING;
+            baseLine += style().getTextHeight() + VPADDING;
         }
     }
 
@@ -160,7 +160,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
         for (int i = 0; i < items.length; i++) {
             int itemWidth = items[i].isBlank ? 0 : style().stringWidth(items[i].name);
             size.ensureWidth(itemWidth);
-            size.extendHeight(style().getHeight() + VPADDING);
+            size.extendHeight(style().getTextHeight() + VPADDING);
         }
 
         size.extend(getPadding());
@@ -283,7 +283,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
     }
 
     public void mouseMoved(Location at) {
-        int option = at.getY() / (style().getHeight() + VPADDING);
+        int option = at.getY() / (style().getTextHeight() + VPADDING);
         option = Math.max(option, 0);
         option = Math.min(option, items.length - 1);
         if (option >= 0 && optionIdentified != option) {

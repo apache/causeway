@@ -413,7 +413,7 @@ public class Viewer {
         LOG.debug("  internal " + internalDisplaySize);
 
         Size rootViewSize = new Size(internalDisplaySize);
-        statusBarHeight = 2 + Style.STATUS.getHeight() + 2;
+        statusBarHeight = 2 + Style.STATUS.getLineHeight() + 2;
         rootViewSize.contractHeight(statusBarHeight);
         statusBarArea = new Bounds(insets.left, insets.top + rootViewSize.height, rootViewSize.width, statusBarHeight);
         ((WorkspaceSpecification) rootView.getSpecification()).setRequiredSize(rootViewSize);
