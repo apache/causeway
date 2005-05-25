@@ -4,9 +4,12 @@ package org.nakedobjects.viewer.skylark.text;
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.text.CursorPosition;
 import org.nakedobjects.viewer.skylark.text.TextBlockTarget;
 import org.nakedobjects.viewer.skylark.text.TextContent;
+
+import java.awt.Font;
 
 import junit.framework.TestCase;
 
@@ -30,39 +33,59 @@ public class TextFieldContentTest extends TestCase {
         TextBlockTarget target = new TextBlockTarget() {
             /* with this configuration:
              * 
-             * 		lines are 20 characters
-             * 		each character is 10 pixels
-             * 		first line is 0 <= y <= 24
-             * 		second line is 25 <= y <= 39
+             * 		lines are 20 characters;
+             * 		each character is 10 pixels;
+             * 		first line is 0 <= y <= 24;
+             * 		second line is 25 <= y <= 39;
              *  	third line is 40 <= y <= 54
              */
-            
-
-            public int charWidth(char ch) {
-                return 10;
-            }
 
             public int getMaxWidth() {
                 return 200;
             }
+            
+            public Text getText() {
+                return new Text() { 
 
-            public int stringWidth(String string) {
-                return 40;
-            }
+		            public int charWidth(char ch) {
+		                return 10;
+		            }
+		
+		            public int stringWidth(String string) {
+		                return 40;
+		            }
+		/*
+		            public int getBaseline() {
+		                return 20;
+		            }
+		*/
+		            public int getAscent() {
+		                return 10;
+		            }
+		
+		            public int getLineHeight() {
+		                return 15;
+		            }
 
-            public int getBaseline() {
-                return 20;
-            }
+                    public Font getAwtFont() {
+                        return null;
+                    }
 
-            public int getAscent() {
-                return 10;
-            }
+                    public int getDescent() {
+                        return 0;
+                    }
 
-            public int lineHeight() {
-                return 15;
+                    public int getTextHeight() {
+                        return 15;
+                    }
+
+                    public int getLineSpacing() {
+                        return 0;
+                    }
+                };
             }
         };
-
+        
         content = new TextContent(target, 4);
     }
 
