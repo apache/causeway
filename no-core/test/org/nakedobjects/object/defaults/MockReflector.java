@@ -1,6 +1,6 @@
 package org.nakedobjects.object.defaults;
 
-import org.nakedobjects.object.MockOneToOneAssociation;
+import org.nakedobjects.object.MockOneToOnePeer;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.Persistable;
@@ -42,7 +42,7 @@ public class MockReflector implements Reflector {
     public void clearDirty(NakedObject object2) {}
 
     public FieldPeer[] fields() {
-        return new FieldPeer[] { new MockOneToOneAssociation() };
+        return new FieldPeer[] { new MockOneToOnePeer() };
     }
 
     public String[] fieldSortOrder() {

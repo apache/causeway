@@ -1,4 +1,4 @@
-package org.nakedobjects.object.security;
+package org.nakedobjects.utility;
 
 import java.util.Vector;
 
@@ -21,11 +21,6 @@ public class ExpectedSet {
     public void verify() {
         Assert.assertTrue("Too few actuals added\n  Expected " + expectedObjects, actualObjects.size() == expectedObjects.size());
     }
-
-  /*  private String expectedError() {
-        return "Expected: " + expectedObjects + "\n  but got: " + actualObjects+ "\n";
-    }
-*/
 }
 
 

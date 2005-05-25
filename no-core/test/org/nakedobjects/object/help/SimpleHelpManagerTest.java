@@ -142,6 +142,27 @@ public class SimpleHelpManagerTest extends TestCase {
         assertEquals("Help about second field\n", s);
     }
 
+    public void testReadBlankLines() {
+        manager.addLine("C:cls");
+        manager.addLine("");
+        manager.addLine("");
+        manager.addLine("Help about class");
+        
+        MemberIdentifier identifier = new MemberIdentifier("cls");
+        String s = manager.help(identifier);
+        assertEquals("\n\nHelp about class\n", s);
+  
+    }
+    public void testSkipComments() {
+        manager.addLine("C:cls");
+        manager.addLine("# comment");
+        manager.addLine("Help about class");
+        
+        MemberIdentifier identifier = new MemberIdentifier("cls");
+        String s = manager.help(identifier);
+        assertEquals("Help about class\n", s);
+  
+    }
 }
 
 class TestHelpManager extends SimpleHelpManager {

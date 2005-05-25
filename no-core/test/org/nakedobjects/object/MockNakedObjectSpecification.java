@@ -10,9 +10,10 @@ import org.nakedobjects.object.reflect.Action.Type;
 
 public class MockNakedObjectSpecification implements NakedObjectSpecification {
     private static int next = 100;
-    public NakedObjectField[] fields = new NakedObjectField[0];
+    private NakedObjectField[] fields = new NakedObjectField[0];
     private final int id = next++;
     private NakedObjectSpecification[] subclasses = new NakedObjectSpecification[0];
+    private Action action;
 
     public MockNakedObjectSpecification() {}
 
@@ -63,11 +64,11 @@ public class MockNakedObjectSpecification implements NakedObjectSpecification {
     }
 
     public Action getObjectAction(Type type, String name) {
-        return null;
+        return action;
     }
 
     public Action getObjectAction(Type type, String name, NakedObjectSpecification[] parameters) {
-        return null;
+        return action;
     }
 
     public Action[] getObjectActions(Type type) {
@@ -159,6 +160,14 @@ public class MockNakedObjectSpecification implements NakedObjectSpecification {
 
     public String unresolvedTitle(PojoAdapter pojo) {
         return null;
+    }
+
+    public void setupAction(Action action) {
+        this.action = action;
+    }
+
+    public void setupFields(NakedObjectField[] fields ) {
+        this.fields = fields;
     }
 }
 

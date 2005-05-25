@@ -1,11 +1,9 @@
-package org.nakedobjects.object.security;
+package org.nakedobjects.object;
 
-import org.nakedobjects.object.NakedCollection;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToManyPeer;
+import org.nakedobjects.utility.ExpectedSet;
 
 
 public class MockOneToManyPeer implements OneToManyPeer {
@@ -14,7 +12,7 @@ public class MockOneToManyPeer implements OneToManyPeer {
 
     public void addAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
 
-    void expect(String string) {
+    public void expect(String string) {
         expectedActions.addExpected(string);
     }
 
@@ -55,12 +53,12 @@ public class MockOneToManyPeer implements OneToManyPeer {
 
     public void removeAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
 
-    void setupHint(Hint hint) {
+    public void setupHint(Hint hint) {
         this.hint = hint;
 
     }
 
-    void verify() {
+    public void verify() {
         expectedActions.verify();
     }
 

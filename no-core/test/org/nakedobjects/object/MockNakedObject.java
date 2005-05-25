@@ -1,6 +1,7 @@
 package org.nakedobjects.object;
 
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.MockHint;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionParameterSet;
@@ -8,10 +9,14 @@ import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.utility.ExpectedCalls;
+
+import java.util.Hashtable;
+import java.util.Vector;
 
 
 public class MockNakedObject implements NakedObject {
-    private NakedObject field;
+    private Hashtable fields = new Hashtable();
     private Object object;
     private Oid oid;
     private NakedObjectSpecification specification;
@@ -20,6 +25,9 @@ public class MockNakedObject implements NakedObject {
     private boolean viewDirty;
     private boolean resolved;
     private long version;
+    private MockHint hint;
+    
+    public ExpectedCalls calls = new ExpectedCalls();
 
     public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
 
@@ -38,6 +46,8 @@ public class MockNakedObject implements NakedObject {
     public void deleted() {}
 
     public Naked execute(Action action, Naked[] parameters) {
+        calls.addActualMethod("execute");
+        calls.addActualParameter(action);
         return null;
     }
 
@@ -46,7 +56,7 @@ public class MockNakedObject implements NakedObject {
     }
 
     public Naked getField(NakedObjectField field) {
-        return this.field;
+        return (Naked) fields.get(field.getName());
     }
 
     public NakedObjectField[] getFields() {
@@ -54,11 +64,11 @@ public class MockNakedObject implements NakedObject {
     }
 
     public Hint getHint(Action action, Naked[] parameters) {
-        return null;
+        return hint;
     }
 
     public Hint getHint(NakedObjectField field, Naked value) {
-        return null;
+        return hint;
     }
 
     public String getIconName() {
@@ -146,8 +156,8 @@ public class MockNakedObject implements NakedObject {
         resolved = true;
     }
 
-    public void setupField(NakedObject field) {
-        this.field = field;
+    public void setupField(String name, Naked field) {
+        this.fields.put(name, field);
     }
 
     public void setupObject(Object object) {
@@ -188,6 +198,10 @@ public class MockNakedObject implements NakedObject {
     
     public long getVersion() {
         return version;
+    }
+
+    public void setupHint(MockHint hint) {
+        this.hint = hint;
     }
 }
 

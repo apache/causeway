@@ -12,7 +12,7 @@ import org.nakedobjects.object.security.Session;
 
 import java.util.Enumeration;
 
-class DummyNakedCollection implements NakedCollection {
+public class DummyNakedCollection implements NakedCollection {
 
     public DummyNakedCollection() {
         super();

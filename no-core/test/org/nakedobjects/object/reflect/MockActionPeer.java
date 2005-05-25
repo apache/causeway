@@ -6,7 +6,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action.Target;
 import org.nakedobjects.object.reflect.Action.Type;
-import org.nakedobjects.object.security.ExpectedSet;
+import org.nakedobjects.utility.ExpectedSet;
 
 import java.util.Vector;
 

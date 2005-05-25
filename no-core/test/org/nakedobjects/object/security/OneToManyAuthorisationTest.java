@@ -1,6 +1,7 @@
 package org.nakedobjects.object.security;
 
 import org.nakedobjects.NakedObjectsClient;
+import org.nakedobjects.object.MockOneToManyPeer;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.MockHint;

@@ -2,6 +2,7 @@ package org.nakedobjects.object.security;
 
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.NoOpVeto;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.MockHint;
 
@@ -40,7 +41,7 @@ public class AuthorisationHintTest extends TestCase {
         manager.setupUsable(false);
         Hint hint = AuthorisationHint.hint(null, originalHint, manager);
         
-        Consent canAccess = new DummyConsent();
+        Consent canAccess = new NoOpVeto();
         originalHint.setupCanAccess(canAccess );
         originalHint.setupName("name");
         originalHint.setupDescription("desc");

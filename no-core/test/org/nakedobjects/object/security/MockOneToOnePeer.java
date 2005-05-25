@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
+import org.nakedobjects.utility.ExpectedSet;
 
 public class MockOneToOnePeer implements OneToOnePeer {
     private ExpectedSet expectedActions = new ExpectedSet();

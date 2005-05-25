@@ -4,9 +4,9 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 
-public class MockOneToOneAssociation implements OneToOnePeer {
+public class MockOneToOnePeer implements OneToOnePeer {
 
-    public MockOneToOneAssociation() {
+    public MockOneToOnePeer() {
         super();
     }
 

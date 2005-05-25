@@ -81,13 +81,13 @@ public class ObjectDataFactoryTest extends TestCase {
         fieldSpecification.fields = new NakedObjectField[0];
         fieldObject.setupSpecification(fieldSpecification);
         
-        object.setupField(fieldObject);
+        object.setupField("", fieldObject);
         
         ObjectData od = factory.createObjectData(object, 0);
 
         assertEquals(3, od.getFieldContent().length);
-        assertEquals(fieldSpecification.getFullName(), 
-                ((ObjectData) od.getFieldContent()[1]).getType());
+        ObjectData objectData = ((ObjectData) od.getFieldContent()[1]);
+        assertEquals(fieldSpecification.getFullName(), objectData.getType());
   
     }
 

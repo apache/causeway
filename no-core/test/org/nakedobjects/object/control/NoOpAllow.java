@@ -1,15 +1,15 @@
-package org.nakedobjects.object.security;
+package org.nakedobjects.object.control;
 
 import org.nakedobjects.object.control.Consent;
 
-public class DummyConsent implements Consent {
+public class NoOpAllow implements Consent {
 
     public String getReason() {
-        return null;
+        return "reason";
     }
 
     public boolean isAllowed() {
-        return false;
+        return true;
     }
 
     public boolean isVetoed() {
