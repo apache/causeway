@@ -34,6 +34,11 @@ public class SimpleHelpManager implements HelpManager {
              * Read through each line in file.  
              */
             while((line = reader.readLine()) != null) {
+                // Skip comments - lines begining with hash
+                if(line.length() > 0 && line.charAt(0) == '#') {
+                    continue;
+                }
+                
                 /*
                  * Look for class.
                  */
