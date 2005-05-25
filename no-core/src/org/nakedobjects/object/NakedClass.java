@@ -2,6 +2,7 @@ package org.nakedobjects.object;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.defaults.Error;
 import org.nakedobjects.object.defaults.FastFinder;
 import org.nakedobjects.object.defaults.InternalNakedObject;
 import org.nakedobjects.object.persistence.NakedObjectManager;
