@@ -56,7 +56,7 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
      * Get the instances of this class.
      */
     public TestCollection instances() {
-        NakedCollection instances = NakedObjects.getObjectManager().allInstances(((NakedClass) getForNaked()).forObjectType(), false);
+        NakedCollection instances = NakedObjects.getObjectManager().allInstances(nakedClass.forObjectType(), false);
         if (instances.size() == 0) {
             throw new IllegalActionError("Find must find at least one object");
         } else {

@@ -18,7 +18,7 @@ public interface TestObjectFactory {
     
     TestObject createTestObject(NakedObject object);
 
-    TestObject createTestObject(NakedObject field, Hashtable viewCache);
+    TestObject createTestObject(NakedObject field, Hashtable cache);
 
     TestValue createTestValue(NakedValue object);
 

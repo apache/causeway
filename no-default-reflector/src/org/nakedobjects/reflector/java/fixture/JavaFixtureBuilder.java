@@ -4,6 +4,7 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.application.system.ExplorationClock;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.defaults.Error;
 import org.nakedobjects.object.fixture.Fixture;
 import org.nakedobjects.object.fixture.FixtureBuilder;
 import org.nakedobjects.object.persistence.NakedObjectManager;
