@@ -122,6 +122,10 @@ public class NakedClass implements InternalNakedObject {
         return object;
     }
 
+    public String title() {
+        return className;
+    }
+    
     public String toString() {
         StringBuffer s = new StringBuffer();
 
