@@ -193,10 +193,6 @@ public class InstanceCollectionVector implements TypedNakedCollection, InternalN
         return specification;
     }
     
-    public boolean isSameAs(Naked object) {
-        return false;
-    }
-
     public boolean isParsable() {
         return false;
     }

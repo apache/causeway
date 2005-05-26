@@ -129,10 +129,6 @@ public class MockNakedObject implements NakedObject {
         return resolved;
     }
 
-    public boolean isSameAs(Naked object) {
-        return false;
-    }
-
     public boolean isViewDirty() {
         return viewDirty;
     }

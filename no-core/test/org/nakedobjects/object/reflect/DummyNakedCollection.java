@@ -103,10 +103,6 @@ public class DummyNakedCollection implements NakedCollection {
         return null;
     }
 
-    public boolean isSameAs(Naked object) {
-        return false;
-    }
-
     public String titleString() {
         return null;
     }

@@ -31,11 +31,6 @@ public abstract class AbstractNakedValue implements NakedValue {
     
     public void copyObject(Naked object) {}
 
-    public boolean isSameAs(Naked object) {
-        return false;
-    }
-
-
     public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
 
     public Naked execute(Action action, Naked[] parameters) {

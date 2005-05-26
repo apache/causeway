@@ -54,19 +54,6 @@ public interface Naked {
      */
     NakedObjectSpecification getSpecification();
 
-    /**
-     * Checks to see if two objects contain the same information. Compare with
-     * <code>equals</code>, which determines if the one object is replaceable
-     * with another.
-     * 
-     * @param object
-     *                       the object to compare
-     * @return true if the objects have the same content, and false if the
-     *                 objects are of different types or their contents are deemed to be
-     *                 different.
-     */
-    boolean isSameAs(Naked object);
-
     String titleString();
 }
 

@@ -115,10 +115,6 @@ public class DummyNakedObject implements NakedObject {
         return false;
     }
 
-    public boolean isSameAs(Naked object) {
-        return false;
-    }
-
     public boolean isViewDirty() {
         return false;
     }

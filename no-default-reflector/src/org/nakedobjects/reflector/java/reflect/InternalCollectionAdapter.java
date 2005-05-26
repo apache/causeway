@@ -115,10 +115,6 @@ public class InternalCollectionAdapter implements InternalCollection {
         return specification;
     }
 
-    public boolean isSameAs(Naked object) {
-        return false;
-    }
-
     public String titleString() {
         return "vector...";
     }

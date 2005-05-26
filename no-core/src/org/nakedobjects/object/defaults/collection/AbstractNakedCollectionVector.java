@@ -106,27 +106,6 @@ public abstract class AbstractNakedCollectionVector extends AbstractNakedObject 
         return size() == 0;
     }
 
-    public boolean isSameAs(Naked object) {
-        if (super.isSameAs(object)) {
-            return true;
-        }
-
-        if (object instanceof NakedCollection) {
-            NakedCollection collection = (NakedCollection) object;
-
-            if (size() == collection.size()) {
-                Enumeration e = elements();
-                while (e.hasMoreElements()) {
-                    if (!collection.contains((NakedObject) e.nextElement())) {
-                        break;
-                    }
-                }
-            }
-            return true;
-        }
-        return false;
-    }
-
     /**
      * Return all the OIDs of all elements in this collection. The elements do
      * not need to be resolved to do this (though the collection does)

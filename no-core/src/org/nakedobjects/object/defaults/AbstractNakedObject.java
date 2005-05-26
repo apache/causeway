@@ -151,16 +151,6 @@ public abstract class AbstractNakedObject implements NakedObject {
         return isResolved;
     }
 
-    /**
-     * returns true if the specified object is this object, i.e. no content
-     * comparison is done.
-     * 
-     * @see org.nakedobjects.object.NakedObject#isSameAs(Naked)
-     */
-    public boolean isSameAs(Naked object) {
-        return object == this;
-    }
-
     public void makeFinder() {
         if (isPersistent()) {
             throw new IllegalStateException("Can't make a persient object into a Finder");

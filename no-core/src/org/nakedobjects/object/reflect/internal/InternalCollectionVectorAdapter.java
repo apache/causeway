@@ -167,11 +167,7 @@ public class InternalCollectionVectorAdapter implements InternalCollection {
     public boolean isResolved() {
         return false;
     }
-
-    public boolean isSameAs(Naked object) {
-        return false;
-    }
-
+    
     public boolean isViewDirty() {
         return false;
     }
