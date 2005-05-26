@@ -45,7 +45,7 @@ public class ValueField extends ValueContent implements FieldContent {
         return field.getFieldReflector();
     }
 
-    public String getIconName() {
+   public String getIconName() {
         return object.getIconName();
     }
 

@@ -108,7 +108,7 @@ public abstract class AbstractView implements View {
 
         b.append("\nSelf:      " + getView());
         b.append("\nAxis:      " + getViewAxis());
-        b.append("\nState:     " + getState());
+        b.append("\nState:    " + getState());
         b.append("\nLocation:  " + getLocation());
         if (specification == null) {
             b.append("\nSpec:      none");

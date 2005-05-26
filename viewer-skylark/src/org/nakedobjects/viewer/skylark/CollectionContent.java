@@ -28,16 +28,8 @@ public abstract class CollectionContent extends AbstractContent implements Conte
 
         for (int i = 0; i < actions.length; i++) {
             MenuOption option;
-          /*  if (actions[i].parameters().length == 0) {
-                option = ImmediateObjectOption.createOption(actions[i], object);
-            } else {
-                option = DialogedObjectOption.createOption(actions[i], object);
-            } */
-            
             option = new MenuOption(actions[i].getName()) {
-
                 public void execute(Workspace workspace, View view, Location at) {}
-                
             };
             
             if (option != null) {
