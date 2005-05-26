@@ -124,10 +124,6 @@ public class ExampleObjectForView implements NakedObject {
         return new ExampleSpecification();
     }
 
-    public boolean isSameAs(Naked object) {
-        return false;
-    }
-
     public String titleString() {
         return "Object Title";
     }

@@ -24,13 +24,13 @@ public class TreeExample extends TestViews {
         Content content = new RootObject(object);
         
         View view = new TreeBrowserSpecification().createView(content, axis);
-        view.setLocation(new Location(400, 20));
+        view.setLocation(new Location(100, 50));
         view.setSize(view.getRequiredSize());
         workspace.addView(view);
         
         
         view = new FormSpecification().createView(content, axis);
-        view.setLocation(new Location(100, 20));
+        view.setLocation(new Location(100, 200));
         view.setSize(view.getRequiredSize());
         workspace.addView(view);
         

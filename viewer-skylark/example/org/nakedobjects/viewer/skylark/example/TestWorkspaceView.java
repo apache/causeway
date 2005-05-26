@@ -29,6 +29,21 @@ public class TestWorkspaceView extends AbstractView implements Workspace {
         super(content, new TestWorkspaceSpecification(), null);
     }
 
+    public String debugDetails() {
+        StringBuffer b = new StringBuffer();
+        
+        View[] subviews = getSubviews();
+		for (int i = 0; i < subviews.length; i++) {
+		    b.append(subviews[i].debugDetails());
+		    b.append("\n----------------\n");
+		}
+		        
+        
+   //     b.append("\n\n");
+
+        return b.toString();
+   }
+    
     public void draw(Canvas canvas) {
         Bounds bounds = getBounds();
         canvas.drawRectangle(0, 0, bounds.getWidth(), bounds.getHeight(), Color.BLUE);
