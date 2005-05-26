@@ -8,7 +8,6 @@ import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.ToString;
-import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
@@ -16,7 +15,6 @@ import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.ParameterContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
-import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
 class ObjectParameter extends ObjectContent implements ParameterContent {
@@ -62,15 +60,15 @@ class ObjectParameter extends ObjectContent implements ParameterContent {
         debug.appendln(4, "object", object);
     }
 
-    public String getIconName() {
+    /*public String getIconName() {
         return object.getIconName();
-    }
+    }*/
 
-    public Image getIconPicture(int iconHeight) {
+/*    public Image getIconPicture(int iconHeight) {
         NakedObjectSpecification specification = object.getSpecification();
         return ImageFactory.getInstance().loadIcon(specification, "", iconHeight);
     }
-
+*/
     public Naked getNaked() {
         return object;
     }

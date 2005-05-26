@@ -19,6 +19,7 @@ import org.nakedobjects.utility.UnexpectedCallException;
 import org.nakedobjects.viewer.skylark.basic.AbstractContent;
 import org.nakedobjects.viewer.skylark.basic.ClassOption;
 import org.nakedobjects.viewer.skylark.basic.ObjectOption;
+import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
 public abstract class ObjectContent extends AbstractContent {
@@ -179,6 +180,24 @@ public abstract class ObjectContent extends AbstractContent {
     }
 
     public abstract void setObject(NakedObject object);
+    
+    public String getIconName() {
+        NakedObject object = getObject();
+        return object.getIconName();
+    }
+    
+    public Image getIconPicture(int iconHeight) {
+        NakedObject nakedObject = getObject();
+        Object object = nakedObject.getObject();
+        if( object instanceof NakedClass) {
+            NakedObjectSpecification specification = ((NakedClass) object).forObjectType();
+            return ImageFactory.getInstance().loadClassIcon(specification, "", iconHeight);
+        } else {
+	        NakedObjectSpecification specification = nakedObject.getSpecification();
+	        return ImageFactory.getInstance().loadObjectIcon(specification, "", iconHeight);
+        }
+    }
+
 }
 
 /*

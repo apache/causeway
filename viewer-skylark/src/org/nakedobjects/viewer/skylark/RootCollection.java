@@ -50,10 +50,6 @@ public class RootCollection extends CollectionContent {
         return "root-collection";
     }
     
-    public Image getIconPicture(int iconHeight) {
-       throw new NotImplementedException();
-    }
-
     public String getName() {
         return "";
     }
@@ -94,6 +90,10 @@ public class RootCollection extends CollectionContent {
 
     public Consent canDrop(Content sourceContent) {
         return Veto.DEFAULT;
+    }
+
+    public Image getIconPicture(int iconHeight) {
+       throw new NotImplementedException();
     }
 }
 

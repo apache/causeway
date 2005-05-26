@@ -12,9 +12,7 @@ import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.utility.DebugString;
-import org.nakedobjects.viewer.skylark.basic.ObjectOption;
 import org.nakedobjects.viewer.skylark.basic.RemoveOneToOneAssociationOption;
-import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
 public class OneToOneField extends ObjectContent implements FieldContent {
@@ -94,15 +92,15 @@ public class OneToOneField extends ObjectContent implements FieldContent {
         return getParent().getHint(getField(), null);
     }
 
-    public String getIconName() {
+    /*public String getIconName() {
         return object.getIconName();
-    }
+    }*/
 
-    public Image getIconPicture(int iconHeight) {
+/*    public Image getIconPicture(int iconHeight) {
         NakedObjectSpecification specification = object.getSpecification();
         return ImageFactory.getInstance().loadIcon(specification, "", iconHeight);
     }
-
+*/
     public Naked getNaked() {
         return object;
     }

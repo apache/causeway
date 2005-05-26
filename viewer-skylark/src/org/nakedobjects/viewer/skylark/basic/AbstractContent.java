@@ -2,9 +2,7 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
-import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 public abstract class AbstractContent implements Content {
     public boolean isCollection() {
@@ -19,9 +17,9 @@ public abstract class AbstractContent implements Content {
         return false;
     }
  
-    public Image getIconPicture(int iconHeight) {
-        return  ImageFactory.getInstance().loadIcon(getSpecification(), "", iconHeight);
-    }
+    /*public Image getIconPicture(int iconHeight) {
+        return  ImageFactory.getInstance().loadObjectIcon(getSpecification(), "", iconHeight);
+    }*/
 
     public String windowTitle() {
         return "";

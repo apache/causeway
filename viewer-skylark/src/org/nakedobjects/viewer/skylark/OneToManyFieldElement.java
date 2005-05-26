@@ -64,9 +64,9 @@ public class OneToManyFieldElement extends ObjectContent implements FieldContent
         return field.getFieldReflector();
     }
 
-    public String getIconName() {
+    /*public String getIconName() {
         return element.getIconName();
-    }
+    }*/
 
     public Naked getNaked() {
         return element;

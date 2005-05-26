@@ -7,10 +7,8 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.DebugString;
-import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.ParameterContent;
-import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
 /**
@@ -63,12 +61,12 @@ public class ActionContent extends ObjectContent {
         return getNaked().getIconName();
     }
 
-    public Image getIconPicture(int iconHeight) {
+/*    public Image getIconPicture(int iconHeight) {
         NakedObjectSpecification specification = getNaked().getSpecification();
         return ImageFactory.getInstance().loadIcon(specification, "", iconHeight);
     }
 
-    public Naked getNaked() {
+*/    public Naked getNaked() {
         return invocation.getTarget();
     }
 

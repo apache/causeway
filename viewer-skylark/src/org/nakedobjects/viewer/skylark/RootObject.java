@@ -1,14 +1,12 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.DebugString;
-import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
 public class RootObject extends ObjectContent {
@@ -34,16 +32,16 @@ public class RootObject extends ObjectContent {
         debug.appendln(4, "object", object);
     }
 
-    public String getIconName() {
+    /*public String getIconName() {
         return object.getIconName();
-    }
+    }*/
 
-    public Image getIconPicture(int iconHeight) {
+/*    public Image getIconPicture(int iconHeight) {
         NakedObjectSpecification specification = object.getObject() instanceof NakedClass ? ((NakedClass) object.getObject())
                 .forObjectType() : object.getSpecification();
         return ImageFactory.getInstance().loadIcon(specification, "", iconHeight);
     }
-
+*/
     public Naked getNaked() {
         return object;
     }

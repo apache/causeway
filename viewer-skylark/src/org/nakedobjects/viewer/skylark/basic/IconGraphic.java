@@ -11,22 +11,27 @@ import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
-/**
- *  
+/*
+ *  TODO why does this pass out the baseline, and then expect it back when doing the drawing?
  */
 public class IconGraphic {
     private Content content;
     private Image icon;
     private int iconHeight;
     private String lastIconName;
+    private int baseline;
 
-    public IconGraphic(View view, int height) {
+    public IconGraphic(View view, int height, int baseline) {
         content = view.getContent();
-        iconHeight = height;
+        iconHeight = height - View.VPADDING * 2;
+        this.baseline = baseline;
     }
 
     public IconGraphic(View view, Text style) {
-        this(view, (style.getTextHeight() * 120) / 100);
+        content = view.getContent();
+        iconHeight = (style.getTextHeight() * 120) / 100 - View.VPADDING * 2;
+        //this.baseline = - (style.getAscent() - style.getDescent() - iconHeight) / 2;
+        this.baseline = style.getAscent() + View.VPADDING;
     }
 
     public void draw(Canvas canvas, int x, int baseline) {
@@ -47,7 +52,7 @@ public class IconGraphic {
     }
 
     public int getBaseline() {
-        return iconHeight - 4;
+        return baseline;
     }
 
     public Size getSize() {
@@ -63,9 +68,8 @@ public class IconGraphic {
         return new Size(width, height);
     }
 
-    private Image icon() {
-        //        final NakedObject object = content.getObject();
-        final String iconName = content.getIconName(); //iconName(object);
+    protected Image icon() {
+        final String iconName = content.getIconName();
 
         /*
          * If the graphic is based on a name provided by the object then the
@@ -77,21 +81,15 @@ public class IconGraphic {
         lastIconName = iconName;
 
         if (iconName != null) {
-            final Image loadIcon = loadIcon(iconName);
-            if (loadIcon != null) {
-                icon = loadIcon;
-                return loadIcon;
-            }
+            icon = ImageFactory.getInstance().createIcon(iconName, iconHeight, null);
         }
 
-        icon = content.getIconPicture(iconHeight); //iconPicture(object);
+        if (icon == null) {
+            icon = content.getIconPicture(iconHeight);
+        }
+        
         return icon;
     }
-
-    private Image loadIcon(final String iconName) {
-        return ImageFactory.getInstance().createIcon(iconName, iconHeight, null);
-    }
-
 }
 
 /*

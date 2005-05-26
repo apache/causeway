@@ -14,6 +14,7 @@ import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.viewer.skylark.basic.ClassOption;
+import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 import java.util.Enumeration;
 
@@ -24,10 +25,8 @@ public class OneToManyField extends CollectionContent implements FieldContent {
 
     public Consent canDrop(Content sourceContent) {
         NakedObject object = (NakedObject) sourceContent.getNaked();
-        //NakedObject parent = (NakedObject) getNaked();
         NakedObject parent = field.getParent();
 
-        //InternalCollection collection = (InternalCollection) parent.getField(getOneToManyAssociation());
         InternalCollection collection = (InternalCollection) getNaked();
         if(!object.getSpecification().isOfType(collection.getElementSpecification())) {
             return new Veto("Only objects of type " + collection.getElementSpecification().getSingularName() + " are allowed in this collection");
@@ -51,7 +50,6 @@ public class OneToManyField extends CollectionContent implements FieldContent {
         Consent perm = canDrop(sourceContent);
         if (perm.isAllowed()) {
 	        parent.setAssociation(getOneToManyAssociation(), object);
-	//        layout();
         }
         return null;
     }
@@ -62,7 +60,6 @@ public class OneToManyField extends CollectionContent implements FieldContent {
     }
 
     public Enumeration allElements() {
-        //        return getParent().getFieldElements(getOneToManyAssociation());
         return getCollection().elements();
     }
 
@@ -139,6 +136,20 @@ public class OneToManyField extends CollectionContent implements FieldContent {
     public void menuOptions(MenuOptionSet options) {
         super.menuOptions(options);
         ClassOption.menuOptions(getOneToManyAssociation().getSpecification(), options);
+    }
+    
+
+    public Image getIconPicture(int iconHeight) {
+        NakedObjectSpecification specification = getOneToManyAssociation().getSpecification();
+        
+/*        NakedObject nakedObject = getObject();
+        Object object = nakedObject.getObject();
+        if( object instanceof NakedClass) {
+            NakedObjectSpecification specification = ((NakedClass) object).forObjectType();
+            return ImageFactory.getInstance().loadClassIcon(specification, "", iconHeight);
+        } else {
+	        NakedObjectSpecification specification = nakedObject.getSpecification();
+*/	        return ImageFactory.getInstance().loadObjectIcon(specification, "", iconHeight);
     }
 }
 

@@ -4,6 +4,7 @@ import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.basic.AbstractContent;
 
 
@@ -16,6 +17,10 @@ public abstract class ValueContent extends AbstractContent {
     }
 
     public abstract NakedValue getObject();
+
+    public Image getIconPicture(int iconHeight) {
+        throw new NotImplementedException();
+     }
 
     public abstract Hint getValueHint(String entryText);
 
