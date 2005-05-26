@@ -1,26 +1,18 @@
 package org.nakedobjects.viewer.skylark.metal;
 
+import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
 
-
 public class ClassIconGraphic extends IconGraphic {
 
-    public ClassIconGraphic(View view, int height) {
-        super(view, height);
+    public ClassIconGraphic(View view, int height, int baseline) {
+        super(view, height, baseline);
     }
-
-    /*
-    protected Image iconPicture(NakedObject object) {
-        final NakedClass cls = (NakedClass) object.getObject();
-        final NakedObjectSpecification spec = cls.forObjectType();
-        Image icon = loadIcon(spec, "_class");
-        if(icon == null) {
-            icon = loadIcon(spec, "");
-        }
-        return icon;
+    
+    public ClassIconGraphic(View view, Text style) {
+        super(view, style);
     }
-    */
 }
 
 /*

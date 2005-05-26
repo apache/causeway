@@ -67,8 +67,8 @@ public class ClassIcon extends ObjectView {
         super(content, specification, axis);
         
         int iconSize = NakedObjects.getConfiguration().getInteger(CLASS_ICON_SIZE_PROPERTY, CLASS_ICON_SIZE);
-        iconUnselected = new ClassIconGraphic(this, iconSize); 
-        iconSelected = new ClassIconGraphic(this, iconSize); 
+        iconUnselected = new ClassIconGraphic(this, iconSize, 0); 
+        iconSelected = new ClassIconGraphic(this, iconSize, 0); 
         icon = iconUnselected;
        
        title = new ClassTitleText(this, Style.CLASS);
