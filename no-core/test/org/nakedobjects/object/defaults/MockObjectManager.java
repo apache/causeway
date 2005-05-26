@@ -153,7 +153,7 @@ public class MockObjectManager extends AbstractNakedObjectManager {
 
     public void saveChanges() {}
 
-    public void resolveEagerly(NakedObject object, NakedObjectField field) {}
+    public void resolveLazily(NakedObject object, NakedObjectField field) {}
 
     public void addObjectChangedListener(DirtyObjectSet listener) {}
 }

@@ -135,7 +135,7 @@ public interface NakedObjectStore extends DebugInfo {
     /**
      * Called by the resolveEagerly method in NakedObjectManager.
      * 
-     * @see NakedObjectManager#resolveEagerly(NakedObject, NakedObjectField)
+     * @see NakedObjectManager#resolveLazily(NakedObject, NakedObjectField)
      */
     void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectStoreException;
 

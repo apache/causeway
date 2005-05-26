@@ -134,7 +134,7 @@ public interface NakedObjectManager extends DebugInfo {
      * 
      * @see #resolveImmediately(NakedObject)
      */
-    void resolveEagerly(NakedObject object, NakedObjectField field);
+    void resolveLazily(NakedObject object, NakedObjectField field);
 
     /**
      * Persists the specified object's state. Essentially the data held by the

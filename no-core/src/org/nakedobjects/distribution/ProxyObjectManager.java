@@ -197,7 +197,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
        connection.startTransaction(session);
     }
 
-    public void resolveEagerly(NakedObject object, NakedObjectField field) {}
+    public void resolveLazily(NakedObject object, NakedObjectField field) {}
 
     public void reset() {}
 }

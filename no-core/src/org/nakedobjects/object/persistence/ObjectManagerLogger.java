@@ -125,9 +125,9 @@ public class ObjectManagerLogger extends Logger implements NakedObjectManager {
         decorated.reset();
     }
 
-    public void resolveEagerly(NakedObject object, NakedObjectField field) {
+    public void resolveLazily(NakedObject object, NakedObjectField field) {
         log("Resolve eagerly object in field " + field + " of " + object);
-        decorated.resolveEagerly(object, field);
+        decorated.resolveLazily(object, field);
     }
 
     public void resolveImmediately(NakedObject object) {

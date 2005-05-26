@@ -388,7 +388,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         NakedObjects.getPojoAdapterFactory().reset();
     }
 
-    public void resolveEagerly(NakedObject object, NakedObjectField field) {
+    public void resolveLazily(NakedObject object, NakedObjectField field) {
         // TODO skip this if field if alreay resolved?
         if (object.isResolved() || !isPersistent(object)) {
             return;
