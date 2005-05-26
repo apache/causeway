@@ -109,21 +109,51 @@ public class ImageFactory {
         }
     }
 
-    public Image loadIcon(final NakedObjectSpecification specification, final String type, int iconHeight) {
-        String className = specification.getFullName().replace('.', '_') + type;
+    public Image loadObjectIcon(final NakedObjectSpecification specification, final String type, int iconHeight) {
+        Image icon = loadIcon(specification, type, iconHeight);
+        if (icon == null) {
+            return loadUnknownIcon(iconHeight);
+        } else { 
+            return icon;
+        }
+    }
+
+
+    public Image loadClassIcon(final NakedObjectSpecification specification, final String type, int iconHeight) {
+        Image icon = loadIcon(specification, type + "_class", iconHeight);
+        if (icon == null) {
+            return loadObjectIcon(specification, type, iconHeight);
+        } else { 
+            return icon;
+        }
+    }
+    
+    private Image loadIcon(final NakedObjectSpecification specification, final String extension, int iconHeight) {
+        String className = specification.getFullName().replace('.', '_') + extension;
         Image loadIcon = loadIcon(className, iconHeight);
         if (loadIcon == null) {
-            className = specification.getShortName();
-            loadIcon = loadIcon(className, iconHeight);
-            if (loadIcon == null) {
-                NakedObjectSpecification superclass = specification.superclass();
-                if (superclass == null) {
-                    return loadUnknownIcon(iconHeight);
-                }
-                return loadIcon(superclass, type, iconHeight);
-            }
+            loadIcon = loadIconWIthShortName(specification, extension, iconHeight);
         }
+        return loadIcon;
+    }
 
+    private Image loadIconWIthShortName(final NakedObjectSpecification specification, final String extension, int iconHeight) {
+        String className = specification.getShortName().replace('.', '_') + extension;
+        Image loadIcon = loadIcon(className, iconHeight);
+        if (loadIcon == null) {
+            loadIcon = loadIconForSuperClass(specification, extension, iconHeight);
+        }
+        return loadIcon;
+    }
+
+    private Image loadIconForSuperClass(final NakedObjectSpecification specification, final String extension, int iconHeight) {
+        NakedObjectSpecification superclass = specification.superclass();
+        Image loadIcon;
+        if (superclass == null) {
+            loadIcon = null;
+        } else {
+            loadIcon = loadIcon(superclass, extension, iconHeight);
+        }
         return loadIcon;
     }
 
