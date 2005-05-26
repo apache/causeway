@@ -123,12 +123,12 @@ public interface NakedObjectManager extends DebugInfo {
 
     /**
      * Hint that specified field within the specified object is likely to be
-     * needed soon. This allows the object's data to be eagerly loaded, ready
+     * needed soon. This allows the object's data to be loaded, ready
      * for use.
      * 
      * <p>
-     * This method need to do anything, but offers the object store the
-     * opportunity to eagerly load in objects before their use. Contrast this
+     * This method need not do anything, but offers the object store the
+     * opportunity to load in objects before their use. Contrast this
      * with resolveImmediately, which requires an object to be loaded before
      * continuing.
      * 
@@ -137,22 +137,17 @@ public interface NakedObjectManager extends DebugInfo {
     void resolveLazily(NakedObject object, NakedObjectField field);
 
     /**
-     * Persists the specified object's state. Essentially the data held by the
-     * persistence mechanism should be updated to reflect the state of the
-     * specified objects. Once updated, the object store should issue a
-     * notification to all of the object's users via the <class>UpdateNotifier
-     * </class> object. This can be achieved simply, if extending the <class>
-     * AbstractObjectStore </class> by calling its <method>broadcastObjectUpdate
-     * </method> method.
-     */
-    //   void objectChanged(NakedObject object);
-    /**
      * Re-initialises the fields of an object. If the object is unresolved then
      * the object's missing data should be retreieved from the persistence
      * mechanism and be used to set up the value objects and associations.
      */
     void resolveImmediately(NakedObject object);
 
+    /**
+     * Persists any objects whose state has changed. Essentially the data held by the
+     * persistence mechanism should be updated to reflect the state of the
+     * dirty objects.
+     */
     void saveChanges();
 
     void shutdown();
