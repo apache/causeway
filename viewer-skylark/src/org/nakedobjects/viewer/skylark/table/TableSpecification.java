@@ -1,4 +1,4 @@
-package org.nakedobjects.viewer.skylark.special;
+package org.nakedobjects.viewer.skylark.table;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
@@ -15,6 +15,9 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractBuilderDecorator;
 import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
+import org.nakedobjects.viewer.skylark.special.CollectionElementBuilder;
+import org.nakedobjects.viewer.skylark.special.StackLayout;
+import org.nakedobjects.viewer.skylark.special.SubviewSpec;
 
 
 class TableHeaderBuilder extends AbstractBuilderDecorator {

@@ -1,4 +1,4 @@
-package org.nakedobjects.viewer.skylark.special;
+package org.nakedobjects.viewer.skylark.tree;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectRuntimeException;
@@ -14,6 +14,9 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
+import org.nakedobjects.viewer.skylark.special.ResizeBorder;
+import org.nakedobjects.viewer.skylark.special.ScrollBorder;
+import org.nakedobjects.viewer.skylark.table.InternalTableSpecification;
 
 
 class TreeBrowserFrame extends AbstractView implements ViewAxis {

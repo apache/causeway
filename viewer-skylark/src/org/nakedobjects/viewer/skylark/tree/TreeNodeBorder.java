@@ -1,4 +1,4 @@
-package org.nakedobjects.viewer.skylark.special;
+package org.nakedobjects.viewer.skylark.tree;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
@@ -154,7 +154,7 @@ public class TreeNodeBorder extends AbstractBorder {
         
         if(getContent() instanceof FieldContent) {
             NakedObjectField field = ((FieldContent) getContent()).getFieldReflector();
-            NakedObjects.getObjectManager().resolveEagerly((NakedObject) parent, field);
+            NakedObjects.getObjectManager().resolveLazily((NakedObject) parent, field);
         } else if(getContent() instanceof CollectionContent) {
             NakedObjects.getObjectManager().resolveImmediately((NakedObject) parent);
         } else if(getContent() instanceof CollectionElement) {
@@ -163,7 +163,7 @@ public class TreeNodeBorder extends AbstractBorder {
     }
 
     private boolean canClick() {
-    	return ((TreeNodeSpecification) getSpecification()).canOpen(getContent());
+    	return ((NodeSpecification) getSpecification()).canOpen(getContent());
     //    return true;
     }
 

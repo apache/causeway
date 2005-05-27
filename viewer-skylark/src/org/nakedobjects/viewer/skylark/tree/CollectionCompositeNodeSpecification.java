@@ -1,19 +1,13 @@
-package org.nakedobjects.viewer.skylark.metal;
+package org.nakedobjects.viewer.skylark.tree;
 
-import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.View;
-import org.nakedobjects.viewer.skylark.ViewAxis;
+import org.nakedobjects.viewer.skylark.special.CollectionElementBuilder;
+import org.nakedobjects.viewer.skylark.special.StackLayout;
 
-public class TableSpecification extends org.nakedobjects.viewer.skylark.table.TableSpecification {
 
-    public View createView(Content content, ViewAxis axis) {
-        return new WindowBorder(super.createView(content, axis), true);
+public class CollectionCompositeNodeSpecification extends CompositeNodeSpecification {
+    public CollectionCompositeNodeSpecification() {
+        builder = new StackLayout(new CollectionElementBuilder(this, true));
     }
-	
-    public String getName() {
-		return "Table";
-	}
-	
 }
 
 

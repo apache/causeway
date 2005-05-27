@@ -1,4 +1,4 @@
-package org.nakedobjects.viewer.skylark.special;
+package org.nakedobjects.viewer.skylark.table;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.NakedObjectField;

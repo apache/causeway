@@ -183,7 +183,7 @@ public abstract class ObjectContent extends AbstractContent {
     
     public String getIconName() {
         NakedObject object = getObject();
-        return object.getIconName();
+        return object == null ? null : object.getIconName();
     }
     
     public Image getIconPicture(int iconHeight) {

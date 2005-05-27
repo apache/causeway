@@ -1,12 +1,21 @@
-package org.nakedobjects.viewer.skylark.special;
+package org.nakedobjects.viewer.skylark.table;
 
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.ViewAxis;
+import org.nakedobjects.viewer.skylark.special.ScrollBorder;
 
 
-interface TreeNodeSpecification {
-	public boolean canOpen(Content content);
+public class InternalTableSpecification extends TableSpecification {
+    public String getName() {
+        return "Internal Table";
+    }
+    
+    public View createView(Content content, ViewAxis axis) {
+        View table = super.createView(content, axis);
+        return new ScrollBorder(table);
+    }
 }
-
 
 /*
 Naked Objects - a framework that exposes behaviourally complete

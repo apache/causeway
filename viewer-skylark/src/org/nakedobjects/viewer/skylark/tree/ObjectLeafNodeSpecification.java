@@ -1,22 +1,33 @@
-package org.nakedobjects.viewer.skylark.metal;
+package org.nakedobjects.viewer.skylark.tree;
 
-import org.nakedobjects.object.defaults.FastFinder;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.reflect.NakedObjectAssociation;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.ViewAxis;
+import org.nakedobjects.viewer.skylark.basic.ObjectBorder;
 
-public class TreeBrowserSpecification extends org.nakedobjects.viewer.skylark.tree.TreeBrowserSpecification {
 
-    public String getName() {
-        return "Tree Browser";
-    }
-
-    protected View addBorder(View frame) {
-        return new WindowBorder(frame, false);
+class ObjectLeafNodeSpecification extends NodeSpecification {
+    public boolean canDisplay(Content content) {
+        return content.isObject() && content.getNaked() != null;
     }
     
-    public boolean canDisplay(Content content) {
-        // don't use this view for a finder
-        return super.canDisplay(content) && ! (content.getNaked().getObject() instanceof FastFinder);
+    public boolean canOpen(Content content) {
+        NakedObject object = ((ObjectContent) content).getObject();
+        NakedObjectField[] fields = object.getVisibleFields();
+        for (int i = 0; i < fields.length; i++) {
+            if (fields[i] instanceof NakedObjectAssociation && !(object.getSpecification().isLookup())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected View createView(View treeLeafNode, Content content, ViewAxis axis) {
+        return new ObjectBorder(treeLeafNode);
     }
 }
 

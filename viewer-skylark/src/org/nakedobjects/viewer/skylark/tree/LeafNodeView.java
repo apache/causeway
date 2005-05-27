@@ -1,21 +1,16 @@
-package org.nakedobjects.viewer.skylark.metal;
+package org.nakedobjects.viewer.skylark.tree;
 
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
+import org.nakedobjects.viewer.skylark.ViewSpecification;
+import org.nakedobjects.viewer.skylark.core.ObjectView;
 
-public class TableSpecification extends org.nakedobjects.viewer.skylark.table.TableSpecification {
+class LeafNodeView extends ObjectView {
 
-    public View createView(Content content, ViewAxis axis) {
-        return new WindowBorder(super.createView(content, axis), true);
+    public LeafNodeView(Content content, ViewSpecification design, ViewAxis axis) {
+        super(content, design, axis);
     }
-	
-    public String getName() {
-		return "Table";
-	}
-	
 }
-
 
 /*
 Naked Objects - a framework that exposes behaviourally complete

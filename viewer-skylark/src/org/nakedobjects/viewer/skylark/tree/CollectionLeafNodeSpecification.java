@@ -1,22 +1,29 @@
-package org.nakedobjects.viewer.skylark.metal;
+package org.nakedobjects.viewer.skylark.tree;
 
-import org.nakedobjects.object.defaults.FastFinder;
+import org.nakedobjects.object.NakedCollection;
+import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.ViewAxis;
+import org.nakedobjects.viewer.skylark.basic.ObjectBorder;
 
-public class TreeBrowserSpecification extends org.nakedobjects.viewer.skylark.tree.TreeBrowserSpecification {
 
-    public String getName() {
-        return "Tree Browser";
-    }
-
-    protected View addBorder(View frame) {
-        return new WindowBorder(frame, false);
-    }
-    
+class CollectionLeafNodeSpecification extends NodeSpecification {
     public boolean canDisplay(Content content) {
-        // don't use this view for a finder
-        return super.canDisplay(content) && ! (content.getNaked().getObject() instanceof FastFinder);
+        return content.isCollection() && content.getNaked() != null;
+    }
+
+    public boolean canOpen(Content content) {
+        if (!content.isCollection()) {
+            return false;
+        } else {
+            NakedCollection collection = ((CollectionContent) content).getCollection();
+            return collection.size() > 0;
+        } 
+    }
+
+    protected View createView(View treeLeafNode, Content content, ViewAxis axis) {
+        return new ObjectBorder(treeLeafNode);
     }
 }
 

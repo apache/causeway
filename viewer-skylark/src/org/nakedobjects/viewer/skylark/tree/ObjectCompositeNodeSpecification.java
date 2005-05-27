@@ -1,20 +1,16 @@
-package org.nakedobjects.viewer.skylark.special;
+package org.nakedobjects.viewer.skylark.tree;
 
-import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.View;
-import org.nakedobjects.viewer.skylark.ViewAxis;
+import org.nakedobjects.viewer.skylark.special.ObjectFieldBuilder;
+import org.nakedobjects.viewer.skylark.special.StackLayout;
 
 
-public class InternalTableSpecification extends TableSpecification {
-    public String getName() {
-        return "Internal Table";
-    }
-    
-    public View createView(Content content, ViewAxis axis) {
-        View table = super.createView(content, axis);
-        return new ScrollBorder(table);
+public class ObjectCompositeNodeSpecification extends CompositeNodeSpecification {
+
+    public ObjectCompositeNodeSpecification() {
+        builder = new StackLayout(new ObjectFieldBuilder(this));
     }
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete

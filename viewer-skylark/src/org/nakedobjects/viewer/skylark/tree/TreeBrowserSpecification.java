@@ -1,4 +1,4 @@
-package org.nakedobjects.viewer.skylark.special;
+package org.nakedobjects.viewer.skylark.tree;
 
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
@@ -8,12 +8,11 @@ import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
-import org.nakedobjects.viewer.skylark.basic.Identifier;
 import org.nakedobjects.viewer.skylark.basic.WindowBorder;
 
 
 public class TreeBrowserSpecification implements ViewSpecification {
-	private ViewSpecification collectionCompositeNode;
+/*	private ViewSpecification collectionCompositeNode;
 	private TreeLeafNodeSpecification collectionLeafNode;
 	private ViewSpecification objectCompositeNode;
 	private TreeLeafNodeSpecification objectLeafNode;
@@ -28,7 +27,9 @@ public class TreeBrowserSpecification implements ViewSpecification {
 		objectLeafNode.setReplacementNodeSpecification(objectCompositeNode);
 		collectionLeafNode.setReplacementNodeSpecification(collectionCompositeNode);
 	}
-	
+*/	
+    private TreeNodeFactory factory = new TreeNodeFactory();
+    
     public boolean canDisplay(Content content) {
         if(content.isCollection()) {
             return true;
@@ -54,10 +55,12 @@ public class TreeBrowserSpecification implements ViewSpecification {
 		View rootNode;
 		axis = frame;
 		if(content.getNaked() instanceof NakedCollection) {
-	    	rootNode = collectionCompositeNode.createView(content, axis);
+	    	//rootNode = collectionCompositeNode.createView(content, axis);
+		    rootNode = factory.createRootCollectionNode(content, axis);
 	    } else {
-	        rootNode = objectCompositeNode.createView(content, axis);
-	        frame.setSelectedNode(rootNode);
+	        //rootNode = objectCompositeNode.createView(content, axis);
+	        rootNode = factory.createRootObjectNode(content, axis);
+		        frame.setSelectedNode(rootNode);
 	    }
 		View leftPane = rootNode;
         frame.initLeftPane(leftPane);
@@ -70,7 +73,8 @@ public class TreeBrowserSpecification implements ViewSpecification {
     }
 
     protected View addBorder(View frame) {
-        return new Identifier(new WindowBorder(frame));
+//        return new Identifier(new WindowBorder(frame));
+        return new WindowBorder(frame);
     }
 
     public String getName() {

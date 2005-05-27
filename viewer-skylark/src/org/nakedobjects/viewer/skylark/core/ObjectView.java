@@ -22,11 +22,9 @@ import org.nakedobjects.viewer.skylark.ViewDrag;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.basic.DragContentIcon;
 
-import org.apache.log4j.Logger;
-
 
 public abstract class ObjectView extends AbstractView {
-    private static final Logger LOG = Logger.getLogger(ObjectView.class);
+ //   private static final Logger LOG = Logger.getLogger(ObjectView.class);
     
     public ObjectView(Content content, ViewSpecification design, ViewAxis axis) {
         super(content, design, axis);

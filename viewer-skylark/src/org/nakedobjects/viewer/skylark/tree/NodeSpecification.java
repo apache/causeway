@@ -1,23 +1,48 @@
-package org.nakedobjects.viewer.skylark.metal;
+package org.nakedobjects.viewer.skylark.tree;
 
-import org.nakedobjects.object.defaults.FastFinder;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.ViewAxis;
+import org.nakedobjects.viewer.skylark.ViewSpecification;
 
-public class TreeBrowserSpecification extends org.nakedobjects.viewer.skylark.tree.TreeBrowserSpecification {
+
+abstract class NodeSpecification implements ViewSpecification {
+    private ViewSpecification replacementNodeSpecification;
+
+    public abstract boolean canOpen(Content content);
+
+ /*   public boolean canDisplay(Content content) {
+        return content.isObject() && TreeDisplayRules.canDisplay(content.getNaked());
+    }
+*/
+    public View createView(Content content, ViewAxis axis) {
+        View treeLeafNode = new LeafNodeView(content, this, axis);
+        View view = createView(treeLeafNode, content, axis);
+        return new TreeNodeBorder(view, replacementNodeSpecification);
+    }
+
+    void setReplacementNodeSpecification(ViewSpecification replacementNodeSpecification) {
+        this.replacementNodeSpecification = replacementNodeSpecification;
+    }
+
+    protected abstract View createView(View treeLeafNode, Content content, ViewAxis axis);
 
     public String getName() {
-        return "Tree Browser";
+        return null;
     }
 
-    protected View addBorder(View frame) {
-        return new WindowBorder(frame, false);
+    public boolean isOpen() {
+        return false;
     }
-    
-    public boolean canDisplay(Content content) {
-        // don't use this view for a finder
-        return super.canDisplay(content) && ! (content.getNaked().getObject() instanceof FastFinder);
+
+    public boolean isReplaceable() {
+        return false;
     }
+
+    public boolean isSubView() {
+        return true;
+    }
+
 }
 
 /*
