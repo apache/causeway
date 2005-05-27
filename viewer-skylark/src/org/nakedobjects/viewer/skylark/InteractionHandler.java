@@ -238,7 +238,6 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                     }
                 }
 
-                spy.addAction("mouseMoved " + location);
                 spy.addTrace("--> mouse moved");
                 viewer.mouseMoved(location);
                 spy.addTrace(overView, " mouse location", location);

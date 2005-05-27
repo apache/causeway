@@ -15,9 +15,13 @@ import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
+import org.nakedobjects.viewer.skylark.core.AbstractView;
+
+import org.apache.log4j.Logger;
 
 
 public class ScrollBorder extends AbstractBorder {
+    private static final Logger LOG = Logger.getLogger(ScrollBorder.class);
     private static final int SCROLLBAR_WIDTH = 16;
 
     private int horizontalScrollPosition = 0;
@@ -86,6 +90,14 @@ public class ScrollBorder extends AbstractBorder {
         int y = offset.getDeltaY();
         Canvas subCanvas = canvas.createSubcanvas(-x, -y, contentWidth + x , contentHeight + y);
         wrappedView.draw(subCanvas);
+        
+        if (AbstractView.debug) {
+            Size size = getSize();
+            canvas.drawRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, Color.DEBUG_VIEW_BOUNDS);
+            canvas.drawLine(0, size.getHeight() / 2, size.getWidth() - 1, size.getHeight() / 2, Color.DEBUG_VIEW_BOUNDS);
+            canvas.drawLine(0, getBaseline(), size.getWidth() - 1, getBaseline(), Color.DEBUG_BASELINE);
+        }
+
     }
 	
     public Size getSize() {
@@ -226,33 +238,35 @@ public class ScrollBorder extends AbstractBorder {
             if (y > verticalScrollPosition && y < verticalScrollPosition + verticalVisibleAmount) {
                 dragOffset = y - verticalScrollPosition;
                 verticalDrag = true;
+	            return new SimpleInternalDrag(this, location);
             }
-            return new SimpleInternalDrag(this, location);
 
         } else if (y >= contents.getHeight()) {
             if (x > horizontalScrollPosition && x < horizontalScrollPosition + horizontalVisibleAmount) {
                 dragOffset = x - horizontalScrollPosition;
                 verticalDrag = false;
+	            return new SimpleInternalDrag(this, location);
             }
-            return new SimpleInternalDrag(this, location);
 
         } else {
             Offset offset = offset();
             drag.add(offset);
             return super.dragStart(drag);
         }
+        
+        return null;
     }
 
     public void drag(InternalDrag drag) {
+        LOG.debug("drag " + drag);
         if (dragOffset == -1) {
-//            drag.add(offset());
             super.drag(drag);
         } else {
             if (verticalDrag) {
-                int y = drag.getLocation().getY(); // -  getView().getPadding().getTop();
+                int y = drag.getLocation().getY();
                 setVerticalPostion(y - dragOffset);
             } else {
-                int x = drag.getLocation().getX(); // -  getView().getPadding().getLeft();
+                int x = drag.getLocation().getX();
                 setHorizontalPostion(x - dragOffset);
             }
         }
@@ -273,6 +287,7 @@ public class ScrollBorder extends AbstractBorder {
     }
     
     public void mouseMoved(Location location) {
+        LOG.debug("moved " + location);
         if (contentArea().contains(location)) {
             addOffset(location);
         }
