@@ -295,7 +295,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
                 throw new NakedAssertionFailedError(unexpected(message) + " empty field " + fieldName);
             }
         } else {
-            if (actualValue != null && actualValue.isSameAs(notExpected)) {
+            if (actualValue != null && actualValue == notExpected) {
                 throw new NakedAssertionFailedError(unexpected(message) + " value " + notExpected + " in field " + fieldName);
             }
         }
