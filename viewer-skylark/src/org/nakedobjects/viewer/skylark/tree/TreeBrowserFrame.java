@@ -90,10 +90,10 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
         left.draw(subCanvas);
 
         int y1 = getPadding().getTop();
-        int y2 = getSize().getHeight();
-        for (int i = 0; i < 3; i++) {
-            int x = bounds.getWidth() + i;
-            canvas.drawLine(x, y1, x, y2, Style.SECONDARY2);
+        int y2 = getSize().getHeight() - 1;
+        for (int i = 0; i < ResizeBorder.BORDER_WIDTH; i++) {
+            int x = bounds.getWidth() - i - 1;
+            canvas.drawLine(x, y1, x, y2, Style.SECONDARY1);
         }
 
         if (right != null) {
@@ -196,7 +196,7 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     }
  
     private int rightViewOffet() {
-        return left.getSize().getWidth() + 5;
+        return left.getSize().getWidth();
     }
 
     public void replaceView(View toReplace, View replacement) {
@@ -227,7 +227,6 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
         Workspace workspace = this.getWorkspace();
         if(workspace != null) {
             limitBoundsWithin(new Bounds(workspace.getSize()));
-//            workspace.limitBounds(this );
         }
         invalidateLayout();
     }
