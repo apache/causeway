@@ -18,14 +18,14 @@ import org.apache.log4j.Logger;
 
 public class ResizeBorder extends AbstractBorder {
     private static final Logger LOG = Logger.getLogger(ResizeBorder.class);
-    private static final int BORDER_WIDTH = 3;
+    public static final int BORDER_WIDTH = 5;
     private Size resize;
     private int direction;
     private boolean resizing;
     private int onBorder;
 
     // TODO allow a minimum and maximum sizes to be specified and then ensure the user doesn't go outside them.
-    
+    // TODO allow the direction of resizing be limited, ie left/right only 
     public ResizeBorder(View view) {
         super(view);
         bottom = right = BORDER_WIDTH;
