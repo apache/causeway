@@ -1,4 +1,4 @@
-package org.nakedobjects.viewer.skylark.special;
+package org.nakedobjects.viewer.skylark.tree;
 
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
@@ -8,6 +8,8 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.example.ExampleObjectForView;
 import org.nakedobjects.viewer.skylark.example.TestViews;
+import org.nakedobjects.viewer.skylark.tree.CollectionLeafNodeSpecification;
+import org.nakedobjects.viewer.skylark.tree.TreeBrowserFrame;
 
 
 public class TreeLeafNodeExample extends TestViews {
@@ -22,18 +24,18 @@ public class TreeLeafNodeExample extends TestViews {
         
         Content content = new RootObject(object);
         
-        View view = new TreeLeafNodeSpecification().createView(content, axis);
+        View view = new CollectionLeafNodeSpecification().createView(content, axis);
         view.setLocation(new Location(100, 20));
         view.setSize(view.getRequiredSize());
         workspace.addView(view);
         
-        view = new TreeLeafNodeSpecification().createView(content, axis);
+        view = new CollectionLeafNodeSpecification().createView(content, axis);
         view.setLocation(new Location(100, 60));
         view.setSize(view.getRequiredSize());
         workspace.addView(view);
         view.getState().setObjectIdentified();
 
-        view = new TreeLeafNodeSpecification().createView(content, axis);
+        view = new CollectionLeafNodeSpecification().createView(content, axis);
         view.setLocation(new Location(100, 100));
         view.setSize(view.getRequiredSize());
         workspace.addView(view);

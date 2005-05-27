@@ -1,4 +1,4 @@
-package org.nakedobjects.viewer.skylark.special;
+package org.nakedobjects.viewer.skylark.tree;
 
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
@@ -8,7 +8,9 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.example.ExampleObjectForView2;
 import org.nakedobjects.viewer.skylark.example.TestViews;
+import org.nakedobjects.viewer.skylark.metal.FormSpecification;
 import org.nakedobjects.viewer.skylark.metal.TreeBrowserSpecification;
+import org.nakedobjects.viewer.skylark.tree.TreeBrowserFrame;
 
 
 public class TreeExample extends TestViews {
