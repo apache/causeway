@@ -18,7 +18,7 @@ public class OneToOneHelp extends AbstractOneToOnePeer {
 
     public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked association) {
         Hint hint = super.getHint(identifier, object, association);
-        return helpLookup.getHint(identifier, hint);
+        return helpLookup.createMergedHint(identifier, hint);
     }
 
     public boolean hasHint() {

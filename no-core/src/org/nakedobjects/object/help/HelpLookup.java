@@ -12,7 +12,7 @@ public class HelpLookup {
         this.helpManager = helpManager;
     }
     
-     Hint getHint(final MemberIdentifier identifier, final Hint hint) {
+     Hint createMergedHint(final MemberIdentifier identifier, final Hint hint) {
         final String help = helpManager == null ? "" : helpManager.help(identifier);
         Hint mergedHint = new DefaultHint() {
             
@@ -44,7 +44,7 @@ public class HelpLookup {
             public String getName() {
                 String name = hint.getName();
                 if(name == null || name.length() == 0) {
-                    return identifier.getName();
+                    return null;
                 } else {
                     return name;
                 }

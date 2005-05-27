@@ -47,9 +47,8 @@ public class OneToOneAssociation extends NakedObjectAssociation {
     }
 
     protected String getLabel(NakedObject object) {
-        Hint about = getHint(object, get(object));
-
-        return getLabel(about);
+        Hint hint = getHint(object, get(object));
+        return getLabel(hint);
     }
 
     public boolean hasHint() {

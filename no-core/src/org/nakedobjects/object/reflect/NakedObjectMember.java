@@ -35,14 +35,14 @@ public abstract class NakedObjectMember {
         return label;
     }
 
-    protected String getLabel(Hint about) {
-        if (about == null) {
+    protected String getLabel(Hint hint) {
+        if (hint == null) {
             return label;
         } else {
-            if (about.getName() == null) {
+            if (hint.getName() == null) {
                 return label;
             } else {
-                return about.getName();
+                return hint.getName();
             }
         }
     }
