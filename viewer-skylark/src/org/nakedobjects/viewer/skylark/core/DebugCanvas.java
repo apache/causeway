@@ -72,13 +72,8 @@ public class DebugCanvas extends Canvas {
 
     public void drawRectangleAround(View view, Color color) {
         Bounds bounds = view.getBounds();
-        super.drawRectangle(0, 0, bounds.getWidth() - 1, bounds.getHeight() - 1, color);
         indent();
         buffer.append("Rectangle 0,0 " + bounds.getWidth() + "x" + bounds.getHeight() + " " + color);
-    }
-
-    public void drawRoundedRectangle(Bounds bounds, int arcWidth, int arcHeight, Color color) {
-        drawRoundedRectangle(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), arcWidth, arcHeight, color);
     }
 
     public void drawRoundedRectangle(int x, int y, int width, int height, int arcWidth, int arcHeight, Color color) {
