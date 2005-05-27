@@ -21,7 +21,7 @@ public class ObjectBorder extends AbstractBorder {
 		top = size;
 		left = size;
 		bottom = size;
-		right = size;
+		right = size + 13;
 	}
 
 	protected void debugDetails(StringBuffer b) {
