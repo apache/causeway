@@ -1,10 +1,31 @@
 package org.nakedobjects.viewer.skylark.tree;
 
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.special.ObjectFieldBuilder;
 import org.nakedobjects.viewer.skylark.special.StackLayout;
 
 
 public class ObjectCompositeNodeSpecification extends CompositeNodeSpecification {
+
+    /**
+     * This is only used to control root nodes. Therefore a object tree can only
+     * be displayed for an object with fields that are collections.
+     */
+    public boolean canDisplay(Content content) {
+        if(content.isObject()) {
+            NakedObject object = (NakedObject) content.getNaked();
+	        NakedObjectField[] fields = object.getVisibleFields();
+	        for (int i = 0; i < fields.length; i++) {
+                if(fields[i].isCollection()) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
 
     public ObjectCompositeNodeSpecification() {
         builder = new StackLayout(new ObjectFieldBuilder(this));

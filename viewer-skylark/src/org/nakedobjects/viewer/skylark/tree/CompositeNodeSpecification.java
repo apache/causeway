@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.tree;
 
-import org.nakedobjects.utility.UnexpectedCallException;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
@@ -14,10 +13,6 @@ public abstract class CompositeNodeSpecification extends NodeSpecification imple
     private CollectionLeafNodeSpecification collectionLeafNodeSpecification;
     private ObjectLeafNodeSpecification objectLeafNodeSpecification;
 
-    public boolean canDisplay(Content content) {
-        throw new UnexpectedCallException();
-    }
-    
     public void setCollectionLeafNodeSpecification(CollectionLeafNodeSpecification collectionLeafNodeSpecification) {
         this.collectionLeafNodeSpecification = collectionLeafNodeSpecification;
     }
