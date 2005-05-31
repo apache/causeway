@@ -61,9 +61,32 @@ public class ScrollBorder extends AbstractBorder {
     public void draw(Canvas canvas) {
          Bounds contents = contentArea();
 
-        Color color = isOnBorder() ? Style.PRIMARY1 : Style.PRIMARY2;
         int contentWidth = contents.getWidth();
         int contentHeight = contents.getHeight();
+        
+        drawScrollBars(canvas, contentWidth, contentHeight);
+        drawContent(canvas, contentWidth, contentHeight);
+        
+        if (AbstractView.debug) {
+            Size size = getSize();
+            canvas.drawRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, Color.DEBUG_VIEW_BOUNDS);
+            canvas.drawLine(0, size.getHeight() / 2, size.getWidth() - 1, size.getHeight() / 2, Color.DEBUG_VIEW_BOUNDS);
+            canvas.drawLine(0, getBaseline(), size.getWidth() - 1, getBaseline(), Color.DEBUG_BASELINE);
+        }
+
+    }
+	
+    private void drawContent(Canvas canvas, int contentWidth, int contentHeight) {
+        Offset offset = offset();
+        int x = offset.getDeltaX();
+        int y = offset.getDeltaY();
+        Canvas subCanvas = canvas.createSubcanvas(-x, -y, contentWidth + x , contentHeight + y);
+        wrappedView.draw(subCanvas);
+    }
+
+    private void drawScrollBars(Canvas canvas, int contentWidth, int contentHeight) {
+        Color color = isOnBorder() ? Style.PRIMARY1 : Style.PRIMARY2;
+        
         if(horizontalScrollPosition > 0 || horizontalVisibleAmount < contentWidth) {
             canvas.drawSolidRectangle(0, contentHeight + 1, contentWidth,
                     SCROLLBAR_WIDTH - 2, Style.SECONDARY3);
@@ -85,21 +108,8 @@ public class ScrollBorder extends AbstractBorder {
 	        canvas.drawRectangle(contentWidth, 0, 
 	                SCROLLBAR_WIDTH - 1, contentHeight,  Style.SECONDARY2);
         }
-        Offset offset = offset();
-        int x = offset.getDeltaX();
-        int y = offset.getDeltaY();
-        Canvas subCanvas = canvas.createSubcanvas(-x, -y, contentWidth + x , contentHeight + y);
-        wrappedView.draw(subCanvas);
-        
-        if (AbstractView.debug) {
-            Size size = getSize();
-            canvas.drawRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, Color.DEBUG_VIEW_BOUNDS);
-            canvas.drawLine(0, size.getHeight() / 2, size.getWidth() - 1, size.getHeight() / 2, Color.DEBUG_VIEW_BOUNDS);
-            canvas.drawLine(0, getBaseline(), size.getWidth() - 1, getBaseline(), Color.DEBUG_BASELINE);
-        }
-
     }
-	
+
     public Size getSize() {
         return new Size(size);
     }
@@ -139,17 +149,15 @@ public class ScrollBorder extends AbstractBorder {
 
     public void setVerticalPostion(final int position) {
         getViewManager().getSpy().addAction("Move to vertical position " + position);
-        verticalScrollPosition = position;
-        verticalScrollPosition = Math.min(verticalScrollPosition, verticalMaximum);
-        verticalScrollPosition = Math.max(verticalScrollPosition, verticalMinimum);
+        verticalScrollPosition = Math.min(position, verticalMaximum);
+        verticalScrollPosition = Math.max(position, verticalMinimum);
         markDamaged();
     }
 
     public void setHorizontalPostion(final int position) {
         getViewManager().getSpy().addAction("Move to horizontal position " + position);
-        horizontalScrollPosition = position;
-        horizontalScrollPosition = Math.min(horizontalScrollPosition, horizontalMaximum);
-        horizontalScrollPosition = Math.max(horizontalScrollPosition, horizontalMinimum);
+        horizontalScrollPosition = Math.min(position, horizontalMaximum);
+        horizontalScrollPosition = Math.max(position, horizontalMinimum);
         markDamaged();
     }
 
@@ -290,8 +298,8 @@ public class ScrollBorder extends AbstractBorder {
         LOG.debug("moved " + location);
         if (contentArea().contains(location)) {
             addOffset(location);
+	        super.mouseMoved(location);
         }
-        super.mouseMoved(location);
     }
 
     public void markDamaged(Bounds bounds) {
@@ -300,7 +308,7 @@ public class ScrollBorder extends AbstractBorder {
         super.markDamaged(bounds);
     }
     
-    public Location getAbsoluteLocation() {
+/*    public Location getAbsoluteLocation() {
         Location location = super.getAbsoluteLocation();
         getViewManager().getSpy().addTrace(this, "scrollbar's parent 's location", location);
         getViewManager().getSpy().addTrace(this, "scrollbar offset", offset());
@@ -308,6 +316,7 @@ public class ScrollBorder extends AbstractBorder {
         getViewManager().getSpy().addTrace(this, "scrollbar's locatin", location);
       return location;
     }
+      */
 }
 
 /*
