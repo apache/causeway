@@ -40,6 +40,7 @@ public class ResizeBorder extends AbstractBorder {
         Size size = getSize();
         int width = size.getWidth();
         int height = size.getHeight();
+        LOG.debug("redrawing resize border " + resizing);
         if (resizing) {
             Shape shape = new Shape(0, 0);
             int resizeMarkerSize = 10;
@@ -87,8 +88,10 @@ public class ResizeBorder extends AbstractBorder {
         getViewManager().showDefaultCursor();
         ViewResizeOutline outline = ((ViewResizeOutline) drag.getOverlay());
         if(outline != null) {
+            resizing = false;
+            onBorder = 0;
             getView().setRequiredSize(outline.getSize());
-            Logger.getLogger(getClass()).debug("resizing view " + resize);
+            LOG.debug("resizing view " + resize);
             invalidateLayout();
         } else {
             super.dragTo(drag);
@@ -150,6 +153,8 @@ public class ResizeBorder extends AbstractBorder {
     public void exited() {
         getViewManager().showDefaultCursor();
         resizing = false;
+        onBorder = 0;
+        markDamaged();
         LOG.debug("off resize border " + onBorder + " " + resizing);
         super.exited();
     }
