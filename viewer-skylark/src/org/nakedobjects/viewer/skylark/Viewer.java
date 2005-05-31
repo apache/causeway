@@ -202,10 +202,10 @@ public class Viewer {
     }
 
     void repaint() {
-        LOG.debug("Repaint viewer");
         updateNotifier.invalidateViewsForChangedObjects();
         rootView.layout();
         if (redrawArea != null) {
+	        LOG.debug("Repaint viewer");
             Bounds area;
             synchronized (this) {
                 area = redrawArea;

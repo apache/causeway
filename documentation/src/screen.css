@@ -28,7 +28,7 @@ h1,h2,h3,h4
 { color:#330099; letter-spacing:1.0pt; clear: both; line-height: 1.3em;}
 
 H1 
-{ font-size: 140%; margin-top: -8px; }
+{ font-size: 140%; margin-top: -8px; border-bottom: 3px solid #330099;}
 
 H2 
 { font-size: 120%; border-bottom: 3px solid #330099;}
@@ -83,14 +83,32 @@ pre {			font-family: andale mono, monospaced; font-size: 10pt;
 			clear: both;}
 pre.b {		color:black;}
 
+pre.property-listing {
+    background: #ffdddd;
+}
+
+pre.command-listing {
+    background: #ddffd;
+}
+
+pre.program-listing {
+    background: #ddffd;
+}
+
 code 
 {		color: #6600CC; font: monospaced;}
 
 
 
+.class, .method {
+    font-family: andale mono, monospaced; 
+    color: blue
+}
 
-
-
+.path {
+    font-family: andale mono, monospaced; 
+    color: green
+}
 
 
 

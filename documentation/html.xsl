@@ -18,6 +18,7 @@
     <html>
     
     <head>
+		<!-- this tag is not being copied across with the closing slash ? -->
         <link rel="STYLESHEET" href="./screen.css" media="screen"/>
         <link rel="STYLESHEET" href="./print.css" media="print"/>
         <title>
@@ -57,14 +58,7 @@
         </xsl:for-each>
       </xsl:for-each--> 
 
-      <!-- Title page -->
-        <h1>
-            <xsl:value-of select="/section/title"/>
-        </h1>
-        <h2>
-            <xsl:value-of select="/section/subtitle"/>
-        </h2>
-      
+     
 
       <!-- Table of contents -->
       <!--fo:page-sequence initial-page-number="0" master-reference="toc">
@@ -214,12 +208,30 @@
       <xsl:apply-templates/> 
     </p>
   </xsl:template>
+ 
+  <xsl:template match ="title">
+    <h1>
+      <xsl:apply-templates/> 
+    </h1>
+  </xsl:template>
 
+  <xsl:template match ="heading">
+    <h2>
+      <xsl:apply-templates/> 
+    </h2>
+  </xsl:template>
 
   <xsl:template match ="subheading">
     <h3>
       <xsl:apply-templates/> 
     </h3>
+  </xsl:template>
+
+
+  <xsl:template match ="minorheading">
+    <h4>
+      <xsl:apply-templates/> 
+    </h4>
   </xsl:template>
 
   <xsl:template match="list">
@@ -271,6 +283,18 @@
   <xsl:template match ="comment">
   </xsl:template>
 
+  <xsl:template match ="command-listing">
+    <pre class="command">
+      <xsl:apply-templates/> 
+    </pre>
+  </xsl:template>
+
+  <xsl:template match ="property-listing">
+    <pre class="property">
+      <xsl:apply-templates/> 
+    </pre>
+  </xsl:template>
+
 
   <xsl:template match ="program-listing">
     <pre class="program">
@@ -284,14 +308,6 @@
       <xsl:apply-templates/> 
     </p>
   </xsl:template>
-
-
-  <xsl:template match ="command-listing|property-listing">
-    <p class="listing">
-      <xsl:apply-templates/> 
-    </p>
-  </xsl:template>
-
 
   <xsl:template match ="panel">
     <p>

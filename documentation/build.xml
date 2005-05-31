@@ -18,6 +18,11 @@
         <mkdir dir="${dest.dir}"/>
     
         <xslt basedir="src" destdir="${dest.dir}"
+           style="html-set.xsl">
+        	 <mapper type="glob" from="notebook.xml" to="index.html"/>
+        </xslt>
+    
+		<xslt basedir="src" destdir="${dest.dir}"
            extension=".html" style="html.xsl" includes="*.xml" excludes="build.xml">
         </xslt>
         

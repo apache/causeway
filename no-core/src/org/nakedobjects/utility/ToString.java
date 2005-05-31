@@ -69,7 +69,7 @@ public final class ToString {
 
 
     public ToString append(final String name, final boolean flag) {
-        append(name, Boolean.toString(flag));
+        append(name, flag ? "true" : "false");
         return this;
     }
 

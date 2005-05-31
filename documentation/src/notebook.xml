@@ -1,0 +1,9 @@
+<!DOCTYPE content SYSTEM "./content.dtd">
+
+<content>
+	<page file="how no works.xml"/>
+	<page file="running an example.xml"/>
+	<page file="logging.xml"/>
+	<page file="images.xml"/>
+	<page file="viewer properties.xml"/>
+</content>

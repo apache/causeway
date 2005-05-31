@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section SYSTEM "./documentation.dtd">
+<section numbered="on">
+  <title>Viewer properties</title>
+
+  <para>Fonts can be specified for the following areas:-</para>
+
+  <list>
+    <para>class</para>
+
+    <para>debug</para>
+
+    <para>label</para>
+
+    <para>normal</para>
+
+    <para>status</para>
+
+    <para>title</para>
+  </list>
+
+  <para>A particular font can be specifed for an area by specifying</para>
+
+  <property-listing>org.nakedobjects.viewer.skylark.font.&lt;area&gt;=&lt;font&gt;</property-listing>
+
+  <para>Where the <property>&lt;area&gt;</property> is the name and the
+  <property>&lt;font&gt;</property> is specified according the
+  <method>Font.decode()</method> specification (<class>see
+  java.awt.Font</class>). This essentially is a contationation of the name,
+  style and size as below:</para>
+
+  <property-listing>&lt;logical font name&gt;-&lt;style&gt;-&lt;point
+  size&gt;</property-listing>
+
+  <para>In addition to the font the amount of space between lines of text can
+  also be specified.</para>
+
+  <property-listing>org.nakedobjects.viewer.skylark.spacing.&lt;area&gt;=&lt;pixels&gt;</property-listing>
+</section>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section SYSTEM "./documentation.dtd">
+
+<section numbered="on">
+    <title>Running an Example</title>
+
+    <para>Before starting with Naked Objects it is worth trying out the
+    framework with a simple example. Once you have downloaded and unzipped the
+    latest distribution try out the framework by running the ECS car
+    reservation example. In Windows, assuming you have the Java JRE installed
+    correctly, you can simply double-click on the <path>example.jar</path>
+    file to start (this jar can be found in the <path>lib</path>
+    directory).</para>
+
+    <figure fileref="intro/files.png"
+            label="Files from the downloaded distribution" width=""></figure>
+
+    <figure fileref="intro/lib.png"
+            label="The jar files in the exploration distribution"></figure>
+
+    <para>To start the application double-click on the
+    <path>examples.jar</path> icon as shown above. After the splash screen is
+    shown a large window appears showing a set of classes that you can work
+    with. Every thing that is displayed within the application window is an
+    object and can be worked with, this is they can be right-clicked, or
+    dragged and dropped onto any other object, although these actions will
+    only be allowed when applicable</para>
+
+    <figure fileref="intro/opening-screen.png"
+            label="The opening screen of the Naked Objects example showing the six classes"></figure>
+
+    <para>Note - at the moment the application does not alway start up
+    correctly: the icons can be partly hidden under the title bar and
+    sometimes the icons are placed on top of each other. To relayout the icons
+    if needed, right-click on the desktop and select the "Tidy up icons"
+    option. To get the screen to be redrawn properly just resize it (by
+    dragging the lower-left corner of the windows.</para>
+
+    <para>When a customer calls the booking number the agent creates a new
+    booking by selecting the New Booking option the the Booking class. This
+    action brings up a window for the new object.</para>
+
+    <figure fileref="example/new-booking.png"></figure>
+
+    <para>The customer then identifies himeself and the agent uses the list of
+    customers to find the object for the customer. Then dragging the customer
+    icon onto the customer field in the booking the agent creates an
+    association from the booking to the customer object.</para>
+
+    <figure fileref="example/select-customer.png"></figure>
+
+    <para>With the association created double-clicking the customer icon in
+    the booking opens the customer obect.</para>
+
+    <figure fileref="example/open-customer.png"></figure>
+
+    <para>Double-clicking the location opens up the locations in a separate
+    window. Closing the customer window makes space on the screen.</para>
+
+    <figure fileref="example/open-locations.png"></figure>
+
+    <para>The agent then asks the customer where he wants to be picked up, and
+    drags the QIC Headquarters location to the Pick Up field. Notice that the
+    city field also gets set up to the city for that location.</para>
+
+    <figure fileref="example/drop-pick-up.png"></figure>
+
+    <para>The drop off location object - JFK Airport - is dragged to the Drop
+    Off field. If any of the other location were dragged over this field you
+    would see the field turn red either because the city for the location is
+    not New York, or in the case of QIC Headquarters, because the pick up and
+    drop off location cannot be the same.</para>
+
+    <figure fileref="example/drop-drop-off.png"></figure>
+
+    <para>Next the date and time are specified by clicking in the relevant
+    fields, or tabbing to them, and entering the date and time.</para>
+
+    <figure fileref="example/edit-date-time.png"></figure>
+
+    <para>When enquiring about the payment method the customer states that
+    they wish to pay by credit card rather than by the usual method, so a new
+    credit card object must be created.</para>
+
+    <figure fileref="example/new-credit-card.png"></figure>
+
+    <para>With the payment details entered the it is associated with the
+    booking.</para>
+
+    <figure fileref="example/associate-payment.png"></figure>
+
+    <para>Finally a telephone number is required. This is got from the
+    customer object which is opened up again by double-clicking on the
+    customer icon. Again the reuqired number - the one known as Mobile - is
+    dragged across to the Contact Telephone field.</para>
+
+    <figure fileref="example/associate-phone.png"></figure>
+
+    <para>With all the fields completed the booking can be checked for
+    availability. Until checked the booking cannot be confirmed and
+    completed.</para>
+
+    <figure fileref="example/check-availablity.png"></figure>
+
+    <para>If the booking can be fulfilled then the status will be changed.
+    Below the status shows that cars and driver will be available for this
+    booking.</para>
+
+    <figure fileref="example/available.png"></figure>
+
+    <para>Finally the booking can be confirmed.</para>
+
+    <figure fileref="example/confirm.png"></figure>
+
+    <para>Now that the main booking is complete, the agent enquires whether
+    the customer wishes to make a return booking. The agent uses the Return
+    Booking option to create a second booking.</para>
+
+    <figure fileref="example/return-booking.png"></figure>
+
+    <para>The return booking is a copy of the one just manually created, but
+    has the pick up and drop off objects reversed. The agent must now just set
+    up the date and time. If needed any of the other fields can be changed by
+    using the Clear Association option to clear the field, and then creating a
+    new association by dragging and dropping the required objects as done
+    earlier.</para>
+
+    <figure fileref="example/new-return-booking.png"></figure>
+
+    <para>If we now open up the customer again we can see that the customer
+    has two new booking objects in his list of bookings. The second last one
+    is the confirmed booking we just created whilst talking to the customer,
+    and the last is the returned booking, which at present is
+    unconfirmed.</para>
+
+    <figure fileref="example/uipdated-customer.png"></figure>
+ </section>

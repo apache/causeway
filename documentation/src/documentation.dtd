@@ -14,29 +14,27 @@
 <!ENTITY % para-elements "%text;|%code;|%ui;|path|property|
    note|anchor|comment|weblink|ref|see">
 
-<!ENTITY  % section-elements "subheading|para|list|program-listing|
+<!ENTITY  % section-elements "heading|subheading|minorheading|para|list|program-listing|
    command-listing|property-listing|inline-graphic|figure|panel|
    comment|index|anchor|biblio">
 
 
 <!-- sections - each document is split into sections, each section can
 contain other sections -->
-<!ELEMENT section (title, comment?,index*,(intro|para),(section|(%section-elements;))*)>
+<!ELEMENT section (title,index*,description+,comment?,intro+,(section|(%section-elements;))*)>
 <!ATTLIST section
         label CDATA #IMPLIED
         numbered (on|off) "on">
 
 <!ELEMENT title (%text;)*>
 
-
-<!-- main textual elements
-   intro - introductory text
-   subheading - 
-   para - standard paragraph -->
+<!ELEMENT description (%text;)*>
 
 <!ELEMENT intro (para|index|comment)*>
 
+<!ELEMENT heading (%text;)*>
 <!ELEMENT subheading (%text;)*>
+<!ELEMENT minorheading (%text;)*>
 
 <!ELEMENT para (%para-elements;)*>
 
