@@ -11,8 +11,8 @@ import org.nakedobjects.viewer.skylark.core.AbstractView;
 
 public class TestObjectView extends AbstractView {
 
-    private final int requiredWidth;
-    private final int requiredHeight;
+    private int requiredWidth;
+    private int requiredHeight;
     private final String label;
 
     public TestObjectView(Content content, ViewSpecification specification, ViewAxis axis, int width, int height, String label) {
@@ -36,6 +36,13 @@ public class TestObjectView extends AbstractView {
     
     public Size getRequiredSize() {
         return new Size(requiredWidth, requiredHeight);
+    }
+    
+    public void setRequiredSize(Size size) {
+        requiredHeight = size.getHeight();
+        requiredWidth = size.getWidth();
+        
+        setSize(size);
     }
 }
 

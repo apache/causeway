@@ -57,6 +57,7 @@ public class TestWorkspaceView extends AbstractView implements Workspace {
             
             final int width = requiredSize.getWidth();
             final int height = requiredSize.getHeight();
+            final int baseline = location.getY() + view.getBaseline();
             final int left = location.getX() - 10;
             final int top = location.getY() - 10;
             final int right = left + 10 + width - 1 + 10;
@@ -72,6 +73,9 @@ public class TestWorkspaceView extends AbstractView implements Workspace {
 
             canvas.drawRectangle(left + 10, top + 10, width - 1, height - 1, Color.LIGHT_GRAY);
             
+            canvas.drawLine(left, baseline, left + 10, baseline, Color.GRAY);
+            canvas.drawLine(right - 10, baseline, right, baseline, Color.GRAY);
+            canvas.drawLine(left + 10, baseline, right - 10, baseline, Color.LIGHT_GRAY);
             
 	        Canvas subcanvas = canvas.createSubcanvas(view.getBounds());
 	        view.draw(subcanvas);

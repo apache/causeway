@@ -7,18 +7,19 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
-import org.nakedobjects.viewer.skylark.core.EmptyBorder;
+import org.nakedobjects.viewer.skylark.basic.ObjectBorder;
 import org.nakedobjects.viewer.skylark.example.ExampleObjectForView;
 import org.nakedobjects.viewer.skylark.example.ExampleViewSpecification;
-import org.nakedobjects.viewer.skylark.example.TestObjectViewWithDragging;
+import org.nakedobjects.viewer.skylark.example.TestObjectView;
 import org.nakedobjects.viewer.skylark.example.TestViews;
+import org.nakedobjects.viewer.skylark.metal.WindowBorder;
 import org.nakedobjects.viewer.skylark.special.ScrollBorder;
 
 
-public class ScrollBorderExample extends TestViews {
+public class CompoundBorderExample extends TestViews {
 
     public static void main(String[] args) {
-        new ScrollBorderExample();
+        new CompoundBorderExample();
     }
 
     protected void views(Workspace workspace) {
@@ -27,20 +28,33 @@ public class ScrollBorderExample extends TestViews {
         ViewSpecification specification = new ExampleViewSpecification();        
         ViewAxis axis = null;
         
-        View view = new EmptyBorder(10, new ScrollBorder(new TestObjectViewWithDragging(content, specification, axis, 800, 800, "both")));
+        View v = new TestObjectView(content, specification, axis, 300, 120, "normal");
+        
+        View objectBorder = new ObjectBorder(1, v);
+        
+        View scrollBorder = new ScrollBorder(objectBorder);
+        scrollBorder.setSize(new Size(200, 200));
+        
+        View view = new WindowBorder(scrollBorder, false);
         view.setLocation(new Location(50, 60));
-        view.setSize(new Size(200, 200));
+        view.setSize(view.getRequiredSize());
         workspace.addView(view);
         
-        view = new ScrollBorder(new TestObjectViewWithDragging(content, specification, axis, 200, 800, "vertical"));
-        view.setLocation(new Location(300, 60));
-        view.setSize(new Size(200, 200));
+        view = new WindowBorder(new TestObjectView(content, specification, axis, 100, 30, "active"), false);
+        view.setLocation(new Location(200, 300));
+        view.setSize(view.getRequiredSize());
         workspace.addView(view);
         
-        view = new ScrollBorder(new TestObjectViewWithDragging(content, specification, axis, 800, 200, "horizontal"));
-        view.setLocation(new Location(550, 60));
-        view.setSize(new Size(200, 200));
+        view.getState().setActive();
+
+    
+        view = new WindowBorder(new TestObjectView(content, specification, axis, 100, 30, "view identified"), false);
+        view.setLocation(new Location(200, 400));
+        view.setSize(view.getRequiredSize());
         workspace.addView(view);
+        
+        view.getState().setInactive();
+        view.getState().setRootViewIdentified();
 
     }
 
