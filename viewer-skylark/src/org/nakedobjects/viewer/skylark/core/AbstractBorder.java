@@ -47,8 +47,12 @@ public class AbstractBorder extends AbstractViewDecorator {
     }
 
     public Drag dragStart(DragStart drag) {
-        drag.subtract(getLeft(), getTop());
-        return super.dragStart(drag);
+        if(overContent(drag.getLocation())) {
+	        drag.subtract(getLeft(), getTop());
+	        return super.dragStart(drag);
+        } else {
+            return null;
+        }
     }
     
     public void draw(Canvas canvas) {
@@ -66,8 +70,10 @@ public class AbstractBorder extends AbstractViewDecorator {
     }
 
     public void firstClick(Click click) {
-        click.subtract(getLeft(), getTop());
-        wrappedView.firstClick(click);
+        if(overContent(click.getLocation())) {
+	        click.subtract(getLeft(), getTop());
+	        wrappedView.firstClick(click);
+        }
     }
 
     public int getBaseline() {
@@ -121,12 +127,12 @@ public class AbstractBorder extends AbstractViewDecorator {
 		b.append("\n           contents:  " + contentArea());
 	}
 
-    protected boolean overBorder(Location mouseLocation) {
-        return !contentArea().contains(mouseLocation);
+    protected boolean overBorder(Location location) {
+        return !contentArea().contains(location);
     }
 
-    protected boolean overContent(Location mouseLocation) {
-        return contentArea().contains(mouseLocation);
+    protected boolean overContent(Location location) {
+        return contentArea().contains(location);
     }
 
     protected boolean isOnBorder() {
@@ -155,8 +161,10 @@ public class AbstractBorder extends AbstractViewDecorator {
     //        LOG.debug("On border " + onBorder + " " + this);
         }
 
-        at.move(-getLeft(), -getTop());
-        wrappedView.mouseMoved(at);
+        if(!on) {
+	        at.move(-getLeft(), -getTop());
+	        wrappedView.mouseMoved(at);
+        }
     }
     
     public void exited() {
@@ -179,8 +187,10 @@ public class AbstractBorder extends AbstractViewDecorator {
     }
 
     public void secondClick(Click click) {
+        if(overContent(click.getLocation())) {
         click.subtract(getLeft(), getTop());
         wrappedView.secondClick(click);
+        }
     }
     
 	public void setRequiredSize(Size size) {
@@ -202,8 +212,10 @@ public class AbstractBorder extends AbstractViewDecorator {
     }
 
     public void thirdClick(Click click) {
+        if(overContent(click.getLocation())) {
         click.subtract(getLeft(), getTop());
         wrappedView.thirdClick(click);
+        }
     }
 
     public ViewAreaType viewAreaType(Location mouseLocation) {
