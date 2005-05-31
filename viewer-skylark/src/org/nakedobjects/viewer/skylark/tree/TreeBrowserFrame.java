@@ -86,8 +86,6 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     
     public void draw(Canvas canvas) {
         Bounds bounds = left.getBounds();
-        Canvas subCanvas = canvas.createSubcanvas(bounds);
-        left.draw(subCanvas);
 
         int y1 = getPadding().getTop();
         int y2 = getSize().getHeight() - 1;
@@ -95,6 +93,9 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
             int x = bounds.getWidth() - i - 1;
             canvas.drawLine(x, y1, x, y2, Style.SECONDARY1);
         }
+
+        Canvas subCanvas = canvas.createSubcanvas(bounds);
+        left.draw(subCanvas);
 
         if (right != null) {
             bounds = right.getBounds();
