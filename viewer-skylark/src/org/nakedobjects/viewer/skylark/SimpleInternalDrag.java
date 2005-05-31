@@ -22,6 +22,11 @@ public class SimpleInternalDrag extends InternalDrag {
  
         this.location = new Location(location);
         offset = view.getAbsoluteLocation();
+        
+        Padding targetPadding = view.getPadding();
+        Padding containerPadding = view.getView().getPadding();
+        offset.add(containerPadding.getLeft() - targetPadding.getLeft(), containerPadding.getTop() - targetPadding.getTop());
+        
         this.location.subtract(offset);
     }
 
@@ -52,7 +57,7 @@ public class SimpleInternalDrag extends InternalDrag {
     }
 
     protected void start(Viewer viewer) {}
-
+    
     public String toString() {
         return "InternalDrag [location=" + location + ",relative=" + getLocation() + "," + super.toString() + "]";
     }
