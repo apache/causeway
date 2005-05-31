@@ -110,7 +110,7 @@ public class Canvas {
     public void drawText(String text, int x, int y, Color color, Text style) {
         useColor(color);
         useFont(style);
-        graphics.drawString(text, x, y);
+        graphics.drawString(text, x, y + 1);
     }
 
     public void offset(int x, int y) {
