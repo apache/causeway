@@ -150,27 +150,27 @@ public class ScrollBorder extends AbstractBorder {
     public void setVerticalPostion(final int position) {
         getViewManager().getSpy().addAction("Move to vertical position " + position);
         verticalScrollPosition = Math.min(position, verticalMaximum);
-        verticalScrollPosition = Math.max(position, verticalMinimum);
+        verticalScrollPosition = Math.max(verticalScrollPosition, verticalMinimum);
         markDamaged();
     }
 
     public void setHorizontalPostion(final int position) {
         getViewManager().getSpy().addAction("Move to horizontal position " + position);
         horizontalScrollPosition = Math.min(position, horizontalMaximum);
-        horizontalScrollPosition = Math.max(position, horizontalMinimum);
+        horizontalScrollPosition = Math.max(horizontalScrollPosition, horizontalMinimum);
         markDamaged();
     }
 
     public ViewAreaType viewAreaType(Location location) {
         if (overContent(location)) {
-            addOffset(location);
+            offsetLocation(location);
             return super.viewAreaType(location);
         } else {
             return ViewAreaType.INTERNAL;
         }
     }
 
-    private void addOffset(Location location) {
+    private void offsetLocation(Location location) {
         location.add(offset());
     }
 
@@ -297,7 +297,7 @@ public class ScrollBorder extends AbstractBorder {
     public void mouseMoved(Location location) {
         LOG.debug("moved " + location);
         if (contentArea().contains(location)) {
-            addOffset(location);
+            offsetLocation(location);
 	        super.mouseMoved(location);
         }
     }
