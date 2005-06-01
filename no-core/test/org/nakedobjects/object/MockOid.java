@@ -24,6 +24,10 @@ public class MockOid implements Oid {
     public int hashCode() {
         return 37 * 17 + (int) (id ^ (id >>> 32));
     }
+    
+    public String toString() {
+        return "MockOid#" + id;
+    }
 }
 
 /*

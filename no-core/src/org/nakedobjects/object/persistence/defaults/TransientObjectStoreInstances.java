@@ -81,8 +81,9 @@ class TransientObjectStoreInstances {
     public void instances(InstancesCriteria criteria, Vector instances) {
         if(criteria instanceof TitleCriteria) {
             String requiredTitle = ((TitleCriteria) criteria).getRequiredTitle();
-            Object object = titleIndex.get(requiredTitle);
-            if(object != null) {
+            Object oid = titleIndex.get(requiredTitle);
+            if(oid != null) {
+                NakedObject object = getObject((Oid) oid);
                 instances.addElement(object);
                 return;
             }
@@ -121,7 +122,7 @@ class TransientObjectStoreInstances {
 
     public void save(NakedObject object) {
         objectInstances.put(object.getOid(), object.getObject());
-        titleIndex.put(object.titleString().toLowerCase(), object);
+        titleIndex.put(object.titleString().toLowerCase(), object.getOid());
     }
 
     public void shutdown() {

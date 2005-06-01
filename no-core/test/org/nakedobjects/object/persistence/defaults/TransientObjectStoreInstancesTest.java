@@ -1,11 +1,17 @@
 package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.NakedObjectsClient;
+import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.MockOid;
+import org.nakedobjects.object.persistence.TitleCriteria;
 import org.nakedobjects.object.reflect.DummyNakedObject;
+
 import java.util.Enumeration;
+import java.util.Vector;
+
 import junit.framework.TestCase;
+
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -86,19 +92,17 @@ public class TransientObjectStoreInstancesTest extends TestCase {
     }
 
     public void testElements() {
-        /*
-        mockPojoAdapterFactory.setupLoaded(false);
-        mockPojoAdapterFactory.setupExpectedPojo(object);
-        DummyNakedObject nakedObject = new DummyNakedObject();
-        mockPojoAdapterFactory.setupCreatedAdapter(nakedObject);
-
-        Enumeration e = instances.elements();
-
-        e.nextElement();
-        e.nextElement();
-        e.nextElement();
-        assertFalse(e.hasMoreElements());
-        */
+    /*
+     * mockPojoAdapterFactory.setupLoaded(false);
+     * mockPojoAdapterFactory.setupExpectedPojo(object); DummyNakedObject
+     * nakedObject = new DummyNakedObject();
+     * mockPojoAdapterFactory.setupCreatedAdapter(nakedObject);
+     * 
+     * Enumeration e = instances.elements();
+     * 
+     * e.nextElement(); e.nextElement(); e.nextElement();
+     * assertFalse(e.hasMoreElements());
+     */
     }
 
     public void testNoElements() {
@@ -125,9 +129,21 @@ public class TransientObjectStoreInstancesTest extends TestCase {
         assertTrue(instances.objectInstances.containsKey(oid));
         assertTrue(instances.objectInstances.contains(object));
         assertTrue(instances.titleIndex.containsKey("four"));
-        assertTrue(instances.titleIndex.contains(mockNakedObject));
+        assertTrue(instances.titleIndex.contains(oid));
     }
 
+    public void testInstancesByCriteria() {
+        mockPojoAdapterFactory.setupExpectedOid(new MockOid(2));
+        mockPojoAdapterFactory.setupExpectedPojo(object);
+        DummyNakedObject nakedObject = new DummyNakedObject();
+        mockPojoAdapterFactory.setupCreatedAdapter(nakedObject);
+        
+        Vector vector = new Vector();
+        TitleCriteria criteria = new TitleCriteria(new DummyNakedObjectSpecification(), "two", false);
+        instances.instances(criteria, vector);
+        assertEquals(1, vector.size());
+        assertEquals(nakedObject, vector.elementAt(0));
+    }
 }
 
 /*
