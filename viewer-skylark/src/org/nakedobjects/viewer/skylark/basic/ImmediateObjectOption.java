@@ -56,9 +56,9 @@ class ImmediateObjectOption extends MenuOption {
     public Consent disabled(View view) {
         Hint about = object.getHint(action, null);
         if (about.canUse().isAllowed()) {
-            String description = about.getDescription();
+            String description = about.getName() + " " + about.getDescription();
             if (action.hasReturn()) {
-                description += " returns a " + action.getReturnType();
+                description += " returns a " + action.getReturnType().getSingularName();
             }
             return new Allow(description);
         } else {
