@@ -35,7 +35,8 @@ public class ViewDrag extends Drag {
         this.dragView = dragView;
         this.overlayOffset = offset;
 
-        viewsWorkspace = view.getParent().getWorkspace();
+        //viewsWorkspace = view.getParent().getWorkspace();
+        viewsWorkspace = view.getWorkspace();
         viewsDecoratedWorkspace = viewsWorkspace.getView();
     }
 
