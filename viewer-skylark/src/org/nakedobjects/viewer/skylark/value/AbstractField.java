@@ -65,19 +65,19 @@ public abstract class AbstractField extends AbstractView {
     public void dragTo(InternalDrag drag) {}
 
     public void draw(Canvas canvas) {
-        super.draw(canvas);
-
         if (getState().isActive()) {
-            canvas.drawBackground(this, Style.IDENTIFIED);
+            canvas.clearBackground(this, Style.IDENTIFIED);
         }
 
         if (getState().isOutOfSynch()) {
-            canvas.drawBackground(this, Style.OUT_OF_SYNCH);
+            canvas.clearBackground(this, Style.OUT_OF_SYNCH);
         }
 
         if (getState().isInvalid()) {
-            canvas.drawBackground(this, Style.INVALID);
+            canvas.clearBackground(this, Style.INVALID);
         }
+
+        super.draw(canvas);
 
         // outline bounds
         if (debug) {

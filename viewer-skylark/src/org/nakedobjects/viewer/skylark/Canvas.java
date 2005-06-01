@@ -38,9 +38,9 @@ public class Canvas {
         graphics.draw3DRect(x, y, width, height, raised);
     }
 
-    public void drawBackground(View view, Color color) {
-        Bounds bounds = view.getBounds();
-        drawSolidRectangle(0, 0, bounds.getWidth() - 1, bounds.getHeight() - 1, color);
+    public void clearBackground(View view, Color color) {
+	        Bounds bounds = view.getBounds();
+	        drawSolidRectangle(0, 0, bounds.getWidth() - 1, bounds.getHeight() - 1, color);
     }
 
     public void drawIcon(Image icon, int x, int y) {

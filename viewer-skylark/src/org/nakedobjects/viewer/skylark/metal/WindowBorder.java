@@ -80,7 +80,7 @@ public class WindowBorder extends AbstractBorder {
         int height = s.getHeight();
 
         // blank background
-        canvas.drawSolidRectangle(x, x, width - x - 1, height - x - 1, Style.background(getSpecification()));
+        canvas.clearBackground(this, Style.background(getSpecification()));
 
         // slightly rounded grey border
         canvas.drawRectangle(1, 0, width - 3, height - 1, Style.SECONDARY1);

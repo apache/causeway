@@ -20,7 +20,7 @@ public class PlainBackground extends AbstractViewDecorator {
 	}
 	
 	public void draw(Canvas canvas) {
-		canvas.drawBackground(this, color);
+		canvas.clearBackground(this, color);
 		super.draw(canvas);
 	}
 	

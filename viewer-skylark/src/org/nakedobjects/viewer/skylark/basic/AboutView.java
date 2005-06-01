@@ -28,7 +28,7 @@ public class AboutView extends AbstractView {
     public void draw(Canvas canvas) {
         super.draw(canvas);
         
-        canvas.drawBackground(this, Style.WHITE);
+        canvas.clearBackground(this, Style.WHITE);
         canvas.drawRectangleAround(this, Style.SECONDARY1);
         
         if(showingImage()) {

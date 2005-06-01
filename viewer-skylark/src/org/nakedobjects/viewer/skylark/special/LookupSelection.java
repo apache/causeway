@@ -20,7 +20,7 @@ class LookupSelection extends AbstractViewDecorator {
     public void draw(Canvas canvas) {
         if (getState().isViewIdentified()) {
             Color color = Style.SECONDARY3;
-            canvas.drawBackground(this, color);
+            canvas.clearBackground(this, color);
         }
         canvas.offset(HPADDING, 0);
         super.draw(canvas);

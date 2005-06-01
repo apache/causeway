@@ -26,7 +26,7 @@ public class TestObjectView extends AbstractView {
         super.draw(canvas);       
         int width = getSize().getWidth();
         int height = getSize().getHeight();
-        canvas.drawBackground(this, Color.LIGHT_GRAY);
+        canvas.clearBackground(this, Color.LIGHT_GRAY);
         canvas.drawRectangle(0,0, width - 1, height - 1, Color.GRAY);
         canvas.drawLine(0, 0, width - 1, height - 1, Color.RED);
         canvas.drawLine(width - 1, 0, 0, height - 1, Color.RED);
