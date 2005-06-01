@@ -1,11 +1,15 @@
 package org.nakedobjects.viewer.skylark;
 
+import java.util.Hashtable;
+
 /**
  */
 public class Style {
 
     // colors
-    public static final Color APPLICATION_BACKGROUND = new Color("background.application", "#dddddd");
+ //   public static final Color APPLICATION_BACKGROUND = new Color("background.application", "#dddddd");
+    public static final Color APPLICATION_BACKGROUND = new Color("application.background", "#dddddd");
+    public static final Color WINDOW_BACKGROUND = new Color("window.background", "#dddddd");
     public static final Color BLACK = new Color("black", "#000000");
     public static final Text CLASS = new AwtText("class", "SansSerif--12");
     public static final Color CONTENT_MENU = new Color("menu.content", "#FFCCCC");
@@ -28,6 +32,7 @@ public class Style {
     public static final Color SECONDARY2 = new Color("secondary2", "#999999");
     public static final Color SECONDARY3 = new Color("secondary3", "#cccccc");
     public static final Text STATUS = new AwtText("status", "SansSerif--10");
+    public static final Color RESIZE = new Color("resize", SECONDARY2);
 
     // fonts
     public static final Text TITLE = new AwtText("title", "SansSerif-bold-12");
@@ -35,28 +40,41 @@ public class Style {
     public static final Color VALUE_MENU = new Color("menu.value", "#CCFFCC");
     public static final Color VIEW_MENU = new Color("menu.view", "#FFCCFF");
     public static final Color WHITE = new Color("white", "#ffffff");
-
     public static final Color WORKSPACE_MENU = new Color("menu.workspace", "#CCCCCC");
     public static final Color OUT_OF_SYNCH = new Color("out-of-sync", "#662200");
 
+    private static int defaultBaseline;
+    private static int defaultFieldHeight;
+    private static Hashtable backgrounds = new Hashtable();
+    
     public static int defaultBaseline() {
-        int iconSize = Style.NORMAL.getAscent() * 120 / 100;
-        int height = View.VPADDING + iconSize;
-
-        return height;
+        if(defaultBaseline == 0) {
+	        int iconSize = Style.NORMAL.getAscent() * 120 / 100;
+	        defaultBaseline = View.VPADDING + iconSize;
+        }
+        return defaultBaseline;
     }
 
     public static int defaultFieldHeight() {
+        if(defaultFieldHeight == 0) {
         int iconSize = Style.NORMAL.getTextHeight() * 120 / 100;
-        int height = View.VPADDING * 2 + iconSize;
-
-        return height;
+        defaultFieldHeight = View.VPADDING * 2 + iconSize;
+        }
+        return defaultFieldHeight;
     }
     
     public static Color background(ViewSpecification specification) {
-        String property = specification.getClass().getName() + ".background";
-        // TODO this should really be a fallback colour, not hardcoded.
-        return new Color(property, "#cccccc");
+        return background(specification, "");
+    }
+    
+    public static Color background(ViewSpecification specification, String part) {
+        String property = specification.getClass().getName() + ".background" + (part == null || part.length() == 0 ? "" : "." + part);
+        Color background = (Color) backgrounds.get(property);
+       if(background == null) {
+            background = new Color(property, WINDOW_BACKGROUND);
+            backgrounds.put(property, background);
+        }
+        return background;
     }
 }
 

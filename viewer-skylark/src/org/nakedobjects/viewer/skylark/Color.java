@@ -38,6 +38,12 @@ public class Color {
                 java.awt.Color.decode(defaultColor));
     }
 
+    Color(String propertyName, Color defaultColor) {
+        this.name = propertyName;
+        color = NakedObjects.getConfiguration().getColor(PROPERTY_STEM + propertyName,
+                defaultColor.getAwtColor());
+    }
+
     public Color brighter() {
         return new Color(color.brighter());
     }
@@ -49,10 +55,9 @@ public class Color {
     public java.awt.Color getAwtColor() {
         return color;
     }
-
+    
     public String toString() {
-        
-        return name + " (#" + Integer.toHexString(color.getRGB()) + ")";
+        return name + " (" + "#" + Integer.toHexString(color.getRGB()) + ")";
     }
 }
 
