@@ -86,7 +86,9 @@ public class TreeNodeBorder extends AbstractBorder {
 
         // blank background
    //     canvas.drawSolidRectangle(0, 0, getSize().getWidth() - 1, getSize().getHeight() - 1, Style.background(getSpecification()));
+   //     canvas.drawBackground(this, Style.background(getSpecification()));
 
+        
         if (((TreeBrowserFrame) getViewAxis()).getSelectedNode() == getView()) {
             canvas.drawSolidRectangle(left, 0, getSize().getWidth() - left - 1, top - 1, Style.PRIMARY2);
         }
