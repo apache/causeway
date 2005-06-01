@@ -1,5 +1,7 @@
 package org.nakedobjects.viewer.skylark.example.border;
 
+import org.nakedobjects.NakedObjectsClient;
+import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.RootObject;
@@ -12,7 +14,8 @@ import org.nakedobjects.viewer.skylark.example.ExampleObjectForView;
 import org.nakedobjects.viewer.skylark.example.ExampleViewSpecification;
 import org.nakedobjects.viewer.skylark.example.TestObjectViewWithDragging;
 import org.nakedobjects.viewer.skylark.example.TestViews;
-import org.nakedobjects.viewer.skylark.special.ResizeBorder;
+import org.nakedobjects.viewer.skylark.metal.TextFieldResizeBorder;
+import org.nakedobjects.viewer.skylark.tree.TreeBrowserResizeBorder;
 
 
 public class ResizeBorderExample extends TestViews {
@@ -22,16 +25,24 @@ public class ResizeBorderExample extends TestViews {
     }
 
     protected void views(Workspace workspace) {
+        Configuration config = new Configuration();
+        config.add("" , "");
+        new NakedObjectsClient().setConfiguration(config);
+        
         ExampleObjectForView object = new ExampleObjectForView();
         Content content = new RootObject(object);
         ViewSpecification specification = new ExampleViewSpecification();
         ViewAxis axis = null;
 
-        View view = new ResizeBorder(new TestObjectViewWithDragging(content, specification, axis, 400, 400, "resizing"));
+        View view = new TextFieldResizeBorder(new TestObjectViewWithDragging(content, specification, axis, 400, 400, "resizing"));
         view.setLocation(new Location(50, 60));
-        view.setSize(new Size(200, 200));
+        view.setSize(new Size(100, 24));
         workspace.addView(view);
 
+        view = new TreeBrowserResizeBorder(new TestObjectViewWithDragging(content, specification, axis, 400, 400, "resizing"));
+        view.setLocation(new Location(50, 120));
+        view.setSize(new Size(200, 200));
+        workspace.addView(view);
     }
 
 }

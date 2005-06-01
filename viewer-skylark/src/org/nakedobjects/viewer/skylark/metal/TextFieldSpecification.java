@@ -4,14 +4,11 @@ import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
-import org.nakedobjects.viewer.skylark.special.ResizeBorder;
 import org.nakedobjects.viewer.skylark.value.TextField;
 
 public class TextFieldSpecification extends AbstractFieldSpecification {
     public View createView(Content content, ViewAxis axis) {
-		//return new SimpleIdentifier(new TextFieldBorder(new TextField(content, this, axis, false)));
-        //return new TextFieldBorder(new ResizeBorder(new TextField(content, this, axis, true)));
-        return new ResizeBorder(new TextField(content, this, axis, true));
+        return new TextFieldResizeBorder(new TextField(content, this, axis, true));
     }
     
     public String getName() {

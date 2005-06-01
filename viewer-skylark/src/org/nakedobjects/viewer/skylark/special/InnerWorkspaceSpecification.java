@@ -25,7 +25,7 @@ public class InnerWorkspaceSpecification implements WorkspaceSpecification {
 			} else {
 				workspace = new DefaultWorkspace(content, this, axis);
 			}
-			return new WindowBorder(new ResizeBorder(workspace), false);
+			return new WindowBorder(workspace, true);
 		}
 	
 
