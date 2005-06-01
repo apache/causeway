@@ -2,12 +2,10 @@ package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
-import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.Shape;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
@@ -16,19 +14,29 @@ import org.nakedobjects.viewer.skylark.core.AbstractBorder;
 import org.apache.log4j.Logger;
 
 
-public class ResizeBorder extends AbstractBorder {
+public abstract class ResizeBorder extends AbstractBorder {
     private static final Logger LOG = Logger.getLogger(ResizeBorder.class);
-    public static final int BORDER_WIDTH = 5;
+    public static final int LEFT = 1;
+    public static final int RIGHT = 2;
+    public static final int UP = 4;
+    public static final int DOWN = 8;
     private Size resize;
-    private int direction;
-    private boolean resizing;
+    private int requiredDirection;
+    private int allowDirections;
+ //   private Size minimumSize;
+    protected boolean resizing;
     private int onBorder;
 
-    // TODO allow a minimum and maximum sizes to be specified and then ensure the user doesn't go outside them.
-    // TODO allow the direction of resizing be limited, ie left/right only 
-    public ResizeBorder(View view) {
+    // TODO allow a minimum and maximum sizes to be specified and then ensure
+    // the user doesn't go outside them.
+    public ResizeBorder(View view, int allowDirections, int width) {
         super(view);
-        bottom = right = BORDER_WIDTH;
+        this.allowDirections = allowDirections;
+        top = canExtend(UP) ? width : 0;
+        bottom = canExtend(DOWN) ? width : 0;
+        left = canExtend(LEFT) ? width : 0;
+        right = canExtend(RIGHT) ? width : 0;
+
     }
 
     protected void debugDetails(StringBuffer b) {
@@ -40,38 +48,29 @@ public class ResizeBorder extends AbstractBorder {
         Size size = getSize();
         int width = size.getWidth();
         int height = size.getHeight();
-        LOG.debug("redrawing resize border " + resizing);
-        if (resizing) {
-            Shape shape = new Shape(0, 0);
-            int resizeMarkerSize = 10;
-            shape.addLine(resizeMarkerSize, 0);
-            shape.addLine(0, resizeMarkerSize);
-            shape.addLine(-resizeMarkerSize, -resizeMarkerSize);
-            Color color = new Color(0xffff00);
-            canvas.drawSolidShape(shape, size.getWidth() - resizeMarkerSize, size.getHeight(), color);
-            canvas.drawRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, color);
-        }
-        
-        Canvas subCanvas = canvas.createSubcanvas(0,0, width - BORDER_WIDTH, height - BORDER_WIDTH);
+        drawResizeBorder(canvas, size);
+
+        Canvas subCanvas = canvas.createSubcanvas(0, 0, width - left - right, height - top - bottom);
         wrappedView.draw(subCanvas);
     }
 
+    protected abstract void drawResizeBorder(Canvas canvas, Size size);
+
     public ViewAreaType viewAreaType(Location mouseLocation) {
-        if(isOnBorder()) {
+        if (isOnBorder()) {
             return ViewAreaType.INTERNAL;
         }
         return super.viewAreaType(mouseLocation);
     }
 
-    
     public Drag dragStart(DragStart drag) {
         Location location = drag.getLocation();
-        if(overBorder(location)) {
-	        direction = onBorder(location);
-	        if (direction > 0) {
-	            return new ResizeDrag(this, new Bounds(getAbsoluteLocation(), getView().getSize()), direction);
-	        }
-	        return null;
+        if (overBorder(location)) {
+            requiredDirection = onBorder(location);
+            if (requiredDirection > 0) {
+                return new ResizeDrag(this, new Bounds(getAbsoluteLocation(), getView().getSize()), requiredDirection);
+            }
+            return null;
         } else {
             return super.dragStart(drag);
         }
@@ -79,15 +78,15 @@ public class ResizeBorder extends AbstractBorder {
 
     public void drag(InternalDrag drag) {
         ViewResizeOutline outline = ((ViewResizeOutline) drag.getOverlay());
-        if(outline == null) {
+        if (outline == null) {
             super.drag(drag);
-        }		
+        }
     }
 
     public void dragTo(InternalDrag drag) {
         getViewManager().showDefaultCursor();
         ViewResizeOutline outline = ((ViewResizeOutline) drag.getOverlay());
-        if(outline != null) {
+        if (outline != null) {
             resizing = false;
             onBorder = 0;
             getView().setRequiredSize(outline.getSize());
@@ -97,9 +96,9 @@ public class ResizeBorder extends AbstractBorder {
             super.dragTo(drag);
         }
     }
-    
+
     public Size getRequiredSize() {
-        if(resize == null ) {
+        if (resize == null) {
             Size size = wrappedView.getRequiredSize();
             size.extend(getLeft() + getRight(), getTop() + getBottom());
             return size;
@@ -107,14 +106,18 @@ public class ResizeBorder extends AbstractBorder {
             return new Size(resize);
         }
     }
-    
+
     public void setRequiredSize(Size size) {
         this.resize = size;
     }
 
+    /*public void setMinimumSize(Size minimumSize) {
+        this.minimumSize = minimumSize;
+    }*/
+
     /**
-     * Detects wheter the point is on the resize border, and if so changes
-     * the cursor to show it can be resized.
+     * Detects wheter the point is on the resize border, and if so changes the
+     * cursor to show it can be resized.
      */
     public void mouseMoved(Location at) {
         int onBorder = onBorder(at);
@@ -149,7 +152,7 @@ public class ResizeBorder extends AbstractBorder {
         }
         this.onBorder = onBorder;
     }
-    
+
     public void exited() {
         getViewManager().showDefaultCursor();
         resizing = false;
@@ -161,23 +164,26 @@ public class ResizeBorder extends AbstractBorder {
 
     private int onBorder(Location at) {
         Bounds area = contentArea();
-        boolean right = at.getX() >= area.getWidth() && at.getX() <= area.getWidth() + getRight();
-        boolean bottom = at.getY() >= area.getHeight() && at.getY() <= area.getHeight() + getBottom();
-        
+        boolean right = canExtend(RIGHT) && at.getX() >= area.getWidth() && at.getX() <= area.getWidth() + getRight();
+        boolean bottom = canExtend(DOWN) && at.getY() >= area.getHeight() && at.getY() <= area.getHeight() + getBottom();
+
         final int status;
-        if(right && bottom) {
+        if (right && bottom) {
             status = ResizeDrag.BOTTOM_RIGHT;
-        } else if(right) {
+        } else if (right) {
             status = ResizeDrag.RIGHT;
-        } else if(bottom) {
+        } else if (bottom) {
             status = ResizeDrag.BOTTOM;
         } else {
             status = 0;
         }
-        
+
         return status;
     }
-    
+
+    private boolean canExtend(int extend) {
+        return (extend & allowDirections) == extend;
+    }
 
 }
 
