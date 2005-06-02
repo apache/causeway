@@ -58,7 +58,7 @@ class DialogedObjectOption extends MenuOption {
 		Hint about = object.getHint(action, parameterValues);
         // ignore the details from the About about useablility this will be
         // checked in the dialog
-        String description = about.getName() + " " + about.getDescription();
+        String description = getName(view) + ": " + about.getDescription();
         if (action.hasReturn()) {
             description += " returns a " + action.getReturnType().getSingularName();
         }
