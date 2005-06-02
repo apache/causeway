@@ -417,7 +417,11 @@ public class Viewer {
         rootViewSize.contractHeight(statusBarHeight);
         statusBarArea = new Bounds(insets.left, insets.top + rootViewSize.height, rootViewSize.width, statusBarHeight);
         ((WorkspaceSpecification) rootView.getSpecification()).setRequiredSize(rootViewSize);
-        rootView.invalidateLayout();
+        View subviews[] = rootView.getSubviews();
+        for (int i = 0; i < subviews.length; i++) {
+            subviews[i].invalidateLayout();
+        }	
+//        rootView.invalidateLayout();
 
         Bounds bounds = new Bounds(internalDisplaySize);
         markDamaged(bounds);
