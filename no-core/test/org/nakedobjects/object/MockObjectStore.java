@@ -40,6 +40,11 @@ public class MockObjectStore implements NakedObjectStore {
 			return;
 		Assert.fail("action " + i + " expected: <" + expected + "> but was: <" +actual + ">");
     }
+    
+    public void assertLastAction(int expectedLastAction) {
+        int actualLastAction = actions.size() - 1;
+        Assert.assertEquals(expectedLastAction, actualLastAction);
+    }
 
     public void abortTransaction() {
         actions.addElement("abortTransaction");
@@ -174,6 +179,8 @@ public class MockObjectStore implements NakedObjectStore {
     public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException {
         for (int i = 0; i < commands.length; i++) {
             actions.addElement("run " + commands[i]);
+            
+            commands[i].execute();
         }
     }
 }

@@ -48,15 +48,10 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     public void abortTransaction() {
-        try {
-            if (transaction != null) {
-	            transaction.abort();
-	            objectStore.abortTransaction();
-	            transaction = null;
-	            transactionLevel = 0;
-            }
-        } catch (ObjectStoreException e) {
-            e.printStackTrace();
+        if (transaction != null) {
+            transaction.abort();
+            transaction = null;
+            transactionLevel = 0;
         }
     }
 

@@ -69,6 +69,22 @@ public class TransactionTest extends TestCase {
         };
     }
 
+    private SaveObjectCommand createCommandThatAborts(final NakedObject object, final String name) {
+        return new SaveObjectCommand() {
+            public void execute() throws ObjectStoreException {
+                throw new ObjectStoreException();
+            }
+
+            public NakedObject onObject() {
+                return object;
+            }
+
+            public String toString() {
+                return name;
+            }
+        };
+    }
+
     protected void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
@@ -85,6 +101,26 @@ public class TransactionTest extends TestCase {
         t.abort();
 
         assertEquals(0, os.getActions().size());
+    }
+
+    public void testAbortBeforeCommand() throws Exception {
+        t.abort();
+
+        assertEquals(0, os.getActions().size());
+    }
+
+    public void testCommandThrowsAnExceptionCausingAbort() throws Exception {
+        t.addCommand(createSaveCommand(object1, "command 1"));
+        t.addCommand(createCommandThatAborts(object2, "command 2"));
+        t.addCommand(createSaveCommand(object1, "command 3"));
+        try {
+            t.commit(os);
+            fail();
+        } catch (ObjectStoreException expected) {}
+        os.assertAction(0, "start");
+        os.assertAction(1, "run command 1");
+        os.assertAction(2, "run command 2");
+        os.assertAction(3, "abort");
     }
 
     public void testAddCommands() throws Exception {

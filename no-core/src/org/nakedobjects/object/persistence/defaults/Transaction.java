@@ -124,8 +124,13 @@ public class Transaction {
         commands.copyInto(commandsArray);
         if (commandsArray.length > 0) {
             objectStore.startTransaction();
+            try {
             objectStore.runTransaction(commandsArray);
             objectStore.endTransaction();
+            } catch (ObjectStoreException e) {
+                objectStore.abortTransaction();
+                throw e;
+            }
         }
     }
 
