@@ -8,8 +8,8 @@ public class Style {
 
     // colors
  //   public static final Color APPLICATION_BACKGROUND = new Color("background.application", "#dddddd");
-    public static final Color APPLICATION_BACKGROUND = new Color("application.background", "#dddddd");
-    public static final Color WINDOW_BACKGROUND = new Color("window.background", "#dddddd");
+    public static final Color APPLICATION_BACKGROUND = new Color("application.background", "#e0e0e0");
+    public static final Color WINDOW_BACKGROUND = new Color("window.background", "#ffffff");
     public static final Color BLACK = new Color("black", "#000000");
     public static final Text CLASS = new AwtText("class", "SansSerif--12");
     public static final Color CONTENT_MENU = new Color("menu.content", "#FFCCCC");
