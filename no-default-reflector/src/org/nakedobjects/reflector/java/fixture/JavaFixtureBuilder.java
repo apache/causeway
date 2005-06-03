@@ -35,6 +35,7 @@ public final class JavaFixtureBuilder extends FixtureBuilder {
             objectManager.endTransaction();
         } catch (RuntimeException e) {
             objectManager.abortTransaction();
+            throw e;
         }
         newInstances.removeAllElements();
     }
