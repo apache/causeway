@@ -10,14 +10,14 @@ import org.nakedobjects.viewer.skylark.special.SubviewSpec;
 
 public abstract class CompositeNodeSpecification extends NodeSpecification implements  CompositeViewSpecification, SubviewSpec {
     protected CompositeViewBuilder builder;
-    private CollectionLeafNodeSpecification collectionLeafNodeSpecification;
-    private ObjectLeafNodeSpecification objectLeafNodeSpecification;
+    private NodeSpecification collectionLeafNodeSpecification;
+    private NodeSpecification objectLeafNodeSpecification;
 
-    public void setCollectionLeafNodeSpecification(CollectionLeafNodeSpecification collectionLeafNodeSpecification) {
+    public void setCollectionSubNodeSpecification(NodeSpecification collectionLeafNodeSpecification) {
         this.collectionLeafNodeSpecification = collectionLeafNodeSpecification;
     }
     
-    public void setObjectLeafNodeSpecification(ObjectLeafNodeSpecification objectLeafNodeSpecification) {
+    public void setObjectSubNodeSpecification(NodeSpecification objectLeafNodeSpecification) {
         this.objectLeafNodeSpecification = objectLeafNodeSpecification;
     }
 

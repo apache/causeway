@@ -1,44 +1,33 @@
 package org.nakedobjects.viewer.skylark.tree;
 
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
-import org.nakedobjects.viewer.skylark.ViewSpecification;
+import org.nakedobjects.viewer.skylark.basic.ObjectBorder;
 
 
-abstract class NodeSpecification implements ViewSpecification {
-    private ViewSpecification replacementNodeSpecification;
-
-    public abstract boolean canOpen(Content content);
-
-    public View createView(Content content, ViewAxis axis) {
-        View treeLeafNode = new LeafNodeView(content, this, axis);
-        View view = createView(treeLeafNode, content, axis);
-        return new TreeNodeBorder(view, replacementNodeSpecification);
+class ElementNodeSpecification extends CollectionLeafNodeSpecification {
+    public boolean canDisplay(Content content) {
+        return content.isObject() && content.getNaked() != null;
     }
 
-    void setReplacementNodeSpecification(ViewSpecification replacementNodeSpecification) {
-        this.replacementNodeSpecification = replacementNodeSpecification;
-    }
+    public boolean canOpen(Content content) {
+        NakedObject object = (NakedObject) content.getNaked();
+        NakedObjectField[] fields = object.getVisibleFields();
+        for (int i = 0; i < fields.length; i++) {
+            if (fields[i].isCollection()) {
+                return true;
+            }
+        }
 
-    protected abstract View createView(View treeLeafNode, Content content, ViewAxis axis);
-
-    public String getName() {
-        return null;
-    }
-
-    public boolean isOpen() {
         return false;
     }
 
-    public boolean isReplaceable() {
-        return false;
+    protected View createView(View treeLeafNode, Content content, ViewAxis axis) {
+        return new ObjectBorder(treeLeafNode);
     }
-
-    public boolean isSubView() {
-        return true;
-    }
-
 }
 
 /*

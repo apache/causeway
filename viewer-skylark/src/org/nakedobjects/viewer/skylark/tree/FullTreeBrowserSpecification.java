@@ -5,39 +5,38 @@ import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
-import org.nakedobjects.viewer.skylark.basic.WindowBorder;
+import org.nakedobjects.viewer.skylark.metal.WindowBorder;
 
 /**
  * Specification for a tree browser frame with a tree displaying only collections and objects containing collections.
  */
-public class TreeBrowserSpecification implements ViewSpecification {
-    private final OpenCollectionNodeSpecification openCollectionNode;
-    private final OpenObjectNodeSpecification openObjectNode;
+public class FullTreeBrowserSpecification implements ViewSpecification {
+    private final CollectionCompositeNodeSpecification rootCollectionNode;
+    private final ObjectCompositeNodeSpecification rootObjectNode;
 
-    public TreeBrowserSpecification() {
-        EmptyNodeSpecification emptyNode = new EmptyNodeSpecification();
+    public FullTreeBrowserSpecification() {
+        ObjectLeafNodeSpecification objectLeafNode = new ObjectLeafNodeSpecification();
+        CollectionLeafNodeSpecification collectionLeafNode = new CollectionLeafNodeSpecification();
 
-        NodeSpecification elementNode = new ElementNodeSpecification();
-        
-        NodeSpecification fieldNode = new FieldNodeSpecification();        
-        
-        openCollectionNode = new OpenCollectionNodeSpecification();
-        openCollectionNode.setCollectionSubNodeSpecification(emptyNode);
-        openCollectionNode.setObjectSubNodeSpecification(elementNode);
-        openCollectionNode.setReplacementNodeSpecification(emptyNode);
-        
-        openObjectNode = new OpenObjectNodeSpecification();
-        openObjectNode.setCollectionSubNodeSpecification(fieldNode);
-        openObjectNode.setObjectSubNodeSpecification(emptyNode);
-        openObjectNode.setReplacementNodeSpecification(emptyNode);
-        
-        elementNode.setReplacementNodeSpecification(openObjectNode);
+        rootObjectNode = new ObjectCompositeNodeSpecification();
 
-        fieldNode.setReplacementNodeSpecification(openCollectionNode);
+        rootObjectNode.setCollectionSubNodeSpecification(collectionLeafNode);
+        rootObjectNode.setObjectSubNodeSpecification(objectLeafNode);
+        rootObjectNode.setReplacementNodeSpecification(objectLeafNode);
+
+        objectLeafNode.setReplacementNodeSpecification(rootObjectNode);
+
+        rootCollectionNode = new CollectionCompositeNodeSpecification();
+
+        rootCollectionNode.setCollectionSubNodeSpecification(collectionLeafNode);
+        rootCollectionNode.setObjectSubNodeSpecification(objectLeafNode);
+        rootCollectionNode.setReplacementNodeSpecification(objectLeafNode);
+
+        collectionLeafNode.setReplacementNodeSpecification(rootCollectionNode);
     }
 
     public boolean canDisplay(Content content) {
-        return openCollectionNode.canDisplay(content) || openObjectNode.canDisplay(content);
+        return rootCollectionNode.canDisplay(content) || rootObjectNode.canDisplay(content);
     }
 
     public View createView(Content content, ViewAxis axis) {
@@ -46,10 +45,10 @@ public class TreeBrowserSpecification implements ViewSpecification {
         View view = addBorder(frame);
         View rootNode;
         axis = frame;
-        if (openCollectionNode.canDisplay(content)) {
-            rootNode = openCollectionNode.createView(content, axis);
+        if (rootCollectionNode.canDisplay(content)) {
+            rootNode = rootCollectionNode.createView(content, axis);
         } else {
-            rootNode = openObjectNode.createView(content, axis);
+            rootNode = rootObjectNode.createView(content, axis);
             frame.setSelectedNode(rootNode);
         }
         View leftPane = rootNode;
@@ -63,7 +62,7 @@ public class TreeBrowserSpecification implements ViewSpecification {
     }
 
     protected View addBorder(View frame) {
-        return new WindowBorder(frame);
+        return new WindowBorder(frame, false);
     }
 
     public String getName() {

@@ -1,44 +1,23 @@
 package org.nakedobjects.viewer.skylark.tree;
 
+import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.View;
-import org.nakedobjects.viewer.skylark.ViewAxis;
-import org.nakedobjects.viewer.skylark.ViewSpecification;
+import org.nakedobjects.viewer.skylark.special.CollectionElementBuilder;
+import org.nakedobjects.viewer.skylark.special.StackLayout;
 
 
-abstract class NodeSpecification implements ViewSpecification {
-    private ViewSpecification replacementNodeSpecification;
-
-    public abstract boolean canOpen(Content content);
-
-    public View createView(Content content, ViewAxis axis) {
-        View treeLeafNode = new LeafNodeView(content, this, axis);
-        View view = createView(treeLeafNode, content, axis);
-        return new TreeNodeBorder(view, replacementNodeSpecification);
+public class OpenCollectionNodeSpecification extends CompositeNodeSpecification {
+    /**
+     * This is only used to control root nodes. Therefore a collection tree can
+     * only be displayed for a collection that has elements.
+     */
+    public boolean canDisplay(Content content) {
+        return content.isCollection() && ((CollectionContent) content).getCollection().size() > 0;
     }
 
-    void setReplacementNodeSpecification(ViewSpecification replacementNodeSpecification) {
-        this.replacementNodeSpecification = replacementNodeSpecification;
+    public OpenCollectionNodeSpecification() {
+        builder = new StackLayout(new CollectionElementBuilder(this, true));
     }
-
-    protected abstract View createView(View treeLeafNode, Content content, ViewAxis axis);
-
-    public String getName() {
-        return null;
-    }
-
-    public boolean isOpen() {
-        return false;
-    }
-
-    public boolean isReplaceable() {
-        return false;
-    }
-
-    public boolean isSubView() {
-        return true;
-    }
-
 }
 
 /*
