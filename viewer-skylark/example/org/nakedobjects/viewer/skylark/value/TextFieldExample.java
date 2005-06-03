@@ -2,17 +2,22 @@ package org.nakedobjects.viewer.skylark.value;
 
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.reflect.NakedObjectAssociation;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.ValueContent;
+import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
@@ -21,18 +26,27 @@ import org.nakedobjects.viewer.skylark.example.TestViews;
 
 
 public class TextFieldExample extends TestViews {
+    private static final String LONG_TEXT = "Naked Objects - a framework that exposes behaviourally complete business\n"
+            + "objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group  Ltd\n" + "\n"
+            + "This program is free software; you can redistribute it and/or modify it under\n"
+            + "the terms of the GNU General Public License as published by the Free Software\n"
+            + "Foundation; either version 2 of the License, or (at your option) any later " + "version.";
+
+    private static final String SHORT_TEXT = "Short length of text";
 
     public static void main(String[] args) {
         new TextFieldExample();
     }
 
     protected void views(Workspace workspace) {
-        
-        Content content = new Value();
-        ViewSpecification specification = new ExampleViewSpecification();        
+        View parent = new ParentView();
+
+        Content content = new Value(SHORT_TEXT);
+        ViewSpecification specification = new ExampleViewSpecification();
         ViewAxis axis = null;
-        
+
         TextField view = new TextField(content, specification, axis, false);
+        view.setParent(parent);
         view.setNoLines(3);
         view.setMaxWidth(200);
         view.setLocation(new Location(50, 60));
@@ -40,38 +54,32 @@ public class TextFieldExample extends TestViews {
         workspace.addView(view);
 
         view = new TextField(content, specification, axis, false);
+        view.setParent(parent);
         view.setNoLines(1);
         view.setMaxWidth(80);
         view.setLocation(new Location(50, 150));
         view.setSize(view.getRequiredSize());
         workspace.addView(view);
-        
+
+        content = new Value(LONG_TEXT);
         view = new TextField(content, specification, axis, false);
-        view.setNoLines(3);
+        view.setParent(parent);
+        view.setNoLines(5);
         view.setMaxWidth(200);
         view.setWrapping(false);
-        view.setLocation(new Location(50, 60));
+        view.setLocation(new Location(50, 200));
         view.setSize(view.getRequiredSize());
         workspace.addView(view);
-
-        
 
     }
 }
 
-
-
 class Value extends ValueContent {
+    private String text;
 
-    public NakedValue getObject() {
-        return null;
+    public Value(String text) {
+        this.text = text;
     }
-
-    public Hint getValueHint(String entryText) {
-        return new DefaultHint();
-    }
-
-    public void parseEntry(String entryText) throws TextEntryParseException, InvalidEntryException {}
 
     public Consent canDrop(Content sourceContent) {
         return null;
@@ -88,19 +96,84 @@ class Value extends ValueContent {
     }
 
     public Naked getNaked() {
-        return null;
+        return getObject();
+    }
+
+    public NakedValue getObject() {
+        return new NakedValue() {
+
+            public byte[] asEncodedString() {
+                return null;
+            }
+
+            public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
+
+            public void copyObject(Naked object) {}
+
+            public Naked execute(Action action, Naked[] parameters) {
+                return null;
+            }
+
+            public Hint getHint(Action action, Naked[] parameters) {
+                return null;
+            }
+
+            public Hint getHint(NakedObjectField field, Naked value) {
+                return null;
+            }
+
+            public String getIconName() {
+                return null;
+            }
+
+            public int getMaximumLength() {
+                return 0;
+            }
+
+            public int getMinumumLength() {
+                return 0;
+            }
+
+            public Object getObject() {
+                return null;
+            }
+
+            public Oid getOid() {
+                return null;
+            }
+
+            public NakedObjectSpecification getSpecification() {
+                return null;
+            }
+
+            public void parseTextEntry(String text) throws InvalidEntryException {
+                Value.this.text = text;
+            }
+
+            public void restoreFromEncodedString(byte[] data) {}
+
+            public String titleString() {
+                return text;
+            }
+        };
     }
 
     public NakedObjectSpecification getSpecification() {
         return null;
     }
 
+    public Hint getValueHint(String entryText) {
+        return new DefaultHint();
+    }
+
     public boolean isTransient() {
         return false;
     }
 
+    public void parseEntry(String entryText) throws TextEntryParseException, InvalidEntryException {}
+
     public String title() {
-        return "a really long string that should wrap when displayed.";
+        return null;
     }
 
 }
