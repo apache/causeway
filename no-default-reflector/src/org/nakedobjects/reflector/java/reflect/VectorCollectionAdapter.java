@@ -161,7 +161,7 @@ public class VectorCollectionAdapter implements InternalCollection {
     }
 
     public boolean isEmpty() {
-        throw new NotImplementedException();
+        return size() == 0;
     }
 
     public String toString() {

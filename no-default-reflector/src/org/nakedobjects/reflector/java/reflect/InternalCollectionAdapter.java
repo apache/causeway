@@ -163,7 +163,7 @@ public class InternalCollectionAdapter implements InternalCollection {
     }
 
     public boolean isEmpty() {
-        throw new NotImplementedException();
+        return size() == 0;
     }
 
     public String toString() {
