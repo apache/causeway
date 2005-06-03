@@ -9,6 +9,7 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
 import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.InstancesCriteria;
@@ -295,24 +296,30 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
      *  
      */
     public void makePersistent(NakedObject object) {
-        LOG.info("makePersistent " + object);
-
         if (isPersistent(object)) {
             throw new NotPersistableException("Object already persistent");
         }
-
+        if(object.getSpecification().persistable() == Persistable.TRANSIENT) {
+            throw new NotPersistableException("Object must be transient");
+       }
+ 
+        persist(object);
+    }
+    
+    private void persist(NakedObject object) {
+        if(object.isPersistent() || object.getSpecification().persistable() == Persistable.TRANSIENT) {
+            return;
+        }
+            
+        LOG.info("persist " + object);
         object.setOid(createOid(object));
-
         if (!object.isResolved()) {
             object.setResolved();
         }
 
-        //NakedObjectSpecification specification = object.getSpecification();
         NakedObjectField[] fields = object.getFields();
-
         for (int i = 0; i < fields.length; i++) {
             NakedObjectField field = fields[i];
-
             if (field.isDerived()) {
                 continue;
             } else if (field.isValue()) {
@@ -321,33 +328,18 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
                 InternalCollection collection = (InternalCollection) object.getField(field);
                 collection.setOid(createOid(collection));
                 collection.setResolved();
-
                 for (int j = 0; j < collection.size(); j++) {
-                    NakedObject element = collection.elementAt(j);
-
-                    if (isPersistent(element)) {
-                        continue;
-                    }
-
-                    makePersistent(element);
+                    persist(collection.elementAt(j));
                 }
             } else {
                 Object fieldValue = object.getField(field);
-
                 if (fieldValue == null) {
                     continue;
                 }
-
                 if (!(fieldValue instanceof NakedObject)) {
                     throw new NakedObjectRuntimeException();
                 }
-                NakedObject association = (NakedObject) fieldValue;
-
-                if (isPersistent(association)) {
-                    continue;
-                }
-
-                makePersistent(association);
+                persist((NakedObject) fieldValue);
             }
         }
 
