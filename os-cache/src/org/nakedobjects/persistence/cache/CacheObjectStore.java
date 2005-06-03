@@ -50,7 +50,6 @@ public class CacheObjectStore implements NakedObjectStore {
     private String snapshotFilename = "snapshot";
     private String suffix = ".data";
     private int version = 0;
-    private LoadedObjects loadedObjects;
     private Hashtable objectSets;
 
     CacheObjectStore(String directory) {
@@ -118,10 +117,10 @@ public class CacheObjectStore implements NakedObjectStore {
     }
 
     public void createObject(NakedObject object) throws ObjectStoreException {
-        NakedObjectSpecification nakedClass = object.getSpecification();
-        if(!nakedClass.isCollection()) {
+        NakedObjectSpecification specification = object.getSpecification();
+        if(!specification.isCollection()) {
 	        writeJournal("create", new Memento(object));
-	        instances(nakedClass).create(object);
+	        instances(specification).create(object);
         }
     }
 

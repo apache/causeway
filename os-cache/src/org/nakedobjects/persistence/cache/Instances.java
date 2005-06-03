@@ -1,5 +1,6 @@
 package org.nakedobjects.persistence.cache;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectContext;
@@ -7,6 +8,7 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.io.Memento;
 import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.reflect.PojoAdapterFactory;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -49,12 +51,16 @@ class Instances {
             Memento memento = (Memento) oos.readObject();
             LOG.debug("read 2: " + i + " " + memento);
 
-            NakedObject object = loadedObjects.getLoadedObject(memento.getOid());
+            NakedObject object = loadedObjects().getLoadedObject(memento.getOid());
             memento.updateObject(object, loadedObjects, context);
             LOG.debug("recreated " + object + " " + object.titleString());
             size++;
         }
         return size;
+    }
+
+    private PojoAdapterFactory loadedObjects() {
+        return NakedObjects.getPojoAdapterFactory();
     }
 
     void loadIdentities(ObjectInputStream oos) throws IOException, ClassNotFoundException {
@@ -66,7 +72,7 @@ class Instances {
             NakedObject obj = (NakedObject) specification.acquireInstance();
             obj.setOid(oid);
             preload(oid, obj);
-            loadedObjects.loaded(obj);
+            loadedObjects().loaded(obj);
         }
     }
 
