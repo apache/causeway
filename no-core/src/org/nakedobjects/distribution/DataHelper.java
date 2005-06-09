@@ -51,8 +51,7 @@ public class DataHelper {
 
     private static void recreateObjectsInFields(ObjectData data, NakedObject object) {
       Object[] fieldContent = data.getFieldContent();
-      if (!object.isResolved() && fieldContent != null && fieldContent.length > 0) {
-        // REMOVED AS CAUSING PROBLEM  object.setResolved();
+      if (fieldContent != null && fieldContent.length > 0) {
         NakedObjectField[] fields = object.getSpecification().getFields();
         for (int i = 0; i < fields.length; i++) {
             if (fields[i].isCollection()) {
