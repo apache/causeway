@@ -105,10 +105,6 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
         }
     }
 
-    public void save(Object object) {
-        objectManger().saveChanges();
-    }
-
     /**
      * Generates a unique serial number for the specified squence set. Each set
      * of serial numbers are a simple numerical sequence. Calling this method
@@ -124,7 +120,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
             number = (Sequence) e.nextElement();
             if (number.getName().isSameAs(sequence)) {
                 number.getSerialNumber().next();
-                save(number);
+                objectChanged(number);
                 return number.getSerialNumber().longValue();
             }
         }

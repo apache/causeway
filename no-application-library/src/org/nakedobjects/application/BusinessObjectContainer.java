@@ -23,8 +23,6 @@ public interface BusinessObjectContainer {
 
     void resolve(Object object);
 
-    void save(Object object);
-
     long serialNumber(String sequence);
 
     void objectChanged(Object object);
