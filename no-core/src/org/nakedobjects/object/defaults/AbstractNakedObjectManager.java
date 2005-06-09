@@ -61,7 +61,7 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
         return createInstance(cls);
     }
 
-    public abstract Oid createOid(Naked object);
+    protected abstract Oid createOid(Naked object);
 
     public NakedObject createTransientInstance(NakedObjectSpecification nc) {
         Object object = objectFactory.createObject(nc);

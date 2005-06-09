@@ -10,12 +10,11 @@ import org.nakedobjects.viewer.skylark.example.ExampleObjectForView;
 import org.nakedobjects.viewer.skylark.example.ExampleViewSpecification;
 import org.nakedobjects.viewer.skylark.example.TestObjectView;
 import org.nakedobjects.viewer.skylark.example.TestViews;
-import org.nakedobjects.viewer.skylark.tree.other.NewTreeNodeBorder;
 
 
 public class NodeBorderExample extends TestViews {
 
-    private NewTreeNodeBorder view;
+    private TreeNodeBorder view;
 
     public static void main(String[] args) {
         new NodeBorderExample();
@@ -27,7 +26,7 @@ public class NodeBorderExample extends TestViews {
         ViewAxis axis = null;
 
         Content content = new RootObject(object);
-        view = new NewTreeNodeBorder(new TestObjectView(content, specification, axis, 200, 90, "Tree node"), null);
+        view = new TreeNodeBorder(new TestObjectView(content, specification, axis, 200, 90, "Tree node"), null);
         view.setLocation(new Location(60, 60));
         view.setSize(view.getRequiredSize());
         workspace.addView(view);

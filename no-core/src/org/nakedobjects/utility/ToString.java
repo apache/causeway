@@ -32,7 +32,7 @@ public final class ToString {
     }
 
     public ToString append(final String name, final Object object) {
-        append(name, object.toString());
+        append(name, object == null ? "null" : object.toString());
         return this;
     }
 
@@ -51,6 +51,11 @@ public final class ToString {
         return this;
     }
 
+    public ToString appendAsHex(final String name, final int number) {
+        append(name, "#" + Integer.toHexString(number));
+        return this;
+    }
+    
     public ToString append(final String name, final long number) {
         append(name, Long.toString(number));
         return this;

@@ -27,7 +27,7 @@ public class HelpView extends AbstractView implements View, TextBlockTarget {
         }
         
         String text = (name == null ? "(no name)" : name)  + "\n\n" + (description == null ? "(no description)" : description);
-        content = new TextContent(this, 10);
+        content = new TextContent(this, 10, TextContent.WRAPPING);
         content.setText(text);
    //     content.setNoDisplayLines(2);
     }

@@ -27,6 +27,27 @@ public class BoundsTest extends TestCase {
         assertTrue(b.contains(new Location(10, 29)));
     }
 
+    public void testNotEquals() {
+        Bounds c = new Bounds(0, 10, 10, 20);
+        assertFalse(c.equals(b));
+        
+        c = new Bounds(5, 0, 10, 20);
+        assertFalse(c.equals(b));
+        
+        c = new Bounds(5, 10, 0, 20);
+        assertFalse(c.equals(b));
+        
+        c = new Bounds(5, 10, 10, 0);
+        assertFalse(c.equals(b));
+    }
+    
+
+    public void testEquals() {
+        Bounds c = new Bounds(5, 10, 10, 20);
+        assertTrue(c.equals(b));
+        assertTrue(b.equals(c));
+    }
+
     public void testContracSize() {
         b.contract(new Size(5, 12));
         assertEquals(5, b.getWidth());
@@ -51,6 +72,16 @@ public class BoundsTest extends TestCase {
         assertEquals(5, b.getWidth());
     }
 
+    public void testCopyBounds() {
+        Bounds c = new Bounds();
+        c.setBounds(b);
+
+        assertEquals(5, b.x);
+        assertEquals(10, b.y);
+        assertEquals(10, b.width);
+        assertEquals(20, b.height);
+    }
+
     public void testDefaultBounds() {
         Bounds b = new Bounds();
         assertEquals(0, b.getX());
@@ -70,7 +101,8 @@ public class BoundsTest extends TestCase {
 
     public void testEnclosingUnion() {
         Bounds c = new Bounds(10, 20, 5, 5);
-        Bounds u = b.union(c);
+        Bounds u = new Bounds(b);
+        u.union(c);
         assertEquals(b, u);
     }
 
@@ -146,7 +178,8 @@ public class BoundsTest extends TestCase {
 
     public void testNonOverlappingUnion() {
         Bounds c = new Bounds(20, 40, 10, 20);
-        Bounds u = b.union(c);
+        Bounds u = new Bounds(b);
+        u.union(c);
         assertEquals(new Bounds(5, 10, 25, 50), u);
     }
 
@@ -164,7 +197,8 @@ public class BoundsTest extends TestCase {
 
     public void testOverlappingUnion() {
         Bounds c = new Bounds(3, 5, 10, 10);
-        Bounds u = b.union(c);
+        Bounds u = new Bounds(b);
+        u.union(c);
         assertEquals(new Bounds(3, 5, 12, 25), u);
     }
 

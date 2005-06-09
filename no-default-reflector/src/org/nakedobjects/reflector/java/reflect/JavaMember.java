@@ -1,6 +1,6 @@
 package org.nakedobjects.reflector.java.reflect;
 
-import org.nakedobjects.container.configuration.ConfigurationFactory;
+import org.nakedobjects.NakedObjects;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 public abstract class JavaMember {
     private final static Logger LOG = Logger.getLogger(JavaMember.class);
-    private final static boolean STRICT = ConfigurationFactory.getConfiguration().getBoolean("reflection.strict", true);
+    private final static boolean STRICT = NakedObjects.getConfiguration().getBoolean("reflection.strict", true);
     private final String name;
     private Method aboutMethod;
 

@@ -7,8 +7,10 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.metal.WindowBorder;
 
+
 /**
- * Specification for a tree browser frame with a tree displaying only collections and objects containing collections.
+ * Specification for a tree browser frame with a tree displaying any objects or
+ * collections (but no values).
  */
 public class FullTreeBrowserSpecification implements ViewSpecification {
     private final CollectionCompositeNodeSpecification rootCollectionNode;
@@ -66,7 +68,7 @@ public class FullTreeBrowserSpecification implements ViewSpecification {
     }
 
     public String getName() {
-        return "Tree Browser";
+        return "Long Tree Browser";
     }
 
     public boolean isOpen() {

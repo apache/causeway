@@ -7,8 +7,10 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.basic.WindowBorder;
 
+
 /**
- * Specification for a tree browser frame with a tree displaying only collections and objects containing collections.
+ * Specification for a tree browser frame with a tree displaying only
+ * collections and objects containing collections.
  */
 public class TreeBrowserSpecification implements ViewSpecification {
     private final OpenCollectionNodeSpecification openCollectionNode;
@@ -18,22 +20,26 @@ public class TreeBrowserSpecification implements ViewSpecification {
         EmptyNodeSpecification emptyNode = new EmptyNodeSpecification();
 
         NodeSpecification elementNode = new ElementNodeSpecification();
-        
-        NodeSpecification fieldNode = new FieldNodeSpecification();        
-        
+
+        NodeSpecification fieldNode = new FieldNodeSpecification();
+
         openCollectionNode = new OpenCollectionNodeSpecification();
         openCollectionNode.setCollectionSubNodeSpecification(emptyNode);
         openCollectionNode.setObjectSubNodeSpecification(elementNode);
         openCollectionNode.setReplacementNodeSpecification(emptyNode);
-        
+
         openObjectNode = new OpenObjectNodeSpecification();
         openObjectNode.setCollectionSubNodeSpecification(fieldNode);
         openObjectNode.setObjectSubNodeSpecification(emptyNode);
         openObjectNode.setReplacementNodeSpecification(emptyNode);
-        
+
         elementNode.setReplacementNodeSpecification(openObjectNode);
 
         fieldNode.setReplacementNodeSpecification(openCollectionNode);
+    }
+
+    protected View addBorder(View frame) {
+        return new WindowBorder(frame);
     }
 
     public boolean canDisplay(Content content) {
@@ -62,12 +68,8 @@ public class TreeBrowserSpecification implements ViewSpecification {
         return view;
     }
 
-    protected View addBorder(View frame) {
-        return new WindowBorder(frame);
-    }
-
     public String getName() {
-        return "Tree Browser";
+        return "Short Tree Browser";
     }
 
     public boolean isOpen() {

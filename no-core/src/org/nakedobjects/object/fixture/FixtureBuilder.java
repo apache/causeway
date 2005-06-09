@@ -35,7 +35,6 @@ public abstract class FixtureBuilder {
                 LOG.info("Installing fixture: " + fixture);
                 installFixture(objectManager, fixture);
             } catch (RuntimeException e) {
-                e.fillInStackTrace();
                 LOG.error("Fixture aborted", e);
                 objectManager.abortTransaction();
                 throw e;
