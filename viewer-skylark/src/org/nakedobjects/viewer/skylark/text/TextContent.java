@@ -7,32 +7,31 @@ import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 
 public class TextContent {
-    private static final Category LOG = Category.getInstance(TextContent.class);
+    private static final Logger LOG = Logger.getLogger(TextContent.class);
+    public static final int NO_WRAPPING = 1;
+    public static final int WRAPPING = 0;
     private Vector blocks;
     private TextBlockTarget target;
     private int displayFromLine;
-    //    private int displayToLine;
-    private int noDisplayLines = 1; // number of
-                                                               // lines to
-                                                               // display
-
-    public TextContent(final TextBlockTarget target, final int noLines) {
+    private int noDisplayLines = 1;
+    private final int wrap;
+    
+    public TextContent(final TextBlockTarget target, final int noLines, int wrap) {
         this.target = target;
+        this.wrap = wrap;
         this.blocks = new Vector();
-
         noDisplayLines = noLines;
         displayFromLine = 0;
-        //    displayToLine = noDisplayLines - 1;
         addBlock("");
         alignDisplay(0);
     }
 
     private void addBlock(String text) {
-        TextBlock block = new TextBlock(target, text);
+        TextBlock block = new TextBlock(target, text, wrap == TextContent.WRAPPING);
         LOG.debug("add block " + block);
         blocks.addElement(block);
     }
@@ -203,7 +202,6 @@ public class TextContent {
             addBlock("");
         } else {
             StringTokenizer st = new StringTokenizer(text, "\n");
-
             while (st.hasMoreTokens()) {
                 addBlock(st.nextToken());
             }

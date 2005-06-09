@@ -68,7 +68,7 @@ public class TextBlockTest extends TestCase {
 
         };
 
-        block = new TextBlock(user, "Now is the winter of our discontent made summer by this glorious sun of York");
+        block = new TextBlock(user, "Now is the winter of our discontent made summer by this glorious sun of York", true);
     }
 
     public void testBreakBlock() {

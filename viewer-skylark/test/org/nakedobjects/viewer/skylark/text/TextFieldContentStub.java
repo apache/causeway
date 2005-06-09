@@ -6,7 +6,7 @@ import org.nakedobjects.viewer.skylark.text.TextContent;
 public class TextFieldContentStub extends TextContent {
 
     public TextFieldContentStub() {
-        super(null, 1);
+        super(null, 1, WRAPPING);
     }
 
     public void alignDisplay(int line) {

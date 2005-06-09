@@ -86,7 +86,7 @@ public class TextFieldContentTest extends TestCase {
             }
         };
         
-        content = new TextContent(target, 4);
+        content = new TextContent(target, 4, TextContent.WRAPPING);
     }
 
     public void testCreate() {

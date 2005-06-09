@@ -4,6 +4,7 @@ package org.nakedobjects.viewer.skylark.value;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.Canvas;
@@ -25,8 +26,6 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.LabelAxis;
-import org.nakedobjects.viewer.skylark.basic.SimpleIdentifier;
-import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
 import org.nakedobjects.viewer.skylark.core.BackgroundTask;
 import org.nakedobjects.viewer.skylark.core.BackgroundThread;
 import org.nakedobjects.viewer.skylark.text.CursorPosition;
@@ -45,46 +44,31 @@ import java.awt.event.KeyEvent;
 import org.apache.log4j.Logger;
 
 
-public class TextField extends AbstractField implements TextBlockTarget {
-    private static final int ORIGINAL_WIDTH = 20;
-
-    public static class Specification extends AbstractFieldSpecification {
-
-        public View createView(Content content, ViewAxis axis) {
-            return new SimpleIdentifier(new TextField(content, this, axis, true));
-        }
-
-        public String getName() {
-            return "Text";
-        }
-    }
-
+public abstract class TextField extends AbstractField implements TextBlockTarget {
     private static final Logger LOG = Logger.getLogger(TextField.class);
-    private static final Text style = Style.NORMAL;        
-    private CursorPosition cursor;
+    protected static final Text style = Style.NORMAL;        
+    protected CursorPosition cursor;
     private boolean identified;
     private String invalidReason = null;
     private boolean isSaved = true;
     private int maxTextWidth;
-    private boolean multiline = false;
-    private boolean wrapping = false;
-    private TextSelection selection;
-    private TextContent textContent;
+    protected TextSelection selection;
+    protected TextContent textContent;
     private boolean showLines;
     private int maximumLength = 0;
     private int minumumLength = 0;
 
-    public TextField(Content content, ViewSpecification specification, ViewAxis axis, boolean showLines) {
+    public TextField(Content content, ViewSpecification specification, ViewAxis axis, boolean showLines, int width, int wrap) {
         super(content, specification, axis);
         this.showLines = showLines;
-        setMaxTextWidth(ORIGINAL_WIDTH);
+        setMaxTextWidth(width);
 
         NakedValue value = getValue();
         if(value != null) {
             maximumLength = value.getMaximumLength();
             minumumLength = value.getMinumumLength();
         }
-        textContent = new TextContent(this, 1);
+        textContent = new TextContent(this, 1, wrap);
         cursor = new CursorPosition(textContent, 0, 0);
         selection = new TextSelection(cursor, cursor);
         textContent.setText(value == null ? "" : value.titleString());
@@ -193,63 +177,20 @@ public class TextField extends AbstractField implements TextBlockTarget {
         super.draw(canvas);
 
         int width = getMaxWidth();
-        drawHighlight(canvas, width);
-        drawLines(canvas, width);
-        drawText(canvas, width);
-    }
 
-    private void drawHighlight(Canvas canvas, int maxWidth) {
+        align();
+        
         if (hasFocus() && selection.hasSelection()) {
-            int baseline = getBaseline();
-            int top = baseline - style.getAscent();
-
-            CursorPosition from = selection.from();
-            CursorPosition to = selection.to();
-/**
-            for (int i = displayFromLine; i <= displayToLine; i++) {
-                if ((i >= from.getLine()) && (i <= to.getLine())) {
-                    String line = textContent.getText(i);
-                    int start = 0;
-                    int end = style.stringWidth(line);
-
-                    if (from.getLine() == i) {
-                        int at = Math.min(from.getCharacter(), line.length());
-                        start = style.stringWidth(line.substring(0, at));
-                    }
-
-                    if (to.getLine() == i) {
-                        int at = Math.min(to.getCharacter(), line.length());
-                        end = style.stringWidth(line.substring(0, at));
-                    }
-
-                    canvas.drawSolidRectangle(start + (HPADDING), top, end - start, lineHeight(), Style.PRIMARY3);
-                }
-
-                top += lineHeight();
-            }
-     */
-            	}
-    }
-
-    private void drawLines(Canvas canvas, int width) {
-        if (showLines == true && canChangeValue()) {
-            int baseline = getBaseline() + 1;
-
-            Color color = identified ? Style.IDENTIFIED : Style.SECONDARY2;
-            color = hasFocus() ? Style.PRIMARY1 : color;
-
-            int noDisplayLines = textContent.getNoDisplayLines();
-            for (int line = 0; line < noDisplayLines; line++) {
-                canvas.drawLine(HPADDING, baseline, HPADDING + width, baseline, color);
-                baseline += getText().getLineHeight();
-            }
+            drawHighlight(canvas, width);
         }
-    }
-
-    private void drawText(Canvas canvas, int width) {
+        
+        if (showLines == true && canChangeValue()) {
+            Color color = identified ? Style.IDENTIFIED : Style.SECONDARY2;
+	        color = hasFocus() ? Style.PRIMARY1 : color;
+	        drawLines(canvas, color, width);
+        }
+        
         Color textColor;
-        int baseline = getBaseline();
-
         if (getState().isInvalid()) {
             textColor = Style.BLACK;
         } else if (hasFocus()) {
@@ -261,37 +202,16 @@ public class TextField extends AbstractField implements TextBlockTarget {
         } else {
             textColor = Style.BLACK;
         }
-
-        //LOG.debug(displayFromLine + " -> " + displayToLine);
-        
-        String[] lines = textContent.getDisplayLines();
-        for (int i = 0; i < lines.length; i++) {
-            String chars = lines[i];
-            if(chars == null) {
-                throw new NakedObjectRuntimeException();
-            }
-            if (chars.endsWith("\n")) { throw new RuntimeException(); }
-
-            // draw cursor
-            if (hasFocus() && (cursor.getLine() == i) && canChangeValue()) {
-                int at = Math.min(cursor.getCharacter(), chars.length());
-                int pos = style.stringWidth(chars.substring(0, at));
-                canvas.drawLine(pos + (HPADDING), (baseline + style.getDescent()), pos + (HPADDING),
-                        baseline - style.getAscent(), Style.PRIMARY1);
-            }
-
-            // draw text
-            canvas.drawText(chars, HPADDING, baseline, textColor, style);
-            baseline += getText().getLineHeight();
-        }
-/*
-        if (end < entryLength) {
-            int x = style.stringWidth(new String(buffer, start, end));
-            g.setColor(Color.red);
-            g.drawString("\u00bb", x, baseline - lineHeight());
-        }
-        */
+        drawText(canvas, textColor, width);
     }
+
+    protected abstract void align();
+
+    protected abstract void drawHighlight(Canvas canvas, int maxWidth);
+
+    protected abstract void drawLines(Canvas canvas, Color color, int width);
+
+    protected abstract void drawText(Canvas canvas, Color textColor, int width);
 
     public void editComplete() {
         if (canChangeValue() && !isSaved) {
@@ -328,6 +248,11 @@ public class TextField extends AbstractField implements TextBlockTarget {
 	                getState().setValid();
 	                markDamaged();
 	                getParent().invalidateContent();
+	            } catch (TextEntryParseException e) {
+	                invalidReason = "INVALID ENTRY: " + e.getMessage();
+	                getViewManager().setStatus(invalidReason);
+	                getState().setInvalid();
+	                markDamaged();
 	            } catch (NakedObjectRuntimeException e) {
 	                invalidReason = "UPDATE FAILURE: " + e.getMessage();
 	                LOG.error(invalidReason, e);
@@ -460,143 +385,55 @@ public class TextField extends AbstractField implements TextBlockTarget {
         final boolean ctrl = (modifiers & InputEvent.CTRL_MASK) > 0;
 
         switch (keyCode) {
-        // ctrl+pgup
         case KeyEvent.VK_PAGE_UP:
-
-            if (ctrl) {
-                textContent.increaseDepth();        
-                textContent.alignDisplay(cursor.getLine());    
-                invalidateLayout();
-            } else {
-                cursor.pageUp();
-            }
-
+            pageUp(ctrl);
             break;
-
-        // ctrl+pgdn
         case KeyEvent.VK_PAGE_DOWN:
-
-            if (ctrl) {
-                if( textContent.decreaseDepth()) {
-                    textContent.alignDisplay(cursor.getLine());
-                    invalidateLayout();
-                }
-            } else {
-                cursor.pageDown();
-            }
-
+            pageDown(ctrl);
             break;
-
         case KeyEvent.VK_V:
-
             if (ctrl) {
                 paste();
                 highlight(false);
             }
-
             break;
-
         case KeyEvent.VK_C:
-
             if (ctrl) {
                 copy();
             }
-
             break;
-
         case KeyEvent.VK_DOWN:
-            cursor.lineDown();
-            highlight(shift);
-
+            down(shift);
             break;
-
         case KeyEvent.VK_UP:
-            cursor.lineUp();
-            highlight(shift);
-
+            up(shift);
             break;
-
         case KeyEvent.VK_HOME:
-
-            if (alt) {
-                cursor.top();
-            } else {
-                cursor.home();
-            }
-
-            highlight(shift);
-
+            home(alt, shift);
             break;
-
         case KeyEvent.VK_END:
-
-            if (alt) {
-                cursor.bottom();
-            } else {
-                cursor.end();
-            }
-
-            highlight(shift);
-
+            end(alt, shift);
             break;
-
         case KeyEvent.VK_LEFT:
-
-            if (alt) {
-                cursor.wordLeft();
-            } else {
-                cursor.left();
-            }
-
-            highlight(shift);
-
+            left(alt, shift);
             break;
-
         case KeyEvent.VK_RIGHT:
-
-            if (alt) {
-                cursor.wordRight();
-            } else {
-                cursor.right();
-            }
-
-            highlight(shift);
-
+            right(alt, shift);
             break;
-
         case KeyEvent.VK_DELETE:
             deleteForward();
-
             break;
-
         case KeyEvent.VK_BACK_SPACE:
             delete();
-
             break;
-
         case KeyEvent.VK_TAB:
-
-            if (!isSaved) {
-                editComplete();
-            }
+            tab();
             break;
-
         case KeyEvent.VK_ENTER:
-
-            if (multiline) {
-                newline();
-            } else {
-                if (!isSaved) {
-                    editComplete();
-                }
-            }
-
+            enter();
             break;
-
         case KeyEvent.VK_ESCAPE:
-            invalidReason = null;
-            refresh();
-
+            escape();
             break;
 
         default:
@@ -607,6 +444,90 @@ public class TextField extends AbstractField implements TextBlockTarget {
 
         LOG.debug("Character at " + cursor.getCharacter() + " line " + cursor.getLine());
         LOG.debug(selection);
+    }
+
+    protected void pageDown(final boolean ctrl) {
+        if (ctrl) {
+            if( textContent.decreaseDepth()) {
+                textContent.alignDisplay(cursor.getLine());
+                invalidateLayout();
+            }
+        } else {
+            cursor.pageDown();
+        }
+    }
+
+    protected void pageUp(final boolean ctrl) {
+        if (ctrl) {
+            textContent.increaseDepth();        
+            textContent.alignDisplay(cursor.getLine());    
+            invalidateLayout();
+        } else {
+            cursor.pageUp();
+        }
+    }
+
+    protected void down(final boolean shift) {
+        cursor.lineDown();
+        highlight(shift);
+    }
+
+    protected void up(final boolean shift) {
+        cursor.lineUp();
+        highlight(shift);
+    }
+
+    protected void home(final boolean alt, final boolean shift) {
+        if (alt) {
+            cursor.top();
+        } else {
+            cursor.home();
+        }
+
+        highlight(shift);
+    }
+
+    protected void end(final boolean alt, final boolean shift) {
+        if (alt) {
+            cursor.bottom();
+        } else {
+            cursor.end();
+        }
+
+        highlight(shift);
+    }
+
+    protected void left(final boolean alt, final boolean shift) {
+        if (alt) {
+            cursor.wordLeft();
+        } else {
+            cursor.left();
+        }
+
+        highlight(shift);
+    }
+
+    protected void right(final boolean alt, final boolean shift) {
+        if (alt) {
+            cursor.wordRight();
+        } else {
+            cursor.right();
+        }
+
+        highlight(shift);
+    }
+
+    protected void escape() {
+        invalidReason = null;
+        refresh();
+    }
+
+    protected void tab() {
+        editComplete();
+    }
+
+    protected void enter() {
+        editComplete();
     }
 
     /**
@@ -637,16 +558,6 @@ public class TextField extends AbstractField implements TextBlockTarget {
             }
         });
         super.contentMenuOptions(options);
-    }
-
-    /**
-     * Inserts a newline at the cursor
-     */
-    private void newline() {
-        textContent.breakBlock(cursor);
-        cursor.lineDown();
-        cursor.home();
-        markDamaged();
     }
 
     public void paste() {
@@ -691,36 +602,12 @@ public class TextField extends AbstractField implements TextBlockTarget {
     public void setMaxTextWidth(int noCharacters) {
         maxTextWidth = getText().charWidth('o') * noCharacters;
     }
-    
-    public void setMultiline(boolean multiline) {
-        this.multiline = multiline;
-    }
-    
-    public void setWrapping(boolean wrapping) {
-        this.wrapping = wrapping;
-    }
-
-    public void setRequiredSize(Size size) {
-        int lines = Math.max(1, size.getHeight() / getText().getLineHeight());
-        setNoLines(lines);
-	    int width = Math.max(180, size.getWidth() - HPADDING);
-        setMaxWidth(width);
-        LOG.debug(lines + " x " + width);
-        invalidateLayout();
-    }
-    
+      
     /**
      * Set the maximum width of the field, as a number of pixels
      */
     public void setMaxWidth(int width) {
         maxTextWidth = width;
-    }
-
-    /**
-     * Sets the number of lines to display
-     */
-    public void setNoLines(int noLines) {
-        textContent.setNoDisplayLines(noLines);
     }
 
     public void thirdClick(Click click) {

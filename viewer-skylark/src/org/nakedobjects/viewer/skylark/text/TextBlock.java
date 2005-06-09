@@ -1,23 +1,21 @@
 package org.nakedobjects.viewer.skylark.text;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 class TextBlock {
-	private static final Category LOG = Category.getInstance(TextBlock.class);
+	private static final Logger LOG = Logger.getLogger(TextBlock.class);
 	private final TextBlockTarget forField;
 	private String text;
 	private int[] lineBreaks;
 	private boolean isFormatted;
 	private int lineCount;
+    private boolean canWrap;
 
-	TextBlock(TextBlockTarget forField) {
-		this.forField = forField;
-	}
-
-	TextBlock(TextBlockTarget forField, String text) {
+	TextBlock(TextBlockTarget forField, String text, boolean canWrap) {
 		this.forField = forField;
 		this.text = text;
 		isFormatted = false;
+		this.canWrap = canWrap;
 	}
 
 	public String getLine(int line) {
@@ -72,14 +70,13 @@ class TextBlock {
 	}
 
 	private void format() {
-		if (!isFormatted) {
+		if (canWrap && !isFormatted) {
 			lineBreaks = new int[100];
 			lineCount = 0;
 
 			int length = text.length();
 
 			int lineWidth = 0;
-			//            int start = 0;
 			int breakAt = -1;
 
 			for (int pos = 0; pos < length; pos++) {
@@ -149,11 +146,15 @@ class TextBlock {
 	public TextBlock breakBlock(int line, int character) {
 	    format();
 		int pos = pos(line, character);
-		TextBlock newBlock = new TextBlock(forField, text.substring(pos));
+		TextBlock newBlock = new TextBlock(forField, text.substring(pos), canWrap);
 		text = text.substring(0, pos);
 		isFormatted = false;
 		return newBlock;
 	}
+	
+	public void setCanWrap(boolean canWrap) {
+        this.canWrap = canWrap;
+    }
 	
 	public String toString() {
 	    StringBuffer content = new StringBuffer();

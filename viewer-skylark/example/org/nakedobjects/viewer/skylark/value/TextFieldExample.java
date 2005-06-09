@@ -32,7 +32,7 @@ public class TextFieldExample extends TestViews {
             + "the terms of the GNU General Public License as published by the Free Software\n"
             + "Foundation; either version 2 of the License, or (at your option) any later " + "version.";
 
-    private static final String SHORT_TEXT = "Short length of text";
+    private static final String SHORT_TEXT = "Short length of text for small field";
 
     public static void main(String[] args) {
         new TextFieldExample();
@@ -45,32 +45,38 @@ public class TextFieldExample extends TestViews {
         ViewSpecification specification = new ExampleViewSpecification();
         ViewAxis axis = null;
 
-        TextField view = new TextField(content, specification, axis, false);
-        view.setParent(parent);
-        view.setNoLines(3);
-        view.setMaxWidth(200);
-        view.setLocation(new Location(50, 60));
-        view.setSize(view.getRequiredSize());
-        workspace.addView(view);
+        SingleLineTextField textField = new SingleLineTextField(content, specification, axis, true, 20);
+        textField.setParent(parent);
+        textField.setMaxWidth(200);
+        textField.setLocation(new Location(50, 20));
+        textField.setSize(textField.getRequiredSize());
+        workspace.addView(textField);
 
-        view = new TextField(content, specification, axis, false);
-        view.setParent(parent);
-        view.setNoLines(1);
-        view.setMaxWidth(80);
-        view.setLocation(new Location(50, 150));
-        view.setSize(view.getRequiredSize());
-        workspace.addView(view);
+        textField = new SingleLineTextField(content, specification, axis, false, 20);
+        textField.setParent(parent);
+        textField.setMaxWidth(80);
+        textField.setLocation(new Location(50, 80));
+        textField.setSize(textField.getRequiredSize());
+        workspace.addView(textField);
 
         content = new Value(LONG_TEXT);
-        view = new TextField(content, specification, axis, false);
+        MultiLineTextField view = new MultiLineTextField(content, specification, axis, false, 20);
         view.setParent(parent);
         view.setNoLines(5);
         view.setMaxWidth(200);
         view.setWrapping(false);
-        view.setLocation(new Location(50, 200));
+        view.setLocation(new Location(50, 140));
         view.setSize(view.getRequiredSize());
         workspace.addView(view);
 
+        view = new MultiLineTextField(content, specification, axis, true, 20);
+        view.setParent(parent);
+        view.setNoLines(8);
+        view.setMaxWidth(500);
+        view.setWrapping(false);
+        view.setLocation(new Location(50, 250));
+        view.setSize(view.getRequiredSize());
+        workspace.addView(view);
     }
 }
 
