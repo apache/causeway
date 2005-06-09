@@ -16,6 +16,7 @@ import org.nakedobjects.viewer.skylark.metal.ClassIcon;
 import org.nakedobjects.viewer.skylark.metal.FormSpecification;
 import org.nakedobjects.viewer.skylark.metal.ListSpecification;
 import org.nakedobjects.viewer.skylark.metal.TableSpecification;
+import org.nakedobjects.viewer.skylark.metal.TextFieldSpecification;
 import org.nakedobjects.viewer.skylark.metal.TreeBrowserSpecification;
 import org.nakedobjects.viewer.skylark.special.DataFormSpecification;
 import org.nakedobjects.viewer.skylark.special.InnerWorkspaceSpecification;
@@ -24,7 +25,6 @@ import org.nakedobjects.viewer.skylark.special.WorkspaceSpecification;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
 import org.nakedobjects.viewer.skylark.value.CheckboxField;
 import org.nakedobjects.viewer.skylark.value.ColorField;
-import org.nakedobjects.viewer.skylark.value.TextField;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -42,11 +42,12 @@ public class Viewer {
     private static final Logger LOG = Logger.getLogger(Viewer.class);
     public static final String PROPERTY_BASE = "viewer.skylark.";
     private static final String SPECIFICATION_BASE = PROPERTY_BASE + "specification.";
+    private static final Bounds NO_REDRAW = new Bounds();
     private Graphics bufferGraphics;
     private Image doubleBuffer;
     private boolean doubleBuffering = false;
     private View overlayView;
-    private Bounds redrawArea;
+    private final Bounds redrawArea;
     private int redrawCount = 100000;
     private RenderingArea renderingArea;
     private View rootView;
@@ -54,10 +55,8 @@ public class Viewer {
     private PopupMenu popup;
     private boolean explorationMode;
     private ObjectViewingMechanismListener listener;
-
     private ViewUpdateNotifier updateNotifier;
     private View keyboardFocus;
-//    private View windowFocus;
     private Size internalDisplaySize;
     private Insets insets;
     private int statusBarHeight;
@@ -66,15 +65,20 @@ public class Viewer {
 
     public Viewer() {
         doubleBuffering = NakedObjects.getConfiguration().getBoolean(PROPERTY_BASE + "doublebuffering", true);
-    
+        redrawArea = new Bounds();
     }
     
     public void markDamaged(Bounds bounds) {
         spy.addDamagedArea(bounds);
-        synchronized (this) {
-            redrawArea = redrawArea == null ? bounds : redrawArea.union(bounds);
+        synchronized (redrawArea) {
+            if (redrawArea.equals(NO_REDRAW)) {
+                redrawArea.setBounds(bounds);
+                LOG.debug("damage - new area " + redrawArea);
+            } else {
+                redrawArea.union(bounds);
+                LOG.debug("damage - extend area " + redrawArea + " - to include " + bounds);
+            }
         }
-        //		LOG.debug("total damaged area " + redrawArea);
     }
 
     public void disposeOverlayView() {
@@ -204,15 +208,14 @@ public class Viewer {
     void repaint() {
         updateNotifier.invalidateViewsForChangedObjects();
         rootView.layout();
-        if (redrawArea != null) {
-	        LOG.debug("Repaint viewer");
-            Bounds area;
-            synchronized (this) {
-                area = redrawArea;
-                redrawArea = null;
+        synchronized (redrawArea) {
+            if (!redrawArea.equals(NO_REDRAW)) {
+                LOG.debug("Repaint viewer " + redrawArea);
+                Bounds area = new Bounds(redrawArea);
                 area.translate(insets.left, insets.top);
+                renderingArea.repaint(area.x, area.y, area.width, area.height);
+                redrawArea.setBounds(NO_REDRAW);
             }
-            renderingArea.repaint(area.x, area.y, area.width, area.height);
         }
     }
 
@@ -316,7 +319,7 @@ public class Viewer {
 */
         viewFactory.addValueFieldSpecification(loadSpecification("field.color", ColorField.Specification.class));
         viewFactory.addValueFieldSpecification(loadSpecification("field.checkbox", CheckboxField.Specification.class));
-        viewFactory.addValueFieldSpecification(loadSpecification("field.text", TextField.Specification.class));
+        viewFactory.addValueFieldSpecification(loadSpecification("field.text", TextFieldSpecification.class));
         viewFactory.addRootWorkspaceSpecification(new org.nakedobjects.viewer.skylark.metal.WorkspaceSpecification());
         viewFactory.addWorkspaceSpecification(new InnerWorkspaceSpecification());
 

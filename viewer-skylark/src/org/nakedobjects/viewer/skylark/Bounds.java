@@ -259,6 +259,14 @@ public class Bounds {
         return limited;
     }
 
+    public void setBounds(Bounds bounds) {
+        x = bounds.x;
+        y = bounds.y;
+        width = bounds.width;
+        height = bounds.height;
+        
+    }
+
     public void setHeight(int height) {
         this.height = height;
     }
@@ -284,14 +292,13 @@ public class Bounds {
         this.y += y;
     }
 
-    public Bounds union(Bounds bounds) {
-        Bounds newBounds = new Bounds();
-        newBounds.x = Math.min(x, bounds.x);
-        newBounds.y = Math.min(y, bounds.y);
-        newBounds.width = Math.max(x + width, bounds.x + bounds.width) - newBounds.x;
-        newBounds.height = Math.max(y + height, bounds.y + bounds.height) - newBounds.y;
-
-        return newBounds;
+    public void union(Bounds bounds) {
+        int newX = Math.min(x, bounds.x);
+        int newY = Math.min(y, bounds.y);
+        width = Math.max(x + width, bounds.x + bounds.width) - newX;
+        height = Math.max(y + height, bounds.y + bounds.height) - newY;
+        x = newX;
+        y = newY;
     }
 
 }
