@@ -32,6 +32,7 @@ public final class JavaFixtureBuilder extends FixtureBuilder {
                     objectManager.makePersistent(object);
                 }
             }
+            objectManager.saveChanges();
             objectManager.endTransaction();
         } catch (RuntimeException e) {
             objectManager.abortTransaction();
@@ -43,6 +44,7 @@ public final class JavaFixtureBuilder extends FixtureBuilder {
     protected void installFixture(NakedObjectManager objectManager, Fixture fixture) {
         objectManager.startTransaction();
         fixture.install();
+        objectManager.saveChanges();
         objectManager.endTransaction();
     }
     
