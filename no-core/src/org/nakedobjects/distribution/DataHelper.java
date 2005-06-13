@@ -92,6 +92,10 @@ public class DataHelper {
                 loadedObjects().loaded(object);
             }
         }
+        
+		if (!object.isResolved() && data.isResolved()){
+			object.setResolved();
+		}
 
         NakedObjectField[] fields = object.getSpecification().getFields();
         if (fields.length == 0) {
