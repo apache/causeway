@@ -26,12 +26,12 @@ public class TreeBrowserSpecification implements ViewSpecification {
         openCollectionNode = new OpenCollectionNodeSpecification();
         openCollectionNode.setCollectionSubNodeSpecification(emptyNode);
         openCollectionNode.setObjectSubNodeSpecification(elementNode);
-        openCollectionNode.setReplacementNodeSpecification(emptyNode);
+        openCollectionNode.setReplacementNodeSpecification(fieldNode);
 
         openObjectNode = new OpenObjectNodeSpecification();
         openObjectNode.setCollectionSubNodeSpecification(fieldNode);
         openObjectNode.setObjectSubNodeSpecification(emptyNode);
-        openObjectNode.setReplacementNodeSpecification(emptyNode);
+        openObjectNode.setReplacementNodeSpecification(elementNode);
 
         elementNode.setReplacementNodeSpecification(openObjectNode);
 
