@@ -93,6 +93,8 @@ public interface NakedObject extends Naked {
     void setResolved();
 
     void setValue(OneToOneAssociation field, Object object);
+    
+    void setVersion(long version);
 
 }
 

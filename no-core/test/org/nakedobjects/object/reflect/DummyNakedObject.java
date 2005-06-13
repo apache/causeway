@@ -165,6 +165,8 @@ public class DummyNakedObject implements NakedObject {
         return 0;
     }
 
+    public void setVersion(long version) {}
+
 }
 
 /*
