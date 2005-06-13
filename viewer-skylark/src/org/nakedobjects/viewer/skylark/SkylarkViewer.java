@@ -12,10 +12,8 @@ public class SkylarkViewer {
     private Viewer viewer;
     
     public SkylarkViewer() {
-
         frame = new ViewerFrame();
         
-
         viewer = new Viewer();
         viewer.setRenderingArea(frame);
 
@@ -61,6 +59,10 @@ public class SkylarkViewer {
 
     public void setShutdownListener(ObjectViewingMechanismListener listener) {
         viewer.setListener(listener);
+    }
+    
+    public void setExploration(boolean inExplorationMode) {
+        viewer.setExploration(inExplorationMode);
     }
 }
 

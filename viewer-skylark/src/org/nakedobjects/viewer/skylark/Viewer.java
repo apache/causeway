@@ -53,7 +53,8 @@ public class Viewer {
     private View rootView;
     private String userStatus;
     private PopupMenu popup;
-    private boolean explorationMode;
+    private boolean runningAsExploration;
+    private boolean showExplorationMenuByDefault;
     private ObjectViewingMechanismListener listener;
     private ViewUpdateNotifier updateNotifier;
     private View keyboardFocus;
@@ -65,6 +66,7 @@ public class Viewer {
 
     public Viewer() {
         doubleBuffering = NakedObjects.getConfiguration().getBoolean(PROPERTY_BASE + "doublebuffering", true);
+        showExplorationMenuByDefault = NakedObjects.getConfiguration().getBoolean(PROPERTY_BASE + "show-exploration", true);
         redrawArea = new Bounds();
     }
     
@@ -219,11 +221,11 @@ public class Viewer {
         }
     }
 
-    public boolean isShowingDeveloperStatus() {
+    public boolean isShowingMouseSpy() {
         return spy.isVisible();
     }
 
-    public void setShowDeveloperStatus(boolean showDeveloperStatus) {
+    public void setShowMouseSpy(boolean showDeveloperStatus) {
         if (spy.isVisible()) {
             spy.close();
         } else {
@@ -263,7 +265,7 @@ public class Viewer {
 */
         
         forView = click.isAlt() ^ forView;
-        boolean includeExploration = click.isCtrl() || explorationMode;
+        boolean includeExploration = runningAsExploration && (click.isCtrl() || showExplorationMenuByDefault);
         boolean includeDebug = click.isShift() && click.isCtrl();
      /*   
         forView = click.button4() ^ forView;
@@ -384,24 +386,15 @@ public class Viewer {
 
     public void start() {
         popup = new DefaultPopupMenu();
-        explorationMode = NakedObjects.getConfiguration().getBoolean(PROPERTY_BASE + "show-exploration");
 
         InteractionHandler interactionHandler = new InteractionHandler(this, spy);
         renderingArea.addMouseMotionListener(interactionHandler);
         renderingArea.addMouseListener(interactionHandler);
         renderingArea.addKeyListener(interactionHandler);
 
-        try {
-            setupViewFactory();
-        } catch (ConfigurationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ComponentException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        setupViewFactory();
         
-        if (NakedObjects.getConfiguration().getBoolean(PROPERTY_BASE + "debugstatus", false)) {
+        if (NakedObjects.getConfiguration().getBoolean(PROPERTY_BASE + "show-mouse-spy", false)) {
             spy.open();
         }
     }
@@ -411,7 +404,6 @@ public class Viewer {
         LOG.debug("size changed: frame " + internalDisplaySize);
         insets = renderingArea.getInsets();
         LOG.debug("  insets " + insets);
-        //rootView.setLocation(new Location(insets.left, insets.top));
         internalDisplaySize.contract(insets.left + insets.right, insets.top + insets.bottom);
         LOG.debug("  internal " + internalDisplaySize);
 
@@ -562,6 +554,10 @@ public class Viewer {
     
     public void setListener(ObjectViewingMechanismListener listener) {
         this.listener = listener;
+    }
+    
+    public void setExploration(boolean asExploration) {
+        this.runningAsExploration = asExploration;
     }
     
     public void setSpy(InteractionSpy spy) {
