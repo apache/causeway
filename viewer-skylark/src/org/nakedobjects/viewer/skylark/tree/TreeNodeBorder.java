@@ -13,6 +13,7 @@ import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.CollectionElement;
 import org.nakedobjects.viewer.skylark.Color;
+import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.FieldContent;
@@ -26,6 +27,7 @@ import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
+import org.nakedobjects.viewer.skylark.basic.DragContentIcon;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
 import org.nakedobjects.viewer.skylark.basic.ObjectTitleText;
 import org.nakedobjects.viewer.skylark.basic.TitleText;
@@ -76,6 +78,8 @@ public class TreeNodeBorder extends AbstractBorder {
         b.append("TreeNodeBorder " + left + " pixels\n");
         b.append("           titlebar " + (top) + " pixels\n");
         b.append("           replace with  " + replaceWithSpecification);
+       	super.debugDetails(b);
+        
     }
 
     public void draw(Canvas canvas) {
@@ -216,7 +220,12 @@ public class TreeNodeBorder extends AbstractBorder {
     
     
     public Drag dragStart(DragStart drag) {
-        return super.dragStart(drag);
+        if(overBorder(drag.getLocation())) {
+            View dragOverlay = new DragContentIcon(getContent());
+            return new ContentDrag(this, drag.getLocation(), dragOverlay);
+        } else {
+            return super.dragStart(drag);
+        }
     }
     
     public ViewAreaType viewAreaType(Location mouseLocation) {
