@@ -1,9 +1,9 @@
 package org.nakedobjects.utility;
 
-import org.nakedobjects.object.NakedObjectException;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 
 
-public class StartupException extends NakedObjectException {
+public class StartupException extends NakedObjectRuntimeException {
 	public StartupException() {
         super();
     }
