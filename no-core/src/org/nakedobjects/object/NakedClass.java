@@ -55,6 +55,9 @@ public class NakedClass implements InternalNakedObject {
         if (ca != null && ca.canUse().isVetoed()) {
             about.invisible();
         }
+        if(specification.isAbstract()) {
+            about.unusable("Cannot create an instance of an abstract class");
+        }
     }
 
     public FastFinder explorationActionFind() {
@@ -65,7 +68,7 @@ public class NakedClass implements InternalNakedObject {
     }
 
     public NakedCollection allInstances() {
-        return getObjectManager().allInstances(forObjectType(), false);
+        return getObjectManager().allInstances(forObjectType(), specification.isAbstract());
     }
 
     public NakedCollection explorationActionInstances() {
@@ -92,6 +95,10 @@ public class NakedClass implements InternalNakedObject {
 
     public String getName() {
         return className;
+    }
+
+    public String getShortName() {
+        return forObjectType().getShortName();
     }
 
     private NakedObjectManager getObjectManager() {
@@ -123,7 +130,7 @@ public class NakedClass implements InternalNakedObject {
     }
 
     public String title() {
-        return className;
+        return getPluralName();
     }
     
     public String toString() {
