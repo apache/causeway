@@ -43,9 +43,9 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         
         Logger.getRootLogger().setLevel(Level.OFF);
     	loader = new MockNakedObjectSpecificationLoader();
-    	new NakedObjectsClient().setSpecificationLoader(loader);
-
-    	ConfigurationFactory.setConfiguration(new TestConfiguration());
+    	NakedObjectsClient nakedObjects = new NakedObjectsClient();
+        nakedObjects.setSpecificationLoader(loader);
+    	nakedObjects.setConfiguration(new TestConfiguration());
         
 		objectWithVector = new JavaObjectWithVector();
     	pojoAdapterFactory = new PojoAdapterFactoryImpl();

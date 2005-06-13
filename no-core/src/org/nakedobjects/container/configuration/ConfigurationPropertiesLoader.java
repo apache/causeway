@@ -21,7 +21,8 @@ public class ConfigurationPropertiesLoader {
         properties = new Properties();
         try {
 	        FileInputStream in;
-            in = new FileInputStream(pathname);
+            File file = new File(pathname);
+            in = new FileInputStream(file);
             properties.load(in);
         } catch (FileNotFoundException e) {
             if(ensureFileLoads) {

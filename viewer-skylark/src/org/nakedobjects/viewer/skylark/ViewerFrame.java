@@ -23,8 +23,6 @@ public class ViewerFrame extends Frame implements RenderingArea {
      * @see java.awt.Frame#Frame(String)
      */
     public ViewerFrame() {	    
- 
-        viewer = new Viewer();
         addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
                     quit();

@@ -10,7 +10,6 @@ import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
-import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -225,10 +224,6 @@ public class CompositeView extends ObjectView {
         this.canDragView = canDragView;
     }
 
-    protected String title() {
-        return getContent().title();
-    }
-
     public String toString() {
         return "ObjectCompositeView" + getId();
     }
@@ -243,8 +238,7 @@ public class CompositeView extends ObjectView {
     public ViewAreaType viewAreaType(Location location) {
         View subview = subviewFor(location);
         if(subview == null) {
-            boolean overTitle = new Bounds(5, 0, Style.TITLE.stringWidth(title()), 24).contains(location);
-            return overTitle ? ViewAreaType.CONTENT : ViewAreaType.VIEW;
+            return ViewAreaType.VIEW;
         } else {
             location.subtract(subview.getLocation());
             return subview.viewAreaType(location);

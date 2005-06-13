@@ -3,7 +3,6 @@ package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.application.control.FieldAbout;
-import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
@@ -43,8 +42,7 @@ public class JavaAssociationTest extends TestCase {
     	loader.addSpec(new DummyNakedObjectSpecification()); // for float
     	NakedObjectsClient nakedObjectsClient = new NakedObjectsClient();
         nakedObjectsClient.setSpecificationLoader(loader);
-
-    	ConfigurationFactory.setConfiguration(new TestConfiguration());
+        nakedObjectsClient.setConfiguration(new TestConfiguration());
         
         javaObjectWithOneToOneAssociations = new JavaObjectWithOneToOneAssociations();
     	PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();

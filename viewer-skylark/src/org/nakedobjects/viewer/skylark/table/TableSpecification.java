@@ -48,9 +48,6 @@ public class TableSpecification extends AbstractCompositeViewSpecification imple
     }
 
     public View createView(Content content, ViewAxis axis) {
- //       resolveCollection(content);
-        //     NakedObjectSpecification elementSpecification = ((CollectionContent)
-        // content).getCollection().getElementType();
         TypedNakedCollection coll = (TypedNakedCollection) ((CollectionContent) content)
                 .getCollection();
         NakedObjectSpecification elementSpecification = NakedObjects.getSpecificationLoader().loadSpecification(

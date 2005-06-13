@@ -57,7 +57,7 @@ public class SingleLineTextField extends TextField {
     protected void drawText(Canvas canvas, Color textColor, int width) {
         String[] lines = textContent.getDisplayLines();
         if (lines.length > 1) {
-            throw new NakedObjectRuntimeException();
+            throw new NakedObjectRuntimeException("Single line field should only be one line");
         }
 
         String chars = lines[0];

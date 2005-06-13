@@ -134,10 +134,10 @@ public class ViewerAssistant {
                 }
             });
         
-        String action = viewer.isShowingDeveloperStatus() ? "Hide" : "Show";
+        String action = viewer.isShowingMouseSpy() ? "Hide" : "Show";
         options.add(MenuOptionSet.DEBUG, new MenuOption(action + " developer status") {
             public void execute(Workspace workspace, View view, Location at) {
-                viewer.setShowDeveloperStatus(!viewer.isShowingDeveloperStatus());
+                viewer.setShowMouseSpy(!viewer.isShowingMouseSpy());
             }
         });
 

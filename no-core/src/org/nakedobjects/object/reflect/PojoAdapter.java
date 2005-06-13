@@ -23,6 +23,7 @@ public class PojoAdapter extends AbstractNakedObject {
     public long getVersion() {
         return version;
     }
+    
     public void setVersion(long version) {
         this.version = version;
     }

@@ -54,15 +54,24 @@ public class InternalAbout implements Hint {
     public void unusableOnCondition(boolean condition, String reason) {
         if(condition) {
             unusable = true;
-	        if (unusableReason.length() > 0) {
-	            unusableReason.append("; ");
-	        }
-	        unusableReason.append(reason);
+	        appendUnusableReason(reason);
         }
+    }
+
+    private void appendUnusableReason(String reason) {
+        if (unusableReason.length() > 0) {
+            unusableReason.append("; ");
+        }
+        unusableReason.append(reason);
     }
 
     public void unusable() {
         unusable = true;
+    }
+
+    public void unusable(String reason) {
+        unusable = true;
+        appendUnusableReason(reason);
     }
 
     public Consent isValid() {

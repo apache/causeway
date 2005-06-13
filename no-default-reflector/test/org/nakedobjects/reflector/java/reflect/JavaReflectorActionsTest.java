@@ -33,9 +33,9 @@ public class JavaReflectorActionsTest extends TestCase {
     protected void setUp() throws ClassNotFoundException {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
-        ConfigurationFactory.setConfiguration(new TestConfiguration());
-
         NakedObjectsClient nakedObjects = new NakedObjectsClient();
+
+        nakedObjects.setConfiguration(new TestConfiguration());
 
         loader = new MockNakedObjectSpecificationLoader();
         loader.addSpec(new DummyNakedObjectSpecification());

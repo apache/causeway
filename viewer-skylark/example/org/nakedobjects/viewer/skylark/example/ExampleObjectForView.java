@@ -15,7 +15,6 @@ import org.nakedobjects.object.reflect.OneToOneAssociation;
 
 
 public class ExampleObjectForView implements NakedObject {
-
     private NakedObject object;
 
     public void clearCollection(OneToManyAssociation association) {}
@@ -141,6 +140,8 @@ public class ExampleObjectForView implements NakedObject {
     public long getVersion() {
         return 0;
     }
+
+    public void setVersion(long version) {}
 
 }
 

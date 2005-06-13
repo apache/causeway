@@ -2,7 +2,6 @@ package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.application.control.ActionAbout;
-import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
@@ -34,9 +33,7 @@ public class JavaActionTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         
-        ConfigurationFactory.setConfiguration(new TestConfiguration());
-        
-        new NakedObjectsClient(); 
+        new NakedObjectsClient().setConfiguration(new TestConfiguration());
         
        	Logger.getRootLogger().setLevel(Level.OFF);
     	loader = new MockNakedObjectSpecificationLoader();

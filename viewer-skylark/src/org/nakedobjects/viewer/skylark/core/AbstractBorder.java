@@ -27,7 +27,6 @@ public class AbstractBorder extends AbstractViewDecorator {
 
     protected Bounds contentArea() {
         return new Bounds(getLeft(), getTop(), getSize().getWidth() -getLeft() - getRight(), getSize().getHeight() - getTop() - getBottom());
-        //return new Bounds(getLeft(), getTop(), wrappedView.getSize().getWidth(), wrappedView.getSize().getHeight());
     }
 
     public View dragFrom(Location location) {

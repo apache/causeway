@@ -24,9 +24,7 @@ import org.nakedobjects.viewer.skylark.basic.DragContentIcon;
 
 
 public abstract class ObjectView extends AbstractView {
- //   private static final Logger LOG = Logger.getLogger(ObjectView.class);
-    
-    public ObjectView(Content content, ViewSpecification design, ViewAxis axis) {
+     public ObjectView(Content content, ViewSpecification design, ViewAxis axis) {
         super(content, design, axis);
         if (!(content instanceof ObjectContent) && !(content instanceof CollectionContent)) {
             throw new IllegalArgumentException("Content must be ObjectContent or AssociateContent: " + content);

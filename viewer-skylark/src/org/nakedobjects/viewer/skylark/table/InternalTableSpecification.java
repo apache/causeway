@@ -14,6 +14,8 @@ public class InternalTableSpecification extends TableSpecification {
     public View createView(Content content, ViewAxis axis) {
         View table = super.createView(content, axis);
         return new ScrollBorder(table);
+        
+        //return new TableBorder(new ScrollBorder(table));
     }
 }
 

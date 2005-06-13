@@ -1,5 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.utility.ToString;
+
 public class DragStart extends PointerEvent {
     private final Location location;
 
@@ -23,7 +25,13 @@ public class DragStart extends PointerEvent {
     public void add(Offset offset) {
         location.add(offset);
     }
-    
+
+    public String toString() {
+        ToString str = new ToString(this);
+        str.append("location", location);
+        str.append("buttons", super.toString());
+        return str.toString();
+    }
 }
 
 
