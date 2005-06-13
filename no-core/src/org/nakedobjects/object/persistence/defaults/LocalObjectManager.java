@@ -88,7 +88,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         getTransaction().addCommand(objectStore.createCreateObjectCommand(object));
     }
 
-    public final Oid createOid(Naked object) {
+    protected final Oid createOid(Naked object) {
         Oid oid = oidGenerator.next(object);
         LOG.debug("createOid " + oid);
         return oid;
@@ -113,6 +113,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         transactionLevel--;
         if(transactionLevel == 0) {
 	        try {
+	            saveChanges();
 	            getTransaction().commit(objectStore);
 	            transaction = null;
 	        } catch (ObjectStoreException e) {
@@ -180,7 +181,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
             throw new NakedObjectRuntimeException(e);
         }
         nakedClasses.put(nakedClass, spec);
-        //        spec.setContext(getContext());
         return spec;
     }
 
@@ -365,7 +365,9 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     public void objectChanged(NakedObject object) {
-        objectsToBeSaved.addDirty(object);
+        if(object.isPersistent()) {
+            objectsToBeSaved.addDirty(object);
+        }
         if (objectsToRefreshViewsFor != null) {
             objectsToRefreshViewsFor.addDirty(object);
         }
@@ -396,19 +398,24 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         }
 
         if (!isPersistent(object)) {
-            LOG.debug("resolve requested, but not persistent: " + object);
+            LOG.debug("ignored resolve request as not persistent " + object);
             return;
         }
 
         LOG.info("resolve-immediately: " + object);
         try {
-            object.setResolved();
+            // TODO fudge by Fergal
+            if (object.isResolved()) {
+        		return;
+        	} else {
+        		object.setResolved();
+        	}
+           // object.setResolved();
             objectStore.resolveImmediately(object);
             objectsToBeSaved.remove(object);
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
-      //  object.setResolved();
     }
 
     public void saveChanges() {
