@@ -72,12 +72,18 @@ public class Configuration {
      */
     public boolean getBoolean(String name, boolean defaultValue) {
         String value = getProperty(name);
-
         if (value == null) {
             return defaultValue;
         }
+        value = value.toLowerCase();
+        if(value.equals("on") || value.equals("yes") || value.equals("true") || value.equals("")) {
+            return true;
+        }
+        if(value.equals("off") || value.equals("no") || value.equals("false")) {
+            return false;
+        }
 
-        return value.equals("on") || value.equals("yes") || value.equals("true") || value.equals("");
+        throw new ConfigurationException("Illegal flag for " + "name; must be one of on, off, yes, no, true or false");
     }
 
     /**
@@ -209,7 +215,11 @@ public class Configuration {
         LOG.debug("property: " + key + " =  <" + property + ">");
         return property;
     }
-/*
+
+    public Properties getPropertiesStrippingPrefix(String prefix) {
+        return getProperties(prefix, prefix);
+    }
+    /*
     public Properties getPropertySubset(String prefix) {
         prefix = PREFIX + prefix + ".";
         Properties p = getProperties(prefix);
