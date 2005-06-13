@@ -629,25 +629,27 @@ public class JavaReflector implements Reflector {
                 aboutMethod = defaultAboutFieldMethod;
             }
 
+            Class[] params = new Class[] {null};
             // look for corresponding add and remove methods
-            Method addMethod = findMethod(OBJECT, "addTo" + name, void.class, null);
+            Method addMethod = findMethod(OBJECT, "addTo" + name, void.class, params);
             if (addMethod == null) {
-                addMethod = findMethod(OBJECT, "add" + name, void.class, null);
+                addMethod = findMethod(OBJECT, "add" + name, void.class, params);
             }
             if (addMethod == null) {
-                addMethod = findMethod(OBJECT, "associate" + name, void.class, null);
+                addMethod = findMethod(OBJECT, "associate" + name, void.class, params);
             }
 
-            Method removeMethod = findMethod(OBJECT, "removeFrom" + name, void.class, null);
+            Method removeMethod = findMethod(OBJECT, "removeFrom" + name, void.class, params);
             if (removeMethod == null) {
-                removeMethod = findMethod(OBJECT, "remove" + name, void.class, null);
+                removeMethod = findMethod(OBJECT, "remove" + name, void.class, params);
             }
             if (removeMethod == null) {
-                removeMethod = findMethod(OBJECT, "dissociate" + name, void.class, null);
+                removeMethod = findMethod(OBJECT, "dissociate" + name, void.class, params);
             }
 
             if (addMethod == null || removeMethod == null) {
                 LOG.error("There must be both add and remove methods for " + name + " in " + className());
+                return;
             }
 
             Class removeType = (removeMethod == null) ? null : removeMethod.getParameterTypes()[0];
