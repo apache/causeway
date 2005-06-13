@@ -28,6 +28,7 @@ import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.LabelAxis;
 import org.nakedobjects.viewer.skylark.core.BackgroundTask;
 import org.nakedobjects.viewer.skylark.core.BackgroundThread;
+import org.nakedobjects.viewer.skylark.core.TextView;
 import org.nakedobjects.viewer.skylark.text.CursorPosition;
 import org.nakedobjects.viewer.skylark.text.TextBlockTarget;
 import org.nakedobjects.viewer.skylark.text.TextContent;
@@ -266,20 +267,26 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
 	                markDamaged();
 	            }
             }
+        } else {
+            getState().setValid();
         }
     }
     
 
     public void entered() {
-        getViewManager().showTextCursor();
-        identified = true;
-        markDamaged();
+        if(canChangeValue()) {
+	        getViewManager().showTextCursor();
+	        identified = true;
+	        markDamaged();
+        }
     }
 
     public void exited() {
-        getViewManager().showArrowCursor();
-        identified = false;
-        markDamaged();
+        if (canChangeValue()) {
+            getViewManager().showArrowCursor();
+            identified = false;
+            markDamaged();
+        }
     }
 
     /**
@@ -293,6 +300,15 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
             cursor.cursorAt(at);
             resetSelection();
             markDamaged();
+        } 
+
+        if (! canChangeValue() || click.isShift()) {
+            TextView textView = new TextView(getContent().getNaked().titleString());
+            textView.setSize(textView.getRequiredSize());
+            getViewManager().setOverlayView(textView);
+            textView.setLocation(getAbsoluteLocation());
+            textView.markDamaged();
+//            getViewManager().setStatus(getContent().getNaked().titleString());
         }
     }
 
