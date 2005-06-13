@@ -80,14 +80,19 @@ public class EmptyField extends AbstractView {
     }
 
     public void dragIn(ContentDrag drag) {
-        NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
-        Consent perm = canDrop(source);
-        if (perm.getReason() != null) {
-            getViewManager().setStatus(perm.getReason());
-        }
-
-        if (perm.isAllowed()) {
-            getState().setCanDrop();
+        Content sourceContent = drag.getSourceContent();
+        if(sourceContent instanceof ObjectContent) {
+	        NakedObject source = ((ObjectContent) sourceContent).getObject();
+	        Consent perm = canDrop(source);
+	        if (perm.getReason() != null) {
+	            getViewManager().setStatus(perm.getReason());
+	        }
+	
+	        if (perm.isAllowed()) {
+	            getState().setCanDrop();
+	        } else {
+	            getState().setCantDrop();
+	        }
         } else {
             getState().setCantDrop();
         }
