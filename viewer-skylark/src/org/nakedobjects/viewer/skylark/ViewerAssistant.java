@@ -135,7 +135,7 @@ public class ViewerAssistant {
             });
         
         String action = viewer.isShowingMouseSpy() ? "Hide" : "Show";
-        options.add(MenuOptionSet.DEBUG, new MenuOption(action + " developer status") {
+        options.add(MenuOptionSet.DEBUG, new MenuOption(action + " mouse spy") {
             public void execute(Workspace workspace, View view, Location at) {
                 viewer.setShowMouseSpy(!viewer.isShowingMouseSpy());
             }
