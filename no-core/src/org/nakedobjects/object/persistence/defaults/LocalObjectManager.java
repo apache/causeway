@@ -113,7 +113,8 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         transactionLevel--;
         if(transactionLevel == 0) {
 	        try {
-	            saveChanges();
+	        	// TODO collate changes befor committing
+	        	//    saveChanges();
 	            getTransaction().commit(objectStore);
 	            transaction = null;
 	        } catch (ObjectStoreException e) {
@@ -365,9 +366,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     public void objectChanged(NakedObject object) {
-        if(object.isPersistent()) {
-            objectsToBeSaved.addDirty(object);
-        }
+        objectsToBeSaved.addDirty(object);
         if (objectsToRefreshViewsFor != null) {
             objectsToRefreshViewsFor.addDirty(object);
         }
