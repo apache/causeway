@@ -13,6 +13,8 @@ import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.CollectionElement;
 import org.nakedobjects.viewer.skylark.Color;
+import org.nakedobjects.viewer.skylark.Drag;
+import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.FieldContent;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
@@ -54,11 +56,7 @@ public class TreeNodeBorder extends AbstractBorder {
                     return nc.getShortName();
                 }
             };
-            text = new TitleText(this, LABEL_STYLE) {
-                protected String title() {
-                    return nc.getPluralName();
-                }
-            };
+            text = new ObjectTitleText(this, LABEL_STYLE);
 
         } else {
             icon = new IconGraphic(this, LABEL_STYLE);
@@ -217,17 +215,19 @@ public class TreeNodeBorder extends AbstractBorder {
  //   }
     
     
+    public Drag dragStart(DragStart drag) {
+        return super.dragStart(drag);
+    }
+    
     public ViewAreaType viewAreaType(Location mouseLocation) {
         int iconWidth = icon.getSize().getWidth();
         int textWidth = text.getSize().getWidth();
 
         Bounds bounds = new Bounds(0, 0, iconWidth + textWidth, top);
-
         if (bounds.contains(mouseLocation)) {
             return ViewAreaType.CONTENT;
         } else {
             return super.viewAreaType(mouseLocation);
-
         }
     }
 
@@ -252,6 +252,11 @@ public class TreeNodeBorder extends AbstractBorder {
         super.objectActionResult(result, at);
     }
 
+    protected Bounds contentArea() {
+    //    return new Bounds(getLeft(), getTop(), getSize().getWidth() -getLeft() - getRight(), getSize().getHeight() - getTop() - getBottom());
+        return new Bounds(getLeft(), getTop(), wrappedView.getSize().getWidth(), wrappedView.getSize().getHeight());
+    }
+    
     public void entered() {
         super.entered();
         getState().setObjectIdentified();
