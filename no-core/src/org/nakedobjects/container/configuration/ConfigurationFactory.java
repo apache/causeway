@@ -4,6 +4,7 @@ package org.nakedobjects.container.configuration;
 
 /**
  * Holds the available properties for this Naked Objects session.
+ * @deprecated use NakedObjects.getConfiguraton
  */
 public final class ConfigurationFactory {
     private static Configuration instance;
@@ -22,6 +23,7 @@ public final class ConfigurationFactory {
 
     /**
      * Returns the singleton that is to be used to access the properties.
+     * @deprecated use NakedObjects.getConfiguraton
      */
     public final static Configuration getConfiguration() {
         if(instance == null) {
@@ -32,6 +34,7 @@ public final class ConfigurationFactory {
 
 	/**
 	 * Expose as a .NET property
+     * @deprecated use NakedObjects.getConfiguraton
 	 */
 	public final static Configuration get_Configuration() {
 		return getConfiguration();
