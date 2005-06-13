@@ -58,6 +58,10 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
     public void drop(ContentDrag drag) {
         getViewManager().showArrowCursor();
 
+        if(!drag.getSourceContent().isObject()) {
+            return;
+        }
+        
         NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
  
         View newView;
