@@ -27,8 +27,10 @@ public class PojoAdapter extends AbstractNakedObject {
     public void setVersion(long version) {
         this.version = version;
     }
+    
     protected PojoAdapter(Object pojo) {
         this.pojo = pojo;
+        LOG.debug("created " + this + " for " + pojo);
     }
 
     public void clearAssociation(NakedObjectAssociation specification, NakedObject associate) {

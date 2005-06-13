@@ -130,7 +130,7 @@ public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
                     "cannot add as loaded object; object already present, but with a different oid: " + object);
         }
     
-        LOG.debug("added loaded object as " + oid);
+        LOG.debug("added for OID " + oid + " - " + object);
         loaded.put(oid, object);
     }
 
