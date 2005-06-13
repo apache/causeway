@@ -10,7 +10,6 @@ import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.fixture.Fixture;
-import org.nakedobjects.object.help.HelpManager;
 import org.nakedobjects.object.help.HelpManagerAssist;
 import org.nakedobjects.object.help.SimpleHelpManager;
 import org.nakedobjects.object.persistence.OidGenerator;
@@ -65,9 +64,6 @@ public class JavaExploration {
             NakedObjects nakedObjects = new  NakedObjectsClient();
             nakedObjects.setConfiguration(configuration);
             ConfigurationFactory.setConfiguration(configuration);
-            if (configuration.getString(SHOW_EXPLORATION_OPTIONS) == null) {
-                configuration.add(SHOW_EXPLORATION_OPTIONS, "yes");
-            }
             PropertyConfigurator.configure(ConfigurationFactory.getConfiguration().getProperties("log4j"));
 
             Logger log = Logger.getLogger("Naked Objects");
@@ -167,7 +163,8 @@ public class JavaExploration {
         builder.installFixtures();
 
         SkylarkViewer viewer = new SkylarkViewer();
-
+        viewer.setExploration(true);
+        
         String[] classes = builder.getClasses();
         JavaExplorationContext context = new JavaExplorationContext();
         for (int i = 0; i < classes.length; i++) {
