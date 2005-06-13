@@ -135,8 +135,8 @@ public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
     }
 
     public void reset() {
-        loaded.clear();
-        pojos.reset();
+  //      loaded = new Hashtable();
+ //       pojos.reset();
     }
 
     /**
