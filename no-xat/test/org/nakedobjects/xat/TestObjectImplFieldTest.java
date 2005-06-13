@@ -1,6 +1,5 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.MockNakedObjectSpecification;
@@ -8,6 +7,7 @@ import org.nakedobjects.object.MockOneToManyPeer;
 import org.nakedobjects.object.MockOneToOnePeer;
 import org.nakedobjects.object.control.MockHint;
 import org.nakedobjects.object.control.NoOpAllow;
+import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.DummyNakedCollection;
 import org.nakedobjects.object.reflect.DummyNakedObject;
@@ -46,7 +46,7 @@ public class TestObjectImplFieldTest extends TestCase {
         object.setupHint(hint);
 
 
-        new NakedObjectsClient().setObjectManager(null);
+        new NakedObjectsClient().setObjectManager(new MockObjectManager());
     }
 
     public void testGetField() {
