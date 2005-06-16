@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.text;
 
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.Location;
 
@@ -105,6 +106,9 @@ public class TextContent {
 
     public void deleteLeft(CursorPosition cursorAt) {
         TextBlockReference block = getBlockFor(cursorAt.getLine());
+        if(block == null || block.block == null) {
+            throw new NakedObjectRuntimeException("invalid block " + block + " for line " + cursorAt.getLine());
+        }
         block.block.deleteLeft(block.line, cursorAt.getCharacter());
     }
 
