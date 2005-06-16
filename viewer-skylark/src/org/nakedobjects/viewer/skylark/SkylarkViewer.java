@@ -10,6 +10,7 @@ public class SkylarkViewer {
     private ViewUpdateNotifier updateNotifier;
     private ViewerFrame frame;
     private Viewer viewer;
+    private ViewerAssistant viewerAssistant;
     
     public SkylarkViewer() {
         frame = new ViewerFrame();
@@ -19,17 +20,14 @@ public class SkylarkViewer {
 
         frame.setViewer(viewer);
         
-        updateNotifier = new ViewUpdateNotifier();
-        NakedObjects.getObjectManager().addObjectChangedListener(updateNotifier);
+        //updateNotifier = new ViewUpdateNotifier();
         
         InteractionSpy spy = new InteractionSpy();
 
-        ViewerAssistant viewerAssistant = new ViewerAssistant();
+        viewerAssistant = new ViewerAssistant();
         viewerAssistant.setViewer(viewer);
         viewerAssistant.setDebugFrame(spy);
-        viewerAssistant.setUpdateNotifier(updateNotifier);
 
-        viewer.setUpdateNotifier(updateNotifier);
         viewer.setSpy(spy);
 
         setShutdownListener(new ObjectViewingMechanismListener() {
@@ -43,6 +41,8 @@ public class SkylarkViewer {
     }
     
     public void show() {        
+        NakedObjects.getObjectManager().addObjectChangedListener(updateNotifier);
+        
         frame.setBounds(10, 10, 800, 600);
         frame.show();    
         viewer.sizeChange();
@@ -63,6 +63,17 @@ public class SkylarkViewer {
     
     public void setExploration(boolean inExplorationMode) {
         viewer.setExploration(inExplorationMode);
+    }
+/*
+    public DirtyObjectSet getUpdateNotifier() {
+        return updateNotifier;
+    }
+*/    
+    public void setUpdateNotifier(ViewUpdateNotifier updateNotifier) {
+        this.updateNotifier = updateNotifier;
+
+        viewerAssistant.setUpdateNotifier(updateNotifier);
+        viewer.setUpdateNotifier(updateNotifier);
     }
 }
 
