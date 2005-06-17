@@ -365,6 +365,10 @@ public class XmlObjectStore implements NakedObjectStore {
         }
     }
 
+    public void reset() {
+        NakedObjects.getPojoAdapterFactory().reset();
+    }
+    
     public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException {
         LOG.info("start execution of transaction");
         for (int i = 0; i < commands.length; i++) {
