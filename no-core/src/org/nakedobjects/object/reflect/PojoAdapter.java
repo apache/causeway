@@ -28,9 +28,13 @@ public class PojoAdapter extends AbstractNakedObject {
         this.version = version;
     }
     
+    public void setOid(Oid oid) {
+        super.setOid(oid);
+        LOG.debug("set OID " + oid + " " + this);
+    }
+    
     protected PojoAdapter(Object pojo) {
         this.pojo = pojo;
-        LOG.debug("created " + this + " for " + pojo);
     }
 
     public void clearAssociation(NakedObjectAssociation specification, NakedObject associate) {
@@ -231,6 +235,7 @@ public class PojoAdapter extends AbstractNakedObject {
         
         str.append("specification", specification == null ? "undetermined" : specification.getShortName());
         str.append("title", titleString());
+        str.appendAsHex("pojo-hash", pojo.hashCode());
         return str.toString();
 
         
