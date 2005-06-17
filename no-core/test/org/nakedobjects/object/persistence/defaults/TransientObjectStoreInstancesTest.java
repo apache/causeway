@@ -1,13 +1,9 @@
 package org.nakedobjects.object.persistence.defaults;
 
-import org.nakedobjects.NakedObjectsClient;
-import org.nakedobjects.object.DummyNakedObjectSpecification;
-import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.MockOid;
-import org.nakedobjects.object.persistence.TitleCriteria;
+import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.DummyNakedObject;
 
-import java.util.Enumeration;
 import java.util.Vector;
 
 import junit.framework.TestCase;
@@ -18,65 +14,43 @@ import org.apache.log4j.Logger;
 
 
 public class TransientObjectStoreInstancesTest extends TestCase {
-    private MockOid oid;
     private MockTransientObjectStoreInstances instances;
-    private MockPojoAdapterFactory mockPojoAdapterFactory;
-    private TestObject object;
+    private int nextId = 0;
+    private Oid oid;
+
+    private Oid addInstance(String title) {
+        Oid oid = new MockOid(nextId++);
+        instances.addElement(oid, "one");
+        return oid;
+    }
 
     protected void setUp() throws Exception {
         BasicConfigurator.configure();
         Logger.getRootLogger().setLevel(Level.OFF);
 
         instances = new MockTransientObjectStoreInstances();
-        mockPojoAdapterFactory = new MockPojoAdapterFactory();
-        new NakedObjectsClient().setPojoAdapterFactory(mockPojoAdapterFactory);
-        instances.setLoaded(mockPojoAdapterFactory);
 
-        instances.addElement(new MockOid(1), new TestObject(), "one");
-
-        oid = new MockOid(2);
-        object = new TestObject();
-        instances.addElement(oid, object, "two");
-
-        instances.addElement(new MockOid(3), new TestObject(), "three");
+        addInstance("one");
+        oid = addInstance("two");
+        addInstance("three");
     }
 
-    public void testGetObjectWhichIsAlreadyLoaded() {
-        mockPojoAdapterFactory.setupLoaded(true);
+    public void testAdd() {
+        Oid oid = new MockOid(2);
         DummyNakedObject object = new DummyNakedObject();
-        mockPojoAdapterFactory.setupLoadedObject(object);
-        mockPojoAdapterFactory.setupExpectedOid(oid);
+        object.setOid(oid);
 
-        assertEquals(object, instances.getObject(oid));
+        instances.add(object);
+
+        assertEquals(4, instances.size());
+        assertEquals(oid, instances.objectInstances.elementAt(3));
     }
 
-    public void testGetNoObject() throws Exception {
-        mockPojoAdapterFactory.setupLoaded(false);
-        mockPojoAdapterFactory.setupExpectedOid(new MockOid(0));
-
-        assertEquals(null, instances.getObject(new MockOid(0)));
-    }
-
-    public void testGetObjectWhichIsNotYetLoaded() throws Exception {
-        mockPojoAdapterFactory.setupLoaded(false);
-        mockPojoAdapterFactory.setupExpectedPojo(object);
-        DummyNakedObject nakedObject = new DummyNakedObject();
-        mockPojoAdapterFactory.setupCreatedAdapter(nakedObject);
-        mockPojoAdapterFactory.setupExpectedOid(oid);
-
-        assertEquals(nakedObject, instances.getObject(oid));
-    }
-
-    public void testRemoveObject() throws Exception {
-        mockPojoAdapterFactory.setupLoaded(true);
-        DummyNakedObject object = new DummyNakedObject();
-        mockPojoAdapterFactory.setupLoadedObject(object);
-        mockPojoAdapterFactory.setupExpectedOid(oid);
-
-        instances.remove(oid);
-
-        assertFalse(instances.contains(oid));
-        assertEquals(2, instances.size());
+    public void testElements() {
+        Vector v = new Vector();
+        instances.instances(v);
+        assertEquals(3, v.size());
+        assertEquals(oid, v.elementAt(1));
     }
 
     public void testHasInstances() throws Exception {
@@ -91,59 +65,19 @@ public class TransientObjectStoreInstancesTest extends TestCase {
         assertEquals(0, instances.numberOfInstances());
     }
 
-    public void testElements() {
-    /*
-     * mockPojoAdapterFactory.setupLoaded(false);
-     * mockPojoAdapterFactory.setupExpectedPojo(object); DummyNakedObject
-     * nakedObject = new DummyNakedObject();
-     * mockPojoAdapterFactory.setupCreatedAdapter(nakedObject);
-     * 
-     * Enumeration e = instances.elements();
-     * 
-     * e.nextElement(); e.nextElement(); e.nextElement();
-     * assertFalse(e.hasMoreElements());
-     */
+    public void testRemoveObject() throws Exception {
+        instances.remove(oid);
+
+        assertFalse(instances.contains(oid));
+        assertEquals(2, instances.size());
     }
 
-    public void testNoElements() {
-        instances.objectInstances.clear();
+    public void testShutdownClearsAllInstances() {
+        instances.shutdown();
 
-        Enumeration e = instances.elements();
-        assertFalse(e.hasMoreElements());
+        assertEquals(0, instances.size());
     }
 
-    public void testOidForObject() {
-        assertEquals(oid, instances.getOidFor(object));
-    }
-
-    public void testSave() {
-        MockNakedObject mockNakedObject = new MockNakedObject();
-        MockOid oid = new MockOid(0);
-        mockNakedObject.setOid(oid);
-        TestObject object = new TestObject();
-        mockNakedObject.setupObject(object);
-        mockNakedObject.setupTitleString("four");
-
-        instances.save(mockNakedObject);
-
-        assertTrue(instances.objectInstances.containsKey(oid));
-        assertTrue(instances.objectInstances.contains(object));
-        assertTrue(instances.titleIndex.containsKey("four"));
-        assertTrue(instances.titleIndex.contains(oid));
-    }
-
-    public void testInstancesByCriteria() {
-        mockPojoAdapterFactory.setupExpectedOid(new MockOid(2));
-        mockPojoAdapterFactory.setupExpectedPojo(object);
-        DummyNakedObject nakedObject = new DummyNakedObject();
-        mockPojoAdapterFactory.setupCreatedAdapter(nakedObject);
-        
-        Vector vector = new Vector();
-        TitleCriteria criteria = new TitleCriteria(new DummyNakedObjectSpecification(), "two", false);
-        instances.instances(criteria, vector);
-        assertEquals(1, vector.size());
-        assertEquals(nakedObject, vector.elementAt(0));
-    }
 }
 
 /*

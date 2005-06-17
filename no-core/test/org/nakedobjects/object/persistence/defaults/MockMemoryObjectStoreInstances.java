@@ -3,7 +3,7 @@ package org.nakedobjects.object.persistence.defaults;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
 
-public class MockTransientObjectStoreInstances extends TransientObjectStoreInstances {
+public class MockMemoryObjectStoreInstances extends MemoryObjectStoreInstances {
 
     private PojoAdapterFactory factory;
     
@@ -11,13 +11,13 @@ public class MockTransientObjectStoreInstances extends TransientObjectStoreInsta
         return factory;
     }
 
-    public void addElement(Oid oid, String title) {
-        objectInstances.addElement(oid);
+    public void addElement(Oid oid, Object object, String title) {
+        objectInstances.put(oid, object);
         titleIndex.put(title, oid);
     }
 
     public boolean contains(Oid oid) {
-        return objectInstances.contains(oid);
+        return objectInstances.containsKey(oid);
     }
 
     public int size() {
