@@ -99,7 +99,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     public void resolve(Object object) {
         if (object != null) {
             NakedObject adapter = NakedObjects.getPojoAdapterFactory().createNOAdapter(object);
-            if (!adapter.isResolved()) {
+            if (adapter.isPersistent() && !adapter.isResolved()) {
                 objectManger().resolveImmediately(adapter);
             }
         }
