@@ -8,17 +8,11 @@ import org.nakedobjects.object.security.Session;
 
 
 public class NakedObjectsClient extends NakedObjects {
-
     protected PojoAdapterFactory adapterFactory;
     protected Configuration configuration;
     protected NakedObjectManager objectManager;
     protected Session session;
     protected NakedObjectSpecificationLoader specificationLoader;
-
-    public NakedObjectsClient() {
-    // calls no-arg constructor which sets this object to be the static
-    // instance.
-    }
 
     protected Configuration configuration() {
         return configuration;
