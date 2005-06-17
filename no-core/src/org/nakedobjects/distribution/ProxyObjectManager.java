@@ -27,6 +27,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     final static Logger LOG = Logger.getLogger(ProxyObjectManager.class);
     private ClientDistribution connection;
     private final Hashtable nakedClasses = new Hashtable();
+    private DirtyObjectSet updateNotifier;
     private DataFactory objectDataFactory;
     private Session session;
 
@@ -149,7 +150,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         
         LOG.debug("resolve object (remotely from server)" + oid);
         ObjectData data = connection.getObject(session, oid, hint.getFullName());
-        DataHelper.update(data);
+        DataHelper.update(data, updateNotifier);
 
         if(object.isResolved()) {
             LOG.error("Object already resolved, no need to set resolve flag");
@@ -171,7 +172,6 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         this.connection = connection;
     }
 
-
     /**
      * .NET property
      * 
@@ -185,6 +185,19 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         this.connection = connection;
     }
 
+    /**
+     * .NET property
+     * 
+     * @property
+     */
+    public void set_UpdateNotifier(DirtyObjectSet updateNotifier) {
+        this.updateNotifier = updateNotifier;
+    }
+
+    public void setUpdateNotifier(DirtyObjectSet updateNotifier) {
+        this.updateNotifier = updateNotifier;
+    }
+    
     public void setObjectDataFactory(DataFactory factory) {
         this.objectDataFactory = factory;
     }
