@@ -52,7 +52,7 @@ public class NakedObjectsByThread extends NakedObjects {
         return getLocal().session;
     }
 
-    private NakedObjectsData getLocal() {
+    protected NakedObjectsData getLocal() {
         Thread thread = Thread.currentThread();
         LOG.info("in " + thread);       
         NakedObjectsData local = (NakedObjectsData) threads.get(thread);

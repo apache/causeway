@@ -72,9 +72,6 @@ public class ServerDistribution implements ClientDistribution {
             Oid objectOid, String objectType, Data[] parameterData) {
         NakedObject object = getNakedObject(session, objectOid, objectType);
 
-        // TEMP - TO BE REMOVED
-        ((LocalObjectManager) objectManager()).tempResetDirty();
-
         NakedObjectSpecification[] parameterSpecifiactions = new NakedObjectSpecification[parameterTypes.length];
         for (int i = 0; i < parameterSpecifiactions.length; i++) {
             parameterSpecifiactions[i] = getSpecification(parameterTypes[i]);
@@ -108,6 +105,9 @@ public class ServerDistribution implements ClientDistribution {
                 throw new NakedObjectRuntimeException();
             }
         }
+
+        // TEMP - TO BE REMOVED
+        ((LocalObjectManager) objectManager()).tempResetDirty();
 
         try {
             NakedObject result = (NakedObject) object.execute(action, parameters);
