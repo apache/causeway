@@ -114,7 +114,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         if(transactionLevel == 0) {
 	        try {
 	        	// TODO collate changes befor committing
-	        	//    saveChanges();
+	            saveChanges();
 	            getTransaction().commit(objectStore);
 	            transaction = null;
 	        } catch (ObjectStoreException e) {
@@ -373,7 +373,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     public void reset() {
-        NakedObjects.getPojoAdapterFactory().reset();
+        objectStore.reset();
     }
 
     public void resolveLazily(NakedObject object, NakedObjectField field) {
@@ -397,7 +397,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         }
 
         if (!isPersistent(object)) {
-            LOG.debug("ignored resolve request as not persistent " + object);
+            LOG.warn("ignoring resolve request as not a persistent object: " + object);
             return;
         }
 
