@@ -34,7 +34,7 @@ public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
     private PojoAdapterHash pojos;
     private ReflectorFactory reflectorFactory;
 
-    public Naked createAdapter(Object pojo) {
+    public Naked createAdapter(final Object pojo) {
         if (pojo == null) {
             return null;
         }
@@ -70,12 +70,14 @@ public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
             if (nakedObject == null) {
                 nakedObject = new PojoAdapter(pojo);
                 pojos.add(pojo, nakedObject);
+   //             NakedObjects.getObjectManager().resolveImmediately((NakedObject) nakedObject);
+                LOG.debug("created PojoAdapter@" + Integer.toHexString(nakedObject.hashCode()) + " for " + pojo);                
             }
         }
         return nakedObject;
     }
 
-    public NakedObject createNOAdapter(Object pojo) {
+    public NakedObject createNOAdapter(final Object pojo) {
         return (NakedObject) createAdapter(pojo);
     }
 
@@ -130,13 +132,13 @@ public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
                     "cannot add as loaded object; object already present, but with a different oid: " + object);
         }
     
-        LOG.debug("added for OID " + oid + " - " + object);
+        LOG.debug("loaded for OID " + oid + " - " + object);
         loaded.put(oid, object);
     }
 
     public void reset() {
-  //      loaded = new Hashtable();
- //       pojos.reset();
+        loaded = new Hashtable();
+        pojos.reset();
     }
 
     /**

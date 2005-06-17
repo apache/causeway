@@ -152,6 +152,8 @@ public interface NakedObjectStore extends DebugInfo {
 
     public void startTransaction() throws ObjectStoreException;
 
+    public void reset();
+
 }
 
 /*
