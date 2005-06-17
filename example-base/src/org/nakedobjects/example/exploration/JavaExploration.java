@@ -4,7 +4,6 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
@@ -27,6 +26,7 @@ import org.nakedobjects.system.AboutNakedObjects;
 import org.nakedobjects.system.SplashWindow;
 import org.nakedobjects.utility.StartupException;
 import org.nakedobjects.viewer.skylark.SkylarkViewer;
+import org.nakedobjects.viewer.skylark.ViewUpdateNotifier;
 
 import java.util.Locale;
 import java.util.Properties;
@@ -40,7 +40,6 @@ import org.apache.log4j.PropertyConfigurator;
 public class JavaExploration {
     private static final String DEFAULT_CONFIG = "nakedobjects.properties";
     private static final Logger LOG = Logger.getLogger(JavaExploration.class);
-    private static final String SHOW_EXPLORATION_OPTIONS = "nakedobjects.viewer.skylark.show-exploration";
 
     private SplashWindow splash;
     private JavaFixtureBuilder builder;
@@ -63,15 +62,14 @@ public class JavaExploration {
             Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(DEFAULT_CONFIG, false));
             NakedObjects nakedObjects = new  NakedObjectsClient();
             nakedObjects.setConfiguration(configuration);
-            ConfigurationFactory.setConfiguration(configuration);
-            PropertyConfigurator.configure(ConfigurationFactory.getConfiguration().getProperties("log4j"));
+            PropertyConfigurator.configure(configuration.getProperties("log4j"));
 
             Logger log = Logger.getLogger("Naked Objects");
             log.info(AboutNakedObjects.getName());
             log.info(AboutNakedObjects.getVersion());
             log.info(AboutNakedObjects.getBuildId());
 
-            boolean noSplash = ConfigurationFactory.getConfiguration().getBoolean("nosplash", false);
+            boolean noSplash = configuration.getBoolean("nosplash", false);
             if (!noSplash) {
                 splash = new SplashWindow();
             }
@@ -127,8 +125,6 @@ public class JavaExploration {
             }
 
             builder = new JavaFixtureBuilder();
-//            explorationFixture = new ExplorationFixture(builder);
- //           builder.addFixture(explorationFixture);
         } finally {
             if (splash != null) {
                 splash.removeAfterDelay(4);
@@ -137,7 +133,7 @@ public class JavaExploration {
     }
 
     private void setUpLocale() {
-        String localeSpec = ConfigurationFactory.getConfiguration().getString("locale");
+        String localeSpec = NakedObjects.getConfiguration().getString("locale");
         if (localeSpec != null) {
             int pos = localeSpec.indexOf('_');
             Locale locale;
@@ -163,6 +159,7 @@ public class JavaExploration {
         builder.installFixtures();
 
         SkylarkViewer viewer = new SkylarkViewer();
+        viewer.setUpdateNotifier(new ViewUpdateNotifier());
         viewer.setExploration(true);
         
         String[] classes = builder.getClasses();
@@ -186,27 +183,6 @@ public class JavaExploration {
     public Object createInstance(Class cls) {
         return builder.createInstance(cls.getName());
     }
-    /*
-    private static class ExplorationFixture extends JavaFixture {
-        private final FixtureBuilder builder;
-
-        public ExplorationFixture(FixtureBuilder builder) {
-           this. builder = builder;
-        }
-
-        protected FixtureBuilder getBuilder() {
-            return builder;
-        }
-
-        public void setBuilder(FixtureBuilder builder) {}
-
-        public void install() {}
-
-        protected final void addClass(Class cls) {
-            builder.registerClass(cls.getName());
-        }
-    }
-*/
 }
 
 /*

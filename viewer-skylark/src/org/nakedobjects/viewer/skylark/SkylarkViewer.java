@@ -20,8 +20,6 @@ public class SkylarkViewer {
 
         frame.setViewer(viewer);
         
-        //updateNotifier = new ViewUpdateNotifier();
-        
         InteractionSpy spy = new InteractionSpy();
 
         viewerAssistant = new ViewerAssistant();
@@ -64,16 +62,30 @@ public class SkylarkViewer {
     public void setExploration(boolean inExplorationMode) {
         viewer.setExploration(inExplorationMode);
     }
-/*
-    public DirtyObjectSet getUpdateNotifier() {
-        return updateNotifier;
+
+    /**
+     * Expose as a .NET property
+     * 
+     * @property
+     */
+    public void set_Exploration(boolean inExplorationMode) {
+        setExploration(inExplorationMode);
     }
-*/    
+
     public void setUpdateNotifier(ViewUpdateNotifier updateNotifier) {
         this.updateNotifier = updateNotifier;
 
         viewerAssistant.setUpdateNotifier(updateNotifier);
         viewer.setUpdateNotifier(updateNotifier);
+    }
+
+    /**
+     * Expose as a .NET property
+     * 
+     * @property
+     */
+    public void set_UpdateNotifier(ViewUpdateNotifier updateNotifier) {
+        setUpdateNotifier(updateNotifier);
     }
 }
 
