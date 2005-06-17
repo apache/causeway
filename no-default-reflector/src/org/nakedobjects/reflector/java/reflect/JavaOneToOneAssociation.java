@@ -153,7 +153,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         try {
             setMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(setMethod + " method doesn't expect a " + associate.getClass().getName());
+            throw new IllegalArgumentException(setMethod + " method doesn't expect a " + associate.getObject().getClass().getName());
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + setMethod, e);
         } catch (IllegalAccessException ignore) {

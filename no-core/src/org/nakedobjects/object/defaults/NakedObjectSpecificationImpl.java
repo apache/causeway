@@ -84,7 +84,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
      * returned using the getJavaType method).
      */
     public Naked acquireInstance() {
-        LOG.info("acquire instance of " + getShortName());
+        LOG.debug("acquire instance of " + getShortName());
         return reflector.acquireInstance();
     }
 

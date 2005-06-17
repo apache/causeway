@@ -36,4 +36,75 @@
   also be specified.</para>
 
   <property-listing>org.nakedobjects.viewer.skylark.spacing.&lt;area&gt;=&lt;pixels&gt;</property-listing>
+
+
+  <para>Exploration menus are only shown during exploration, and not when running as a client 
+	or standalone. This property allows you to turn off the default displaying of exploration option
+	during exploration: to then bring the options up you can hold down the Ctrl key while right-clicking
+	to bring up the menu.</para>
+
+  <property-listing>nakedobjects.viewer.skylark.show-exploration=off</property-listing>
+
+
+  <para>For debugging purposes details about the mouse interaction can be seen in a separate window.  Add the following property to show the window.</para>
+
+  <property-listing>nakedobjects.viewer.skylark.show-mouse-spy</property-listing>
+
+
+	<property-listing>
+# uncomment to hide splash
+#nakedobjects.nosplash
+
+nakedobjects.locale=en_GB
+#nakedobjects.locale=ja_JP
+#nakedobjects.locale=fr_FR
+
+
+nakedobjects.viewer=org.nakedobjects.viewer.skylark.ViewerFrame
+
+nakedobjects.viewer.skylark.specification.root=org.nakedobjects.viewer.skylark.special.RootWorkspaceSpecification
+
+#nakedobjects.viewer.skylark.debugstatus=on
+nakedobjects.viewer.skylark.show-exploration=on
+
+nakedobjects.viewer.skylark.specification.defaults=off
+nakedobjects.viewer.skylark.specification.root=org.nakedobjects.viewer.skylark.special.RootWorkspaceSpecification
+nakedobjects.viewer.skylark.specification.icon.class=org.nakedobjects.viewer.skylark.metal.ClassIcon$Specification
+nakedobjects.viewer.skylark.specification.field.text=org.nakedobjects.viewer.skylark.metal.TextFieldSpecification
+nakedobjects.viewer.skylark.specification.field.option=org.nakedobjects.viewer.skylark.metal.OptionFieldSpecification
+nakedobjects.viewer.skylark.specification.view=org.nakedobjects.viewer.skylark.metal.NakedErrorViewSpecification,\
+	org.nakedobjects.viewer.skylark.metal.FindFormSpecification,\
+	org.nakedobjects.viewer.skylark.metal.ListSpecification,\
+	org.nakedobjects.viewer.skylark.metal.TableSpecification,\
+	org.nakedobjects.viewer.skylark.metal.TreeBrowserSpecification,\
+	org.nakedobjects.viewer.skylark.tree.FullTreeBrowserSpecification,\
+	org.nakedobjects.viewer.skylark.metal.FormSpecification,
+nakedobjects.viewer.skylark.class-icon-size = 35
+
+# lightweight viewing mechanism (default)
+#nakedobjects.viewer.skylark.font.normal=SansSerif--12
+#nakedobjects.viewer.skylark.font.class=Helvetica--12
+#nakedobjects.viewer.skylark.font.title=SansSerif-bold-16
+#nakedobjects.viewer.skylark.font.label=Helvetica-italic-11
+#nakedobjects.viewer.skylark.font.status=SansSerif--11
+nakedobjects.viewer.skylark.font.debug=MonoSpaced--11
+
+nakedobjects.viewer.skylark.show-exploration=off
+
+#nakedobjects.viewer.skylark.fallback-image=Unknown.gif
+#nakedobjects.viewer.skylark.color.background.application=#ccffcc
+#nakedobjects.viewer.skylark.color.object.identified=#335533
+#nakedobjects.viewer.skylark.doublebuffering=no
+#org.nakedobjects.viewer.skylark.border-controls=off 
+#nakedobjects.viewer.skylark.hpadding=18
+#nakedobjects.viewer.skylark.vpadding=6
+#nakedobjects.viewer.skylark.background=org.nakedobjects.viewer.skylark.util.LogoBackground
+
+#nakedobjects.viewer.skylark.color.application.background=#ddffdd
+#nakedobjects.viewer.skylark.color.window.background=#ddeedd
+#nakedobjects.viewer.skylark.color.org.nakedobjects.viewer.skylark.metal.ListSpecification.background=#eeffee
+#nakedobjects.viewer.skylark.color.org.nakedobjects.viewer.skylark.metal.TreeBrowserSpecification.background.right=#aaccdd
+nakedobjects.viewer.skylark.color.org.nakedobjects.viewer.skylark.metal.TreeBrowserSpecification.background.left=#ddffdd
+
+</property-listing>
 </section>
