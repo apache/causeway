@@ -1,6 +1,7 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -76,7 +77,7 @@ public class DataHelper {
       }
     }
 
-    public static void update(ObjectData data) {
+    public static void update(ObjectData data, DirtyObjectSet updateNotifier) {
         Oid oid = data.getOid();
         Object[] fieldContent = data.getFieldContent();
         String type = data.getType();
@@ -97,13 +98,10 @@ public class DataHelper {
 			object.setResolved();
 		}
 
+		updateNotifier.addDirty(object);
+		
         NakedObjectField[] fields = object.getSpecification().getFields();
-        if (fields.length == 0) {
-            for (int i = 0; i < fieldContent.length; i++) {
-
-            }
-
-        } else {
+        if (fields.length > 0) {
             for (int i = 0; i < fields.length; i++) {
                 if (fields[i].isCollection()) {
                     if (fieldContent[i] != null) {
