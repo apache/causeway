@@ -97,8 +97,6 @@ public class DataHelper {
 		if (!object.isResolved() && data.isResolved()){
 			object.setResolved();
 		}
-
-		updateNotifier.addDirty(object);
 		
         NakedObjectField[] fields = object.getSpecification().getFields();
         if (fields.length > 0) {
@@ -125,6 +123,8 @@ public class DataHelper {
                 }
             }
         }
+
+		updateNotifier.addDirty(object);
     }
 
     private static PojoAdapterFactory loadedObjects() {
