@@ -26,8 +26,6 @@ public class ClientConnection {
             input = new ObjectInputStream(socket.getInputStream());
             output = new ObjectOutputStream(socket.getOutputStream());
             LOG.debug("Connnection established " + socket);
-            //  	receiver = new ClientUpdateReceiver(input);
-            //  	LOG.debug("Reciever waiting " + receiver);
         } catch (MalformedURLException e) {
             throw new NakedObjectRuntimeException(e);
         } catch (UnknownHostException e) {
