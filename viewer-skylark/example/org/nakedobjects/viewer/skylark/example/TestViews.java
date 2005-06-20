@@ -6,13 +6,11 @@ import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoaderNew;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.utility.InfoDebugFrame;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.InteractionSpy;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.ViewUpdateNotifier;
 import org.nakedobjects.viewer.skylark.Viewer;
-import org.nakedobjects.viewer.skylark.ViewerAssistant;
 import org.nakedobjects.viewer.skylark.ViewerFrame;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
@@ -45,16 +43,7 @@ public class TestViews {
         ViewerFrame frame = new ViewerFrame();
         frame.setViewer(viewer);
         viewer.setRenderingArea(frame);
-        InteractionSpy spyWindow = new InteractionSpy();
-        viewer.setSpy(spyWindow);
-        spyWindow.open();
-        ViewUpdateNotifier notifier = new ViewUpdateNotifier();
-        viewer.setUpdateNotifier(notifier);
-
-        new ViewerAssistant();
-        ViewerAssistant.getInstance().setViewer(viewer);
-        ViewerAssistant.getInstance().setUpdateNotifier(notifier);
-        ViewerAssistant.getInstance().setDebugFrame(spyWindow);
+        viewer.setUpdateNotifier(new ViewUpdateNotifier());
 
         AbstractView.debug = false;
 
@@ -64,13 +53,15 @@ public class TestViews {
 
         views(workspace);
 
+        viewer.init();
+        viewer.showSpy();
+
         InfoDebugFrame debug = new InfoDebugFrame();
         debug.setInfo(new DebugView(workspace));
         debug.setSize(800, 600);
         debug.setLocation(400, 300);
         debug.show();
 
-        viewer.start();
         frame.setBounds(200, 100, 800, 600);
         frame.show();
         viewer.sizeChange();

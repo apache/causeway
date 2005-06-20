@@ -19,7 +19,7 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewDrag;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.ViewState;
-import org.nakedobjects.viewer.skylark.ViewerAssistant;
+import org.nakedobjects.viewer.skylark.Viewer;
 import org.nakedobjects.viewer.skylark.Workspace;
 
 
@@ -206,7 +206,7 @@ public class AbstractViewDecorator implements View {
         return wrappedView.getViewAxis();
     }
 
-    public ViewerAssistant getViewManager() {
+    public Viewer getViewManager() {
         return wrappedView.getViewManager();
     }
 

@@ -1,10 +1,5 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.container.configuration.ComponentException;
-import org.nakedobjects.container.configuration.ConfigurationException;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.viewer.ObjectViewingMechanismListener;
-
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.event.ComponentAdapter;
@@ -58,10 +53,6 @@ public class ViewerFrame extends Frame implements RenderingArea {
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
-    }
-
-    public void init(NakedObject object, ObjectViewingMechanismListener listener) throws ConfigurationException, ComponentException {
-        viewer.init(this, object, listener);
     }
 
     /**

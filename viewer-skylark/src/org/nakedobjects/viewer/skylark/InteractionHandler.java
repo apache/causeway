@@ -19,11 +19,50 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     private View previouslyIdentifiedView;
     private InteractionSpy spy;
     private final Viewer viewer;
+
+    /**
+     * Responds to mouse click events by calling <code>firstClick</code>,
+     * <code>secondClick</code>, and <code>thirdClick</code> on the view
+     * that the mouse is over. Ignored if the mouse is not over a view.
+     * 
+     * @see java.awt.event.MouseListener#mouseClicked(MouseEvent)
+     */
+    public void mouseClicked(MouseEvent me) {
+        Click click = new Click(previouslyIdentifiedView, downAt, me.getModifiers());
+        spy.addAction("Mouse clicked " + click.getLocation());
+    
+    
+        if (click.button3() && viewer.getOverlayView() == null) {
+            if (previouslyIdentifiedView != null) {
+                spy.addAction(" popup " + downAt + " over " + previouslyIdentifiedView);
+                viewer.popupMenu(previouslyIdentifiedView, click);
+            }
+    
+        } else {
+            switch (me.getClickCount()) {
+            case 1:
+                viewer.firstClick(click);
+                break;
+    
+            case 2:
+                viewer.secondClick(click);
+                break;
+    
+            case 3:
+                viewer.thirdClick(click);
+                break;
+    
+            default:
+                break;
+            }
+        }
+        redraw();
+    }
     private final KeyboardManager keyboardManager;
     
-    InteractionHandler(Viewer viewer, InteractionSpy debugFrame) {
+    InteractionHandler(Viewer viewer, InteractionSpy spy) {
         this.viewer = viewer;
-        this.spy = debugFrame;
+        this.spy = spy;
         keyboardManager = new KeyboardManager(viewer);
     }
 
@@ -111,45 +150,6 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
             keyboardManager.typed(ke.getKeyChar());
             redraw();
         }
-    }
-
-    /**
-     * Responds to mouse click events by calling <code>firstClick</code>,
-     * <code>secondClick</code>, and <code>thirdClick</code> on the view
-     * that the mouse is over. Ignored if the mouse is not over a view.
-     * 
-     * @see java.awt.event.MouseListener#mouseClicked(MouseEvent)
-     */
-    public void mouseClicked(MouseEvent me) {
-        Click click = new Click(previouslyIdentifiedView, downAt, me.getModifiers());
-        spy.addAction("Mouse clicked " + click.getLocation());
-
-
-        if (click.button3() && viewer.getOverlayView() == null) {
-            if (previouslyIdentifiedView != null) {
-                spy.addAction(" popup " + downAt + " over " + previouslyIdentifiedView);
-                viewer.popupMenu(previouslyIdentifiedView, click);
-            }
-
-        } else {
-            switch (me.getClickCount()) {
-            case 1:
-                viewer.firstClick(click);
-                break;
-
-            case 2:
-                viewer.secondClick(click);
-                break;
-
-            case 3:
-                viewer.thirdClick(click);
-                break;
-
-            default:
-                break;
-            }
-        }
-        redraw();
     }
 
     /**

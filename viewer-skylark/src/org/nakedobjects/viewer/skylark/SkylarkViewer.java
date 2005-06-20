@@ -3,6 +3,7 @@ package org.nakedobjects.viewer.skylark;
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.ApplicationContext;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.utility.StartupException;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.special.RootWorkspaceSpecification;
 
@@ -10,57 +11,61 @@ public class SkylarkViewer {
     private ViewUpdateNotifier updateNotifier;
     private ViewerFrame frame;
     private Viewer viewer;
-    private ViewerAssistant viewerAssistant;
+    private ObjectViewingMechanismListener shutdownListener;
+    private boolean inExplorationMode;
+    private ApplicationContext applicationContext;
+    private Bounds bounds;
     
-    public SkylarkViewer() {
+    public void init() {
+        if(updateNotifier == null) {
+            throw new StartupException("No update notifier set for " + this);
+        }
+        if(shutdownListener == null) {
+            throw new StartupException("No shutdown listener set for " + this);
+        }
+        if(bounds == null) {
+            bounds = new Bounds(10, 10, 800, 600);
+        }
+        
         frame = new ViewerFrame();
+        frame.setBounds(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
         
         viewer = new Viewer();
         viewer.setRenderingArea(frame);
+        viewer.setUpdateNotifier(updateNotifier);
+        viewer.setListener(shutdownListener);
+        viewer.setExploration(inExplorationMode);
 
         frame.setViewer(viewer);
         
-        InteractionSpy spy = new InteractionSpy();
-
-        viewerAssistant = new ViewerAssistant();
-        viewerAssistant.setViewer(viewer);
-        viewerAssistant.setDebugFrame(spy);
-
-        viewer.setSpy(spy);
-
-        setShutdownListener(new ObjectViewingMechanismListener() {
-            public void viewerClosing() {
-                System.out.println("EXITED");
-                System.exit(0);
-            }
-        });
-        
-        viewer.start();
-    }
-    
-    public void show() {        
         NakedObjects.getObjectManager().addObjectChangedListener(updateNotifier);
-        
-        frame.setBounds(10, 10, 800, 600);
+                
+        viewer.init();
+    
+        NakedObject rootObject = NakedObjects.getPojoAdapterFactory().createNOAdapter(applicationContext);
+        RootWorkspaceSpecification spec = new RootWorkspaceSpecification();
+        View view = spec.createView(new RootObject(rootObject), null);
+        viewer.setRootView(view);
+ 
+        frame.setTitle(applicationContext.name());
         frame.show();    
         viewer.sizeChange();
     }
 
     public void setApplication(ApplicationContext applicationContext) {
-        NakedObject rootObject = NakedObjects.getPojoAdapterFactory().createNOAdapter(applicationContext);
-        RootWorkspaceSpecification spec = new RootWorkspaceSpecification();
-        View view = spec.createView(new RootObject(rootObject), null);
-        viewer.setRootView(view);
-        
-        frame.setTitle(applicationContext.name());
+        this.applicationContext = applicationContext;
     }
 
-    public void setShutdownListener(ObjectViewingMechanismListener listener) {
-        viewer.setListener(listener);
+    public void setBounds(Bounds bounds) {
+        this.bounds = bounds;
+    }
+    
+    public void setShutdownListener(ObjectViewingMechanismListener shutdownListener) {
+        this.shutdownListener = shutdownListener;
     }
     
     public void setExploration(boolean inExplorationMode) {
-        viewer.setExploration(inExplorationMode);
+        this.inExplorationMode = inExplorationMode;
     }
 
     /**
@@ -72,11 +77,17 @@ public class SkylarkViewer {
         setExploration(inExplorationMode);
     }
 
+    /**
+     * Expose as a .NET property
+     * 
+     * @property
+     */
+    public void set_Application(ApplicationContext applicationContext) {
+        setApplication(applicationContext);
+    }
+    
     public void setUpdateNotifier(ViewUpdateNotifier updateNotifier) {
         this.updateNotifier = updateNotifier;
-
-        viewerAssistant.setUpdateNotifier(updateNotifier);
-        viewer.setUpdateNotifier(updateNotifier);
     }
 
     /**
@@ -87,6 +98,17 @@ public class SkylarkViewer {
     public void set_UpdateNotifier(ViewUpdateNotifier updateNotifier) {
         setUpdateNotifier(updateNotifier);
     }
+    
+
+    /**
+     * Expose as a .NET property
+     * 
+     * @property
+     */
+    public void set_ShutdownListener(ObjectViewingMechanismListener listener) {
+        setShutdownListener(listener);
+    }
+
 }
 
 

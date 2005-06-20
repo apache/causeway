@@ -25,6 +25,7 @@ import org.nakedobjects.reflector.java.reflect.JavaReflectorFactory;
 import org.nakedobjects.system.AboutNakedObjects;
 import org.nakedobjects.system.SplashWindow;
 import org.nakedobjects.utility.StartupException;
+import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.SkylarkViewer;
 import org.nakedobjects.viewer.skylark.ViewUpdateNotifier;
 
@@ -161,6 +162,12 @@ public class JavaExploration {
         SkylarkViewer viewer = new SkylarkViewer();
         viewer.setUpdateNotifier(new ViewUpdateNotifier());
         viewer.setExploration(true);
+        viewer.setShutdownListener(new ObjectViewingMechanismListener() {
+            public void viewerClosing() {
+                System.out.println("EXITED");
+                System.exit(0);
+            }
+        });
         
         String[] classes = builder.getClasses();
         JavaExplorationContext context = new JavaExplorationContext();
@@ -168,7 +175,8 @@ public class JavaExploration {
             context.addClass(classes[i]);
         }
         viewer.setApplication(context);
-        viewer.show();
+
+        viewer.init();
 
         if (splash != null) {
             splash.toFront();

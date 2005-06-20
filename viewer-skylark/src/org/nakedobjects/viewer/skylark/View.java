@@ -188,7 +188,7 @@ public interface View extends Cloneable {
 
     ViewAxis getViewAxis();
 
-    ViewerAssistant getViewManager();
+    Viewer getViewManager();
 
     Workspace getWorkspace();
 

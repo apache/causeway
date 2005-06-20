@@ -28,7 +28,7 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewDrag;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.ViewState;
-import org.nakedobjects.viewer.skylark.ViewerAssistant;
+import org.nakedobjects.viewer.skylark.Viewer;
 import org.nakedobjects.viewer.skylark.Workspace;
 
 import java.util.Enumeration;
@@ -54,6 +54,7 @@ public abstract class AbstractView implements View {
     private int width;
     private int x;
     private int y;
+ //   private Viewer viewer;
 
     protected AbstractView(Content content, ViewSpecification specification, ViewAxis axis) {
         assignId();
@@ -143,7 +144,7 @@ public abstract class AbstractView implements View {
         if (parent != null) {
             parent.removeView(getView());
         } else {
-            ViewerAssistant.getInstance().clearOverlayView(this);
+            getViewManager().clearOverlayView(this);
         }
     }
 
@@ -283,10 +284,15 @@ public abstract class AbstractView implements View {
         return viewAxis;
     }
 
-    public ViewerAssistant getViewManager() {
-        return ViewerAssistant.getInstance();
+    public Viewer getViewManager() {
+//        return viewer;
+        return Viewer.getInstance();
     }
-
+    
+/*    public void setViewer(Viewer viewer) {
+        this.viewer = viewer;
+    }
+*/
     public Workspace getWorkspace() {
         return getParent() == null ? null : getParent().getWorkspace();
     }

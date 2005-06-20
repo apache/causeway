@@ -4,14 +4,22 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.container.configuration.ComponentException;
 import org.nakedobjects.container.configuration.ComponentLoader;
 import org.nakedobjects.container.configuration.ConfigurationException;
-import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.control.AbstractConsent;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.persistence.NakedObjectManager;
+import org.nakedobjects.object.undo.UndoStack;
+import org.nakedobjects.utility.DebugFileDump;
 import org.nakedobjects.utility.DebugFrame;
+import org.nakedobjects.utility.InfoDebugFrame;
+import org.nakedobjects.utility.StartupException;
+import org.nakedobjects.utility.ToString;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.basic.EmptyField;
 import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
 import org.nakedobjects.viewer.skylark.basic.SubviewIconSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.DefaultPopupMenu;
+import org.nakedobjects.viewer.skylark.core.OverlayDebugFrame;
 import org.nakedobjects.viewer.skylark.metal.ClassIcon;
 import org.nakedobjects.viewer.skylark.metal.FormSpecification;
 import org.nakedobjects.viewer.skylark.metal.ListSpecification;
@@ -20,7 +28,6 @@ import org.nakedobjects.viewer.skylark.metal.TextFieldSpecification;
 import org.nakedobjects.viewer.skylark.metal.TreeBrowserSpecification;
 import org.nakedobjects.viewer.skylark.special.DataFormSpecification;
 import org.nakedobjects.viewer.skylark.special.InnerWorkspaceSpecification;
-import org.nakedobjects.viewer.skylark.special.RootWorkspaceSpecification;
 import org.nakedobjects.viewer.skylark.special.WorkspaceSpecification;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
 import org.nakedobjects.viewer.skylark.value.CheckboxField;
@@ -35,6 +42,8 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.StringTokenizer;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 
@@ -56,15 +65,23 @@ public class Viewer {
     private boolean runningAsExploration;
     private boolean showExplorationMenuByDefault;
     private ObjectViewingMechanismListener listener;
-    private ViewUpdateNotifier updateNotifier;
+    protected ViewUpdateNotifier updateNotifier;
     private View keyboardFocus;
     private Size internalDisplaySize;
     private Insets insets;
     private int statusBarHeight;
     private Bounds statusBarArea;
     private InteractionSpy spy;
+    private final UndoStack undoStack = new UndoStack();
+
+
+	private static Viewer instance;
+    public static Viewer getInstance() {
+        return instance;
+    }
 
     public Viewer() {
+        instance = this;    
         doubleBuffering = NakedObjects.getConfiguration().getBoolean(PROPERTY_BASE + "doublebuffering", true);
         showExplorationMenuByDefault = NakedObjects.getConfiguration().getBoolean(PROPERTY_BASE + "show-exploration", true);
         redrawArea = new Bounds();
@@ -101,32 +118,6 @@ public class Viewer {
 
     public View getOverlayView() {
         return overlayView;
-    }
-
-    public void init(RenderingArea renderingArea, NakedObject object, ObjectViewingMechanismListener listener)
-            throws ConfigurationException, ComponentException {
-        init(renderingArea, listener);
-
-        WorkspaceSpecification spec = (WorkspaceSpecification) ComponentLoader.loadComponent(SPECIFICATION_BASE + "root",
-                RootWorkspaceSpecification.class, WorkspaceSpecification.class);
-        View view = spec.createView(new RootObject(object), null);
-        setRootView(view);
-    }
-
-    public void init(RenderingArea renderingArea, ObjectViewingMechanismListener listener) throws ConfigurationException,
-            ComponentException {
- 
-        /*
-         * background = (Background)
-         * ComponentLoader.loadComponent(PARAMETER_BASE + "background",
-         * Background.class);
-         */
-        this.renderingArea = renderingArea;
-        this.listener = listener;
-        
-        spy = new InteractionSpy();
-        new ViewerAssistant(this, updateNotifier, spy);
-
     }
 
     public void setRootView(View rootView) {
@@ -258,20 +249,10 @@ public class Viewer {
     protected void popupMenu(View over, Click click) {
         Location at = click.getLocation();
         boolean forView = rootView.viewAreaType(new Location(click.getLocation())) == ViewAreaType.VIEW;
-
-/*        forView = (click.isCtrl() && !click.isShift()) ^ forView;
-        boolean includeExploration = click.isShift() || explorationMode;
-        boolean includeDebug = click.isShift() && click.isCtrl();
-*/
         
         forView = click.isAlt() ^ forView;
         boolean includeExploration = runningAsExploration && (click.isCtrl() || showExplorationMenuByDefault);
         boolean includeDebug = click.isShift() && click.isCtrl();
-     /*   
-        forView = click.button4() ^ forView;
-        boolean includeExploration = click.button5();//click.isShift() || explorationMode;
-        boolean includeDebug = click.button6(); //click.isShift() && click.isCtrl();
-        */
 
         popup.init(over, rootView, at, forView, includeExploration, includeDebug);
         setOverlayView(popup);
@@ -384,7 +365,13 @@ public class Viewer {
         return (ViewSpecification) ComponentLoader.loadComponent(SPECIFICATION_BASE + name, cls, ViewSpecification.class);
     }
 
-    public void start() {
+    public void init() {
+        if(updateNotifier == null) {
+            throw new StartupException("No update notifier set for " + this);
+        }
+        
+        spy = new InteractionSpy();
+
         popup = new DefaultPopupMenu();
 
         InteractionHandler interactionHandler = new InteractionHandler(this, spy);
@@ -424,7 +411,11 @@ public class Viewer {
     }
 
     public String toString() {
-        return "Viewer [renderingArea=" + renderingArea + ",redrawArea=" + redrawArea + ",rootView=" + rootView + "]";
+        ToString str = new ToString(this);
+        str.append("renderingArea", renderingArea);
+        str.append("redrawArea", redrawArea);
+        str.append("rootView", rootView);
+        return str.toString();
     }
 
     public void translate(MouseEvent me) {
@@ -521,10 +512,15 @@ public class Viewer {
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
 
-    InteractionSpy getSpy() {
+    public InteractionSpy getSpy() {
         return spy;
     }
 
+    public void showSpy() {
+        spy.open();
+    }
+    
+    
     public Drag dragStart(DragStart start) {
         if (onOverlay(start.getLocation())) {
             return null;
@@ -559,15 +555,198 @@ public class Viewer {
     public void setExploration(boolean asExploration) {
         this.runningAsExploration = asExploration;
     }
-    
-    public void setSpy(InteractionSpy spy) {
-        this.spy = spy;
-    }
 
     public void setUpdateNotifier(ViewUpdateNotifier updateNotifier) {
         this.updateNotifier = updateNotifier;
     }
 
+
+    public void addToNotificationList(View view) {
+        updateNotifier.add(view);
+    }
+
+    public void clearOverlayView(View view) {
+        if (this.getOverlayView() != view) {
+            LOG.warn("No such view to remove: " + view);
+        }
+
+        this.clearOverlayView();
+    }
+
+    public void forceRepaint() {
+        this.repaint();
+    }
+
+    private MenuOption loggingOption(String name, final Level level) {
+        return new MenuOption("Log " + level + " " + name + "...") {
+                public Consent disabled(View component) {
+                    return AbstractConsent.allow(LogManager.getRootLogger().getLevel() != level);
+                }
+
+                public void execute(Workspace workspace, View view, Location at) {
+                    LogManager.getRootLogger().setLevel(level);
+                }
+            };
+    }
+
+    public void menuOptions(MenuOptionSet options) {
+        options.add(MenuOptionSet.VIEW,
+            new MenuOption("Quit") {
+                public void execute(Workspace workspace, View view, Location at) {
+                    Viewer.this.close();
+                }
+            });
+
+        options.add(MenuOptionSet.DEBUG,
+                new MenuOption("Vew context details...") {
+                    public void execute(Workspace workspace, View view, Location at) {
+                        InfoDebugFrame f = new InfoDebugFrame();
+                        f.setInfo(NakedObjects.getCurrentSession());
+                        f.show(at.x + 50, workspace.getBounds().y + 6);
+                    }
+                });
+
+
+        
+        options.add(MenuOptionSet.DEBUG, loggingOption("Off", Level.OFF));
+        options.add(MenuOptionSet.DEBUG, loggingOption("Error", Level.ERROR));
+        options.add(MenuOptionSet.DEBUG, loggingOption("Warn", Level.WARN));
+        options.add(MenuOptionSet.DEBUG, loggingOption("Info", Level.INFO));
+        options.add(MenuOptionSet.DEBUG, loggingOption("Debug", Level.DEBUG));
+
+        String debug = "Debug graphics " + (AbstractView.debug ? "off" : "on");
+        options.add(MenuOptionSet.DEBUG,
+            new MenuOption(debug) {
+                public void execute(Workspace workspace, View view, Location at) {
+                    AbstractView.debug = !AbstractView.debug;
+                    view.markDamaged();
+                }
+            });
+        
+        String action = this.isShowingMouseSpy() ? "Hide" : "Show";
+        options.add(MenuOptionSet.DEBUG, new MenuOption(action + " mouse spy") {
+            public void execute(Workspace workspace, View view, Location at) {
+                Viewer.this.setShowMouseSpy(!Viewer.this.isShowingMouseSpy());
+            }
+        });
+
+        options.add(MenuOptionSet.DEBUG,
+                new MenuOption("Restart object manager") {
+                    public void execute(Workspace workspace, View view, Location at) {
+	                    NakedObjects.getObjectManager().reset();
+	         //           NakedObjects.getPojoAdapterFactory().reset();
+                    }
+                });
+
+
+        options.add(MenuOptionSet.DEBUG,
+                new MenuOption("Debug notification receivers...") {
+                    public void execute(Workspace workspace, View view, Location at) {
+                        InfoDebugFrame f = new InfoDebugFrame();
+                        f.setInfo(updateNotifier);
+                        f.show(at.x + 50, workspace.getBounds().y + 6);
+                    }
+                });
+
+        options.add(MenuOptionSet.DEBUG,
+                new MenuOption("Debug object manager") {
+                    public void execute(Workspace workspace, View view, Location at) {
+                        NakedObjectManager om = NakedObjects.getObjectManager();
+                        InfoDebugFrame f = new InfoDebugFrame();
+                        f.setInfo(om);
+                        f.show(at.x + 50, workspace.getBounds().y + 6);                   
+                    }
+                });
+
+        options.add(MenuOptionSet.DEBUG,
+                new MenuOption("Dump all") {
+                    public void execute(Workspace workspace, View view, Location at) {
+                        DebugFileDump.dump(NakedObjects.debug());
+                    }
+                });
+
+        options.add(MenuOptionSet.DEBUG,
+                new MenuOption("Debug overlay...") {
+                    public void execute(Workspace workspace, View view, Location at) {
+                        DebugFrame f = new OverlayDebugFrame(Viewer.this);
+                        f.show(at.x + 50, workspace.getBounds().y + 6);
+                    }
+                });
+
+        options.add(MenuOptionSet.DEBUG,
+                new MenuOption("Debug prototypes...") {
+                    public void execute(Workspace workspace, View view, Location at) {
+                        InfoDebugFrame f = new InfoDebugFrame();
+                        f.setInfo(Skylark.getViewFactory());
+                        f.show(at.x + 50, workspace.getBounds().y + 6);
+                    }
+                });
+
+}
+
+    public void removeFromNotificationList(View view) {
+        updateNotifier.remove(view);
+    }
+    
+    public void showArrowCursor() {
+       setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    }
+
+    public void showCrosshairCursor() {
+       setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+    }
+
+    public void showHandCursor() {
+       setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }
+
+    public void showMoveCursor() {
+       setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+    }
+
+    public void showResizeDownCursor() {
+       setCursor(Cursor.getPredefinedCursor(Cursor.S_RESIZE_CURSOR));
+    }
+
+    public void showResizeDownLeftCursor() {
+       setCursor(Cursor.getPredefinedCursor(Cursor.SW_RESIZE_CURSOR));
+    }
+    
+    public void showResizeDownRightCursor() {
+       setCursor(Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR));
+    }
+
+    public void showResizeLeftCursor() {
+       setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
+    }
+
+    public void showResizeRightCursor() {
+       setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
+    }
+
+    public void showResizeUpCursor() {
+       setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
+    }
+
+    public void showResizeUpLeftCursor() {
+       setCursor(Cursor.getPredefinedCursor(Cursor.NW_RESIZE_CURSOR));
+    }
+
+    public void showResizeUpRightCursor() {
+       setCursor(Cursor.getPredefinedCursor(Cursor.NE_RESIZE_CURSOR));
+    }
+    
+    public void showTextCursor() {
+       setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+    }
+
+    public void showWaitCursor() {
+       setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+    }
+
+    public UndoStack getUndoStack() {
+        return undoStack;
+    }
 }
 
 /*

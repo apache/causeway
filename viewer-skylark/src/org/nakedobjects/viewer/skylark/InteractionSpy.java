@@ -50,6 +50,10 @@ public class InteractionSpy {
     private int traceIndex;
     private boolean isVisible;
 
+    public InteractionSpy() {
+        
+    }
+    
     public void addAction(String action) {
         if (isVisible) {
             set(actionCount++, "Action", action);

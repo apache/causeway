@@ -152,7 +152,6 @@ public class PopupMenuTest extends TestCase {
 		);
 		
 		
-        new ViewerAssistant().setViewer(viewer);
 		
 		popup = new MockPopup();
 		view = new MockView(null);
@@ -374,7 +373,7 @@ public class PopupMenuTest extends TestCase {
                     return null;
                 }
 
-                public ViewerAssistant getViewManager() {
+                public Viewer getViewManager() {
                     return null;
                 }
 
@@ -456,7 +455,8 @@ public class PopupMenuTest extends TestCase {
                     return null;
                 }
 
-                public void viewMenuOptions(MenuOptionSet menuOptions) {}};
+                public void viewMenuOptions(MenuOptionSet menuOptions) {}
+            };
         }
 	}
 	
