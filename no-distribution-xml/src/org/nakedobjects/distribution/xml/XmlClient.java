@@ -15,6 +15,7 @@ import org.nakedobjects.distribution.xml.request.MakePersistent;
 import org.nakedobjects.distribution.xml.request.SetAssociation;
 import org.nakedobjects.distribution.xml.request.SetValue;
 import org.nakedobjects.distribution.xml.request.StartTransaction;
+import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.InstancesCriteria;
@@ -23,11 +24,15 @@ import org.nakedobjects.object.persistence.TitleCriteria;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.NotImplementedException;
 
+import org.apache.log4j.Logger;
+
 import com.thoughtworks.xstream.XStream;
 
 
 public class XmlClient implements ClientDistribution {
+    private static final Logger LOG = Logger.getLogger(XmlClient.class);    
     private ClientConnection connection;
+    private DirtyObjectSet updateNotifier;
 
     public XmlClient() {
         connection = new ClientConnection();
@@ -107,7 +112,8 @@ public class XmlClient implements ClientDistribution {
         
         ObjectData[] updates = response.getUpdates();
         for (int i = 0; i < updates.length; i++) {
-            DataHelper.update(updates[i]);
+            LOG.debug("update " + updates[i]);
+            DataHelper.update(updates[i], updateNotifier);
         }
     }
 
@@ -135,6 +141,10 @@ public class XmlClient implements ClientDistribution {
     public void startTransaction(Session session) {
         Request request = new StartTransaction(session);
         remoteExecute(request);        
+    }
+
+    public void setUpdateNotifier(DirtyObjectSet updateNotifier) {
+        this.updateNotifier = updateNotifier;
     }
 
 }
