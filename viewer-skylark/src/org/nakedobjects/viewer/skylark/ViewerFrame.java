@@ -13,23 +13,7 @@ import java.lang.reflect.Method;
 public class ViewerFrame extends Frame implements RenderingArea {
     private Viewer viewer;
  
-    /**
-     * Creates a bordered frame.
-     * @see java.awt.Frame#Frame(String)
-     */
-    public ViewerFrame() {	    
-        addWindowListener(new WindowAdapter() {
-                public void windowClosing(WindowEvent e) {
-                    quit();
-                }
-            });
-
-        addComponentListener(new ComponentAdapter() {
-                public void componentResized(ComponentEvent e) {
-                    ViewerFrame.this.viewer.sizeChange();
-                }
-            });
-
+    public ViewerFrame() {} {	    
         setBackground(Style.APPLICATION_BACKGROUND.getAwtColor());
 
         /*
@@ -43,7 +27,7 @@ public class ViewerFrame extends Frame implements RenderingArea {
             e1.printStackTrace();
         } catch (NoSuchMethodException ignore) {
             /*
-             * Ignore no such method exception as this method is only available, and 
+             * Ignore no such method exception as this method is only available, but 
              * needed, in version 1.4 and later.
              */
         } catch (IllegalArgumentException e) {
@@ -83,12 +67,26 @@ public class ViewerFrame extends Frame implements RenderingArea {
         this.viewer = viewer;
     }
     
+    public void init() {
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                quit();
+            }
+        });
+
+        addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                ViewerFrame.this.viewer.sizeChange();
+            }
+        });    
+    }
+    
     /**
 	 * Expose as a .NET property
 	 * @property
 	 */
     public void set_Viewer(Viewer viewer) {
-        this.viewer = viewer;
+        setViewer(viewer);
     }
     
     /**

@@ -47,13 +47,12 @@ public class TestViews {
 
         AbstractView.debug = false;
 
+
         Workspace workspace = workspace();
-
         viewer.setRootView(workspace);
-
+        viewer.init();
         views(workspace);
 
-        viewer.init();
         viewer.showSpy();
 
         InfoDebugFrame debug = new InfoDebugFrame();
@@ -63,6 +62,7 @@ public class TestViews {
         debug.show();
 
         frame.setBounds(200, 100, 800, 600);
+        frame.init();
         frame.show();
         viewer.sizeChange();
 

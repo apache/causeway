@@ -40,15 +40,20 @@ public class SkylarkViewer {
         
         NakedObjects.getObjectManager().addObjectChangedListener(updateNotifier);
                 
-        viewer.init();
     
         NakedObject rootObject = NakedObjects.getPojoAdapterFactory().createNOAdapter(applicationContext);
         RootWorkspaceSpecification spec = new RootWorkspaceSpecification();
         View view = spec.createView(new RootObject(rootObject), null);
         viewer.setRootView(view);
  
+        viewer.init();
+        
+
         frame.setTitle(applicationContext.name());
+        frame.init();
         frame.show();    
+
+        
         viewer.sizeChange();
     }
 
