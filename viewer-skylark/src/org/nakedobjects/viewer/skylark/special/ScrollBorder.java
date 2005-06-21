@@ -40,7 +40,9 @@ public class ScrollBorder extends AbstractBorder {
     public ScrollBorder(View view) {
         super(view);
         bottom = right = SCROLLBAR_WIDTH;
-    }
+        setHorizontalPostion(0);
+        setVerticalPostion(0);
+     }
 
     protected void debugDetails(StringBuffer b) {
         super.debugDetails(b);
@@ -65,6 +67,9 @@ public class ScrollBorder extends AbstractBorder {
         int contentHeight = contents.getHeight();
         
         drawScrollBars(canvas, contentWidth, contentHeight);
+        
+        canvas.drawRectangle(contents.getX(), contents.getY(), contents.getWidth(), contents.getHeight(), Color.DEBUG_DRAW_BOUNDS);
+        
         drawContent(canvas, contentWidth, contentHeight);
         
         if (AbstractView.debug) {
@@ -81,31 +86,32 @@ public class ScrollBorder extends AbstractBorder {
         int x = offset.getDeltaX();
         int y = offset.getDeltaY();
         Canvas subCanvas = canvas.createSubcanvas(-x, -y, contentWidth + x , contentHeight + y);
+        subCanvas.offset(left, top);
         wrappedView.draw(subCanvas);
     }
 
     private void drawScrollBars(Canvas canvas, int contentWidth, int contentHeight) {
         Color color = isOnBorder() ? Style.PRIMARY1 : Style.PRIMARY2;
         
-        if(horizontalScrollPosition > 0 || horizontalVisibleAmount < contentWidth) {
-            canvas.drawSolidRectangle(0, contentHeight + 1, contentWidth,
+        if(horizontalScrollPosition > left || horizontalVisibleAmount < contentWidth) {
+            canvas.drawSolidRectangle(left, contentHeight + top + 1, contentWidth,
                     SCROLLBAR_WIDTH - 2, Style.SECONDARY3);
-            canvas.drawSolidRectangle(horizontalScrollPosition, contentHeight + 1, horizontalVisibleAmount,
+            canvas.drawSolidRectangle(horizontalScrollPosition, contentHeight + top + 1, horizontalVisibleAmount,
                     SCROLLBAR_WIDTH - 3, color);
-            canvas.drawRectangle(horizontalScrollPosition, contentHeight + 1, horizontalVisibleAmount,
+            canvas.drawRectangle(horizontalScrollPosition, contentHeight + top + 1, horizontalVisibleAmount,
                     SCROLLBAR_WIDTH - 3, Style.SECONDARY1);
-	        canvas.drawRectangle(0, contentHeight, contentWidth,
+	        canvas.drawRectangle(left, contentHeight + top, contentWidth,
 	                SCROLLBAR_WIDTH - 1, Style.SECONDARY2);
         }
 
-        if(verticalScrollPosition > 0 || verticalVisibleAmount < contentHeight) {
-            canvas.drawSolidRectangle(contentWidth + 1, 0, 
+        if(verticalScrollPosition > top || verticalVisibleAmount < contentHeight) {
+            canvas.drawSolidRectangle(contentWidth + left + 1, top, 
                     SCROLLBAR_WIDTH - 2, contentHeight,  Style.SECONDARY3);
-            canvas.drawSolidRectangle(contentWidth + 1, verticalScrollPosition, 
+            canvas.drawSolidRectangle(contentWidth + left + 1, verticalScrollPosition, 
                     SCROLLBAR_WIDTH - 3, verticalVisibleAmount,             color);
-            canvas.drawRectangle(contentWidth + 1, verticalScrollPosition, 
+            canvas.drawRectangle(contentWidth + left + 1, verticalScrollPosition, 
                     SCROLLBAR_WIDTH - 3, verticalVisibleAmount,  Style.SECONDARY1);
-	        canvas.drawRectangle(contentWidth, 0, 
+	        canvas.drawRectangle(contentWidth + left, top, 
 	                SCROLLBAR_WIDTH - 1, contentHeight,  Style.SECONDARY2);
         }
     }
@@ -134,14 +140,14 @@ public class ScrollBorder extends AbstractBorder {
         int displayHeight = displayArea.getHeight();
         int contentHeight = Math.max(displayHeight, contentSize.getHeight());
         verticalVisibleAmount = displayHeight * displayHeight / (contentHeight - SCROLLBAR_WIDTH);
-        verticalMinimum = 0;
+        verticalMinimum = top;
         verticalMaximum = displayHeight - verticalVisibleAmount;
  //       verticalScrollPosition = (int) (verticalScrollPosition * verticalRatio);
 
         int displayWidth = displayArea.getWidth();
         int contentWidth = Math.max(displayWidth, contentSize.getWidth());
         horizontalVisibleAmount = displayWidth * displayWidth / (contentWidth - SCROLLBAR_WIDTH);
-        horizontalMinimum = 0;
+        horizontalMinimum = left;
         horizontalMaximum = displayWidth - horizontalVisibleAmount;
         
         wrappedView.setSize(wrappedView.getRequiredSize());
@@ -149,19 +155,19 @@ public class ScrollBorder extends AbstractBorder {
 
     public void setVerticalPostion(final int position) {
         getViewManager().getSpy().addAction("Move to vertical position " + position);
-        verticalScrollPosition = Math.min(position, verticalMaximum);
+        verticalScrollPosition = Math.min(position + top, verticalMaximum);
         verticalScrollPosition = Math.max(verticalScrollPosition, verticalMinimum);
         markDamaged();
     }
 
     public void setHorizontalPostion(final int position) {
         getViewManager().getSpy().addAction("Move to horizontal position " + position);
-        horizontalScrollPosition = Math.min(position, horizontalMaximum);
+        horizontalScrollPosition = Math.min(position + left, horizontalMaximum);
         horizontalScrollPosition = Math.max(horizontalScrollPosition, horizontalMinimum);
         markDamaged();
     }
-
-    public ViewAreaType viewAreaType(Location location) {
+    
+     public ViewAreaType viewAreaType(Location location) {
         if (overContent(location)) {
             offsetLocation(location);
             return super.viewAreaType(location);
@@ -307,16 +313,6 @@ public class ScrollBorder extends AbstractBorder {
         bounds.translate(-offset.getDeltaX(), -offset.getDeltaY());
         super.markDamaged(bounds);
     }
-    
-/*    public Location getAbsoluteLocation() {
-        Location location = super.getAbsoluteLocation();
-        getViewManager().getSpy().addTrace(this, "scrollbar's parent 's location", location);
-        getViewManager().getSpy().addTrace(this, "scrollbar offset", offset());
-        location.subtract(offset());
-        getViewManager().getSpy().addTrace(this, "scrollbar's locatin", location);
-      return location;
-    }
-      */
 }
 
 /*
