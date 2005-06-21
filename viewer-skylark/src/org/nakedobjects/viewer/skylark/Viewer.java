@@ -369,9 +369,13 @@ public class Viewer {
         if(updateNotifier == null) {
             throw new StartupException("No update notifier set for " + this);
         }
+        if(rootView == null) {
+            throw new StartupException("No root view set for " + this);
+        }
         
-        spy = new InteractionSpy();
+        insets = new Insets(0, 0, 0, 0);
 
+        spy = new InteractionSpy();
         popup = new DefaultPopupMenu();
 
         InteractionHandler interactionHandler = new InteractionHandler(this, spy);
@@ -388,7 +392,6 @@ public class Viewer {
 
     public void sizeChange() {
         internalDisplaySize = new Size(renderingArea.getSize());
-        LOG.debug("size changed: frame " + internalDisplaySize);
         insets = renderingArea.getInsets();
         LOG.debug("  insets " + insets);
         internalDisplaySize.contract(insets.left + insets.right, insets.top + insets.bottom);

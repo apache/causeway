@@ -312,24 +312,9 @@ public abstract class AbstractView implements View {
             return subview.identify(location);
         }
     }
-
-    /**
-     * Flags that the views do not properly represent the content, and hence it
-     * needs rebuilding. Contrast this with invalidateLayout(), which deals with
-     * an a complete view, but one that is not showing properly.
-     * 
-     * @see #invalidateLayout()
-     */
+    
     public void invalidateContent() {}
 
-    /**
-     * Flags that the views are possibly not displaying the content fully - too
-     * small, wrong place etc - although views exists for all the content.
-     * Contrast this with invalidateContent(), which deals with an incomplete
-     * view.
-     * 
-     * @see #invalidateContent()
-     */
     public void invalidateLayout() {
         if (parent != null) {
             parent.invalidateLayout();
@@ -351,18 +336,6 @@ public abstract class AbstractView implements View {
     public void layout() {}
 
     /**
-     * Limits the bounds of the given view (when being moved or dropped) so its
-     * never extends outside the bounds of the containing open view
-     * 
-     * public void limitBounds(View view) { Bounds contentBounds =
-     * view.getBounds(); Bounds containerBounds = new Bounds(getSize()); //
-     * containerBounds.contract(getPadding()); if
-     * (containerBounds.limitBounds(contentBounds) && !
-     * view.getBounds().equals(contentBounds)) { view.setBounds(contentBounds);
-     * view.invalidateLayout(); } }
-     */
-
-    /**
      * Limits the bounds of the this view (when being moved or dropped) so it
      * never extends outside the bounds of the parent view
      */
@@ -371,11 +344,6 @@ public abstract class AbstractView implements View {
         if (containerBounds.limitBounds(contentBounds)) {
             getView().setBounds(contentBounds);
         }
-        /*
-         * if (containerBounds.limitBounds(contentBounds) && !
-         * getView().getBounds().equals(contentBounds)) {
-         * getView().setBounds(contentBounds); // invalidateLayout(); }
-         */
     }
 
     public void markDamaged() {
@@ -512,16 +480,6 @@ public abstract class AbstractView implements View {
     public void removeView(View view) {
         throw new NakedObjectRuntimeException();
     }
-
-    /**
-     * Forces a repaint; should only be used in places markDamaged() does not
-     * work because no user action occurs - within the required timeframe - that
-     * would otherwise cause a redraw automatically.
-    protected void repaint() {
-        markDamaged();
-        getViewManager().forceRepaint();
-    }
-     */
 
     protected void replaceOptions(Enumeration possibleViews, MenuOptionSet options) {
         while (possibleViews.hasMoreElements()) {

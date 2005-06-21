@@ -22,7 +22,6 @@ import org.apache.log4j.Logger;
 public class CompositeView extends ObjectView {
     private static final Logger LOG = Logger.getLogger(CompositeView.class);
     private int buildCount = 0;
-
     private CompositeViewBuilder builder;
     private boolean buildInvalid = true;
     private boolean canDragView = true;
@@ -134,7 +133,7 @@ public class CompositeView extends ObjectView {
         views.copyInto(v);
         return v;
     }
-
+    
     public void invalidateContent() {
         buildInvalid = true;
         invalidateLayout();
@@ -154,15 +153,12 @@ public class CompositeView extends ObjectView {
         if (layoutInvalid) {
             markDamaged();
             View views[] = getSubviews();
-
             for (int i = 0; i < views.length; i++) {
-                View subview = views[i];
-                subview.layout();
+                views[i].layout();
             }
 
             layoutInvalid = false;
 
-//            Size size = builder.getRequiredSize(getView());
             Size size =getView().getRequiredSize();
             getView().setSize(size);
 

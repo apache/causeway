@@ -195,9 +195,24 @@ public interface View extends Cloneable {
     boolean hasFocus();
 
     View identify(Location mouseLocation);
-
+    
+    /**
+     * Flags that the views do not properly represent the content, and hence it
+     * needs rebuilding. Contrast this with invalidateLayout(), which deals with
+     * an a complete view, but one that is not showing properly.
+     * 
+     * @see #invalidateLayout()
+     */
     void invalidateContent();
 
+    /**
+     * Flags that the views are possibly not displaying the content fully - too
+     * small, wrong place etc - although views exists for all the content.
+     * Contrast this with invalidateContent(), which deals with an incomplete
+     * view.
+     * 
+     * @see #invalidateContent()
+     */
     void invalidateLayout();
 
     /**

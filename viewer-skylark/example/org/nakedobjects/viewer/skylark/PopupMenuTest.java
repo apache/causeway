@@ -1,8 +1,6 @@
 
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Allow;
@@ -115,7 +113,7 @@ public class PopupMenuTest extends TestCase {
 	}
 
 	protected void setUp() throws Exception {
-	    ConfigurationFactory.setConfiguration(new Configuration());
+	//    ConfigurationFactory.setConfiguration(new Configuration());
 		Viewer viewer = new Viewer();
 		
 		viewer.setRenderingArea(new RenderingArea() {
@@ -244,7 +242,7 @@ public class PopupMenuTest extends TestCase {
                 public View createSubviewFor(Naked object, boolean asIcon) {
                     return null;
                 }
-
+                
                 public void lower(View view) {}
 
                 public void raise(View view) {}
