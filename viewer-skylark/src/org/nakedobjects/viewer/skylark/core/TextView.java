@@ -18,8 +18,6 @@ public class TextView extends AbstractView {
     }
     
     public void draw(Canvas canvas) {
-        canvas.clearBackground(this, Style.WHITE);
-        canvas.drawRectangleAround(this, Style.SECONDARY1);
         canvas.drawText(text,  HPADDING, getBaseline(), color, style);
     }
     
