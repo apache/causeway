@@ -1,5 +1,6 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
@@ -16,23 +17,19 @@ import org.apache.log4j.Logger;
 public class NakedObjectSpecificationLoaderImpl implements NakedObjectSpecificationLoader {
     private final static Logger LOG = Logger.getLogger(NakedObjectSpecificationLoaderImpl.class);
     private Hashtable classes;
-    private ReflectorFactory reflectorFactory;
-
+ 
     public NakedObjectSpecificationLoaderImpl() {
         classes = new Hashtable();    
     }
     
-    public void setReflectorFactory(ReflectorFactory reflectorFactory) {
-        this.reflectorFactory = reflectorFactory;
-    }
-
-    /**
+     /**
      * Expose as a .NET property
      * 
      * @property
+     * @deprecated
      */
     public void set_ReflectorFactory(ReflectorFactory reflectorFactory) {
-        this.reflectorFactory = reflectorFactory;
+        throw new NakedObjectRuntimeException("Changed configuration; setup in NakedObjects instead");
     }
 
     public NakedObjectSpecification loadSpecification(Class cls) {
@@ -40,9 +37,6 @@ public class NakedObjectSpecificationLoaderImpl implements NakedObjectSpecificat
     }
 
     public NakedObjectSpecification loadSpecification(String className) {
-        if (reflectorFactory == null) {
-            throw new NakedObjectRuntimeException("No reflector factory has be set up");
-        }
         if (className == null) {
             throw new NullPointerException("No class name specified");
         }
@@ -57,6 +51,10 @@ public class NakedObjectSpecificationLoaderImpl implements NakedObjectSpecificat
                 if (InternalNakedObject.class.isAssignableFrom(cls) || cls.getName().startsWith("java.")) {
                     reflector = new InternalReflector(className);
                 } else {
+                    ReflectorFactory reflectorFactory = NakedObjects.getReflectorFactory();
+                    if (reflectorFactory == null) {
+                        throw new NakedObjectRuntimeException("No reflector factory has be set up");
+                    }
                     reflector = reflectorFactory.createReflector(className);
                 }
 

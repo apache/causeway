@@ -47,19 +47,14 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
 
     private final static Logger LOG = Logger.getLogger(NakedObjectSpecificationImpl.class);
 
-    private static ReflectionFactory reflectionFactory;
-
-    /**
+   /**
      * Expose as a .NET property
      * 
      * @property
+     * @deprecated
      */
     public static void set_ReflectionFactory(ReflectionFactory reflectionFactory) {
-        NakedObjectSpecificationImpl.reflectionFactory = reflectionFactory;
-    }
-
-    public static void setReflectionFactory(ReflectionFactory reflectionFactory) {
-        NakedObjectSpecificationImpl.reflectionFactory = reflectionFactory;
+        throw new NakedObjectRuntimeException("Changed configuration; setup in NakedObjects instead");
     }
 
     private Action[] classActions = new Action[0];
@@ -84,7 +79,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
      * returned using the getJavaType method).
      */
     public Naked acquireInstance() {
-        LOG.debug("acquire instance of " + getShortName());
+        // TODO this happens a lot!  LOG.debug("acquire instance of " + getShortName());
         return reflector.acquireInstance();
     }
 
@@ -96,7 +91,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         Action actionChains[] = new Action[actions.length];
 
         for (int i = 0; i < actions.length; i++) {
-            actionChains[i] = reflectionFactory.createAction(getFullName(), actions[i]);
+            actionChains[i] = reflectionFactory().createAction(getFullName(), actions[i]);
         }
 
         return actionChains;
@@ -116,10 +111,10 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
             Object object = fieldPeers[i];
 
             if (object instanceof OneToOnePeer) {
-                fields[i] = reflectionFactory.createField(getFullName(), (OneToOnePeer) object);
+                fields[i] = reflectionFactory().createField(getFullName(), (OneToOnePeer) object);
 
             } else if (object instanceof OneToManyPeer) {
-                fields[i] = reflectionFactory.createField(getFullName(), (OneToManyPeer) object);
+                fields[i] = reflectionFactory().createField(getFullName(), (OneToManyPeer) object);
 
             } else {
                 throw new NakedObjectRuntimeException();
@@ -127,6 +122,10 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         }
 
         return fields;
+    }
+
+    private ReflectionFactory reflectionFactory() {
+        return NakedObjects.getReflectionFactory();
     }
 
     private void debugAboutDetail(StringBuffer text, NakedObjectMember member) {
