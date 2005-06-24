@@ -26,10 +26,10 @@ public class ConfigurationPropertiesLoader {
             properties.load(in);
         } catch (FileNotFoundException e) {
             if(ensureFileLoads) {
-                throw new NakedObjectRuntimeException("Could not find configuration file", e);
+                throw new NakedObjectRuntimeException("Could not find configuration file: " + pathname, e);
             }
         } catch (IOException e) {
-            throw new NakedObjectRuntimeException("Could not load configuration file", e);
+            throw new NakedObjectRuntimeException("Could not load configuration file: " + pathname, e);
         }
     }
 
@@ -66,7 +66,7 @@ public class ConfigurationPropertiesLoader {
     public static Properties loadProperties(String resource, boolean mustLoadFile) throws ConfigurationException {
 
         try {
-            URL url = ConfigurationFactory.class.getResource(resource);
+            URL url = ConfigurationPropertiesLoader.class.getResource(resource);
             if (url == null) {
                 if (mustLoadFile) {
                     throw new ConfigurationException("Configuration resource not found: " + resource);
