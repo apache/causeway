@@ -233,9 +233,10 @@ public class TransientObjectStore implements NakedObjectStore {
             instances.instances(v);
             Enumeration f = v.elements();
             while (f.hasMoreElements()) {
-                NakedObject object = (NakedObject) f.nextElement();
                 debug.append(spec.getFullName());
                 debug.append(": ");
+                Oid oid = (Oid) f.nextElement();
+                NakedObject object = (NakedObject) objects.get(oid);
                 debug.append(object);
                 debug.appendln(debugGraph(object, "name???", 0, dump));
             }
