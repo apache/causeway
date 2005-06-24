@@ -14,8 +14,7 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
-import org.nakedobjects.viewer.skylark.basic.LineBorder;
-import org.nakedobjects.viewer.skylark.basic.PlainBackground;
+import org.nakedobjects.viewer.skylark.basic.PanelBorder;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.special.ScrollBorder;
 
@@ -33,7 +32,7 @@ public class NakedErrorViewSpecification implements ViewSpecification {
     }
 
     public View createView(Content content, ViewAxis axis) {
-        return new PlainBackground(new LineBorder(4, Style.BLACK, new ScrollBorder(new ErrorView(content, this, null))));
+        return new PanelBorder(4, new ScrollBorder(new ErrorView(content, this, null)));
     }
 
     public boolean isOpen() {

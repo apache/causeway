@@ -26,6 +26,7 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.LabelAxis;
+import org.nakedobjects.viewer.skylark.basic.PanelBorder;
 import org.nakedobjects.viewer.skylark.core.BackgroundTask;
 import org.nakedobjects.viewer.skylark.core.BackgroundThread;
 import org.nakedobjects.viewer.skylark.core.TextView;
@@ -303,12 +304,11 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
         } 
 
         if (! canChangeValue() || click.isShift()) {
-            TextView textView = new TextView(getContent().getNaked().titleString());
+            View textView = new PanelBorder(1, Style.PRIMARY1, Style.PRIMARY3, new TextView(getContent().getNaked().titleString()));
             textView.setSize(textView.getRequiredSize());
             getViewManager().setOverlayView(textView);
             textView.setLocation(getAbsoluteLocation());
             textView.markDamaged();
-//            getViewManager().setStatus(getContent().getNaked().titleString());
         }
     }
 

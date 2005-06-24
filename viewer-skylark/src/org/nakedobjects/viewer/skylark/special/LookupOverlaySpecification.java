@@ -11,8 +11,7 @@ import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.basic.IconView;
-import org.nakedobjects.viewer.skylark.basic.LineBorder;
-import org.nakedobjects.viewer.skylark.basic.PlainBackground;
+import org.nakedobjects.viewer.skylark.basic.PanelBorder;
 import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
 
 
@@ -39,7 +38,7 @@ class LookupOverlaySpecification extends AbstractCompositeViewSpecification impl
         TypedNakedCollection instances = manager.allInstances(type, true);
         instances.sort();
         RootCollection instanceContent = new RootCollection(instances);
-        return new PlainBackground(new LineBorder(2, new ScrollBorder(super.createView(instanceContent, axis))));
+        return new PanelBorder(2, new ScrollBorder(super.createView(instanceContent, axis)));
     }
 
     public String getName() {
