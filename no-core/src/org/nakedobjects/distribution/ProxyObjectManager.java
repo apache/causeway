@@ -16,27 +16,30 @@ import org.nakedobjects.object.persistence.UnsupportedFindException;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.security.Session;
+import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
 
-// TODO this class replaces most of AbstractNakedObjectManager, therefore just implement NakedObjectManager
+
+// TODO this class replaces most of AbstractNakedObjectManager, therefore just
+// implement NakedObjectManager
 public final class ProxyObjectManager extends AbstractNakedObjectManager {
     final static Logger LOG = Logger.getLogger(ProxyObjectManager.class);
     private ClientDistribution connection;
     private final Hashtable nakedClasses = new Hashtable();
-    private DirtyObjectSet updateNotifier;
     private DataFactory objectDataFactory;
     private Session session;
+    private DirtyObjectSet updateNotifier;
 
     public void abortTransaction() {
         connection.abortTransaction(session);
     }
 
     public void addObjectChangedListener(DirtyObjectSet listener) {}
-    
+
     public TypedNakedCollection allInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
         LOG.debug("getInstances of " + specification);
         ObjectData data[] = connection.allInstances(session, specification.getFullName(), false);
@@ -63,13 +66,28 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
 
     public void endTransaction() {
         connection.endTransaction(session);
-      }
+    }
 
-    public TypedNakedCollection findInstances(InstancesCriteria criteria)
-            throws UnsupportedFindException {
+    public TypedNakedCollection findInstances(InstancesCriteria criteria) throws UnsupportedFindException {
         LOG.debug("getInstances of " + criteria.getSpecification() + " with " + criteria);
         ObjectData[] instances = connection.findInstances(session, criteria);
         return convertToNakedObjects(criteria.getSpecification(), instances);
+    }
+
+    public String getDebugData() {
+        DebugString debug = new DebugString();
+
+        debug.appendln(0, "Connection", connection);
+        debug.appendln();
+
+        debug.appendTitle(NakedObjects.getPojoAdapterFactory().getDebugTitle());
+        debug.appendln(NakedObjects.getPojoAdapterFactory().getDebugData());
+        
+        return debug.toString();
+    }
+
+    public String getDebugTitle() {
+        return "Proxy Object Manager";
     }
 
     protected NakedObject[] getInstances(InstancesCriteria criteria) {
@@ -98,18 +116,16 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
 
     public synchronized NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException {
         throw new NotImplementedException();
-/*
-         if (loadedObjects().isLoaded(oid)) {
-            LOG.debug("getObject (from already loaded objects) " + oid);
-            return loadedObjects().getLoadedObject(oid);
-        } else {
-            LOG.debug("getObject (remotely from server)" + oid);
-            ObjectData data = connection.getObject(session, oid, hint.getFullName());
-            return DataHelper.recreateObject(data);
-        }
- 
-    */
-        
+        /*
+         * if (loadedObjects().isLoaded(oid)) { LOG.debug("getObject (from
+         * already loaded objects) " + oid); return
+         * loadedObjects().getLoadedObject(oid); } else { LOG.debug("getObject
+         * (remotely from server)" + oid); ObjectData data =
+         * connection.getObject(session, oid, hint.getFullName()); return
+         * DataHelper.recreateObject(data); }
+         *  
+         */
+
     }
 
     public boolean hasInstances(NakedObjectSpecification specification) {
@@ -119,15 +135,15 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
 
     public void init() {}
 
+    private PojoAdapterFactory loadedObjects() {
+        return NakedObjects.getPojoAdapterFactory();
+    }
+
     public synchronized void makePersistent(NakedObject object) {
         LOG.debug("makePersistent " + object);
         Oid[] oid = connection.makePersistent(session, objectDataFactory.createObjectData(object, 0));
         object.setOid(oid[0]);
         loadedObjects().loaded(object);
-    }
-
-    private PojoAdapterFactory loadedObjects() {
-        return NakedObjects.getPojoAdapterFactory();
     }
 
     public int numberOfInstances(NakedObjectSpecification specification) {
@@ -139,6 +155,8 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         LOG.debug("objectChanged " + object + " - ignored by proxy manager ");
     }
 
+    public void reset() {}
+
     public synchronized void resolveImmediately(NakedObject object) {
         LOG.debug("resolve " + object);
         if (object.isResolved() || !object.isPersistent()) {
@@ -147,17 +165,19 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
 
         Oid oid = object.getOid();
         NakedObjectSpecification hint = object.getSpecification();
-        
+
         LOG.debug("resolve object (remotely from server)" + oid);
-        ObjectData data = connection.getObject(session, oid, hint.getFullName());
+        ObjectData data = connection.resolveImmediately(session, oid, hint.getFullName());
         DataHelper.update(data, updateNotifier);
 
-        if(object.isResolved()) {
+        if (object.isResolved()) {
             LOG.error("Object already resolved, no need to set resolve flag");
         } else {
             object.setResolved();
         }
     }
+
+    public void resolveLazily(NakedObject object, NakedObjectField field) {}
 
     public void saveChanges() {
         LOG.debug("saveChanges - ignored by proxy manager");
@@ -181,10 +201,6 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         this.objectDataFactory = factory;
     }
 
-    public void setConnection(ClientDistribution connection) {
-        this.connection = connection;
-    }
-
     /**
      * .NET property
      * 
@@ -194,12 +210,16 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         this.updateNotifier = updateNotifier;
     }
 
-    public void setUpdateNotifier(DirtyObjectSet updateNotifier) {
-        this.updateNotifier = updateNotifier;
+    public void setConnection(ClientDistribution connection) {
+        this.connection = connection;
     }
-    
+
     public void setObjectDataFactory(DataFactory factory) {
         this.objectDataFactory = factory;
+    }
+
+    public void setUpdateNotifier(DirtyObjectSet updateNotifier) {
+        this.updateNotifier = updateNotifier;
     }
 
     public void shutdown() {
@@ -207,12 +227,8 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     }
 
     public void startTransaction() {
-       connection.startTransaction(session);
+        connection.startTransaction(session);
     }
-
-    public void resolveLazily(NakedObject object, NakedObjectField field) {}
-
-    public void reset() {}
 }
 
 /*

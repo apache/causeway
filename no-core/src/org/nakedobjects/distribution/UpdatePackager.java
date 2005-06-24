@@ -1,5 +1,7 @@
 package org.nakedobjects.distribution;
 
+import org.nakedobjects.utility.ToString;
+
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
@@ -21,6 +23,16 @@ public class UpdatePackager {
         ObjectData[] updatesArray = new ObjectData[noUpdates];
         updates.copyInto(updatesArray);
         return updatesArray;
+    }
+    
+    public String updateList() {
+        return updates.toString();
+    }
+    
+    public String toString() {
+        ToString str = new ToString(this);
+        str.append("updates", updates);
+        return str.toString();
     }
 }
 

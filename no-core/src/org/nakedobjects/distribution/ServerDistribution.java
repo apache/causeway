@@ -36,8 +36,6 @@ public class ServerDistribution implements ClientDistribution {
     private DataFactory objectDataFactory;
     private ObjectFactory objectFactory;
 
-    //   private LocalObjectManager objectManager;
-
     public ObjectData[] allInstances(Session session, String fullName, boolean includeSubclasses) {
         TypedNakedCollection instances = objectManager().allInstances(getSpecification(fullName), includeSubclasses);
         return convertToNakedCollection(instances);
@@ -157,7 +155,7 @@ public class ServerDistribution implements ClientDistribution {
         return object;
     }
 
-    public ObjectData getObject(Session session, Oid oid, String fullName) {
+    public ObjectData resolveImmediately(Session session, Oid oid, String fullName) {
         NakedObject object = getNakedObject(session, oid, fullName);
         return objectDataFactory.createObjectData(object, OBJECT_DATA_DEPTH);
     }
