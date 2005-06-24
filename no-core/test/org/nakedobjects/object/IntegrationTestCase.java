@@ -1,8 +1,8 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 
@@ -20,7 +20,7 @@ public class IntegrationTestCase extends TestCase {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
         manager = MockObjectManager.setup();
         new NakedObjectSpecificationLoaderImpl();
-        NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
+        new NakedObjectsClient().setReflectionFactory(new LocalReflectionFactory());
     }
     
     protected void tearDown() throws Exception {

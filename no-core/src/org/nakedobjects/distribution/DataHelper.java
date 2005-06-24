@@ -60,7 +60,7 @@ public class DataHelper {
                     ObjectData collection = (ObjectData) fieldContent[i];
                     NakedObject[] instances = new NakedObject[collection.getFieldContent().length];
                     for (int j = 0; j < instances.length; j++) {
-                        instances[j] = (NakedObject) recreateObject(((ObjectData) collection.getFieldContent()[j]));
+                        instances[j] = recreateObject(((ObjectData) collection.getFieldContent()[j]));
                     }
                     object.initOneToManyAssociation((OneToManyAssociation) fields[i], instances);
                 }
@@ -69,7 +69,7 @@ public class DataHelper {
             } else {
                 if (fieldContent[i] != null) {
                     NakedObjectAssociation field = (NakedObjectAssociation) fields[i];
-                    NakedObject value = (NakedObject) recreateObject(((ObjectData) fieldContent[i]));
+                    NakedObject value = recreateObject(((ObjectData) fieldContent[i]));
                     object.initAssociation(field, value);
                 }
             }

@@ -1,7 +1,11 @@
 package org.nakedobjects.viewer.skylark.example;
 import org.nakedobjects.viewer.skylark.Canvas;
+import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.Drag;
+import org.nakedobjects.viewer.skylark.DragStart;
+import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -31,7 +35,6 @@ public class TestObjectView extends AbstractView {
         canvas.drawLine(0, 0, width - 1, height - 1, Color.RED);
         canvas.drawLine(width - 1, 0, 0, height - 1, Color.RED);
         canvas.drawText(label , 2, Style.NORMAL.getAscent() + 2, Color.BLACK, Style.NORMAL);
-       // canvas.drawSolidRectangle(10, 10, 20, 40, Color.GREEN);
     }
     
     public Size getRequiredSize() {
@@ -43,6 +46,30 @@ public class TestObjectView extends AbstractView {
         requiredWidth = size.getWidth();
         
         setSize(size);
+    }
+
+    public void firstClick(Click click) {
+        debug("first click " + click);
+        super.firstClick(click);
+    }
+
+    public void secondClick(Click click) {
+        debug("second click " + click);
+        super.secondClick(click);
+    }
+    
+    public void mouseMoved(Location location) {
+        debug("mouse moved " + location);
+        super.mouseMoved(location);
+    }
+    
+    private void debug(String str) {
+        getViewManager().getSpy().addAction(str);
+    }
+    
+    public Drag dragStart(DragStart drag) {
+        debug("drag start " + drag);
+        return super.dragStart(drag);
     }
 }
 

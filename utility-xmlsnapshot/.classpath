@@ -7,6 +7,6 @@
 	<classpathentry kind="var" path="LOG4J"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry sourcepath="ECLIPSE_HOME/plugins/org.eclipse.jdt.source_3.0.0/src/org.junit_3.8.1/junitsrc.zip" kind="var" path="JUNIT_HOME/junit.jar"/>
-	<classpathentry kind="src" path="/no-memento"/>
+	<classpathentry kind="src" path="/utility-memento"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

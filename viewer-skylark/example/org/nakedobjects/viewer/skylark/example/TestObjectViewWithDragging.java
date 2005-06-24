@@ -3,7 +3,6 @@ package org.nakedobjects.viewer.skylark.example;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
-import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 
@@ -18,14 +17,8 @@ public class TestObjectViewWithDragging extends TestObjectView {
     }
 
     public Drag dragStart(DragStart drag) {
-        LOG.debug("drag start " + drag.getLocation());
-        
+        LOG.debug("drag start " + drag.getLocation());        
         return super.dragStart(drag);
-    }
-    
-
-    public void mouseMoved(Location location) {
-        LOG.debug("mouse moved " + location);
     }
 }
 

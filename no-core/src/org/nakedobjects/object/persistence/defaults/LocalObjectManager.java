@@ -86,7 +86,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
     private void createObject(NakedObject object) throws ObjectStoreException {
         getTransaction().addCommand(objectStore.createCreateObjectCommand(object));
-    }
+     }
 
     protected final Oid createOid(Naked object) {
         Oid oid = oidGenerator.next(object);
@@ -113,7 +113,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         transactionLevel--;
         if(transactionLevel == 0) {
 	        try {
-	        	// TODO collate changes befor committing
+	        	// TODO collate changes before committing
 	            saveChanges();
 	            getTransaction().commit(objectStore);
 	            transaction = null;
@@ -272,10 +272,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         return object.getOid() != null;
     }
 
-    private PojoAdapterFactory loadedObjects() {
-        return NakedObjects.getPojoAdapterFactory();
-    }
-
     /**
      * Makes a naked object persistent. The specified object should be stored
      * away via this object store's persistence mechanism, and have an new and
@@ -349,7 +345,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
-        loadedObjects().loaded(object);
     }
 
     /**
@@ -433,7 +428,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     private synchronized void collateChanges() {
         if (checkObjectsForDirtyFlag) {
             LOG.debug("collating changed objects");
-            PojoAdapterFactory factory = loadedObjects();
+            PojoAdapterFactory factory =  NakedObjects.getPojoAdapterFactory();
             Enumeration e = factory.getLoadedObjects();
             while (e.hasMoreElements()) {
                 NakedObject object = (NakedObject) e.nextElement();

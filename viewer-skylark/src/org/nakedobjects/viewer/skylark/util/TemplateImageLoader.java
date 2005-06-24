@@ -31,7 +31,7 @@ class TemplateImageLoader {
      * Creates a PictureLoader and loads a fallback icon.
      */
     TemplateImageLoader() {
-        alsoLoadAsFiles = NakedObjects.getConfiguration().getBoolean(Viewer.PROPERTY_BASE + "load-images-from-files", true);;
+        alsoLoadAsFiles = NakedObjects.getConfiguration().getBoolean(Viewer.PROPERTY_BASE + "load-images-from-files", true);
     }
 
     /*

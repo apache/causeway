@@ -12,7 +12,6 @@ import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.utility.ExpectedCalls;
 
 import java.util.Hashtable;
-import java.util.Vector;
 
 
 public class MockNakedObject implements NakedObject {

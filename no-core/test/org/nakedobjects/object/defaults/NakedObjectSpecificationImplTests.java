@@ -38,9 +38,9 @@ public class NakedObjectSpecificationImplTests extends TestCase {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
         MockNakedObjectSpecificationLoader specificationLoader = new MockNakedObjectSpecificationLoader();
-        new NakedObjectsClient().setSpecificationLoader(specificationLoader);
-
-        NakedObjectSpecificationImpl.setReflectionFactory(new MockReflectionFactory());
+        NakedObjectsClient nakedObjects = new NakedObjectsClient();
+        nakedObjects.setSpecificationLoader(specificationLoader);
+        nakedObjects.setReflectionFactory(new MockReflectionFactory());
 
         nakedObjectSpecification = new NakedObjectSpecificationImpl();
         mockReflector = new MockReflector();

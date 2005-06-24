@@ -1,7 +1,6 @@
 package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.NakedObjectsClient;
-import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;

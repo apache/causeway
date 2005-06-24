@@ -1,6 +1,5 @@
 package org.nakedobjects.object.defaults.collection;
 
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Consent;

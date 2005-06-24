@@ -25,8 +25,6 @@ public class ConfigurationTest extends TestCase {
         BasicConfigurator.configure();
         LogManager.getRootLogger().setLevel(Level.OFF);
 
-        ConfigurationFactory.setConfiguration(new Configuration());
-
         configuration = new Configuration();
         Properties p = new Properties();
         p.put("nakedobjects.bool", "on");

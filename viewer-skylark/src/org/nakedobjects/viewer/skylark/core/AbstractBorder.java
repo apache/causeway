@@ -157,8 +157,7 @@ public class AbstractBorder extends AbstractViewDecorator {
         if (onBorder != on) {
             markDamaged();
             onBorder = on;
-    //        LOG.debug("On border " + onBorder + " " + this);
-        }
+         }
 
         if(!on) {
 	        at.move(-getLeft(), -getTop());

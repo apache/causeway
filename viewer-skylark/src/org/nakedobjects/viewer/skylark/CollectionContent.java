@@ -24,9 +24,13 @@ public abstract class CollectionContent extends AbstractContent implements Conte
     public void menuOptions(MenuOptionSet options) {
         Naked object = getNaked();
         
+  		// TODO find all collection actions, and make them available
+  		// not valid       ObjectOption.menuOptions((NakedObject) object, options);
+            
         Action[] actions = object.getSpecification().getObjectActions(Action.USER);
 
         for (int i = 0; i < actions.length; i++) {
+            
             MenuOption option;
             option = new MenuOption(actions[i].getName()) {
                 public void execute(Workspace workspace, View view, Location at) {}
