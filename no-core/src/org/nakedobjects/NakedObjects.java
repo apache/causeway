@@ -4,6 +4,8 @@ import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.ReflectionFactory;
+import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.security.Session;
@@ -13,6 +15,10 @@ import org.nakedobjects.utility.DebugString;
 
 public abstract class NakedObjects implements DebugInfo {
     private static NakedObjects singleton;
+
+    public static DebugInfo debug() {
+        return getInstance();
+    }
 
     public static Configuration getConfiguration() {
         return getInstance().configuration();
@@ -32,6 +38,14 @@ public abstract class NakedObjects implements DebugInfo {
 
     public static PojoAdapterFactory getPojoAdapterFactory() {
         return getInstance().pojoAdapterFactory();
+    }
+
+    public static ReflectionFactory getReflectionFactory() {
+        return getInstance().reflectionFactory();
+    }
+
+    public static ReflectorFactory getReflectorFactory() {
+        return getInstance().reflectorFactory();
     }
 
     public static NakedObjectSpecificationLoader getSpecificationLoader() {
@@ -105,6 +119,10 @@ public abstract class NakedObjects implements DebugInfo {
 
     protected abstract PojoAdapterFactory pojoAdapterFactory();
 
+    protected abstract ReflectionFactory reflectionFactory();
+
+    protected abstract ReflectorFactory reflectorFactory();
+
     public abstract void setConfiguration(Configuration configuration);
 
     public abstract void setObjectManager(NakedObjectManager objectManager);
@@ -116,10 +134,6 @@ public abstract class NakedObjects implements DebugInfo {
     public abstract void setSpecificationLoader(NakedObjectSpecificationLoader loader);
 
     protected abstract NakedObjectSpecificationLoader specificationLoader();
-
-    public static DebugInfo debug() {
-        return getInstance();
-    }
 
 }
 
