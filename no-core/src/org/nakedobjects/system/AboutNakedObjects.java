@@ -1,5 +1,7 @@
 package org.nakedobjects.system;
 
+import org.apache.log4j.Logger;
+
 
 public class AboutNakedObjects {
 
@@ -32,6 +34,13 @@ public class AboutNakedObjects {
         System.out.println(getName() + " version " + getVersion());
         System.out.println("Build: " + getBuildId());
         System.out.println(getCopyrightNotice());
+    }
+
+    public static void logVersion() {
+        Logger log = Logger.getLogger("Naked Objects");
+        log.info(getName());
+        log.info(getVersion());
+        log.info(getBuildId());    
     }
 }
 
