@@ -1,5 +1,6 @@
 package org.nakedobjects.object.persistence.defaults;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.persistence.CreateObjectCommand;
 import org.nakedobjects.object.persistence.DestroyObjectCommand;
@@ -7,6 +8,8 @@ import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.object.persistence.PersistenceCommand;
 import org.nakedobjects.object.persistence.SaveObjectCommand;
+import org.nakedobjects.object.reflect.PojoAdapterFactory;
+import org.nakedobjects.utility.ToString;
 
 import java.util.Enumeration;
 import java.util.Vector;
@@ -125,8 +128,23 @@ public class Transaction {
         if (commandsArray.length > 0) {
             objectStore.startTransaction();
             try {
-            objectStore.runTransaction(commandsArray);
-            objectStore.endTransaction();
+                objectStore.runTransaction(commandsArray);
+                objectStore.endTransaction();
+                
+                PojoAdapterFactory loaded = NakedObjects.getPojoAdapterFactory();
+                for (int i = 0; i < commandsArray.length; i++) {
+                    PersistenceCommand command = commandsArray[i];
+                    if(command instanceof CreateObjectCommand) {
+	                    NakedObject object;
+                        object = command.onObject();
+                        loaded.loaded(object);
+
+                    } else if(command instanceof DestroyObjectCommand) {
+                        NakedObject object = command.onObject();
+                        loaded.unloaded(object);
+                        
+                    }
+                }
             } catch (ObjectStoreException e) {
                 objectStore.abortTransaction();
                 throw e;
@@ -135,7 +153,10 @@ public class Transaction {
     }
 
     public String toString() {
-        return "Transaction [complete=" + complete + ",commands=" + commands.size() + "]";
+        ToString str = new ToString(this);
+        str.append("complete", complete);
+        str.append("commands", commands.size());
+        return str.toString();
     }
 }
 
