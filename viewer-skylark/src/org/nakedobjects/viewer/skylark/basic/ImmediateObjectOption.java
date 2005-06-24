@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
  * vetoing the option and giving the option an name respectively.
  */
 class ImmediateObjectOption extends MenuOption {
+    private static final Logger LOG = Logger.getLogger(ImmediateObjectOption.class);
 
     public static ImmediateObjectOption createOption(Action action, NakedObject object) {
         Assert.assertTrue("Only suitable for 0 param methods", action.parameters().length == 0);
@@ -80,10 +81,9 @@ class ImmediateObjectOption extends MenuOption {
 	                    view.objectActionResult(returnedObject, at);
 	                }
                 } catch (Exception e) {
+                    LOG.error("Error while executing action: ", e);
                     Naked error = NakedObjects.getPojoAdapterFactory().createAdapter(
                             new Error("Error while executing action:", e));
-                    Logger logger = Logger.getLogger(object.getClass());
-                    logger.error(error);
                     workspace.addOpenViewFor(error, at);
                 }
             }
