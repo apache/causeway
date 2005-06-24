@@ -15,7 +15,11 @@ public class LineBorder extends AbstractBorder {
 	}
 	
 	public LineBorder(int size, View wrappedView) {
-	    this(size, Style.PRIMARY2, wrappedView);
+	    this(size, Style.BLACK, wrappedView);
+	}
+	
+	public LineBorder(Color color, View wrappedView) {
+		this(1, color, wrappedView);
 	}
 	
 	public LineBorder(int size, Color color, View wrappedView) {
@@ -34,7 +38,6 @@ public class LineBorder extends AbstractBorder {
     }
    
 	public void draw(Canvas canvas) {
-		
 		Size s  = getSize();
 		int width = s.getWidth();
 		for (int i = 0; i < left; i++) {

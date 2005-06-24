@@ -4,28 +4,38 @@ import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
-import org.nakedobjects.viewer.skylark.core.AbstractViewDecorator;
 
-public class PlainBackground extends AbstractViewDecorator {
-	private Color color;
+public class PanelBorder extends LineBorder {
+	private Color background;
 
-    public PlainBackground(View wrappedView) {
+    public PanelBorder(View wrappedView) {
 		super(wrappedView);	
-		color = Style.WHITE;
+		background = Style.WHITE;
 	}
 
-    public PlainBackground(View wrappedView, Color color) {
-		super(wrappedView);	
-		this.color = color;
+    public PanelBorder(int size, Color border, Color background, View wrappedView) {
+        super(size, border, wrappedView);
+        this.background = background;
+    }
+    
+    public PanelBorder(int size, View wrappedView) {
+        super(size, wrappedView);
+		background = Style.WHITE;
+    }
+    
+    public PanelBorder(Color border, Color background, View wrappedView) {
+        super(border, wrappedView);
+		this.background = background;
 	}
-	
+
+    
 	public void draw(Canvas canvas) {
-		canvas.clearBackground(this, color);
+		canvas.clearBackground(this, background);
 		super.draw(canvas);
 	}
 	
-	public void setColor(Color color) {
-        this.color = color;
+	public void setBackground(Color color) {
+        this.background = color;
     }
 }
 
