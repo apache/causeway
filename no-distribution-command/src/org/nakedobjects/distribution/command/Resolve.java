@@ -1,26 +1,29 @@
-package org.nakedobjects.distribution.xml;
+package org.nakedobjects.distribution.command;
 
-import org.nakedobjects.distribution.command.CommandClient;
-import org.nakedobjects.distribution.command.Request;
-import org.nakedobjects.distribution.command.Response;
+import org.nakedobjects.distribution.ObjectData;
+import org.nakedobjects.distribution.ServerDistribution;
+import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.security.Session;
 
-import com.thoughtworks.xstream.XStream;
 
+public class Resolve extends AbstractRequest {
+    private final Oid objectOid;
+    private final String objectType;
 
-public class XmlClient extends CommandClient {
-    private ClientConnection connection;
-
-    public XmlClient() {
-        connection = new ClientConnection();
-        connection.init();
+    public Resolve(Session session, Oid objectOid, String objectType) {
+        super(session);
+        this.objectOid = objectOid;
+        this.objectType = objectType;
     }
 
-    protected Response executeRemotely(Request request) {
-        XStream xstream = new XStream();
-        String requestData = xstream.toXML(request);
-        String responseData = connection.request(requestData);
-        return (Response) xstream.fromXML(responseData);
+    public void execute(ServerDistribution sd) {
+        setResponse(sd.resolveImmediately(session, objectOid, objectType));
     }
+
+    public ObjectData getUpdateData() {
+        return (ObjectData) getResponse();
+    }
+
 }
 
 /*

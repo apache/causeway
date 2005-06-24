@@ -1,26 +1,25 @@
-package org.nakedobjects.distribution.xml.request;
+package org.nakedobjects.distribution.command;
 
-import org.nakedobjects.distribution.ObjectData;
-import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.security.Session;
 
-public class MakePersistent extends AbstractRequest {
-    private ObjectData object;
-
-    public MakePersistent(Session session, ObjectData object) {
-        super(session);
+class ObjectTransferCarrier {
+    private Object object;
+    private Oid oid;
+    
+    
+    ObjectTransferCarrier(Object object, Oid oid) {
+        super();
         this.object = object;
+        this.oid = oid;
     }
 
-    public void execute(ServerDistribution sd) {
-        response = sd.makePersistent(session, object);
+    Object getObject() {
+        return object;
     }
-
-    public Oid[] getOids() {
-        return (Oid[]) response;
+    
+    Oid getOid() {
+        return oid;
     }
-
 }
 
 

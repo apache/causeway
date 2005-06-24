@@ -1,17 +1,19 @@
-package org.nakedobjects.distribution.xml;
+package org.nakedobjects.distribution.command;
 
 import org.nakedobjects.distribution.ServerDistribution;
+import org.nakedobjects.object.security.Session;
 
+public class AbortTransaction extends AbstractRequest {
 
-public interface Request {
+    public AbortTransaction(Session session) {
+        super(session);
+    }
 
-    void execute(ServerDistribution sd);
-
-    void setResponse(Object response);
+    public void execute(ServerDistribution sd) {
+        sd.abortTransaction(session);
+    }
     
-    Object getResponse();
     
-    int getId();
 }
 
 

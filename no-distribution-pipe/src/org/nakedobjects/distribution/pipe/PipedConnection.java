@@ -1,26 +1,56 @@
-package org.nakedobjects.distribution.xml;
+package org.nakedobjects.distribution.pipe;
 
-import org.nakedobjects.distribution.command.CommandClient;
 import org.nakedobjects.distribution.command.Request;
 import org.nakedobjects.distribution.command.Response;
 
-import com.thoughtworks.xstream.XStream;
+import org.apache.log4j.Logger;
 
 
-public class XmlClient extends CommandClient {
-    private ClientConnection connection;
+public class PipedConnection {
+    private static final Logger LOG = Logger.getLogger(PipedConnection.class);
+    private Request request;
+    private Response response;
 
-    public XmlClient() {
-        connection = new ClientConnection();
-        connection.init();
+    public synchronized void setRequest(Request request) {
+        this.request = request;
+        notify();
     }
 
-    protected Response executeRemotely(Request request) {
-        XStream xstream = new XStream();
-        String requestData = xstream.toXML(request);
-        String responseData = connection.request(requestData);
-        return (Response) xstream.fromXML(responseData);
+    public synchronized Request getRequest() {
+        while (request == null) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                LOG.error("wait (getRequest) interrupted", e);
+            }
+        }
+
+        Request r = request;
+        request = null;
+        notify();
+        return r;
     }
+
+    public synchronized void setResponse(Response response) {
+        this.response = response;
+        notify();
+    }
+
+    public synchronized Response getResponse() {
+        while (response == null) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                LOG.error("wait (getResponse) interrupted", e);
+            }
+        }
+
+        Response r = response;
+        response = null;
+        notify();
+        return r;
+    }
+
 }
 
 /*

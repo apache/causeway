@@ -1,19 +1,28 @@
-package org.nakedobjects.distribution.xml.request;
+package org.nakedobjects.distribution.command;
 
 import org.nakedobjects.distribution.ServerDistribution;
+import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.security.Session;
 
-public class AbortTransaction extends AbstractRequest {
+public class ClearAssociation extends AbstractRequest {
+    private final String fieldIdentifier;
+    private final Oid objectOid;
+    private final String objectType;
+    private final Oid associateOid;
+    private final String associateType;
 
-    public AbortTransaction(Session session) {
+    public ClearAssociation(Session session, String fieldIdentifier, Oid objectOid, String objectType, Oid associateOid, String associateType) {
         super(session);
+        this.fieldIdentifier = fieldIdentifier;
+        this.objectOid = objectOid;
+        this.objectType = objectType;
+        this.associateOid = associateOid;
+        this.associateType = associateType;
     }
 
     public void execute(ServerDistribution sd) {
-        sd.abortTransaction(session);
+        sd.clearAssociation(session, fieldIdentifier, objectOid, objectType, associateOid, associateType);
     }
-    
-    
 }
 
 

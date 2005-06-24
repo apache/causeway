@@ -1,19 +1,17 @@
-package org.nakedobjects.distribution.xml.request;
+package org.nakedobjects.distribution.command;
 
 import org.nakedobjects.distribution.ServerDistribution;
-import org.nakedobjects.object.security.Session;
 
-public class EndTransaction extends AbstractRequest {
 
-    public EndTransaction(Session session) {
-        super(session);
-    }
+public interface Request {
 
-    public void execute(ServerDistribution sd) {
-        sd.endTransaction(session);
-    }
+    void execute(ServerDistribution sd);
+
+    void setResponse(Object response);
     
+    Object getResponse();
     
+    int getId();
 }
 
 

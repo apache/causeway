@@ -1,27 +1,39 @@
-package org.nakedobjects.distribution.xml.request;
+package org.nakedobjects.distribution.command;
+import org.nakedobjects.distribution.ObjectData;
+import org.nakedobjects.utility.ToString;
 
-import org.nakedobjects.distribution.ServerDistribution;
-import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.security.Session;
+public class Response {
+    private int id;
+    private Object object;
+    private ObjectData[] updates;
 
-public class ClearAssociation extends AbstractRequest {
-    private final String fieldIdentifier;
-    private final Oid objectOid;
-    private final String objectType;
-    private final Oid associateOid;
-    private final String associateType;
-
-    public ClearAssociation(Session session, String fieldIdentifier, Oid objectOid, String objectType, Oid associateOid, String associateType) {
-        super(session);
-        this.fieldIdentifier = fieldIdentifier;
-        this.objectOid = objectOid;
-        this.objectType = objectType;
-        this.associateOid = associateOid;
-        this.associateType = associateType;
+    public Response(Request request) {
+        this.id = request.getId();
+        this.object = request.getResponse();
     }
 
-    public void execute(ServerDistribution sd) {
-        sd.clearAssociation(session, fieldIdentifier, objectOid, objectType, associateOid, associateType);
+    public Object getObject() {
+        return object;
+    }
+    
+    public int getId() {
+        return id;
+    }
+
+    public void setUpdates(ObjectData[] updates) {
+        this.updates = updates;
+    }
+
+    public ObjectData[] getUpdates() {
+        return updates;
+    }
+    
+    public String toString() {
+        ToString str = new ToString(this);
+        str.append("id", id);
+        str.append("object", object);
+        str.append("updates", updates == null ? "null" : "" + updates.length);
+        return str.toString();
     }
 }
 

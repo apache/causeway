@@ -1,6 +1,5 @@
-package org.nakedobjects.distribution.xml.request;
+package org.nakedobjects.distribution.command;
 
-import org.nakedobjects.distribution.xml.Request;
 import org.nakedobjects.object.security.Session;
 
 

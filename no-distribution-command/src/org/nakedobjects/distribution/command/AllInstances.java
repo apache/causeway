@@ -1,19 +1,28 @@
-package org.nakedobjects.distribution.xml.request;
+package org.nakedobjects.distribution.command;
 
+import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.object.security.Session;
 
-public class StartTransaction extends AbstractRequest {
+public class AllInstances extends AbstractRequest {
 
-    public StartTransaction(Session session) {
+    private final String name;
+    private boolean includeSubclasses;
+
+    public AllInstances(Session session, String name, boolean includeSubclasses) {
         super(session);
+        this.name = name;
+        this.includeSubclasses = includeSubclasses;
     }
 
     public void execute(ServerDistribution sd) {
-        sd.startTransaction(session);
+        ObjectData[] instances = sd.allInstances(session, name, includeSubclasses);
+        setResponse(instances);
     }
-    
-    
+
+    public ObjectData[] getInstances() {
+        return  (ObjectData[]) response;
+    }
 }
 
 

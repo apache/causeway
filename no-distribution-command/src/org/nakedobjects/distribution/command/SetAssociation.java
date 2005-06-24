@@ -1,28 +1,31 @@
-package org.nakedobjects.distribution.xml.request;
+package org.nakedobjects.distribution.command;
 
-import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ServerDistribution;
+import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.security.Session;
 
-public class AllInstances extends AbstractRequest {
+public class SetAssociation extends AbstractRequest {
+    private final String fieldIdentifier;
+    private final Oid objectOid;
+    private final String objectType;
+    private final Oid associateOid;
+    private final String associateType;
 
-    private final String name;
-    private boolean includeSubclasses;
-
-    public AllInstances(Session session, String name, boolean includeSubclasses) {
+    public SetAssociation(Session session, String fieldIdentifier, Oid objectOid, String objectType, Oid associateOid, String associateType) {
         super(session);
-        this.name = name;
-        this.includeSubclasses = includeSubclasses;
+        this.fieldIdentifier = fieldIdentifier;
+        this.objectOid = objectOid;
+        this.objectType = objectType;
+        this.associateOid = associateOid;
+        this.associateType = associateType;
     }
-
+    
     public void execute(ServerDistribution sd) {
-        ObjectData[] instances = sd.allInstances(session, name, includeSubclasses);
-        setResponse(instances);
+        sd.setAssociation(session, fieldIdentifier, objectOid, objectType, associateOid, associateType);
     }
 
-    public ObjectData[] getInstances() {
-        return  (ObjectData[]) response;
-    }
+
+
 }
 
 

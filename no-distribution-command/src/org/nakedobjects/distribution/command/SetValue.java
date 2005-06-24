@@ -1,31 +1,26 @@
-package org.nakedobjects.distribution.xml.request;
+package org.nakedobjects.distribution.command;
 
 import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.security.Session;
 
-public class SetAssociation extends AbstractRequest {
+public class SetValue extends AbstractRequest {
     private final String fieldIdentifier;
-    private final Oid objectOid;
+    private Oid oid;
+    private Object associate;
     private final String objectType;
-    private final Oid associateOid;
-    private final String associateType;
 
-    public SetAssociation(Session session, String fieldIdentifier, Oid objectOid, String objectType, Oid associateOid, String associateType) {
+    public SetValue(Session session, String fieldIdentifier, Oid oid, String objectType, Object associate) {
         super(session);
         this.fieldIdentifier = fieldIdentifier;
-        this.objectOid = objectOid;
+        this.oid = oid;
         this.objectType = objectType;
-        this.associateOid = associateOid;
-        this.associateType = associateType;
+        this.associate = associate;
     }
-    
+
     public void execute(ServerDistribution sd) {
-        sd.setAssociation(session, fieldIdentifier, objectOid, objectType, associateOid, associateType);
+        sd.setValue(session, fieldIdentifier, oid, objectType, associate);
     }
-
-
-
 }
 
 

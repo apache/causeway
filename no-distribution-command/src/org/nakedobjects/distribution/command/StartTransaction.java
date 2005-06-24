@@ -1,25 +1,19 @@
-package org.nakedobjects.distribution.xml.request;
+package org.nakedobjects.distribution.command;
 
-import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.distribution.ServerDistribution;
+import org.nakedobjects.object.security.Session;
 
-class ObjectTransferCarrier {
-    private Object object;
-    private Oid oid;
-    
-    
-    ObjectTransferCarrier(Object object, Oid oid) {
-        super();
-        this.object = object;
-        this.oid = oid;
+public class StartTransaction extends AbstractRequest {
+
+    public StartTransaction(Session session) {
+        super(session);
     }
 
-    Object getObject() {
-        return object;
+    public void execute(ServerDistribution sd) {
+        sd.startTransaction(session);
     }
     
-    Oid getOid() {
-        return oid;
-    }
+    
 }
 
 

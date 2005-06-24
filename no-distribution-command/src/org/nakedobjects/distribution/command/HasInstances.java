@@ -1,31 +1,24 @@
-package org.nakedobjects.distribution.xml;
+package org.nakedobjects.distribution.command;
 
-import org.nakedobjects.distribution.ObjectData;
+import org.nakedobjects.distribution.ServerDistribution;
+import org.nakedobjects.object.security.Session;
 
-public class Response {
-    private int id;
-    private Object object;
-    private ObjectData[] updates;
+public class HasInstances extends AbstractRequest {
 
-    public Response(Request request) {
-        this.id = request.getId();
-        this.object = request.getResponse();
+    private final String name;
+
+    public HasInstances(Session session, String name) {
+        super(session);
+        this.name = name;
     }
 
-    public Object getObject() {
-        return object;
+    public void execute(ServerDistribution sd) {
+        boolean hasInstances = sd.hasInstances(session, name);
+        setResponse(new Boolean(hasInstances));
     }
     
-    public int getId() {
-        return id;
-    }
-
-    public void setUpdates(ObjectData[] updates) {
-        this.updates = updates;
-    }
-
-    public ObjectData[] getUpdates() {
-        return updates;
+    public boolean getFlag() {
+        return ((Boolean) response).booleanValue();
     }
 }
 

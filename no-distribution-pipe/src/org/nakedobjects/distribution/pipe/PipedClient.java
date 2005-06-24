@@ -1,25 +1,20 @@
-package org.nakedobjects.distribution.xml;
+package org.nakedobjects.distribution.pipe;
 
 import org.nakedobjects.distribution.command.CommandClient;
 import org.nakedobjects.distribution.command.Request;
 import org.nakedobjects.distribution.command.Response;
 
-import com.thoughtworks.xstream.XStream;
 
-
-public class XmlClient extends CommandClient {
-    private ClientConnection connection;
-
-    public XmlClient() {
-        connection = new ClientConnection();
-        connection.init();
+public class PipedClient extends CommandClient {
+    private PipedConnection communication;
+    
+    public void setConnection(PipedConnection communication) {
+        this.communication = communication;
     }
-
-    protected Response executeRemotely(Request request) {
-        XStream xstream = new XStream();
-        String requestData = xstream.toXML(request);
-        String responseData = connection.request(requestData);
-        return (Response) xstream.fromXML(responseData);
+    
+    protected synchronized Response executeRemotely(Request request) {
+        communication.setRequest(request);
+        return communication.getResponse();
     }
 }
 

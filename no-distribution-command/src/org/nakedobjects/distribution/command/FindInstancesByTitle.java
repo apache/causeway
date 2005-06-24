@@ -1,4 +1,4 @@
-package org.nakedobjects.distribution.xml.request;
+package org.nakedobjects.distribution.command;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.distribution.ObjectData;

@@ -3,9 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="/no-core"/>
-	<classpathentry kind="lib" path="D:/no-development/nakedobjects/lib/xpp3-1.1.3.4d_b4_min.jar"/>
-	<classpathentry kind="lib" path="D:/no-development/nakedobjects/lib/xstream-1.0.2.jar"/>
+	<classpathentry sourcepath="JUNIT_SRC" kind="var" path="JUNIT"/>
 	<classpathentry sourcepath="LOG4J_SRC" kind="var" path="LOG4J"/>
-	<classpathentry kind="src" path="/no-distribution-command"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

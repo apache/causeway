@@ -3,6 +3,8 @@ package org.nakedobjects.distribution.xml;
 import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.distribution.SingleResponseUpdateNotifier;
 import org.nakedobjects.distribution.UpdatePackager;
+import org.nakedobjects.distribution.command.Request;
+import org.nakedobjects.distribution.command.Response;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

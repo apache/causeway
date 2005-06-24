@@ -1,25 +1,26 @@
-package org.nakedobjects.distribution.xml.request;
+package org.nakedobjects.distribution.command;
 
+import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ServerDistribution;
+import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.security.Session;
 
-public class HasInstances extends AbstractRequest {
+public class MakePersistent extends AbstractRequest {
+    private ObjectData object;
 
-    private final String name;
-
-    public HasInstances(Session session, String name) {
+    public MakePersistent(Session session, ObjectData object) {
         super(session);
-        this.name = name;
+        this.object = object;
     }
 
     public void execute(ServerDistribution sd) {
-        boolean hasInstances = sd.hasInstances(session, name);
-        setResponse(new Boolean(hasInstances));
+        response = sd.makePersistent(session, object);
     }
-    
-    public boolean getFlag() {
-        return ((Boolean) response).booleanValue();
+
+    public Oid[] getOids() {
+        return (Oid[]) response;
     }
+
 }
 
 
