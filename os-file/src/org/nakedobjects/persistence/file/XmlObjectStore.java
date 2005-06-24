@@ -207,14 +207,14 @@ public class XmlObjectStore implements NakedObjectStore {
                 instance = loadedObjects().getLoadedObject(oid);
             } else {
                 instance = (NakedObject) createSkeletalObject(oid, instanceData.getClassName());
-                //                instance.setContext(NakedObjectContext.getDefaultContext());
                 loadedObjects().loaded(instance);
             }
+            resolveImmediately(instance);
             initObject(instance, instanceData);
-            if (!instance.isResolved()) {
+/*            if (!instance.isResolved()) {
                 instance.setResolved();
             }
-
+*/
             if (criteria == null || criteria.matches(instance)) {
                 instances[count++] = instance;
             }
@@ -265,6 +265,7 @@ public class XmlObjectStore implements NakedObjectStore {
 
             if (field.isValue()) {
                 object.initValue((OneToOneAssociation) field, data.get(field.getName()));
+                
             } else if (field instanceof OneToManyAssociation) {
                 /*
                  * The internal collection is already a part of the object, and
@@ -356,12 +357,12 @@ public class XmlObjectStore implements NakedObjectStore {
     public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectStoreException {}
 
     public void resolveImmediately(NakedObject object) throws ObjectStoreException {
+        LOG.info("resolve-immediately: " + object);
         ObjectData data = (ObjectData) dataManager.loadData((SerialOid) object.getOid());
         if (data == null) {
             LOG.warn("Not able to read in data - during resolve - for " + object);
         } else {
             initObject(object, data);
-
         }
     }
 

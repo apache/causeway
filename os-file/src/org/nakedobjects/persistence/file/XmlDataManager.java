@@ -1,7 +1,6 @@
 package org.nakedobjects.persistence.file;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.ObjectStoreException;
@@ -29,8 +28,8 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 
 public class XmlDataManager implements DataManager {
-    private static String directory() {
-        return ConfigurationFactory.getConfiguration().getString("xml-object-store.directory", "xml");
+    public static String directory() {
+        return NakedObjects.getConfiguration().getString("xml-object-store.directory", "xml");
     }
 
     public String getDebugData() {
@@ -185,7 +184,7 @@ public class XmlDataManager implements DataManager {
             this.directory.mkdirs();
         }
 
-        charset = ConfigurationFactory.getConfiguration().getString(ENCODING_PROPERTY, DEFAULT_ENCODING);
+        charset = NakedObjects.getConfiguration().getString(ENCODING_PROPERTY, DEFAULT_ENCODING);
     }
 
     /**

@@ -6,7 +6,6 @@ import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.fixture.Fixture;
 import org.nakedobjects.object.help.HelpManagerAssist;
@@ -61,7 +60,7 @@ public class JavaExploration {
             name = name.substring(name.lastIndexOf('.') + 1);
 
             Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(DEFAULT_CONFIG, false));
-            NakedObjects nakedObjects = new  NakedObjectsClient();
+            NakedObjectsClient nakedObjects = new  NakedObjectsClient();
             nakedObjects.setConfiguration(configuration);
             PropertyConfigurator.configure(configuration.getProperties("log4j"));
 
@@ -111,8 +110,8 @@ public class JavaExploration {
             pojoAdapterFactory.setReflectorFactory(reflectorFactory);
             nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
             
-            NakedObjectSpecificationImpl.setReflectionFactory(reflectionFactory);
-            specificationLoader.setReflectorFactory(reflectorFactory);
+            nakedObjects.setReflectionFactory(reflectionFactory);
+            nakedObjects.setReflectorFactory(reflectorFactory);
 
             reflectorFactory.setObjectFactory(objectFactory);
 

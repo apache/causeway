@@ -3,7 +3,6 @@ package org.nakedobjects.persistence.file;
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
@@ -33,7 +32,7 @@ public class XmlDataManagerTest extends TestCase {
 	protected void setUp() throws Exception {		
 		LogManager.getLoggerRepository().setThreshold(Level.OFF);
 		
-		ConfigurationFactory.setConfiguration(new Configuration());
+		new NakedObjectsClient().setConfiguration(new Configuration());
  		XmlDataManager.clearTestDirectory();
 		manager = new XmlDataManager("tmp/tests");
 

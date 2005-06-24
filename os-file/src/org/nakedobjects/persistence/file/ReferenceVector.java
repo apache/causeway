@@ -25,7 +25,9 @@
 package org.nakedobjects.persistence.file;
 
 import org.nakedobjects.object.persistence.defaults.SerialOid;
+import org.nakedobjects.utility.ToString;
 
+import java.util.Enumeration;
 import java.util.Vector;
 
 public class ReferenceVector {
@@ -44,18 +46,6 @@ public class ReferenceVector {
 		elements.removeElement(oid);
 	}
 
-//	public Object first() {
-//		return references.firstElement();	
-//	}
-//	
-//	public Object last() {
-//		return references.lastElement();	
-//	}
-//	
-//	public Enumeration elements() {
-//		return references.elements();	
-//	}
-//	
 	public SerialOid getOid() {
 		return oid;
 	}
@@ -68,10 +58,6 @@ public class ReferenceVector {
 		return (SerialOid) elements.elementAt(index);
 	}
 
-//	public boolean contains(Object reference) {
-//		return references.contains(reference);
-//	}
-//	
 	public boolean equals(Object obj) {
       if (obj == this) {
          return true;
@@ -88,5 +74,12 @@ public class ReferenceVector {
 		int h = 17;
 		h = 37 * h + elements.hashCode();
 		return h;
-	}	
+	}
+	
+	public String toString() {
+	    ToString str = new ToString(this);
+	    str.append("oid", oid);
+	    str.append("refs", elements);
+        return str.toString();
+    }
 }

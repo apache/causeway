@@ -4,7 +4,6 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.ComponentLoader;
 import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
@@ -102,8 +101,7 @@ public abstract class AcceptanceTestCase extends TestCase {
         
         NakedObjectsClient nakedObjects = new NakedObjectsClient();
         nakedObjects.setConfiguration(configuration);
-        ConfigurationFactory.setConfiguration(configuration);
-        
+          
         Properties logProperties = configuration.getProperties("log4j");
         if (logProperties.size() == 0) {
             LogManager.getRootLogger().setLevel(Level.OFF);
@@ -158,7 +156,7 @@ public abstract class AcceptanceTestCase extends TestCase {
 
     protected abstract FixtureBuilder createFixtureBuilder();
 
-    protected abstract void setupFramework(NakedObjects nakedObjects);
+    protected abstract void setupFramework(NakedObjectsClient nakedObjects);
 
     protected abstract void setUpFixtures();
 

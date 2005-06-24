@@ -1,9 +1,8 @@
 package org.nakedobjects.example.xat;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.fixture.FixtureBuilder;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
@@ -51,11 +50,11 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
     
     protected void setUp() throws Exception {
         LOG.info("test set up " + getName());
-       methodProfiler.start();
+        methodProfiler.start();
         super.setUp();
         methodProfiler.stop();
         LOG.info("test set up complete " + getName() + " " + methodProfiler.timeLog());
-       System.out.print(getName() + ": \t" + methodProfiler.timeLog());
+        System.out.print(getName() + ": \t" + methodProfiler.timeLog());
     }
     
     protected void tearDown() throws Exception {
@@ -78,7 +77,7 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
        System.out.print(" \t" + methodProfiler.timeLog());
    }
    
-    protected final void setupFramework(NakedObjects nakedObjects) {
+    protected final void setupFramework(NakedObjectsClient nakedObjects) {
         JavaBusinessObjectContainer container = new JavaBusinessObjectContainer();
 
         JavaObjectFactory objectFactory = new JavaObjectFactory();
@@ -110,8 +109,8 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
         pojoAdapterFactory.setReflectorFactory(reflectorFactory);
         nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
 
-        NakedObjectSpecificationImpl.setReflectionFactory(reflectionFactory);
-        specificationLoader.setReflectorFactory(reflectorFactory);
+        nakedObjects.setReflectionFactory(reflectionFactory);
+        nakedObjects.setReflectorFactory(reflectorFactory);
 
         reflectorFactory.setObjectFactory(objectFactory);
         
