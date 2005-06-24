@@ -1,36 +1,12 @@
 package org.nakedobjects;
 
-import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
-import org.nakedobjects.object.security.Session;
-import org.nakedobjects.utility.ToString;
-
 import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
 
 
-public class NakedObjectsByThread extends NakedObjects {
+public class NakedObjectsByThread extends NakedObjectsServer {
     private static final Logger LOG = Logger.getLogger(NakedObjectsByThread.class);
-    
-    private static class NakedObjectsData {
-        protected PojoAdapterFactory adapterFactory;
-        protected Configuration configuration;
-        protected NakedObjectManager objectManager;
-        protected Session session;
-        protected NakedObjectSpecificationLoader specificationLoader;
-        
-        public String toString() {
-            ToString toString = new ToString(this);
-            toString.append("thread", Thread.currentThread());
-            toString.append("objectManager", objectManager);
-            toString.append("session", session);
-            toString.append("adapterFactory", adapterFactory);
-            return toString.toString();
-        }
-    }
 
     public static NakedObjects createInstance() {
         if (getInstance() == null) {
@@ -44,103 +20,18 @@ public class NakedObjectsByThread extends NakedObjects {
 
     private NakedObjectsByThread() {}
 
-    protected Configuration configuration() {
-        return getLocal().configuration;
-    }
-
-    protected Session currentSession() {
-        return getLocal().session;
-    }
-
     protected NakedObjectsData getLocal() {
         Thread thread = Thread.currentThread();
-        LOG.info("in " + thread);       
+        LOG.info("in " + thread);
         NakedObjectsData local = (NakedObjectsData) threads.get(thread);
         if (local == null) {
             local = new NakedObjectsData();
             threads.put(thread, local);
             LOG.info("  creating local " + local + "; now have " + threads.size() + " locals");
         } else {
-            LOG.info("  using local " + local);            
+            LOG.info("  using local " + local);
         }
         return local;
-    }
-
-    protected NakedObjectManager objectManager() {
-        return getLocal().objectManager;
-    }
-
-    protected PojoAdapterFactory pojoAdapterFactory() {
-        return getLocal().adapterFactory;
-    }
-
-    /**
-     * Expose as a .NET property
-     * 
-     * @property
-     */
-    public void set_Configuration(Configuration configuration) {
-        setConfiguration(configuration);
-    }
-
-    /**
-     * Expose as a .NET property
-     * 
-     * @property
-     */
-    public void set_ObjectManager(NakedObjectManager objectManager) {
-        setObjectManager(objectManager);
-    }
-
-    /**
-     * Expose as a .NET property
-     * 
-     * @property
-     */
-    public void set_PojoAdapterFactory(PojoAdapterFactory adapterFactory) {
-        setPojoAdapterFactory(adapterFactory);
-    }
-
-    /**
-     * Expose as a .NET property
-     * 
-     * @property
-     */
-    public void set_Session(Session session) {
-        setSession(session);
-    }
-
-    /**
-     * Expose as a .NET property
-     * 
-     * @property
-     */
-    public void set_SpecificationLoader(NakedObjectSpecificationLoader specificationLoader) {
-        setSpecificationLoader(specificationLoader);
-    }
-
-    public void setConfiguration(Configuration configuration) {
-        getLocal().configuration = configuration;
-    }
-
-    public void setObjectManager(NakedObjectManager objectManager) {
-        getLocal().objectManager = objectManager;
-    }
-
-    public void setPojoAdapterFactory(PojoAdapterFactory adapterFactory) {
-        getLocal().adapterFactory = adapterFactory;
-    }
-
-    public void setSession(Session session) {
-        getLocal().session = session;
-    }
-
-    public void setSpecificationLoader(NakedObjectSpecificationLoader specificationLoader) {
-        getLocal().specificationLoader = specificationLoader;
-    }
-
-    protected NakedObjectSpecificationLoader specificationLoader() {
-        return getLocal().specificationLoader;
     }
 
     public String getDebugTitle() {
