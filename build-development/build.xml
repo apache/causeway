@@ -21,8 +21,10 @@
 			<fileset dir="../no-xat/${src.dir}" />
 			<fileset dir="../os-file/${src.dir}" />
 		
+			<fileset dir="../no-distribution-command/${src.dir}" />
+			<fileset dir="../no-distribution-pipe/${src.dir}" />
 			<fileset dir="../no-distribution-xml/${src.dir}" />
-			<fileset dir="../no-memento/${src.dir}" />
+			<fileset dir="../utility-memento/${src.dir}" />
 			<fileset dir="../utility-xmlsnapshot/${src.dir}" />
 		</copy>
 		
@@ -47,7 +49,7 @@
 			<fileset dir="../os-file/${test.dir}" />
 		
 			<!--fileset dir="../no-distribution-xml/${test.dir}" /-->
-			<fileset dir="../no-memento/${test.dir}" />
+			<fileset dir="../utility-memento/${test.dir}" />
 			<fileset dir="../utility-xmlsnapshot/${test.dir}" />
 		</copy>
 
