@@ -29,8 +29,8 @@ public class PojoAdapter extends AbstractNakedObject {
     }
     
     public void setOid(Oid oid) {
-        super.setOid(oid);
         LOG.debug("set OID " + oid + " " + this);
+        super.setOid(oid);
     }
     
     protected PojoAdapter(Object pojo) {
@@ -39,6 +39,7 @@ public class PojoAdapter extends AbstractNakedObject {
 
     public void clearAssociation(NakedObjectAssociation specification, NakedObject associate) {
         mustBeResolvedIfPersistent(this);
+        LOG.debug("clearAssociation " + specification.getName() + "/" + associate + " in " + this);
         specification.clearAssociation(this, associate);
     }
 
@@ -52,11 +53,13 @@ public class PojoAdapter extends AbstractNakedObject {
 
     public void clearCollection(OneToManyAssociation association) {
         mustBeResolvedIfPersistent(this);
+        LOG.debug("clearCollection " + association.getName() + " in " + this);
         association.clearCollection(this);
     }
 
     public void clearValue(OneToOneAssociation association) {
         mustBeResolvedIfPersistent(this);
+        LOG.debug("clearValue " + association.getName() + " in " + this);
         association.clearValue(this);
     }
 
@@ -88,6 +91,7 @@ public class PojoAdapter extends AbstractNakedObject {
 
     public Naked execute(Action action, Naked[] parameters) {
         mustBeResolvedIfPersistent(this);
+        LOG.debug("execute " + action.getName() + " in " + this);
         for (int i = 0; parameters != null && i < parameters.length; i++) {
             if (parameters[i] instanceof NakedObject) {
                 mustBeResolvedIfPersistent((NakedObject) parameters[i]);
@@ -154,16 +158,19 @@ public class PojoAdapter extends AbstractNakedObject {
 
     public void initAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
         mustBeResolvedIfPersistent(this);
+        LOG.debug("initAssociation " + field.getName() + "/" + associatedObject + " in " + this);
         field.initAssociation(this, associatedObject);
     }
 
     public void initOneToManyAssociation(OneToManyAssociation field, NakedObject[] instances) {
         mustBeResolvedIfPersistent(this);
+        LOG.debug("initAssociation " + field.getName() + " with " + instances.length + "instances in " + this);
         field.initOneToManyAssociation(this, instances);
     }
 
     public void initValue(OneToOneAssociation field, Object object) {
         mustBeResolvedIfPersistent(this);
+        LOG.debug("initValue " + field.getName() + " with " + object + " in " + this);
         field.initValue(this, object);
     }
 
@@ -182,12 +189,14 @@ public class PojoAdapter extends AbstractNakedObject {
 
     public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
         mustBeResolvedIfPersistent(this);
+        LOG.debug("setAssociation " + field.getName() + " with " + associatedObject + " in " + this);
         field.setAssociation(this, associatedObject);
     }
 
     public void setValue(OneToOneAssociation field, Object object) {
         mustBeResolvedIfPersistent(this);
-        field.setValue(this, object);
+        LOG.debug("setValue " + field.getName() + " with " + object + " in " + this);
+       field.setValue(this, object);
     }
 
     /**
@@ -237,26 +246,6 @@ public class PojoAdapter extends AbstractNakedObject {
         str.append("title", titleString());
         str.appendAsHex("pojo-hash", pojo.hashCode());
         return str.toString();
-
-        
-        
-        // speculating on performance.
-        // For MemoryTestCase, fixture set up went from 1.502 secs to 1.291
-        // secs.
-
-        // return "POJO " + super.toString() +" " + specification == null ? "" :
-        // titleString();
-        //return "PojoAdapter ";
-        //return "PojoAdapter " + titleString();
-       //return "POJO " + super.toString() +" " + specification == null ? "" : titleString();
-      //  return "POJO " + super.toString(); // +" "
-                                                                         // +
-                                                                         // specification
-                                                                         // ==
-                                                                         // null
-                                                                         // ? ""
-                                                                         // :
-                                                                         // titleString();
     }
 
     protected void finalize() throws Throwable {
