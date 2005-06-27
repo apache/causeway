@@ -1,6 +1,7 @@
 package org.nakedobjects.distribution.java;
 
 import org.nakedobjects.distribution.ValueData;
+import org.nakedobjects.utility.ToString;
 
 
 public class JavaValueData implements ValueData {
@@ -21,7 +22,10 @@ public class JavaValueData implements ValueData {
     }
     
     public String toString() {
-        return "JavaValueData [type=" + type + ",value" + value + "]";
+        ToString str = new ToString(this);
+        str.append("type", type);
+        str.append("value", value);
+        return str.toString();
     }
 
 }

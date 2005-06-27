@@ -22,11 +22,24 @@ public final class ProxyOneToOneAssociation extends AbstractOneToOnePeer {
     }
 
     public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("remote clear association " + inObject + "/" + associate);
         if (isPersistent(inObject)) {
-            connection.clearAssociation(NakedObjects.getCurrentSession(), getName(), inObject.getOid(), inObject.getSpecification().getFullName(), associate.getOid(), associate.getSpecification().getFullName());
+            LOG.debug("clear association remotely " + inObject + "/" + associate);
+            connection.clearAssociation(NakedObjects.getCurrentSession(), getName(), inObject.getOid(), inObject
+                    .getSpecification().getFullName(), associate.getOid(), associate.getSpecification().getFullName());
         } else {
+            LOG.debug("clear association locally " + inObject + "/" + associate);
             super.clearAssociation(identifier, inObject, associate);
+        }
+    }
+
+    public Naked getAssociation(MemberIdentifier identifier, NakedObject inObject) {
+        if (isPersistent(inObject) && fullProxy) {
+            //  return
+            // connection.getOneToOneAssociation(ClientSession.getSession(),
+            // inObject);
+            throw new NotExpectedException();
+        } else {
+            return super.getAssociation(identifier, inObject);
         }
     }
 
@@ -38,33 +51,29 @@ public final class ProxyOneToOneAssociation extends AbstractOneToOnePeer {
         }
     }
 
-    public Naked getAssociation(MemberIdentifier identifier, NakedObject inObject) {
-        if (isPersistent(inObject) && fullProxy) {
-          //  return connection.getOneToOneAssociation(ClientSession.getSession(), inObject);
-            throw new NotExpectedException();
-       } else {
-            return super.getAssociation(identifier, inObject);
-        }
-    }
-
-    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {
-        if (isPersistent(inObject)) {
-            connection.setValue(NakedObjects.getCurrentSession(), getName(), inObject.getOid(), inObject.getSpecification().getFullName(),  associate);
-        } else {
-	        super.setValue(identifier, inObject, associate);
-        }
-    }
-
     private boolean isPersistent(NakedObject inObject) {
         return inObject.getOid() != null;
     }
 
-     public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("remote set association " + getName() + " in " + inObject + " with " + associate);
+    public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         if (isPersistent(inObject)) {
-            connection.setAssociation(NakedObjects.getCurrentSession(), getName(), inObject.getOid(), inObject.getSpecification().getFullName(), associate.getOid(), associate.getSpecification().getFullName());
+            LOG.debug("set association remotely " + getName() + " in " + inObject + " with " + associate);
+            connection.setAssociation(NakedObjects.getCurrentSession(), getName(), inObject.getOid(), inObject.getSpecification()
+                    .getFullName(), associate.getOid(), associate.getSpecification().getFullName());
         } else {
+            LOG.debug("set association locally " + getName() + " in " + inObject + " with " + associate);
             super.setAssociation(identifier, inObject, associate);
+        }
+    }
+
+    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object value) {
+        if (isPersistent(inObject)) {
+            LOG.debug("set value remotely " + getName() + " in " + inObject + " with " + value);
+            connection.setValue(NakedObjects.getCurrentSession(), getName(), inObject.getOid(), inObject.getSpecification()
+                    .getFullName(), value);
+        } else {
+            LOG.debug("set value locally " + getName() + " in " + inObject + " with " + value);
+            super.setValue(identifier, inObject, value);
         }
     }
 }

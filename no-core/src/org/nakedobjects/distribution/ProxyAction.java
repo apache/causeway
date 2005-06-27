@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 
 
 public final class ProxyAction extends AbstractActionPeer {
-    final static Logger LOG = Logger.getLogger(ProxyAction.class);
+    private final static Logger LOG = Logger.getLogger(ProxyAction.class);
     private ClientDistribution connection;
     private boolean fullProxy = false;
     private final DataFactory dataFactory;
@@ -31,37 +31,38 @@ public final class ProxyAction extends AbstractActionPeer {
         if (executeRemotely(target)) {
             String[] parameterTypes = pararmeterTypes();
             Data[] parameterObjectData = parameterValues(parameters);
+            LOG.debug(debug("execute remotely",identifier, target, parameters));
             Data result = connection.executeAction(NakedObjects.getCurrentSession(), getType().getName(), getName(),
                     parameterTypes, target.getOid(), target.getSpecification().getFullName(), parameterObjectData);
-            if(result instanceof ExceptionData) {
+            if (result instanceof ExceptionData) {
                 DataHelper.throwRemoteException((ExceptionData) result);
-                
                 throw new NakedObjectRuntimeException("the above should have thrown an exception");
             } else {
-	            NakedObject returnedObject;
-	            returnedObject = result == null ? null : DataHelper.recreateObject((ObjectData) result);
-	            return returnedObject;
+                NakedObject returnedObject;
+                returnedObject = result == null ? null : DataHelper.recreateObject((ObjectData) result);
+                return returnedObject;
             }
         } else {
+            LOG.debug(debug("execute locally", identifier, target, parameters));
             return super.execute(identifier, target, parameters);
         }
     }
 
     private boolean executeRemotely(NakedObject target) {
         boolean remoteAsPersistent = target.getOid() != null;
-        boolean remoteOverride =  getTarget() == Action.REMOTE;
-        boolean localOverride =  getTarget() == Action.LOCAL;
-        
-        if(localOverride) {
+        boolean remoteOverride = getTarget() == Action.REMOTE;
+        boolean localOverride = getTarget() == Action.LOCAL;
+
+        if (localOverride) {
             return false;
         }
-        
-        if(remoteOverride) {
+
+        if (remoteOverride) {
             return true;
         }
-        
+
         return remoteAsPersistent;
-   }
+    }
 
     private Data[] parameterValues(Naked[] parameters) {
         Data parameterObjectData[] = new Data[parameters.length];
@@ -85,10 +86,32 @@ public final class ProxyAction extends AbstractActionPeer {
         if (executeRemotely(target) && fullProxy) {
             String[] parameterTypes = pararmeterTypes();
             Data[] parameterObjectData = parameterValues(parameters);
-            return connection.getActionHint(NakedObjects.getCurrentSession(), getType().getName(), getName(), parameterTypes, target.getOid(), target
-                    .getSpecification().getFullName(), parameterObjectData);
+            LOG.debug(debug("get hint remotely", identifier, target, parameters));
+            return connection.getActionHint(NakedObjects.getCurrentSession(), getType().getName(), getName(), parameterTypes,
+                    target.getOid(), target.getSpecification().getFullName(), parameterObjectData);
         } else {
+            LOG.debug(debug("get hint locally",identifier, target, parameters));
             return super.getHint(identifier, target, parameters);
+        }
+    }
+
+    private String debug(String message, MemberIdentifier identifier, NakedObject target, Naked[] parameters) {
+        if (LOG.isDebugEnabled()) {
+            StringBuffer str = new StringBuffer();
+            str.append(message);
+            str.append(" ");
+            str.append(identifier);
+            str.append(" on ");
+            str.append(target);
+            for (int i = 0; i < parameters.length; i++) {
+                if (i > 0) {
+                    str.append(',');
+                }
+                str.append(parameters[i]);
+            }
+            return str.toString();
+        } else {
+            return "";
         }
     }
 }

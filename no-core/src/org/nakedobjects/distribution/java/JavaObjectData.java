@@ -2,6 +2,7 @@ package org.nakedobjects.distribution.java;
 
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.utility.ToString;
 
 
 public class JavaObjectData implements ObjectData {
@@ -38,13 +39,12 @@ public class JavaObjectData implements ObjectData {
         return version;
     }
     
+    
     public String toString() {
-        StringBuffer str = new StringBuffer();
-        str.append("JavaDataObject [type=");
-        str.append(type);
-        str.append(",oid=");
-        str.append(oid); 
-        str.append(",fields=");
+        ToString str = new ToString(this);
+        str.append("type", type);
+        str.append("oid", oid);
+        str.append("fields=");
         for (int i = 0; i < fieldContent.length; i++) {
             if(i > 0) {
                 str.append(";");

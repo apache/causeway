@@ -1,6 +1,7 @@
 package org.nakedobjects.distribution.java;
 
 import org.nakedobjects.distribution.ExceptionData;
+import org.nakedobjects.utility.ToString;
 
 public class JavaExceptionData implements ExceptionData {
 
@@ -24,6 +25,14 @@ public class JavaExceptionData implements ExceptionData {
 
     public String getStackTrace() {
         return trace;
+    }
+    
+    public String toString() {
+        ToString str = new ToString(this);
+        str.append("type", type);
+        str.append("message", message);
+        str.appendTruncated("trace", trace, 30);
+        return str.toString();
     }
 
 }

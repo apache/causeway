@@ -37,12 +37,14 @@ public class ServerDistribution implements ClientDistribution {
     private ObjectFactory objectFactory;
 
     public ObjectData[] allInstances(Session session, String fullName, boolean includeSubclasses) {
+        LOG.debug("request allInstances of " + fullName  + (includeSubclasses ? "(including subclasses)" : "") + " from " + session);
         TypedNakedCollection instances = objectManager().allInstances(getSpecification(fullName), includeSubclasses);
         return convertToNakedCollection(instances);
     }
 
     public void clearAssociation(Session session, String fieldIdentifier, Oid objectOid, String objectType, Oid associateOid,
             String associateType) {
+        LOG.debug("request clearAssociation " + fieldIdentifier + " on " + objectType + "/" + objectOid + " of " + associateType + "/" + associateOid + " for " + session);
         NakedObject inObject = getNakedObject(session, objectOid, objectType);
         NakedObject associate = getNakedObject(session, associateOid, associateType);
         NakedObjectAssociation association = (NakedObjectAssociation) inObject.getSpecification().getField(fieldIdentifier);
@@ -61,13 +63,16 @@ public class ServerDistribution implements ClientDistribution {
         return data;
     }
 
-    public void destroyObject(Session session, Oid oid, String type) {
-        NakedObject inObject = getNakedObject(session, oid, type);
+    public void destroyObject(Session session, Oid oid, String objectType) {
+        LOG.debug("request destroyObject " + objectType + "/" + oid + " for " + session);
+        NakedObject inObject = getNakedObject(session, oid, objectType);
         objectManager().destroyObject(inObject);
     }
 
     public Data executeAction(Session session, String actionType, String actionIdentifier, String[] parameterTypes,
             Oid objectOid, String objectType, Data[] parameterData) {
+        LOG.debug("request executeAction " + actionIdentifier + " on " + objectType + "/" + objectOid + " for " + session);
+
         NakedObject object = getNakedObject(session, objectOid, objectType);
 
         NakedObjectSpecification[] parameterSpecifiactions = new NakedObjectSpecification[parameterTypes.length];
@@ -132,12 +137,14 @@ public class ServerDistribution implements ClientDistribution {
     }
 
     public ObjectData[] findInstances(Session session, InstancesCriteria criteria) {
+        LOG.debug("request findInstances " + criteria + " for " + session);
         TypedNakedCollection instances = objectManager().findInstances(criteria);
         return convertToNakedCollection(instances);
     }
 
     public Hint getActionHint(Session session, String actionType, String actionIdentifier, String[] parameterTypes,
             Oid objectOid, String objectType, Data[] parameters) {
+        LOG.debug("request getActionHint " + actionIdentifier + " for " + session);
         return new DefaultHint();
     }
 
@@ -145,18 +152,20 @@ public class ServerDistribution implements ClientDistribution {
         return null;
     }
 
-    private NakedObject getNakedObject(Session session, Oid oid, String fullName) {
+    private NakedObject getNakedObject(Session session, Oid oid, String objectType) {
+        LOG.debug("request getNakedObject " + objectType + "/" + oid + " for " + session);
         NakedObject object;
         try {
-            object = objectManager().getObject(oid, getSpecification(fullName));
+            object = objectManager().getObject(oid, getSpecification(objectType));
         } catch (ObjectNotFoundException e) {
             throw new NakedObjectRuntimeException(e);
         }
         return object;
     }
 
-    public ObjectData resolveImmediately(Session session, Oid oid, String fullName) {
-        NakedObject object = getNakedObject(session, oid, fullName);
+    public ObjectData resolveImmediately(Session session, Oid oid, String objectType) {
+        LOG.debug("request resolveImmediately " + objectType + "/" + oid +" for " + session);
+        NakedObject object = getNakedObject(session, oid, objectType);
         return objectDataFactory.createObjectData(object, OBJECT_DATA_DEPTH);
     }
 
@@ -164,11 +173,13 @@ public class ServerDistribution implements ClientDistribution {
         return NakedObjects.getSpecificationLoader().loadSpecification(fullName);
     }
 
-    public boolean hasInstances(Session session, String fullName) {
-        return objectManager().hasInstances(getSpecification(fullName));
+    public boolean hasInstances(Session session, String objectType) {
+        LOG.debug("request hasInstances of " +  objectType + " for " + session);
+        return objectManager().hasInstances(getSpecification(objectType));
     }
 
     public Oid[] makePersistent(Session session, ObjectData data) {
+        LOG.debug("request makePersistent " + data +  " for " + session);
         NakedObject object = DataHelper.recreateObject(data);
         objectFactory.recreatedObject(object.getObject());
         objectManager().startTransaction();
@@ -177,8 +188,9 @@ public class ServerDistribution implements ClientDistribution {
         return new Oid[] { object.getOid() };
     }
 
-    public int numberOfInstances(Session sessionId, String fullName) {
-        return objectManager().numberOfInstances(getSpecification(fullName));
+    public int numberOfInstances(Session session, String objectType) {
+        LOG.debug("request numberOfInstances of " + objectType + " for " + session);
+        return objectManager().numberOfInstances(getSpecification(objectType));
     }
 
     /**
@@ -206,17 +218,9 @@ public class ServerDistribution implements ClientDistribution {
         this.objectFactory = objectFactory;
     }
 
-    public void setAssociation(Session session, String fieldIdentifier, NakedObject inObject, NakedObject associate) {
-        NakedObjectAssociation association = (NakedObjectAssociation) inObject.getSpecification().getField(fieldIdentifier);
-        Hint about = inObject.getHint(association, associate);
-        if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
-            throw new NakedObjectRuntimeException();
-        }
-        inObject.setAssociation(association, associate);
-    }
-
     public void setAssociation(Session session, String fieldIdentifier, Oid objectOid, String objectType, Oid associateOid,
             String associateType) {
+        LOG.debug("request setAssociation " + fieldIdentifier + " on " + objectType + "/" + objectOid + " with " + associateType + "/" + associateOid+ " for " + session);
         NakedObject inObject = getNakedObject(session, objectOid, objectType);
         NakedObject associate = getNakedObject(session, associateOid, associateType);
         NakedObjectAssociation association = (NakedObjectAssociation) inObject.getSpecification().getField(fieldIdentifier);
@@ -240,6 +244,7 @@ public class ServerDistribution implements ClientDistribution {
     }
 
     public void setValue(Session session, String fieldIdentifier, Oid objectOid, String objectType, Object value) {
+        LOG.debug("request setValue " + fieldIdentifier + " on " + objectType + "/" + objectOid + " with " + value + " for " + session);
         NakedObject inObject = getNakedObject(session, objectOid, objectType);
         OneToOneAssociation association = (OneToOneAssociation) inObject.getSpecification().getField(fieldIdentifier);
         Hint about = inObject.getHint(association, NakedObjects.getPojoAdapterFactory().createAdapter(value));

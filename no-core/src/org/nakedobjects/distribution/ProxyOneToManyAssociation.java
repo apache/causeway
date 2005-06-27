@@ -25,15 +25,27 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
 
     public void addAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         if (isPersistent(inObject)) {
-            LOG.debug("remote set association " + getName() + " in " + inObject + " with " + associate);
+            LOG.debug("set association remotely " + getName() + " in " + inObject + " with " + associate);
             try {
-                connection.setAssociation(NakedObjects.getCurrentSession(), getName(), inObject.getOid(), inObject.getSpecification().getFullName(), associate.getOid(), associate.getSpecification().getFullName());
+                connection.setAssociation(NakedObjects.getCurrentSession(), getName(), inObject.getOid(), inObject
+                        .getSpecification().getFullName(), associate.getOid(), associate.getSpecification().getFullName());
             } catch (NakedObjectRuntimeException e) {
                 LOG.error("Problem with distribution ", e.getCause());
                 throw (NakedObjectRuntimeException) e.getCause();
             }
         } else {
+            LOG.debug("set association locally " + getName() + " in " + inObject + " with " + associate);
             super.addAssociation(identifier, inObject, associate);
+        }
+    }
+
+    public NakedCollection getAssociations(MemberIdentifier identifier, NakedObject inObject) {
+        if (isPersistent(inObject) && fullProxy) {
+            LOG.debug("get association remotely " + inObject);
+            throw new NotImplementedException();
+        } else {
+            LOG.debug("get association locally " + inObject);
+            return super.getAssociations(identifier, inObject);
         }
     }
 
@@ -52,15 +64,6 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
         }
     }
 
-    public NakedCollection getAssociations(MemberIdentifier identifier, NakedObject inObject) {
-        if (isPersistent(inObject) && fullProxy) {
-            LOG.debug("remote get association " + inObject);
-            throw new NotImplementedException();
-        } else {
-            return super.getAssociations(identifier, inObject);
-        }
-    }
-
     private boolean isPersistent(NakedObject inObject) {
         return inObject.getOid() != null;
     }
@@ -71,13 +74,15 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
      */
     public void removeAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         if (isPersistent(inObject) && fullProxy) {
-            LOG.debug("remote clear association " + inObject + "/" + associate);
+            LOG.debug("clear association remotely " + inObject + "/" + associate);
             try {
-                connection.clearAssociation(NakedObjects.getCurrentSession(), getName(), inObject.getOid(), inObject.getSpecification().getFullName(), associate.getOid(), associate.getSpecification().getFullName());
+                connection.clearAssociation(NakedObjects.getCurrentSession(), getName(), inObject.getOid(), inObject
+                        .getSpecification().getFullName(), associate.getOid(), associate.getSpecification().getFullName());
             } catch (NakedObjectRuntimeException e) {
                 throw (NakedObjectRuntimeException) e.getCause();
             }
         } else {
+            LOG.debug("clear association locally " + inObject + "/" + associate);
             super.removeAssociation(identifier, inObject, associate);
         }
     }
