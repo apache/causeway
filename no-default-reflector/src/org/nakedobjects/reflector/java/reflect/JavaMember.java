@@ -36,7 +36,8 @@ public abstract class JavaMember {
 
     // TODO move this to main reflection package, generalised so it will work regardless of reflector.
     protected static void invocationException(String error, InvocationTargetException e) {
-        LOG.error(error, e.getTargetException());
+        //LOG.error(error, e.getTargetException());
+        LOG.error(error);
         if (STRICT) {
             new ReflectionErrorDialog(error, e);
             //throw new NakedObjectRuntimeException(error, e);

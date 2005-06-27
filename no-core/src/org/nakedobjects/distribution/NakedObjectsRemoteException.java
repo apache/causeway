@@ -11,39 +11,39 @@ import java.io.PrintWriter;
  */
 public class NakedObjectsRemoteException extends NakedObjectRuntimeException {
     private final String message;
-    private final String type;
     private final String trace;
+    private final String type;
 
     public NakedObjectsRemoteException(String type, String message, String trace) {
         this.type = type;
         this.message = message;
         this.trace = "Remote: " + trace;
     }
-    
-    public String getMessage() {
-        return message;
-    }
-    
+
     public String getLocalizedMessage() {
         return message;
     }
-    
+
+    public String getMessage() {
+        return message;
+    }
+
     public void printStackTrace(PrintStream s) {
         synchronized (s) {
             s.println(trace);
         }
     }
-    
-	public void printStackTrace(PrintWriter s) {
-	       synchronized (s) {
-	            s.println(trace);
-	        }
-	}
-	
-	public String toString() {
-	       String s = type;
-	        String message = getLocalizedMessage();
-	        return (message != null) ? (s + ": " + message) : s;
+
+    public void printStackTrace(PrintWriter s) {
+        synchronized (s) {
+            s.println(trace);
+        }
+    }
+
+    public String toString() {
+        String s = type;
+        String message = getLocalizedMessage();
+        return (message != null) ? (s + ": " + message) : s;
     }
 }
 
