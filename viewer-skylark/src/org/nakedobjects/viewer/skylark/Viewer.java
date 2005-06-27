@@ -48,45 +48,223 @@ import org.apache.log4j.Logger;
 
 
 public class Viewer {
+
+    private static Viewer instance;
     private static final Logger LOG = Logger.getLogger(Viewer.class);
+    private static final Bounds NO_REDRAW = new Bounds();
     public static final String PROPERTY_BASE = "viewer.skylark.";
     private static final String SPECIFICATION_BASE = PROPERTY_BASE + "specification.";
-    private static final Bounds NO_REDRAW = new Bounds();
-    private Graphics bufferGraphics;
-    private Image doubleBuffer;
-    private boolean doubleBuffering = false;
-    private View overlayView;
-    private final Bounds redrawArea;
-    private int redrawCount = 100000;
-    private RenderingArea renderingArea;
-    private View rootView;
-    private String userStatus;
-    private PopupMenu popup;
-    private boolean runningAsExploration;
-    private boolean showExplorationMenuByDefault;
-    private ObjectViewingMechanismListener listener;
-    protected ViewUpdateNotifier updateNotifier;
-    private View keyboardFocus;
-    private Size internalDisplaySize;
-    private Insets insets;
-    private int statusBarHeight;
-    private Bounds statusBarArea;
-    private InteractionSpy spy;
-    private final UndoStack undoStack = new UndoStack();
 
-
-	private static Viewer instance;
     public static Viewer getInstance() {
         return instance;
     }
 
+    private Graphics bufferGraphics;
+    private Image doubleBuffer;
+    private boolean doubleBuffering = false;
+    private Insets insets;
+    private Size internalDisplaySize;
+    private View keyboardFocus;
+    private ObjectViewingMechanismListener listener;
+    private View overlayView;
+    private PopupMenu popup;
+    private final Bounds redrawArea;
+    private int redrawCount = 100000;
+    private RenderingArea renderingArea;
+    private View rootView;
+    private boolean runningAsExploration;
+    private boolean showExplorationMenuByDefault;
+    private InteractionSpy spy;
+    private Bounds statusBarArea;
+    private int statusBarHeight;
+    private final UndoStack undoStack = new UndoStack();
+    protected ViewUpdateNotifier updateNotifier;
+    private String userStatus;
+
     public Viewer() {
-        instance = this;    
+        instance = this;
         doubleBuffering = NakedObjects.getConfiguration().getBoolean(PROPERTY_BASE + "doublebuffering", true);
         showExplorationMenuByDefault = NakedObjects.getConfiguration().getBoolean(PROPERTY_BASE + "show-exploration", true);
         redrawArea = new Bounds();
     }
-    
+
+    public void addToNotificationList(View view) {
+        updateNotifier.add(view);
+    }
+
+    public void clearOverlayView() {
+        if (overlayView != null) {
+            overlayView.markDamaged();
+            if (overlayView == keyboardFocus) {
+                keyboardFocus = null;
+            }
+            overlayView = null;
+        }
+    }
+
+    public void clearOverlayView(View view) {
+        if (this.getOverlayView() != view) {
+            LOG.warn("No such view to remove: " + view);
+        }
+
+        this.clearOverlayView();
+    }
+
+    public void close() {
+        if (spy != null) {
+            spy.close();
+        }
+        DebugFrame.disposeAll();
+        renderingArea.dispose();
+        if (listener != null) {
+            listener.viewerClosing();
+        }
+    }
+
+    public void disposeOverlayView() {
+        if (overlayView != null) {
+            overlayView.dispose();
+        }
+    }
+
+    public View dragFrom(Location location) {
+        if (onOverlay(location)) {
+            location.subtract(overlayView.getLocation());
+            return overlayView.dragFrom(location);
+        } else {
+            return rootView.dragFrom(location);
+        }
+    }
+
+    public Drag dragStart(DragStart start) {
+        if (onOverlay(start.getLocation())) {
+            return null;
+        } else {
+            return rootView.dragStart(start);
+        }
+    }
+
+    public void firstClick(Click click) {
+        if (onOverlay(click.getLocation())) {
+            click.subtract(overlayView.getLocation());
+            overlayView.firstClick(click);
+        } else {
+            rootView.firstClick(click);
+        }
+    }
+
+    public void forceRepaint() {
+        this.repaint();
+    }
+
+    protected View getFocus() {
+        return keyboardFocus;
+    }
+
+    public Bounds getOverlayBounds() {
+        Bounds bounds = new Bounds(new Size(renderingArea.getSize()));
+        Insets in = renderingArea.getInsets();
+        bounds.contract(in.left + in.right, in.top + in.bottom);
+        bounds.contract(0, statusBarHeight);
+        return bounds;
+    }
+
+    public View getOverlayView() {
+        return overlayView;
+    }
+
+    public InteractionSpy getSpy() {
+        return spy;
+    }
+
+    public UndoStack getUndoStack() {
+        return undoStack;
+    }
+
+    public boolean hasFocus(View view) {
+        return keyboardFocus == view;
+    }
+
+    public View identifyView(Location location, boolean includeOverlay) {
+        if (includeOverlay && onOverlay(location)) {
+            location.subtract(overlayView.getLocation());
+            return overlayView.identify(location);
+        } else {
+            return rootView.identify(location);
+        }
+    }
+
+    public void init() {
+        if (updateNotifier == null) {
+            throw new StartupException("No update notifier set for " + this);
+        }
+        if (rootView == null) {
+            throw new StartupException("No root view set for " + this);
+        }
+
+        insets = new Insets(0, 0, 0, 0);
+
+        spy = new InteractionSpy();
+        popup = new DefaultPopupMenu();
+
+        InteractionHandler interactionHandler = new InteractionHandler(this, spy);
+        renderingArea.addMouseMotionListener(interactionHandler);
+        renderingArea.addMouseListener(interactionHandler);
+        renderingArea.addKeyListener(interactionHandler);
+
+        setupViewFactory();
+
+        if (NakedObjects.getConfiguration().getBoolean(PROPERTY_BASE + "show-mouse-spy", false)) {
+            spy.open();
+        }
+    }
+
+    public boolean isRunningAsExploration() {
+        return runningAsExploration;
+    }
+
+    public boolean isShowingMouseSpy() {
+        return spy.isVisible();
+    }
+
+    private ViewSpecification loadSpecification(String name, Class cls) throws ConfigurationException, ComponentException {
+        return (ViewSpecification) ComponentLoader.loadComponent(SPECIFICATION_BASE + name, cls, ViewSpecification.class);
+    }
+
+    private MenuOption loggingOption(String name, final Level level) {
+        return new MenuOption("Log " + level + " " + name + "...") {
+            public Consent disabled(View component) {
+                return AbstractConsent.allow(LogManager.getRootLogger().getLevel() != level);
+            }
+
+            public void execute(Workspace workspace, View view, Location at) {
+                LogManager.getRootLogger().setLevel(level);
+            }
+        };
+    }
+
+    public void makeFocus(View view) {
+        if (view != null && view.canFocus()) {
+            if ((keyboardFocus != null) && (keyboardFocus != view)) {
+                keyboardFocus.focusLost();
+                keyboardFocus.markDamaged();
+            }
+
+            keyboardFocus = view;
+            keyboardFocus.focusRecieved();
+
+            view.markDamaged();
+        }
+    }
+
+    public void makeWindowFocus(View view) {
+        if (view != null && view.canFocus()) {
+            // windowFocus = view;
+            keyboardFocus.focusLost();
+            keyboardFocus = null;
+        }
+    }
+
     public void markDamaged(Bounds bounds) {
         spy.addDamagedArea(bounds);
         synchronized (redrawArea) {
@@ -100,30 +278,101 @@ public class Viewer {
         }
     }
 
-    public void disposeOverlayView() {
-        if (overlayView != null) {
-            overlayView.dispose();
-        }
-    }
-
-    public void clearOverlayView() {
-        if (overlayView != null) {
-            overlayView.markDamaged();
-            if (overlayView == keyboardFocus) {
-                keyboardFocus = null;
+    public void menuOptions(MenuOptionSet options) {
+        options.add(MenuOptionSet.VIEW, new MenuOption("Quit") {
+            public void execute(Workspace workspace, View view, Location at) {
+                Viewer.this.close();
             }
-            overlayView = null;
+        });
+
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Vew context details...") {
+            public void execute(Workspace workspace, View view, Location at) {
+                InfoDebugFrame f = new InfoDebugFrame();
+                f.setInfo(NakedObjects.getCurrentSession());
+                f.show(at.x + 50, workspace.getBounds().y + 6);
+            }
+        });
+
+        options.add(MenuOptionSet.DEBUG, loggingOption("Off", Level.OFF));
+        options.add(MenuOptionSet.DEBUG, loggingOption("Error", Level.ERROR));
+        options.add(MenuOptionSet.DEBUG, loggingOption("Warn", Level.WARN));
+        options.add(MenuOptionSet.DEBUG, loggingOption("Info", Level.INFO));
+        options.add(MenuOptionSet.DEBUG, loggingOption("Debug", Level.DEBUG));
+
+        String debug = "Debug graphics " + (AbstractView.debug ? "off" : "on");
+        options.add(MenuOptionSet.DEBUG, new MenuOption(debug) {
+            public void execute(Workspace workspace, View view, Location at) {
+                AbstractView.debug = !AbstractView.debug;
+                view.markDamaged();
+            }
+        });
+
+        String action = this.isShowingMouseSpy() ? "Hide" : "Show";
+        options.add(MenuOptionSet.DEBUG, new MenuOption(action + " mouse spy") {
+            public void execute(Workspace workspace, View view, Location at) {
+                Viewer.this.setShowMouseSpy(!Viewer.this.isShowingMouseSpy());
+            }
+        });
+
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Restart object manager") {
+            public void execute(Workspace workspace, View view, Location at) {
+                NakedObjects.getObjectManager().reset();
+                //           NakedObjects.getPojoAdapterFactory().reset();
+            }
+        });
+
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Debug notification receivers...") {
+            public void execute(Workspace workspace, View view, Location at) {
+                InfoDebugFrame f = new InfoDebugFrame();
+                f.setInfo(updateNotifier);
+                f.show(at.x + 50, workspace.getBounds().y + 6);
+            }
+        });
+
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Debug object manager") {
+            public void execute(Workspace workspace, View view, Location at) {
+                NakedObjectManager om = NakedObjects.getObjectManager();
+                InfoDebugFrame f = new InfoDebugFrame();
+                f.setInfo(om);
+                f.show(at.x + 50, workspace.getBounds().y + 6);
+            }
+        });
+
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Dump all") {
+            public void execute(Workspace workspace, View view, Location at) {
+                DebugFileDump.dump(NakedObjects.debug());
+            }
+        });
+
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Debug overlay...") {
+            public void execute(Workspace workspace, View view, Location at) {
+                DebugFrame f = new OverlayDebugFrame(Viewer.this);
+                f.show(at.x + 50, workspace.getBounds().y + 6);
+            }
+        });
+
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Debug prototypes...") {
+            public void execute(Workspace workspace, View view, Location at) {
+                InfoDebugFrame f = new InfoDebugFrame();
+                f.setInfo(Skylark.getViewFactory());
+                f.show(at.x + 50, workspace.getBounds().y + 6);
+            }
+        });
+
+    }
+
+    public void mouseMoved(Location location) {
+        if (onOverlay(location)) {
+            location.subtract(overlayView.getLocation());
+            overlayView.mouseMoved(location);
+        } else {
+            rootView.mouseMoved(location);
         }
     }
 
-    public View getOverlayView() {
-        return overlayView;
+    private boolean onOverlay(Location mouse) {
+        return overlayView != null && overlayView.getBounds().contains(mouse);
     }
-
-    public void setRootView(View rootView) {
-        this.rootView = rootView;
-        rootView.invalidateContent();
-     }
 
     public void paint(Graphics g) {
         redrawCount++;
@@ -152,7 +401,7 @@ public class Viewer {
         // Canvas c = new Canvas(bufferGraphics, 0, 0, w, h);
 
         if (AbstractView.debug) {
-            LOG.debug("------ repaint viewer #" + redrawCount + " " + r.x + "," +  r.y + " " + r.width + "x" + r.height);
+            LOG.debug("------ repaint viewer #" + redrawCount + " " + r.x + "," + r.y + " " + r.width + "x" + r.height);
         }
 
         //paint icons
@@ -198,6 +447,42 @@ public class Viewer {
         paintStatus(bufferCanvas, top, userStatus);
     }
 
+    public View pickupContent(Location location) {
+        if (onOverlay(location)) {
+            location.subtract(overlayView.getLocation());
+            return overlayView.pickupContent(location);
+        } else {
+            return rootView.pickupContent(location);
+        }
+    }
+
+    public View pickupView(Location location) {
+        if (onOverlay(location)) {
+            location.subtract(overlayView.getLocation());
+            return overlayView.pickupView(location);
+        } else {
+            return rootView.pickupView(location);
+        }
+    }
+
+    protected void popupMenu(View over, Click click) {
+        Location at = click.getLocation();
+        boolean forView = rootView.viewAreaType(new Location(click.getLocation())) == ViewAreaType.VIEW;
+
+        forView = click.isAlt() ^ forView;
+        boolean includeExploration = runningAsExploration && (click.isCtrl() || showExplorationMenuByDefault);
+        boolean includeDebug = click.isShift() && click.isCtrl();
+
+        popup.init(over, rootView, at, forView, includeExploration, includeDebug);
+        setOverlayView(popup);
+
+        makeFocus(popup);
+    }
+
+    public void removeFromNotificationList(View view) {
+        updateNotifier.remove(view);
+    }
+
     void repaint() {
         updateNotifier.invalidateViewsForChangedObjects();
         rootView.layout();
@@ -212,8 +497,48 @@ public class Viewer {
         }
     }
 
-    public boolean isShowingMouseSpy() {
-        return spy.isVisible();
+    public void saveCurrentFieldEntry() {
+        if (keyboardFocus != null) {
+            keyboardFocus.editComplete();
+            keyboardFocus.markDamaged();
+        }
+    }
+
+    public void secondClick(Click click) {
+        if (onOverlay(click.getLocation())) {
+            click.subtract(overlayView.getLocation());
+            overlayView.secondClick(click);
+        } else {
+            rootView.secondClick(click);
+        }
+    }
+
+    public void setCursor(Cursor cursor) {
+        renderingArea.setCursor(cursor);
+    }
+
+    public void setExploration(boolean asExploration) {
+        this.runningAsExploration = asExploration;
+    }
+
+    public void setListener(ObjectViewingMechanismListener listener) {
+        this.listener = listener;
+    }
+
+    public void setOverlayView(View view) {
+        disposeOverlayView();
+        overlayView = view;
+        view.limitBoundsWithin(rootView.getBounds());
+        overlayView.markDamaged();
+    }
+
+    public void setRenderingArea(RenderingArea renderingArea) {
+        this.renderingArea = renderingArea;
+    }
+
+    public void setRootView(View rootView) {
+        this.rootView = rootView;
+        rootView.invalidateContent();
     }
 
     public void setShowMouseSpy(boolean showDeveloperStatus) {
@@ -222,17 +547,6 @@ public class Viewer {
         } else {
             spy.open();
         }
-    }
-
-    public void setCursor(Cursor cursor) {
-        renderingArea.setCursor(cursor);
-    }
-
-    public void setOverlayView(View view) {
-        disposeOverlayView();
-        overlayView = view;
-        view.limitBoundsWithin(rootView.getBounds());
-        overlayView.markDamaged();
     }
 
     /**
@@ -246,48 +560,8 @@ public class Viewer {
         }
     }
 
-    protected void popupMenu(View over, Click click) {
-        Location at = click.getLocation();
-        boolean forView = rootView.viewAreaType(new Location(click.getLocation())) == ViewAreaType.VIEW;
-        
-        forView = click.isAlt() ^ forView;
-        boolean includeExploration = runningAsExploration && (click.isCtrl() || showExplorationMenuByDefault);
-        boolean includeDebug = click.isShift() && click.isCtrl();
-
-        popup.init(over, rootView, at, forView, includeExploration, includeDebug);
-        setOverlayView(popup);
-
-        makeFocus(popup);
-    }
-
-    public void makeFocus(View view) {
-        if (view != null && view.canFocus()) {
-            if ((keyboardFocus != null) && (keyboardFocus != view)) {
-                keyboardFocus.focusLost();
-                keyboardFocus.markDamaged();
-            }
-
-            keyboardFocus = view;
-            keyboardFocus.focusRecieved();
-
-            view.markDamaged();
-        }
-    }
-
-    public void makeWindowFocus(View view) {
-        if (view != null && view.canFocus()) {
-            // windowFocus = view;
-            keyboardFocus.focusLost();
-            keyboardFocus = null;
-        }
-    }
-    
-    public boolean hasFocus(View view) {
-        return keyboardFocus == view;
-    }
-
-    protected View getFocus() {
-        return keyboardFocus;
+    public void setUpdateNotifier(ViewUpdateNotifier updateNotifier) {
+        this.updateNotifier = updateNotifier;
     }
 
     private void setupViewFactory() throws ConfigurationException, ComponentException {
@@ -295,11 +569,14 @@ public class Viewer {
 
         LOG.debug("Setting up default views (provided by the framework)");
 
-/*
-        viewFactory.addValueFieldSpecification(loadSpecification("field.option", OptionSelectionField.Specification.class));
-        viewFactory.addValueFieldSpecification(loadSpecification("field.percentage", PercentageBarField.Specification.class));
-        viewFactory.addValueFieldSpecification(loadSpecification("field.timeperiod", TimePeriodBarField.Specification.class));
-*/
+        /*
+         * viewFactory.addValueFieldSpecification(loadSpecification("field.option",
+         * OptionSelectionField.Specification.class));
+         * viewFactory.addValueFieldSpecification(loadSpecification("field.percentage",
+         * PercentageBarField.Specification.class));
+         * viewFactory.addValueFieldSpecification(loadSpecification("field.timeperiod",
+         * TimePeriodBarField.Specification.class));
+         */
         viewFactory.addValueFieldSpecification(loadSpecification("field.color", ColorField.Specification.class));
         viewFactory.addValueFieldSpecification(loadSpecification("field.checkbox", CheckboxField.Specification.class));
         viewFactory.addValueFieldSpecification(loadSpecification("field.text", TextFieldSpecification.class));
@@ -311,8 +588,10 @@ public class Viewer {
             viewFactory.addCompositeRootViewSpecification(new DataFormSpecification());
             viewFactory.addCompositeRootViewSpecification(new ListSpecification());
             viewFactory.addCompositeRootViewSpecification(new TableSpecification());
-//            viewFactory.addCompositeRootViewSpecification(new BarchartSpecification());
-//           viewFactory.addCompositeRootViewSpecification(new GridSpecification());
+            //            viewFactory.addCompositeRootViewSpecification(new
+            // BarchartSpecification());
+            //           viewFactory.addCompositeRootViewSpecification(new
+            // GridSpecification());
             viewFactory.addCompositeRootViewSpecification(new TreeBrowserSpecification());
         }
 
@@ -350,44 +629,68 @@ public class Viewer {
 
     }
 
-    public void close() {
-        if(spy != null) {
-            spy.close();
-        }
-        DebugFrame.disposeAll();
-        renderingArea.dispose();
-        if (listener != null) {
-            listener.viewerClosing();
-        }
+    public void showArrowCursor() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
 
-    private ViewSpecification loadSpecification(String name, Class cls) throws ConfigurationException, ComponentException {
-        return (ViewSpecification) ComponentLoader.loadComponent(SPECIFICATION_BASE + name, cls, ViewSpecification.class);
+    public void showCrosshairCursor() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
     }
 
-    public void init() {
-        if(updateNotifier == null) {
-            throw new StartupException("No update notifier set for " + this);
-        }
-        if(rootView == null) {
-            throw new StartupException("No root view set for " + this);
-        }
-        
-        insets = new Insets(0, 0, 0, 0);
+    public void showDefaultCursor() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    }
 
-        spy = new InteractionSpy();
-        popup = new DefaultPopupMenu();
+    public void showHandCursor() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }
 
-        InteractionHandler interactionHandler = new InteractionHandler(this, spy);
-        renderingArea.addMouseMotionListener(interactionHandler);
-        renderingArea.addMouseListener(interactionHandler);
-        renderingArea.addKeyListener(interactionHandler);
+    public void showMoveCursor() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+    }
 
-        setupViewFactory();
-        
-        if (NakedObjects.getConfiguration().getBoolean(PROPERTY_BASE + "show-mouse-spy", false)) {
-            spy.open();
-        }
+    public void showResizeDownCursor() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.S_RESIZE_CURSOR));
+    }
+
+    public void showResizeDownLeftCursor() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.SW_RESIZE_CURSOR));
+    }
+
+    public void showResizeDownRightCursor() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR));
+    }
+
+    public void showResizeLeftCursor() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
+    }
+
+    public void showResizeRightCursor() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
+    }
+
+    public void showResizeUpCursor() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
+    }
+
+    public void showResizeUpLeftCursor() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.NW_RESIZE_CURSOR));
+    }
+
+    public void showResizeUpRightCursor() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.NE_RESIZE_CURSOR));
+    }
+
+    public void showSpy() {
+        spy.open();
+    }
+
+    public void showTextCursor() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+    }
+
+    public void showWaitCursor() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     }
 
     public void sizeChange() {
@@ -405,12 +708,21 @@ public class Viewer {
         View subviews[] = rootView.getSubviews();
         for (int i = 0; i < subviews.length; i++) {
             subviews[i].invalidateLayout();
-        }	
-//        rootView.invalidateLayout();
+        }
+        //        rootView.invalidateLayout();
 
         Bounds bounds = new Bounds(internalDisplaySize);
         markDamaged(bounds);
         repaint();
+    }
+
+    public void thirdClick(Click click) {
+        if (onOverlay(click.getLocation())) {
+            click.subtract(overlayView.getLocation());
+            overlayView.thirdClick(click);
+        } else {
+            rootView.thirdClick(click);
+        }
     }
 
     public String toString() {
@@ -425,55 +737,6 @@ public class Viewer {
         me.translatePoint(-insets.left, -insets.top);
     }
 
-    public View identifyView(Location location, boolean includeOverlay) {
-        if (includeOverlay && onOverlay(location)) {
-            location.subtract(overlayView.getLocation());
-            return overlayView.identify(location);
-        } else {
-            return rootView.identify(location);
-        }
-    }
-
-    public void mouseMoved(Location location) {
-        if (onOverlay(location)) {
-            location.subtract(overlayView.getLocation());
-            overlayView.mouseMoved(location);
-        } else {
-            rootView.mouseMoved(location);
-        }
-    }
-
-    private boolean onOverlay(Location mouse) {
-        return overlayView != null && overlayView.getBounds().contains(mouse);
-    }
-
-    public void firstClick(Click click) {
-        if (onOverlay(click.getLocation())) {
-            click.subtract(overlayView.getLocation());
-            overlayView.firstClick(click);
-        } else {
-            rootView.firstClick(click);
-        }
-    }
-
-    public void secondClick(Click click) {
-        if (onOverlay(click.getLocation())) {
-            click.subtract(overlayView.getLocation());
-            overlayView.secondClick(click);
-        } else {
-            rootView.secondClick(click);
-        }
-    }
-
-    public void thirdClick(Click click) {
-        if (onOverlay(click.getLocation())) {
-            click.subtract(overlayView.getLocation());
-            overlayView.thirdClick(click);
-        } else {
-            rootView.thirdClick(click);
-        }
-    }
-
     public ViewAreaType viewAreaType(Location location) {
         if (onOverlay(location)) {
             location.subtract(overlayView.getLocation());
@@ -481,274 +744,6 @@ public class Viewer {
         } else {
             return rootView.viewAreaType(location);
         }
-    }
- 
-    public View dragFrom(Location location) {    
-        if (onOverlay(location)) {
-            location.subtract(overlayView.getLocation());
-            return overlayView.dragFrom(location);
-        } else {
-            return rootView.dragFrom(location);
-        }
-    }
-    
-    public View pickupContent(Location location) {    
-        if (onOverlay(location)) {
-            location.subtract(overlayView.getLocation());
-            return overlayView.pickupContent(location);
-        } else {
-            return rootView.pickupContent(location);
-        }
-    }
-
-    
-    public View pickupView(Location location) {    
-        if (onOverlay(location)) {
-            location.subtract(overlayView.getLocation());
-            return overlayView.pickupView(location);
-        } else {
-            return rootView.pickupView(location);
-        }
-    }
-    
-    public void showDefaultCursor() {
-        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-    }
-
-    public InteractionSpy getSpy() {
-        return spy;
-    }
-
-    public void showSpy() {
-        spy.open();
-    }
-    
-    
-    public Drag dragStart(DragStart start) {
-        if (onOverlay(start.getLocation())) {
-            return null;
-        } else {
-            return rootView.dragStart(start);
-        }
-    }
-    
-    public void saveCurrentFieldEntry() {
-         if (keyboardFocus != null) {
-            keyboardFocus.editComplete();
-            keyboardFocus.markDamaged();
-        }
-    }
-
-    public Bounds getOverlayBounds() {
-        Bounds bounds = new Bounds(new Size(renderingArea.getSize()));
-        Insets in = renderingArea.getInsets();
-        bounds.contract(in.left + in.right, in.top + in.bottom);
-        bounds.contract(0, statusBarHeight);
-        return bounds;
-    }
-    
-    public void setRenderingArea(RenderingArea renderingArea) {
-        this.renderingArea = renderingArea;
-    }
-    
-    public void setListener(ObjectViewingMechanismListener listener) {
-        this.listener = listener;
-    }
-    
-    public void setExploration(boolean asExploration) {
-        this.runningAsExploration = asExploration;
-    }
-
-    public void setUpdateNotifier(ViewUpdateNotifier updateNotifier) {
-        this.updateNotifier = updateNotifier;
-    }
-
-
-    public void addToNotificationList(View view) {
-        updateNotifier.add(view);
-    }
-
-    public void clearOverlayView(View view) {
-        if (this.getOverlayView() != view) {
-            LOG.warn("No such view to remove: " + view);
-        }
-
-        this.clearOverlayView();
-    }
-
-    public void forceRepaint() {
-        this.repaint();
-    }
-
-    private MenuOption loggingOption(String name, final Level level) {
-        return new MenuOption("Log " + level + " " + name + "...") {
-                public Consent disabled(View component) {
-                    return AbstractConsent.allow(LogManager.getRootLogger().getLevel() != level);
-                }
-
-                public void execute(Workspace workspace, View view, Location at) {
-                    LogManager.getRootLogger().setLevel(level);
-                }
-            };
-    }
-
-    public void menuOptions(MenuOptionSet options) {
-        options.add(MenuOptionSet.VIEW,
-            new MenuOption("Quit") {
-                public void execute(Workspace workspace, View view, Location at) {
-                    Viewer.this.close();
-                }
-            });
-
-        options.add(MenuOptionSet.DEBUG,
-                new MenuOption("Vew context details...") {
-                    public void execute(Workspace workspace, View view, Location at) {
-                        InfoDebugFrame f = new InfoDebugFrame();
-                        f.setInfo(NakedObjects.getCurrentSession());
-                        f.show(at.x + 50, workspace.getBounds().y + 6);
-                    }
-                });
-
-
-        
-        options.add(MenuOptionSet.DEBUG, loggingOption("Off", Level.OFF));
-        options.add(MenuOptionSet.DEBUG, loggingOption("Error", Level.ERROR));
-        options.add(MenuOptionSet.DEBUG, loggingOption("Warn", Level.WARN));
-        options.add(MenuOptionSet.DEBUG, loggingOption("Info", Level.INFO));
-        options.add(MenuOptionSet.DEBUG, loggingOption("Debug", Level.DEBUG));
-
-        String debug = "Debug graphics " + (AbstractView.debug ? "off" : "on");
-        options.add(MenuOptionSet.DEBUG,
-            new MenuOption(debug) {
-                public void execute(Workspace workspace, View view, Location at) {
-                    AbstractView.debug = !AbstractView.debug;
-                    view.markDamaged();
-                }
-            });
-        
-        String action = this.isShowingMouseSpy() ? "Hide" : "Show";
-        options.add(MenuOptionSet.DEBUG, new MenuOption(action + " mouse spy") {
-            public void execute(Workspace workspace, View view, Location at) {
-                Viewer.this.setShowMouseSpy(!Viewer.this.isShowingMouseSpy());
-            }
-        });
-
-        options.add(MenuOptionSet.DEBUG,
-                new MenuOption("Restart object manager") {
-                    public void execute(Workspace workspace, View view, Location at) {
-	                    NakedObjects.getObjectManager().reset();
-	         //           NakedObjects.getPojoAdapterFactory().reset();
-                    }
-                });
-
-
-        options.add(MenuOptionSet.DEBUG,
-                new MenuOption("Debug notification receivers...") {
-                    public void execute(Workspace workspace, View view, Location at) {
-                        InfoDebugFrame f = new InfoDebugFrame();
-                        f.setInfo(updateNotifier);
-                        f.show(at.x + 50, workspace.getBounds().y + 6);
-                    }
-                });
-
-        options.add(MenuOptionSet.DEBUG,
-                new MenuOption("Debug object manager") {
-                    public void execute(Workspace workspace, View view, Location at) {
-                        NakedObjectManager om = NakedObjects.getObjectManager();
-                        InfoDebugFrame f = new InfoDebugFrame();
-                        f.setInfo(om);
-                        f.show(at.x + 50, workspace.getBounds().y + 6);                   
-                    }
-                });
-
-        options.add(MenuOptionSet.DEBUG,
-                new MenuOption("Dump all") {
-                    public void execute(Workspace workspace, View view, Location at) {
-                        DebugFileDump.dump(NakedObjects.debug());
-                    }
-                });
-
-        options.add(MenuOptionSet.DEBUG,
-                new MenuOption("Debug overlay...") {
-                    public void execute(Workspace workspace, View view, Location at) {
-                        DebugFrame f = new OverlayDebugFrame(Viewer.this);
-                        f.show(at.x + 50, workspace.getBounds().y + 6);
-                    }
-                });
-
-        options.add(MenuOptionSet.DEBUG,
-                new MenuOption("Debug prototypes...") {
-                    public void execute(Workspace workspace, View view, Location at) {
-                        InfoDebugFrame f = new InfoDebugFrame();
-                        f.setInfo(Skylark.getViewFactory());
-                        f.show(at.x + 50, workspace.getBounds().y + 6);
-                    }
-                });
-
-}
-
-    public void removeFromNotificationList(View view) {
-        updateNotifier.remove(view);
-    }
-    
-    public void showArrowCursor() {
-       setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-    }
-
-    public void showCrosshairCursor() {
-       setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
-    }
-
-    public void showHandCursor() {
-       setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-    }
-
-    public void showMoveCursor() {
-       setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
-    }
-
-    public void showResizeDownCursor() {
-       setCursor(Cursor.getPredefinedCursor(Cursor.S_RESIZE_CURSOR));
-    }
-
-    public void showResizeDownLeftCursor() {
-       setCursor(Cursor.getPredefinedCursor(Cursor.SW_RESIZE_CURSOR));
-    }
-    
-    public void showResizeDownRightCursor() {
-       setCursor(Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR));
-    }
-
-    public void showResizeLeftCursor() {
-       setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
-    }
-
-    public void showResizeRightCursor() {
-       setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
-    }
-
-    public void showResizeUpCursor() {
-       setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));
-    }
-
-    public void showResizeUpLeftCursor() {
-       setCursor(Cursor.getPredefinedCursor(Cursor.NW_RESIZE_CURSOR));
-    }
-
-    public void showResizeUpRightCursor() {
-       setCursor(Cursor.getPredefinedCursor(Cursor.NE_RESIZE_CURSOR));
-    }
-    
-    public void showTextCursor() {
-       setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
-    }
-
-    public void showWaitCursor() {
-       setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-    }
-
-    public UndoStack getUndoStack() {
-        return undoStack;
     }
 }
 
