@@ -11,6 +11,7 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
+import org.nakedobjects.object.persistence.ActionTransaction;
 import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.NakedObjectStore;
@@ -24,6 +25,7 @@ import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.utility.DebugString;
+import org.nakedobjects.utility.ExceptionHelper;
 import org.nakedobjects.utility.StartupException;
 import org.nakedobjects.utility.ToString;
 
@@ -484,7 +486,11 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         try {
             LOG.info("shutting down " + this);
             if (transaction != null) {
-    			abortTransaction();
+                try {
+                    abortTransaction();
+                } catch (Exception e2) {
+                    ExceptionHelper.log(ActionTransaction.class, "Failure during abort", e2);
+                }
     		}
             objectsToBeSaved.shutdown();
             if(objectsToRefreshViewsFor != null) {

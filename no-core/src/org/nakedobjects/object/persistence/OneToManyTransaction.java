@@ -5,62 +5,76 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.AbstractOneToManyPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToManyPeer;
+import org.nakedobjects.utility.ExceptionHelper;
+
+import org.apache.log4j.Logger;
 
 
 public class OneToManyTransaction extends AbstractOneToManyPeer {
+    private final static Logger LOG = Logger.getLogger(OneToManyTransaction.class);
 
     public OneToManyTransaction(OneToManyPeer peer) {
         super(peer);
     }
 
     public void addAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        NakedObjectManager objectManager = NakedObjects.getObjectManager(); //inObject.getContext().getObjectManager();
-        try {
-            if (inObject.isPersistent()) {
+        NakedObjectManager objectManager = NakedObjects.getObjectManager();
+        if (inObject.isPersistent()) {
+            try {
                 objectManager.startTransaction();
-            }
-            super.addAssociation(identifier, inObject, associate);
-            objectManager.saveChanges();
-            if (inObject.isPersistent()) {
+                super.addAssociation(identifier, inObject, associate);
+                objectManager.saveChanges();
                 objectManager.endTransaction();
+            } catch (RuntimeException e) {
+                abort(objectManager);
+                throw e;
             }
-        } catch (RuntimeException e) {
-            objectManager.abortTransaction();
-            throw e;
+        } else {
+            super.addAssociation(identifier, inObject, associate);
         }
     }
 
     public void removeAllAssociations(MemberIdentifier identifier, NakedObject inObject) {
         NakedObjectManager objectManager = NakedObjects.getObjectManager();
-        try {
-            if (inObject.isPersistent()) {
+        if (inObject.isPersistent()) {
+            try {
                 objectManager.startTransaction();
-            }
-            super.removeAllAssociations(identifier, inObject);
-            objectManager.saveChanges();
-            if (inObject.isPersistent()) {
+                super.removeAllAssociations(identifier, inObject);
+                objectManager.saveChanges();
                 objectManager.endTransaction();
+            } catch (RuntimeException e) {
+                abort(objectManager);
+                throw e;
             }
-        } catch (RuntimeException e) {
+        } else {
+            super.removeAllAssociations(identifier, inObject);
+
+        }
+    }
+
+    private void abort(NakedObjectManager objectManager) {
+        LOG.info("Exception executing " + getName() + ", aborting transaction");
+        try {
             objectManager.abortTransaction();
-            throw e;
+        } catch (Exception e2) {
+            ExceptionHelper.log(OneToManyTransaction.class, "Failure during abort", e2);
         }
     }
 
     public void removeAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         NakedObjectManager objectManager = NakedObjects.getObjectManager();
-        try {
-            if (inObject.isPersistent()) {
+        if (inObject.isPersistent()) {
+            try {
                 objectManager.startTransaction();
-            }
-            super.removeAssociation(identifier, inObject, associate);
-            objectManager.saveChanges();
-            if (inObject.isPersistent()) {
+                super.removeAssociation(identifier, inObject, associate);
+                objectManager.saveChanges();
                 objectManager.endTransaction();
+            } catch (RuntimeException e) {
+                abort(objectManager);
+                throw e;
             }
-        } catch (RuntimeException e) {
-            objectManager.abortTransaction();
-            throw e;
+        } else {
+            super.removeAssociation(identifier, inObject, associate);
         }
 
     }

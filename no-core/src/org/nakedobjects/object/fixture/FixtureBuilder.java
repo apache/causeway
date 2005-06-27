@@ -1,7 +1,9 @@
 package org.nakedobjects.object.fixture;
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.persistence.ActionTransaction;
 import org.nakedobjects.object.persistence.NakedObjectManager;
+import org.nakedobjects.utility.ExceptionHelper;
 
 import java.util.Vector;
 
@@ -35,8 +37,12 @@ public abstract class FixtureBuilder {
                 LOG.info("Installing fixture: " + fixture);
                 installFixture(objectManager, fixture);
             } catch (RuntimeException e) {
-                LOG.error("Fixture aborted", e);
-                objectManager.abortTransaction();
+                LOG.error("Installing fixtures failed; aborting ", e);
+                try {
+                    objectManager.abortTransaction();
+                } catch (Exception e2) {
+                    ExceptionHelper.log(ActionTransaction.class, "Failure during abort", e2);
+                }
                 throw e;
             }
         }

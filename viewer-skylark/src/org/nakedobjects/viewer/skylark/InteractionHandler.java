@@ -1,5 +1,8 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.utility.ExceptionHelper;
+import org.nakedobjects.viewer.skylark.core.BackgroundThread;
+
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -16,50 +19,11 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      */
     private Location downAt;
     private Drag drag;
+    private final KeyboardManager keyboardManager;
     private View previouslyIdentifiedView;
     private InteractionSpy spy;
     private final Viewer viewer;
 
-    /**
-     * Responds to mouse click events by calling <code>firstClick</code>,
-     * <code>secondClick</code>, and <code>thirdClick</code> on the view
-     * that the mouse is over. Ignored if the mouse is not over a view.
-     * 
-     * @see java.awt.event.MouseListener#mouseClicked(MouseEvent)
-     */
-    public void mouseClicked(MouseEvent me) {
-        Click click = new Click(previouslyIdentifiedView, downAt, me.getModifiers());
-        spy.addAction("Mouse clicked " + click.getLocation());
-    
-    
-        if (click.button3() && viewer.getOverlayView() == null) {
-            if (previouslyIdentifiedView != null) {
-                spy.addAction(" popup " + downAt + " over " + previouslyIdentifiedView);
-                viewer.popupMenu(previouslyIdentifiedView, click);
-            }
-    
-        } else {
-            switch (me.getClickCount()) {
-            case 1:
-                viewer.firstClick(click);
-                break;
-    
-            case 2:
-                viewer.secondClick(click);
-                break;
-    
-            case 3:
-                viewer.thirdClick(click);
-                break;
-    
-            default:
-                break;
-            }
-        }
-        redraw();
-    }
-    private final KeyboardManager keyboardManager;
-    
     InteractionHandler(Viewer viewer, InteractionSpy spy) {
         this.viewer = viewer;
         this.spy = spy;
@@ -105,7 +69,6 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
         int x = dragged.x;
         int y = dragged.y;
 
-        
         return x > xDown + THRESHOLD || x < xDown - THRESHOLD || y > yDown + THRESHOLD || y < yDown - THRESHOLD;
     }
 
@@ -116,16 +79,20 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * @see java.awt.event.KeyListener#keyPressed(KeyEvent)
      */
     public void keyPressed(KeyEvent ke) {
-        if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            if (drag != null) {
-                drag.cancel(viewer);
-                drag = null;
+        try {
+            if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                if (drag != null) {
+                    drag.cancel(viewer);
+                    drag = null;
+                }
+                viewer.clearOverlayView();
             }
-            viewer.clearOverlayView();
-        }
-        keyboardManager.pressed(ke.getKeyCode(), ke.getModifiers());
+            keyboardManager.pressed(ke.getKeyCode(), ke.getModifiers());
 
-        redraw();
+            redraw();
+        } catch (Exception e) {
+            log(e);
+        }
     }
 
     /**
@@ -135,8 +102,13 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * @see java.awt.event.KeyListener#keyReleased(KeyEvent)
      */
     public void keyReleased(KeyEvent ke) {
-        keyboardManager.released(ke.getKeyCode(), ke.getModifiers());
-        redraw();
+        try {
+            keyboardManager.released(ke.getKeyCode(), ke.getModifiers());
+            redraw();
+        } catch (Exception e) {
+            log(e);
+        }
+
     }
 
     /**
@@ -152,6 +124,52 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
         }
     }
 
+    private void log(Exception e) {
+        ExceptionHelper.log(InteractionHandler.class, "Error during user interaction", e);
+    }
+
+    /**
+     * Responds to mouse click events by calling <code>firstClick</code>,
+     * <code>secondClick</code>, and <code>thirdClick</code> on the view
+     * that the mouse is over. Ignored if the mouse is not over a view.
+     * 
+     * @see java.awt.event.MouseListener#mouseClicked(MouseEvent)
+     */
+    public void mouseClicked(MouseEvent me) {
+        try {
+            Click click = new Click(previouslyIdentifiedView, downAt, me.getModifiers());
+            spy.addAction("Mouse clicked " + click.getLocation());
+
+            if (click.button3() && viewer.getOverlayView() == null) {
+                if (previouslyIdentifiedView != null) {
+                    spy.addAction(" popup " + downAt + " over " + previouslyIdentifiedView);
+                    viewer.popupMenu(previouslyIdentifiedView, click);
+                }
+
+            } else {
+                switch (me.getClickCount()) {
+                case 1:
+                    viewer.firstClick(click);
+                    break;
+
+                case 2:
+                    viewer.secondClick(click);
+                    break;
+
+                case 3:
+                    viewer.thirdClick(click);
+                    break;
+
+                default:
+                    break;
+                }
+            }
+            redraw();
+        } catch (Exception e) {
+            log(e);
+        }
+    }
+
     /**
      * Responds to mouse dragged according to the button used. If the left
      * button then identified view is moved.
@@ -159,21 +177,26 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * @see java.awt.event.MouseMotionListener#mouseDragged(MouseEvent)
      */
     public void mouseDragged(MouseEvent me) {
-        if (canDrag) {
-            // checked to ensure that dragging over a view doesn't start a
-            // drag - it should only start when already over a view.
+        try {
+            if (canDrag) {
+                // checked to ensure that dragging over a view doesn't start a
+                // drag - it should only start when already over a view.
 
-            spy.reset();
-            viewer.translate(me);
-            if (drag == null) {
-                // no drag in progress yet
-                dragStart(me);
-                redraw();
-            } else {
-                drag(me);
-                redraw();
+                spy.reset();
+                viewer.translate(me);
+                if (drag == null) {
+                    // no drag in progress yet
+                    dragStart(me);
+                    redraw();
+                } else {
+                    drag(me);
+                    redraw();
+                }
             }
+        } catch (Exception e) {
+            log(e);
         }
+
     }
 
     /**
@@ -199,52 +222,57 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * @see java.awt.event.MouseMotionListener#mouseMoved(MouseEvent)
      */
     public void mouseMoved(MouseEvent me) {
-        if (drag == null) {
-            spy.reset();
-            viewer.translate(me);
-            Location location = new Location(me.getPoint());
-            spy.setLocationInViewer(location);
+        try {
+            if (drag == null) {
+                spy.reset();
+                viewer.translate(me);
+                Location location = new Location(me.getPoint());
+                spy.setLocationInViewer(location);
 
-            View overView = viewer.identifyView(new Location(location), true);
-            spy.setOver(overView);
+                View overView = viewer.identifyView(new Location(location), true);
+                spy.setOver(overView);
 
-            if (overView != null) {
-                if (previouslyIdentifiedView == null) {
-                    previouslyIdentifiedView = overView;
-                } else {
-                    if (overView != previouslyIdentifiedView) {
-
-                        if (overView == previouslyIdentifiedView) {
-                            spy.addAction("moved into subview from " + previouslyIdentifiedView);
-                            previouslyIdentifiedView.enteredSubview();
-                        } else {
-                            spy.addAction("exited " + previouslyIdentifiedView);
-                            previouslyIdentifiedView.exited();
-                        }
-
-                        View previouslyIdentified = previouslyIdentifiedView;
+                if (overView != null) {
+                    if (previouslyIdentifiedView == null) {
                         previouslyIdentifiedView = overView;
+                    } else {
+                        if (overView != previouslyIdentifiedView) {
 
-                        if (overView != null) {
-                            if (overView == previouslyIdentified) {
-                                spy.addAction("moved back to from " + previouslyIdentified);
-                                overView.exitedSubview();
+                            if (overView == previouslyIdentifiedView) {
+                                spy.addAction("moved into subview from " + previouslyIdentifiedView);
+                                previouslyIdentifiedView.enteredSubview();
                             } else {
-                                spy.addAction("entered " + overView);
-                                overView.entered();
+                                spy.addAction("exited " + previouslyIdentifiedView);
+                                previouslyIdentifiedView.exited();
                             }
+
+                            View previouslyIdentified = previouslyIdentifiedView;
+                            previouslyIdentifiedView = overView;
+
+                            if (overView != null) {
+                                if (overView == previouslyIdentified) {
+                                    spy.addAction("moved back to from " + previouslyIdentified);
+                                    overView.exitedSubview();
+                                } else {
+                                    spy.addAction("entered " + overView);
+                                    overView.entered();
+                                }
+                            }
+                            redraw();
                         }
-                        redraw();
                     }
+
+                    spy.addTrace("--> mouse moved");
+                    viewer.mouseMoved(location);
+                    spy.addTrace(overView, " mouse location", location);
+
+                    redraw();
                 }
-
-                spy.addTrace("--> mouse moved");
-                viewer.mouseMoved(location);
-                spy.addTrace(overView, " mouse location", location);
-
-                redraw();
             }
+        } catch (Exception e) {
+            log(e);
         }
+
     }
 
     /**
@@ -255,30 +283,34 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * @see java.awt.event.MouseListener#mousePressed(MouseEvent)
      */
     public void mousePressed(MouseEvent me) {
-        spy.reset();
-        viewer.translate(me);
+        try {
+            spy.reset();
+            viewer.translate(me);
 
-        downAt = new Location(me.getPoint());
-        spy.setDownAt(downAt);
+            downAt = new Location(me.getPoint());
+            spy.setDownAt(downAt);
 
-        Location location = new Location(me.getPoint());
-        spy.setLocationInViewer(location);
+            Location location = new Location(me.getPoint());
+            spy.setLocationInViewer(location);
 
-        View overView = viewer.identifyView(new Location(location), true);
-        spy.setOver(overView);
-        spy.addAction("Mouse pressed " + location);
-        drag = null;
+            View overView = viewer.identifyView(new Location(location), true);
+            spy.setOver(overView);
+            spy.addAction("Mouse pressed " + location);
+            drag = null;
 
-        
-        // hide an overlay view when not being pointed to
-        View overlayView = viewer.getOverlayView();
-        if (overlayView != null && overlayView != overView && !overlayView.contains(overView)) {
-            viewer.disposeOverlayView();
+            // hide an overlay view when not being pointed to
+            View overlayView = viewer.getOverlayView();
+            if (overlayView != null && overlayView != overView && !overlayView.contains(overView)) {
+                viewer.disposeOverlayView();
+            }
+            viewer.makeFocus(overView);
+            // drag should not be valid after double/triple click
+            canDrag = overView != null && me.getClickCount() == 1;
+            previouslyIdentifiedView = overView;
+        } catch (Exception e) {
+            log(e);
         }
-        viewer.makeFocus(overView);
-        // drag should not be valid after double/triple click
-        canDrag = overView != null && me.getClickCount() == 1;
-        previouslyIdentifiedView = overView;
+
     }
 
     /**
@@ -292,16 +324,20 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * @see java.awt.event.MouseListener#mouseReleased(MouseEvent)
      */
     public void mouseReleased(MouseEvent me) {
-        if (drag != null) {
-            mouseDragged(me);
+        try {
+            if (drag != null) {
+                mouseDragged(me);
 
-            Location location = new Location(me.getPoint());
-            drag.drag(viewer, location, me.getModifiers());
-            drag.end(viewer);
-            viewer.disposeOverlayView();
-            redraw();
+                Location location = new Location(me.getPoint());
+                drag.drag(viewer, location, me.getModifiers());
+                drag.end(viewer);
+                viewer.disposeOverlayView();
+                redraw();
 
-            drag = null;
+                drag = null;
+            }
+        } catch (Exception e) {
+            log(e);
         }
     }
 

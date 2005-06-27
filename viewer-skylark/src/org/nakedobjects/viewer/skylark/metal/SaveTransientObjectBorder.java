@@ -5,16 +5,21 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.persistence.ActionTransaction;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.utility.ExceptionHelper;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
+import org.apache.log4j.Logger;
+
 
 public class SaveTransientObjectBorder extends ButtonBorder {
-
+    private static final Logger LOG = Logger.getLogger(SaveTransientObjectBorder.class);
+    
     private static class CloseAction extends ButtonAction {
         public CloseAction() {
             super("Discard");
@@ -87,7 +92,12 @@ public class SaveTransientObjectBorder extends ButtonBorder {
 	            objectManager.makePersistent(transientObject);
 	            objectManager.endTransaction();
 	        } catch (RuntimeException e) {
-	            objectManager.abortTransaction();
+	            LOG.info("Exception saving " + transientObject + ", aborting transaction");
+	            try {
+	                objectManager.abortTransaction();
+	            } catch (Exception e2) {
+	                ExceptionHelper.log(ActionTransaction.class, "Failure during abort", e2);
+	            }
 	            throw e;
 	        }
         } else {

@@ -7,11 +7,12 @@ import org.nakedobjects.object.reflect.AbstractActionPeer;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.ReflectiveActionException;
+import org.nakedobjects.utility.ExceptionHelper;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 public class ActionTransaction extends AbstractActionPeer {
-    private final static Category LOG = Category.getInstance(ActionTransaction.class);
+    private final static Logger LOG = Logger.getLogger(ActionTransaction.class);
 
     public ActionTransaction(ActionPeer decorated) {
         super(decorated);
@@ -54,14 +55,13 @@ public class ActionTransaction extends AbstractActionPeer {
             objectManager.endTransaction();
 
             return result;
-
- /*       } catch (ObjectNotFoundException e) {
-            LOG.error("Non-existing target or parameter used in " + getName(), e);
-            objectManager.abortTransaction();
-            return null;*/
         } catch (RuntimeException e) {
             LOG.info("Exception executing " + getName() + ", aborting transaction");
-            objectManager.abortTransaction();
+            try {
+                objectManager.abortTransaction();
+            } catch (Exception e2) {
+                ExceptionHelper.log(ActionTransaction.class, "Failure during abort", e2);
+            }
             throw e;
         }
     }

@@ -5,6 +5,7 @@ import org.nakedobjects.distribution.SingleResponseUpdateNotifier;
 import org.nakedobjects.distribution.UpdatePackager;
 import org.nakedobjects.distribution.command.Request;
 import org.nakedobjects.distribution.command.Response;
+import org.nakedobjects.utility.ExceptionHelper;
 
 import org.apache.log4j.Logger;
 
@@ -17,20 +18,24 @@ public class PipedServer {
 
     public synchronized void run() {
         while (true) {
-            Request request = communication.getRequest();
-            LOG.debug("client request: " + request);
-            
-            UpdatePackager updates = updateNotifier.createUpdatePackager();
-            
-            request.execute(facade);
-            LOG.debug("server updates: " + updates.updateList());
-            
-		    Response response = new Response(request);
-            LOG.debug("server response: " + response);
-            
-            response.setUpdates(updates.getUpdates());
-		    
-            communication.setResponse(response);
+                Request request = communication.getRequest();
+                LOG.debug("client request: " + request);
+
+                UpdatePackager updates = updateNotifier.createUpdatePackager();
+
+	            try {
+	                request.execute(facade);
+	                LOG.debug("server updates: " + updates.updateList());
+	            } catch (Exception e) {
+	                ExceptionHelper.log(PipedServer.class, "Failure during request", e);
+	            }
+
+                Response response = new Response(request);
+                LOG.debug("server response: " + response);
+
+                response.setUpdates(updates.getUpdates());
+
+                communication.setResponse(response);
         }
 
     }
@@ -38,7 +43,7 @@ public class PipedServer {
     public void setConnection(PipedConnection communication) {
         this.communication = communication;
     }
-    
+
     public void setFacade(ServerDistribution facade) {
         this.facade = facade;
     }

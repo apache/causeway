@@ -6,7 +6,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.defaults.Error;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Location;
@@ -16,8 +15,6 @@ import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.core.BackgroundTask;
 import org.nakedobjects.viewer.skylark.core.BackgroundThread;
 
-import org.apache.log4j.Logger;
-
 
 /**
  * Options for an underlying object determined dynamically by looking for
@@ -25,7 +22,6 @@ import org.apache.log4j.Logger;
  * vetoing the option and giving the option an name respectively.
  */
 class ImmediateObjectOption extends MenuOption {
-    private static final Logger LOG = Logger.getLogger(ImmediateObjectOption.class);
 
     public static ImmediateObjectOption createOption(Action action, NakedObject object) {
         Assert.assertTrue("Only suitable for 0 param methods", action.parameters().length == 0);
@@ -68,23 +64,15 @@ class ImmediateObjectOption extends MenuOption {
     }
 
     public void execute(final Workspace workspace, final View view, final Location at) {
-
         BackgroundThread.run(view, new BackgroundTask() {
             protected void execute() {
-                try {
-	                Naked returnedObject;
-                    returnedObject = object.execute(action, null);
-	                if (returnedObject != null) {
-	                    if (!(returnedObject instanceof Naked)) {
-	                        returnedObject = NakedObjects.getPojoAdapterFactory().createAdapter(returnedObject);
-	                    }
-	                    view.objectActionResult(returnedObject, at);
-	                }
-                } catch (Exception e) {
-                    LOG.error("Error while executing action: ", e);
-                    Naked error = NakedObjects.getPojoAdapterFactory().createAdapter(
-                            new Error("Error while executing action:", e));
-                    workspace.addOpenViewFor(error, at);
+                Naked returnedObject;
+                returnedObject = object.execute(action, null);
+                if (returnedObject != null) {
+                    if (!(returnedObject instanceof Naked)) {
+                        returnedObject = NakedObjects.getPojoAdapterFactory().createAdapter(returnedObject);
+                    }
+                    view.objectActionResult(returnedObject, at);
                 }
             }
         });

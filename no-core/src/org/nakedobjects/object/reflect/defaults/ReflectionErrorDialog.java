@@ -1,10 +1,8 @@
 package org.nakedobjects.object.reflect.defaults;
 
 import org.nakedobjects.utility.ErrorDialog;
+import org.nakedobjects.utility.ExceptionHelper;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 
 
@@ -17,17 +15,9 @@ public class ReflectionErrorDialog extends ErrorDialog {
 
     public ReflectionErrorDialog(final String message, final InvocationTargetException exception) {
         super("Application Exception");
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            exception.getTargetException().printStackTrace(new PrintStream(baos));
-            String stackTrace;
-            stackTrace = baos.toString();
-            baos.close();
-            show(message, stackTrace);
-        } catch (IOException ex) {
-            //LOG.error(ex);
-        }
-
+        String stackTrace;
+        stackTrace = ExceptionHelper.exceptionTraceAsString(exception.getTargetException());
+        show(message, stackTrace);
     }
 
 }

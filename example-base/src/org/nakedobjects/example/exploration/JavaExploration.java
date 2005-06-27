@@ -2,7 +2,6 @@ package org.nakedobjects.example.exploration;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.NakedObjectsClient;
-import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
@@ -23,7 +22,7 @@ import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
 import org.nakedobjects.reflector.java.reflect.JavaReflectorFactory;
 import org.nakedobjects.system.AboutNakedObjects;
 import org.nakedobjects.system.SplashWindow;
-import org.nakedobjects.utility.StartupException;
+import org.nakedobjects.utility.ExceptionHelper;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.SkylarkViewer;
 import org.nakedobjects.viewer.skylark.ViewUpdateNotifier;
@@ -60,7 +59,7 @@ public class JavaExploration {
             name = name.substring(name.lastIndexOf('.') + 1);
 
             Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(DEFAULT_CONFIG, false));
-            NakedObjectsClient nakedObjects = new  NakedObjectsClient();
+            NakedObjectsClient nakedObjects = new NakedObjectsClient();
             nakedObjects.setConfiguration(configuration);
             PropertyConfigurator.configure(configuration.getProperties("log4j"));
 
@@ -97,19 +96,19 @@ public class JavaExploration {
             NakedObjectSpecificationLoaderImpl specificationLoader = new NakedObjectSpecificationLoaderImpl();
 
             nakedObjects.setSpecificationLoader(specificationLoader);
-            
+
             LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
             HelpManagerAssist helpManager = new HelpManagerAssist();
             helpManager.setDecorated(new SimpleHelpManager());
             reflectionFactory.setHelpManager(helpManager);
-            
+
             JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
 
             PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
             pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
             pojoAdapterFactory.setReflectorFactory(reflectorFactory);
             nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
-            
+
             nakedObjects.setReflectionFactory(reflectionFactory);
             nakedObjects.setReflectorFactory(reflectorFactory);
 
@@ -117,14 +116,12 @@ public class JavaExploration {
 
             nakedObjects.setSession(new SimpleSession());
 
-
-            try {
-                objectManager.init();
-            } catch (StartupException e) {
-                throw new NakedObjectRuntimeException(e);
-            }
+            objectManager.init();
 
             builder = new JavaFixtureBuilder();
+
+        } catch (Exception e) {
+            ExceptionHelper.log(JavaExploration.class, "Exploration startup problem", e);
         } finally {
             if (splash != null) {
                 splash.removeAfterDelay(4);
@@ -149,6 +146,7 @@ public class JavaExploration {
         }
 
         LOG.debug("locale is " + Locale.getDefault());
+
     }
 
     public void addFixture(Fixture fixture) {
@@ -156,31 +154,37 @@ public class JavaExploration {
     }
 
     public void display() {
-        builder.installFixtures();
+        try {
+            builder.installFixtures();
 
-        SkylarkViewer viewer = new SkylarkViewer();
-        viewer.setUpdateNotifier(new ViewUpdateNotifier());
-        viewer.setExploration(true);
-        viewer.setShutdownListener(new ObjectViewingMechanismListener() {
-            public void viewerClosing() {
-                System.out.println("EXITED");
-                System.exit(0);
+            SkylarkViewer viewer = new SkylarkViewer();
+            viewer.setUpdateNotifier(new ViewUpdateNotifier());
+            viewer.setExploration(true);
+            viewer.setShutdownListener(new ObjectViewingMechanismListener() {
+                public void viewerClosing() {
+                    System.out.println("EXITED");
+                    System.exit(0);
+                }
+            });
+
+            String[] classes = builder.getClasses();
+            JavaExplorationContext context = new JavaExplorationContext();
+            for (int i = 0; i < classes.length; i++) {
+                context.addClass(classes[i]);
             }
-        });
-        
-        String[] classes = builder.getClasses();
-        JavaExplorationContext context = new JavaExplorationContext();
-        for (int i = 0; i < classes.length; i++) {
-            context.addClass(classes[i]);
+            viewer.setApplication(context);
+
+            viewer.init();
+
+        } catch (RuntimeException e) {
+            ExceptionHelper.log(JavaExploration.class, "Exploration startup problem", e);
+            throw e;
         }
-        viewer.setApplication(context);
-
-        viewer.init();
-
         if (splash != null) {
             splash.toFront();
             splash.removeAfterDelay(4);
         }
+
     }
 
     public void registerClass(Class cls) {
