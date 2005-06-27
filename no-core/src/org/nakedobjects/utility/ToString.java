@@ -1,8 +1,8 @@
 package org.nakedobjects.utility;
 
 public final class ToString {
-    private final StringBuffer string;
     private boolean addComma = false;
+    private final StringBuffer string;
 
     public ToString(final Object forObject) {
         string = new StringBuffer();
@@ -13,9 +13,51 @@ public final class ToString {
         string.append(" [");
     }
 
-    public String toString() {
-        string.append(']');
-        return string.toString();
+    public ToString append(final String text) {
+        string.append(text);
+        return this;
+    }
+
+
+    public ToString append(final String name, final boolean flag) {
+        append(name, flag ? "true" : "false");
+        return this;
+    }
+
+    public ToString append(final String name, final byte number) {
+        append(name, Byte.toString(number));
+        return this;
+    }
+
+
+    public ToString append(final String name, final double number) {
+        append(name, Double.toString(number));
+        return this;
+    }
+
+    public ToString append(final String name, final float number) {
+        append(name, Float.toString(number));
+        return this;
+    }
+
+    public ToString append(final String name, final int number) {
+        append(name, Integer.toString(number));
+        return this;
+    }
+    
+    public ToString append(final String name, final long number) {
+        append(name, Long.toString(number));
+        return this;
+    }
+
+    public ToString append(final String name, final Object object) {
+        append(name, object == null ? "null" : object.toString());
+        return this;
+    }
+
+    public ToString append(final String name, final short number) {
+        append(name, Short.toString(number));
+        return this;
     }
 
     public ToString append(final String name, final String string) {
@@ -31,61 +73,28 @@ public final class ToString {
         return this;
     }
 
-    public ToString append(final String name, final Object object) {
-        append(name, object == null ? "null" : object.toString());
-        return this;
-    }
-
-    public ToString append(final String name, final byte number) {
-        append(name, Byte.toString(number));
-        return this;
-    }
-
-    public ToString append(final String name, final short number) {
-        append(name, Short.toString(number));
-        return this;
-    }
-
-    public ToString append(final String name, final int number) {
-        append(name, Integer.toString(number));
-        return this;
-    }
-
     public ToString appendAsHex(final String name, final int number) {
         append(name, "#" + Integer.toHexString(number));
         return this;
     }
+
     
-    public ToString append(final String name, final long number) {
-        append(name, Long.toString(number));
-        return this;
-    }
-
-
-    public ToString append(final String name, final double number) {
-        append(name, Double.toString(number));
-        return this;
-    }
-
-    public ToString append(final String name, final float number) {
-        append(name, Float.toString(number));
-        return this;
-    }
-
-
-    public ToString append(final String name, final boolean flag) {
-        append(name, flag ? "true" : "false");
-        return this;
+    public void appendTruncated(String name, String string, int maxLength) {
+        if(string.length() > maxLength) {
+            append(name, string.substring(0, maxLength));
+            append("...");
+        } else {
+            append(name, string);
+        }
     }
 
     public void setAddComma() {
         this.addComma = true;
     }
 
-    public ToString append(final String text) {
-        string.append(text);
-
-        return this;
+    public String toString() {
+        string.append(']');
+        return string.toString();
     }
 }
 
