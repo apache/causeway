@@ -3,7 +3,6 @@ import org.nakedobjects.example.library.Loan;
 import org.nakedobjects.example.library.Member;
 import org.nakedobjects.example.xat.JavaAcceptanceTestCase;
 import org.nakedobjects.reflector.java.fixture.JavaFixture;
-import org.nakedobjects.xat.TestObject;
 
 
 public class LibraryTest extends JavaAcceptanceTestCase {
@@ -20,7 +19,7 @@ public class LibraryTest extends JavaAcceptanceTestCase {
 		title("Stock library with books");
 		nextStep();
 		
-		TestObject newBook = getTestClass(Book.class.getName()).newInstance();
+//		TestObject newBook = getTestClass(Book.class.getName()).newInstance();
 /*		newBook.fieldEntry("Title", "The Cat in the Hat");
 		newBook.fieldEntry("Author", "Dr Suess");
 		newBook.fieldEntry("Code", "9282821");
