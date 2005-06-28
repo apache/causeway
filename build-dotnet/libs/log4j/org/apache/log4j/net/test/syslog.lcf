@@ -1,0 +1,20 @@
+
+# ------------------------------------------------+
+# Set the host variable to match your environment |
+# ------------------------------------------------+
+host=torino.qos.ch
+
+
+log4j.rootCategory=DEBUG, A1
+
+log4j.appender.A1=org.apache.log4j.net.SyslogAppender
+log4j.appender.A1.SyslogHost=${host}
+
+log4j.appender.A1.layout=org.apache.log4j.PatternLayout
+
+# -----------------------------------------------------------------
+# The ConversionPattern should be terminated with a "\n" instead of
+# the usual "%n" as the syslog host is most probably a unix machine.
+# -----------------------------------------------------------------
+log4j.appender.A1.layout.ConversionPattern=%-5r %-5p [%t] %c{2} %x - %m\n
+

@@ -1,0 +1,12 @@
+
+# -------------------------------------------------------------------
+# This config file is intended to be used by a SocketServer that logs
+# events received from various clients on the console.
+# -------------------------------------------------------------------
+
+log4j.rootCategory=DEBUG, A1
+log4j.category.org.apache.log4j.net=DEBUG
+log4j.appender.A1=org.apache.log4j.ConsoleAppender
+log4j.appender.A1.layout=org.apache.log4j.PatternLayout
+log4j.appender.A1.layout.ConversionPattern=%-5r %-5p [%t] %c{2} %x - %m%n
+

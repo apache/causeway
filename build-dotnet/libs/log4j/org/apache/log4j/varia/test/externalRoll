@@ -1,0 +1,42 @@
+
+# This script 
+
+# Read the .functions file
+. ../../test/.functions
+
+
+TEMP=temp
+PORT=6700
+
+MAX_COUNTER=15
+MAX_MESSAGES=500000
+
+
+setPERL
+
+echo "log4j.rootCategory=DEBUG, testAppender" > $LCF
+lecho "log4j.appender.testAppender=org.apache.log4j.varia.ExternallyRolledFileAppender"
+lecho "log4j.appender.testAppender.File=$TEMP"
+lecho "log4j.appender.testAppender.Append=false"
+lecho "log4j.appender.testAppender.Port=$PORT"
+lecho "log4j.appender.testAppender.MaxBackupIndex=$MAX_COUNTER" 
+lecho "log4j.appender.testAppender.layout=org.apache.log4j.PatternLayout"
+lecho "log4j.appender.testAppender.layout.ConversionPattern=%m%n"
+
+
+rm ${TEMP}*
+
+
+
+./doRoll $MAX_COUNTER localhost $PORT &
+java -Dlog4j.configDebug org.apache.log4j.varia.test.Loop $LCF $MAX_MESSAGES
+
+
+
+if perl checkForHoles.pl $TEMP $MAX_COUNTER $MAX_MESSAGES 
+then
+  echo "Externally triggered roll over test PASSED."
+else
+  echo "Externally triggered roll over test test FAILED."
+  exit 1
+fi

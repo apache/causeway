@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/"
+                     configDebug="true">
+
+	<appender name="ASYNC" class="org.apache.log4j.AsyncAppender">
+	        <appender-ref ref="TEMP"/>
+	</appender>
+
+	<appender name="TEMP" class="org.apache.log4j.FileAppender">
+		<param name="File" value="temp"/>
+		<layout class="org.apache.log4j.PatternLayout">
+  		     <param name="ConversionPattern" 
+                            value="%d %-5p [%t] %C{2} (%F:%L) - %m%n"/>
+		</layout>
+	</appender>
+
+	<root>
+		<priority value="debug"/>
+		<appender-ref ref="ASYNC"/>
+	</root>
+</log4j:configuration>

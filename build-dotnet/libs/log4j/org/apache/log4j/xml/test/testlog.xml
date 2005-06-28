@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j SYSTEM "log4j.dtd">
+<log4j>
+	<appender name="A1" class="org.apache.log4j.FileAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+		  <param name="ConversionPattern" value="%-5p %c{2} - %m\n"/>
+		</layout>
+	</appender>
+	<appender name="A2" class="org.apache.log4j.FileAppender">
+		<layout class="org.apache.log4j.TTCCLayout">
+			<param name="DateFormat" value="ISO8601" />
+		</layout>
+		<param name="File" value="warning.log" />
+		<param name="Append" value="false" />
+	</appender>
+	<category name="org.apache.log4j.xml" priority="debug">
+		<appender-ref ref="A1" />
+	</category>
+	<root priority="debug">
+		<appender-ref ref="A1" />
+		<appender-ref ref="A2" />
+	</root>
+</log4j>

@@ -1,0 +1,9 @@
+log4j.rootCategory=  , testAppender
+log4j.configDebug=true
+log4j.appender.testAppender=org.apache.log4j.net.SyslogAppender
+log4j.appender.testAppender.SyslogHost=localhost
+log4j.appender.testAppender.Facility=LOCAL0
+log4j.appender.testAppender.FacilityPrinting=
+log4j.appender.testAppender.layout=org.apache.log4j.TTCCLayout
+log4j.appender.testAppender.layout.DateFormat=NULL
+log4j.appender.testAppender.layout.TimeZone=

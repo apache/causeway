@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<!-- PropertyConfigurator equivalent:
+log4j.rootCategory=, NULL
+log4j.category.A0123456789=INFO
+log4j.appender.NULL=org.apache.log4j.performance.NullAppender
+log4j.appender.NULL.layout=org.apache.log4j.SimpleLayout
+-->
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+  <appender name="NULL" class="org.apache.log4j.performance.NullAppender">
+    <layout class="org.apache.log4j.SimpleLayout"/>
+  </appender>
+	
+  <root>
+    <priority value ="debug" />
+    <appender-ref ref="NULL" />
+  </root>
+	
+</log4j:configuration>

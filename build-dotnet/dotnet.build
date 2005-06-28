@@ -1,0 +1,330 @@
+<?xml version="1.0" ?>
+<project name="nakedobjects" default="compile" basedir="." xmlns="http://nant.sf.net/schemas/nant-0.85.win32.net-1.0.xsd">
+
+	<!-- Properties -->
+	<property name="nant.settings.currentframework" value="net-1.1"/>
+	<property name="java.sources" value=".."/>
+	<property name="build.dir" value=".\build"/>
+	<property name="build.src.dir" value="${build.dir}/src"/>
+	
+    <exec program="C:/Program Files/Java/apache-ant-1.6.2/bin/ant.bat" useruntimeengine="true">
+          <arg line="-buildfile ../build-templates/version.xml" />
+    </exec>
+		
+	<script language="VB" failonerror="true"> 
+		<imports>
+			<import name="System.IO.StreamReader"/>	
+		</imports>
+		
+		<code>	
+			<![CDATA[ 
+		Public Shared Sub ScriptMain(project As Project) 
+			Dim strFullFileName as String = project.Properties.Item("build.src.dir") & "/org/nakedobjects/system/AboutNakedObjects.java"
+            	
+            Dim sr As StreamReader = New StreamReader("../build-templates/version.properties")				
+          	Dim line As String
+			line = sr.ReadLine()
+            Do
+				line = sr.ReadLine()
+				if not line is nothing andAlso line.startsWith("version=") then
+					project.Log(Level.Info, line.substring(8))
+					project.Properties.Add("build.id", line.substring(8))
+				end if
+			Loop Until line Is Nothing
+           	sr.Close()
+          End Sub 			
+			]]>
+		</code>
+	</script> 
+	
+
+  
+	<echo message="Using '${nant.settings.currentframework}' Framework"/>
+	<echo>Build number: ${build.id}</echo>
+	<echo>Build source: ${java.sources}</echo>
+
+
+
+<!--
+	<tstamp>
+		<formatter property="build.date" pattern="yyyyMMdd-HH00"/>
+	</tstamp>
+	<property name="build.id" value="pojo-${build.date}"/>
+	-->
+
+
+
+	<!-- Clean target will delete the current version -->
+	<target name="clean" description="remove all framework file">
+		<delete dir="${build.dir}" failonerror="false"/>	
+	</target>
+
+
+	<target name="copy">
+		<mkdir dir="${build.dir}" failonerror="true" />
+		<mkdir dir="${build.src.dir}" failonerror="true" />
+
+		<!-- always remove this file, so we get a fresh copy each time as we will change it during the build -->
+        <delete failonerror="false" file="${build.src.dir}/org/nakedobjects/system/AboutNakedObjects.java" />
+
+		<copy todir="${build.src.dir}">
+			<fileset basedir="${java.sources}/no-core/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+		<copy todir="${build.src.dir}\">
+			<fileset basedir="${java.sources}/no-xat/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+		<copy todir="${build.src.dir}\">
+			<fileset basedir="${java.sources}/viewer-skylark/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+		<copy todir="${build.src.dir}\">
+			<fileset basedir="${java.sources}/utility-xmlsnapshot/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+        <copy todir="${build.src.dir}\">
+			<fileset basedir="${java.sources}/utility-memento/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+        <copy todir="${build.src.dir}\">
+			<fileset basedir="${java.sources}/no-distribution-command/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+        <copy todir="${build.src.dir}\">
+			<fileset basedir="${java.sources}/no-distribution-pipe/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+        <copy todir="${build.src.dir}\">
+			<fileset basedir="${java.sources}/os-file/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+		<copy todir="${build.src.dir}\">
+			<fileset basedir="${java.sources}/no-application-library/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+		<copy todir="${build.src.dir}\">
+			<fileset basedir="${java.sources}/no-default-reflector/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+		<copy todir="${build.src.dir}\">
+			<fileset basedir="${java.sources}/example-ecs/src">
+				<include name="**/*.java" />
+                                <!--exclude name="**/EcsFixture.java"/>
+                                <exclude name="**/EcsExploration.java"/-->
+			</fileset>
+		</copy>
+
+        <copy todir="${build.src.dir}\">
+			<fileset basedir="${java.sources}/example-base/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+		<copy todir="${build.src.dir}\">
+			<fileset basedir="${java.sources}/exploration/src">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+
+
+
+		
+		<script language="VB" failonerror="true"> 
+			<imports>
+				<import name="System.IO.StreamReader"/>	
+				<import name="System.IO.StreamWriter"/>	
+				<import name="System.Text.StringBuilder"/>
+			</imports>
+		
+			<code>	
+			<![CDATA[ 
+	Public Shared Sub ScriptMain(project As Project) 
+		Dim strFullFileName as String = project.Properties.Item("build.src.dir") & "/org/nakedobjects/system/AboutNakedObjects.java"
+            	Dim sr As StreamReader = New StreamReader(strFullFileName)				
+           	Dim sw As StreamWriter = New StreamWriter(strFullFileName & ".tmp")				
+	      	Dim line As String
+		line = sr.ReadLine()
+            	Do
+			line = line.Replace("%BUILD_ID%", project.Properties.Item("build.id") )
+			line = line.Replace("%COPYRIGHT_NOTICE%", "Copyright Naked Objects Group 2000 - 2005" )
+			' Console.WriteLine(line)
+			sw.WriteLine(line)
+			line = sr.ReadLine()
+		Loop Until line Is Nothing
+            	sw.Close()
+		sr.Close()
+          End Sub 			
+			]]>
+			</code>
+		</script> 
+	
+	
+		<move overwrite="true"
+			file="${build.src.dir}/org/nakedobjects/system/AboutNakedObjects.java.tmp" 
+			tofile="${build.src.dir}/org/nakedobjects/system/AboutNakedObjects.java" />
+	
+	
+		<!-- copy the library sources across -->	
+		<copy todir="${build.src.dir}">
+            <fileset basedir="dot-net/src">
+                <include name="**/*.vb" />
+            </fileset>
+        </copy>
+
+		<copy todir="${build.src.dir}">
+			<fileset basedir="libs/junit">
+				<include name="junit/**/*.java"/>
+				<exclude name="junit/extensions/**/*"/>
+				<exclude name="junit/swingui/**/*"/>
+			</fileset>
+		</copy>
+		
+		<copy todir="${build.src.dir}">
+			<fileset basedir="libs/log4j">		
+				<include name="**/*.java"/>
+				<exclude name="org/apache/log4j/MDC.java"/>
+				<exclude name="org/apache/log4j/varia/**/*"/>
+				<exclude name="org/apache/log4j/chainsaw/**/*"/>
+				<exclude name="org/apache/log4j/jmx/**/*"/>
+				<exclude name="org/apache/log4j/lf5/**/*"/>
+	                        <exclude name="org/apache/log4j/net/**/JMS*"/>
+	                        <exclude name="org/apache/log4j/net/**/SMTP*"/>
+				<exclude name="org/apache/log4j/or/jms/**/*"/>
+				<exclude name="org/apache/log4j/or/sax	/**/*"/>
+				<exclude name="org/apache/log4j/helpers/ThreadLocalMap.java"/>
+				<exclude name="org/apache/log4j/performance/history/**/*"/>
+				<exclude name="org/apache/log4j/performance/xml/**/*"/>
+				<exclude name="org/apache/log4j/performance/Logging.java"/>	
+			</fileset>
+		</copy>
+	
+		<copy todir="${build.src.dir}">
+			<fileset basedir="libs/crimson">
+				<include name="**/*.java"/>
+			</fileset>
+		</copy>
+		
+		<copy todir="${build.src.dir}">
+			<fileset basedir="components/dot-net-refelector/reflection">
+				<include name="**/*.java"/>
+				<include name="**/*.java"/>
+				<include name="**/*.jsl"/>
+			</fileset>
+		</copy>
+        
+    </target>
+
+
+    <target name="compile">	
+	
+	    <exec program="C:/Program Files/Java/apache-ant-1.6.2/bin/ant.bat" useruntimeengine="true">
+	          <arg line="-buildfile ./build.xml" />
+	    </exec>
+
+        <!--asminfo output="AssemblyInfo2.vb" language="VB">
+            <attributes>
+                <attribute type="AssemblyCopyrightAttribute" value="Copyright (c) 2005, Naked Objects Group Ltd, Inc." />
+                <attribute type="AssemblyVersionAttribute" value="2.0.0.0" />
+                <attribute type="AssemblyTitleAttribute" value="Naked Objects Framework" />
+                <attribute type="AssemblyDescriptionAttribute" value="" />
+                <attribute type="ApplicationNameAttribute" value="NakedObjects" />
+            </attributes>
+        </asminfo-->
+	
+		<vjc target="library" output="build/nakedobjects.net.dll" debug="true">
+	                <sources basedir=".">
+				<include name="${build.src.dir}/**/*.java"/>
+				<include name="${build.src.dir}/**/*.jsl"/>
+				<include name="AssemblyInfo.jsl"/>
+			</sources>
+		</vjc>
+
+        <vbc target="library" output="build/nakedobjects.dotnet.dll" debug="true">
+			<sources basedir=".">
+				<include name="dot-net/src/**/*.vb"/>
+	                        <include name="AssemblyInfo.vb"/>
+			</sources>
+			
+			<references basedir=".">
+				<include name="C:/WINDOWS/Microsoft.NET/Framework/v1.1.4322/vjslib.dll"/>
+				<include name="C:/WINDOWS/Microsoft.NET/Framework/v1.1.4322/System.dll"/>
+	                        <include name="build/nakedobjects.net.dll"/>
+	                        
+	                        <include name="dot-net/log4net.dll"/>
+	                        <include name="dot-net/Spring.Core.dll"/>
+			</references>
+	
+		</vbc>
+
+		<!--vbc target="exe" output="build/example.exe" debug="true" main="Test">
+			<sources basdir=".">
+				<includes name="example/**/Test.vb"/>
+			</sources>
+			
+			<references basedir="c:\">
+				<includes name="C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\vjslib.dll"/>
+				<includes name="build/nakedobjects.net.dll"/>
+			</references>
+	
+		</vbc-->
+        
+    </target>
+    
+
+    <target name="dist" depends="compile">
+		<zip zipfile="build/doc.zip">
+			<fileset basedir="build-docs" prefix="docs">
+	                    <include name="**/*.*" />
+			</fileset>
+		</zip>
+		
+	 	<zip zipfile="build/src.zip">
+			<fileset basedir="build">
+				<include name="src/**/*.*" />
+			</fileset>
+		</zip>
+		
+		<zip zipfile="../../../no-builds/nakedobjects.net-${build.id}.zip">
+			<fileset basedir="build">
+				<include name="*.dll"/>
+				<include name="*.pdb"/>
+				<!--include name="src/**/*"/-->
+				<include name="src.zip"/>
+	                        <include name="doc.zip"/>
+			</fileset>
+		</zip>
+        
+        <copy todir="d:/sdm-development/lib/nof">
+			<fileset basedir="build">
+				<include name="*.dll"/>
+				<include name="*.pdb"/>
+				<include name="src.zip"/>
+			</fileset>
+		</copy>
+
+
+        <mkdir dir="g:/transfer" failonerror="false"/>
+        <copy todir="g:/transfer" failonerror="false">
+			<fileset basedir="../../no-builds/">
+				<include name="nakedobjects.net-${build.id}.zip"/>
+			</fileset>
+		</copy>
+    </target>
+
+
+    <target name="release" depends="copy, dist">
+    	<echo>Completed release ${build.id}</echo>
+    </target>
+
+    
+</project>

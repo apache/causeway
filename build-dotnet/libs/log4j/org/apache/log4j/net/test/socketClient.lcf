@@ -1,0 +1,20 @@
+# -------------------------------------------------------------------------
+# This config file is intended to be used by a client wishing to log using
+# a SocketAppender to a SyslogServer or equivalent.
+# -------------------------------------------------------------------------
+
+log4j.configDebug=true
+
+log4j.rootCategory=DEBUG, A1, CON
+
+log4j.category.org.apache.log4j.net=DEBUG
+log4j.appender.A1=org.apache.log4j.net.SocketAppender
+log4j.appender.A1.RemoteHost=localhost
+log4j.appender.A1.Port=15000
+log4j.appender.A1.layout=org.apache.log4j.PatternLayout
+log4j.appender.A1.layout.ConversionPattern=%-5r %-5p [%t] %c{2} %x - %m%n
+
+
+log4j.appender.CON=org.apache.log4j.ConsoleAppender
+log4j.appender.CON.layout=org.apache.log4j.PatternLayout
+log4j.appender.CON.layout.ConversionPattern=%-5r %-5p [%t] %c{2} %x - %m%n

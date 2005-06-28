@@ -1,0 +1,6 @@
+
+log4j.rootCategory=DEBUG, A1
+log4j.configDebug=true
+log4j.appender.A1=org.apache.log4j.net.JMSAppender
+log4j.appender.A1.TopicBindingName=LOGBN
+log4j.appender.A1.TopicConnectionFactoryBindingName=TCFBN

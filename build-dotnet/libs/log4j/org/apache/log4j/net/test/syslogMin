@@ -1,0 +1,21 @@
+
+	
+
+# Read the .functions file
+. ../../test/.functions
+
+declare -i start=$1
+
+setPERL
+
+  echo  "log4j.rootCategory=  , testAppender" > $LCF
+  lecho "log4j.configDebug=true"
+  lecho "log4j.appender.testAppender=org.apache.log4j.net.SyslogAppender"
+  lecho "log4j.appender.testAppender.SyslogHost=localhost"
+  lecho "log4j.appender.testAppender.Facility=LOCAL0"
+  lecho "log4j.appender.testAppender.FacilityPrinting="
+  lecho "log4j.appender.testAppender.layout=org.apache.log4j.TTCCLayout"
+  lecho "log4j.appender.testAppender.layout.DateFormat=NULL"
+  lecho "log4j.appender.testAppender.layout.TimeZone="
+
+  java org.apache.log4j.net.test.SyslogMin $LCF

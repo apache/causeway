@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" [
+  <!ENTITY XCategory "org.log4j.xml.examples.XCategory">
+]>
+
+
+<!-- A sample file demonstrating the configuration of Category and
+     Priority sub-classes.  -->
+
+
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+           <layout class="org.apache.log4j.PatternLayout">
+             <param name="ConversionPattern"
+		    value="%d %-5p [%t] %c %C{3} (%F:%L) - %m\n"/>
+           </layout>	    
+	</appender>
+	
+	<category name="some.cat"
+                  class="org.apache.log4j.xml.examples.XCategory">
+	  <priority value="TRACE"
+                   class="org.apache.log4j.xml.examples.XPriority"/>
+          <param name="Suffix" 
+                 value=" (Freedom as in the capacity to exercise choice.)"/>
+	</category>
+	
+	<root>
+	   <priority value ="trace" 
+                     class="org.apache.log4j.xml.examples.XPriority"/>
+   	   <appender-ref ref="STDOUT" />
+	</root>
+	
+</log4j:configuration>

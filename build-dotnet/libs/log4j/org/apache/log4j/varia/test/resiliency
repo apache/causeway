@@ -1,0 +1,41 @@
+
+# This shell script checks whether for a given computing environment
+# the ResilientFileAppender can cope with renaming of the file where
+# the log output goes. 
+
+# Test show that under Linux the ResilientFileAppender correctly copes
+# with renaming of files. On the other hand, under Windows 2000 the
+# premise of ResilientFileAppender is false because under Windows 2000
+# it is not possible to rename an open file.
+
+# Read the .functions file
+. ../../test/.functions
+
+
+TEMP=temp
+
+setPERL
+
+echo "log4j.rootCategory=DEBUG, testAppender" > $LCF
+lecho "log4j.appender.testAppender=org.apache.log4j.ResilientFileAppender"
+lecho "log4j.appender.testAppender.File=$TEMP"
+lecho "log4j.appender.testAppender.Append=false"
+lecho "log4j.appender.testAppender.layout=org.apache.log4j.PatternLayout"
+lecho "log4j.appender.testAppender.layout.ConversionPattern=%m%n"
+
+
+rm ${TEMP}*
+
+MAX_COUNTER=3
+MAX_MESSAGES=50000
+
+perl elf.pl $TEMP $MAX_COUNTER&
+java org.apache.log4j.test.Loop $LCF $MAX_MESSAGES
+
+if perl checkForHoles.pl $TEMP $MAX_COUNTER $MAX_MESSAGES 
+then
+  echo "Resiliency test PASSED for this environment."
+else
+  echo "Resiliency test FAILED."
+  exit 1
+fi

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- A sample file demonstrating the configuration of Category and
+     Priority sub-classes.  -->
+
+
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+           <layout class="org.apache.log4j.PatternLayout">
+             <param name="ConversionPattern"
+		    value="%d %-5p [%t] %C{2} (%F:%L) - %m\n"/>
+           </layout>	    
+	</appender>
+	
+	<!-- Note the class attribute! -->
+	<category name="org.apache.log4j.xml"
+                  class="org.apache.log4j.xml.examples.XCategory">
+	  <priority value="info" />
+	</category>
+	
+	<root>
+	   <priority value ="trace" 
+                     class="org.apache.log4j.xml.examples.XPriority"/>
+   	   <appender-ref ref="STDOUT" />
+	</root>
+	
+</log4j:configuration>

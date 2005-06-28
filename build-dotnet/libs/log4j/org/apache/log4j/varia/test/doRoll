@@ -1,0 +1,21 @@
+
+# Read the .functions file
+. ../../test/.functions
+
+
+LOOP_LEN=$1
+HOST=$2
+PORT=$3
+
+declare -i i
+i=0
+
+while [ $i -lt $LOOP_LEN ]
+do
+   sleep 1  
+   i=$i+1
+   java  -Dlog4j.configDebug org.apache.log4j.varia.Roller $HOST $PORT	
+done  
+
+
+
