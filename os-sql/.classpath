@@ -8,5 +8,5 @@
 	<classpathentry kind="var" path="LOG4J"/>
 	<classpathentry kind="lib" path="/lib/hsqldb.jar"/>
 	<classpathentry kind="src" path="/no-memento"/>
-	<classpathentry kind="output" path="classes"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
