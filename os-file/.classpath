@@ -6,5 +6,5 @@
 	<classpathentry kind="src" path="/no-core"/>
 	<classpathentry kind="var" path="JUNIT"/>
 	<classpathentry kind="var" path="LOG4J"/>
-	<classpathentry kind="output" path="classes"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
