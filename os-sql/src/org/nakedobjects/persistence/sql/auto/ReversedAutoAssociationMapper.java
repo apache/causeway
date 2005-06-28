@@ -4,7 +4,8 @@ import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ResolveException;
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.NakedObjectAssociation;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.persistence.sql.CollectionMapper;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.Results;
@@ -19,9 +20,9 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 	private String table;
 	private String parentColumn;
 	private String elementIdColumn;
-	private FieldSpecification field;
+	private NakedObjectField field;
 	
-	public ReversedAutoAssociationMapper(String elemenType, FieldSpecification field, String parameterBase) throws SqlObjectStoreException {
+	public ReversedAutoAssociationMapper(String elemenType, NakedObjectField field, String parameterBase) throws SqlObjectStoreException {
 		super(elemenType, parameterBase);
 		
 		this.field = field;
@@ -44,8 +45,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 
 	public void loadInternalCollection(DatabaseConnector connector, NakedObject parent)
 			throws ResolveException, SqlObjectStoreException {
-		InternalCollection collection = (InternalCollection) field.getPojo(parent);
-		LOG.debug("Loading internal collection " + collection);
+		LOG.debug("Loading internal collection " + field);
 		String parentId = primaryKey(parent.getOid());
 		
 		String statement = "select " + elementIdColumn + "," + columnList() + " from " + table + " where "
@@ -55,14 +55,14 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 			Oid oid = recreateOid(rs, nakedClass, elementIdColumn);
 			NakedObject element = loadObject(nakedClass, oid);
 			LOG.debug("  element  " + element);
-			collection.added(element);
+			parent.setAssociation((NakedObjectAssociation) field, element);
 		}
         rs.close();
-		collection.setResolved();
+        ((NakedObject) parent.getField(field)).setResolved();
 	}
 
 	public void saveInternalCollection(DatabaseConnector connector, NakedObject parent) throws SqlObjectStoreException {
-		InternalCollection collection = (InternalCollection) field.getPojo(parent);
+		InternalCollection collection = (InternalCollection) parent.getField(field);
 		LOG.debug("Saving internal collection " + collection);
 		String parentId = primaryKey(parent.getOid());
 		

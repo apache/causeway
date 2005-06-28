@@ -1,20 +1,19 @@
 package org.nakedobjects.persistence.sql.auto;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ResolveException;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
 import org.nakedobjects.object.persistence.defaults.SerialOid;
-import org.nakedobjects.object.reflect.AssociationSpecification;
-import org.nakedobjects.object.reflect.FieldSpecification;
-import org.nakedobjects.object.reflect.OneToManyAssociationSpecification;
-import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
+import org.nakedobjects.object.reflect.NakedObjectAssociation;
+import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.persistence.sql.AbstractObjectMapper;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.ObjectMapper;
@@ -46,9 +45,9 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
 
 	private String columns(NakedObjectSpecification cls) {
         StringBuffer sb = new StringBuffer();
-        FieldSpecification[] fields = cls.getFields();
+        NakedObjectField [] fields = cls.getFields();
         for (int i = 0; i < fields.length; i++) {
-            if (fields[i].isDerived() || fields[i] instanceof OneToManyAssociationSpecification) {
+            if (fields[i].isDerived() || fields[i].isCollection()) {
                 continue;
             }
             if (i > 0) {
@@ -60,7 +59,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
     }
 
    
-    private String columnName(FieldSpecification field) {
+    private String columnName(NakedObjectField field) {
         return field.getName().replace(' ', '_').toLowerCase();
     }
 
@@ -95,7 +94,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         Results rs = connector.select(statement);
         while (rs.next()) {
             int id = rs.getInt("id"); 
-            NakedObject instance = setupReference(loadedObjects, cls, id);
+            NakedObject instance = setupReference(cls, id);
             LOG.debug("  instance  " + instance);
             instances.addElement(instance);
         }
@@ -112,7 +111,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         Results rs = connector.select(statement);
         while (rs.next()) {
             int id = rs.getInt("id"); 
-            NakedObject instance = setupReference(loadedObjects, cls, id);
+            NakedObject instance = setupReference(cls, id);
             LOG.debug("  instance  " + instance);
             instances.addElement(instance);
         }
@@ -134,7 +133,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
     public NakedObject getObject(DatabaseConnector connector, Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, SqlObjectStoreException {
         NakedObject object = (NakedObject) hint.acquireInstance();
         object.setOid(oid);
-        loadedObjects.loaded(object);
+        loadedObjects().loaded(object);
         return object;
     }
 
@@ -142,7 +141,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         return numberOfInstances(connector, cls) > 0;
     }
 
-    private void loadInternalCollection(DatabaseConnector connector, String id, FieldSpecification field, InternalCollection collection) throws ResolveException, SqlObjectStoreException {
+    private void loadInternalCollection(DatabaseConnector connector, String id, NakedObjectField field, InternalCollection collection) throws ResolveException, SqlObjectStoreException {
         NakedObjectSpecification cls = collection.parent().getSpecification();
         NakedObjectSpecification elementCls = NakedObjects.getSpecificationLoader().loadSpecification(collection.getElementSpecification().getFullName());
 
@@ -155,15 +154,21 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         while(rs.next()) {
             int ref = rs.getInt(a);
             
-            NakedObject element = setupReference(loadedObjects, elementCls, ref);
+            NakedObject element = setupReference(elementCls, ref);
             LOG.debug("  element  " + element);
-            collection.added(element);
+            collection.add(element);
         }
         rs.close();
         collection.setResolved();
     }
 
-    private NakedObject setupReference(LoadedObjects manager, NakedObjectSpecification elementCls, int id) {
+    private PojoAdapterFactory loadedObjects() {
+        return NakedObjects.getPojoAdapterFactory();
+    }
+
+
+    private NakedObject setupReference(NakedObjectSpecification elementCls, int id) {
+        PojoAdapterFactory manager = NakedObjects.getPojoAdapterFactory();
         NakedObject element;
         SerialOid oid = new SerialOid(id);
         if (manager.isLoaded(oid)) {
@@ -193,21 +198,21 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         String statement = "select " + columns + " from " + table + " where id = " + id;
         Results rs = connector.select(statement);
         if (rs.next()) {
-            FieldSpecification[] fields = cls.getFields();
+            NakedObjectField[] fields = cls.getFields();
             for (int i = 0; i < fields.length; i++) {
                 if (fields[i].isDerived()) {
                     continue;
-                } else if (fields[i] instanceof OneToManyAssociationSpecification) {
+                } else if (fields[i].isCollection()) {
                    DatabaseConnector connection = connector.getConnectionPool().acquire();
-                    loadInternalCollection(connection, id, fields[i], (InternalCollection) fields[i].getPojo(object));
+                    loadInternalCollection(connection, id, fields[i], (InternalCollection) object.getField(fields[i]));
                     connector.getConnectionPool().release(connection);
-                } else if (fields[i] instanceof ValueFieldSpecification) {
+                } else if (fields[i].isValue()) {
                     ValueMapper mapper = ValueMapperLookup.getInstance().mapperFor(fields[i].getSpecification());
                     mapper.setFromDBColumn(columnName(fields[i]), fields[i], object, rs);
-               } else if (fields[i] instanceof OneToOneAssociationSpecification) {
+               } else if (fields[i].isObject()) {
                     NakedObjectSpecification associatedCls = fields[i].getSpecification();
-                    NakedObject reference = setupReference(loadedObjects, associatedCls, rs.getInt(columnName(fields[i])));
-                    object.setAssociation((AssociationSpecification) fields[i], reference);
+                    NakedObject reference = setupReference(associatedCls, rs.getInt(columnName(fields[i])));
+                    object.setAssociation((NakedObjectAssociation) fields[i], reference);
                 }
             }
             object.setResolved();
@@ -224,13 +229,13 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         String table = table(cls);
 
         StringBuffer sb = new StringBuffer();
-        FieldSpecification[] fields = cls.getFields();
+        NakedObjectField[] fields = cls.getFields();
         for (int i = 0; i < fields.length; i++) {
             if (fields[i].isDerived()) {
                 continue;
             }
-            Naked fieldValue = fields[i].getPojo(object);
-            if (fields[i] instanceof OneToManyAssociationSpecification) {
+            Naked fieldValue = object.getField(fields[i]);
+            if (fields[i].isCollection()) {
                 saveInternalCollection(connector, fields[i], (InternalCollection) fieldValue);
             } else {
                 if (i > 0) {
@@ -259,7 +264,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
         connector.update(statement);
     }
 
-    private void saveInternalCollection(DatabaseConnector connector, FieldSpecification field, InternalCollection collection) throws SqlObjectStoreException {
+    private void saveInternalCollection(DatabaseConnector connector, NakedObjectField field, InternalCollection collection) throws SqlObjectStoreException {
         NakedObjectSpecification cls = collection.parent().getSpecification();
 
         String table = table(cls) + "_" + field.getName().toLowerCase();
@@ -278,13 +283,13 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
 
     private String values(NakedObjectSpecification cls, NakedObject object) {
         StringBuffer sb = new StringBuffer();
-        FieldSpecification[] fields = cls.getFields();
+        NakedObjectField [] fields = cls.getFields();
         for (int i = 0; i < fields.length; i++) {
-            if (fields[i].isDerived() || fields[i] instanceof OneToManyAssociationSpecification) {
+            if (fields[i].isDerived() || fields[i].isCollection()) {
                 continue;
             }
             sb.append(", ");
-            Naked fieldValue = fields[i].getPojo(object);
+            Naked fieldValue = object.getField(fields[i]);
             if (fieldValue == null) {
                 sb.append("NULL");
             } else {

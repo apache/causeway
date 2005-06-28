@@ -3,6 +3,7 @@ package org.nakedobjects.persistence.sql.jdbc;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.ValueFieldSpecification;
 import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
@@ -24,7 +25,7 @@ public class JdbcDateMapper implements ValueMapper {
 
     }
 
-    public void setFromDBColumn(String columnName, FieldSpecification field, NakedObject object, Results rs) throws SqlObjectStoreException {       
+    public void setFromDBColumn(String columnName, NakedObjectField field, NakedObject object, Results rs) throws SqlObjectStoreException {       
         String val = rs.getString(columnName);
 		
         // convert date to yyyymmdd

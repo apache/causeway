@@ -1,6 +1,7 @@
 package org.nakedobjects.persistence.sql.jdbc;
 
-import org.nakedobjects.container.configuration.ConfigurationFactory;
+import org.nakedobjects.NakedObjects;
+import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.persistence.sql.AbstractDatabaseConnector;
 import org.nakedobjects.persistence.sql.Results;
@@ -52,7 +53,7 @@ public class JdbcConnector extends AbstractDatabaseConnector {
 
     public void open() throws SqlObjectStoreException {
         try {
-            ConfigurationFactory params = ConfigurationFactory.getConfiguration();
+            Configuration params = NakedObjects.getConfiguration();
             String BASE = "sql-object-store.jdbc.";
             String driver = params.getString(BASE + "driver");
             String url = params.getString(BASE + "connection");

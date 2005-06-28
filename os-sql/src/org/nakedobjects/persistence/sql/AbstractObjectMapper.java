@@ -1,17 +1,13 @@
 package org.nakedobjects.persistence.sql;
 
-import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.defaults.SerialOid;
 
 import java.util.Hashtable;
 
-import org.apache.log4j.Logger;
-
 public abstract class AbstractObjectMapper {
-	private static final Logger LOG = Logger.getLogger(AbstractObjectMapper.class);
-	public LoadedObjects loadedObjects;
+	//private static final Logger LOG = Logger.getLogger(AbstractObjectMapper.class);
 	private ObjectMapperLookup objectMapperLookup;
 	private Hashtable keyMapping = new Hashtable();
 
@@ -29,9 +25,8 @@ public abstract class AbstractObjectMapper {
 	public final void shutdown() throws SqlObjectStoreException {
 	}
 
-	public void startup(DatabaseConnector connector, ObjectMapperLookup objectMapperLookup, LoadedObjects loaded) throws SqlObjectStoreException {
+	public void startup(DatabaseConnector connector, ObjectMapperLookup objectMapperLookup) throws SqlObjectStoreException {
 		this.objectMapperLookup = objectMapperLookup;
-		this.loadedObjects = loaded;
 		if (needsTables(connector)) {
 			createTables(connector);
 		}

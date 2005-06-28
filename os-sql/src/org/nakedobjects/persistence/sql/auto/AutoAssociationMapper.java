@@ -1,12 +1,13 @@
 package org.nakedobjects.persistence.sql.auto;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ResolveException;
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.reflect.FieldSpecification;
+import org.nakedobjects.object.reflect.NakedObjectAssociation;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.persistence.sql.AbstractObjectMapper;
 import org.nakedobjects.persistence.sql.CollectionMapper;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
@@ -21,10 +22,10 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 	private String parentColumn;
 	private String elementIdColumn;
 	private String elementClassColumn;
-	private FieldSpecification field;
+	private NakedObjectField field;
 	private AbstractAutoMapper mapper;
 
-	public AutoAssociationMapper(AbstractAutoMapper mapper, NakedObjectSpecification nakedClass, FieldSpecification field) throws SqlObjectStoreException {
+	public AutoAssociationMapper(AbstractAutoMapper mapper, NakedObjectSpecification nakedClass, NakedObjectField field) throws SqlObjectStoreException {
 		this.mapper = mapper;
 		this.field = field;
 
@@ -57,8 +58,7 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 
 	public void loadInternalCollection(DatabaseConnector connector, NakedObject parent)
 			throws ResolveException, SqlObjectStoreException {
-		InternalCollection collection = (InternalCollection) field.getPojo(parent);
-		LOG.debug("Loading internal collection " + collection);
+		LOG.debug("Loading internal collection " + field);
 		String parentId = mapper.primaryKey(parent.getOid());
 		
 		String statement = "select " + elementIdColumn + "," + elementClassColumn + " from " + table + " where "
@@ -70,13 +70,13 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 			Oid oid = recreateOid(rs, elementCls, elementIdColumn);
 			NakedObject element = mapper.loadObject(elementCls, oid);
 			LOG.debug("  element  " + element.getOid());
-			collection.added(element);
+			parent.setAssociation((NakedObjectAssociation) field, element);
 		}
 		rs.close();
 	}
 
 	public void saveInternalCollection(DatabaseConnector connector, NakedObject parent) throws SqlObjectStoreException {
-		InternalCollection collection = (InternalCollection) field.getPojo(parent);
+		InternalCollection collection = (InternalCollection) parent.getField(field);
 		LOG.debug("Saving internal collection " + collection);
 		String parentId = mapper.primaryKey(parent.getOid());
 		

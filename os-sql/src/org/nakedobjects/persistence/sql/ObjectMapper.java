@@ -1,6 +1,5 @@
 package org.nakedobjects.persistence.sql;
 
-import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
@@ -23,7 +22,7 @@ public interface ObjectMapper {
     int numberOfInstances(DatabaseConnector connector, NakedObjectSpecification cls) throws SqlObjectStoreException;
 
 
-    void startup(DatabaseConnector connector, ObjectMapperLookup mappers, LoadedObjects loadedObjects) throws SqlObjectStoreException;
+    void startup(DatabaseConnector connector, ObjectMapperLookup mappers) throws SqlObjectStoreException;
     void shutdown() throws SqlObjectStoreException;
 }
 

@@ -1,17 +1,16 @@
 package org.nakedobjects.persistence.sql.auto;
 
-import org.nakedobjects.container.configuration.ConfigurationFactory;
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.defaults.AbstractNakedObject;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
-import org.nakedobjects.object.reflect.OneToOneAssociationSpecification;
-import org.nakedobjects.object.reflect.ValueFieldSpecification;
+import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.ObjectMapper;
 import org.nakedobjects.persistence.sql.Results;
@@ -19,6 +18,7 @@ import org.nakedobjects.persistence.sql.SqlObjectStoreException;
 import org.nakedobjects.persistence.sql.ValueMapper;
 import org.nakedobjects.persistence.sql.ValueMapperLookup;
 
+import java.util.Date;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
@@ -31,9 +31,7 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 	public AutoMapper(String nakedClassName, String parameterBase) throws SqlObjectStoreException {
 		super(nakedClassName, parameterBase);
 		
-		ConfigurationFactory configParameters = ConfigurationFactory.getConfiguration();
-
-		instancesWhereClause = configParameters.getString(parameterBase + "find");
+		instancesWhereClause = NakedObjects.getConfiguration().getString(parameterBase + "find");
 		if(instancesWhereClause == null) {
 			instancesWhereClause = idColumn + "=";
 		}
@@ -151,10 +149,10 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 
 	public void loadData(NakedObject object, Results rs) throws SqlObjectStoreException {
 		for (int i = 0; i < fields.length; i++) {
-			if (fields[i] instanceof ValueFieldSpecification) {
+			if (fields[i].isValue()) {
 				ValueMapper mapper = ValueMapperLookup.getInstance().mapperFor(fields[i].getSpecification());
 				mapper.setFromDBColumn(columnNames[i], fields[i], object, rs);
-			} else if (fields[i] instanceof OneToOneAssociationSpecification) {
+			} else if (fields[i].isObject()) {
 				NakedObjectSpecification associatedCls = fields[i].getSpecification();
 				
 				Oid oid = recreateOid(rs, associatedCls, columnNames[i]);
@@ -163,7 +161,7 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 				        LOG.warn("NOT DEALING WITH POLYMORPHIC ASSOCIATIONS");
 				    } else {
 				        NakedObject reference = loadObject(associatedCls, oid);
-				        object.setValue((OneToOneAssociationSpecification) fields[i], reference);
+				        object.setValue((OneToOneAssociation) fields[i], reference);
 				    }
 				}
 			} else {
@@ -177,12 +175,12 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 		NakedObjectSpecification cls = object.getSpecification();
 
 		String updateWhereClause = updateWhereClause(object, true);
-		((AbstractNakedObject) object).getLastActivity().reset();
+		((AbstractNakedObject) object).setVersion(new Date().getTime());
 
 		StringBuffer assignments = new StringBuffer();
 		int fld = 0;
 		for (int i = 0; i < fields.length; i++) {
-			Naked fieldValue = fields[i].getPojo(object);
+			Naked fieldValue = object.getField(fields[i]);
 
 			if (i > 0) {
 				assignments.append(", ");

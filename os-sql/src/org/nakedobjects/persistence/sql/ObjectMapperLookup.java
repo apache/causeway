@@ -1,19 +1,16 @@
 package org.nakedobjects.persistence.sql;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.container.configuration.ComponentException;
 import org.nakedobjects.container.configuration.ComponentLoader;
-import org.nakedobjects.container.configuration.ConfigurationFactory;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.persistence.sql.auto.AutoMapper;
-import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Enumeration;
@@ -27,21 +24,15 @@ public class ObjectMapperLookup {
     private static final Logger LOG = Logger.getLogger(ObjectMapperLookup.class);
     private static final NakedObjectSpecification nakedClass = NakedObjects.getSpecificationLoader().loadSpecification(NakedClass.class.getName());
     private final Hashtable mappers = new Hashtable();
-    private final LoadedObjects loadedObjects;
     private ObjectMapperFactory mapperFactory;
     private DatabaseConnectorPool connectionPool;
-    
-    public ObjectMapperLookup(LoadedObjects loadedObjects) {
-        Assert.assertNotNull(loadedObjects);
-        this.loadedObjects = loadedObjects;
-    }
     
     public ObjectMapper getMapper(DatabaseConnector connection, NakedObjectSpecification cls) throws SqlObjectStoreException {
         ObjectMapper mapper = (ObjectMapper) mappers.get(cls);
         if (mapper == null) {
             AutoMapper autoMapper = (AutoMapper) mapperFactory.createMapper(cls.getFullName(), SqlObjectStore.BASE_NAME + ".automapper.default");
            // DatabaseConnector connection = connectionPool.acquire();
-            autoMapper.startup(connection, this, loadedObjects);
+            autoMapper.startup(connection, this);
             if(autoMapper.needsTables(connection)) {
                 autoMapper.createTables(connection);
             }
@@ -74,11 +65,6 @@ public class ObjectMapperLookup {
         this.connectionPool = connectionPool;
     }
 
-    private void setNakedClassMapper(NakedClassMapper mapper) throws SqlObjectStoreException {
-        LOG.debug("set naked class mapper " + mapper);
-		add(nakedClass, mapper);
-    }
-
     private void add(String className, ObjectMapper mapper) throws SqlObjectStoreException {
         NakedObjectSpecification cls = NakedObjects.getSpecificationLoader().loadSpecification(className);
         add(cls, mapper);
@@ -87,7 +73,7 @@ public class ObjectMapperLookup {
     private void add(NakedObjectSpecification cls, ObjectMapper mapper) throws SqlObjectStoreException {
 		LOG.debug("add mapper " + mapper + " for " + cls);
 		DatabaseConnector connection = connectionPool.acquire();
-        mapper.startup(connection, this, loadedObjects);
+        mapper.startup(connection, this);
         connectionPool.release(connection);
         mappers.put(cls, mapper);
 	}
@@ -106,7 +92,7 @@ public class ObjectMapperLookup {
             throw new ComponentException("Failed to set up class mapper", e);
         }
 */
-        Properties properties = ConfigurationFactory.getConfiguration().getPropertySubset(BASE_NAME + ".mapper");
+        Properties properties = NakedObjects.getConfiguration().getPropertiesStrippingPrefix(BASE_NAME + ".mapper");
         Enumeration e = properties.keys();
         while (e.hasMoreElements()) {
             String className = (String) e.nextElement();
