@@ -4,10 +4,10 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="/no-core"/>
 	<classpathentry kind="src" path="/no-default-reflector"/>
-	<classpathentry kind="src" path="/no-memento"/>
 	<classpathentry sourcepath="JUNIT_SRC" kind="var" path="JUNIT"/>
 	<classpathentry sourcepath="LOG4J_SRC" kind="var" path="LOG4J"/>
 	<classpathentry kind="src" path="/no-application-library"/>
 	<classpathentry kind="src" path="/utility-xmlsnapshot"/>
+	<classpathentry kind="src" path="/utility-memento"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
