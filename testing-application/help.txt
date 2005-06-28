@@ -1,0 +1,37 @@
+C:bom.Customer
+
+M:FirstName
+
+The first name of the customer.  What you would call them if you knew them.
+
+M:LastName
+
+HeapAnalyzer 1.3.4 supports the .phd format.
+
+What is HeapAnalyzer?
+
+HeapAnalyzer allows the finding of a possible JavaTM heap leak area through its heuristic search engine and analysis of the Java heap dump in Java applications.
+
+Java heap areas define objects, arrays, and classes. When the Garbage Collector allocates areas of storage in the heap, an object continues to be live while a reference to it exists somewhere in the active state of the JVM; therefore the object is reachable. When an object ceases to be referenced from the active state, it becomes garbage and can be reclaimed for reuse. When this reclamation occurs, the Garbage Collector must process a possible finalizer and also ensure that any internal JVM resources that are associated with the object are returned to the pool of such resources. Java heap dumps are snap shots of Java heaps at specific times.
+
+How does it work?
+HeapAnalyzer analyzes Java heap dumps by parsing the Java heap dump, creating directional graphs, transforming them into directional trees, and executing the heuristic search engine.
+
+The following are examples of features:
+
+    * List of objects/classes/arrays by size
+    * List of objects/classes/arrays by size of child
+    * List of objects/classes/arrays by number of child
+    * List of objects/classes/arrays by frequency
+    * List of objects/classes/arrays by alphabetical order
+    * List of available heap spaces by size
+    * Available heap space distribution chart
+    * Tree view of Java heap dump
+    * Locations of possible Java heap leak areas
+    * Loading/Saving processed Java heap dumps.
+
+	
+
+About the technology author(s):
+Jinwoo Hwang is software engineer who is a member of WebSphere Application Server Technical Support Team, based in Research Triangle Park, N.C. He joined IBM in 1995 and worked with IBM Global Learning Services, IBM Consulting Services, and development, until he joined WebSphere Application Server Technical Support. Mr. Hwang is an IBM Certified Solution Developer as well as a SUN Certified Programmer for The Java 2 platform. He is also the author of the book C Programming for Novices (Yonam Press,1995). 
+
