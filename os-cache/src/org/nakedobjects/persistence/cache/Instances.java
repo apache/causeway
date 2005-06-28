@@ -1,38 +1,32 @@
 package org.nakedobjects.persistence.cache;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.LoadedObjects;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.io.Memento;
+import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 
 class Instances {
-    private final static Category LOG = Category.getInstance(Instances.class);
+    private final static Logger LOG = Logger.getLogger(Instances.class);
     private NakedObjectSpecification specification;
     private Hashtable index = new Hashtable();
-    private LoadedObjects loadedObjects;
     private Vector orderedInstances = new Vector();
 
-    public Instances(NakedObjectSpecification cls, LoadedObjects loadedObjects) {
-        if(cls == null || loadedObjects == null) {
+    public Instances(NakedObjectSpecification cls) {
+        if(cls == null) {
             throw new NullPointerException();
         }
         this.specification = cls;
-        this.loadedObjects = loadedObjects;
     }
     
     public void create(NakedObject object) {
@@ -44,15 +38,15 @@ class Instances {
         return orderedInstances.elements();
     }
 
-    int loadData(ObjectInputStream oos, NakedObjectContext context) throws IOException, ClassNotFoundException {
-        int noInstances = oos.readInt();
+    public int loadData(SnapshotImpl reader) throws ObjectStoreException {
+        int noInstances = reader.readInt();
         int size = 0;
         for (int i = 0; i < noInstances; i++) {
-            Memento memento = (Memento) oos.readObject();
+            Memento memento = (Memento) reader.readObject();
             LOG.debug("read 2: " + i + " " + memento);
 
             NakedObject object = loadedObjects().getLoadedObject(memento.getOid());
-            memento.updateObject(object, loadedObjects, context);
+            memento.updateObject(object);
             LOG.debug("recreated " + object + " " + object.titleString());
             size++;
         }
@@ -63,10 +57,10 @@ class Instances {
         return NakedObjects.getPojoAdapterFactory();
     }
 
-    void loadIdentities(ObjectInputStream oos) throws IOException, ClassNotFoundException {
-        int noInstances = oos.readInt();
+    public void loadIdentities(SnapshotImpl reader) throws ObjectStoreException {
+        int noInstances = reader.readInt();
         for (int i = 0; i < noInstances; i++) {
-            Oid oid = (Oid) oos.readObject();
+            Oid oid = (Oid) reader.readOid();
             LOG.debug("read 1: " + i + " " + specification.getFullName() + "/" + oid);
 
             NakedObject obj = (NakedObject) specification.acquireInstance();
@@ -96,29 +90,27 @@ class Instances {
         index.remove(object.getOid());
     }
 
-    long saveData(ObjectOutputStream oos) throws IOException {
-        oos.writeInt(numberInstances());
+    public long saveData(SnapShotWriter writer) throws ObjectStoreException {
+        writer.writeInt(numberInstances());
 
         Enumeration e = instances();
         int i = 0;
         while (e.hasMoreElements()) {
             NakedObject object = (NakedObject) e.nextElement();
-            Memento memento = new Memento(object);
-            LOG.debug("write 2: " + i++ + " " + specification.getFullName() + "/" + memento);
-            oos.writeObject(memento);
+            writer.writeNakedObject(object);
         }
         return i;
     }
 
-    void saveIdentities(ObjectOutputStream oos) throws IOException {
-        oos.writeInt(numberInstances());
+    public void saveIdentities(SnapShotWriter writer) throws ObjectStoreException {
+        writer.writeInt(numberInstances());
 
         Enumeration e = instances();
         int i = 0;
         while (e.hasMoreElements()) {
             NakedObject object = (NakedObject) e.nextElement();
             Object oid = object.getOid();
-            oos.writeObject(oid);
+            writer.writeOid(oid);
             LOG.debug("write 1: " + i++ + " " + specification.getFullName() + "/" + oid);
         }
     }
