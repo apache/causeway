@@ -1,5 +1,6 @@
 package org.nakedobjects.object.transaction;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.container.configuration.ComponentException;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.NakedObject;
@@ -154,7 +155,7 @@ public class SimpleTransactionManager extends LocalObjectManager implements Tran
         if(transaction == null) {
 	        super.resolveImmediately(object);
         } else {
-            transaction.resolve(object,  getObjectStore().getLoadedObjects().getLoadedObject(object.getOid()));
+            transaction.resolve(object,  NakedObjects.getPojoAdapterFactory().getLoadedObject(object.getOid()));
         }
     }
 
