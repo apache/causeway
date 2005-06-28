@@ -6,5 +6,5 @@
 	<classpathentry kind="var" path="LOG4J"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry sourcepath="JUNIT_SRC" kind="var" path="JUNIT"/>
-	<classpathentry kind="output" path="classes"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
