@@ -13,5 +13,5 @@
 	<classpathentry kind="src" path="/no-xat"/>
 	<classpathentry kind="src" path="/os-file"/>
 	<classpathentry kind="src" path="/example-base"/>
-	<classpathentry kind="output" path="classes"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
