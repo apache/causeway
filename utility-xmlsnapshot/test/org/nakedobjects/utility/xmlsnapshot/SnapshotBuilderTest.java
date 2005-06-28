@@ -9,8 +9,6 @@ import org.nakedobjects.object.reflect.NakedObjectField;
 
 import junit.framework.TestCase;
 
-import org.w3c.dom.Element;
-
 
 public class SnapshotBuilderTest extends TestCase {
 

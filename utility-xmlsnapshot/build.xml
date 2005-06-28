@@ -16,7 +16,7 @@
 			<pathelement location="../no-core/build/classes/src"/>
 			<pathelement location="../no-core/build/classes/test"/>
 
-			<pathelement location="../no-memento/build/classes/src"/>
+			<pathelement location="../utility-memento/build/classes/src"/>
 	</path>
 	
 	&project-build;	
