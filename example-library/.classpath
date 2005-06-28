@@ -11,5 +11,5 @@
 	<classpathentry kind="src" path="/viewer-skylark"/>
 	<classpathentry kind="src" path="/no-default-reflector"/>
 	<classpathentry kind="src" path="/example-base"/>
-	<classpathentry kind="output" path="classes"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
