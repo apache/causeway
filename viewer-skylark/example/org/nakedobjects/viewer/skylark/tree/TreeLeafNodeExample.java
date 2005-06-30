@@ -1,15 +1,13 @@
 package org.nakedobjects.viewer.skylark.tree;
 
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.RootObject;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.Workspace;
-import org.nakedobjects.viewer.skylark.example.ExampleObjectForView;
 import org.nakedobjects.viewer.skylark.example.TestViews;
-import org.nakedobjects.viewer.skylark.tree.CollectionLeafNodeSpecification;
-import org.nakedobjects.viewer.skylark.tree.TreeBrowserFrame;
 
 
 public class TreeLeafNodeExample extends TestViews {
@@ -19,7 +17,7 @@ public class TreeLeafNodeExample extends TestViews {
     }
 
     protected void views(Workspace workspace) {
-        ExampleObjectForView object = new ExampleObjectForView();
+        NakedObject object = createExampleObjectForView();
         ViewAxis axis = new TreeBrowserFrame(null, null);
         
         Content content = new RootObject(object);

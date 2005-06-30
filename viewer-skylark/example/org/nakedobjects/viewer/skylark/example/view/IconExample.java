@@ -7,7 +7,6 @@ import org.nakedobjects.viewer.skylark.RootObject;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
-import org.nakedobjects.viewer.skylark.example.ExampleObjectForView;
 import org.nakedobjects.viewer.skylark.example.TestViews;
 import org.nakedobjects.viewer.skylark.metal.ClassIcon;
 
@@ -21,8 +20,7 @@ public class IconExample extends TestViews {
     
 
     protected void views(Workspace workspace) {
-        ExampleObjectForView object = new ExampleObjectForView();
-        object.setObject((NakedObject) new NakedClass("test naked class"));
+        NakedObject object = (NakedObject) new NakedClass("test naked class");
         Content content = new RootObject(object);
         ViewSpecification specification = null;
         ViewAxis axis = null;

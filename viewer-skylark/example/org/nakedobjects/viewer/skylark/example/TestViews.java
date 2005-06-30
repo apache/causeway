@@ -2,8 +2,10 @@ package org.nakedobjects.viewer.skylark.example;
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoaderNew;
 import org.nakedobjects.object.defaults.MockObjectManager;
+import org.nakedobjects.object.reflect.DummyNakedObject;
 import org.nakedobjects.utility.InfoDebugFrame;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
@@ -20,6 +22,14 @@ import org.apache.log4j.BasicConfigurator;
 
 
 public class TestViews {
+
+
+    protected NakedObject createExampleObjectForView() {
+        DummyNakedObject object = new DummyNakedObject();
+        object.setupTitle("ExampleObjectForView");
+        object.setupSpecification(new ExampleSpecification());
+        return object;
+    }
 
     public static void main(String[] args) {
         new TestViews();

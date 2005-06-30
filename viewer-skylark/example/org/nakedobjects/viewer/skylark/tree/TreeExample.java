@@ -1,16 +1,25 @@
 package org.nakedobjects.viewer.skylark.tree;
 
+import org.nakedobjects.object.DummyNakedObjectSpecification;
+import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.DummyNakedObject;
+import org.nakedobjects.object.reflect.MemberIdentifier;
+import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.RootObject;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.Workspace;
-import org.nakedobjects.viewer.skylark.example.ExampleObjectForView2;
+import org.nakedobjects.viewer.skylark.example.ExampleSpecification;
 import org.nakedobjects.viewer.skylark.example.TestViews;
 import org.nakedobjects.viewer.skylark.metal.FormSpecification;
 import org.nakedobjects.viewer.skylark.metal.TreeBrowserSpecification;
-import org.nakedobjects.viewer.skylark.tree.TreeBrowserFrame;
 
 
 public class TreeExample extends TestViews {
@@ -20,7 +29,11 @@ public class TreeExample extends TestViews {
     }
 
     protected void views(Workspace workspace) {
-        ExampleObjectForView2 object = new ExampleObjectForView2();
+        DummyNakedObject object = new DummyNakedObject();
+        object.setupFields(fields());
+        object.setupLabel("label");
+        object.setupSpecification(new ExampleSpecification());
+
         ViewAxis axis = new TreeBrowserFrame(null, null);
              
         Content content = new RootObject(object);
@@ -38,6 +51,63 @@ public class TreeExample extends TestViews {
         
     }
 
+    private NakedObjectField[] fields() {
+        final DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
+
+        OneToOnePeer peer = new OneToOnePeer() {
+
+            public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
+
+            public Naked getAssociation(MemberIdentifier identifier, NakedObject inObject) {
+                return null;
+            }
+
+            public Object getExtension(Class cls) {
+                return null;
+            }
+
+            public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked value) {
+                return null;
+            }
+
+            public String getName() {
+                return "field";
+            }
+
+            public NakedObjectSpecification getType() {
+                return spec;
+            }
+
+            public boolean hasHint() {
+                return false;
+            }
+
+            public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
+
+            public void initValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {}
+
+            public boolean isDerived() {
+                return false;
+            }
+
+            public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
+                return false;
+            }
+
+            public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
+
+            public void setValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {}
+        };
+
+        NakedObjectField[] fields = new NakedObjectField[] { new OneToOneAssociation("cls", "fld", spec, peer),
+        /* new OneToManyAssociation() */
+        };
+        return fields;
+        
+    }
+
+    
+    
 }
 
 

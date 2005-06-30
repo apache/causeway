@@ -1,12 +1,12 @@
 package org.nakedobjects.viewer.skylark.tree;
 
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.RootObject;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
-import org.nakedobjects.viewer.skylark.example.ExampleObjectForView;
 import org.nakedobjects.viewer.skylark.example.ExampleViewSpecification;
 import org.nakedobjects.viewer.skylark.example.TestObjectView;
 import org.nakedobjects.viewer.skylark.example.TestViews;
@@ -21,7 +21,7 @@ public class NodeBorderExample extends TestViews {
     }
 
     protected void views(Workspace workspace) {
-        ExampleObjectForView object = new ExampleObjectForView();
+        NakedObject object = createExampleObjectForView();
         ViewSpecification specification = new ExampleViewSpecification();
         ViewAxis axis = null;
 

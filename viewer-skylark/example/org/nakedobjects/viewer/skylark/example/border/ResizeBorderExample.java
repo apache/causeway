@@ -2,6 +2,7 @@ package org.nakedobjects.viewer.skylark.example.border;
 
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.RootObject;
@@ -10,7 +11,6 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
-import org.nakedobjects.viewer.skylark.example.ExampleObjectForView;
 import org.nakedobjects.viewer.skylark.example.ExampleViewSpecification;
 import org.nakedobjects.viewer.skylark.example.TestObjectViewWithDragging;
 import org.nakedobjects.viewer.skylark.example.TestViews;
@@ -29,7 +29,7 @@ public class ResizeBorderExample extends TestViews {
         config.add("" , "");
         new NakedObjectsClient().setConfiguration(config);
         
-        ExampleObjectForView object = new ExampleObjectForView();
+        NakedObject object = createExampleObjectForView();
         Content content = new RootObject(object);
         ViewSpecification specification = new ExampleViewSpecification();
         ViewAxis axis = null;
