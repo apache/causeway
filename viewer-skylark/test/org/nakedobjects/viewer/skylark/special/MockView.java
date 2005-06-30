@@ -8,6 +8,7 @@ import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
+import org.nakedobjects.viewer.skylark.InteractionSpy;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
@@ -167,7 +168,11 @@ public class MockView implements View {
     }
 
     public Viewer getViewManager() {
-        return null;
+        return new Viewer() {
+            public InteractionSpy getSpy() {
+                return new InteractionSpy();
+            }
+        };
     }
 
     public Workspace getWorkspace() {
