@@ -16,7 +16,6 @@ import org.nakedobjects.viewer.skylark.RootObject;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.Workspace;
-import org.nakedobjects.viewer.skylark.example.ExampleSpecification;
 import org.nakedobjects.viewer.skylark.example.TestViews;
 import org.nakedobjects.viewer.skylark.metal.FormSpecification;
 import org.nakedobjects.viewer.skylark.metal.TreeBrowserSpecification;
@@ -32,7 +31,7 @@ public class TreeExample extends TestViews {
         DummyNakedObject object = new DummyNakedObject();
         object.setupFields(fields());
         object.setupLabel("label");
-        object.setupSpecification(new ExampleSpecification());
+        object.setupSpecification(new DummyNakedObjectSpecification());
 
         ViewAxis axis = new TreeBrowserFrame(null, null);
              

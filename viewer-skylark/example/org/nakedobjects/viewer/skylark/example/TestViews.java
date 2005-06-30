@@ -2,6 +2,7 @@ package org.nakedobjects.viewer.skylark.example;
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
+import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoaderNew;
 import org.nakedobjects.object.defaults.MockObjectManager;
@@ -26,8 +27,8 @@ public class TestViews {
 
     protected NakedObject createExampleObjectForView() {
         DummyNakedObject object = new DummyNakedObject();
-        object.setupTitle("ExampleObjectForView");
-        object.setupSpecification(new ExampleSpecification());
+        object.setupTitleString("ExampleObjectForView");
+        object.setupSpecification(new DummyNakedObjectSpecification());
         return object;
     }
 
