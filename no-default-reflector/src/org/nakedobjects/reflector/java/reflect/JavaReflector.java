@@ -346,6 +346,10 @@ public class JavaReflector implements Reflector {
 
         }
     }
+    
+    public void destroyed(NakedObject object) {
+        // TODO pass on notification to POJO about its deletion.
+    }
 
     public FieldPeer[] fields() {
         if (cls.getName().startsWith("java.") || BusinessValueHolder.class.isAssignableFrom(cls)) {
