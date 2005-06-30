@@ -1,6 +1,7 @@
 package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.ConcurrencyException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
@@ -12,6 +13,8 @@ import org.nakedobjects.object.defaults.AbstractNakedObject;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.utility.ToString;
 
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 
 
@@ -19,13 +22,27 @@ public class PojoAdapter extends AbstractNakedObject {
     private final static Logger LOG = Logger.getLogger(PojoAdapter.class);
     private Object pojo;
     private long version;
+    private Date modifiedTime;
+    private String modifierBy;
 
     public long getVersion() {
         return version;
     }
-    
+        
     public void setVersion(long version) {
         this.version = version;
+    }
+    
+    public void setOptimisticLock(long version, String modifierBy, Date modifiedTime) {
+        this.version = version;
+        this.modifierBy = modifierBy;
+        this.modifiedTime = modifiedTime;
+    }
+    
+    public void checkLock(long version) {
+        if(version != this.version) {
+            throw new ConcurrencyException(modifierBy + " changed this object (" + titleString() + ") at " + modifiedTime);
+        }
     }
     
     public void setOid(Oid oid) {
@@ -181,10 +198,6 @@ public class PojoAdapter extends AbstractNakedObject {
 
     public Persistable persistable() {
         return getSpecification().persistable();
-    }
-
-    public boolean isParsable() {
-        return getSpecification().isParsable();
     }
 
     public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {

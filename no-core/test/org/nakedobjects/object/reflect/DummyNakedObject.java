@@ -1,6 +1,5 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -9,17 +8,22 @@ import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.Oid;
 
+import java.util.Date;
+
 
 public class DummyNakedObject implements NakedObject {
-
-    private DummyNakedObjectSpecification spec;
-    private Oid oid;
+    private NakedObjectField[] fields = new NakedObjectField[0];
     private Object object;
+    private Oid oid;
+    private NakedObjectSpecification spec;
     private String title;
+    private String label;
 
     public DummyNakedObject() {
         super();
     }
+
+    public void checkLock(long version) {}
 
     public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
 
@@ -35,6 +39,8 @@ public class DummyNakedObject implements NakedObject {
 
     public void created() {}
 
+    public void debugClearResolved() {}
+
     public void deleted() {}
 
     public Naked execute(Action action, Naked[] parameters) {
@@ -47,6 +53,10 @@ public class DummyNakedObject implements NakedObject {
 
     public Naked getField(NakedObjectField field) {
         return null;
+    }
+
+    public NakedObjectField[] getFields() {
+        return fields;
     }
 
     public Hint getHint(Action action, Naked[] parameters) {
@@ -62,11 +72,11 @@ public class DummyNakedObject implements NakedObject {
     }
 
     public String getLabel(Action action) {
-        return null;
+        return label;
     }
 
     public String getLabel(NakedObjectField field) {
-        return null;
+        return label;
     }
 
     public Object getObject() {
@@ -87,6 +97,14 @@ public class DummyNakedObject implements NakedObject {
 
     public NakedValue getValue(OneToOneAssociation field) {
         return null;
+    }
+
+    public long getVersion() {
+        return 0;
+    }
+
+    public NakedObjectField[] getVisibleFields() {
+        return getFields();
     }
 
     public void initAssociation(NakedObjectAssociation field, NakedObject associatedObject) {}
@@ -131,41 +149,37 @@ public class DummyNakedObject implements NakedObject {
         this.oid = oid;
     }
 
+    public void setOptimisticLock(long version, String user, Date time) {}
+
     public void setResolved() {}
 
-    public void setupSpecification(DummyNakedObjectSpecification spec) {
-        this.spec = spec;
-    }
-
-    public void setValue(OneToOneAssociation field, Object object) {}
-
-    public String titleString() {
-        return title;
-    }
-
-    public void setupTitle(String title) {
-        this.title = title;
+    public void setupFields(NakedObjectField[] fields) {
+        this.fields = fields;
     }
 
     public void setupObject(Object object) {
         this.object = object;
     }
 
-    public NakedObjectField[] getFields() {
-        return new NakedObjectField[0];
+    public void setupSpecification(NakedObjectSpecification spec) {
+        this.spec = spec;
     }
 
-    public NakedObjectField[] getVisibleFields() {
-        return  new NakedObjectField[0];
+    public void setupTitle(String title) {
+        this.title = title;
     }
 
-    public void debugClearResolved() {}
-
-    public long getVersion() {
-        return 0;
-    }
+    public void setValue(OneToOneAssociation field, Object object) {}
 
     public void setVersion(long version) {}
+
+    public void setupLabel(String label) {
+        this.label = label;
+    }
+    
+    public String titleString() {
+        return title;
+    }
 
 }
 

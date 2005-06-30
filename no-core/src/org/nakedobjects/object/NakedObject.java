@@ -8,6 +8,8 @@ import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 
+import java.util.Date;
+
 
 /**
  * Definition of an naked reference object.
@@ -52,7 +54,7 @@ public interface NakedObject extends Naked {
     ActionParameterSet getParameters(Action action);
 
     NakedValue getValue(OneToOneAssociation field);
-
+    
     long getVersion();
 
     NakedObjectField[] getVisibleFields();
@@ -64,8 +66,6 @@ public interface NakedObject extends Naked {
     void initValue(OneToOneAssociation field, Object object);
 
     boolean isEmpty(NakedObjectField field);
-
-    boolean isParsable();
 
     /**
      * Returns true when the object is persistent.
@@ -94,8 +94,12 @@ public interface NakedObject extends Naked {
 
     void setValue(OneToOneAssociation field, Object object);
     
+    /** @deprecated */
     void setVersion(long version);
+    
+    void setOptimisticLock(long version, String user, Date time);
 
+    void checkLock(long version);
 }
 
 /*

@@ -11,22 +11,25 @@ import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.utility.ExpectedCalls;
 
+import java.util.Date;
 import java.util.Hashtable;
 
 
 public class MockNakedObject implements NakedObject {
+
+    public ExpectedCalls calls = new ExpectedCalls();
     private Hashtable fields = new Hashtable();
+    private MockHint hint;
     private Object object;
     private Oid oid;
+    private boolean persistDirty;
+    private boolean resolved;
     private NakedObjectSpecification specification;
     private String titleString;
-    private boolean persistDirty;
-    private boolean viewDirty;
-    private boolean resolved;
     private long version;
-    private MockHint hint;
-    
-    public ExpectedCalls calls = new ExpectedCalls();
+    private boolean viewDirty;
+
+    public void checkLock(long version) {}
 
     public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
 
@@ -41,6 +44,8 @@ public class MockNakedObject implements NakedObject {
     public void copyObject(Naked object) {}
 
     public void created() {}
+
+    public void debugClearResolved() {}
 
     public void deleted() {}
 
@@ -102,6 +107,14 @@ public class MockNakedObject implements NakedObject {
         return null;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public NakedObjectField[] getVisibleFields() {
+        return null;
+    }
+
     public void initAssociation(NakedObjectAssociation field, NakedObject associatedObject) {}
 
     public void initOneToManyAssociation(OneToManyAssociation association, NakedObject[] instances) {}
@@ -147,12 +160,22 @@ public class MockNakedObject implements NakedObject {
         this.oid = oid;
     }
 
+    public void setOptimisticLock(long version, String user, Date time) {}
+
     public void setResolved() {
         resolved = true;
     }
 
+    public void setupDirty() {
+        persistDirty = true;
+    }
+
     public void setupField(String name, Naked field) {
         this.fields.put(name, field);
+    }
+
+    public void setupHint(MockHint hint) {
+        this.hint = hint;
     }
 
     public void setupObject(Object object) {
@@ -167,36 +190,18 @@ public class MockNakedObject implements NakedObject {
         this.titleString = titleString;
     }
 
-    public void setValue(OneToOneAssociation field, Object object) {}
-
-    public String titleString() {
-        return titleString;
-    }
-
-    public void setupDirty() {
-        persistDirty = true;    
-    }
-
     public void setupViewDirty(boolean b) {
         viewDirty = b;
     }
 
-    public NakedObjectField[] getVisibleFields() {
-        return null;
-    }
-
-    public void debugClearResolved() {}
+    public void setValue(OneToOneAssociation field, Object object) {}
 
     public void setVersion(long version) {
         this.version = version;
     }
-    
-    public long getVersion() {
-        return version;
-    }
 
-    public void setupHint(MockHint hint) {
-        this.hint = hint;
+    public String titleString() {
+        return titleString;
     }
 }
 

@@ -94,8 +94,6 @@ public interface NakedObjectSpecification {
      */
     boolean isOfType(NakedObjectSpecification cls);
 
-    boolean isParsable();
-
     /**
      * Determines if objects of this specification can be persisted or not. If
      * it can be persisted (i.e. it return something other than

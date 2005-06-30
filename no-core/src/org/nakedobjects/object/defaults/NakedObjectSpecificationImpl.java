@@ -469,16 +469,6 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         return false;
     }
 
-    /** TODO implement */
-    public boolean isParsable() {
-        return true;
-    }
-
-   /** @deprecated */
-    public boolean isPartOf() {
-        return reflector.isPartOf();
-    }
-
     public Persistable persistable() {
         return reflector.persistable();
     }

@@ -127,10 +127,6 @@ public class InternalObjectSpecification implements NakedObjectSpecification {
         return cls == this;
     }
 
-    public boolean isParsable() {
-        return false;
-    }
-
     public boolean isValue() {
         return false;
     }
