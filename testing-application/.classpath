@@ -9,7 +9,6 @@
 	<classpathentry kind="src" path="/viewer-skylark"/>
 	<classpathentry kind="src" path="/no-application-library"/>
 	<classpathentry kind="src" path="/no-xat"/>
-	<classpathentry kind="src" path="/os-file"/>
 	<classpathentry kind="src" path="/example-base"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
