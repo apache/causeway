@@ -65,13 +65,6 @@ public class ContactTestObject {
         return null;
     }
 
-    public ContactTestObject actionDuplicate() {
-        ContactTestObject contact = new ContactTestObject();
-
-        contact.getAddress().copyObject(getAddress());
-        return contact;
-    }
-
     public void actionResetWorth() {}
 
     public void actionSetUp() {
