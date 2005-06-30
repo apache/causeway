@@ -81,7 +81,6 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
             object = objectManager.createTransientInstance(cls.forObjectType());
             objectManager.startTransaction();
             objectManager.makePersistent(object);
-            object.created();
             objectManager.saveChanges();
             objectManager.endTransaction();
         } catch (NotPersistableException e) {

@@ -1,8 +1,8 @@
 package org.nakedobjects.xat;
 
 import org.nakedobjects.NakedObjectsClient;
+import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
-import org.nakedobjects.object.MockNakedObjectSpecification;
 import org.nakedobjects.object.MockOneToManyPeer;
 import org.nakedobjects.object.MockOneToOnePeer;
 import org.nakedobjects.object.control.MockHint;
@@ -50,19 +50,19 @@ public class TestObjectImplFieldTest extends TestCase {
     }
 
     public void testGetField() {
-        MockNakedObjectSpecification fieldSpec = new MockNakedObjectSpecification();
+        DummyNakedObjectSpecification fieldSpec = new DummyNakedObjectSpecification();
 
-        MockNakedObjectSpecification objectSpec = new MockNakedObjectSpecification();
+        DummyNakedObjectSpecification objectSpec = new DummyNakedObjectSpecification();
         OneToOneAssociation field1 = new OneToOneAssociation("cls", "one", fieldSpec, new MockOneToOnePeer());
         OneToOneAssociation field2 = new OneToOneAssociation("cls", "two", fieldSpec, new MockOneToOnePeer());
         objectSpec.setupFields(new NakedObjectField[] { field1, field2 });
         object.setupSpecification(objectSpec);
     
         DummyNakedObject fieldObject1 = new DummyNakedObject();
-        object.setupField("one", fieldObject1);
+        object.setupFieldValue("one", fieldObject1);
 
         DummyNakedObject fieldObject2 = new DummyNakedObject();
-        object.setupField("two", fieldObject2);
+        object.setupFieldValue("two", fieldObject2);
 
         target.expected.addExpectedMethod("fieldAccessorFor");
         target.expected.addExpectedParameter("one");
@@ -89,19 +89,19 @@ public class TestObjectImplFieldTest extends TestCase {
     
 
     public void testGetCollectionField() {
-        MockNakedObjectSpecification fieldSpec = new MockNakedObjectSpecification();
+        DummyNakedObjectSpecification fieldSpec = new DummyNakedObjectSpecification();
 
-        MockNakedObjectSpecification objectSpec = new MockNakedObjectSpecification();
+        DummyNakedObjectSpecification objectSpec = new DummyNakedObjectSpecification();
         OneToOneAssociation field1 = new OneToOneAssociation("cls", "one", fieldSpec, new MockOneToOnePeer());
         OneToManyAssociation field2 = new OneToManyAssociation("cls", "two", fieldSpec, new MockOneToManyPeer());
         objectSpec.setupFields(new NakedObjectField[] { field1, field2 });
         object.setupSpecification(objectSpec);
         
         DummyNakedObject fieldObject = new DummyNakedObject();
-        object.setupField("one", fieldObject);
+        object.setupFieldValue("one", fieldObject);
 
         DummyNakedCollection fieldCollection = new DummyNakedCollection();
-        object.setupField("two", fieldCollection);
+        object.setupFieldValue("two", fieldCollection);
 
 
         target.expected.addExpectedMethod("fieldAccessorFor");
@@ -131,19 +131,19 @@ public class TestObjectImplFieldTest extends TestCase {
     
 
     public void testAssertEmpty() {
-        MockNakedObjectSpecification fieldSpec = new MockNakedObjectSpecification();
+        DummyNakedObjectSpecification fieldSpec = new DummyNakedObjectSpecification();
 
-        MockNakedObjectSpecification objectSpec = new MockNakedObjectSpecification();
+        DummyNakedObjectSpecification objectSpec = new DummyNakedObjectSpecification();
         OneToOneAssociation field1 = new OneToOneAssociation("cls", "one", fieldSpec, new MockOneToOnePeer());
         OneToOneAssociation field2 = new OneToOneAssociation("cls", "two", fieldSpec, new MockOneToOnePeer());
         objectSpec.setupFields(new NakedObjectField[] { field1, field2 });
         object.setupSpecification(objectSpec);
     
         DummyNakedObject fieldObject1 = new DummyNakedObject();
-        object.setupField("one", fieldObject1);
+        object.setupFieldValue("one", fieldObject1);
 
         DummyNakedObject fieldObject2 = new DummyNakedObject();
-        object.setupField("two", fieldObject2);
+        object.setupFieldValue("two", fieldObject2);
 
         target.expected.addExpectedMethod("fieldAccessorFor");
         target.expected.addExpectedParameter("one");

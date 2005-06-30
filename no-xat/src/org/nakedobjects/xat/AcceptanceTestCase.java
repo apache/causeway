@@ -138,9 +138,9 @@ public abstract class AcceptanceTestCase extends TestCase {
             String[] cls = fixtureBuilder.getClasses();
             for (int i = 0; i < cls.length; i++) {
                 NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(cls[i]);
-                NakedClass spec = new NakedClass(cls[i]);
-                NakedObjects.getPojoAdapterFactory().createNOAdapter(spec).setResolved();
-                TestClass view = testObjectFactory.createTestClass(spec);
+                NakedClass nakedClass = new NakedClass(cls[i]);
+                NakedObjects.getPojoAdapterFactory().createNOAdapter(nakedClass).setResolved();
+                TestClass view = testObjectFactory.createTestClass(nakedClass);
                 classes.put(nc.getFullName().toLowerCase(), view);
             }
         } catch (Exception e) {
