@@ -1,6 +1,7 @@
 package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.NakedObjectsClient;
+import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 
@@ -28,7 +29,14 @@ public class PojoAdapterTest extends TestCase {
 
     public void testTitleStringWhereSpecificationProvidesTitleFromObject() {
         MockNakedObjectSpecificationLoader specLoader = new MockNakedObjectSpecificationLoader();
-        specLoader.addSpec(new NakedObjectSpecificationProvidingTitle());
+        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
+        spec.setupTitleObject(new ObjectTitle() {
+            public String title(NakedObject object) {
+                return "object title from specification";
+            }
+        });
+        specLoader.addSpec(spec);
+         
         nakedObjects.setSpecificationLoader(specLoader);
         NakedObject pa = pojoAdapterFactory.createNOAdapter(new TestPojo());
         pa.getSpecification();
@@ -38,22 +46,36 @@ public class PojoAdapterTest extends TestCase {
     
     public void testTitleFromUnresolvedObject() {
         MockNakedObjectSpecificationLoader specLoader = new MockNakedObjectSpecificationLoader();
-        specLoader.addSpec(new NakedObjectSpecificationProvidingNullTitle());
+        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
+        spec.setupTitleObject(new ObjectTitle() {
+            public String title(NakedObject object) {
+                return null;
+            }
+        });
+        spec.setupUnresolvedTitle("unresolved object");
+        specLoader.addSpec(spec);
         nakedObjects.setSpecificationLoader(specLoader);
         NakedObject pa = pojoAdapterFactory.createNOAdapter(new TestPojo());
         pa.getSpecification();
         assertFalse(pa.isResolved());
-        assertEquals("unresolved title",  pa.titleString());
+        assertEquals("unresolved object",  pa.titleString());
     }
     
     public void testTitleStringWhereSpecificationReturnNullAsTitle() {
         MockNakedObjectSpecificationLoader specLoader = new MockNakedObjectSpecificationLoader();
-        specLoader.addSpec(new NakedObjectSpecificationProvidingNullTitle());
+        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
+        spec.setupTitleObject(new ObjectTitle() {
+            public String title(NakedObject object) {
+                return null;
+            }
+        });
+        spec.setupUnresolvedTitle("unresolved object");
+        specLoader.addSpec(spec);
         nakedObjects.setSpecificationLoader(specLoader);
         NakedObject pa = pojoAdapterFactory.createNOAdapter(new TestPojo());
         pa.getSpecification();
         pa.setResolved();
-        assertEquals("A singlar name from specification",  pa.titleString());
+        assertEquals("A singular name",  pa.titleString());
     }
 }
 

@@ -11,25 +11,13 @@ import org.nakedobjects.object.reflect.OneToOneAssociation;
 import java.util.Date;
 
 
-/**
- * Definition of an naked reference object.
- * <p>
- * A basic implementation is provided by AbstractNakedObject.
- * 
- * @see org.nakedobjects.object.defaults.AbstractNakedObject
- */
 public interface NakedObject extends Naked {
+
+    void checkLock(long version);
 
     void clearCollection(OneToManyAssociation association);
 
     void clearValue(OneToOneAssociation association);
-
-    /**
-     * A lifecycle method called when the object is first created to intialised
-     * the object. This will not be called when the object is recreated when
-     * retrieved from the object store.
-     */
-    void created();
 
     public void debugClearResolved();
 
@@ -37,7 +25,7 @@ public interface NakedObject extends Naked {
      * A lifecycle method called when the object is delete, after it is removed
      * from the object store.
      */
-    void deleted();
+    void destroyed();
 
     NakedObject getAssociation(OneToOneAssociation field);
 
@@ -54,7 +42,7 @@ public interface NakedObject extends Naked {
     ActionParameterSet getParameters(Action action);
 
     NakedValue getValue(OneToOneAssociation field);
-    
+
     long getVersion();
 
     NakedObjectField[] getVisibleFields();
@@ -68,6 +56,12 @@ public interface NakedObject extends Naked {
     boolean isEmpty(NakedObjectField field);
 
     /**
+     * Returns true if the object has not yet been fully resolved, but it does
+     * have some of it fields loaded.
+     */
+    boolean isPartlyResolved();
+
+    /**
      * Returns true when the object is persistent.
      */
     boolean isPersistent();
@@ -75,8 +69,26 @@ public interface NakedObject extends Naked {
     /**
      * Returns true once the object has been completely read into memory and all
      * it attributes can be validly accessed.
+     * 
+     * TODO rename to isFullyResolved()
      */
     boolean isResolved();
+
+    /**
+     * Returns true while object is having its field set up.
+     */
+    boolean isResolving();
+
+    /**
+     * Returns true when an object has not yet been made persistent.
+     */
+    boolean isTransient();
+
+    /**
+     * Return true to indicate that the object is newly created and has no
+     * fields set up yet.
+     */
+    boolean isUnresolved();
 
     Persistable persistable();
 
@@ -87,19 +99,20 @@ public interface NakedObject extends Naked {
      */
     void setOid(Oid oid);
 
+    void setOptimisticLock(long version, String user, Date time);
+
     /**
      * sets the object's resolved state to true
+     * 
+     * @deprecated
      */
     void setResolved();
 
     void setValue(OneToOneAssociation field, Object object);
-    
+
     /** @deprecated */
     void setVersion(long version);
-    
-    void setOptimisticLock(long version, String user, Date time);
 
-    void checkLock(long version);
 }
 
 /*

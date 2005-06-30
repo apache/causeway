@@ -81,7 +81,7 @@ public class ObjectDataFactoryTest extends TestCase {
         fieldSpecification.fields = new NakedObjectField[0];
         fieldObject.setupSpecification(fieldSpecification);
         
-        object.setupField("", fieldObject);
+        object.setupFieldValue("", fieldObject);
         
         ObjectData od = factory.createObjectData(object, 0);
 

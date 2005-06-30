@@ -4,7 +4,6 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.ObjectTitle;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.Action.Type;
 
 
@@ -12,8 +11,18 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     private static int next = 100;
     public NakedObjectField[] fields = new NakedObjectField[0];
     private final int id = next++;
-
-    public DummyNakedObjectSpecification() {}
+    private ObjectTitle titleObject;
+    private String unresolvedTitle;
+ private NakedObjectSpecification[] subclasses = new NakedObjectSpecification[0];
+    private Action action;
+    
+    public DummyNakedObjectSpecification() {
+        titleObject = new ObjectTitle() {
+            public String title(NakedObject object) {
+                return "";
+            }
+        };    
+    }
 
     public Naked acquireInstance() {
         return null;
@@ -62,11 +71,11 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     }
 
     public Action getObjectAction(Type type, String name) {
-        return null;
+        return action;
     }
 
     public Action getObjectAction(Type type, String name, NakedObjectSpecification[] parameters) {
-        return null;
+        return action;
     }
 
     public Action[] getObjectActions(Type type) {
@@ -86,12 +95,7 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     }
 
     public ObjectTitle getTitle() {
-        return new ObjectTitle() {
-
-            public String title(NakedObject object) {
-                return "";
-            }
-        };
+        return titleObject;
     }
 
     public NakedObjectField[] getVisibleFields(NakedObject object) {
@@ -140,8 +144,12 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         return null;
     }
 
+    public void setupSubclasses(NakedObjectSpecification[] subclasses) {
+        this.subclasses = subclasses;
+    }
+
     public NakedObjectSpecification[] subclasses() {
-        return new NakedObjectSpecification[0];
+        return subclasses;
     }
 
     public NakedObjectSpecification superclass() {
@@ -152,9 +160,29 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         return getFullName();
     }
 
-    public String unresolvedTitle(PojoAdapter pojo) {
-        return null;
+    public String unresolvedTitle(NakedObject object) {
+        return unresolvedTitle;
     }
+
+
+    public void setupAction(Action action) {
+        this.action = action;
+    }
+
+    public void setupFields(NakedObjectField[] fields ) {
+        this.fields = fields;
+    }
+
+    public void deleted(NakedObject object) {}
+    
+    public void setupTitleObject(ObjectTitle titleObject) {
+        this.titleObject = titleObject;
+    }
+    
+    public void setupUnresolvedTitle(String unresolvedTitle) {
+        this.unresolvedTitle = unresolvedTitle;
+    }
+    
 }
 
 /*

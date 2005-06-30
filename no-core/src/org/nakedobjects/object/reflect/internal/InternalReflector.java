@@ -263,6 +263,8 @@ public class InternalReflector implements Reflector {
 
         }
     }
+    
+    public void destroyed(NakedObject object) {}
 
     public FieldPeer[] fields() {
         LOG.debug("  looking  for fields");

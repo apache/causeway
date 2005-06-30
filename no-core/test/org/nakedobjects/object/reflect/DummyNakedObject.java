@@ -9,16 +9,22 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.Oid;
 
 import java.util.Date;
+import java.util.Hashtable;
 
 
 public class DummyNakedObject implements NakedObject {
     private NakedObjectField[] fields = new NakedObjectField[0];
+    private String label;
     private Object object;
     private Oid oid;
     private NakedObjectSpecification spec;
-    private String title;
-    private String label;
+    private Hint hint;
+     private long version;
+     private boolean resolved;
+    private String titleString;
+    private Hashtable fieldContents = new Hashtable();
 
+     
     public DummyNakedObject() {
         super();
     }
@@ -41,7 +47,7 @@ public class DummyNakedObject implements NakedObject {
 
     public void debugClearResolved() {}
 
-    public void deleted() {}
+    public void destroyed() {}
 
     public Naked execute(Action action, Naked[] parameters) {
         return null;
@@ -50,21 +56,17 @@ public class DummyNakedObject implements NakedObject {
     public NakedObject getAssociation(OneToOneAssociation field) {
         return null;
     }
-
-    public Naked getField(NakedObjectField field) {
-        return null;
-    }
-
+    
     public NakedObjectField[] getFields() {
         return fields;
     }
 
     public Hint getHint(Action action, Naked[] parameters) {
-        return null;
+        return hint;
     }
 
     public Hint getHint(NakedObjectField field, Naked value) {
-        return null;
+        return hint;
     }
 
     public String getIconName() {
@@ -98,10 +100,11 @@ public class DummyNakedObject implements NakedObject {
     public NakedValue getValue(OneToOneAssociation field) {
         return null;
     }
-
+    
     public long getVersion() {
-        return 0;
+        return version;
     }
+
 
     public NakedObjectField[] getVisibleFields() {
         return getFields();
@@ -121,6 +124,10 @@ public class DummyNakedObject implements NakedObject {
         return false;
     }
 
+    public boolean isPartlyResolved() {
+        return false;
+    }
+
     public boolean isPersistDirty() {
         return false;
     }
@@ -129,7 +136,12 @@ public class DummyNakedObject implements NakedObject {
         return false;
     }
 
-    public boolean isResolved() {
+
+    public boolean isResolving() {
+        return false;
+    }
+
+    public boolean isUnresolved() {
         return false;
     }
 
@@ -151,10 +163,16 @@ public class DummyNakedObject implements NakedObject {
 
     public void setOptimisticLock(long version, String user, Date time) {}
 
-    public void setResolved() {}
+    public void setResolved() {
+        resolved = true;
+    }
 
     public void setupFields(NakedObjectField[] fields) {
         this.fields = fields;
+    }
+
+    public void setupLabel(String label) {
+        this.label = label;
     }
 
     public void setupObject(Object object) {
@@ -165,22 +183,39 @@ public class DummyNakedObject implements NakedObject {
         this.spec = spec;
     }
 
-    public void setupTitle(String title) {
-        this.title = title;
+    public void setupHint(Hint hint) {
+        this.hint = hint;
     }
 
     public void setValue(OneToOneAssociation field, Object object) {}
 
-    public void setVersion(long version) {}
-
-    public void setupLabel(String label) {
-        this.label = label;
+    public void setVersion(long version) {
+        this.version = version;
     }
-    
+  
+    public boolean isResolved() {
+        return resolved;
+    }
+
+    public void setupTitleString(String titleString) {
+        this.titleString = titleString;
+    }
+
     public String titleString() {
-        return title;
+        return titleString;
+    }
+  
+    public Naked getField(NakedObjectField field) {
+        return (Naked) fieldContents.get(field.getName());
     }
 
+    public void setupFieldValue(String name, Naked field) {
+        this.fieldContents.put(name, field);
+    }
+
+    public boolean isTransient() {
+        return false;
+    }
 }
 
 /*

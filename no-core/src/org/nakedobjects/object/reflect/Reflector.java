@@ -20,7 +20,9 @@ public interface Reflector {
 
     Hint classHint();
 
-    void clearDirty(NakedObject object2);
+    void clearDirty(NakedObject object);
+
+    void destroyed(NakedObject object);
 
     FieldPeer[] fields();
 
@@ -58,7 +60,7 @@ public interface Reflector {
 
     boolean isValue();
 
-    void markDirty(NakedObject object2);
+    void markDirty(NakedObject object);
 
     Persistable persistable();
 

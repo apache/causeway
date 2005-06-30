@@ -27,8 +27,12 @@ public class Assert {
         assertTrue("expected true", flag);
     }
 
+    public static void assertTrue(String message, Object target, boolean flag) {
+        if (!flag) { throw new NakedObjectAssertException(message + (target == null ? "" : (": " + target))); }
+    }
+
     public static void assertTrue(String message, boolean flag) {
-        if (!flag) { throw new NakedObjectAssertException(message); }
+       assertTrue(message, null, flag);
     }
 
 }

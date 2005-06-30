@@ -175,7 +175,7 @@ public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
     }
 
     public void unloaded(NakedObject object) {
-        Assert.assertTrue("cannot unload object as it is not loaded", loaded.contains(object));
+        Assert.assertTrue("cannot unload object as it is not loaded", object, loaded.contains(object));
         LOG.debug("removed loaded object " + object);
         loaded.remove(object.getOid());
     }

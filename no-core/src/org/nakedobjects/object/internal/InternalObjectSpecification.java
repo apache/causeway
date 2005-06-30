@@ -10,7 +10,6 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.ObjectTitle;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.Action.Type;
 
 
@@ -145,9 +144,11 @@ public class InternalObjectSpecification implements NakedObjectSpecification {
         return null;
     }
 
-    public String unresolvedTitle(PojoAdapter pojo) {
+    public String unresolvedTitle(NakedObject object) {
         return "";
     }
+
+    public void deleted(NakedObject object) {}
 }
 
 /*

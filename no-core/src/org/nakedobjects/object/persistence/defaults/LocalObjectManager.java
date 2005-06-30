@@ -105,7 +105,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
         DestroyObjectCommand command = objectStore.createDestroyObjectCommand(object);
         getTransaction().addCommand(command);
-        object.deleted();
+        object.destroyed();
         clear(object);
 
         NakedObjects.getPojoAdapterFactory().unloaded(object);

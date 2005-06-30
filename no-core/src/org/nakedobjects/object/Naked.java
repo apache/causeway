@@ -28,11 +28,6 @@ public interface Naked {
 
     abstract void clearAssociation(NakedObjectAssociation specification, NakedObject ref);
 
-    /**
-     * Copies the content of the specified object into this object.
-     */
-    abstract void copyObject(Naked object);
-
     Naked execute(Action action, Naked[] parameters);
 
     Hint getHint(Action action, Naked[] parameters);

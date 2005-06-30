@@ -110,7 +110,9 @@ public class DummyReflectorFactoryCreatingTitle extends ReflectorFactory {
 
             public Object getExtension(Class cls) {
                 return null;
-            }};
+            }
+
+            public void destroyed(NakedObject object) {}};
     }
 
     public ObjectFactory getObjectFactory() {

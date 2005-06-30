@@ -118,6 +118,8 @@ public class MockReflector implements Reflector {
     public Object getExtension(Class cls) {
         return null;
     }
+
+    public void destroyed(NakedObject object) {}
 }
 
 /*

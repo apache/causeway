@@ -21,7 +21,6 @@ import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToManyPeer;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.OneToOnePeer;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.Reflector;
 
 import java.lang.reflect.Array;
@@ -81,6 +80,10 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
     public Naked acquireInstance() {
         // TODO this happens a lot!  LOG.debug("acquire instance of " + getShortName());
         return reflector.acquireInstance();
+    }
+    
+    public void deleted(NakedObject object) {
+        reflector.destroyed(object);
     }
 
     public void clearDirty(NakedObject object) {
@@ -573,8 +576,8 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         return superclass;
     }
 
-    public String unresolvedTitle(PojoAdapter pojo) {
-        return reflector.unresolvedTitle(pojo);
+    public String unresolvedTitle(NakedObject object) {
+        return reflector.unresolvedTitle(object);
     }
 
     private String asString;

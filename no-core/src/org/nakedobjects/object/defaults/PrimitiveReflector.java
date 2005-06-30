@@ -118,6 +118,8 @@ public class PrimitiveReflector implements Reflector {
     public String unresolvedTitle(NakedObject pojo) {
         return "no title";
     }
+
+    public void destroyed(NakedObject object) {}
 }
 
 

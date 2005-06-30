@@ -8,9 +8,10 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Persistable;
+import org.nakedobjects.object.ResolvedState;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.defaults.AbstractNakedObject;
 import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.ToString;
 
 import java.util.Date;
@@ -18,25 +19,20 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 
 
-public class PojoAdapter extends AbstractNakedObject {
+public class PojoAdapter implements NakedObject {
     private final static Logger LOG = Logger.getLogger(PojoAdapter.class);
-    private Object pojo;
-    private long version;
+    private String defaultTitle;
     private Date modifiedTime;
     private String modifierBy;
-
-    public long getVersion() {
-        return version;
-    }
-        
-    public void setVersion(long version) {
-        this.version = version;
-    }
-    
-    public void setOptimisticLock(long version, String modifierBy, Date modifiedTime) {
-        this.version = version;
-        this.modifierBy = modifierBy;
-        this.modifiedTime = modifiedTime;
+    private Oid oid;
+    private Object pojo;
+    private transient ResolvedState resolvedState;
+    private NakedObjectSpecification specification;
+    private long version;
+      
+    protected PojoAdapter(Object pojo) {
+        this.pojo = pojo;
+        resolvedState = ResolvedState.UNRESOLVED;
     }
     
     public void checkLock(long version) {
@@ -44,28 +40,11 @@ public class PojoAdapter extends AbstractNakedObject {
             throw new ConcurrencyException(modifierBy + " changed this object (" + titleString() + ") at " + modifiedTime);
         }
     }
-    
-    public void setOid(Oid oid) {
-        LOG.debug("set OID " + oid + " " + this);
-        super.setOid(oid);
-    }
-    
-    protected PojoAdapter(Object pojo) {
-        this.pojo = pojo;
-    }
 
     public void clearAssociation(NakedObjectAssociation specification, NakedObject associate) {
         mustBeResolvedIfPersistent(this);
         LOG.debug("clearAssociation " + specification.getName() + "/" + associate + " in " + this);
         specification.clearAssociation(this, associate);
-    }
-
-    private void mustBeResolvedIfPersistent(NakedObject object) {
-        if (object.isPersistent() && !object.isResolved()) {
-            LOG.info("Unresolved object attempting to be used; resolving it immediately: " + object);
-            NakedObjects.getObjectManager().resolveImmediately(object);
-            //throw new NakedObjectRuntimeException("Object not resolved when used with adapter: " + object);
-        }
     }
 
     public void clearCollection(OneToManyAssociation association) {
@@ -78,6 +57,26 @@ public class PojoAdapter extends AbstractNakedObject {
         mustBeResolvedIfPersistent(this);
         LOG.debug("clearValue " + association.getName() + " in " + this);
         association.clearValue(this);
+    }
+
+    public void debugClearResolved() {
+        resolvedState = ResolvedState.UNRESOLVED;
+    }
+
+    /**
+     * Asks the reflector to tell the pojo that this object has been deleted.
+     */
+    public void destroyed() {
+        mustBeResolvedIfPersistent(this);
+        LOG.debug("deleted notification for " + this);
+        specification.deleted(this);
+    }
+
+    /**
+     * Dissociates the POJO from this adapter.
+     */
+    public void dispose() {
+        pojo = null;
     }
 
     public boolean equals(Object other) {
@@ -118,6 +117,11 @@ public class PojoAdapter extends AbstractNakedObject {
         return result;
     }
 
+    protected void finalize() throws Throwable {
+        super.finalize();
+        LOG.debug("finalizing pojo: " + pojo);
+    }
+
     public NakedObject getAssociation(OneToOneAssociation field) {
         mustBeResolvedIfPersistent(this);
         return (NakedObject) field.get(this);
@@ -130,10 +134,6 @@ public class PojoAdapter extends AbstractNakedObject {
 
     public NakedObjectField[] getFields() {
         return getSpecification().getFields();
-    }
-
-    public NakedObjectField[] getVisibleFields() {
-        return getSpecification().getVisibleFields(this);
     }
 
     public Hint getHint(Action action, Naked[] parameterValues) {
@@ -152,6 +152,16 @@ public class PojoAdapter extends AbstractNakedObject {
         }
     }
 
+
+    /**
+     * Returns the short name from this objects NakedObjectSpecification
+     * 
+     * TODO allow the reflector to set up a icon name
+     */
+    public String getIconName() {
+        return null;
+    }
+
     public String getLabel(Action action) {
         return action.getLabel(this);
     }
@@ -164,13 +174,32 @@ public class PojoAdapter extends AbstractNakedObject {
         return pojo;
     }
 
+    public Oid getOid() {
+        return oid;
+    }
+
     public ActionParameterSet getParameters(Action action) {
         return action.getParameters(this);
+    }
+
+    public NakedObjectSpecification getSpecification() {
+        if (specification == null) {
+            specification = NakedObjects.getSpecificationLoader().loadSpecification(getObject().getClass());
+        }
+        return specification;
     }
 
     public NakedValue getValue(OneToOneAssociation field) {
         mustBeResolvedIfPersistent(this);
         return (NakedValue) field.get(this);
+    }
+
+    public long getVersion() {
+        return version;
+    }
+
+    public NakedObjectField[] getVisibleFields() {
+        return getSpecification().getVisibleFields(this);
     }
 
     public void initAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
@@ -196,8 +225,48 @@ public class PojoAdapter extends AbstractNakedObject {
         return field.isEmpty(this);
     }
 
+    public boolean isPartlyResolved() {
+        return resolvedState == ResolvedState.PARTIALLY_RESOLVED;
+    }
+
+    /**
+     * Returns true if this object has an OID set.
+     */
+    public boolean isPersistent() {
+        return getOid() != null;
+    }
+
+    public boolean isResolved() {
+        return resolvedState == ResolvedState.RESOLVED;
+    }
+
+    public boolean isResolving() {
+        return resolvedState == ResolvedState.RESOLVING;
+    }
+
+    public boolean isTransient() {
+        return resolvedState == ResolvedState.TRANSIENT;
+    }
+
+    public boolean isUnresolved() {
+        return resolvedState == ResolvedState.UNRESOLVED;
+    }
+
+    private void mustBeResolvedIfPersistent(NakedObject object) {
+        if (object.isPersistent() && !object.isResolved()) {
+            LOG.info("Unresolved object attempting to be used; resolving it immediately: " + object);
+            NakedObjects.getObjectManager().resolveImmediately(object);
+            //throw new NakedObjectRuntimeException("Object not resolved when used with adapter: " + object);
+        }
+    }
+
     public Persistable persistable() {
         return getSpecification().persistable();
+    }
+    
+    void persistedAs(Oid oid) {
+        Assert.assertTrue("Cannot make a non-transient object persistent", this, isTransient());
+        setOid(oid);
     }
 
     public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
@@ -205,18 +274,36 @@ public class PojoAdapter extends AbstractNakedObject {
         LOG.debug("setAssociation " + field.getName() + " with " + associatedObject + " in " + this);
         field.setAssociation(this, associatedObject);
     }
+ 
+    public void setOid(Oid oid) {
+        LOG.debug("set OID " + oid + " " + this);
+        Assert.assertTrue("Oid can't be set again", this, this.oid == null);
+        this.oid = oid;
+    }
+    
+    public void setOptimisticLock(long version, String modifierBy, Date modifiedTime) {
+        this.version = version;
+        this.modifierBy = modifierBy;
+        this.modifiedTime = modifiedTime;
+    }
+
+    public void setResolved() {
+        if (resolvedState == ResolvedState.RESOLVED) {
+            throw new IllegalStateException("Object is already marked as resolved (" + this + ")");
+        } else {
+            resolvedState = ResolvedState.RESOLVED;
+        }
+    }
 
     public void setValue(OneToOneAssociation field, Object object) {
         mustBeResolvedIfPersistent(this);
         LOG.debug("setValue " + field.getName() + " with " + object + " in " + this);
        field.setValue(this, object);
     }
-
-    /**
-     * Introduced during performance profiling; PojoAdapter#titleString often
-     * called.
-     */
-    private String defaultTitle;
+        
+    public void setVersion(long version) {
+        this.version = version;
+    }
  
     /**
      * Returns the title from the underlying business object. If the object has
@@ -241,11 +328,11 @@ public class PojoAdapter extends AbstractNakedObject {
         return title;
     }
 
-    public String toString() {
+    public synchronized String toString() {
         ToString str = new ToString(this);
         
-        str.append(isPersistent() ? "P" : (isFinder() ? "F" : "T"));
-        str.append(isResolved() ? "R" : "-");
+        str.append(isPersistent() ? "P" : "T");
+        str.append(resolvedState.code());
         Oid oid = getOid();
         if (oid != null) {
             str.append(":");
@@ -260,16 +347,6 @@ public class PojoAdapter extends AbstractNakedObject {
         str.appendAsHex("pojo-hash", pojo.hashCode());
         return str.toString();
     }
-
-    protected void finalize() throws Throwable {
-        super.finalize();
-        //      LOG.info("finalizing pojo: " + pojo);
-    }
-
-    public void dispose() {
-        pojo = null;
-    }
-
 }
 
 /*

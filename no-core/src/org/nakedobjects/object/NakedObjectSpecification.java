@@ -4,7 +4,6 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.ObjectTitle;
-import org.nakedobjects.object.reflect.PojoAdapter;
 
 
 public interface NakedObjectSpecification {
@@ -113,7 +112,9 @@ public interface NakedObjectSpecification {
 
     NakedObjectSpecification superclass();
 
-    String unresolvedTitle(PojoAdapter pojo);
+    String unresolvedTitle(NakedObject object);
+
+    void deleted(NakedObject object);
 }
 
 /*

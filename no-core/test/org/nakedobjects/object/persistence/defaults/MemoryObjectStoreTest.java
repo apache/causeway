@@ -1,7 +1,7 @@
 package org.nakedobjects.object.persistence.defaults;
 
+import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
-import org.nakedobjects.object.MockNakedObjectSpecification;
 import org.nakedobjects.object.MockOid;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -108,9 +108,9 @@ class MockMemoryObjectStoreInstances2 extends MemoryObjectStoreInstances {
 }
 
 public class MemoryObjectStoreTest extends TestCase {
-    private MockNakedObjectSpecification objectSpec;
+    private DummyNakedObjectSpecification objectSpec;
     private MemoryObjectStore objectStore;
-    private MockNakedObjectSpecification superClassObjectSpec;
+    private DummyNakedObjectSpecification superClassObjectSpec;
     private MockMemoryObjectStoreInstances2 transientObjectStoreInstancesForClass;
     private MockMemoryObjectStoreInstances2 transientObjectStoreInstancesForSuperClass;
 
@@ -129,8 +129,8 @@ public class MemoryObjectStoreTest extends TestCase {
         BasicConfigurator.configure();
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        superClassObjectSpec = new MockNakedObjectSpecification();
-        objectSpec = new MockNakedObjectSpecification();
+        superClassObjectSpec = new DummyNakedObjectSpecification();
+        objectSpec = new DummyNakedObjectSpecification();
         superClassObjectSpec.setupSubclasses(new NakedObjectSpecification[] { objectSpec });
 
         transientObjectStoreInstancesForSuperClass = new MockMemoryObjectStoreInstances2();
