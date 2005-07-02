@@ -7,6 +7,7 @@ import org.nakedobjects.application.valueholder.BusinessValueHolder;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
@@ -209,7 +210,11 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
             if (obj == null) {
                 return null;
             } else {
-                return NakedObjects.getPojoAdapterFactory().createAdapter(obj);
+                Naked adapter = NakedObjects.getObjectManager().createAdapterForValue(obj);
+                if(adapter == null) {
+                    adapter = NakedObjects.getObjectManager().getAdapterFor(obj);
+                }
+                return adapter;
             }
 
         } catch (InvocationTargetException e) {

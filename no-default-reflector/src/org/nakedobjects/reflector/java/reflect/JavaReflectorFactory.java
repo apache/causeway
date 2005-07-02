@@ -5,7 +5,8 @@ import org.nakedobjects.application.valueholder.BusinessValueHolder;
 import org.nakedobjects.application.valueholder.Color;
 import org.nakedobjects.application.valueholder.Logical;
 import org.nakedobjects.application.valueholder.TextString;
-import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedCollection;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.reflect.ReflectionException;
@@ -29,8 +30,7 @@ public class JavaReflectorFactory extends ReflectorFactory {
          return new JavaReflector(className, objectFactory);
     }
     
-    public Naked createAdapter(Object object) {
-        //    TODO this code is duplicated in JavaReflector
+    public NakedValue createValueAdapter(Object object) {
         if (object instanceof TextString ){
             return new TextStringAdapter((TextString) object);
         } else if (object instanceof Logical ){
@@ -41,13 +41,20 @@ public class JavaReflectorFactory extends ReflectorFactory {
             return new IntegerNumberAdapter((IntegerNumber) object);
         } else if (object instanceof BusinessValueHolder ){
             return new BusinessValueAdapter((BusinessValueHolder) object);
-        } else if (object instanceof Vector){
-            return VectorCollectionAdapter.createAdapter((Vector) object, Object.class);
-
-         } else {
+        } else {
             return null;
         }
     }
+    
+    
+    public NakedCollection createCollectionAdapter(Object object) {
+        if (object instanceof Vector){
+            return VectorCollectionAdapter.createAdapter((Vector) object, Object.class);
+
+        } else {
+           return null;
+       }
+      }
 
     public ObjectFactory getObjectFactory() {
         return objectFactory;

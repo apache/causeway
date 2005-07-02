@@ -15,14 +15,13 @@ import org.apache.log4j.Logger;
 
 public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     private static final Logger LOG = Logger.getLogger(JavaBusinessObjectContainer.class);
-    private JavaObjectFactory objectFactory;
 
     public Vector allInstances(Class cls) {
         return allInstances(cls, false);
     }
 
     public Vector allInstances(Class cls, boolean includeSubclasses) {
-        TypedNakedCollection nakedObjectInstances = objectManger().allInstances(getSpecification(cls), includeSubclasses);
+        TypedNakedCollection nakedObjectInstances = objectManager().allInstances(getSpecification(cls), includeSubclasses);
         Vector objectInstances = new Vector(nakedObjectInstances.size());
         Enumeration e = nakedObjectInstances.elements();
         while (e.hasMoreElements()) {
@@ -39,9 +38,9 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
      *              details of object creation
      */
     public Object createInstance(Class cls) {
-        Object object = createTransientInstance(cls);
-        makePersistent(object);
-        return object;
+        LOG.debug("creating new persistent instance of " + cls.getName());
+        NakedObject object = objectManager().createPersistentInstance(cls.getName());
+        return object.getObject();
     }
 
     /**
@@ -49,13 +48,13 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
      * objects setContainer() and created() methods if they exist.
      */
     public Object createTransientInstance(Class cls) {
-        Object object = objectFactory.createObject(cls);
-        objectFactory.logicalCreation(cls, object);
-        return object;
+        LOG.debug("creating new tranisent instance of " + cls.getName());
+        NakedObject object = objectManager().createTransientInstance(cls.getName());
+        return object.getObject();
     }
 
     public void destroyObject(Object object) {
-        objectManger().destroyObject(NakedObjects.getPojoAdapterFactory().createNOAdapter(object));
+        objectManager().destroyObject(NakedObjects.getPojoAdapterFactory().createNOAdapter(object));
     }
 
     protected void finalize() throws Throwable {
@@ -63,44 +62,41 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
         LOG.info("finalizing java business object container " + this);
     }
 
-    public JavaObjectFactory getObjectFactory() {
-        return objectFactory;
-    }
-
     private NakedObjectSpecification getSpecification(Class cls) {
         return NakedObjects.getSpecificationLoader().loadSpecification(cls);
     }
 
     public boolean hasInstances(Class cls) {
-        return objectManger().hasInstances(getSpecification(cls));
+        return objectManager().hasInstances(getSpecification(cls));
     }
 
     public void makePersistent(Object transientObject) {
-        objectManger().startTransaction();
-        objectManger().makePersistent(NakedObjects.getPojoAdapterFactory().createNOAdapter(transientObject));
-        objectManger().endTransaction();
+        NakedObject adapter = NakedObjects.getObjectManager().getAdapterFor(transientObject);
+        objectManager().startTransaction();
+        objectManager().makePersistent(adapter);
+        objectManager().endTransaction();
     }
 
     public int numberOfInstances(Class cls) {
-        return objectManger().numberOfInstances(getSpecification(cls));
+        return objectManager().numberOfInstances(getSpecification(cls));
     }
 
-    private NakedObjectManager objectManger() {
+    private NakedObjectManager objectManager() {
         return NakedObjects.getObjectManager();
     }
 
     public void objectChanged(Object object) {
         if (object != null) {
-            NakedObject adapter = NakedObjects.getPojoAdapterFactory().createNOAdapter(object);
-            objectManger().objectChanged(adapter);
+            NakedObject adapter = NakedObjects.getObjectManager().getAdapterFor(object);
+            objectManager().objectChanged(adapter);
         }
     }
     
     public void resolve(Object object) {
         if (object != null) {
-            NakedObject adapter = NakedObjects.getPojoAdapterFactory().createNOAdapter(object);
+            NakedObject adapter = NakedObjects.getObjectManager().getAdapterFor(object);
             if (adapter.isPersistent() && !adapter.isResolved()) {
-                objectManger().resolveImmediately(adapter);
+                objectManager().resolveImmediately(adapter);
             }
         }
     }
@@ -125,14 +121,10 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
             }
         }
 
-        number = new Sequence();
+        number = (Sequence) createTransientInstance(Sequence.class);
         number.getName().setValue(sequence);
         makePersistent(number);
         return number.getSerialNumber().longValue();
-    }
-
-    public void setObjectFactory(JavaObjectFactory objectFactory) {
-        this.objectFactory = objectFactory;
     }
 }
 

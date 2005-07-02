@@ -3,6 +3,7 @@ package org.nakedobjects.reflector.java.reflect;
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
@@ -32,7 +33,8 @@ public class VectorCollectionAdapter implements InternalCollection {
     public void setVersion(long version) {
         this.version = version;
     }
-    public static Naked createAdapter(Vector pojo, Class type) {
+    
+    public static NakedCollection createAdapter(Vector pojo, Class type) {
         if(pojo == null) {
             return null;
         }
@@ -63,7 +65,7 @@ public class VectorCollectionAdapter implements InternalCollection {
 
     public NakedObject elementAt(int index) {
         Object element = collection.elementAt(index);
-        return NakedObjects.getPojoAdapterFactory().createNOAdapter(element);
+        return (NakedObject) adapter(element);
     }
 
     public Enumeration elements() {
@@ -76,9 +78,13 @@ public class VectorCollectionAdapter implements InternalCollection {
 
             public Object nextElement() {
                 Object element = elements.nextElement();
-                return element instanceof NakedObject ? element : NakedObjects.getPojoAdapterFactory().createAdapter(element);
+                return adapter(element);
             }
         };
+    }
+
+    private Object adapter(Object element) {
+        return element instanceof NakedObject ? element : NakedObjects.getObjectManager().getAdapterFor(element);
     }
 
     public Enumeration oids() {

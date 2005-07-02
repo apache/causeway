@@ -8,6 +8,7 @@ import org.nakedobjects.object.reflect.ReflectionException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 import org.apache.log4j.Logger;
 
@@ -21,12 +22,8 @@ public class JavaObjectFactory implements ObjectFactory {
     public void setContainer(BusinessObjectContainer container) {
         this.container = container;
     }
-    
-    public JavaObjectFactory(final BusinessObjectContainer container) {
-        this.container = container;
-    }
-    
-    public Object createObject(NakedObjectSpecification specification) {
+
+    public Object createNewLogicalObject(NakedObjectSpecification specification) {
         String className = specification.getFullName();
         Class cls;
         try {
@@ -34,14 +31,53 @@ public class JavaObjectFactory implements ObjectFactory {
         } catch (ClassNotFoundException e) {
             throw new NakedObjectRuntimeException(e);
         }
-        return createObject(cls);
+
+        Object object = createObject(cls);
+        setContainer(object, cls);
+        logicalCreation(object, cls);
+        
+        return object;
     }
     
+    public Object recreateObject(NakedObjectSpecification specification) {
+        String className = specification.getFullName();
+        Class cls;
+        try {
+            cls = Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            throw new NakedObjectRuntimeException(e);
+        }
+
+        Object object = createObject(cls);
+        setContainer(object, cls);
+        
+        return object;
+    }
+    
+    public Object createFakeObject(NakedObjectSpecification specification) {
+        String className = specification.getFullName();
+        Class cls;
+        try {
+            cls = Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            throw new NakedObjectRuntimeException(e);
+        }
+
+        Object object = createObject(cls);
+        setContainer(object, cls);        
+        
+        return object;
+    }
+     
     /**
      * Creates a new instance of the specified type, and then call the new
-     * objects setContainer() and created() methods if they exist.
+     * objects setContainer() methods if it has one.
      */
-    public Object createObject(Class cls) {
+    private Object createObject(Class cls) {
+        if (Modifier.isAbstract(cls.getModifiers())) {
+            throw new NakedObjectRuntimeException("Cannot create an instance of an abstract classS: " + cls);
+        }
+
         Object object;
         try {
             object = cls.newInstance();
@@ -54,11 +90,14 @@ public class JavaObjectFactory implements ObjectFactory {
         return object;
     }
 
-    protected void logicalCreation(Class cls, Object object) {
+    /**
+     * Call the new object's created method if it has one.
+     */
+    private void logicalCreation(Object object, Class cls) {
         invokeMethod(cls, object, "created", new Class[0], new Object[0]);
     }
 
-    public void recreatedObject(Object object) {
+    public void initRecreatedObject(Object object) {
         Class cls = object.getClass();
         setContainer(object, cls);
     }

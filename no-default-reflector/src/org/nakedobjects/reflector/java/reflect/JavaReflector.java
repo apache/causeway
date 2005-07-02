@@ -30,6 +30,7 @@ import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.control.SimpleClassAbout;
 import org.nakedobjects.reflector.java.value.LogicalValueObjectAdapter;
 import org.nakedobjects.reflector.java.value.TextStringAdapter;
+import org.nakedobjects.utility.UnexpectedCallException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -178,20 +179,15 @@ public class JavaReflector implements Reflector {
     }
 
     public Naked acquireInstance() {
+        throw new UnexpectedCallException();
+        /*
         if (Modifier.isAbstract(cls.getModifiers())) {
             throw new IllegalStateException("Handling of abstract naked classes is not yet supported: " + cls);
         }
 
         Object object = objectFactory.createObject(cls);
-
-        // TODO this code is duplicated in JavaReflectorFactory
-        if (object instanceof TextString) {
-            return new TextStringAdapter((TextString) object);
-        } else if (object instanceof Logical) {
-            return new LogicalValueObjectAdapter((Logical) object);
-        } else {
-            return NakedObjects.getPojoAdapterFactory().createAdapter(objectFactory.createObject(cls));
-        }
+        return NakedObjects.getPojoAdapterFactory().createAdapter(object);
+        */
     }
 
     public ActionPeer[] actionPeers(boolean forClass) {
