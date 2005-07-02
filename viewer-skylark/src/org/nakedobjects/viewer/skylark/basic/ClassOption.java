@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.PojoAdapter;
@@ -10,31 +11,31 @@ import org.nakedobjects.viewer.skylark.MenuOptionSet;
 
 public class ClassOption {
     public static void menuOptions(NakedObjectSpecification specificaton, MenuOptionSet menuOptionSet) {
-        PojoAdapter nakedClass = (PojoAdapter) NakedObjects.getPojoAdapterFactory().createAdapter(
-                NakedObjects.getObjectManager().getNakedClass(specificaton));
+        NakedClass nakedClass = NakedObjects.getObjectManager().getNakedClass(specificaton);
+        PojoAdapter classAdapter = (PojoAdapter) NakedObjects.getObjectManager().getAdapterFor(nakedClass);
 
         Action[] actions;
         actions = specificaton.getClassActions(Action.USER);
         for (int i = 0; i < actions.length; i++) {
-            addOption(nakedClass, menuOptionSet, actions[i], MenuOptionSet.OBJECT);
+            addOption(classAdapter, menuOptionSet, actions[i], MenuOptionSet.OBJECT);
         }
 
-        actions = nakedClass.getSpecification().getObjectActions(Action.USER);
+        actions = classAdapter.getSpecification().getObjectActions(Action.USER);
         for (int i = 0; i < actions.length; i++) {
-            addOption(nakedClass, menuOptionSet, actions[i], MenuOptionSet.OBJECT);
+            addOption(classAdapter, menuOptionSet, actions[i], MenuOptionSet.OBJECT);
         }
 
         actions = specificaton.getClassActions(Action.EXPLORATION);
         if (actions.length > 0) {
             for (int i = 0; i < actions.length; i++) {
-                addOption(nakedClass, menuOptionSet, actions[i], MenuOptionSet.EXPLORATION);
+                addOption(classAdapter, menuOptionSet, actions[i], MenuOptionSet.EXPLORATION);
             }
         }
 
-        actions = nakedClass.getSpecification().getObjectActions(Action.EXPLORATION);
+        actions = classAdapter.getSpecification().getObjectActions(Action.EXPLORATION);
         if (actions.length > 0) {
             for (int i = 0; i < actions.length; i++) {
-                addOption(nakedClass, menuOptionSet, actions[i], MenuOptionSet.EXPLORATION);
+                addOption(classAdapter, menuOptionSet, actions[i], MenuOptionSet.EXPLORATION);
             }
         }
     }

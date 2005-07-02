@@ -176,7 +176,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
     private View newInstance(NakedObjectSpecification cls, boolean openAView) {
         NakedObjectManager objectManager = NakedObjects.getObjectManager();
         objectManager.startTransaction();
-        NakedObject newInstance = objectManager.createInstance(cls);
+        NakedObject newInstance = objectManager.createPersistentInstance(cls);
         objectManager.endTransaction();
         return createSubviewFor(newInstance, openAView);
     }

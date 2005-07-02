@@ -153,7 +153,7 @@ public class ClassIcon extends ObjectView {
             nakedClass.aboutExplorationActionFind(about);
             if (about.canUse().isAllowed() && getViewManager().isRunningAsExploration()) {
                 FastFinder finder = nakedClass.explorationActionFind();
-                object = NakedObjects.getPojoAdapterFactory().createAdapter(finder);
+                object = NakedObjects.getObjectManager().createAdapterForTransient(finder);
             }
         }
 
