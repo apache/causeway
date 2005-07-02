@@ -34,8 +34,7 @@ public class ParameterValueImpl implements TestValue {
     }
 
     public Naked getForNaked() {
-        return NakedObjects.getPojoAdapterFactory().createAdapter(object);
- //       return NakedObjects.getPojoAdapterFactory(value);
+        return NakedObjects.getObjectManager().createAdapterForValue(object);
     }
 
     public void setForNaked(Naked value) {

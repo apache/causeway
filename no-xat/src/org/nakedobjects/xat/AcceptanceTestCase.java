@@ -137,11 +137,11 @@ public abstract class AcceptanceTestCase extends TestCase {
             fixtureBuilder.installFixtures();
             String[] cls = fixtureBuilder.getClasses();
             for (int i = 0; i < cls.length; i++) {
-                NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(cls[i]);
+                NakedObjectSpecification spec = NakedObjects.getSpecificationLoader().loadSpecification(cls[i]);
                 NakedClass nakedClass = new NakedClass(cls[i]);
-                NakedObjects.getPojoAdapterFactory().createNOAdapter(nakedClass).setResolved();
+//                NakedObjects.getPojoAdapterFactory().createNOAdapter(nakedClass).setResolved();
                 TestClass view = testObjectFactory.createTestClass(nakedClass);
-                classes.put(nc.getFullName().toLowerCase(), view);
+                classes.put(spec.getFullName().toLowerCase(), view);
             }
         } catch (Exception e) {
             // If an exception is thrown in setUp then tearDown is not called,
