@@ -64,7 +64,7 @@ public class SetupObjectStore {
                 return name.endsWith(".xml");
             }
         });
-        for (int i = 0; i < files.length; i++) {
+        for (int i = 0; files != null && i < files.length; i++) {
             new File(directory, files[i]).delete();
         }
         //        directory.delete();
@@ -75,8 +75,6 @@ public class SetupObjectStore {
 
             JavaObjectFactory objectFactory = new JavaObjectFactory();
             objectFactory.setContainer(container);
-
-            container.setObjectFactory(objectFactory);
 
             
             XmlObjectStore objectStore = new XmlObjectStore();
@@ -109,6 +107,8 @@ public class SetupObjectStore {
         
             nakedObjects.setSession(new SimpleSession());
             
+            objectManager.setReflectorFactory(reflectorFactory);
+            objectManager.init();
 
             PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
             pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
@@ -123,6 +123,8 @@ public class SetupObjectStore {
             fb.addFixture(new ClassesFixture());
             fb.installFixtures();
 
+            System.out.println("\n\nState of ObjectManager");
+            System.out.println(objectManager.getDebugData());
             
 
 

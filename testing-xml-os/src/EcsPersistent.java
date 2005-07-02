@@ -22,8 +22,6 @@ import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.SkylarkViewer;
 import org.nakedobjects.viewer.skylark.ViewUpdateNotifier;
 
-import java.util.logging.Logger;
-
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -46,11 +44,8 @@ public class EcsPersistent {
         
         PropertyConfigurator.configure(configuration.getProperties("log4j"));
 
-        Logger log = Logger.getLogger("Naked Objects");
-        log.info(AboutNakedObjects.getName());
-        log.info(AboutNakedObjects.getVersion());
-        log.info(AboutNakedObjects.getBuildId());
-
+        AboutNakedObjects.logVersion();
+        
         SplashWindow splash = null;
         boolean noSplash =configuration.getBoolean("nosplash", false);
         if (!noSplash) {
@@ -62,8 +57,6 @@ public class EcsPersistent {
 
             JavaObjectFactory objectFactory = new JavaObjectFactory();
             objectFactory.setContainer(container);
-
-            container.setObjectFactory(objectFactory);
 
             
             XmlObjectStore objectStore = new XmlObjectStore();
@@ -101,6 +94,9 @@ public class EcsPersistent {
             pojoAdapterFactory.setReflectorFactory(reflectorFactory);
             nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
             
+            objectManager.setReflectorFactory(reflectorFactory);
+            objectManager.init();
+
             
             // Viewer
             SkylarkViewer viewer = new SkylarkViewer();
