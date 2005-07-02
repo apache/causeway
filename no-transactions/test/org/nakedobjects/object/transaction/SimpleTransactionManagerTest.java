@@ -103,8 +103,8 @@ public class SimpleTransactionManagerTest extends TestCase {
         
         //      transaction 4
         objectManager.startTransaction();
-        Account personal = (Account) objectManager.createInstance(Account.class.getName());
-        Account saving = (Account) objectManager.createInstance(Account.class.getName());
+        Account personal = (Account) objectManager.createPersistentInstance(Account.class.getName());
+        Account saving = (Account) objectManager.createPersistentInstance(Account.class.getName());
         personal.getName().setValue("Personal");
         personal.getBalance().setValue(1000);
         saving.getName().setValue("Savings");
@@ -142,7 +142,7 @@ public class SimpleTransactionManagerTest extends TestCase {
 
     public void testIsolationInCreate() {
         objectManager.startTransaction();
-        Account personal = (Account) objectManager.createInstance(Account.class.getName());
+        Account personal = (Account) objectManager.createPersistentInstance(Account.class.getName());
         assertNoInstances("instance not persisted until end tranaction", 0, accountClass);
         objectManager.endTransaction();
         
@@ -152,7 +152,7 @@ public class SimpleTransactionManagerTest extends TestCase {
     
    public void testIsolationInCreateWithAbort() {
        objectManager.startTransaction();
-       Account personal = (Account) objectManager.createInstance(Account.class.getName());
+       Account personal = (Account) objectManager.createPersistentInstance(Account.class.getName());
        
        assertNoInstances("instance not persisted until end tranaction", 0,  accountClass);
        
@@ -163,8 +163,8 @@ public class SimpleTransactionManagerTest extends TestCase {
    
    public void testMethod2InTransaction() throws ObjectNotFoundException {
        objectManager.startTransaction();
-       Account personal = (Account) objectManager.createInstance(Account.class.getName());
-       Account saving = (Account) objectManager.createInstance(Account.class.getName());
+       Account personal = (Account) objectManager.createPersistentInstance(Account.class.getName());
+       Account saving = (Account) objectManager.createPersistentInstance(Account.class.getName());
        saving.balance.setValue(500.0);
        Transfer transfer = personal.actionCreateTransactionFrom(saving);
        assertNoInstances(0, transfer.getSpecification());
@@ -186,8 +186,8 @@ public class SimpleTransactionManagerTest extends TestCase {
    
    public void testMethod2InTransactionAndAbort() throws ObjectNotFoundException {
        objectManager.startTransaction();
-       Account personal = (Account) objectManager.createInstance(Account.class.getName());
-       Account saving = (Account) objectManager.createInstance(Account.class.getName());
+       Account personal = (Account) objectManager.createPersistentInstance(Account.class.getName());
+       Account saving = (Account) objectManager.createPersistentInstance(Account.class.getName());
        saving.balance.setValue(500.0);
        Transfer transfer = personal.actionCreateTransactionFrom(saving);
        assertNoInstances(0, transfer.getSpecification());
@@ -207,8 +207,8 @@ public class SimpleTransactionManagerTest extends TestCase {
    
    public void testMethodInTransaction() throws ObjectNotFoundException {	
        objectManager.startTransaction();
-       Account personal = (Account) objectManager.createInstance(Account.class.getName());
-       Account saving = (Account) objectManager.createInstance(Account.class.getName());
+       Account personal = (Account) objectManager.createPersistentInstance(Account.class.getName());
+       Account saving = (Account) objectManager.createPersistentInstance(Account.class.getName());
        objectManager.endTransaction();
        assertNoInstances(2, personal.getSpecification());
          
@@ -226,7 +226,7 @@ public class SimpleTransactionManagerTest extends TestCase {
     }
     
     public void testNoIsolationInCreate() {
-        Account personal = (Account) objectManager.createInstance(Account.class.getName());
+        Account personal = (Account) objectManager.createPersistentInstance(Account.class.getName());
         
         assertNoInstances("instance persisted immediately", 1, accountClass);
         assertInstanceEquals("account is the object created", accountClass, personal);
