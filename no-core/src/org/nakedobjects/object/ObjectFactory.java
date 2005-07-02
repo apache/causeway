@@ -1,9 +1,19 @@
 package org.nakedobjects.object;
 
 public interface ObjectFactory {
-    Object createObject(NakedObjectSpecification specification);
+    Object createNewLogicalObject(NakedObjectSpecification specification);
+ 
+    Object recreateObject(NakedObjectSpecification specification);
+    
+    
+//    Object createObject(NakedObjectSpecification specification);
 
-    void recreatedObject(Object object);
+    /**
+     * Sets up an existing object to work within the business container.  This is 
+     * only needed if the object is created outside the framework, such as through
+     * serialization.
+     */
+    void initRecreatedObject(Object object);
 }
 
 

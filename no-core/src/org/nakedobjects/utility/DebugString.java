@@ -12,6 +12,27 @@ public class DebugString {
         string.append(object);
     }
 
+    public void append(Object object, int width) {
+        int len = string.length();
+        string.append(object);
+        regularizeWidth(width, len);
+    }
+
+    public void append(int number, int width) {
+        int len = string.length();
+        string.append(number);
+        regularizeWidth(width, len);
+    }
+
+    private void regularizeWidth(int width, int len) {
+        if(width > 0) {
+            int textWidth = string.length() - len;
+            int spaces = width - textWidth;
+            spaces = Math.max(0, spaces);
+            string.append(SPACES.substring(0, spaces));
+        }
+    }
+
     public void appendln() {
         string.append('\n');
     }
@@ -67,6 +88,11 @@ public class DebugString {
         string.append('\n');
     }
 
+    public void append(DebugInfo debug) {
+        appendTitle(debug.getDebugTitle());
+        append(debug.getDebugData());
+    }
+    
     public void blankLine() {
         string.append('\n');
     }

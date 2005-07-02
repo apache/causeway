@@ -1,9 +1,11 @@
 package org.nakedobjects.object.persistence;
 
 import org.nakedobjects.object.DirtyObjectSet;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.DebugInfo;
@@ -11,20 +13,28 @@ import org.nakedobjects.utility.StartupException;
 
 
 public interface NakedObjectManager extends DebugInfo {
+    NakedObject createAdapterForTransient(final Object object);
+    
+    NakedObject createAdapterForPersistent(final Object object, final Oid oid);
+    
+    NakedValue createAdapterForValue(final Object value);
+    
+    NakedObject getAdapterFor(Object obj);
+    
     void abortTransaction();
 
     void addObjectChangedListener(DirtyObjectSet listener);
         
     TypedNakedCollection allInstances(NakedObjectSpecification specification, boolean includeSubclasses);
 
-    NakedObject createInstance(NakedObjectSpecification specification);
+    NakedObject createPersistentInstance(NakedObjectSpecification specification);
 
     /**
      * A utility method for creating new objects in the context of the system -
      * that is, it is added to the pool of objects the enterprise system
      * contains.
      */
-    NakedObject createInstance(String className);
+    NakedObject createPersistentInstance(String className);
 
     NakedObject createTransientInstance(NakedObjectSpecification nc);
 
@@ -153,6 +163,12 @@ public interface NakedObjectManager extends DebugInfo {
     void shutdown();
 
     void startTransaction();
+
+    /**
+     * Creates new instance of the specified class, and creates an adapter to hold it.
+     */
+    Naked recreateExistingInstance(NakedObjectSpecification specification);
+
 }
 
 /*

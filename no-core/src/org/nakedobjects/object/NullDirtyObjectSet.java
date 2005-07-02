@@ -1,22 +1,18 @@
-package org.nakedobjects.utility;
+package org.nakedobjects.object;
 
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.utility.ToString;
 
 
-/**
- * Indicates that a call was made to a method (normally an overridden one) that
- * was not expected, and hence not coded for.
- */
-public class UnexpectedCallException extends NakedObjectRuntimeException {
+public class NullDirtyObjectSet implements DirtyObjectSet {
+ 
+    public synchronized void addDirty(NakedObject object) {
+     }
 
-    public UnexpectedCallException() {
-        super("This method call was not expected");
+    public void shutdown() {
     }
-
-    public UnexpectedCallException(String arg0) {
-        super(arg0);
+    public String toString() {
+        return new ToString(this).toString();
     }
-
 }
 
 /*

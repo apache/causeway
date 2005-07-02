@@ -181,7 +181,7 @@ public class ServerDistribution implements ClientDistribution {
     public Oid[] makePersistent(Session session, ObjectData data) {
         LOG.debug("request makePersistent " + data +  " for " + session);
         NakedObject object = DataHelper.recreateObject(data);
-        objectFactory.recreatedObject(object.getObject());
+        objectFactory.initRecreatedObject(object.getObject());
         objectManager().startTransaction();
         objectManager().makePersistent(object);
         objectManager().endTransaction();

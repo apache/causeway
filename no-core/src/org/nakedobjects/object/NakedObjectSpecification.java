@@ -12,7 +12,7 @@ public interface NakedObjectSpecification {
      * only creates a java object (using newInstance on the Class object
      * returned using the getJavaType method).
      */
-    Naked acquireInstance();
+    NakedValue acquireInstance();
 
     void clearDirty(NakedObject object);
 

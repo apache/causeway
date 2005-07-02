@@ -121,7 +121,6 @@ public class Transaction {
         if (complete) {
             throw new TransactionException("Transaction already complete; cannot commit");
         }
-        complete = true;
 
         PersistenceCommand[] commandsArray = new PersistenceCommand[commands.size()];
         commands.copyInto(commandsArray);
@@ -131,17 +130,17 @@ public class Transaction {
                 objectStore.runTransaction(commandsArray);
                 objectStore.endTransaction();
                 
-                PojoAdapterFactory loaded = NakedObjects.getPojoAdapterFactory();
+//                PojoAdapterFactory loaded = NakedObjects.getPojoAdapterFactory();
                 for (int i = 0; i < commandsArray.length; i++) {
                     PersistenceCommand command = commandsArray[i];
                     if(command instanceof CreateObjectCommand) {
 	                    NakedObject object;
                         object = command.onObject();
-                        loaded.loaded(object);
+//                        loaded.loaded(object);
 
                     } else if(command instanceof DestroyObjectCommand) {
                         NakedObject object = command.onObject();
-                        loaded.unloaded(object);
+ //                       loaded.unloaded(object);
                         
                     }
                 }
@@ -150,6 +149,7 @@ public class Transaction {
                 throw e;
             }
         }
+        complete = true;
     }
 
     public String toString() {

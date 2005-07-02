@@ -2,6 +2,7 @@ package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ReflectorFactory;
@@ -115,7 +116,7 @@ public class DummyReflectorFactory extends ReflectorFactory {
         return null;
     }
 
-    public Naked createAdapter(Object pojo) {
+    public NakedValue createValueAdapter(Object pojo) {
         return null;
     }
 

@@ -116,7 +116,6 @@ public class NakedClass implements InternalNakedObject {
     private NakedObject newInstance() {
         NakedObjectManager objectManager = getObjectManager();
         NakedObject object = objectManager.createTransientInstance(forObjectType());
-        object.setResolved();
         if (createPersistentInstances) {
             try {
                 getObjectManager().makePersistent(object);

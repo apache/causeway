@@ -29,11 +29,14 @@ public class PojoAdapterHashImpl implements PojoAdapterHash {
     public String getDebugData() {
         DebugString debug = new DebugString();
         Enumeration e = pojos.keys();
+        int count = 0;
         while (e.hasMoreElements()) {
             Object pojo = (Object) e.nextElement();
             NakedObject object = (NakedObject) pojos.get(pojo);
-            debug.append(pojo.toString());
-            debug.append("    ");
+            debug.append(count++, 5);
+            debug.append(" '");
+            debug.append(pojo.toString(), 25);
+            debug.append("'    ");
             debug.appendln(object.toString());
         }
         return debug.toString();

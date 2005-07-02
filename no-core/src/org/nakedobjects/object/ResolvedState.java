@@ -1,25 +1,59 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.utility.ToString;
+
 public final class ResolvedState {
-    public static ResolvedState PARTIALLY_RESOLVED = new ResolvedState("Partially Resolved", "P");
-    public static ResolvedState RESOLVED = new ResolvedState("Resolved", "R");
-    public static ResolvedState RESOLVING = new ResolvedState("Resolving", "~");
-    public static ResolvedState TRANSIENT = new ResolvedState("Transient", "T");
-    public static ResolvedState UNRESOLVED = new ResolvedState("Unresolved", "-");
+    public static ResolvedState PART_RESOLVED = new ResolvedState("Part Resolved", "r", 0);
+    public static ResolvedState RESOLVED = new ResolvedState("Resolved", "R", 0);
+    public static ResolvedState RESOLVING = new ResolvedState("Resolving", "~R", 0);
+    public static ResolvedState RESOLVING_PART = new ResolvedState("Resolving", "~r", 0);
+    public static ResolvedState TRANSIENT = new ResolvedState("Transient", "T", 0);
+    public static ResolvedState NEW = new ResolvedState("New", "-", 0);
+    public static ResolvedState FAKE = new ResolvedState("Fake", "F", 0);
+    public static ResolvedState GHOST = new ResolvedState("Ghost", "G", 0);
+    
     private final String code;
     private final String name;
+    private final int stage;
 
-    private ResolvedState(String name, String code) {
+    private ResolvedState(String name, String code, int stage) {
         this.name = name;
         this.code = code;
+        this.stage = stage;
     }
 
     public String code() {
         return code;
     }
 
+    public String name() {
+        return name;
+    }
+    
+    public boolean isValidToChangeTo(ResolvedState nextState) {
+        if(this == NEW) {
+            return nextState == TRANSIENT || nextState == GHOST;
+        } else if(this == TRANSIENT) {
+            return nextState == RESOLVED;
+        } else if(this == GHOST) {
+            return nextState == RESOLVING_PART || nextState == RESOLVING;
+        } else if(this == RESOLVING_PART) {
+            return nextState == PART_RESOLVED || nextState == RESOLVED;
+        } else if(this == RESOLVING) {
+            return nextState == RESOLVED;
+        } else if(this == PART_RESOLVED) {
+            return nextState == RESOLVING;
+        }
+        
+        return false;
+    }
+    
     public String toString() {
-        return "ResolvedState-" + name;
+        ToString str = new ToString(this);
+        str.append("name", name);
+        str.append("code", code);
+        str.append("stage", stage);
+        return str.toString();
     }
 }
 

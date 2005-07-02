@@ -12,9 +12,11 @@ import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
+import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
 
 
-public abstract class AbstractNakedObjectManager implements NakedObjectManager {
+public abstract class AbstractNakedObjectManager extends PojoAdapterFactoryImpl implements NakedObjectManager {
     protected ObjectFactory objectFactory;
     public abstract void abortTransaction();
     
@@ -44,34 +46,51 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
         return collection;
     }
 
-    public NakedObject createInstance(NakedObjectSpecification specification) {
-       Object object = objectFactory.createObject(specification);
-       NakedObject nakedObject = NakedObjects.getPojoAdapterFactory().createNOAdapter(object);
-       makePersistent(nakedObject);
-       return nakedObject;
+    /**
+     * Creates an new instance of the class specified in the specification and creates a NakedObject adapter 
+     * for it.  This new object is then made persistent
+     */
+    public NakedObject createPersistentInstance(NakedObjectSpecification specification) {
+       NakedObject adapter = createTransientInstance(specification);
+       makePersistent(adapter);
+       return adapter;
     }
 
     /**
-     * A utility method for creating new objects in the context of the system -
-     * that is, it is added to the pool of objects the enterprise system
-     * contains.
+     * Creates an new instance of the class specified and creates a NakedObject adapter 
+     * for it.  This new object is then made persistent
      */
-    public NakedObject createInstance(String className) {
+    public NakedObject createPersistentInstance(String className) {
         NakedObjectSpecification cls = NakedObjects.getSpecificationLoader().loadSpecification(className);
-        return createInstance(cls);
+        return createPersistentInstance(cls);
     }
 
     protected abstract Oid createOid(Naked object);
 
-    public NakedObject createTransientInstance(NakedObjectSpecification nc) {
-        Object object = objectFactory.createObject(nc);
-        return NakedObjects.getPojoAdapterFactory().createNOAdapter(object);
+    /**
+     * Creates an new instance of the class specified in the specification and creates a NakedObject adapter for it.
+     */
+    public NakedObject createTransientInstance(NakedObjectSpecification specification) {
+        Object object = objectFactory.createNewLogicalObject(specification);
+        NakedObject adapter = createAdapterForTransient(object);
+        ((PojoAdapter) adapter).setTransient();
+        return adapter;
     }
 
+    /**
+     * Creates an new instance of the class specified and creates a NakedObject adapter for it.
+     */
     public NakedObject createTransientInstance(String className) {
         NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(className);
         return createTransientInstance(nc);
     }
+
+
+    public Naked recreateExistingInstance(NakedObjectSpecification specification) {
+        Object object = objectFactory.recreateObject(specification);
+        NakedObject adapter = createNOAdapter(object);
+        return adapter;
+   }
 
     public TypedNakedCollection findInstances(InstancesCriteria criteria)
             throws UnsupportedFindException {
@@ -82,17 +101,6 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
         NakedObjectSpecification specification = criteria.getSpecification();
         TypedNakedCollection collection = new InstanceCollectionVector(specification, instances);
         return collection;
-    }
-
-    public String getDebugData() {
-        StringBuffer data = new StringBuffer();
-        data.append('\n');
-        data.append('\n');
-        return data.toString();
-    }
-
-    public String getDebugTitle() {
-        return "Naked Object Manager";
     }
 
     protected abstract NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses);

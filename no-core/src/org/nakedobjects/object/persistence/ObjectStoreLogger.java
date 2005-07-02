@@ -5,6 +5,7 @@ import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.persistence.defaults.ObjectLoader;
 import org.nakedobjects.object.reflect.NakedObjectField;
 
 public class ObjectStoreLogger extends Logger implements NakedObjectStore {
@@ -124,6 +125,10 @@ public class ObjectStoreLogger extends Logger implements NakedObjectStore {
 
     public String getDebugTitle() {
         return decorated.getDebugTitle();
+    }
+
+    public void setObjectLoader(ObjectLoader objectLoader) {
+        decorated.setObjectLoader(objectLoader);
     }
 
 }

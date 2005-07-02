@@ -1,8 +1,9 @@
 package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.ResolveException;
 import org.nakedobjects.object.persistence.Oid;
@@ -17,6 +18,7 @@ import org.nakedobjects.object.reflect.valueadapter.ShortAdapter;
 import org.nakedobjects.object.reflect.valueadapter.StringAdapter;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.DebugString;
+import org.nakedobjects.utility.UnexpectedCallException;
 
 import java.util.Date;
 import java.util.Enumeration;
@@ -27,20 +29,115 @@ import org.apache.log4j.Logger;
 
 public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
     private static final Logger LOG = Logger.getLogger(PojoAdapterFactoryImpl.class);
-    
     // TODO follow same pattern as PojoAdapterHash - delegate to hash class
-    protected Hashtable loaded = new Hashtable();
-
-    private PojoAdapterHash pojos;
+    protected Hashtable identityMap = new Hashtable();
+    private PojoAdapterHash pojoMap = new PojoAdapterHashImpl();
     private ReflectorFactory reflectorFactory;
+    
+    
+    public NakedObject createAdapterForTransient(final Object object) {
+        NakedObject adapter = createObjectAdapter(object);
+       
+        Assert.assertTrue(pojoMap.getPojo(object) == adapter);
+        
+        return adapter;
+    }
+    
+    public NakedObject createAdapterForPersistent(final Object object, final Oid oid) {
+        Assert.assertNotNull(oid);
+        Assert.assertFalse("Identity Map already contains object for OID " + oid, identityMap.containsKey(oid));
+        
+        NakedObject adapter = createObjectAdapter(object);
+    
+        LOG.debug("adding adapter for " + oid + " - " + adapter);
+        identityMap.put(oid, adapter);
 
+        Assert.assertTrue(pojoMap.getPojo(object) == adapter);
+        Assert.assertTrue(identityMap.get(oid) == adapter);
+ 
+        return adapter;
+    }
+    
+    public NakedCollection createCollectionAdapter(final Object collection) {
+        Assert.assertFalse("Can't create an adapter for a NOF adapter", collection instanceof Naked);
+        
+        NakedCollection adapter;
+        adapter = reflectorFactory.createCollectionAdapter(collection);
+        
+        Assert.assertNotNull(adapter);
+    
+        return adapter;
+    }
+    
+    public NakedValue createAdapterForValue(final Object value) {
+        Assert.assertFalse("Can't create an adapter for a NOF adapter", value instanceof Naked);
+        
+        NakedValue adapter;
+        if (value instanceof String) {
+            adapter = new StringAdapter((String) value);
+        } else if (value instanceof Date) {
+            adapter = new DateAdapter((Date) value);
+        } else if (value instanceof Float) {
+            adapter = new FloatAdapter();
+        } else if (value instanceof Double) {
+            adapter = new DoubleAdapter();
+        } else if (value instanceof Boolean) {
+            adapter = new BooleanAdapter();
+        } else if (value instanceof Byte) {
+            adapter = new ByteAdapter();
+        } else if (value instanceof Short) {
+            adapter = new ShortAdapter();
+        } else if (value instanceof Integer) {
+            adapter = new IntAdapter();
+        } else if (value instanceof Long) {
+            adapter = new LongAdapter();
+        } else {
+            adapter = reflectorFactory.createValueAdapter(value);
+        }
+        
+   //     Assert.assertNotNull(value.toString(), adapter);
+    
+        return adapter;
+    }
+    
+    public void makePersistent(final NakedObject adapter, final Oid oid) {
+        Assert.assertTrue("Adapter should be in map", pojoMap.getPojo(adapter.getObject()) == adapter);
+        Assert.assertNull("OID should not map to an adapter", identityMap.get(oid));
+
+        ((PojoAdapter) adapter).persistedAs(oid);
+
+        identityMap.put(oid, adapter);
+    }
+    
+    public NakedObject getAdapterFor(final Oid oid) {
+        Assert.assertNotNull("OID should not be null", this, oid);
+        NakedObject adapter = (NakedObject) identityMap.get(oid);
+        return adapter;
+    }
+ 
+    public NakedObject getAdapterFor(final Object object) {
+        Assert.assertNotNull("object is null", this, object);
+        NakedObject adapter = (NakedObject) pojoMap.getPojo(object);
+        if(adapter == null) {
+            LOG.debug("No existing adapter found for " + object + "; creating a new transient one");
+            adapter = createAdapterForTransient(object);
+        }
+        Assert.assertNotNull("should find an adapter for ", object, adapter);
+        return adapter;
+    }
+ 
+    
+    
+    
     public Naked createAdapter(final Object pojo) {
+        throw new UnexpectedCallException();
+        /*
         if (pojo == null) {
             return null;
         }
         Naked nakedObject;
-        if (pojos.containsPojo(pojo)) {
-            nakedObject = pojos.getPojo(pojo);
+        if (pojoMap.containsPojo(pojo)) {
+            nakedObject = pojoMap.getPojo(pojo);
         } else {
             if (pojo instanceof Naked) {
                 throw new NakedObjectRuntimeException("Warning: adapter is wrapping an adapter: " + pojo);
@@ -69,11 +166,23 @@ public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
             }
             if (nakedObject == null) {
                 nakedObject = new PojoAdapter(pojo);
-                pojos.add(pojo, nakedObject);
+                pojoMap.add(pojo, nakedObject);
    //             NakedObjects.getObjectManager().resolveImmediately((NakedObject) nakedObject);
                 LOG.debug("created PojoAdapter@" + Integer.toHexString(nakedObject.hashCode()) + " for " + pojo);                
             }
         }
+        return nakedObject;
+        */
+    }
+
+    private NakedObject createObjectAdapter(final Object object) {
+        Assert.assertNotNull(object);
+        Assert.assertFalse("POJO Map already contains object", pojoMap.containsPojo(object));
+        Assert.assertFalse("Can't create an adapter for a NOF adapter", object instanceof Naked);
+
+        NakedObject nakedObject = new PojoAdapter(object);
+        pojoMap.add(object, nakedObject);
+        LOG.debug("created PojoAdapter@" + Integer.toHexString(nakedObject.hashCode()) + " for " + object);                
         return nakedObject;
     }
 
@@ -83,16 +192,22 @@ public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
 
     public String getDebugData() {
         DebugString debug = new DebugString();
-        Enumeration e = loaded.keys();
+        debug.append(pojoMap);
+        debug.appendln();
+
+        debug.appendTitle("Loaded objects");
+        Enumeration e = identityMap.keys();
+        int count = 0;
         while (e.hasMoreElements()) {
             Oid oid = (Oid) e.nextElement();
-            NakedObject object = (NakedObject) loaded.get(oid);
-            debug.append(oid.toString());
+            NakedObject object = (NakedObject) identityMap.get(oid);
+            debug.append(count++, 5);
+            debug.append(" ");
+            debug.append(oid.toString(), 8);
             debug.append("    ");
             debug.appendln(object.toString());
         }
         debug.appendln();
-        debug.append(pojos.getDebugData());
         return debug.toString();
     }
 
@@ -100,25 +215,31 @@ public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
         return "Loaded objects and POJOs";
     }
 
-    public NakedObject getLoadedObject(Oid oid) {
-        if (oid == null) {
-            throw new IllegalArgumentException("OID is null");
-        }
-        return (NakedObject) loaded.get(oid);
+     public NakedObject getLoadedObject(Oid oid) {
+        throw new UnexpectedCallException();
     }
 
-    public Enumeration getLoadedObjects() {
-        return loaded.elements();
+    protected Enumeration getIdentifiedObjects() {
+        return identityMap.elements();
     }
 
+    public boolean isIdentityKnown(Oid oid) {
+        Assert.assertNotNull(oid);
+        return identityMap.containsKey(oid);
+    }
+    
     public boolean isLoaded(Oid oid) {
-        if (oid == null) {
+        throw new UnexpectedCallException();
+/*        if (oid == null) {
             throw new IllegalArgumentException("OID is null");
         }
-        return loaded.containsKey(oid);
+        return identityMap.containsKey(oid);
+        */
     }
 
     public void loaded(NakedObject object) throws ResolveException {
+        throw new UnexpectedCallException();
+        /*
         Oid oid = object.getOid();
         if (oid == null) {
             throw new IllegalArgumentException("OID is null");
@@ -134,11 +255,12 @@ public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
     
         LOG.debug("loaded for OID " + oid + " - " + object);
         loaded.put(oid, object);
+        */
     }
 
     public void reset() {
-        loaded = new Hashtable();
-        pojos.reset();
+        identityMap = new Hashtable();
+        pojoMap.reset();
     }
 
     /**
@@ -147,7 +269,7 @@ public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
      * @property
      */
     public void set_PojoAdapterHash(PojoAdapterHash pojos) {
-        this.pojos = pojos;
+        this.pojoMap = pojos;
     }
 
     /**
@@ -160,7 +282,7 @@ public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
     }
 
     public void setPojoAdapterHash(PojoAdapterHash pojos) {
-        this.pojos = pojos;
+        this.pojoMap = pojos;
     }
 
     public void setReflectorFactory(ReflectorFactory reflectorFactory) {
@@ -168,16 +290,16 @@ public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
     }
 
     public void shutdown() {
-        loaded.clear();
-        loaded = null;
-        pojos.shutdown();
+        identityMap.clear();
+        identityMap = null;
+        pojoMap.shutdown();
         reflectorFactory = null;
     }
 
     public void unloaded(NakedObject object) {
-        Assert.assertTrue("cannot unload object as it is not loaded", object, loaded.contains(object));
+        Assert.assertTrue("cannot unload object as it is not loaded", object, identityMap.contains(object));
         LOG.debug("removed loaded object " + object);
-        loaded.remove(object.getOid());
+        identityMap.remove(object.getOid());
     }
 }
 

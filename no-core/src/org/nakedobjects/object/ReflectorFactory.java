@@ -8,7 +8,9 @@ public abstract class ReflectorFactory {
 
     public abstract ObjectFactory getObjectFactory();
 
-    public abstract Naked createAdapter(Object pojo) ;
+    public abstract NakedValue createValueAdapter(Object pojo) ;
+    
+    public abstract NakedCollection createCollectionAdapter(Object object);
 }
 
 

@@ -13,6 +13,7 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.ToString;
+import org.nakedobjects.utility.UnexpectedCallException;
 
 import java.util.Date;
 
@@ -32,7 +33,7 @@ public class PojoAdapter implements NakedObject {
       
     protected PojoAdapter(Object pojo) {
         this.pojo = pojo;
-        resolvedState = ResolvedState.UNRESOLVED;
+        resolvedState = ResolvedState.NEW;
     }
     
     public void checkLock(long version) {
@@ -60,7 +61,7 @@ public class PojoAdapter implements NakedObject {
     }
 
     public void debugClearResolved() {
-        resolvedState = ResolvedState.UNRESOLVED;
+        resolvedState = ResolvedState.NEW;
     }
 
     /**
@@ -203,21 +204,21 @@ public class PojoAdapter implements NakedObject {
     }
 
     public void initAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
-        mustBeResolvedIfPersistent(this);
         LOG.debug("initAssociation " + field.getName() + "/" + associatedObject + " in " + this);
         field.initAssociation(this, associatedObject);
+        partlyResolved();
     }
 
     public void initOneToManyAssociation(OneToManyAssociation field, NakedObject[] instances) {
-        mustBeResolvedIfPersistent(this);
         LOG.debug("initAssociation " + field.getName() + " with " + instances.length + "instances in " + this);
         field.initOneToManyAssociation(this, instances);
+        partlyResolved();
     }
 
     public void initValue(OneToOneAssociation field, Object object) {
-        mustBeResolvedIfPersistent(this);
         LOG.debug("initValue " + field.getName() + " with " + object + " in " + this);
         field.initValue(this, object);
+        partlyResolved();
     }
 
     public boolean isEmpty(NakedObjectField field) {
@@ -225,8 +226,12 @@ public class PojoAdapter implements NakedObject {
         return field.isEmpty(this);
     }
 
+    private void partlyResolved() {
+  //      resolvedState = ResolvedState.PART_RESOLVED;
+    }
+
     public boolean isPartlyResolved() {
-        return resolvedState == ResolvedState.PARTIALLY_RESOLVED;
+        return resolvedState == ResolvedState.PART_RESOLVED;
     }
 
     /**
@@ -241,7 +246,7 @@ public class PojoAdapter implements NakedObject {
     }
 
     public boolean isResolving() {
-        return resolvedState == ResolvedState.RESOLVING;
+        return resolvedState == ResolvedState.RESOLVING || resolvedState == ResolvedState.RESOLVING;
     }
 
     public boolean isTransient() {
@@ -249,11 +254,11 @@ public class PojoAdapter implements NakedObject {
     }
 
     public boolean isUnresolved() {
-        return resolvedState == ResolvedState.UNRESOLVED;
+        return resolvedState == ResolvedState.NEW;
     }
 
     private void mustBeResolvedIfPersistent(NakedObject object) {
-        if (object.isPersistent() && !object.isResolved()) {
+        if (object.isPersistent() && (object.isUnresolved() || object.isPartlyResolved())) {
             LOG.info("Unresolved object attempting to be used; resolving it immediately: " + object);
             NakedObjects.getObjectManager().resolveImmediately(object);
             //throw new NakedObjectRuntimeException("Object not resolved when used with adapter: " + object);
@@ -264,9 +269,13 @@ public class PojoAdapter implements NakedObject {
         return getSpecification().persistable();
     }
     
-    void persistedAs(Oid oid) {
+    public void persistedAs(Oid oid) {
+        LOG.debug("set OID " + oid + " " + this);
         Assert.assertTrue("Cannot make a non-transient object persistent", this, isTransient());
-        setOid(oid);
+        Assert.assertTrue("Oid can't be set again", this, this.oid == null);
+
+        this.oid = oid;
+        resolvedState =ResolvedState.RESOLVED;
     }
 
     public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
@@ -276,9 +285,13 @@ public class PojoAdapter implements NakedObject {
     }
  
     public void setOid(Oid oid) {
-        LOG.debug("set OID " + oid + " " + this);
+        throw new UnexpectedCallException();
+        /*
+         * 
+              LOG.debug("set OID " + oid + " " + this);
         Assert.assertTrue("Oid can't be set again", this, this.oid == null);
         this.oid = oid;
+        */
     }
     
     public void setOptimisticLock(long version, String modifierBy, Date modifiedTime) {
@@ -288,11 +301,14 @@ public class PojoAdapter implements NakedObject {
     }
 
     public void setResolved() {
+        throw new UnexpectedCallException();
+        /*
         if (resolvedState == ResolvedState.RESOLVED) {
             throw new IllegalStateException("Object is already marked as resolved (" + this + ")");
         } else {
             resolvedState = ResolvedState.RESOLVED;
         }
+        */
     }
 
     public void setValue(OneToOneAssociation field, Object object) {
@@ -331,6 +347,14 @@ public class PojoAdapter implements NakedObject {
     public synchronized String toString() {
         ToString str = new ToString(this);
         
+        if(isUnresolved()) {
+            str.append("-");
+        } else if(isPersistent()) {
+            str.append("P");
+        } else {
+            str.append("T");
+        }
+        
         str.append(isPersistent() ? "P" : "T");
         str.append(resolvedState.code());
         Oid oid = getOid();
@@ -346,6 +370,21 @@ public class PojoAdapter implements NakedObject {
         str.append("title", titleString());
         str.appendAsHex("pojo-hash", pojo.hashCode());
         return str.toString();
+    }
+
+    public void recreate(Oid oid) {
+        changeState( ResolvedState.GHOST);
+        this.oid = oid;
+    }
+
+    public void setTransient() {
+        changeState(ResolvedState.TRANSIENT);
+    }
+
+    public void changeState(ResolvedState newState) {
+        Assert.assertTrue("can't change from " + resolvedState.name() + " to " + newState.name(), resolvedState.isValidToChangeTo(newState));
+        LOG.debug("recreate - change state " + this + " to " + newState);
+        resolvedState = newState;
     }
 }
 

@@ -9,7 +9,9 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NullDirtyObjectSet;
 import org.nakedobjects.object.Persistable;
+import org.nakedobjects.object.ResolvedState;
 import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
 import org.nakedobjects.object.persistence.ActionTransaction;
 import org.nakedobjects.object.persistence.DestroyObjectCommand;
@@ -23,7 +25,8 @@ import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
+import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.ExceptionHelper;
 import org.nakedobjects.utility.StartupException;
@@ -35,13 +38,13 @@ import java.util.Hashtable;
 import org.apache.log4j.Logger;
 
 
-public class LocalObjectManager extends AbstractNakedObjectManager {
+public class LocalObjectManager extends AbstractNakedObjectManager implements ObjectLoader {
     private static final Logger LOG = Logger.getLogger(LocalObjectManager.class);
     private boolean checkObjectsForDirtyFlag;
     private final Hashtable nakedClasses = new Hashtable();
     private final DirtyObjectSetImpl objectsToBeSaved = new DirtyObjectSetImpl();
     private NakedObjectStore objectStore;
-    private DirtyObjectSet objectsToRefreshViewsFor;
+    private DirtyObjectSet objectsToRefreshViewsFor = new NullDirtyObjectSet();
     private OidGenerator oidGenerator;
     private Transaction transaction;
     private int transactionLevel;
@@ -59,6 +62,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     public void addObjectChangedListener(DirtyObjectSet listener) {
+        Assert.assertNotNull("must set a listener", listener);
         this.objectsToRefreshViewsFor = listener;
     }
 
@@ -133,12 +137,13 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     public String getDebugData() {
         DebugString debug = new DebugString();
 
-        debug.appendTitle(NakedObjects.getPojoAdapterFactory().getDebugTitle());
-        debug.appendln(NakedObjects.getPojoAdapterFactory().getDebugData());
+        debug.appendTitle(super.getDebugTitle());
+        debug.append(super.getDebugData());
         debug.appendln();
 
         debug.append(objectStore.getDebugData());
         debug.appendln();
+        
         return debug.toString();
     }
 
@@ -151,7 +156,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         try {
             NakedObject[] instances = objectStore.getInstances(criteria);
             collateChanges();
-            objectsToBeSaved.remove(instances);
+            //objectsToBeSaved.remove(instances);
             return instances;
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
@@ -163,7 +168,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         try {
             NakedObject[] instances = objectStore.getInstances(specification, false);
             collateChanges();
-            objectsToBeSaved.remove(instances);
+            //objectsToBeSaved.remove(instances);
             return instances;
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
@@ -221,17 +226,10 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
      */
     public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException {
         LOG.info("getObject " + oid);
-        try {
-            if (NakedObjects.getPojoAdapterFactory().isLoaded(oid)) {
-                return NakedObjects.getPojoAdapterFactory().getLoadedObject(oid);
-            } else {
-	            NakedObject object = objectStore.getObject(oid, hint);
-	            collateChanges();
-	            objectsToBeSaved.remove(object);
-	            return object;
-            }
-        } catch (ObjectStoreException e) {
-            throw new NakedObjectRuntimeException(e);
+        if (isIdentityKnown(oid)) {
+            return getAdapterFor(oid);
+        } else {
+            return objectStore.getObject(oid, hint);
         }
     }
 
@@ -262,12 +260,9 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
      * persisted objects and persist changes to the object that are saved.
      */
     public void init() throws StartupException {
-        try {
-            oidGenerator.init();
-            objectStore.init();
-        } catch (ObjectStoreException e) {
-            throw new StartupException(e);
-        }
+        oidGenerator.init();
+        objectStore.setObjectLoader(this);
+        objectStore.init();
     }
 
     private boolean isPersistent(NakedObject object) {
@@ -311,11 +306,14 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         }
             
         LOG.info("persist " + object);
+        makePersistent(object, createOid(object));
+        
+/*        
         object.setOid(createOid(object));
         if (!object.isResolved()) {
             object.setResolved();
         }
-
+*/
         NakedObjectField[] fields = object.getFields();
         for (int i = 0; i < fields.length; i++) {
             NakedObjectField field = fields[i];
@@ -363,12 +361,12 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     public void objectChanged(NakedObject object) {
-        objectsToBeSaved.addDirty(object);
-        if (objectsToRefreshViewsFor != null) {
+        if (!object.isResolving()) {
+            objectsToBeSaved.addDirty(object);
             objectsToRefreshViewsFor.addDirty(object);
         }
     }
-
+  
     public void reset() {
         objectStore.reset();
     }
@@ -379,7 +377,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
             return;
         }
         LOG.info("resolve-eagerly" + object + "/" + field.getName());
-        objectsToBeSaved.remove(object);  // TODO is this enough or do we need to check the referenced fields?
+    //    objectsToBeSaved.remove(object);  // TODO is this enough or do we need to check the referenced fields?
         try {
             objectStore.resolveEagerly(object, field);
         } catch (ObjectStoreException e) {
@@ -388,7 +386,10 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     public void resolveImmediately(NakedObject object) {
-        if (object.isResolved()) {
+        Assert.assertFalse("only resolve object that are not yet resolved", object, object.isResolved());
+        Assert.assertTrue("only resolve object that are persistent", object, object.isPersistent());
+
+        /*      if (object.isResolved()) {
             LOG.debug("resolve requested, but already resolved: " + object);
            return;
         }
@@ -397,21 +398,18 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
             LOG.warn("ignoring resolve request as not a persistent object: " + object);
             return;
         }
-
+*/
         LOG.info("resolve-immediately: " + object);
-        try {
+/*        try {
             // TODO fudge by Fergal
             if (object.isResolved()) {
         		return;
         	} else {
         		object.setResolved();
         	}
-           // object.setResolved();
+   */        // object.setResolved();
             objectStore.resolveImmediately(object);
-            objectsToBeSaved.remove(object);
-        } catch (ObjectStoreException e) {
-            throw new NakedObjectRuntimeException(e);
-        }
+ //           objectsToBeSaved.remove(object);
     }
 
     public void saveChanges() {
@@ -430,8 +428,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     private synchronized void collateChanges() {
         if (checkObjectsForDirtyFlag) {
             LOG.debug("collating changed objects");
-            PojoAdapterFactory factory =  NakedObjects.getPojoAdapterFactory();
-            Enumeration e = factory.getLoadedObjects();
+            Enumeration e = getIdentifiedObjects();
             while (e.hasMoreElements()) {
                 NakedObject object = (NakedObject) e.nextElement();
                 if (object.getSpecification().isDirty(object)) {
@@ -493,9 +490,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
                 }
     		}
             objectsToBeSaved.shutdown();
-            if(objectsToRefreshViewsFor != null) {
-                objectsToRefreshViewsFor.shutdown();
-            }
+            objectsToRefreshViewsFor.shutdown();
     		oidGenerator.shutdown();
             oidGenerator = null;
             objectStore.shutdown();
@@ -529,6 +524,42 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     public void tempResetDirty() {
         objectsToBeSaved.dirtyObjects();
     }
+    
+    
+    
+    
+    /**
+     * Recreates an adapter for a persistent busines object that is being loaded into the system.  If an
+     * adapter already exists for the specified OID then that adapter is returned.  Otherwise a new instance
+     * of the specified business object is created and an adapter is created for it.  The adapter will then
+     * be in the state UNRESOLVED.
+     */
+    public NakedObject recreateAdapter(Oid oid, NakedObjectSpecification specification) {
+        if (isIdentityKnown(oid)) {
+            return getAdapterFor(oid);
+        }
+        
+        LOG.debug("recreating object " + specification.getFullName() + "/" + oid);
+        Object object = objectFactory.recreateObject(specification);
+        PojoAdapter adapter = (PojoAdapter) createAdapterForPersistent(object, oid);
+  
+        adapter.recreate(oid);
+        return adapter;
+    }
+    
+    public NakedObject loadedObject(Oid oid) {
+        return NakedObjects.getPojoAdapterFactory().getLoadedObject(oid);
+    }
+
+    public void loading(NakedObject object, boolean completeObject) {
+        ((PojoAdapter) object).changeState(completeObject ? ResolvedState.RESOLVING : ResolvedState.RESOLVING_PART);
+    }
+
+
+    public void loaded(NakedObject object, boolean completeObject) {
+        ((PojoAdapter) object).changeState(completeObject ? ResolvedState.RESOLVED : ResolvedState.PART_RESOLVED);       
+    }
+
 }
 
 /*

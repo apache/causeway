@@ -46,11 +46,11 @@ public class PojoAdapterFactoryLoadedTest extends TestCase {
     }
 
     public void testObjectIsLoadedForOid() {
-        assertTrue(loaded.isLoaded(oid1));
+        assertTrue(loaded.isIdentityKnown(oid1));
     }
 
     public void testOidHasNoAssociatedLoadedObject() {
-        assertFalse(loaded.isLoaded(new DummyOid()));
+        assertFalse(loaded.isIdentityKnown(new DummyOid()));
     }
 
     public void testObjectIsAddedToCache() {
@@ -107,15 +107,15 @@ public class PojoAdapterFactoryLoadedTest extends TestCase {
 class Cache extends PojoAdapterFactoryImpl {
 
     void setup(Oid oid, NakedObject object) {
-        loaded.put(oid, object);
+        identityMap.put(oid, object);
     }
 
     Object get(Object key) {
-        return loaded.get(key);
+        return identityMap.get(key);
     }
 
     int size() {
-        return loaded.size();
+        return identityMap.size();
     }
 
 }

@@ -9,7 +9,7 @@ public class MockObjectFactory implements ObjectFactory {
         return specification.acquireInstance();
     }
 
-    public void recreatedObject(Object object) {}
+    public void initRecreatedObject(Object object) {}
 
 }
 

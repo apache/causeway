@@ -11,6 +11,7 @@ import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.utility.DebugString;
+import org.nakedobjects.utility.UnexpectedCallException;
 
 
 public abstract class NakedObjects implements DebugInfo {
@@ -37,7 +38,8 @@ public abstract class NakedObjects implements DebugInfo {
     }
 
     public static PojoAdapterFactory getPojoAdapterFactory() {
-        return getInstance().pojoAdapterFactory();
+        throw new UnexpectedCallException();
+ //       return getInstance().pojoAdapterFactory();
     }
 
     public static ReflectionFactory getReflectionFactory() {

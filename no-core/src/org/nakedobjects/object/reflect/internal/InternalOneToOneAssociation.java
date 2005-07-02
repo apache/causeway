@@ -169,7 +169,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
             try {
                 if (associate == null) {
                     if (removeMethod != null) {
-                        removeMethod.invoke(inObject.getObject(), new Object[] { get(inObject) });
+                        removeMethod.invoke(inObject.getObject(), new Object[] { getAssociation(inObject) });
                     } else {
                         setMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
                     }
@@ -207,14 +207,14 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
     }
 
 	public Naked getAssociation(MemberIdentifier identifier, NakedObject fromObject) {
-		return get(fromObject);
+		return getAssociation(fromObject);
 	}
 	
 	public Object getExtension(Class cls) {
         return null;
     }
 	
-    private Naked get(NakedObject fromObject) {
+    private Naked getAssociation(NakedObject fromObject) {
         try {
              Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
             
@@ -225,7 +225,8 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
                 
                 throw new NakedObjectRuntimeException(getType().getFullName());
             } else {
-                return NakedObjects.getPojoAdapterFactory().createAdapter(obj);
+                return NakedObjects.getObjectManager().getAdapterFor(obj);
+//                NakedObjects.getPojoAdapterFactory().createAdapter(obj);
             }
             
         } catch (InvocationTargetException e) {

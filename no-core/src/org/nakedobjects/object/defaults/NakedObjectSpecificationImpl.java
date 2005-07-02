@@ -7,6 +7,7 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ReflectionFactory;
 import org.nakedobjects.object.control.Hint;
@@ -77,9 +78,12 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
      * only creates a java object (using newInstance on the Class object
      * returned using the getJavaType method).
      */
-    public Naked acquireInstance() {
-        // TODO this happens a lot!  LOG.debug("acquire instance of " + getShortName());
-        return reflector.acquireInstance();
+    public NakedValue acquireInstance() {
+        // TODO this happens a lot! 
+        LOG.debug("acquire instance of " + getShortName());
+   
+        return (NakedValue) NakedObjects.getObjectManager().createAdapterForValue(this);
+//        return (NakedValue) NakedObjects.getObjectManager().recreateExistingInstance(this);
     }
     
     public void deleted(NakedObject object) {

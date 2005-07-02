@@ -33,6 +33,7 @@ public class DirtyObjectSetImpl implements DirtyObjectSet {
         changes.removeAllElements();
         changes = null;
     }
+    /*
 
     public void remove(NakedObject object) {
         LOG.debug("unmark as dirty " + object);
@@ -45,6 +46,7 @@ public class DirtyObjectSetImpl implements DirtyObjectSet {
         }
     }
     
+*/
     public String toString() {
         return new ToString(this).append("changes", changes).toString();
     }

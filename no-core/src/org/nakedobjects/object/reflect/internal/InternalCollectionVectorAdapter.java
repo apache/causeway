@@ -70,7 +70,8 @@ public class InternalCollectionVectorAdapter implements InternalCollection {
 
             public Object nextElement() {
                 Object element = elements.nextElement();
-                return element instanceof NakedObject ? element : NakedObjects.getPojoAdapterFactory().createNOAdapter(element);
+                return element instanceof NakedObject ? element : NakedObjects.getObjectManager().getAdapterFor(element); 
+                //NakedObjects.getPojoAdapterFactory().createNOAdapter(element);
             }
         };
     }

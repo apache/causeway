@@ -19,6 +19,7 @@ public interface PojoAdapterFactory extends DebugInfo {
 
     void reset();
 
+    /** @deprecated */
     NakedObject getLoadedObject(Oid oid);
 
     boolean isLoaded(Oid oid);
@@ -26,8 +27,6 @@ public interface PojoAdapterFactory extends DebugInfo {
     void loaded(NakedObject object) throws ResolveException;
 
     void unloaded(NakedObject object);
-
-    Enumeration getLoadedObjects();
 }
 
 /*

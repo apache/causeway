@@ -1,6 +1,7 @@
 package org.nakedobjects.object.persistence;
 
 import org.nakedobjects.object.DirtyObjectSet;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -33,14 +34,14 @@ public class ObjectManagerLogger extends Logger implements NakedObjectManager {
         return decorated.allInstances(specification, includeSubclasses);
     }
 
-    public NakedObject createInstance(NakedObjectSpecification specification) {
-        NakedObject instance = decorated.createInstance(specification);
+    public NakedObject createPersistentInstance(NakedObjectSpecification specification) {
+        NakedObject instance = decorated.createPersistentInstance(specification);
         log("Create an instances of " + specification.getShortName(), instance.getObject());
         return instance;
     }
 
-    public NakedObject createInstance(String className) {
-        NakedObject instance = decorated.createInstance(className);
+    public NakedObject createPersistentInstance(String className) {
+        NakedObject instance = decorated.createPersistentInstance(className);
         log("Create an instances of " + className, instance.getObject());
         return instance;
     }
@@ -149,6 +150,11 @@ public class ObjectManagerLogger extends Logger implements NakedObjectManager {
     public void startTransaction() {
         log("Start transaction");
         decorated.startTransaction();
+    }
+
+    public Naked recreateExistingInstance(NakedObjectSpecification specification) {
+        log("create instance of " + specification.getShortName());
+        return decorated.recreateExistingInstance(specification);
     }
 }
 

@@ -1,6 +1,6 @@
 package org.nakedobjects.object.reflect.internal;
 
-import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.reflect.ReflectionException;
@@ -16,7 +16,7 @@ public class NullReflectorFactory extends ReflectorFactory {
         return null;
     }
 
-    public Naked createAdapter(Object pojo) {
+    public NakedValue createValueAdapter(Object pojo) {
         return null;
     }
 
