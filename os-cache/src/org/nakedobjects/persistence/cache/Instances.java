@@ -4,7 +4,6 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.io.Memento;
 import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
@@ -63,10 +62,12 @@ class Instances {
             Oid oid = (Oid) reader.readOid();
             LOG.debug("read 1: " + i + " " + specification.getFullName() + "/" + oid);
 
-            NakedObject obj = (NakedObject) specification.acquireInstance();
-            obj.setOid(oid);
+            NakedObject obj = objectLoader.recreateAdapter(oid, specification);
+            
+//            NakedObject obj = (NakedObject) specification.acquireInstance();
+//            obj.setOid(oid);
             preload(oid, obj);
-            loadedObjects().loaded(obj);
+//            loadedObjects().loaded(obj);
         }
     }
 
