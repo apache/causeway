@@ -11,7 +11,7 @@ public class BaseObject {
     
 
     protected  static Object createInstance(Class class1) {
-        return NakedObjects.getObjectManager().createInstance(class1.getName());
+        return NakedObjects.getObjectManager().createPersistentInstance(class1.getName());
     }
 
 }
