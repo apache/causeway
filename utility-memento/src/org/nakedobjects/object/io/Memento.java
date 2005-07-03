@@ -74,7 +74,7 @@ public class Memento implements Transferable, Serializable {
         return d;
     }
 
-    public Object getOid() {
+    public Oid getOid() {
         return state.oid;
     }
 
@@ -82,9 +82,15 @@ public class Memento implements Transferable, Serializable {
         if (state == null) {
             return null;
         } else {
-            NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(state.className);
-            NakedObject object = (NakedObject) nc.acquireInstance();
-            object.setOid(state.oid);
+            NakedObjectSpecification spec = NakedObjects.getSpecificationLoader().loadSpecification(state.className);
+            PojoAdapterFactory objectLoader = NakedObjects.getPojoAdapterFactory();
+            NakedObject object;
+            if(getOid() == null) {
+                object = objectLoader.createTransientInstance(spec);
+            } else {
+                object = objectLoader.recreateAdapter(getOid(), spec);
+            }
+            
             LOG.debug("Recreated object " + object.getOid());
             updateObject(object);
 
@@ -92,29 +98,20 @@ public class Memento implements Transferable, Serializable {
         }
     }
 
-    private NakedObject recreateObject2(Data data) {
-        PojoAdapterFactory loadedObjects = loadedObjects();
-        synchronized (loadedObjects) {
-            NakedObject ref;
+    private NakedObject recreateReference(Data data) {
+        PojoAdapterFactory objectLoader = NakedObjects.getPojoAdapterFactory();
+        synchronized (objectLoader) {
             Oid oid = data.oid;
 
-            NakedObjectSpecification nakedClass = NakedObjects.getSpecificationLoader().loadSpecification(data.className);
+            NakedObject ref;
             if (oid == null) {
                 ref = null;
-            } else if (loadedObjects.isLoaded(oid)) {
-                ref = loadedObjects.getLoadedObject(oid);
             } else {
-                ref = (NakedObject) nakedClass.acquireInstance();
-                ref.setOid(oid);
-                loadedObjects.loaded(ref);
+	            NakedObjectSpecification spec = NakedObjects.getSpecificationLoader().loadSpecification(data.className);
+                ref = objectLoader.recreateAdapter(oid, spec);
             }
-
             return ref;
         }
-    }
-
-    private PojoAdapterFactory loadedObjects() {
-        return NakedObjects.getPojoAdapterFactory();
     }
 
     public String toString() {
@@ -139,6 +136,10 @@ public class Memento implements Transferable, Serializable {
             if (!(state instanceof ObjectData)) {
                 throw new NakedObjectRuntimeException("Expected an ObjectData but got " + state.getClass());
             } else {
+                PojoAdapterFactory objectLoader = NakedObjects.getPojoAdapterFactory();
+
+                objectLoader.loading(object, true);
+                
                 ObjectData od = (ObjectData) state;
 
                 NakedObjectField[] fields = object.getSpecification().getFields();
@@ -155,6 +156,8 @@ public class Memento implements Transferable, Serializable {
                         }
                     }
                 }
+                
+                objectLoader.loaded(object, true);
             }
             LOG.debug("object updated " + object.getOid());
         }
@@ -163,7 +166,6 @@ public class Memento implements Transferable, Serializable {
 
     private void updateOneToManyAssociation(NakedObject object, OneToManyAssociation field, InternalCollectionData collectionData) {
         InternalCollection collection = (InternalCollection) object.getField(field);
- //       collection.setContext(context);
         if (collection.getOid() == null) {
             collection.setOid(collectionData.getOid());
         }
@@ -175,13 +177,12 @@ public class Memento implements Transferable, Serializable {
         }
 
         for (int j = 0; j < collectionData.elements.length; j++) {
-            NakedObject element = recreateObject2((Data) collectionData.elements[j]);
+            NakedObject element = recreateReference((Data) collectionData.elements[j]);
             if (!collection.contains(element)) {
                 LOG.debug("  association " + field + " changed, added " + element.getOid());
                 object.setAssociation(field, element);
             } else {
                 object.clearAssociation(field, element);
-//                original.removeElement(element);
             }
         }
 
@@ -197,7 +198,7 @@ public class Memento implements Transferable, Serializable {
         if (fieldData == null) {
             object.setValue(field, null);
         } else {
-            NakedObject ref = recreateObject2(fieldData);
+            NakedObject ref = recreateReference(fieldData);
             if (object.getField(field) != ref) {
                 LOG.debug("  association " + field + " changed to " + ref.getOid());
                 object.setValue(field, ref);
