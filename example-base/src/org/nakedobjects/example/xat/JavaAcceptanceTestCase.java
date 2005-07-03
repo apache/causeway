@@ -8,8 +8,6 @@ import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.TimeBasedOidGenerator;
 import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
-import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
-import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
@@ -82,8 +80,6 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
 
         JavaObjectFactory objectFactory = new JavaObjectFactory();
         objectFactory.setContainer(container);
-
-        container.setObjectFactory(objectFactory);
         
         TransientObjectStore objectStore = new TransientObjectStore();
 
@@ -104,11 +100,9 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
 
         JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
         
-        PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
-        pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
-        pojoAdapterFactory.setReflectorFactory(reflectorFactory);
-        nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
-
+    	nakedObjects.setPojoAdapterFactory(objectManager);
+		
+  
         nakedObjects.setReflectionFactory(reflectionFactory);
         nakedObjects.setReflectorFactory(reflectorFactory);
 
