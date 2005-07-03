@@ -11,8 +11,6 @@ import org.nakedobjects.distribution.java.JavaObjectDataFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.ObjectManagerLogger;
-import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
-import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.reflect.JavaReflectorFactory;
@@ -67,8 +65,6 @@ public class XmlClient {
             JavaObjectFactory objectFactory = new JavaObjectFactory();
             objectFactory.setContainer(container);
 
-            container.setObjectFactory(objectFactory);
-
             JavaObjectDataFactory objectDataFactory = new JavaObjectDataFactory();    
 
             ProxyObjectManager proxyObjectManager = new ProxyObjectManager();
@@ -87,10 +83,7 @@ public class XmlClient {
             
             JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
 
-            PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
-            pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
-            pojoAdapterFactory.setReflectorFactory(reflectorFactory);
-            nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+            nakedObjects.setPojoAdapterFactory(objectManager);
 
             nakedObjects.setReflectionFactory(reflectionFactory);
             NakedObjectSpecificationLoaderImpl specificationLoader = new NakedObjectSpecificationLoaderImpl();
