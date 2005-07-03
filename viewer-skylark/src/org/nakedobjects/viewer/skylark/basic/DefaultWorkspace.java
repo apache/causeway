@@ -239,11 +239,11 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
                 for (int i = 0; i < specs.length; i++) {
                     NakedObjectSpecification cls = specs[i];
                     if (cls.isObject()) {
-                        classCollection.addElement(NakedObjects.getPojoAdapterFactory().createAdapter(
+                        classCollection.addElement(NakedObjects.getObjectManager().createAdapterForTransient(
                                 objectManager.getNakedClass(cls)));
                     }
                 }
-                View classesView = createSubviewFor(NakedObjects.getPojoAdapterFactory().createAdapter(classCollection), false);
+                View classesView = createSubviewFor(NakedObjects.getObjectManager().createAdapterForTransient(classCollection), false);
                 classesView.setLocation(at);
                 addView(classesView);
             }

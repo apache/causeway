@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Allow;
@@ -69,9 +68,6 @@ class ImmediateObjectOption extends MenuOption {
                 Naked returnedObject;
                 returnedObject = object.execute(action, null);
                 if (returnedObject != null) {
-                    if (!(returnedObject instanceof Naked)) {
-                        returnedObject = NakedObjects.getPojoAdapterFactory().createAdapter(returnedObject);
-                    }
                     view.objectActionResult(returnedObject, at);
                 }
             }

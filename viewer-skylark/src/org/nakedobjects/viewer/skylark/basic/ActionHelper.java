@@ -51,7 +51,7 @@ public class ActionHelper {
             // change name using the hint
             NakedObjectSpecification type = parameterTypes[i];
             labels[i] = labels[i] == null ? type.getShortName() : labels[i];
-            parameters[i] = defaultValues[i] == null ? parameterValues[i] : NakedObjects.getPojoAdapterFactory().createAdapter(
+            parameters[i] = defaultValues[i] == null ? parameterValues[i] : NakedObjects.getObjectManager().createAdapterForValue(
                     defaultValues[i]);
         }
 
