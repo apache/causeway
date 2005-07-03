@@ -62,7 +62,7 @@ public class InternalCollectionAdapter implements InternalCollection {
 
     public NakedObject elementAt(int index) {
         Object element = collection.elementAt(index);
-        return NakedObjects.getPojoAdapterFactory().createNOAdapter(element);
+        return NakedObjects.getObjectManager().getAdapterFor(element);
     }
 
     public Enumeration elements() {
@@ -75,7 +75,7 @@ public class InternalCollectionAdapter implements InternalCollection {
 
             public Object nextElement() {
                 Object element = elements.nextElement();
-                return element instanceof NakedObject ? element : NakedObjects.getPojoAdapterFactory().createAdapter(element);
+                return element instanceof NakedObject ? element : NakedObjects.getObjectManager().getAdapterFor(element);
             }
         };
     }

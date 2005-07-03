@@ -54,8 +54,9 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     }
 
     public void destroyObject(Object object) {
-        objectManager().destroyObject(NakedObjects.getPojoAdapterFactory().createNOAdapter(object));
-    }
+        //objectManager().destroyObject(NakedObjects.getPojoAdapterFactory().createNOAdapter(object));
+        objectManager().destroyObject(objectManager().getAdapterFor(object));
+   }
 
     protected void finalize() throws Throwable {
         super.finalize();

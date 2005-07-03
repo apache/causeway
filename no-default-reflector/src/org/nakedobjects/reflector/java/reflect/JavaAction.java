@@ -57,7 +57,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
             Object result = actionMethod.invoke(inObject.getObject(), executionParameters);
             LOG.debug(" action result " + result);
             if (result != null) { 
-                return NakedObjects.getPojoAdapterFactory().createAdapter(result);
+                return NakedObjects.getObjectManager().getAdapterFor(result);
             }
 
         } catch (InvocationTargetException e) {
