@@ -388,7 +388,6 @@ public class XmlObjectStore implements NakedObjectStore {
     }
 
     public void reset() {
-        NakedObjects.getPojoAdapterFactory().reset();
     }
     
     public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException {
