@@ -123,11 +123,7 @@ public abstract class AcceptanceTestCase extends TestCase {
         String methodName = getName().substring(4);
         testObjectFactory.testStarting(className, methodName);
 
-        PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
-		pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
-		nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
-		
-        setupFramework(nakedObjects);
+	      setupFramework(nakedObjects);
 
         nakedObjects.setSession(new Session());
 
