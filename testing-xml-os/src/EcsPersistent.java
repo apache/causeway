@@ -8,8 +8,6 @@ import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
-import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
-import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.persistence.file.XmlDataManager;
 import org.nakedobjects.persistence.file.XmlObjectStore;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
@@ -88,11 +86,6 @@ public class EcsPersistent {
             new SystemClock();
         
             nakedObjects.setSession(new SimpleSession());
-
-            PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
-            pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
-            pojoAdapterFactory.setReflectorFactory(reflectorFactory);
-            nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
             
             objectManager.setReflectorFactory(reflectorFactory);
             objectManager.init();
