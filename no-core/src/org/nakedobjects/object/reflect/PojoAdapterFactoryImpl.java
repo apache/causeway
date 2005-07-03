@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.ResolveException;
+import org.nakedobjects.object.ResolvedState;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.valueadapter.BooleanAdapter;
 import org.nakedobjects.object.reflect.valueadapter.ByteAdapter;
@@ -27,14 +28,13 @@ import java.util.Hashtable;
 import org.apache.log4j.Logger;
 
 
-public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
+public abstract class PojoAdapterFactoryImpl implements PojoAdapterFactory {
     private static final Logger LOG = Logger.getLogger(PojoAdapterFactoryImpl.class);
     // TODO follow same pattern as PojoAdapterHash - delegate to hash class
     protected Hashtable identityMap = new Hashtable();
     private PojoAdapterHash pojoMap = new PojoAdapterHashImpl();
     private ReflectorFactory reflectorFactory;
-    
-    
+        
     public NakedObject createAdapterForTransient(final Object object) {
         NakedObject adapter = createObjectAdapter(object);
        
@@ -43,7 +43,7 @@ public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
         return adapter;
     }
     
-    public NakedObject createAdapterForPersistent(final Object object, final Oid oid) {
+    protected NakedObject createAdapterForPersistent(final Object object, final Oid oid) {
         Assert.assertNotNull(oid);
         Assert.assertFalse("Identity Map already contains object for OID " + oid, identityMap.containsKey(oid));
         
@@ -58,6 +58,8 @@ public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
         return adapter;
     }
     
+    
+
     public NakedCollection createCollectionAdapter(final Object collection) {
         Assert.assertFalse("Can't create an adapter for a NOF adapter", collection instanceof Naked);
         
@@ -301,6 +303,15 @@ public class PojoAdapterFactoryImpl implements PojoAdapterFactory {
         LOG.debug("removed loaded object " + object);
         identityMap.remove(object.getOid());
     }
+    
+    public void loading(NakedObject object, boolean completeObject) {
+        ((PojoAdapter) object).changeState(completeObject ? ResolvedState.RESOLVING : ResolvedState.RESOLVING_PART);
+    }
+
+    public void loaded(NakedObject object, boolean completeObject) {
+        ((PojoAdapter) object).changeState(completeObject ? ResolvedState.RESOLVED : ResolvedState.PART_RESOLVED);       
+    }
+
 }
 
 /*

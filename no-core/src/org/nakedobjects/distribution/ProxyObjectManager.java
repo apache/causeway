@@ -1,6 +1,5 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
@@ -14,7 +13,6 @@ import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
 import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.NotImplementedException;
@@ -61,7 +59,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     public synchronized void destroyObject(NakedObject object) {
         LOG.debug("destroyObject " + object);
         connection.destroyObject(session, object.getOid(), object.getSpecification().getFullName());
-        loadedObjects().unloaded(object);
+        unloaded(object);
     }
 
     public void endTransaction() {
@@ -80,8 +78,8 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         debug.appendln(0, "Connection", connection);
         debug.appendln();
 
-        debug.appendTitle(NakedObjects.getPojoAdapterFactory().getDebugTitle());
-        debug.appendln(NakedObjects.getPojoAdapterFactory().getDebugData());
+        debug.appendTitle(super.getDebugTitle());
+        debug.append(super.getDebugData());
 
         return debug.toString();
     }
@@ -134,15 +132,10 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
 
     public void init() {}
 
-    private PojoAdapterFactory loadedObjects() {
-        return NakedObjects.getPojoAdapterFactory();
-    }
-
     public synchronized void makePersistent(NakedObject object) {
         LOG.debug("makePersistent " + object);
         Oid[] oid = connection.makePersistent(session, objectDataFactory.createObjectData(object, 0));
-        object.setOid(oid[0]);
-        loadedObjects().loaded(object);
+        makePersistent(object, oid[0]);
     }
 
     public int numberOfInstances(NakedObjectSpecification specification) {
@@ -168,12 +161,6 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         LOG.debug("resolve object (remotely from server)" + oid);
         ObjectData data = connection.resolveImmediately(session, oid, hint.getFullName());
         DataHelper.update(data, updateNotifier);
-
-        if (object.isResolved()) {
-            LOG.error("Object already resolved, no need to set resolve flag");
-        } else {
-            object.setResolved();
-        }
     }
 
     public void resolveLazily(NakedObject object, NakedObjectField field) {}

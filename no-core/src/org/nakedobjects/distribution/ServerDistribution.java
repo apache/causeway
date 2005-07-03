@@ -97,13 +97,12 @@ public class ServerDistribution implements ClientDistribution {
                 ObjectData objectData = (ObjectData) data;
                 if (objectData.getOid() != null) {
                     parameters[i] = getNakedObject(session, objectData.getOid(), objectData.getType());
-                    Assert.assertEquals(parameters[i], NakedObjects.getPojoAdapterFactory().createAdapter(parameters[i].getObject()));
                 } else {
                     parameters[i] = DataHelper.recreate(data);
                 }
             } else if (data instanceof ValueData) {
                 ValueData valueData = (ValueData) data;
-                parameters[i] = NakedObjects.getPojoAdapterFactory().createAdapter(valueData.getValue());
+                parameters[i] = NakedObjects.getPojoAdapterFactory().createAdapterForValue(valueData.getValue());
             } else {
                 throw new NakedObjectRuntimeException();
             }
@@ -153,10 +152,10 @@ public class ServerDistribution implements ClientDistribution {
     }
 
     private NakedObject getNakedObject(Session session, Oid oid, String objectType) {
-        LOG.debug("request getNakedObject " + objectType + "/" + oid + " for " + session);
+        LOG.debug("get object " + objectType + "/" + oid + " for " + session);
         NakedObject object;
         try {
-            object = objectManager().getObject(oid, getSpecification(objectType));
+            object = NakedObjects.getPojoAdapterFactory().getObject(oid, getSpecification(objectType));
         } catch (ObjectNotFoundException e) {
             throw new NakedObjectRuntimeException(e);
         }
@@ -247,14 +246,14 @@ public class ServerDistribution implements ClientDistribution {
         LOG.debug("request setValue " + fieldIdentifier + " on " + objectType + "/" + objectOid + " with " + value + " for " + session);
         NakedObject inObject = getNakedObject(session, objectOid, objectType);
         OneToOneAssociation association = (OneToOneAssociation) inObject.getSpecification().getField(fieldIdentifier);
-        Hint about = inObject.getHint(association, NakedObjects.getPojoAdapterFactory().createAdapter(value));
+        Hint about = inObject.getHint(association, NakedObjects.getPojoAdapterFactory().createAdapterForValue(value));
         if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
             throw new NakedObjectRuntimeException();
         }
 
         NakedValue fieldValue = (NakedValue) inObject.getValue(association);
         if (fieldValue != null) {
-            fieldValue.restoreFromEncodedString(((NakedValue) NakedObjects.getPojoAdapterFactory().createAdapter(value))
+            fieldValue.restoreFromEncodedString(((NakedValue) NakedObjects.getPojoAdapterFactory().createAdapterForValue(value))
                     .asEncodedString());
         }
 

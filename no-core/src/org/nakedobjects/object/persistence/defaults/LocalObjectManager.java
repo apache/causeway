@@ -1,6 +1,5 @@
 package org.nakedobjects.object.persistence.defaults;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.DirtyObjectSetImpl;
 import org.nakedobjects.object.InternalCollection;
@@ -11,7 +10,6 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NullDirtyObjectSet;
 import org.nakedobjects.object.Persistable;
-import org.nakedobjects.object.ResolvedState;
 import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
 import org.nakedobjects.object.persistence.ActionTransaction;
 import org.nakedobjects.object.persistence.DestroyObjectCommand;
@@ -25,7 +23,6 @@ import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.ExceptionHelper;
@@ -112,7 +109,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Ob
         object.destroyed();
         clear(object);
 
-        NakedObjects.getPojoAdapterFactory().unloaded(object);
+        unloaded(object);
     }
 
     public void endTransaction() {
@@ -224,7 +221,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Ob
      * @param oid
      *                       of the object to be retrieved
      */
-    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException {
+    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) {
         LOG.info("getObject " + oid);
         if (isIdentityKnown(oid)) {
             return getAdapterFor(oid);
@@ -368,6 +365,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Ob
     }
   
     public void reset() {
+        super.reset();
         objectStore.reset();
     }
 
@@ -526,40 +524,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Ob
     }
     
     
-    
-    
-    /**
-     * Recreates an adapter for a persistent busines object that is being loaded into the system.  If an
-     * adapter already exists for the specified OID then that adapter is returned.  Otherwise a new instance
-     * of the specified business object is created and an adapter is created for it.  The adapter will then
-     * be in the state UNRESOLVED.
-     */
-    public NakedObject recreateAdapter(Oid oid, NakedObjectSpecification specification) {
-        if (isIdentityKnown(oid)) {
-            return getAdapterFor(oid);
-        }
-        
-        LOG.debug("recreating object " + specification.getFullName() + "/" + oid);
-        Object object = objectFactory.recreateObject(specification);
-        PojoAdapter adapter = (PojoAdapter) createAdapterForPersistent(object, oid);
-  
-        adapter.recreate(oid);
-        return adapter;
-    }
-    
-    public NakedObject loadedObject(Oid oid) {
-        return NakedObjects.getPojoAdapterFactory().getLoadedObject(oid);
-    }
-
-    public void loading(NakedObject object, boolean completeObject) {
-        ((PojoAdapter) object).changeState(completeObject ? ResolvedState.RESOLVING : ResolvedState.RESOLVING_PART);
-    }
-
-
-    public void loaded(NakedObject object, boolean completeObject) {
-        ((PojoAdapter) object).changeState(completeObject ? ResolvedState.RESOLVED : ResolvedState.PART_RESOLVED);       
-    }
-
 }
 
 /*

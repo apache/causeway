@@ -25,15 +25,26 @@ public class DataHelper {
     }
     
     private static Naked recreateValue(ValueData valueData) {
-        Naked value = NakedObjects.getPojoAdapterFactory().createAdapter(valueData.getValue());
+        Naked value = NakedObjects.getPojoAdapterFactory().createAdapterForValue(valueData.getValue());
         return value;
     }
 
     public  static NakedObject recreateObject(ObjectData data) {
         Oid oid = data.getOid();
         String type = data.getType();
+        NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
+        PojoAdapterFactory objectLoader = NakedObjects.getPojoAdapterFactory();
         NakedObject object;
-        if (oid != null && loadedObjects().isLoaded(oid)) {
+        if(oid == null) {
+            object = objectLoader.createTransientInstance(specification);
+            recreateObjectsInFields(data, object);
+        } else {
+            object = objectLoader.recreateAdapter(oid, specification);
+	        objectLoader.loading(object, data.isResolved());
+	        recreateObjectsInFields(data, object);
+	        objectLoader.loaded(object, data.isResolved());
+        }
+/*        if (oid != null && loadedObjects().isLoaded(oid)) {
             object = loadedObjects().getLoadedObject(oid);
         } else {
             NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
@@ -46,7 +57,7 @@ public class DataHelper {
         if(data.isResolved() && ! object.isResolved()) {
             object.setResolved();
         }
-        recreateObjectsInFields(data, object);
+  */
         return object;
     }
 
@@ -80,9 +91,18 @@ public class DataHelper {
     public static void update(ObjectData data, DirtyObjectSet updateNotifier) {
         Oid oid = data.getOid();
         Object[] fieldContent = data.getFieldContent();
-        String type = data.getType();
 
+        PojoAdapterFactory objectLoader = NakedObjects.getPojoAdapterFactory();
+        if(!objectLoader.isIdentityKnown(oid)) {
+            // if we don't have an object in use then ignore the data about it.
+            return;
+        }
+        
         NakedObject object;
+        object = objectLoader.getAdapterFor(oid);
+        
+        /*
+        String type = data.getType();
         if (oid != null && loadedObjects().isLoaded(oid)) {
             object = loadedObjects().getLoadedObject(oid);
         } else {
@@ -97,6 +117,9 @@ public class DataHelper {
 		if (!object.isResolved() && data.isResolved()){
 			object.setResolved();
 		}
+		*/
+        
+        objectLoader.loading(object, data.isResolved());
 		
         NakedObjectField[] fields = object.getSpecification().getFields();
         if (fields.length > 0) {
@@ -123,12 +146,8 @@ public class DataHelper {
                 }
             }
         }
-
+        objectLoader.loaded(object, data.isResolved());
 		updateNotifier.addDirty(object);
-    }
-
-    private static PojoAdapterFactory loadedObjects() {
-        return NakedObjects.getPojoAdapterFactory();
     }
 
     public static void throwRemoteException(ExceptionData data) throws ReflectiveActionException {

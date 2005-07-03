@@ -88,12 +88,6 @@ public class ObjectManagerLogger extends Logger implements NakedObjectManager {
         return cls;
     }
 
-    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException {
-        NakedObject object = decorated.getObject(oid, hint);
-        log("Get object for " + oid + " (of type " + hint.getShortName() + ")", object.getObject());
-        return object;
-    }
-
     public boolean hasInstances(NakedObjectSpecification specification) {
         boolean hasInstances = decorated.hasInstances(specification);
         log("Has instances of " + specification.getShortName(), "" + hasInstances);

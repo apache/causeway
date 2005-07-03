@@ -108,11 +108,7 @@ public abstract class NakedObjects implements DebugInfo {
             debug.appendln(4, i + ")", specs[i].toString());
         }
 
-        debug.appendTitle(objectManager().getDebugTitle());
-        debug.append(objectManager().getDebugData());
-
-        debug.appendTitle(pojoAdapterFactory().getDebugTitle());
-        debug.append(pojoAdapterFactory().getDebugData());
+        debug.append(objectManager());
 
         return debug.toString();
     }

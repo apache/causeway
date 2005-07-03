@@ -393,6 +393,8 @@ public class TransientObjectStore implements NakedObjectStore {
     public void startTransaction() {
         LOG.debug("start transaction");
     }
+
+    public void setObjectLoader(ObjectLoader objectLoader) {}
 }
 
 /*

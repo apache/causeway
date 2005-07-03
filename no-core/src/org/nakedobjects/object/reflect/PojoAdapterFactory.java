@@ -1,32 +1,12 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.ResolveException;
-import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.utility.DebugInfo;
-
-import java.util.Enumeration;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.persistence.defaults.ObjectLoader;
 
 
-public interface PojoAdapterFactory extends DebugInfo {
-
-    Naked createAdapter(Object pojo);
-
-    NakedObject createNOAdapter(Object pojo);
+public interface PojoAdapterFactory extends ObjectLoader {
 
     void shutdown();
-
-    void reset();
-
-    /** @deprecated */
-    NakedObject getLoadedObject(Oid oid);
-
-    boolean isLoaded(Oid oid);
-
-    void loaded(NakedObject object) throws ResolveException;
-
-    void unloaded(NakedObject object);
 }
 
 /*
