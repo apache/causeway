@@ -55,8 +55,6 @@ public class XmlServer {
         JavaObjectFactory objectFactory = new JavaObjectFactory();
         objectFactory.setContainer(container);
 
-        container.setObjectFactory(objectFactory);
-
         OidGenerator oidGenerator = new SimpleOidGenerator();
 
         LocalObjectManager objectManager = new LocalObjectManager();
@@ -72,10 +70,7 @@ public class XmlServer {
         JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
         reflectorFactory.setObjectFactory(objectFactory);
 
-        PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
-        pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
-        pojoAdapterFactory.setReflectorFactory(reflectorFactory);
-        nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+        nakedObjects.setPojoAdapterFactory(objectManager);
 
         nakedObjects.setReflectionFactory(reflectionFactory);
 
