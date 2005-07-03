@@ -74,9 +74,6 @@ public class TestingStandalone {
             JavaObjectFactory objectFactory = new JavaObjectFactory();
             objectFactory.setContainer(container);
 
-            container.setObjectFactory(objectFactory);
-
-
             TransientObjectStore tos = new TransientObjectStore();
             NakedObjectStore objectStore = new ObjectStoreLogger(tos, "store.log");
             
@@ -98,12 +95,8 @@ public class TestingStandalone {
             LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
 
             JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
-
-            PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
-            pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
-            pojoAdapterFactory.setReflectorFactory(reflectorFactory);
-            
-            nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+  
+            nakedObjects.setPojoAdapterFactory(objectManager);
             
             nakedObjects.setReflectionFactory(reflectionFactory);
             nakedObjects.setReflectorFactory(reflectorFactory);
