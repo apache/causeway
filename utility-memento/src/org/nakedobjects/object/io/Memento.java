@@ -4,13 +4,13 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
 
 import java.io.Serializable;
 import java.util.Vector;
@@ -83,7 +83,7 @@ public class Memento implements Transferable, Serializable {
             return null;
         } else {
             NakedObjectSpecification spec = NakedObjects.getSpecificationLoader().loadSpecification(state.className);
-            PojoAdapterFactory objectLoader = NakedObjects.getPojoAdapterFactory();
+            NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
             NakedObject object;
             if(getOid() == null) {
                 object = objectLoader.createTransientInstance(spec);
@@ -99,7 +99,7 @@ public class Memento implements Transferable, Serializable {
     }
 
     private NakedObject recreateReference(Data data) {
-        PojoAdapterFactory objectLoader = NakedObjects.getPojoAdapterFactory();
+        NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
         synchronized (objectLoader) {
             Oid oid = data.oid;
 
@@ -136,7 +136,7 @@ public class Memento implements Transferable, Serializable {
             if (!(state instanceof ObjectData)) {
                 throw new NakedObjectRuntimeException("Expected an ObjectData but got " + state.getClass());
             } else {
-                PojoAdapterFactory objectLoader = NakedObjects.getPojoAdapterFactory();
+                NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
 
                 objectLoader.loading(object, true);
                 
