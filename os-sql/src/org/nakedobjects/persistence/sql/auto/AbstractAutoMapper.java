@@ -145,7 +145,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 	}
 
 	private PojoAdapterFactory loadedObjects() {
-        return NakedObjects.getPojoAdapterFactory();
+        return NakedObjects.getObjectLoader();
     }
 
     public boolean needsTables(DatabaseConnector connection) throws SqlObjectStoreException {

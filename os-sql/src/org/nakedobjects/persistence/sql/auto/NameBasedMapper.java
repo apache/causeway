@@ -163,12 +163,12 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
     }
 
     private PojoAdapterFactory loadedObjects() {
-        return NakedObjects.getPojoAdapterFactory();
+        return NakedObjects.getObjectLoader();
     }
 
 
     private NakedObject setupReference(NakedObjectSpecification elementCls, int id) {
-        PojoAdapterFactory manager = NakedObjects.getPojoAdapterFactory();
+        PojoAdapterFactory manager = NakedObjects.getObjectLoader();
         NakedObject element;
         SerialOid oid = new SerialOid(id);
         if (manager.isLoaded(oid)) {
