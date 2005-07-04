@@ -34,7 +34,7 @@ public class ParameterValueImpl implements TestValue {
     }
 
     public Naked getForNaked() {
-        return NakedObjects.getObjectManager().createAdapterForValue(object);
+        return NakedObjects.getObjectLoader().createAdapterForValue(object);
     }
 
     public void setForNaked(Naked value) {

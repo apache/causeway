@@ -10,8 +10,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.fixture.Fixture;
 import org.nakedobjects.object.fixture.FixtureBuilder;
-import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
-import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.security.Session;
 
 import java.io.File;
@@ -61,7 +59,9 @@ public abstract class AcceptanceTestCase extends TestCase {
         TestClass view = (TestClass) classes.get(name.toLowerCase());
         
         NakedObject object = (NakedObject) view.getForNaked();
-        NakedObjects.getObjectManager().resolveImmediately(object);
+        if(object.isPersistent()) {
+            NakedObjects.getObjectManager().resolveImmediately(object);
+        }
         
         if (view == null) {
             throw new IllegalArgumentException("Invalid class name " + name);

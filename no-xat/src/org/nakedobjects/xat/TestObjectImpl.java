@@ -413,7 +413,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         try {
             NakedValue nakedValue = (NakedValue) valueObject;
             if (nakedValue == null) {
-                nakedValue = (NakedValue) field.getSpecification().acquireInstance();
+                nakedValue = NakedObjects.getObjectLoader().createAdapterForValue(field.getSpecification());
             }
             nakedValue.parseTextEntry(value);
             throw new NakedAssertionFailedError("Value was unexpectedly parsed");
@@ -433,19 +433,16 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
             throw new IllegalActionError("Can only make an entry (eg by keyboard) into a value field");
         }
 
-        //        Naked valueObject = forObject.getField(field);
-        Naked valueObject = field.getSpecification().acquireInstance();
-        if (valueObject == null) {
+        NakedValue nakedValue = NakedObjects.getObjectLoader().createValueInstance(field.getSpecification());
+        if (nakedValue == null) {
             throw new NakedAssertionFailedError("Field '" + fieldName
                     + "' contains null, but should contain an NakedValue object");
         }
+        if (nakedValue == null) {
+            nakedValue = (NakedValue) NakedObjects.getObjectLoader().createInstance(field.getSpecification());
+        }
         try {
-            NakedValue nakedValue = (NakedValue) valueObject;
-            if (nakedValue == null) {
-                nakedValue = (NakedValue) field.getSpecification().acquireInstance();
-            }
             nakedValue.parseTextEntry(value);
-
             Hint about = getForNaked().getHint(field, nakedValue);
             boolean isAllowed = about.isValid().isAllowed();
             if (isAllowed) {
@@ -790,7 +787,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
             }
             NakedValue value = object.getValue((OneToOneAssociation) field);
             if (value == null) {
-                value = (NakedValue) field.getSpecification().acquireInstance();
+                value = NakedObjects.getObjectLoader().createAdapterForValue(field.getSpecification());
             }
             value.parseTextEntry(textEntry);
 
@@ -938,7 +935,10 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         
         Naked field = forObject.getField(fieldAccessor);
         if(field instanceof NakedObject) {
-            NakedObjects.getObjectManager().resolveImmediately((NakedObject) field);
+            NakedObject nakedObject = (NakedObject) field;
+            if(nakedObject.isPersistent() && ! nakedObject.isResolved()) {
+                NakedObjects.getObjectManager().resolveImmediately(nakedObject);
+            }
         }
         fieldObject.setForNaked(field);
         return fieldObject;
@@ -984,8 +984,10 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
                     + "' within it");
         }
 
-        NakedObjects.getObjectManager().resolveImmediately(selectedObject);
-
+        if(selectedObject.isPersistent() && ! selectedObject.isResolved()) {
+            NakedObjects.getObjectManager().resolveImmediately(selectedObject);
+        }
+        
         return factory.createTestObject(selectedObject);
     }
 

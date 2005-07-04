@@ -94,6 +94,8 @@ public class StaticNakedObjectSpecificationLoader implements NakedObjectSpecific
     
     public void shutdown() {
     }
+
+    public void init() {}
 }
 
 /*

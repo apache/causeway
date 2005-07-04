@@ -45,7 +45,7 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
      * Returns the NakedClass that this view represents.
      */
     public final Naked getForNaked() {
-        return NakedObjects.getObjectManager().getAdapterFor(nakedClass);
+        return NakedObjects.getObjectLoader().getAdapterOrCreateTransientFor(nakedClass);
     }
   
     public String getTitle() {
@@ -86,7 +86,7 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
         } catch (NotPersistableException e) {
             NakedError error = new Error(
                     "Failed to create instance of " + cls.forObjectType().getFullName(), e);
-            object = NakedObjects.getObjectManager().createAdapterForTransient(error);
+            object = NakedObjects.getObjectLoader().createAdapterForTransient(error);
 
             System.out.println("Failed to create instance of " + cls.forObjectType().getFullName());
             e.printStackTrace();
