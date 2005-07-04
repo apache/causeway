@@ -2,9 +2,9 @@ package org.nakedobjects.object.utility.snapshot;
 
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
+import org.nakedobjects.object.defaults.ObjectLoaderImpl;
 import org.nakedobjects.reflector.java.reflect.JavaReflectorFactory;
 import org.nakedobjects.utility.xmlsnapshot.DomSerializer;
 import org.nakedobjects.utility.xmlsnapshot.DomSerializerCrimson;
@@ -32,8 +32,10 @@ public class SnapshotBuilderTest extends TestCase {
              
           
           TestObject testObject = new TestObject();
+          
+          ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
 
-          XmlSnapshot builder = new XmlSnapshot((NakedObject) nakedObjects.getPojoAdapterFactory().createAdapter(testObject));
+          XmlSnapshot builder = new XmlSnapshot(objectLoader.createAdapterForTransient(testObject));
           Element e = builder.getXmlElement();
 
           DomSerializer serializer = new DomSerializerCrimson();

@@ -137,11 +137,11 @@ public abstract class NakedObjectStoreAdvancedTestCase extends NakedObjectStoreT
         restartObjectStore();
 
         Role role = (Role) objectStore.getObject(roles[1].getOid(), roleClass);
-        objectStore.resolve(role);
+        objectStore.resolve(this, role);
         Person person = role.getReferencedObject();
 
         // at this point the person could just be a skeleton object
-        objectStore.resolve(person);
+        objectStore.resolve(this, person);
         // after the resolve it must be be complete
 
         assertEquals(people[1].getName(), person.getName());

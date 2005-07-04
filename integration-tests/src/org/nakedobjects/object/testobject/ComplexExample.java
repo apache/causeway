@@ -47,7 +47,7 @@ public class ComplexExample {
     }
 
     public LoadedObject getAssociation() {
-        resolve(assoc);
+        resolve(parent, assoc);
 
         return assoc;
     }

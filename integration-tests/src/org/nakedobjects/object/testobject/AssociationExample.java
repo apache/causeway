@@ -20,7 +20,7 @@ public class AssociationExample {
     }
     
     public LoadedObject getAssociation() {
-    	resolve(assoc);
+    	resolve(parent, assoc);
     	return assoc;	
     }
     
