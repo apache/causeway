@@ -6,10 +6,10 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
+import org.nakedobjects.object.defaults.ObjectLoaderImpl;
+import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.FieldPeer;
-import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
-import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 
 import junit.framework.TestCase;
@@ -39,10 +39,10 @@ public class JavaReflectorTest extends TestCase {
     	loader = new MockNakedObjectSpecificationLoader();     	
     	loader.addSpec(new DummyNakedObjectSpecification());
     	
-    	PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
-    	pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
-    	pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
-		nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+    	ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
+    	objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
+    	objectLoader.setReflectorFactory(new NullReflectorFactory());
+		nakedObjects.setObjectLoader(objectLoader);
 		
     	objectFactory = new MockObjectFactory();
         reflector = new MockJavaReflector(JavaObjectForReflector.class.getName(), objectFactory);
@@ -77,15 +77,6 @@ public class JavaReflectorTest extends TestCase {
         assertEquals(2, names.length);
         assertEquals("top", names[0]);
         assertEquals("bottom", names[1]);
-    }
-    
-
-    public void testAcquire() {
-        DummyObject newInstance = new DummyObject();
-        objectFactory.setupNewInstance(newInstance);
-        Naked acquiredInstance = reflector.acquireInstance();
-        assertNotNull(acquiredInstance);
-        assertEquals(newInstance, acquiredInstance.getObject());
     }
     
    public void testShortName() {

@@ -56,8 +56,17 @@ public class JavaAction extends JavaMember implements ActionPeer {
             }
             Object result = actionMethod.invoke(inObject.getObject(), executionParameters);
             LOG.debug(" action result " + result);
-            if (result != null) { 
-                return NakedObjects.getObjectManager().getAdapterFor(result);
+            if (result != null) {
+                Naked adapter = NakedObjects.getObjectLoader().getAdapterFor(result);
+                if(adapter == null) {
+                    adapter = NakedObjects.getObjectLoader().createCollectionAdapter(result);
+                    if(adapter == null) {
+                        adapter = NakedObjects.getObjectLoader().createAdapterForTransient(result);
+                    }
+                }
+                return adapter;
+            } else {
+                return null;
             }
 
         } catch (InvocationTargetException e) {
@@ -66,13 +75,13 @@ public class JavaAction extends JavaMember implements ActionPeer {
         	    throw new ReflectiveActionException("TransactionException thrown while executing " + actionMethod + " " + e.getTargetException().getMessage(), e.getTargetException());
         	} else {
 	            invocationException("Exception executing " + actionMethod, e);
+	            return null;
         	}
         	
         } catch (IllegalAccessException e) {
             throw new ReflectiveActionException("Illegal access of " + actionMethod, e);
         }
 
-        return null;
     }
 
     public Object getExtension(Class cls) {

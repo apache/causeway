@@ -23,15 +23,15 @@ public class JavaObjectFactory implements ObjectFactory {
         this.container = container;
     }
 
-    public Object createNewLogicalObject(NakedObjectSpecification specification) {
-        String className = specification.getFullName();
-        Class cls;
-        try {
-            cls = Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            throw new NakedObjectRuntimeException(e);
-        }
 
+    public Object createValueObject(NakedObjectSpecification specification) {
+        Class cls = classFor(specification);
+        Object object = createObject(cls);        
+        return object;
+    }
+    
+    public Object createNewLogicalObject(NakedObjectSpecification specification) {
+        Class cls = classFor(specification);
         Object object = createObject(cls);
         setContainer(object, cls);
         logicalCreation(object, cls);
@@ -40,14 +40,7 @@ public class JavaObjectFactory implements ObjectFactory {
     }
     
     public Object recreateObject(NakedObjectSpecification specification) {
-        String className = specification.getFullName();
-        Class cls;
-        try {
-            cls = Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            throw new NakedObjectRuntimeException(e);
-        }
-
+        Class cls = classFor(specification);
         Object object = createObject(cls);
         setContainer(object, cls);
         
@@ -55,6 +48,14 @@ public class JavaObjectFactory implements ObjectFactory {
     }
     
     public Object createFakeObject(NakedObjectSpecification specification) {
+        Class cls = classFor(specification);
+        Object object = createObject(cls);
+        setContainer(object, cls);        
+        
+        return object;
+    }
+     
+    private Class classFor(NakedObjectSpecification specification) {
         String className = specification.getFullName();
         Class cls;
         try {
@@ -62,13 +63,9 @@ public class JavaObjectFactory implements ObjectFactory {
         } catch (ClassNotFoundException e) {
             throw new NakedObjectRuntimeException(e);
         }
-
-        Object object = createObject(cls);
-        setContainer(object, cls);        
-        
-        return object;
+        return cls;
     }
-     
+
     /**
      * Creates a new instance of the specified type, and then call the new
      * objects setContainer() methods if it has one.

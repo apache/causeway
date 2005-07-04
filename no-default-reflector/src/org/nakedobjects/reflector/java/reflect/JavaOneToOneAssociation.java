@@ -82,7 +82,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
      * EO to reference.
      */
     public void initValue(MemberIdentifier identifier, NakedObject inObject, Object setValue) {
-        LOG.debug("local initValue() " + inObject.getOid() + "/" + setValue);
+        LOG.debug("local initValue() " + getName() + " " + inObject.getOid() + "/" + setValue);
 
         try {
             if (setMethod == null) {
@@ -210,9 +210,9 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
             if (obj == null) {
                 return null;
             } else {
-                Naked adapter = NakedObjects.getObjectManager().createAdapterForValue(obj);
+                Naked adapter = NakedObjects.getObjectLoader().createAdapterForValue(obj);
                 if(adapter == null) {
-                    adapter = NakedObjects.getObjectManager().getAdapterFor(obj);
+                    adapter = NakedObjects.getObjectLoader().getAdapterOrCreateTransientFor(obj);
                 }
                 return adapter;
             }
@@ -233,7 +233,6 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
                 BusinessValueHolder value = (BusinessValueHolder) obj;
                 value.parseUserEntry(text);
                 NakedObjects.getObjectManager().objectChanged(inObject);
-               // fromObject.markDirty();
             } catch (InvocationTargetException e) {
                 invocationException("Exception executing " + getMethod, e);
             } catch (IllegalAccessException ignore) {

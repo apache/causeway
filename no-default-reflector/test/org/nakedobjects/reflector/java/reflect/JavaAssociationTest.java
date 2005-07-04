@@ -7,9 +7,9 @@ import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
+import org.nakedobjects.object.defaults.ObjectLoaderImpl;
+import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
-import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.internal.DummyIdentifier;
 import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 
@@ -47,15 +47,15 @@ public class JavaAssociationTest extends TestCase {
         nakedObjectsClient.setConfiguration(new TestConfiguration());
         
         javaObjectWithOneToOneAssociations = new JavaObjectWithOneToOneAssociations();
-    	PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl(){
+    	ObjectLoaderImpl objectLoader = new ObjectLoaderImpl(){
             public NakedObject recreateAdapter(Oid oid, NakedObjectSpecification spec) {
                 return null;
             }};
-  //      pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
-   //     pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
-//		nakedObjectsClient.setPojoAdapterFactory(pojoAdapterFactory);
+       objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
+       objectLoader.setReflectorFactory(new NullReflectorFactory());
+       nakedObjectsClient.setObjectLoader(objectLoader);
 
-        nakedObjectHoldingObjectWithAssociations = pojoAdapterFactory.createAdapterForTransient(javaObjectWithOneToOneAssociations);        
+        nakedObjectHoldingObjectWithAssociations = objectLoader.createAdapterForTransient(javaObjectWithOneToOneAssociations);        
         
         Class cls = JavaObjectWithOneToOneAssociations.class;
         Method get = cls.getDeclaredMethod("getReferencedObject", new Class[0]);
@@ -65,7 +65,7 @@ public class JavaAssociationTest extends TestCase {
         personField = new JavaOneToOneAssociation(PERSON_FIELD_NAME, JavaReferencedObject.class, get, set, null, null, about);
         
         javaObjectForReferencing = new JavaReferencedObject();
-        associate = pojoAdapterFactory.createAdapterForTransient(javaObjectForReferencing);
+        associate = objectLoader.createAdapterForTransient(javaObjectForReferencing);
     }
 
     

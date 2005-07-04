@@ -180,14 +180,6 @@ public class JavaReflector implements Reflector {
 
     public Naked acquireInstance() {
         throw new UnexpectedCallException();
-        /*
-        if (Modifier.isAbstract(cls.getModifiers())) {
-            throw new IllegalStateException("Handling of abstract naked classes is not yet supported: " + cls);
-        }
-
-        Object object = objectFactory.createObject(cls);
-        return NakedObjects.getPojoAdapterFactory().createAdapter(object);
-        */
     }
 
     public ActionPeer[] actionPeers(boolean forClass) {

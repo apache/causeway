@@ -70,6 +70,10 @@ public class JavaReflectorFactory extends ReflectorFactory {
         LOG.info("finalizing reflector factory " + this);
     }
 
+    public void init() {}
+
+    public void shutdown() {}
+
 
 }
 

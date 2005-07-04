@@ -4,10 +4,10 @@ import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
+import org.nakedobjects.object.defaults.ObjectLoaderImpl;
+import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionPeer;
-import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
-import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 
@@ -39,10 +39,10 @@ public class JavaReflectorActionsTest extends TestCase {
         loader = new MockNakedObjectSpecificationLoader();
         loader.addSpec(new DummyNakedObjectSpecification());
 
-        PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
-        pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
-        pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
-        nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+        ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
+        objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
+        objectLoader.setReflectorFactory(new NullReflectorFactory());
+        nakedObjects.setObjectLoader(objectLoader);
 
         objectFactory = new JavaObjectFactory();
         reflector = new JavaReflector(BusinessObjectWithActions.class.getName(), objectFactory);

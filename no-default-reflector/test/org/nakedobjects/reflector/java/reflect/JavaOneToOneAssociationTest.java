@@ -6,8 +6,8 @@ import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
-import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
-import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
+import org.nakedobjects.object.defaults.ObjectLoaderImpl;
+import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.internal.DummyIdentifier;
 import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 
@@ -49,12 +49,12 @@ public class JavaOneToOneAssociationTest extends TestCase {
         nakedObjects.setConfiguration(new TestConfiguration());
     	
         objectWithOneToOneAssoications = new JavaObjectWithOneToOneAssociations();
-    	PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
-    	pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
-        pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
-        nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+    	ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
+    	objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
+        objectLoader.setReflectorFactory(new NullReflectorFactory());
+        nakedObjects.setObjectLoader(objectLoader);
         
-        nakedObject = pojoAdapterFactory.createNOAdapter(objectWithOneToOneAssoications);
+        nakedObject = objectLoader.createAdapterForTransient(objectWithOneToOneAssoications);
         
         Class cls = JavaObjectWithOneToOneAssociations.class;
         Method get = cls.getDeclaredMethod("getReferencedObject", new Class[0]);
@@ -64,7 +64,7 @@ public class JavaOneToOneAssociationTest extends TestCase {
         personField = new JavaOneToOneAssociation(PERSON_FIELD_NAME, JavaReferencedObject.class, get, set, null, null, about);
         
         referencedObject = new JavaReferencedObject();
-        associatedNakedObject = pojoAdapterFactory.createNOAdapter(referencedObject);
+        associatedNakedObject = objectLoader.createAdapterForTransient(referencedObject);
     }
 
     public void testType() {

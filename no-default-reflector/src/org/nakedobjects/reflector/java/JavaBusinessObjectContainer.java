@@ -55,7 +55,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
 
     public void destroyObject(Object object) {
         //objectManager().destroyObject(NakedObjects.getPojoAdapterFactory().createNOAdapter(object));
-        objectManager().destroyObject(objectManager().getAdapterFor(object));
+        objectManager().destroyObject(adapterFor(object));
    }
 
     protected void finalize() throws Throwable {
@@ -72,10 +72,16 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     }
 
     public void makePersistent(Object transientObject) {
-        NakedObject adapter = NakedObjects.getObjectManager().getAdapterFor(transientObject);
+        NakedObject adapter = adapterFor(transientObject);
         objectManager().startTransaction();
         objectManager().makePersistent(adapter);
         objectManager().endTransaction();
+    }
+
+    private NakedObject adapterFor(Object object) {
+        NakedObject adapter = NakedObjects.getObjectLoader().getAdapterOrCreateTransientFor(object);
+        
+        return adapter;
     }
 
     public int numberOfInstances(Class cls) {
@@ -88,19 +94,29 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
 
     public void objectChanged(Object object) {
         if (object != null) {
-            NakedObject adapter = NakedObjects.getObjectManager().getAdapterFor(object);
+            NakedObject adapter =adapterFor(object);
             objectManager().objectChanged(adapter);
         }
     }
     
-    public void resolve(Object object) {
-        if (object != null) {
-            NakedObject adapter = NakedObjects.getObjectManager().getAdapterFor(object);
+    public void resolve(Object parent, Object field) {
+        if(field == null) {
+            NakedObject adapter = adapterFor(parent);
+            if(adapter.isPersistent() && !adapter.isResolved()) {
+                objectManager().resolveImmediately(adapter);
+            }
+        }
+        
+        /*
+
+        if (field != null) {
+            NakedObject adapter = adapterFor(field);
             if (adapter.isPersistent() && !adapter.isResolved()) {
                 objectManager().resolveImmediately(adapter);
             }
         }
-    }
+*/
+	}
 
     /**
      * Generates a unique serial number for the specified squence set. Each set
