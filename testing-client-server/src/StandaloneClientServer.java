@@ -2,7 +2,6 @@
 import org.nakedobjects.application.system.SystemClock;
 import org.nakedobjects.application.valueholder.Date;
 import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.distribution.DataFactory;
 import org.nakedobjects.distribution.ProxyObjectManager;
@@ -16,14 +15,14 @@ import org.nakedobjects.distribution.pipe.PipedConnection;
 import org.nakedobjects.distribution.pipe.PipedServer;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
+import org.nakedobjects.object.defaults.ObjectLoaderImpl;
+import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.ObjectManagerLogger;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
-import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
-import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
@@ -45,11 +44,11 @@ import fixtures.CitiesFixture;
 import fixtures.ClassesFixture;
 
 
-public class StandaloneClientServer {
+public abstract class StandaloneClientServer {
     private static final String COMMON_CONFIG = "logging.properties";
     private static final String CLIENT_CONFIG = "client.properties";
-
-    public static void main(String[] args) throws ConfigurationException {
+    
+    protected void init() {
         BasicConfigurator.configure();
 
         Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(COMMON_CONFIG, true));
@@ -78,7 +77,9 @@ public class StandaloneClientServer {
         }
     }
 
-    private static void server(final NakedObjectsPipe nakedObjects, final PipedConnection connection) {
+    private void server(final NakedObjectsPipe nakedObjects, final PipedConnection connection) {
+        final TransientObjectStore objectStore = objectStore();
+		    
         Runnable runnable = new Runnable() {
             public void run() {
 		        final PipedServer server = new PipedServer();
@@ -89,7 +90,6 @@ public class StandaloneClientServer {
                 JavaBusinessObjectContainer container = new JavaBusinessObjectContainer();
                 new SystemClock();
 
-                TransientObjectStore objectStore = new TransientObjectStore();
 
                 DataFactory objectDataFactory = new JavaObjectDataFactory();
 
@@ -99,13 +99,10 @@ public class StandaloneClientServer {
                 JavaObjectFactory objectFactory = new JavaObjectFactory();
                 objectFactory.setContainer(container);
 
-                container.setObjectFactory(objectFactory);
-
                 OidGenerator oidGenerator = new SimpleOidGenerator();
 
                 LocalObjectManager objectManager = new LocalObjectManager();
                 objectManager.setObjectStore(objectStore);
-                objectManager.setObjectFactory(objectFactory);
                 objectManager.setOidGenerator(oidGenerator);
                 objectManager.setCheckObjectsForDirtyFlag(true);
 
@@ -116,10 +113,10 @@ public class StandaloneClientServer {
                 JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
                 reflectorFactory.setObjectFactory(objectFactory);
 
-                PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
-                pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
-                pojoAdapterFactory.setReflectorFactory(reflectorFactory);
-                nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+                ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
+                objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
+                objectLoader.setObjectFactory(objectFactory);
+                nakedObjects.setObjectLoader(objectLoader);
 
                 nakedObjects.setReflectionFactory(reflectionFactory);
 
@@ -137,6 +134,8 @@ public class StandaloneClientServer {
 
                 objectManager.addObjectChangedListener(updateNotifier);
 
+                nakedObjects.init();
+                
                 JavaFixtureBuilder fb = new JavaFixtureBuilder();
                 CitiesFixture cities;
                 fb.addFixture(cities = new CitiesFixture());
@@ -164,7 +163,7 @@ public class StandaloneClientServer {
     }
 
     
-    private static void client(final NakedObjectsPipe nakedObjects, final PipedConnection connection) {
+    private void client(final NakedObjectsPipe nakedObjects, final PipedConnection connection) {
         Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(CLIENT_CONFIG, true));
         nakedObjects.setConfiguration(configuration);
         
@@ -178,12 +177,10 @@ public class StandaloneClientServer {
         JavaObjectFactory objectFactory = new JavaObjectFactory();
         objectFactory.setContainer(container);
 
-        container.setObjectFactory(objectFactory);
 
         JavaObjectDataFactory objectDataFactory = new JavaObjectDataFactory();
 
         ProxyObjectManager proxyObjectManager = new ProxyObjectManager();
-        proxyObjectManager.setObjectFactory(objectFactory);
         proxyObjectManager.setConnection(client);
         proxyObjectManager.setObjectDataFactory(objectDataFactory);
 
@@ -198,10 +195,10 @@ public class StandaloneClientServer {
 
         JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
 
-        PojoAdapterFactoryImpl pojoAdapterFactory = new PojoAdapterFactoryImpl();
-        pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
-        pojoAdapterFactory.setReflectorFactory(reflectorFactory);
-        nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+        ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
+        objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
+        objectLoader.setObjectFactory(objectFactory);
+        nakedObjects.setObjectLoader(objectLoader);
 
         nakedObjects.setReflectionFactory(reflectionFactory);
         NakedObjectSpecificationLoaderImpl specificationLoader = new NakedObjectSpecificationLoaderImpl();
@@ -209,6 +206,8 @@ public class StandaloneClientServer {
 
         nakedObjects.setSpecificationLoader(specificationLoader);
 
+        nakedObjects.init();
+        
         reflectorFactory.setObjectFactory(objectFactory);
 
         ViewUpdateNotifier updateNotifier = new ViewUpdateNotifier();
@@ -227,6 +226,8 @@ public class StandaloneClientServer {
         skylark.setExploration(true);
         skylark.init();
     }
+
+    protected abstract TransientObjectStore objectStore() ;
 }
 
 /*
