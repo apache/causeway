@@ -2,21 +2,22 @@ package org.nakedobjects.object;
 
 import org.nakedobjects.utility.ToString;
 
-public final class ResolvedState {
-    public static ResolvedState PART_RESOLVED = new ResolvedState("Part Resolved", "r", 0);
-    public static ResolvedState RESOLVED = new ResolvedState("Resolved", "R", 0);
-    public static ResolvedState RESOLVING = new ResolvedState("Resolving", "~R", 0);
-    public static ResolvedState RESOLVING_PART = new ResolvedState("Resolving", "~r", 0);
-    public static ResolvedState TRANSIENT = new ResolvedState("Transient", "T", 0);
-    public static ResolvedState NEW = new ResolvedState("New", "-", 0);
-    public static ResolvedState FAKE = new ResolvedState("Fake", "F", 0);
-    public static ResolvedState GHOST = new ResolvedState("Ghost", "G", 0);
+public final class ResolveState {
+    public static ResolveState PART_RESOLVED = new ResolveState("Part Resolved", "r", 0);
+    public static ResolveState RESOLVED = new ResolveState("Resolved", "R", 0);
+    public static ResolveState RESOLVING = new ResolveState("Resolving", "~R", 0);
+    public static ResolveState UPDATING = new ResolveState("Updating", "U", 0);
+    public static ResolveState RESOLVING_PART = new ResolveState("Resolving", "~r", 0);
+    public static ResolveState TRANSIENT = new ResolveState("Transient", "T", 0);
+    public static ResolveState NEW = new ResolveState("New", "-", 0);
+    public static ResolveState FAKE = new ResolveState("Fake", "F", 0);
+    public static ResolveState GHOST = new ResolveState("Ghost", "G", 0);
     
     private final String code;
     private final String name;
     private final int stage;
 
-    private ResolvedState(String name, String code, int stage) {
+    private ResolveState(String name, String code, int stage) {
         this.name = name;
         this.code = code;
         this.stage = stage;
@@ -30,7 +31,7 @@ public final class ResolvedState {
         return name;
     }
     
-    public boolean isValidToChangeTo(ResolvedState nextState) {
+    public boolean isValidToChangeTo(ResolveState nextState) {
         if(this == NEW) {
             return nextState == TRANSIENT || nextState == GHOST;
         } else if(this == TRANSIENT) {
@@ -43,10 +44,23 @@ public final class ResolvedState {
             return nextState == RESOLVED;
         } else if(this == PART_RESOLVED) {
             return nextState == RESOLVING;
+        } else if(this == RESOLVED) {
+            return nextState == UPDATING;
+        } else if(this == UPDATING) {
+            return nextState == RESOLVED;
         }
         
         return false;
     }
+    
+    public boolean isLoadable() {
+        return this == GHOST || this == PART_RESOLVED;
+    }
+    
+  /*  public boolean isLoading() {
+        return this == RESOLVING || this == RESOLVING_PART;
+    }
+    */
     
     public String toString() {
         ToString str = new ToString(this);

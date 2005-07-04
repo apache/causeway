@@ -225,7 +225,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
                 
                 throw new NakedObjectRuntimeException(getType().getFullName());
             } else {
-                return NakedObjects.getObjectManager().getAdapterFor(obj);
+                return NakedObjects.getObjectLoader().getAdapterOrCreateTransientFor(obj);
 //                NakedObjects.getPojoAdapterFactory().createAdapter(obj);
             }
             

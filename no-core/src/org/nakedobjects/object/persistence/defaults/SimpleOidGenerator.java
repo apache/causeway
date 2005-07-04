@@ -11,9 +11,18 @@ import org.nakedobjects.object.persistence.OidGenerator;
  */
 public class SimpleOidGenerator implements OidGenerator {
     private long next;
+    private long start;
 
+    public SimpleOidGenerator() {
+        start = 0;
+    }
+
+    public SimpleOidGenerator(long start) {
+        this.start = start;
+    }
+    
     public void init() {
-        next = 0;
+        next = start;
     }
 
     public String name() {

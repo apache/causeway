@@ -6,8 +6,7 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.defaults.DummyOid;
 import org.nakedobjects.object.reflect.DummyNakedObject;
-import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
-import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
+import org.nakedobjects.object.reflect.ObjectLoaderImpl;
 
 import junit.framework.TestCase;
 
@@ -104,7 +103,7 @@ public class PojoAdapterFactoryLoadedTest extends TestCase {
     }
 }
 
-class Cache extends PojoAdapterFactoryImpl {
+class Cache extends ObjectLoaderImpl {
 
     void setup(Oid oid, NakedObject object) {
         identityMap.put(oid, object);

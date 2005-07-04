@@ -1,11 +1,11 @@
 package org.nakedobjects;
 
 import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ReflectionFactory;
 import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.security.Session;
 
 
@@ -27,8 +27,8 @@ public abstract class NakedObjectsServer extends NakedObjects {
         return getLocal().objectManager;
     }
 
-    protected PojoAdapterFactory pojoAdapterFactory() {
-        return getLocal().adapterFactory;
+    protected NakedObjectLoader objectLoader() {
+        return getLocal().objectLoader;
     }
 
     protected ReflectionFactory reflectionFactory() {
@@ -62,8 +62,8 @@ public abstract class NakedObjectsServer extends NakedObjects {
      * 
      * @property
      */
-    public void set_PojoAdapterFactory(PojoAdapterFactory adapterFactory) {
-        setPojoAdapterFactory(adapterFactory);
+    public void set_ObjectLoader(NakedObjectLoader objectLoader) {
+        setObjectLoader(objectLoader);
     }
 
     /**
@@ -110,8 +110,8 @@ public abstract class NakedObjectsServer extends NakedObjects {
         getLocal().objectManager = objectManager;
     }
 
-    public void setPojoAdapterFactory(PojoAdapterFactory adapterFactory) {
-        getLocal().adapterFactory = adapterFactory;
+    public void setObjectLoader(NakedObjectLoader objectLoader) {
+        getLocal().objectLoader = objectLoader;
     }
 
     public void setReflectionFactory(ReflectionFactory reflectionFactory) {

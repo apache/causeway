@@ -1,5 +1,6 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -72,7 +73,7 @@ public class NakedObjectSpecificationImplTests extends TestCase {
         DummyNakedObject instance = new DummyNakedObject();
         mockReflector.setupAcquireInstance(instance);
         
-        Naked acquire = nakedObjectSpecification.acquireInstance();
+        Naked acquire = NakedObjects.getObjectLoader().createAdapterForValue(nakedObjectSpecification);
         assertEquals(instance, acquire);
     }
     

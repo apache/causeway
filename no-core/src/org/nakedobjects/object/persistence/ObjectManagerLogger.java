@@ -1,7 +1,6 @@
 package org.nakedobjects.object.persistence;
 
 import org.nakedobjects.object.DirtyObjectSet;
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -146,9 +145,10 @@ public class ObjectManagerLogger extends Logger implements NakedObjectManager {
         decorated.startTransaction();
     }
 
-    public Naked recreateExistingInstance(NakedObjectSpecification specification) {
-        log("create instance of " + specification.getShortName());
-        return decorated.recreateExistingInstance(specification);
+    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException {
+        NakedObject object = decorated.getObject(oid, hint);
+        log("Get object for " + oid + " (of type " + hint.getShortName() + ")", object.getObject());
+        return object;
     }
 }
 

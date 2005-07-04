@@ -29,7 +29,7 @@ public class MemoryObjectStoreInstancesTest extends TestCase {
 
         instances = new MockMemoryObjectStoreInstances();
         mockPojoAdapterFactory = new MockPojoAdapterFactory();
-        new NakedObjectsClient().setPojoAdapterFactory(mockPojoAdapterFactory);
+        new NakedObjectsClient().setObjectLoader(mockPojoAdapterFactory);
         instances.setLoaded(mockPojoAdapterFactory);
 
         instances.addElement(new MockOid(1), new TestObject(), "one");

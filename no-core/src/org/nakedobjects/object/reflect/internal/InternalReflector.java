@@ -1,10 +1,8 @@
 package org.nakedobjects.object.reflect.internal;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Aggregated;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
@@ -17,6 +15,7 @@ import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.Reflector;
+import org.nakedobjects.utility.UnexpectedCallException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -102,12 +101,14 @@ public class InternalReflector implements Reflector {
         methods = cls.getMethods();
     }
 
+    
     public Naked acquireInstance() {
-        if (Modifier.isAbstract(cls.getModifiers())) {
+        throw new UnexpectedCallException();
+ /*       if (Modifier.isAbstract(cls.getModifiers())) {
             throw new IllegalStateException("Handling of abstract naked classes is not yet supported: " + cls);
         } else {
             try {
-                return NakedObjects.getPojoAdapterFactory().createAdapter(cls.newInstance());
+                return NakedObjects.getObjectLoader().createAdapter(cls.newInstance());
             } catch (NoSuchMethodError ex) {
                 throw new NakedObjectRuntimeException("No accessible default constructor in " + className());
             } catch (IllegalAccessException e) {
@@ -117,6 +118,8 @@ public class InternalReflector implements Reflector {
                 throw new NakedObjectRuntimeException("Failed to instantiate a " + className() + " object: " + e, e);
             }
         }
+    */
+        
     }
 
     public ActionPeer[] actionPeers(boolean forClass) {

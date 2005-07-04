@@ -25,7 +25,7 @@ public class LocalObjectManagerTest extends TestCase {
     private LocalObjectManager objectManager;
     private DummyNakedObjectSpecification objectSpecification;
     private MockObjectStore objectStore;
-    private PojoAdapterFactory pojoAdapterFactory;
+    private PojoAdapterFactory objectLoader;
     private MockNakedObject testNakedObject;
 
     protected void setUp() throws Exception {
@@ -37,8 +37,8 @@ public class LocalObjectManagerTest extends TestCase {
         objectManager.setObjectStore(objectStore);
         objectManager.setOidGenerator(new MockOidGenerator());
 
-        pojoAdapterFactory = new DummyPojoAdapterFactory();
-        new NakedObjectsClient().setPojoAdapterFactory(pojoAdapterFactory);
+        objectLoader = new DummyPojoAdapterFactory();
+        new NakedObjectsClient().setObjectLoader(objectLoader);
         testNakedObject = new MockNakedObject();
         objectSpecification = new DummyNakedObjectSpecification();
         testNakedObject.setupSpecification(objectSpecification);
@@ -67,7 +67,7 @@ public class LocalObjectManagerTest extends TestCase {
     public void testDestroy() {
         objectSpecification.fields = new NakedObjectField[0];
 
-        pojoAdapterFactory.createAdapter(testNakedObject);
+        objectLoader.createAdapter(testNakedObject);
 
         objectManager.startTransaction();
         objectManager.destroyObject(testNakedObject);

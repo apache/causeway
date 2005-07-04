@@ -1,7 +1,8 @@
-package org.nakedobjects.object.reflect;
+package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.utility.DebugString;
 
 import java.util.Enumeration;

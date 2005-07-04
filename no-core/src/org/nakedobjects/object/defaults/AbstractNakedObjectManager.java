@@ -4,7 +4,6 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
 import org.nakedobjects.object.persistence.InstancesCriteria;
@@ -12,37 +11,12 @@ import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
 import org.nakedobjects.object.reflect.PojoAdapter;
-import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
-
-import org.apache.log4j.Logger;
 
 
-public abstract class AbstractNakedObjectManager extends PojoAdapterFactoryImpl implements NakedObjectManager {
-    private static final Logger LOG = Logger.getLogger(AbstractNakedObjectManager.class);
-    protected ObjectFactory objectFactory;
-
+public abstract class AbstractNakedObjectManager implements NakedObjectManager {
     public abstract void abortTransaction();
 
     public void debugCheckObjectForOid(Oid oid, NakedObject object) {}
-
-    public AbstractNakedObjectManager() {}
-
-    public AbstractNakedObjectManager(final ObjectFactory objectFactory) {
-        this.objectFactory = objectFactory;
-    }
-
-    public void setObjectFactory(ObjectFactory objectFactory) {
-        this.objectFactory = objectFactory;
-    }
-
-    /**
-     * Expose as a .NET property
-     * 
-     * @property
-     */
-    public void set_ObjectFactory(ObjectFactory objectFactory) {
-        setObjectFactory(objectFactory);
-    }
 
     public TypedNakedCollection allInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
         NakedObject[] instances = getInstances(specification, includeSubclasses);
@@ -77,8 +51,7 @@ public abstract class AbstractNakedObjectManager extends PojoAdapterFactoryImpl 
      * creates a NakedObject adapter for it.
      */
     public NakedObject createTransientInstance(NakedObjectSpecification specification) {
-        Object object = objectFactory.createNewLogicalObject(specification);
-        NakedObject adapter = createAdapterForTransient(object);
+        NakedObject adapter = NakedObjects.getObjectLoader().createInstance(specification);
         ((PojoAdapter) adapter).setTransient();
         return adapter;
     }
@@ -90,12 +63,6 @@ public abstract class AbstractNakedObjectManager extends PojoAdapterFactoryImpl 
     public NakedObject createTransientInstance(String className) {
         NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(className);
         return createTransientInstance(nc);
-    }
-
-    public Naked recreateExistingInstance(NakedObjectSpecification specification) {
-        Object object = objectFactory.recreateObject(specification);
-        NakedObject adapter = createNOAdapter(object);
-        return adapter;
     }
 
     public TypedNakedCollection findInstances(InstancesCriteria criteria) throws UnsupportedFindException {
@@ -111,30 +78,6 @@ public abstract class AbstractNakedObjectManager extends PojoAdapterFactoryImpl 
     protected abstract NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses);
 
     protected abstract NakedObject[] getInstances(InstancesCriteria criteria);
-
-    public void shutdown() {
-        objectFactory = null;
-    }
-
-    /**
-     * Recreates an adapter for a persistent business object that is being
-     * loaded into the system. If an adapter already exists for the specified
-     * OID then that adapter is returned. Otherwise a new instance of the
-     * specified business object is created and an adapter is created for it.
-     * The adapter will then be in the state UNRESOLVED.
-     */
-    public NakedObject recreateAdapter(Oid oid, NakedObjectSpecification specification) {
-        if (isIdentityKnown(oid)) {
-            return getAdapterFor(oid);
-        }
-
-        LOG.debug("recreating object " + specification.getFullName() + "/" + oid);
-        Object object = objectFactory.recreateObject(specification);
-        PojoAdapter adapter = (PojoAdapter) createAdapterForPersistent(object, oid);
-
-        adapter.recreate(oid);
-        return adapter;
-    }
 }
 /*
  * Naked Objects - a framework that exposes behaviourally complete business

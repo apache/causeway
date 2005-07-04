@@ -44,12 +44,12 @@ public class InternalAssociationTest extends TestCase {
         nakedObjects.setSpecificationLoader(loader);
 
         objectWithOneToOneAssoications = new InternalObjectWithOneToOneAssociations();
-    	PojoAdapterFactory pojoAdapterFactory = new DummyPojoAdapterFactory();
-    	nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+    	PojoAdapterFactory objectLoader = new DummyPojoAdapterFactory();
+    	nakedObjects.setObjectLoader(objectLoader);
     	
-     //   pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
-    //    pojoAdapterFactory.setReflectorFactory(new NullReflectorFactory());
-        object = pojoAdapterFactory.createNOAdapter(objectWithOneToOneAssoications);
+     //   objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
+    //    objectLoader.setReflectorFactory(new NullReflectorFactory());
+        object = objectLoader.createNOAdapter(objectWithOneToOneAssoications);
         
         Class cls = InternalObjectWithOneToOneAssociations.class;
         Method get = cls.getDeclaredMethod("getReferencedObject", new Class[0]);
@@ -59,7 +59,7 @@ public class InternalAssociationTest extends TestCase {
         personField = new InternalOneToOneAssociation(PERSON_FIELD_NAME, InternalObjectForReferencing.class, get, set, null, null, about);
         
         referencedObject = new InternalObjectForReferencing();
-        associate = pojoAdapterFactory.createNOAdapter(referencedObject);
+        associate = objectLoader.createNOAdapter(referencedObject);
     }
 
     

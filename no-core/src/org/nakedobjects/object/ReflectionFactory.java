@@ -1,5 +1,6 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.NakedObjectsComponent;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.NakedObjectField;
@@ -7,7 +8,7 @@ import org.nakedobjects.object.reflect.OneToManyPeer;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 
 
-public interface ReflectionFactory {
+public interface ReflectionFactory extends NakedObjectsComponent {
     Action createAction(String className, ActionPeer action);
 
     NakedObjectField createField(String className, OneToManyPeer local);

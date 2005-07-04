@@ -1,17 +1,16 @@
 package org.nakedobjects;
 
 import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ReflectionFactory;
 import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.utility.DebugString;
-import org.nakedobjects.utility.UnexpectedCallException;
 
 
 public abstract class NakedObjects implements DebugInfo {
@@ -33,13 +32,12 @@ public abstract class NakedObjects implements DebugInfo {
         return singleton;
     }
 
-    public static NakedObjectManager getObjectManager() {
-        return getInstance().objectManager();
+    public static NakedObjectLoader getObjectLoader() {
+        return getInstance().objectLoader();
     }
 
-    public static PojoAdapterFactory getPojoAdapterFactory() {
-        throw new UnexpectedCallException();
- //       return getInstance().pojoAdapterFactory();
+    public static NakedObjectManager getObjectManager() {
+        return getInstance().objectManager();
     }
 
     public static ReflectionFactory getReflectionFactory() {
@@ -58,17 +56,16 @@ public abstract class NakedObjects implements DebugInfo {
         singleton = null;
     }
 
-    /**
-     * @deprecated
+    /*
+     * public static void setObjectLoader(PojoAdapterFactory factory) {
+     * getInstance().setObjectLoader(factory); }
      */
-    public static void setAdapterFactory(PojoAdapterFactory factory) {
-        getInstance().setPojoAdapterFactory(factory);
-    }
-
     public static void shutdown() {
         getObjectManager().shutdown();
-        getPojoAdapterFactory().shutdown();
+        getObjectLoader().shutdown();
         getSpecificationLoader().shutdown();
+        getReflectionFactory().shutdown();
+        getReflectorFactory().shutdown();
         getInstance().clearReferences();
     }
 
@@ -83,7 +80,7 @@ public abstract class NakedObjects implements DebugInfo {
 
     private void clearReferences() {
         setObjectManager(null);
-        setPojoAdapterFactory(null);
+        setObjectLoader(null);
         setSpecificationLoader(null);
         setConfiguration(null);
         setSession(null);
@@ -113,9 +110,17 @@ public abstract class NakedObjects implements DebugInfo {
         return debug.toString();
     }
 
-    protected abstract NakedObjectManager objectManager();
+    public void init() {
+        getObjectManager().init();
+        getObjectLoader().init();
+        getSpecificationLoader().init();
+        getReflectionFactory().init();
+        getReflectorFactory().init();
+    }
 
-    protected abstract PojoAdapterFactory pojoAdapterFactory();
+    protected abstract NakedObjectLoader objectLoader();
+
+    protected abstract NakedObjectManager objectManager();
 
     protected abstract ReflectionFactory reflectionFactory();
 
@@ -123,9 +128,9 @@ public abstract class NakedObjects implements DebugInfo {
 
     public abstract void setConfiguration(Configuration configuration);
 
-    public abstract void setObjectManager(NakedObjectManager objectManager);
+    public abstract void setObjectLoader(NakedObjectLoader loader);
 
-    public abstract void setPojoAdapterFactory(PojoAdapterFactory factory);
+    public abstract void setObjectManager(NakedObjectManager objectManager);
 
     public abstract void setSession(Session session);
 

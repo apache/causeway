@@ -1,12 +1,20 @@
-package org.nakedobjects.object.reflect;
+package org.nakedobjects.object.defaults;
 
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.persistence.defaults.ObjectLoader;
+import org.nakedobjects.object.Naked;
+import org.nakedobjects.utility.DebugInfo;
 
 
-public interface PojoAdapterFactory extends ObjectLoader {
+public interface PojoAdapterHash extends DebugInfo {
 
-    void shutdown();
+    public void add(Object pojo, Naked adapter);
+
+    public boolean containsPojo(Object pojo);
+
+    public Naked getPojo(Object pojo);
+
+    public void reset();
+
+    public void shutdown();
 }
 
 /*

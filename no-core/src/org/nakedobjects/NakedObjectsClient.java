@@ -1,16 +1,16 @@
 package org.nakedobjects;
 
 import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ReflectionFactory;
 import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.security.Session;
 
 
 public class NakedObjectsClient extends NakedObjects {
-    protected PojoAdapterFactory adapterFactory;
+    protected NakedObjectLoader objectLoader;
     protected Configuration configuration;
     protected NakedObjectManager objectManager;
     private ReflectionFactory reflectionFactory;
@@ -34,8 +34,8 @@ public class NakedObjectsClient extends NakedObjects {
         return objectManager;
     }
 
-    protected PojoAdapterFactory pojoAdapterFactory() {
-        return adapterFactory;
+    protected NakedObjectLoader objectLoader() {
+        return objectLoader;
     }
 
     protected ReflectionFactory reflectionFactory() {
@@ -69,8 +69,8 @@ public class NakedObjectsClient extends NakedObjects {
      * 
      * @property
      */
-    public void set_PojoAdapterFactory(PojoAdapterFactory adapterFactory) {
-        setPojoAdapterFactory(adapterFactory);
+    public void set_ObjectLoader(NakedObjectLoader objectLoader) {
+        setObjectLoader(objectLoader);
     }
 
     /**
@@ -117,8 +117,8 @@ public class NakedObjectsClient extends NakedObjects {
         this.objectManager = objectManager;
     }
 
-    public void setPojoAdapterFactory(PojoAdapterFactory adapterFactory) {
-        this.adapterFactory = adapterFactory;
+    public void setObjectLoader(NakedObjectLoader objectLoader) {
+        this.objectLoader = objectLoader;
     }
 
     public void setReflectionFactory(ReflectionFactory reflectionFactory) {

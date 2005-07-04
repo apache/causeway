@@ -160,7 +160,7 @@ public class TransientObjectStoreTest extends TestCase {
         objectStore.instances.put(superClassObjectSpec, transientObjectStoreInstancesForSuperClass);
         objectStore.instances.put(objectSpec, transientObjectStoreInstancesForClass);
 
-        new NakedObjectsClient().setPojoAdapterFactory(new MockPojoAdapterFactory());
+        new NakedObjectsClient().setObjectLoader(new MockPojoAdapterFactory());
         
         objectStore.init();
     }

@@ -4,13 +4,14 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.reflect.ReflectiveActionException;
 
 
@@ -25,7 +26,7 @@ public class DataHelper {
     }
     
     private static Naked recreateValue(ValueData valueData) {
-        Naked value = NakedObjects.getPojoAdapterFactory().createAdapterForValue(valueData.getValue());
+        Naked value = NakedObjects.getObjectLoader().createAdapterForValue(valueData.getValue());
         return value;
     }
 
@@ -33,31 +34,19 @@ public class DataHelper {
         Oid oid = data.getOid();
         String type = data.getType();
         NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
-        PojoAdapterFactory objectLoader = NakedObjects.getPojoAdapterFactory();
+        NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
         NakedObject object;
         if(oid == null) {
             object = objectLoader.createTransientInstance(specification);
             recreateObjectsInFields(data, object);
         } else {
             object = objectLoader.recreateAdapter(oid, specification);
-	        objectLoader.loading(object, data.isResolved());
-	        recreateObjectsInFields(data, object);
-	        objectLoader.loaded(object, data.isResolved());
-        }
-/*        if (oid != null && loadedObjects().isLoaded(oid)) {
-            object = loadedObjects().getLoadedObject(oid);
-        } else {
-            NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
-            object = (NakedObject) specification.acquireInstance();
-            if (oid != null) {
-                object.setOid(oid);
-                loadedObjects().loaded(object);
+            if (objectLoader.needsLoading(object)) {
+                objectLoader.loading(object, data.isResolved() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART);
+		        recreateObjectsInFields(data, object);
+		        objectLoader.loaded(object, data.isResolved() ? ResolveState.RESOLVED : ResolveState.PART_RESOLVED);
             }
         }
-        if(data.isResolved() && ! object.isResolved()) {
-            object.setResolved();
-        }
-  */
         return object;
     }
 
@@ -92,7 +81,7 @@ public class DataHelper {
         Oid oid = data.getOid();
         Object[] fieldContent = data.getFieldContent();
 
-        PojoAdapterFactory objectLoader = NakedObjects.getPojoAdapterFactory();
+        NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
         if(!objectLoader.isIdentityKnown(oid)) {
             // if we don't have an object in use then ignore the data about it.
             return;
@@ -100,26 +89,8 @@ public class DataHelper {
         
         NakedObject object;
         object = objectLoader.getAdapterFor(oid);
-        
-        /*
-        String type = data.getType();
-        if (oid != null && loadedObjects().isLoaded(oid)) {
-            object = loadedObjects().getLoadedObject(oid);
-        } else {
-            NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
-            object = (NakedObject) specification.acquireInstance();
-            if (oid != null) {
-                object.setOid(oid);
-                loadedObjects().loaded(object);
-            }
-        }
-        
-		if (!object.isResolved() && data.isResolved()){
-			object.setResolved();
-		}
-		*/
-        
-        objectLoader.loading(object, data.isResolved());
+ 
+        objectLoader.loading(object, ResolveState.UPDATING);
 		
         NakedObjectField[] fields = object.getSpecification().getFields();
         if (fields.length > 0) {
@@ -146,7 +117,7 @@ public class DataHelper {
                 }
             }
         }
-        objectLoader.loaded(object, data.isResolved());
+        objectLoader.loaded(object, ResolveState.RESOLVED);
 		updateNotifier.addDirty(object);
     }
 

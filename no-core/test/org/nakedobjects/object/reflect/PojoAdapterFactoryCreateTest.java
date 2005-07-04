@@ -2,6 +2,7 @@ package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.defaults.PojoAdapterHash;
 import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;
 
 import junit.framework.Assert;
@@ -10,7 +11,7 @@ import junit.framework.TestCase;
 
 public class PojoAdapterFactoryCreateTest extends TestCase {
 
-    private PojoAdapterFactoryImpl factory;
+    private ObjectLoaderImpl factory;
     private Cache cache;
 
     public static void main(String[] args) {
@@ -19,7 +20,7 @@ public class PojoAdapterFactoryCreateTest extends TestCase {
 
     protected void setUp() throws Exception {
         cache = new Cache();
-        factory = new PojoAdapterFactoryImpl();
+        factory = new ObjectLoaderImpl();
         factory.setPojoAdapterHash(cache);
         factory.setReflectorFactory(new DummyReflectorFactory());
     }

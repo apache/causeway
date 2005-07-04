@@ -332,7 +332,7 @@ public class MemoryObjectStore implements NakedObjectStore {
     public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectStoreException {}
 
     public void reset() {
-        NakedObjects.getPojoAdapterFactory().reset();
+        NakedObjects.getObjectLoader().reset();
     }
     
     public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException {
@@ -370,7 +370,7 @@ public class MemoryObjectStore implements NakedObjectStore {
         if (object != null && object.getOid() == null) {
             Oid fieldOid = instancesFor(object.getSpecification()).getOidFor(object.getObject());
             object.setOid(fieldOid);
-            NakedObjects.getPojoAdapterFactory().loaded(object);
+//            NakedObjects.getObjectLoader().loaded(object);
         }
 
         NakedObjectField[] fields = object.getFields();

@@ -1,5 +1,6 @@
 package org.nakedobjects.object.reflect;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
@@ -174,7 +175,7 @@ public class Action extends NakedObjectMember {
         for (int i = 0; i < paramCount; i++) {
             NakedObjectSpecification parameter = parameters[i];
             if (parameter.isValue()) {
-                parameterValues[i] = parameter.acquireInstance();
+                parameterValues[i] = NakedObjects.getObjectLoader().createAdapterForValue(parameter);
             } else {
                 parameterValues[i] = null;
             }

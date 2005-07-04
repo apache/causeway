@@ -1,9 +1,7 @@
 package org.nakedobjects.object.persistence.defaults;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -37,10 +35,6 @@ class TransientObjectStoreInstances {
             Oid oid = (Oid) e.nextElement();
 	        instances.addElement(oid);
         }
-    }
-
-    protected PojoAdapterFactory loaded() {
-        return NakedObjects.getPojoAdapterFactory();
     }
 
     public int numberOfInstances() {

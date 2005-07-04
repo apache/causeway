@@ -1,5 +1,6 @@
 package org.nakedobjects.object.persistence.defaults;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.DirtyObjectSetImpl;
 import org.nakedobjects.object.InternalCollection;
@@ -9,6 +10,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NullDirtyObjectSet;
+import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
 import org.nakedobjects.object.persistence.ActionTransaction;
@@ -35,7 +37,7 @@ import java.util.Hashtable;
 import org.apache.log4j.Logger;
 
 
-public class LocalObjectManager extends AbstractNakedObjectManager implements ObjectLoader {
+public class LocalObjectManager extends AbstractNakedObjectManager {
     private static final Logger LOG = Logger.getLogger(LocalObjectManager.class);
     private boolean checkObjectsForDirtyFlag;
     private final Hashtable nakedClasses = new Hashtable();
@@ -109,7 +111,11 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Ob
         object.destroyed();
         clear(object);
 
-        unloaded(object);
+        loader().unloaded(object);
+    }
+
+    private NakedObjectLoader loader() {
+        return NakedObjects.getObjectLoader();
     }
 
     public void endTransaction() {
@@ -133,14 +139,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Ob
 
     public String getDebugData() {
         DebugString debug = new DebugString();
-
-        debug.appendTitle(super.getDebugTitle());
-        debug.append(super.getDebugData());
-        debug.appendln();
-
-        debug.append(objectStore.getDebugData());
-        debug.appendln();
-        
+        debug.append(objectStore);
         return debug.toString();
     }
 
@@ -189,47 +188,18 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Ob
         return spec;
     }
 
-    /**
-     * Retrieves the object identified by the specified OID from the object
-     * store. The cache should be checked first and, if the object is cached,
-     * the cached version should be returned. It is important that if this
-     * method is called again, while the originally returned object is in
-     * working memory, then this method must return that same Java object.
-     * 
-     * <para>Assuming that the object is not cached then the data for the object
-     * should be retreived from the persistence mechanism and the object
-     * recreated (as describe previously). The specified OID should then be
-     * assigned to the recreated object by calling its <method>setOID </method>.
-     * Before returning the object its resolved flag should also be set by
-     * calling its <method>setResolved </method> method as well. </para>
-     * 
-     * <para>If the persistence mechanism does not known of an object with the
-     * specified OID then a <class>ObjectNotFoundException </class> should be
-     * thrown. </para>
-     * 
-     * <para>Note that the OID could be for an internal collection, and is
-     * therefore related to the parent object (using a <class>CompositeOid
-     * </class>). The elements for an internal collection are commonly stored as
-     * part of the parent object, so to get element the parent object needs to
-     * be retrieved first, and the internal collection can be got from that.
-     * </para>
-     * 
-     * <para>Returns the stored NakedObject object that has the specified OID.
-     * </para>
-     * 
-     * @return the requested naked object
-     * @param oid
-     *                       of the object to be retrieved
-     */
-    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) {
-        LOG.info("getObject " + oid);
-        if (isIdentityKnown(oid)) {
-            return getAdapterFor(oid);
-        } else {
-            return objectStore.getObject(oid, hint);
-        }
+    public NakedObject getObject(Oid oid, NakedObjectSpecification objectType) {
+        NakedObject object;
+		if(oid == null) {
+		    object = NakedObjects.getObjectLoader().createTransientInstance(objectType);
+		} else if(NakedObjects.getObjectLoader().isIdentityKnown(oid)) {
+		    object = NakedObjects.getObjectLoader().getAdapterFor(oid);
+		} else {
+		    object = objectStore.getObject(oid, objectType);
+		}
+        return object;
     }
-
+    
     private Transaction getTransaction() {
         if (transaction == null) {
             throw new TransactionException("No transaction started");
@@ -258,7 +228,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Ob
      */
     public void init() throws StartupException {
         oidGenerator.init();
-        objectStore.setObjectLoader(this);
         objectStore.init();
     }
 
@@ -303,7 +272,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Ob
         }
             
         LOG.info("persist " + object);
-        makePersistent(object, createOid(object));
+        loader().makePersistent(object, createOid(object));
         
 /*        
         object.setOid(createOid(object));
@@ -365,7 +334,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Ob
     }
   
     public void reset() {
-        super.reset();
         objectStore.reset();
     }
 
@@ -426,7 +394,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Ob
     private synchronized void collateChanges() {
         if (checkObjectsForDirtyFlag) {
             LOG.debug("collating changed objects");
-            Enumeration e = getIdentifiedObjects();
+            Enumeration e = loader().getIdentifiedObjects();
             while (e.hasMoreElements()) {
                 NakedObject object = (NakedObject) e.nextElement();
                 if (object.getSpecification().isDirty(object)) {
@@ -497,7 +465,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Ob
         } catch (ObjectStoreException e) {
             throw new NakedObjectRuntimeException(e);
         }
-        super.shutdown();
     }
 
     public void startTransaction() {

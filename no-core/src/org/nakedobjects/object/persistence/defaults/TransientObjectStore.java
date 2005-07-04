@@ -5,6 +5,7 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.persistence.CreateObjectCommand;
 import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.InstancesCriteria;
@@ -80,7 +81,7 @@ public class TransientObjectStore implements NakedObjectStore {
                 TransientObjectStoreInstances ins = instancesFor(specification);
                 ins.remove(object.getOid());
                 
-                NakedObjects.getPojoAdapterFactory().unloaded(object);
+                NakedObjects.getObjectLoader().unloaded(object);
             }
 
             public NakedObject onObject() {
@@ -394,7 +395,6 @@ public class TransientObjectStore implements NakedObjectStore {
         LOG.debug("start transaction");
     }
 
-    public void setObjectLoader(ObjectLoader objectLoader) {}
 }
 
 /*

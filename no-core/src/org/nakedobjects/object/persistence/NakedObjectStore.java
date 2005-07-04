@@ -1,16 +1,14 @@
 package org.nakedobjects.object.persistence;
 
-import org.nakedobjects.container.configuration.ComponentException;
-import org.nakedobjects.container.configuration.ConfigurationException;
+import org.nakedobjects.NakedObjectsComponent;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.persistence.defaults.ObjectLoader;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.DebugInfo;
 
 
-public interface NakedObjectStore extends DebugInfo {
+public interface NakedObjectStore extends NakedObjectsComponent, DebugInfo {
 
     public void abortTransaction() throws ObjectStoreException;
 
@@ -114,16 +112,6 @@ public interface NakedObjectStore extends DebugInfo {
     boolean hasInstances(NakedObjectSpecification specification, boolean includeSubclasses) throws ObjectStoreException;
 
     /**
-     * Initialize the object store so that calls to this object store access
-     * persisted objects and persist changes to the object that are saved.
-     * 
-     * @throws ObjectStoreException
-     *                       if the object store cannot be initialized. The store should
-     *                       not be used if it can not be initialized.
-     */
-    void init() throws ConfigurationException, ComponentException, ObjectStoreException;
-
-    /**
      * The name of this objects store (for logging/debugging purposes)
      */
     String name();
@@ -149,14 +137,9 @@ public interface NakedObjectStore extends DebugInfo {
 
     public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException;
 
-    public void shutdown() throws ObjectStoreException;
-
     public void startTransaction() throws ObjectStoreException;
 
     public void reset();
-
-    public void setObjectLoader(ObjectLoader objectLoader);
-
 }
 
 /*

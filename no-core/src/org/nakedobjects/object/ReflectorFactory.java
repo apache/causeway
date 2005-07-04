@@ -1,9 +1,10 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.NakedObjectsComponent;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.Reflector;
 
-public abstract class ReflectorFactory {
+public abstract class ReflectorFactory implements NakedObjectsComponent {
     public abstract Reflector createReflector(String className) throws ReflectionException;
 
     public abstract ObjectFactory getObjectFactory();

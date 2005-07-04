@@ -87,15 +87,15 @@ public class InternalOneToOneAssociationTest extends TestCase {
     }     	
     
     public void testGet() {
-        MockPojoAdapterFactory pojoAdapterFactory = new MockPojoAdapterFactory();
-        DummyNakedObject pojoFromAdapterFactory = new DummyNakedObject();
-        pojoAdapterFactory.setupAdapter(pojoFromAdapterFactory);
-        nakedObjects.setPojoAdapterFactory(pojoAdapterFactory);
+        MockDummyObjectLoader objectLoader = new MockDummyObjectLoader();
+        DummyNakedObject pojoFromLoader = new DummyNakedObject();
+        objectLoader.setupAdapter(pojoFromLoader);
+        nakedObjects.setObjectLoader(objectLoader);
         
     	objectWithOneToOneAssoications.setReferencedObject(referencedObject);
     	
     	Naked association = personField.getAssociation(new DummyIdentifier(), nakedObject);
-        assertEquals(pojoFromAdapterFactory, association);
+        assertEquals(pojoFromLoader, association);
     }     	
     
     public void testInitGet() {

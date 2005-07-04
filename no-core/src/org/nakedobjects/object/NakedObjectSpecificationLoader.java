@@ -1,13 +1,13 @@
 package org.nakedobjects.object;
 
-public interface NakedObjectSpecificationLoader {
+import org.nakedobjects.NakedObjectsComponent;
+
+public interface NakedObjectSpecificationLoader extends NakedObjectsComponent {
     public abstract NakedObjectSpecification loadSpecification(String name);
     
     public abstract NakedObjectSpecification loadSpecification(Class cls);
     
     public abstract NakedObjectSpecification[] getAllSpecifications();
-
-    public abstract void shutdown();
 }
 
 

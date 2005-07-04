@@ -1,6 +1,5 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionParameterSet;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
@@ -94,24 +93,9 @@ public interface NakedObject extends Naked {
 
     void setAssociation(NakedObjectAssociation field, NakedObject associatedObject);
 
-    /**
-     * Sets the OID for this object. This id must be unique.
-     */
-    void setOid(Oid oid);
-
     void setOptimisticLock(long version, String user, Date time);
 
-    /**
-     * sets the object's resolved state to true
-     * 
-     * @deprecated
-     */
-    void setResolved();
-
     void setValue(OneToOneAssociation field, Object object);
-
-    /** @deprecated */
-    void setVersion(long version);
 
 }
 

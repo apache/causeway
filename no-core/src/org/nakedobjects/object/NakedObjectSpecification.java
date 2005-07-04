@@ -7,13 +7,6 @@ import org.nakedobjects.object.reflect.ObjectTitle;
 
 
 public interface NakedObjectSpecification {
-    /**
-     * Creates an object of the type represented by this object. This method
-     * only creates a java object (using newInstance on the Class object
-     * returned using the getJavaType method).
-     */
-    NakedValue acquireInstance();
-
     void clearDirty(NakedObject object);
 
     String debugInterface();

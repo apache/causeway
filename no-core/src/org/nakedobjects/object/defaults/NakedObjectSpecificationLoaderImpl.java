@@ -96,6 +96,8 @@ public class NakedObjectSpecificationLoaderImpl implements NakedObjectSpecificat
     public void shutdown() {
         classes.clear();
     }
+
+    public void init() {}
 }
 
 /*

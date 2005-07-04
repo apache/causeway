@@ -5,9 +5,8 @@ public interface ObjectFactory {
  
     Object recreateObject(NakedObjectSpecification specification);
     
-    
-//    Object createObject(NakedObjectSpecification specification);
-
+    Object createValueObject(NakedObjectSpecification specification);
+ 
     /**
      * Sets up an existing object to work within the business container.  This is 
      * only needed if the object is created outside the framework, such as through

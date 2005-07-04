@@ -1,5 +1,6 @@
 package org.nakedobjects.distribution;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
@@ -59,7 +60,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     public synchronized void destroyObject(NakedObject object) {
         LOG.debug("destroyObject " + object);
         connection.destroyObject(session, object.getOid(), object.getSpecification().getFullName());
-        unloaded(object);
+        NakedObjects.getObjectLoader().unloaded(object);
     }
 
     public void endTransaction() {
@@ -74,13 +75,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
 
     public String getDebugData() {
         DebugString debug = new DebugString();
-
         debug.appendln(0, "Connection", connection);
-        debug.appendln();
-
-        debug.appendTitle(super.getDebugTitle());
-        debug.append(super.getDebugData());
-
         return debug.toString();
     }
 
@@ -135,7 +130,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     public synchronized void makePersistent(NakedObject object) {
         LOG.debug("makePersistent " + object);
         Oid[] oid = connection.makePersistent(session, objectDataFactory.createObjectData(object, 0));
-        makePersistent(object, oid[0]);
+        NakedObjects.getObjectLoader().makePersistent(object, oid[0]);
     }
 
     public int numberOfInstances(NakedObjectSpecification specification) {
@@ -208,13 +203,11 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         this.updateNotifier = updateNotifier;
     }
 
-    public void shutdown() {
-        super.shutdown();
-    }
-
     public void startTransaction() {
         connection.startTransaction(session);
     }
+
+    public void shutdown() {}
 }
 
 /*

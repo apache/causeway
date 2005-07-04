@@ -4,6 +4,7 @@ import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
+import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 
 import junit.framework.TestCase;
 
@@ -12,7 +13,7 @@ import org.apache.log4j.Logger;
 
 public class PojoAdapterTest extends TestCase {
 
-    private PojoAdapterFactoryImpl pojoAdapterFactory;
+    private ObjectLoaderImpl objectLoader;
     private NakedObjectsClient nakedObjects;
 
     public static void main(String[] args) {
@@ -22,9 +23,9 @@ public class PojoAdapterTest extends TestCase {
     protected void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
         nakedObjects = new NakedObjectsClient();
-		pojoAdapterFactory = new PojoAdapterFactoryImpl();
-		pojoAdapterFactory.setPojoAdapterHash(new PojoAdapterHashImpl());
-        pojoAdapterFactory.setReflectorFactory(new DummyReflectorFactory());
+		objectLoader = new ObjectLoaderImpl();
+		objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
+        objectLoader.setReflectorFactory(new DummyReflectorFactory());
     }
 
     public void testTitleStringWhereSpecificationProvidesTitleFromObject() {
@@ -38,7 +39,7 @@ public class PojoAdapterTest extends TestCase {
         specLoader.addSpec(spec);
          
         nakedObjects.setSpecificationLoader(specLoader);
-        NakedObject pa = pojoAdapterFactory.createNOAdapter(new TestPojo());
+        NakedObject pa = objectLoader.createNOAdapter(new TestPojo());
         pa.getSpecification();
         pa.setResolved();
         assertEquals("object title from specification",  pa.titleString());
@@ -55,7 +56,7 @@ public class PojoAdapterTest extends TestCase {
         spec.setupUnresolvedTitle("unresolved object");
         specLoader.addSpec(spec);
         nakedObjects.setSpecificationLoader(specLoader);
-        NakedObject pa = pojoAdapterFactory.createNOAdapter(new TestPojo());
+        NakedObject pa = objectLoader.createNOAdapter(new TestPojo());
         pa.getSpecification();
         assertFalse(pa.isResolved());
         assertEquals("unresolved object",  pa.titleString());
@@ -72,7 +73,7 @@ public class PojoAdapterTest extends TestCase {
         spec.setupUnresolvedTitle("unresolved object");
         specLoader.addSpec(spec);
         nakedObjects.setSpecificationLoader(specLoader);
-        NakedObject pa = pojoAdapterFactory.createNOAdapter(new TestPojo());
+        NakedObject pa = objectLoader.createNOAdapter(new TestPojo());
         pa.getSpecification();
         pa.setResolved();
         assertEquals("A singular name",  pa.titleString());

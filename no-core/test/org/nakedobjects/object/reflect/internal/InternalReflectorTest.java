@@ -33,8 +33,8 @@ public class InternalReflectorTest extends TestCase {
         
     	new MockNakedObjectSpecificationLoader();     	
     	
-    	PojoAdapterFactory pojoAdapterFactory = new DummyPojoAdapterFactory();
-    	new NakedObjectsClient().setPojoAdapterFactory(pojoAdapterFactory);
+    	PojoAdapterFactory objectLoader = new DummyPojoAdapterFactory();
+    	new NakedObjectsClient().setObjectLoader(objectLoader);
 		
         reflector = new MockInternalReflector(InternalObjectForReflector.class.getName());
     }

@@ -2,15 +2,15 @@ package org.nakedobjects;
 
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.ReflectionFactory;
 import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.ToString;
 
 public class NakedObjectsData {
-    protected PojoAdapterFactory adapterFactory;
+    protected NakedObjectLoader objectLoader;
     protected Configuration configuration;
     protected NakedObjectManager objectManager;
     protected Session session;
@@ -24,7 +24,7 @@ public class NakedObjectsData {
         toString.append("thread", Thread.currentThread());
         toString.append("objectManager", objectManager);
         toString.append("session", session);
-        toString.append("adapterFactory", adapterFactory);
+        toString.append("objectLoader", objectLoader);
         toString.append("reflectorFactory", reflectorFactory);
         toString.append("reflectionFactory", reflectionFactory);
         return toString.toString();

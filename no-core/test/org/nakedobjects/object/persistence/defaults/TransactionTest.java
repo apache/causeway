@@ -9,7 +9,7 @@ import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.object.persistence.SaveObjectCommand;
 import org.nakedobjects.object.reflect.DummyNakedObject;
 import org.nakedobjects.object.reflect.DummyPojoAdapterFactory;
-import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
+import org.nakedobjects.object.reflect.ObjectLoaderImpl;
 
 import junit.framework.TestCase;
 

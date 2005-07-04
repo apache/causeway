@@ -49,7 +49,7 @@ public class InternalAction extends InternalMember implements ActionPeer {
             LOG.debug("  action result " + result);
 
             if (result != null && result instanceof Naked) { return (Naked) result; }
-            if (result != null) { return NakedObjects.getPojoAdapterFactory().createAdapter(result); }
+            if (result != null) { return NakedObjects.getObjectLoader().createAdapterForTransient(result); }
         } catch (InvocationTargetException e) {
             e.fillInStackTrace();
             throw new ReflectionException(e);

@@ -2,11 +2,11 @@ package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.TitleCriteria;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -40,7 +40,7 @@ class MemoryObjectStoreInstances {
     }
 
     public NakedObject getObject(Oid oid) {
-        NakedObject loadedObject = loaded().getLoadedObject(oid);
+        NakedObject loadedObject = loaded().getAdapterFor(oid);
         if (loadedObject != null) {
             return loadedObject;
         } else {
@@ -48,7 +48,7 @@ class MemoryObjectStoreInstances {
             if (pojo == null) {
                 return null;
             }
-            NakedObject object = NakedObjects.getPojoAdapterFactory().createNOAdapter(pojo);
+            NakedObject object = NakedObjects.getObjectLoader().getAdapterFor(pojo);
             if (object.getOid() == null) {
                 object.setOid(oid);
                 if(!object.isResolved()) {
@@ -58,7 +58,7 @@ class MemoryObjectStoreInstances {
                 throw new NakedObjectRuntimeException("Requested object with OID " + oid
                         + ", but got object (with different oid): " + object);
             }
-            loaded().loaded(object);
+            loaded().loaded(object, true);
 
             return object;
         }
@@ -107,8 +107,8 @@ class MemoryObjectStoreInstances {
         }
     }
 
-    protected PojoAdapterFactory loaded() {
-        return NakedObjects.getPojoAdapterFactory();
+    protected NakedObjectLoader loaded() {
+        return NakedObjects.getObjectLoader();
     }
 
     public int numberOfInstances() {

@@ -1,12 +1,13 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectFactory;
 
 public class MockObjectFactory implements ObjectFactory {
 
     public Object createObject(NakedObjectSpecification specification) {
-        return specification.acquireInstance();
+        return NakedObjects.getObjectLoader().createAdapterForValue(specification);
     }
 
     public void initRecreatedObject(Object object) {}

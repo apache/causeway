@@ -60,6 +60,10 @@ public class ProxyReflectionFactory implements ReflectionFactory {
     public void setObjectDataFactory(DataFactory objectDataFactory) {
         this.objectDataFactory = objectDataFactory;
     }
+
+    public void init() {}
+
+    public void shutdown() {}
 }
 
 /*

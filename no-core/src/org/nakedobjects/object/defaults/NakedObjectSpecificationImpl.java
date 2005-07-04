@@ -73,19 +73,6 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
 
     public NakedObjectSpecificationImpl() {}
 
-    /**
-     * Creates an object of the type represented by this object. This method
-     * only creates a java object (using newInstance on the Class object
-     * returned using the getJavaType method).
-     */
-    public NakedValue acquireInstance() {
-        // TODO this happens a lot! 
-        LOG.debug("acquire instance of " + getShortName());
-   
-        return (NakedValue) NakedObjects.getObjectManager().createAdapterForValue(this);
-//        return (NakedValue) NakedObjects.getObjectManager().recreateExistingInstance(this);
-    }
-    
     public void deleted(NakedObject object) {
         reflector.destroyed(object);
     }

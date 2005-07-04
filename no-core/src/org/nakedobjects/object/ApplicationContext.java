@@ -46,7 +46,7 @@ public abstract class ApplicationContext implements InternalNakedObject {
     }
 
     public void associateUser(UserId user) {
-        user.setRootObject(NakedObjects.getPojoAdapterFactory().getAdapterFor(this));
+        user.setRootObject(NakedObjects.getObjectLoader().getAdapterOrCreateTransientFor(this));
         this.setUser(user);
     }
 

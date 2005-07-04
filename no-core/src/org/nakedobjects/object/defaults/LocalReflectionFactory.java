@@ -46,6 +46,10 @@ public class LocalReflectionFactory implements ReflectionFactory {
                 oneToOneDelegate);
         return association;
     }
+
+    public void init() {}
+
+    public void shutdown() {}
 }
 
 /*
