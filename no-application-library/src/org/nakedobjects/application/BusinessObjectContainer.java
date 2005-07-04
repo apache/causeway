@@ -21,7 +21,7 @@ public interface BusinessObjectContainer {
 
     int numberOfInstances(Class cls);
 
-    void resolve(Object object);
+    void resolve(Object parent, Object object);
 
     long serialNumber(String sequence);
 
