@@ -10,12 +10,12 @@ import org.nakedobjects.distribution.java.JavaObjectDataFactory;
 import org.nakedobjects.distribution.xml.ServerListener;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
+import org.nakedobjects.object.defaults.ObjectLoaderImpl;
+import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
-import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
-import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
@@ -59,7 +59,6 @@ public class XmlServer {
 
         LocalObjectManager objectManager = new LocalObjectManager();
         objectManager.setObjectStore(objectStore);
-        objectManager.setObjectFactory(objectFactory);
         objectManager.setOidGenerator(oidGenerator);
         objectManager.setCheckObjectsForDirtyFlag(true);
 
@@ -70,7 +69,11 @@ public class XmlServer {
         JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
         reflectorFactory.setObjectFactory(objectFactory);
 
-        nakedObjects.setPojoAdapterFactory(objectManager);
+        ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
+        objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
+        objectLoader.setReflectorFactory(reflectorFactory);
+        objectLoader.setObjectFactory(objectFactory);
+        nakedObjects.setObjectLoader(objectLoader);
 
         nakedObjects.setReflectionFactory(reflectionFactory);
 
