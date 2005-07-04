@@ -178,11 +178,11 @@ public class Location {
 
     public Title title() {
         if (knownAs.isEmpty()) {
-//            return streetAddress.title().append(",", getCity());
-            return streetAddress.title();
+            return streetAddress.title().append(",", getCity());
+//            return streetAddress.title();
         } else {
-//            return knownAs.title().append(",", getCity());
-            return knownAs.title();
+            return knownAs.title().append(",", getCity());
+//            return knownAs.title();
         }
     }
 

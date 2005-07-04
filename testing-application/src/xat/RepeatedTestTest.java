@@ -88,7 +88,7 @@ public class RepeatedTestTest extends JavaAcceptanceTestCase {
              
              private void createCity(String name) {
                  City city = (City) createInstance(City.class);
-                 city.setName(name);
+                 city.getName().setValue(name);
              }
          } );
      }

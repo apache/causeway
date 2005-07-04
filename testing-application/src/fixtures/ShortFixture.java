@@ -10,7 +10,7 @@ public class ShortFixture extends JavaFixture {
     public void install() {
 
         City city = (City) createInstance(City.class);
-        city.setName("London");
+        city.getName().setValue("London");
         
         Location l = (Location) createInstance(Location.class);
         l.setCity(city);

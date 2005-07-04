@@ -20,7 +20,7 @@ public class CitiesFixture extends JavaFixture {
 
         for (int i = 0; i < cityNames.length; i++) {
             cities[i] = (City) createInstance(City.class);
-            cities[i].setName(cityNames[i]);
+            cities[i].getName().setValue(cityNames[i]);
         }
 
         boston = cities[1];

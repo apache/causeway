@@ -89,7 +89,7 @@ public class CopyOfECSAcceptanceTest extends JavaAcceptanceTestCase {
              
              private void createCity(String name) {
                  City city = (City) createInstance(City.class);
-                 city.setName(name);
+                 city.getName().setValue(name);
              }
          } );
          
@@ -143,7 +143,7 @@ public class CopyOfECSAcceptanceTest extends JavaAcceptanceTestCase {
      public void testCity() {
          TestObject city = getTestClass(City.class.getName()).newInstance();
          city.fieldEntry("NAME", "London");
-         city.fieldEntry("date opened", "23-10-03");
+  //       city.fieldEntry("date opened", "23-10-03");
   //       city.fieldEntry("population", "8000000");
          
          city.assertNotEmpty("NAME");

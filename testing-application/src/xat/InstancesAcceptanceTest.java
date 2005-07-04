@@ -74,7 +74,7 @@ public class InstancesAcceptanceTest extends JavaAcceptanceTestCase {
              
              private City createCity(String name) {
                  City city = (City) createInstance(City.class);
-                 city.setName(name);
+                 city.getName().setValue(name);
                  return city;
              }
          } );
