@@ -7,7 +7,7 @@ public class BaseObject {
 	private BusinessObjectContainer container;
 
     public void resolve(Object object) {
-        container.resolve(object);
+        container.resolve(this, object);
     }
 
     public void objectChanged() {
