@@ -53,7 +53,7 @@ class Instances {
     }
 
     private PojoAdapterFactory loadedObjects() {
-        return NakedObjects.getPojoAdapterFactory();
+        return NakedObjects.getObjectLoader();
     }
 
     public void loadIdentities(SnapshotImpl reader) throws ObjectStoreException {
