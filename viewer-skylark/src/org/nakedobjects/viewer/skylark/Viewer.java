@@ -4,6 +4,7 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.container.configuration.ComponentException;
 import org.nakedobjects.container.configuration.ComponentLoader;
 import org.nakedobjects.container.configuration.ConfigurationException;
+import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.persistence.NakedObjectManager;
@@ -332,6 +333,16 @@ public class Viewer {
         options.add(MenuOptionSet.DEBUG, new MenuOption("Debug object manager") {
             public void execute(Workspace workspace, View view, Location at) {
                 NakedObjectManager om = NakedObjects.getObjectManager();
+                InfoDebugFrame f = new InfoDebugFrame();
+                f.setInfo(om);
+                f.show(at.x + 50, workspace.getBounds().y + 6);
+            }
+        });
+
+
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Debug object loader") {
+            public void execute(Workspace workspace, View view, Location at) {
+                NakedObjectLoader om = NakedObjects.getObjectLoader();
                 InfoDebugFrame f = new InfoDebugFrame();
                 f.setInfo(om);
                 f.show(at.x + 50, workspace.getBounds().y + 6);

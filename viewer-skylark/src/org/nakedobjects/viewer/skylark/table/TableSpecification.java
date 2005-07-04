@@ -52,7 +52,8 @@ public class TableSpecification extends AbstractCompositeViewSpecification imple
                 .getCollection();
         NakedObjectSpecification elementSpecification = NakedObjects.getSpecificationLoader().loadSpecification(
                 coll.getElementSpecification().getFullName());
-        NakedObject exampleObject = (NakedObject) elementSpecification.acquireInstance();
+
+        NakedObject exampleObject = NakedObjects.getObjectLoader().createTransientInstance(elementSpecification);
         NakedObjectField[] viewFields = exampleObject.getVisibleFields();
         TableAxis tableAxis = new TableAxis(tableFields(viewFields), exampleObject);
         tableAxis.setupColumnWidths(new TypeBasedColumnWidthStrategy());

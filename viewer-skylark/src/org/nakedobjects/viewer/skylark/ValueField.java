@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
@@ -70,7 +71,7 @@ public class ValueField extends ValueContent implements FieldContent {
     }
 
     public Hint getValueHint(String entryText) {
-        NakedValue example = (NakedValue) getSpecification().acquireInstance();
+        NakedValue example = NakedObjects.getObjectLoader().createAdapterForValue(getSpecification());
 
         if (example != null) {
 	        try {
@@ -104,7 +105,7 @@ public class ValueField extends ValueContent implements FieldContent {
 
     public void parseEntry(String entryText) throws TextEntryParseException, InvalidEntryException {
         if (object == null) {
-            object = (NakedValue) getSpecification().acquireInstance();
+            object = NakedObjects.getObjectLoader().createAdapterForValue(getSpecification());
         }
         object.parseTextEntry(entryText);
         getParent().setValue(getOneToOneAssociation(), object.getObject());

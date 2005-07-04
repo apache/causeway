@@ -36,7 +36,7 @@ public class ActionHelper {
         values = new Naked[parameterTypes.length];
         for (int i = 0; i < parameterTypes.length; i++) {
             if (parameterTypes[i].isValue()) {
-                values[i] = parameterTypes[i].acquireInstance();
+                values[i] = NakedObjects.getObjectLoader().createValueInstance(parameterTypes[i]);
             } else {
                 values[i] = null;
             }
@@ -51,7 +51,7 @@ public class ActionHelper {
             // change name using the hint
             NakedObjectSpecification type = parameterTypes[i];
             labels[i] = labels[i] == null ? type.getShortName() : labels[i];
-            parameters[i] = defaultValues[i] == null ? parameterValues[i] : NakedObjects.getObjectManager().createAdapterForValue(
+            parameters[i] = defaultValues[i] == null ? parameterValues[i] : NakedObjects.getObjectLoader().createAdapterForValue(
                     defaultValues[i]);
         }
 

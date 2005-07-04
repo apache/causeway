@@ -21,7 +21,7 @@ public final class BackgroundThread {
                     task.execute();
                 } catch (Exception e) {
                     ExceptionHelper.log(BackgroundThread.class, "Error while executing action", e);
-                    Naked error = NakedObjects.getObjectManager().createAdapterForTransient(
+                    Naked error = NakedObjects.getObjectLoader().createAdapterForTransient(
                             new Error("Error while executing action:", e));
                     // TODO centre view
                     //  centre = view.getWorkspace().getAbsoluteLocation();

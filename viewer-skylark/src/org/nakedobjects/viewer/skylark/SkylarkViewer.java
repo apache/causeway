@@ -41,7 +41,7 @@ public class SkylarkViewer {
         NakedObjects.getObjectManager().addObjectChangedListener(updateNotifier);
                 
     
-        NakedObject rootObject = NakedObjects.getObjectManager().createAdapterForTransient(applicationContext);
+        NakedObject rootObject = NakedObjects.getObjectLoader().createAdapterForTransient(applicationContext);
         RootWorkspaceSpecification spec = new RootWorkspaceSpecification();
         View view = spec.createView(new RootObject(rootObject), null);
         viewer.setRootView(view);

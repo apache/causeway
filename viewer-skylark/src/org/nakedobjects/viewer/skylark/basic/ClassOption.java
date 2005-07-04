@@ -2,9 +2,9 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 
@@ -12,7 +12,7 @@ import org.nakedobjects.viewer.skylark.MenuOptionSet;
 public class ClassOption {
     public static void menuOptions(NakedObjectSpecification specificaton, MenuOptionSet menuOptionSet) {
         NakedClass nakedClass = NakedObjects.getObjectManager().getNakedClass(specificaton);
-        PojoAdapter classAdapter = (PojoAdapter) NakedObjects.getObjectManager().getAdapterFor(nakedClass);
+        NakedObject classAdapter = NakedObjects.getObjectLoader().getAdapterOrCreateTransientFor(nakedClass);
 
         Action[] actions;
         actions = specificaton.getClassActions(Action.USER);
@@ -40,7 +40,7 @@ public class ClassOption {
         }
     }
 
-    private static void addOption(PojoAdapter cls, MenuOptionSet menuOptionSet, Action action, int type) {
+    private static void addOption(NakedObject cls, MenuOptionSet menuOptionSet, Action action, int type) {
         MenuOption option;
         if (action.parameters().length == 0) {
             option = ImmediateObjectOption.createOption(action, cls);
