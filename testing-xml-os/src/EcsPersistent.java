@@ -5,6 +5,8 @@ import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
+import org.nakedobjects.object.defaults.ObjectLoaderImpl;
+import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
@@ -60,11 +62,10 @@ public class EcsPersistent {
             XmlObjectStore objectStore = new XmlObjectStore();
             objectStore.setDataManager(new XmlDataManager());
 
-            OidGenerator oidGenerator = new SimpleOidGenerator();            
+            OidGenerator oidGenerator = new SimpleOidGenerator(1000);            
 
             LocalObjectManager objectManager = new LocalObjectManager();
             objectManager.setObjectStore(objectStore);
-            objectManager.setObjectFactory(objectFactory);
             objectManager.setOidGenerator(oidGenerator);
             objectManager.setCheckObjectsForDirtyFlag(true);
 
@@ -87,9 +88,12 @@ public class EcsPersistent {
         
             nakedObjects.setSession(new SimpleSession());
             
-            objectManager.setReflectorFactory(reflectorFactory);
-            objectManager.init();
+            ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
+            objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
+            objectLoader.setObjectFactory(objectFactory);
+            nakedObjects.setObjectLoader(objectLoader);
 
+            nakedObjects.init();
             
             // Viewer
             SkylarkViewer viewer = new SkylarkViewer();

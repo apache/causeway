@@ -5,6 +5,8 @@ import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
+import org.nakedobjects.object.defaults.ObjectLoaderImpl;
+import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
@@ -82,7 +84,6 @@ public class SetupObjectStore {
 
             LocalObjectManager objectManager = new LocalObjectManager();
             objectManager.setObjectStore(objectStore);
-            objectManager.setObjectFactory(objectFactory);
             objectManager.setOidGenerator(oidGenerator);
             objectManager.setCheckObjectsForDirtyFlag(true);
 
@@ -104,12 +105,14 @@ public class SetupObjectStore {
             new SystemClock();
         
             nakedObjects.setSession(new SimpleSession());
-            
-            objectManager.setReflectorFactory(reflectorFactory);
-            objectManager.init();
 
-            nakedObjects.setPojoAdapterFactory(objectManager);
-      
+            ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
+            objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
+            objectLoader.setReflectorFactory(reflectorFactory);
+            objectLoader.setObjectFactory(objectFactory);
+            nakedObjects.setObjectLoader(objectLoader);      
+
+            nakedObjects.init();
 
             JavaFixtureBuilder fb = new JavaFixtureBuilder();
             CitiesFixture cities;
@@ -118,6 +121,12 @@ public class SetupObjectStore {
             fb.addFixture(new ClassesFixture());
             fb.installFixtures();
 
+
+
+            System.out.println("\n\nLoaded objects");
+            System.out.println(objectLoader.getDebugData());
+
+            
             System.out.println("\n\nState of ObjectManager");
             System.out.println(objectManager.getDebugData());
             
