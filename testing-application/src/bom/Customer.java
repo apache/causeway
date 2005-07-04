@@ -212,7 +212,7 @@ public class Customer {
     }
 
     public PaymentMethod getPreferredPaymentMethod() {
-        container.resolve(preferredPaymentMethod);
+        container.resolve(this, preferredPaymentMethod);
 
         return preferredPaymentMethod;
     }

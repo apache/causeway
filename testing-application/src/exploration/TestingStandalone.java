@@ -7,6 +7,8 @@ import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
+import org.nakedobjects.object.defaults.ObjectLoaderImpl;
+import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.ObjectManagerLogger;
@@ -15,8 +17,6 @@ import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
-import org.nakedobjects.object.reflect.PojoAdapterFactoryImpl;
-import org.nakedobjects.object.reflect.PojoAdapterHashImpl;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.control.SimpleSession;
@@ -81,7 +81,6 @@ public class TestingStandalone {
 
             LocalObjectManager lom = new LocalObjectManager();
             lom.setObjectStore(objectStore);
-            lom.setObjectFactory(objectFactory);
             lom.setOidGenerator(oidGenerator);
             lom.setCheckObjectsForDirtyFlag(true);
             
@@ -96,7 +95,11 @@ public class TestingStandalone {
 
             JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
   
-            nakedObjects.setPojoAdapterFactory(objectManager);
+            ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
+            objectLoader.setObjectFactory(objectFactory);
+            objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
+            objectLoader.setReflectorFactory(reflectorFactory);
+            nakedObjects.setObjectLoader(objectLoader);
             
             nakedObjects.setReflectionFactory(reflectionFactory);
             nakedObjects.setReflectorFactory(reflectorFactory);
