@@ -8,7 +8,7 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Persistable;
-import org.nakedobjects.object.ResolvedState;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.utility.Assert;
@@ -27,13 +27,13 @@ public class PojoAdapter implements NakedObject {
     private String modifierBy;
     private Oid oid;
     private Object pojo;
-    private transient ResolvedState resolvedState;
+    private transient ResolveState resolvedState;
     private NakedObjectSpecification specification;
     private long version;
       
-    protected PojoAdapter(Object pojo) {
+    public PojoAdapter(Object pojo) {
         this.pojo = pojo;
-        resolvedState = ResolvedState.NEW;
+        resolvedState = ResolveState.NEW;
     }
     
     public void checkLock(long version) {
@@ -61,7 +61,7 @@ public class PojoAdapter implements NakedObject {
     }
 
     public void debugClearResolved() {
-        resolvedState = ResolvedState.NEW;
+        resolvedState = ResolveState.NEW;
     }
 
     /**
@@ -206,19 +206,16 @@ public class PojoAdapter implements NakedObject {
     public void initAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
         LOG.debug("initAssociation " + field.getName() + "/" + associatedObject + " in " + this);
         field.initAssociation(this, associatedObject);
-        partlyResolved();
     }
 
     public void initOneToManyAssociation(OneToManyAssociation field, NakedObject[] instances) {
         LOG.debug("initAssociation " + field.getName() + " with " + instances.length + "instances in " + this);
         field.initOneToManyAssociation(this, instances);
-        partlyResolved();
     }
 
     public void initValue(OneToOneAssociation field, Object object) {
         LOG.debug("initValue " + field.getName() + " with " + object + " in " + this);
         field.initValue(this, object);
-        partlyResolved();
     }
 
     public boolean isEmpty(NakedObjectField field) {
@@ -226,12 +223,8 @@ public class PojoAdapter implements NakedObject {
         return field.isEmpty(this);
     }
 
-    private void partlyResolved() {
-  //      resolvedState = ResolvedState.PART_RESOLVED;
-    }
-
     public boolean isPartlyResolved() {
-        return resolvedState == ResolvedState.PART_RESOLVED;
+        return resolvedState == ResolveState.PART_RESOLVED;
     }
 
     /**
@@ -242,19 +235,19 @@ public class PojoAdapter implements NakedObject {
     }
 
     public boolean isResolved() {
-        return resolvedState == ResolvedState.RESOLVED;
+        return resolvedState == ResolveState.RESOLVED;
     }
 
     public boolean isResolving() {
-        return resolvedState == ResolvedState.RESOLVING || resolvedState == ResolvedState.RESOLVING;
+        return resolvedState == ResolveState.RESOLVING || resolvedState == ResolveState.RESOLVING;
     }
 
     public boolean isTransient() {
-        return resolvedState == ResolvedState.TRANSIENT;
+        return resolvedState == ResolveState.TRANSIENT;
     }
 
     public boolean isUnresolved() {
-        return resolvedState == ResolvedState.NEW;
+        return resolvedState == ResolveState.NEW;
     }
 
     private void mustBeResolvedIfPersistent(NakedObject object) {
@@ -275,7 +268,7 @@ public class PojoAdapter implements NakedObject {
         Assert.assertTrue("Oid can't be set again", this, this.oid == null);
 
         this.oid = oid;
-        resolvedState =ResolvedState.RESOLVED;
+        resolvedState =ResolveState.RESOLVED;
     }
 
     public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
@@ -355,7 +348,6 @@ public class PojoAdapter implements NakedObject {
             str.append("T");
         }
         
-        str.append(isPersistent() ? "P" : "T");
         str.append(resolvedState.code());
         Oid oid = getOid();
         if (oid != null) {
@@ -373,18 +365,22 @@ public class PojoAdapter implements NakedObject {
     }
 
     public void recreate(Oid oid) {
-        changeState( ResolvedState.GHOST);
+        changeState( ResolveState.GHOST);
         this.oid = oid;
     }
 
     public void setTransient() {
-        changeState(ResolvedState.TRANSIENT);
+        changeState(ResolveState.TRANSIENT);
     }
 
-    public void changeState(ResolvedState newState) {
-        Assert.assertTrue("can't change from " + resolvedState.name() + " to " + newState.name(), resolvedState.isValidToChangeTo(newState));
+    public void changeState(ResolveState newState) {
+        Assert.assertTrue("can't change from " + resolvedState.name() + " to " + newState.name() + ": " + this, resolvedState.isValidToChangeTo(newState));
         LOG.debug("recreate - change state " + this + " to " + newState);
         resolvedState = newState;
+    }
+
+    public boolean needsLoading() {
+        return resolvedState.isLoadable();
     }
 }
 
