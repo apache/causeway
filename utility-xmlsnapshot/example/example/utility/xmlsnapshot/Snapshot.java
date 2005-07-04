@@ -11,7 +11,7 @@ public class Snapshot {
     // fields excluded for clarity
 
     public void actionCreateSnapshot() {
-        XmlSnapshot builder = new XmlSnapshot(NakedObjects.getObjectManager().getAdapterFor(this));
+        XmlSnapshot builder = new XmlSnapshot(NakedObjects.getObjectLoader().getAdapterOrCreateTransientFor(this));
         builder.include("fieldname/fieldname");
         Element e = builder.getXmlElement();
         
