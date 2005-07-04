@@ -5,7 +5,10 @@ import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectLoader;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.persistence.CreateObjectCommand;
 import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.InstancesCriteria;
@@ -16,7 +19,6 @@ import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.PersistenceCommand;
 import org.nakedobjects.object.persistence.SaveObjectCommand;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
-import org.nakedobjects.object.persistence.defaults.ObjectLoader;
 import org.nakedobjects.object.persistence.defaults.SerialOid;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
@@ -31,7 +33,7 @@ import org.apache.log4j.Logger;
 public class XmlObjectStore implements NakedObjectStore {
     private static final Logger LOG = Logger.getLogger(XmlObjectStore.class);
     private DataManager dataManager;
-    private ObjectLoader objectLoader;
+    private NakedObjectLoader objectLoader;
 
     public void abortTransaction() {
         LOG.debug("transaction aborted");
@@ -161,7 +163,8 @@ public class XmlObjectStore implements NakedObjectStore {
         return instances;
     }
 
-    public NakedObject[] getInstances(NakedObjectSpecification specification, boolean includeSubclasses) throws ObjectStoreException {
+    public NakedObject[] getInstances(NakedObjectSpecification specification, boolean includeSubclasses)
+            throws ObjectStoreException {
         LOG.debug("getInstances of " + specification);
         if (includeSubclasses) {
             NakedObject[] instances = getInstances(specification);
@@ -191,17 +194,9 @@ public class XmlObjectStore implements NakedObjectStore {
             LOG.debug("instance data " + instanceData);
 
             SerialOid oid = instanceData.getOid();
-            
+
             NakedObjectSpecification spec = specFor(instanceData);
             NakedObject instance = objectLoader.recreateAdapter(oid, spec);
-/*            NakedObject instance;
-            if (loadedObjects().isLoaded(oid)) {
-                instance = loadedObjects().getLoadedObject(oid);
-            } else {
-                instance = (NakedObject) createSkeletalObject(oid, instanceData.getClassName());
-                loadedObjects().loaded(instance);
-            }
-   */       
             initObject(instance, instanceData);
 
             if (criteria == null || criteria.matches(instance)) {
@@ -215,7 +210,7 @@ public class XmlObjectStore implements NakedObjectStore {
     }
 
     public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
-         throw new ObjectNotFoundException();
+        throw new ObjectNotFoundException();
     }
 
     public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectStoreException {
@@ -228,7 +223,8 @@ public class XmlObjectStore implements NakedObjectStore {
         if (data instanceof ObjectData) {
             object = recreateObject((ObjectData) data);
         } else if (data instanceof CollectionData) {
-            object = (NakedObject) specFor(data).acquireInstance();
+            throw new NakedObjectRuntimeException();
+            //            object = (NakedObject) specFor(data).acquireInstance();
         } else {
             throw new ObjectNotFoundException();
         }
@@ -240,29 +236,32 @@ public class XmlObjectStore implements NakedObjectStore {
         return numberOfInstances(cls, includeSubclasses) > 0;
     }
 
-    public void init() throws ObjectStoreException {}
+    public void init() throws ObjectStoreException {
+        objectLoader = NakedObjects.getObjectLoader();
+    }
 
     private void initObject(NakedObject object, ObjectData data) throws ObjectStoreException {
-        objectLoader.loading(object, true);
-        
-        NakedObjectField[] fields = object.getFields();
+        if (objectLoader.needsLoading(object)) {
+            objectLoader.loading(object, ResolveState.RESOLVING);
 
-        for (int i = 0; i < fields.length; i++) {
-            NakedObjectField field = fields[i];
-            if (field.isDerived()) {
-                continue;
+            NakedObjectField[] fields = object.getFields();
+            for (int i = 0; i < fields.length; i++) {
+                NakedObjectField field = fields[i];
+                if (field.isDerived()) {
+                    continue;
+                }
+
+                if (field.isValue()) {
+                    object.initValue((OneToOneAssociation) field, data.get(field.getName()));
+                } else if (field instanceof OneToManyAssociation) {
+                    initObjectSetupCollection(object, data, field);
+                } else {
+                    initObjectSetupReference(object, data, field);
+                }
             }
 
-            if (field.isValue()) {
-                object.initValue((OneToOneAssociation) field, data.get(field.getName()));
-            } else if (field instanceof OneToManyAssociation) {
-                initObjectSetupCollection(object, data, field);
-            } else {
-                initObjectSetupReference(object, data, field);
-            }
+            objectLoader.loaded(object, ResolveState.RESOLVED);
         }
-        
-        objectLoader.loaded(object, true);
     }
 
     private void initObjectSetupReference(NakedObject object, ObjectData data, NakedObjectField field) {
@@ -271,37 +270,32 @@ public class XmlObjectStore implements NakedObjectStore {
         if (referenceOid == null) {
             return;
         }
-        
+
         Data fieldData = (Data) dataManager.loadData(referenceOid);
-        
+
         NakedObject reference = objectLoader.recreateAdapter(referenceOid, specFor(fieldData));
         object.initAssociation((OneToOneAssociation) field, reference);
-        
+
         /*
-        if (loadedObjects().isLoaded(referenceOid)) {
-            NakedObject loadedObject = loadedObjects().getLoadedObject(referenceOid);
-            LOG.debug("using loaded object " + loadedObject);
-            object.initAssociation((OneToOneAssociation) field, loadedObject);
-        } else {
-            NakedObject fieldObject;
-            Data fieldData = (Data) dataManager.loadData((SerialOid) referenceOid);
-            
-            if (fieldData != null) {
-                fieldObject = (NakedObject) specFor(fieldData).acquireInstance();
-            } else {
-                fieldObject = (NakedObject) field.getSpecification().acquireInstance();
-            }
-            
-            fieldObject.setOid(referenceOid);
-            
-            if (fieldObject instanceof InternalCollection) {
-                fieldObject.setResolved();
-            }
-            
-            loadedObjects().loaded(fieldObject);
-            object.initAssociation((OneToOneAssociation) field, fieldObject);
-        }
-        */
+         * if (loadedObjects().isLoaded(referenceOid)) { NakedObject
+         * loadedObject = loadedObjects().getLoadedObject(referenceOid);
+         * LOG.debug("using loaded object " + loadedObject);
+         * object.initAssociation((OneToOneAssociation) field, loadedObject); }
+         * else { NakedObject fieldObject; Data fieldData = (Data)
+         * dataManager.loadData((SerialOid) referenceOid);
+         * 
+         * if (fieldData != null) { fieldObject = (NakedObject)
+         * specFor(fieldData).acquireInstance(); } else { fieldObject =
+         * (NakedObject) field.getSpecification().acquireInstance(); }
+         * 
+         * fieldObject.setOid(referenceOid);
+         * 
+         * if (fieldObject instanceof InternalCollection) {
+         * fieldObject.setResolved(); }
+         * 
+         * loadedObjects().loaded(fieldObject);
+         * object.initAssociation((OneToOneAssociation) field, fieldObject); }
+         */
     }
 
     private void initObjectSetupCollection(NakedObject object, ObjectData data, NakedObjectField field) {
@@ -314,32 +308,30 @@ public class XmlObjectStore implements NakedObjectStore {
         if (refs == null) {
             return;
         }
-        
+
         for (int j = 0; j < refs.size(); j++) {
             try {
                 SerialOid elementOid = refs.elementAt(j);
                 NakedObject adapter;
-                if(objectLoader.isIdentityKnown(elementOid)) {
+                if (objectLoader.isIdentityKnown(elementOid)) {
                     adapter = objectLoader.getAdapterFor(elementOid);
                 } else {
                     adapter = getObject(elementOid, null);
                 }
                 object.initAssociation((NakedObjectAssociation) field, adapter);
-                
-                
+
                 /*
-                if (loadedObjects().isLoaded(elementOid)) {
-                    object.initAssociation((NakedObjectAssociation) field, loadedObjects().getLoadedObject(
-                            elementOid));
-                } else {
-                    object.initAssociation((NakedObjectAssociation) field, getObject(elementOid, null));
-                }
-                */
+                 * if (loadedObjects().isLoaded(elementOid)) {
+                 * object.initAssociation((NakedObjectAssociation) field,
+                 * loadedObjects().getLoadedObject( elementOid)); } else {
+                 * object.initAssociation((NakedObjectAssociation) field,
+                 * getObject(elementOid, null)); }
+                 */
             } catch (ObjectNotFoundException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-                }
             }
+        }
     }
 
     public String name() {
@@ -357,22 +349,20 @@ public class XmlObjectStore implements NakedObjectStore {
      */
     private NakedObject recreateObject(ObjectData data) throws ObjectStoreException {
         SerialOid oid = data.getOid();
-        
+
         NakedObjectSpecification spec = specFor(data);
         NakedObject object = objectLoader.recreateAdapter(oid, spec);
-        
+
         /*
-        the above two lines replaces all this 
-        
-        if (loadedObjects().isLoaded(oid)) {
-            return loadedObjects().getLoadedObject(oid);
-        }
-        NakedObjectSpecification nc = classFor(data.getClassName());
-        NakedObject object = (NakedObject) nc.acquireInstance();
-        LOG.debug("Recreating object " + nc.getFullName() + "/" + oid);
-        object.setOid(oid);
-        loadedObjects().loaded(object);
-        */
+         * the above two lines replaces all this
+         * 
+         * if (loadedObjects().isLoaded(oid)) { return
+         * loadedObjects().getLoadedObject(oid); } NakedObjectSpecification nc =
+         * classFor(data.getClassName()); NakedObject object = (NakedObject)
+         * nc.acquireInstance(); LOG.debug("Recreating object " +
+         * nc.getFullName() + "/" + oid); object.setOid(oid);
+         * loadedObjects().loaded(object);
+         */
         initObject(object, data);
         //object.setResolved();
         return object;
@@ -387,9 +377,8 @@ public class XmlObjectStore implements NakedObjectStore {
         initObject(object, data);
     }
 
-    public void reset() {
-    }
-    
+    public void reset() {}
+
     public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException {
         LOG.info("start execution of transaction");
         for (int i = 0; i < commands.length; i++) {
@@ -413,15 +402,11 @@ public class XmlObjectStore implements NakedObjectStore {
     }
 
     public void shutdown() throws ObjectStoreException {
-        LOG.info("shutdown " + this);        
+        LOG.info("shutdown " + this);
     }
 
     public void startTransaction() {
-        LOG.debug("start transaction");    
-    }
-    
-    public void setObjectLoader(ObjectLoader objectLoader) {
-        this.objectLoader = objectLoader;
+        LOG.debug("start transaction");
     }
 }
 
