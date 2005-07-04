@@ -6,6 +6,8 @@ import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
+import org.nakedobjects.object.defaults.ObjectLoaderImpl;
+import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.fixture.Fixture;
 import org.nakedobjects.object.help.HelpManagerAssist;
 import org.nakedobjects.object.help.SimpleHelpManager;
@@ -84,7 +86,6 @@ public class JavaExploration {
 
             LocalObjectManager objectManager = new LocalObjectManager();
             objectManager.setObjectStore(objectStore);
-            objectManager.setObjectFactory(objectFactory);
             objectManager.setOidGenerator(oidGenerator);
 
             nakedObjects.setObjectManager(objectManager);
@@ -100,8 +101,12 @@ public class JavaExploration {
 
             JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
 
-            nakedObjects.setPojoAdapterFactory(objectManager);
-
+            ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
+            objectLoader.setObjectFactory(objectFactory);
+            objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
+            objectLoader.setReflectorFactory(reflectorFactory);
+            nakedObjects.setObjectLoader(objectLoader);
+            
             nakedObjects.setReflectionFactory(reflectionFactory);
             nakedObjects.setReflectorFactory(reflectorFactory);
 
@@ -109,9 +114,9 @@ public class JavaExploration {
 
             nakedObjects.setSession(new SimpleSession());
 
-            objectManager.init();
-
             builder = new JavaFixtureBuilder();
+
+            nakedObjects.init();
 
         } catch (Exception e) {
             ExceptionHelper.log(JavaExploration.class, "Exploration startup problem", e);

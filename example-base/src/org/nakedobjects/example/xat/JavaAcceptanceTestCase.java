@@ -3,6 +3,8 @@ package org.nakedobjects.example.xat;
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
+import org.nakedobjects.object.defaults.ObjectLoaderImpl;
+import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.fixture.FixtureBuilder;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
@@ -23,6 +25,7 @@ import org.apache.log4j.Logger;
 
 public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
     private static final Logger LOG = Logger.getLogger(JavaAcceptanceTestCase.class);
+    private static final boolean PROFILER_ON = false;
     private static Profiler classProfiler;
     private Profiler methodProfiler = new Profiler("method");
     
@@ -52,7 +55,7 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
         super.setUp();
         methodProfiler.stop();
         LOG.info("test set up complete " + getName() + " " + methodProfiler.timeLog());
-        System.out.print(getName() + ": \t" + methodProfiler.timeLog());
+        if(PROFILER_ON) {System.out.print(getName() + ": \t" + methodProfiler.timeLog());}
     }
     
     protected void tearDown() throws Exception {
@@ -62,7 +65,7 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
        super.tearDown();
         methodProfiler.stop();
         LOG.info("test tear down complete " + getName() + " " + methodProfiler.timeLog());
-        System.out.println(" \t" + methodProfiler.timeLog());
+        if(PROFILER_ON) {System.out.println(" \t" + methodProfiler.timeLog());}
     }
     
    protected void runTest() throws Throwable {
@@ -72,7 +75,7 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
        super.runTest();
        methodProfiler.stop();
        LOG.info("test run complete " + getName() + " " + methodProfiler.timeLog());
-       System.out.print(" \t" + methodProfiler.timeLog());
+       if(PROFILER_ON) {System.out.print(" \t" + methodProfiler.timeLog());}
    }
    
     protected final void setupFramework(NakedObjectsClient nakedObjects) {
@@ -87,7 +90,6 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
 
         LocalObjectManager objectManager = new LocalObjectManager();
         objectManager.setObjectStore(objectStore);
-        objectManager.setObjectFactory(objectFactory);
         objectManager.setOidGenerator(oidGenerator);
 
         nakedObjects.setObjectManager(objectManager);
@@ -100,9 +102,12 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
 
         JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
         
-    	nakedObjects.setPojoAdapterFactory(objectManager);
-		
-  
+        ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
+    	nakedObjects.setObjectLoader(objectLoader);
+        objectLoader.setObjectFactory(objectFactory);
+        objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
+        objectLoader.setReflectorFactory(reflectorFactory);
+        
         nakedObjects.setReflectionFactory(reflectionFactory);
         nakedObjects.setReflectorFactory(reflectorFactory);
 
