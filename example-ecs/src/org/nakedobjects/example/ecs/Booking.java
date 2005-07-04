@@ -250,18 +250,18 @@ public class Booking {
      * it has ensured that the object has been loaded into memory.
      */
     public City getCity() {
-        container.resolve(city);
+        container.resolve(this, city);
         return city;
     }
 
     public Telephone getContactTelephone() {
-        container.resolve(contactTelephone);
+        container.resolve(this, contactTelephone);
 
         return contactTelephone;
     }
 
     public Customer getCustomer() {
-        container.resolve(customer);
+        container.resolve(this, customer);
 
         return customer;
     }
@@ -281,13 +281,13 @@ public class Booking {
     }
     
     public Location getDropOff() {
-        container.resolve(dropOff);
+        container.resolve(this, dropOff);
 
         return dropOff;
     }
 
     public PaymentMethod getPaymentMethod() {
-        container.resolve(paymentMethod);
+        container.resolve(this, paymentMethod);
 
         return paymentMethod;
     }
@@ -297,7 +297,7 @@ public class Booking {
     }
     
     public Location getPickUp() {
-        container.resolve(pickUp);
+        container.resolve(this, pickUp);
 
         return pickUp;
     }

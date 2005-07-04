@@ -128,7 +128,7 @@ public class Customer {
     }
 
     public Location getHome() {
-        container.resolve(home);
+        container.resolve(this, home);
         return home;
     }
 
@@ -149,7 +149,7 @@ public class Customer {
     }
 
     public PaymentMethod getPreferredPaymentMethod() {
-        container.resolve(preferredPaymentMethod);
+        container.resolve(this, preferredPaymentMethod);
 
         return preferredPaymentMethod;
     }

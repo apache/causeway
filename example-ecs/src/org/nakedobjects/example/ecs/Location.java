@@ -113,12 +113,12 @@ public class Location {
     }
     
     public City getCity() {
-        container.resolve(city);
+        container.resolve(this, city);
         return city;
     }
 
     public Customer getCustomer() {
-        container.resolve(customer);
+        container.resolve(this, customer);
 
         return customer;
     }
