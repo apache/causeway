@@ -8,6 +8,7 @@ import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.distribution.SingleResponseUpdateNotifier;
 import org.nakedobjects.distribution.java.JavaObjectDataFactory;
 import org.nakedobjects.distribution.xml.ServerListener;
+import org.nakedobjects.object.defaults.IdentityAdapterMapImpl;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
@@ -67,12 +68,11 @@ public class XmlServer {
         LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
 
         JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
-        reflectorFactory.setObjectFactory(objectFactory);
 
         ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
-        objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
-        objectLoader.setReflectorFactory(reflectorFactory);
+        objectLoader.setPojoAdapterMap(new PojoAdapterHashImpl());
         objectLoader.setObjectFactory(objectFactory);
+        objectLoader.setIdentityAdapterMap(new IdentityAdapterMapImpl());
         nakedObjects.setObjectLoader(objectLoader);
 
         nakedObjects.setReflectionFactory(reflectionFactory);
