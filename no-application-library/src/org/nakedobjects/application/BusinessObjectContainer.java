@@ -26,6 +26,8 @@ public interface BusinessObjectContainer {
     long serialNumber(String sequence);
 
     void objectChanged(Object object);
+    
+    void userMessage(String text);
 }
 
 /*
