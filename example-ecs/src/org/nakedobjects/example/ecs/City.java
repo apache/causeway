@@ -5,14 +5,11 @@ import org.nakedobjects.application.Lookup;
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.TitledObject;
 import org.nakedobjects.application.control.FieldAbout;
-
-import java.util.Date;
+import org.nakedobjects.application.valueholder.TextString;
 
 
 public class City implements Lookup, TitledObject {
-    private String name;
-    private Date dateOpened;
-    private float population;
+    private final TextString name = new TextString();
     private transient BusinessObjectContainer container;
 
     public void setContainer(BusinessObjectContainer container) {
@@ -29,12 +26,8 @@ public class City implements Lookup, TitledObject {
     //   	about.modifiableOnlyByRole(Role.SYSADMIN);
     }
 
-    public final String getName() {
+    public final TextString getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public static String pluralName() {
@@ -42,23 +35,7 @@ public class City implements Lookup, TitledObject {
     }
 
     public String toString() {
-        return name;
-    }
-
-    public float getPopulation() {
-        return population;
-    }
-
-    public void setPopulation(float population) {
-        this.population = population;
-    }
-
-    public Date getDateOpened() {
-        return dateOpened;
-    }
-
-    public void setDateOpened(Date dateOpened) {
-        this.dateOpened = dateOpened;
+        return name.titleString();
     }
     
     public String lookupDescription() {
