@@ -1,4 +1,5 @@
 import org.nakedobjects.container.configuration.ConfigurationException;
+import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
 
 
@@ -10,7 +11,7 @@ public class StandaloneClientServerWithTransientStore extends StandaloneClientSe
     }
 
 
-    protected TransientObjectStore objectStore() {
+    protected NakedObjectStore objectStore() {
         return new TransientObjectStore();
     }
 }

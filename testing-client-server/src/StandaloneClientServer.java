@@ -13,16 +13,18 @@ import org.nakedobjects.distribution.pipe.NakedObjectsPipe;
 import org.nakedobjects.distribution.pipe.PipedClient;
 import org.nakedobjects.distribution.pipe.PipedConnection;
 import org.nakedobjects.distribution.pipe.PipedServer;
+import org.nakedobjects.object.defaults.IdentityAdapterMapImpl;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
 import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.persistence.NakedObjectManager;
+import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.ObjectManagerLogger;
+import org.nakedobjects.object.persistence.ObjectStoreLogger;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
-import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
@@ -78,7 +80,7 @@ public abstract class StandaloneClientServer {
     }
 
     private void server(final NakedObjectsPipe nakedObjects, final PipedConnection connection) {
-        final TransientObjectStore objectStore = objectStore();
+        final NakedObjectStore objectStore = new ObjectStoreLogger(objectStore(), "server-store.log");
 		    
         Runnable runnable = new Runnable() {
             public void run() {
@@ -101,21 +103,22 @@ public abstract class StandaloneClientServer {
 
                 OidGenerator oidGenerator = new SimpleOidGenerator();
 
-                LocalObjectManager objectManager = new LocalObjectManager();
-                objectManager.setObjectStore(objectStore);
-                objectManager.setOidGenerator(oidGenerator);
-                objectManager.setCheckObjectsForDirtyFlag(true);
+                LocalObjectManager localObjectManager = new LocalObjectManager();
+                localObjectManager.setObjectStore(objectStore);
+                localObjectManager.setOidGenerator(oidGenerator);
+                localObjectManager.setCheckObjectsForDirtyFlag(true);
 
+                NakedObjectManager objectManager = new ObjectManagerLogger(localObjectManager, "server-manager.log");
                 nakedObjects.setObjectManager(objectManager);
 
                 LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
 
                 JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
-                reflectorFactory.setObjectFactory(objectFactory);
 
                 ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
-                objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
+                objectLoader.setPojoAdapterMap(new PojoAdapterHashImpl());
                 objectLoader.setObjectFactory(objectFactory);
+                objectLoader.setIdentityAdapterMap(new IdentityAdapterMapImpl());
                 nakedObjects.setObjectLoader(objectLoader);
 
                 nakedObjects.setReflectionFactory(reflectionFactory);
@@ -184,7 +187,7 @@ public abstract class StandaloneClientServer {
         proxyObjectManager.setConnection(client);
         proxyObjectManager.setObjectDataFactory(objectDataFactory);
 
-        NakedObjectManager objectManager = new ObjectManagerLogger(proxyObjectManager, "manager");
+        NakedObjectManager objectManager = new ObjectManagerLogger(proxyObjectManager, "client-manager.log");
         nakedObjects.setObjectManager(objectManager);
 
         new NakedObjectSpecificationLoaderImpl();
@@ -196,8 +199,9 @@ public abstract class StandaloneClientServer {
         JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
 
         ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
-        objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
+        objectLoader.setPojoAdapterMap(new PojoAdapterHashImpl());
         objectLoader.setObjectFactory(objectFactory);
+        objectLoader.setIdentityAdapterMap(new IdentityAdapterMapImpl());
         nakedObjects.setObjectLoader(objectLoader);
 
         nakedObjects.setReflectionFactory(reflectionFactory);
@@ -208,7 +212,6 @@ public abstract class StandaloneClientServer {
 
         nakedObjects.init();
         
-        reflectorFactory.setObjectFactory(objectFactory);
 
         ViewUpdateNotifier updateNotifier = new ViewUpdateNotifier();
 
@@ -227,7 +230,7 @@ public abstract class StandaloneClientServer {
         skylark.init();
     }
 
-    protected abstract TransientObjectStore objectStore() ;
+    protected abstract NakedObjectStore objectStore() ;
 }
 
 /*
