@@ -1,18 +1,16 @@
 package org.nakedobjects.io;
 
-import org.nakedobjects.object.LoadedObjects;
+import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.Person;
 import org.nakedobjects.object.Role;
 import org.nakedobjects.object.Team;
-import org.nakedobjects.object.defaults.LoadedObjectsHashtable;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
-import org.nakedobjects.object.defaults.SerialOid;
 import org.nakedobjects.object.io.Memento;
+import org.nakedobjects.object.persistence.defaults.SerialOid;
 import org.nakedobjects.object.system.TestClock;
 
 import java.io.ByteArrayInputStream;
@@ -34,13 +32,11 @@ public class MementoTest extends TestCase {
     }
 
     private MockObjectManager originatingManager;
-   // private MockObjectManager receivingManager;
     private Person person;
     private Person person2;
     private Role role;
     private Team team;
     private LoadedObjects loadedObjects;
-    private NakedObjectContext context;
 
     protected void setUp() {
         BasicConfigurator.configure();
@@ -48,18 +44,9 @@ public class MementoTest extends TestCase {
         
         new TestClock();
         
-    	new NakedObjectSpecificationLoaderImpl();
-    	NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
-    	NakedObjectSpecificationImpl.setReflectorFactory(new InternalReflectorFactory());
-    	
-        originatingManager = MockObjectManager.setup();
- 
-        loadedObjects = new LoadedObjectsHashtable();
-        
-       context = new NakedObjectContext(originatingManager);
+        new TestSystem();
 
-       team = new Team();
-        team.setContext(context);
+        team = new Team();
         team.setOid(new SerialOid(11));
         team.getMembers().setOid(new SerialOid(13));
 
