@@ -11,14 +11,16 @@
 	<target name="release-number">
 		<dependset>
 			<srcfileset dir="..">
-				<include name="**/src/**/*.java"/>
-				<include name="**/src/**/*.vb"/>
-				<exclude name="**/build/**"/>
+				<include name="*/src/**/*.java"/>
+				<include name="build-dotnet/dot-net/src/**/*.vb"/>
+				<exclude name="*/build/**"/>
 			</srcfileset>
 			
+			<!--
 			<srcfileset dir="../no-application-library/src/" includes="**/*.java" />
 			<srcfileset dir="../no-core/src/" includes="**/*.java" />
 			<srcfileset dir="../no-default-reflector/src/" includes="**/*.java" />
+			-->
 			
 			<targetfilelist dir="." files="version.properties"/>
 		</dependset>
