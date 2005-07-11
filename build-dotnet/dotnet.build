@@ -226,11 +226,6 @@
 
 
     <target name="compile">	
-	
-	    <exec program="C:/Program Files/Java/apache-ant-1.6.2/bin/ant.bat" useruntimeengine="true">
-	          <arg line="-buildfile ./build.xml" />
-	    </exec>
-
         <!--asminfo output="AssemblyInfo2.vb" language="VB">
             <attributes>
                 <attribute type="AssemblyCopyrightAttribute" value="Copyright (c) 2005, Naked Objects Group Ltd, Inc." />
@@ -252,18 +247,26 @@
         <vbc target="library" output="build/nakedobjects.dotnet.dll" debug="true">
 			<sources basedir=".">
 				<include name="dot-net/src/**/*.vb"/>
-	                        <include name="AssemblyInfo.vb"/>
+                <include name="AssemblyInfo.vb"/>
 			</sources>
 			
 			<references basedir=".">
 				<include name="C:/WINDOWS/Microsoft.NET/Framework/v1.1.4322/vjslib.dll"/>
 				<include name="C:/WINDOWS/Microsoft.NET/Framework/v1.1.4322/System.dll"/>
-	                        <include name="build/nakedobjects.net.dll"/>
-	                        
-	                        <include name="dot-net/log4net.dll"/>
-	                        <include name="dot-net/Spring.Core.dll"/>
+	    		<include name="C:/WINDOWS/Microsoft.NET/Framework/v1.1.4322/System.Data.dll"/>
+	 
+	 
+	             <include name="D:/no-development/nakedobjects/build-dotnet/build/nakedobjects.net.dll"/>                    
+	             <include name="D:/no-development/nakedobjects/build-dotnet/dot-net/log4net.dll"/>
+	             <include name="D:/no-development/nakedobjects/build-dotnet/dot-net/Spring.Core.dll"/>
 			</references>
 	
+			<!-- references basedir="C:/WINDOWS/Microsoft.NET/Framework/v1.1.4322/">
+				<include name="vjslib.dll"/>
+				<include name="System.dll"/>
+	    		<include name="System.Data.dll"/>
+			</references-->
+
 		</vbc>
 
 		<!--vbc target="exe" output="build/example.exe" debug="true" main="Test">
@@ -277,6 +280,12 @@
 			</references>
 	
 		</vbc-->
+
+	
+	    <exec program="C:/Program Files/Java/apache-ant-1.6.2/bin/ant.bat" useruntimeengine="true">
+	          <arg line="-buildfile ./build.xml" />
+	    </exec>
+
         
     </target>
     
@@ -313,9 +322,9 @@
 		</copy>
 
 
-        <mkdir dir="g:/transfer" failonerror="false"/>
-        <copy todir="g:/transfer" failonerror="false">
-			<fileset basedir="../../no-builds/">
+        <mkdir dir="e:/transfer" failonerror="false"/>
+        <copy todir="e:/transfer" failonerror="false">
+			<fileset basedir="../../../no-builds/">
 				<include name="nakedobjects.net-${build.id}.zip"/>
 			</fileset>
 		</copy>

@@ -23,6 +23,11 @@ Namespace org.nakedobjects.dotnet
 Public MustInherit Class DotNetBootstrapper
         Public MustOverride Sub initExtensions()
 
+        Public Overridable Overloads Sub run(ByVal containerId As String, _
+            ByVal userContextId As String, _
+               ByVal viewerId As String)
+            Me.run(containerId, userContextId, viewerId, False)
+        End Sub
 
 
         Public Overloads Sub run( _
@@ -31,29 +36,51 @@ Public MustInherit Class DotNetBootstrapper
                          ByVal viewerId As String, _
                          ByVal consoleonly As Boolean)
 
+            Dim splash As SplashWindow
+            Try
+                initLogging()
+                initSpringContext()
 
-            initSpringContext()
+                If Not consoleonly Then splash = New SplashWindow
 
-            startLogging()
 
-            'TODO: should both be made properly springable 
-            'TODO: watch out for problems with references with the reflector factory
 
-            Dim rf As ReflectorFactory = _
-                DirectCast(myCtx.GetObject("SdmReflectorFactory"), ReflectorFactory)
+                'TODO: should both be made properly springable 
+                'TODO: watch out for problems with references with the reflector factory
 
-            Dim factory As PojoAdapterFactoryImpl = New PojoAdapterFactoryImpl
-            NakedObjects.setAdapterFactory(factory)
-            factory.setPojoAdapterHash(New PojoAdapterHashImpl)
-            factory.setReflectorFactory(rf)
+                'Dim rf As ReflectorFactory = _
+                '   DirectCast(myCtx.GetObject("SdmReflectorFactory"), ReflectorFactory)
 
-            initContainer(containerId)
-            initDependencies()
-            initExtensions()
-            If Not consoleOnly Then
-                If Not authenticate() Then Return
-            End If
+                ' Dim factory As PojoAdapterFactoryImpl = New PojoAdapterFactoryImpl
+                ' NakedObjects.setAdapterFactory(factory)
+                ' factory.setPojoAdapterHash(New PojoAdapterHashImpl)
+                ' factory.setReflectorFactory(rf)
 
+                initContainer(containerId)
+                initDependencies()
+                initExtensions()
+
+
+                If Not consoleonly Then
+                    If Not authenticate() Then Return
+                End If
+
+                display(userContextId)
+
+            Catch ex As Exception
+                ExceptionHelper.dumpException(ex)
+                Throw ex
+            Finally
+                If Not splash Is Nothing Then
+                    splash.toFront()
+                    splash.removeAfterDelay(3)
+                End If
+            End Try
+
+
+        End Sub
+
+        Public Overridable Sub display(ByVal userContextId As String)
 
         End Sub
 
@@ -68,15 +95,11 @@ Public MustInherit Class DotNetBootstrapper
         End Sub
 
 
-        Protected Sub startLogging()
+        Protected Sub initLogging()
             org.apache.log4j.BasicConfigurator.configure()
-            log4net.Config.DOMConfigurator.Configure()
-            PropertyConfigurator.configure( _
-                NakedObjects.getConfiguration().getProperties("log4j"))
-            Dim log As Logger = Logger.getLogger("Naked Objects")
-            log.info(AboutNakedObjects.getName())
-            log.info(AboutNakedObjects.getVersion())
-            log.info(AboutNakedObjects.getBuildId())
+            '  PropertyConfigurator.configure(NakedObjects.getConfiguration().getProperties("log4j"))
+            PropertyConfigurator.configure("logging.properties")
+            AboutNakedObjects.logVersion()
         End Sub
 
 
@@ -90,6 +113,8 @@ Public MustInherit Class DotNetBootstrapper
             myContainer = CType(myCtx.GetObject(containerId), _
                     FixtureBuilder)
         End Sub
+        
+        
         Public ReadOnly Property Container() As FixtureBuilder
             Get
                 Return myContainer

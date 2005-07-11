@@ -76,21 +76,19 @@ Namespace org.nakedobjects.dotnet
         Public Overrides Sub setUp()
 
             Try
-                org.apache.log4j.BasicConfigurator.configure()
-
-                LogManager.getRootLogger().setLevel(Level.ERROR)
+                startLogging()
+                'org.apache.log4j.BasicConfigurator.configure()
+                'LogManager.getRootLogger().setLevel(Level.ERROR)
 
                 initSpringContext()
-
-                startLogging()
 
                 Dim rf As ReflectorFactory = _
                 DirectCast(myCtx.GetObject("SdmReflectorFactory"), ReflectorFactory)
 
-                Dim factory As PojoAdapterFactoryImpl = New PojoAdapterFactoryImpl
-                NakedObjects.setAdapterFactory(factory)
-                factory.setPojoAdapterHash(New PojoAdapterHashImpl)
-                factory.setReflectorFactory(rf)
+               ' Dim factory As PojoAdapterFactoryImpl = New PojoAdapterFactoryImpl
+                'NakedObjects.setAdapterFactory(factory)
+                'factory.setPojoAdapterHash(New PojoAdapterHashImpl)
+                'factory.setReflectorFactory(rf)
 
 
                 initTestObjectFactory(myTestObjectFactoryId)
@@ -171,8 +169,7 @@ Namespace org.nakedobjects.dotnet
         End Sub
 
         Private Sub startLogging()
-            PropertyConfigurator.configure( _
-                NakedObjects.getConfiguration().getProperties("log4j"))
+            PropertyConfigurator.configure("logging.properties")
             Logger.getLogger( _
                 java.lang.Class.FromType(GetType(AcceptanceTestCase))). _
                     debug("XAT Logging enabled - new test: " + getName())
