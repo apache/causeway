@@ -97,16 +97,12 @@ public class TestingStandalone {
   
             ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
             objectLoader.setObjectFactory(objectFactory);
-            objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
-            objectLoader.setReflectorFactory(reflectorFactory);
+            objectLoader.setPojoAdapterMap(new PojoAdapterHashImpl());
             nakedObjects.setObjectLoader(objectLoader);
             
             nakedObjects.setReflectionFactory(reflectionFactory);
             nakedObjects.setReflectorFactory(reflectorFactory);
 
-            reflectorFactory.setObjectFactory(objectFactory);
-
-            
             
             // Exploration setup
             JavaFixtureBuilder fixtureBuilder = new JavaFixtureBuilder();
