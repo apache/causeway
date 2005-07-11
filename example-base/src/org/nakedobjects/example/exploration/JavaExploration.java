@@ -4,6 +4,7 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
+import org.nakedobjects.object.defaults.IdentityAdapterMapImpl;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
@@ -103,14 +104,12 @@ public class JavaExploration {
 
             ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
             objectLoader.setObjectFactory(objectFactory);
-            objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
-            objectLoader.setReflectorFactory(reflectorFactory);
+            objectLoader.setPojoAdapterMap(new PojoAdapterHashImpl());
+            objectLoader.setIdentityAdapterMap(new IdentityAdapterMapImpl());
             nakedObjects.setObjectLoader(objectLoader);
             
             nakedObjects.setReflectionFactory(reflectionFactory);
             nakedObjects.setReflectorFactory(reflectorFactory);
-
-            reflectorFactory.setObjectFactory(objectFactory);
 
             nakedObjects.setSession(new SimpleSession());
 

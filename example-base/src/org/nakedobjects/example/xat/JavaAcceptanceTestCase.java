@@ -2,6 +2,7 @@ package org.nakedobjects.example.xat;
 
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.application.NakedObjectRuntimeException;
+import org.nakedobjects.object.defaults.IdentityAdapterMapImpl;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
 import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
@@ -105,14 +106,12 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
         ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
     	nakedObjects.setObjectLoader(objectLoader);
         objectLoader.setObjectFactory(objectFactory);
-        objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
-        objectLoader.setReflectorFactory(reflectorFactory);
-        
+        objectLoader.setPojoAdapterMap(new PojoAdapterHashImpl());
+        objectLoader.setIdentityAdapterMap(new IdentityAdapterMapImpl());
+             
         nakedObjects.setReflectionFactory(reflectionFactory);
         nakedObjects.setReflectorFactory(reflectorFactory);
 
-        reflectorFactory.setObjectFactory(objectFactory);
-        
         try {
             objectManager.init();
         } catch (StartupException e) {
