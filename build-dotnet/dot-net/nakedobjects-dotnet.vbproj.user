@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <VisualBasic LastOpenVersion = "7.10.3077" >
         <Build>
-            <Settings ReferencePath = "D:\no-development\nakedobjects.net\build\;D:\no-development\nakedobjects.net\dot-net\" >
+            <Settings ReferencePath = "D:\no-development\nakedobjects\build-dotnet\build\;D:\no-development\nakedobjects.net\build\;D:\no-development\nakedobjects.net\dot-net\" >
                 <Config
                     Name = "Debug"
                     EnableASPDebugging = "false"

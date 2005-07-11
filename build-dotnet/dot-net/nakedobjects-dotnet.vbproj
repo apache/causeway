@@ -106,12 +106,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "src\DotNetBootstrapper.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "src\DotNetClient.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "src\DotNetClientShutdown.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "src\DotNetPrototype.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
