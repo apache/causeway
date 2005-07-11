@@ -7,6 +7,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
@@ -88,7 +89,7 @@ public class Memento implements Transferable, Serializable {
             if(getOid() == null) {
                 object = objectLoader.createTransientInstance(spec);
             } else {
-                object = objectLoader.recreateAdapter(getOid(), spec);
+                object = objectLoader.recreateAdapterForPersistent(getOid(), spec);
             }
             
             LOG.debug("Recreated object " + object.getOid());
@@ -108,7 +109,7 @@ public class Memento implements Transferable, Serializable {
                 ref = null;
             } else {
 	            NakedObjectSpecification spec = NakedObjects.getSpecificationLoader().loadSpecification(data.className);
-                ref = objectLoader.recreateAdapter(oid, spec);
+                ref = objectLoader.recreateAdapterForPersistent(oid, spec);
             }
             return ref;
         }
@@ -138,7 +139,7 @@ public class Memento implements Transferable, Serializable {
             } else {
                 NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
 
-                objectLoader.loading(object, true);
+                objectLoader.loading(object, ResolveState.RESOLVING);
                 
                 ObjectData od = (ObjectData) state;
 
@@ -157,7 +158,7 @@ public class Memento implements Transferable, Serializable {
                     }
                 }
                 
-                objectLoader.loaded(object, true);
+                objectLoader.loaded(object, ResolveState.RESOLVED);
             }
             LOG.debug("object updated " + object.getOid());
         }
