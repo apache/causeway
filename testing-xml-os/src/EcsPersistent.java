@@ -3,6 +3,7 @@ import org.nakedobjects.application.system.SystemClock;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
+import org.nakedobjects.object.defaults.IdentityAdapterMapImpl;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
@@ -82,15 +83,14 @@ public class EcsPersistent {
             nakedObjects.setReflectionFactory(reflectionFactory);
             nakedObjects.setReflectorFactory(reflectorFactory);
 
-            reflectorFactory.setObjectFactory(objectFactory);
-
             new SystemClock();
         
             nakedObjects.setSession(new SimpleSession());
             
             ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
-            objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
+            objectLoader.setPojoAdapterMap(new PojoAdapterHashImpl());
             objectLoader.setObjectFactory(objectFactory);
+            objectLoader.setIdentityAdapterMap(new IdentityAdapterMapImpl());
             nakedObjects.setObjectLoader(objectLoader);
 
             nakedObjects.init();

@@ -100,15 +100,12 @@ public class SetupObjectStore {
             nakedObjects.setReflectionFactory(reflectionFactory);
             nakedObjects.setReflectorFactory(reflectorFactory);
 
-            reflectorFactory.setObjectFactory(objectFactory);
-
             new SystemClock();
         
             nakedObjects.setSession(new SimpleSession());
 
             ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
-            objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
-            objectLoader.setReflectorFactory(reflectorFactory);
+            objectLoader.setPojoAdapterMap(new PojoAdapterHashImpl());
             objectLoader.setObjectFactory(objectFactory);
             nakedObjects.setObjectLoader(objectLoader);      
 
