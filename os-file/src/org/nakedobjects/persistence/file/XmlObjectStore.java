@@ -196,7 +196,7 @@ public class XmlObjectStore implements NakedObjectStore {
             SerialOid oid = instanceData.getOid();
 
             NakedObjectSpecification spec = specFor(instanceData);
-            NakedObject instance = objectLoader.recreateAdapter(oid, spec);
+            NakedObject instance = objectLoader.recreateAdapterForPersistent(oid, spec);
             initObject(instance, instanceData);
 
             if (criteria == null || criteria.matches(instance)) {
@@ -241,7 +241,7 @@ public class XmlObjectStore implements NakedObjectStore {
     }
 
     private void initObject(NakedObject object, ObjectData data) throws ObjectStoreException {
-        if (objectLoader.needsLoading(object)) {
+        if (objectLoader.canBeLoaded(object, null)) {
             objectLoader.loading(object, ResolveState.RESOLVING);
 
             NakedObjectField[] fields = object.getFields();
@@ -273,7 +273,7 @@ public class XmlObjectStore implements NakedObjectStore {
 
         Data fieldData = (Data) dataManager.loadData(referenceOid);
 
-        NakedObject reference = objectLoader.recreateAdapter(referenceOid, specFor(fieldData));
+        NakedObject reference = objectLoader.recreateAdapterForPersistent(referenceOid, specFor(fieldData));
         object.initAssociation((OneToOneAssociation) field, reference);
 
         /*
@@ -351,7 +351,7 @@ public class XmlObjectStore implements NakedObjectStore {
         SerialOid oid = data.getOid();
 
         NakedObjectSpecification spec = specFor(data);
-        NakedObject object = objectLoader.recreateAdapter(oid, spec);
+        NakedObject object = objectLoader.recreateAdapterForPersistent(oid, spec);
 
         /*
          * the above two lines replaces all this

@@ -50,16 +50,16 @@ public class XmlDataManagerTest extends TestCase {
 		data = new ObjectData[SIZE];
 //		NakedObjectSpecification type = specificationLoader.loadSpecification(Role.class.getName());
 		NakedObjectSpecification type = new DummyNakedObjectSpecification();
-        specificationLoader.addSpec(type);
-        specificationLoader.addSpec(type);
-        specificationLoader.addSpec(type);
-        specificationLoader.addSpec(type);
-        specificationLoader.addSpec(type);
-        specificationLoader.addSpec(type);
-        specificationLoader.addSpec(type);
-        specificationLoader.addSpec(type);
-        specificationLoader.addSpec(type);
-        specificationLoader.addSpec(type);
+        specificationLoader.addSpecification(type);
+        specificationLoader.addSpecification(type);
+        specificationLoader.addSpecification(type);
+        specificationLoader.addSpecification(type);
+        specificationLoader.addSpecification(type);
+        specificationLoader.addSpecification(type);
+        specificationLoader.addSpecification(type);
+        specificationLoader.addSpecification(type);
+        specificationLoader.addSpecification(type);
+        specificationLoader.addSpecification(type);
 
         pattern = new ObjectData(type, null);
 		for (int i = 0; i < SIZE; i++) {
