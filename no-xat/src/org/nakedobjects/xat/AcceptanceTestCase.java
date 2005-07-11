@@ -126,7 +126,8 @@ public abstract class AcceptanceTestCase extends TestCase {
 	      setupFramework(nakedObjects);
 
         nakedObjects.setSession(new Session());
-
+        nakedObjects.init();
+        
         setUpFixtures();
 
         try {

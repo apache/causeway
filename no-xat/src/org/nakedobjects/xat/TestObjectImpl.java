@@ -439,7 +439,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
                     + "' contains null, but should contain an NakedValue object");
         }
         if (nakedValue == null) {
-            nakedValue = (NakedValue) NakedObjects.getObjectLoader().createInstance(field.getSpecification());
+            nakedValue = (NakedValue) NakedObjects.getObjectLoader().createValueInstance(field.getSpecification());
         }
         try {
             nakedValue.parseTextEntry(value);

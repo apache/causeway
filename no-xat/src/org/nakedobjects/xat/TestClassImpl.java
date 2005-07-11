@@ -45,7 +45,7 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
      * Returns the NakedClass that this view represents.
      */
     public final Naked getForNaked() {
-        return NakedObjects.getObjectLoader().getAdapterOrCreateTransientFor(nakedClass);
+        return NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(nakedClass);
     }
   
     public String getTitle() {
