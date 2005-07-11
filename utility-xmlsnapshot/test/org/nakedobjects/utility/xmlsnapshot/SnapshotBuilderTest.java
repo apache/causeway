@@ -21,7 +21,7 @@ public class SnapshotBuilderTest extends TestCase {
         
       	MockNakedObjectSpecificationLoader loader = new MockNakedObjectSpecificationLoader();
         DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
-        loader.addSpec(spec);
+        loader.addSpecification(spec);
         spec.fields = new NakedObjectField[0];
         
         DummyNakedObject object = new DummyNakedObject();
