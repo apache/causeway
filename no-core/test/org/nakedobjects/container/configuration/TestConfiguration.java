@@ -1,18 +1,8 @@
-package org.nakedobjects.system;
+package org.nakedobjects.container.configuration;
 
 
-public interface Log {
+public class TestConfiguration extends Configuration {
 
-    /**
-     * Add a blnk line to the log 
-     */
-    void log();
-
-    /**
-     * 
-     * Add the specified message to the log
-     */
-    void log(String message);
 }
 
 

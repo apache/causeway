@@ -8,7 +8,6 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.DebugInfo;
-import org.nakedobjects.utility.StartupException;
 
 
 public interface NakedObjectManager extends NakedObjectsComponent, DebugInfo {

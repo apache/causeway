@@ -51,8 +51,7 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
      * creates a NakedObject adapter for it.
      */
     public NakedObject createTransientInstance(NakedObjectSpecification specification) {
-        NakedObject adapter = NakedObjects.getObjectLoader().createInstance(specification);
-        ((PojoAdapter) adapter).setTransient();
+        NakedObject adapter = NakedObjects.getObjectLoader().createTransientInstance(specification);
         return adapter;
     }
 

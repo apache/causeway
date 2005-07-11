@@ -137,7 +137,7 @@ public class DummyNakedObject implements NakedObject {
     }
 
 
-    public boolean isResolving() {
+    public boolean ignoreChanges() {
         return false;
     }
 

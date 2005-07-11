@@ -301,14 +301,10 @@ public class MemoryObjectStore implements NakedObjectStore {
         s.append(Debug.indentString(4) + "+--");
     }
 
-    public void init() throws ObjectStoreException {
-        LOG.info("init");
-    }
-
     private MemoryObjectStoreInstances instancesFor(NakedObjectSpecification spec) {
 		MemoryObjectStoreInstances ins = (MemoryObjectStoreInstances) instances.get(spec);
 		if (ins == null) {
-			ins = new MemoryObjectStoreInstances();
+			ins = new MemoryObjectStoreInstances(NakedObjects.getObjectLoader());
 			instances.put(spec, ins);
 		}
         return ins;
@@ -369,7 +365,7 @@ public class MemoryObjectStore implements NakedObjectStore {
         all.addElement(object);
         if (object != null && object.getOid() == null) {
             Oid fieldOid = instancesFor(object.getSpecification()).getOidFor(object.getObject());
-            object.setOid(fieldOid);
+//            object.setOid(fieldOid);
 //            NakedObjects.getObjectLoader().loaded(object);
         }
 
@@ -389,7 +385,7 @@ public class MemoryObjectStore implements NakedObjectStore {
         }
     }
 
-    public void shutdown() throws ObjectStoreException {
+    public void shutdown() {
         LOG.info("shutdown " + this);
         for (Enumeration e = instances.elements(); e.hasMoreElements();) {
             MemoryObjectStoreInstances inst = (MemoryObjectStoreInstances) e.nextElement();
@@ -411,6 +407,9 @@ public class MemoryObjectStore implements NakedObjectStore {
         }
         return ins;
     }
+
+    public void init() {}
+
 }
 
 /*

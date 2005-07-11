@@ -1,12 +1,9 @@
 package org.nakedobjects.object.reflect.internal;
 
 
-import org.nakedobjects.NakedObjectsClient;
+import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
-import org.nakedobjects.object.reflect.DummyPojoAdapterFactory;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
 
 import java.lang.reflect.Method;
 
@@ -23,7 +20,7 @@ public class InternalAssociationTest extends TestCase {
 	private InternalObjectForReferencing referencedObject;
 	private InternalOneToOneAssociation personField;
 	private NakedObject associate;
-    private MockNakedObjectSpecificationLoader loader;
+    private TestSystem system;
     private NakedObject object;
     private DummyNakedObjectSpecification spec;
     
@@ -36,20 +33,15 @@ public class InternalAssociationTest extends TestCase {
 
     	
     	Logger.getRootLogger().setLevel(Level.OFF);
-    	loader = new MockNakedObjectSpecificationLoader();
-        
+    	system = new TestSystem();
+        system.init();
+
         spec = new DummyNakedObjectSpecification();
-        loader.addSpec(spec);
-        NakedObjectsClient nakedObjects = new NakedObjectsClient();
-        nakedObjects.setSpecificationLoader(loader);
+        system.addSpecification(spec);
 
         objectWithOneToOneAssoications = new InternalObjectWithOneToOneAssociations();
-    	PojoAdapterFactory objectLoader = new DummyPojoAdapterFactory();
-    	nakedObjects.setObjectLoader(objectLoader);
-    	
-     //   objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
-    //    objectLoader.setReflectorFactory(new NullReflectorFactory());
-        object = objectLoader.createNOAdapter(objectWithOneToOneAssoications);
+
+        object = system.createAdapterForTransient(objectWithOneToOneAssoications);
         
         Class cls = InternalObjectWithOneToOneAssociations.class;
         Method get = cls.getDeclaredMethod("getReferencedObject", new Class[0]);
@@ -59,30 +51,28 @@ public class InternalAssociationTest extends TestCase {
         personField = new InternalOneToOneAssociation(PERSON_FIELD_NAME, InternalObjectForReferencing.class, get, set, null, null, about);
         
         referencedObject = new InternalObjectForReferencing();
-        associate = objectLoader.createNOAdapter(referencedObject);
+        associate = system.createAdapterForTransient(referencedObject);
     }
 
-    
 
     protected void tearDown() throws Exception {
-   //     manager.shutdown();
-        super.tearDown();
+        system.shutdown();
     }
 
     public void testType() {
  //       DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
-        loader.addSpec(spec);
+        system.addSpecification(spec);
     	assertEquals(spec, personField.getType());
     }
     	
     public void testSet() {
-        loader.addSpec(spec);
+        system.addSpecification(spec);
      	personField.setAssociation(new DummyIdentifier(), object, associate);
      	assertEquals(associate.getObject(), objectWithOneToOneAssoications.getReferencedObject());
     }     	
     
     public void testRemove() {
-        loader.addSpec(spec);
+        system.addSpecification(spec);
         
     	objectWithOneToOneAssoications.setReferencedObject(referencedObject);
     	

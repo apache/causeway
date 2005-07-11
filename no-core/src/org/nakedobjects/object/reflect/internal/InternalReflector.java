@@ -1,7 +1,6 @@
 package org.nakedobjects.object.reflect.internal;
 
 import org.nakedobjects.object.Aggregated;
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.Persistable;
@@ -15,7 +14,6 @@ import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.Reflector;
-import org.nakedobjects.utility.UnexpectedCallException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -99,27 +97,6 @@ public class InternalReflector implements Reflector {
         }
         this.cls = cls;
         methods = cls.getMethods();
-    }
-
-    
-    public Naked acquireInstance() {
-        throw new UnexpectedCallException();
- /*       if (Modifier.isAbstract(cls.getModifiers())) {
-            throw new IllegalStateException("Handling of abstract naked classes is not yet supported: " + cls);
-        } else {
-            try {
-                return NakedObjects.getObjectLoader().createAdapter(cls.newInstance());
-            } catch (NoSuchMethodError ex) {
-                throw new NakedObjectRuntimeException("No accessible default constructor in " + className());
-            } catch (IllegalAccessException e) {
-                throw new NakedObjectRuntimeException("Can't access the default constructor when creating class " + cls
-                        + ". Ensure it is public");
-            } catch (InstantiationException e) {
-                throw new NakedObjectRuntimeException("Failed to instantiate a " + className() + " object: " + e, e);
-            }
-        }
-    */
-        
     }
 
     public ActionPeer[] actionPeers(boolean forClass) {

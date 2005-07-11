@@ -2,11 +2,11 @@ package org.nakedobjects.object.reflect.internal;
 
 
 import org.nakedobjects.NakedObjectsClient;
+import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
-import org.nakedobjects.object.reflect.DummyNakedObject;
+import org.nakedobjects.object.NakedObject;
 
 import java.lang.reflect.Method;
 
@@ -24,7 +24,7 @@ public class InternalOneToOneAssociationTest extends TestCase {
 	private InternalOneToOneAssociation personField;
 	private InternalObjectForReferencing referencedObject;
 	private MockNakedObject associate;
-    private MockNakedObjectSpecificationLoader loader;
+    private TestSystem system;
     private DummyNakedObjectSpecification spec;
     private NakedObjectsClient nakedObjects;
     
@@ -36,12 +36,11 @@ public class InternalOneToOneAssociationTest extends TestCase {
         super.setUp();
 
         Logger.getRootLogger().setLevel(Level.OFF);
-        loader = new MockNakedObjectSpecificationLoader();
+        system = new TestSystem();
+        system.init();
 
         spec = new DummyNakedObjectSpecification();
-        loader.addSpec(spec);
-        nakedObjects = new NakedObjectsClient();
-        nakedObjects.setSpecificationLoader(loader);
+        system.addSpecification(spec);
 
         objectWithOneToOneAssoications = new InternalObjectWithOneToOneAssociations();
         nakedObject = new MockNakedObject();
@@ -61,14 +60,17 @@ public class InternalOneToOneAssociationTest extends TestCase {
         associate.setupObject(referencedObject);
     }
 
+    protected void tearDown() throws Exception {
+        system.shutdown();
+    }
+    
     public void testType() {
-      //  DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
-        loader.addSpec(spec);
+        system.addSpecification(spec);
     	assertEquals(spec, personField.getType());
     }
     	
     public void testSet() {
-        loader.addSpec(spec);
+        system.addSpecification(spec);
        
      	personField.setAssociation(new DummyIdentifier(), nakedObject, associate);
      	
@@ -76,7 +78,7 @@ public class InternalOneToOneAssociationTest extends TestCase {
     }     	
     
     public void testRemove() {
-        loader.addSpec(spec);
+        system.addSpecification(spec);
         
     	objectWithOneToOneAssoications.setReferencedObject(referencedObject);
     	assertNotNull(objectWithOneToOneAssoications.getReferencedObject());
@@ -87,11 +89,7 @@ public class InternalOneToOneAssociationTest extends TestCase {
     }     	
     
     public void testGet() {
-        MockDummyObjectLoader objectLoader = new MockDummyObjectLoader();
-        DummyNakedObject pojoFromLoader = new DummyNakedObject();
-        objectLoader.setupAdapter(pojoFromLoader);
-        nakedObjects.setObjectLoader(objectLoader);
-        
+        NakedObject pojoFromLoader = system.createAdapterForTransient(referencedObject);
     	objectWithOneToOneAssoications.setReferencedObject(referencedObject);
     	
     	Naked association = personField.getAssociation(new DummyIdentifier(), nakedObject);

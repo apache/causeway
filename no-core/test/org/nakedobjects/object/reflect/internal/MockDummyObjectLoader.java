@@ -59,7 +59,7 @@ public class MockDummyObjectLoader implements NakedObjectLoader {
         return null;
     }
 
-    public NakedObject recreateAdapter(Oid oid, NakedObjectSpecification spec) {
+    public NakedObject recreateAdapterForPersistent(Oid oid, NakedObjectSpecification spec) {
         return null;
     }
 
@@ -85,13 +85,13 @@ public class MockDummyObjectLoader implements NakedObjectLoader {
 
     public void unloaded(NakedObject object) {}
 
-    public void makePersistent(NakedObject object, Oid oid) {}
+    public void madePersistent(NakedObject object, Oid oid) {}
 
-    public NakedObject getAdapterOrCreateTransientFor(Object object) {
+    public NakedObject getAdapterForElseCreateAdapterForTransient(Object object) {
         return null;
     }
 
-    public boolean needsLoading(NakedObject object) {
+    public boolean canBeLoaded(NakedObject object, ResolveState newState) {
         return false;
     }
 

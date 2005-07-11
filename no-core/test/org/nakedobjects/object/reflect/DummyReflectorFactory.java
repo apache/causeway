@@ -1,6 +1,6 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectFactory;
@@ -12,10 +12,6 @@ public class DummyReflectorFactory extends ReflectorFactory {
 
     public Reflector createReflector(String className) throws ReflectionException {
         return new Reflector() {
-
-            public Naked acquireInstance() {
-                return null;
-            }
 
             public ActionPeer[] actionPeers(boolean forClass) {
                 return null;
@@ -119,6 +115,14 @@ public class DummyReflectorFactory extends ReflectorFactory {
     public NakedValue createValueAdapter(Object pojo) {
         return null;
     }
+
+    public NakedCollection createCollectionAdapter(Object object) {
+        return null;
+    }
+
+    public void init() {}
+
+    public void shutdown() {}
 
 }
 

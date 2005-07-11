@@ -16,14 +16,18 @@ import org.apache.log4j.Logger;
 
 
 /*
- * The objects need to store in a repeatable sequence so the elements and
- * instances method return the same data for any repeated call, and so that one
- * subset of instances follows on the previous. This is done by keeping the
- * objects in the order that they where created.
+ * The objects need to store in a repeatable sequence so the elements and instances method return the same data for any repeated
+ * call, and so that one subset of instances follows on the previous. This is done by keeping the objects in the order that they
+ * where created.
  */
 class MemoryObjectStoreInstances {
     protected final Hashtable objectInstances = new Hashtable();
     protected final Hashtable titleIndex = new Hashtable();
+    private NakedObjectLoader objectLoader;
+
+    public MemoryObjectStoreInstances(NakedObjectLoader objectLoader) {
+        this.objectLoader = objectLoader;
+    }
 
     public Enumeration elements() {
         Vector v = new Vector(objectInstances.size());
@@ -40,7 +44,7 @@ class MemoryObjectStoreInstances {
     }
 
     public NakedObject getObject(Oid oid) {
-        NakedObject loadedObject = loaded().getAdapterFor(oid);
+        NakedObject loadedObject = objectLoader.getAdapterFor(oid);
         if (loadedObject != null) {
             return loadedObject;
         } else {
@@ -48,19 +52,11 @@ class MemoryObjectStoreInstances {
             if (pojo == null) {
                 return null;
             }
-            NakedObject object = NakedObjects.getObjectLoader().getAdapterFor(pojo);
-            if (object.getOid() == null) {
-                object.setOid(oid);
-                if(!object.isResolved()) {
-                    object.setResolved();
-                }
-            } else if (!object.getOid().equals(oid)) {
-                throw new NakedObjectRuntimeException("Requested object with OID " + oid
-                        + ", but got object (with different oid): " + object);
-            }
-            loaded().loaded(object, true);
+            NakedObject adapter;
+            adapter = objectLoader.getAdapterForElseCreateAdapterForTransient(pojo);
+            objectLoader.madePersistent(adapter, oid);
 
-            return object;
+            return objectLoader.recreateAdapterForPersistent(oid, null);
         }
     }
 
@@ -81,23 +77,23 @@ class MemoryObjectStoreInstances {
     }
 
     public void instances(InstancesCriteria criteria, Vector instances) {
-        if(criteria instanceof TitleCriteria) {
+        if (criteria instanceof TitleCriteria) {
             String requiredTitle = ((TitleCriteria) criteria).getRequiredTitle();
             Object oid = titleIndex.get(requiredTitle);
-            if(oid != null) {
+            if (oid != null) {
                 NakedObject object = getObject((Oid) oid);
                 instances.addElement(object);
                 return;
             }
         }
-        
+
         Enumeration e = elements();
         while (e.hasMoreElements()) {
             NakedObject element = (NakedObject) e.nextElement();
-            if(criteria.matches(element)) {
+            if (criteria.matches(element)) {
                 instances.addElement(element);
             }
-        }    
+        }
     }
 
     public void instances(Vector instances) {
@@ -105,10 +101,6 @@ class MemoryObjectStoreInstances {
         while (e.hasMoreElements()) {
             instances.addElement(e.nextElement());
         }
-    }
-
-    protected NakedObjectLoader loaded() {
-        return NakedObjects.getObjectLoader();
     }
 
     public int numberOfInstances() {
@@ -119,7 +111,7 @@ class MemoryObjectStoreInstances {
         NakedObject object;
         object = getObject(oid);
         objectInstances.remove(oid);
-        loaded().unloaded(object);
+        objectLoader.unloaded(object);
     }
 
     public void save(NakedObject object) {
@@ -135,25 +127,18 @@ class MemoryObjectStoreInstances {
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user. Copyright (C) 2000 -
+ * 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is Kingsway House, 123
+ * Goldworth Road, Woking GU21 1NR, UK).
  */

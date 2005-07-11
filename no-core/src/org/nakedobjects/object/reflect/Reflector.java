@@ -10,9 +10,6 @@ public interface Reflector {
     public static final boolean CLASS = true;
     public static final boolean OBJECT = false;
 
-    /** @deprecated */
-    Naked acquireInstance();
-
     ActionPeer[] actionPeers(boolean forClass);
 
     String[] actionSortOrder();

@@ -1,14 +1,11 @@
 package org.nakedobjects.object.persistence.defaults;
 
-import org.nakedobjects.NakedObjectsClient;
+import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
+import org.nakedobjects.object.MockObjectLoader;
 import org.nakedobjects.object.MockObjectStore;
-import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
-import org.nakedobjects.object.defaults.MockObjectFactory;
-import org.nakedobjects.object.reflect.DummyPojoAdapterFactory;
 import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
 
 import junit.framework.TestCase;
 
@@ -25,23 +22,34 @@ public class LocalObjectManagerTest extends TestCase {
     private LocalObjectManager objectManager;
     private DummyNakedObjectSpecification objectSpecification;
     private MockObjectStore objectStore;
-    private PojoAdapterFactory objectLoader;
     private MockNakedObject testNakedObject;
+    private MockObjectLoader objectLoader;
+    private TestSystem system;
 
     protected void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
-
-        objectStore = new MockObjectStore();
+        
+        system = new TestSystem();
 
         objectManager = new LocalObjectManager();
+        objectStore = new MockObjectStore();
         objectManager.setObjectStore(objectStore);
         objectManager.setOidGenerator(new MockOidGenerator());
 
-        objectLoader = new DummyPojoAdapterFactory();
-        new NakedObjectsClient().setObjectLoader(objectLoader);
+        system.setObjectManager(objectManager);
+        
+        objectLoader = new MockObjectLoader();
+        system.setObjectLoader(objectLoader);
+
+        system.init();
+        
         testNakedObject = new MockNakedObject();
         objectSpecification = new DummyNakedObjectSpecification();
         testNakedObject.setupSpecification(objectSpecification);
+    }
+    
+    protected void tearDown() throws Exception {
+      	system.shutdown();
     }
 
     public void testAbort() {
@@ -67,7 +75,7 @@ public class LocalObjectManagerTest extends TestCase {
     public void testDestroy() {
         objectSpecification.fields = new NakedObjectField[0];
 
-        objectLoader.createAdapter(testNakedObject);
+        system.createAdapterForTransient(testNakedObject);
 
         objectManager.startTransaction();
         objectManager.destroyObject(testNakedObject);
@@ -87,15 +95,14 @@ public class LocalObjectManagerTest extends TestCase {
         objectManager.startTransaction();
         objectManager.makePersistent(testNakedObject);
         objectManager.endTransaction();
-    }
-
-    public void testIncomplete() {
-        MockNakedObjectSpecificationLoader specLoader = new MockNakedObjectSpecificationLoader();
-        specLoader.addSpec(new DummyNakedObjectSpecification());
-
-        LocalObjectManager om = new LocalObjectManager();
-        om.setObjectFactory(new MockObjectFactory());
-    }
+        
+        objectStore.assertAction(0, "createObject " + testNakedObject);
+        objectStore.assertAction(1, "startTransaction");
+        objectStore.assertAction(2, "run CreateObjectCommand " + testNakedObject);
+        objectStore.assertAction(3, "endTransaction");
+        
+        assertEquals(4, objectStore.getActions().size());
+   }
 }
 
 /*

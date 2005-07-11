@@ -1,9 +1,9 @@
 package org.nakedobjects.object;
 
 public interface ObjectFactory {
-    Object createNewLogicalObject(NakedObjectSpecification specification);
+    void setUpAsNewLogicalObject(Object object);
  
-    Object recreateObject(NakedObjectSpecification specification);
+    Object createObject(NakedObjectSpecification specification);
     
     Object createValueObject(NakedObjectSpecification specification);
  

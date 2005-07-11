@@ -17,21 +17,12 @@ import org.apache.log4j.Logger;
 public class NakedObjectSpecificationLoaderImpl implements NakedObjectSpecificationLoader {
     private final static Logger LOG = Logger.getLogger(NakedObjectSpecificationLoaderImpl.class);
     private Hashtable classes;
+    private ReflectorFactory reflectorFactory;
  
     public NakedObjectSpecificationLoaderImpl() {
         classes = new Hashtable();    
     }
-    
-     /**
-     * Expose as a .NET property
-     * 
-     * @property
-     * @deprecated
-     */
-    public void set_ReflectorFactory(ReflectorFactory reflectorFactory) {
-        throw new NakedObjectRuntimeException("Changed configuration; setup in NakedObjects instead");
-    }
-
+   
     public NakedObjectSpecification loadSpecification(Class cls) {
         return loadSpecification(cls.getName());
     }
@@ -51,10 +42,6 @@ public class NakedObjectSpecificationLoaderImpl implements NakedObjectSpecificat
                 if (InternalNakedObject.class.isAssignableFrom(cls) || cls.getName().startsWith("java.")) {
                     reflector = new InternalReflector(className);
                 } else {
-                    ReflectorFactory reflectorFactory = NakedObjects.getReflectorFactory();
-                    if (reflectorFactory == null) {
-                        throw new NakedObjectRuntimeException("No reflector factory has be set up");
-                    }
                     reflector = reflectorFactory.createReflector(className);
                 }
 
@@ -96,8 +83,21 @@ public class NakedObjectSpecificationLoaderImpl implements NakedObjectSpecificat
     public void shutdown() {
         classes.clear();
     }
+    
+    /** 
+     * @property
+     * 
+     * @deprecated */
+    public void set_ReflectorFactory(ReflectorFactory reflectorFactory) {
+        this.reflectorFactory = reflectorFactory;
+    }
 
-    public void init() {}
+    public void init() {
+        reflectorFactory = NakedObjects.getReflectorFactory();
+        if (reflectorFactory == null) {
+            throw new NakedObjectRuntimeException("No reflector factory has be set up");
+        }
+    }
 }
 
 /*

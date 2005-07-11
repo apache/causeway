@@ -1,10 +1,7 @@
 package org.nakedobjects.object.defaults;
 
-import org.nakedobjects.NakedObjects;
-import org.nakedobjects.NakedObjectsClient;
-import org.nakedobjects.object.Naked;
+import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.reflect.DummyNakedObject;
 import org.nakedobjects.object.reflect.NakedObjectField;
 
 import junit.framework.TestCase;
@@ -20,6 +17,7 @@ import com.mockobjects.ExpectationSet;
 public class NakedObjectSpecificationImplTests extends TestCase {
     private NakedObjectSpecificationImpl nakedObjectSpecification;
     private MockReflector mockReflector;
+    private TestSystem system;
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(new TestSuite(NakedObjectSpecificationImplTests.class));
@@ -38,43 +36,20 @@ public class NakedObjectSpecificationImplTests extends TestCase {
     protected void setUp() {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
-        MockNakedObjectSpecificationLoader specificationLoader = new MockNakedObjectSpecificationLoader();
-        NakedObjectsClient nakedObjects = new NakedObjectsClient();
-        nakedObjects.setSpecificationLoader(specificationLoader);
-        nakedObjects.setReflectionFactory(new MockReflectionFactory());
+        system = new TestSystem();
+        system.init();
 
-        nakedObjectSpecification = new NakedObjectSpecificationImpl();
         mockReflector = new MockReflector();
         mockReflector.superClass = new NakedObjectSpecificationImpl();
+        nakedObjectSpecification = new NakedObjectSpecificationImpl();
         
-        specificationLoader.addSpec(mockReflector.superClass);
-        
+        system.addSpecification(mockReflector.superClass);
         
         nakedObjectSpecification.reflect("class-x", mockReflector);
-
-        /*
-         * new NakedObjectSpecificationLoaderImpl();
-         * NakedObjectSpecificationImpl.setReflectionFactory(new
-         * LocalReflectionFactory());
-         * 
-         * new DummyNakedObjectSpecificationLoader(); new MockReflector();
-         * 
-         * nakedObjectSpecification =
-         * nakedObjectSpecification(NakedClassTestObject.class);
-         */
     }
 
     protected void tearDown() throws Exception {
-        // manager.shutdown();
-        super.tearDown();
-    }
-
-    public void testAcquireInstance() {        
-        DummyNakedObject instance = new DummyNakedObject();
-        mockReflector.setupAcquireInstance(instance);
-        
-        Naked acquire = NakedObjects.getObjectLoader().createAdapterForValue(nakedObjectSpecification);
-        assertEquals(instance, acquire);
+        system.shutdown();
     }
     
     public void testGetFieldsNew() {

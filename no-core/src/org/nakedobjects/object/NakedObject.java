@@ -76,7 +76,7 @@ public interface NakedObject extends Naked {
     /**
      * Returns true while object is having its field set up.
      */
-    boolean isResolving();
+    boolean ignoreChanges();
 
     /**
      * Returns true when an object has not yet been made persistent.

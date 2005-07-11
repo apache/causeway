@@ -125,8 +125,8 @@ public class ObjectManagerLogger extends Logger implements NakedObjectManager {
     }
 
     public void resolveImmediately(NakedObject object) {
-        log("Resolve immediately: " + object);
         decorated.resolveImmediately(object);
+        log("Resolve immediately: " + object);
     }
 
     public void saveChanges() {

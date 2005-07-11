@@ -144,12 +144,16 @@ public class MockObjectStore implements NakedObjectStore {
         return instances;
     }
 
-    public CreateObjectCommand createCreateObjectCommand(NakedObject object) {
+    public CreateObjectCommand createCreateObjectCommand(final NakedObject object) {
         actions.addElement("createObject " + object);
         return new CreateObjectCommand() {
 
             public void execute() throws ObjectStoreException {}
 
+            public String toString() {
+                return "CreateObjectCommand " + object.toString();
+            }
+            
             public NakedObject onObject() {
                 return null;
             }};

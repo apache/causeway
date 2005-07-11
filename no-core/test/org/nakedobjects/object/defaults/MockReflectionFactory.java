@@ -27,6 +27,10 @@ public class MockReflectionFactory implements ReflectionFactory {
         return new OneToOneAssociation(className, "field one", new DummyNakedObjectSpecification(), local);
     }
 
+    public void init() {}
+
+    public void shutdown() {}
+
 }
 
 

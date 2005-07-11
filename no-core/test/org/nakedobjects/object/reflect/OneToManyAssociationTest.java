@@ -9,7 +9,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.defaults.MockObjectFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.persistence.ObjectStoreException;
 
@@ -39,7 +38,7 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     public void setUp()  throws ObjectStoreException {
     	LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
-    	new NakedObjectsClient().setObjectManager(new MockObjectManager(new MockObjectFactory()));
+    	new NakedObjectsClient().setObjectManager(new MockObjectManager());
     	
        	nakedObject = new DummyNakedObject();
         associate = new DummyNakedObject();

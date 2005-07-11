@@ -1,7 +1,12 @@
 package org.nakedobjects.object.reflect;
 
+import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.defaults.DummyObjectFactory;
+import org.nakedobjects.object.defaults.IdentityAdapterMapImpl;
+import org.nakedobjects.object.defaults.ObjectLoaderImpl;
 import org.nakedobjects.object.defaults.PojoAdapterHash;
 import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;
 
@@ -11,43 +16,57 @@ import junit.framework.TestCase;
 
 public class PojoAdapterFactoryCreateTest extends TestCase {
 
-    private ObjectLoaderImpl factory;
+    private ObjectLoaderImpl objectLoader;
     private Cache cache;
+    private TestSystem system;
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(PojoAdapterFactoryCreateTest.class);
     }
 
     protected void setUp() throws Exception {
+        system = new TestSystem();
+        
+        objectLoader = new ObjectLoaderImpl();
         cache = new Cache();
-        factory = new ObjectLoaderImpl();
-        factory.setPojoAdapterHash(cache);
-        factory.setReflectorFactory(new DummyReflectorFactory());
+        objectLoader.setPojoAdapterMap(cache);
+        objectLoader.setIdentityAdapterMap(new IdentityAdapterMapImpl());
+        objectLoader.setObjectFactory(new DummyObjectFactory());
+        
+        system.setObjectLoader(objectLoader);
+        system.init();
+    }
+    
+    protected void tearDown() throws Exception {
+        system.shutdown();
     }
 
     public void testValueCreatesAValueAdapter() {
-        Naked naked = factory.createAdapter("test java object");
+        Naked naked = objectLoader.createAdapterForValue("test java object");
         assertTrue(naked instanceof AbstractNakedValue);
     }
 
     public void testValuesAreNotCached() {
-        Naked naked = factory.createAdapter("test java object");
+        Naked naked = objectLoader.createAdapterForValue("test java object");
         assertNull(cache.action);
 
-        Naked naked2 = factory.createAdapter("test java object");
+        Naked naked2 = objectLoader.createAdapterForValue("test java object");
         assertNotSame("Values are not cached, so will get new adapter each time", naked, naked2);
     }
 
     public void testGenericObectCreatesAPojoAdapter() {
         ExampleBusinessObject businessObject = new ExampleBusinessObject();
-        Naked adapter = factory.createAdapter(businessObject);
+        cache.setupPojo(businessObject);
+        cache.adapter = new PojoAdapter(businessObject);
+        Naked adapter = objectLoader.createAdapterForTransient(businessObject);
         assertTrue(adapter instanceof PojoAdapter);
         assertEquals(businessObject, adapter.getObject());
     }
 
     public void testAdapterIsAddedToCache() {
         ExampleBusinessObject businessObject = new ExampleBusinessObject();
-        factory.createAdapter(businessObject);
+        cache.setupPojo(businessObject);
+        objectLoader.createAdapterForTransient(businessObject);
         assertEquals("add " + businessObject, cache.action);
     }
 
@@ -56,9 +75,9 @@ public class PojoAdapterFactoryCreateTest extends TestCase {
         cache.containsPojo = true;
 
         ExampleBusinessObject businessObject = new ExampleBusinessObject();
-        cache.pojo = businessObject;
+        cache.setupPojo(businessObject);
 
-        Naked adapter = factory.createAdapter(businessObject);
+        Naked adapter = objectLoader.getAdapterForElseCreateAdapterForTransient(businessObject);
         assertEquals(adapter, cache.adapter);
     }
 
@@ -66,31 +85,31 @@ public class PojoAdapterFactoryCreateTest extends TestCase {
 
     public void testCantCreateAdapterForAnAdapter() {
         try {
-            factory.createAdapter(new DummyNakedObject());
+            objectLoader.createAdapterForTransient(new DummyNakedObject());
             fail();
         } catch (NakedObjectRuntimeException expected) {}
     }
 
     public void testResetClearsCache() {
-        factory.reset();
+        objectLoader.reset();
         assertEquals("reset", cache.action);
-    }
-
-    public void testShutdownShutsCache() {
-        factory.shutdown();
-        assertEquals("shutdown", cache.action);
-
     }
 }
 
 class Cache implements PojoAdapterHash {
-    ExampleBusinessObject pojo;
+    Object pojo;
     String action = null;
     Naked adapter = null;
     boolean containsPojo = false;
 
     public void add(Object pojo, Naked adapter) {
         action = "add " + pojo;
+        this.pojo = pojo;
+        this.adapter = adapter;
+    }
+
+    public void setupPojo(ExampleBusinessObject pojo) {
+        this.pojo = pojo;
     }
 
     public boolean containsPojo(Object pojo) {
@@ -119,6 +138,9 @@ class Cache implements PojoAdapterHash {
         return null;
     }
 
+    public void remove(NakedObject object) {}
+
+   
 }
 
 class ExampleBusinessObject {}

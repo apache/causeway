@@ -53,6 +53,8 @@ public class MockNakedObjectSpecificationLoaderNew implements NakedObjectSpecifi
 
     public void shutdown() {}
 
+    public void init() {}
+
 }
 
 

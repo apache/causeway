@@ -1,6 +1,5 @@
 package org.nakedobjects.object.defaults;
 
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
@@ -14,10 +13,6 @@ public class PrimitiveReflector implements Reflector {
   
     public PrimitiveReflector(String className) {
         this.name = className;
-    }
-
-    public Naked acquireInstance() {
-        return null;
     }
 
     public ActionPeer[] actionPeers(boolean forClass) {

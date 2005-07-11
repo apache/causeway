@@ -1,6 +1,5 @@
 package org.nakedobjects.object.persistence.defaults;
 
-import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.MockObjectStore;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.persistence.CreateObjectCommand;
@@ -8,8 +7,6 @@ import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.object.persistence.SaveObjectCommand;
 import org.nakedobjects.object.reflect.DummyNakedObject;
-import org.nakedobjects.object.reflect.DummyPojoAdapterFactory;
-import org.nakedobjects.object.reflect.ObjectLoaderImpl;
 
 import junit.framework.TestCase;
 
@@ -91,11 +88,11 @@ public class TransactionTest extends TestCase {
     protected void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
+        //system = new TestSystem();
+        
         t = new Transaction();
         os = new MockObjectStore();
         
-        new NakedObjectsClient().set_PojoAdapterFactory(new DummyPojoAdapterFactory());
-
         object1 = new DummyNakedObject();
         object2 = new DummyNakedObject();
     }

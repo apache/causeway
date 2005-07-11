@@ -188,14 +188,20 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         return spec;
     }
 
-    public NakedObject getObject(Oid oid, NakedObjectSpecification objectType) {
+    public NakedObject getObject(Oid oid, NakedObjectSpecification specification) {
+        Assert.assertNotNull("needs an OID", oid);
+        Assert.assertNotNull("needs a specification", specification);
+        
         NakedObject object;
+        /*
 		if(oid == null) {
 		    object = NakedObjects.getObjectLoader().createTransientInstance(objectType);
-		} else if(NakedObjects.getObjectLoader().isIdentityKnown(oid)) {
+		} else
+		    */
+        if(NakedObjects.getObjectLoader().isIdentityKnown(oid)) {
 		    object = NakedObjects.getObjectLoader().getAdapterFor(oid);
 		} else {
-		    object = objectStore.getObject(oid, objectType);
+		    object = objectStore.getObject(oid, specification);
 		}
         return object;
     }
@@ -272,7 +278,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         }
             
         LOG.info("persist " + object);
-        loader().makePersistent(object, createOid(object));
+        loader().madePersistent(object, createOid(object));
         
 /*        
         object.setOid(createOid(object));
@@ -327,7 +333,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     public void objectChanged(NakedObject object) {
-        if (!object.isResolving()) {
+        if (!object.ignoreChanges()) {
             objectsToBeSaved.addDirty(object);
             objectsToRefreshViewsFor.addDirty(object);
         }

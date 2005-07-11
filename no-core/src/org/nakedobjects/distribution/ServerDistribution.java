@@ -14,7 +14,6 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
@@ -105,9 +104,6 @@ public class ServerDistribution implements ClientDistribution {
                 throw new NakedObjectRuntimeException();
             }
         }
-
-        // TEMP - TO BE REMOVED
-        ((LocalObjectManager) objectManager()).tempResetDirty();
 
         try {
             NakedObject result = (NakedObject) object.execute(action, parameters);

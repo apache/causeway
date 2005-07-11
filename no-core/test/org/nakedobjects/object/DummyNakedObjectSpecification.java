@@ -24,10 +24,6 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         };    
     }
 
-    public Naked acquireInstance() {
-        return null;
-    }
-
     public void clearDirty(NakedObject object) {}
 
     public String debugInterface() {

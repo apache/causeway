@@ -61,6 +61,10 @@ public class PojoAdapterHashImpl implements PojoAdapterHash {
         }
         pojos.clear();
     }
+
+    public void remove(NakedObject object) {
+        pojos.remove(object.getObject());
+    }
 }
 
 /*

@@ -40,8 +40,8 @@ public class DataHelper {
             object = objectLoader.createTransientInstance(specification);
             recreateObjectsInFields(data, object);
         } else {
-            object = objectLoader.recreateAdapter(oid, specification);
-            if (objectLoader.needsLoading(object)) {
+            object = objectLoader.recreateAdapterForPersistent(oid, specification);
+            if (objectLoader.canBeLoaded(object, null)) {
                 objectLoader.loading(object, data.isResolved() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART);
 		        recreateObjectsInFields(data, object);
 		        objectLoader.loaded(object, data.isResolved() ? ResolveState.RESOLVED : ResolveState.PART_RESOLVED);

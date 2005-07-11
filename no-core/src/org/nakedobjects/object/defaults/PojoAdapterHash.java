@@ -1,6 +1,7 @@
 package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.utility.DebugInfo;
 
 
@@ -15,6 +16,8 @@ public interface PojoAdapterHash extends DebugInfo {
     public void reset();
 
     public void shutdown();
+
+    public void remove(NakedObject object);
 }
 
 /*

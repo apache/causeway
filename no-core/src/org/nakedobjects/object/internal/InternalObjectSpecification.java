@@ -1,8 +1,6 @@
 package org.nakedobjects.object.internal;
 
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.DefaultHint;
@@ -18,10 +16,6 @@ public class InternalObjectSpecification implements NakedObjectSpecification {
 
     public InternalObjectSpecification(String name) {
         this.name = name;
-    }
-
-    public Naked acquireInstance() {
-        throw new NakedObjectRuntimeException();
     }
 
     public void clearDirty(NakedObject object) {}

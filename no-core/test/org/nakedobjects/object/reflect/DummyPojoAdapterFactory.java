@@ -1,70 +1,8 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.ResolveException;
-import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.reflect.internal.MockDummyObjectLoader;
 
-import java.util.Enumeration;
-
-public class DummyPojoAdapterFactory implements PojoAdapterFactory {
-
-    public DummyPojoAdapterFactory() {
-        super();
-    }
-
-    public Naked createAdapter(Object pojo) {
-        return new DummyNakedObject();
-    }
-
-    public NakedObject createNOAdapter(Object pojo) {
-        DummyNakedObject dummyNakedObject = new DummyNakedObject();
-        dummyNakedObject.setupObject(pojo);
-        return  dummyNakedObject;
-    }
-
-    public void shutdown() {}
-
-    public void reset() {}
-
-    public NakedObject getLoadedObject(Oid oid) {
-        return new DummyNakedObject();
-    }
-
-    public boolean isLoaded(Oid oid) {
-        return true;
-    }
-
-    public void loaded(NakedObject object) throws ResolveException {}
-
-    public void unloaded(NakedObject object) {}
-
-    public Enumeration dirtyObjects() {
-        return new Enumeration() {
-
-            public boolean hasMoreElements() {
-                return false;
-            }
-
-            public Object nextElement() {
-                return null;
-            }
-            
-        };
-    }
-
-    public String getDebugData() {
-        return null;
-    }
-
-    public String getDebugTitle() {
-        return null;
-    }
-
-    public Enumeration getLoadedObjects() {
-        return null;
-    }
-
+public class DummyPojoAdapterFactory extends MockDummyObjectLoader{
 }
 
 

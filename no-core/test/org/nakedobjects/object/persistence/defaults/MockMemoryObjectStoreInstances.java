@@ -1,16 +1,20 @@
 package org.nakedobjects.object.persistence.defaults;
 
+import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
 
 public class MockMemoryObjectStoreInstances extends MemoryObjectStoreInstances {
+    public MockMemoryObjectStoreInstances(NakedObjectLoader objectLoader) {
+        super(objectLoader);
+    }
 
+    /*
     private PojoAdapterFactory factory;
     
     protected PojoAdapterFactory loaded() {
         return factory;
     }
-
+*/
     public void addElement(Oid oid, Object object, String title) {
         objectInstances.put(oid, object);
         titleIndex.put(title, oid);
@@ -24,9 +28,9 @@ public class MockMemoryObjectStoreInstances extends MemoryObjectStoreInstances {
         return objectInstances.size();
     }
 
-    public void setLoaded(PojoAdapterFactory factory) {
+   /* public void setLoaded(PojoAdapterFactory factory) {
         this.factory = factory;}
-    
+   */ 
 }
 
 

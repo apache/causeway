@@ -1,7 +1,6 @@
 package org.nakedobjects;
 
 import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.object.defaults.MockObjectFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
 
 import junit.framework.TestCase;
@@ -20,7 +19,7 @@ public class NakedObjectsTest extends TestCase {
     }
     
     public void testObjectManager() {
-        MockObjectManager objectManager = new MockObjectManager(new MockObjectFactory());
+        MockObjectManager objectManager = new MockObjectManager();
         NakedObjects.reset();
         new NakedObjectsClient().setObjectManager(objectManager);
         assertEquals(objectManager, NakedObjects.getObjectManager());

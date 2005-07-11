@@ -1,6 +1,6 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.NakedObjectsClient;
+import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
@@ -9,8 +9,6 @@ import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.defaults.MockObjectFactory;
-import org.nakedobjects.object.defaults.MockObjectManager;
 
 import junit.framework.TestSuite;
 
@@ -26,6 +24,7 @@ public class AssociationTest extends NakedObjectTestCase {
     private NakedObject associate;
     private DummyNakedObjectSpecification type;
     private MockOneToOneAssociation associationDelegate;
+    private TestSystem system;
 
     public AssociationTest(String name) {
         super(name);
@@ -38,13 +37,19 @@ public class AssociationTest extends NakedObjectTestCase {
     protected void setUp() throws Exception {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
-        new NakedObjectsClient().setObjectManager(new MockObjectManager(new MockObjectFactory()));
+        system = new TestSystem();
+        system.init();
+
         nakedObject = new DummyNakedObject();
         associate = new DummyNakedObject();
         
         associationDelegate = new MockOneToOneAssociation();
         type = new DummyNakedObjectSpecification();
         association = new OneToOneAssociation("", FIELD_NAME, type, associationDelegate);
+    }
+    
+    protected void tearDown() throws Exception {
+        system.shutdown();
     }
 
     public void testType() {

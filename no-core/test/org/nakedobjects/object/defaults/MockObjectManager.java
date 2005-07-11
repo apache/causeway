@@ -7,7 +7,6 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.object.persistence.Oid;
@@ -20,19 +19,10 @@ import junit.framework.Assert;
 
 
 public class MockObjectManager extends AbstractNakedObjectManager {
-    
-    public MockObjectManager(ObjectFactory factory) {
-        super(factory);
-    }
-
-    public MockObjectManager() {
-        super(new MockObjectFactory());
-    }
-
 
     public static MockObjectManager setup() {
         MockObjectManager manager;
-        manager = new MockObjectManager(new MockObjectFactory());
+        manager = new MockObjectManager();
         manager.reset();
         return manager;
     }
@@ -135,8 +125,6 @@ public class MockObjectManager extends AbstractNakedObjectManager {
     }
 
     public void shutdown() {
-//        classManager.shutdown();
-        super.shutdown();
     }
 
     public void startTransaction() {

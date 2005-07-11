@@ -2,9 +2,9 @@ package org.nakedobjects.object.security;
 
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.control.NoOpVeto;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.MockHint;
+import org.nakedobjects.object.control.NoOpVeto;
 
 import junit.framework.TestCase;
 

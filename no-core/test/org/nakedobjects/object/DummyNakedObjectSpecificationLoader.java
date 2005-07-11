@@ -16,6 +16,8 @@ public class DummyNakedObjectSpecificationLoader implements NakedObjectSpecifica
 
     public void shutdown() {}
 
+    public void init() {}
+
 }
 
 

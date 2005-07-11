@@ -10,7 +10,6 @@ public final class ResolveState {
     public static ResolveState RESOLVING_PART = new ResolveState("Resolving", "~r", 0);
     public static ResolveState TRANSIENT = new ResolveState("Transient", "T", 0);
     public static ResolveState NEW = new ResolveState("New", "-", 0);
-    public static ResolveState FAKE = new ResolveState("Fake", "F", 0);
     public static ResolveState GHOST = new ResolveState("Ghost", "G", 0);
     
     private final String code;
@@ -31,13 +30,17 @@ public final class ResolveState {
         return name;
     }
     
+    /**
+     * Determines if the resolved state can be changed from this state to the specified state.  Returns true
+     * if the change is valid.
+     */
     public boolean isValidToChangeTo(ResolveState nextState) {
         if(this == NEW) {
             return nextState == TRANSIENT || nextState == GHOST;
         } else if(this == TRANSIENT) {
             return nextState == RESOLVED;
         } else if(this == GHOST) {
-            return nextState == RESOLVING_PART || nextState == RESOLVING;
+            return nextState == RESOLVING_PART || nextState == RESOLVING || nextState == UPDATING;
         } else if(this == RESOLVING_PART) {
             return nextState == PART_RESOLVED || nextState == RESOLVED;
         } else if(this == RESOLVING) {
@@ -53,14 +56,26 @@ public final class ResolveState {
         return false;
     }
     
-    public boolean isLoadable() {
-        return this == GHOST || this == PART_RESOLVED;
+    /**
+     * Returns true if the state reflects some form of non-resolved state (GHOST, PART_RESOLVED) or is resolved and
+     * it needs to be updated. Hence it can 
+     * be changed to loading (RESOLVING_PART, RESOLVING or UPDATING).
+     */
+    public boolean isLoadable(ResolveState newState) {
+        if(this == GHOST || this == PART_RESOLVED || this == RESOLVED) {
+            return isValidToChangeTo(newState);
+        }
+        return false;
     }
     
-  /*  public boolean isLoading() {
-        return this == RESOLVING || this == RESOLVING_PART;
-    }
+   /**
+    * Return true if the state reflects some kind of loading (RESOLVING_PART, RESOLVING or 
+    * UPDATING), and hence can be changed to loaded (PART_RESOLVED OR RESOLVED). 
     */
+    public boolean isLoading() {
+        return this == RESOLVING || this == RESOLVING_PART || this == UPDATING;
+    }
+   
     
     public String toString() {
         ToString str = new ToString(this);

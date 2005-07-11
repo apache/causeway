@@ -40,7 +40,7 @@ public class InternalOneToManyAssociationTest extends NakedObjectTestCase {
         new NakedObjectsClient().setSpecificationLoader(loader);
 
         spec = new DummyNakedObjectSpecification();
-        loader.addSpec(spec);
+        loader.addSpecification(spec);
 
         objectWithVector = new InternalObjectWithVector();
 
@@ -61,12 +61,12 @@ public class InternalOneToManyAssociationTest extends NakedObjectTestCase {
     }
 
     public void testType() {
-        loader.addSpec(spec);
+        loader.addSpecification(spec);
         assertEquals(spec, oneToOneAssociation.getType());
     }
 
     public void testAdd() {
-        loader.addSpec(new DummyNakedObjectSpecification()); // for
+        loader.addSpecification(new DummyNakedObjectSpecification()); // for
                                                                                                                             // object
 
         //NakedObject associate =
@@ -80,7 +80,7 @@ public class InternalOneToManyAssociationTest extends NakedObjectTestCase {
     }
 
     public void testRemove() {
-        loader.addSpec(spec);
+        loader.addSpecification(spec);
 
         MockNakedObject associate = new MockNakedObject();
         associate.setupObject(new InternalObjectForReferencing());
@@ -90,7 +90,7 @@ public class InternalOneToManyAssociationTest extends NakedObjectTestCase {
     }
 
     public void testGet() {
-        loader.addSpec(spec);
+        loader.addSpecification(spec);
         assertNull(oneToOneAssociation.getAssociations(new DummyIdentifier(), nakedObject));
 
         objectWithVector.collection = new Vector();

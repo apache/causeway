@@ -1,16 +1,8 @@
 package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
 
 public class MockTransientObjectStoreInstances extends TransientObjectStoreInstances {
-
-    private PojoAdapterFactory factory;
-    
-    protected PojoAdapterFactory loaded() {
-        return factory;
-    }
-
     public void addElement(Oid oid, String title) {
         objectInstances.addElement(oid);
         titleIndex.put(title, oid);
@@ -23,10 +15,6 @@ public class MockTransientObjectStoreInstances extends TransientObjectStoreInsta
     public int size() {
         return objectInstances.size();
     }
-
-    public void setLoaded(PojoAdapterFactory factory) {
-        this.factory = factory;}
-    
 }
 
 

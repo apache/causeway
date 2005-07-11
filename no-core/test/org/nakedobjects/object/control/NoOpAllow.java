@@ -1,6 +1,5 @@
 package org.nakedobjects.object.control;
 
-import org.nakedobjects.object.control.Consent;
 
 public class NoOpAllow implements Consent {
 

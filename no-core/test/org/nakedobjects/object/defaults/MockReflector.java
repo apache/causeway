@@ -12,15 +12,10 @@ import org.nakedobjects.object.reflect.Reflector;
 
 
 public class MockReflector implements Reflector {
-    private NakedObject acquireInstance;
     NakedObjectSpecificationImpl superClass;
 
     public MockReflector() {
         super();
-    }
-
-    public Naked acquireInstance() {
-        return acquireInstance;
     }
 
     public ActionPeer[] actionPeers(boolean forClass) {
@@ -93,10 +88,6 @@ public class MockReflector implements Reflector {
 
     public String pluralName() {
         return "plural";
-    }
-
-    public void setupAcquireInstance(NakedObject object) {
-        acquireInstance = object;
     }
 
     public String shortName() {

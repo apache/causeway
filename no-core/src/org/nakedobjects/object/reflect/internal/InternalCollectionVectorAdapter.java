@@ -57,7 +57,7 @@ public class InternalCollectionVectorAdapter implements InternalCollection {
 
     public NakedObject elementAt(int index) {
         Object element = collection.elementAt(index);
-        return NakedObjects.getObjectLoader().getAdapterOrCreateTransientFor(element);
+        return NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(element);
     }
 
     public Enumeration elements() {
@@ -70,7 +70,7 @@ public class InternalCollectionVectorAdapter implements InternalCollection {
 
             public Object nextElement() {
                 Object element = elements.nextElement();
-                return element instanceof NakedObject ? element : NakedObjects.getObjectLoader().getAdapterOrCreateTransientFor(element); 
+                return element instanceof NakedObject ? element : NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(element); 
                 //NakedObjects.getPojoAdapterFactory().createNOAdapter(element);
             }
         };

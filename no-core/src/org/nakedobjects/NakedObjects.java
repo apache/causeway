@@ -9,6 +9,7 @@ import org.nakedobjects.object.ReflectionFactory;
 import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.security.Session;
+import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.utility.DebugString;
 
@@ -40,10 +41,12 @@ public abstract class NakedObjects implements DebugInfo {
         return getInstance().objectManager();
     }
 
+    /** @deprecated */
     public static ReflectionFactory getReflectionFactory() {
         return getInstance().reflectionFactory();
     }
 
+    /** @deprecated */
     public static ReflectorFactory getReflectorFactory() {
         return getInstance().reflectorFactory();
     }
@@ -111,11 +114,18 @@ public abstract class NakedObjects implements DebugInfo {
     }
 
     public void init() {
-        getObjectManager().init();
-        getObjectLoader().init();
-        getSpecificationLoader().init();
-        getReflectionFactory().init();
+        Assert.assertNotNull("no object manager set up", getObjectManager());
+        Assert.assertNotNull("no configuration set up", getConfiguration());
+        Assert.assertNotNull("no object loader set up", getObjectLoader());
+        Assert.assertNotNull("no specification loader set up", getSpecificationLoader());
+        Assert.assertNotNull("no reflection factory set up", getReflectionFactory());
+        Assert.assertNotNull("no reflector factory set up", getReflectorFactory());
+        
         getReflectorFactory().init();
+        getReflectionFactory().init();
+        getSpecificationLoader().init();
+        getObjectLoader().init();
+        getObjectManager().init();
     }
 
     protected abstract NakedObjectLoader objectLoader();

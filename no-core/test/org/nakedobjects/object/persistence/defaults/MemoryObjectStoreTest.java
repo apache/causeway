@@ -1,9 +1,12 @@
 package org.nakedobjects.object.persistence.defaults;
 
+import org.nakedobjects.NakedObjects;
+import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.MockOid;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.Oid;
@@ -23,6 +26,10 @@ import org.apache.log4j.Logger;
 
 
 class MockMemoryObjectStoreInstances2 extends MemoryObjectStoreInstances {
+    public MockMemoryObjectStoreInstances2(NakedObjectLoader objectLoader) {
+        super(objectLoader);
+    }
+
     private Vector actions = new Vector();
     private boolean hasInstances;
     private NakedObject[] instances = new NakedObject[0];
@@ -113,6 +120,7 @@ public class MemoryObjectStoreTest extends TestCase {
     private DummyNakedObjectSpecification superClassObjectSpec;
     private MockMemoryObjectStoreInstances2 transientObjectStoreInstancesForClass;
     private MockMemoryObjectStoreInstances2 transientObjectStoreInstancesForSuperClass;
+    private TestSystem system;
 
     private void assertEquals(NakedObject object, NakedObject v) {
         assertEquals(object.getObject(), v.getObject());
@@ -128,13 +136,16 @@ public class MemoryObjectStoreTest extends TestCase {
     protected void setUp() throws Exception {
         BasicConfigurator.configure();
         Logger.getRootLogger().setLevel(Level.OFF);
-
+        
+        system = new TestSystem();
+        system.init();
+        
         superClassObjectSpec = new DummyNakedObjectSpecification();
         objectSpec = new DummyNakedObjectSpecification();
         superClassObjectSpec.setupSubclasses(new NakedObjectSpecification[] { objectSpec });
 
-        transientObjectStoreInstancesForSuperClass = new MockMemoryObjectStoreInstances2();
-        transientObjectStoreInstancesForClass = new MockMemoryObjectStoreInstances2();
+        transientObjectStoreInstancesForSuperClass = new MockMemoryObjectStoreInstances2(NakedObjects.getObjectLoader());
+        transientObjectStoreInstancesForClass = new MockMemoryObjectStoreInstances2(NakedObjects.getObjectLoader());
         objectStore = new MemoryObjectStore();
         objectStore.instances.put(superClassObjectSpec, transientObjectStoreInstancesForSuperClass);
         objectStore.instances.put(objectSpec, transientObjectStoreInstancesForClass);
@@ -144,6 +155,8 @@ public class MemoryObjectStoreTest extends TestCase {
 
     protected void tearDown() throws Exception {
         objectStore.shutdown();
+        
+        system.shutdown();
     }
 
     public void testCreateInstances() throws Exception {

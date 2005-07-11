@@ -130,7 +130,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     public synchronized void makePersistent(NakedObject object) {
         LOG.debug("makePersistent " + object);
         Oid[] oid = connection.makePersistent(session, objectDataFactory.createObjectData(object, 0));
-        NakedObjects.getObjectLoader().makePersistent(object, oid[0]);
+        NakedObjects.getObjectLoader().madePersistent(object, oid[0]);
     }
 
     public int numberOfInstances(NakedObjectSpecification specification) {
@@ -145,7 +145,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     public void reset() {}
 
     public synchronized void resolveImmediately(NakedObject object) {
-        LOG.debug("resolve " + object);
+  //      LOG.debug("resolve " + object);
         if (object.isResolved() || !object.isPersistent()) {
             return;
         }
