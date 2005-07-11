@@ -8,6 +8,7 @@ import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.distribution.ProxyObjectManager;
 import org.nakedobjects.distribution.ProxyReflectionFactory;
 import org.nakedobjects.distribution.java.JavaObjectDataFactory;
+import org.nakedobjects.object.defaults.IdentityAdapterMapImpl;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
 import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
@@ -73,7 +74,7 @@ public class XmlClient {
             proxyObjectManager.setConnection(connection);
             proxyObjectManager.setObjectDataFactory(objectDataFactory);
 
-            NakedObjectManager objectManager = new ObjectManagerLogger(proxyObjectManager, "manager");
+            NakedObjectManager objectManager = new ObjectManagerLogger(proxyObjectManager, "manager.log");
             nakedObjects.setObjectManager(objectManager);
  
             new NakedObjectSpecificationLoaderImpl();
@@ -85,9 +86,9 @@ public class XmlClient {
             JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
 
             ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
-            objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
+            objectLoader.setPojoAdapterMap(new PojoAdapterHashImpl());
             objectLoader.setObjectFactory(objectFactory);
-            objectLoader.setReflectorFactory(reflectorFactory);
+            objectLoader.setIdentityAdapterMap(new IdentityAdapterMapImpl());
             nakedObjects.setObjectLoader(objectLoader);
 
             nakedObjects.setReflectionFactory(reflectionFactory);
@@ -95,8 +96,6 @@ public class XmlClient {
             nakedObjects.setReflectorFactory(reflectorFactory);
             
             nakedObjects.setSpecificationLoader(specificationLoader);
-            
-            reflectorFactory.setObjectFactory(objectFactory);
             
             
             ViewUpdateNotifier updateNotifier = new ViewUpdateNotifier();
