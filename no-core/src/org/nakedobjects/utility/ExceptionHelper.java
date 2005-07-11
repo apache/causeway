@@ -24,17 +24,23 @@ public class ExceptionHelper {
         submitLog(exception);
     }
 
+
     /**
 	 * Submits an error log to the development server.
 	 */
     public static void submitLog(Throwable exception) {
+        String error = exception.getMessage();
+        String trace = exceptionTraceAsString(exception);
+        submitLog(error, trace);
+    }
+    
+    /**
+	 * Submits an error log to the development server.
+	 */
+    public static void submitLog(String message, String trace) {
         String user = System.getProperty("user.name");
         String system = System.getProperty("os.name") + " ("+ System.getProperty("os.arch") + ") " + System.getProperty("os.version");
         String java = System.getProperty("java.vm.name") + " " + System.getProperty("java.vm.version");
-        
-        String error = exception.getMessage();
-        String trace = exceptionTraceAsString(exception);
-        
         String version = AboutNakedObjects.getVersion() + " " + AboutNakedObjects.getBuildId();
         
         try {
@@ -45,7 +51,7 @@ public class ExceptionHelper {
 	        out.addParameter("user", user);
 	        out.addParameter("system", system);
 	        out.addParameter("vm", java);
-	        out.addParameter("error", error);
+	        out.addParameter("error", message);
 	        out.addParameter("trace", trace);
 	        out.addParameter("version", version);
 	        out.close();	        
