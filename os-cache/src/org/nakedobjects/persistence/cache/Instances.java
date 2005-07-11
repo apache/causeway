@@ -62,7 +62,7 @@ class Instances {
             Oid oid = (Oid) reader.readOid();
             LOG.debug("read 1: " + i + " " + specification.getFullName() + "/" + oid);
 
-            NakedObject obj = objectLoader.recreateAdapter(oid, specification);
+            NakedObject obj = objectLoader.recreateAdapterForPersistent(oid, specification);
             
 //            NakedObject obj = (NakedObject) specification.acquireInstance();
 //            obj.setOid(oid);
