@@ -84,7 +84,7 @@ public class VectorCollectionAdapter implements InternalCollection {
     }
 
     private Object adapter(Object element) {
-        return element instanceof NakedObject ? element : NakedObjects.getObjectLoader().getAdapterOrCreateTransientFor(element);
+        return element instanceof NakedObject ? element : NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(element);
     }
 
     public Enumeration oids() {

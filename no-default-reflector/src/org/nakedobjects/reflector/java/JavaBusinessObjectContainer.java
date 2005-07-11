@@ -16,6 +16,12 @@ import org.apache.log4j.Logger;
 public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     private static final Logger LOG = Logger.getLogger(JavaBusinessObjectContainer.class);
 
+    private NakedObject adapterFor(Object object) {
+        NakedObject adapter = NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(object);
+
+        return adapter;
+    }
+
     public Vector allInstances(Class cls) {
         return allInstances(cls, false);
     }
@@ -34,8 +40,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     /**
      * Creates a new instance and then persists it.
      * 
-     * @see JavaBusinessObjectContainer#createTransientInstance(Class) for
-     *              details of object creation
+     * @see JavaBusinessObjectContainer#createTransientInstance(Class) for details of object creation
      */
     public Object createInstance(Class cls) {
         LOG.debug("creating new persistent instance of " + cls.getName());
@@ -44,8 +49,8 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     }
 
     /**
-     * Creates a new instance of the specified type, and then call the new
-     * objects setContainer() and created() methods if they exist.
+     * Creates a new instance of the specified type, and then call the new objects setContainer() and created() methods if they
+     * exist.
      */
     public Object createTransientInstance(Class cls) {
         LOG.debug("creating new tranisent instance of " + cls.getName());
@@ -56,7 +61,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     public void destroyObject(Object object) {
         //objectManager().destroyObject(NakedObjects.getPojoAdapterFactory().createNOAdapter(object));
         objectManager().destroyObject(adapterFor(object));
-   }
+    }
 
     protected void finalize() throws Throwable {
         super.finalize();
@@ -78,50 +83,39 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
         objectManager().endTransaction();
     }
 
-    private NakedObject adapterFor(Object object) {
-        NakedObject adapter = NakedObjects.getObjectLoader().getAdapterOrCreateTransientFor(object);
-        
-        return adapter;
-    }
-
     public int numberOfInstances(Class cls) {
         return objectManager().numberOfInstances(getSpecification(cls));
+    }
+
+    public void objectChanged(Object object) {
+        if (object != null) {
+            NakedObject adapter = adapterFor(object);
+            objectManager().objectChanged(adapter);
+        }
     }
 
     private NakedObjectManager objectManager() {
         return NakedObjects.getObjectManager();
     }
 
-    public void objectChanged(Object object) {
-        if (object != null) {
-            NakedObject adapter =adapterFor(object);
-            objectManager().objectChanged(adapter);
-        }
-    }
-    
     public void resolve(Object parent, Object field) {
-        if(field == null) {
+        if (field == null) {
             NakedObject adapter = adapterFor(parent);
-            if(adapter.isPersistent() && !adapter.isResolved()) {
-                objectManager().resolveImmediately(adapter);
-            }
-        }
-        
-        /*
-
-        if (field != null) {
-            NakedObject adapter = adapterFor(field);
             if (adapter.isPersistent() && !adapter.isResolved()) {
                 objectManager().resolveImmediately(adapter);
             }
         }
-*/
-	}
+
+        /*
+         * 
+         * if (field != null) { NakedObject adapter = adapterFor(field); if (adapter.isPersistent() && !adapter.isResolved()) {
+         * objectManager().resolveImmediately(adapter); } }
+         */
+    }
 
     /**
-     * Generates a unique serial number for the specified squence set. Each set
-     * of serial numbers are a simple numerical sequence. Calling this method
-     * with a unused sequence name creates a new set.
+     * Generates a unique serial number for the specified squence set. Each set of serial numbers are a simple numerical sequence.
+     * Calling this method with a unused sequence name creates a new set.
      */
     public long serialNumber(String sequence) {
         LOG.debug("serialNumber " + sequence);
@@ -143,28 +137,23 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
         makePersistent(number);
         return number.getSerialNumber().longValue();
     }
+
+    public void userMessage(String text) {}
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user. Copyright (C) 2000 -
+ * 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is Kingsway House, 123
+ * Goldworth Road, Woking GU21 1NR, UK).
  */

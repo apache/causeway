@@ -30,16 +30,11 @@ public class JavaObjectFactory implements ObjectFactory {
         return object;
     }
     
-    public Object createNewLogicalObject(NakedObjectSpecification specification) {
-        Class cls = classFor(specification);
-        Object object = createObject(cls);
-        setContainer(object, cls);
-        logicalCreation(object, cls);
-        
-        return object;
+    public void setUpAsNewLogicalObject(Object object) {
+        logicalCreation(object, object.getClass());
     }
     
-    public Object recreateObject(NakedObjectSpecification specification) {
+    public Object createObject(NakedObjectSpecification specification) {
         Class cls = classFor(specification);
         Object object = createObject(cls);
         setContainer(object, cls);

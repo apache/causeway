@@ -1,16 +1,13 @@
 package org.nakedobjects.reflector.java.reflect;
 
-import org.nakedobjects.NakedObjectsClient;
+import org.nakedobjects.NakedObjects;
+import org.nakedobjects.TestSystem;
 import org.nakedobjects.application.control.ActionAbout;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
-import org.nakedobjects.object.defaults.ObjectLoaderImpl;
-import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 
 import java.lang.reflect.Method;
 
@@ -25,30 +22,32 @@ public class JavaActionTest extends TestCase {
         junit.textui.TestRunner.run(JavaActionTest.class);
     }
 
+    private TestSystem system;
     private JavaAction javaAction;
     private NakedObject nakedObject;
     private JavaActionTestObject javaObject;
-    private MockNakedObjectSpecificationLoader loader;
-
+ 
     protected void setUp() throws Exception {
         super.setUp();
-        
-        new NakedObjectsClient().setConfiguration(new TestConfiguration());
-        
        	Logger.getRootLogger().setLevel(Level.OFF);
-    	loader = new MockNakedObjectSpecificationLoader();
-        
-		javaObject = new JavaActionTestObject();
-    	ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
-		objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
-		objectLoader.setReflectorFactory(new NullReflectorFactory());
-		nakedObject = objectLoader.createAdapterForTransient(javaObject);
+       	
+        system = new TestSystem();
+        system.init();
 
+        system.addSpecification(new DummyNakedObjectSpecification());
+
+		javaObject = new JavaActionTestObject();
+		nakedObject = NakedObjects.getObjectLoader().createAdapterForTransient(javaObject);
+		 		
         Class cls = Class.forName(getClass().getName() + "Object");
         Method action = cls.getDeclaredMethod("actionMethod", new Class[0]);
         Method about = cls.getDeclaredMethod("aboutMethod", new Class[] { ActionAbout.class });
         javaAction = new JavaAction("methodName", Action.EXPLORATION, Action.LOCAL, action, about);
         assertNotNull(javaAction);
+    }
+
+    protected void tearDown() throws Exception {
+        system.shutdown();
     }
 
     public void testAbout() {
@@ -59,7 +58,7 @@ public class JavaActionTest extends TestCase {
 
     public void testAction() throws Exception {
         DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
-        loader.addSpec(spec);
+        system.addSpecification(spec);
         
         javaAction.execute(null, nakedObject, new Naked[0]);
 

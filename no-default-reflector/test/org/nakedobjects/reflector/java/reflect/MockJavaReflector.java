@@ -12,8 +12,8 @@ import java.lang.reflect.Method;
 
 public class MockJavaReflector extends JavaReflector {
 
-    public MockJavaReflector(String name, MockObjectFactory objectFactory) {
-        super(name, objectFactory);
+    public MockJavaReflector(String name) {
+        super(name);
     }
 
     ActionPeer createAction(Method method, String name, Method aboutMethod, Type action) {

@@ -1,15 +1,10 @@
 package org.nakedobjects.reflector.java.reflect;
 
-import org.nakedobjects.NakedObjectsClient;
+import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationException;
-import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
-import org.nakedobjects.object.defaults.ObjectLoaderImpl;
-import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionPeer;
-import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
-import org.nakedobjects.reflector.java.JavaObjectFactory;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -25,28 +20,22 @@ public class JavaReflectorActionsTest extends TestCase {
     }
 
     private ActionPeer[] actions;
-    private MockNakedObjectSpecificationLoader loader;
-    private JavaObjectFactory objectFactory;
     private JavaReflector reflector;
+    private TestSystem system;
 
     protected void setUp() throws ClassNotFoundException {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
-        NakedObjectsClient nakedObjects = new NakedObjectsClient();
+        system = new TestSystem();
+        system.init();
+        system.addSpecification(new DummyNakedObjectSpecification());
 
-        nakedObjects.setConfiguration(new TestConfiguration());
-
-        loader = new MockNakedObjectSpecificationLoader();
-        loader.addSpec(new DummyNakedObjectSpecification());
-
-        ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
-        objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
-        objectLoader.setReflectorFactory(new NullReflectorFactory());
-        nakedObjects.setObjectLoader(objectLoader);
-
-        objectFactory = new JavaObjectFactory();
-        reflector = new JavaReflector(BusinessObjectWithActions.class.getName(), objectFactory);
+        reflector = new JavaReflector(BusinessObjectWithActions.class.getName());
         actions = reflector.actionPeers(false);
+    }
+
+    protected void tearDown() throws Exception {
+        system.shutdown();
     }
 
     public void testAbout() {

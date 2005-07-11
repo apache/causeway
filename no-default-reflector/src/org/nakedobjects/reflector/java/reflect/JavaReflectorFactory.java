@@ -7,11 +7,9 @@ import org.nakedobjects.application.valueholder.Logical;
 import org.nakedobjects.application.valueholder.TextString;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.Reflector;
-import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.value.BusinessValueAdapter;
 import org.nakedobjects.reflector.java.value.ColorValueObjectAdapter;
 import org.nakedobjects.reflector.java.value.IntegerNumberAdapter;
@@ -24,10 +22,9 @@ import org.apache.log4j.Logger;
 
 public class JavaReflectorFactory extends ReflectorFactory {
     private final static Logger LOG = Logger.getLogger(JavaReflectorFactory.class);
-    private JavaObjectFactory objectFactory;
     
     public Reflector createReflector(String className) throws ReflectionException {
-         return new JavaReflector(className, objectFactory);
+         return new JavaReflector(className);
     }
     
     public NakedValue createValueAdapter(Object object) {
@@ -55,16 +52,7 @@ public class JavaReflectorFactory extends ReflectorFactory {
            return null;
        }
       }
-
-    public ObjectFactory getObjectFactory() {
-        return objectFactory;
-    }
     
-    public void setObjectFactory(JavaObjectFactory objectFactory) {
-        this.objectFactory = objectFactory;
-    }
-    
-
     protected void finalize() throws Throwable {
         super.finalize();
         LOG.info("finalizing reflector factory " + this);

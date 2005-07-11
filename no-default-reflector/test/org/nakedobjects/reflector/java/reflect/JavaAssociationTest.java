@@ -1,17 +1,12 @@
 package org.nakedobjects.reflector.java.reflect;
 
 
-import org.nakedobjects.NakedObjectsClient;
+import org.nakedobjects.NakedObjects;
+import org.nakedobjects.TestSystem;
 import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
-import org.nakedobjects.object.defaults.ObjectLoaderImpl;
-import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
-import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.internal.DummyIdentifier;
-import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 
 import java.lang.reflect.Method;
 
@@ -29,8 +24,9 @@ public class JavaAssociationTest extends TestCase {
 	private JavaOneToOneAssociation personField;
 	private JavaReferencedObject javaObjectForReferencing;
 	private NakedObject associate;
-    private MockNakedObjectSpecificationLoader loader;
+//    private MockNakedObjectSpecificationLoader loader;
     private DummyNakedObjectSpecification spec;
+    private TestSystem system;
     
     public static void main(String[] args) {
         junit.textui.TestRunner.run(new TestSuite(JavaAssociationTest.class));
@@ -38,24 +34,15 @@ public class JavaAssociationTest extends TestCase {
 
     protected void setUp()  throws Exception {
     	Logger.getRootLogger().setLevel(Level.OFF);
-    	loader = new MockNakedObjectSpecificationLoader();
-    	loader.addSpec(spec = new DummyNakedObjectSpecification()); // for String
-    	loader.addSpec(new DummyNakedObjectSpecification()); // for Date	
-    	loader.addSpec(new DummyNakedObjectSpecification()); // for float
-    	NakedObjectsClient nakedObjectsClient = new NakedObjectsClient();
-        nakedObjectsClient.setSpecificationLoader(loader);
-        nakedObjectsClient.setConfiguration(new TestConfiguration());
+
+    	system = new TestSystem();
+        system.init();
+        system.addSpecification(spec = new DummyNakedObjectSpecification()); // for String
+    	system.addSpecification(new DummyNakedObjectSpecification()); // for Date	
+    	system.addSpecification(new DummyNakedObjectSpecification()); // for float
         
         javaObjectWithOneToOneAssociations = new JavaObjectWithOneToOneAssociations();
-    	ObjectLoaderImpl objectLoader = new ObjectLoaderImpl(){
-            public NakedObject recreateAdapter(Oid oid, NakedObjectSpecification spec) {
-                return null;
-            }};
-       objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
-       objectLoader.setReflectorFactory(new NullReflectorFactory());
-       nakedObjectsClient.setObjectLoader(objectLoader);
-
-        nakedObjectHoldingObjectWithAssociations = objectLoader.createAdapterForTransient(javaObjectWithOneToOneAssociations);        
+        nakedObjectHoldingObjectWithAssociations = system.createAdapterForTransient(javaObjectWithOneToOneAssociations);        
         
         Class cls = JavaObjectWithOneToOneAssociations.class;
         Method get = cls.getDeclaredMethod("getReferencedObject", new Class[0]);
@@ -65,13 +52,11 @@ public class JavaAssociationTest extends TestCase {
         personField = new JavaOneToOneAssociation(PERSON_FIELD_NAME, JavaReferencedObject.class, get, set, null, null, about);
         
         javaObjectForReferencing = new JavaReferencedObject();
-        associate = objectLoader.createAdapterForTransient(javaObjectForReferencing);
+        associate = NakedObjects.getObjectLoader().createAdapterForTransient(javaObjectForReferencing);
     }
 
-    
-
     protected void tearDown() throws Exception {
-        super.tearDown();
+        system.shutdown();
     }
 
     public void testType() {
@@ -79,8 +64,8 @@ public class JavaAssociationTest extends TestCase {
     }
     	
     public void testSet() {
-        loader.addSpec(new DummyNakedObjectSpecification()); // for one-to-one
-        loader.addSpec(new DummyNakedObjectSpecification()); // for object
+        system.addSpecification(new DummyNakedObjectSpecification()); // for one-to-one
+        system.addSpecification(new DummyNakedObjectSpecification()); // for object
         
      	assertNull(javaObjectWithOneToOneAssociations.getReferencedObject());
      	personField.setAssociation(new DummyIdentifier(), nakedObjectHoldingObjectWithAssociations, associate);
@@ -88,8 +73,8 @@ public class JavaAssociationTest extends TestCase {
     }     	
     
     public void testRemove() {
-        loader.addSpec(new DummyNakedObjectSpecification()); // for one-to-one
-        loader.addSpec(new DummyNakedObjectSpecification()); // for object
+        system.addSpecification(new DummyNakedObjectSpecification()); // for one-to-one
+        system.addSpecification(new DummyNakedObjectSpecification()); // for object
         
         javaObjectWithOneToOneAssociations.setReferencedObject(javaObjectForReferencing);
     	
@@ -105,8 +90,8 @@ public class JavaAssociationTest extends TestCase {
     }     	
     
     public void testInitGet() {
-        loader.addSpec(new DummyNakedObjectSpecification()); // for object
-        loader.addSpec(new DummyNakedObjectSpecification()); // for object
+        system.addSpecification(new DummyNakedObjectSpecification()); // for object
+        system.addSpecification(new DummyNakedObjectSpecification()); // for object
 
         assertNull(javaObjectWithOneToOneAssociations.getReferencedObject());
     	personField.initAssociation(new DummyIdentifier(), nakedObjectHoldingObjectWithAssociations, associate);

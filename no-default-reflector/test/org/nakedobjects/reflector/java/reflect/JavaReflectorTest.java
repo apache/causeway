@@ -1,16 +1,11 @@
 package org.nakedobjects.reflector.java.reflect;
 
-import org.nakedobjects.NakedObjectsClient;
+import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
-import org.nakedobjects.object.defaults.ObjectLoaderImpl;
-import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.FieldPeer;
-import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -22,8 +17,7 @@ import org.apache.log4j.LogManager;
 public class JavaReflectorTest extends TestCase {
 
     private MockJavaReflector reflector;
-    private MockObjectFactory objectFactory;
-    private MockNakedObjectSpecificationLoader loader;
+    private TestSystem system;
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(new TestSuite(JavaReflectorTest.class));
@@ -32,20 +26,15 @@ public class JavaReflectorTest extends TestCase {
     protected void setUp() throws ClassNotFoundException {
     	LogManager.getLoggerRepository().setThreshold(Level.OFF);
         
-       	NakedObjectsClient nakedObjects = new NakedObjectsClient();
-       	
-       	nakedObjects.setConfiguration(new TestConfiguration());
-       	
-    	loader = new MockNakedObjectSpecificationLoader();     	
-    	loader.addSpec(new DummyNakedObjectSpecification());
+    	system = new TestSystem();
+        system.init();
+        system.addSpecification(new DummyNakedObjectSpecification());
     	
-    	ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
-    	objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
-    	objectLoader.setReflectorFactory(new NullReflectorFactory());
-		nakedObjects.setObjectLoader(objectLoader);
-		
-    	objectFactory = new MockObjectFactory();
-        reflector = new MockJavaReflector(JavaObjectForReflector.class.getName(), objectFactory);
+        reflector = new MockJavaReflector(JavaObjectForReflector.class.getName());
+    }
+
+    protected void tearDown() throws Exception {
+        system.shutdown();
     }
 
     public void testObjectActions() throws NakedObjectSpecificationException {
@@ -98,8 +87,8 @@ public class JavaReflectorTest extends TestCase {
     }
 
     public void testFields() throws Exception {
-        loader.addSpec(new DummyNakedObjectSpecification()); // for Date
-        loader.addSpec(new DummyNakedObjectSpecification()); // for float
+        system.addSpecification(new DummyNakedObjectSpecification()); // for Date
+        system.addSpecification(new DummyNakedObjectSpecification()); // for float
         
         FieldPeer[] fields = reflector.fields();
         

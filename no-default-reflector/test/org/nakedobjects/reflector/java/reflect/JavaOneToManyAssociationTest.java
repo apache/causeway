@@ -1,16 +1,12 @@
 package org.nakedobjects.reflector.java.reflect;
 
 
-import org.nakedobjects.NakedObjectsClient;
+import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectTestCase;
-import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
-import org.nakedobjects.object.defaults.ObjectLoaderImpl;
-import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.reflect.internal.DummyIdentifier;
-import org.nakedobjects.object.reflect.internal.NullReflectorFactory;
 
 import java.lang.reflect.Method;
 import java.util.Vector;
@@ -26,9 +22,10 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
  	private JavaObjectWithVector objectWithVector;
 	private JavaOneToManyAssociation collectionField;
 	private JavaReferencedObject elements[];
-    private MockNakedObjectSpecificationLoader loader;
+//    private MockNakedObjectSpecificationLoader loader;
     private NakedObject nakedObject;
-    private ObjectLoaderImpl objectLoader;
+  //  private ObjectLoaderImpl objectLoader;
+    private TestSystem system;
 
     public JavaOneToManyAssociationTest(String name) {
         super(name);
@@ -39,18 +36,13 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
     }
 
     protected void setUp()  throws Exception {
-        
         Logger.getRootLogger().setLevel(Level.OFF);
-    	loader = new MockNakedObjectSpecificationLoader();
-    	NakedObjectsClient nakedObjects = new NakedObjectsClient();
-        nakedObjects.setSpecificationLoader(loader);
-    	nakedObjects.setConfiguration(new TestConfiguration());
-        
-		objectWithVector = new JavaObjectWithVector();
-    	objectLoader = new ObjectLoaderImpl();
-		objectLoader.setPojoAdapterHash(new PojoAdapterHashImpl());
-		objectLoader.setReflectorFactory(new NullReflectorFactory());
-		nakedObject = objectLoader.createAdapterForTransient(objectWithVector);
+
+        system = new TestSystem();
+        system.init();
+
+        objectWithVector = new JavaObjectWithVector();
+		nakedObject = system.createAdapterForTransient(objectWithVector);
         elements = new JavaReferencedObject[3];
         for (int i = 0; i < elements.length; i++) {
 			elements[i] = new JavaReferencedObject();
@@ -60,25 +52,28 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         Method get = cls.getDeclaredMethod("getMethod", new Class[0]);
         Method add = cls.getDeclaredMethod("addToMethod", new Class[] {JavaReferencedObject.class});
         Method remove = cls.getDeclaredMethod("removeFromMethod", new Class[] {JavaReferencedObject.class});
-
         collectionField = new JavaOneToManyAssociation(MEMBERS_FIELD_NAME, InternalCollection.class, get, add, remove, null);
     }
-    
+
+    protected void tearDown() throws Exception {
+        system.shutdown();
+    }
+
     public void testType() {
         DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
-        loader.addSpec(spec);
+        system.addSpecification(spec);
     	assertEquals(spec, collectionField.getType());
     }
     	
     public void testAdd() {
         DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
-        loader.addSpec(spec);
+        system.addSpecification(spec);
         
         JavaReferencedObject associate = new JavaReferencedObject();
-        NakedObject nakedObjectAssoicate =objectLoader.createAdapterForTransient(associate);
+        NakedObject nakedObjectAssoicate = system.createAdapterForTransient(associate);
         
         spec = new DummyNakedObjectSpecification();
-        loader.addSpec(spec);
+        system.addSpecification(spec);
         
         assertNull(objectWithVector.added);
         collectionField.addAssociation(new DummyIdentifier(), nakedObject, nakedObjectAssoicate);
@@ -87,13 +82,13 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
     
     public void testRemove() {
         DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
-        loader.addSpec(spec);
+        system.addSpecification(spec);
         
         JavaReferencedObject associate = new JavaReferencedObject();
-        NakedObject nakedObjectAssoicate =objectLoader.createAdapterForTransient(associate);
+        NakedObject nakedObjectAssoicate =system.createAdapterForTransient(associate);
         
         spec = new DummyNakedObjectSpecification();
-        loader.addSpec(spec);
+        system.addSpecification(spec);
         
         assertNull(objectWithVector.removed);
         collectionField.removeAssociation(new DummyIdentifier(), nakedObject, nakedObjectAssoicate);
@@ -102,10 +97,10 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
     
     public void testGet() {
         DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
-        loader.addSpec(spec);
+        system.addSpecification(spec);
         
         spec = new DummyNakedObjectSpecification();
-        loader.addSpec(spec);
+        system.addSpecification(spec);
         
     	//objectWithVector.collection = new DummyInternalCollection();
     	assertNotNull(collectionField.getAssociations(new DummyIdentifier(), nakedObject));

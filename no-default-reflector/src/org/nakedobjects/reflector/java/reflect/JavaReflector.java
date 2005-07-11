@@ -1,6 +1,5 @@
 package org.nakedobjects.reflector.java.reflect;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.application.Lookup;
 import org.nakedobjects.application.NonPersistable;
 import org.nakedobjects.application.Title;
@@ -10,10 +9,7 @@ import org.nakedobjects.application.control.ClassAbout;
 import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.application.value.BusinessValue;
 import org.nakedobjects.application.valueholder.BusinessValueHolder;
-import org.nakedobjects.application.valueholder.Logical;
-import org.nakedobjects.application.valueholder.TextString;
 import org.nakedobjects.object.Aggregated;
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecificationException;
@@ -26,11 +22,7 @@ import org.nakedobjects.object.reflect.ObjectTitle;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.Reflector;
 import org.nakedobjects.object.reflect.Action.Target;
-import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.control.SimpleClassAbout;
-import org.nakedobjects.reflector.java.value.LogicalValueObjectAdapter;
-import org.nakedobjects.reflector.java.value.TextStringAdapter;
-import org.nakedobjects.utility.UnexpectedCallException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -152,10 +144,8 @@ public class JavaReflector implements Reflector {
     private Method isDirtyMethod;
     private Method markDirtyMethod;
     private Method methods[];
-    private final JavaObjectFactory objectFactory;
 
-    public JavaReflector(String name, JavaObjectFactory objectFactory) throws ReflectionException {
-        this.objectFactory = objectFactory;
+    public JavaReflector(String name) throws ReflectionException {
         LOG.info("Introspecting " + name);
 
         Class cls;
@@ -178,9 +168,6 @@ public class JavaReflector implements Reflector {
         //TODO optomize by caching isObject etc
     }
 
-    public Naked acquireInstance() {
-        throw new UnexpectedCallException();
-    }
 
     public ActionPeer[] actionPeers(boolean forClass) {
         LOG.debug("  looking  for action methods");

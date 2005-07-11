@@ -212,7 +212,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
             } else {
                 Naked adapter = NakedObjects.getObjectLoader().createAdapterForValue(obj);
                 if(adapter == null) {
-                    adapter = NakedObjects.getObjectLoader().getAdapterOrCreateTransientFor(obj);
+                    adapter = NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(obj);
                 }
                 return adapter;
             }
