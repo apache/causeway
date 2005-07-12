@@ -2,7 +2,6 @@ package org.nakedobjects.distribution.pipe;
 
 import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.distribution.SingleResponseUpdateNotifier;
-import org.nakedobjects.distribution.UpdatePackager;
 import org.nakedobjects.distribution.command.Request;
 import org.nakedobjects.distribution.command.Response;
 import org.nakedobjects.utility.ExceptionHelper;
@@ -21,11 +20,9 @@ public class PipedServer {
                 Request request = communication.getRequest();
                 LOG.debug("client request: " + request);
 
-                UpdatePackager updates = updateNotifier.createUpdatePackager();
-
-	            try {
+ 	            try {
 	                request.execute(facade);
-	                LOG.debug("server updates: " + updates.updateList());
+	                LOG.debug("server updates: " + updateNotifier.updateList());
 	            } catch (Exception e) {
 	                ExceptionHelper.log(PipedServer.class, "Failure during request", e);
 	            }
@@ -33,7 +30,7 @@ public class PipedServer {
                 Response response = new Response(request);
                 LOG.debug("server response: " + response);
 
-                response.setUpdates(updates.getUpdates());
+                response.setUpdates(updateNotifier.getUpdates());
 
                 communication.setResponse(response);
         }
