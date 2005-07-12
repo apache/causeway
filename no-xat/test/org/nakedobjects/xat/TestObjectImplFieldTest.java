@@ -5,6 +5,7 @@ import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.MockOneToManyPeer;
 import org.nakedobjects.object.MockOneToOnePeer;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.control.MockHint;
 import org.nakedobjects.object.control.NoOpAllow;
 import org.nakedobjects.object.defaults.MockObjectManager;
@@ -59,6 +60,7 @@ public class TestObjectImplFieldTest extends TestCase {
         object.setupSpecification(objectSpec);
     
         DummyNakedObject fieldObject1 = new DummyNakedObject();
+        fieldObject1.setupResolveState(ResolveState.GHOST);
         object.setupFieldValue("one", fieldObject1);
 
         DummyNakedObject fieldObject2 = new DummyNakedObject();
@@ -98,6 +100,7 @@ public class TestObjectImplFieldTest extends TestCase {
         object.setupSpecification(objectSpec);
         
         DummyNakedObject fieldObject = new DummyNakedObject();
+        fieldObject.setupResolveState(ResolveState.GHOST);
         object.setupFieldValue("one", fieldObject);
 
         DummyNakedCollection fieldCollection = new DummyNakedCollection();
@@ -140,6 +143,7 @@ public class TestObjectImplFieldTest extends TestCase {
         object.setupSpecification(objectSpec);
     
         DummyNakedObject fieldObject1 = new DummyNakedObject();
+        fieldObject1.setupResolveState(ResolveState.GHOST);
         object.setupFieldValue("one", fieldObject1);
 
         DummyNakedObject fieldObject2 = new DummyNakedObject();

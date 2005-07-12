@@ -10,6 +10,7 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
@@ -936,7 +937,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         Naked field = forObject.getField(fieldAccessor);
         if(field instanceof NakedObject) {
             NakedObject nakedObject = (NakedObject) field;
-            if(nakedObject.isPersistent() && ! nakedObject.isResolved()) {
+            if(nakedObject.getResolveState().isResolvable(ResolveState.RESOLVING)) {
                 NakedObjects.getObjectManager().resolveImmediately(nakedObject);
             }
         }
@@ -984,7 +985,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
                     + "' within it");
         }
 
-        if(selectedObject.isPersistent() && ! selectedObject.isResolved()) {
+        if(selectedObject.getResolveState().isResolvable(ResolveState.RESOLVING)) {
             NakedObjects.getObjectManager().resolveImmediately(selectedObject);
         }
         

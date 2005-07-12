@@ -59,7 +59,7 @@ public abstract class AcceptanceTestCase extends TestCase {
         TestClass view = (TestClass) classes.get(name.toLowerCase());
         
         NakedObject object = (NakedObject) view.getForNaked();
-        if(object.isPersistent()) {
+        if(object.getResolveState().isPersistent()) {
             NakedObjects.getObjectManager().resolveImmediately(object);
         }
         
