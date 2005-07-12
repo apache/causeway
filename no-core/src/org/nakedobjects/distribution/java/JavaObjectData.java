@@ -45,7 +45,7 @@ public class JavaObjectData implements ObjectData {
         str.append("type", type);
         str.append("oid", oid);
         str.append("fields=");
-        for (int i = 0; i < fieldContent.length; i++) {
+        for (int i = 0; fieldContent != null && i < fieldContent.length; i++) {
             if(i > 0) {
                 str.append(";");
             }

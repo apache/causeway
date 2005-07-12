@@ -1,11 +1,11 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.NakedObjectsComponent;
 
 
-public interface DirtyObjectSet {
+
+public interface DirtyObjectSet extends NakedObjectsComponent {
     void addDirty(NakedObject object);
-
-    void shutdown();
 }
 
 /*

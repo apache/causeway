@@ -12,6 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
 
@@ -66,6 +67,8 @@ public class ExceptionHelper {
 
 	        in.close();
 	        
+        } catch (UnknownHostException e) {
+            LOG.info("Could not find host (unknown host) to submit log to");
         } catch (IOException e) {
             LOG.debug("IO problem submitting log", e);
         }
