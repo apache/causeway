@@ -241,7 +241,7 @@ public class XmlObjectStore implements NakedObjectStore {
     }
 
     private void initObject(NakedObject object, ObjectData data) throws ObjectStoreException {
-        if (objectLoader.canBeLoaded(object, null)) {
+        if (object.getResolveState().isResolvable(ResolveState.RESOLVING)) {
             objectLoader.loading(object, ResolveState.RESOLVING);
 
             NakedObjectField[] fields = object.getFields();
