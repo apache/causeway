@@ -324,7 +324,7 @@
 
 
     <target name="quick-release" depends="copy-source, dist">
-    	<echo>Completed quick release ${build.id} (docs not up-to-date</echo>
+    	<echo>Completed quick release ${build.id} (docs not up-to-date)</echo>
     </target>
 
     <target name="release" depends="copy-source, docs, dist">
