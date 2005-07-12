@@ -2,6 +2,7 @@ package org.nakedobjects.distribution.command;
 
 import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.object.security.Session;
+import org.nakedobjects.utility.ToString;
 
 public class HasInstances extends AbstractRequest {
 
@@ -19,6 +20,12 @@ public class HasInstances extends AbstractRequest {
     
     public boolean getFlag() {
         return ((Boolean) response).booleanValue();
+    }
+
+    public String toString() {
+        ToString str = new ToString(this);
+        str.append("class", name);
+        return str.toString();
     }
 }
 

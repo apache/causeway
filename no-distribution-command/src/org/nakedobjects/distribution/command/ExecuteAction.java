@@ -4,6 +4,7 @@ import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.security.Session;
+import org.nakedobjects.utility.ToString;
 
 
 public class ExecuteAction extends AbstractRequest {
@@ -35,6 +36,14 @@ public class ExecuteAction extends AbstractRequest {
         return (Data) getResponse();
     }
 
+
+    public String toString() {
+        ToString str = new ToString(this);
+        str.append("method", actionIdentifier);
+        str.append("oid", objectOid);
+        str.append("type", objectType);
+        return str.toString();
+    }
 }
 
 /*

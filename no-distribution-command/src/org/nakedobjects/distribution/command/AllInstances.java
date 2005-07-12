@@ -3,6 +3,7 @@ package org.nakedobjects.distribution.command;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.object.security.Session;
+import org.nakedobjects.utility.ToString;
 
 public class AllInstances extends AbstractRequest {
 
@@ -22,6 +23,14 @@ public class AllInstances extends AbstractRequest {
 
     public ObjectData[] getInstances() {
         return  (ObjectData[]) response;
+    }
+    
+
+    public String toString() {
+        ToString str = new ToString(this);
+        str.append("class", name);
+        str.append("subclasses", includeSubclasses);
+        return str.toString();
     }
 }
 

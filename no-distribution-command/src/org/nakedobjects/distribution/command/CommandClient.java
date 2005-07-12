@@ -88,6 +88,7 @@ public abstract class CommandClient implements ClientDistribution {
             throw new NakedObjectRuntimeException("Response out of sequence with respect to the request: " + request.getId()
                     + " & " + response.getId() + " respectively");
         }
+        LOG.debug("response " + response);
         request.setResponse(response.getObject());
         
         ObjectData[] updates = response.getUpdates();
