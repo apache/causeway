@@ -165,7 +165,7 @@ public abstract class ObjectContent extends AbstractContent {
 
         options.add(MenuOptionSet.DEBUG, new MenuOption("Clear resolved") {
             public Consent disabled(View component) {
-                return AbstractConsent.allow(object != null && !object.isResolved());
+                return AbstractConsent.allow(object != null && !object.getResolveState().isResolved());
             }
 
             public void execute(Workspace workspace, View view, Location at) {

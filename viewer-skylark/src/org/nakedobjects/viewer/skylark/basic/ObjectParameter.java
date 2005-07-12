@@ -82,7 +82,7 @@ class ObjectParameter extends ObjectContent implements ParameterContent {
     }
 
     public boolean isTransient() {
-        return object != null && !object.isPersistent();
+        return object != null && object.getResolveState().isTransient();
     }
 
     public void menuOptions(MenuOptionSet options) {

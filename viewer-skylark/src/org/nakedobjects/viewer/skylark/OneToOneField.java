@@ -130,7 +130,7 @@ public class OneToOneField extends ObjectContent implements FieldContent {
     }
 
     public boolean isTransient() {
-        return object != null && !object.isPersistent();
+        return object != null && object.getResolveState().isTransient();
     }
 
     public void menuOptions(MenuOptionSet options) {

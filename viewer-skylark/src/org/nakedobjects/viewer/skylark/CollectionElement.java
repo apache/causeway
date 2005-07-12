@@ -64,7 +64,7 @@ public class CollectionElement extends ObjectContent {
     }
 
     public boolean isTransient() {
-        return ! object.isPersistent();
+        return object.getResolveState().isTransient();
     }
  
     public void setObject(NakedObject object) {
