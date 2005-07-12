@@ -2,7 +2,6 @@ package org.nakedobjects.distribution.xml;
 
 import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.distribution.SingleResponseUpdateNotifier;
-import org.nakedobjects.distribution.UpdatePackager;
 import org.nakedobjects.distribution.command.Request;
 import org.nakedobjects.distribution.command.Response;
 
@@ -66,10 +65,9 @@ class ServerConnection implements Runnable {
 				XStream xstream = new XStream();
 				Request request = (Request) xstream.fromXML(requestData);
 				LOG.debug("Request received " + request);
-				UpdatePackager updates = updateNotifier.createUpdatePackager();
 			    request.execute(server);
 			    Response response = new Response(request);
-			    response.setUpdates(updates.getUpdates());
+			    response.setUpdates(updateNotifier.getUpdates());
 				LOG.debug("Sending " + response);
                 String responseData = xstream.toXML(response);
                 LOG.debug("Send response \n" + responseData);
