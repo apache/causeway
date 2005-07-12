@@ -23,7 +23,7 @@ Namespace org.nakedobjects.dotnet
 Public MustInherit Class DotNetBootstrapper
         Public MustOverride Sub initExtensions()
 
-        Public Overridable Overloads Sub run(ByVal containerId As String, _
+        Public Overloads Sub run(ByVal containerId As String, _
             ByVal userContextId As String, _
                ByVal viewerId As String)
             Me.run(containerId, userContextId, viewerId, False)

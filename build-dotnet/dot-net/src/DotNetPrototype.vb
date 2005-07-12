@@ -27,7 +27,7 @@ Public MustInherit Class DotNetPrototype
         '    Me.run(containerId, userContextId, viewerId, False)
         'End Sub
 
-        Public Overridable Overloads Sub display(ByVal userContextId As String)
+        Public Overrides Sub display(ByVal userContextId As String)
 
             'To-Do needs to be an interface
             Dim thisViewer As org.nakedobjects.viewer.skylark.SkylarkViewer

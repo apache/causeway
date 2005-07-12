@@ -45,14 +45,6 @@
 
 
 
-<!--
-	<tstamp>
-		<formatter property="build.date" pattern="yyyyMMdd-HH00"/>
-	</tstamp>
-	<property name="build.id" value="pojo-${build.date}"/>
-	-->
-
-
 
 	<!-- Clean target will delete the current version -->
 	<target name="clean" description="remove all framework file">
@@ -60,7 +52,7 @@
 	</target>
 
 
-	<target name="copy">
+	<target name="copy-source">
 		<mkdir dir="${build.dir}" failonerror="true" />
 		<mkdir dir="${build.src.dir}" failonerror="true" />
 
@@ -280,13 +272,13 @@
 			</references>
 	
 		</vbc-->
-
+	</target>
 	
+	
+    <target name="docs" depends="compile">
 	    <exec program="C:/Program Files/Java/apache-ant-1.6.2/bin/ant.bat" useruntimeengine="true">
 	          <arg line="-buildfile ./build.xml" />
-	    </exec>
-
-        
+	    </exec>     
     </target>
     
 
@@ -307,9 +299,8 @@
 			<fileset basedir="build">
 				<include name="*.dll"/>
 				<include name="*.pdb"/>
-				<!--include name="src/**/*"/-->
 				<include name="src.zip"/>
-	                        <include name="doc.zip"/>
+	            <include name="doc.zip"/>
 			</fileset>
 		</zip>
         
@@ -331,7 +322,12 @@
     </target>
 
 
-    <target name="release" depends="copy, dist">
+
+    <target name="quick-release" depends="copy-source, dist">
+    	<echo>Completed quick release ${build.id} (docs not up-to-date</echo>
+    </target>
+
+    <target name="release" depends="copy-source, docs, dist">
     	<echo>Completed release ${build.id}</echo>
     </target>
 
