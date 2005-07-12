@@ -4,6 +4,7 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.application.BusinessObjectContainer;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 
@@ -101,16 +102,11 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     public void resolve(Object parent, Object field) {
         if (field == null) {
             NakedObject adapter = adapterFor(parent);
-            if (adapter.isPersistent() && !adapter.isResolved()) {
+            ResolveState resolveState = adapter.getResolveState();
+            if (resolveState.isResolvable(ResolveState.RESOLVING)) {
                 objectManager().resolveImmediately(adapter);
             }
         }
-
-        /*
-         * 
-         * if (field != null) { NakedObject adapter = adapterFor(field); if (adapter.isPersistent() && !adapter.isResolved()) {
-         * objectManager().resolveImmediately(adapter); } }
-         */
     }
 
     /**
