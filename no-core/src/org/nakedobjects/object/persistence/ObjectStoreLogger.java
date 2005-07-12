@@ -5,7 +5,6 @@ import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.reflect.NakedObjectField;
 
 public class ObjectStoreLogger extends Logger implements NakedObjectStore {

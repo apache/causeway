@@ -29,7 +29,7 @@ import org.apache.log4j.Logger;
 
 public class ServerDistribution implements ClientDistribution {
     private static final Logger LOG = Logger.getLogger(ServerDistribution.class);
-    private static final int OBJECT_DATA_DEPTH = 3;
+    private static final int OBJECT_DATA_DEPTH = 1;
     private DataFactory objectDataFactory;
     private ObjectFactory objectFactory;
 

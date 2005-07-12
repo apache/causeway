@@ -134,7 +134,7 @@ public class ObjectLoaderImplTest extends TestCase {
         
         assertEquals(pojo1, adapter.getObject());
         assertEquals(ResolveState.GHOST, adapter.getResolveState());
-        assertTrue(adapter.isPersistent());
+        assertTrue(adapter.getResolveState().isPersistent());
         assertEquals(oid1, adapter.getOid());
         assertTrue(identityAdapterMap.containsKey(oid1));
     }
@@ -144,11 +144,10 @@ public class ObjectLoaderImplTest extends TestCase {
         assertEquals(ResolveState.NEW, adapter1.getResolveState());
         adapter1.changeState(ResolveState.GHOST);
     
-        assertTrue(objectLoader.canBeLoaded(adapter1, ResolveState.RESOLVING));
         objectLoader.loading(adapter1, ResolveState.RESOLVING);
-        assertFalse(objectLoader.canBeLoaded(adapter1, ResolveState.RESOLVING));
+        assertEquals(ResolveState.RESOLVING, adapter1.getResolveState());
         objectLoader.loaded(adapter1, ResolveState.RESOLVED);
-        assertTrue(adapter1.isResolved());
+        assertEquals(ResolveState.RESOLVED, adapter1.getResolveState());
     }
     
     
@@ -156,11 +155,10 @@ public class ObjectLoaderImplTest extends TestCase {
         assertEquals(ResolveState.NEW, adapter1.getResolveState());
         adapter1.changeState(ResolveState.GHOST);
     
-        assertTrue(objectLoader.canBeLoaded(adapter1, ResolveState.RESOLVING_PART));
         objectLoader.loading(adapter1, ResolveState.RESOLVING_PART);
-        assertFalse(objectLoader.canBeLoaded(adapter1, ResolveState.RESOLVING_PART));
+        assertEquals(ResolveState.RESOLVING_PART, adapter1.getResolveState());
         objectLoader.loaded(adapter1, ResolveState.PART_RESOLVED);
-        assertFalse(adapter1.isResolved());
+        assertEquals(ResolveState.PART_RESOLVED, adapter1.getResolveState());
     }
     
     
@@ -168,11 +166,10 @@ public class ObjectLoaderImplTest extends TestCase {
         assertEquals(ResolveState.NEW, adapter1.getResolveState());
         adapter1.changeState(ResolveState.GHOST);
     
-        assertTrue(objectLoader.canBeLoaded(adapter1, ResolveState.RESOLVING_PART));
         objectLoader.loading(adapter1, ResolveState.RESOLVING_PART);
-        assertFalse(objectLoader.canBeLoaded(adapter1, ResolveState.RESOLVING_PART));
+        assertEquals(ResolveState.RESOLVING_PART, adapter1.getResolveState());
         objectLoader.loaded(adapter1, ResolveState.RESOLVED);
-        assertTrue(adapter1.isResolved());
+        assertEquals(ResolveState.RESOLVED, adapter1.getResolveState());
     }
     
 
@@ -182,11 +179,10 @@ public class ObjectLoaderImplTest extends TestCase {
         adapter1.changeState(ResolveState.RESOLVING_PART);
         adapter1.changeState(ResolveState.PART_RESOLVED);
 
-        assertTrue(objectLoader.canBeLoaded(adapter1, ResolveState.RESOLVING));
         objectLoader.loading(adapter1, ResolveState.RESOLVING);
-        assertFalse(objectLoader.canBeLoaded(adapter1, ResolveState.RESOLVING));
+        assertEquals(ResolveState.RESOLVING, adapter1.getResolveState());
         objectLoader.loaded(adapter1, ResolveState.RESOLVED);
-        assertTrue(adapter1.isResolved());
+        assertEquals(ResolveState.RESOLVED, adapter1.getResolveState());
     }
 
 
@@ -196,11 +192,10 @@ public class ObjectLoaderImplTest extends TestCase {
         adapter1.changeState(ResolveState.RESOLVING);
         adapter1.changeState(ResolveState.RESOLVED);
 
-        assertTrue(objectLoader.canBeLoaded(adapter1, ResolveState.UPDATING));
         objectLoader.loading(adapter1, ResolveState.UPDATING);
-        assertFalse(objectLoader.canBeLoaded(adapter1, ResolveState.UPDATING));
+        assertEquals(ResolveState.UPDATING, adapter1.getResolveState());
         objectLoader.loaded(adapter1, ResolveState.RESOLVED);
-        assertTrue(adapter1.isResolved());
+        assertEquals(ResolveState.RESOLVED, adapter1.getResolveState());
     }
 
 }

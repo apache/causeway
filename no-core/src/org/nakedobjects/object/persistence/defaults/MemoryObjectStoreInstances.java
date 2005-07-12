@@ -1,9 +1,7 @@
 package org.nakedobjects.object.persistence.defaults;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectLoader;
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.TitleCriteria;

@@ -1,6 +1,7 @@
 package org.nakedobjects.object.reflect.internal;
 
 import org.nakedobjects.NakedObjectsClient;
+import org.nakedobjects.object.DummyObjectLoader;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecificationException;
@@ -8,7 +9,6 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.InternalNakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 import org.nakedobjects.object.reflect.ActionPeer;
-import org.nakedobjects.object.reflect.DummyPojoAdapterFactory;
 import org.nakedobjects.object.reflect.FieldPeer;
 
 import junit.framework.TestCase;
@@ -31,7 +31,7 @@ public class InternalReflectorTest extends TestCase {
         
     	new MockNakedObjectSpecificationLoader();     	
     	
-    	NakedObjectLoader objectLoader = new DummyPojoAdapterFactory();
+    	NakedObjectLoader objectLoader = new DummyObjectLoader();
     	new NakedObjectsClient().setObjectLoader(objectLoader);
 		
         reflector = new MockInternalReflector(InternalObjectForReflector.class.getName());

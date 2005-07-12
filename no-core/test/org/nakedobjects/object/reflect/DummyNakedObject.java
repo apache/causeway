@@ -5,6 +5,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Persistable;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.Oid;
 
@@ -23,6 +24,7 @@ public class DummyNakedObject implements NakedObject {
      private boolean resolved;
     private String titleString;
     private Hashtable fieldContents = new Hashtable();
+    private ResolveState state;
 
      
     public DummyNakedObject() {
@@ -35,19 +37,7 @@ public class DummyNakedObject implements NakedObject {
 
     public void clearCollection(OneToManyAssociation association) {}
 
-    public void clearPersistDirty() {}
-
     public void clearValue(OneToOneAssociation specification) {}
-
-    public void clearViewDirty() {}
-
-    public void copyObject(Naked object) {}
-
-    public void created() {}
-
-    public void debugClearResolved() {}
-
-    public void destroyed() {}
 
     public Naked execute(Action action, Naked[] parameters) {
         return null;
@@ -120,36 +110,10 @@ public class DummyNakedObject implements NakedObject {
         return false;
     }
 
-    public boolean isParsable() {
-        return false;
-    }
-
-    public boolean isPartlyResolved() {
-        return false;
-    }
-
-    public boolean isPersistDirty() {
-        return false;
-    }
-
     public boolean isPersistent() {
         return false;
     }
 
-
-    public boolean ignoreChanges() {
-        return false;
-    }
-
-    public boolean isUnresolved() {
-        return false;
-    }
-
-    public boolean isViewDirty() {
-        return false;
-    }
-
-    public void markDirty() {}
 
     public Persistable persistable() {
         return null;
@@ -157,15 +121,7 @@ public class DummyNakedObject implements NakedObject {
 
     public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {}
 
-    public void setOid(Oid oid) {
-        this.oid = oid;
-    }
-
     public void setOptimisticLock(long version, String user, Date time) {}
-
-    public void setResolved() {
-        resolved = true;
-    }
 
     public void setupFields(NakedObjectField[] fields) {
         this.fields = fields;
@@ -213,8 +169,20 @@ public class DummyNakedObject implements NakedObject {
         this.fieldContents.put(name, field);
     }
 
-    public boolean isTransient() {
-        return false;
+    public void debugClearResolved() {}
+
+    public void destroyed() {}
+
+    public ResolveState getResolveState() {
+        return state;
+    }
+    
+    public void setOid(Oid oid) {
+        this.oid = oid;
+    }
+
+    public void setupResolveState(ResolveState state) {
+        this.state = state;
     }
 }
 

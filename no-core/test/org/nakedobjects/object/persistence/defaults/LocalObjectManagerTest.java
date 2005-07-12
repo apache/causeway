@@ -3,8 +3,9 @@ package org.nakedobjects.object.persistence.defaults;
 import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
-import org.nakedobjects.object.MockObjectLoader;
+import org.nakedobjects.object.DummyObjectLoader;
 import org.nakedobjects.object.MockObjectStore;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.reflect.NakedObjectField;
 
 import junit.framework.TestCase;
@@ -23,7 +24,7 @@ public class LocalObjectManagerTest extends TestCase {
     private DummyNakedObjectSpecification objectSpecification;
     private MockObjectStore objectStore;
     private MockNakedObject testNakedObject;
-    private MockObjectLoader objectLoader;
+    private DummyObjectLoader objectLoader;
     private TestSystem system;
 
     protected void setUp() throws Exception {
@@ -34,11 +35,11 @@ public class LocalObjectManagerTest extends TestCase {
         objectManager = new LocalObjectManager();
         objectStore = new MockObjectStore();
         objectManager.setObjectStore(objectStore);
-        objectManager.setOidGenerator(new MockOidGenerator());
+        objectManager.setPersistAlgorithm(new DummyPersistAlgorithm());
 
         system.setObjectManager(objectManager);
         
-        objectLoader = new MockObjectLoader();
+        objectLoader = new DummyObjectLoader();
         system.setObjectLoader(objectLoader);
 
         system.init();
@@ -91,6 +92,8 @@ public class LocalObjectManagerTest extends TestCase {
 
     public void testMakePersistent() {
         objectSpecification.fields = new NakedObjectField[0];
+        
+        testNakedObject.setupResolveState(ResolveState.TRANSIENT);
 
         objectManager.startTransaction();
         objectManager.makePersistent(testNakedObject);

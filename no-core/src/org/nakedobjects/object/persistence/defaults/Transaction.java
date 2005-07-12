@@ -128,7 +128,8 @@ public class Transaction {
                 objectStore.runTransaction(commandsArray);
                 objectStore.endTransaction();
                 
-//                PojoAdapterFactory loaded = NakedObjects.getPojoAdapterFactory();
+/*
+        //                PojoAdapterFactory loaded = NakedObjects.getPojoAdapterFactory();
                 for (int i = 0; i < commandsArray.length; i++) {
                     PersistenceCommand command = commandsArray[i];
                     if(command instanceof CreateObjectCommand) {
@@ -142,6 +143,7 @@ public class Transaction {
                         
                     }
                 }
+      */
             } catch (ObjectStoreException e) {
                 objectStore.abortTransaction();
                 throw e;

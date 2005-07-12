@@ -19,6 +19,7 @@ public class ResolveStateTest extends TestCase {
         assertFalse(from.isValidToChangeTo(ResolveState.RESOLVING_PART));
         //assertFalse(from.isValidToChangeTo(ResolveState.TRANSIENT));
         assertFalse(from.isValidToChangeTo(ResolveState.UPDATING));
+        assertFalse(from.isValidToChangeTo(ResolveState.SERIALIZING));
   }
 
     public void testValidChangesFromNew() {
@@ -31,6 +32,7 @@ public class ResolveStateTest extends TestCase {
         //assertTrue(from.isValidToChangeTo(ResolveState.RESOLVING_PART));
         assertTrue(from.isValidToChangeTo(ResolveState.TRANSIENT));
         //assertTrue(from.isValidToChangeTo(ResolveState.UPDATING));
+        //assertTrue(from.isValidToChangeTo(ResolveState.SERIALIZING));
     }
     
     public void testInvalidChangesFromGhost() {
@@ -43,6 +45,7 @@ public class ResolveStateTest extends TestCase {
         //assertFalse(from.isValidToChangeTo(ResolveState.RESOLVING_PART));
         assertFalse(from.isValidToChangeTo(ResolveState.TRANSIENT));
         //assertFalse(from.isValidToChangeTo(ResolveState.UPDATING));
+        //assertFalse(from.isValidToChangeTo(ResolveState.SERIALIZING));
     }
 
     public void testValidChangesFromGhost() {
@@ -55,6 +58,7 @@ public class ResolveStateTest extends TestCase {
         assertTrue(from.isValidToChangeTo(ResolveState.RESOLVING_PART));
         //assertTrue(from.isValidToChangeTo(ResolveState.TRANSIENT));
         assertTrue(from.isValidToChangeTo(ResolveState.UPDATING));
+        assertTrue(from.isValidToChangeTo(ResolveState.SERIALIZING));
     }
 
     public void testInvalidChangesFromTransient() {
@@ -67,6 +71,7 @@ public class ResolveStateTest extends TestCase {
         assertFalse(from.isValidToChangeTo(ResolveState.RESOLVING_PART));
         assertFalse(from.isValidToChangeTo(ResolveState.TRANSIENT));
         assertFalse(from.isValidToChangeTo(ResolveState.UPDATING));
+        //assertFalse(from.isValidToChangeTo(ResolveState.SERIALIZING));
     }
 
     public void testValidChangesFromTransient() {
@@ -79,6 +84,7 @@ public class ResolveStateTest extends TestCase {
         //assertTrue(from.isValidToChangeTo(ResolveState.RESOLVING_PART));
         //assertTrue(from.isValidToChangeTo(ResolveState.TRANSIENT));
         //assertTrue(from.isValidToChangeTo(ResolveState.UPDATING));
+        assertTrue(from.isValidToChangeTo(ResolveState.SERIALIZING));
     }
 
     
@@ -92,6 +98,7 @@ public class ResolveStateTest extends TestCase {
         assertFalse(from.isValidToChangeTo(ResolveState.RESOLVING_PART));
         assertFalse(from.isValidToChangeTo(ResolveState.TRANSIENT));
         assertFalse(from.isValidToChangeTo(ResolveState.UPDATING));
+        assertFalse(from.isValidToChangeTo(ResolveState.SERIALIZING));
     }
 
     public void testValidChangesFromResolvingPart() {
@@ -104,6 +111,7 @@ public class ResolveStateTest extends TestCase {
         //assertTrue(from.isValidToChangeTo(ResolveState.RESOLVING_PART));
         //assertTrue(from.isValidToChangeTo(ResolveState.TRANSIENT));
         //assertTrue(from.isValidToChangeTo(ResolveState.UPDATING));
+        //assertTrue(from.isValidToChangeTo(ResolveState.SERIALIZING));
     }
     
     
@@ -117,6 +125,7 @@ public class ResolveStateTest extends TestCase {
         assertFalse(from.isValidToChangeTo(ResolveState.RESOLVING_PART));
         assertFalse(from.isValidToChangeTo(ResolveState.TRANSIENT));
         assertFalse(from.isValidToChangeTo(ResolveState.UPDATING));
+        //assertFalse(from.isValidToChangeTo(ResolveState.SERIALIZING));
     }
 
     public void testValidChangesFromPartResolved() {
@@ -129,6 +138,7 @@ public class ResolveStateTest extends TestCase {
         //assertTrue(from.isValidToChangeTo(ResolveState.RESOLVING_PART));
         //assertTrue(from.isValidToChangeTo(ResolveState.TRANSIENT));
         //assertTrue(from.isValidToChangeTo(ResolveState.UPDATING));
+        assertTrue(from.isValidToChangeTo(ResolveState.SERIALIZING));
     }
     
     
@@ -142,6 +152,7 @@ public class ResolveStateTest extends TestCase {
         assertFalse(from.isValidToChangeTo(ResolveState.RESOLVING_PART));
         assertFalse(from.isValidToChangeTo(ResolveState.TRANSIENT));
         assertFalse(from.isValidToChangeTo(ResolveState.UPDATING));
+        assertFalse(from.isValidToChangeTo(ResolveState.SERIALIZING));
     }
 
     public void testValidChangesFromResolving() {
@@ -154,6 +165,7 @@ public class ResolveStateTest extends TestCase {
         //assertTrue(from.isValidToChangeTo(ResolveState.RESOLVING_PART));
         //assertTrue(from.isValidToChangeTo(ResolveState.TRANSIENT));
         //assertTrue(from.isValidToChangeTo(ResolveState.UPDATING));
+        //assertTrue(from.isValidToChangeTo(ResolveState.SERIALIZING));
     }
 
 
@@ -168,6 +180,7 @@ public class ResolveStateTest extends TestCase {
         assertFalse(from.isValidToChangeTo(ResolveState.RESOLVING_PART));
         assertFalse(from.isValidToChangeTo(ResolveState.TRANSIENT));
         //assertFalse(from.isValidToChangeTo(ResolveState.UPDATING));
+        //assertFalse(from.isValidToChangeTo(ResolveState.SERIALIZING));
     }
 
     public void testValidChangesFromResolved() {
@@ -180,13 +193,9 @@ public class ResolveStateTest extends TestCase {
         //assertTrue(from.isValidToChangeTo(ResolveState.RESOLVING_PART));
         //assertTrue(from.isValidToChangeTo(ResolveState.TRANSIENT));
         assertTrue(from.isValidToChangeTo(ResolveState.UPDATING));
+        assertTrue(from.isValidToChangeTo(ResolveState.SERIALIZING));
     }
 
-    
-    
-    
-    
-    
     public void testInvalidChangesFromUpdating() {
         ResolveState from = ResolveState.UPDATING;
         assertFalse(from.isValidToChangeTo(ResolveState.GHOST));
@@ -197,6 +206,7 @@ public class ResolveStateTest extends TestCase {
         assertFalse(from.isValidToChangeTo(ResolveState.RESOLVING_PART));
         assertFalse(from.isValidToChangeTo(ResolveState.TRANSIENT));
         assertFalse(from.isValidToChangeTo(ResolveState.UPDATING));
+        assertFalse(from.isValidToChangeTo(ResolveState.SERIALIZING));
     }
 
     public void testValidChangesFromUpdating() {

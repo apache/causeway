@@ -1,7 +1,6 @@
 package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.TypedNakedCollection;
@@ -10,7 +9,6 @@ import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
-import org.nakedobjects.object.reflect.PojoAdapter;
 
 
 public abstract class AbstractNakedObjectManager implements NakedObjectManager {
@@ -44,9 +42,7 @@ public abstract class AbstractNakedObjectManager implements NakedObjectManager {
         return createPersistentInstance(cls);
     }
 
-    protected abstract Oid createOid(Naked object);
-
-    /**
+     /**
      * Creates an new instance of the class specified in the specification and
      * creates a NakedObject adapter for it.
      */

@@ -175,7 +175,7 @@ public class Action extends NakedObjectMember {
         for (int i = 0; i < paramCount; i++) {
             NakedObjectSpecification parameter = parameters[i];
             if (parameter.isValue()) {
-                parameterValues[i] = NakedObjects.getObjectLoader().createAdapterForValue(parameter);
+                parameterValues[i] = NakedObjects.getObjectLoader().createValueInstance(parameter);
             } else {
                 parameterValues[i] = null;
             }

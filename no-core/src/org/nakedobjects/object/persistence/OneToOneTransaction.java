@@ -19,7 +19,7 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
 
     public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         NakedObjectManager objectManager = NakedObjects.getObjectManager();
-        if (inObject.isPersistent()) {
+        if (inObject.getResolveState().isPersistent()) {
             try {
                 objectManager.startTransaction();
                 super.clearAssociation(identifier, inObject, associate);
@@ -36,7 +36,7 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
 
     public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         NakedObjectManager objectManager = NakedObjects.getObjectManager();
-        if (inObject.isPersistent()) {
+        if (inObject.getResolveState().isPersistent()) {
             try {
                 objectManager.startTransaction();
                 super.setAssociation(identifier, inObject, associate);
@@ -53,7 +53,7 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
 
     public void setValue(MemberIdentifier identifier, NakedObject inObject, Object value) {
         NakedObjectManager objectManager = NakedObjects.getObjectManager();
-        if (inObject.isPersistent()) {
+        if (inObject.getResolveState().isPersistent()) {
             try {
                 objectManager.startTransaction();
                 super.setValue(identifier, inObject, value);

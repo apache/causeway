@@ -5,7 +5,6 @@ import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.MockOid;
-import org.nakedobjects.object.reflect.DummyNakedObject;
 
 import java.util.Enumeration;
 

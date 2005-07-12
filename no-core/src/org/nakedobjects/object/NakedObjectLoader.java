@@ -111,13 +111,6 @@ public interface NakedObjectLoader extends NakedObjectsComponent, DebugInfo {
     void madePersistent(NakedObject object, Oid oid);
 
     /**
-     * Flags whether this object object can be loaded: is in the state ghost or
-     * party resolved.
-     * @param newState TODO
-     */
-    boolean canBeLoaded(NakedObject object, ResolveState newState);
-
-    /**
      * Recreates an adapter for a persistent busines object that is being loaded
      * into the system. If an adapter already exists for the specified OID then
      * that adapter is returned. Otherwise a new instance of the specified
@@ -136,6 +129,8 @@ public interface NakedObjectLoader extends NakedObjectsComponent, DebugInfo {
      * object is no longer in use, and therefore that no objects exists within the system.
      */
     void unloaded(NakedObject object);
+
+    void serializing(NakedObject object);
 }
 
 /*

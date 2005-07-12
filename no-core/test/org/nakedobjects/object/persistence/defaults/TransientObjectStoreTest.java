@@ -3,7 +3,7 @@ package org.nakedobjects.object.persistence.defaults;
 import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
-import org.nakedobjects.object.MockObjectLoader;
+import org.nakedobjects.object.DummyObjectLoader;
 import org.nakedobjects.object.MockOid;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -123,7 +123,7 @@ public class TransientObjectStoreTest extends TestCase {
         objectStore.instances.put(objectSpec, transientObjectStoreInstancesForClass);
 
         system = new TestSystem();
-        system.setObjectLoader(new MockObjectLoader());
+        system.setObjectLoader(new DummyObjectLoader());
         system.init();
 
     }

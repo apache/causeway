@@ -6,6 +6,7 @@ import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockOid;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectLoader;
+import org.nakedobjects.object.ResolveState;
 
 import junit.framework.TestCase;
 
@@ -51,7 +52,7 @@ public class PojoAdapterTest extends TestCase {
 
         NakedObject pa = objectLoader.createAdapterForTransient(new TestPojo());
         pa.getSpecification();
-        assertFalse(pa.isResolved());
+        assertFalse(pa.getResolveState() == ResolveState.RESOLVED);
         assertEquals("unresolved object", pa.titleString());
     }
 

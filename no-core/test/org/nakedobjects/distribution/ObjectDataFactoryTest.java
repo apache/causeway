@@ -1,8 +1,11 @@
 package org.nakedobjects.distribution;
 
+import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
+import org.nakedobjects.object.DummyObjectLoader;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.MockOid;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.persistence.defaults.MockField;
 import org.nakedobjects.object.reflect.NakedObjectField;
 
@@ -10,10 +13,11 @@ import junit.framework.TestCase;
 
 
 public class ObjectDataFactoryTest extends TestCase {
-
     private TestingObjectDataFactory factory;
     private DummyNakedObjectSpecification specification;
     private MockNakedObject object;
+    private TestSystem system;
+    private DummyObjectLoader objectLoader;
 
 
     public static void main(String[] args) {
@@ -21,19 +25,30 @@ public class ObjectDataFactoryTest extends TestCase {
     }
 
     protected void setUp() throws Exception {
+        system = new TestSystem();
+        objectLoader = new DummyObjectLoader();
+        system.setObjectLoader(objectLoader);
+        system.init();
+        
+        
         factory = new TestingObjectDataFactory();
-
+        
         specification = new DummyNakedObjectSpecification();
         specification.fields = new NakedObjectField[0];
 
         object = new MockNakedObject();
+        object.setupResolveState(ResolveState.NEW);
         object.setupSpecification(specification);
+    }
+    
+    protected void tearDown() throws Exception {
+        system.shutdown();
     }
     
     public void testBasicObject() {
         MockOid oid = new MockOid(1);
         object.setOid(oid);
-
+        
         ObjectData od = factory.createObjectData(object, 0);
 
         assertEquals(oid, od.getOid());
@@ -41,14 +56,16 @@ public class ObjectDataFactoryTest extends TestCase {
         assertEquals(false, od.isResolved());
         assertEquals(0, od.getVersion());
         assertEquals(0, od.getFieldContent().length);
+        assertEquals(ResolveState.SERIALIZING, object.getResolveState());
     }
 
     public void testResolved() {
-        object.setResolved();
+        object.setupResolveState(ResolveState.RESOLVED);
         
         ObjectData od = factory.createObjectData(object, 0);
 
         assertEquals(true, od.isResolved());
+        assertEquals(ResolveState.SERIALIZING, object.getResolveState());
     }
     
     public void testVersion() {
@@ -57,7 +74,7 @@ public class ObjectDataFactoryTest extends TestCase {
         ObjectData od = factory.createObjectData(object, 0);
 
         assertEquals(78821L, od.getVersion());
-     
+        assertEquals(ResolveState.SERIALIZING, object.getResolveState());
     }
 
 
@@ -69,6 +86,7 @@ public class ObjectDataFactoryTest extends TestCase {
         ObjectData od = factory.createObjectData(object, 0);
 
         assertEquals(3, od.getFieldContent().length);
+        assertEquals(ResolveState.SERIALIZING, object.getResolveState());
     }
 
     public void testObjectWithFields() {
@@ -77,6 +95,8 @@ public class ObjectDataFactoryTest extends TestCase {
         };
         
         MockNakedObject fieldObject = new MockNakedObject();
+        fieldObject.setupResolveState(ResolveState.NEW);
+        
         DummyNakedObjectSpecification fieldSpecification = new DummyNakedObjectSpecification();
         fieldSpecification.fields = new NakedObjectField[0];
         fieldObject.setupSpecification(fieldSpecification);
@@ -88,7 +108,12 @@ public class ObjectDataFactoryTest extends TestCase {
         assertEquals(3, od.getFieldContent().length);
         ObjectData objectData = ((ObjectData) od.getFieldContent()[1]);
         assertEquals(fieldSpecification.getFullName(), objectData.getType());
+        assertEquals(ResolveState.SERIALIZING, object.getResolveState());
   
+    }
+    
+    // TODO implement
+    public void testTransientHasAllDataSerialized() {
     }
 
 

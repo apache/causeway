@@ -42,19 +42,19 @@ public class PojoAdapter implements NakedObject {
     }
 
     public void clearAssociation(NakedObjectAssociation specification, NakedObject associate) {
-        mustBeResolvedIfPersistent(this);
+        resolveIfOnlyAGhost(this);
         LOG.debug("clearAssociation " + specification.getName() + "/" + associate + " in " + this);
         specification.clearAssociation(this, associate);
     }
 
     public void clearCollection(OneToManyAssociation association) {
-        mustBeResolvedIfPersistent(this);
+        resolveIfOnlyAGhost(this);
         LOG.debug("clearCollection " + association.getName() + " in " + this);
         association.clearCollection(this);
     }
 
     public void clearValue(OneToOneAssociation association) {
-        mustBeResolvedIfPersistent(this);
+        resolveIfOnlyAGhost(this);
         LOG.debug("clearValue " + association.getName() + " in " + this);
         association.clearValue(this);
     }
@@ -67,7 +67,7 @@ public class PojoAdapter implements NakedObject {
      * Asks the reflector to tell the pojo that this object has been deleted.
      */
     public void destroyed() {
-        mustBeResolvedIfPersistent(this);
+        resolveIfOnlyAGhost(this);
         LOG.debug("deleted notification for " + this);
         specification.deleted(this);
     }
@@ -98,11 +98,11 @@ public class PojoAdapter implements NakedObject {
      */
 
     public Naked execute(Action action, Naked[] parameters) {
-        mustBeResolvedIfPersistent(this);
+        resolveIfOnlyAGhost(this);
         LOG.debug("execute " + action.getName() + " in " + this);
         for (int i = 0; parameters != null && i < parameters.length; i++) {
             if (parameters[i] instanceof NakedObject) {
-                mustBeResolvedIfPersistent((NakedObject) parameters[i]);
+                resolveIfOnlyAGhost((NakedObject) parameters[i]);
             }
         }
         Naked result = action.execute(this, parameters);
@@ -115,12 +115,12 @@ public class PojoAdapter implements NakedObject {
     }
 
     public NakedObject getAssociation(OneToOneAssociation field) {
-        mustBeResolvedIfPersistent(this);
+        resolveIfOnlyAGhost(this);
         return (NakedObject) field.get(this);
     }
 
     public Naked getField(NakedObjectField field) {
-        mustBeResolvedIfPersistent(this);
+        resolveIfOnlyAGhost(this);
         return field.get(this);
     }
 
@@ -129,12 +129,12 @@ public class PojoAdapter implements NakedObject {
     }
 
     public Hint getHint(Action action, Naked[] parameterValues) {
-        mustBeResolvedIfPersistent(this);
+        resolveIfOnlyAGhost(this);
         return action.getHint(this, parameterValues);
     }
 
     public Hint getHint(NakedObjectField field, Naked value) {
-        mustBeResolvedIfPersistent(this);
+        resolveIfOnlyAGhost(this);
         if (field instanceof OneToOneAssociation) {
             return ((OneToOneAssociation) field).getHint(this, value);
         } else if (field instanceof OneToManyAssociation) {
@@ -181,7 +181,7 @@ public class PojoAdapter implements NakedObject {
     }
 
     public NakedValue getValue(OneToOneAssociation field) {
-        mustBeResolvedIfPersistent(this);
+        resolveIfOnlyAGhost(this);
         return (NakedValue) field.get(this);
     }
 
@@ -209,44 +209,19 @@ public class PojoAdapter implements NakedObject {
     }
 
     public boolean isEmpty(NakedObjectField field) {
-        mustBeResolvedIfPersistent(this);
+        resolveIfOnlyAGhost(this);
         return field.isEmpty(this);
     }
 
-    public boolean isPartlyResolved() {
-        return resolveState == ResolveState.PART_RESOLVED;
-    }
-
-    /**
-     * Returns true if this object has an OID set.
-     */
-    public boolean isPersistent() {
-        return getOid() != null;
-    }
-
-    public boolean isResolved() {
+    private boolean isResolved() {
         return resolveState == ResolveState.RESOLVED;
     }
 
-    public boolean ignoreChanges() {
-        return resolveState == ResolveState.TRANSIENT || resolveState == ResolveState.RESOLVING
-                || resolveState == ResolveState.RESOLVING_PART || resolveState == ResolveState.UPDATING;
-    }
-
-    public boolean isTransient() {
-        return resolveState == ResolveState.TRANSIENT;
-    }
-
-    public boolean isUnresolved() {
-        return resolveState == ResolveState.NEW;
-    }
-
-    private void mustBeResolvedIfPersistent(NakedObject object) {
-        if (object.isPersistent() && (object.isUnresolved() || object.isPartlyResolved())) {
+    private void resolveIfOnlyAGhost(NakedObject object) {
+        ResolveState resolveState = object.getResolveState();
+        if (resolveState.isGhost()) {
             LOG.info("Unresolved object attempting to be used; resolving it immediately: " + object);
             NakedObjects.getObjectManager().resolveImmediately(object);
-            //throw new NakedObjectRuntimeException("Object not resolved when
-            // used with adapter: " + object);
         }
     }
 
@@ -256,7 +231,7 @@ public class PojoAdapter implements NakedObject {
 
     public void persistedAs(Oid oid) {
         LOG.debug("set OID " + oid + " " + this);
-        Assert.assertTrue("Cannot make a non-transient object persistent", this, isTransient());
+        Assert.assertTrue("Cannot make a non-transient object persistent", this, getResolveState().isTransient());
         Assert.assertTrue("Oid can't be set again", this, getOid() == null);
 
         this.oid = oid;
@@ -264,7 +239,7 @@ public class PojoAdapter implements NakedObject {
     }
 
     public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
-        mustBeResolvedIfPersistent(this);
+        resolveIfOnlyAGhost(this);
         LOG.debug("setAssociation " + field.getName() + " with " + associatedObject + " in " + this);
         field.setAssociation(this, associatedObject);
     }
@@ -276,7 +251,7 @@ public class PojoAdapter implements NakedObject {
     }
 
     public void setValue(OneToOneAssociation field, Object object) {
-        mustBeResolvedIfPersistent(this);
+        resolveIfOnlyAGhost(this);
         LOG.debug("setValue " + field.getName() + " with " + object + " in " + this);
         field.setValue(this, object);
     }
@@ -306,14 +281,14 @@ public class PojoAdapter implements NakedObject {
     public synchronized String toString() {
         ToString str = new ToString(this);
 
-        if (isUnresolved()) {
+   /*     if (isUnresolved()) {
             str.append("-");
         } else if (isPersistent()) {
             str.append("P");
         } else {
             str.append("T");
         }
-
+*/
         str.append(resolveState.code());
         Oid oid = getOid();
         if (oid != null) {

@@ -3,14 +3,12 @@ package org.nakedobjects.object.persistence.defaults;
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.DirtyObjectSetImpl;
-import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NullDirtyObjectSet;
-import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
 import org.nakedobjects.object.persistence.ActionTransaction;
@@ -21,7 +19,6 @@ import org.nakedobjects.object.persistence.NotPersistableException;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.ObjectStoreException;
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
@@ -37,16 +34,16 @@ import java.util.Hashtable;
 import org.apache.log4j.Logger;
 
 
-public class LocalObjectManager extends AbstractNakedObjectManager {
+public class LocalObjectManager extends AbstractNakedObjectManager implements PersistedObjectAdder {
     private static final Logger LOG = Logger.getLogger(LocalObjectManager.class);
     private boolean checkObjectsForDirtyFlag;
     private final Hashtable nakedClasses = new Hashtable();
     private final DirtyObjectSetImpl objectsToBeSaved = new DirtyObjectSetImpl();
     private NakedObjectStore objectStore;
     private DirtyObjectSet objectsToRefreshViewsFor = new NullDirtyObjectSet();
-    private OidGenerator oidGenerator;
     private Transaction transaction;
     private int transactionLevel;
+    private PersistAlgorithm persistAlgorithm;
 
     public LocalObjectManager() {
         LOG.info("creating object manager");
@@ -89,15 +86,9 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         }
     }
 
-    private void createObject(NakedObject object) throws ObjectStoreException {
+    public void createObject(NakedObject object) throws ObjectStoreException {
         getTransaction().addCommand(objectStore.createCreateObjectCommand(object));
      }
-
-    protected final Oid createOid(Naked object) {
-        Oid oid = oidGenerator.next(object);
-        LOG.debug("createOid " + oid);
-        return oid;
-    }
 
     /**
      * Removes the specified object from the system. The specified object's data
@@ -233,7 +224,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
      * persisted objects and persist changes to the object that are saved.
      */
     public void init() throws StartupException {
-        oidGenerator.init();
+        persistAlgorithm.init();
         objectStore.init();
     }
 
@@ -269,23 +260,18 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
             throw new NotPersistableException("Object must be transient");
        }
  
-        persist(object);
+        persistAlgorithm.makePersistent(object, this);
     }
-    
+    /*
     private void persist(NakedObject object) {
-        if(object.isPersistent() || object.getSpecification().persistable() == Persistable.TRANSIENT) {
+        if(object.getResolveState().isPersistent() || object.getSpecification().persistable() == Persistable.TRANSIENT) {
             return;
         }
             
         LOG.info("persist " + object);
         loader().madePersistent(object, createOid(object));
         
-/*        
-        object.setOid(createOid(object));
-        if (!object.isResolved()) {
-            object.setResolved();
-        }
-*/
+
         NakedObjectField[] fields = object.getFields();
         for (int i = 0; i < fields.length; i++) {
             NakedObjectField field = fields[i];
@@ -318,6 +304,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
             throw new NakedObjectRuntimeException(e);
         }
     }
+        */
 
     /**
      * A count of the number of instances matching the specified pattern.
@@ -333,7 +320,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     public void objectChanged(NakedObject object) {
-        if (!object.ignoreChanges()) {
+        if (!object.getResolveState().isIgnoreChanges()) {
             objectsToBeSaved.addDirty(object);
             objectsToRefreshViewsFor.addDirty(object);
         }
@@ -345,7 +332,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
 
     public void resolveLazily(NakedObject object, NakedObjectField field) {
         // TODO skip this if field if alreay resolved?
-        if (object.isResolved() || !isPersistent(object)) {
+        if (object.getResolveState().isResolved() || !isPersistent(object)) {
             return;
         }
         LOG.info("resolve-eagerly" + object + "/" + field.getName());
@@ -358,8 +345,8 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     }
 
     public void resolveImmediately(NakedObject object) {
-        Assert.assertFalse("only resolve object that are not yet resolved", object, object.isResolved());
-        Assert.assertTrue("only resolve object that are persistent", object, object.isPersistent());
+        Assert.assertFalse("only resolve object that are not yet resolved", object, object.getResolveState().isResolved());
+        Assert.assertTrue("only resolve object that are persistent", object, object.getResolveState().isPersistent());
 
         /*      if (object.isResolved()) {
             LOG.debug("resolve requested, but already resolved: " + object);
@@ -430,25 +417,12 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         this.objectStore = objectStore;
     }
 
-    /**
-     * Expose as a .NET property
-     * 
-     * @property
-     */
-    public void set_OidGenerator(OidGenerator oidGenerator) {
-        this.oidGenerator = oidGenerator;
-    }
-
     public void setCheckObjectsForDirtyFlag(boolean checkObjectsForDirtyFlag) {
         this.checkObjectsForDirtyFlag = checkObjectsForDirtyFlag;
     }
 
     public void setObjectStore(NakedObjectStore objectStore) {
         this.objectStore = objectStore;
-    }
-
-    public void setOidGenerator(OidGenerator oidGenerator) {
-        this.oidGenerator = oidGenerator;
     }
 
     public void shutdown() {
@@ -463,9 +437,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
     		}
             objectsToBeSaved.shutdown();
             objectsToRefreshViewsFor.shutdown();
-    		oidGenerator.shutdown();
-            oidGenerator = null;
-            objectStore.shutdown();
+             objectStore.shutdown();
             objectStore = null;
             nakedClasses.clear();
         } catch (ObjectStoreException e) {
@@ -486,12 +458,27 @@ public class LocalObjectManager extends AbstractNakedObjectManager {
         if(objectStore != null) {
             toString.append("objectStore", objectStore.name());
         }
-        if(oidGenerator != null) {
-            toString.append("oidGenerator", oidGenerator.name());
+        if(persistAlgorithm != null) {
+            toString.append("oidGenerator", persistAlgorithm.name());
         }
         return toString.toString();
     }
 
+
+    /**
+     * Expose as a .NET property
+     * 
+     * @property
+     */
+    public void set_PersistAlgorithm(PersistAlgorithm persistAlgorithm) {
+        this.persistAlgorithm = persistAlgorithm;
+    }
+
+    public void setPersistAlgorithm(PersistAlgorithm persistAlgorithm) {
+        this.persistAlgorithm = persistAlgorithm;
+    }
+
+    
     public void tempResetDirty() {
         objectsToBeSaved.dirtyObjects();
     }

@@ -1,13 +1,11 @@
 package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ReflectionFactory;
 import org.nakedobjects.object.control.Hint;

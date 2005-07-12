@@ -185,18 +185,22 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
         Assert.assertNotNull(oid);
         return identityAdapterMap.containsKey(oid);
     }
+    
+    public void serializing(NakedObject object) {
+        ((PojoAdapter) object).changeState(ResolveState.SERIALIZING);
+    }
 
     public void loaded(NakedObject object, ResolveState state) {
         LOG.debug("loaded " + object + " as " + state.name());
         PojoAdapter pojoAdapter = ((PojoAdapter) object);
-        Assert.assertTrue("invalid state for changing to LOADED", pojoAdapter.getResolveState().isLoading());
+        Assert.assertTrue("invalid state for changing to LOADED", pojoAdapter.getResolveState().isResolving());
         pojoAdapter.changeState(state);
     }
 
     public void loading(NakedObject object, ResolveState state) {
         LOG.debug("loading " + object + " as " + state.name());
         PojoAdapter pojoAdapter = ((PojoAdapter) object);
-        Assert.assertTrue("invalid state for changing to " + state, pojoAdapter, pojoAdapter.getResolveState().isLoadable(state));
+        Assert.assertTrue("invalid state for changing to " + state, pojoAdapter, pojoAdapter.getResolveState().isResolvable(state));
         pojoAdapter.changeState(state);
     }
 
@@ -208,10 +212,6 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
         ((PojoAdapter) adapter).persistedAs(assignedOid);
 
         addIdentityMapping(assignedOid, (PojoAdapter) adapter);
-    }
-
-    public boolean canBeLoaded(NakedObject object, ResolveState newState) {
-        return ((PojoAdapter) object).getResolveState().isLoadable(newState);
     }
 
     public NakedObject recreateAdapterForPersistent(Oid oid, NakedObjectSpecification specification) {

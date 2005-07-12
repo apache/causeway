@@ -1,16 +1,18 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.ToString;
 
 public final class ResolveState {
-    public static ResolveState PART_RESOLVED = new ResolveState("Part Resolved", "r", 0);
-    public static ResolveState RESOLVED = new ResolveState("Resolved", "R", 0);
-    public static ResolveState RESOLVING = new ResolveState("Resolving", "~R", 0);
-    public static ResolveState UPDATING = new ResolveState("Updating", "U", 0);
-    public static ResolveState RESOLVING_PART = new ResolveState("Resolving", "~r", 0);
+    public static ResolveState PART_RESOLVED = new ResolveState("Part Resolved", "Pr", 0);
+    public static ResolveState RESOLVED = new ResolveState("Resolved", "PR", 0);
+    public static ResolveState RESOLVING = new ResolveState("Resolving", "P~R", 0);
+    public static ResolveState UPDATING = new ResolveState("Updating", "PU", 0);
+    public static ResolveState RESOLVING_PART = new ResolveState("Resolving", "P~r", 0);
     public static ResolveState TRANSIENT = new ResolveState("Transient", "T", 0);
     public static ResolveState NEW = new ResolveState("New", "-", 0);
-    public static ResolveState GHOST = new ResolveState("Ghost", "G", 0);
+    public static ResolveState GHOST = new ResolveState("Ghost", "PG", 0);
+    public static ResolveState SERIALIZING = new ResolveState("Serializing", "S", 0);
     
     private final String code;
     private final String name;
@@ -35,20 +37,21 @@ public final class ResolveState {
      * if the change is valid.
      */
     public boolean isValidToChangeTo(ResolveState nextState) {
-        if(this == NEW) {
+       Assert.assertNotNull("new state must be specified", nextState);
+       if(this == NEW) {
             return nextState == TRANSIENT || nextState == GHOST;
         } else if(this == TRANSIENT) {
-            return nextState == RESOLVED;
+            return nextState == RESOLVED || nextState == SERIALIZING;
         } else if(this == GHOST) {
-            return nextState == RESOLVING_PART || nextState == RESOLVING || nextState == UPDATING;
+            return nextState == RESOLVING_PART || nextState == RESOLVING || nextState == UPDATING || nextState == SERIALIZING;
         } else if(this == RESOLVING_PART) {
             return nextState == PART_RESOLVED || nextState == RESOLVED;
         } else if(this == RESOLVING) {
             return nextState == RESOLVED;
         } else if(this == PART_RESOLVED) {
-            return nextState == RESOLVING;
+            return nextState == RESOLVING || nextState == SERIALIZING;
         } else if(this == RESOLVED) {
-            return nextState == UPDATING;
+            return nextState == UPDATING || nextState == SERIALIZING;
         } else if(this == UPDATING) {
             return nextState == RESOLVED;
         }
@@ -61,7 +64,8 @@ public final class ResolveState {
      * it needs to be updated. Hence it can 
      * be changed to loading (RESOLVING_PART, RESOLVING or UPDATING).
      */
-    public boolean isLoadable(ResolveState newState) {
+    public boolean isResolvable(ResolveState newState) {
+        Assert.assertNotNull("new state must be specified", newState);
         if(this == GHOST || this == PART_RESOLVED || this == RESOLVED) {
             return isValidToChangeTo(newState);
         }
@@ -72,10 +76,38 @@ public final class ResolveState {
     * Return true if the state reflects some kind of loading (RESOLVING_PART, RESOLVING or 
     * UPDATING), and hence can be changed to loaded (PART_RESOLVED OR RESOLVED). 
     */
-    public boolean isLoading() {
+    public boolean isResolving() {
         return this == RESOLVING || this == RESOLVING_PART || this == UPDATING;
     }
    
+    public boolean isPartlyResolved() {
+        return this == ResolveState.PART_RESOLVED;
+    }
+
+    public boolean isResolved() {
+        return this == ResolveState.RESOLVED;
+    }
+    
+    public boolean isPersistent() {
+        return this == GHOST || this == PART_RESOLVED || this == RESOLVED ||
+        	this == RESOLVING || this == RESOLVING_PART || this == UPDATING;
+    }
+    
+    /**
+     * Returns true when an object has not yet been made persistent.
+     */
+    public boolean isTransient() {
+        return this == ResolveState.TRANSIENT;
+    }
+
+    /**
+     * Returns true while object is having its field set up.
+     */
+    public boolean isIgnoreChanges() {
+        return this == ResolveState.TRANSIENT || this == ResolveState.RESOLVING
+                || this == ResolveState.RESOLVING_PART || this == ResolveState.UPDATING;
+    }
+
     
     public String toString() {
         ToString str = new ToString(this);
@@ -83,6 +115,14 @@ public final class ResolveState {
         str.append("code", code);
         str.append("stage", stage);
         return str.toString();
+    }
+
+    public boolean isSerializable() {
+        return this != SERIALIZING;
+    }
+
+    public boolean isGhost() {
+        return this == GHOST;
     }
 }
 

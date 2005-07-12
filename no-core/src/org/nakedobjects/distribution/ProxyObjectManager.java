@@ -2,10 +2,10 @@ package org.nakedobjects.distribution;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DirtyObjectSet;
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
 import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
@@ -51,10 +51,6 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
             instances[i] = DataHelper.recreateObject(data[i]);
         }
         return new InstanceCollectionVector(specification, instances);
-    }
-
-    public Oid createOid(Naked object) {
-        throw new NotExpectedException();
     }
 
     public synchronized void destroyObject(NakedObject object) {
@@ -145,8 +141,8 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     public void reset() {}
 
     public synchronized void resolveImmediately(NakedObject object) {
-  //      LOG.debug("resolve " + object);
-        if (object.isResolved() || !object.isPersistent()) {
+        ResolveState resolveState = object.getResolveState();
+        if (resolveState.isResolved() || resolveState.isTransient()) {
             return;
         }
 

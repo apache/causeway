@@ -37,6 +37,8 @@ public interface NakedObject extends Naked {
     String getLabel(Action action);
 
     String getLabel(NakedObjectField field);
+    
+    ResolveState getResolveState();
 
     ActionParameterSet getParameters(Action action);
 
@@ -53,41 +55,6 @@ public interface NakedObject extends Naked {
     void initValue(OneToOneAssociation field, Object object);
 
     boolean isEmpty(NakedObjectField field);
-
-    /**
-     * Returns true if the object has not yet been fully resolved, but it does
-     * have some of it fields loaded.
-     */
-    boolean isPartlyResolved();
-
-    /**
-     * Returns true when the object is persistent.
-     */
-    boolean isPersistent();
-
-    /**
-     * Returns true once the object has been completely read into memory and all
-     * it attributes can be validly accessed.
-     * 
-     * TODO rename to isFullyResolved()
-     */
-    boolean isResolved();
-
-    /**
-     * Returns true while object is having its field set up.
-     */
-    boolean ignoreChanges();
-
-    /**
-     * Returns true when an object has not yet been made persistent.
-     */
-    boolean isTransient();
-
-    /**
-     * Return true to indicate that the object is newly created and has no
-     * fields set up yet.
-     */
-    boolean isUnresolved();
 
     Persistable persistable();
 

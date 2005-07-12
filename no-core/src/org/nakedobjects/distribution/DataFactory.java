@@ -1,20 +1,21 @@
 package org.nakedobjects.distribution;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.NakedObjectField;
 
 import java.util.Enumeration;
-import java.util.Vector;
 
 
 public abstract class DataFactory {
 
-    private ObjectData createCollectionData(NakedCollection object, Vector savedObjects, int depth) {
+    private ObjectData createCollectionData(NakedCollection object, int depth) {
         Oid oid = null;
         String type = null;
         NakedCollection collection = (NakedCollection) object;
@@ -23,7 +24,7 @@ public abstract class DataFactory {
         int i = 0;
         while (e.hasMoreElements()) {
             NakedObject element = (NakedObject) e.nextElement();
-            fieldContent[i++] = createObjectData(element, savedObjects, depth);
+            fieldContent[i++] = createObjectData(element, depth);
         }
         // TODO need to add resolved flag to NakedCollection
         return createObjectData(oid, type, fieldContent, false, object.getVersion());
@@ -37,7 +38,7 @@ public abstract class DataFactory {
         if (object.getSpecification().isObject()) {
             return createObjectData((NakedObject) object, depth);
         } else if (object.getSpecification().isValue()) {
-            return createValueData(object, depth);
+            return createValueData(object);
         } else {
             throw new IllegalArgumentException("Expected a naked object or a naked value, but got " + object);
         }
@@ -45,10 +46,6 @@ public abstract class DataFactory {
     
     // TODO if specified object is transient then we need to pass back all it's children that are also transient, ie not  just to the specified depth
     public final ObjectData createObjectData(NakedObject object, int depth) {
-        return createObjectData(object, new Vector(), depth);
-    }
-
-    private ObjectData createObjectData(NakedObject object, Vector savedObjects, int depth) {
         if (object == null) {
             return null;
         }
@@ -56,34 +53,33 @@ public abstract class DataFactory {
         Oid oid = object.getOid();
         NakedObjectSpecification specification = object.getSpecification();
         String type = specification.getFullName();
-
-        if (savedObjects.contains(object) || (depth <= 0 && object.isPersistent())) {
-            return createObjectData(oid, type, null, object.isResolved(), object.getVersion());
+        ResolveState resolveState = object.getResolveState();
+        
+        if (! resolveState.isSerializable()) {
+            return createObjectData(oid, type, null, resolveState.isResolved(), object.getVersion());
         }
-        savedObjects.addElement(object);
-
+        
+        NakedObjects.getObjectLoader().serializing(object);
         NakedObjectField[] fields = specification.getFields();
         Object[] fieldContent = new Object[fields.length];
         for (int i = 0; i < fields.length; i++) {
             Naked field = object.getField(fields[i]);
             if (field == null) {
                 continue;
-            }
-
-            if (fields[i].isValue()) {
+            } else if (fields[i].isValue()) {
                 fieldContent[i] = field.getObject();
             } else if (fields[i].isCollection()) {
-                fieldContent[i] = createCollectionData((NakedCollection) field, savedObjects, depth - 1);
+                fieldContent[i] = createCollectionData((NakedCollection) field, depth - 1);
             } else {
-                fieldContent[i] = createObjectData((NakedObject) field, savedObjects, depth - 1);
+                fieldContent[i] = createObjectData((NakedObject) field, depth - 1);
             }
         }
-        return createObjectData(oid, type, fieldContent, object.isResolved(), object.getVersion());
+        return createObjectData(oid, type, fieldContent, resolveState.isResolved(), object.getVersion());
     }
 
     protected abstract ObjectData createObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved, long version);
 
-    private final ValueData createValueData(Naked object, int depth) {
+    private final ValueData createValueData(Naked object) {
         return createValueData(object.getSpecification().getFullName(), ((NakedValue) object).getObject());
     }
 

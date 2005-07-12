@@ -23,8 +23,6 @@ public class TestSystem {
     private NakedObjectManager objectManager;
 
     public TestSystem() {
-
-
         specificationLoader = new MockNakedObjectSpecificationLoader();
 
         ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
@@ -68,7 +66,7 @@ public class TestSystem {
     }
 
     public void shutdown() {
-        NakedObjects.shutdown();
+       NakedObjects.shutdown();
     }
 
     public void setObjectManager(LocalObjectManager objectManager) {

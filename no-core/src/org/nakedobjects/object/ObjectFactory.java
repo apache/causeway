@@ -1,5 +1,6 @@
 package org.nakedobjects.object;
 
+
 public interface ObjectFactory {
     void setUpAsNewLogicalObject(Object object);
  
