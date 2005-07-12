@@ -71,7 +71,7 @@ public class ValueField extends ValueContent implements FieldContent {
     }
 
     public Hint getValueHint(String entryText) {
-        NakedValue example = NakedObjects.getObjectLoader().createAdapterForValue(getSpecification());
+        NakedValue example = NakedObjects.getObjectLoader().createValueInstance(getSpecification());
 
         if (example != null) {
 	        try {
@@ -105,7 +105,7 @@ public class ValueField extends ValueContent implements FieldContent {
 
     public void parseEntry(String entryText) throws TextEntryParseException, InvalidEntryException {
         if (object == null) {
-            object = NakedObjects.getObjectLoader().createAdapterForValue(getSpecification());
+            object = NakedObjects.getObjectLoader().createValueInstance(getSpecification());
         }
         object.parseTextEntry(entryText);
         getParent().setValue(getOneToOneAssociation(), object.getObject());
