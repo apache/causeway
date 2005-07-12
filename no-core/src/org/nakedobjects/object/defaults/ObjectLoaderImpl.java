@@ -51,7 +51,8 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
     }
 
     public NakedValue createAdapterForValue(final Object value) {
-        Assert.assertFalse("Can't create an adapter for a NOF adapter", value instanceof Naked);
+        Assert.assertFalse("can't create an adapter for a NOF adapter", value instanceof Naked);
+        Assert.assertFalse("can't create an adapter for a NO Specification", value instanceof NakedObjectSpecification);
         LOG.debug("creating adapter (value) for " + value);
 
         NakedValue adapter;
@@ -76,8 +77,6 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
         } else {
             adapter = reflectorFactory.createValueAdapter(value);
         }
-
-        //     Assert.assertNotNull(value.toString(), adapter);
 
         return adapter;
     }

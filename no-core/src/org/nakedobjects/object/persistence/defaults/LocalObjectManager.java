@@ -336,7 +336,6 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
             return;
         }
         LOG.info("resolve-eagerly" + object + "/" + field.getName());
-    //    objectsToBeSaved.remove(object);  // TODO is this enough or do we need to check the referenced fields?
         try {
             objectStore.resolveEagerly(object, field);
         } catch (ObjectStoreException e) {
@@ -348,27 +347,8 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
         Assert.assertFalse("only resolve object that are not yet resolved", object, object.getResolveState().isResolved());
         Assert.assertTrue("only resolve object that are persistent", object, object.getResolveState().isPersistent());
 
-        /*      if (object.isResolved()) {
-            LOG.debug("resolve requested, but already resolved: " + object);
-           return;
-        }
-
-        if (!isPersistent(object)) {
-            LOG.warn("ignoring resolve request as not a persistent object: " + object);
-            return;
-        }
-*/
         LOG.info("resolve-immediately: " + object);
-/*        try {
-            // TODO fudge by Fergal
-            if (object.isResolved()) {
-        		return;
-        	} else {
-        		object.setResolved();
-        	}
-   */        // object.setResolved();
-            objectStore.resolveImmediately(object);
- //           objectsToBeSaved.remove(object);
+        objectStore.resolveImmediately(object);
     }
 
     public void saveChanges() {

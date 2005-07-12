@@ -77,7 +77,16 @@ public class DataHelper {
       }
     }
 
+
     public static void update(ObjectData data, DirtyObjectSet updateNotifier) {
+        loadData(data, ResolveState.UPDATING, updateNotifier);
+    }
+
+    public static void resolve(ObjectData data, DirtyObjectSet updateNotifier) {
+        loadData(data, ResolveState.PART_RESOLVED, updateNotifier);
+    }
+
+    private static void loadData(ObjectData data, ResolveState initialState, DirtyObjectSet updateNotifier) {
         Oid oid = data.getOid();
         Object[] fieldContent = data.getFieldContent();
 
@@ -90,7 +99,7 @@ public class DataHelper {
         NakedObject object;
         object = objectLoader.getAdapterFor(oid);
  
-        objectLoader.loading(object, ResolveState.UPDATING);
+        objectLoader.loading(object, initialState);
 		
         NakedObjectField[] fields = object.getSpecification().getFields();
         if (fields.length > 0) {

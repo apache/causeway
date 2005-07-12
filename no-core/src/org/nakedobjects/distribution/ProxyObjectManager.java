@@ -151,7 +151,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
 
         LOG.debug("resolve object (remotely from server)" + oid);
         ObjectData data = connection.resolveImmediately(session, oid, hint.getFullName());
-        DataHelper.update(data, updateNotifier);
+        DataHelper.resolve(data, updateNotifier);
     }
 
     public void resolveLazily(NakedObject object, NakedObjectField field) {}

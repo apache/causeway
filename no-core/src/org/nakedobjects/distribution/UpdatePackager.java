@@ -2,6 +2,7 @@ package org.nakedobjects.distribution;
 
 import org.nakedobjects.utility.ToString;
 
+import java.util.Enumeration;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
@@ -13,6 +14,17 @@ public class UpdatePackager {
 
     protected void addUpdate(ObjectData objectData) {
         if (!updates.contains(objectData)) {
+            
+            // HACK  - remove previous update to this object
+            for(Enumeration e = updates.elements(); e.hasMoreElements();) {
+                ObjectData exitsing = (ObjectData) e.nextElement();
+                if(objectData.getOid().equals(exitsing.getOid())) {
+                    //updates.removeElement(exitsing);
+                    //break;
+                    return;
+                }
+            }
+            
             updates.addElement(objectData);
         }
     }
