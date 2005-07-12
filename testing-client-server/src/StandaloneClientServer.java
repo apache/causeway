@@ -23,6 +23,7 @@ import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.ObjectManagerLogger;
 import org.nakedobjects.object.persistence.ObjectStoreLogger;
 import org.nakedobjects.object.persistence.OidGenerator;
+import org.nakedobjects.object.persistence.defaults.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
@@ -103,9 +104,12 @@ public abstract class StandaloneClientServer {
 
                 OidGenerator oidGenerator = new SimpleOidGenerator();
 
+                DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
+                persistAlgorithm.setOidGenerator(oidGenerator);
+
                 LocalObjectManager localObjectManager = new LocalObjectManager();
                 localObjectManager.setObjectStore(objectStore);
-                localObjectManager.setOidGenerator(oidGenerator);
+                localObjectManager.setPersistAlgorithm(persistAlgorithm);
                 localObjectManager.setCheckObjectsForDirtyFlag(true);
 
                 NakedObjectManager objectManager = new ObjectManagerLogger(localObjectManager, "server-manager.log");
