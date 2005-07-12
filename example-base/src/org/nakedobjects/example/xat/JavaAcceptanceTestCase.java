@@ -8,6 +8,7 @@ import org.nakedobjects.object.defaults.ObjectLoaderImpl;
 import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.fixture.FixtureBuilder;
 import org.nakedobjects.object.persistence.OidGenerator;
+import org.nakedobjects.object.persistence.defaults.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.TimeBasedOidGenerator;
 import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
@@ -89,9 +90,13 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
 
         OidGenerator oidGenerator = new TimeBasedOidGenerator();            
 
+        DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
+        persistAlgorithm.setOidGenerator(oidGenerator);
+
         LocalObjectManager objectManager = new LocalObjectManager();
         objectManager.setObjectStore(objectStore);
-        objectManager.setOidGenerator(oidGenerator);
+        objectManager.setPersistAlgorithm(persistAlgorithm);
+
 
         nakedObjects.setObjectManager(objectManager);
 

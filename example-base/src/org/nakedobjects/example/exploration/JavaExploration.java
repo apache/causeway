@@ -13,6 +13,7 @@ import org.nakedobjects.object.fixture.Fixture;
 import org.nakedobjects.object.help.HelpManagerAssist;
 import org.nakedobjects.object.help.SimpleHelpManager;
 import org.nakedobjects.object.persistence.OidGenerator;
+import org.nakedobjects.object.persistence.defaults.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
@@ -84,10 +85,13 @@ public class JavaExploration {
             TransientObjectStore objectStore = new TransientObjectStore();
 
             OidGenerator oidGenerator = new SimpleOidGenerator();
+            
+            DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
+            persistAlgorithm.setOidGenerator(oidGenerator);
 
             LocalObjectManager objectManager = new LocalObjectManager();
             objectManager.setObjectStore(objectStore);
-            objectManager.setOidGenerator(oidGenerator);
+            objectManager.setPersistAlgorithm(persistAlgorithm);
 
             nakedObjects.setObjectManager(objectManager);
 
