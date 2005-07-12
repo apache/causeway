@@ -414,7 +414,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         try {
             NakedValue nakedValue = (NakedValue) valueObject;
             if (nakedValue == null) {
-                nakedValue = NakedObjects.getObjectLoader().createAdapterForValue(field.getSpecification());
+                nakedValue = NakedObjects.getObjectLoader().createValueInstance(field.getSpecification());
             }
             nakedValue.parseTextEntry(value);
             throw new NakedAssertionFailedError("Value was unexpectedly parsed");
@@ -788,7 +788,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
             }
             NakedValue value = object.getValue((OneToOneAssociation) field);
             if (value == null) {
-                value = NakedObjects.getObjectLoader().createAdapterForValue(field.getSpecification());
+                value = NakedObjects.getObjectLoader().createValueInstance(field.getSpecification());
             }
             value.parseTextEntry(textEntry);
 
