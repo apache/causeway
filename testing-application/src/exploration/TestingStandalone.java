@@ -14,6 +14,7 @@ import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.ObjectManagerLogger;
 import org.nakedobjects.object.persistence.ObjectStoreLogger;
 import org.nakedobjects.object.persistence.OidGenerator;
+import org.nakedobjects.object.persistence.defaults.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
@@ -79,10 +80,13 @@ public class TestingStandalone {
             
             OidGenerator oidGenerator = new SimpleOidGenerator();            
 
+            DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
+            persistAlgorithm.setOidGenerator(oidGenerator);
+
             LocalObjectManager lom = new LocalObjectManager();
             lom.setObjectStore(objectStore);
-            lom.setOidGenerator(oidGenerator);
             lom.setCheckObjectsForDirtyFlag(true);
+            lom.setPersistAlgorithm(persistAlgorithm);
             
             NakedObjectManager objectManager = new ObjectManagerLogger(lom, "manager.log");
             nakedObjects.setObjectManager(objectManager);
