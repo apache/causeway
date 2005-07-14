@@ -1,7 +1,6 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.utility.ExceptionHelper;
-import org.nakedobjects.viewer.skylark.core.BackgroundThread;
 
 import java.awt.Point;
 import java.awt.event.KeyEvent;
