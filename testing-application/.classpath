@@ -10,5 +10,6 @@
 	<classpathentry kind="src" path="/no-application-library"/>
 	<classpathentry kind="src" path="/no-xat"/>
 	<classpathentry kind="src" path="/example-base"/>
+	<classpathentry kind="src" path="/no-system"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
