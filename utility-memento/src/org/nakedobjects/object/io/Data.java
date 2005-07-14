@@ -7,11 +7,13 @@ import java.io.Serializable;
 class Data implements Transferable, Serializable {
     private final static long serialVersionUID = 1L;
     final String className;
+    final String resolveState; 
     final Oid oid;
 
-    public Data(Oid oid, String className) {
+    public Data(Oid oid, String resolveState, String className) {
         this.oid = oid;
         this.className = className;
+        this.resolveState = resolveState;
     }
 
 
@@ -25,11 +27,13 @@ class Data implements Transferable, Serializable {
 
     public void writeData(TransferableWriter data) {
         data.writeString(className);
+        data.writeString(resolveState);
         data.writeObject((Transferable) oid);
     }
 
     public Data(TransferableReader data) {
         className = data.readString();
+        resolveState = data.readString();
         oid = (Oid) data.readObject();
     }
 }

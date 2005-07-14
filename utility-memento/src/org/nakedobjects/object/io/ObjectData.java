@@ -10,8 +10,8 @@ class ObjectData extends Data {
     private final static Transferable NO_ENTRY = new Null();
     private final Hashtable fields = new Hashtable();
 
-    public ObjectData(Oid oid, String className) {
-        super(oid, className);
+    public ObjectData(Oid oid, String resolveState, String className) {
+        super(oid, resolveState, className);
     }
 
     public ObjectData(TransferableReader data) {

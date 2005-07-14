@@ -7,6 +7,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.NakedObjectField;
@@ -44,10 +45,10 @@ public class Memento implements Transferable, Serializable {
             Data[] collData = new Data[coll.size()];
             for (int j = 0; j < coll.size(); j++) {
                 NakedObject ref = coll.elementAt(j);
-                collData[j] = new Data(ref.getOid(), ref.getSpecification().getFullName());
+                collData[j] = new Data(ref.getOid(), ref.getResolveState().name(), ref.getSpecification().getFullName());
             }
 
-            return new InternalCollectionData(coll.getOid(), InternalCollection.class.getName(), collData);
+            return new CollectionData(coll.getOid(), InternalCollection.class.getName(), collData);
         } else {
             return createObjectData((NakedObject) object);
         }
@@ -55,20 +56,23 @@ public class Memento implements Transferable, Serializable {
 
     private ObjectData createObjectData(NakedObject object) {
         NakedObjectSpecification cls = object.getSpecification();
-        ObjectData d = new ObjectData(object.getOid(), cls.getFullName());
+        ObjectData d = new ObjectData(object.getOid(), object.getResolveState().name(), cls.getFullName());
 
         NakedObjectField[] fields = cls.getFields();
 
         for (int i = 0; i < fields.length; i++) {
             NakedObjectField field = fields[i];
             if (!field.isDerived()) {
-               if (field instanceof OneToManyAssociation) {
+               if (field.isCollection()) {
                     InternalCollection coll = (InternalCollection) object.getField(field);
                     d.addField(field.getName(), createData(coll));
-                } else if (field instanceof OneToOneAssociation) {
-                    NakedObject ref = object.getAssociation((OneToOneAssociation) field);
-                    Object refOid = ref == null ? null : new Data(ref.getOid(), ref.getSpecification().getFullName());
-                    d.addField(field.getName(), refOid);
+               } else if (field.isObject()) {
+                   NakedObject ref = object.getAssociation((OneToOneAssociation) field);
+                   Object refOid = ref == null ? null : new Data(ref.getOid(), ref.getResolveState().name(), ref.getSpecification().getFullName());
+                   d.addField(field.getName(), refOid);
+               } else if (field.isValue()) {
+                   NakedValue value = object.getValue((OneToOneAssociation) field);
+                   d.addField(field.getName(), value.asEncodedString());
                 }
             }
         }
@@ -91,10 +95,8 @@ public class Memento implements Transferable, Serializable {
             } else {
                 object = objectLoader.recreateAdapterForPersistent(getOid(), spec);
             }
-            
             LOG.debug("Recreated object " + object.getOid());
-            updateObject(object);
-
+            updateObject(object, ResolveState.UPDATING);
             return object;
         }
     }
@@ -128,6 +130,10 @@ public class Memento implements Transferable, Serializable {
      *                       the one specified (i.e. its oid differs).
      */
     public void updateObject(NakedObject object) {
+        updateObject(object, ResolveState.RESOLVING);
+    }
+    
+    private void updateObject(NakedObject object, ResolveState resolveState) {
         Object oid = object.getOid();
         if (oid != null && !oid.equals(state.oid)) {
             throw new IllegalArgumentException("This memento can only be used to " + "update the naked object with the Oid "
@@ -139,7 +145,7 @@ public class Memento implements Transferable, Serializable {
             } else {
                 NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
 
-                objectLoader.loading(object, ResolveState.RESOLVING);
+                objectLoader.start(object, resolveState);
                 
                 ObjectData od = (ObjectData) state;
 
@@ -149,23 +155,25 @@ public class Memento implements Transferable, Serializable {
                     NakedObjectField field = fields[i];
                     Object fieldData = od.getEntry(field.getName());
                     if (!field.isDerived()) {
-                        if (field instanceof OneToManyAssociation) {
+                        if (field.isCollection()) {
                             updateOneToManyAssociation(object, (OneToManyAssociation) field,
-                                    (InternalCollectionData) fieldData);
-                        } else if (field instanceof OneToOneAssociation) {
+                                    (CollectionData) fieldData);
+                        } else if (field.isObject()) {
                             updateOneToOneAssociation(object, (OneToOneAssociation) field, (Data) fieldData);
+                        } else if (field.isValue()) {
+                            object.initValue((OneToOneAssociation) field, fieldData);
                         }
                     }
                 }
                 
-                objectLoader.loaded(object, ResolveState.RESOLVED);
+                objectLoader.end(object);
             }
             LOG.debug("object updated " + object.getOid());
         }
 
     }
 
-    private void updateOneToManyAssociation(NakedObject object, OneToManyAssociation field, InternalCollectionData collectionData) {
+    private void updateOneToManyAssociation(NakedObject object, OneToManyAssociation field, CollectionData collectionData) {
         InternalCollection collection = (InternalCollection) object.getField(field);
         if (collection.getOid() == null) {
             collection.setOid(collectionData.getOid());

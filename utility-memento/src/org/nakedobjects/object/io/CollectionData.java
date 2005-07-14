@@ -2,16 +2,16 @@ package org.nakedobjects.object.io;
 
 import org.nakedobjects.object.persistence.Oid;
 
-class InternalCollectionData extends Data {
+class CollectionData extends Data {
     private final static long serialVersionUID = 1L;
     final Data[] elements;
 
-    public InternalCollectionData(Oid oid, String className, Data[] elements) {
-        super(oid, className);
+    public CollectionData(Oid oid, String className, Data[] elements) {
+        super(oid, "", className);
         this.elements = elements;
     }
 
-    public InternalCollectionData(TransferableReader data) {
+    public CollectionData(TransferableReader data) {
         super(data);
 
         int no = data.readInt();
