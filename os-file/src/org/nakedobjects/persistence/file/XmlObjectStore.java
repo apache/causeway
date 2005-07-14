@@ -242,7 +242,7 @@ public class XmlObjectStore implements NakedObjectStore {
 
     private void initObject(NakedObject object, ObjectData data) throws ObjectStoreException {
         if (object.getResolveState().isResolvable(ResolveState.RESOLVING)) {
-            objectLoader.loading(object, ResolveState.RESOLVING);
+            objectLoader.start(object, ResolveState.RESOLVING);
 
             NakedObjectField[] fields = object.getFields();
             for (int i = 0; i < fields.length; i++) {
@@ -260,7 +260,7 @@ public class XmlObjectStore implements NakedObjectStore {
                 }
             }
 
-            objectLoader.loaded(object, ResolveState.RESOLVED);
+            objectLoader.end(object);
         }
     }
 
