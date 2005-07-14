@@ -9,7 +9,6 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.PojoAdapter;
 
 import java.util.Enumeration;
 
@@ -56,13 +55,11 @@ public abstract class DataFactory {
         String type = specification.getFullName();
         ResolveState resolveState = object.getResolveState();
         
-        if (! resolveState.isSerializable()) {
+        if (resolveState.isSerializing()) {
             return createObjectData(oid, type, null, resolveState.isResolved(), object.getVersion());
         }
         
-        ResolveState state = object.getResolveState();
-        
-        NakedObjects.getObjectLoader().serializing(object);
+        NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
         NakedObjectField[] fields = specification.getFields();
         Object[] fieldContent = new Object[fields.length];
         for (int i = 0; i < fields.length; i++) {
@@ -78,8 +75,7 @@ public abstract class DataFactory {
             }
         }
         
-        ((PojoAdapter) object).changeState(state);
-        
+        NakedObjects.getObjectLoader().end(object);
         return createObjectData(oid, type, fieldContent, resolveState.isResolved(), object.getVersion());
     }
 

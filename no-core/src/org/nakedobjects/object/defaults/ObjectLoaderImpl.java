@@ -184,23 +184,18 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
         Assert.assertNotNull(oid);
         return identityAdapterMap.containsKey(oid);
     }
-    
-    public void serializing(NakedObject object) {
-        ((PojoAdapter) object).changeState(ResolveState.SERIALIZING);
-    }
 
-    public void loaded(NakedObject object, ResolveState state) {
-        LOG.debug("loaded " + object + " as " + state.name());
+    public void start(NakedObject object, ResolveState state) {
+        LOG.debug("start " + object + " as " + state.name());
         PojoAdapter pojoAdapter = ((PojoAdapter) object);
-        Assert.assertTrue("invalid state for changing to LOADED", pojoAdapter.getResolveState().isResolving());
         pojoAdapter.changeState(state);
     }
 
-    public void loading(NakedObject object, ResolveState state) {
-        LOG.debug("loading " + object + " as " + state.name());
+    public void end(NakedObject object) {
+        ResolveState endState = object.getResolveState().getEndState();
+        LOG.debug("end " + object + " as " + endState.name());
         PojoAdapter pojoAdapter = ((PojoAdapter) object);
-        Assert.assertTrue("invalid state for changing to " + state, pojoAdapter, pojoAdapter.getResolveState().isResolvable(state));
-        pojoAdapter.changeState(state);
+        pojoAdapter.changeState(endState);
     }
 
     public void madePersistent(final NakedObject adapter, final Oid assignedOid) {

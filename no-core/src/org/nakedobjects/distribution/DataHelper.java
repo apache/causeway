@@ -41,10 +41,11 @@ public class DataHelper {
             recreateObjectsInFields(data, object);
         } else {
             object = objectLoader.recreateAdapterForPersistent(oid, specification);
-            if (object.getResolveState().isResolvable(data.isResolved() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART)) {
-                objectLoader.loading(object, data.isResolved() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART);
+            ResolveState state = data.isResolved() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART;
+            if (object.getResolveState().isResolvable(state)) {
+                objectLoader.start(object, state);
 		        recreateObjectsInFields(data, object);
-		        objectLoader.loaded(object, data.isResolved() ? ResolveState.RESOLVED : ResolveState.PART_RESOLVED);
+		        objectLoader.end(object);
             }
         }
         return object;
@@ -83,7 +84,7 @@ public class DataHelper {
     }
 
     public static void resolve(ObjectData data, DirtyObjectSet updateNotifier) {
-        loadData(data, ResolveState.PART_RESOLVED, updateNotifier);
+        loadData(data, ResolveState.RESOLVING, updateNotifier);
     }
 
     private static void loadData(ObjectData data, ResolveState initialState, DirtyObjectSet updateNotifier) {
@@ -99,7 +100,7 @@ public class DataHelper {
         NakedObject object;
         object = objectLoader.getAdapterFor(oid);
  
-        objectLoader.loading(object, initialState);
+        objectLoader.start(object, initialState);
 		
         NakedObjectField[] fields = object.getSpecification().getFields();
         if (fields.length > 0) {
@@ -126,7 +127,7 @@ public class DataHelper {
                 }
             }
         }
-        objectLoader.loaded(object, ResolveState.RESOLVED);
+        objectLoader.end(object);
 		updateNotifier.addDirty(object);
     }
 

@@ -94,14 +94,16 @@ public interface NakedObjectLoader extends NakedObjectsComponent, DebugInfo {
      * as specified by the second parameter. Attempting to specify any other
      * state throws a runtime exception.
      */
-    void loaded(NakedObject object, ResolveState state);
+  //  void loaded(NakedObject object, ResolveState state);
+    void end(NakedObject object); 
 
     /**
      * Marks the specified object as being loaded: resolving, partly resolving
      * or updating as specified by the second parameter. Attempting to specify
      * any other state throws a runtime exception.
      */
-    void loading(NakedObject object, ResolveState state);
+  //  void loading(NakedObject object, ResolveState state);
+    void start(NakedObject object, ResolveState targetState);
 
     /**
      * Marks the specified adapter as perstient (as opposed to to being
@@ -130,7 +132,7 @@ public interface NakedObjectLoader extends NakedObjectsComponent, DebugInfo {
      */
     void unloaded(NakedObject object);
 
-    void serializing(NakedObject object);
+//    void serializing(NakedObject object);
 }
 
 /*

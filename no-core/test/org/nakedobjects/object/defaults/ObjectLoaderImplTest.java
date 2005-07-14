@@ -144,9 +144,9 @@ public class ObjectLoaderImplTest extends TestCase {
         assertEquals(ResolveState.NEW, adapter1.getResolveState());
         adapter1.changeState(ResolveState.GHOST);
     
-        objectLoader.loading(adapter1, ResolveState.RESOLVING);
+        objectLoader.start(adapter1, ResolveState.RESOLVING);
         assertEquals(ResolveState.RESOLVING, adapter1.getResolveState());
-        objectLoader.loaded(adapter1, ResolveState.RESOLVED);
+        objectLoader.end(adapter1);
         assertEquals(ResolveState.RESOLVED, adapter1.getResolveState());
     }
     
@@ -155,23 +155,11 @@ public class ObjectLoaderImplTest extends TestCase {
         assertEquals(ResolveState.NEW, adapter1.getResolveState());
         adapter1.changeState(ResolveState.GHOST);
     
-        objectLoader.loading(adapter1, ResolveState.RESOLVING_PART);
+        objectLoader.start(adapter1, ResolveState.RESOLVING_PART);
         assertEquals(ResolveState.RESOLVING_PART, adapter1.getResolveState());
-        objectLoader.loaded(adapter1, ResolveState.PART_RESOLVED);
+        objectLoader.end(adapter1);
         assertEquals(ResolveState.PART_RESOLVED, adapter1.getResolveState());
     }
-    
-    
-    public void testPartLoadingThenFullyLoaded() {
-        assertEquals(ResolveState.NEW, adapter1.getResolveState());
-        adapter1.changeState(ResolveState.GHOST);
-    
-        objectLoader.loading(adapter1, ResolveState.RESOLVING_PART);
-        assertEquals(ResolveState.RESOLVING_PART, adapter1.getResolveState());
-        objectLoader.loaded(adapter1, ResolveState.RESOLVED);
-        assertEquals(ResolveState.RESOLVED, adapter1.getResolveState());
-    }
-    
 
     public void testLoadingAfterPartLoaded() {
         assertEquals(ResolveState.NEW, adapter1.getResolveState());
@@ -179,9 +167,9 @@ public class ObjectLoaderImplTest extends TestCase {
         adapter1.changeState(ResolveState.RESOLVING_PART);
         adapter1.changeState(ResolveState.PART_RESOLVED);
 
-        objectLoader.loading(adapter1, ResolveState.RESOLVING);
+        objectLoader.start(adapter1, ResolveState.RESOLVING);
         assertEquals(ResolveState.RESOLVING, adapter1.getResolveState());
-        objectLoader.loaded(adapter1, ResolveState.RESOLVED);
+        objectLoader.end(adapter1);
         assertEquals(ResolveState.RESOLVED, adapter1.getResolveState());
     }
 
@@ -192,9 +180,9 @@ public class ObjectLoaderImplTest extends TestCase {
         adapter1.changeState(ResolveState.RESOLVING);
         adapter1.changeState(ResolveState.RESOLVED);
 
-        objectLoader.loading(adapter1, ResolveState.UPDATING);
+        objectLoader.start(adapter1, ResolveState.UPDATING);
         assertEquals(ResolveState.UPDATING, adapter1.getResolveState());
-        objectLoader.loaded(adapter1, ResolveState.RESOLVED);
+        objectLoader.end(adapter1);
         assertEquals(ResolveState.RESOLVED, adapter1.getResolveState());
     }
 

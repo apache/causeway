@@ -3,8 +3,10 @@ package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.object.persistence.Oid;
 
+import java.io.Serializable;
 
-public class SerialOid implements Oid {
+
+public class SerialOid implements Oid, Serializable {
     private final long serialNo;
    
     public SerialOid(long serialNo) {

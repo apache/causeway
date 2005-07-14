@@ -33,6 +33,8 @@ public class DummyObjectLoader implements NakedObjectLoader {
         return null;
     }
 
+    public void end(NakedObject object) {}
+
     public NakedObject getAdapterFor(Object object) {
         return null;
     }
@@ -63,10 +65,6 @@ public class DummyObjectLoader implements NakedObjectLoader {
         return false;
     }
 
-    public void loaded(NakedObject object, ResolveState state) {}
-
-    public void loading(NakedObject object, ResolveState state) {}
-
     public void madePersistent(NakedObject object, Oid oid) {}
 
     public NakedObject recreateAdapterForPersistent(Oid oid, NakedObjectSpecification spec) {
@@ -75,15 +73,15 @@ public class DummyObjectLoader implements NakedObjectLoader {
 
     public void reset() {}
 
-    public void serializing(NakedObject object) {
-        ((DummyNakedObject) object).setupResolveState(ResolveState.SERIALIZING);
-    }
-
     public void setupAdapter(NakedObject adapter) {
         this.adapter = adapter;
     }
 
     public void shutdown() {}
+
+    public void start(NakedObject object, ResolveState targetState) {
+        ((DummyNakedObject) object).setupResolveState(ResolveState.SERIALIZING_RESOLVED);
+    }
 
     public void unloaded(NakedObject object) {}
 }

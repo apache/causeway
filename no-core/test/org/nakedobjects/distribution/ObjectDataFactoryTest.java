@@ -56,7 +56,7 @@ public class ObjectDataFactoryTest extends TestCase {
         assertEquals(false, od.isResolved());
         assertEquals(0, od.getVersion());
         assertEquals(0, od.getFieldContent().length);
-        assertEquals(ResolveState.SERIALIZING, object.getResolveState());
+        assertEquals(ResolveState.SERIALIZING_RESOLVED, object.getResolveState());
     }
 
     public void testResolved() {
@@ -65,7 +65,7 @@ public class ObjectDataFactoryTest extends TestCase {
         ObjectData od = factory.createObjectData(object, 0);
 
         assertEquals(true, od.isResolved());
-        assertEquals(ResolveState.SERIALIZING, object.getResolveState());
+        assertEquals(ResolveState.SERIALIZING_RESOLVED, object.getResolveState());
     }
     
     public void testVersion() {
@@ -74,7 +74,7 @@ public class ObjectDataFactoryTest extends TestCase {
         ObjectData od = factory.createObjectData(object, 0);
 
         assertEquals(78821L, od.getVersion());
-        assertEquals(ResolveState.SERIALIZING, object.getResolveState());
+        assertEquals(ResolveState.SERIALIZING_RESOLVED, object.getResolveState());
     }
 
 
@@ -86,7 +86,7 @@ public class ObjectDataFactoryTest extends TestCase {
         ObjectData od = factory.createObjectData(object, 0);
 
         assertEquals(3, od.getFieldContent().length);
-        assertEquals(ResolveState.SERIALIZING, object.getResolveState());
+        assertEquals(ResolveState.SERIALIZING_RESOLVED, object.getResolveState());
     }
 
     public void testObjectWithFields() {
@@ -108,7 +108,7 @@ public class ObjectDataFactoryTest extends TestCase {
         assertEquals(3, od.getFieldContent().length);
         ObjectData objectData = ((ObjectData) od.getFieldContent()[1]);
         assertEquals(fieldSpecification.getFullName(), objectData.getType());
-        assertEquals(ResolveState.SERIALIZING, object.getResolveState());
+        assertEquals(ResolveState.SERIALIZING_RESOLVED, object.getResolveState());
   
     }
     
