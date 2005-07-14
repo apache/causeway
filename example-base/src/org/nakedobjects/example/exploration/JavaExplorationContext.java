@@ -1,8 +1,8 @@
 package org.nakedobjects.example.exploration;
 
+import org.nakedobjects.object.ApplicationContext;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
-import org.nakedobjects.object.ApplicationContext;
 
 public class JavaExplorationContext extends ApplicationContext  {
     private String name;
