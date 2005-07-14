@@ -4,33 +4,28 @@ package org.nakedobjects.object;
 
 import org.nakedobjects.application.control.ActionAbout;
 import org.nakedobjects.application.control.FieldAbout;
-import org.nakedobjects.object.defaults.LoadedObject;
 
 import java.util.Vector;
 
-
-/**
- * A very simple NakedObject classes - contains only a one-to-many association
- */
 public class Team {
    private final Vector members = new Vector();
    public boolean reduced = false;
    
-   public void aboutMembers(FieldAbout about, LoadedObject person, boolean add) {
+   public void aboutMembers(FieldAbout about, Person person, boolean add) {
+   }
+
+   public void addToMembers(Person member) {
+       members.addElement(member);
+   }
+
+   public void removeFromMembers(Person member) {
+       members.removeElement(member);
    }
    
    public Vector getMembers() {
       return members;
    }
    
-   public void addToMembers(Person member) {
-       members.addElement(member);
-   }
-   
-   public void aremoveFromMembers(Person member) {
-       members.removeElement(member);
-   }
-
    public void aboutActionReduceHeadcount(ActionAbout about) {
    }
    

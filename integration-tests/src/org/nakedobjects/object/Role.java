@@ -2,8 +2,7 @@ package org.nakedobjects.object;
 
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.control.FieldAbout;
-import org.nakedobjects.application.value.TextString;
-import org.nakedobjects.object.defaults.LoadedObject;
+import org.nakedobjects.application.valueholder.TextString;
 
 
 /**
