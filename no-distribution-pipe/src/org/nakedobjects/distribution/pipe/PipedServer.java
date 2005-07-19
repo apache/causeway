@@ -4,7 +4,6 @@ import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.distribution.SingleResponseUpdateNotifier;
 import org.nakedobjects.distribution.command.Request;
 import org.nakedobjects.distribution.command.Response;
-import org.nakedobjects.utility.ExceptionHelper;
 
 import org.apache.log4j.Logger;
 
@@ -24,7 +23,7 @@ public class PipedServer {
 	                request.execute(facade);
 	                LOG.debug("server updates: " + updateNotifier.updateList());
 	            } catch (Exception e) {
-	                ExceptionHelper.log(PipedServer.class, "Failure during request", e);
+	                LOG.error("Failure during request", e);
 	            }
 
                 Response response = new Response(request);
