@@ -30,6 +30,10 @@ public class OpenObjectNodeSpecification extends CompositeNodeSpecification {
     public OpenObjectNodeSpecification() {
         builder = new StackLayout(new ObjectFieldBuilder(this));
     }
+
+    public boolean isOpen() {
+        return true;
+    }
 }
 
 

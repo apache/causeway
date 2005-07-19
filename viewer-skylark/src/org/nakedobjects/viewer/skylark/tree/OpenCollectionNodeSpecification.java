@@ -18,6 +18,10 @@ public class OpenCollectionNodeSpecification extends CompositeNodeSpecification 
     public OpenCollectionNodeSpecification() {
         builder = new StackLayout(new CollectionElementBuilder(this, true));
     }
+    
+    public boolean isOpen() {
+        return true;
+    }
 }
 
 /*
