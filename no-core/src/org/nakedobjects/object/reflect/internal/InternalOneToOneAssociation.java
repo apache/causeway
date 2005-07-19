@@ -228,10 +228,9 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
             } else {
                 Naked adapter = NakedObjects.getObjectLoader().createAdapterForValue(obj);
                 if(adapter == null) {
-                    adapter = NakedObjects.getObjectLoader().createAdapterForTransient(obj);
+                    adapter = NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(obj);
                 }
                 return adapter;
-//                NakedObjects.getPojoAdapterFactory().createAdapter(obj);
             }
             
         } catch (InvocationTargetException e) {
