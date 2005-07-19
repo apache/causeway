@@ -81,6 +81,8 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
                     String label = parameter.getParameterName();
                     view.replaceView(subview, decorateSubview(new LabelBorder(label, fieldView)));                    
                 }
+            } else {
+                subview.refresh();
             }
         }
     }
