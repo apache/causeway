@@ -3,7 +3,6 @@ package org.nakedobjects.object.reflect;
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
@@ -103,13 +102,9 @@ public class Action extends NakedObjectMember {
 
     protected Naked execute(final NakedObject object, final Naked[] parameters) {
         LOG.debug("execute action " + object + "." + getName());
-        try {
-            Naked result = reflectiveAdapter.execute(getIdentifier(), object, parameters == null ?  new Naked[0] : parameters);
-            return result;
-        } catch (ReflectiveActionException e) {
-            // TODO Sort out how to deal with exception during reflection
-            throw new NakedObjectRuntimeException(e);
-        }
+        Naked[] params = parameters == null ?  new Naked[0] : parameters;
+        Naked result = reflectiveAdapter.execute(getIdentifier(), object, params);
+        return result;
     }
 
     protected Hint getHint(NakedObject object, Naked[] parameters) {
