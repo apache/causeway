@@ -1,17 +1,12 @@
 package org.nakedobjects.object;
 
 public interface NakedValue extends Naked {
-    void parseTextEntry(String text) throws InvalidEntryException;
 
     byte[] asEncodedString();
-
-    void restoreFromEncodedString(byte[] data);
-
-    /**
-     * The minimum length of this value - the number of characters that can be
-     * parsed. If zero (0) then the value can be blank or empty.
-     */
-    int getMinumumLength();
+    
+    void clear();
+    
+    boolean canClear();
 
     /**
      * The maximum length of this value - the number of characters that can be
@@ -19,6 +14,21 @@ public interface NakedValue extends Naked {
      * characters it can be composed of.
      */
     int getMaximumLength();
+
+    /**
+     * The minimum length of this value - the number of characters that can be
+     * parsed. If zero (0) then the value can be blank or empty.
+     */
+    int getMinumumLength();
+    
+    /**
+     * returns true if the value is empty.  This will be true after a call to clear() if canClear() returns true.
+     */
+    boolean isEmpty();
+    
+    void parseTextEntry(String text) throws InvalidEntryException;
+
+    void restoreFromEncodedString(byte[] data);
 }
 
 /*

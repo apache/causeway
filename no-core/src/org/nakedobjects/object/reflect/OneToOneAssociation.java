@@ -25,9 +25,7 @@ public class OneToOneAssociation extends NakedObjectAssociation {
 
     protected void clearValue(NakedObject inObject) {
         NakedValue associate = (NakedValue) get(inObject);
-        if (associate != null) {
-            setValue(inObject, null);
-        }
+        associate.clear();
     }
 
     protected Naked get(NakedObject fromObject) {

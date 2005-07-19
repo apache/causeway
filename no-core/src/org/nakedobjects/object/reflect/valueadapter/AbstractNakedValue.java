@@ -60,6 +60,17 @@ public abstract class AbstractNakedValue implements NakedValue {
     public int getMaximumLength() {
         return 0;
     }
+    
+    
+    public boolean canClear() {
+        return false;
+    }
+    
+    public void clear() {}
+    
+    public boolean isEmpty() {
+        return false;
+    }
 }
 
 

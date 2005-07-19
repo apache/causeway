@@ -72,6 +72,16 @@ public class MockNakedValue implements NakedValue {
 
     public void clearViewDirty() {}
 
+    public void clear() {}
+
+    public boolean canClear() {
+        return false;
+    }
+
+    public boolean isEmpty() {
+        return false;
+    }
+
 }
 
 
