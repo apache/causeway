@@ -69,10 +69,11 @@ public class Customer {
         pickUp.isLondon();
     }
         
-    public void aboutActionCreateBooking(ActionAbout about, Location from, Location to, Telephone telephone, TextString text, Date date) {
+    public void aboutActionCreateBooking(ActionAbout about, Location from, Location to, Telephone telephone, TextString text, Date date, Date returning) {
         about.setParameter(0, "Pick up");
         about.setParameter(1, "Drop off");
         about.setParameter(3, "Date");
+        about.setParameter(4, "Return on");
 
 /*        if (!getLocations().isEmpty()) {
             about.setParameter(0, getLocations().firstElement());
@@ -85,9 +86,15 @@ public class Customer {
     //    about.setParameter(3, (Object) "hsadaskll");
         
         about.setDescription("From " + from + " to " + to + ", call on " + telephone);
+        
+        
+        about.unusableOnCondition(from == null, "must have a from location");
+        about.unusableOnCondition(text.isEmpty(), "Need some text");
+        about.unusableOnCondition(date.isLessThanOrEqualTo(new Date()), "Date must be tommorow or after");
+        about.unusableOnCondition(returning.isLessThanOrEqualTo(new Date()), "Date must be tommorow or after");
     }
 
-    public Booking actionCreateBooking(Location from, Location to, TextString text, Date date) {
+    public Booking actionCreateBooking(Location from, Location to, Telephone telephone, TextString text, Date date, Date returnon) {
         Booking booking = (Booking) container.createInstance(Booking.class);
         booking.associateCustomer(this);
         booking.setPaymentMethod(getPreferredPaymentMethod());

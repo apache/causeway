@@ -6,6 +6,7 @@ import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.application.control.Validity;
 import org.nakedobjects.application.valueholder.Color;
 import org.nakedobjects.application.valueholder.TextString;
+import org.nakedobjects.application.valueholder.WholeNumber;
 
 
 public class CreditCard implements PaymentMethod {
@@ -16,6 +17,14 @@ public class CreditCard implements PaymentMethod {
     
     public static void aboutCreditCard(ClassAbout about) {
         about.instancesUnavailable();
+    }
+    
+    public void aboutActionChangeNumber(FieldAbout about, WholeNumber number) {
+
+    }
+    
+    public void actionChangeNumber(WholeNumber number) {
+        
     }
     
      public CreditCard() {

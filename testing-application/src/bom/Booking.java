@@ -174,11 +174,12 @@ public class Booking {
     public static Booking actionNewBooking(Customer customer) {
         return customer.createBooking();
     }
+   
     
-    public static Booking actionCreateBooking() {
-        return null;
+    public static Booking actionTestException(String name) {
+        throw new RuntimeException("No way to test");
     }
-
+    
     /* The recommended ordering for the action methods can be specified
     * with the actionOrder method.   This will affect the order of the
     * menu items for this object. */

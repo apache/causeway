@@ -87,7 +87,10 @@ log4j.appender.Remote.layout.locationInfo=false
 log4j.appender.Remote.proxyAddress=<proxy server>
 #log4j.appender.Remote.proxyPort=8080
 
-
+log4j.appender.Popup=org.nakedobjects.utility.PopupSnapshotAppender
+log4j.appender.Popup.layout=org.apache.log4j.PatternLayout
+log4j.appender.Popup.layout.ConversionPattern=%-5r [%-20c{1} %-10t %-5p]  %m%n
+#log4j.appender.Popup.layout.locationInfo=true
 
 
 
@@ -121,7 +124,3 @@ log4j.appender.Remote.layout.locationInfo=false
 log4j.appender.Remote.proxyAddress=<proxy server>
 #log4j.appender.Remote.proxyPort=8080
 
-log4j.appender.Popup=org.nakedobjects.utility.PopupSnapshotAppender
-log4j.appender.Popup.layout=org.apache.log4j.PatternLayout
-log4j.appender.Popup.layout.ConversionPattern=%-5r [%-20c{1} %-10t %-5p]  %m%n
-#log4j.appender.Popup.layout.locationInfo=true
