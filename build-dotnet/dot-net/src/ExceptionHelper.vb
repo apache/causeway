@@ -9,7 +9,6 @@ Public Class ExceptionHelper
         Public Shared Sub dumpException(ByVal ex As Exception)
             Dim trace as String
             trace = exceptionAsString(ex)
-            org.nakedobjects.utility.ExceptionHelper.submitLog(ex.Message, trace)
             Console.WriteLine(trace)
         End Sub
         

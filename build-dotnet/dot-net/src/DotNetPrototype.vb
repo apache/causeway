@@ -4,7 +4,6 @@ Imports System.Configuration
 
 Imports Spring.Context
 Imports Spring.Context.Support
-Imports log4net.Config
 
 Imports org.apache.log4j
 

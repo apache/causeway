@@ -4,7 +4,6 @@ Imports System.Configuration
 
 Imports Spring.Context
 Imports Spring.Context.Support
-Imports log4net.Config
 
 Imports org.apache.log4j
 
@@ -95,7 +94,7 @@ Public MustInherit Class DotNetBootstrapper
         End Sub
 
 
-        Protected Sub initLogging()
+        Protected Overridable Sub initLogging()
             org.apache.log4j.BasicConfigurator.configure()
             '  PropertyConfigurator.configure(NakedObjects.getConfiguration().getProperties("log4j"))
             PropertyConfigurator.configure("logging.properties")

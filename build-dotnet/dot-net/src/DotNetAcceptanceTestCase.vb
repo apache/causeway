@@ -5,7 +5,6 @@ Imports System.Configuration
 
 Imports Spring.Context
 Imports Spring.Context.Support
-Imports log4net.Config
 
 Imports org.nakedobjects.container.configuration
 Imports org.nakedobjects

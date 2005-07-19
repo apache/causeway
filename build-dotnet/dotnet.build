@@ -249,7 +249,6 @@
 	 
 	 
 	             <include name="D:/no-development/nakedobjects/build-dotnet/build/nakedobjects.net.dll"/>                    
-	             <include name="D:/no-development/nakedobjects/build-dotnet/dot-net/log4net.dll"/>
 	             <include name="D:/no-development/nakedobjects/build-dotnet/dot-net/Spring.Core.dll"/>
 			</references>
 	
