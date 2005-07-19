@@ -30,7 +30,6 @@ public final class BackgroundThread {
                     view.getWorkspace().addOpenViewFor(error, new Location(20, 20));
                 }
                 view.getState().setInactive();
-                view.markDamaged();
                 repaint(view);
             }
         };
