@@ -28,7 +28,7 @@ public class NakedErrorViewSpecification implements ViewSpecification {
     }
 
     public String getName() {
-        return "Naked Error";
+        return "Detailed Naked Error";
     }
 
     public View createView(Content content, ViewAxis axis) {
