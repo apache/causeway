@@ -1,7 +1,5 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.utility.ExceptionHelper;
-
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -9,8 +7,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import org.apache.log4j.Logger;
+
 
 public class InteractionHandler implements MouseMotionListener, MouseListener, KeyListener {
+    private static final Logger LOG = Logger.getLogger(InteractionHandler.class);
     private final static int THRESHOLD = 7;
     private boolean canDrag;
     /*
@@ -124,7 +125,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     }
 
     private void log(Exception e) {
-        ExceptionHelper.log(InteractionHandler.class, "Error during user interaction", e);
+        LOG.error("Error during user interaction", e);
     }
 
     /**
