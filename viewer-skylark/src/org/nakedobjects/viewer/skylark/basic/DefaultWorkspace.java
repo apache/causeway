@@ -199,7 +199,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
 
         for (int i = 0; i < views.length; i++) {
             View view = views[i];
-            if (((ObjectContent) view.getContent()).getObject() == object) {
+            if (view.getContent().getNaked() == object) {
                 view.dispose();
             }
         }

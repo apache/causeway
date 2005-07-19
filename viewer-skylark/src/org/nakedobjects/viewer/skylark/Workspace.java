@@ -12,10 +12,19 @@ public interface Workspace extends View {
 
     View createSubviewFor(Naked object, boolean asIcon);
 
+    /**
+     * Lower the specified view so it is below all the other views.
+     */
     void lower(View view);
 
+    /**
+     * Raise the specified view so it is above all the other views.
+     */
     void raise(View view);
 
+    /**
+     * Close all views for the specified object.
+     */
     void removeViewsFor(NakedObject object);
 }
 /*

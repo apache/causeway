@@ -32,16 +32,6 @@ public class RootObject extends ObjectContent {
         debug.appendln(4, "object", object);
     }
 
-    /*public String getIconName() {
-        return object.getIconName();
-    }*/
-
-/*    public Image getIconPicture(int iconHeight) {
-        NakedObjectSpecification specification = object.getObject() instanceof NakedClass ? ((NakedClass) object.getObject())
-                .forObjectType() : object.getSpecification();
-        return ImageFactory.getInstance().loadIcon(specification, "", iconHeight);
-    }
-*/
     public Naked getNaked() {
         return object;
     }
