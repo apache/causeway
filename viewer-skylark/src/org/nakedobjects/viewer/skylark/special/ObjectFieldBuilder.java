@@ -65,7 +65,6 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         } else {
             updateBuild(view, object, flds);
         }
-        // object.clearViewDirty();
     }
 
     public View createCompositeView(Content content, CompositeViewSpecification specification, ViewAxis axis) {
@@ -131,19 +130,12 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
             try {
                 Naked value = object.getField(field);
                 if (field.isValue()) {
-                    NakedValue existing = ((ValueField) subview.getContent()).getObject();
-                    if (value != existing) {
-               //         ((OneToOneField) subview.getContent()).updateDerivedValue((NakedObject) value);
-                    }
                     subview.refresh();
                 } else if (value instanceof NakedCollection) {
                     subview.update(value);
                 } else {
                     NakedObject existing = ((ObjectContent) subviews[i].getContent()).getObject();
-         //           boolean changeToNull = value == null && existing != null;
-         //           boolean changedFromNull = value != null && existing == null;
                     boolean changedValue = value != existing;
-          //          if (changeToNull || changedFromNull || changedValue) {
                     if (changedValue) {
                         View fieldView = subviewDesign.createSubview(createContent(object, value, field), view.getViewAxis());
                         if (fieldView != null) {
