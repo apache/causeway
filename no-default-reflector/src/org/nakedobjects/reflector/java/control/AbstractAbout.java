@@ -39,7 +39,7 @@ public abstract class AbstractAbout implements Hint {
 
     public Consent canUse() {
         if (unusableReason == null) {
-            return Allow.DEFAULT;
+            return new Allow(getDescription());
         } else {
             return new Veto(unusableReason.toString());
         }
