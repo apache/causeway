@@ -1,7 +1,7 @@
 package org.nakedobjects.object;
 
 
-public class InvalidEntryException extends NakedObjectException {
+public class InvalidEntryException extends NakedObjectRuntimeException {
 	public InvalidEntryException() {
 		this("Invalid value");
 	}
