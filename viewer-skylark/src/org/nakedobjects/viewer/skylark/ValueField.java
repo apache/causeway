@@ -26,7 +26,7 @@ public class ValueField extends ValueContent implements FieldContent {
     }
 
     public void clear() {
-        getParent().clearValue(getOneToOneAssociation());
+        object.clear();
     }
 
     public void debugDetails(DebugString debug) {
