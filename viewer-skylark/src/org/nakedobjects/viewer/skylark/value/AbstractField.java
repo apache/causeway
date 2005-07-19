@@ -168,11 +168,21 @@ public abstract class AbstractField extends AbstractView {
 
     protected final void initiateSave() {
        BackgroundThread.run(this, new BackgroundTask() {
-            protected void execute() {
+            public void execute() {
                 save();
                 getParent().updateView();
                 invalidateLayout();
             }
+
+            public String getName() {
+                return "Save field";
+            }
+
+            public String getDescription() {
+                return "Saving " + getContent().windowTitle();
+            }
+            
+            
         });
     }
 

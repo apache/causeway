@@ -79,13 +79,21 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
 
         public void execute(final Workspace workspace, final View view, final Location at) {
             BackgroundThread.run(view, new BackgroundTask() {
-                protected void execute() {
+                public void execute() {
                     ActionContent actionContent = ((ActionContent) view.getContent());
                     Naked result = actionContent.execute();
                     if (result != null) {
                         move(at);
                         workspace.addOpenViewFor(result, at);
                     }
+                }
+
+                public String getName() {
+                    return ((ActionContent) view.getContent()).getActionName();
+                }
+
+                public String getDescription() {
+                    return "Running action " + getName() + " on  " + view.getContent().getNaked();
                 }
             });
         }

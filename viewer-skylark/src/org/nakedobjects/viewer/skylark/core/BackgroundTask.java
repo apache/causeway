@@ -2,8 +2,12 @@ package org.nakedobjects.viewer.skylark.core;
 
 
 
-public abstract class BackgroundTask {
-     protected abstract void execute();
+public interface BackgroundTask {
+	void execute();
+	
+	String getName();
+	
+	String getDescription();
 }
 
 

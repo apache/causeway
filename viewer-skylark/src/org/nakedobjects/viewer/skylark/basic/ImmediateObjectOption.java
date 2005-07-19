@@ -62,14 +62,23 @@ class ImmediateObjectOption extends MenuOption {
         }
     }
 
+    // TODO this method is very similar to ActionDialogSpecification.execute()
     public void execute(final Workspace workspace, final View view, final Location at) {
         BackgroundThread.run(view, new BackgroundTask() {
-            protected void execute() {
+            public void execute() {
                 Naked returnedObject;
                 returnedObject = object.execute(action, null);
                 if (returnedObject != null) {
                     view.objectActionResult(returnedObject, at);
                 }
+            }
+            
+            public String getName() {
+                return "Action " + action.getName();
+            }
+
+            public String getDescription() {
+                return "Running action " + getName() + " on  " + view.getContent().getNaked();
             }
         });
     }
