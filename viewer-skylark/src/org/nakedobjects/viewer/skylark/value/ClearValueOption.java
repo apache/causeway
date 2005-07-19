@@ -5,7 +5,7 @@ import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.ValueField;
+import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
@@ -19,6 +19,8 @@ public class ClearValueOption extends AbstractValueOption {
         NakedValue value = getValue(view);
         if (!view.canChangeValue()) {
             return new Veto("Field cannot be edited");
+        } else if (value.canClear()) {
+            return new Veto("Can't clear " + value.getSpecification().getShortName() + " values");
         } else if (isEmpty(view)) {
             return new Veto("Field is already empty");
         } else {
@@ -27,9 +29,10 @@ public class ClearValueOption extends AbstractValueOption {
     }
 
     public void execute(Workspace frame, View view, Location at) {
-        ValueField field = (ValueField) view.getContent();        
+        ValueContent field = (ValueContent) view.getContent();        
         field.clear();
         updateParent(view);
+        view.invalidateContent();
     }
 
     public String toString() {

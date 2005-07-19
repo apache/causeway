@@ -3,7 +3,7 @@ package org.nakedobjects.viewer.skylark.value;
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.viewer.skylark.MenuOption;
-import org.nakedobjects.viewer.skylark.ValueField;
+import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.View;
 
 
@@ -17,19 +17,19 @@ public abstract class AbstractValueOption extends MenuOption {
 	}
 	
     protected NakedValue getValue(View view) {
-		ValueField vc = (ValueField) view.getContent();
+        ValueContent vc = (ValueContent) view.getContent();
         NakedValue value = vc.getObject();
 		return value;
 	}
 
 	protected void updateParent(View view) {
-//       NakedObject valueObject = ((ObjectContent) view.getParent().getParent().getContent()).getObject();
-      // valueObject.getContext().getObjectManager().objectChanged(valueObject);
        NakedObjects.getObjectManager().saveChanges();
+       view.markDamaged();
+       view.getParent().invalidateContent();
     }
 	
 	protected boolean isEmpty(View view) {
-	    ValueField field = (ValueField) view.getContent();
+	    ValueContent field = (ValueContent) view.getContent();
         return field.isEmpty();
 	}
 }
