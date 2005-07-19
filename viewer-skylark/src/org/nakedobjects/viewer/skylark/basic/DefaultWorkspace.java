@@ -8,6 +8,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.reflect.internal.InternalAbout;
 import org.nakedobjects.viewer.skylark.Bounds;
+import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
@@ -59,6 +60,11 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
         getViewManager().showArrowCursor();
 
         if (!drag.getSourceContent().isObject()) {
+            return;
+        }
+        
+        if(drag.getSourceContent().getNaked() == getContent().getNaked()) {
+            getViewManager().setStatus("can' drop self on workspace");
             return;
         }
 
@@ -205,6 +211,14 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
         }
     }
 
+
+    public void secondClick(Click click) {
+        View subview = subviewFor(click.getLocation());
+        if (subview != null) {
+            // ignore double-click on self - don't open up new view
+            super.secondClick(click);
+        }
+    }
     public String toString() {
         return "Workspace" + getId();
     }
