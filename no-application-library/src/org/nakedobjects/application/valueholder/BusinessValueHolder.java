@@ -47,6 +47,7 @@ public abstract class BusinessValueHolder implements TitledObject {
 
     public abstract void copyObject(BusinessValueHolder object);
 
+    public abstract void clear();
 }
 
 /*
