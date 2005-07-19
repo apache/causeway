@@ -4,6 +4,7 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.MemberIdentifier;
@@ -225,7 +226,11 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
                 
                 throw new NakedObjectRuntimeException(getType().getFullName());
             } else {
-                return NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(obj);
+                Naked adapter = NakedObjects.getObjectLoader().createAdapterForValue(obj);
+                if(adapter == null) {
+                    adapter = NakedObjects.getObjectLoader().createAdapterForTransient(obj);
+                }
+                return adapter;
 //                NakedObjects.getPojoAdapterFactory().createAdapter(obj);
             }
             
