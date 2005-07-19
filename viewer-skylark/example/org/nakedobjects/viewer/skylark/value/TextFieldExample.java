@@ -161,6 +161,16 @@ class Value extends ValueContent {
             public String titleString() {
                 return text;
             }
+
+            public void clear() {}
+
+            public boolean canClear() {
+                return false;
+            }
+
+            public boolean isEmpty() {
+                return false;
+            }
         };
     }
 
@@ -181,6 +191,12 @@ class Value extends ValueContent {
     public String title() {
         return null;
     }
+
+    public boolean isEmpty() {
+        return false;
+    }
+
+    public void clear() {}
 
 }
 /*
