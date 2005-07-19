@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.core;
 
+import org.nakedobjects.utility.ToString;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.View;
@@ -18,8 +19,6 @@ public class CloseAllViewsOption extends MenuOption {
             View otherView = views[i];
             if (otherView.getSpecification().isOpen() && otherView != view) {
                 otherView.dispose();
-                //				workspace.removeView(otherView);
-                //				otherView.markDamaged();
             }
         }
     }
@@ -29,7 +28,7 @@ public class CloseAllViewsOption extends MenuOption {
     }
 
     public String toString() {
-        return "CloseAllViewsOption";
+        return new ToString(this).toString();
     }
 }
 

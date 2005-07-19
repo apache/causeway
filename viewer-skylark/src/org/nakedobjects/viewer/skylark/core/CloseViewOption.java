@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.core;
 
+import org.nakedobjects.utility.ToString;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.View;
@@ -20,8 +21,8 @@ public class CloseViewOption extends MenuOption {
     }
 
     public String toString() {
-        return "CloseOption";
-    }
+        return new ToString(this).toString();
+   }
 }
 
 /*
