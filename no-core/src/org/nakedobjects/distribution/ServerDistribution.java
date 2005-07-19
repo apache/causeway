@@ -180,14 +180,7 @@ public class ServerDistribution implements ClientDistribution {
         LOG.debug("request numberOfInstances of " + objectType + " for " + session);
         return objectManager().numberOfInstances(getSpecification(objectType));
     }
-
-    /**
-     * .NET property
-     * 
-     * @property / public void set_LocalObjectManager(LocalObjectManager
-     *                       objectManager) { this.objectManager = objectManager; }
-     */
-
+    
     /**
      * .NET property
      * 
@@ -250,14 +243,17 @@ public class ServerDistribution implements ClientDistribution {
     }
 
     public void abortTransaction(Session session) {
-        objectManager().abortTransaction();
+        LOG.debug("request abort transaction for " + session);
+       objectManager().abortTransaction();
     }
 
     public void endTransaction(Session session) {
+        LOG.debug("request end transaction for " + session);
         objectManager().endTransaction();
     }
 
     public void startTransaction(Session session) {
+        LOG.debug("request start transaction for " + session);
         objectManager().startTransaction();
     }
 

@@ -62,7 +62,6 @@ public class NakedClass implements InternalNakedObject {
 
     public FastFinder explorationActionFind() {
         FastFinder find = new FastFinder();
-        find.setObjectManager(getObjectManager());
         find.setFromClass(forObjectType());
         return find;
     }

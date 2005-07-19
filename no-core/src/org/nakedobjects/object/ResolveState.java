@@ -15,7 +15,8 @@ public final class ResolveState {
     public static final ResolveState RESOLVING = new ResolveState("Resolving", "P~R", RESOLVED);
     public static final ResolveState RESOLVING_PART = new ResolveState("Resolving Part", "P~r", PART_RESOLVED);
     public static final ResolveState SERIALIZING_GHOST = new ResolveState("Serializing Resolved", "SG", GHOST);
-    public static final ResolveState SERIALIZING_PART_RESOLVED = new ResolveState("Serializing Part Resolved", "Sr", PART_RESOLVED);
+    public static final ResolveState SERIALIZING_PART_RESOLVED = new ResolveState("Serializing Part Resolved", "Sr",
+            PART_RESOLVED);
     public static final ResolveState SERIALIZING_RESOLVED = new ResolveState("Serializing Resolved", "SR", RESOLVED);
     public static final ResolveState TRANSIENT = new ResolveState("Transient", "T");
     public static final ResolveState SERIALIZING_TRANSIENT = new ResolveState("Serializing Transient", "ST", TRANSIENT);
@@ -71,8 +72,8 @@ public final class ResolveState {
 
     /**
      * Returns true if the state reflects some form of non-resolved state (GHOST, PART_RESOLVED) or
-     * is resolved and it needs to be updated. Hence it can be changed to loading (RESOLVING_PART,
-     * RESOLVING or UPDATING).
+     * is resolved and it needs to be updated. The spcified new state, which you intend to resolve
+     * at should be one of: RESOLVING_PART; RESOLVING; or UPDATING).
      */
     public boolean isResolvable(ResolveState newState) {
         Assert.assertNotNull("new state must be specified", newState);

@@ -1,10 +1,10 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.TitleCriteria;
 import org.nakedobjects.object.reflect.internal.InternalAbout;
 
@@ -12,7 +12,6 @@ import org.nakedobjects.object.reflect.internal.InternalAbout;
 public class FastFinder implements InternalNakedObject {
 	private NakedObjectSpecification specification;
 	private String term;
-    private NakedObjectManager objectManager;
 	
 	public String getIconName() {
 		return specification.getShortName();
@@ -31,17 +30,13 @@ public class FastFinder implements InternalNakedObject {
 	}
 	
 	public Naked actionFind() {
-		NakedCollection instances = objectManager.findInstances(new TitleCriteria(specification, term, true));
+		NakedCollection instances = NakedObjects.getObjectManager().findInstances(new TitleCriteria(specification, term, true));
 		if(instances.size() == 1) { 
 			return (NakedObject) instances.elements().nextElement();
 		} else {
 			return instances;
 		}
 	}
-	
-	public void setObjectManager(NakedObjectManager objectManager) {
-        this.objectManager = objectManager;
-    }
 	
 	public void aboutFromClass(InternalAbout about) {
 		about.unusable();

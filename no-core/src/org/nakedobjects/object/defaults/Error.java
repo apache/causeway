@@ -2,10 +2,7 @@ package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.reflect.internal.InternalAbout;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import org.nakedobjects.utility.ExceptionHelper;
 
 import org.apache.log4j.Logger;
 
@@ -22,17 +19,9 @@ public class Error implements NakedError {
     }
 
     public Error(String msg, Throwable e) {
-        error = msg;
+        error = msg;        
         exception = e.getMessage();
-
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            e.printStackTrace(new PrintStream(baos));
-            trace = baos.toString();
-            baos.close();
-        } catch (IOException ex) {
-            LOG.error(ex);
-        }
+        trace = ExceptionHelper.exceptionTraceAsString(e);
     }
 
     public void aboutError(InternalAbout about, String entry) {
