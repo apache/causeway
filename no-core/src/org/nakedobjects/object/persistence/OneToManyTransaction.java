@@ -5,7 +5,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.AbstractOneToManyPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToManyPeer;
-import org.nakedobjects.utility.ExceptionHelper;
 
 import org.apache.log4j.Logger;
 
@@ -57,7 +56,7 @@ public class OneToManyTransaction extends AbstractOneToManyPeer {
         try {
             objectManager.abortTransaction();
         } catch (Exception e2) {
-            ExceptionHelper.log(OneToManyTransaction.class, "Failure during abort", e2);
+            LOG.error("Failure during abort", e2);
         }
     }
 

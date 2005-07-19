@@ -7,7 +7,6 @@ import org.nakedobjects.object.reflect.AbstractActionPeer;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.ReflectiveActionException;
-import org.nakedobjects.utility.ExceptionHelper;
 
 import org.apache.log4j.Logger;
 
@@ -56,11 +55,11 @@ public class ActionTransaction extends AbstractActionPeer {
 
             return result;
         } catch (RuntimeException e) {
-            LOG.info("Exception executing " + getName() + ", aborting transaction");
+            LOG.info("Exception executing " + getName() + "; aborting transaction");
             try {
                 objectManager.abortTransaction();
             } catch (Exception e2) {
-                ExceptionHelper.log(ActionTransaction.class, "Failure during abort", e2);
+                LOG.error("Failure during abort", e2);
             }
             throw e;
         }
