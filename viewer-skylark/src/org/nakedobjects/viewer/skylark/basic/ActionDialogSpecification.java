@@ -2,8 +2,10 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.ParameterContent;
 import org.nakedobjects.viewer.skylark.Skylark;
 import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.ValueContent;
@@ -73,6 +75,22 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
         }
 
         public Consent disabled(View view) {
+            View[] subviews = view.getSubviews();
+            StringBuffer invalidFields = new StringBuffer();
+            for (int i = 0; i < subviews.length; i++) {
+                View field = subviews[i];
+                if(field.getState().isInvalid()) {
+                    String parameterName = ((ParameterContent) field.getContent()).getParameterName();
+                    if(invalidFields.length() > 0) {
+                        invalidFields.append(", ");
+                    }
+                    invalidFields.append(parameterName);
+                }
+            }
+            if(invalidFields.length() > 0) {
+                return new Veto("Invalid fields: " + invalidFields);
+            }
+            
             ActionContent actionContent = ((ActionContent) view.getContent());
             return actionContent.disabled();
         }
