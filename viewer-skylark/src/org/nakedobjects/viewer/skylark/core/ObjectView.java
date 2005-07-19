@@ -2,6 +2,7 @@
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
@@ -39,11 +40,16 @@ public abstract class ObjectView extends AbstractView {
 
     public void dragIn(ContentDrag drag) {
         Consent perm = getContent().canDrop(drag.getSourceContent());
+        Hint hint = getContent().getHint();
+        String description = "";
+        if(hint != null) {
+            description = hint.getDescription();
+        }
          if (perm.isAllowed()) {
-            getViewManager().setStatus(perm.getReason());
+            getViewManager().setStatus(perm.getReason() + " " + description);
             getState().setCanDrop();
         } else {
-            getViewManager().setStatus(perm.getReason());
+            getViewManager().setStatus(perm.getReason() + " " + description);
             getState().setCantDrop();
         }
         markDamaged();
