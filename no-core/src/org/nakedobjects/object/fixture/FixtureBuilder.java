@@ -1,9 +1,7 @@
 package org.nakedobjects.object.fixture;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.persistence.ActionTransaction;
 import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.utility.ExceptionHelper;
 
 import java.util.Vector;
 
@@ -41,7 +39,7 @@ public abstract class FixtureBuilder {
                 try {
                     objectManager.abortTransaction();
                 } catch (Exception e2) {
-                    ExceptionHelper.log(ActionTransaction.class, "Failure during abort", e2);
+                    LOG.error("Failure during abort", e2);
                 }
                 throw e;
             }
