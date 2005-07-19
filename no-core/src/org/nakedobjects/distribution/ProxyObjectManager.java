@@ -105,12 +105,10 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     public synchronized NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException {
         throw new NotImplementedException();
         /*
-         * if (loadedObjects().isLoaded(oid)) { LOG.debug("getObject (from
-         * already loaded objects) " + oid); return
-         * loadedObjects().getLoadedObject(oid); } else { LOG.debug("getObject
-         * (remotely from server)" + oid); ObjectData data =
-         * connection.getObject(session, oid, hint.getFullName()); return
-         * DataHelper.recreateObject(data); }
+         * if (loadedObjects().isLoaded(oid)) { LOG.debug("getObject (from already loaded objects) " +
+         * oid); return loadedObjects().getLoadedObject(oid); } else { LOG.debug("getObject
+         * (remotely from server)" + oid); ObjectData data = connection.getObject(session, oid,
+         * hint.getFullName()); return DataHelper.recreateObject(data); }
          *  
          */
 
@@ -142,16 +140,14 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
 
     public synchronized void resolveImmediately(NakedObject object) {
         ResolveState resolveState = object.getResolveState();
-        if (resolveState.isResolved() || resolveState.isTransient()) {
-            return;
+        if (resolveState.isResolvable(ResolveState.RESOLVING)) {
+            Oid oid = object.getOid();
+            NakedObjectSpecification hint = object.getSpecification();
+
+            LOG.debug("resolve object (remotely from server)" + oid);
+            ObjectData data = connection.resolveImmediately(session, oid, hint.getFullName());
+            DataHelper.resolve(data, updateNotifier);
         }
-
-        Oid oid = object.getOid();
-        NakedObjectSpecification hint = object.getSpecification();
-
-        LOG.debug("resolve object (remotely from server)" + oid);
-        ObjectData data = connection.resolveImmediately(session, oid, hint.getFullName());
-        DataHelper.resolve(data, updateNotifier);
     }
 
     public void resolveLazily(NakedObject object, NakedObjectField field) {}
@@ -207,25 +203,21 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if
+ * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ * 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
+ * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */
