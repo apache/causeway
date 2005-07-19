@@ -39,6 +39,7 @@ import org.apache.log4j.Logger;
 public abstract class AbstractView implements View {
     private static final UserAction CLOSE_ALL_OPTION = new CloseAllViewsOption();
     private static final UserAction CLOSE_OPTION = new CloseViewOption();
+    private static final UserAction CLOSE_VIEWS_FOR_OBJECT = new CloseAllViewsForObjectOption();
     public static boolean debug = false;
     private static final Logger LOG = Logger.getLogger(AbstractView.class);
 
@@ -398,6 +399,7 @@ public abstract class AbstractView implements View {
             if (getParent() != null) {
                 options.add(MenuOptionSet.VIEW, CLOSE_OPTION);
                 options.add(MenuOptionSet.VIEW, CLOSE_ALL_OPTION);
+                options.add(MenuOptionSet.VIEW, CLOSE_VIEWS_FOR_OBJECT);
             }
         }
 
