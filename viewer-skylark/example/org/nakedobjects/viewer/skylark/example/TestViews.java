@@ -1,11 +1,13 @@
 package org.nakedobjects.viewer.skylark.example;
 import org.nakedobjects.NakedObjectsClient;
+import org.nakedobjects.TestSystem;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoaderNew;
 import org.nakedobjects.object.defaults.MockObjectManager;
+import org.nakedobjects.object.defaults.ObjectLoaderImpl;
 import org.nakedobjects.object.reflect.DummyNakedObject;
 import org.nakedobjects.utility.InfoDebugFrame;
 import org.nakedobjects.viewer.skylark.Content;
@@ -38,7 +40,7 @@ public class TestViews {
 
     protected TestViews() {
         BasicConfigurator.configure();
-
+/*
         NakedObjectsClient nakedObjects = new NakedObjectsClient();
 
         Configuration configuration = new Configuration(new ConfigurationPropertiesLoader("nakedobjects.properties", false));
@@ -49,6 +51,12 @@ public class TestViews {
         nakedObjects.setSpecificationLoader(loader);
       
         nakedObjects.setObjectManager(new MockObjectManager());
+        
+        nakedObjects.setObjectLoader(new ObjectLoaderImpl());
+        */
+        
+        new TestSystem().init();
+        
         
         Viewer viewer = new Viewer();
         ViewerFrame frame = new ViewerFrame();
