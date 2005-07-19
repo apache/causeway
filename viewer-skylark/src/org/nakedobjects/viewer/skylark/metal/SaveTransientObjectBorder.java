@@ -5,10 +5,8 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.persistence.ActionTransaction;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.utility.ExceptionHelper;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
@@ -96,7 +94,7 @@ public class SaveTransientObjectBorder extends ButtonBorder {
 	            try {
 	                objectManager.abortTransaction();
 	            } catch (Exception e2) {
-	                ExceptionHelper.log(ActionTransaction.class, "Failure during abort", e2);
+	                LOG.error("Failure during abort", e2);
 	            }
 	            throw e;
 	        }
