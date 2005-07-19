@@ -3,6 +3,7 @@ package org.nakedobjects.viewer.skylark;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
+import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.utility.UnexpectedCallException;
@@ -18,7 +19,7 @@ public abstract class CollectionContent extends AbstractContent implements Conte
     public abstract NakedCollection getCollection();
 
     public Hint getHint() {
-        throw new UnexpectedCallException();
+        return new DefaultHint();
     }
 
     public void menuOptions(MenuOptionSet options) {
