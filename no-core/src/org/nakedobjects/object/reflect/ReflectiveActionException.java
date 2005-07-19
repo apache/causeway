@@ -1,8 +1,8 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.NakedObjectException;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 
-public class ReflectiveActionException extends NakedObjectException {
+public class ReflectiveActionException extends NakedObjectRuntimeException {
 
     public ReflectiveActionException() {
         super();
