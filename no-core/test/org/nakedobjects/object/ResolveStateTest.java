@@ -148,7 +148,7 @@ public class ResolveStateTest extends TestCase {
         //assertFalse(from.isValidToChangeTo(ResolveState.RESOLVING));
         assertFalse(from.isValidToChangeTo(ResolveState.RESOLVING_PART));
         assertFalse(from.isValidToChangeTo(ResolveState.TRANSIENT));
-        assertFalse(from.isValidToChangeTo(ResolveState.UPDATING));
+        //assertFalse(from.isValidToChangeTo(ResolveState.UPDATING));
         assertFalse(from.isValidToChangeTo(ResolveState.SERIALIZING_TRANSIENT));
         assertFalse(from.isValidToChangeTo(ResolveState.SERIALIZING_GHOST));
         //assertFalse(from.isValidToChangeTo(ResolveState.SERIALIZING_PART_RESOLVED));
@@ -164,7 +164,7 @@ public class ResolveStateTest extends TestCase {
         assertTrue(from.isValidToChangeTo(ResolveState.RESOLVING));
         //assertTrue(from.isValidToChangeTo(ResolveState.RESOLVING_PART));
         //assertTrue(from.isValidToChangeTo(ResolveState.TRANSIENT));
-        //assertTrue(from.isValidToChangeTo(ResolveState.UPDATING));
+        assertTrue(from.isValidToChangeTo(ResolveState.UPDATING));
         //assertTrue(from.isValidToChangeTo(ResolveState.SERIALIZING_TRANSIENT));
         //assertTrue(from.isValidToChangeTo(ResolveState.SERIALIZING_GHOST));
         assertTrue(from.isValidToChangeTo(ResolveState.SERIALIZING_PART_RESOLVED));

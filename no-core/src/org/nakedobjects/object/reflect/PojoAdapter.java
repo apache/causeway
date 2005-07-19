@@ -280,15 +280,6 @@ public class PojoAdapter implements NakedObject {
 
     public synchronized String toString() {
         ToString str = new ToString(this);
-
-   /*     if (isUnresolved()) {
-            str.append("-");
-        } else if (isPersistent()) {
-            str.append("P");
-        } else {
-            str.append("T");
-        }
-*/
         str.append(resolveState.code());
         Oid oid = getOid();
         if (oid != null) {
@@ -300,7 +291,7 @@ public class PojoAdapter implements NakedObject {
         str.setAddComma();
 
         str.append("specification", specification == null ? "undetermined" : specification.getShortName());
-        if (isResolved()) {
+        if (resolveState.isTransient() || resolveState.isResolved()) {
             // don't do title of unresolved objects as this may force the resolving of the object.
             str.append("title", titleString());
         }

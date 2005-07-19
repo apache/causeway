@@ -89,11 +89,11 @@ public class InternalOneToOneAssociationTest extends TestCase {
     }     	
     
     public void testGet() {
-        NakedObject pojoFromLoader = system.createAdapterForTransient(referencedObject);
+    //    NakedObject pojoFromLoader = system.createAdapterForTransient(referencedObject);
     	objectWithOneToOneAssoications.setReferencedObject(referencedObject);
     	
     	Naked association = personField.getAssociation(new DummyIdentifier(), nakedObject);
-        assertEquals(pojoFromLoader, association);
+        assertEquals(referencedObject, association.getObject());
     }     	
     
     public void testInitGet() {
