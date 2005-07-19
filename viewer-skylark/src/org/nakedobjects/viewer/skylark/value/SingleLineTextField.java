@@ -26,7 +26,7 @@ public class SingleLineTextField extends TextField {
         int rightLimit = offset + maxWidth - LIMIT;
         
         if(cursor.getCharacter() > line.length()) {
-            throw new NakedObjectRuntimeException("substring will fail on " + line + " " + cursor.getCharacter());
+            cursor.end();
         }
         
         int cursorPosition = style.stringWidth( line.substring(0, cursor.getCharacter()));
