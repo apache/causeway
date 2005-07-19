@@ -10,8 +10,8 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NullDirtyObjectSet;
 import org.nakedobjects.object.Persistable;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
-import org.nakedobjects.object.persistence.ActionTransaction;
 import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.NakedObjectStore;
@@ -24,7 +24,6 @@ import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.DebugString;
-import org.nakedobjects.utility.ExceptionHelper;
 import org.nakedobjects.utility.StartupException;
 import org.nakedobjects.utility.ToString;
 
@@ -344,11 +343,14 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
     }
 
     public void resolveImmediately(NakedObject object) {
-        Assert.assertFalse("only resolve object that are not yet resolved", object, object.getResolveState().isResolved());
-        Assert.assertTrue("only resolve object that are persistent", object, object.getResolveState().isPersistent());
-
-        LOG.info("resolve-immediately: " + object);
-        objectStore.resolveImmediately(object);
+        ResolveState resolveState = object.getResolveState();
+        if (resolveState.isResolvable(ResolveState.RESOLVING)) {
+	        Assert.assertFalse("only resolve object that is not yet resolved", object, object.getResolveState().isResolved());
+	        Assert.assertTrue("only resolve object that is persistent", object, object.getResolveState().isPersistent());
+	
+	        LOG.info("resolve-immediately: " + object);
+	        objectStore.resolveImmediately(object);
+        }
     }
 
     public void saveChanges() {
@@ -412,7 +414,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
                 try {
                     abortTransaction();
                 } catch (Exception e2) {
-                    ExceptionHelper.log(ActionTransaction.class, "Failure during abort", e2);
+                    LOG.error("Failure during abort", e2);
                 }
     		}
             objectsToBeSaved.shutdown();
