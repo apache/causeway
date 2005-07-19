@@ -49,20 +49,27 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         }
 
         if (aboutMethod == null) {
-            return new DefaultHint();
+            DefaultHint hint = new DefaultHint();
+/*            if(hint.getDescription().equals("") && associate != null) {
+                hint.setDescription("Set field " + getName() + " to " + associate.getObject());
+            }
+   */         return hint;
         }
 
         try {
-            SimpleFieldAbout about = new SimpleFieldAbout(NakedObjects.getCurrentSession(), object.getObject());
+            SimpleFieldAbout hint = new SimpleFieldAbout(NakedObjects.getCurrentSession(), object.getObject());
             Object[] parameters;
             if (aboutMethod.getParameterTypes().length == 2) {
-                parameters = new Object[] { about, associate == null ? null : associate.getObject() };
+                parameters = new Object[] { hint, associate == null ? null : associate.getObject() };
             } else {
                 // default about
-                parameters = new Object[] { about };
+                parameters = new Object[] { hint };
             }
             aboutMethod.invoke(object.getObject(), parameters);
-            return about;
+            if(hint.getDescription().equals("") && associate != null) {
+                hint.setDescription("Set field " + getName() + " to " + associate.getObject());
+            }
+            return hint;
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + aboutMethod, e);
         } catch (IllegalAccessException ignore) {

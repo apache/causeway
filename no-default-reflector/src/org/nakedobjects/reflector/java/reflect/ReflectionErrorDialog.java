@@ -10,7 +10,6 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Error dialog to be shown when method fails when being called reflectively.
  */
-
 public class ReflectionErrorDialog extends ErrorDialog {
 
     public ReflectionErrorDialog(final String message, final InvocationTargetException exception) {

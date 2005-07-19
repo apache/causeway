@@ -69,8 +69,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
                 return null;
             }
 
-        } catch (InvocationTargetException e) {
-            e.fillInStackTrace();
+        } catch (InvocationTargetException e) { 
             if(e.getTargetException() instanceof TransactionException) {
         	    throw new ReflectiveActionException("TransactionException thrown while executing " + actionMethod + " " + e.getTargetException().getMessage(), e.getTargetException());
         	} else {
@@ -98,25 +97,29 @@ public class JavaAction extends JavaMember implements ActionPeer {
         if (aboutMethod == null) { return new DefaultHint(); }
 
         try {
-            SimpleActionAbout about;
-            about = new SimpleActionAbout(NakedObjects.getCurrentSession(), object.getObject(), parameters);
+            SimpleActionAbout hint;
+            hint = new SimpleActionAbout(NakedObjects.getCurrentSession(), object.getObject(), parameters);
 
             if (aboutMethod.getName().equals("aboutActionDefault")) {
-                aboutMethod.invoke(object.getObject(), new Object[] { about });
+                aboutMethod.invoke(object.getObject(), new Object[] { hint });
             } else {
                 Object[] longParams = new Object[parameters.length + 1];
-                longParams[0] = about;
+                longParams[0] = hint;
                 for (int i = 1; i < longParams.length; i++) {
                         longParams[i] = parameters[i - 1] == null ? null : parameters[i - 1].getObject();
                 }
                 aboutMethod.invoke(object.getObject(), longParams);
             }
 
-            if (about == null) {
+            if (hint == null) {
                 LOG.error("No about returned from " + aboutMethod + " allowing action by default.");
                 return new DefaultHint();
             }
-            return about;
+            if(hint.getDescription().equals("")) {
+                hint.setDescription("Invoke action " + getName());
+            }
+
+            return hint;
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + aboutMethod, e);
         } catch (IllegalAccessException ignore) {

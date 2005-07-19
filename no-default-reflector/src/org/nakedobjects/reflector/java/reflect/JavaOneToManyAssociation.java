@@ -72,16 +72,19 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
         if (hasHint()) {
             Method aboutMethod = getAboutMethod();
             try {
-                SimpleFieldAbout about = new SimpleFieldAbout(NakedObjects.getCurrentSession(), object.getObject());
+                SimpleFieldAbout hint = new SimpleFieldAbout(NakedObjects.getCurrentSession(), object.getObject());
                 Object[] parameters;
                 if (aboutMethod.getParameterTypes().length == 3) {
-                    parameters = new Object[] { about, element == null ? null : element.getObject(), new Boolean(add) };
+                    parameters = new Object[] { hint, element == null ? null : element.getObject(), new Boolean(add) };
                 } else {
                     // default about
-                    parameters = new Object[] { about };
+                    parameters = new Object[] { hint };
                 }
                 aboutMethod.invoke(object.getObject(), parameters);
-                return about;
+                if(hint.getDescription().equals("")) {
+                    hint.setDescription("Add " + element.getObject() + " to field " + getName());
+                }
+                return hint;
             } catch (InvocationTargetException e) {
                invocationException("Exception executing " + aboutMethod, e);
             } catch (IllegalAccessException ignore) {

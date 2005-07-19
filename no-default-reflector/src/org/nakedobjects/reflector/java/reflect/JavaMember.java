@@ -1,6 +1,7 @@
 package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.reflect.ReflectiveActionException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -34,19 +35,16 @@ public abstract class JavaMember {
         return name;
     }
 
-    // TODO move this to main reflection package, generalised so it will work regardless of reflector.
     protected static void invocationException(String error, InvocationTargetException e) {
-        //LOG.error(error, e.getTargetException());
-        LOG.error(error);
+        LOG.error(error, e.getTargetException());
         if (STRICT) {
             new ReflectionErrorDialog(error, e);
-            //throw new NakedObjectRuntimeException(error, e);
-        } else {}
-
+        }
+        
         if (e.getTargetException() instanceof RuntimeException) {
             throw (RuntimeException) e.getTargetException();
         } else {
-            throw new RuntimeException(e.getTargetException().getMessage());
+            throw new ReflectiveActionException(e.getTargetException().getMessage(), e.getTargetException());
         }
     }
 }
