@@ -112,7 +112,7 @@ public class ImageFactory {
     public Image loadObjectIcon(final NakedObjectSpecification specification, final String type, int iconHeight) {
         Image icon = loadIcon(specification, type, iconHeight);
         if (icon == null) {
-            return loadUnknownIcon(iconHeight);
+            return createUnknownIcon(iconHeight);
         } else { 
             return icon;
         }
@@ -161,7 +161,7 @@ public class ImageFactory {
         return ImageFactory.getInstance().createIcon(iconName, iconHeight, null);
     }
 
-    private Image loadUnknownIcon(int iconHeight) {
+    public Image createUnknownIcon(int iconHeight) {
         return ImageFactory.getInstance().createFallbackIcon(iconHeight, null);
     }
 
