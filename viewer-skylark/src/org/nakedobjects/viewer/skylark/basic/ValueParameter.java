@@ -52,6 +52,14 @@ class ValueParameter extends ValueContent implements ParameterContent {
         return new DefaultHint();
     }
 
+    public boolean isEmpty() {
+        return object.isEmpty();
+    }
+    
+    public void clear() {
+        object.clear();
+    }
+
     public boolean isTransient() {
         return true;
     }
