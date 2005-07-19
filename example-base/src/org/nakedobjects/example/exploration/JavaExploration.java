@@ -24,7 +24,6 @@ import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
 import org.nakedobjects.reflector.java.reflect.JavaReflectorFactory;
 import org.nakedobjects.system.AboutNakedObjects;
 import org.nakedobjects.system.SplashWindow;
-import org.nakedobjects.utility.ExceptionHelper;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.SkylarkViewer;
 import org.nakedobjects.viewer.skylark.ViewUpdateNotifier;
@@ -122,7 +121,7 @@ public class JavaExploration {
             nakedObjects.init();
 
         } catch (Exception e) {
-            ExceptionHelper.log(JavaExploration.class, "Exploration startup problem", e);
+            LOG.error("Exploration startup problem", e);
         } finally {
             if (splash != null) {
                 splash.removeAfterDelay(4);
@@ -178,7 +177,7 @@ public class JavaExploration {
             viewer.init();
 
         } catch (RuntimeException e) {
-            ExceptionHelper.log(JavaExploration.class, "Exploration startup problem", e);
+            LOG.error("Exploration startup problem", e);
             throw e;
         }
         if (splash != null) {
