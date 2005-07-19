@@ -79,6 +79,7 @@ public class KeyboardManager {
 
     private void help(View over) {
         if (over != null) {
+            viewer.clearStatus();
             viewer.clearOverlayView();
             View helpView = new HelpView(over);
             helpView.setSize(helpView.getRequiredSize());

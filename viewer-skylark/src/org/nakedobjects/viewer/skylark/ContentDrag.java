@@ -44,6 +44,7 @@ public class ContentDrag extends Drag {
         if (target != null) {
             target.dragOut(this);
         }
+        viewer.clearStatus();
         viewer.clearOverlayView();
         viewer.showDefaultCursor();
     }
@@ -85,6 +86,7 @@ public class ContentDrag extends Drag {
     protected void end(Viewer viewer) {
         viewer.getSpy().addAction("drop on " + target);
         target.drop(this);
+        viewer.clearStatus();
         viewer.clearOverlayView();
         viewer.showDefaultCursor();
     }

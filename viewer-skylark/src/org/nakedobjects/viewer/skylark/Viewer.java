@@ -107,8 +107,11 @@ public class Viewer {
         if (this.getOverlayView() != view) {
             LOG.warn("No such view to remove: " + view);
         }
-
         this.clearOverlayView();
+    }
+    
+    public void clearStatus() {
+        setStatus("");
     }
 
     public void close() {
@@ -122,10 +125,13 @@ public class Viewer {
         }
     }
 
+    // TODO remove this method; use clearOverlay instead
     public void disposeOverlayView() {
-        if (overlayView != null) {
+    /*    if (overlayView != null) {
             overlayView.dispose();
         }
+        */
+        clearOverlayView();
     }
 
     public View dragFrom(Location location) {
@@ -485,9 +491,36 @@ public class Viewer {
         boolean includeDebug = click.isShift() && click.isCtrl();
 
         popup.init(over, rootView, at, forView, includeExploration, includeDebug);
+        popupStatus(over, forView, includeExploration, includeDebug);
         setOverlayView(popup);
 
         makeFocus(popup);
+    }
+
+    private void popupStatus(View over, boolean forView, boolean includeExploration, boolean includeDebug) {
+        StringBuffer status = new StringBuffer("Menu for ");
+        if(forView) {
+            status.append("view ");
+            status.append(    over.getSpecification().getName());
+        } else {
+            status.append("object: ");
+            Content content = over.getContent();
+            status.append(content.title());
+        }
+        if(includeDebug || includeExploration) {
+            status.append(" (includes ");
+            if(includeExploration) {
+                status.append("exploration");
+            }
+            if(includeDebug) {
+                if(includeExploration) {
+                    status.append(" & ");
+                }
+                status.append("debug");
+            }
+            status.append(" options)");
+        }
+        setStatus(status.toString());
     }
 
     public void removeFromNotificationList(View view) {
@@ -718,7 +751,8 @@ public class Viewer {
         ((WorkspaceSpecification) rootView.getSpecification()).setRequiredSize(rootViewSize);
         View subviews[] = rootView.getSubviews();
         for (int i = 0; i < subviews.length; i++) {
-            subviews[i].invalidateLayout();
+    //        subviews[i].invalidateLayout();
+            subviews[i].invalidateContent();
         }
         //        rootView.invalidateLayout();
 

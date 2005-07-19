@@ -85,6 +85,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                     drag.cancel(viewer);
                     drag = null;
                 }
+                viewer.clearStatus();
                 viewer.clearOverlayView();
             }
             keyboardManager.pressed(ke.getKeyCode(), ke.getModifiers());
@@ -301,6 +302,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
             // hide an overlay view when not being pointed to
             View overlayView = viewer.getOverlayView();
             if (overlayView != null && overlayView != overView && !overlayView.contains(overView)) {
+                viewer.clearStatus();
                 viewer.disposeOverlayView();
             }
             viewer.makeFocus(overView);
@@ -330,8 +332,9 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 
                 Location location = new Location(me.getPoint());
                 drag.drag(viewer, location, me.getModifiers());
-                drag.end(viewer);
+                viewer.clearStatus();
                 viewer.disposeOverlayView();
+                drag.end(viewer);
                 redraw();
 
                 drag = null;
