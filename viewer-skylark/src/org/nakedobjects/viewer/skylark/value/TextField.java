@@ -27,8 +27,6 @@ import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.LabelAxis;
 import org.nakedobjects.viewer.skylark.basic.PanelBorder;
-import org.nakedobjects.viewer.skylark.core.BackgroundTask;
-import org.nakedobjects.viewer.skylark.core.BackgroundThread;
 import org.nakedobjects.viewer.skylark.core.TextView;
 import org.nakedobjects.viewer.skylark.text.CursorPosition;
 import org.nakedobjects.viewer.skylark.text.TextBlockTarget;
@@ -218,13 +216,7 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
     public void editComplete() {
         if (canChangeValue() && !isSaved) {
             isSaved = true;
-            BackgroundThread.run(this, new BackgroundTask() {
-                protected void execute() {
-                    save();
-                    getParent().updateView();
-                    invalidateLayout();
-                }
-            });
+            initiateSave();
         }      
     }
     
@@ -255,16 +247,16 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
 	                getViewManager().setStatus(invalidReason);
 	                getState().setInvalid();
 	                markDamaged();
+	          } catch (InvalidEntryException e) {
+	                invalidReason = "INVALID ENTRY: " + e.getMessage();
+	                getViewManager().setStatus(invalidReason);
+	                getState().setInvalid();
+	                markDamaged();
 	            } catch (NakedObjectRuntimeException e) {
 	                invalidReason = "UPDATE FAILURE: " + e.getMessage();
 	                LOG.error(invalidReason, e);
 	                getViewManager().setStatus(invalidReason);
 	                getState().setOutOfSynch();
-	                markDamaged();
-	          } catch (InvalidEntryException e) {
-	                invalidReason = "INVALID ENTRY: " + e.getMessage();
-	                getViewManager().setStatus(invalidReason);
-	                getState().setInvalid();
 	                markDamaged();
 	            }
             }
