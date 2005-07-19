@@ -50,6 +50,18 @@ public class BusinessValueAdapter extends AbstractNakedValue {
         return adaptee.getClass().getName();
     }
     
+    public boolean canClear() {
+        return true;
+    }
+    
+    public void clear() {
+      	adaptee.clear();
+    }
+    
+    public boolean isEmpty() {
+        return adaptee.isEmpty();
+    }
+    
 }
 
 

@@ -59,6 +59,18 @@ public class TextStringAdapter extends AbstractNakedValue implements StringValue
     public void setValue(String value) {
         adaptee.setValue(value);
     }
+    
+    public boolean canClear() {
+        return true;
+    }
+
+    public void clear() {
+        adaptee.clear();
+    }
+    
+    public boolean isEmpty() {
+        return adaptee.isEmpty();
+    }
 }
 
 
