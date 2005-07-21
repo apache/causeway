@@ -19,7 +19,7 @@ public class ClearValueOption extends AbstractValueOption {
         NakedValue value = getValue(view);
         if (!view.canChangeValue()) {
             return new Veto("Field cannot be edited");
-        } else if (value.canClear()) {
+        } else if (!value.canClear()) {
             return new Veto("Can't clear " + value.getSpecification().getShortName() + " values");
         } else if (isEmpty(view)) {
             return new Veto("Field is already empty");
