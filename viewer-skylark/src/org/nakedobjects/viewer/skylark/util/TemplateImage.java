@@ -2,6 +2,7 @@ package org.nakedobjects.viewer.skylark.util;
 
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Image;
+import org.nakedobjects.viewer.skylark.core.AwtImage;
 
 import java.awt.Canvas;
 import java.awt.MediaTracker;
@@ -47,7 +48,7 @@ class TemplateImage {
     }
 
     public Image getFullSizeImage() {
-        return new Image(image);
+        return new AwtImage(image);
     }
 
     public Image getIcon(int height, Color tint) {
@@ -87,7 +88,7 @@ class TemplateImage {
             Toolkit.getDefaultToolkit().createImage(new FilteredImageSource(iconImage.getSource(), new Filter()));
         }
 
-        return new Image(iconImage);
+        return new AwtImage(iconImage);
     }
 }
 
