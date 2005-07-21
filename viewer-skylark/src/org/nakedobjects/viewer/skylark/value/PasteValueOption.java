@@ -8,7 +8,7 @@ import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.ValueField;
+import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
@@ -28,7 +28,6 @@ public class PasteValueOption extends AbstractValueOption {
     }
 
     public Consent disabled(View view) {
-
 		if (!view.canChangeValue()) {
 			return new Veto("Field cannot be edited");
 		} else {
@@ -36,9 +35,9 @@ public class PasteValueOption extends AbstractValueOption {
 		}
     }
 
-    public void execute(Workspace frame, View view, Location at) {
+    public void execute(Workspace workspace, View view, Location at) {
         String pasteValue = getClipboard();
-        ValueField objectContent = ((ValueField) view.getContent());
+        ValueContent objectContent = ((ValueContent) view.getContent());
         try {
             objectContent.parseEntry(pasteValue);
 	        updateParent(view);
