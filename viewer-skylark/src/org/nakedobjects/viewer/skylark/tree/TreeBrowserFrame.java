@@ -143,6 +143,7 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
 	        if (right != null) {
 	            right.layout();
 	        }
+	        
             Bounds workspaceLimit = getWorkspace().getBounds();
             workspaceLimit.contract(getView().getPadding());
 
@@ -215,7 +216,7 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
         left.setParent(getView());
     }
 
-    private void showInRightPane(View view) {
+    protected void showInRightPane(View view) {
         right = view;
         right.setParent(getView());
         Workspace workspace = this.getWorkspace();
