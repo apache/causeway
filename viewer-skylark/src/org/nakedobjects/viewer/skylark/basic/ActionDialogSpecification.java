@@ -48,9 +48,6 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
                 if (parameterContent.getNaked() == null) {
                     return (new EmptyField.Specification()).createView(content, axis);
                 } else {
-                    //return new SubviewIconSpecification().createView(content,
-                    // axis);
-
                     ViewFactory factory = Skylark.getViewFactory();
                     ViewSpecification specification = factory.getIconizedSubViewSpecification(parameterContent);
                     return specification.createView(content, axis);

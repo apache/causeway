@@ -11,7 +11,6 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.core.AbstractViewBuilder;
 import org.nakedobjects.viewer.skylark.core.CompositeView;
-import org.nakedobjects.viewer.skylark.core.TextView;
 import org.nakedobjects.viewer.skylark.special.SubviewSpec;
 
 import org.apache.log4j.Logger;
@@ -51,14 +50,26 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
 
     private void newBuild(View view, ActionContent actionContent) {
         LOG.debug("build new view " + view + " for " + actionContent);
-        view.addView(new TextView( "ACTION: " + actionContent.getActionName()));
-
+    //    view.addView(new TextView( "ACTION: " + actionContent.getActionName()));
+        view.addView(new SubviewIconSpecification().createView(actionContent, null));
+        
         int noParameters = actionContent.getNoParameters();
+        View focusOn = null;
         for (int f = 0; f < noParameters; f++) {
             ParameterContent parameter = actionContent.getParameterContent(f);
             View fieldView = createFieldView(view, parameter);
             String label = parameter.getParameterName();
-            view.addView(decorateSubview(new LabelBorder(label, fieldView)));
+            View decoratedSubview = decorateSubview(new LabelBorder(label, fieldView));
+            view.addView(decoratedSubview);
+            
+            // set focus to first value field
+            if(focusOn == null && parameter instanceof ValueParameter && fieldView.canFocus()) {
+                focusOn = decoratedSubview;
+            }
+        }
+        
+        if(focusOn != null) {
+            view.getViewManager().makeFocus(focusOn);
         }
     }
 

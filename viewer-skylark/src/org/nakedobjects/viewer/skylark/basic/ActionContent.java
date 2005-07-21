@@ -110,7 +110,7 @@ public class ActionContent extends ObjectContent {
     }
 
     public String title() {
-        return "";
+        return getNaked().titleString();
     }
 
     public String windowTitle() {
