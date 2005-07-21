@@ -55,7 +55,6 @@ public abstract class AbstractView implements View {
     private int width;
     private int x;
     private int y;
- //   private Viewer viewer;
 
     protected AbstractView(Content content, ViewSpecification specification, ViewAxis axis) {
         assignId();
@@ -67,7 +66,7 @@ public abstract class AbstractView implements View {
     }
 
     public void addView(View view) {
-        throw new NakedObjectRuntimeException();
+        throw new NakedObjectRuntimeException("Can't add views to " + this);
     }
 
     protected void assignId() {
