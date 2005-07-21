@@ -280,7 +280,7 @@ public class ScrollBorder extends AbstractViewDecorator {
     }
 
     public void setHorizontalPostion(final int position) {
-        getViewManager().getSpy().addAction("Move to horizontal position " + position);
+        getViewManager().addSpyAction("Move to horizontal position " + position);
         horizontalScrollPosition = Math.min(position + left, horizontalMaximum);
         horizontalScrollPosition = Math.max(horizontalScrollPosition, horizontalMinimum);
         markDamaged();
@@ -320,7 +320,7 @@ public class ScrollBorder extends AbstractViewDecorator {
     }
 
     public void setVerticalPostion(final int position) {
-        getViewManager().getSpy().addAction("Move to vertical position " + position);
+        getViewManager().addSpyAction("Move to vertical position " + position);
         verticalScrollPosition = Math.min(position + top, verticalMaximum);
         verticalScrollPosition = Math.max(verticalScrollPosition, verticalMinimum);
         markDamaged();
