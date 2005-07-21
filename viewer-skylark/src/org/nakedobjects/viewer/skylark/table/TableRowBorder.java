@@ -33,12 +33,14 @@ public class TableRowBorder extends AbstractBorder {
     }
 
     public void draw(Canvas canvas) {
-        int bl = getBaseline();
+        int baseline = getBaseline();
 
         int width = ((TableAxis) getViewAxis()).getHeaderOffset();
         Canvas subcanvas = canvas.createSubcanvas(0, 0, width, getSize().getHeight());
-        icon.draw(subcanvas, 1, bl);
-        title.draw(subcanvas, icon.getSize().getWidth() + HPADDING, bl);
+        int offset = HPADDING;
+        icon.draw(subcanvas, offset, baseline);
+        offset += icon.getSize().getWidth() + HPADDING + 0 + HPADDING;
+        title.draw(subcanvas, offset, baseline, getLeft() - offset);
 
         int y = getSize().getHeight() - 1;
         canvas.drawLine(0, y, getSize().getWidth(), y, Style.SECONDARY2);
@@ -56,7 +58,7 @@ public class TableRowBorder extends AbstractBorder {
     }
 
     protected int requiredTitleWidth() {
-        return icon.getSize().getWidth() + HPADDING + title.getSize().getWidth();
+        return HPADDING + icon.getSize().getWidth() + HPADDING + title.getSize().getWidth() + HPADDING;
     }
 
     public String toString() {
