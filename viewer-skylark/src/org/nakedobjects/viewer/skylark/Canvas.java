@@ -40,6 +40,8 @@ public interface Canvas {
     void drawText(String text, int x, int y, Color color, Text style);
 
     void offset(int x, int y);
+
+    boolean overlaps(Bounds bounds);
 }
 
 /*
