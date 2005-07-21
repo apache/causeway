@@ -17,6 +17,10 @@ public class TextView extends AbstractView {
         this.text = text;
     }
     
+    public boolean canFocus() {
+        return false;
+    }
+    
     public void draw(Canvas canvas) {
         canvas.drawText(text,  HPADDING, getBaseline(), color, style);
     }
