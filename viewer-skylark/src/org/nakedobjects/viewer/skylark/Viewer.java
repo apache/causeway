@@ -20,6 +20,7 @@ import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
 import org.nakedobjects.viewer.skylark.basic.SubviewIconSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.DefaultPopupMenu;
+import org.nakedobjects.viewer.skylark.core.DrawingCanvas;
 import org.nakedobjects.viewer.skylark.core.OverlayDebugFrame;
 import org.nakedobjects.viewer.skylark.metal.ClassIcon;
 import org.nakedobjects.viewer.skylark.metal.FormSpecification;
@@ -273,7 +274,9 @@ public class Viewer {
     }
 
     public void markDamaged(Bounds bounds) {
-        spy.addDamagedArea(bounds);
+        if(spy != null) {
+            spy.addDamagedArea(bounds);
+        }
         synchronized (redrawArea) {
             if (redrawArea.equals(NO_REDRAW)) {
                 redrawArea.setBounds(bounds);
@@ -414,7 +417,7 @@ public class Viewer {
         bufferGraphics.clearRect(0, 0, w, h);
 
         bufferGraphics.setClip(r.x, r.y, r.width, r.height);
-        Canvas c = new Canvas(bufferGraphics, r.x, r.y, r.width, r.height);
+        Canvas c = new DrawingCanvas(bufferGraphics, r.x, r.y, r.width, r.height);
         // Canvas c = new Canvas(bufferGraphics, 0, 0, w, h);
 
         if (AbstractView.debug) {
@@ -529,8 +532,8 @@ public class Viewer {
 
     void repaint() {
         updateNotifier.invalidateViewsForChangedObjects();
-        rootView.layout();
         synchronized (redrawArea) {
+	        rootView.layout();
             if (!redrawArea.equals(NO_REDRAW)) {
                 LOG.debug("Repaint viewer " + redrawArea);
                 Bounds area = new Bounds(redrawArea);
@@ -653,7 +656,7 @@ public class Viewer {
             while (st.hasMoreTokens()) {
                 String specName = (String) st.nextToken();
 
-                if (specName != null && !specName.equals("")) {
+                if (specName != null && !specName.trim().equals("")) {
                     try {
                         ViewSpecification spec;
                         spec = (ViewSpecification) Class.forName(specName).newInstance();
@@ -751,10 +754,8 @@ public class Viewer {
         ((WorkspaceSpecification) rootView.getSpecification()).setRequiredSize(rootViewSize);
         View subviews[] = rootView.getSubviews();
         for (int i = 0; i < subviews.length; i++) {
-    //        subviews[i].invalidateLayout();
-            subviews[i].invalidateContent();
+            subviews[i].invalidateLayout();
         }
-        //        rootView.invalidateLayout();
 
         Bounds bounds = new Bounds(internalDisplaySize);
         markDamaged(bounds);
@@ -788,6 +789,12 @@ public class Viewer {
             return overlayView.viewAreaType(location);
         } else {
             return rootView.viewAreaType(location);
+        }
+    }
+
+    public void addSpyAction(String actionMessage) {
+        if(spy != null) {
+            spy.addAction(actionMessage);
         }
     }
 }
