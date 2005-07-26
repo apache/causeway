@@ -89,7 +89,7 @@ public class InternalReflector implements Reflector {
             throw new ReflectionException("Could not load class " + name, e);
         }
 
-        if (!InternalNakedObject.class.isAssignableFrom(cls) && !cls.getName().startsWith("java.")) {
+        if (!InternalNakedObject.class.isAssignableFrom(cls) && !cls.getName().startsWith("java.") && !Exception.class.isAssignableFrom(cls)) {
             throw new NakedObjectSpecificationException("Class must be InternalNakedObject: " + cls.getName());
         }
         if (!Modifier.isPublic(cls.getModifiers())) {
