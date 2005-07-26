@@ -52,16 +52,16 @@ public class TransactionTest extends TestCase {
 
         personOid = new MockOid(1);
         person = new Person();
-        person.setOid(personOid);
+        person.setupOid(personOid);
 
         roleOid = new MockOid(2);
         role = new Role();
-        role.setOid(roleOid);
+        role.setupOid(roleOid);
 
         teamOid = new MockOid(3);
         membersOid = new MockOid(5);
         team = new Team();
-        team.setOid(teamOid);
+        team.setupOid(teamOid);
         members = team.getMembers();
         members.setOid(membersOid);
 
@@ -184,7 +184,7 @@ public class TransactionTest extends TestCase {
 
         Role role = new Role();
         role.getName().setValue(roleName);
-        role.setOid(roleOid);
+        role.setupOid(roleOid);
 
         Role transactionRole = (Role) t.getObject(roleOid, role);
         assertTrue(transactionRole.isResolved());
@@ -202,7 +202,7 @@ public class TransactionTest extends TestCase {
         person.getName().setValue(personName);
 
         Team team = new Team();
-        team.setOid(roleOid);
+        team.setupOid(roleOid);
         InternalCollection members = team.getMembers();
         members.setOid(membersOid);
         team.getMembers().add(person);
@@ -325,7 +325,7 @@ public class TransactionTest extends TestCase {
    public void test() {     
         Role r = new Role(); // transient object
         Oid roleOid = new MockOid(11);
-        r.setOid(roleOid);
+        r.setupOid(roleOid);
         
         Person transactionPerson = (Person) t.getObject(personOid, person);
         r.setReferencedObject(transactionPerson);	// new object being setup with ref to proxy

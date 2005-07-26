@@ -280,7 +280,7 @@ public class Transaction {
 	        NakedObjectSpecification cls;
             cls = associatedObject.getSpecification();
             NakedObject associateCopy = (NakedObject) cls.acquireInstance();
-            associateCopy.setOid(associatedObject.getOid());
+            associateCopy.setupOid(associatedObject.getOid());
             proxy.setValue(association, associateCopy);
             log("  copy: " + associateCopy + " -> " + association.getName());
         }
@@ -311,7 +311,7 @@ public class Transaction {
             NakedObject elementCopy = (NakedObject) transactionalObjects.get(originalElementOid);
             if (elementCopy == null) {
                 NakedObject proxyX = (NakedObject) originalElement.getSpecification().acquireInstance();
-                proxyX.setOid(originalElementOid);
+                proxyX.setupOid(originalElementOid);
                 loaded(proxyX);
                 elementCopy = proxyX;
             }
@@ -347,7 +347,7 @@ public class Transaction {
         Object object = transactionalObjects.get(oid);
         if (object == null) {
             NakedObject proxy = (NakedObject) original.getSpecification().acquireInstance();
-            proxy.setOid(original.getOid());
+            proxy.setupOid(original.getOid());
             loaded(proxy);
             proxy.setResolved();
             copyToProxy(original, proxy);
