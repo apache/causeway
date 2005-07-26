@@ -65,7 +65,7 @@ public class Viewer {
     private Image doubleBuffer;
     private boolean doubleBuffering = false;
     private Insets insets;
-    private Size internalDisplaySize;
+    private Size internalDisplaySize = new Size(1,1);
     private View keyboardFocus;
     private ObjectViewingMechanismListener listener;
     private View overlayView;
@@ -450,6 +450,12 @@ public class Viewer {
         }
     }
 
+    private void paintUserStatus(Graphics bufferCanvas) {
+        int top = internalDisplaySize.getHeight() - statusBarHeight;
+        bufferCanvas.setColor(Color.lightGray);
+        paintStatus(bufferCanvas, top, userStatus);
+    }
+
     private void paintStatus(Graphics bufferCanvas, int top, String text) {
         bufferCanvas.setFont(Style.STATUS.getAwtFont());
         int baseline = top + Style.STATUS.getAscent();
@@ -459,12 +465,6 @@ public class Viewer {
         if (text != null) {
             bufferCanvas.drawString(text, 5, baseline);
         }
-    }
-
-    private void paintUserStatus(Graphics bufferCanvas) {
-        int top = internalDisplaySize.getHeight() - statusBarHeight;
-        bufferCanvas.setColor(Color.lightGray);
-        paintStatus(bufferCanvas, top, userStatus);
     }
 
     public View pickupContent(Location location) {
@@ -756,6 +756,9 @@ public class Viewer {
         for (int i = 0; i < subviews.length; i++) {
             subviews[i].invalidateLayout();
         }
+        
+        Size size = rootView.getRequiredSize();
+        rootView.setSize(size);
 
         Bounds bounds = new Bounds(internalDisplaySize);
         markDamaged(bounds);
