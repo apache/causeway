@@ -48,6 +48,15 @@ public class Location {
         return allInstances;
     }
     
+    public Location actionCreateCopy() {
+       Location copy = (Location) container.createTransientInstance(Location.class);
+       copy.city = city;
+       copy.customer = customer;
+       copy.getStreetAddress().setValue(getStreetAddress());
+       copy.getKnownAs().setValue(getKnownAs());
+           return copy;
+    }
+    
     public void actionChangeCity(City city) {
         this.setCity(city);
     }
@@ -110,6 +119,7 @@ public class Location {
         booking.setCity(getCity());
         container.makePersistent(booking);
 
+        
         Customer customer = getCustomer();
         if (customer != null) {
             booking.associateCustomer(customer);

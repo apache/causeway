@@ -1,5 +1,6 @@
 package bom;
 
+import org.nakedobjects.application.ApplicationException;
 import org.nakedobjects.application.BusinessObjectContainer;
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.control.ActionAbout;
@@ -7,8 +8,8 @@ import org.nakedobjects.application.valueholder.Date;
 import org.nakedobjects.application.valueholder.MultilineTextString;
 import org.nakedobjects.application.valueholder.Percentage;
 import org.nakedobjects.application.valueholder.TextString;
-import org.nakedobjects.object.NakedObjectRuntimeException;
 
+import java.net.SocketException;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
@@ -30,19 +31,20 @@ public class Customer {
     private PaymentMethod preferredPaymentMethod;
     private final Vector PaymentMethods = new Vector();
 
-    	private MultilineTextString notes = new MultilineTextString();
-    
-    	public MultilineTextString getNotes() {
-            return notes;
-        }
-    	
-    	public Vector getPaymentMethods() {
-            return PaymentMethods;
-        }
-    	
-    	public void addToPaymentMethods(PaymentMethod method) {}
-    	public void removeFromPaymentMethods(PaymentMethod method) {}
-    	
+    private MultilineTextString notes = new MultilineTextString();
+
+    public MultilineTextString getNotes() {
+        return notes;
+    }
+
+    public Vector getPaymentMethods() {
+        return PaymentMethods;
+    }
+
+    public void addToPaymentMethods(PaymentMethod method) {}
+
+    public void removeFromPaymentMethods(PaymentMethod method) {}
+
     public Customer() {
         firstName = new TextString();
         lastName = new TextString();
@@ -55,39 +57,43 @@ public class Customer {
     public void actionUseAllInstances() {
         container.allInstances(Location.class);
     }
-    
+
     public Vector actionNewLocations() {
-        //LocationCollection collection = (LocationCollection) container.createInstance(LocationCollection.class);
         LocationCollection collection = new LocationCollection();
         collection.addAll(locations);
         return collection;
     }
-    
-     public void actionInvokeLocationMethodOnOneOfTheBookings() {
+
+    public void actionInvokeLocationMethodOnOneOfTheBookings() {
         Booking booking = (Booking) getBookings().elementAt(0);
         Location pickUp = booking.getPickUp();
         pickUp.isLondon();
     }
-        
-    public void aboutActionCreateBooking(ActionAbout about, Location from, Location to, Telephone telephone, TextString text, Date date, Date returning) {
+
+    public void aboutActionCreateBooking(
+            ActionAbout about,
+            Location from,
+            Location to,
+            Telephone telephone,
+            TextString text,
+            Date date,
+            Date returning) {
         about.setParameter(0, "Pick up");
         about.setParameter(1, "Drop off");
         about.setParameter(3, "Date");
         about.setParameter(4, "Return on");
 
-/*        if (!getLocations().isEmpty()) {
-            about.setParameter(0, getLocations().firstElement());
-        }
-*/
+        /*
+         * if (!getLocations().isEmpty()) { about.setParameter(0, getLocations().firstElement()); }
+         */
         text.toString();
         date.toString();
-        
+
         about.setParameter(3, "Name", new TextString("#23"));
-    //    about.setParameter(3, (Object) "hsadaskll");
-        
+        //    about.setParameter(3, (Object) "hsadaskll");
+
         about.setDescription("From " + from + " to " + to + ", call on " + telephone);
-        
-        
+
         about.unusableOnCondition(from == null, "must have a from location");
         about.unusableOnCondition(text.isEmpty(), "Need some text");
         about.unusableOnCondition(date.isLessThanOrEqualTo(new Date()), "Date must be tommorow or after");
@@ -106,24 +112,21 @@ public class Customer {
 
     }
 
-    
     public Vector actionLocations() {
         Vector v = new Vector();
         for (int i = 0; i < locations.size(); i++) {
-	        v.addElement(locations.elementAt(i));
+            v.addElement(locations.elementAt(i));
         }
-       return v;
+        return v;
     }
-    
-    
+
     public LocationVector actionLocationsAsVector() {
         LocationVector v = new LocationVector();
         for (int i = 0; i < locations.size(); i++) {
-	        v.addElement(locations.elementAt(i));
+            v.addElement(locations.elementAt(i));
         }
-       return v;
+        return v;
     }
-
 
     public Booking actionUsePaymentMethod(PaymentMethod method) {
         Booking booking = (Booking) container.createInstance(Booking.class);
@@ -132,13 +135,13 @@ public class Customer {
         return booking;
     }
 
-    public void actionMethodThatFails() {
-        throw new NakedObjectRuntimeException("application exception", new RuntimeException("This is an error created by the application"));
+    public void actionShowFailureOfSystem() throws SocketException {
+        throw new SocketException("example exception for system failure");
     }
 
-
-    public void actionMethodThatFails2() {
-        throw new RuntimeException("This is an error created by the application");
+    public void actionFailureOfApplication() {
+        throw new ApplicationException("This is an error created by the application", new RuntimeException(
+                "This is an error created by the application"));
     }
 
     public Booking actionNewBooking() {
@@ -147,15 +150,15 @@ public class Customer {
         booking.setPaymentMethod(getPreferredPaymentMethod());
         return booking;
     }
-    
+
     public Location actionNewLocation() {
         Location l = new Location();
         l.setContainer(container);
-        
+
         container.makePersistent(l);
-        
+
         addToLocations(l);
-        
+
         return l;
     }
 
@@ -197,11 +200,6 @@ public class Customer {
         return firstName;
     }
 
-   /*public Location getHome() {
-        container.resolve(home);
-        return home;
-    }
-*/
     public final TextString getLastName() {
         return lastName;
     }
@@ -261,7 +259,7 @@ public class Customer {
     public Title title() {
         return firstName.title().append(lastName + "");
     }
-    
+
     protected void finalize() throws Throwable {
         super.finalize();
         Logger.getLogger("Customer").info("finalizing customer");
@@ -269,25 +267,21 @@ public class Customer {
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if
+ * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ * 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
+ * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */
