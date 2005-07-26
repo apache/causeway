@@ -1,7 +1,6 @@
 package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.application.collection.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
@@ -11,6 +10,7 @@ import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToManyPeer;
+import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.reflector.java.control.SimpleFieldAbout;
 
 import java.lang.reflect.InvocationTargetException;
@@ -156,10 +156,10 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
             return InternalCollectionAdapter.createAdapter(collection, type);
         } catch (InvocationTargetException e) {
              invocationException("Exception executing " + getMethod, e);
-             throw new NakedObjectRuntimeException(e);
+             throw new ReflectionException(e);
         } catch (IllegalAccessException ignore) {
             LOG.error("Illegal access of " + getMethod, ignore);
-            throw new NakedObjectRuntimeException(ignore);
+            throw new ReflectionException(ignore);
         }
     }
    
@@ -169,10 +169,10 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
             return collection.isEmpty();
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + getMethod, e);
-            throw new NakedObjectRuntimeException(e);
+            throw new ReflectionException(e);
         } catch (IllegalAccessException ignore) {
             LOG.error("Illegal access of " + getMethod, ignore);
-            throw new NakedObjectRuntimeException(ignore);
+            throw new ReflectionException(ignore);
         }
     }
     
@@ -186,10 +186,10 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
             }
        } catch (InvocationTargetException e) {
             LOG.error("Exception executing " + getMethod, e.getTargetException());
-            throw new NakedObjectRuntimeException(e);
+            throw new ReflectionException(e);
        } catch (IllegalAccessException ignore) {
            LOG.error("Illegal access of " + getMethod, ignore);
-           throw new NakedObjectRuntimeException(ignore);
+           throw new ReflectionException(ignore);
        }
     }
     

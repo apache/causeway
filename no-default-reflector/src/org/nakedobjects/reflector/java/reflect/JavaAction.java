@@ -1,7 +1,6 @@
 package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
@@ -12,6 +11,7 @@ import org.nakedobjects.object.persistence.defaults.TransactionException;
 import org.nakedobjects.object.reflect.ActionParameterSet;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
+import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.ReflectiveActionException;
 import org.nakedobjects.object.reflect.Action.Target;
 import org.nakedobjects.object.reflect.Action.Type;
@@ -168,7 +168,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
         }  else if (hint instanceof DefaultHint) {
             return null;
         }else {
-            throw new NakedObjectRuntimeException();
+            throw new ReflectionException();
         }
     }
     

@@ -1,7 +1,6 @@
 package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
@@ -9,6 +8,7 @@ import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToManyPeer;
+import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.reflector.java.control.SimpleFieldAbout;
 
 import java.lang.reflect.InvocationTargetException;
@@ -53,7 +53,7 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
              if(obj instanceof Vector) {
                  ((Vector) obj).addElement(associate.getObject());
              } else {
-                 throw new NakedObjectRuntimeException();
+                 throw new ReflectionException();
              }
 
 //            addMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
@@ -152,15 +152,15 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
              } else if(obj instanceof Vector) {
                  return VectorCollectionAdapter.createAdapter((Vector) obj, type);
              } else {
-                 throw new NakedObjectRuntimeException();
+                 throw new ReflectionException();
              }
              
         } catch (InvocationTargetException e) {
              invocationException("Exception executing " + getMethod, e);
-             throw new NakedObjectRuntimeException(e);
+             throw new ReflectionException(e);
         } catch (IllegalAccessException ignore) {
             LOG.error("Illegal access of " + getMethod, ignore);
-            throw new NakedObjectRuntimeException(ignore);
+            throw new ReflectionException(ignore);
         }
     }
    
@@ -173,14 +173,14 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
              } else if(obj instanceof Vector) {
                  return ((Vector) obj).isEmpty();
              } else {
-                 throw new NakedObjectRuntimeException();
+                 throw new ReflectionException();
              }
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + getMethod, e);
-            throw new NakedObjectRuntimeException(e);
+            throw new ReflectionException(e);
         } catch (IllegalAccessException ignore) {
             LOG.error("Illegal access of " + getMethod, ignore);
-            throw new NakedObjectRuntimeException(ignore);
+            throw new ReflectionException(ignore);
         }
     }
     
@@ -195,15 +195,15 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
 	                ((Vector) obj).addElement(instances[i].getObject());
                 }
             } else {
-                throw new NakedObjectRuntimeException();
+                throw new ReflectionException();
             }
             
        } catch (InvocationTargetException e) {
             LOG.error("Exception executing " + getMethod, e.getTargetException());
-            throw new NakedObjectRuntimeException(e);
+            throw new ReflectionException(e);
        } catch (IllegalAccessException ignore) {
            LOG.error("Illegal access of " + getMethod, ignore);
-           throw new NakedObjectRuntimeException(ignore);
+           throw new ReflectionException(ignore);
        }
     }
 }

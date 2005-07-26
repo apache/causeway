@@ -1,7 +1,6 @@
 package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.application.ValueParseException;
 import org.nakedobjects.application.valueholder.BusinessValueHolder;
 import org.nakedobjects.object.InvalidEntryException;
@@ -12,6 +11,7 @@ import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
+import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.reflector.java.control.SimpleFieldAbout;
 
 import java.lang.reflect.InvocationTargetException;
@@ -228,7 +228,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
             return null;
         } catch (IllegalAccessException ignore) {
             LOG.error("Illegal access of " + getMethod, ignore);
-            throw new NakedObjectRuntimeException(ignore);
+            throw new ReflectionException(ignore);
         }
     }
 
@@ -243,7 +243,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
                 invocationException("Exception executing " + getMethod, e);
             } catch (IllegalAccessException ignore) {
                 LOG.error("Illegal access of " + getMethod, ignore);
-                throw new NakedObjectRuntimeException("Illegal access of " + getMethod, ignore);
+                throw new ReflectionException("Illegal access of " + getMethod, ignore);
             } catch (ValueParseException e) {
                 throw new TextEntryParseException(e);
             }
@@ -255,7 +255,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
                 invocationException("Exception executing " + setMethod, e);
             } catch (IllegalAccessException ignore) {
                 LOG.error("Illegal access of " + setMethod, ignore);
-                throw new NakedObjectRuntimeException("Illegal access of " + setMethod, ignore);
+                throw new ReflectionException("Illegal access of " + setMethod, ignore);
             }
 
         }
@@ -272,10 +272,10 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
             }
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + getMethod, e);
-            throw new NakedObjectRuntimeException(e);
+            throw new ReflectionException(e);
         } catch (IllegalAccessException ignore) {
             LOG.error("Illegal access of " + getMethod, ignore);
-            throw new NakedObjectRuntimeException(ignore);
+            throw new ReflectionException(ignore);
         }
     }
 }

@@ -1,7 +1,6 @@
 package org.nakedobjects.reflector.java;
 
 import org.nakedobjects.application.BusinessObjectContainer;
-import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.reflect.ReflectionException;
@@ -56,7 +55,7 @@ public class JavaObjectFactory implements ObjectFactory {
         try {
             cls = Class.forName(className);
         } catch (ClassNotFoundException e) {
-            throw new NakedObjectRuntimeException(e);
+            throw new ReflectionException(e);
         }
         return cls;
     }
@@ -67,7 +66,7 @@ public class JavaObjectFactory implements ObjectFactory {
      */
     private Object createObject(Class cls) {
         if (Modifier.isAbstract(cls.getModifiers())) {
-            throw new NakedObjectRuntimeException("Cannot create an instance of an abstract classS: " + cls);
+            throw new ReflectionException("Cannot create an instance of an abstract classS: " + cls);
         }
 
         Object object;
