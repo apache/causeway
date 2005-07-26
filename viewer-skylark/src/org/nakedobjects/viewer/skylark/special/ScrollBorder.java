@@ -116,10 +116,12 @@ public class ScrollBorder extends AbstractViewDecorator {
 
         drawScrollBars(canvas, contentWidth, contentHeight);
 
+        if(AbstractView.debug) {
         canvas
                 .drawRectangle(contents.getX(), contents.getY(), contents.getWidth(), contents.getHeight(),
                         Color.DEBUG_DRAW_BOUNDS);
-
+        }
+        
         drawContent(canvas, contentWidth, contentHeight);
 
         if (AbstractView.debug) {
