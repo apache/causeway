@@ -1,6 +1,8 @@
 package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.application.ApplicationException;
+import org.nakedobjects.object.NakedObjectApplicationException;
 import org.nakedobjects.object.reflect.ReflectiveActionException;
 
 import java.lang.reflect.InvocationTargetException;
@@ -36,6 +38,10 @@ public abstract class JavaMember {
     }
 
     protected static void invocationException(String error, InvocationTargetException e) {
+        if(e.getTargetException() instanceof ApplicationException) {
+            throw new NakedObjectApplicationException(e.getCause());
+        }
+        
         LOG.error(error, e.getTargetException());
         if (STRICT) {
             new ReflectionErrorDialog(error, e);
