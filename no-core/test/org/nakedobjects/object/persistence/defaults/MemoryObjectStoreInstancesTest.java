@@ -122,7 +122,7 @@ public class MemoryObjectStoreInstancesTest extends TestCase {
     public void testSave() {
         MockNakedObject mockNakedObject = new MockNakedObject();
         MockOid oid = new MockOid(0);
-        mockNakedObject.setOid(oid);
+        mockNakedObject.setupOid(oid);
         TestObject object = new TestObject();
         mockNakedObject.setupObject(object);
         mockNakedObject.setupTitleString("four");

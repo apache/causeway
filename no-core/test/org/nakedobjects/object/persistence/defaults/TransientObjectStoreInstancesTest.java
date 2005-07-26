@@ -38,7 +38,7 @@ public class TransientObjectStoreInstancesTest extends TestCase {
     public void testAdd() {
         Oid oid = new MockOid(2);
         DummyNakedObject object = new DummyNakedObject();
-        object.setOid(oid);
+        object.setupOid(oid);
 
         instances.add(object);
 

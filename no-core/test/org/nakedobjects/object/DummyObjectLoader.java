@@ -33,7 +33,10 @@ public class DummyObjectLoader implements NakedObjectLoader {
         return null;
     }
 
-    public void end(NakedObject object) {}
+    public void end(NakedObject object) {
+ /*       ((DummyNakedObject) object).getResolveState().getEndState():
+            ((DummyNakedObject) object).s   setupResolveState(targetState);    
+*/    }
 
     public NakedObject getAdapterFor(Object object) {
         return null;
@@ -80,7 +83,7 @@ public class DummyObjectLoader implements NakedObjectLoader {
     public void shutdown() {}
 
     public void start(NakedObject object, ResolveState targetState) {
-        ((DummyNakedObject) object).setupResolveState(ResolveState.SERIALIZING_RESOLVED);
+        ((DummyNakedObject) object).setupResolveState(targetState);
     }
 
     public void unloaded(NakedObject object) {}

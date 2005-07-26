@@ -14,17 +14,16 @@ import java.util.Hashtable;
 
 
 public class DummyNakedObject implements NakedObject {
+    private Hashtable fieldContents = new Hashtable();
     private NakedObjectField[] fields = new NakedObjectField[0];
+    private Hint hint;
     private String label;
     private Object object;
     private Oid oid;
     private NakedObjectSpecification spec;
-    private Hint hint;
-     private long version;
-     private boolean resolved;
-    private String titleString;
-    private Hashtable fieldContents = new Hashtable();
     private ResolveState state;
+    private String titleString;
+     private long version;
 
      
     public DummyNakedObject() {
@@ -39,12 +38,20 @@ public class DummyNakedObject implements NakedObject {
 
     public void clearValue(OneToOneAssociation specification) {}
 
+    public void debugClearResolved() {}
+
+    public void destroyed() {}
+
     public Naked execute(Action action, Naked[] parameters) {
         return null;
     }
 
     public NakedObject getAssociation(OneToOneAssociation field) {
         return null;
+    }
+  
+    public Naked getField(NakedObjectField field) {
+        return (Naked) fieldContents.get(field.getName());
     }
     
     public NakedObjectField[] getFields() {
@@ -83,6 +90,10 @@ public class DummyNakedObject implements NakedObject {
         return null;
     }
 
+    public ResolveState getResolveState() {
+        return state;
+    }
+
     public NakedObjectSpecification getSpecification() {
         return spec;
     }
@@ -110,11 +121,6 @@ public class DummyNakedObject implements NakedObject {
         return false;
     }
 
-    public boolean isPersistent() {
-        return false;
-    }
-
-
     public Persistable persistable() {
         return null;
     }
@@ -127,6 +133,14 @@ public class DummyNakedObject implements NakedObject {
         this.fields = fields;
     }
 
+    public void setupFieldValue(String name, Naked field) {
+        this.fieldContents.put(name, field);
+    }
+
+    public void setupHint(Hint hint) {
+        this.hint = hint;
+    }
+
     public void setupLabel(String label) {
         this.label = label;
     }
@@ -134,55 +148,31 @@ public class DummyNakedObject implements NakedObject {
     public void setupObject(Object object) {
         this.object = object;
     }
-
-    public void setupSpecification(NakedObjectSpecification spec) {
-        this.spec = spec;
-    }
-
-    public void setupHint(Hint hint) {
-        this.hint = hint;
-    }
-
-    public void setValue(OneToOneAssociation field, Object object) {}
-
-    public void setVersion(long version) {
-        this.version = version;
-    }
-  
-    public boolean isResolved() {
-        return resolved;
-    }
-
-    public void setupTitleString(String titleString) {
-        this.titleString = titleString;
-    }
-
-    public String titleString() {
-        return titleString;
-    }
-  
-    public Naked getField(NakedObjectField field) {
-        return (Naked) fieldContents.get(field.getName());
-    }
-
-    public void setupFieldValue(String name, Naked field) {
-        this.fieldContents.put(name, field);
-    }
-
-    public void debugClearResolved() {}
-
-    public void destroyed() {}
-
-    public ResolveState getResolveState() {
-        return state;
-    }
     
-    public void setOid(Oid oid) {
+    public void setupOid(Oid oid) {
         this.oid = oid;
     }
 
     public void setupResolveState(ResolveState state) {
         this.state = state;
+    }
+
+    public void setupSpecification(NakedObjectSpecification spec) {
+        this.spec = spec;
+    }
+  
+    public void setupTitleString(String titleString) {
+        this.titleString = titleString;
+    }
+
+    public void setupVersion(long version) {
+        this.version = version;
+    }
+
+    public void setValue(OneToOneAssociation field, Object object) {}
+
+    public String titleString() {
+        return titleString;
     }
 }
 

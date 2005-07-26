@@ -9,19 +9,21 @@ import org.nakedobjects.object.reflect.Action.Type;
 
 public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     private static int next = 100;
+    private Action action;
     public NakedObjectField[] fields = new NakedObjectField[0];
     private final int id = next++;
+    private boolean isObject = true;
+    private boolean isValue = false;
+    private NakedObjectSpecification[] subclasses = new NakedObjectSpecification[0];
     private ObjectTitle titleObject;
     private String unresolvedTitle;
- private NakedObjectSpecification[] subclasses = new NakedObjectSpecification[0];
-    private Action action;
-    
+
     public DummyNakedObjectSpecification() {
         titleObject = new ObjectTitle() {
             public String title(NakedObject object) {
                 return "";
             }
-        };    
+        };
     }
 
     public void clearDirty(NakedObject object) {}
@@ -29,6 +31,8 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     public String debugInterface() {
         return null;
     }
+
+    public void deleted(NakedObject object) {}
 
     public Action getClassAction(Type type, String name) {
         return null;
@@ -119,7 +123,7 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     }
 
     public boolean isObject() {
-        return true;
+        return isObject;
     }
 
     public boolean isOfType(NakedObjectSpecification cls) {
@@ -131,7 +135,7 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     }
 
     public boolean isValue() {
-        return false;
+        return isValue;
     }
 
     public void markDirty(NakedObject object) {}
@@ -140,8 +144,34 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         return null;
     }
 
+    public void setupAction(Action action) {
+        this.action = action;
+    }
+
+    public void setupFields(NakedObjectField[] fields) {
+        this.fields = fields;
+    }
+
+    public void setupIsObject() {
+        isObject = true;
+        isValue = false;
+    }
+
+    public void setupIsValue(boolean is) {
+        isValue = true;
+        isObject = false;
+    }
+
     public void setupSubclasses(NakedObjectSpecification[] subclasses) {
         this.subclasses = subclasses;
+    }
+
+    public void setupTitleObject(ObjectTitle titleObject) {
+        this.titleObject = titleObject;
+    }
+
+    public void setupUnresolvedTitle(String unresolvedTitle) {
+        this.unresolvedTitle = unresolvedTitle;
     }
 
     public NakedObjectSpecification[] subclasses() {
@@ -160,47 +190,24 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         return unresolvedTitle;
     }
 
-
-    public void setupAction(Action action) {
-        this.action = action;
-    }
-
-    public void setupFields(NakedObjectField[] fields ) {
-        this.fields = fields;
-    }
-
-    public void deleted(NakedObject object) {}
-    
-    public void setupTitleObject(ObjectTitle titleObject) {
-        this.titleObject = titleObject;
-    }
-    
-    public void setupUnresolvedTitle(String unresolvedTitle) {
-        this.unresolvedTitle = unresolvedTitle;
-    }
-    
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if
+ * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ * 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
+ * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */

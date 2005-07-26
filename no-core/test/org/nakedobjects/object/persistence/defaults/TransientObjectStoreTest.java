@@ -103,7 +103,7 @@ public class TransientObjectStoreTest extends TestCase {
     private NakedObject createTestObject() {
         MockNakedObject nakedObject = new MockNakedObject();
         MockOid oid = new MockOid(nextId++);
-        nakedObject.setOid(oid);
+        nakedObject.setupOid(oid);
         nakedObject.setupSpecification(objectSpec);
         return nakedObject;
     }
