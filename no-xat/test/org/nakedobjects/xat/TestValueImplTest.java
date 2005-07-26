@@ -1,6 +1,6 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.object.MockNakedValue;
+import org.nakedobjects.object.DummyNakedValue;
 
 import junit.framework.TestCase;
 
@@ -11,7 +11,7 @@ public class TestValueImplTest extends TestCase {
     }
 
     public void testConstructor() {
-        MockNakedValue value = new MockNakedValue();
+        DummyNakedValue value = new DummyNakedValue();
         value.setupObject("test");
         TestValueImpl valueImpl = new TestValueImpl(value);
         
