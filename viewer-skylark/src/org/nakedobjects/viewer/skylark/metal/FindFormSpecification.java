@@ -46,7 +46,7 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
 		}
 		
 		public View decorateSubview(View view) {
-			return new FieldLabel(view);
+			return FieldLabel.createInstance(view);
 		}
 	}
 
@@ -78,10 +78,10 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
         };
         actions[1] = new ButtonAction("Close") {
             public void execute(Workspace workspace, View view, Location at) {
-                workspace.removeView(view);
+                workspace.removeView(view.getView());
             }
         };
-        return new WindowBorder(new ButtonBorder(actions, super.createView(content, new LabelAxis())), false);
+        return new DialogBorder(new ButtonBorder(actions, super.createView(content, new LabelAxis())), false);
     }
     
 	public String getName() {

@@ -35,7 +35,7 @@ public class TreeBrowserFormSpecification extends AbstractCompositeViewSpecifica
         }
 
         public View decorateSubview(View view) {
-            return new FieldLabel(view);
+            return FieldLabel.createInstance(view);
         }
     }
 

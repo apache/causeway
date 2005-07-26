@@ -1,10 +1,24 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.viewer.skylark.FieldContent;
+import org.nakedobjects.viewer.skylark.Style;
+import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.View;
 
 public class FieldLabel extends LabelBorder {
 
+    public static FieldLabel createInstance(View wrappedView) {
+        FieldContent fieldContent = (FieldContent) wrappedView.getContent();
+        String name = fieldContent.getFieldName();
+        boolean mandatory = fieldContent.isMandatory();
+        Text style = mandatory ? Style.TITLE : Style.LABEL;
+        return new FieldLabel(name, style, wrappedView);
+    }
+    
+    public FieldLabel(String name, Text style, View wrappedView) {
+        super(name, style, wrappedView);
+    }
+    
 	public FieldLabel(View wrappedView) {
 		super(((FieldContent) wrappedView.getContent()).getFieldName(), wrappedView);
 	}

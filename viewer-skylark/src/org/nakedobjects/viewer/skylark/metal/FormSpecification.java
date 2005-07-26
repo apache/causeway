@@ -55,7 +55,7 @@ public class FormSpecification extends AbstractCompositeViewSpecification implem
     }
 
     public View decorateSubview(View view) {
-        return new FieldLabel(view);
+        return FieldLabel.createInstance(view);
     }
 
     public String getName() {

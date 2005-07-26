@@ -2,15 +2,22 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Style;
+import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
 
 public class LabelBorder extends AbstractBorder {
-	private String label;
-
+	private final String label;
+	private final Text style;
+	
 	public LabelBorder(String label, View wrappedView) {
+		this(label, Style.LABEL, wrappedView);
+	}
+	
+	public LabelBorder(String label, Text style, View wrappedView) {
 		super(wrappedView);
 		this.label = label + ":";
+		this.style = style;
 		
         int width = HPADDING + Style.LABEL.stringWidth(this.label) + HPADDING;
 		if(getViewAxis() == null) {
@@ -33,12 +40,8 @@ public class LabelBorder extends AbstractBorder {
     }
 
 	public void draw(Canvas canvas) {
-		canvas.drawText(label, HPADDING, wrappedView.getBaseline(), Style.PRIMARY1, Style.LABEL);
+		canvas.drawText(label, HPADDING, wrappedView.getBaseline(), Style.PRIMARY1, style);
 		super.draw(canvas);
-	}
-
-	protected void setLabel(String label) {
-		this.label = label;
 	}
 	
 	public String toString() {
