@@ -124,6 +124,10 @@ public class OneToOneField extends ObjectContent implements FieldContent {
     public boolean isLookup() {
         return getOneToOneAssociation().getSpecification().isLookup();
     }
+    
+    public boolean isMandatory() {
+        return false;
+    }
 
     public boolean isObject() {
         return true;

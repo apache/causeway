@@ -116,6 +116,10 @@ public class OneToManyField extends CollectionContent implements FieldContent {
         return false;
     }
 
+    public boolean isMandatory() {
+        return false;
+    }
+    
     public void setObject(NakedObject object) {
         throw new NakedObjectRuntimeException("Invalid call");
     }

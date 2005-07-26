@@ -64,10 +64,6 @@ public class OneToManyFieldElement extends ObjectContent implements FieldContent
         return field.getFieldReflector();
     }
 
-    /*public String getIconName() {
-        return element.getIconName();
-    }*/
-
     public Naked getNaked() {
         return element;
     }
@@ -86,6 +82,10 @@ public class OneToManyFieldElement extends ObjectContent implements FieldContent
 
     public NakedObjectSpecification getSpecification() {
         return field.getSpecification();
+    }
+
+    public boolean isMandatory() {
+        return false;
     }
 
     public boolean isObject() {

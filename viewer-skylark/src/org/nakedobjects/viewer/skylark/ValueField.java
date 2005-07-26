@@ -95,6 +95,10 @@ public class ValueField extends ValueContent implements FieldContent {
         return getParent().isEmpty(getField());
     }
 
+    public boolean isMandatory() {
+        return true;
+    }
+    
     public boolean isTransient() {
         return false;
     }
