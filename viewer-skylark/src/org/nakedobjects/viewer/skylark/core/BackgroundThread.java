@@ -2,7 +2,7 @@ package org.nakedobjects.viewer.skylark.core;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.defaults.Error;
+import org.nakedobjects.object.NakedObjectApplicationException;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.View;
 
@@ -21,10 +21,12 @@ public final class BackgroundThread {
                 try {
                     task.execute();
                 } catch (Throwable e) {
-                    String message = "Error while running background task: " + task.getName();
-                    LOG.error(message, e);
+                    if(!(e instanceof NakedObjectApplicationException)) {
+	                    String message = "Error while running background task " + task.getName();
+	                    LOG.error(message, e);
+                    }
 
-                    Naked error = NakedObjects.getObjectLoader().createAdapterForTransient(new Error(message, e));
+                    Naked error = NakedObjects.getObjectLoader().createAdapterForTransient(e);
                     // TODO centre view
                     //  centre = view.getWorkspace().getAbsoluteLocation();
                     view.getWorkspace().addOpenViewFor(error, new Location(20, 20));
