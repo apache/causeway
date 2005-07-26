@@ -17,10 +17,6 @@ public abstract class AbstractContent implements Content {
         return false;
     }
  
-    /*public Image getIconPicture(int iconHeight) {
-        return  ImageFactory.getInstance().loadObjectIcon(getSpecification(), "", iconHeight);
-    }*/
-
     public String windowTitle() {
         return "";
     }

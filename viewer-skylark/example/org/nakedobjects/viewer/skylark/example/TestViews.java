@@ -1,13 +1,7 @@
 package org.nakedobjects.viewer.skylark.example;
-import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.TestSystem;
-import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoaderNew;
-import org.nakedobjects.object.defaults.MockObjectManager;
-import org.nakedobjects.object.defaults.ObjectLoaderImpl;
 import org.nakedobjects.object.reflect.DummyNakedObject;
 import org.nakedobjects.utility.InfoDebugFrame;
 import org.nakedobjects.viewer.skylark.Content;
@@ -27,6 +21,8 @@ import org.apache.log4j.BasicConfigurator;
 public class TestViews {
 
 
+    protected TestSystem system;
+
     protected NakedObject createExampleObjectForView() {
         DummyNakedObject object = new DummyNakedObject();
         object.setupTitleString("ExampleObjectForView");
@@ -40,22 +36,9 @@ public class TestViews {
 
     protected TestViews() {
         BasicConfigurator.configure();
-/*
-        NakedObjectsClient nakedObjects = new NakedObjectsClient();
 
-        Configuration configuration = new Configuration(new ConfigurationPropertiesLoader("nakedobjects.properties", false));
-        nakedObjects.setConfiguration(configuration);
-        
-        MockNakedObjectSpecificationLoaderNew loader = new MockNakedObjectSpecificationLoaderNew();
-        setupSpecificationLoader(loader);
-        nakedObjects.setSpecificationLoader(loader);
-      
-        nakedObjects.setObjectManager(new MockObjectManager());
-        
-        nakedObjects.setObjectLoader(new ObjectLoaderImpl());
-        */
-        
-        new TestSystem().init();
+       system = new TestSystem();
+       system.init();
         
         
         Viewer viewer = new Viewer();
@@ -87,8 +70,6 @@ public class TestViews {
 
         debug.refresh();
     }
-
-    protected void setupSpecificationLoader(MockNakedObjectSpecificationLoaderNew loader) {}
 
     protected void views(Workspace workspace) {
         Content content = null;
