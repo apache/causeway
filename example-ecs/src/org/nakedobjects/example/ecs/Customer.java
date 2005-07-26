@@ -78,10 +78,6 @@ public class Customer {
         return booking;
     }
 
-    public void actionMethodThatFails() {
-        throw new RuntimeException("This is an error created by the application");
-    }
-
     public Booking actionNewBooking() {
         Booking booking = (Booking) container.createInstance(Booking.class);
         booking.associateCustomer(this);
