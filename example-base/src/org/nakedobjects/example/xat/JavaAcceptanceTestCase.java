@@ -1,7 +1,6 @@
 package org.nakedobjects.example.xat;
 
 import org.nakedobjects.NakedObjectsClient;
-import org.nakedobjects.application.NakedObjectRuntimeException;
 import org.nakedobjects.object.defaults.IdentityAdapterMapImpl;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
@@ -17,7 +16,6 @@ import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
 import org.nakedobjects.reflector.java.reflect.JavaReflectorFactory;
 import org.nakedobjects.utility.Profiler;
-import org.nakedobjects.utility.StartupException;
 import org.nakedobjects.xat.AcceptanceTestCase;
 import org.nakedobjects.xat.StaticNakedObjectSpecificationLoader;
 
@@ -117,11 +115,7 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
         nakedObjects.setReflectionFactory(reflectionFactory);
         nakedObjects.setReflectorFactory(reflectorFactory);
 
-        try {
-            objectManager.init();
-        } catch (StartupException e) {
-            throw new NakedObjectRuntimeException(e);
-        }
+        objectManager.init();
     }   
 }
 
