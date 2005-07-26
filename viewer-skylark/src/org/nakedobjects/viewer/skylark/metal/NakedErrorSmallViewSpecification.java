@@ -1,21 +1,19 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.NakedError;
-import org.nakedobjects.object.defaults.Error;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
+import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
-import org.nakedobjects.viewer.skylark.core.AbstractView;
+import org.nakedobjects.viewer.skylark.basic.ActionDialogSpecification;
 import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
@@ -23,7 +21,7 @@ public class NakedErrorSmallViewSpecification implements ViewSpecification {
 
     public boolean canDisplay(Content content) {
         return content.isObject() && content.getNaked() instanceof PojoAdapter
-                && ((PojoAdapter) content.getNaked()).getObject() instanceof NakedError;
+                && ((PojoAdapter) content.getNaked()).getObject() instanceof Exception;
     }
 
     public String getName() {
@@ -31,7 +29,9 @@ public class NakedErrorSmallViewSpecification implements ViewSpecification {
     }
 
     public View createView(Content content, ViewAxis axis) {
-        return new WindowBorder(new SmallErrorView(content, this, null), false);
+        // TODO extract the 'close window' action
+        UserAction actions[] = new UserAction[] { new ActionDialogSpecification.CloseAction() };
+        return new DialogBorder(new ButtonBorder(actions, new SmallErrorView(content, this, null)), false);
     }
 
     public boolean isOpen() {
@@ -47,7 +47,7 @@ public class NakedErrorSmallViewSpecification implements ViewSpecification {
     }
 }
 
-class SmallErrorView extends AbstractView {
+class SmallErrorView extends AbstractErrorView {
     private static Image errorIcon;
     {
         errorIcon = ImageFactory.getInstance().createIcon("error", 32, null);
@@ -69,10 +69,8 @@ class SmallErrorView extends AbstractView {
 
         size.extendHeight(Style.TITLE.getAscent());
 
-        Error error = (Error) ((PojoAdapter) ((ObjectContent) getContent()).getObject()).getObject();
-
         size.extendHeight(30);
-        size.extendWidth(Style.NORMAL.stringWidth(error.getError()));
+        size.extendWidth(Style.NORMAL.stringWidth(message));
         size.extendHeight(Style.NORMAL.getTextHeight());
 
         size.extend(40, 20);
@@ -91,18 +89,10 @@ class SmallErrorView extends AbstractView {
 
         left += errorIcon.getWidth() + 20;
         top += Style.TITLE.getAscent();
-        canvas.drawText("ERROR", left, top, Color.RED, Style.TITLE);
+        canvas.drawText(name, left, top, Color.BLACK, Style.TITLE);
 
-        Error error = (Error) ((PojoAdapter) getContent().getNaked()).getObject();
         top += 30;
-        canvas.drawText(error.getError(), left, top, Color.RED, Style.NORMAL);
-        /*
-         * top += 30; String trace = error.getTrace(); StringTokenizer st = new
-         * StringTokenizer(trace, "\n\r"); while (st.hasMoreTokens()) { String line =
-         * st.nextToken(); canvas.drawText(line,left + (line.startsWith("\t") ? 20 : 00), top,
-         * Color.BLACK, Style.NORMAL); top += Style.NORMAL.getTextHeight(); }
-         */
-
+        canvas.drawText(message, left, top, Color.BLACK, Style.NORMAL);
     }
 
     public ViewAreaType viewAreaType(Location mouseLocation) {

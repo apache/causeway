@@ -1,21 +1,18 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.NakedError;
-import org.nakedobjects.object.defaults.Error;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
+import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
-import org.nakedobjects.viewer.skylark.basic.PanelBorder;
-import org.nakedobjects.viewer.skylark.core.AbstractView;
+import org.nakedobjects.viewer.skylark.basic.ActionDialogSpecification;
 import org.nakedobjects.viewer.skylark.special.ScrollBorder;
 
 import java.util.StringTokenizer;
@@ -24,7 +21,7 @@ import java.util.StringTokenizer;
 public class NakedErrorViewSpecification implements ViewSpecification {
 
     public boolean canDisplay(Content content) {
-        return content.isObject() && content.getNaked() instanceof PojoAdapter && ((PojoAdapter) content.getNaked()).getObject() instanceof NakedError;
+        return content.isObject() && content.getNaked() instanceof PojoAdapter && ((PojoAdapter) content.getNaked()).getObject() instanceof Exception;
     }
 
     public String getName() {
@@ -32,7 +29,10 @@ public class NakedErrorViewSpecification implements ViewSpecification {
     }
 
     public View createView(Content content, ViewAxis axis) {
-        return new PanelBorder(4, new ScrollBorder(new ErrorView(content, this, null)));
+        UserAction actions[] = new UserAction[] {
+                new ActionDialogSpecification.CloseAction()
+         };
+        return new DialogBorder(new ButtonBorder(actions,new ScrollBorder(new ErrorView(content, this, null))), true);
     }
 
     public boolean isOpen() {
@@ -48,31 +48,28 @@ public class NakedErrorViewSpecification implements ViewSpecification {
     }
 }
 
-class ErrorView extends AbstractView {
-
+class ErrorView extends AbstractErrorView {
     protected ErrorView(Content content, ViewSpecification specification, ViewAxis axis) {
         super(content, specification, axis);
     }
-    
+
     public Size getRequiredSize() {
         Size size = new Size();
-       size.extendHeight(Style.TITLE. getTextHeight());
-       size.extendHeight(30);
+        size.extendHeight(Style.TITLE.getTextHeight());
+        size.extendHeight(30);
 
-       Error error = (Error) ((PojoAdapter) ((ObjectContent) getContent()).getObject()).getObject();
+        size.ensureWidth(Style.NORMAL.stringWidth(message));
+        size.extendHeight(Style.NORMAL.getTextHeight());
+        size.extendHeight(30);
        
-       size.ensureWidth(Style.NORMAL.stringWidth(error.getError()));
-       size.extendHeight(Style.NORMAL.getTextHeight());
-       size.extendHeight(30);
-       
-       if(error.getException() != null) {
+   /*    if(error.getException() != null) {
            size.ensureWidth(Style.NORMAL.stringWidth(error.getException()));
        }
        size.extendHeight(Style.NORMAL.getTextHeight());
        size.extendHeight(30);
+*/
 
-
-       String trace = error.getTrace();
+       //String trace = error.getTrace();
         StringTokenizer st = new StringTokenizer(trace, "\n\r");
         while (st.hasMoreTokens()) {
             String line = st.nextToken();
@@ -95,16 +92,15 @@ class ErrorView extends AbstractView {
         canvas.drawSolidRectangle(left, top, width - 1, height -1, Style.WHITE);
         canvas.drawRectangle(left, top, width - 1, height - 1, Style.BLACK);
 
+ 
         left = 20;
         top += Style.TITLE.getTextHeight();
-        canvas.drawText("ERROR", left, top, Color.RED, Style.TITLE);
         
-        Error error = (Error) ((PojoAdapter) getContent().getNaked()).getObject();
+        canvas.drawText(name, left, top, Color.RED, Style.TITLE);
         top += 30;
-        canvas.drawText(error.getError() ,left, top, Color.RED, Style.NORMAL);
+        canvas.drawText(message ,left, top, Color.RED, Style.NORMAL);
 
-         top += 30;
-        String trace = error.getTrace();
+        top += 30;
         StringTokenizer st = new StringTokenizer(trace, "\n\r");
         while (st.hasMoreTokens()) {
             String line = st.nextToken();
