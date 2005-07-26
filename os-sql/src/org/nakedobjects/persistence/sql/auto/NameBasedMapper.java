@@ -132,7 +132,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
 
     public NakedObject getObject(DatabaseConnector connector, Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, SqlObjectStoreException {
         NakedObject object = (NakedObject) hint.acquireInstance();
-        object.setOid(oid);
+        object.setupOid(oid);
         loadedObjects().loaded(object);
         return object;
     }
@@ -175,7 +175,7 @@ public class NameBasedMapper extends AbstractObjectMapper implements ObjectMappe
             element = manager.getLoadedObject(oid);
         } else {
             element = (NakedObject) elementCls.acquireInstance();
-            element.setOid(oid);
+            element.setupOid(oid);
             manager.loaded(element);
         }
         return element;
