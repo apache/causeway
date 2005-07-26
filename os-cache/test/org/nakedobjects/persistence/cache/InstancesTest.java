@@ -57,14 +57,14 @@ public class InstancesTest extends TestCase {
         p1.getName().setValue("Harry");
         p1.getSalary().setValue(1234);
         p1Oid = new SerialOid(1);
-        p1.setOid(p1Oid);
+        p1.setupOid(p1Oid);
         ins.create(p1);
         
         p2 = new Person();
         p2.getName().setValue("Fred");
         p1.getSalary().setValue(2345);
         p2Oid = new SerialOid(2);
-        p2.setOid(p2Oid);
+        p2.setupOid(p2Oid);
         ins.create(p2);
       }
 
@@ -122,9 +122,9 @@ public class InstancesTest extends TestCase {
         
         // skeleton objects - loaded objects
         Person p1r = new Person();
-        p1r.setOid(p1.getOid());
+        p1r.setupOid(p1.getOid());
         Person p2r = new Person();
-        p2r.setOid(p2.getOid());
+        p2r.setupOid(p2.getOid());
         loadedWithOids.setupLoadedObjects(new NakedObject[] {p1r, p2r});
         
         Instances ins2 = new Instances(personClass, loadedWithOids);
@@ -151,7 +151,7 @@ public class InstancesTest extends TestCase {
        
         Role r = new Role();
         r.setReferencedObject(p1);
-        r.setOid(new SerialOid(6));
+        r.setupOid(new SerialOid(6));
         ins.create(r);
         
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -171,11 +171,11 @@ public class InstancesTest extends TestCase {
         
         // skeleton objects - loaded objects
         Person p1r = new Person();
-        p1r.setOid(p1.getOid());
+        p1r.setupOid(p1.getOid());
         Person p2r = new Person();
-        p2r.setOid(p2.getOid());
+        p2r.setupOid(p2.getOid());
         Role r1r = new Role();
-        r1r.setOid(r.getOid());
+        r1r.setupOid(r.getOid());
         loadedWithOids.setupLoadedObjects(new NakedObject[] {r1r, p1r, p2r});
         
         Instances ins2 = new Instances(roleClass, loadedWithOids);
