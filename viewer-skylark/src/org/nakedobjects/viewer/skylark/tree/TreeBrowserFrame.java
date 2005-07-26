@@ -110,8 +110,6 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
         if(left != null) {
             size = left.getRequiredSize();
         }
-        size.extend(getPadding());
-//        size.extendWidth(5);
         if (right != null) {
             Size rightSize = right.getRequiredSize();
             size.ensureHeight(rightSize.getHeight());
@@ -119,6 +117,7 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
         } else {
             size.extendWidth(100);
         }
+        size.extend(getPadding());
         size.ensureWidth(225);
 
         return size;
@@ -173,6 +172,9 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
             }
             layoutCount++;
             invalidLayout = false;
+            
+            Size frameSize = getView().getRequiredSize();
+            getView().setSize(frameSize);
         }
     }
 
