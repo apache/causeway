@@ -104,14 +104,6 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
 
     public synchronized NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException {
         throw new NotImplementedException();
-        /*
-         * if (loadedObjects().isLoaded(oid)) { LOG.debug("getObject (from already loaded objects) " +
-         * oid); return loadedObjects().getLoadedObject(oid); } else { LOG.debug("getObject
-         * (remotely from server)" + oid); ObjectData data = connection.getObject(session, oid,
-         * hint.getFullName()); return DataHelper.recreateObject(data); }
-         *  
-         */
-
     }
 
     public boolean hasInstances(NakedObjectSpecification specification) {
@@ -123,7 +115,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
 
     public synchronized void makePersistent(NakedObject object) {
         LOG.debug("makePersistent " + object);
-        Oid[] oid = connection.makePersistent(session, objectDataFactory.createObjectData(object, 0));
+        Oid[] oid = connection.makePersistent(session, objectDataFactory.createMakePersistentGraph(object));
         NakedObjects.getObjectLoader().madePersistent(object, oid[0]);
     }
 

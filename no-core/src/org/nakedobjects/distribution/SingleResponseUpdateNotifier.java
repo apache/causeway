@@ -30,7 +30,7 @@ public class SingleResponseUpdateNotifier implements DirtyObjectSet {
         int i = 0;
         for (Enumeration e = updates.elements(); e.hasMoreElements();) {
             NakedObject object = (NakedObject) e.nextElement();
-            ObjectData objectData = factory.createObjectData(object, 1);
+            ObjectData objectData = factory.createForUpdate(object);
             updatesArray[i++] = objectData;
         }
         return updatesArray;

@@ -36,6 +36,7 @@ public class DataHelper {
         NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
         NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
         NakedObject object;
+        
         if(oid == null) {
             object = objectLoader.createTransientInstance(specification);
             recreateObjectsInFields(data, object);

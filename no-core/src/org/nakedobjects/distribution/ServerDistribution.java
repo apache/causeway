@@ -29,7 +29,6 @@ import org.apache.log4j.Logger;
 
 public class ServerDistribution implements ClientDistribution {
     private static final Logger LOG = Logger.getLogger(ServerDistribution.class);
-    private static final int OBJECT_DATA_DEPTH = 1;
     private DataFactory objectDataFactory;
     private ObjectFactory objectFactory;
 
@@ -55,7 +54,7 @@ public class ServerDistribution implements ClientDistribution {
     private ObjectData[] convertToNakedCollection(TypedNakedCollection instances) {
         ObjectData[] data = new ObjectData[instances.size()];
         for (int i = 0; i < instances.size(); i++) {
-            data[i] = objectDataFactory.createObjectData(instances.elementAt(i), OBJECT_DATA_DEPTH);
+            data[i] = objectDataFactory.createCompletePersistentGraph(instances.elementAt(i));
         }
         return data;
     }
@@ -107,7 +106,7 @@ public class ServerDistribution implements ClientDistribution {
 
         try {
             NakedObject result = (NakedObject) object.execute(action, parameters);
-            return objectDataFactory.createObjectData(result, OBJECT_DATA_DEPTH);
+            return objectDataFactory.createCompletePersistentGraph(result);
         } catch (RuntimeException e) {
             LOG.error(e.getMessage(), e);
             
@@ -154,7 +153,7 @@ public class ServerDistribution implements ClientDistribution {
     public ObjectData resolveImmediately(Session session, Oid oid, String objectType) {
         LOG.debug("request resolveImmediately " + objectType + "/" + oid +" for " + session);
         NakedObject object = forNakedObject(session, oid, objectType);
-        return objectDataFactory.createObjectData(object, OBJECT_DATA_DEPTH);
+        return objectDataFactory.createCompletePersistentGraph(object);
     }
 
     private NakedObjectSpecification getSpecification(String fullName) {

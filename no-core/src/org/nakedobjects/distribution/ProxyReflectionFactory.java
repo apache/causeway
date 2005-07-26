@@ -15,19 +15,10 @@ import org.nakedobjects.object.reflect.OneToOnePeer;
 
 public class ProxyReflectionFactory implements ReflectionFactory {
     private ClientDistribution connection;
-    private DataFactory objectDataFactory;
-    
-    private HelpLookup helpLookup = new HelpLookup(null);
-    
-    
-    public void setHelpManager(HelpManager helpManager) {
-        this.helpLookup = new HelpLookup(helpManager);
-    }
 
-    public void set_HelpManager(HelpManager helpManager) {
-        setHelpManager(helpManager);
-    }
-    
+    private HelpLookup helpLookup = new HelpLookup(null);
+    private DataFactory objectDataFactory;
+
     public ProxyReflectionFactory() {}
 
     public Action createAction(String className, ActionPeer localDelegate) {
@@ -37,18 +28,38 @@ public class ProxyReflectionFactory implements ReflectionFactory {
 
     public NakedObjectField createField(String className, OneToManyPeer local) {
         OneToManyPeer oneToManyDelegate = new ProxyOneToManyAssociation(local, connection);
-        OneToManyAssociation association = new OneToManyAssociation(className, oneToManyDelegate.getName(), oneToManyDelegate.getType(),
-                oneToManyDelegate);
+        OneToManyAssociation association = new OneToManyAssociation(className, oneToManyDelegate.getName(), oneToManyDelegate
+                .getType(), oneToManyDelegate);
         return association;
     }
 
     public NakedObjectField createField(String className, OneToOnePeer local) {
-        
+
         OneToOnePeer oneToOneDelegate = new ProxyOneToOneAssociation(local, connection);
         oneToOneDelegate = new OneToOneHelp(oneToOneDelegate, helpLookup);
-        OneToOneAssociation association = new OneToOneAssociation(className, oneToOneDelegate.getName(), oneToOneDelegate.getType(),
-                oneToOneDelegate);
+        OneToOneAssociation association = new OneToOneAssociation(className, oneToOneDelegate.getName(), oneToOneDelegate
+                .getType(), oneToOneDelegate);
         return association;
+    }
+
+    public void init() {}
+
+    /**
+     * .NET property
+     * 
+     * @property
+     */
+    public void set_Connection(ClientDistribution connection) {
+        this.connection = connection;
+    }
+
+    /**
+     * .NET property
+     * 
+     * @property
+     */
+    public void set_HelpManager(HelpManager helpManager) {
+        setHelpManager(helpManager);
     }
 
     /**
@@ -60,48 +71,37 @@ public class ProxyReflectionFactory implements ReflectionFactory {
         this.objectDataFactory = objectDataFactory;
     }
 
-    /**
-     * .NET property
-     * 
-     * @property
-     */
-    public void set_Connection(ClientDistribution connection) {
+    public void setConnection(ClientDistribution connection) {
         this.connection = connection;
     }
 
-    public void setConnection(ClientDistribution connection) {
-        this.connection = connection;
+    public void setHelpManager(HelpManager helpManager) {
+        this.helpLookup = new HelpLookup(helpManager);
     }
 
     public void setObjectDataFactory(DataFactory objectDataFactory) {
         this.objectDataFactory = objectDataFactory;
     }
 
-    public void init() {}
-
     public void shutdown() {}
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if
+ * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ * 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
+ * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */

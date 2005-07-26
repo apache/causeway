@@ -68,7 +68,7 @@ public final class ProxyAction extends AbstractActionPeer {
         Data parameterObjectData[] = new Data[parameters.length];
         for (int i = 0; i < parameters.length; i++) {
             Naked parameter = parameters[i];
-            parameterObjectData[i] = dataFactory.createData(parameter, 0);
+            parameterObjectData[i] = dataFactory.createDataForParameter(parameter);
         }
         return parameterObjectData;
     }
