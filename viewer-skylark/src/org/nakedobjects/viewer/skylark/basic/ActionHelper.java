@@ -51,8 +51,14 @@ public class ActionHelper {
             // change name using the hint
             NakedObjectSpecification type = parameterTypes[i];
             labels[i] = labels[i] == null ? type.getShortName() : labels[i];
-            parameters[i] = defaultValues[i] == null ? parameterValues[i] : NakedObjects.getObjectLoader().createAdapterForValue(
-                    defaultValues[i]);
+            if(defaultValues[i] == null) {
+                parameters[i] =  parameterValues[i];
+            } else {
+                parameters[i] = NakedObjects.getObjectLoader().createAdapterForValue(defaultValues[i]);
+                if(parameters[i] == null) {
+                    parameters[i] = NakedObjects.getObjectLoader().createAdapterForTransient(defaultValues[i]);
+                }
+            }
         }
 
         return new ActionHelper(target, action, labels, parameters, parameterTypes);
