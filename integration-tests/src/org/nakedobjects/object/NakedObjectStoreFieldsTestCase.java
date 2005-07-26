@@ -15,7 +15,7 @@ public abstract class NakedObjectStoreFieldsTestCase extends NakedObjectStoreTes
 
         // extend to test associations
         Person person = new Person();
-        person.setOid(oid);
+        person.setupOid(oid);
         person.getName().setValue("Samuel");
         person.getSalary().setValue(10.0);
         
@@ -149,7 +149,7 @@ public abstract class NakedObjectStoreFieldsTestCase extends NakedObjectStoreTes
     private NakedObject saveAndGet(NakedObject object) throws ObjectStoreException, Exception, ObjectNotFoundException {
         NakedObjectSpecification spec = object.getSpecification();
         Oid oid = nextOid();
-        object.setOid(oid);
+        object.setupOid(oid);
         objectStore.save(object);
 
         restartObjectStore();

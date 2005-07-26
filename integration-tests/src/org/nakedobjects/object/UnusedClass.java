@@ -39,7 +39,7 @@ public class UnusedClass {
         return null;
     }
 
-	public void setOid(Oid oid) {
+	public void setupOid(Oid oid) {
 		junit.framework.Assert.fail("No objects of this type should be created");
 	}
 

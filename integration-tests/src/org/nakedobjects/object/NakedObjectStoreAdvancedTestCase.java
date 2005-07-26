@@ -38,7 +38,7 @@ public abstract class NakedObjectStoreAdvancedTestCase extends NakedObjectStoreT
         for (int i = 0; i < names.length; i++) {
             people[i] = new Person();
             people[i].setContext(context);
-            people[i].setOid(nextOid());
+            people[i].setupOid(nextOid());
             people[i].name.setValue(names[i]);
             objectStore.createObject(people[i]);
 
@@ -50,7 +50,7 @@ public abstract class NakedObjectStoreAdvancedTestCase extends NakedObjectStoreT
         for (int i = 0; i < roleNames.length; i++) {
             roles[i] = new Role();
             roles[i].setContext(context);
-            roles[i].setOid(nextOid());
+            roles[i].setupOid(nextOid());
             roles[i].name.setValue(roleNames[i]);
             roles[i].referencedObject = people[i];
             objectStore.createObject(roles[i]);
@@ -58,8 +58,8 @@ public abstract class NakedObjectStoreAdvancedTestCase extends NakedObjectStoreT
 
         team = new Team();
         team.setContext(context);
-        team.setOid(teamOid = nextOid());
-        team.getMembers().setOid(membersOid = nextOid());
+        team.setupOid(teamOid = nextOid());
+        team.getMembers().setupOid(membersOid = nextOid());
         
         teamMembers = new Person[names.length - 1];
         for (int i = 0; i < names.length - 1; i++) {
@@ -76,12 +76,12 @@ public abstract class NakedObjectStoreAdvancedTestCase extends NakedObjectStoreT
 
         Role role = new Role();
         role.setContext(context);
-        role.setOid(nextOid());
+        role.setupOid(nextOid());
         role.name.setValue("Leader");
 
         Person person = new Person();
         person.setContext(context);
-        person.setOid(nextOid());
+        person.setupOid(nextOid());
         person.getName().setValue("Fred");
         role.referencedObject = person;
 

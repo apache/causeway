@@ -66,7 +66,7 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
         for (int i = 0; i < names.length; i++) {
             nakedObjects[i] = new Person();
             nakedObjects[i].setContext(context);
-            nakedObjects[i].setOid(nextOid());
+            nakedObjects[i].setupOid(nextOid());
             nakedObjects[i].name.setValue(names[i]);
             objectStore.createObject(nakedObjects[i]);
 
@@ -78,7 +78,7 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
         for (int i = 0; i < roleNames.length; i++) {
             roles[i] = new Role();
             roles[i].setContext(context);
-            roles[i].setOid(nextOid());
+            roles[i].setupOid(nextOid());
             roles[i].name.setValue(roleNames[i]);
             roles[i].referencedObject = nakedObjects[i];
             objectStore.createObject(roles[i]);
@@ -91,7 +91,7 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
     public void testClass() throws Exception {
         NakedClass nc = new NakedClass(personClassName);
         nc.setContext(context);
-        nc.setOid(nextOid());
+        nc.setupOid(nextOid());
         objectStore.createNakedClass(nc);
 
         NakedClass nc2 = objectStore.getNakedClass(personClassName);
@@ -101,7 +101,7 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
 
     public void testClassAsObjects() throws Exception {
         NakedClass nc = new NakedClass(personClassName);
-        nc.setOid(nextOid());
+        nc.setupOid(nextOid());
         objectStore.createNakedClass(nc);
 
         NakedClass nc2 = (NakedClass) objectStore.getObject(nc.getOid(), nc.getSpecification());
@@ -254,12 +254,12 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
             for (int i = 0; i < obj.length; i++) {
                 obj[i] = new Role();
                 obj[i].setContext(context);
-                obj[i].setOid(nextOid());
+                obj[i].setupOid(nextOid());
                 obj[i].getName().setValue(((i % 2) == 0) ? "even" : "odd");
 
                 v = new Person();
                 v.setContext(context);
-                v.setOid(nextOid());
+                v.setupOid(nextOid());
                 obj[i].setReferencedObject(v);
                 objectStore.createObject(obj[i]);
             }
