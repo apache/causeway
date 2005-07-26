@@ -18,7 +18,7 @@ import org.nakedobjects.viewer.skylark.core.BackgroundTask;
 import org.nakedobjects.viewer.skylark.core.BackgroundThread;
 import org.nakedobjects.viewer.skylark.metal.ButtonAction;
 import org.nakedobjects.viewer.skylark.metal.ButtonBorder;
-import org.nakedobjects.viewer.skylark.metal.WindowBorder;
+import org.nakedobjects.viewer.skylark.metal.DialogBorder;
 import org.nakedobjects.viewer.skylark.special.StackLayout;
 import org.nakedobjects.viewer.skylark.special.SubviewSpec;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
@@ -26,13 +26,13 @@ import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 public class ActionDialogSpecification extends AbstractCompositeViewSpecification {
 
-    private static class CloseAction extends ButtonAction {
+    public static class CloseAction extends ButtonAction {
         public CloseAction() {
             super("Cancel");
         }
 
         public void execute(Workspace workspace, View view, Location at) {
-            workspace.removeView(view);
+            workspace.removeView(view.getView());
         }
     }
 
@@ -140,8 +140,10 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
     }
 
     public View createView(Content content, ViewAxis axis) {
-        UserAction[] actions = new UserAction[] { new ExecuteAndCloseAction(), new CloseAction(), new ExecuteAction(), };
-        return new WindowBorder(new ButtonBorder(actions, super.createView(content, new LabelAxis())), false);
+        // TODO reintroduce the 'Apply' notion, but under control from the method declaration
+        // UserAction[] actions = new UserAction[] { new ExecuteAndCloseAction(), new CloseAction(), new ExecuteAction(), };
+        UserAction[] actions = new UserAction[] { new ExecuteAndCloseAction(), new CloseAction()};
+        return new DialogBorder(new ButtonBorder(actions, super.createView(content, new LabelAxis())), false);
     }
 
     public String getName() {
