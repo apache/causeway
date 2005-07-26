@@ -1,6 +1,6 @@
 package org.nakedobjects.application.valueholder;
 
-import org.nakedobjects.application.NakedObjectRuntimeException;
+import org.nakedobjects.application.ApplicationException;
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.ValueParseException;
 import org.nakedobjects.application.system.Clock;
@@ -101,7 +101,7 @@ public class Time extends Magnitude {
      */
     public Time() {
         if (clock == null) {
-            throw new NakedObjectRuntimeException("Clock not set up");
+            throw new ApplicationException("Clock not set up");
         }
         setValue(new java.util.Date(clock.getTime()));
     }

@@ -1,6 +1,6 @@
 package org.nakedobjects.application.valueholder;
 
-import org.nakedobjects.application.NakedObjectRuntimeException;
+import org.nakedobjects.application.ApplicationException;
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.ValueParseException;
 import org.nakedobjects.application.control.State;
@@ -39,7 +39,7 @@ public class SimpleState extends BusinessValueHolder implements State {
 	}
 
 	public void parseUserEntry(String text) throws ValueParseException {
-		throw new NakedObjectRuntimeException();
+		throw new ApplicationException();
 	}
 
 	public void reset() {
@@ -64,7 +64,7 @@ public class SimpleState extends BusinessValueHolder implements State {
 	}
 
 	public void copyObject(BusinessValueHolder object) {
-		throw new NakedObjectRuntimeException();
+		throw new ApplicationException();
 	}
 
 	public boolean isEmpty() {

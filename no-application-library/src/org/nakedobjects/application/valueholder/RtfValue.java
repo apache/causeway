@@ -1,6 +1,6 @@
 package org.nakedobjects.application.valueholder;
 
-import org.nakedobjects.application.NakedObjectRuntimeException;
+import org.nakedobjects.application.ApplicationException;
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.ValueParseException;
 
@@ -46,7 +46,7 @@ public class RtfValue extends BusinessValueHolder {
      */
     public void copyObject(final BusinessValueHolder other) {
         if (!(other instanceof RtfValue)) {
-            throw new NakedObjectRuntimeException("only support copying from other RTF values");
+            throw new ApplicationException("only support copying from other RTF values");
         }
         copyObject((RtfValue) other);
     }
@@ -65,7 +65,7 @@ public class RtfValue extends BusinessValueHolder {
         try {
             return utf8Encoded.getBytes("UTF-8");
         } catch (java.io.UnsupportedEncodingException ex) {
-            throw new NakedObjectRuntimeException(ex);
+            throw new ApplicationException(ex);
         }
     }
 
@@ -114,7 +114,7 @@ public class RtfValue extends BusinessValueHolder {
     public void parseUserEntry(String text) throws ValueParseException {
         try {
             restoreFromEncodedString(text);
-        } catch (NakedObjectRuntimeException ex) {
+        } catch (ApplicationException ex) {
             throw new ValueParseException(ex.getCause());
         }
     }

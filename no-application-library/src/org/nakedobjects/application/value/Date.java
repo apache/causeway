@@ -1,6 +1,6 @@
 package org.nakedobjects.application.value;
 
-import org.nakedobjects.application.NakedObjectRuntimeException;
+import org.nakedobjects.application.ApplicationException;
 import org.nakedobjects.application.ValueParseException;
 import org.nakedobjects.application.system.Clock;
 
@@ -359,7 +359,7 @@ public class Date extends Magnitude {
         Calendar cal = Calendar.getInstance();
 
         if (clock == null) {
-            throw new NakedObjectRuntimeException("Clock not set up");
+            throw new ApplicationException("Clock not set up");
         }
         long time = clock.getTime();
         java.util.Date d = new java.util.Date(time);
