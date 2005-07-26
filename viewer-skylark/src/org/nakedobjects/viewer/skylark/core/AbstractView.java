@@ -285,14 +285,13 @@ public abstract class AbstractView implements View {
     }
 
     public Viewer getViewManager() {
-//        return viewer;
+        //        return viewer;
         return Viewer.getInstance();
     }
-    
-/*    public void setViewer(Viewer viewer) {
-        this.viewer = viewer;
-    }
-*/
+
+    /*
+     * public void setViewer(Viewer viewer) { this.viewer = viewer; }
+     */
     public Workspace getWorkspace() {
         return getParent() == null ? null : getParent().getWorkspace();
     }
@@ -312,7 +311,7 @@ public abstract class AbstractView implements View {
             return subview.identify(location);
         }
     }
-    
+
     public void invalidateContent() {}
 
     public void invalidateLayout() {
@@ -321,23 +320,17 @@ public abstract class AbstractView implements View {
         }
     }
 
-    public void keyPressed(int keyCode, int modifiers) {
-    // TODO Auto-generated method stub
-    }
+    public void keyPressed(int keyCode, int modifiers) {}
 
-    public void keyReleased(int keyCode, int modifiers) {
-    // TODO Auto-generated method stub
-    }
+    public void keyReleased(int keyCode, int modifiers) {}
 
-    public void keyTyped(char keyCode) {
-    // TODO Auto-generated method stub
-    }
+    public void keyTyped(char keyCode) {}
 
     public void layout() {}
 
     /**
-     * Limits the bounds of the this view (when being moved or dropped) so it
-     * never extends outside the bounds of the parent view
+     * Limits the bounds of the this view (when being moved or dropped) so it never extends outside
+     * the bounds of the parent view
      */
     public void limitBoundsWithin(Bounds containerBounds) {
         Bounds contentBounds = getView().getBounds();
@@ -364,14 +357,14 @@ public abstract class AbstractView implements View {
 
     public void contentMenuOptions(MenuOptionSet options) {
         options.setColor(Style.CONTENT_MENU);
-        
+
         Content content = getContent();
         if (content != null) {
             content.menuOptions(options);
         }
 
     }
-    
+
     public void viewMenuOptions(MenuOptionSet options) {
         options.setColor(Style.VIEW_MENU);
 
@@ -567,25 +560,21 @@ public abstract class AbstractView implements View {
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if
+ * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ * 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
+ * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */

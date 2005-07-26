@@ -144,6 +144,11 @@ public class CompositeView extends ObjectView {
         super.invalidateLayout();
     }
 
+    /**
+     * The default layout for composite views, which asks each subview to lay itself out first
+     * before asking its own builder to layout its own views. The act of laying out the children
+     * first ensures that the parent is big enough to accomodate all its children.
+     */
     public void layout() {
         if (buildInvalid) {
             buildInvalid = false;
@@ -159,7 +164,7 @@ public class CompositeView extends ObjectView {
 
             layoutInvalid = false;
 
-            Size size =getView().getRequiredSize();
+            Size size = getView().getRequiredSize();
             getView().setSize(size);
 
             builder.layout(getView());

@@ -37,7 +37,7 @@ public class DebugCanvas implements Canvas {
     }
 
     public Canvas createSubcanvas(Bounds bounds) {
-        return null;
+        return createSubcanvas(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
     }
 
     public Canvas createSubcanvas(int x, int y, int width, int height) {
