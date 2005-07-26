@@ -1,20 +1,31 @@
 package org.nakedobjects.application;
 
 
+public class ApplicationException extends RuntimeException {
+	private Throwable cause;
 
-public class ValueParseException extends ApplicationException {
-   public ValueParseException(String message) {
-		super(message);
+	public ApplicationException() {
+		super();
 	}
 
-    public ValueParseException(Throwable cause) {
-        super("Could not parse", cause);
-    }
+	public ApplicationException(String msg) {
+		super(msg);
+	}
+	public ApplicationException(Throwable cause) {
+		this(cause.getMessage());
+		this.cause = cause;
+	}
 
-    public ValueParseException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public ApplicationException(String msg, Throwable cause) {
+		this(msg);
+		this.cause = cause;
+	}
+
+	public Throwable getCause() {
+		return cause;
+	}
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
