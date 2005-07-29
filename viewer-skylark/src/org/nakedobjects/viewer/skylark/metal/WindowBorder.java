@@ -3,12 +3,15 @@ package org.nakedobjects.viewer.skylark.metal;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.special.ScrollBorder;
+import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
 public class WindowBorder extends AbstractWindowBorder {
@@ -37,17 +40,16 @@ public class WindowBorder extends AbstractWindowBorder {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
-        // transient marker
-/*
         if (isTransient()) {
-            Image icon = ImageFactory.getInstance().createIcon("transient", BUTTON_HEIGHT, null);
+            int height = top - 2;
+            int x = 100;
+            Image icon = ImageFactory.getInstance().createIcon("transient", height, null);
             if (icon == null) {
-                canvas.drawText("*", x, y, Style.BLACK, Style.NORMAL);
+                canvas.drawText("*", x, getBaseline(), Style.BLACK, Style.NORMAL);
             } else {
-                canvas.drawIcon(icon, x, y, BUTTON_HEIGHT, BUTTON_HEIGHT);
+                canvas.drawIcon(icon, x, 1, height, height);
             }
         }
-   */
     }
 
     private boolean isTransient() {
