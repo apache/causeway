@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark.text;
 
 import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.Location;
 
@@ -182,7 +183,12 @@ public class TextContent {
     }
 
     public void insert(CursorPosition cursorAt, String characters) {
+        Assert.assertNotNull(cursorAt);
+        
         TextBlockReference block = getBlockFor(cursorAt.getLine());
+        
+        Assert.assertNotNull(block);
+        
         block.block.insert(block.line, cursorAt.getCharacter(), characters);
     }
 
