@@ -1,6 +1,7 @@
 
 package org.nakedobjects.viewer.skylark.value;
 
+import org.nakedobjects.object.ConcurrencyException;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
@@ -13,6 +14,7 @@ import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
+import org.nakedobjects.viewer.skylark.Enterable;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
@@ -252,9 +254,15 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
 	                getViewManager().setStatus(invalidReason);
 	                getState().setInvalid();
 	                markDamaged();
+	            } catch (ConcurrencyException e) {
+	                invalidReason = "UPDATE FAILURE: " + e.getMessage();
+	                LOG.warn(invalidReason, e);
+	                getState().setOutOfSynch();
+	                markDamaged();
+	                throw e;
 	            } catch (NakedObjectRuntimeException e) {
 	                invalidReason = "UPDATE FAILURE: " + e.getMessage();
-	                LOG.error(invalidReason, e);
+	                LOG.warn(invalidReason, e);
 	                getViewManager().setStatus(invalidReason);
 	                getState().setOutOfSynch();
 	                markDamaged();
@@ -439,7 +447,8 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
             break;
         case KeyEvent.VK_ENTER:
             enter();
-            break;
+        	getParent().keyPressed(keyCode, modifiers);
+        	break;
         case KeyEvent.VK_ESCAPE:
             escape();
             break;
