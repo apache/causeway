@@ -65,11 +65,18 @@ class ServerConnection implements Runnable {
 				XStream xstream = new XStream();
 				Request request = (Request) xstream.fromXML(requestData);
 				LOG.debug("Request received " + request);
-			    request.execute(server);
-			    Response response = new Response(request);
-			    response.setUpdates(updateNotifier.getUpdates());
-				LOG.debug("Sending " + response);
-                String responseData = xstream.toXML(response);
+				String responseData;
+                try {
+				    request.execute(server);
+					Response response;
+				    response = new Response(request);
+				    response.setUpdates(updateNotifier.getUpdates());
+					LOG.debug("Sending " + response);
+					responseData = xstream.toXML(response);
+				} catch(Exception e) {
+				    LOG.debug("Sending exception " + e);
+				    responseData = xstream.toXML(e);
+				}
                 LOG.debug("Send response \n" + responseData);
 				output.writeObject(responseData);
                 output.flush();
