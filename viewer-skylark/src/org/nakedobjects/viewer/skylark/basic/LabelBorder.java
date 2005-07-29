@@ -19,7 +19,7 @@ public class LabelBorder extends AbstractBorder {
 		this.label = label + ":";
 		this.style = style;
 		
-        int width = HPADDING + Style.LABEL.stringWidth(this.label) + HPADDING;
+        int width = HPADDING + style.stringWidth(this.label) + HPADDING;
 		if(getViewAxis() == null) {
 		    left = width;
 		} else {
