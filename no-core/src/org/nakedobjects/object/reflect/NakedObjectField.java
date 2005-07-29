@@ -46,6 +46,10 @@ public abstract class NakedObjectField extends NakedObjectMember {
     public boolean isValue() {
 	    return specification.isValue();
     }
+    
+    public boolean isMandatory() {
+        return false;
+    }
 }
 
 

@@ -37,7 +37,8 @@ public class PojoAdapter implements NakedObject {
 
     public void checkLock(long version) {
         if (version != this.version) {
-            throw new ConcurrencyException(modifierBy + " changed this object (" + titleString() + ") at " + modifiedTime);
+            throw new ConcurrencyException(modifierBy + " changed " + specification.getShortName() + " object (" + titleString() + ") at " + modifiedTime +
+                    " (" + this.version + "~" + version + ")");
         }
     }
 
@@ -60,7 +61,7 @@ public class PojoAdapter implements NakedObject {
     }
 
     public void debugClearResolved() {
-        resolveState = ResolveState.NEW;
+        resolveState = ResolveState.GHOST;
     }
 
     /**
@@ -296,6 +297,8 @@ public class PojoAdapter implements NakedObject {
             str.append("title", titleString());
         }
         str.appendAsHex("pojo-hash", pojo.hashCode());
+        str.appendAsHex("version", version);
+        str.appendAsTimestamp("modified", modifiedTime);
         return str.toString();
     }
 
