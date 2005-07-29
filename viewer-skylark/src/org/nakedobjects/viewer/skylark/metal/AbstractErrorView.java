@@ -21,7 +21,7 @@ public class AbstractErrorView extends AbstractView {
 
         Exception error = (Exception) ((PojoAdapter) ((ObjectContent) getContent()).getObject()).getObject();
         if(error instanceof NakedObjectApplicationException) {
-            Throwable t = error.getCause();
+            Throwable t = ((NakedObjectApplicationException) error).getCause();
 	        String name = t.getClass().getName();
 	        name = name.substring(name.lastIndexOf('.') + 1);
 	        this.name = NameConvertor.naturalName(name);
@@ -33,6 +33,16 @@ public class AbstractErrorView extends AbstractView {
 	        this.name = NameConvertor.naturalName(name);
 	        this.message = error.getMessage();
 	        this.trace = ExceptionHelper.exceptionTraceAsString(error);
+        }
+        
+        if(this.name == null) {
+            this.name = "";
+        }
+        if(this.message == null) {
+            this.message = "";
+        }
+        if(this.trace == null) {
+            this.trace = "";
         }
     }
     
