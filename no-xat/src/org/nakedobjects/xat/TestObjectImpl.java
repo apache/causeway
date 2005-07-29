@@ -721,7 +721,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         } else {
             NakedObject ref = (NakedObject) forObject.getField(field);
             if (ref != null) {
-                getForNaked().clearAssociation((OneToOneAssociation) fieldAccessorFor(fieldName), ref);
+                forObject.clearAssociation((OneToOneAssociation) fieldAccessorFor(fieldName), ref);
             }
         }
     }
