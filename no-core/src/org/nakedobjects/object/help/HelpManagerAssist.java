@@ -19,7 +19,7 @@ public class HelpManagerAssist implements HelpManager {
         if(decorated != null) {
             help = decorated.help(identifier);
         }
-        return showIdentifier ?  (identifier.toString() + "\n\n") : "" + help;
+        return showIdentifier ?  (identifier.toString() + "\n") : "" + help;
     }
 
     
