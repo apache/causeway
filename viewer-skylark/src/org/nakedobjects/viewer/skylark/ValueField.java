@@ -96,7 +96,7 @@ public class ValueField extends ValueContent implements FieldContent {
     }
 
     public boolean isMandatory() {
-        return true;
+        return getOneToOneAssociation().isMandatory();
     }
     
     public boolean isTransient() {

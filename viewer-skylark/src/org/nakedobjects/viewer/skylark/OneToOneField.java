@@ -126,7 +126,7 @@ public class OneToOneField extends ObjectContent implements FieldContent {
     }
     
     public boolean isMandatory() {
-        return false;
+        return getOneToOneAssociation().isMandatory();
     }
 
     public boolean isObject() {

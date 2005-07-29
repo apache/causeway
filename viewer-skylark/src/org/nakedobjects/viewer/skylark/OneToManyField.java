@@ -117,7 +117,7 @@ public class OneToManyField extends CollectionContent implements FieldContent {
     }
 
     public boolean isMandatory() {
-        return false;
+        return getOneToManyAssociation().isMandatory();
     }
     
     public void setObject(NakedObject object) {
