@@ -11,7 +11,6 @@ import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.Skylark;
-import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -59,8 +58,8 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
     }
 	
     public View createView(Content content, ViewAxis axis) {
-        UserAction[] actions = new UserAction[2];
-        actions[0] = new ButtonAction("Find") {
+        ButtonAction[] actions = new ButtonAction[2];
+        actions[0] = new AbstractButtonAction("Find", true) {
             public Consent disabled(View view) {
                 NakedObject target = ((ObjectContent) view.getContent()).getObject();
                 Action action = target.getSpecification().getObjectAction(Action.USER, "Find");
@@ -76,7 +75,7 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
                 workspace.addOpenViewFor(result, at);
             }
         };
-        actions[1] = new ButtonAction("Close") {
+        actions[1] = new AbstractButtonAction("Close") {
             public void execute(Workspace workspace, View view, Location at) {
                 workspace.removeView(view.getView());
             }

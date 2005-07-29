@@ -8,7 +8,6 @@ import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
@@ -18,7 +17,7 @@ import org.apache.log4j.Logger;
 public class SaveTransientObjectBorder extends ButtonBorder {
     private static final Logger LOG = Logger.getLogger(SaveTransientObjectBorder.class);
     
-    private static class CloseAction extends ButtonAction {
+    private static class CloseAction extends AbstractButtonAction {
         public CloseAction() {
             super("Discard");
         }
@@ -28,7 +27,7 @@ public class SaveTransientObjectBorder extends ButtonBorder {
         }
     }
 
-    private static class SaveAction extends ButtonAction {
+    private static class SaveAction extends AbstractButtonAction {
         public SaveAction() {
             super("Save");
         }
@@ -53,12 +52,12 @@ public class SaveTransientObjectBorder extends ButtonBorder {
             if(action == null) {
                 return Allow.DEFAULT;
             } else {
-		        Naked transientObject = (NakedObject) view.getContent().getNaked();
+		        NakedObject transientObject = (NakedObject) view.getContent().getNaked();
                 return transientObject.getHint(action, new Naked[0]).canUse();
             }
         }
         
-    private static class SaveAndCloseAction extends ButtonAction {
+    private static class SaveAndCloseAction extends AbstractButtonAction {
         public SaveAndCloseAction() {
             super("Save & Close");
         }
@@ -105,7 +104,7 @@ public class SaveTransientObjectBorder extends ButtonBorder {
     }
 
     public SaveTransientObjectBorder(View view) {
-        super(new UserAction[] { new SaveAction(), new SaveAndCloseAction(), new CloseAction(), }, view);
+        super(new ButtonAction[] { new SaveAction(), new SaveAndCloseAction(), new CloseAction(), }, view);
     }
 
 }

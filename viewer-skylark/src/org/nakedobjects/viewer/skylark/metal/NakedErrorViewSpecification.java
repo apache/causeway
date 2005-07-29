@@ -7,7 +7,6 @@ import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
-import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -29,7 +28,7 @@ public class NakedErrorViewSpecification implements ViewSpecification {
     }
 
     public View createView(Content content, ViewAxis axis) {
-        UserAction actions[] = new UserAction[] {
+        ButtonAction actions[] = new ButtonAction[] {
                 new ActionDialogSpecification.CloseAction()
          };
         return new DialogBorder(new ButtonBorder(actions,new ScrollBorder(new ErrorView(content, this, null))), true);

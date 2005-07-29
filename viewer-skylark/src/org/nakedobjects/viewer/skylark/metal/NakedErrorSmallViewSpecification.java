@@ -8,7 +8,6 @@ import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
-import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -30,7 +29,7 @@ public class NakedErrorSmallViewSpecification implements ViewSpecification {
 
     public View createView(Content content, ViewAxis axis) {
         // TODO extract the 'close window' action
-        UserAction actions[] = new UserAction[] { new ActionDialogSpecification.CloseAction() };
+        ButtonAction actions[] = new ButtonAction[] { new ActionDialogSpecification.CloseAction() };
         return new DialogBorder(new ButtonBorder(actions, new SmallErrorView(content, this, null)), false);
     }
 
