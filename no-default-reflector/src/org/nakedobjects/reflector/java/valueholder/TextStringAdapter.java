@@ -1,23 +1,18 @@
-package org.nakedobjects.reflector.java.value;
+package org.nakedobjects.reflector.java.valueholder;
 
-import org.nakedobjects.application.ValueParseException;
-import org.nakedobjects.application.valueholder.BusinessValueHolder;
-import org.nakedobjects.object.TextEntryParseException;
+import org.nakedobjects.application.valueholder.TextString;
 import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;
+import org.nakedobjects.object.value.StringValue;
 
-public class BusinessValueAdapter extends AbstractNakedValue {
-    private final BusinessValueHolder adaptee;
+public class TextStringAdapter extends AbstractNakedValue implements StringValue {
+    private final TextString adaptee;
     
-    public BusinessValueAdapter(final BusinessValueHolder adaptee) {
+    public TextStringAdapter(final TextString adaptee) {
         this.adaptee = adaptee;
     }
     
     public void parseTextEntry(String text) {
-        try{
-            adaptee.parseUserEntry(text);
-        } catch(ValueParseException e) {
-            throw new TextEntryParseException(e.getMessage(), e);
-        }
+        adaptee.setValue(text);
     }
 
     public byte[] asEncodedString() {
@@ -32,36 +27,50 @@ public class BusinessValueAdapter extends AbstractNakedValue {
     public Object getObject() {
         return adaptee;
     }
-
+ 
     public String getIconName() {
         return "text";
     }
     
     public String toString() {
-        return "POJO BusinessValueAdapter: " + adaptee.titleString();
+        return "POJO TextStringAdapter: " + adaptee.stringValue();
     }
-    
+
     public String titleString() {
         return adaptee.titleString();
     }
-    
 
     public String getValueClass() {
         return adaptee.getClass().getName();
     }
     
+    public int getMinumumLength() {
+        return adaptee.getMinimumLength();
+    }
+    
+    public int getMaximumLength() {
+        return adaptee.getMaximumLength();
+    }
+
+    public String stringValue() {
+        return adaptee.stringValue();
+    }
+
+    public void setValue(String value) {
+        adaptee.setValue(value);
+    }
+    
     public boolean canClear() {
         return true;
     }
-    
+
     public void clear() {
-      	adaptee.clear();
+        adaptee.clear();
     }
     
     public boolean isEmpty() {
         return adaptee.isEmpty();
     }
-    
 }
 
 

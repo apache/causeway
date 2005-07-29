@@ -1,8 +1,8 @@
 package org.nakedobjects.reflector.java.value;
 
-import org.nakedobjects.application.ValueParseException;
 import org.nakedobjects.application.value.IntegerNumber;
 import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;
 import org.nakedobjects.object.value.IntegerValue;
 
@@ -42,7 +42,7 @@ public class IntegerNumberAdapter extends AbstractNakedValue implements IntegerV
             try {
                 value = new IntegerNumber(FORMAT.parse(entry).intValue());
             } catch (ParseException e) {
-                throw new ValueParseException("Invalid number", e);
+                throw new TextEntryParseException("Invalid number", e);
             }
         }
     }

@@ -1,82 +1,79 @@
-package org.nakedobjects.reflector.java.value;
+package org.nakedobjects.reflector.java.valueholder;
 
-import org.nakedobjects.application.valueholder.Logical;
+import org.nakedobjects.application.valueholder.Color;
 import org.nakedobjects.object.InvalidEntryException;
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;
-import org.nakedobjects.object.value.BooleanValue;
+import org.nakedobjects.object.value.ColorValue;
 
-public class LogicalValueObjectAdapter extends AbstractNakedValue implements BooleanValue {
-    private final Logical adaptee;
+public class ColorValueObjectAdapter extends AbstractNakedValue implements ColorValue {
+    private final Color adaptee;
     
-    public LogicalValueObjectAdapter(Logical adaptee) {
+    public ColorValueObjectAdapter(Color adaptee) {
         this.adaptee = adaptee;
     }
-
-    public boolean isSet() {
-        return adaptee.isSet();
+    
+    public int color() {
+        return adaptee.intValue();
     }
 
-    public void set() {
-        adaptee.set();
+    public void setColor(int color) {
+        adaptee.setValue(color);
     }
-
-    public void reset() {
-        adaptee.reset();
-    }
-
+   
     public String getIconName() {
         return "boolean";
     }
     
     public String toString() {
-        return "POJO LogicalAdapter: " + adaptee.isSet();
+        return "POJO ColorAdapter: #" + Integer.toHexString(color()).toUpperCase();
     }
-    
-    public void toggle() {
-        adaptee.setValue(! adaptee.isSet());
-    }
-    
-
-    
-    
+        
     
     // Naked methods
     public void parseTextEntry(String text) throws InvalidEntryException {
-        if("true".startsWith(text.toLowerCase())) {
-            set();
-        } else if("false".startsWith(text.toLowerCase())) {
-            reset();
+        if (text == null || text.trim().equals("")) {
+            adaptee.clear();
         } else {
-            throw new InvalidEntryException();
+            try {
+              	if(text.startsWith("0x")) {
+              	  setColor(Integer.parseInt(text.substring(2), 16));
+            	} else if(text.startsWith("#")) {
+            	    setColor(Integer.parseInt(text.substring(1), 16));
+                	} else {
+                	    setColor(Integer.parseInt(text));
+            	}
+            } catch (NumberFormatException e) {
+                throw new TextEntryParseException("Invalid number", e);
+            }
         }
     }
 
     public byte[] asEncodedString() {
-        return new byte[] {(byte) (isSet() ? 'T' : 'F')};
+        if(adaptee.isEmpty()) {
+            return "NULL".getBytes();
+        } else {
+            return String.valueOf(color()).getBytes();
+        }
     }
 
     public void restoreFromEncodedString(byte[] data) {
-        if(data.length != 1) {
-            throw new NakedObjectRuntimeException("Invalid data for logical, expected one byte, got " + data.length);
-        }
-        if(data[0] == 'T') {
-            set();
-        } else if (data[0] == 'F') {
-            reset();
+        String text = new String(data);
+        if(text == null || text.equals("NULL")) {
+            adaptee.clear();
         } else {
-            throw new NakedObjectRuntimeException("Invalid data for logical, expected 'T' or 'F', but  got " + data[0]);
+            setColor(Integer.valueOf(text).intValue());
         }
     }
 
     public String titleString() {
-        return isSet() ? "True" : "False";
+        return adaptee.titleString();
     }
     
     public Object getObject() {
         return adaptee;
     }
-   
+    
 
     public String getValueClass() {
         return adaptee.getClass().getName();

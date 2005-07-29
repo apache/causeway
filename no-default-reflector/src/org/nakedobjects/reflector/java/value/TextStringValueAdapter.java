@@ -1,31 +1,31 @@
 package org.nakedobjects.reflector.java.value;
 
-import org.nakedobjects.application.valueholder.TextString;
+import org.nakedobjects.application.value.TextString;
 import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;
 import org.nakedobjects.object.value.StringValue;
 
-public class TextStringAdapter extends AbstractNakedValue implements StringValue {
-    private final TextString adaptee;
+public class TextStringValueAdapter extends AbstractNakedValue implements StringValue {
+    private TextString value;
     
-    public TextStringAdapter(final TextString adaptee) {
-        this.adaptee = adaptee;
+    public TextStringValueAdapter(final TextString adaptee) {
+        this.value = adaptee;
     }
     
     public void parseTextEntry(String text) {
-        adaptee.setValue(text);
+        value = new TextString(text);
     }
 
     public byte[] asEncodedString() {
-        return adaptee.asEncodedString().getBytes();
+        return value.text().getBytes();
     }
 
     public void restoreFromEncodedString(byte[] data) {
         String text = new String(data);
-        adaptee.restoreFromEncodedString(text);
+        value = new TextString(text);
     }
 
     public Object getObject() {
-        return adaptee;
+        return value;
     }
  
     public String getIconName() {
@@ -33,31 +33,31 @@ public class TextStringAdapter extends AbstractNakedValue implements StringValue
     }
     
     public String toString() {
-        return "POJO TextStringAdapter: " + adaptee.stringValue();
+        return "TextStringValueAdapter: " + value.text();
     }
 
     public String titleString() {
-        return adaptee.titleString();
+        return value.text();
     }
 
     public String getValueClass() {
-        return adaptee.getClass().getName();
+        return value.getClass().getName();
     }
     
     public int getMinumumLength() {
-        return adaptee.getMinimumLength();
+        return 0; //value.getMinimumLength();
     }
     
     public int getMaximumLength() {
-        return adaptee.getMaximumLength();
+        return 0; //value.getMaximumLength();
     }
 
     public String stringValue() {
-        return adaptee.stringValue();
+        return value.text();
     }
 
     public void setValue(String value) {
-        adaptee.setValue(value);
+        this.value = new TextString(value);
     }
     
     public boolean canClear() {
@@ -65,11 +65,11 @@ public class TextStringAdapter extends AbstractNakedValue implements StringValue
     }
 
     public void clear() {
-        adaptee.clear();
+        value = new TextString("");
     }
     
     public boolean isEmpty() {
-        return adaptee.isEmpty();
+        return value.text().equals("");
     }
 }
 
