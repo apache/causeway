@@ -1,6 +1,8 @@
  package org.nakedobjects.viewer.skylark.core;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.utility.Assert;
@@ -13,6 +15,8 @@ import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.MenuOption;
+import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Size;
@@ -21,6 +25,7 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewDrag;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
+import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.DragContentIcon;
 
 
@@ -126,7 +131,10 @@ public abstract class ObjectView extends AbstractView {
             }
         }
     }
-
+    
+    public void invalidateContent() {
+        super.invalidateLayout();
+    }
 
     public void secondClick(Click click) {
         View subview = subviewFor(click.getLocation());
@@ -146,7 +154,18 @@ public abstract class ObjectView extends AbstractView {
        return super.toString() + ": " + getContent(); 
     }
 
-}
+
+    public void contentMenuOptions(MenuOptionSet options) {
+        super.contentMenuOptions(options);
+
+        options.add(MenuOptionSet.OBJECT, new MenuOption("Reload") {
+            public void execute(Workspace workspace, View view, Location at) {
+                NakedObject object = (NakedObject) getContent().getNaked();
+                NakedObjects.getObjectManager().reload(object);
+            }
+        });
+    }
+ }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
