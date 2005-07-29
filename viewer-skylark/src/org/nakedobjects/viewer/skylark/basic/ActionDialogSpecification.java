@@ -7,7 +7,6 @@ import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ParameterContent;
 import org.nakedobjects.viewer.skylark.Skylark;
-import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -16,6 +15,7 @@ import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.core.BackgroundTask;
 import org.nakedobjects.viewer.skylark.core.BackgroundThread;
+import org.nakedobjects.viewer.skylark.metal.AbstractButtonAction;
 import org.nakedobjects.viewer.skylark.metal.ButtonAction;
 import org.nakedobjects.viewer.skylark.metal.ButtonBorder;
 import org.nakedobjects.viewer.skylark.metal.DialogBorder;
@@ -26,18 +26,17 @@ import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 public class ActionDialogSpecification extends AbstractCompositeViewSpecification {
 
-    public static class CloseAction extends ButtonAction {
+    public static class CloseAction extends AbstractButtonAction {
         public CloseAction() {
             super("Cancel");
         }
 
         public void execute(Workspace workspace, View view, Location at) {
-            workspace.removeView(view.getView());
+            workspace.removeView(view);
         }
     }
 
     private static class DialogFormSubviews implements SubviewSpec {
-
         public View createSubview(Content content, ViewAxis axis) {
             if (content instanceof ValueParameter) {
                 ViewFactory factory = Skylark.getViewFactory();
@@ -62,13 +61,13 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
         }
     }
 
-    private static class ExecuteAction extends ButtonAction {
+    private static class ExecuteAction extends AbstractButtonAction {
         public ExecuteAction() {
             this("Apply");
         }
 
         public ExecuteAction(String name) {
-            super(name);
+            super(name, true);
         }
 
         public Consent disabled(View view) {
@@ -142,7 +141,7 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
     public View createView(Content content, ViewAxis axis) {
         // TODO reintroduce the 'Apply' notion, but under control from the method declaration
         // UserAction[] actions = new UserAction[] { new ExecuteAndCloseAction(), new CloseAction(), new ExecuteAction(), };
-        UserAction[] actions = new UserAction[] { new ExecuteAndCloseAction(), new CloseAction()};
+        ButtonAction[] actions = new ButtonAction[] { new ExecuteAndCloseAction(), new CloseAction()};
         return new DialogBorder(new ButtonBorder(actions, super.createView(content, new LabelAxis())), false);
     }
 
