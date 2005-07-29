@@ -103,6 +103,7 @@ public class XmlClient {
             proxyObjectManager.setUpdateNotifier(updateNotifier);
             connection.setUpdateNotifier(updateNotifier);
             
+            nakedObjects.init();
             
             SkylarkViewer skylark = new SkylarkViewer();
             skylark.setUpdateNotifier(updateNotifier);
@@ -112,7 +113,7 @@ public class XmlClient {
                 }
             });
             skylark.setApplication(new Context());
-            skylark.setExploration(false);
+            skylark.setExploration(true);
             skylark.init();
             
             /*
