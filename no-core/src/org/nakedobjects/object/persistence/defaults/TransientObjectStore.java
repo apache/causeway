@@ -19,6 +19,7 @@ import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.Debug;
 import org.nakedobjects.utility.DebugString;
 
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -57,6 +58,8 @@ public class TransientObjectStore implements NakedObjectStore {
                 TransientObjectStoreInstances ins = instancesFor(specification);
                 ins.add(object);
                 objects.put(object.getOid(), object);
+                
+                object.setOptimisticLock(object.getVersion() + 1, "user", new Date());
             }
 
             public NakedObject onObject() {
@@ -100,6 +103,8 @@ public class TransientObjectStore implements NakedObjectStore {
                 LOG.debug("   saving object " + object + " as instance of " + specification.getFullName());
                 TransientObjectStoreInstances ins = instancesFor(specification);
                 ins.save(object);
+                
+                object.setOptimisticLock(object.getVersion() + 1, "user", new Date());
             }
 
             public NakedObject onObject() {
