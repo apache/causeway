@@ -16,11 +16,6 @@ import org.apache.log4j.Logger;
 public class ViewUpdateNotifier extends DirtyObjectSetImpl implements DebugInfo {
     private static final Logger LOG = Logger.getLogger(ViewUpdateNotifier.class);
     protected Hashtable views = new Hashtable();
-//    private DirtyObjectSet viewChanges = new DirtyObjectSet();
-
-    public ViewUpdateNotifier() {
-//        NakedObjects.getObjectManager().addObjectChangedListener(viewChanges);
-    }
     
     public void add(View view) {
         Content content = view.getContent();
@@ -45,21 +40,7 @@ public class ViewUpdateNotifier extends DirtyObjectSetImpl implements DebugInfo 
             }
         }
     }
-/*
-    public void objectChanged(NakedObject object) {
-        Vector viewsToNotify = (Vector) views.get(object);
 
-        if (viewsToNotify == null || viewsToNotify.size() == 0) {
-            LOG.debug("No views to update for " + object);
-        } else {
-            for (int i = 0; i < viewsToNotify.size(); i++) {
-                View view = (View) viewsToNotify.elementAt(i);
-                LOG.info("object change notifications to: " + view + " for " + object);
-                view.update(object);
-            }
-        }
-    }
-*/
     public String getDebugData() {
         StringBuffer buf = new StringBuffer();
         Enumeration f = views.keys();
@@ -109,7 +90,6 @@ public class ViewUpdateNotifier extends DirtyObjectSetImpl implements DebugInfo 
 
     public void shutdown() {
         views.clear();
-        //viewChanges.shutdown();
     }
 
     public void invalidateViewsForChangedObjects() {
