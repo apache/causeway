@@ -37,7 +37,6 @@ public class CompositeView extends ObjectView {
 
     public void refresh() {
         View views[] = getSubviews();
-
         for (int i = 0; i < views.length; i++) {
             views[i].refresh();
         }

@@ -541,7 +541,7 @@ public abstract class AbstractView implements View {
 
     public String toString() {
         String name = getClass().getName();
-        return name.substring(name.lastIndexOf('.') + 1) + getId() + " " + getContent();
+        return name.substring(name.lastIndexOf('.') + 1) + getId() + ":" + getState() + ":" + getContent();
     }
 
     public void update(Naked object) {}
