@@ -55,7 +55,7 @@ public class DefaultPersistAlgorithm implements PersistAlgorithm {
                     continue;
                 }
                 if (!(fieldValue instanceof NakedObject)) {
-                    throw new NakedObjectRuntimeException();
+                    throw new NakedObjectRuntimeException(fieldValue + " is not a NakedObject");
                 }
                 makePersistent((NakedObject) fieldValue, manager);
             }
