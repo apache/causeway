@@ -22,14 +22,13 @@ public class HelpView extends AbstractView implements View, TextBlockTarget {
 	            name = content.getHint().getName();
 	            description = content.getHint().getDescription();
 	        } else {
-	            name = content.getNaked().titleString();
+	            name = content.title();
 	        }
         }
         
-        String text = (name == null ? "(no name)" : name)  + "\n\n" + (description == null ? "(no description)" : description);
+        String text = (name == null ? "" : (name  + "\n\n")) + (description == null ? "" : description);
         content = new TextContent(this, 10, TextContent.WRAPPING);
         content.setText(text);
-   //     content.setNoDisplayLines(2);
     }
 
     public void draw(Canvas canvas) {
@@ -46,8 +45,7 @@ public class HelpView extends AbstractView implements View, TextBlockTarget {
         canvas.drawRoundedRectangle(x + 2, y + 2, xEntent - 4, yExtent - 4, arc, arc, Style.BLACK);
 
         canvas.drawText("Help", x + 10, y + 20, Style.BLACK, Style.TITLE);
-        canvas.drawText(content.getText(), x + 10, y + 40, Style.BLACK, Style.NORMAL);
-   //     canvas.drawText(description == null ? "(no description)" : description, x + 10, y + 55, Style.BLACK, Style.NORMAL);
+     //   canvas.drawText(content.getText(), x + 10, y + 40, Style.BLACK, Style.NORMAL);
         
         y += 65;
         String[] lines = content.getDisplayLines();
