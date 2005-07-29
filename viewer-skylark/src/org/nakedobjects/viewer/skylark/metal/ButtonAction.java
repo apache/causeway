@@ -1,30 +1,11 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.control.Allow;
-import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.UserAction;
-import org.nakedobjects.viewer.skylark.View;
 
+public interface ButtonAction extends UserAction {
 
-public abstract class ButtonAction implements UserAction {
-    private String name;
+    boolean isDefault();
 
-    public ButtonAction(String name) {
-        super();
-        this.name = name;
-    }
-
-    public String getName(View view) {
-        return name;
-    }
-    
-    public String getDescription(View view) {
-        return null;
-    }
-
-    public Consent disabled(View view) {
-        return Allow.DEFAULT;
-    }
 }
 
 
