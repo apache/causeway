@@ -82,6 +82,12 @@ public class Location {
         System.out.println("  " + customer.title());
     }
 
+
+    public Booking actionRemoteNewBookingFromTransientLocation(Location location) {
+        container.makePersistent(this);
+        return actionNewBooking(location);
+    }
+    
     public Booking actionNewBooking(Location location) {
         Booking booking = (Booking) container.createTransientInstance(Booking.class);
         Customer customer = location.getCustomer();

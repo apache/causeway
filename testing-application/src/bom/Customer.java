@@ -151,6 +151,12 @@ public class Customer {
         return booking;
     }
 
+    public void actionNewBookingNoReturn() {
+        Booking booking = (Booking) container.createInstance(Booking.class);
+        booking.associateCustomer(this);
+        booking.setPaymentMethod(getPreferredPaymentMethod());
+    }
+
     public Location actionNewLocation() {
         Location l = new Location();
         l.setContainer(container);

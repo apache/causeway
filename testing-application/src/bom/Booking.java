@@ -96,6 +96,10 @@ public class Booking {
     }
 
     public void actionConfirm() {
+        if(getPickUp() == null || getDropOff() == null) {
+            throw new NullPointerException();
+        }
+        
         getStatus().setValue("Confirmed");
 
         /* The locations used are added to the customer's Locations field.
