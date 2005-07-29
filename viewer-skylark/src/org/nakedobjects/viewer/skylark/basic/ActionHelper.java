@@ -56,7 +56,7 @@ public class ActionHelper {
             } else {
                 parameters[i] = NakedObjects.getObjectLoader().createAdapterForValue(defaultValues[i]);
                 if(parameters[i] == null) {
-                    parameters[i] = NakedObjects.getObjectLoader().createAdapterForTransient(defaultValues[i]);
+                    parameters[i] = NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(defaultValues[i]);
                 }
             }
         }
