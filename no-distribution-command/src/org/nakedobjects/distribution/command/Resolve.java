@@ -1,24 +1,22 @@
 package org.nakedobjects.distribution.command;
 
 import org.nakedobjects.distribution.ObjectData;
+import org.nakedobjects.distribution.ReferenceData;
 import org.nakedobjects.distribution.ServerDistribution;
-import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.ToString;
 
 
 public class Resolve extends AbstractRequest {
-    private final Oid objectOid;
-    private final String objectType;
+    private final ReferenceData target;
 
-    public Resolve(Session session, Oid objectOid, String objectType) {
+    public Resolve(Session session, ReferenceData target) {
         super(session);
-        this.objectOid = objectOid;
-        this.objectType = objectType;
+        this.target = target;
     }
 
     public void execute(ServerDistribution sd) {
-        setResponse(sd.resolveImmediately(session, objectOid, objectType));
+        setResponse(sd.resolveImmediately(session, target));
     }
 
     public ObjectData getUpdateData() {
@@ -27,8 +25,7 @@ public class Resolve extends AbstractRequest {
 
     public String toString() {
         ToString str = new ToString(this);
-        str.append("oid", objectOid);
-        str.append("type", objectType);
+        str.append("target", target);
         return str.toString();
     }
 }

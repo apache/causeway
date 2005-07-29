@@ -1,27 +1,23 @@
 package org.nakedobjects.distribution.command;
 
+import org.nakedobjects.distribution.ReferenceData;
 import org.nakedobjects.distribution.ServerDistribution;
-import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.security.Session;
 
 public class SetAssociation extends AbstractRequest {
     private final String fieldIdentifier;
-    private final Oid objectOid;
-    private final String objectType;
-    private final Oid associateOid;
-    private final String associateType;
+    private final ReferenceData target;
+    private final ReferenceData associate;
 
-    public SetAssociation(Session session, String fieldIdentifier, Oid objectOid, String objectType, Oid associateOid, String associateType) {
+    public SetAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {
         super(session);
         this.fieldIdentifier = fieldIdentifier;
-        this.objectOid = objectOid;
-        this.objectType = objectType;
-        this.associateOid = associateOid;
-        this.associateType = associateType;
+        this.target = target;
+        this.associate = associate;
     }
     
     public void execute(ServerDistribution sd) {
-        sd.setAssociation(session, fieldIdentifier, objectOid, objectType, associateOid, associateType);
+        sd.setAssociation(session, fieldIdentifier, target, associate);
     }
 
 

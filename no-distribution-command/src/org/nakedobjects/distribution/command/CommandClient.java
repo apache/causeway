@@ -4,6 +4,7 @@ import org.nakedobjects.distribution.ClientDistribution;
 import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.DataHelper;
 import org.nakedobjects.distribution.ObjectData;
+import org.nakedobjects.distribution.ReferenceData;
 import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.control.Hint;
@@ -17,7 +18,7 @@ import org.apache.log4j.Logger;
 
 
 public abstract class CommandClient implements ClientDistribution {
-    private static final Logger LOG = Logger.getLogger(CommandClient.class);    
+    private static final Logger LOG = Logger.getLogger(CommandClient.class);
     private DirtyObjectSet updateNotifier;
 
     public ObjectData[] allInstances(Session session, String fullName, boolean includeSubclasses) {
@@ -26,41 +27,37 @@ public abstract class CommandClient implements ClientDistribution {
         return request.getInstances();
     }
 
-    public void clearAssociation(Session session, String fieldIdentifier, Oid objectOid, String objectType, Oid associateOid,
-            String associateType) {
-        Request request = new ClearAssociation(session, fieldIdentifier, objectOid, objectType, associateOid, associateType);
+    public void clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {
+        Request request = new ClearAssociation(session, fieldIdentifier, target, associate);
         execute(request);
     }
 
-    public void destroyObject(Session session, Oid oid, String type) {
+    public void destroyObject(Session session, ReferenceData target) {
         throw new NotImplementedException();
     }
 
-    public Data executeAction(Session session, String actionType, String actionIdentifier, String[] parameterTypes,
-            Oid objectOid, String objectType, Data[] parameters) {
-        ExecuteAction request = new ExecuteAction(session, actionType, actionIdentifier, parameterTypes, objectOid, objectType,
-                parameters);
+    public Data executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
+        ExecuteAction request = new ExecuteAction(session, actionType, actionIdentifier, target, parameters);
         execute(request);
         return request.getActionResult();
     }
 
     public ObjectData[] findInstances(Session session, InstancesCriteria criteria) {
-        if(criteria instanceof TitleCriteria) {
-	        FindInstancesByTitle request = new FindInstancesByTitle(session, (TitleCriteria) criteria);
-	        execute(request);
-	        return request.getInstances();
+        if (criteria instanceof TitleCriteria) {
+            FindInstancesByTitle request = new FindInstancesByTitle(session, (TitleCriteria) criteria);
+            execute(request);
+            return request.getInstances();
         } else {
             throw new NakedObjectRuntimeException();
         }
     }
 
-    public Hint getActionHint(Session session, String actionType, String actionIdentifier, String[] parameterTypes,
-            Oid objectOid, String objectType, Data[] parameters) {
+    public Hint getActionHint(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
         throw new NotImplementedException();
     }
 
-    public ObjectData resolveImmediately(Session session, Oid oid, String fullName) {
-        Resolve request = new Resolve(session, oid, fullName);
+    public ObjectData resolveImmediately(Session session, ReferenceData target) {
+        Resolve request = new Resolve(session, target);
         execute(request);
         return request.getUpdateData();
     }
@@ -90,7 +87,7 @@ public abstract class CommandClient implements ClientDistribution {
         }
         LOG.debug("response " + response);
         request.setResponse(response.getObject());
-        
+
         ObjectData[] updates = response.getUpdates();
         for (int i = 0; i < updates.length; i++) {
             LOG.debug("update " + updates[i]);
@@ -100,30 +97,29 @@ public abstract class CommandClient implements ClientDistribution {
 
     protected abstract Response executeRemotely(Request request);
 
-    public void setAssociation(Session session, String fieldIdentifier, Oid objectOid, String objectType, Oid associateOid,
-            String associateType) {
-        Request request = new SetAssociation(session, fieldIdentifier, objectOid, objectType, associateOid, associateType);
+    public void setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {
+        Request request = new SetAssociation(session, fieldIdentifier, target, associate);
         execute(request);
     }
 
-    public void setValue(Session session, String fieldIdentifier, Oid oid, String objectType, Object associate) {
-        Request request = new SetValue(session, fieldIdentifier, oid, objectType, associate);
+    public void setValue(Session session, String fieldIdentifier, ReferenceData target, Object associate) {
+        Request request = new SetValue(session, fieldIdentifier, target, associate);
         execute(request);
     }
-    
+
     public void abortTransaction(Session session) {
         Request request = new AbortTransaction(session);
-        execute(request);    
+        execute(request);
     }
 
     public void endTransaction(Session session) {
         Request request = new EndTransaction(session);
-        execute(request);    
+        execute(request);
     }
 
     public void startTransaction(Session session) {
         Request request = new StartTransaction(session);
-        execute(request);        
+        execute(request);
     }
 
     public void setUpdateNotifier(DirtyObjectSet updateNotifier) {
@@ -133,25 +129,21 @@ public abstract class CommandClient implements ClientDistribution {
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if
+ * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ * 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
+ * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */
