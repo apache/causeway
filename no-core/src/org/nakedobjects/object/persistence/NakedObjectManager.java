@@ -116,6 +116,8 @@ public interface NakedObjectManager extends NakedObjectsComponent, DebugInfo {
 
     void reset();
 
+    void reload(NakedObject object);
+    
     /**
      * Re-initialises the fields of an object. If the object is unresolved then
      * the object's missing data should be retreieved from the persistence

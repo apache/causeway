@@ -38,10 +38,7 @@ public class MockObjectManager extends AbstractNakedObjectManager {
         return false;
     }
 
-   /** @deprecated */
-    public void setupAddClass(Class cls) {
-//        classManager.setupAddNakedClass(cls);
-    }
+    public void addObjectChangedListener(DirtyObjectSet listener) {}
    
     public void assertAction(int i, String action) {
         if (i >= actions.size()) {
@@ -64,11 +61,23 @@ public class MockObjectManager extends AbstractNakedObjectManager {
         actions.addElement("end transaction");
     }
 
+    public NakedError generatorError(String message, Exception e) {
+        return null;
+    }
+
     public String getDebugData() {
         throw new NotImplementedException();
     }
 
     public String getDebugTitle() {
+        throw new NotImplementedException();
+    }
+
+    protected NakedObject[] getInstances(InstancesCriteria criteria) {
+        return null;
+    }
+
+    public NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) {
         throw new NotImplementedException();
     }
 
@@ -83,15 +92,11 @@ public class MockObjectManager extends AbstractNakedObjectManager {
         throw new NotImplementedException();
     }
 
-    public NakedObject[] getInstances(NakedObject pattern, boolean includeSubclasses) {
+    public NakedClass getNakedClass(NakedObjectSpecification nakedClass) {
         throw new NotImplementedException();
     }
 
     public NakedObject getObject(Oid oid, NakedObjectSpecification hint) {
-        throw new NotImplementedException();
-    }
-
-    public NakedClass getNakedClass(NakedObjectSpecification nakedClass) {
         throw new NotImplementedException();
     }
     
@@ -113,11 +118,17 @@ public class MockObjectManager extends AbstractNakedObjectManager {
         actions.addElement("object changed " + object);
     }
 
+    public void reload(NakedObject object) {}
+
     public void reset() {
         actions.removeAllElements();
     }
 
     public void resolveImmediately(NakedObject object) {}
+
+    public void resolveLazily(NakedObject object, NakedObjectField field) {}
+
+    public void saveChanges() {}
 
     public long serialNumber(String sequence) {
         actions.addElement("serial number");
@@ -130,20 +141,6 @@ public class MockObjectManager extends AbstractNakedObjectManager {
     public void startTransaction() {
         actions.addElement("start transaction");
     }
-
-    public NakedError generatorError(String message, Exception e) {
-        return null;
-    }
-
-    protected NakedObject[] getInstances(InstancesCriteria criteria) {
-        return null;
-    }
-
-    public void saveChanges() {}
-
-    public void resolveLazily(NakedObject object, NakedObjectField field) {}
-
-    public void addObjectChangedListener(DirtyObjectSet listener) {}
 }
 
 /*

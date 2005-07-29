@@ -341,6 +341,9 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
             throw new NakedObjectRuntimeException(e);
         }
     }
+    
+    public void reload(NakedObject object) {}
+
 
     public void resolveImmediately(NakedObject object) {
         ResolveState resolveState = object.getResolveState();
