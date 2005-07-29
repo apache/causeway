@@ -4,38 +4,20 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 
 
 public class ObjectStoreException extends NakedObjectRuntimeException {
-    private final Throwable cause;
-
     public ObjectStoreException() {
         super();
-        cause = null;
     }
 
-    public ObjectStoreException(String s) {
-        super(s);
-        cause = null;
+    public ObjectStoreException(String message) {
+        super(message);
     }
 
-    public ObjectStoreException(String s, Throwable cause) {
-        super(s);
-        this.cause = cause;
+    public ObjectStoreException(String message, Throwable cause) {
+        super(message, cause);
     }
 
     public ObjectStoreException(Throwable cause) {
-        super(cause.getMessage());
-        this.cause = cause;
-    }
-
-    public final Throwable getCause() {
-        return cause;
-    }
-
-    public String toString() {
-        if (cause == null) {
-            return super.toString();
-        } else {
-            return super.toString() + ": " + cause.getMessage();
-        }
+        super(cause);
     }
 }
 

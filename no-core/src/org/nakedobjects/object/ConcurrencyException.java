@@ -2,9 +2,6 @@ package org.nakedobjects.object;
 
 import org.nakedobjects.object.persistence.ObjectStoreException;
 
-/**
-  * TODO this should probably be passed through the object manager to the client
-  */
 public class ConcurrencyException extends ObjectStoreException {
 
 	public ConcurrencyException() {
@@ -22,7 +19,6 @@ public class ConcurrencyException extends ObjectStoreException {
 	public ConcurrencyException(String message, Throwable cause) {
 		super(message, cause);
 	}
-
 }
 
 
