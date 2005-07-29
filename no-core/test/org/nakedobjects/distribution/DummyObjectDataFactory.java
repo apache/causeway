@@ -1,7 +1,6 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.utility.NotImplementedException;
 
 
 class DummyObjectDataFactory extends DataFactory {
@@ -13,8 +12,12 @@ class DummyObjectDataFactory extends DataFactory {
         return new DummyValueData(object, fullName);
     }
 
-    protected ExceptionData createExceptionData(String type, String message, String trace) {
-        throw new NotImplementedException();
+    protected NullData createNullData(String type) {
+        return null;
+    }
+
+    protected ReferenceData createReferenceData(String type, Oid oid, long version) {
+        return null;
     }
 }
 

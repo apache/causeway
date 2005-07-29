@@ -136,7 +136,7 @@ public class DateAdapter extends AbstractNakedValue implements DateValue {
     }
     
     public String toString() {
-        return "POJO DataAdapter: " + date;
+        return "DataAdapter: " + date;
     }
 }
 

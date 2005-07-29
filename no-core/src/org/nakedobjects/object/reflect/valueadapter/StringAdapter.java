@@ -40,7 +40,7 @@ public class StringAdapter extends AbstractNakedValue implements StringValue {
     }
 
     public String toString() {
-        return "POJO StringAdapter: " + text;
+        return "StringAdapter: " + text;
     }
 
     public String titleString() {

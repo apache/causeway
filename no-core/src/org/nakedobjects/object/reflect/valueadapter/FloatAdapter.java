@@ -51,6 +51,10 @@ public class FloatAdapter extends AbstractNakedValue implements FloatingPointVal
         return FORMAT.format(value);
     }
 
+    public String toString() {
+        return "FloatAdapter: " + value;
+    }
+
     public String getValueClass() {
         return float.class.getName();
     }

@@ -97,7 +97,7 @@ public class DataFactoryTest extends TestCase {
         DummyNakedValue dummyNakedValue = new DummyNakedValue();
         dummyNakedValue.setupObject(new Integer(123));
 
-        ValueData data = (ValueData) factory.createDataForParameter(dummyNakedValue);
+        ValueData data = (ValueData) factory.createDataForParameter("", dummyNakedValue);
 
         assertEquals(dummyNakedValue.getSpecification().getFullName(), data.getType());
         assertEquals(new Integer(123), data.getValue());
@@ -109,7 +109,7 @@ public class DataFactoryTest extends TestCase {
         MockOid rootOid = new MockOid(1);
         rootObject.setupOid(rootOid);
 
-        ObjectData rootData = (ObjectData) factory.createDataForParameter(rootObject);
+        ObjectData rootData = (ObjectData) factory.createDataForParameter("", rootObject);
         assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
 
         assertEquals(rootOid, rootData.getOid());
@@ -123,7 +123,7 @@ public class DataFactoryTest extends TestCase {
         rootObject.setupResolveState(ResolveState.TRANSIENT);
         referencedObjectField.setupResolveState(ResolveState.TRANSIENT);
 
-        ObjectData rootData = (ObjectData) factory.createDataForParameter(rootObject);
+        ObjectData rootData = (ObjectData) factory.createDataForParameter("", rootObject);
         assertEquals(ResolveState.SERIALIZING_TRANSIENT, rootObject.getResolveState());
 
         assertEquals(null, rootData.getOid());
