@@ -1,5 +1,6 @@
 package org.nakedobjects.reflector.java.reflect;
 
+import org.nakedobjects.application.value.Date;
 import org.nakedobjects.application.value.IntegerNumber;
 import org.nakedobjects.application.valueholder.BusinessValueHolder;
 import org.nakedobjects.application.valueholder.Color;
@@ -10,11 +11,13 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.Reflector;
-import org.nakedobjects.reflector.java.value.BusinessValueAdapter;
-import org.nakedobjects.reflector.java.value.ColorValueObjectAdapter;
+import org.nakedobjects.reflector.java.value.DateValueAdapter;
 import org.nakedobjects.reflector.java.value.IntegerNumberAdapter;
-import org.nakedobjects.reflector.java.value.LogicalValueObjectAdapter;
-import org.nakedobjects.reflector.java.value.TextStringAdapter;
+import org.nakedobjects.reflector.java.value.TextStringValueAdapter;
+import org.nakedobjects.reflector.java.valueholder.BusinessValueAdapter;
+import org.nakedobjects.reflector.java.valueholder.ColorValueObjectAdapter;
+import org.nakedobjects.reflector.java.valueholder.LogicalValueObjectAdapter;
+import org.nakedobjects.reflector.java.valueholder.TextStringAdapter;
 
 import java.util.Vector;
 
@@ -36,6 +39,10 @@ public class JavaReflectorFactory extends ReflectorFactory {
             return new ColorValueObjectAdapter((Color) object);
         } else if (object instanceof IntegerNumber){
             return new IntegerNumberAdapter((IntegerNumber) object);
+        } else if (object instanceof Date){
+            return new DateValueAdapter((Date) object);
+        } else if (object instanceof org.nakedobjects.application.value.TextString){
+            return new TextStringValueAdapter((org.nakedobjects.application.value.TextString) object);
         } else if (object instanceof BusinessValueHolder ){
             return new BusinessValueAdapter((BusinessValueHolder) object);
         } else {
