@@ -84,7 +84,8 @@ public class TestViews {
     protected Workspace workspace() {
         TestWorkspaceView workspace = new TestWorkspaceView(null);
         // NOTE - viewer seems to ignore the placement of the workspace view
-        workspace.setLocation(new Location(200, 200));
+        // TODO fix the viewer so the root view is displayed at specified location
+        //workspace.setLocation(new Location(50, 50));
         workspace.setSize(workspace.getRequiredSize());
         return workspace;
     }
