@@ -1,5 +1,6 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionParameterSet;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
@@ -14,6 +15,8 @@ public interface NakedObject extends Naked {
 
     void checkLock(long version);
 
+    void clearAssociation(NakedObjectAssociation specification, NakedObject ref);
+
     void clearCollection(OneToManyAssociation association);
 
     void clearValue(OneToOneAssociation association);
@@ -26,21 +29,25 @@ public interface NakedObject extends Naked {
      */
     void destroyed();
 
+    Naked execute(Action action, Naked[] parameters);
+
     NakedObject getAssociation(OneToOneAssociation field);
 
     Naked getField(NakedObjectField field);
 
     NakedObjectField[] getFields();
 
+    Hint getHint(Action action, Naked[] parameters);
+
     String getIconName();
 
     String getLabel(Action action);
 
     String getLabel(NakedObjectField field);
-    
-    ResolveState getResolveState();
 
     ActionParameterSet getParameters(Action action);
+    
+    ResolveState getResolveState();
 
     NakedValue getValue(OneToOneAssociation field);
 
