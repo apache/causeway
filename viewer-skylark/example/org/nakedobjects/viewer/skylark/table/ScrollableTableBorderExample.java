@@ -8,6 +8,7 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
+import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.example.ExampleViewSpecification;
 import org.nakedobjects.viewer.skylark.example.TestObjectViewWithDragging;
 import org.nakedobjects.viewer.skylark.example.TestViews;
@@ -20,6 +21,9 @@ public class ScrollableTableBorderExample extends TestViews {
     }
 
     protected void views(Workspace workspace) {
+        AbstractView.debug = true;
+        
+        
         NakedObject object = createExampleObjectForView();
         Content content = new RootObject(object);
         ViewSpecification specification = new ExampleViewSpecification();        

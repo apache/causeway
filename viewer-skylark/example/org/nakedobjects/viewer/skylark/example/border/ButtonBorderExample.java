@@ -7,7 +7,6 @@ import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.RootObject;
-import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
@@ -15,6 +14,7 @@ import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.example.ExampleViewSpecification;
 import org.nakedobjects.viewer.skylark.example.TestObjectView;
 import org.nakedobjects.viewer.skylark.example.TestViews;
+import org.nakedobjects.viewer.skylark.metal.ButtonAction;
 import org.nakedobjects.viewer.skylark.metal.ButtonBorder;
 
 
@@ -25,7 +25,7 @@ public class ButtonBorderExample extends TestViews {
     }
 
     protected void views(Workspace workspace) {
-        UserAction[] actions = new UserAction[] { new UserAction() {
+        ButtonAction[] actions = new ButtonAction[] { new ButtonAction() {
 
             public Consent disabled(View view) {
                 return Allow.DEFAULT;
@@ -42,9 +42,13 @@ public class ButtonBorderExample extends TestViews {
             public String getName(View view) {
                 return "Action";
             }
+            
+            public boolean isDefault() {
+                return true;
+            }
         },
 
-        new UserAction() {
+        new ButtonAction() {
 
             public Consent disabled(View view) {
                 return Veto.DEFAULT;
@@ -60,6 +64,10 @@ public class ButtonBorderExample extends TestViews {
 
             public String getName(View view) {
                 return "Disabled";
+            }
+            
+            public boolean isDefault() {
+                return false;
             }
         } };
 

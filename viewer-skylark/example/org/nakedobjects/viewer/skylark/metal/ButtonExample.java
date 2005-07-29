@@ -3,7 +3,6 @@ import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.example.TestViews;
@@ -16,8 +15,8 @@ public class ButtonExample extends TestViews {
     }
 
     protected void views(Workspace workspace) {
-        UserAction action = 
-                new UserAction() {
+        ButtonAction action = 
+                new ButtonAction() {
 
                     public Consent disabled(View view) {
                         return Allow.DEFAULT;
@@ -33,7 +32,12 @@ public class ButtonExample extends TestViews {
 
                     public String getName(View view) {
                         return "Action";
-                    }};
+                    }
+        
+                    public boolean isDefault() {
+                        return true;
+                    }
+        };
    
         
         View view = new Button(action, 28, null);
@@ -42,8 +46,8 @@ public class ButtonExample extends TestViews {
         workspace.addView(view);
         
         
-        UserAction action2 = 
-            new UserAction() {
+        ButtonAction action2 = 
+            new ButtonAction() {
 
                 public Consent disabled(View view) {
                     return Veto.DEFAULT;
@@ -59,7 +63,14 @@ public class ButtonExample extends TestViews {
 
                 public String getName(View view) {
                     return "Press Me Now!";
-                }};
+                }
+                
+
+                public boolean isDefault() {
+                    return false;
+                }
+                
+        };
 
                 
                 View view2 = new Button(action2, 28, null);
