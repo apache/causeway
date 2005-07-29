@@ -4,6 +4,11 @@ import org.nakedobjects.object.reflect.MemberIdentifier;
 
 public class HelpManagerAssist implements HelpManager {
     private HelpManager decorated;
+    private boolean showIdentifier = false;
+    
+    public void setShowIdentifier(boolean showIdentifier) {
+        this.showIdentifier = showIdentifier;
+    }
     
     public void setDecorated(HelpManager decorated) {
         this.decorated = decorated;
@@ -14,7 +19,7 @@ public class HelpManagerAssist implements HelpManager {
         if(decorated != null) {
             help = decorated.help(identifier);
         }
-        return identifier.toString() + "\n\n" + help;
+        return showIdentifier ?  (identifier.toString() + "\n\n") : "" + help;
     }
 
     
