@@ -12,11 +12,12 @@ public class JavaObjectData implements ObjectData {
     private boolean resolved;
     private long version;
 
-    public JavaObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved) {
+    public JavaObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved, long version) {
         this.oid = oid;
         this.type = type;
         this.fieldContent = fieldContent;
         this.resolved = resolved;
+        this.version = version;
     }
 
     public Object[] getFieldContent() {
@@ -44,7 +45,8 @@ public class JavaObjectData implements ObjectData {
         ToString str = new ToString(this);
         str.append("type", type);
         str.append("oid", oid);
-        str.append("fields=");
+        str.append("version", version);
+        str.append(",fields=");
         for (int i = 0; fieldContent != null && i < fieldContent.length; i++) {
             if(i > 0) {
                 str.append(";");
