@@ -19,6 +19,8 @@ public interface Canvas {
 
     void drawLine(Location start, int xExtent, int yExtent, Color color);
 
+    void drawOval(int x, int y, int width, int height, Color color);
+
     void drawRectangle(int x, int y, int width, int height, Color color);
 
     void drawRectangleAround(View view, Color color);

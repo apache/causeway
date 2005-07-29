@@ -69,6 +69,11 @@ public class DrawingCanvas implements Canvas {
         drawLine(start.getX(), start.getY(), start.getX() + xExtent, start.getY() + yExtent, color);
     }
 
+    public void drawOval(int x, int y, int width, int height, Color color) {
+        useColor(color);
+        graphics.drawOval(x, y, width, height);
+    }
+    
     public void drawRectangle(int x, int y, int width, int height, Color color) {
         useColor(color);
         graphics.drawRect(x, y, width, height);

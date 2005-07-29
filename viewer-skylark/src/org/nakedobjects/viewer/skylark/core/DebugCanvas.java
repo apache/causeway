@@ -73,6 +73,11 @@ public class DebugCanvas implements Canvas {
                 + (start.getY() + yExtent) + " " + color);
     }
 
+    public void drawOval(int x, int y, int width, int height, Color color) {
+        indent();
+        buffer.append("Oval " + x + "," + y + " " + width + "x" + height + " " + color);
+    }
+
     public void drawRectangle(int x, int y, int width, int height, Color color) {
         indent();
         buffer.append("Rectangle " + x + "," + y + " " + width + "x" + height + " " + color);
