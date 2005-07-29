@@ -24,6 +24,10 @@ public class JavaObjectFactory implements ObjectFactory {
 
 
     public Object createValueObject(NakedObjectSpecification specification) {
+        if(specification.getFullName().equals("float")) {
+            return new Float(0);
+        }
+        
         Class cls = classFor(specification);
         Object object = createObject(cls);        
         return object;
@@ -55,6 +59,9 @@ public class JavaObjectFactory implements ObjectFactory {
         try {
             cls = Class.forName(className);
         } catch (ClassNotFoundException e) {
+            if(className.equals("float")) {
+                return float.class;
+            }
             throw new ReflectionException(e);
         }
         return cls;
