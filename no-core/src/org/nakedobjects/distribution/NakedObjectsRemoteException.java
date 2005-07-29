@@ -2,48 +2,22 @@ package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.NakedObjectRuntimeException;
 
-import java.io.PrintStream;
-import java.io.PrintWriter;
-
 
 /**
  * Denotes an exception that occured on the server.
  */
 public class NakedObjectsRemoteException extends NakedObjectRuntimeException {
-    private final String message;
-    private final String trace;
-    private final String type;
-
-    public NakedObjectsRemoteException(String type, String message, String trace) {
-        this.type = type;
-        this.message = message;
-        this.trace = "Remote: " + trace;
+    public NakedObjectsRemoteException() {
+        super();
     }
-
-    public String getLocalizedMessage() {
-        return message;
+    public NakedObjectsRemoteException(String msg) {
+        super(msg);
     }
-
-    public String getMessage() {
-        return message;
+    public NakedObjectsRemoteException(String msg, Throwable cause) {
+        super(msg, cause);
     }
-
-    public void printStackTrace(PrintStream s) {
-        synchronized (s) {
-            s.println(trace);
-        }
-    }
-
-    public void printStackTrace(PrintWriter s) {
-        synchronized (s) {
-            s.println(trace);
-        }
-    }
-
-    public String toString() {
-        String s = type;
-        String message = getLocalizedMessage();
-        return (message != null) ? (s + ": " + message) : s;
+    public NakedObjectsRemoteException(Throwable cause) {
+        super(cause);
     }
 }
 

@@ -20,10 +20,6 @@ import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-
 import org.apache.log4j.Logger;
 
 
@@ -38,11 +34,10 @@ public class ServerDistribution implements ClientDistribution {
         return convertToNakedCollection(instances);
     }
 
-    public void clearAssociation(Session session, String fieldIdentifier, Oid objectOid, String objectType, Oid associateOid,
-            String associateType) {
-        LOG.debug("request clearAssociation " + fieldIdentifier + " on " + objectType + "/" + objectOid + " of " + associateType + "/" + associateOid + " for " + session);
-        NakedObject inObject = forNakedObject(session, objectOid, objectType);
-        NakedObject associate = forNakedObject(session, associateOid, associateType);
+    public void clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associated) {
+        LOG.debug("request clearAssociation " + fieldIdentifier + " on " + target + " of " + associated+ " for " + session);
+        NakedObject inObject = getPersistentNakedObject(session, target);
+        NakedObject associate = getPersistentNakedObject(session, associated);
         NakedObjectAssociation association = (NakedObjectAssociation) inObject.getSpecification().getField(fieldIdentifier);
         Hint about = inObject.getHint(association, associate);
         if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
@@ -59,43 +54,44 @@ public class ServerDistribution implements ClientDistribution {
         return data;
     }
 
-    public void destroyObject(Session session, Oid oid, String objectType) {
-        LOG.debug("request destroyObject " + objectType + "/" + oid + " for " + session);
-        NakedObject inObject = forNakedObject(session, oid, objectType);
+    public void destroyObject(Session session, ReferenceData object) {
+        LOG.debug("request destroyObject " + object+ " for " + session);
+        NakedObject inObject = getPersistentNakedObject(session, object);
         objectManager().destroyObject(inObject);
     }
 
-    public Data executeAction(Session session, String actionType, String actionIdentifier, String[] parameterTypes,
-            Oid objectOid, String objectType, Data[] parameterData) {
-        LOG.debug("request executeAction " + actionIdentifier + " on " + objectType + "/" + objectOid + " for " + session);
+    public Data executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameterData) {
+        LOG.debug("request executeAction " + actionIdentifier + " on " + target + " for " + session);
 
-        NakedObject object = forNakedObject(session, objectOid, objectType);
-
-        NakedObjectSpecification[] parameterSpecifiactions = new NakedObjectSpecification[parameterTypes.length];
-        for (int i = 0; i < parameterSpecifiactions.length; i++) {
-            parameterSpecifiactions[i] = getSpecification(parameterTypes[i]);
-        }
-        Type type = Action.getType(actionType);
-        Action action = (Action) object.getSpecification().getObjectAction(type, actionIdentifier, parameterSpecifiactions);
-
-        Hint about = getActionHint(session, actionType, actionIdentifier, parameterTypes, objectOid, objectType, parameterData);
-        if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
+        NakedObject object;// = getPersistentNakedObject(session, target);
+        if (target instanceof ReferenceData && ((ReferenceData) target).getOid() != null) {
+            object = getPersistentNakedObject(session, (ReferenceData) target);
+        } else if (target instanceof ObjectData) {
+            object = DataHelper.recreateObject((ObjectData) target);
+        } else {
             throw new NakedObjectRuntimeException();
         }
+        
+        Action action = getActionMethod(actionType, actionIdentifier, parameterData, object);
+        checkHint(session, actionType, actionIdentifier, target, parameterData);
+        Naked[] parameters = getParameters(session, parameterData);
+
+        NakedObject result = (NakedObject) object.execute(action, parameters);
+        return objectDataFactory.createCompletePersistentGraph(result);
+    }
+
+    private Naked[] getParameters(Session session, Data[] parameterData) {
         Naked[] parameters = new Naked[parameterData.length];
         for (int i = 0; i < parameters.length; i++) {
             Data data = parameterData[i];
-            if (data == null) {
+            if (data instanceof NullData) {
                 continue;
             }
             
-            if (data instanceof ObjectData) {
-                ObjectData objectData = (ObjectData) data;
-                if (objectData.getOid() != null) {
-                    parameters[i] = forNakedObject(session, objectData.getOid(), objectData.getType());
-                } else {
-                    parameters[i] = DataHelper.recreate(data);
-                }
+            if (data instanceof ReferenceData && ((ReferenceData) data).getOid() != null) {
+                parameters[i] = getPersistentNakedObject(session, (ReferenceData) data);
+            } else if (data instanceof ObjectData) {
+                parameters[i] = DataHelper.recreateObject((ObjectData) data);
             } else if (data instanceof ValueData) {
                 ValueData valueData = (ValueData) data;
                 parameters[i] = NakedObjects.getObjectLoader().createAdapterForValue(valueData.getValue());
@@ -103,29 +99,24 @@ public class ServerDistribution implements ClientDistribution {
                 throw new NakedObjectRuntimeException();
             }
         }
+        return parameters;
+    }
 
-        try {
-            NakedObject result = (NakedObject) object.execute(action, parameters);
-            return objectDataFactory.createCompletePersistentGraph(result);
-        } catch (RuntimeException e) {
-            LOG.error(e.getMessage(), e);
-            
-            String exceptionType = e.getClass().getName();
-            String message = e.getMessage();
-            String trace;
-            
-            try {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                e.printStackTrace(new PrintStream(baos));
-                trace = baos.toString();
-                baos.close();
-            } catch (IOException ex) {
-                LOG.error(ex);
-                trace = "failed to get trace - see log";
-            }
-
-            return objectDataFactory.createExceptionData(exceptionType, message, trace);
+    private void checkHint(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameterData) {
+        Hint about = getActionHint(session, actionType, actionIdentifier, target, parameterData);
+        if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
+            throw new NakedObjectRuntimeException();
         }
+    }
+
+    private Action getActionMethod(String actionType, String actionIdentifier, Data[] parameterData, NakedObject object) {
+        NakedObjectSpecification[] parameterSpecifiactions = new NakedObjectSpecification[parameterData.length];
+        for (int i = 0; i < parameterSpecifiactions.length; i++) {
+            parameterSpecifiactions[i] = getSpecification(parameterData[i].getType());
+        }
+        Type type = Action.getType(actionType);
+        Action action = (Action) object.getSpecification().getObjectAction(type, actionIdentifier, parameterSpecifiactions);
+        return action;
     }
 
     public ObjectData[] findInstances(Session session, InstancesCriteria criteria) {
@@ -134,8 +125,7 @@ public class ServerDistribution implements ClientDistribution {
         return convertToNakedCollection(instances);
     }
 
-    public Hint getActionHint(Session session, String actionType, String actionIdentifier, String[] parameterTypes,
-            Oid objectOid, String objectType, Data[] parameters) {
+    public Hint getActionHint(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
         LOG.debug("request getActionHint " + actionIdentifier + " for " + session);
         return new DefaultHint();
     }
@@ -144,15 +134,20 @@ public class ServerDistribution implements ClientDistribution {
         return null;
     }
 
-    private NakedObject forNakedObject(Session session, Oid oid, String objectType) {
-        LOG.debug("get object " + objectType + "/" + oid + " for " + session);
-        NakedObjectSpecification spec = getSpecification(objectType);
-        return NakedObjects.getObjectManager().getObject(oid, spec);
+    private NakedObject getPersistentNakedObject(Session session, ReferenceData object) {
+        LOG.debug("get object " + object + " for " + session);
+        NakedObjectSpecification spec = getSpecification(object.getType());
+        NakedObject obj = NakedObjects.getObjectManager().getObject(object.getOid(), spec);
+        obj.checkLock(object.getVersion());
+        return obj;
      }
 
-    public ObjectData resolveImmediately(Session session, Oid oid, String objectType) {
-        LOG.debug("request resolveImmediately " + objectType + "/" + oid +" for " + session);
-        NakedObject object = forNakedObject(session, oid, objectType);
+    public ObjectData resolveImmediately(Session session, ReferenceData target) {
+        LOG.debug("request resolveImmediately " + target +" for " + session);
+         
+        NakedObjectSpecification spec = getSpecification(target.getType());
+        NakedObject object = NakedObjects.getObjectManager().getObject(target.getOid(), spec);
+
         return objectDataFactory.createCompletePersistentGraph(object);
     }
 
@@ -198,11 +193,10 @@ public class ServerDistribution implements ClientDistribution {
         this.objectFactory = objectFactory;
     }
 
-    public void setAssociation(Session session, String fieldIdentifier, Oid objectOid, String objectType, Oid associateOid,
-            String associateType) {
-        LOG.debug("request setAssociation " + fieldIdentifier + " on " + objectType + "/" + objectOid + " with " + associateType + "/" + associateOid+ " for " + session);
-        NakedObject inObject = forNakedObject(session, objectOid, objectType);
-        NakedObject associate = forNakedObject(session, associateOid, associateType);
+    public void setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associated) {
+        LOG.debug("request setAssociation " + fieldIdentifier + " on " +target + " with " + associated + " for " + session);
+        NakedObject inObject = getPersistentNakedObject(session, target);
+        NakedObject associate = getPersistentNakedObject(session, associated);
         NakedObjectAssociation association = (NakedObjectAssociation) inObject.getSpecification().getField(fieldIdentifier);
         Hint about = inObject.getHint(association, associate);
         if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
@@ -223,9 +217,9 @@ public class ServerDistribution implements ClientDistribution {
         this.objectFactory = objectFactory;
     }
 
-    public void setValue(Session session, String fieldIdentifier, Oid objectOid, String objectType, Object value) {
-        LOG.debug("request setValue " + fieldIdentifier + " on " + objectType + "/" + objectOid + " with " + value + " for " + session);
-        NakedObject inObject = forNakedObject(session, objectOid, objectType);
+    public void setValue(Session session, String fieldIdentifier, ReferenceData target, Object value) {
+        LOG.debug("request setValue " + fieldIdentifier + " on " + target + " with " + value + " for " + session);
+        NakedObject inObject = getPersistentNakedObject(session, target);
         OneToOneAssociation association = (OneToOneAssociation) inObject.getSpecification().getField(fieldIdentifier);
         Hint about = inObject.getHint(association, NakedObjects.getObjectLoader().createAdapterForValue(value));
         if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {

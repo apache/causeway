@@ -1,7 +1,7 @@
 package org.nakedobjects.distribution;
 
 public interface Data {
-
+    String getType();
 }
 
 

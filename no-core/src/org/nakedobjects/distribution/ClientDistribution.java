@@ -12,22 +12,19 @@ public interface ClientDistribution {
 
     ObjectData[] allInstances(Session session, String fullName, boolean includeSubclasses);
 
-    void clearAssociation(Session session, String fieldIdentifier, Oid objectOid, String objectType, Oid associateOid,
-            String associateType);
+    void clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate);
 
-    void destroyObject(Session session, Oid oid, String type);
+    void destroyObject(Session session, ReferenceData object);
 
     void endTransaction(Session session);
 
-    Data executeAction(Session session, String actionType, String actionIdentifier, String[] parameterTypes, Oid objectOid,
-            String objectType, Data[] parameters);
+    Data executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters);
 
     ObjectData[] findInstances(Session session, InstancesCriteria criteria);
 
-    Hint getActionHint(Session session, String actionType, String actionIdentifier, String[] parameterTypes, Oid objectOid,
-            String objectType, Data[] parameters);
+    Hint getActionHint(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters);
 
-    ObjectData resolveImmediately(Session session, Oid oid, String fullName);
+    ObjectData resolveImmediately(Session session, ReferenceData target);
 
     boolean hasInstances(Session session, String fullName);
 
@@ -35,13 +32,11 @@ public interface ClientDistribution {
 
     int numberOfInstances(Session sessionId, String fullName);
 
-    void setAssociation(Session session, String fieldIdentifier, Oid objectOid, String objectType, Oid associateOid,
-            String associateType);
+    void setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate);
 
-    void setValue(Session session, String fieldIdentifier, Oid objectOid, String objectType, Object associate);
+    void setValue(Session session, String fieldIdentifier, ReferenceData target, Object associate);
 
     void startTransaction(Session session);
-
 }
 
 /*

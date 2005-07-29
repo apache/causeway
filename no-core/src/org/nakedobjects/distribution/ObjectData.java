@@ -1,22 +1,15 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.persistence.Oid;
 
 
 /**
  * ObjectData is data transfer object that contains all the data for an object
  * in a form that can be passed over the network between a client and a server.
  */
-public interface ObjectData extends Data{
+public interface ObjectData extends ReferenceData {
     Object[] getFieldContent();
-
-    Oid getOid();
     
     boolean isResolved();
-    
-    long getVersion();
-
-    String getType();
 }
 /*
  * Naked Objects - a framework that exposes behaviourally complete business

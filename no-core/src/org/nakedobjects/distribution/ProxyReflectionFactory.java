@@ -27,7 +27,7 @@ public class ProxyReflectionFactory implements ReflectionFactory {
     }
 
     public NakedObjectField createField(String className, OneToManyPeer local) {
-        OneToManyPeer oneToManyDelegate = new ProxyOneToManyAssociation(local, connection);
+        OneToManyPeer oneToManyDelegate = new ProxyOneToManyAssociation(local, connection, objectDataFactory);
         OneToManyAssociation association = new OneToManyAssociation(className, oneToManyDelegate.getName(), oneToManyDelegate
                 .getType(), oneToManyDelegate);
         return association;
@@ -35,7 +35,7 @@ public class ProxyReflectionFactory implements ReflectionFactory {
 
     public NakedObjectField createField(String className, OneToOnePeer local) {
 
-        OneToOnePeer oneToOneDelegate = new ProxyOneToOneAssociation(local, connection);
+        OneToOnePeer oneToOneDelegate = new ProxyOneToOneAssociation(local, connection, objectDataFactory);
         oneToOneDelegate = new OneToOneHelp(oneToOneDelegate, helpLookup);
         OneToOneAssociation association = new OneToOneAssociation(className, oneToOneDelegate.getName(), oneToOneDelegate
                 .getType(), oneToOneDelegate);

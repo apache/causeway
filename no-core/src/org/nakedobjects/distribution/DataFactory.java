@@ -41,9 +41,9 @@ public abstract class DataFactory {
         return createObjectData(object, true, persistentGraphDepth);
     }
 
-    public final Data createDataForParameter(Naked object) {
+    public final Data createDataForParameter(String type, Naked object) {
         if (object == null) {
-            return null;
+            return createNullData(type);
         }
 
         if (object.getSpecification().isObject()) {
@@ -56,7 +56,9 @@ public abstract class DataFactory {
         }
     }
 
-    protected abstract ExceptionData createExceptionData(String type, String message, String trace);
+    protected abstract NullData createNullData(String type);
+
+    //protected abstract ExceptionData createExceptionData(String type, String message, String trace);
 
     /**
      * Creates an ObjectData that contains the data for the specified object, but not the data for
@@ -115,6 +117,19 @@ public abstract class DataFactory {
     }
 
     protected abstract ObjectData createObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved, long version);
+    
+
+    /**
+     * Creates a ReferenceData that contains the type, version and OID for the specified object.  This can only be used 
+     * for peristent objects.
+     */
+    public final ReferenceData createReference(NakedObject object) {
+        Assert.assertNotNull(object.getOid());
+        return createReferenceData(object.getSpecification().getFullName(), object.getOid(), object.getVersion());
+    }
+
+
+    protected abstract ReferenceData createReferenceData(String type, Oid oid, long version);
 
     private final ValueData createValueData(Naked object) {
         return createValueData(object.getSpecification().getFullName(), ((NakedValue) object).getObject());
@@ -126,8 +141,14 @@ public abstract class DataFactory {
         return persistentGraphDepth;
     }
 
+    // TODO add .NET property
+    // TODO add property for update depth
     public void setPersistentGraphDepth(int persistentGraphDepth) {
         this.persistentGraphDepth = persistentGraphDepth;
+    }
+
+    public final ObjectData createDataForActionTarget(NakedObject object) {
+        return createObjectData(object, false, 100);
     }
 }
 

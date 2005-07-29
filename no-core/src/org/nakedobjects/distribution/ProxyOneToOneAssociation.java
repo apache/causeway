@@ -15,17 +15,20 @@ public final class ProxyOneToOneAssociation extends AbstractOneToOnePeer {
     private final static Logger LOG = Logger.getLogger(ProxyOneToOneAssociation.class);
     private final ClientDistribution connection;
     private final boolean fullProxy = false;
+    private final DataFactory objectDataFactory;
 
-    public ProxyOneToOneAssociation(OneToOnePeer local, final ClientDistribution connection) {
+    public ProxyOneToOneAssociation(OneToOnePeer local, final ClientDistribution connection, DataFactory objectDataFactory) {
         super(local);
         this.connection = connection;
+        this.objectDataFactory = objectDataFactory;
     }
 
     public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         if (isPersistent(inObject)) {
             LOG.debug("clear association remotely " + inObject + "/" + associate);
-            connection.clearAssociation(NakedObjects.getCurrentSession(), getName(), inObject.getOid(), inObject
-                    .getSpecification().getFullName(), associate.getOid(), associate.getSpecification().getFullName());
+            ReferenceData targetReference = objectDataFactory.createReference(inObject);
+            ReferenceData associateReference = objectDataFactory.createReference(associate);
+            connection.clearAssociation(NakedObjects.getCurrentSession(), getName(), targetReference, associateReference);
         } else {
             LOG.debug("clear association locally " + inObject + "/" + associate);
             super.clearAssociation(identifier, inObject, associate);
@@ -58,8 +61,9 @@ public final class ProxyOneToOneAssociation extends AbstractOneToOnePeer {
     public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         if (isPersistent(inObject)) {
             LOG.debug("set association remotely " + getName() + " in " + inObject + " with " + associate);
-            connection.setAssociation(NakedObjects.getCurrentSession(), getName(), inObject.getOid(), inObject.getSpecification()
-                    .getFullName(), associate.getOid(), associate.getSpecification().getFullName());
+            ReferenceData targetReference = objectDataFactory.createReference(inObject);
+            ReferenceData associateReference = objectDataFactory.createReference(associate);
+            connection.setAssociation(NakedObjects.getCurrentSession(), getName(), targetReference, associateReference);
         } else {
             LOG.debug("set association locally " + getName() + " in " + inObject + " with " + associate);
             super.setAssociation(identifier, inObject, associate);
@@ -69,8 +73,8 @@ public final class ProxyOneToOneAssociation extends AbstractOneToOnePeer {
     public void setValue(MemberIdentifier identifier, NakedObject inObject, Object value) {
         if (isPersistent(inObject)) {
             LOG.debug("set value remotely " + getName() + " in " + inObject + " with " + value);
-            connection.setValue(NakedObjects.getCurrentSession(), getName(), inObject.getOid(), inObject.getSpecification()
-                    .getFullName(), value);
+            ReferenceData targetReference = objectDataFactory.createReference(inObject);
+            connection.setValue(NakedObjects.getCurrentSession(), getName(), targetReference, value);
         } else {
             LOG.debug("set value locally " + getName() + " in " + inObject + " with " + value);
             super.setValue(identifier, inObject, value);

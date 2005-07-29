@@ -55,7 +55,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
 
     public synchronized void destroyObject(NakedObject object) {
         LOG.debug("destroyObject " + object);
-        connection.destroyObject(session, object.getOid(), object.getSpecification().getFullName());
+        connection.destroyObject(session, objectDataFactory.createReference(object));
         NakedObjects.getObjectLoader().unloaded(object);
     }
 
@@ -125,19 +125,26 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     }
 
     public void objectChanged(NakedObject object) {
-        LOG.debug("objectChanged " + object + " - ignored by proxy manager ");
+        if(object.getResolveState().isTransient()) {
+            updateNotifier.addDirty(object);
+        } else {
+            LOG.debug("objectChanged " + object + " - ignored by proxy manager as it is a persistent object");
+        }
     }
 
     public void reset() {}
 
+    public void reload(NakedObject object) {
+        ObjectData update = connection.resolveImmediately(session, objectDataFactory.createReference(object));
+        DataHelper.update(update, updateNotifier);
+    }
+    
     public synchronized void resolveImmediately(NakedObject object) {
         ResolveState resolveState = object.getResolveState();
         if (resolveState.isResolvable(ResolveState.RESOLVING)) {
             Oid oid = object.getOid();
-            NakedObjectSpecification hint = object.getSpecification();
-
             LOG.debug("resolve object (remotely from server)" + oid);
-            ObjectData data = connection.resolveImmediately(session, oid, hint.getFullName());
+            ObjectData data = connection.resolveImmediately(session, objectDataFactory.createReference(object));
             DataHelper.resolve(data, updateNotifier);
         }
     }

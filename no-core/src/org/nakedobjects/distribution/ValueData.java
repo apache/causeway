@@ -8,8 +8,6 @@ package org.nakedobjects.distribution;
  */
 public interface ValueData extends Data{
     Object getValue();
-
-    String getType();
 }
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
