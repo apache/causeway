@@ -115,7 +115,8 @@ public class AbstractWindowBorder extends AbstractBorder {
         canvas.drawLine(15, height - 3, width - 15, height - 3, Style.BLACK);
         canvas.drawLine(16, height - 2, width - 14, height - 2, Style.PRIMARY1);
 
-        canvas.drawSolidRectangle(left, LINE_THICKNESS, width - left - right, titlebarHeight, Style.SECONDARY2);
+        canvas.drawSolidRectangle(left, LINE_THICKNESS, width - left - right, titlebarHeight,
+                getState().isRootViewIdentified() ? Style.PRIMARY2 : Style.SECONDARY2);
         canvas.drawLine(x, top - 1, width - right - 1, top - 1, Style.SECONDARY1);
 
         canvas.drawText(getContent().windowTitle(), x + HPADDING, baseline, Style.BLACK, TITLE_STYLE);
@@ -126,6 +127,14 @@ public class AbstractWindowBorder extends AbstractBorder {
         }
 
         super.draw(canvas);
+    }
+
+    public Size getRequiredSize() {
+        Size size = super.getRequiredSize();
+        int width = getLeft() + HPADDING + TITLE_STYLE.stringWidth(getContent().windowTitle()) + HPADDING + controls.length
+                * (WindowControl.WIDTH + HPADDING) + HPADDING + getRight();
+        size.ensureWidth(width);
+        return size;
     }
 
     public void secondClick(Click click) {
