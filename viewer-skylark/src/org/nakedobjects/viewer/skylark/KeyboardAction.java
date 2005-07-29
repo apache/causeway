@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
 public class KeyboardAction {
-
+    public static final int NONE = 0;
     public static final int ABORT = 1;
     public static final int NEXT_VIEW = 2;
     public static final int NEXT_WINDOW= 3;
