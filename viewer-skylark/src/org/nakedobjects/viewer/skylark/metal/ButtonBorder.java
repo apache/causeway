@@ -6,27 +6,43 @@ import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
-import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
+
+import java.awt.event.KeyEvent;
 
 
 public class ButtonBorder extends AbstractBorder {
     private final Button[] buttons;
     private static final int BUTTON_SPACING = 5;
+    private ButtonAction defaultAction;
 
-    public ButtonBorder(UserAction[] actions, View view) {
+    public ButtonBorder(ButtonAction[] actions, View view) {
         super(view);
 
         int buttonHeight = VPADDING + Style.NORMAL.getTextHeight() + VPADDING;
         buttons = new Button[actions.length];
         for (int i = 0; i < actions.length; i++) {
-            buttons[i] = new Button(actions[i], buttonHeight, view);
+            ButtonAction action = actions[i];
+            if(action.isDefault()) {
+                defaultAction = action;
+            }
+            buttons[i] = new Button(action, buttonHeight, view);
         }
 
         bottom = VPADDING + 2 + buttonHeight;
     }
 
+    public void keyPressed(final int keyCode, final int modifiers) {
+    	if(keyCode == KeyEvent.VK_ENTER) {
+    	    if(defaultAction.disabled(getView()).isAllowed()) {
+    	        defaultAction.execute(getWorkspace(), getView(), getLocation());
+    	    }
+    	}
+    	
+    	super.keyPressed(keyCode, modifiers);
+    }
+    
     public void draw(Canvas canvas) {
         int width = getSize().getWidth();
         int y = getSize().getHeight() - bottom;

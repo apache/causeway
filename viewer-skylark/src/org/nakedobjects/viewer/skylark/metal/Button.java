@@ -5,7 +5,6 @@ import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.Text;
-import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
 
 
@@ -13,7 +12,7 @@ public class Button extends AbstractControlView {
     private final int buttonHeight;
     private static final int TEXT_PADDING = 12;
   
-    public Button(UserAction action, int buttonHeight, View target) {
+    public Button(ButtonAction action, int buttonHeight, View target) {
         super(action, target);
         this.buttonHeight = buttonHeight;
     }
@@ -24,6 +23,7 @@ public class Button extends AbstractControlView {
 
         View target = getParent();
         String text = action.getName(target);
+        if(((ButtonAction) action).isDefault()) text += "*";
         boolean vetoed = action.disabled(target).isVetoed();
         Color color = vetoed ? Style.DISABLED_MENU : Style.BLACK;
         Color border = vetoed ? Style.DISABLED_MENU : Style.SECONDARY2;
@@ -37,6 +37,7 @@ public class Button extends AbstractControlView {
     public Size getRequiredSize() {
         String text = action.getName(getView());
         int buttonWidth = TEXT_PADDING + Style.NORMAL.stringWidth(text) + TEXT_PADDING;
+        if(((ButtonAction) action).isDefault()) buttonWidth += Style.NORMAL.stringWidth("*");
         return new Size(buttonWidth, buttonHeight);
     }
 
