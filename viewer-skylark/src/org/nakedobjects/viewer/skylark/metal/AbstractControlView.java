@@ -105,7 +105,7 @@ public abstract class AbstractControlView implements View {
     public void exitedSubview() {}
 
     public void firstClick(Click click) {
-        View target = getParent();
+        View target = getParent().getView();
         if (action.disabled(target).isAllowed()) {
             markDamaged();
             getViewManager().saveCurrentFieldEntry();
