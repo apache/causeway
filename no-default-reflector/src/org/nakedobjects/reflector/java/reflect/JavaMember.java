@@ -39,7 +39,7 @@ public abstract class JavaMember {
 
     protected static void invocationException(String error, InvocationTargetException e) {
         if(e.getTargetException() instanceof ApplicationException) {
-            throw new NakedObjectApplicationException(e.getCause());
+            throw new NakedObjectApplicationException(e.getTargetException());
         }
         
         LOG.error(error, e.getTargetException());
