@@ -14,6 +14,7 @@ import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
 import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.persistence.OidGenerator;
+import org.nakedobjects.object.persistence.defaults.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
@@ -57,17 +58,21 @@ public class XmlServer {
         objectFactory.setContainer(container);
 
         OidGenerator oidGenerator = new SimpleOidGenerator();
+        DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
+        persistAlgorithm.setOidGenerator(oidGenerator);
 
         LocalObjectManager objectManager = new LocalObjectManager();
         objectManager.setObjectStore(objectStore);
-        objectManager.setOidGenerator(oidGenerator);
+        objectManager.setPersistAlgorithm(persistAlgorithm);
         objectManager.setCheckObjectsForDirtyFlag(true);
 
         nakedObjects.setObjectManager(objectManager);
 
         LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
+        nakedObjects.setReflectionFactory(reflectionFactory);
 
         JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
+        nakedObjects.setReflectorFactory(reflectorFactory);
 
         ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
         objectLoader.setPojoAdapterMap(new PojoAdapterHashImpl());
@@ -75,10 +80,8 @@ public class XmlServer {
         objectLoader.setIdentityAdapterMap(new IdentityAdapterMapImpl());
         nakedObjects.setObjectLoader(objectLoader);
 
-        nakedObjects.setReflectionFactory(reflectionFactory);
 
         NakedObjectSpecificationLoaderImpl specificationLoader = new NakedObjectSpecificationLoaderImpl();
-        nakedObjects.setReflectorFactory(reflectorFactory);
 
         nakedObjects.setSpecificationLoader(specificationLoader);
 
@@ -92,6 +95,8 @@ public class XmlServer {
 
         objectManager.addObjectChangedListener(updateNotifier);
 
+        nakedObjects.init();
+        
         serverListener.start();
 
         JavaFixtureBuilder fb = new JavaFixtureBuilder();
