@@ -16,9 +16,7 @@ import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.NakedObjectMember;
 import org.nakedobjects.object.reflect.NameConvertor;
 import org.nakedobjects.object.reflect.ObjectTitle;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToManyPeer;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.object.reflect.Reflector;
 
@@ -119,61 +117,8 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
     private ReflectionFactory reflectionFactory() {
         return NakedObjects.getReflectionFactory();
     }
-
-    private void debugAboutDetail(StringBuffer text, NakedObjectMember member) {
-        text.append("    " + member.toString() + "\n");
-    }
-
-    public String debugInterface() {
-        StringBuffer text = new StringBuffer();
-
-        // list fields
-        NakedObjectField[] fields = getFields();
-
-        text.append("  Fields" + "\n");
-
-        if (fields.length == 0) {
-            text.append("    none\n");
-        }
-
-        for (int i = 0; i < fields.length; i++) {
-            //text.append(" " + attributes[i].toString() + "\n");
-            if (fields[i] instanceof OneToManyAssociation) {
-                OneToManyAssociation f = (OneToManyAssociation) fields[i];
-                debugAboutDetail(text, f);
-            } else if (fields[i] instanceof OneToOneAssociation) {
-                OneToOneAssociation f = (OneToOneAssociation) fields[i];
-                debugAboutDetail(text, f);
-            }
-        }
-
-        text.append("\n  Object Actions" + "\n");
-
-        if (objectActions.length == 0) {
-            text.append("    none\n");
-        }
-
-        for (int i = 0; i < objectActions.length; i++) {
-            Action action = objectActions[i];
-            debugAboutDetail(text, action);
-        }
-
-        text.append("\n  Class Actions" + "\n");
-
-        if (classActions.length == 0) {
-            text.append("    none\n");
-        }
-
-        for (int i = 0; i < classActions.length; i++) {
-            debugAboutDetail(text, classActions[i]);
-        }
-
-        // return as string
-        text.append("\n");
-
-        return text.toString();
-    }
-
+    
+    
     private Action getAction(Action[] availableActions, Action.Type type, String name, NakedObjectSpecification[] parameters) {
         if (name == null) {
             return null;
@@ -260,6 +205,9 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         return reflector.getExtension(cls);
     }
     
+   public Class[] getExtensions() {
+       return reflector.getExtensions();
+   }
    
     public Object getFieldExtension(String name, Class cls) {
         String searchName = searchName(name);
@@ -271,6 +219,10 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         }
 
         throw new NakedObjectSpecificationException("No field called '" + name + "' in '" + getSingularName() + "'");
+    }
+    
+    public Class[] geFieldExtensions(String fieldName) {
+        return getField(fieldName).getExtensions() ;
     }
 
     public NakedObjectField getField(String name) {
@@ -352,8 +304,8 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         return singularName != null ? singularName : NameConvertor.naturalName(getShortName());
     }
 
-    public ObjectTitle getTitle() {
-        return title;
+    public String getTitle(NakedObject object) {
+        return title.title(object);
     }
 
     public NakedObjectField[] getVisibleFields(NakedObject object) {
@@ -563,10 +515,6 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
 
     public NakedObjectSpecification superclass() {
         return superclass;
-    }
-
-    public String unresolvedTitle(NakedObject object) {
-        return reflector.unresolvedTitle(object);
     }
 
     private String asString;
