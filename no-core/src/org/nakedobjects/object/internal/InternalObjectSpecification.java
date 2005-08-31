@@ -44,6 +44,10 @@ public class InternalObjectSpecification implements NakedObjectSpecification {
         return null;
     }
 
+    public Class[] getExtensions() {
+        return new Class[0];
+    }
+    
     public NakedObjectField getField(String name) {
         return null;
     }
@@ -52,6 +56,10 @@ public class InternalObjectSpecification implements NakedObjectSpecification {
         return null;
     }
 
+    public Class[] geFieldExtensions(String name) {
+        return new Class[0];
+    }
+    
     public NakedObjectField[] getFields() {
         return new NakedObjectField[0];
     }
@@ -138,11 +146,11 @@ public class InternalObjectSpecification implements NakedObjectSpecification {
         return null;
     }
 
-    public String unresolvedTitle(NakedObject object) {
-        return "";
-    }
-
     public void deleted(NakedObject object) {}
+    
+    public String getTitle(NakedObject naked) {
+        return "title";
+    }
 }
 
 /*
