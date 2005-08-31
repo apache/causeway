@@ -36,7 +36,7 @@ public class ViewUpdateNotifier extends DirtyObjectSetImpl implements DebugInfo 
                     throw new NakedObjectRuntimeException(view + " already being notified");
                 }
                 viewsToNotify.addElement(view);
-                LOG.debug("Added " + view + " to observers for " + object);
+                LOG.debug("added " + view + " to observers for " + object);
             }
         }
     }
@@ -68,6 +68,7 @@ public class ViewUpdateNotifier extends DirtyObjectSetImpl implements DebugInfo 
 
     public void remove(View view) {
         Content content = view.getContent();
+        LOG.debug("removing " + content + " for " + view);
         if (content instanceof ObjectContent) {
             Naked object = ((ObjectContent) content).getObject();
 
@@ -75,11 +76,11 @@ public class ViewUpdateNotifier extends DirtyObjectSetImpl implements DebugInfo 
                 Vector viewsToNotify;
                 viewsToNotify = (Vector) views.get(object);
                 viewsToNotify.removeElement(view);
-                LOG.debug("Removed " + view + " from observers for " + object);
+                LOG.debug("removed " + view + " from observers for " + object);
 
                 if (viewsToNotify.size() == 0) {
                     views.remove(object);
-                    LOG.debug("Removed observer list for " + object);
+                    LOG.debug("removed observer list for " + object);
                 }
             } else {
                 throw new NakedObjectRuntimeException("Tried to remove a non-existant view " + view + " from observers for "

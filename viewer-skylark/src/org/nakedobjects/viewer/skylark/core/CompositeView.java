@@ -196,6 +196,8 @@ public class CompositeView extends ObjectView {
 
     public void removeView(View view) {
         if (views.contains(view)) {
+            LOG.debug("removing " + view + " from " + this);
+         //   getViewManager().removeFromNotificationList(view);
             markDamaged();
             views.removeElement(view);
             invalidateLayout();
