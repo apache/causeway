@@ -52,6 +52,16 @@ public class FastSerialOid implements Oid {
     public String toString() {
         return asString;
     }
+
+    public boolean hasPrevious() {
+        return false;
+    }
+
+    public Oid getPrevious() {
+        return null;
+    }
+
+    public void copyFrom(Oid oid) {}
 }
 
 /*
