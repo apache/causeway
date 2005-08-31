@@ -1,8 +1,8 @@
 package org.nakedobjects.distribution.command;
 
-import org.nakedobjects.distribution.ClientDistribution;
 import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.DataHelper;
+import org.nakedobjects.distribution.Distribution;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ReferenceData;
 import org.nakedobjects.object.DirtyObjectSet;
@@ -17,7 +17,7 @@ import org.nakedobjects.utility.NotImplementedException;
 import org.apache.log4j.Logger;
 
 
-public abstract class CommandClient implements ClientDistribution {
+public abstract class CommandClient implements Distribution {
     private static final Logger LOG = Logger.getLogger(CommandClient.class);
     private DirtyObjectSet updateNotifier;
 

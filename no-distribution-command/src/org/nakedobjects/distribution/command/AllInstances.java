@@ -1,7 +1,7 @@
 package org.nakedobjects.distribution.command;
 
+import org.nakedobjects.distribution.Distribution;
 import org.nakedobjects.distribution.ObjectData;
-import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.ToString;
 
@@ -16,8 +16,8 @@ public class AllInstances extends AbstractRequest {
         this.includeSubclasses = includeSubclasses;
     }
 
-    public void execute(ServerDistribution sd) {
-        ObjectData[] instances = sd.allInstances(session, name, includeSubclasses);
+    public void execute(Distribution distribution) {
+        ObjectData[] instances = distribution.allInstances(session, name, includeSubclasses);
         setResponse(instances);
     }
 

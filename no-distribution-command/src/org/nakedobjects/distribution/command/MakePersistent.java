@@ -1,7 +1,7 @@
 package org.nakedobjects.distribution.command;
 
+import org.nakedobjects.distribution.Distribution;
 import org.nakedobjects.distribution.ObjectData;
-import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.security.Session;
 
@@ -13,8 +13,8 @@ public class MakePersistent extends AbstractRequest {
         this.object = object;
     }
 
-    public void execute(ServerDistribution sd) {
-        response = sd.makePersistent(session, object);
+    public void execute(Distribution distribution) {
+        response = distribution.makePersistent(session, object);
     }
 
     public Oid[] getOids() {

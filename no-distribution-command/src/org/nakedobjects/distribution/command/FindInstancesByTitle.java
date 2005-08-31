@@ -1,8 +1,8 @@
 package org.nakedobjects.distribution.command;
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.distribution.Distribution;
 import org.nakedobjects.distribution.ObjectData;
-import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.persistence.TitleCriteria;
 import org.nakedobjects.object.security.Session;
@@ -19,10 +19,10 @@ public class FindInstancesByTitle extends AbstractRequest {
         includeSubclasses = criteria.includeSubclasses();
     }
 
-    public void execute(ServerDistribution sd) {
+    public void execute(Distribution distribution) {
         NakedObjectSpecification spec = NakedObjects.getSpecificationLoader().loadSpecification(name);
         TitleCriteria criteria = new TitleCriteria(spec,  title,includeSubclasses);
-        ObjectData[] instances = sd.findInstances(session, criteria);
+        ObjectData[] instances = distribution.findInstances(session, criteria);
         setResponse(instances);
     }
 

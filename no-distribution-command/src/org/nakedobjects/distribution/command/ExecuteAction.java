@@ -1,8 +1,8 @@
 package org.nakedobjects.distribution.command;
 
 import org.nakedobjects.distribution.Data;
+import org.nakedobjects.distribution.Distribution;
 import org.nakedobjects.distribution.ObjectData;
-import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.ToString;
 
@@ -21,8 +21,8 @@ public class ExecuteAction extends AbstractRequest {
         this.parameters = parameters;
     }
 
-    public void execute(ServerDistribution sd) {
-        setResponse(sd.executeAction(session, actionType, actionIdentifier, target, parameters));
+    public void execute(Distribution distribution) {
+        setResponse(distribution.executeAction(session, actionType, actionIdentifier, target, parameters));
     }
 
     public Data getActionResult() {

@@ -1,8 +1,8 @@
 package org.nakedobjects.distribution.command;
 
+import org.nakedobjects.distribution.Distribution;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ReferenceData;
-import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.ToString;
 
@@ -15,8 +15,8 @@ public class Resolve extends AbstractRequest {
         this.target = target;
     }
 
-    public void execute(ServerDistribution sd) {
-        setResponse(sd.resolveImmediately(session, target));
+    public void execute(Distribution distribution) {
+        setResponse(distribution.resolveImmediately(session, target));
     }
 
     public ObjectData getUpdateData() {

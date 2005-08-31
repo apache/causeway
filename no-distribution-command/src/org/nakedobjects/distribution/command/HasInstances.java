@@ -1,6 +1,6 @@
 package org.nakedobjects.distribution.command;
 
-import org.nakedobjects.distribution.ServerDistribution;
+import org.nakedobjects.distribution.Distribution;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.ToString;
 
@@ -13,8 +13,8 @@ public class HasInstances extends AbstractRequest {
         this.name = name;
     }
 
-    public void execute(ServerDistribution sd) {
-        boolean hasInstances = sd.hasInstances(session, name);
+    public void execute(Distribution distribution) {
+        boolean hasInstances = distribution.hasInstances(session, name);
         setResponse(new Boolean(hasInstances));
     }
     

@@ -1,11 +1,11 @@
 package org.nakedobjects.distribution.command;
 
-import org.nakedobjects.distribution.ServerDistribution;
+import org.nakedobjects.distribution.Distribution;
 
 
 public interface Request {
 
-    void execute(ServerDistribution sd);
+    void execute(Distribution distribution);
 
     void setResponse(Object response);
     

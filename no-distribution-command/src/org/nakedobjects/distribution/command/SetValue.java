@@ -1,7 +1,7 @@
 package org.nakedobjects.distribution.command;
 
+import org.nakedobjects.distribution.Distribution;
 import org.nakedobjects.distribution.ReferenceData;
-import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.object.security.Session;
 
 public class SetValue extends AbstractRequest {
@@ -16,8 +16,8 @@ public class SetValue extends AbstractRequest {
         this.associate = associate;
     }
 
-    public void execute(ServerDistribution sd) {
-        sd.setValue(session, fieldIdentifier, target, associate);
+    public void execute(Distribution distribution) {
+        distribution.setValue(session, fieldIdentifier, target, associate);
     }
 }
 

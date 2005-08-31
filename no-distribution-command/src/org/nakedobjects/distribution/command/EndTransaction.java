@@ -1,6 +1,6 @@
 package org.nakedobjects.distribution.command;
 
-import org.nakedobjects.distribution.ServerDistribution;
+import org.nakedobjects.distribution.Distribution;
 import org.nakedobjects.object.security.Session;
 
 public class EndTransaction extends AbstractRequest {
@@ -9,8 +9,8 @@ public class EndTransaction extends AbstractRequest {
         super(session);
     }
 
-    public void execute(ServerDistribution sd) {
-        sd.endTransaction(session);
+    public void execute(Distribution distribution) {
+        distribution.endTransaction(session);
     }
     
     
