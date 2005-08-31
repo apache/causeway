@@ -25,9 +25,11 @@ import org.nakedobjects.viewer.skylark.core.OverlayDebugFrame;
 import org.nakedobjects.viewer.skylark.metal.ClassIcon;
 import org.nakedobjects.viewer.skylark.metal.FormSpecification;
 import org.nakedobjects.viewer.skylark.metal.ListSpecification;
+import org.nakedobjects.viewer.skylark.metal.PasswordFieldSpecification;
 import org.nakedobjects.viewer.skylark.metal.TableSpecification;
 import org.nakedobjects.viewer.skylark.metal.TextFieldSpecification;
 import org.nakedobjects.viewer.skylark.metal.TreeBrowserSpecification;
+import org.nakedobjects.viewer.skylark.metal.WrappedTextFieldSpecification;
 import org.nakedobjects.viewer.skylark.special.DataFormSpecification;
 import org.nakedobjects.viewer.skylark.special.InnerWorkspaceSpecification;
 import org.nakedobjects.viewer.skylark.special.WorkspaceSpecification;
@@ -626,6 +628,8 @@ public class Viewer {
          */
         viewFactory.addValueFieldSpecification(loadSpecification("field.color", ColorField.Specification.class));
         viewFactory.addValueFieldSpecification(loadSpecification("field.checkbox", CheckboxField.Specification.class));
+        viewFactory.addValueFieldSpecification(loadSpecification("field.password", PasswordFieldSpecification.class));
+        viewFactory.addValueFieldSpecification(loadSpecification("field.wrappedtext", WrappedTextFieldSpecification.class));
         viewFactory.addValueFieldSpecification(loadSpecification("field.text", TextFieldSpecification.class));
         viewFactory.addRootWorkspaceSpecification(new org.nakedobjects.viewer.skylark.metal.WorkspaceSpecification());
         viewFactory.addWorkspaceSpecification(new InnerWorkspaceSpecification());
