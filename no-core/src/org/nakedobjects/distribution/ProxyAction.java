@@ -16,11 +16,11 @@ import org.apache.log4j.Logger;
 
 public final class ProxyAction extends AbstractActionPeer {
     private final static Logger LOG = Logger.getLogger(ProxyAction.class);
-    private ClientDistribution connection;
+    private Distribution connection;
     private boolean fullProxy = false;
     private final DataFactory dataFactory;
 
-    public ProxyAction(final ActionPeer local, final ClientDistribution connection, DataFactory objectDataFactory) {
+    public ProxyAction(final ActionPeer local, final Distribution connection, DataFactory objectDataFactory) {
         super(local);
         this.connection = connection;
         this.dataFactory = objectDataFactory;
@@ -28,14 +28,13 @@ public final class ProxyAction extends AbstractActionPeer {
 
     public Naked execute(MemberIdentifier identifier, NakedObject target, Naked[] parameters) throws ReflectiveActionException {
         if (executeRemotely(target)) {
-         //   String[] parameterTypes = pararmeterTypes();
             Data[] parameterObjectData = parameterValues(parameters);
             LOG.debug(debug("execute remotely", identifier, target, parameters));
             ObjectData targetReference = dataFactory.createDataForActionTarget(target);
             Data result = connection.executeAction(NakedObjects.getCurrentSession(), getType().getName(), getName(),
                     targetReference, parameterObjectData);
-            NakedObject returnedObject;
-            returnedObject = result == null ? null : DataHelper.recreateObject((ObjectData) result);
+            Naked returnedObject;
+            returnedObject = result instanceof NullData ? null : DataHelper.recreateNaked((ObjectData) result);
             return returnedObject;
         } else {
             LOG.debug(debug("execute locally", identifier, target, parameters));
@@ -69,15 +68,16 @@ public final class ProxyAction extends AbstractActionPeer {
         }
         return parameterObjectData;
     }
-    
+
     public Hint getHint(MemberIdentifier identifier, NakedObject target, Naked[] parameters) {
         if (executeRemotely(target) && fullProxy) {
             Data[] parameterObjectData = parameterValues(parameters);
             LOG.debug(debug("get hint remotely", identifier, target, parameters));
             ObjectData targetReference = dataFactory.createDataForActionTarget(target);
-            return connection.getActionHint(NakedObjects.getCurrentSession(), getType().getName(), getName(), targetReference, parameterObjectData);
+            return connection.getActionHint(NakedObjects.getCurrentSession(), getType().getName(), getName(), targetReference,
+                    parameterObjectData);
         } else {
-            LOG.debug(debug("get hint locally",identifier, target, parameters));
+            LOG.debug(debug("get hint locally", identifier, target, parameters));
             return super.getHint(identifier, target, parameters);
         }
     }
@@ -104,25 +104,21 @@ public final class ProxyAction extends AbstractActionPeer {
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if
+ * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ * 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
+ * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */
