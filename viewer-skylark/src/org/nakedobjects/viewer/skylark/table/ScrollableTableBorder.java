@@ -9,7 +9,8 @@ public class ScrollableTableBorder extends ScrollBorder {
     public ScrollableTableBorder(View view) {
         super(view);
         left = 30;
-        top = 12;
+        top = 15;
+        reset();
     }
     
     public void draw(Canvas canvas) {

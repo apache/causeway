@@ -62,6 +62,7 @@ public class ScrollBorder extends AbstractViewDecorator {
         b.append("\n             maximum " + horizontalMaximum);
         b.append("\n             visible amount " + horizontalVisibleAmount);
         b.append("\n           Offset " + offset());
+        b.append("\n           Content area " + contentArea());
     }
 
     public void drag(InternalDrag drag) {
@@ -116,13 +117,22 @@ public class ScrollBorder extends AbstractViewDecorator {
 
         drawScrollBars(canvas, contentWidth, contentHeight);
 
+        Offset offset = offset();
+        int x = offset.getDeltaX();
+        int y = offset.getDeltaY();
+        Canvas subCanvas = canvas.createSubcanvas(left, top, contentWidth, contentHeight);
+        subCanvas.offset(-x, -y);
+        
+        //drawScrollBars(subCanvas, contentWidth, contentHeight);
+
         if(AbstractView.debug) {
         canvas
                 .drawRectangle(contents.getX(), contents.getY(), contents.getWidth(), contents.getHeight(),
                         Color.DEBUG_DRAW_BOUNDS);
         }
         
-        drawContent(canvas, contentWidth, contentHeight);
+//        drawContent(canvas, contentWidth, contentHeight);
+        wrappedView.draw(subCanvas);
 
         if (AbstractView.debug) {
             Size size = getSize();
@@ -137,9 +147,13 @@ public class ScrollBorder extends AbstractViewDecorator {
         Offset offset = offset();
         int x = offset.getDeltaX();
         int y = offset.getDeltaY();
-        Canvas subCanvas = canvas.createSubcanvas(-x, -y, contentWidth + x, contentHeight + y);
-        subCanvas.offset(left, top);
+        Canvas subCanvas = canvas.createSubcanvas(left, top, contentWidth, contentHeight);
+        subCanvas.offset(-x, -y);
         wrappedView.draw(subCanvas);
+        
+        if(AbstractView.debug) {
+            subCanvas.drawRectangle(0, 0, contentWidth, contentHeight, Color.DEBUG_DRAW_BOUNDS);
+        }
     }
 
     private void drawScrollBars(Canvas canvas, int contentWidth, int contentHeight) {
@@ -336,6 +350,11 @@ public class ScrollBorder extends AbstractViewDecorator {
         } else {
             return ViewAreaType.INTERNAL;
         }
+    }
+    
+    public void reset() {
+        horizontalScrollPosition = 0;
+        verticalScrollPosition = 0;
     }
 }
 

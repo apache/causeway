@@ -1,8 +1,9 @@
 package org.nakedobjects.viewer.skylark.metal;
 
+import org.nakedobjects.object.NakedReference;
+import org.nakedobjects.object.Persistable;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
-import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
@@ -19,7 +20,7 @@ public class WindowBorder extends AbstractWindowBorder {
     public WindowBorder(View wrappedView, boolean scrollable) {
         super(addTransientBorderIfNeccessary(scrollable ? new ScrollBorder(wrappedView) : wrappedView));
 
-        if (isTransient()) {
+        if (isTransient(this)) {
             setControls(new WindowControl[] { new CloseWindowControl(this) });
         } else {
             setControls(new WindowControl[] { new IconizeWindowControl(this), new ResizeWindowControl(this),
@@ -29,8 +30,7 @@ public class WindowBorder extends AbstractWindowBorder {
     }
 
     private static View addTransientBorderIfNeccessary(View view) {
-        Content content = view.getContent();
-        if (content.isPersistable() && content.isTransient()) {
+         if (isTransient(view)) {
             return new SaveTransientObjectBorder(view);
         } else {
             return view;
@@ -40,7 +40,7 @@ public class WindowBorder extends AbstractWindowBorder {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
-        if (isTransient()) {
+        if (isTransient(this)) {
             int height = top - 2;
             int x = 100;
             Image icon = ImageFactory.getInstance().createIcon("transient", height, null);
@@ -52,9 +52,9 @@ public class WindowBorder extends AbstractWindowBorder {
         }
     }
 
-    private boolean isTransient() {
-        Content content = getContent();
-        return content.isPersistable() && content.isTransient();
+    private static boolean isTransient(View view) {
+        NakedReference object = (NakedReference) view.getContent().getNaked();
+        return object.persistable() == Persistable.USER_PERSISTABLE && object.getResolveState().isTransient();
     }
 
     private void iconize(Workspace workspace, View view) {
