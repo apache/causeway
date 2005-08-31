@@ -53,6 +53,10 @@ public class PrimitiveReflector implements Reflector {
         return null;
     }
     
+    public Class[] getExtensions() {
+        return new Class[0];
+    }
+
     public String getSuperclass() {
         return null;
     }
@@ -110,10 +114,6 @@ public class PrimitiveReflector implements Reflector {
             }};
     }
     
-    public String unresolvedTitle(NakedObject pojo) {
-        return "no title";
-    }
-
     public void destroyed(NakedObject object) {}
 }
 

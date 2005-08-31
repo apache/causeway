@@ -382,6 +382,10 @@ public class InternalReflector implements Reflector {
         return null;
     }
     
+    public Class[] getExtensions() {
+        return new Class[0];
+    }
+    
     public String[] getInterfaces() {
         Class[] interfaces = cls.getInterfaces();
         Class[] nakedInterfaces = new Class[interfaces.length];
@@ -623,10 +627,6 @@ public class InternalReflector implements Reflector {
         } else {
             return new InternalObjectTitle(titleMethod);
         }
-    }
-
-    public String unresolvedTitle(NakedObject pojo) {
-        return "no title";
     }
 
     private Vector valueFields(Vector fields, Class type) {
