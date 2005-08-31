@@ -19,8 +19,10 @@ public class DataHelper {
     public static Naked recreate(Data data) {
         if (data instanceof ValueData) {
             return recreateValue((ValueData) data);
+        } else if (data instanceof NullData) {
+            return null;
         } else {
-            return recreateObject((ObjectData) data);
+            return recreateNaked((ObjectData) data);
         }
     }
 
@@ -29,15 +31,23 @@ public class DataHelper {
         return value;
     }
 
-    public static NakedObject recreateObject(ObjectData data) {
+    public static Naked recreateNaked(ObjectData data) {
         Oid oid = data.getOid();
         String type = data.getType();
         NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
         NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
-        NakedObject object;
 
+        return recreateObject(data, oid, specification, objectLoader);
+    }
+
+    private static NakedObject recreateObject(
+            ObjectData data,
+            Oid oid,
+            NakedObjectSpecification specification,
+            NakedObjectLoader objectLoader) {
+        NakedObject object;
         if (oid == null) {
-            object = objectLoader.createTransientInstance(specification);
+            object = objectLoader.recreateTransientInstance(specification);
             object.setOptimisticLock(data.getVersion(), "", null);
             recreateObjectsInFields(data, object);
             return object;
@@ -63,15 +73,24 @@ public class DataHelper {
 
     private static void recreateObjectsInFields(ObjectData data, NakedObject object) {
         Object[] fieldContent = data.getFieldContent();
+        boolean partResolving = object.getResolveState() == ResolveState.RESOLVING_PART;
         if (fieldContent != null && fieldContent.length > 0) {
             NakedObjectField[] fields = object.getSpecification().getFields();
             for (int i = 0; i < fields.length; i++) {
+                if (fieldContent[i] instanceof NullData && partResolving) {
+                    /*
+                     * Note - if fully resolving or updating the object then nulls should
+                     * clear the field; if only part-resolving then nulls can be ignored as
+                     * the fields are likely to be null at this point
+                     */
+                    continue;
+                }
                 if (fields[i].isCollection()) {
                     if (fieldContent[i] != null) {
                         ObjectData collection = (ObjectData) fieldContent[i];
                         NakedObject[] instances = new NakedObject[collection.getFieldContent().length];
                         for (int j = 0; j < instances.length; j++) {
-                            instances[j] = recreateObject(((ObjectData) collection.getFieldContent()[j]));
+                            instances[j] = (NakedObject) recreateNaked(((ObjectData) collection.getFieldContent()[j]));
                         }
                         object.initOneToManyAssociation((OneToManyAssociation) fields[i], instances);
                     }
@@ -82,8 +101,8 @@ public class DataHelper {
                 } else {
                     if (fieldContent[i] != null) {
                         NakedObjectAssociation field = (NakedObjectAssociation) fields[i];
-                        NakedObject value = recreateObject(((ObjectData) fieldContent[i]));
-                        object.initAssociation(field, value);
+                        NakedObject associate = (NakedObject) recreate((Data) fieldContent[i]);
+                        object.initAssociation(field, associate);
                     }
                 }
             }
@@ -107,7 +126,7 @@ public class DataHelper {
         if (!objectLoader.isIdentityKnown(oid)) {
             // if we don't have an object in use then ignore the data about it.
             // TODO decide if we should recreate these objects, as they may be new objects that we
-            // will get refences to shortly
+            // will get references to shortly
             return;
         } else {
             NakedObject object = updateExistingObject(oid, version, fieldContent, initialState, objectLoader);
@@ -123,25 +142,23 @@ public class DataHelper {
             NakedObjectLoader objectLoader) {
         NakedObject object;
         object = objectLoader.getAdapterFor(oid);
-        object.setOptimisticLock(version, "", null); // we are not interested in the user and
-        // date - these are only used on the server side when generating a concurrency exception
+        object.setOptimisticLock(version, "", null);
+        /*
+         * note - we are not interested in the user and date - these are only used on the server
+         * side when generating a concurrency exception
+         */
 
         objectLoader.start(object, initialState);
 
         NakedObjectField[] fields = object.getSpecification().getFields();
         if (fields.length > 0) {
             for (int i = 0; i < fields.length; i++) {
-                if (fieldContent[i] == null) {
-                    continue;
-                }
-
                 if (fields[i].isCollection()) {
                     ObjectData collection = (ObjectData) fieldContent[i];
                     Object[] elements = collection.getFieldContent();
                     NakedObject[] instances = new NakedObject[elements.length];
                     for (int j = 0; j < instances.length; j++) {
-                        NakedObject instance = recreateObject((ObjectData) elements[j]);
-                        instances[j] = instance;
+                        instances[j] = (NakedObject) recreateNaked((ObjectData) elements[j]);
                     }
                     object.initOneToManyAssociation((OneToManyAssociation) fields[i], instances);
 
@@ -149,7 +166,12 @@ public class DataHelper {
                     object.initValue((OneToOneAssociation) fields[i], ((ValueData) fieldContent[i]).getValue());
 
                 } else {
-                    NakedObject field = recreateObject((ObjectData) fieldContent[i]);
+                    NakedObject field;
+                    if (fieldContent[i] instanceof NullData) {
+                        field = null;
+                    } else {
+                        field = (NakedObject) recreateNaked((ObjectData) fieldContent[i]);
+                    }
                     object.initAssociation((NakedObjectAssociation) fields[i], field);
                 }
             }
@@ -157,24 +179,29 @@ public class DataHelper {
         objectLoader.end(object);
         return object;
     }
+
+    public static NakedObject recreateObject(ObjectData data) {
+        return (NakedObject) recreateNaked(data);
+    }
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
- * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
- * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
- * option) any later version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
  * 
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
- * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
- * for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
  * 
- * You should have received a copy of the GNU General Public License along with this program; if not, write to
- * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if
+ * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ * 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
- * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
+ * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */

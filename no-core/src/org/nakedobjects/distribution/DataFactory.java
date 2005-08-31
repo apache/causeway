@@ -4,6 +4,7 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ResolveState;
@@ -17,10 +18,9 @@ import java.util.Enumeration;
 public abstract class DataFactory {
     private int persistentGraphDepth = 100;
 
-    private ObjectData createCollectionData(NakedCollection object, boolean recursePersistentObjects, int depth) {
+    private ObjectData createCollectionData(NakedCollection collection, boolean recursePersistentObjects, int depth) {
         Oid oid = null;
         String type = null;
-        NakedCollection collection = (NakedCollection) object;
         Enumeration e = collection.elements();
         Object[] fieldContent = new Object[collection.size()];
         int i = 0;
@@ -28,8 +28,7 @@ public abstract class DataFactory {
             NakedObject element = (NakedObject) e.nextElement();
             fieldContent[i++] = createObjectData(element, recursePersistentObjects, depth);
         }
-        // TODO need to add resolved flag to NakedCollection
-        return createObjectData(oid, type, fieldContent, false, object.getVersion());
+        return createObjectData(oid, type, fieldContent, true, collection.getVersion());
     }
 
     /**
@@ -48,7 +47,7 @@ public abstract class DataFactory {
 
         if (object.getSpecification().isObject()) {
             NakedObject nakedObject = (NakedObject) object;
-            return createObjectData(nakedObject, false, 100);
+            return createObjectData(nakedObject, false, persistentGraphDepth);
         } else if (object.getSpecification().isValue()) {
             return createValueData(object);
         } else {
@@ -75,7 +74,7 @@ public abstract class DataFactory {
      */
     public final ObjectData createMakePersistentGraph(NakedObject object) {
         Assert.assertTrue(object.getResolveState().isTransient());
-        return createObjectData(object, false, 100);
+        return createObjectData(object, false, persistentGraphDepth);
     }
 
     protected final ObjectData createObjectData(NakedObject object, boolean recursePersistentObjects, int depth) {
@@ -101,7 +100,7 @@ public abstract class DataFactory {
             for (int i = 0; i < fields.length; i++) {
                 Naked field = object.getField(fields[i]);
                 if (field == null) {
-                    continue;
+                    fieldContent[i] = createNullData(fields[i].getSpecification().getFullName());
                 } else if (fields[i].isValue()) {
                     fieldContent[i] = createValueData(field);
                 } else if (fields[i].isCollection()) {
@@ -149,6 +148,18 @@ public abstract class DataFactory {
 
     public final ObjectData createDataForActionTarget(NakedObject object) {
         return createObjectData(object, false, 100);
+    }
+
+    public Data createActionResult(Naked result) {
+        if(result == null) {
+            return createNullData("");
+        } else if (result instanceof NakedCollection) {
+            return createCollectionData((NakedCollection) result, true, persistentGraphDepth);
+        } else if (result instanceof NakedObject) {
+	        return createCompletePersistentGraph((NakedObject) result);
+        } else {
+            throw new NakedObjectRuntimeException();
+        }
     }
 }
 
