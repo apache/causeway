@@ -6,7 +6,7 @@ import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 import org.nakedobjects.object.persistence.defaults.SerialOid;
 
 import junit.framework.TestCase;
@@ -100,7 +100,7 @@ public class XmlDataManagerTest extends TestCase {
 		assertEquals(first + 3, manager.nextId());
 	}
 
-	public void testInsertObjectWithFields() throws ObjectStoreException {
+	public void testInsertObjectWithFields() throws ObjectManagerException {
 		ObjectData data = createData(Role.class, 99);
 		data.set("Person", new SerialOid(101));
 		assertNotNull(data.get("Person"));
@@ -118,7 +118,7 @@ public class XmlDataManagerTest extends TestCase {
 	}
 
 
-	public void testInsertObjectWithEmptyOneToManyAssociations() throws ObjectStoreException {
+	public void testInsertObjectWithEmptyOneToManyAssociations() throws ObjectManagerException {
 		ObjectData data = createData(Team.class, 99);
 
 		SerialOid coid = new SerialOid(103);
@@ -134,7 +134,7 @@ public class XmlDataManagerTest extends TestCase {
 		assertNull(c);
 	}
 
-	public void testInsertObjectWithOneToManyAssociations() throws ObjectStoreException {
+	public void testInsertObjectWithOneToManyAssociations() throws ObjectManagerException {
 		ObjectData data = createData(Team.class, 99);
 		
 		SerialOid coid = new SerialOid(103);
