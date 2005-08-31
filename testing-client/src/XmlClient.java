@@ -5,6 +5,7 @@ import org.nakedobjects.application.valueholder.Date;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
+import org.nakedobjects.distribution.DistributionLogger;
 import org.nakedobjects.distribution.ProxyObjectManager;
 import org.nakedobjects.distribution.ProxyReflectionFactory;
 import org.nakedobjects.distribution.java.JavaObjectDataFactory;
@@ -61,8 +62,10 @@ public class XmlClient {
         try {
             Date.setClock(new SystemClock());
             
-            org.nakedobjects.distribution.xml.XmlClient connection = new org.nakedobjects.distribution.xml.XmlClient();
+            org.nakedobjects.distribution.xml.XmlClient conn = new org.nakedobjects.distribution.xml.XmlClient();
 
+            DistributionLogger connection = new DistributionLogger(conn, "client.log");
+            
             JavaBusinessObjectContainer container = new JavaBusinessObjectContainer();
 
             JavaObjectFactory objectFactory = new JavaObjectFactory();
@@ -101,7 +104,7 @@ public class XmlClient {
             ViewUpdateNotifier updateNotifier = new ViewUpdateNotifier();
 
             proxyObjectManager.setUpdateNotifier(updateNotifier);
-            connection.setUpdateNotifier(updateNotifier);
+            conn.setUpdateNotifier(updateNotifier);
             
             nakedObjects.init();
             
