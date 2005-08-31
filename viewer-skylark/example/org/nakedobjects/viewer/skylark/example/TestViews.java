@@ -19,8 +19,6 @@ import org.apache.log4j.BasicConfigurator;
 
 
 public class TestViews {
-
-
     protected TestSystem system;
 
     protected NakedObject createExampleObjectForView() {
@@ -83,11 +81,16 @@ public class TestViews {
 
     protected Workspace workspace() {
         TestWorkspaceView workspace = new TestWorkspaceView(null);
+        workspace.setShowOutline(showOutline());
         // NOTE - viewer seems to ignore the placement of the workspace view
         // TODO fix the viewer so the root view is displayed at specified location
         //workspace.setLocation(new Location(50, 50));
         workspace.setSize(workspace.getRequiredSize());
         return workspace;
+    }
+
+    protected boolean showOutline() {
+        return false;
     }
 }
 

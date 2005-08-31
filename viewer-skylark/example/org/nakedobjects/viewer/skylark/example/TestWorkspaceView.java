@@ -20,6 +20,7 @@ public class TestWorkspaceView extends AbstractView implements Workspace {
     private static final Color markerDark = Color.GRAY;
     private static final Color markerLight = new Color(0xf0f0f0);
     private final Vector views = new Vector();
+    private boolean showOutline;
 
     public View[] getSubviews() {
         View[] array = new View[views.size()];
@@ -37,6 +38,8 @@ public class TestWorkspaceView extends AbstractView implements Workspace {
         View[] subviews = getSubviews();
         for (int i = 0; i < subviews.length; i++) {
             b.append(subviews[i].debugDetails());
+            b.append("\nContent: ");
+            b.append(subviews[i].getContent().getNaked());
             b.append("\n----------------\n");
         }
         return b.toString();
@@ -83,7 +86,11 @@ public class TestWorkspaceView extends AbstractView implements Workspace {
     }
 
     private boolean showOutline() {
-        return false;
+        return showOutline;
+    }
+    
+    public void setShowOutline(boolean showOutline) {
+        this.showOutline = showOutline;
     }
 
     public View subviewFor(Location location) {

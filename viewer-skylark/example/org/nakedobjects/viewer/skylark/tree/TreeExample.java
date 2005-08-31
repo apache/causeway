@@ -96,6 +96,10 @@ public class TreeExample extends TestViews {
             public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
 
             public void setValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {}
+         
+            public Class[] getExtensions() {
+                return new Class[0];
+            }
         };
 
         NakedObjectField[] fields = new NakedObjectField[] { new OneToOneAssociation("cls", "fld", spec, peer),
