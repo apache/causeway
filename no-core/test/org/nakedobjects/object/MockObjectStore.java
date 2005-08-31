@@ -5,7 +5,7 @@ import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.PersistenceCommand;
 import org.nakedobjects.object.persistence.SaveObjectCommand;
@@ -54,7 +54,7 @@ public class MockObjectStore implements NakedObjectStore {
         getObject = object;
     }
 
-    public void createNakedClass(NakedObject cls) throws ObjectStoreException {}
+    public void createNakedClass(NakedObject cls) throws ObjectManagerException {}
 
 
     public void endTransaction() {
@@ -83,11 +83,11 @@ public class MockObjectStore implements NakedObjectStore {
         return instances;
     }
 
-    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
+    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectManagerException {
         throw new NotImplementedException("Getting naked class " + name);
     }
 
-    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectStoreException {
+    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectManagerException {
         if(getObject == null) {
             Assert.fail("no object expected");
         }
@@ -99,7 +99,7 @@ public class MockObjectStore implements NakedObjectStore {
         return hasInstances;
     }
 
-    public void init() throws ObjectStoreException {
+    public void init() throws ObjectManagerException {
     }
 
     public String name() {
@@ -118,7 +118,7 @@ public class MockObjectStore implements NakedObjectStore {
     public void resolveImmediately(NakedObject object) {
     }
 
-    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectStoreException {}
+    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectManagerException {}
     
     public void setupInstancesCount(int i) {
         instanceCount = i;
@@ -132,14 +132,14 @@ public class MockObjectStore implements NakedObjectStore {
         hasInstances = flag;
     }
 
-    public void shutdown() throws ObjectStoreException {
+    public void shutdown() throws ObjectManagerException {
     }
 
     public void startTransaction() {
         actions.addElement("startTransaction");
     }
 
-    public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectStoreException, UnsupportedFindException {
+    public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectManagerException, UnsupportedFindException {
         actions.addElement("getInstances " + criteria);
         return instances;
     }
@@ -148,7 +148,7 @@ public class MockObjectStore implements NakedObjectStore {
         actions.addElement("createObject " + object);
         return new CreateObjectCommand() {
 
-            public void execute() throws ObjectStoreException {}
+            public void execute() throws ObjectManagerException {}
 
             public String toString() {
                 return "CreateObjectCommand " + object.toString();
@@ -163,7 +163,7 @@ public class MockObjectStore implements NakedObjectStore {
         actions.addElement("destroyObject " + object);
         return new DestroyObjectCommand() {
 
-            public void execute() throws ObjectStoreException {}
+            public void execute() throws ObjectManagerException {}
         
             public String toString() {
                 return "DestroyObjectCommand " + object.toString();
@@ -180,7 +180,7 @@ public class MockObjectStore implements NakedObjectStore {
         return null;
     }
 
-    public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException {
+    public void runTransaction(PersistenceCommand[] commands) throws ObjectManagerException {
         for (int i = 0; i < commands.length; i++) {
             actions.addElement("run " + commands[i]);
             

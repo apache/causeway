@@ -80,10 +80,58 @@ public class ObjectLoaderImplTest extends TestCase {
         assertEquals(adapter1, objectLoader.getAdapterFor(pojo1));
     }
 
-    public void testCreateAdapterForValue() {
+    public void testCreateAdapterForStringValue() {
         NakedValue adapter = objectLoader.createAdapterForValue("fred");
         assertEquals("fred", adapter.getObject());
         assertFalse(pojoAdapterMap.containsPojo("fred"));
+    }
+
+    public void testCreateAdapterForCharValue() {
+        NakedValue adapter = objectLoader.createAdapterForValue(new Character('g'));
+        assertEquals(new Character('g'), adapter.getObject());
+        assertFalse(pojoAdapterMap.containsPojo(new Character('g')));
+    }
+
+    public void testCreateAdapterForByteValue() {
+        NakedValue adapter = objectLoader.createAdapterForValue(new Byte((byte) 123));
+        assertEquals(new Byte((byte) 123), adapter.getObject());
+        assertFalse(pojoAdapterMap.containsPojo(new Byte((byte) 123)));
+    }
+
+    public void testCreateAdapterForShortValue() {
+        NakedValue adapter = objectLoader.createAdapterForValue(new Short((short) 123));
+        assertEquals((new Short((short) 123)), adapter.getObject());
+        assertFalse(pojoAdapterMap.containsPojo((new Short((short) 123))));
+    }
+
+    public void testCreateAdapterForIntegerValue() {
+        NakedValue adapter = objectLoader.createAdapterForValue(new Integer(123));
+        assertEquals(new Integer(123), adapter.getObject());
+        assertFalse(pojoAdapterMap.containsPojo(new Integer(123)));
+    }
+
+    public void testCreateAdapterForLongValue() {
+        NakedValue adapter = objectLoader.createAdapterForValue(new Long(123));
+        assertEquals(new Long(123), adapter.getObject());
+        assertFalse(pojoAdapterMap.containsPojo(new Long(123)));
+    }
+
+    public void testCreateAdapterForFloatValue() {
+        NakedValue adapter = objectLoader.createAdapterForValue(new Float(123));
+        assertEquals(new Float(123), adapter.getObject());
+        assertFalse(pojoAdapterMap.containsPojo(new Float(123)));
+    }
+
+    public void testCreateAdapterForDoubleValue() {
+        NakedValue adapter = objectLoader.createAdapterForValue(new Double(123));
+        assertEquals(new Double(123), adapter.getObject());
+        assertFalse(pojoAdapterMap.containsPojo(new Double(123)));
+    }
+
+    public void testCreateAdapterForBooleanValue() {
+        NakedValue adapter = objectLoader.createAdapterForValue(new Boolean(true));
+        assertEquals(new Boolean(true), adapter.getObject());
+        assertFalse(pojoAdapterMap.containsPojo(new Boolean(true)));
     }
 
     public void testGetAdapterByOid() {

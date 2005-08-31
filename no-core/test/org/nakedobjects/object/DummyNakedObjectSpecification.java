@@ -3,7 +3,6 @@ package org.nakedobjects.object;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.ObjectTitle;
 import org.nakedobjects.object.reflect.Action.Type;
 
 
@@ -15,15 +14,16 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     private boolean isObject = true;
     private boolean isValue = false;
     private NakedObjectSpecification[] subclasses = new NakedObjectSpecification[0];
-    private ObjectTitle titleObject;
-    private String unresolvedTitle;
+    private String name;
+    private String title;
+
+    public DummyNakedObjectSpecification(String name) {
+        this.name = name == null ? "DummyNakedObjectSpecification#" + id : name;
+        title = "";
+    }
 
     public DummyNakedObjectSpecification() {
-        titleObject = new ObjectTitle() {
-            public String title(NakedObject object) {
-                return "";
-            }
-        };
+        this(null);
     }
 
     public void clearDirty(NakedObject object) {}
@@ -54,6 +54,10 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         return null;
     }
 
+    public Class[] getExtensions() {
+        return null;
+    }
+
     public NakedObjectField getField(String name) {
         return null;
     }
@@ -61,13 +65,21 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     public Object getFieldExtension(String name, Class cls) {
         return null;
     }
+    
+    public Class[] geFieldExtensions(String name) {
+        return null;
+    }
+
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
     public NakedObjectField[] getFields() {
         return fields;
     }
 
     public String getFullName() {
-        return "DummyNakedObjectSpecification#" + id;
+        return name;
     }
 
     public Action getObjectAction(Type type, String name) {
@@ -92,10 +104,6 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
 
     public String getSingularName() {
         return "singular name";
-    }
-
-    public ObjectTitle getTitle() {
-        return titleObject;
     }
 
     public NakedObjectField[] getVisibleFields(NakedObject object) {
@@ -166,12 +174,8 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         this.subclasses = subclasses;
     }
 
-    public void setupTitleObject(ObjectTitle titleObject) {
-        this.titleObject = titleObject;
-    }
-
-    public void setupUnresolvedTitle(String unresolvedTitle) {
-        this.unresolvedTitle = unresolvedTitle;
+    public void setupTitle(String title) {
+        this.title = title;
     }
 
     public NakedObjectSpecification[] subclasses() {
@@ -186,10 +190,9 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         return getFullName();
     }
 
-    public String unresolvedTitle(NakedObject object) {
-        return unresolvedTitle;
+    public String getTitle(NakedObject naked) {
+        return title;
     }
-
 }
 
 /*

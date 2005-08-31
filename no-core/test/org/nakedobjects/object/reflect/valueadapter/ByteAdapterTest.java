@@ -14,8 +14,7 @@ public class ByteAdapterTest extends TestCase {
     private ByteAdapter fpv;
 
     protected void setUp() throws Exception {
-        fpv = new ByteAdapter();
-        fpv.setValue((byte) 32);
+        fpv = new ByteAdapter((byte) 32);
     }
 
     public void testIntegerValue() {

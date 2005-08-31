@@ -3,9 +3,11 @@ package org.nakedobjects.object.defaults;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectFactory;
 
+import java.util.Vector;
+
 
 public class DummyObjectFactory implements ObjectFactory {
-    private Object createdObject;
+    private Vector createdObjects = new Vector();
 
     public void setUpAsNewLogicalObject(Object object) {}
  
@@ -16,11 +18,13 @@ public class DummyObjectFactory implements ObjectFactory {
     public void initRecreatedObject(Object object) {}
 
     public Object createObject(NakedObjectSpecification specification) {
-        return createdObject;
+        Object firstElement = createdObjects.firstElement();
+        createdObjects.removeElementAt(0);
+        return firstElement;
     }
 
     public void setupCreateObject(Object createdObject) {
-        this.createdObject = createdObject;
+        this.createdObjects.addElement(createdObject);
     }
 }
 

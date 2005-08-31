@@ -1,22 +1,41 @@
 package org.nakedobjects.object;
 
-public class DummyNakedObjectSpecificationLoader implements NakedObjectSpecificationLoader {
+import java.util.Enumeration;
+import java.util.Hashtable;
 
+public class DummyNakedObjectSpecificationLoader implements NakedObjectSpecificationLoader {
+    private Hashtable specs = new Hashtable();
+    
     public NakedObjectSpecification loadSpecification(String name) {
-        return null;
+        if(specs.containsKey(name)) {
+            return (NakedObjectSpecification) specs.get(name);
+        } else {
+            throw new NakedObjectRuntimeException("no specification for " + name);
+        }
     }
 
     public NakedObjectSpecification loadSpecification(Class cls) {
-        return null;
+        return loadSpecification(cls.getName());
     }
 
     public NakedObjectSpecification[] getAllSpecifications() {
-        return null;
+        NakedObjectSpecification[] specsArray;
+        specsArray = new NakedObjectSpecification[specs.size()];
+        int i = 0;
+        Enumeration e = specs.elements();
+        while (e.hasMoreElements()) {
+            specsArray[i++] =  (NakedObjectSpecification) e.nextElement();
+        }
+        return specsArray;
     }
 
     public void shutdown() {}
 
     public void init() {}
+
+    public void addSpecification(NakedObjectSpecification specification) {
+        specs.put(specification.getFullName(), specification);
+    }
 
 }
 

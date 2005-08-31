@@ -114,6 +114,10 @@ class MockOneToOneAssociation implements OneToOnePeer {
         return null;
     }
 
+    public Class[] getExtensions() {
+        return new Class[0];
+    }
+
 }
 
 

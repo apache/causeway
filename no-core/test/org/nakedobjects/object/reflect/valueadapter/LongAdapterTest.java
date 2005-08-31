@@ -14,8 +14,7 @@ public class LongAdapterTest extends TestCase {
     private LongAdapter fpv;
 
     protected void setUp() throws Exception {
-        fpv = new LongAdapter();
-        fpv.setValue(32l);
+        fpv = new LongAdapter(32l);
     }
 
     public void testIntegerValue() {

@@ -47,6 +47,10 @@ public class DummyField extends NakedObjectField {
         return null;
     }
 
+    public Class[] getExtensions() {
+        return new Class[0];
+    }
+
 }
 
 /*

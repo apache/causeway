@@ -14,8 +14,7 @@ public class IntAdapterTest extends TestCase {
     private IntAdapter fpv;
 
     protected void setUp() throws Exception {
-        fpv = new IntAdapter();
-        fpv.setValue(32);
+        fpv = new IntAdapter(32);
     }
 
     public void testIntegerValue() {

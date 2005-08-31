@@ -10,7 +10,7 @@ import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.MockObjectManager;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 
 import junit.framework.TestSuite;
 
@@ -35,7 +35,7 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
         junit.textui.TestRunner.run(new TestSuite(OneToManyAssociationTest.class));
     }
 
-    public void setUp()  throws ObjectStoreException {
+    public void setUp()  throws ObjectManagerException {
     	LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
     	new NakedObjectsClient().setObjectManager(new MockObjectManager());

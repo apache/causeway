@@ -14,8 +14,7 @@ public class DoubleAdapterTest extends TestCase {
     private DoubleAdapter fpv;
 
     protected void setUp() throws Exception {
-        fpv = new DoubleAdapter();
-        fpv.setValue( 32.5d);
+        fpv = new DoubleAdapter(32.5d);
     }
 
     public void testIntegerValue() {

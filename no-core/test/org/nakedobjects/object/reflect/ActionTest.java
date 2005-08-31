@@ -10,7 +10,7 @@ import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.MockHint;
 import org.nakedobjects.object.defaults.MockObjectManager;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 
 import java.util.Vector;
 
@@ -37,7 +37,7 @@ public class ActionTest extends NakedObjectTestCase {
         super(name);
     }
 
-    protected void setUp() throws ObjectStoreException {
+    protected void setUp() throws ObjectManagerException {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
         NakedObjectsClient nakedObjects = new NakedObjectsClient();

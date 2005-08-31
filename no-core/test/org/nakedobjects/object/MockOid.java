@@ -4,7 +4,6 @@ import org.nakedobjects.object.persistence.Oid;
 
 
 public class MockOid implements Oid {
-
     private int id;
 
     public MockOid(int id) {
@@ -28,6 +27,16 @@ public class MockOid implements Oid {
     public String toString() {
         return "MockOid#" + id;
     }
+
+    public boolean hasPrevious() {
+        return false;
+    }
+
+    public Oid getPrevious() {
+        return null;
+    }
+
+    public void copyFrom(Oid oid) {}
 }
 
 /*

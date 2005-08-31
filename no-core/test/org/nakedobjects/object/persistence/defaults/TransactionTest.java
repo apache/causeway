@@ -4,7 +4,7 @@ import org.nakedobjects.object.MockObjectStore;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.persistence.CreateObjectCommand;
 import org.nakedobjects.object.persistence.DestroyObjectCommand;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 import org.nakedobjects.object.persistence.SaveObjectCommand;
 import org.nakedobjects.object.reflect.DummyNakedObject;
 
@@ -28,7 +28,7 @@ public class TransactionTest extends TestCase {
     private CreateObjectCommand createCreateCommand(final NakedObject object, final String name) {
         return new CreateObjectCommand() {
 
-            public void execute() throws ObjectStoreException {}
+            public void execute() throws ObjectManagerException {}
 
             public NakedObject onObject() {
                 return object;
@@ -43,7 +43,7 @@ public class TransactionTest extends TestCase {
     private DestroyObjectCommand createDestroyCommand(final NakedObject object, final String name) {
         return new DestroyObjectCommand() {
 
-            public void execute() throws ObjectStoreException {}
+            public void execute() throws ObjectManagerException {}
 
             public NakedObject onObject() {
                 return object;
@@ -57,7 +57,7 @@ public class TransactionTest extends TestCase {
 
     private SaveObjectCommand createSaveCommand(final NakedObject object, final String name) {
         return new SaveObjectCommand() {
-            public void execute() throws ObjectStoreException {}
+            public void execute() throws ObjectManagerException {}
 
             public NakedObject onObject() {
                 return object;
@@ -71,8 +71,8 @@ public class TransactionTest extends TestCase {
 
     private SaveObjectCommand createCommandThatAborts(final NakedObject object, final String name) {
         return new SaveObjectCommand() {
-            public void execute() throws ObjectStoreException {
-                throw new ObjectStoreException();
+            public void execute() throws ObjectManagerException {
+                throw new ObjectManagerException();
             }
 
             public NakedObject onObject() {
@@ -118,7 +118,7 @@ public class TransactionTest extends TestCase {
         try {
             t.commit(os);
             fail();
-        } catch (ObjectStoreException expected) {}
+        } catch (ObjectManagerException expected) {}
         os.assertAction(0, "start");
         os.assertAction(1, "run command 1");
         os.assertAction(2, "run command 2");

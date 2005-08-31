@@ -14,8 +14,7 @@ public class ShortAdapterTest extends TestCase {
     private ShortAdapter fpv;
 
     protected void setUp() throws Exception {
-        fpv = new ShortAdapter();
-        fpv.setValue((short) 32);
+        fpv = new ShortAdapter((short) 32);
     }
 
     public void testShortValue() {

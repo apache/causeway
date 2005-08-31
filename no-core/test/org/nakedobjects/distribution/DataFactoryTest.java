@@ -1,6 +1,7 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.TestSystem;
+import org.nakedobjects.distribution.dummy.DummyObjectDataFactory;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.DummyNakedValue;
 import org.nakedobjects.object.DummyObjectLoader;
@@ -8,6 +9,7 @@ import org.nakedobjects.object.MockOid;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.reflect.DummyField;
+import org.nakedobjects.object.reflect.DummyNakedCollection;
 import org.nakedobjects.object.reflect.DummyNakedObject;
 import org.nakedobjects.object.reflect.NakedObjectField;
 
@@ -20,23 +22,24 @@ import org.apache.log4j.LogManager;
 
 
 public class DataFactoryTest extends TestCase {
-    private DummyObjectDataFactory factory;
-    private DummyNakedObjectSpecification rootSpecification;
-    private DummyNakedObject rootObject;
-    private TestSystem system;
-    private DummyObjectLoader objectLoader;
-    private DummyNakedValue valueField;
-    private DummyNakedObject referencedObjectField;
-    private DummyNakedObjectSpecification referencedSpecification;
-    private NakedObjectSpecification valueSpecification;
-    private Date value;
-    private DummyNakedObjectSpecification emtpyFieldSpecification;
-    private DummyNakedObjectSpecification referencedReferencedSpecification;
-    private DummyNakedObject referencedReferencedObjectField;
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(DataFactoryTest.class);
     }
+
+    private DummyNakedObjectSpecification emtpyFieldSpecification;
+    private DummyObjectDataFactory factory;
+    private DummyObjectLoader objectLoader;
+    private DummyNakedObject referencedObjectField;
+    private DummyNakedObject referencedReferencedObjectField;
+    private DummyNakedObjectSpecification referencedReferencedSpecification;
+    private DummyNakedObjectSpecification referencedSpecification;
+    private DummyNakedObject rootObject;
+    private DummyNakedObjectSpecification rootSpecification;
+    private TestSystem system;
+    private Date value;
+    private DummyNakedValue valueField;
+    private NakedObjectSpecification valueSpecification;
 
     protected void setUp() throws Exception {
         LogManager.getRootLogger().setLevel(Level.OFF);
@@ -93,162 +96,23 @@ public class DataFactoryTest extends TestCase {
         system.shutdown();
     }
 
-    public void testValueParameter() {
-        DummyNakedValue dummyNakedValue = new DummyNakedValue();
-        dummyNakedValue.setupObject(new Integer(123));
-
-        ValueData data = (ValueData) factory.createDataForParameter("", dummyNakedValue);
-
-        assertEquals(dummyNakedValue.getSpecification().getFullName(), data.getType());
-        assertEquals(new Integer(123), data.getValue());
+    public void testCreateActionResultWithNull() {
+        Data data = factory.createActionResult(null);
+        assertTrue(data instanceof NullData);
     }
 
-    public void testPersistentObjectParameter() {
-        assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
-
-        MockOid rootOid = new MockOid(1);
-        rootObject.setupOid(rootOid);
-
-        ObjectData rootData = (ObjectData) factory.createDataForParameter("", rootObject);
-        assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
-
-        assertEquals(rootOid, rootData.getOid());
-        assertEquals(rootSpecification.getFullName(), rootData.getType());
-        assertEquals(11, rootData.getVersion());
-        assertNull(rootData.getFieldContent());
-
+    public void testCreateActionResultWithCollection() {
+        DummyNakedCollection collection = new DummyNakedCollection();
+        Data data = factory.createActionResult(collection);
+        assertTrue(data instanceof ObjectData);
     }
 
-    public void testTransientObjectParameter() {
-        rootObject.setupResolveState(ResolveState.TRANSIENT);
-        referencedObjectField.setupResolveState(ResolveState.TRANSIENT);
-
-        ObjectData rootData = (ObjectData) factory.createDataForParameter("", rootObject);
-        assertEquals(ResolveState.SERIALIZING_TRANSIENT, rootObject.getResolveState());
-
-        assertEquals(null, rootData.getOid());
-        assertEquals(rootSpecification.getFullName(), rootData.getType());
-        assertEquals(11, rootData.getVersion());
-        assertEquals(3, rootData.getFieldContent().length);
-
-        ObjectData referencedFieldData = (ObjectData) rootData.getFieldContent()[0];
-        assertEquals(1, referencedFieldData.getFieldContent().length);
-        assertEquals(12, referencedFieldData.getVersion());
-        assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
-
-        ObjectData referencedFieldData2 = (ObjectData) referencedFieldData.getFieldContent()[0];
-        assertEquals(null, referencedFieldData2.getFieldContent());
-        assertEquals(13, referencedFieldData2.getVersion());
-        assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
-
-        ValueData valueData = (ValueData) rootData.getFieldContent()[1];
-        assertEquals(valueSpecification.getFullName(), valueData.getType());
-        assertEquals(value, valueData.getValue());
-
-        ObjectData emptyFieldData = (ObjectData) rootData.getFieldContent()[2];
-        assertNull(emptyFieldData);
-
-    }
-
-    public void testResolveStateIsMirroredInObjectData() {
-        rootObject.setupResolveState(ResolveState.GHOST);
-        assertEquals(ResolveState.GHOST, rootObject.getResolveState());
-
-        ObjectData od = factory.createObjectData(rootObject, false, 10);
-
-        assertEquals(false, od.isResolved());
-        assertEquals(ResolveState.GHOST, rootObject.getResolveState());
-
-        rootObject.setupResolveState(ResolveState.RESOLVED);
-        assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
-
-        od = factory.createObjectData(rootObject, false, 10);
-
-        assertEquals(true, od.isResolved());
-        assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
-    }
-
-    public void testCreateMakePersistentGraphWereAllTransient() {
-        rootObject.setupResolveState(ResolveState.TRANSIENT);
-        referencedObjectField.setupResolveState(ResolveState.TRANSIENT);
-        referencedReferencedObjectField.setupResolveState(ResolveState.TRANSIENT);
-
-        ObjectData rootData = (ObjectData) factory.createMakePersistentGraph(rootObject);
-        assertEquals(ResolveState.SERIALIZING_TRANSIENT, rootObject.getResolveState());
-
-        assertEquals(null, rootData.getOid());
-        assertEquals(rootSpecification.getFullName(), rootData.getType());
-        assertEquals(11, rootData.getVersion());
-        assertEquals(3, rootData.getFieldContent().length);
-
-        ObjectData referencedFieldData = (ObjectData) rootData.getFieldContent()[0];
-        assertEquals(1, referencedFieldData.getFieldContent().length);
-        assertEquals(12, referencedFieldData.getVersion());
-        assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
-
-        ObjectData referencedFieldData2 = (ObjectData) referencedFieldData.getFieldContent()[0];
-        assertEquals(0, referencedFieldData2.getFieldContent().length);
-        assertEquals(13, referencedFieldData2.getVersion());
-        assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
-
-        ValueData valueData = (ValueData) rootData.getFieldContent()[1];
-        assertEquals(valueSpecification.getFullName(), valueData.getType());
-        assertEquals(value, valueData.getValue());
-
-        ObjectData emptyFieldData = (ObjectData) rootData.getFieldContent()[2];
-        assertNull(emptyFieldData);
-
-    }
-
-    public void testCreateMakePersistentGraphWereAllReferencesArePersistent() {
-        rootObject.setupResolveState(ResolveState.TRANSIENT);
-
-        ObjectData rootData = (ObjectData) factory.createMakePersistentGraph(rootObject);
-        assertEquals(ResolveState.SERIALIZING_TRANSIENT, rootObject.getResolveState());
-
-        assertEquals(null, rootData.getOid());
-        assertEquals(rootSpecification.getFullName(), rootData.getType());
-        assertEquals(11, rootData.getVersion());
-        assertEquals(3, rootData.getFieldContent().length);
-
-        ObjectData referencedFieldData = (ObjectData) rootData.getFieldContent()[0];
-        assertEquals(null, referencedFieldData.getFieldContent());
-        assertEquals(12, referencedFieldData.getVersion());
-        assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
-
-        ValueData valueData = (ValueData) rootData.getFieldContent()[1];
-        assertEquals(valueSpecification.getFullName(), valueData.getType());
-        assertEquals(value, valueData.getValue());
-
-        ObjectData emptyFieldData = (ObjectData) rootData.getFieldContent()[2];
-        assertNull(emptyFieldData);
-
-    }
-
-    /**
-     * For updates the whole object is passed across, but not any of its children.
-     */
-    public void testCreateForUpdate() {
-        ObjectData rootData = (ObjectData) factory.createForUpdate(rootObject);
-        assertEquals(ResolveState.SERIALIZING_RESOLVED, rootObject.getResolveState());
-
-        assertEquals(null, rootData.getOid());
-        assertEquals(rootSpecification.getFullName(), rootData.getType());
-        assertEquals(11, rootData.getVersion());
-        assertEquals(3, rootData.getFieldContent().length);
-
-        ObjectData referencedFieldData = (ObjectData) rootData.getFieldContent()[0];
-        assertEquals(null, referencedFieldData.getFieldContent());
-        assertEquals(12, referencedFieldData.getVersion());
-        assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
-
-        ValueData valueData = (ValueData) rootData.getFieldContent()[1];
-        assertEquals(valueSpecification.getFullName(), valueData.getType());
-        assertEquals(value, valueData.getValue());
-
-        ObjectData emptyFieldData = (ObjectData) rootData.getFieldContent()[2];
-        assertNull(emptyFieldData);
-
+    public void testCreateActionResultWithObject() {
+        DummyNakedObject object = new DummyNakedObject();
+        object.setupResolveState(ResolveState.PART_RESOLVED);
+        object.setupSpecification(new DummyNakedObjectSpecification());
+        Data data = factory.createActionResult(object);
+        assertTrue(data instanceof ObjectData);
     }
 
     public void testCreateCompletePersistentGraph() {
@@ -285,11 +149,10 @@ public class DataFactoryTest extends TestCase {
         assertEquals(valueSpecification.getFullName(), valueData.getType());
         assertEquals(value, valueData.getValue());
 
-        ObjectData emptyFieldData = (ObjectData) rootData.getFieldContent()[2];
-        assertNull(emptyFieldData);
+        NullData emptyFieldData = (NullData) rootData.getFieldContent()[2];
+        assertNotNull(emptyFieldData);
 
     }
-
 
     public void testCreateCompletePersistentGraphWithGhosts() {
         MockOid rootOid = new MockOid(1);
@@ -299,7 +162,7 @@ public class DataFactoryTest extends TestCase {
         referencedObjectField.setupOid(referencedOid);
 
         referencedObjectField.setupResolveState(ResolveState.GHOST);
-        
+
         ObjectData rootData = (ObjectData) factory.createCompletePersistentGraph(rootObject);
         assertEquals(ResolveState.SERIALIZING_RESOLVED, rootObject.getResolveState());
 
@@ -318,11 +181,167 @@ public class DataFactoryTest extends TestCase {
         assertEquals(valueSpecification.getFullName(), valueData.getType());
         assertEquals(value, valueData.getValue());
 
-        ObjectData emptyFieldData = (ObjectData) rootData.getFieldContent()[2];
-        assertNull(emptyFieldData);
+        NullData emptyFieldData = (NullData) rootData.getFieldContent()[2];
+        assertNotNull(emptyFieldData);
+    }
+
+    /**
+     * For updates the whole object is passed across, but not any of its children.
+     */
+    public void testCreateForUpdate() {
+        ObjectData rootData = (ObjectData) factory.createForUpdate(rootObject);
+        assertEquals(ResolveState.SERIALIZING_RESOLVED, rootObject.getResolveState());
+
+        assertEquals(null, rootData.getOid());
+        assertEquals(rootSpecification.getFullName(), rootData.getType());
+        assertEquals(11, rootData.getVersion());
+        assertEquals(3, rootData.getFieldContent().length);
+
+        ObjectData referencedFieldData = (ObjectData) rootData.getFieldContent()[0];
+        assertEquals(null, referencedFieldData.getFieldContent());
+        assertEquals(12, referencedFieldData.getVersion());
+        assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
+
+        ValueData valueData = (ValueData) rootData.getFieldContent()[1];
+        assertEquals(valueSpecification.getFullName(), valueData.getType());
+        assertEquals(value, valueData.getValue());
+
+        NullData emptyFieldData = (NullData) rootData.getFieldContent()[2];
+        assertNotNull(emptyFieldData);
 
     }
 
+    public void testCreateMakePersistentGraphWereAllReferencesArePersistent() {
+        rootObject.setupResolveState(ResolveState.TRANSIENT);
+
+        ObjectData rootData = (ObjectData) factory.createMakePersistentGraph(rootObject);
+        assertEquals(ResolveState.SERIALIZING_TRANSIENT, rootObject.getResolveState());
+
+        assertEquals(null, rootData.getOid());
+        assertEquals(rootSpecification.getFullName(), rootData.getType());
+        assertEquals(11, rootData.getVersion());
+        assertEquals(3, rootData.getFieldContent().length);
+
+        ObjectData referencedFieldData = (ObjectData) rootData.getFieldContent()[0];
+        assertEquals(null, referencedFieldData.getFieldContent());
+        assertEquals(12, referencedFieldData.getVersion());
+        assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
+
+        ValueData valueData = (ValueData) rootData.getFieldContent()[1];
+        assertEquals(valueSpecification.getFullName(), valueData.getType());
+        assertEquals(value, valueData.getValue());
+
+        NullData emptyFieldData = (NullData) rootData.getFieldContent()[2];
+        assertNotNull(emptyFieldData);
+
+    }
+
+    public void testCreateMakePersistentGraphWereAllTransient() {
+        rootObject.setupResolveState(ResolveState.TRANSIENT);
+        referencedObjectField.setupResolveState(ResolveState.TRANSIENT);
+        referencedReferencedObjectField.setupResolveState(ResolveState.TRANSIENT);
+
+        ObjectData rootData = (ObjectData) factory.createMakePersistentGraph(rootObject);
+        assertEquals(ResolveState.SERIALIZING_TRANSIENT, rootObject.getResolveState());
+
+        assertEquals(null, rootData.getOid());
+        assertEquals(rootSpecification.getFullName(), rootData.getType());
+        assertEquals(11, rootData.getVersion());
+        assertEquals(3, rootData.getFieldContent().length);
+
+        ObjectData referencedFieldData = (ObjectData) rootData.getFieldContent()[0];
+        assertEquals(1, referencedFieldData.getFieldContent().length);
+        assertEquals(12, referencedFieldData.getVersion());
+        assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
+
+        ObjectData referencedFieldData2 = (ObjectData) referencedFieldData.getFieldContent()[0];
+        assertEquals(0, referencedFieldData2.getFieldContent().length);
+        assertEquals(13, referencedFieldData2.getVersion());
+        assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
+
+        ValueData valueData = (ValueData) rootData.getFieldContent()[1];
+        assertEquals(valueSpecification.getFullName(), valueData.getType());
+        assertEquals(value, valueData.getValue());
+
+        NullData emptyFieldData = (NullData) rootData.getFieldContent()[2];
+        assertNotNull(emptyFieldData);
+
+    }
+
+    public void testPersistentObjectParameter() {
+        assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
+
+        MockOid rootOid = new MockOid(1);
+        rootObject.setupOid(rootOid);
+
+        ObjectData rootData = (ObjectData) factory.createDataForParameter("", rootObject);
+        assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
+
+        assertEquals(rootOid, rootData.getOid());
+        assertEquals(rootSpecification.getFullName(), rootData.getType());
+        assertEquals(11, rootData.getVersion());
+        assertNull(rootData.getFieldContent());
+
+    }
+
+    public void testResolveStateIsMirroredInObjectData() {
+        rootObject.setupResolveState(ResolveState.GHOST);
+        assertEquals(ResolveState.GHOST, rootObject.getResolveState());
+
+        ObjectData od = factory.createObjectData(rootObject, false, 10);
+
+        assertEquals(false, od.isResolved());
+        assertEquals(ResolveState.GHOST, rootObject.getResolveState());
+
+        rootObject.setupResolveState(ResolveState.RESOLVED);
+        assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
+
+        od = factory.createObjectData(rootObject, false, 10);
+
+        assertEquals(true, od.isResolved());
+        assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
+    }
+
+    public void testTransientObjectParameter() {
+        rootObject.setupResolveState(ResolveState.TRANSIENT);
+        referencedObjectField.setupResolveState(ResolveState.TRANSIENT);
+
+        ObjectData rootData = (ObjectData) factory.createDataForParameter("", rootObject);
+        assertEquals(ResolveState.SERIALIZING_TRANSIENT, rootObject.getResolveState());
+
+        assertEquals(null, rootData.getOid());
+        assertEquals(rootSpecification.getFullName(), rootData.getType());
+        assertEquals(11, rootData.getVersion());
+        assertEquals(3, rootData.getFieldContent().length);
+
+        ObjectData referencedFieldData = (ObjectData) rootData.getFieldContent()[0];
+        assertEquals(1, referencedFieldData.getFieldContent().length);
+        assertEquals(12, referencedFieldData.getVersion());
+        assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
+
+        ObjectData referencedFieldData2 = (ObjectData) referencedFieldData.getFieldContent()[0];
+        assertEquals(null, referencedFieldData2.getFieldContent());
+        assertEquals(13, referencedFieldData2.getVersion());
+        assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
+
+        ValueData valueData = (ValueData) rootData.getFieldContent()[1];
+        assertEquals(valueSpecification.getFullName(), valueData.getType());
+        assertEquals(value, valueData.getValue());
+
+        NullData emptyFieldData = (NullData) rootData.getFieldContent()[2];
+        assertNotNull(emptyFieldData);
+
+    }
+
+    public void testValueParameter() {
+        DummyNakedValue dummyNakedValue = new DummyNakedValue();
+        dummyNakedValue.setupObject(new Integer(123));
+
+        ValueData data = (ValueData) factory.createDataForParameter("", dummyNakedValue);
+
+        assertEquals(dummyNakedValue.getSpecification().getFullName(), data.getType());
+        assertEquals(new Integer(123), data.getValue());
+    }
 }
 
 /*

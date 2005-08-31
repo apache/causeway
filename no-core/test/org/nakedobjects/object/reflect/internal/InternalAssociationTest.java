@@ -22,7 +22,9 @@ public class InternalAssociationTest extends TestCase {
 	private NakedObject associate;
     private TestSystem system;
     private NakedObject object;
-    private DummyNakedObjectSpecification spec;
+    private DummyNakedObjectSpecification spec1;
+    private DummyNakedObjectSpecification spec2;
+    private DummyNakedObjectSpecification spec3;
     
     public static void main(String[] args) {
         junit.textui.TestRunner.run(new TestSuite(InternalOneToOneAssociationTest.class));
@@ -36,8 +38,12 @@ public class InternalAssociationTest extends TestCase {
     	system = new TestSystem();
         system.init();
 
-        spec = new DummyNakedObjectSpecification();
-        system.addSpecification(spec);
+        spec1 = new DummyNakedObjectSpecification();
+        system.addSpecification(spec1);
+        spec2 = new DummyNakedObjectSpecification(InternalObjectForReferencing.class.getName());
+        system.addSpecification(spec2);
+        spec3 = new DummyNakedObjectSpecification(InternalObjectWithOneToOneAssociations.class.getName());
+        system.addSpecification(spec3);
 
         objectWithOneToOneAssoications = new InternalObjectWithOneToOneAssociations();
 
@@ -60,20 +66,15 @@ public class InternalAssociationTest extends TestCase {
     }
 
     public void testType() {
- //       DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
-        system.addSpecification(spec);
-    	assertEquals(spec, personField.getType());
+    	assertEquals(spec2, personField.getType());
     }
     	
     public void testSet() {
-        system.addSpecification(spec);
      	personField.setAssociation(new DummyIdentifier(), object, associate);
      	assertEquals(associate.getObject(), objectWithOneToOneAssoications.getReferencedObject());
     }     	
     
     public void testRemove() {
-        system.addSpecification(spec);
-        
     	objectWithOneToOneAssoications.setReferencedObject(referencedObject);
     	
     	personField.clearAssociation(new DummyIdentifier(), object, associate);

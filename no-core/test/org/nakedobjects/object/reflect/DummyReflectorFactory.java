@@ -97,12 +97,12 @@ public class DummyReflectorFactory extends ReflectorFactory {
                 return null;
             }
 
-            public String unresolvedTitle(NakedObject pojo) {
+            public Object getExtension(Class cls) {
                 return null;
             }
 
-            public Object getExtension(Class cls) {
-                return null;
+            public Class[] getExtensions() {
+                return new Class[0];
             }
 
             public void destroyed(NakedObject object) {}};

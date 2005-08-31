@@ -3,6 +3,16 @@ package org.nakedobjects.object.persistence.defaults;
 import org.nakedobjects.object.persistence.Oid;
 
 public class DummyOid implements Oid {
+
+    public boolean hasPrevious() {
+        return false;
+    }
+
+    public Oid getPrevious() {
+        return null;
+    }
+
+    public void copyFrom(Oid oid) {}
 }
 
 

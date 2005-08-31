@@ -8,7 +8,16 @@ import org.nakedobjects.utility.StartupException;
 public class MockOidGenerator implements OidGenerator {
 
     public Oid next(Naked object) {
-        return new Oid() {};
+        return new Oid() {
+            public boolean hasPrevious() {
+                return false;
+            }
+
+            public Oid getPrevious() {
+                return null;
+            }
+
+            public void copyFrom(Oid oid) {}};
     }
 
     public String name() {

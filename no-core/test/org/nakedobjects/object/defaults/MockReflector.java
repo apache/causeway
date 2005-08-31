@@ -1,7 +1,6 @@
 package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.MockOneToOnePeer;
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
@@ -102,12 +101,12 @@ public class MockReflector implements Reflector {
         return null;
     }
 
-    public String unresolvedTitle(NakedObject pojo) {
-        return null;
-    }
-
     public Object getExtension(Class cls) {
         return null;
+    }
+    
+    public Class[] getExtensions() {
+        return new Class[0];
     }
 
     public void destroyed(NakedObject object) {}

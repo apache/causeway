@@ -68,6 +68,11 @@ public class MockOneToOnePeer implements OneToOnePeer {
     public Object getExtension(Class cls) {
         return null;
     }
+    
+    public Class[] getExtensions() {
+        return new Class[0];
+    }
+
 }
 
 

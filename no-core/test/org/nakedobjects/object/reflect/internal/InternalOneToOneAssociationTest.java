@@ -1,12 +1,10 @@
 package org.nakedobjects.object.reflect.internal;
 
 
-import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
 
 import java.lang.reflect.Method;
 
@@ -26,7 +24,6 @@ public class InternalOneToOneAssociationTest extends TestCase {
 	private MockNakedObject associate;
     private TestSystem system;
     private DummyNakedObjectSpecification spec;
-    private NakedObjectsClient nakedObjects;
     
     public static void main(String[] args) {
         junit.textui.TestRunner.run(new TestSuite(InternalOneToOneAssociationTest.class));
@@ -65,12 +62,13 @@ public class InternalOneToOneAssociationTest extends TestCase {
     }
     
     public void testType() {
-        system.addSpecification(spec);
-    	assertEquals(spec, personField.getType());
+        DummyNakedObjectSpecification spec2 = new DummyNakedObjectSpecification(InternalObjectForReferencing.class.getName());
+        system.addSpecification(spec2);
+    	assertEquals(spec2, personField.getType());
     }
     	
     public void testSet() {
-        system.addSpecification(spec);
+     //   system.addSpecification(spec);
        
      	personField.setAssociation(new DummyIdentifier(), nakedObject, associate);
      	

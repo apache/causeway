@@ -36,24 +36,22 @@ public class PojoAdapterTest extends TestCase {
     }
 
     private DummyNakedObjectSpecification setupSpec(final String titleString) {
-        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
-        spec.setupTitleObject(new ObjectTitle() {
-            public String title(NakedObject object) {
-                return titleString;
+        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification(){
+            public String getFullName() {
+                return TestPojo.class.getName();
             }
-        });
+        };
+        
+        spec.setupTitle(titleString);
         system.addSpecification(spec);
         return spec;
     }
 
-    public void testTitleFromUnresolvedObject() {
-        DummyNakedObjectSpecification spec = setupSpec(null);
-        spec.setupUnresolvedTitle("unresolved object");
-
+    public void testEmptyTitle() {
+        setupSpec("");        
         NakedObject pa = objectLoader.createAdapterForTransient(new TestPojo());
         pa.getSpecification();
-        assertFalse(pa.getResolveState() == ResolveState.RESOLVED);
-        assertEquals("unresolved object", pa.titleString());
+        assertEquals("", pa.titleString());
     }
 
     public void testTitleStringWhereSpecificationProvidesTitleFromObject() {
@@ -62,16 +60,17 @@ public class PojoAdapterTest extends TestCase {
         NakedObject pa = system.createAdapterForTransient(new TestPojo());
         pa.getSpecification();
         objectLoader.madePersistent(pa, new MockOid(1));
+        assertEquals(ResolveState.RESOLVED, pa.getResolveState());
         assertEquals("object title from specification", pa.titleString());
     }
 
     public void testTitleStringWhereSpecificationReturnNullAsTitle() {
-        DummyNakedObjectSpecification spec = setupSpec(null);
-        spec.setupUnresolvedTitle("unresolved object");
+        setupSpec(null);
 
         NakedObject pa = system.createAdapterForTransient(new TestPojo());
         pa.getSpecification();
         objectLoader.madePersistent(pa, new MockOid(1));
+        assertEquals(ResolveState.RESOLVED, pa.getResolveState());
         assertEquals("A singular name", pa.titleString());
     }
 }

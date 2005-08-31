@@ -8,7 +8,7 @@ import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.persistence.InstancesCriteria;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.NotImplementedException;
@@ -47,7 +47,7 @@ public class MockObjectManager extends AbstractNakedObjectManager {
         Assert.assertEquals(action, actions.elementAt(i));
     }
 
-    protected void createClass(NakedObjectSpecification nc) throws ObjectStoreException {}
+    protected void createClass(NakedObjectSpecification nc) throws ObjectManagerException {}
 
     public Oid createOid(Naked object) {
         throw new NotImplementedException();

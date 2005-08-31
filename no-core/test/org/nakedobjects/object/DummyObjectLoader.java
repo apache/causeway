@@ -74,6 +74,10 @@ public class DummyObjectLoader implements NakedObjectLoader {
         return null;
     }
 
+    public NakedObject recreateTransientInstance(NakedObjectSpecification specification) {
+        return null;
+    }
+    
     public void reset() {}
 
     public void setupAdapter(NakedObject adapter) {
