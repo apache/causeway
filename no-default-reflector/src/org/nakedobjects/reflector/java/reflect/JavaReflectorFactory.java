@@ -5,6 +5,8 @@ import org.nakedobjects.application.value.IntegerNumber;
 import org.nakedobjects.application.valueholder.BusinessValueHolder;
 import org.nakedobjects.application.valueholder.Color;
 import org.nakedobjects.application.valueholder.Logical;
+import org.nakedobjects.application.valueholder.MultilineTextString;
+import org.nakedobjects.application.valueholder.Password;
 import org.nakedobjects.application.valueholder.TextString;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedValue;
@@ -13,10 +15,11 @@ import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.Reflector;
 import org.nakedobjects.reflector.java.value.DateValueAdapter;
 import org.nakedobjects.reflector.java.value.IntegerNumberAdapter;
-import org.nakedobjects.reflector.java.value.TextStringValueAdapter;
 import org.nakedobjects.reflector.java.valueholder.BusinessValueAdapter;
 import org.nakedobjects.reflector.java.valueholder.ColorValueObjectAdapter;
 import org.nakedobjects.reflector.java.valueholder.LogicalValueObjectAdapter;
+import org.nakedobjects.reflector.java.valueholder.MultilineTextStringAdapter;
+import org.nakedobjects.reflector.java.valueholder.PasswordAdapter;
 import org.nakedobjects.reflector.java.valueholder.TextStringAdapter;
 
 import java.util.Vector;
@@ -31,8 +34,12 @@ public class JavaReflectorFactory extends ReflectorFactory {
     }
     
     public NakedValue createValueAdapter(Object object) {
-        if (object instanceof TextString ){
+        if (object instanceof MultilineTextString ){
+            return new MultilineTextStringAdapter((MultilineTextString) object);
+        } else  if (object instanceof TextString ){
             return new TextStringAdapter((TextString) object);
+        } else if (object instanceof Password ){
+            return new PasswordAdapter((Password) object);
         } else if (object instanceof Logical ){
             return new LogicalValueObjectAdapter((Logical) object);
         } else if (object instanceof Color){
@@ -41,8 +48,6 @@ public class JavaReflectorFactory extends ReflectorFactory {
             return new IntegerNumberAdapter((IntegerNumber) object);
         } else if (object instanceof Date){
             return new DateValueAdapter((Date) object);
-        } else if (object instanceof org.nakedobjects.application.value.TextString){
-            return new TextStringValueAdapter((org.nakedobjects.application.value.TextString) object);
         } else if (object instanceof BusinessValueHolder ){
             return new BusinessValueAdapter((BusinessValueHolder) object);
         } else {
