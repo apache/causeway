@@ -96,7 +96,7 @@ public class DataHelper {
                     }
                 } else if (fields[i].isValue()) {
                     if (fieldContent[i] != null) {
-                        object.initValue((OneToOneAssociation) fields[i], ((ValueData) fieldContent[i]).getValue());
+                        object.initValue((OneToOneAssociation) fields[i], fieldContent[i] instanceof NullData ? null : ((ValueData) fieldContent[i]).getValue());
                     }
                 } else {
                     if (fieldContent[i] != null) {
