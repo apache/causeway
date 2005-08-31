@@ -13,6 +13,7 @@ public class AwtText implements Text {
     private static final Logger LOG = Logger.getLogger(AwtText.class);
     private static final String FONT_PROPERTY_STEM = Viewer.PROPERTY_BASE + "font.";
     private static final String SPACING_PROPERTY_STEM = Viewer.PROPERTY_BASE + "spacing.";
+    private final int maxCharWidth;
     private Font font;
     private FontMetrics metrics;
     private Frame fontMetricsComponent = new Frame();
@@ -28,6 +29,8 @@ public class AwtText implements Text {
         }
 
         metrics = fontMetricsComponent.getFontMetrics(font);
+        
+        maxCharWidth = (charWidth('X') + 3);
 
         lineSpacing = cfg.getInteger(SPACING_PROPERTY_STEM + propertyName, 0);
         
@@ -57,7 +60,19 @@ public class AwtText implements Text {
     }
 
     public int stringWidth(String text) {
-        return metrics.stringWidth(text);
+        int stringWidth = metrics.stringWidth(text);
+        if(stringWidth > text.length() * maxCharWidth) {
+            /*
+             * This fixes an intermittent bug in .NET where stringWidth() returns a ridiculous number is returned for the width.
+             * 
+             * TODO don't do this when running Java
+             */
+            stringWidth = 0;
+            for (int i = 0; i < text.length(); i++) {
+                stringWidth += charWidth(text.charAt(i));
+            }
+        }
+        return stringWidth;
     }
 
     public String toString() {
