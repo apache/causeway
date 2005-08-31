@@ -91,7 +91,7 @@ public class Memento implements Transferable, Serializable {
             NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
             NakedObject object;
             if(getOid() == null) {
-                object = objectLoader.createTransientInstance(spec);
+                object = objectLoader.recreateTransientInstance(spec);
             } else {
                 object = objectLoader.recreateAdapterForPersistent(getOid(), spec);
             }
