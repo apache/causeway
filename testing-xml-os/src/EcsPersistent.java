@@ -9,6 +9,7 @@ import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
 import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.persistence.OidGenerator;
+import org.nakedobjects.object.persistence.defaults.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
 import org.nakedobjects.persistence.file.XmlDataManager;
@@ -65,9 +66,12 @@ public class EcsPersistent {
 
             OidGenerator oidGenerator = new SimpleOidGenerator(1000);            
 
+            DefaultPersistAlgorithm algo = new DefaultPersistAlgorithm();
+            algo.setOidGenerator(oidGenerator);
+            
             LocalObjectManager objectManager = new LocalObjectManager();
             objectManager.setObjectStore(objectStore);
-            objectManager.setOidGenerator(oidGenerator);
+            objectManager.setPersistAlgorithm(algo);
             objectManager.setCheckObjectsForDirtyFlag(true);
 
             nakedObjects.setObjectManager(objectManager);
