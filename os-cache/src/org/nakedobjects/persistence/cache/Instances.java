@@ -4,7 +4,7 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.PojoAdapterFactory;
 
@@ -37,7 +37,7 @@ class Instances {
         return orderedInstances.elements();
     }
 
-    public int loadData(SnapshotImpl reader) throws ObjectStoreException {
+    public int loadData(SnapshotImpl reader) throws ObjectManagerException {
         int noInstances = reader.readInt();
         int size = 0;
         for (int i = 0; i < noInstances; i++) {
@@ -56,7 +56,7 @@ class Instances {
         return NakedObjects.getObjectLoader();
     }
 
-    public void loadIdentities(SnapshotImpl reader) throws ObjectStoreException {
+    public void loadIdentities(SnapshotImpl reader) throws ObjectManagerException {
         int noInstances = reader.readInt();
         for (int i = 0; i < noInstances; i++) {
             Oid oid = (Oid) reader.readOid();
@@ -91,7 +91,7 @@ class Instances {
         index.remove(object.getOid());
     }
 
-    public long saveData(SnapShotWriter writer) throws ObjectStoreException {
+    public long saveData(SnapShotWriter writer) throws ObjectManagerException {
         writer.writeInt(numberInstances());
 
         Enumeration e = instances();
@@ -103,7 +103,7 @@ class Instances {
         return i;
     }
 
-    public void saveIdentities(SnapShotWriter writer) throws ObjectStoreException {
+    public void saveIdentities(SnapShotWriter writer) throws ObjectManagerException {
         writer.writeInt(numberInstances());
 
         Enumeration e = instances();

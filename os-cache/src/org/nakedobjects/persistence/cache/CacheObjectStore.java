@@ -9,7 +9,7 @@ import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.PersistenceCommand;
 import org.nakedobjects.object.persistence.SaveObjectCommand;
@@ -33,7 +33,7 @@ public class CacheObjectStore implements NakedObjectStore {
     public CreateObjectCommand createCreateObjectCommand(final NakedObject object) {
         return new CreateObjectCommand() {
 
-            public void execute() throws ObjectStoreException {
+            public void execute() throws ObjectManagerException {
                 journal.writeJournal("create", new Memento(object));
                 instances(object.getSpecification()).create(object);
             }
@@ -51,7 +51,7 @@ public class CacheObjectStore implements NakedObjectStore {
     public DestroyObjectCommand createDestroyObjectCommand(final NakedObject object) {
         return new DestroyObjectCommand() {
 
-            public void execute() throws ObjectStoreException {
+            public void execute() throws ObjectManagerException {
                 journal.writeJournal("delete", new Memento(object));
                 instances(object.getSpecification()).remove(object);
             }
@@ -68,7 +68,7 @@ public class CacheObjectStore implements NakedObjectStore {
 
     public SaveObjectCommand createSaveObjectCommand(final NakedObject object) {
         return new SaveObjectCommand() {
-            public void execute() throws ObjectStoreException {
+            public void execute() throws ObjectManagerException {
                 journal.writeJournal("save", new Memento(object));
             }
 
@@ -93,7 +93,7 @@ public class CacheObjectStore implements NakedObjectStore {
     }
 
     
-    public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectStoreException, UnsupportedFindException {
+    public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectManagerException, UnsupportedFindException {
         // TODO deal with subclasses
         Vector instances = new Vector();
         Enumeration objects = instances(criteria.getSpecification()).instances();
@@ -119,11 +119,11 @@ public class CacheObjectStore implements NakedObjectStore {
         return toArray(instances);
     }
 
-    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
+    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectManagerException {
         throw new ObjectNotFoundException();
     }
 
-    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectStoreException {
+    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectManagerException {
         NakedObject object = (NakedObject) instances(hint).read(oid);
         if (object == null) {
             throw new ObjectNotFoundException(oid);
@@ -146,7 +146,7 @@ public class CacheObjectStore implements NakedObjectStore {
         this.snapshot = snapshot;
     }
     
-    public void init() throws ObjectStoreException {
+    public void init() throws ObjectManagerException {
         loadSnapshot();
         journal.applyJournals();
         journal.openJounal();
@@ -172,7 +172,7 @@ public class CacheObjectStore implements NakedObjectStore {
         }
     }
 
-    private int loadData(SnapshotImpl reader) throws ObjectStoreException {
+    private int loadData(SnapshotImpl reader) throws ObjectManagerException {
         int size = 0;
         int noClasses = reader.readInt();
         for (int k = 0; k < noClasses; k++) {
@@ -182,7 +182,7 @@ public class CacheObjectStore implements NakedObjectStore {
         return size;
     }
 
-    private int loadInstances(SnapshotImpl reader) throws ObjectStoreException {
+    private int loadInstances(SnapshotImpl reader) throws ObjectManagerException {
         int noClasses = reader.readInt();
         for (int k = 0; k < noClasses; k++) {
             String className = (String) reader.readClassName();
@@ -192,7 +192,7 @@ public class CacheObjectStore implements NakedObjectStore {
         return noClasses;
     }
 
-    private void loadSnapshot() throws ObjectStoreException {
+    private void loadSnapshot() throws ObjectManagerException {
         objectSets = new Hashtable();
 
         if(snapshot.open()) {
@@ -213,11 +213,11 @@ public class CacheObjectStore implements NakedObjectStore {
         return instances(spec).numberInstances();
     }
 
-    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectStoreException {}
+    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectManagerException {}
 
     public void resolveImmediately(NakedObject object) {}
 
-    public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException {
+    public void runTransaction(PersistenceCommand[] commands) throws ObjectManagerException {
         LOG.info("start execution of transaction");
         for (int i = 0; i < commands.length; i++) {
             PersistenceCommand command = commands[i];
@@ -226,7 +226,7 @@ public class CacheObjectStore implements NakedObjectStore {
         LOG.info("end execution");
     }
 
-    private void saveData(SnapShotWriter writer) throws ObjectStoreException {
+    private void saveData(SnapShotWriter writer) throws ObjectManagerException {
         long size = 0;
         writer.writeInt(objectSets.size());
         Enumeration e1 = objectSets.keys();
@@ -239,7 +239,7 @@ public class CacheObjectStore implements NakedObjectStore {
         LOG.info(size + " objects saved");
     }
 
-    private void saveIdentities(SnapShotWriter writer) throws ObjectStoreException {
+    private void saveIdentities(SnapShotWriter writer) throws ObjectManagerException {
         writer.writeInt(objectSets.size());
         Enumeration e1 = objectSets.keys();
         while (e1.hasMoreElements()) {
@@ -249,7 +249,7 @@ public class CacheObjectStore implements NakedObjectStore {
         }
     }
 
-    private void saveSnapshot() throws ObjectStoreException {
+    private void saveSnapshot() throws ObjectManagerException {
         SnapShotWriter writer = new SnapShotWriter();
         writer.open();
         saveIdentities(writer);
@@ -257,7 +257,7 @@ public class CacheObjectStore implements NakedObjectStore {
         writer.close();
     }
 
-    public void shutdown() throws ObjectStoreException {
+    public void shutdown() throws ObjectManagerException {
         saveSnapshot();
         journal.closeJournal();
     }

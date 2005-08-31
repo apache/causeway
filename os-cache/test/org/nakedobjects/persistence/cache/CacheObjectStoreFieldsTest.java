@@ -2,7 +2,7 @@ package org.nakedobjects.persistence.cache;
 
 import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.NakedObjectStoreFieldsTestCase;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 
 import java.io.File;
 
@@ -14,7 +14,7 @@ public class CacheObjectStoreFieldsTest extends NakedObjectStoreFieldsTestCase {
 		super(name);
 	}
 	
-	public NakedObjectStore installObjectStore() throws ObjectStoreException {
+	public NakedObjectStore installObjectStore() throws ObjectManagerException {
         return new CacheObjectStore(DIR);
 	}
 	
