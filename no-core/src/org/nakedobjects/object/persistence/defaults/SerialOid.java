@@ -2,12 +2,14 @@ package org.nakedobjects.object.persistence.defaults;
 
 
 import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.utility.Assert;
 
 import java.io.Serializable;
 
 
 public class SerialOid implements Oid, Serializable {
-    private final long serialNo;
+    private long serialNo;
+    private SerialOid previous;
    
     public SerialOid(long serialNo) {
         this.serialNo = serialNo;
@@ -33,6 +35,25 @@ public class SerialOid implements Oid, Serializable {
 
     public String toString() {
         return "OID#" + Long.toHexString(serialNo).toUpperCase();
+    }
+
+    public boolean hasPrevious() {
+        return previous != null;
+    }
+
+    public Oid getPrevious() {
+        return previous;
+    }
+
+    public void copyFrom(Oid oid) {
+        Assert.assertTrue(oid instanceof SerialOid);
+        SerialOid from = (SerialOid) oid;
+        this.serialNo = from.serialNo;
+    }
+    
+    public void setPrevious(SerialOid previous) {
+        Assert.assertNull(previous);
+        this.previous = previous;
     }
 }
 
