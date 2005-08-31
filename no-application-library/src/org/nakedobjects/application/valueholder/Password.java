@@ -5,91 +5,101 @@ import org.nakedobjects.application.ValueParseException;
 
 
 public class Password extends BusinessValueHolder {
-	private static final long serialVersionUID = 1L;
-	private String password;
-	
-	public Password() {
-	}
+    private static final long serialVersionUID = 1L;
+    private int maximumLength;
+    private String password;
 
-	public void clear() {
-		password = null;
-	}
+    public Password() {
+        password = "";
+    }
+    
+    public Password(int maximumLength) {
+        this();
+        this.maximumLength = maximumLength;
+    }
 
-	public void parseUserEntry(String text) throws ValueParseException {
-		password = text;
-	}
+    public String asEncodedString() {
+        return isEmpty() ? null : password;
+    }
 
-	public void reset() {
-		password = null;
-	}
+    public void clear() {
+        password = "";
+    }
 
-	public void restoreFromEncodedString(String data) {
-	    if(data == null) {
-	        clear();
-	    } else {
-	        password = data;
-	    }
-	}
+    public void copyObject(BusinessValueHolder object) {
+        password = ((Password) object).password;
+    }
 
-	public String asEncodedString() {
-		return isEmpty() ? null : password;
-	}
+    public int getMaximumLength() {
+        return maximumLength;
+    }
 
-	public void copyObject(BusinessValueHolder object) {
-		password = ((Password) object).password;
-	}
+    public boolean isEmpty() {
+        return password == null;
+    }
 
-	public boolean isEmpty() {
-		return password == null;
-	}
+    public boolean isSameAs(BusinessValueHolder object) {
+        if (object instanceof Password) {
+            String pswd = ((Password) object).password;
+            if (pswd == null && password == null) {
+                return true;
+            }
+            if (password != null && password.equals(pswd)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	public boolean isSameAs(BusinessValueHolder object) {
-		if(object instanceof Password) {
-			String pswd = ((Password) object).password;
-			if(pswd == null && password == null) {
-				return true;
-			}
-			if(password != null && password.equals(pswd)) {
-				return true;
-			}
-		}
-		return false; 
-	}
+    public void parseUserEntry(String text) throws ValueParseException {
+        password = text;
+    }
 
-	public Title title() {
-		return new Title(password);
-	}
+    public void reset() {
+        password = null;
+    }
 
-	public String stringValue() {
-		return password;
-	}
-	
-	public void setValue(String password) {
-		this.password = password;
-	}
-	
+    public void restoreFromEncodedString(String data) {
+        if (data == null) {
+            clear();
+        } else {
+            password = data;
+        }
+    }
+
+    public void setMaximumLength(int maximumLength) {
+        this.maximumLength = maximumLength;
+    }
+
+    public void setValue(String password) {
+        this.password = password;
+    }
+
+    public String stringValue() {
+        return password;
+    }
+
+    public Title title() {
+        return new Title(password);
+    }
 }
 
 /*
-Naked Objects - a framework that exposes behaviourally complete
-business objects directly to the user.
-Copyright (C) 2000 - 2005  Naked Objects Group Ltd
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-The authors can be contacted via www.nakedobjects.org (the
-registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-Road, Woking GU21 1NR, UK).
-*/
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; if
+ * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ * 02111-1307 USA
+ * 
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
+ * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
+ */
