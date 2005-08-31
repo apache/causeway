@@ -53,6 +53,11 @@ public class DebugString {
     public void appendln(int indent, String label, long value) {
         appendln(indent, label, String.valueOf(value));
     }
+    
+
+    public void appendAsHexln(int indent, String label, long value) {
+        appendln(indent, label, "#" + Long.toHexString(value));
+    }
 
     public void appendln(int indent, String label, Object object) {
         indent(indent);
