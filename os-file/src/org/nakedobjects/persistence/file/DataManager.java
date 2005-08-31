@@ -1,7 +1,7 @@
 package org.nakedobjects.persistence.file;
 
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 import org.nakedobjects.object.persistence.defaults.SerialOid;
 
 
@@ -13,7 +13,7 @@ public interface DataManager {
     /**
      * Save the data for an object and adds the reference to a list of instances
      */
-    void insert(Data data) throws ObjectStoreException;
+    void insert(Data data) throws ObjectManagerException;
 
     /**
      * Loads in data for a collection for the specified identifier.
@@ -25,12 +25,12 @@ public interface DataManager {
      */
     ObjectData loadObjectData(SerialOid oid);
 
-    void remove(SerialOid oid) throws ObjectNotFoundException, ObjectStoreException;
+    void remove(SerialOid oid) throws ObjectNotFoundException, ObjectManagerException;
 
     /**
      * Save the data for latter retrieval.
      */
-    void save(Data data) throws ObjectStoreException;
+    void save(Data data) throws ObjectManagerException;
 
     void shutdown();
     

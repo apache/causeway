@@ -3,7 +3,7 @@ package org.nakedobjects.persistence.file;
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 import org.nakedobjects.object.persistence.defaults.SerialOid;
 
 import java.io.File;
@@ -190,14 +190,14 @@ public class XmlDataManager implements DataManager {
     /**
      * Write out the data for a new instance.
      */
-    protected void addData(SerialOid oid, String type, Data data) throws ObjectStoreException {
+    protected void addData(SerialOid oid, String type, Data data) throws ObjectManagerException {
         writeData(oid, data);
     }
 
     /**
      * Add the reference for an instance to the list of all instances.
      */
-    protected void addInstance(SerialOid oid, String type) throws ObjectStoreException {
+    protected void addInstance(SerialOid oid, String type) throws ObjectManagerException {
         Vector instances = loadInstances(type);
         instances.addElement(oid);
         writeInstanceFile(type, instances);
@@ -257,7 +257,7 @@ public class XmlDataManager implements DataManager {
     /**
      * Save the data for an object and adds the reference to a list of instances
      */
-    public final void insert(Data data) throws ObjectStoreException {
+    public final void insert(Data data) throws ObjectManagerException {
         if (data.getOid() == null) {
             throw new IllegalArgumentException("Oid must be non-null");
         }
@@ -420,7 +420,7 @@ public class XmlDataManager implements DataManager {
         }
     }
 
-    public final void remove(SerialOid oid) throws ObjectNotFoundException, ObjectStoreException {
+    public final void remove(SerialOid oid) throws ObjectNotFoundException, ObjectManagerException {
         Data data = loadData(oid);
         String type = data.getClassName();
         removeInstance(oid, type);
@@ -430,7 +430,7 @@ public class XmlDataManager implements DataManager {
     /**
      * Remove the reference for an instance from the list of all instances.
      */
-    protected void removeInstance(SerialOid oid, String type) throws ObjectStoreException {
+    protected void removeInstance(SerialOid oid, String type) throws ObjectManagerException {
         Vector instances = loadInstances(type);
         instances.removeElement(oid);
         writeInstanceFile(type, instances);
@@ -439,13 +439,13 @@ public class XmlDataManager implements DataManager {
     /**
      * Save the data for latter retrieval.
      */
-    public final void save(Data data) throws ObjectStoreException {
+    public final void save(Data data) throws ObjectManagerException {
         writeData(data.getOid(), data);
     }
 
     public void shutdown() {}
 
-    private void writeData(SerialOid xoid, Data data) throws ObjectStoreException {
+    private void writeData(SerialOid xoid, Data data) throws ObjectManagerException {
         StringBuffer xml = new StringBuffer();
         boolean isObject = data instanceof ObjectData;
         String tag = isObject ? "naked-object" : "collection";
@@ -499,7 +499,7 @@ public class XmlDataManager implements DataManager {
         writeXml(filename(xoid), xml);
     }
 
-    private void writeInstanceFile(String name, Vector instances) throws ObjectStoreException {
+    private void writeInstanceFile(String name, Vector instances) throws ObjectManagerException {
         StringBuffer data = new StringBuffer();
         data.append("<instances name=\"" + name + "\">\n");
 
