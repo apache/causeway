@@ -158,6 +158,10 @@ public class InternalOneToManyAssociation extends InternalField implements OneTo
         return null;
     }
 
+    public Class[] getExtensions() {
+        return new Class[0];
+    }
+    
     public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
         throw new NotImplementedException();
     }

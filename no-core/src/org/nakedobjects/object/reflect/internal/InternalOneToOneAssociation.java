@@ -214,6 +214,10 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
 	public Object getExtension(Class cls) {
         return null;
     }
+
+    public Class[] getExtensions() {
+        return new Class[0];
+    }
 	
     private Naked getAssociation(NakedObject fromObject) {
         try {
