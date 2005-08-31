@@ -13,6 +13,14 @@ public class FloatAdapter extends AbstractNakedValue implements FloatingPointVal
 
     private float value;
 
+    public FloatAdapter(float value) {
+        this.value = value;
+    }
+
+    public FloatAdapter(Float value) {
+        this.value = value.floatValue();
+    }
+
     public byte[] asEncodedString() {
         return null;
     }

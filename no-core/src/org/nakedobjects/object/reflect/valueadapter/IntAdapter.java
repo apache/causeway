@@ -13,6 +13,14 @@ public class IntAdapter extends AbstractNakedValue implements IntegerValue {
 
     private int value;
 
+    public IntAdapter(int value) {
+        this.value = value;
+    }
+    
+    public IntAdapter(Integer value) {
+        this.value = value.intValue();
+    }
+    
     public byte[] asEncodedString() {
         return null;
     }

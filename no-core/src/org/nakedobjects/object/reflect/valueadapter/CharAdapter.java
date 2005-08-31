@@ -1,66 +1,56 @@
 package org.nakedobjects.object.reflect.valueadapter;
 
 import org.nakedobjects.object.InvalidEntryException;
-import org.nakedobjects.object.TextEntryParseException;
-import org.nakedobjects.object.value.ShortValue;
-
-import java.text.NumberFormat;
-import java.text.ParseException;
+import org.nakedobjects.object.value.CharValue;
 
 
-public class ShortAdapter extends AbstractNakedValue implements ShortValue {
-    private static NumberFormat FORMAT = NumberFormat.getNumberInstance();
+public class CharAdapter extends AbstractNakedValue implements CharValue {
+    private char value;
 
-    private short value;
-
-    public ShortAdapter(short value) {
+    public CharAdapter(char value) {
         this.value = value;
     }
 
-    public ShortAdapter(Short value) {
-        this.value = value.shortValue();
+    public CharAdapter(Character value) {
+        this.value = value.charValue();
     }
 
     public byte[] asEncodedString() {
         return null;
     }
 
-    public short shortValue() {
+    public char charValue() {
         return value;
     }
 
     public String getIconName() {
-        return "short";
+        return "char";
     }
 
     public Object getObject() {
-        return new Short(value);
+        return new Character(value);
+    }
+
+    public String getValueClass() {
+        return char.class.getName();
     }
 
     public void parseTextEntry(String entry) throws InvalidEntryException {
-        if (entry == null || entry.trim().equals("")) {
+        if (entry == null || entry.trim().equals("") || entry.length() != 1) {
             throw new InvalidEntryException();
         } else {
-            try {
-                value = FORMAT.parse(entry).shortValue();
-            } catch (ParseException e) {
-                throw new TextEntryParseException("Invalid number", e);
-            }
+            value = entry.charAt(0);
         }
     }
 
     public void restoreFromEncodedString(byte[] data) {}
 
-    public void setValue(short value) {
+    public void setValue(char value) {
         this.value = value;
     }
 
     public String titleString() {
-        return FORMAT.format(value);
-    }
-
-    public String getValueClass() {
-        return short.class.getName();
+        return "" + value;
     }
 }
 

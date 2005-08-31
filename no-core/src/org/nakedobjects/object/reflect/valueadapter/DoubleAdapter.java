@@ -13,6 +13,14 @@ public class DoubleAdapter extends AbstractNakedValue implements DoubleFloatingP
 
     private double value;
 
+    public DoubleAdapter(double value) {
+        this.value = value;
+    }
+
+    public DoubleAdapter(Double value) {
+        this.value = value.floatValue();
+    }
+
     public byte[] asEncodedString() {
         return null;
     }
