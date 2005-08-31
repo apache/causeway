@@ -2,7 +2,6 @@ package org.nakedobjects.distribution;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -23,7 +22,7 @@ import org.nakedobjects.object.security.Session;
 import org.apache.log4j.Logger;
 
 
-public class ServerDistribution implements ClientDistribution {
+public class ServerDistribution implements Distribution {
     private static final Logger LOG = Logger.getLogger(ServerDistribution.class);
     private DataFactory objectDataFactory;
     private ObjectFactory objectFactory;
@@ -67,7 +66,7 @@ public class ServerDistribution implements ClientDistribution {
         if (target instanceof ReferenceData && ((ReferenceData) target).getOid() != null) {
             object = getPersistentNakedObject(session, (ReferenceData) target);
         } else if (target instanceof ObjectData) {
-            object = DataHelper.recreateObject((ObjectData) target);
+            object = (NakedObject) DataHelper.recreateNaked((ObjectData) target);
         } else {
             throw new NakedObjectRuntimeException();
         }
@@ -76,8 +75,8 @@ public class ServerDistribution implements ClientDistribution {
         checkHint(session, actionType, actionIdentifier, target, parameterData);
         Naked[] parameters = getParameters(session, parameterData);
 
-        NakedObject result = (NakedObject) object.execute(action, parameters);
-        return objectDataFactory.createCompletePersistentGraph(result);
+        Naked result = object.execute(action, parameters);
+        return objectDataFactory.createActionResult(result);
     }
 
     private Naked[] getParameters(Session session, Data[] parameterData) {
@@ -128,10 +127,6 @@ public class ServerDistribution implements ClientDistribution {
     public Hint getActionHint(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
         LOG.debug("request getActionHint " + actionIdentifier + " for " + session);
         return new DefaultHint();
-    }
-
-    public NakedClass getNakedClass(String fullName) {
-        return null;
     }
 
     private NakedObject getPersistentNakedObject(Session session, ReferenceData object) {
