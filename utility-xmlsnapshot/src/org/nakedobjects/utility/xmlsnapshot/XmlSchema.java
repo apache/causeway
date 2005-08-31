@@ -6,6 +6,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
+import java.util.Hashtable;
+import java.util.Enumeration;
+
 
 /**
  * Represents the schema for the derived snapshot.
@@ -154,7 +157,7 @@ public final class XmlSchema
 	 * Creates an &lt;xs:element&gt; element defining the presence of the named element
 	 * representing a class
 	 */ 
-	Element createXsElementForNofClass(final Document xsdDoc, final Element element, final boolean addCardinality) {
+	Element createXsElementForNofClass(final Document xsdDoc, final Element element, final boolean addCardinality, final Hashtable extensions) {
 		
 		// gather details from XML element
 		String localName = element.getLocalName();
@@ -188,6 +191,9 @@ public final class XmlSchema
 		xsSequenceElement.appendChild(xsTitleElement);
 		xsMeta.setXsCardinality(xsTitleElement, 0, 1);
 
+		// xs:element/xs:complexType/xs:sequence/xs:element ref="extensions"
+		addXsElementForAppExtensions(xsSequenceElement, extensions);
+
 		// xs:element/xs:complexType/xs:attribute ...
 		xsMeta.addXsNofFeatureAttributeElements(xsComplexTypeElement, "class");
 		xsMeta.addXsNofAttribute(xsComplexTypeElement, "oid");
@@ -196,9 +202,68 @@ public final class XmlSchema
 		xsMeta.addXsNofAttribute(xsComplexTypeElement, "plural");
 		xsMeta.addXsNofAttribute(xsComplexTypeElement, "annotation");
 
+
 		Place.setXsdElement(element, xsElementForNofClassElement);
 
 		return xsElementForNofClassElement;
+	}
+
+
+	/**
+	 * Creates an <code>xs:element</code> element to represent a collection of application-defined extensions
+	 * 
+	 * The returned element should be appended to <code>xs:sequence</code> element of the
+	 * xs:element representing the type of the owning object.
+	 */ 
+	void addXsElementForAppExtensions(final Element parentXsElementElement, final Hashtable extensions) {
+
+		if (extensions.size() == 0)  {
+			return;
+		}
+
+		//	<xs:element name="extensions">
+		//		<xs:complexType>
+		//		    <xs:sequence>
+		//		         <xs:element name="app:%extension class short name%" minOccurs="0" maxOccurs="1" default="%value%"/>
+		//		         <xs:element name="app:%extension class short name%" minOccurs="0" maxOccurs="1" default="%value%"/>
+		//		         ...
+		//		         <xs:element name="app:%extension class short name%" minOccurs="0" maxOccurs="1" default="%value%"/>
+		//			</xs:sequence>
+		//	    </xs:complexType>
+		//	</xs:element>
+
+		// xs:element name="nof-extensions"
+		// xs:element/xs:complexType/xs:sequence
+		Element xsExtensionsSequenceElement = addExtensionsElement(parentXsElementElement);
+
+		addExtensionElements(xsExtensionsSequenceElement, extensions);
+
+		return;
+	}
+
+	/**
+	 * Adds an nof-extensions element and a complexType and sequence elements underneath.
+	 * 
+	 * <p>
+	 * Returns the sequence element so that it can be appended to.
+	 */
+	private Element addExtensionsElement(Element parentXsElement) {
+		Element xsExtensionsElementElement = xsMeta.createXsElementElement(helper.docFor(parentXsElement), "nof-extensions");
+		parentXsElement.appendChild(xsExtensionsElementElement);
+
+		// xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence
+		Element xsExtensionsComplexTypeElement = xsMeta.complexTypeFor(xsExtensionsElementElement);
+		Element xsExtensionsSequenceElement = xsMeta.sequenceFor(xsExtensionsComplexTypeElement);
+
+		return xsExtensionsSequenceElement;
+	}
+
+	private String shortName(String className) {
+		int lastPeriodIdx = className.lastIndexOf('.');
+		if (lastPeriodIdx < 0) {
+			return className;
+		}
+		return className.substring(lastPeriodIdx+1);
 	}
 
 
@@ -208,11 +273,71 @@ public final class XmlSchema
 	 * The returned element should be appended to <code>xs:sequence</code> element of the
 	 * xs:element representing the type of the owning object.
 	 */ 
-	Element createXsElementForNofValue(final Element parentXsElementElement, final Element xmlValueElement) {
+	Element createXsElementForNofValue(final Element parentXsElementElement, final Element xmlValueElement, final Hashtable extensions) {
 
 		// gather details from XML element
 		String datatype = xmlValueElement.getAttributeNS(NofMetaModel.NOF_METAMODEL_NS_URI, "datatype");
 		String fieldName = xmlValueElement.getLocalName();
+
+		// <xs:element name="%owning object%">
+		//		<xs:complexType>
+		//			<xs:sequence>
+		//				<xs:element name="%%field object%%">
+		//					<xs:complexType>
+		//						<xs:sequence>
+		//				            <xs:element name="nof-extensions">
+		//					            <xs:complexType>
+		//						            <xs:sequence>
+		//                                      <xs:element name="%extensionClassShortName%" default="%extensionObjString" minOccurs="0"/>
+		//                                      <xs:element name="%extensionClassShortName%" default="%extensionObjString" minOccurs="0"/>
+		//                                      ...
+		//                                      <xs:element name="%extensionClassShortName%" default="%extensionObjString" minOccurs="0"/>
+		//						            </xs:sequence>
+		//					            </xs:complexType>
+		//				            </xs:element>
+		//						</xs:sequence>
+		//						<xs:attribute ref="nof:feature" fixed="value"/>
+		//						<xs:attribute ref="nof:datatype" fixed="nof:%datatype%"/>
+		//						<xs:attribute ref="nof:isEmpty"/>
+		//			            <xs:attribute ref="nof:annotation"/>
+		//					</xs:complexType>
+		//				</xs:element>
+		//			</xs:sequence>
+		//		</xs:complexType>
+		//	</xs:element>
+
+		// xs:element/xs:complexType/xs:sequence
+		Element parentXsComplexTypeElement = xsMeta.complexTypeFor(parentXsElementElement);
+		Element parentXsSequenceElement = xsMeta.sequenceFor(parentXsComplexTypeElement);
+
+		// xs:element/xs:complexType/xs:sequence/xs:element name="%%field object%"
+		Element xsFieldElementElement = xsMeta.createXsElementElement(helper.docFor(parentXsSequenceElement), fieldName);
+		parentXsSequenceElement.appendChild(xsFieldElementElement);
+
+		// xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType
+		Element xsFieldComplexTypeElement = xsMeta.complexTypeFor(xsFieldElementElement);
+
+
+		// NEW CODE TO SUPPORT EXTENSIONS;
+		// uses a complexType/sequence
+
+		// xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence
+		Element xsFieldSequenceElement = xsMeta.sequenceFor(xsFieldComplexTypeElement);
+
+		// xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element name="nof-extensions"
+		// xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence
+		addXsElementForAppExtensions(xsFieldSequenceElement, extensions);
+		
+		xsMeta.addXsNofFeatureAttributeElements(xsFieldComplexTypeElement, "value");
+		xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "datatype", datatype);
+		xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "isEmpty");
+		xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "annotation");
+
+
+
+		// ORIGINAL CODE THAT DIDN'T EXPORT EXTENSIONS
+		// uses a simpleContent
+		// (I've left this code in in case there is a need to regenerate schemas the "old way").
 
 		// <xs:element name="%owning object%">
 		//		<xs:complexType>
@@ -233,32 +358,35 @@ public final class XmlSchema
 		//		</xs:complexType>
 		//	</xs:element>
 
-		// xs:element/xs:complexType/xs:sequence
-		Element parentXsComplexTypeElement = xsMeta.complexTypeFor(parentXsElementElement);
-		Element parentXsSequenceElement = xsMeta.sequenceFor(parentXsComplexTypeElement);
-
-		// xs:element/xs:complexType/xs:sequence/xs:element name="%%field object%"
-		Element xsFieldElementElement = xsMeta.createXsElementElement(helper.docFor(parentXsSequenceElement), fieldName);
-		parentXsSequenceElement.appendChild(xsFieldElementElement);
-
 		// xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:simpleContent/xs:extension
-		Element xsFieldComplexTypeElement = xsMeta.complexTypeFor(xsFieldElementElement);
-		Element xsFieldSimpleContentElement = xsMeta.simpleContentFor(xsFieldComplexTypeElement);
-		Element xsFieldExtensionElement = xsMeta.extensionFor(xsFieldSimpleContentElement, "string");
-
-		xsMeta.addXsNofFeatureAttributeElements(xsFieldExtensionElement, "value");
-		xsMeta.addXsNofAttribute(xsFieldExtensionElement, "datatype", datatype);
-		xsMeta.addXsNofAttribute(xsFieldExtensionElement, "isEmpty");
-		xsMeta.addXsNofAttribute(xsFieldExtensionElement, "annotation");
+		//		Element xsFieldSimpleContentElement = xsMeta.simpleContentFor(xsFieldComplexTypeElement);
+		//		Element xsFieldExtensionElement = xsMeta.extensionFor(xsFieldSimpleContentElement, "string");
+		//		xsMeta.addXsNofFeatureAttributeElements(xsFieldExtensionElement, "value");
+		//		xsMeta.addXsNofAttribute(xsFieldExtensionElement, "datatype", datatype);
+		//		xsMeta.addXsNofAttribute(xsFieldExtensionElement, "isEmpty");
+		//		xsMeta.addXsNofAttribute(xsFieldExtensionElement, "annotation");
 
 		return xsFieldElementElement;
 	}
+
+	private void addExtensionElements(final Element parentElement, Hashtable extensions) {
+		for(Enumeration enum = extensions.keys(); enum.hasMoreElements(); ) {
+			Class extensionClass = (Class)enum.nextElement();
+			Object extensionObject = extensions.get(extensionClass);
+			// xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element name="%extensionClassShortName%"
+			Element xsExtensionElementElement = xsMeta.createXsElementElement(helper.docFor(parentElement), shortName(extensionClass.getName()));
+			xsExtensionElementElement.setAttribute("default", extensionObject.toString()); // the value
+			xsExtensionElementElement.setAttribute("minOccurs", "0"); // doesn't need to appear in XML (and indeed won't)
+			parentElement.appendChild(xsExtensionElementElement);
+		}
+	}
+
 
 	/**
 	 * Creates an &lt;xs:element&gt; element defining the presence of the named element
 	 * representing a reference to a class; appended to xs:sequence element
 	 */ 
-	Element createXsElementForNofReference(final Element parentXsElementElement, final Element xmlReferenceElement) {
+	Element createXsElementForNofReference(final Element parentXsElementElement, final Element xmlReferenceElement, final Hashtable extensions) {
 
 		// gather details from XML element
 		String fieldName = xmlReferenceElement.getLocalName();
@@ -270,6 +398,16 @@ public final class XmlSchema
 		//					<xs:complexType>
 		//						<xs:sequence>
 		//							<xs:element ref="nof:title" minOccurs="0"/>
+		//				            <xs:element name="nof-extensions">
+		//					            <xs:complexType>
+		//						            <xs:sequence>
+		//				                        <xs:element name="app:%extension class short name%" minOccurs="0" maxOccurs="1" default="%value%"/>
+		//				                        <xs:element name="app:%extension class short name%" minOccurs="0" maxOccurs="1" default="%value%"/>
+		//				                        ...
+		//				                        <xs:element name="app:%extension class short name%" minOccurs="0" maxOccurs="1" default="%value%"/>
+		//						            </xs:sequence>
+		//					            </xs:complexType>
+		//				            </xs:element>
 		//							<xs:sequence minOccurs="0" maxOccurs="1"/>
 		//						</xs:sequence>
 		//						<xs:attribute ref="nof:feature" fixed="reference"/>
@@ -300,6 +438,9 @@ public final class XmlSchema
 		xsFieldSequenceElement.appendChild(xsFieldTitleElement);
 		xsMeta.setXsCardinality(xsFieldTitleElement, 0, 1);
 
+		// xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element name="nof-extensions"
+		addXsElementForAppExtensions(xsFieldSequenceElement, extensions);
+
 		// xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:sequence   // placeholder
 		Element xsReferencedElementSequenceElement = xsMeta.sequenceFor(xsFieldSequenceElement);
 		xsMeta.setXsCardinality(xsReferencedElementSequenceElement, 0, 1);
@@ -317,7 +458,7 @@ public final class XmlSchema
 	 * Creates an &lt;xs:element&gt; element defining the presence of the named element
 	 * representing a collection in a class; appended to xs:sequence element
 	 */ 
-	Element createXsElementForNofCollection(final Element parentXsElementElement, final Element xmlCollectionElement) {
+	Element createXsElementForNofCollection(final Element parentXsElementElement, final Element xmlCollectionElement, final Hashtable extensions) {
 
 		// gather details from XML element
 		String fieldName = xmlCollectionElement.getLocalName();
@@ -360,6 +501,9 @@ public final class XmlSchema
 		xsFieldSequenceElement.appendChild(xsFieldOidsElement);
 		xsMeta.setXsCardinality(xsFieldOidsElement, 0, 1);
 
+		// extensions
+		addXsElementForAppExtensions(xsFieldSequenceElement, extensions);
+
 //		// xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:choice
 //		Element xsFieldChoiceElement = xsMeta.choiceFor(xsFieldComplexTypeElement); // placeholder
 //		xsMeta.setXsCardinality(xsFieldChoiceElement, 0, Integer.MAX_VALUE);
@@ -368,6 +512,7 @@ public final class XmlSchema
 
 //		Element xsReferencedElementSequenceElement = sequenceFor(xsFieldSequenceElement);
 //		setXsCardinality(xsReferencedElementSequenceElement, 0, 1);
+
 
 		xsMeta.addXsNofFeatureAttributeElements(xsFieldComplexTypeElement, "collection");
 		xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "type");

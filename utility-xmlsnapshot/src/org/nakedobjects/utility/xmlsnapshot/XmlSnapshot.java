@@ -14,6 +14,7 @@ import org.nakedobjects.object.reflect.OneToOneAssociation;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.Hashtable;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -514,7 +515,37 @@ public final class XmlSnapshot {
         return childElement;
     }
 
-    Place objectToElement(final NakedObject object) {
+	private Hashtable extensionsFor(NakedObjectSpecification nos) {
+		Hashtable extensions = new Hashtable();
+		Class[] extensionClasses = nos.getExtensions();
+		for(int i=0; i<extensionClasses.length; i++) {
+			Object extensionObj = nos.getExtension(extensionClasses[i]);
+			extensions.put(extensionClasses[i], extensionObj);
+		}
+		return extensions;
+	}
+
+	private Hashtable extensionsFor(OneToOneAssociation oneToOneAssoc) {
+		Hashtable extensions = new Hashtable();
+		Class[] extensionClasses = oneToOneAssoc.getExtensions();
+		for(int i=0; i<extensionClasses.length; i++) {
+			Object extensionObj = oneToOneAssoc.getExtension(extensionClasses[i]);
+			extensions.put(extensionClasses[i], extensionObj);
+		}
+		return extensions;
+	}
+
+	private Hashtable extensionsFor(OneToManyAssociation oneToManyAssoc) {
+		Hashtable extensions = new Hashtable();
+		Class[] extensionClasses = oneToManyAssoc.getExtensions();
+		for(int i=0; i<extensionClasses.length; i++) {
+			Object extensionObj = oneToManyAssoc.getExtension(extensionClasses[i]);
+			extensions.put(extensionClasses[i], extensionObj);
+		}
+		return extensions;
+	}
+
+	Place objectToElement(final NakedObject object) {
 
         LOG.debug("objectToElement(" + log("object", object) + ")");
 
@@ -526,20 +557,10 @@ public final class XmlSnapshot {
         nofMeta.appendNofTitle(element, object.titleString());
 
         LOG.debug("objectToElement(NO): create XS element for NOF class");
-        Element xsElement = schema.createXsElementForNofClass(getXsdDocument(), element, topLevelElementWritten);
-        topLevelElementWritten = true; // hack:
-        // every
-        // element
-        // in the
-        // XSD
-        // schema
-        // apart
-        // from
-        // first
-        // needs
-        // minimum
-        // cardinality
-        // setting.
+        Element xsElement = schema.createXsElementForNofClass(getXsdDocument(), element, topLevelElementWritten, extensionsFor(nos));
+
+		// hack: every element in the XSD schema apart from first needs minimum cardinality setting.
+		topLevelElementWritten = true;
 
         Place place = new Place(object, element);
 
@@ -572,34 +593,27 @@ public final class XmlSnapshot {
                 }
             }
 
-            Element xmlFieldElement = getXmlDocument().createElementNS(schema.getUri(), // scoped
-                    // by
-                    // namespace
-                    // of
-                    // class
-                    // of
-                    // containing
-                    // object
-                    schema.getPrefix() + ":" + fieldName);
+            Element xmlFieldElement = getXmlDocument().createElementNS(
+				schema.getUri(), // scoped by namespace of class of containing object
+                schema.getPrefix() + ":" + fieldName);
 
             Element xsdFieldElement = null;
 
             if (field.isValue()) {
                 LOG.debug("objectToElement(NO): " + log("field", fieldName) + " is value");
 
+				NakedObjectSpecification fieldNos = field.getSpecification();
                 // skip fields of type XmlValue
-                if (field.getSpecification() != null && field.getSpecification().getFullName() != null
-                        && field.getSpecification().getFullName().endsWith("XmlValue")) {
+                if (fieldNos != null && 
+					fieldNos.getFullName() != null && 
+					fieldNos.getFullName().endsWith("XmlValue")) {
                     continue eachField;
                 }
 
-                OneToOneAssociation valueFieldSpec = ((OneToOneAssociation) field);
-                Naked value = object.getField(valueFieldSpec);
-                Element xmlValueElement = xmlFieldElement; // more
-                // meaningful
-                // locally
-                // scoped
-                // name
+                OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
+                Naked value = object.getField(oneToOneAssociation);
+				NakedObjectSpecification valueNos = value.getSpecification();
+                Element xmlValueElement = xmlFieldElement; // more meaningful locally scoped name
 
                 // a null value would be a programming error, but we protect
                 // against it anyway
@@ -608,31 +622,29 @@ public final class XmlSnapshot {
                 }
 
                 // XML
-                nofMeta.setAttributesForValue(xmlValueElement, value.getSpecification().getShortName());
+                nofMeta.setAttributesForValue(xmlValueElement, valueNos.getShortName());
 
-                boolean isEmpty = (value.titleString().length() > 0);
-                if (isEmpty) {
+                boolean notEmpty = (value.titleString().length() > 0);
+                if (notEmpty) {
                     String valueStr = value.titleString();
                     xmlValueElement.appendChild(getXmlDocument().createTextNode(valueStr));
+					
                 } else {
                     nofMeta.setIsEmptyAttribute(xmlValueElement, true);
                 }
 
                 // XSD
-                xsdFieldElement = schema.createXsElementForNofValue(xsElement, xmlValueElement);
+                xsdFieldElement = schema.createXsElementForNofValue(xsElement, xmlValueElement, extensionsFor(oneToOneAssociation));
 
             } else if (field instanceof OneToOneAssociation) {
 
                 LOG.debug("objectToElement(NO): " + log("field", fieldName) + " is OneToOneAssociation");
 
-                OneToOneAssociation oneToOneAssocSpec = ((OneToOneAssociation) field);
-                NakedObject referencedNakedObject = object.getAssociation(oneToOneAssocSpec);
-                String fullyQualifiedClassName = oneToOneAssocSpec.getSpecification().getFullName();
-                Element xmlReferenceElement = xmlFieldElement; // more
-                // meaningful
-                // locally
-                // scoped
-                // name
+                OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
+                NakedObject referencedNakedObject = object.getAssociation(oneToOneAssociation);
+
+                String fullyQualifiedClassName = nos.getFullName();
+                Element xmlReferenceElement = xmlFieldElement; // more meaningful locally scoped name
 
                 // XML
                 nofMeta.setAttributesForReference(xmlReferenceElement, schema.getPrefix(), fullyQualifiedClassName);
@@ -644,26 +656,24 @@ public final class XmlSnapshot {
                 }
 
                 // XSD
-                xsdFieldElement = schema.createXsElementForNofReference(xsElement, xmlReferenceElement);
+                xsdFieldElement = schema.createXsElementForNofReference(xsElement, xmlReferenceElement, extensionsFor(oneToOneAssociation));
 
             } else if (field instanceof OneToManyAssociation) {
 
                 LOG.debug("objectToElement(NO): " + log("field", fieldName) + " is OneToManyAssociation");
 
                 OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
+
                 InternalCollection collection = (InternalCollection) oneToManyAssociation.get(object);
-                String fullyQualifiedClassName = collection.getElementSpecification().getFullName();
-                Element xmlCollectionElement = xmlFieldElement; // more
-                // meaningful
-                // locally
-                // scoped
-                // name
+				NakedObjectSpecification referencedTypeNos = collection.getElementSpecification();
+                String fullyQualifiedClassName = referencedTypeNos.getFullName();
+                Element xmlCollectionElement = xmlFieldElement; // more meaningful locally scoped name
 
                 // XML
                 nofMeta.setNofCollection(xmlCollectionElement, schema.getPrefix(), fullyQualifiedClassName, collection, addOids);
 
                 // XSD
-                xsdFieldElement = schema.createXsElementForNofCollection(xsElement, xmlCollectionElement);
+                xsdFieldElement = schema.createXsElementForNofCollection(xsElement, xmlCollectionElement, extensionsFor(oneToManyAssociation));
 
             } else {
                 LOG.info("objectToElement(NO): " + log("field", fieldName) + " is unknown type; ignored");
