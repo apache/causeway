@@ -33,6 +33,10 @@ public class AbstractOneToOnePeer implements OneToOnePeer {
         return decorated.getExtension(cls);
     }
     
+    public Class[] getExtensions() {
+        return decorated.getExtensions();
+    }
+    
     public NakedObjectSpecification getType() {
         return decorated.getType();
     }

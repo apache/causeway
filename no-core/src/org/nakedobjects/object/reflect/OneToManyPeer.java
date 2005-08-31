@@ -33,6 +33,8 @@ public interface OneToManyPeer extends FieldPeer {
     void removeAllAssociations(MemberIdentifier identifier, NakedObject inObject);
 
     void removeAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate);
+
+    Class[] getExtensions();
 }
 
 /*

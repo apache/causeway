@@ -34,6 +34,8 @@ public interface OneToOnePeer extends FieldPeer {
 	void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate);
 
 	void setValue(MemberIdentifier identifier, NakedObject inObject, Object associate);
+
+    Class[] getExtensions();
 }
 
 

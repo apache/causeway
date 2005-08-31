@@ -35,6 +35,10 @@ public class OneToOneAssociation extends NakedObjectAssociation {
     public Object getExtension(Class cls) {
         return reflectiveAdapter.getExtension(cls);
     }
+    
+    public Class[] getExtensions() {
+        return reflectiveAdapter.getExtensions();
+    }
 
     protected Hint getHint(NakedObject object, Naked value) {
         if (hasHint()) {

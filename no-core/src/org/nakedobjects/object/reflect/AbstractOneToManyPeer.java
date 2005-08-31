@@ -25,6 +25,10 @@ public abstract class AbstractOneToManyPeer implements OneToManyPeer {
         return decorated.getExtension(cls);
     }
     
+    public Class[] getExtensions() {
+        return decorated.getExtensions();
+    }
+    
     public Hint getHint(MemberIdentifier identifier, NakedObject inObject, NakedObject associate, boolean add) {
         return decorated.getHint(identifier, inObject, associate, add);
     }

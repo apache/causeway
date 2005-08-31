@@ -50,6 +50,8 @@ public abstract class NakedObjectField extends NakedObjectMember {
     public boolean isMandatory() {
         return false;
     }
+
+    public abstract Class[] getExtensions();
 }
 
 

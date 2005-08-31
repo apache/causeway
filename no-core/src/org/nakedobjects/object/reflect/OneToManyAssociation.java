@@ -31,7 +31,11 @@ public class OneToManyAssociation extends NakedObjectAssociation {
     }
 
     public Object getExtension(Class cls) {
-        return reflectiveAdapter.getExtension(null);
+        return reflectiveAdapter.getExtension(cls);
+    }
+
+    public Class[] getExtensions() {
+        return reflectiveAdapter.getExtensions();
     }
 
     public Hint getHint(NakedObject object) {
