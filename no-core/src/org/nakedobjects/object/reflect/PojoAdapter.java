@@ -1,7 +1,6 @@
 package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.ConcurrencyException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
@@ -10,6 +9,7 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.persistence.ConcurrencyException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.ToString;
