@@ -1,8 +1,7 @@
-package org.nakedobjects.object;
+package org.nakedobjects.object.persistence;
 
-import org.nakedobjects.object.persistence.ObjectStoreException;
 
-public class ConcurrencyException extends ObjectStoreException {
+public class ConcurrencyException extends ObjectManagerException {
 
 	public ConcurrencyException() {
 		super();
