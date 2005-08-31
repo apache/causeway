@@ -1,13 +1,13 @@
 
 package org.nakedobjects.viewer.skylark.value;
 
-import org.nakedobjects.object.ConcurrencyException;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.persistence.ConcurrencyException;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;

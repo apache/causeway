@@ -13,10 +13,10 @@ import org.nakedobjects.viewer.skylark.text.TextContent;
 
 import org.apache.log4j.Logger;
 
-public class MultiLineTextField extends TextField {
-    private static final Logger LOG = Logger.getLogger(MultiLineTextField.class);
+public class WrappedTextField extends TextField {
+    private static final Logger LOG = Logger.getLogger(WrappedTextField.class);
     
-    public MultiLineTextField(Content content, ViewSpecification specification, ViewAxis axis, boolean showLines, int width) {
+    public WrappedTextField(Content content, ViewSpecification specification, ViewAxis axis, boolean showLines, int width) {
         super(content, specification, axis, showLines, width, TextContent.WRAPPING);
     }
 

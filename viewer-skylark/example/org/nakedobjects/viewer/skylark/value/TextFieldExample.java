@@ -14,6 +14,7 @@ import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.DebugString;
+import org.nakedobjects.utility.ToString;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ValueContent;
@@ -60,7 +61,7 @@ public class TextFieldExample extends TestViews {
         workspace.addView(textField);
 
         content = new Value(LONG_TEXT);
-        MultiLineTextField view = new MultiLineTextField(content, specification, axis, false, 20);
+        WrappedTextField view = new WrappedTextField(content, specification, axis, false, 20);
         view.setParent(parent);
         view.setNoLines(5);
         view.setMaxWidth(200);
@@ -69,7 +70,7 @@ public class TextFieldExample extends TestViews {
         view.setSize(view.getRequiredSize());
         workspace.addView(view);
 
-        view = new MultiLineTextField(content, specification, axis, true, 20);
+        view = new WrappedTextField(content, specification, axis, true, 20);
         view.setParent(parent);
         view.setNoLines(8);
         view.setMaxWidth(500);
@@ -82,6 +83,78 @@ public class TextFieldExample extends TestViews {
 
 class Value extends ValueContent {
     private String text;
+    private NakedValue object = new NakedValue() {
+
+        public String toString() {
+            ToString str = new ToString(this);
+            str.append("text", text);
+            return str.toString();
+        }
+        
+        public byte[] asEncodedString() {
+            return null;
+        }
+
+        public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
+
+        public void copyObject(Naked object) {}
+
+        public Naked execute(Action action, Naked[] parameters) {
+            return null;
+        }
+
+        public Hint getHint(Action action, Naked[] parameters) {
+            return null;
+        }
+
+        public Hint getHint(NakedObjectField field, Naked value) {
+            return null;
+        }
+
+        public String getIconName() {
+            return null;
+        }
+
+        public int getMaximumLength() {
+            return 0;
+        }
+
+        public int getMinumumLength() {
+            return 0;
+        }
+
+        public Object getObject() {
+            return null;
+        }
+
+        public Oid getOid() {
+            return null;
+        }
+
+        public NakedObjectSpecification getSpecification() {
+            return null;
+        }
+
+        public void parseTextEntry(String text) throws InvalidEntryException {
+            Value.this.text = text;
+        }
+
+        public void restoreFromEncodedString(byte[] data) {}
+
+        public String titleString() {
+            return text;
+        }
+
+        public void clear() {}
+
+        public boolean canClear() {
+            return false;
+        }
+
+        public boolean isEmpty() {
+            return false;
+        }
+    };
 
     public Value(String text) {
         this.text = text;
@@ -106,72 +179,7 @@ class Value extends ValueContent {
     }
 
     public NakedValue getObject() {
-        return new NakedValue() {
-
-            public byte[] asEncodedString() {
-                return null;
-            }
-
-            public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
-
-            public void copyObject(Naked object) {}
-
-            public Naked execute(Action action, Naked[] parameters) {
-                return null;
-            }
-
-            public Hint getHint(Action action, Naked[] parameters) {
-                return null;
-            }
-
-            public Hint getHint(NakedObjectField field, Naked value) {
-                return null;
-            }
-
-            public String getIconName() {
-                return null;
-            }
-
-            public int getMaximumLength() {
-                return 0;
-            }
-
-            public int getMinumumLength() {
-                return 0;
-            }
-
-            public Object getObject() {
-                return null;
-            }
-
-            public Oid getOid() {
-                return null;
-            }
-
-            public NakedObjectSpecification getSpecification() {
-                return null;
-            }
-
-            public void parseTextEntry(String text) throws InvalidEntryException {
-                Value.this.text = text;
-            }
-
-            public void restoreFromEncodedString(byte[] data) {}
-
-            public String titleString() {
-                return text;
-            }
-
-            public void clear() {}
-
-            public boolean canClear() {
-                return false;
-            }
-
-            public boolean isEmpty() {
-                return false;
-            }
-        };
+        return object;
     }
 
     public NakedObjectSpecification getSpecification() {
@@ -186,7 +194,9 @@ class Value extends ValueContent {
         return false;
     }
 
-    public void parseEntry(String entryText) throws TextEntryParseException, InvalidEntryException {}
+    public void parseEntry(String entryText) throws TextEntryParseException, InvalidEntryException {
+        object.parseTextEntry(entryText);
+    }
 
     public String title() {
         return null;
@@ -197,6 +207,7 @@ class Value extends ValueContent {
     }
 
     public void clear() {}
+    
 
 }
 /*
