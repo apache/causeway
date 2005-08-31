@@ -177,6 +177,7 @@ public class PojoAdapter implements NakedObject {
     public NakedObjectSpecification getSpecification() {
         if (specification == null) {
             specification = NakedObjects.getSpecificationLoader().loadSpecification(getObject().getClass());
+            defaultTitle = "A " + specification.getSingularName().toLowerCase();
         }
         return specification;
     }
@@ -212,10 +213,6 @@ public class PojoAdapter implements NakedObject {
     public boolean isEmpty(NakedObjectField field) {
         resolveIfOnlyAGhost(this);
         return field.isEmpty(this);
-    }
-
-    private boolean isResolved() {
-        return resolveState == ResolveState.RESOLVED;
     }
 
     private void resolveIfOnlyAGhost(NakedObject object) {
@@ -266,14 +263,9 @@ public class PojoAdapter implements NakedObject {
      */
     public String titleString() {
         NakedObjectSpecification specification = getSpecification();
-        String title = specification.getTitle().title(this);
-        if (title == null && !isResolved()) {
-            title = specification.unresolvedTitle(this);
-        }
+        //String title = specification.getTitle().title(this);
+        String title = specification.getTitle(this);
         if (title == null) {
-            if (defaultTitle == null) {
-                defaultTitle = "A " + specification.getSingularName().toLowerCase();
-            }
             title = defaultTitle;
         }
         return title;
@@ -285,7 +277,7 @@ public class PojoAdapter implements NakedObject {
         Oid oid = getOid();
         if (oid != null) {
             str.append(":");
-            str.append(oid.toString().toUpperCase());
+            str.append(oid.toString());
         } else {
             str.append(":-");
         }
