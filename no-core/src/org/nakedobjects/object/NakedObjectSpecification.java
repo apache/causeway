@@ -3,13 +3,10 @@ package org.nakedobjects.object;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.ObjectTitle;
 
 
 public interface NakedObjectSpecification {
     void clearDirty(NakedObject object);
-
-    String debugInterface();
 
     Action getClassAction(Action.Type type, String name);
 
@@ -20,11 +17,15 @@ public interface NakedObjectSpecification {
     Hint getClassHint();
     
     Object getExtension(Class cls);
+    
+    Class[] getExtensions();
 
     NakedObjectField getField(String name);
     
     Object getFieldExtension(String name, Class cls);
 
+    Class[] geFieldExtensions(String name);
+    
     NakedObjectField[] getFields();
 
     /**
@@ -63,8 +64,6 @@ public interface NakedObjectSpecification {
      * </p>
      */
     String getSingularName();
-
-    ObjectTitle getTitle();
 
     NakedObjectField[] getVisibleFields(NakedObject object);
 
@@ -105,9 +104,9 @@ public interface NakedObjectSpecification {
 
     NakedObjectSpecification superclass();
 
-    String unresolvedTitle(NakedObject object);
-
     void deleted(NakedObject object);
+
+    String getTitle(NakedObject naked);
 }
 
 /*
