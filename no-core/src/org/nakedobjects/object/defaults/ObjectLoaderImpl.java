@@ -14,6 +14,7 @@ import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.reflect.valueadapter.BooleanAdapter;
 import org.nakedobjects.object.reflect.valueadapter.ByteAdapter;
+import org.nakedobjects.object.reflect.valueadapter.CharAdapter;
 import org.nakedobjects.object.reflect.valueadapter.DateAdapter;
 import org.nakedobjects.object.reflect.valueadapter.DoubleAdapter;
 import org.nakedobjects.object.reflect.valueadapter.FloatAdapter;
@@ -61,19 +62,21 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
         } else if (value instanceof Date) {
             adapter = new DateAdapter((Date) value);
         } else if (value instanceof Float) {
-            adapter = new FloatAdapter();
+            adapter = new FloatAdapter((Float) value);
         } else if (value instanceof Double) {
-            adapter = new DoubleAdapter();
+            adapter = new DoubleAdapter((Double) value);
         } else if (value instanceof Boolean) {
-            adapter = new BooleanAdapter();
+            adapter = new BooleanAdapter((Boolean) value);
         } else if (value instanceof Byte) {
-            adapter = new ByteAdapter();
+            adapter = new ByteAdapter((Byte) value);
         } else if (value instanceof Short) {
-            adapter = new ShortAdapter();
+            adapter = new ShortAdapter((Short) value);
         } else if (value instanceof Integer) {
-            adapter = new IntAdapter();
+            adapter = new IntAdapter((Integer) value);
         } else if (value instanceof Long) {
-            adapter = new LongAdapter();
+            adapter = new LongAdapter((Long) value);
+        } else if (value instanceof Character) {
+            adapter = new CharAdapter((Character) value);
         } else {
             adapter = reflectorFactory.createValueAdapter(value);
         }
@@ -95,7 +98,7 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
 
     private NakedObject createObjectAdapter(final Object object) {
         Assert.assertNotNull(object);
-        Assert.assertFalse("POJO Map already contains object", pojoAdapterMap.containsPojo(object));
+        Assert.assertFalse("POJO Map already contains object", object, pojoAdapterMap.containsPojo(object));
         Assert.assertFalse("Can't create an adapter for a NOF adapter", object instanceof Naked);
 
         NakedObject nakedObject = new PojoAdapter(object);
@@ -110,6 +113,14 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
         Object object = objectFactory.createObject(specification);
         NakedObject adapter = createAdapterForTransient(object);
         objectFactory.setUpAsNewLogicalObject(object);
+        return adapter;
+    }
+
+    public NakedObject recreateTransientInstance(NakedObjectSpecification specification) {
+        Assert.assertTrue("must be an object", specification.isObject());
+        LOG.debug("recreating transient instance of for " + specification);
+        Object object = objectFactory.createObject(specification);
+        NakedObject adapter = createAdapterForTransient(object);
         return adapter;
     }
 
@@ -130,6 +141,7 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
     public NakedObject getAdapterFor(final Oid oid) {
         Assert.assertNotNull("OID should not be null", this, oid);
         LOG.debug("get adapter for " + oid);
+        updateOid(oid);
         NakedObject adapter = (NakedObject) identityAdapterMap.get(oid);
         return adapter;
     }
@@ -182,6 +194,7 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
 
     public boolean isIdentityKnown(Oid oid) {
         Assert.assertNotNull(oid);
+        updateOid(oid);
         return identityAdapterMap.containsKey(oid);
     }
 
@@ -299,6 +312,19 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
         LOG.debug("removed loaded object " + object);
         identityAdapterMap.remove(object.getOid());
         pojoAdapterMap.remove(object);
+    }
+    
+    private void updateOid(Oid oid) {
+        if(oid.hasPrevious()) {
+            NakedObject object = (NakedObject) identityAdapterMap.get(oid.getPrevious());
+            if(object != null) {
+                LOG.debug("updating oid " + oid.getPrevious() + " to " + oid);
+                identityAdapterMap.remove(oid.getPrevious());
+                Oid oidFromObject = object.getOid();
+                oidFromObject.copyFrom(oid);
+                identityAdapterMap.put(oidFromObject, object);
+            }
+        }
     }
 }
 
