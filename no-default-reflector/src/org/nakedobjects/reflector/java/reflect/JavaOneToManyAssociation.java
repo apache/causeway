@@ -103,6 +103,10 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
     public Object getExtension(Class cls) {
         return null;
     }
+
+    public Class[] getExtensions() {
+        return new Class[0];
+    }
     
     public void removeAllAssociations(MemberIdentifier identifier, NakedObject inObject) {
         try {

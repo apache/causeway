@@ -481,6 +481,10 @@ public class JavaReflector implements Reflector {
         return null;
     }
 
+    public Class[] getExtensions() {
+        return new Class[0];
+    }
+
     public String[] getInterfaces() {
         Class[] interfaces = cls.getInterfaces();
         Class[] nakedInterfaces = new Class[interfaces.length];
@@ -828,10 +832,6 @@ public class JavaReflector implements Reflector {
         } else {
             return new JavaObjectTitle(titleMethod);
         }
-    }
-
-    public String unresolvedTitle(NakedObject pojo) {
-        return "no title";
     }
 
     private Vector valueFields(Vector fields, Class type) {

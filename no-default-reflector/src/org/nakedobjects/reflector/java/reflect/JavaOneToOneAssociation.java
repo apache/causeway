@@ -37,6 +37,10 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         return null;
     }
     
+    public Class[] getExtensions() {
+        return new Class[0];
+    }
+
     public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked associate) {
         Method aboutMethod = getAboutMethod();
 
@@ -158,7 +162,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
 
         try {
-            setMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
+            setMethod.invoke(inObject.getObject(), new Object[] { associate == null ? null : associate.getObject() });
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(setMethod + " method doesn't expect a " + associate.getObject().getClass().getName());
         } catch (InvocationTargetException e) {

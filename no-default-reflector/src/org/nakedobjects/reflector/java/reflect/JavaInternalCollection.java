@@ -105,6 +105,10 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
         return null;
     }
     
+    public Class[] getExtensions() {
+        return new Class[0];
+    }
+
     public void removeAllAssociations(MemberIdentifier identifier, NakedObject inObject) {
         try {
             clearMethod.invoke(inObject, null);
