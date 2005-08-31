@@ -44,11 +44,11 @@ public class TransientObjectStoreInstancesTest extends NakedObjectStoreInstances
       junit.textui.TestRunner.run(new TestSuite(TransientObjectStoreInstancesTest.class));
    }
 
-	public NakedObjectStore installObjectStore() throws ObjectStoreException {
+	public NakedObjectStore installObjectStore() throws ObjectManagerException {
       return new TransientObjectStore();
    }
 	
-	protected void restartObjectStore() throws ObjectStoreException, Exception, ConfigurationException, ComponentException {
+	protected void restartObjectStore() throws ObjectManagerException, Exception, ConfigurationException, ComponentException {
 	    // override so the store is not restarted
 	}
 }

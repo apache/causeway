@@ -20,7 +20,7 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
         super(name);
     }
 
-    private void cleanPersonInstances() throws ObjectStoreException, UnsupportedFindException {
+    private void cleanPersonInstances() throws ObjectManagerException, UnsupportedFindException {
         NakedObject[] initialInstances;
 
         do {
@@ -35,7 +35,7 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
         assertTrue("no person objects", !objectStore.hasInstances(personClass, false));
     }
 
-    private void cleanRoleInstances() throws ObjectStoreException, UnsupportedFindException {
+    private void cleanRoleInstances() throws ObjectManagerException, UnsupportedFindException {
         NakedObject[] initialInstances;
 
         do {
@@ -163,7 +163,7 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
         assertEquals(p1, p2);
     }
 
-    public void testInstancesRepeatability() throws ConfigurationException, ComponentException, ObjectStoreException, Exception {
+    public void testInstancesRepeatability() throws ConfigurationException, ComponentException, ObjectManagerException, Exception {
         restartObjectStore();
 
         try {

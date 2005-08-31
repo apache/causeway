@@ -133,7 +133,7 @@ public abstract class NakedObjectStoreAdvancedTestCase extends NakedObjectStoreT
         }
     }
 
-    public void testResolve() throws ConfigurationException, ComponentException, ObjectStoreException, Exception {
+    public void testResolve() throws ConfigurationException, ComponentException, ObjectManagerException, Exception {
         restartObjectStore();
 
         Role role = (Role) objectStore.getObject(roles[1].getOid(), roleClass);
