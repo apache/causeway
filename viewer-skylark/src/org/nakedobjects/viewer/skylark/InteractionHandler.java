@@ -79,6 +79,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * @see java.awt.event.KeyListener#keyPressed(KeyEvent)
      */
     public void keyPressed(KeyEvent ke) {
+        LOG.debug("pressed " + KeyEvent.getKeyText(ke.getKeyCode()));
         try {
             if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
                 if (drag != null) {
@@ -104,6 +105,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      */
     public void keyReleased(KeyEvent ke) {
         try {
+            LOG.debug("released " + KeyEvent.getKeyText(ke.getKeyCode()));
             keyboardManager.released(ke.getKeyCode(), ke.getModifiers());
             redraw();
         } catch (Exception e) {
@@ -119,7 +121,8 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * @see java.awt.event.KeyListener#keyTyped(KeyEvent)
      */
     public void keyTyped(KeyEvent ke) {
-        if (!ke.isActionKey()) {
+        LOG.debug("typed " + ke.getKeyChar());
+       if (!ke.isActionKey()) {
             keyboardManager.typed(ke.getKeyChar());
             redraw();
         }
