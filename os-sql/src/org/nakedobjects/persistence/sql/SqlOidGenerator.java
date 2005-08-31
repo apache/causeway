@@ -3,7 +3,7 @@ package org.nakedobjects.persistence.sql;
 import org.nakedobjects.container.configuration.ComponentLoader;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.utility.StartupException;
@@ -30,7 +30,7 @@ public class SqlOidGenerator implements OidGenerator {
             number = rs.getLong("number");
             rs.close();
             db.close();
-        } catch (ObjectStoreException e) {
+        } catch (ObjectManagerException e) {
             throw new NakedObjectRuntimeException(e);
         }
     }
@@ -50,7 +50,7 @@ public class SqlOidGenerator implements OidGenerator {
          try {
             db.open();
             db.update("update no_serial_id set number = " + number);
-        } catch (ObjectStoreException e) {
+        } catch (ObjectManagerException e) {
             throw new NakedObjectRuntimeException(e);
         } finally {
             try {

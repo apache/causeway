@@ -12,7 +12,7 @@ import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.TitleCriteria;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
@@ -29,20 +29,20 @@ public final class SqlObjectStore implements NakedObjectStore {
     private DatabaseConnectorPool connectionPool;
     private Hashtable transactionOrientedConnections;
 
-    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
+    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectManagerException {
         DatabaseConnector connection = getDatabaseConnector();
         NakedClass cls = mapperLookup.getNakedClassMapper(connection).getNakedClass(connection, name);
         releaseConnectionIfNotInTransaction(connection);
         return cls;
     }
     
-    public void createObject(NakedObject object) throws ObjectStoreException {
+    public void createObject(NakedObject object) throws ObjectManagerException {
         DatabaseConnector connection = getDatabaseConnector();
         mapperLookup.getMapper(connection, object).createObject(connection, object);
         releaseConnectionIfNotInTransaction(connection);
     }
 
-    public void destroyObject(NakedObject object) throws ObjectStoreException {
+    public void destroyObject(NakedObject object) throws ObjectManagerException {
         DatabaseConnector connection = getDatabaseConnector();
         mapperLookup.getMapper(connection, object).destroyObject(connection, object);
         releaseConnectionIfNotInTransaction(connection);
@@ -56,21 +56,21 @@ public final class SqlObjectStore implements NakedObjectStore {
         return null;
     }
 
-    public NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses) throws ObjectStoreException {
+    public NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses) throws ObjectManagerException {
         DatabaseConnector connection = getDatabaseConnector();
         NakedObject[] instances = mapperLookup.getMapper(connection, cls).getInstances(connection, cls);
         releaseConnectionIfNotInTransaction(connection);
         return instances;
     }
 
-    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectStoreException {
+    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectManagerException {
         DatabaseConnector connection = getDatabaseConnector();
         NakedObject object = mapperLookup.getMapper(connection, hint).getObject(connection, oid, hint);
         releaseConnectionIfNotInTransaction(connection);
         return object;
     }
     
-    public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectStoreException,
+    public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectManagerException,
             UnsupportedFindException {
 
         if(criteria instanceof TitleCriteria) {
@@ -85,14 +85,14 @@ public final class SqlObjectStore implements NakedObjectStore {
         throw new UnsupportedFindException();
     }
     
-    public boolean hasInstances(NakedObjectSpecification cls, boolean includeSubclasses) throws ObjectStoreException {
+    public boolean hasInstances(NakedObjectSpecification cls, boolean includeSubclasses) throws ObjectManagerException {
         DatabaseConnector connection = getDatabaseConnector();
         boolean hasInstances = mapperLookup.getMapper(connection, cls).hasInstances(connection, cls);
         releaseConnectionIfNotInTransaction(connection);
         return hasInstances;
     }
 
-    public void init() throws ConfigurationException, ComponentException, ObjectStoreException {
+    public void init() throws ConfigurationException, ComponentException, ObjectManagerException {
         transactionOrientedConnections = new Hashtable();
         
         DatabaseConnectorFactory connectorFactory = (DatabaseConnectorFactory) ComponentLoader.
@@ -112,20 +112,20 @@ public final class SqlObjectStore implements NakedObjectStore {
         return "SQL Object Store";
     }
 
-    public int numberOfInstances(NakedObjectSpecification cls, boolean includedSubclasses) throws ObjectStoreException {
+    public int numberOfInstances(NakedObjectSpecification cls, boolean includedSubclasses) throws ObjectManagerException {
         DatabaseConnector connection = getDatabaseConnector();
         int number = mapperLookup.getMapper(connection, cls).numberOfInstances(connection, cls);
         releaseConnectionIfNotInTransaction(connection);
         return number;
     }
 
-    public void resolveImmediately(NakedObject object) throws ObjectStoreException {
+    public void resolveImmediately(NakedObject object) throws ObjectManagerException {
         DatabaseConnector connection = getDatabaseConnector();
        mapperLookup.getMapper(connection, object).resolve(connection, object);
         releaseConnectionIfNotInTransaction(connection);
     }
 
-    public void save(NakedObject object) throws ObjectStoreException {
+    public void save(NakedObject object) throws ObjectManagerException {
         DatabaseConnector connection = getDatabaseConnector();
        if (object instanceof InternalCollection) {
             object = ((InternalCollection) object).parent();
@@ -140,7 +140,7 @@ public final class SqlObjectStore implements NakedObjectStore {
 
     public void setObjectManager(NakedObjectManager manager) {}
 
-    public void shutdown() throws ObjectStoreException {
+    public void shutdown() throws ObjectManagerException {
         mapperLookup.shutdown();
         connectionPool.shutdown();
     }

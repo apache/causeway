@@ -9,7 +9,7 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 import org.nakedobjects.persistence.sql.auto.AutoMapper;
 import org.nakedobjects.utility.NotImplementedException;
 
@@ -107,7 +107,7 @@ public class ObjectMapperLookup {
 	
 	            try {
 	                add(className, (ObjectMapper) ComponentLoader.loadNamedComponent(value, ObjectMapper.class));
-	            } catch (ObjectStoreException ex) {
+	            } catch (ObjectManagerException ex) {
 	                throw new ComponentException("Failed to set up mapper for " + className, ex);
 	            }
             }
@@ -120,7 +120,7 @@ public class ObjectMapperLookup {
         	ObjectMapper mapper = (ObjectMapper) e.nextElement();
             try {
                 mapper.shutdown();
-            } catch (ObjectStoreException ex) {
+            } catch (ObjectManagerException ex) {
                 LOG.error("Shutdown mapper " + mapper, ex);
             }
         }    

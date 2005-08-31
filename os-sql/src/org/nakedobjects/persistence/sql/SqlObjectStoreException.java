@@ -1,8 +1,8 @@
 package org.nakedobjects.persistence.sql;
 
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 
-public class SqlObjectStoreException extends ObjectStoreException {
+public class SqlObjectStoreException extends ObjectManagerException {
 
     public SqlObjectStoreException() {
         super();

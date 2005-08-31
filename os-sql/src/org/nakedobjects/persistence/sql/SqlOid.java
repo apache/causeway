@@ -57,4 +57,14 @@ public final class SqlOid implements Oid {
         writer.writeString(className);
         writer.writeObject(primaryKey);
     }
+
+    public boolean hasPrevious() {
+        return false;
+    }
+
+    public Oid getPrevious() {
+        return null;
+    }
+
+    public void copyFrom(Oid oid) {}
 }
