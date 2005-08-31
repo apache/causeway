@@ -10,7 +10,7 @@ import org.nakedobjects.utility.DebugInfo;
 
 public interface NakedObjectStore extends NakedObjectsComponent, DebugInfo {
 
-    public void abortTransaction() throws ObjectStoreException;
+    public void abortTransaction() throws ObjectManagerException;
 
     /**
      * Makes a naked object persistent. The specified object should be stored
@@ -52,14 +52,14 @@ public interface NakedObjectStore extends NakedObjectsComponent, DebugInfo {
      */
     SaveObjectCommand createSaveObjectCommand(NakedObject object);
 
-    public void endTransaction() throws ObjectStoreException;
+    public void endTransaction() throws ObjectManagerException;
 
-    NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectStoreException,
+    NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectManagerException,
             UnsupportedFindException;
 
-    NakedObject[] getInstances(NakedObjectSpecification specification, boolean includeSubclasses) throws ObjectStoreException;
+    NakedObject[] getInstances(NakedObjectSpecification specification, boolean includeSubclasses) throws ObjectManagerException;
 
-    NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException;
+    NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectManagerException;
 
     /**
      * Retrieves the object identified by the specified OID from the object
@@ -98,7 +98,7 @@ public interface NakedObjectStore extends NakedObjectsComponent, DebugInfo {
      * @throws ObjectNotFoundException
      *                       when no object corresponding to the oid can be found
      */
-    NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectStoreException;
+    NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectManagerException;
 
     /**
      * Checks whether there are any instances of the specified type. The object
@@ -109,7 +109,7 @@ public interface NakedObjectStore extends NakedObjectsComponent, DebugInfo {
      * @param includeSubclasses
      *                       TODO
      */
-    boolean hasInstances(NakedObjectSpecification specification, boolean includeSubclasses) throws ObjectStoreException;
+    boolean hasInstances(NakedObjectSpecification specification, boolean includeSubclasses) throws ObjectManagerException;
 
     /**
      * The name of this objects store (for logging/debugging purposes)
@@ -119,25 +119,25 @@ public interface NakedObjectStore extends NakedObjectsComponent, DebugInfo {
     /**
      * A count of the number of instances matching the specified pattern.
      */
-    int numberOfInstances(NakedObjectSpecification specification, boolean includedSubclasses) throws ObjectStoreException;
+    int numberOfInstances(NakedObjectSpecification specification, boolean includedSubclasses) throws ObjectManagerException;
 
     /**
      * Called by the resolveEagerly method in NakedObjectManager.
      * 
      * @see NakedObjectManager#resolveLazily(NakedObject, NakedObjectField)
      */
-    void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectStoreException;
+    void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectManagerException;
 
     /**
      * Called by the resolveImmediately method in NakedObjectManager.
      * 
      * @see NakedObjectManager#resolveImmediately(NakedObject)
      */
-    void resolveImmediately(NakedObject object) throws ObjectStoreException;
+    void resolveImmediately(NakedObject object) throws ObjectManagerException;
 
-    public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException;
+    public void runTransaction(PersistenceCommand[] commands) throws ObjectManagerException;
 
-    public void startTransaction() throws ObjectStoreException;
+    public void startTransaction() throws ObjectManagerException;
 
     public void reset();
 }

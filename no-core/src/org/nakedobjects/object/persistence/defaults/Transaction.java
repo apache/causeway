@@ -4,7 +4,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.persistence.CreateObjectCommand;
 import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.NakedObjectStore;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 import org.nakedobjects.object.persistence.PersistenceCommand;
 import org.nakedobjects.object.persistence.SaveObjectCommand;
 import org.nakedobjects.utility.ToString;
@@ -114,7 +114,7 @@ public class Transaction {
         return alreadyHasCommand(SaveObjectCommand.class, onObject);
     }
 
-    public void commit(NakedObjectStore objectStore) throws ObjectStoreException {
+    public void commit(NakedObjectStore objectStore) throws ObjectManagerException {
         LOG.info("commit transaction " + this);
         if (complete) {
             throw new TransactionException("Transaction already complete; cannot commit");
@@ -144,7 +144,7 @@ public class Transaction {
                     }
                 }
       */
-            } catch (ObjectStoreException e) {
+            } catch (ObjectManagerException e) {
                 objectStore.abortTransaction();
                 throw e;
             }

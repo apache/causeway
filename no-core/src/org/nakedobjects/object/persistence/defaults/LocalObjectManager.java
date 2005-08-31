@@ -17,7 +17,7 @@ import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.NotPersistableException;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
@@ -85,7 +85,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
         }
     }
 
-    public void createObject(NakedObject object) throws ObjectStoreException {
+    public void createObject(NakedObject object) throws ObjectManagerException {
         getTransaction().addCommand(objectStore.createCreateObjectCommand(object));
      }
 
@@ -116,7 +116,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
 	            saveChanges();
 	            getTransaction().commit(objectStore);
 	            transaction = null;
-	        } catch (ObjectStoreException e) {
+	        } catch (ObjectManagerException e) {
 	            throw new NakedObjectRuntimeException(e);
 	        }
         }
@@ -144,7 +144,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
             collateChanges();
             //objectsToBeSaved.remove(instances);
             return instances;
-        } catch (ObjectStoreException e) {
+        } catch (ObjectManagerException e) {
             throw new NakedObjectRuntimeException(e);
         }
     }
@@ -156,7 +156,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
             collateChanges();
             //objectsToBeSaved.remove(instances);
             return instances;
-        } catch (ObjectStoreException e) {
+        } catch (ObjectManagerException e) {
             throw new NakedObjectRuntimeException(e);
         }
     }
@@ -171,7 +171,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
             spec = objectStore.getNakedClass(nakedClass.getFullName());
         } catch (ObjectNotFoundException e) {
             spec = new NakedClass(nakedClass.getFullName());
-        } catch (ObjectStoreException e) {
+        } catch (ObjectManagerException e) {
             throw new NakedObjectRuntimeException(e);
         }
         nakedClasses.put(nakedClass, spec);
@@ -213,7 +213,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
         LOG.info("hasInstances of " + specification.getShortName());
         try {
             return objectStore.hasInstances(specification, false);
-        } catch (ObjectStoreException e) {
+        } catch (ObjectManagerException e) {
             throw new NakedObjectRuntimeException(e);
         }
     }
@@ -312,7 +312,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
         LOG.info("numberOfInstances like " + specification.getShortName());
         try {
             return objectStore.numberOfInstances(specification, false);
-        } catch (ObjectStoreException e) {
+        } catch (ObjectManagerException e) {
             throw new NakedObjectRuntimeException(e);
         }
 
@@ -337,7 +337,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
         LOG.info("resolve-eagerly" + object + "/" + field.getName());
         try {
             objectStore.resolveEagerly(object, field);
-        } catch (ObjectStoreException e) {
+        } catch (ObjectManagerException e) {
             throw new NakedObjectRuntimeException(e);
         }
     }
@@ -425,7 +425,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
              objectStore.shutdown();
             objectStore = null;
             nakedClasses.clear();
-        } catch (ObjectStoreException e) {
+        } catch (ObjectManagerException e) {
             throw new NakedObjectRuntimeException(e);
         }
     }

@@ -2,7 +2,6 @@ package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.persistence.CreateObjectCommand;
@@ -10,14 +9,14 @@ import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.PersistenceCommand;
 import org.nakedobjects.object.persistence.SaveObjectCommand;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
 import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.utility.Debug;
 import org.nakedobjects.utility.DebugString;
+import org.nakedobjects.utility.Dump;
 
 import java.util.Date;
 import java.util.Enumeration;
@@ -29,7 +28,7 @@ import org.apache.log4j.Category;
 /**
  * This object store keep all objects in memory and simply provides a 
  * index of instances for each particular type.  This store does not exhibit the same
- * behaviour as real object stores that persist the objects' data.  For a more releastic store 
+ * behaviour as real object stores that persist the objects' data.  For a more realistic store 
  * use the Memory Object Store
  * 
  * @see org.nakedobjects.object.persistence.defaults.MemoryObjectStore
@@ -51,7 +50,7 @@ public class TransientObjectStore implements NakedObjectStore {
 
     public CreateObjectCommand createCreateObjectCommand(final NakedObject object) {
         return new CreateObjectCommand() {
-            public void execute() throws ObjectStoreException {
+            public void execute() throws ObjectManagerException {
                 LOG.debug("  create object " + object);
                 NakedObjectSpecification specification = object.getSpecification();
                 LOG.debug("   saving object " + object + " as instance of " + specification.getFullName());
@@ -74,7 +73,7 @@ public class TransientObjectStore implements NakedObjectStore {
 
     public DestroyObjectCommand createDestroyObjectCommand(final NakedObject object) {
         return new DestroyObjectCommand() {
-            public void execute() throws ObjectStoreException {
+            public void execute() throws ObjectManagerException {
                 LOG.info("  delete object '" + object + "'");
                 objects.remove(object.getOid());
                 
@@ -98,7 +97,7 @@ public class TransientObjectStore implements NakedObjectStore {
 
     public SaveObjectCommand createSaveObjectCommand(final NakedObject object) {
         return new SaveObjectCommand() {
-            public void execute() throws ObjectStoreException {
+            public void execute() throws ObjectManagerException {
                 NakedObjectSpecification specification = object.getSpecification();
                 LOG.debug("   saving object " + object + " as instance of " + specification.getFullName());
                 TransientObjectStoreInstances ins = instancesFor(specification);
@@ -115,88 +114,6 @@ public class TransientObjectStore implements NakedObjectStore {
                 return "SaveObjectCommand [object=" + object + "]";
             }
         };
-    }
-
-    private String debugCollectionGraph(NakedCollection collection, String name, int level, Vector recursiveElements) {
-        StringBuffer s = new StringBuffer();
-
-        if (recursiveElements.contains(collection)) {
-            s.append("*\n");
-        } else {
-            recursiveElements.addElement(collection);
-
-            Enumeration e = ((NakedCollection) collection).elements();
-
-            while (e.hasMoreElements()) {
-                indent(s, level);
-
-                NakedObject element;
-                try {
-                    element = ((NakedObject) e.nextElement());
-                } catch (ClassCastException ex) {
-                    LOG.error(ex);
-                    return s.toString();
-                }
-
-                s.append(element);
-                s.append(debugGraph(element, name, level + 1, recursiveElements));
-            }
-        }
-
-        return s.toString();
-    }
-
-    private String debugGraph(NakedObject object, String name, int level, Vector recursiveElements) {
-        if (level > 3) {
-            return "...\n"; // only go 3 levels?
-        }
-
-        if (recursiveElements == null) {
-            recursiveElements = new Vector(25, 10);
-        }
-
-        if (object instanceof NakedCollection) {
-            return "\n" + debugCollectionGraph((NakedCollection) object, name, level, recursiveElements);
-        } else {
-            return "\n" + debugObjectGraph(object, name, level, recursiveElements);
-        }
-    }
-
-    private String debugObjectGraph(NakedObject object, String name, int level, Vector recursiveElements) {
-        StringBuffer s = new StringBuffer();
-
-        recursiveElements.addElement(object);
-
-        // work through all its fields
-        NakedObjectField[] fields;
-
-        fields = object.getSpecification().getFields();
-
-        for (int i = 0; i < fields.length; i++) {
-            NakedObjectField field = fields[i];
-            Object obj = object.getField(field);
-
-            name = field.getName();
-            indent(s, level);
-
-            if (field.isCollection()) {
-                s.append(name + ": \n" + debugCollectionGraph((NakedCollection) obj, "nnn", level + 1, recursiveElements));
-            } else {
-                if (obj instanceof NakedObject) {
-                    if (recursiveElements.contains(obj)) {
-                        s.append(name + ": " + obj + "*\n");
-                    } else {
-                        s.append(name + ": " + obj);
-                        s.append(debugGraph((NakedObject) obj, name, level + 1, recursiveElements));
-                    }
-                } else {
-                    s.append(name + ": " + obj);
-                    s.append("\n");
-                }
-            }
-        }
-
-        return s.toString();
     }
 
     public void endTransaction() {
@@ -243,7 +160,7 @@ public class TransientObjectStore implements NakedObjectStore {
                 Oid oid = (Oid) f.nextElement();
                 NakedObject object = (NakedObject) objects.get(oid);
                 debug.append(object);
-                debug.appendln(debugGraph(object, "name???", 0, dump));
+                debug.appendln(Dump.graph(object, dump));
             }
         }
         return debug.toString();
@@ -253,7 +170,7 @@ public class TransientObjectStore implements NakedObjectStore {
         return name();
     }
 
-    public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectStoreException, UnsupportedFindException {
+    public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectManagerException, UnsupportedFindException {
         Vector allInstances = new Vector();
         getInstances(criteria, allInstances);
         NakedObject[] matchedInstances = new NakedObject[allInstances.size()];
@@ -304,11 +221,11 @@ public class TransientObjectStore implements NakedObjectStore {
         }
     }
 
-    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
+    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectManagerException {
         throw new ObjectNotFoundException();
     }
 
-    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectStoreException {
+    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectManagerException {
         LOG.debug("getObject " + oid);
         NakedObject nakedObject = (NakedObject) objects.get(oid);
         if(nakedObject == null) {
@@ -332,15 +249,7 @@ public class TransientObjectStore implements NakedObjectStore {
         return false;
     }
 
-    private void indent(StringBuffer s, int level) {
-        for (int indent = 0; indent < level; indent++) {
-            s.append(Debug.indentString(4) + "|");
-        }
-
-        s.append(Debug.indentString(4) + "+--");
-    }
-
-    public void init() throws ObjectStoreException {
+    public void init() throws ObjectManagerException {
         LOG.info("init");
     }
 
@@ -368,12 +277,12 @@ public class TransientObjectStore implements NakedObjectStore {
         return numberOfInstances;
     }
 
-    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectStoreException {}
+    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectManagerException {}
 
     public void reset() {
     }
     
-    public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException {
+    public void runTransaction(PersistenceCommand[] commands) throws ObjectManagerException {
         LOG.info("start execution of transaction ");
         for (int i = 0; i < commands.length; i++) {
             commands[i].execute();
@@ -381,11 +290,11 @@ public class TransientObjectStore implements NakedObjectStore {
         LOG.info("end execution");
     }
 
-    public void resolveImmediately(NakedObject object) throws ObjectStoreException {
+    public void resolveImmediately(NakedObject object) throws ObjectManagerException {
         LOG.debug("resolve " + object);
     }
 
-    public void shutdown() throws ObjectStoreException {
+    public void shutdown() throws ObjectManagerException {
         LOG.info("shutdown " + this);
         objects.clear();
         for (Enumeration e = instances.elements(); e.hasMoreElements();) {

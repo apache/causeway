@@ -3,20 +3,20 @@ package org.nakedobjects.object.persistence;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 
 
-public class ObjectStoreException extends NakedObjectRuntimeException {
-    public ObjectStoreException() {
+public class ObjectManagerException extends NakedObjectRuntimeException {
+    public ObjectManagerException() {
         super();
     }
 
-    public ObjectStoreException(String message) {
+    public ObjectManagerException(String message) {
         super(message);
     }
 
-    public ObjectStoreException(String message, Throwable cause) {
+    public ObjectManagerException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public ObjectStoreException(Throwable cause) {
+    public ObjectManagerException(Throwable cause) {
         super(cause);
     }
 }

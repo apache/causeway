@@ -3,7 +3,7 @@ package org.nakedobjects.object.persistence;
 import org.nakedobjects.object.NakedObject;
 
 public interface PersistenceCommand {
-    void execute() throws ObjectStoreException;
+    void execute() throws ObjectManagerException;
     
     NakedObject onObject();
 }

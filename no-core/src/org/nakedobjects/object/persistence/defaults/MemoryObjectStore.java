@@ -10,7 +10,7 @@ import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.PersistenceCommand;
 import org.nakedobjects.object.persistence.SaveObjectCommand;
@@ -41,7 +41,7 @@ public class MemoryObjectStore implements NakedObjectStore {
 
     public CreateObjectCommand createCreateObjectCommand(final NakedObject object) {
         return new CreateObjectCommand() {
-            public void execute() throws ObjectStoreException {
+            public void execute() throws ObjectManagerException {
                 LOG.debug("  create object " + object);
                 save(object);
             }
@@ -58,7 +58,7 @@ public class MemoryObjectStore implements NakedObjectStore {
 
     public DestroyObjectCommand createDestroyObjectCommand(final NakedObject object) {
         return new DestroyObjectCommand() {
-            public void execute() throws ObjectStoreException {
+            public void execute() throws ObjectManagerException {
                 LOG.info("  delete object '" + object + "'");
                 destroy(object);
             }
@@ -75,7 +75,7 @@ public class MemoryObjectStore implements NakedObjectStore {
 
     public SaveObjectCommand createSaveObjectCommand(final NakedObject object) {
         return new SaveObjectCommand() {
-            public void execute() throws ObjectStoreException {
+            public void execute() throws ObjectManagerException {
                 save(object);
             }
 
@@ -227,7 +227,7 @@ public class MemoryObjectStore implements NakedObjectStore {
         return name();
     }
 
-    public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectStoreException, UnsupportedFindException {
+    public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectManagerException, UnsupportedFindException {
         Vector instances = new Vector();
         getInstances(criteria, instances);
         return toInstancesArray(instances);
@@ -262,11 +262,11 @@ public class MemoryObjectStore implements NakedObjectStore {
         }
     }
 
-    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectStoreException {
+    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectManagerException {
         throw new ObjectNotFoundException();
     }
 
-    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectStoreException {
+    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectManagerException {
         LOG.debug("getObject " + oid);
         MemoryObjectStoreInstances ins = instancesFor(hint);
         NakedObject object = ins.getObject(oid);
@@ -325,13 +325,13 @@ public class MemoryObjectStore implements NakedObjectStore {
         return numberOfInstances;
     }
 
-    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectStoreException {}
+    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectManagerException {}
 
     public void reset() {
         NakedObjects.getObjectLoader().reset();
     }
     
-    public void runTransaction(PersistenceCommand[] commands) throws ObjectStoreException {
+    public void runTransaction(PersistenceCommand[] commands) throws ObjectManagerException {
         LOG.info("start execution of transaction ");
         for (int i = 0; i < commands.length; i++) {
             commands[i].execute();
@@ -339,9 +339,9 @@ public class MemoryObjectStore implements NakedObjectStore {
         LOG.info("end execution");
     }
 
-    private void save(NakedObject object) throws ObjectStoreException {
+    private void save(NakedObject object) throws ObjectManagerException {
         if (object.getObject() instanceof NakedClass) {
-            throw new ObjectStoreException("Can't make changes to a NakedClass object");
+            throw new ObjectManagerException("Can't make changes to a NakedClass object");
         }
         NakedObjectSpecification specification = object.getSpecification();
         LOG.debug("   saving object " + object + " as instance of " + specification.getShortName());
@@ -353,7 +353,7 @@ public class MemoryObjectStore implements NakedObjectStore {
         setupReferencedObjects(object, new Vector());
     }
 
-    public void resolveImmediately(NakedObject object) throws ObjectStoreException {
+    public void resolveImmediately(NakedObject object) throws ObjectManagerException {
         LOG.debug("resolve " + object);
         setupReferencedObjects(object);
     }

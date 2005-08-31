@@ -2,7 +2,7 @@ package org.nakedobjects.object.persistence;
 
 
 
-public class ObjectNotFoundException extends ObjectStoreException {
+public class ObjectNotFoundException extends ObjectManagerException {
 
     public ObjectNotFoundException() {
         super();
