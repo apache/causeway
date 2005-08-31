@@ -134,7 +134,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
 
     public void focusLost() {}
 
-    public void focusRecieved() {}
+    public void focusReceived() {}
 
     public int getOption() {
         return optionIdentified;

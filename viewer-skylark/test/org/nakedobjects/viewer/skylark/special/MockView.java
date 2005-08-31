@@ -101,7 +101,7 @@ public class MockView implements View {
 
     public void focusLost() {}
 
-    public void focusRecieved() {}
+    public void focusReceived() {}
 
     public int getBaseline() {
         return 0;

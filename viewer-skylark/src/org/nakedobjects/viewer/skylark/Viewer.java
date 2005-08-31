@@ -261,7 +261,7 @@ public class Viewer {
             }
 
             keyboardFocus = view;
-            keyboardFocus.focusRecieved();
+            keyboardFocus.focusReceived();
 
             view.markDamaged();
         }

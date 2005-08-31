@@ -88,7 +88,7 @@ public class MockView implements View {
 
     public void focusLost() {}
 
-    public void focusRecieved() {}
+    public void focusReceived() {}
 
     public Location getAbsoluteLocation() {
         return null;

@@ -309,7 +309,7 @@ public class PopupMenuTest extends TestCase {
 
                 public void focusLost() {}
 
-                public void focusRecieved() {}
+                public void focusReceived() {}
 
                 public Location getAbsoluteLocation() {
                     return null;

@@ -142,8 +142,8 @@ public class AbstractViewDecorator implements View {
         wrappedView.focusLost();
     }
 
-    public void focusRecieved() {
-        wrappedView.focusRecieved();
+    public void focusReceived() {
+        wrappedView.focusReceived();
     }
 
     public Location getAbsoluteLocation() {

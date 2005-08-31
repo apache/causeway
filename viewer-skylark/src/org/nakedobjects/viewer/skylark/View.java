@@ -131,7 +131,7 @@ public interface View extends Cloneable {
 
     void focusLost();
 
-    void focusRecieved();
+    void focusReceived();
 
     Location getAbsoluteLocation();
 
