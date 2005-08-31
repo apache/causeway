@@ -15,11 +15,11 @@ import org.apache.log4j.Category;
 
 public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
     private final static Category LOG = Category.getInstance(ProxyOneToManyAssociation.class);
-    private ClientDistribution connection;
+    private Distribution connection;
     private boolean fullProxy = false;
     private final DataFactory objectDataFactory;
 
-    public ProxyOneToManyAssociation(OneToManyPeer local, final ClientDistribution connection, DataFactory objectDataFactory) {
+    public ProxyOneToManyAssociation(OneToManyPeer local, final Distribution connection, DataFactory objectDataFactory) {
         super(local);
         this.connection = connection;
         this.objectDataFactory = objectDataFactory;

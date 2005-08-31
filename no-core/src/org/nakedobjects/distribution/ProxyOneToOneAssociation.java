@@ -13,11 +13,11 @@ import org.apache.log4j.Logger;
 
 public final class ProxyOneToOneAssociation extends AbstractOneToOnePeer {
     private final static Logger LOG = Logger.getLogger(ProxyOneToOneAssociation.class);
-    private final ClientDistribution connection;
+    private final Distribution connection;
     private final boolean fullProxy = false;
     private final DataFactory objectDataFactory;
 
-    public ProxyOneToOneAssociation(OneToOnePeer local, final ClientDistribution connection, DataFactory objectDataFactory) {
+    public ProxyOneToOneAssociation(OneToOnePeer local, final Distribution connection, DataFactory objectDataFactory) {
         super(local);
         this.connection = connection;
         this.objectDataFactory = objectDataFactory;

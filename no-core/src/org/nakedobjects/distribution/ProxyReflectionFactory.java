@@ -14,7 +14,7 @@ import org.nakedobjects.object.reflect.OneToOnePeer;
 
 
 public class ProxyReflectionFactory implements ReflectionFactory {
-    private ClientDistribution connection;
+    private Distribution connection;
 
     private HelpLookup helpLookup = new HelpLookup(null);
     private DataFactory objectDataFactory;
@@ -49,7 +49,7 @@ public class ProxyReflectionFactory implements ReflectionFactory {
      * 
      * @property
      */
-    public void set_Connection(ClientDistribution connection) {
+    public void set_Connection(Distribution connection) {
         this.connection = connection;
     }
 
@@ -71,7 +71,7 @@ public class ProxyReflectionFactory implements ReflectionFactory {
         this.objectDataFactory = objectDataFactory;
     }
 
-    public void setConnection(ClientDistribution connection) {
+    public void setConnection(Distribution connection) {
         this.connection = connection;
     }
 
