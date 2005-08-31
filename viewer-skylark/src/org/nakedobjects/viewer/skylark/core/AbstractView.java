@@ -207,9 +207,13 @@ public abstract class AbstractView implements View {
         }
     }
 
-    public void focusLost() {}
+    public void focusLost() {
+        getViewManager().clearStatus();
+    }
 
-    public void focusRecieved() {}
+    public void focusReceived() {
+        getViewManager().clearStatus();
+    }
 
     public Location getAbsoluteLocation() {
         if (parent == null) {

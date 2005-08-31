@@ -103,11 +103,7 @@ public abstract class AbstractField extends AbstractView {
     public void exited() {
         identified = false;
     }
-
-    public void focusLost() {}
-
-    public void focusRecieved() {}
-
+    
     public boolean getIdentified() {
         return identified;
     }

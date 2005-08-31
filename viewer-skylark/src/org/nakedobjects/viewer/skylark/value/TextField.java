@@ -312,11 +312,11 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
     }
 
     public void focusLost() {
-        LOG.debug("Focus lost " + this);
+    	super.focusLost();
         editComplete();
     }
 
-    public void focusRecieved() {
+    public void focusReceived() {
         getViewManager().setStatus(invalidReason == null ? "" : invalidReason);
         resetSelection();
     }
