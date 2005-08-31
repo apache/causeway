@@ -27,7 +27,7 @@ import org.apache.log4j.Logger;
 // implement NakedObjectManager
 public final class ProxyObjectManager extends AbstractNakedObjectManager {
     final static Logger LOG = Logger.getLogger(ProxyObjectManager.class);
-    private ClientDistribution connection;
+    private Distribution connection;
     private final Hashtable nakedClasses = new Hashtable();
     private DataFactory objectDataFactory;
     private Session session;
@@ -160,7 +160,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
      * 
      * @property
      */
-    public void set_Connection(ClientDistribution connection) {
+    public void set_Connection(Distribution connection) {
         this.connection = connection;
     }
 
@@ -182,7 +182,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         this.updateNotifier = updateNotifier;
     }
 
-    public void setConnection(ClientDistribution connection) {
+    public void setConnection(Distribution connection) {
         this.connection = connection;
     }
 
