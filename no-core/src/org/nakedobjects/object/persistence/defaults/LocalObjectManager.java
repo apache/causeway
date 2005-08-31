@@ -99,7 +99,9 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
         DestroyObjectCommand command = objectStore.createDestroyObjectCommand(object);
         getTransaction().addCommand(command);
         object.destroyed();
+        loader().start(object, ResolveState.UPDATING);
         clear(object);
+        loader().end(object);
 
         loader().unloaded(object);
     }
