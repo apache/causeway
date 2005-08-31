@@ -6,8 +6,10 @@ import org.nakedobjects.application.Title;
 import org.nakedobjects.application.control.ActionAbout;
 import org.nakedobjects.application.valueholder.Date;
 import org.nakedobjects.application.valueholder.MultilineTextString;
+import org.nakedobjects.application.valueholder.Password;
 import org.nakedobjects.application.valueholder.Percentage;
 import org.nakedobjects.application.valueholder.TextString;
+import org.nakedobjects.application.valueholder.WholeNumber;
 
 import java.net.SocketException;
 import java.util.Vector;
@@ -30,9 +32,13 @@ public class Customer {
     private final Vector phoneNumbers;
     private PaymentMethod preferredPaymentMethod;
     private final Vector PaymentMethods = new Vector();
-
+    private final Password password = new Password(8);
     private MultilineTextString notes = new MultilineTextString();
 
+    public Password getPassword() {
+        return password;
+    }
+    
     public MultilineTextString getNotes() {
         return notes;
     }
@@ -52,6 +58,16 @@ public class Customer {
         phoneNumbers = new Vector();
         bookings = new Vector();
         membership = new Percentage();
+    }
+    
+
+    public void aboutActionTestInput(ActionAbout about, WholeNumber number) {
+        about.setParameter(0, "number");
+        about.setParameter(0, new WholeNumber(10));
+    }
+    
+    public void actionTestInput(WholeNumber number) {
+        
     }
 
     public void actionUseAllInstances() {
