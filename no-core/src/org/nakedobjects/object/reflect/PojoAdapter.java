@@ -263,8 +263,10 @@ public class PojoAdapter implements NakedObject {
      */
     public String titleString() {
         NakedObjectSpecification specification = getSpecification();
-        //String title = specification.getTitle().title(this);
         String title = specification.getTitle(this);
+        if(title == null) {
+            resolveIfOnlyAGhost(this);
+        }
         if (title == null) {
             title = defaultTitle;
         }
