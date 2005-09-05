@@ -33,6 +33,53 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         removeMethod = remove;
     }
 
+    public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+        LOG.debug("local clear association " + inObject + "/" + associate);
+
+        try {
+            if (removeMethod != null) {
+                removeMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
+            } else {
+                setMethod.invoke(inObject.getObject(), new Object[] { null });
+            }
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("set method expects a " + getType().getFullName() + " object; not a "
+                    + associate.getClass().getName());
+        } catch (InvocationTargetException e) {
+            invocationException("Exception executing " + setMethod, e);
+        } catch (IllegalAccessException ignore) {
+            LOG.error("Illegal access of " + setMethod, ignore);
+            throw new RuntimeException(ignore.getMessage());
+        }
+    }
+
+    private Naked get(NakedObject fromObject) {
+        try {
+            Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
+
+            if (obj == null) {
+                return null;
+            } else {
+                Naked adapter = NakedObjects.getObjectLoader().createAdapterForValue(obj);
+                if(adapter == null) {
+                    adapter = NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(obj);
+                }
+                return adapter;
+            }
+
+        } catch (InvocationTargetException e) {
+            invocationException("Exception executing " + getMethod, e);
+            return null;
+        } catch (IllegalAccessException ignore) {
+            LOG.error("Illegal access of " + getMethod, ignore);
+            throw new ReflectionException(ignore);
+        }
+    }
+
+    public Naked getAssociation(MemberIdentifier identifier, NakedObject fromObject) {
+        return get(fromObject);
+    }
+
     public Object getExtension(Class cls) {
         return null;
     }
@@ -91,6 +138,25 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
      * Set the data in an NakedObject. Passes in an existing object to for the
      * EO to reference.
      */
+    public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+        LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
+
+        try {
+            setMethod.invoke(inObject.getObject(), new Object[] { associate == null ? null : associate.getObject() });
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(setMethod + " method doesn't expect a " + associate.getObject().getClass().getName());
+        } catch (InvocationTargetException e) {
+            invocationException("Exception executing " + setMethod, e);
+        } catch (IllegalAccessException ignore) {
+            LOG.error("Illegal access of " + setMethod, ignore);
+            throw new RuntimeException(ignore.getMessage());
+        }
+    }
+
+    /**
+     * Set the data in an NakedObject. Passes in an existing object to for the
+     * EO to reference.
+     */
     public void initValue(MemberIdentifier identifier, NakedObject inObject, Object setValue) {
         LOG.debug("local initValue() " + getName() + " " + inObject.getOid() + "/" + setValue);
 
@@ -115,125 +181,26 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         }
     }
 
-    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object setValue) {
-        LOG.debug("local setValue() " + inObject.getOid() + "/" + getName() + "/" + setValue);
-
-        try {
-            if (setMethod == null) {
-                NakedObjects.getObjectManager().objectChanged(inObject);
-            } else {
-                setMethod.invoke(inObject.getObject(), new Object[] { setValue });
-            }
-        } catch (InvocationTargetException e) {
-            invocationException("Exception executing " + setMethod, e);
-        } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + setMethod, ignore);
-        } catch (ValueParseException e) {
-            e.printStackTrace();
-            throw e;
-        }
-    }
-
-    public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("local clear association " + inObject + "/" + associate);
-
-        try {
-            if (removeMethod != null) {
-                removeMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
-            } else {
-                setMethod.invoke(inObject.getObject(), new Object[] { null });
-            }
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("set method expects a " + getType().getFullName() + " object; not a "
-                    + associate.getClass().getName());
-        } catch (InvocationTargetException e) {
-            invocationException("Exception executing " + setMethod, e);
-        } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + setMethod, ignore);
-            throw new RuntimeException(ignore.getMessage());
-        }
-    }
-
-    /**
-     * Set the data in an NakedObject. Passes in an existing object to for the
-     * EO to reference.
-     */
-    public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
-
-        try {
-            setMethod.invoke(inObject.getObject(), new Object[] { associate == null ? null : associate.getObject() });
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(setMethod + " method doesn't expect a " + associate.getObject().getClass().getName());
-        } catch (InvocationTargetException e) {
-            invocationException("Exception executing " + setMethod, e);
-        } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + setMethod, ignore);
-            throw new RuntimeException(ignore.getMessage());
-        }
-    }
-
-    public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
-
-        try {
-            if (associate == null) {
-                if (removeMethod != null) {
-                    removeMethod.invoke(inObject.getObject(), new Object[] { get(inObject) });
-                } else {
-                    setMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
-                }
-            } else {
-                if (hasAddMethod()) {
-                    addMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
-                } else {
-                    setMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
-                }
-            }
-
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(setMethod + " method doesn't expect a " + associate.getClass().getName());
-        } catch (InvocationTargetException e) {
-            invocationException("Exception executing " + setMethod, e);
-        } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + setMethod, ignore);
-            throw new RuntimeException(ignore.getMessage());
-        }
-    }
-
-    public String toString() {
-        String methods = (getMethod == null ? "" : "GET") + (setMethod == null ? "" : " SET") + (addMethod == null ? "" : " ADD")
-                + (removeMethod == null ? "" : " REMOVE");
-
-        return "Association [name=\"" + getName() + "\", method=" + getMethod + ",about=" + getAboutMethod() + ", methods="
-                + methods + ", type=" + getType() + " ]";
-    }
-
-    public Naked getAssociation(MemberIdentifier identifier, NakedObject fromObject) {
-        return get(fromObject);
-    }
-
-    private Naked get(NakedObject fromObject) {
+    public boolean isEmpty(MemberIdentifier identifier, NakedObject fromObject) {
         try {
             Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
-
-            if (obj == null) {
-                return null;
+            if (obj instanceof BusinessValueHolder) {
+                BusinessValueHolder value = (BusinessValueHolder) obj;
+                return value.isEmpty();
             } else {
-                Naked adapter = NakedObjects.getObjectLoader().createAdapterForValue(obj);
-                if(adapter == null) {
-                    adapter = NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(obj);
-                }
-                return adapter;
+                return obj == null;
             }
-
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + getMethod, e);
-            return null;
+            throw new ReflectionException(e);
         } catch (IllegalAccessException ignore) {
             LOG.error("Illegal access of " + getMethod, ignore);
             throw new ReflectionException(ignore);
         }
+    }
+    
+    public boolean isMandatory() {
+        return false;
     }
 
     public void parseTextEntry(NakedObject inObject, String text) throws TextEntryParseException, InvalidEntryException {
@@ -265,22 +232,59 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         }
     }
 
-    public boolean isEmpty(MemberIdentifier identifier, NakedObject fromObject) {
+    public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+        LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
+
         try {
-            Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
-            if (obj instanceof BusinessValueHolder) {
-                BusinessValueHolder value = (BusinessValueHolder) obj;
-                return value.isEmpty();
+            if (associate == null) {
+                if (removeMethod != null) {
+                    removeMethod.invoke(inObject.getObject(), new Object[] { get(inObject) });
+                } else {
+                    setMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
+                }
             } else {
-                return obj == null;
+                if (hasAddMethod()) {
+                    addMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
+                } else {
+                    setMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
+                }
+            }
+
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(setMethod + " method doesn't expect a " + associate.getClass().getName());
+        } catch (InvocationTargetException e) {
+            invocationException("Exception executing " + setMethod, e);
+        } catch (IllegalAccessException ignore) {
+            LOG.error("Illegal access of " + setMethod, ignore);
+            throw new RuntimeException(ignore.getMessage());
+        }
+    }
+
+    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object setValue) {
+        LOG.debug("local setValue() " + inObject.getOid() + "/" + getName() + "/" + setValue);
+
+        try {
+            if (setMethod == null) {
+                NakedObjects.getObjectManager().objectChanged(inObject);
+            } else {
+                setMethod.invoke(inObject.getObject(), new Object[] { setValue });
             }
         } catch (InvocationTargetException e) {
-            invocationException("Exception executing " + getMethod, e);
-            throw new ReflectionException(e);
+            invocationException("Exception executing " + setMethod, e);
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + getMethod, ignore);
-            throw new ReflectionException(ignore);
+            LOG.error("Illegal access of " + setMethod, ignore);
+        } catch (ValueParseException e) {
+            e.printStackTrace();
+            throw e;
         }
+    }
+
+    public String toString() {
+        String methods = (getMethod == null ? "" : "GET") + (setMethod == null ? "" : " SET") + (addMethod == null ? "" : " ADD")
+                + (removeMethod == null ? "" : " REMOVE");
+
+        return "Association [name=\"" + getName() + "\", method=" + getMethod + ",about=" + getAboutMethod() + ", methods="
+                + methods + ", type=" + getType() + " ]";
     }
 }
 
