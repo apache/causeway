@@ -19,8 +19,8 @@ public abstract class DataFactory {
     private int persistentGraphDepth = 100;
 
     private ObjectData createCollectionData(NakedCollection collection, boolean recursePersistentObjects, int depth) {
-        Oid oid = null;
-        String type = null;
+        Oid oid = collection.getOid();
+        String type =  collection.getSpecification().getFullName();;
         Enumeration e = collection.elements();
         Object[] fieldContent = new Object[collection.size()];
         int i = 0;
