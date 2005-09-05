@@ -57,7 +57,7 @@ public class WindowBorder extends AbstractWindowBorder {
     }
 
     private void iconize(Workspace workspace, View view) {
-        workspace.removeView(view);
+        view.dispose();
         workspace.addIconFor(getContent().getNaked(), getLocation());
     }
 

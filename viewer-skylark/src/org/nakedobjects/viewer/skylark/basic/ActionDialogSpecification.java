@@ -32,7 +32,7 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
         }
 
         public void execute(Workspace workspace, View view, Location at) {
-            workspace.removeView(view);
+            view.dispose();
         }
     }
 
@@ -124,7 +124,7 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
 
         public void execute(Workspace workspace, View view, Location at) {
             super.execute(workspace, view, at);
-            workspace.removeView(view);
+            view.dispose();
         }
 
         protected void move(Location at) {}

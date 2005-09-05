@@ -18,7 +18,7 @@ class IconOpenAction extends AbstractViewDecorator {
     }
 
     private void closeIcon() {
-        getWorkspace().removeView(getView());
+        getView().dispose();
     }
 
     public void viewMenuOptions(MenuOptionSet menuOptions) {

@@ -39,8 +39,9 @@ public class SaveTransientObjectBorder extends ButtonBorder {
 
         public void execute(Workspace workspace, View view, Location at) {
             NakedObject transientObject = save(view);
-            workspace.addOpenViewFor(transientObject, view.getLocation());
-            workspace.removeView(view);
+            Location location = view.getLocation();
+            view.dispose();
+            workspace.addOpenViewFor(transientObject, location);
         }
     }
 
@@ -73,7 +74,7 @@ public class SaveTransientObjectBorder extends ButtonBorder {
     }
 
     private static void close(Workspace workspace, View view) {
-        workspace.removeView(view);
+        view.dispose();
     }
 
     private static NakedObject save(View view) {

@@ -66,7 +66,7 @@ public class AboutView extends AbstractView {
     }
     
     public void firstClick(Click click) {
-        getWorkspace().removeView(this);
+        dispose();
     }
 }
 

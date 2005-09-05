@@ -202,7 +202,6 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
 
     public void removeViewsFor(NakedObject object) {
         View views[] = getSubviews();
-
         for (int i = 0; i < views.length; i++) {
             View view = views[i];
             if (view.getContent().getNaked() == object) {
@@ -265,14 +264,12 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
         options.add(MenuOptionSet.VIEW, new MenuOption("Close all") {
             public void execute(Workspace workspace, View view, Location at) {
                 View views[] = getSubviews();
-
                 for (int i = 0; i < views.length; i++) {
                     View v = views[i];
                     if (v.getSpecification().isOpen()) {
                         v.dispose();
                     }
                 }
-
                 markDamaged();
             }
         });

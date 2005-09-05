@@ -22,8 +22,7 @@ public class IconizeWindowControl extends WindowControl {
             public void execute(Workspace workspace, View view, Location at) {
                 View iconView = new RootIconSpecification().createView(view.getContent(), null);
                 iconView.setLocation(view.getLocation());
-                workspace.removeView(view);
-                workspace.addView(iconView);
+                workspace.replaceView(view, iconView);
             }
 
             public String getDescription(View view) {

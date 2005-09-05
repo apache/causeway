@@ -77,7 +77,7 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
         };
         actions[1] = new AbstractButtonAction("Close") {
             public void execute(Workspace workspace, View view, Location at) {
-                workspace.removeView(view.getView());
+                view.getView().dispose();
             }
         };
         return new DialogBorder(new ButtonBorder(actions, super.createView(content, new LabelAxis())), false);

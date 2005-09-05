@@ -92,8 +92,7 @@ public class WindowBorder extends AbstractBorder {
         if(viewAreaType(click.getLocation()) == ViewAreaType.VIEW) {
             View iconView = new RootIconSpecification().createView(getContent(), null);
             iconView.setLocation(getView().getLocation());
-            getWorkspace().removeView(getView());
-            getWorkspace().addView(iconView);
+            getWorkspace().replaceView(getView(), iconView);
         } else {
             super.secondClick(click);
         }

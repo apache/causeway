@@ -36,7 +36,10 @@ public interface View extends Cloneable {
 
     /**
      * Called when a view is no longer needed and its resources can be disposed
-     * of.
+     * of.  Dissociates this view from its parent, and removes itself from the list of
+     * views that need to be updated.
+     * 
+     * @see #removeView(View)
      */
     void dispose();
 
@@ -282,6 +285,9 @@ public interface View extends Cloneable {
      */
     void refresh();
 
+    /**
+     * Removes the specifed view from the subviews contained by this view.
+     */
     void removeView(View view);
 
     void replaceView(View toReplace, View replacement);

@@ -51,7 +51,7 @@ public class NakedErrorSmallViewSpecification implements ViewSpecification {
         }
 
         public void execute(Workspace workspace, View view, Location at) {
-            workspace.removeView(view);
+            view.dispose();
         }
     }
 }
