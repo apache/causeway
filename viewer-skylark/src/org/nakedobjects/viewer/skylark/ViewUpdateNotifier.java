@@ -1,8 +1,10 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DirtyObjectSetImpl;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.utility.DebugInfo;
 
@@ -81,6 +83,9 @@ public class ViewUpdateNotifier extends DirtyObjectSetImpl implements DebugInfo 
                 if (viewsToNotify.size() == 0) {
                     views.remove(object);
                     LOG.debug("removed observer list for " + object);
+                    
+                    NakedObjectLoader loader = NakedObjects.getObjectLoader();
+                    loader.unloaded((NakedObject) object);
                 }
             } else {
                 throw new NakedObjectRuntimeException("Tried to remove a non-existant view " + view + " from observers for "
