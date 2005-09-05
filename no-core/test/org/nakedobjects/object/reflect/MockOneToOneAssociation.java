@@ -97,6 +97,10 @@ class MockOneToOneAssociation implements OneToOnePeer {
         return isEmpty;
     }
 
+    public boolean isMandatory() {
+        return false;
+    }
+    
     public String getName() {
         throw new NotImplementedException();
     }

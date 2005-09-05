@@ -60,6 +60,10 @@ public class TestPojoValuePeer implements OneToOnePeer {
         return false;
     }
 
+    public boolean isMandatory() {
+        return false;
+    }
+    
     public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
         Assert.assertTrue(inObject.getObject()  instanceof TestPojo);
         return false;
