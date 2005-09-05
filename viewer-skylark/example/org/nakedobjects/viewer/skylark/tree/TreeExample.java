@@ -89,6 +89,10 @@ public class TreeExample extends TestViews {
                 return false;
             }
 
+            public boolean isMandatory() {
+                return false;
+            }
+            
             public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
                 return false;
             }
