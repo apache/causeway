@@ -309,6 +309,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
     }
 
     public NakedObjectField[] getVisibleFields(NakedObject object) {
+        // TODO don't cache fields, to allow the visibility to change on the fly - comment out the following if
         if (this.viewFields != null) {
             return viewFields;
         }
@@ -316,9 +317,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         NakedObjectField[] viewFields = new NakedObjectField[fields.length];
         int v = 0;
         for (int i = 0; i < fields.length; i++) {
-           // boolean useField = object.canAccess(session, fields[i]);
-            boolean useField = object.getHint(fields[i], null).canAccess().isAllowed();
-            
+            boolean useField = object.getHint(fields[i], null).canAccess().isAllowed();            
             if (useField) {
                 viewFields[v++] = fields[i];
             }
