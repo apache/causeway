@@ -12,6 +12,7 @@ public class Telephone {
     private final TextString number;
     private final TextString knownAs;
     private final Logical temporary;
+    private final Logical hide;
     private transient BusinessObjectContainer container;
     private IntegerNumber ringCount;
     
@@ -19,6 +20,7 @@ public class Telephone {
         number = new TextString();
         knownAs = new TextString();
         temporary = new Logical();
+        hide = new Logical();
     }
 
     public void actionConvertToOffice() {
@@ -30,6 +32,8 @@ public class Telephone {
     
     public void aboutKnownAs(FieldAbout about, TextString entry) {
         about.unmodifiableOnCondition(temporary.isSet(), "Flag set");
+
+        if(hide.isSet()) about.invisible();
     }
     
     public final TextString getKnownAs() {
@@ -38,6 +42,8 @@ public class Telephone {
 
     public void aboutNumber(FieldAbout about, TextString entry) {
         about.unmodifiableOnCondition(temporary.isSet(), "Flag set");
+        
+        if(hide.isSet()) about.invisible();
     }
     
 
@@ -47,6 +53,10 @@ public class Telephone {
     
     public final Logical getUnmodifiable() {
         return temporary;
+    }
+
+    public final Logical getHideFields() {
+        return hide;
     }
 
     public Title title() {
