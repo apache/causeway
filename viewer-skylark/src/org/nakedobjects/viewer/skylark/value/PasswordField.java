@@ -16,7 +16,6 @@ import java.awt.event.KeyEvent;
 
 public class PasswordField extends AbstractField {
     protected static final Text style = Style.NORMAL;
-    private int height;
     private boolean isSaved;
     private int maxTextWidth;
     private String password;
@@ -27,8 +26,8 @@ public class PasswordField extends AbstractField {
 
         setMaxTextWidth(width);
 
-        this.width = style.charWidth('o');
-        height = style.getTextHeight() + style.getDescent();
+        this.width = style.charWidth('O') + 2;
+ //       height = style.getTextHeight() + style.getDescent();
 
         password = text();
     }
@@ -55,12 +54,12 @@ public class PasswordField extends AbstractField {
         int length = password.length();
         int x = 0;
         for (int i = 0; i < length; i++) {
-            canvas.drawSolidRectangle(x, 0 + VPADDING, width, height, hasFocus() ? Color.YELLOW : Color.LIGHT_GRAY);
+            canvas.drawSolidOval(x, 0 + VPADDING + 2, width, width, hasFocus() ? Color.YELLOW : Color.LIGHT_GRAY);
             x += width + 2;
         }
         x = 0;
         for (int i = 0; i < length + 1; i++) {
-            canvas.drawRectangle(0 + i * (width + 2), 0 + VPADDING, width, height, hasFocus() ? Color.BLACK : Color.GRAY);
+            canvas.drawOval(0 + i * (width + 2), 0 + VPADDING + 2, width, width, hasFocus() ? Color.BLACK : Color.GRAY);
             x += width + 2;
         }
     }
