@@ -1,7 +1,5 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.NakedReference;
-import org.nakedobjects.object.Persistable;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Image;
@@ -62,8 +60,7 @@ public class ObjectBorder extends AbstractBorder {
 		}
 		Size s  = getSize();
 		
-		NakedReference object = (NakedReference) getContent().getNaked();
-        if (object != null && object.persistable() == Persistable.USER_PERSISTABLE && object.getResolveState().isTransient()) {
+		if(getContent().isPersistable() && getContent().isTransient()) {
             int x = s.getWidth() - 13;
             int y = 0;
             Image icon = ImageFactory.getInstance().createIcon("transient", 8, null);
