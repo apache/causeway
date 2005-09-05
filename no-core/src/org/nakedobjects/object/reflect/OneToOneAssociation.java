@@ -70,9 +70,7 @@ public class OneToOneAssociation extends NakedObjectAssociation {
     }
 
     public boolean isMandatory() {
-        return super.isMandatory();
-        // TODO add method to OneToOnePeer, and implement in all cases
-       // return reflectiveAdapter.isMandatory();
+       return reflectiveAdapter.isMandatory();
     }
     
     public boolean isEmpty(NakedObject inObject) {

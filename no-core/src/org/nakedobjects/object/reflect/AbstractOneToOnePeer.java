@@ -56,6 +56,10 @@ public class AbstractOneToOnePeer implements OneToOnePeer {
     public boolean isDerived() {
         return decorated.isDerived();
     }
+    
+    public boolean isMandatory() {
+        return decorated.isMandatory();
+    }
 
     public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
         return decorated.isEmpty(identifier, inObject);
