@@ -4,7 +4,6 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.MemberIdentifier;
@@ -248,6 +247,10 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
 
     public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
         throw new NotImplementedException();
+    }
+    
+    public boolean isMandatory() {
+        return false;
     }
 }
 
