@@ -62,6 +62,7 @@ public class AwtText implements Text {
     public int stringWidth(String text) {
         int stringWidth = metrics.stringWidth(text);
         if(stringWidth > text.length() * maxCharWidth) {
+            LOG.debug("spurious length of string; calculating manually: " + stringWidth  + " for "+ this);
             /*
              * This fixes an intermittent bug in .NET where stringWidth() returns a ridiculous number is returned for the width.
              * 
@@ -70,6 +71,7 @@ public class AwtText implements Text {
             stringWidth = 0;
             for (int i = 0; i < text.length(); i++) {
                 stringWidth += charWidth(text.charAt(i));
+                LOG.debug(i + " " + stringWidth);
             }
         }
         return stringWidth;
