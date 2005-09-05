@@ -3,6 +3,7 @@ package org.nakedobjects.distribution;
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.AbstractActionPeer;
@@ -31,8 +32,14 @@ public final class ProxyAction extends AbstractActionPeer {
             Data[] parameterObjectData = parameterValues(parameters);
             LOG.debug(debug("execute remotely", identifier, target, parameters));
             ObjectData targetReference = dataFactory.createDataForActionTarget(target);
-            Data result = connection.executeAction(NakedObjects.getCurrentSession(), getType().getName(), getName(),
-                    targetReference, parameterObjectData);
+            Data result;
+            try {
+                result = connection.executeAction(NakedObjects.getCurrentSession(), getType().getName(), getName(),
+	                    targetReference, parameterObjectData);
+            } catch (NakedObjectRuntimeException e) {
+                LOG.error("remote exception " + e.getMessage(), e);
+                throw e;
+            }
             Naked returnedObject;
             returnedObject = result instanceof NullData ? null : DataHelper.recreateNaked((ObjectData) result);
             return returnedObject;
