@@ -71,7 +71,18 @@ public class DrawingCanvas implements Canvas {
 
     public void drawOval(int x, int y, int width, int height, Color color) {
         useColor(color);
-        graphics.drawOval(x, y, width, height);
+        
+        int points = 50;
+        int xPoints[] = new int[points];
+        int yPoints[] = new int[points];
+        double radians = 0.0;
+        for (int i = 0; i <points; i++) {
+            xPoints[i] = x + width / 2  + (int) (width /2 * Math.cos(radians));
+            yPoints[i] = y + height / 2  + (int) (height / 2 * Math.sin(radians));
+            radians += (2.0 * Math.PI) / points;
+        }
+        graphics.drawPolygon(xPoints, yPoints, points);
+     //   graphics.drawOval(x, y, width, height);
     }
     
     public void drawRectangle(int x, int y, int width, int height, Color color) {
@@ -102,7 +113,19 @@ public class DrawingCanvas implements Canvas {
 
     public void drawSolidOval(int x, int y, int width, int height, Color color) {
         useColor(color);
-        graphics.fillOval(x, y, width, height);
+        
+        int points = 50;
+        int xPoints[] = new int[points];
+        int yPoints[] = new int[points];
+        double radians = 0.0;
+        for (int i = 0; i <points; i++) {
+            xPoints[i] = x + width / 2  + (int) (width /2 * Math.cos(radians));
+            yPoints[i] = y + height / 2  + (int) (height / 2 * Math.sin(radians));
+            radians += (2.0 * Math.PI) / points;
+        }
+        graphics.fillPolygon(xPoints, yPoints, points);
+
+//        graphics.fillOval(x, y, width, height);
     }
 
     public void drawSolidRectangle(int x, int y, int width, int height, Color color) {
