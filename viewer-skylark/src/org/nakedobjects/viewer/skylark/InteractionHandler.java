@@ -1,6 +1,9 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.object.Naked;
+
 import java.awt.Point;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -269,7 +272,12 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                     spy.addTrace("--> mouse moved");
                     viewer.mouseMoved(location);
                     spy.addTrace(overView, " mouse location", location);
+                    if((me.getModifiers() & InputEvent.ALT_MASK) > 0) {
+                        Naked object = overView.getContent().getNaked();
+                        viewer.setStatus("Mouse over " + object);
+                    }
 
+                    
                     redraw();
                 }
             }
