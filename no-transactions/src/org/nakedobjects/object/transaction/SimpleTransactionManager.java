@@ -7,7 +7,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.UpdateNotifier;
 import org.nakedobjects.object.persistence.NakedObjectStore;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
@@ -42,7 +42,7 @@ public class SimpleTransactionManager extends LocalObjectManager implements Tran
         write("");
     }
     
-    protected void createObject(NakedObject object) throws ObjectStoreException {
+    protected void createObject(NakedObject object) throws ObjectManagerException {
         log("schedule create - " + object);
         Transaction t = getTransaction();
         if(t == null) {

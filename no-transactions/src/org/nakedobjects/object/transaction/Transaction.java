@@ -7,7 +7,7 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.persistence.NakedObjectStore;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.persistence.ObjectManagerException;
 import org.nakedobjects.object.persistence.Oid;
 
 import java.util.Date;
@@ -108,11 +108,11 @@ public class Transaction {
             }
             store.endTransaction();
         }
-        }catch(ObjectStoreException ose) {
+        }catch(ObjectManagerException ose) {
             try {
                 store.abortTransaction();
                 return;
-            } catch (ObjectStoreException e1) {
+            } catch (ObjectManagerException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
