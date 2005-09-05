@@ -386,7 +386,7 @@ public final class XmlSchema
 	 * Creates an &lt;xs:element&gt; element defining the presence of the named element
 	 * representing a reference to a class; appended to xs:sequence element
 	 */ 
-	Element createXsElementForNofReference(final Element parentXsElementElement, final Element xmlReferenceElement, final Hashtable extensions) {
+	Element createXsElementForNofReference(final Element parentXsElementElement, final Element xmlReferenceElement, final String referencedClassName, final Hashtable extensions) {
 
 		// gather details from XML element
 		String fieldName = xmlReferenceElement.getLocalName();
@@ -446,7 +446,7 @@ public final class XmlSchema
 		xsMeta.setXsCardinality(xsReferencedElementSequenceElement, 0, 1);
 
 		xsMeta.addXsNofFeatureAttributeElements(xsFieldComplexTypeElement, "reference");
-		xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "type");
+		xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "type", referencedClassName);
 		xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "isEmpty");
 		xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "annotation");
 
@@ -458,7 +458,7 @@ public final class XmlSchema
 	 * Creates an &lt;xs:element&gt; element defining the presence of the named element
 	 * representing a collection in a class; appended to xs:sequence element
 	 */ 
-	Element createXsElementForNofCollection(final Element parentXsElementElement, final Element xmlCollectionElement, final Hashtable extensions) {
+	Element createXsElementForNofCollection(final Element parentXsElementElement, final Element xmlCollectionElement, final String referencedClassName, final Hashtable extensions) {
 
 		// gather details from XML element
 		String fieldName = xmlCollectionElement.getLocalName();
@@ -515,7 +515,7 @@ public final class XmlSchema
 
 
 		xsMeta.addXsNofFeatureAttributeElements(xsFieldComplexTypeElement, "collection");
-		xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "type");
+		xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "type", referencedClassName);
 		xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "size");
 		xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "annotation");
 
