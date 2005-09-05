@@ -10,6 +10,7 @@ import org.nakedobjects.application.valueholder.Password;
 import org.nakedobjects.application.valueholder.Percentage;
 import org.nakedobjects.application.valueholder.TextString;
 import org.nakedobjects.application.valueholder.WholeNumber;
+import org.nakedobjects.object.persistence.ConcurrencyException;
 
 import java.net.SocketException;
 import java.util.Vector;
@@ -153,6 +154,14 @@ public class Customer {
 
     public void actionShowFailureOfSystem() throws SocketException {
         throw new SocketException("example exception for system failure");
+    }
+
+    public void actionShowRuntimeException() {
+        throw new NullPointerException("example runtime exception");
+    }
+
+    public void actionConcurrencyException() {
+        throw new ConcurrencyException("Another user has changed the object X");
     }
 
     public void actionFailureOfApplication() {
