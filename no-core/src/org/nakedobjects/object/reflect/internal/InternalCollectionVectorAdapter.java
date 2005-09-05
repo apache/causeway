@@ -2,21 +2,13 @@ package org.nakedobjects.object.reflect.internal;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.ActionParameterSet;
-import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.utility.NotImplementedException;
-import org.nakedobjects.utility.UnexpectedCallException;
 
 import java.util.Enumeration;
 import java.util.Vector;
@@ -35,25 +27,9 @@ public class InternalCollectionVectorAdapter implements InternalCollection {
         elementSpecification = NakedObjects.getSpecificationLoader().loadSpecification(t);
     }
 
-    public void clear() {}
-
-    public void clear(OneToOneAssociation specification) {}
-
-    public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
-
-    public void clearPersistDirty() {}
-
-    public void clearViewDirty() {}
-
     public boolean contains(NakedObject object) {
         return collection.contains(object.getObject());
     }
-
-    public void copyObject(Naked object) {}
-
-    public void created() {}
-
-    public void deleted() {}
 
     public NakedObject elementAt(int index) {
         Object element = collection.elementAt(index);
@@ -76,24 +52,8 @@ public class InternalCollectionVectorAdapter implements InternalCollection {
         };
     }
 
-    public Naked execute(Action action, Naked[] parameters) {
-        return null;
-    }
-
     public NakedObjectSpecification getElementSpecification() {
         return elementSpecification;
-    }
-
-    public NakedObject getField(NakedObjectField field) {
-        return null;
-    }
-
-    public Enumeration getFieldElements(NakedObjectAssociation oneToManyAssociation) {
-        return null;
-    }
-
-    public Hint getHint(Action action, Naked[] parameters) {
-        return null;
     }
 
     public Hint getHint(NakedObjectField field, Naked value) {
@@ -104,24 +64,12 @@ public class InternalCollectionVectorAdapter implements InternalCollection {
         return null;
     }
 
-    public String getLabel(Action action) {
-        return null;
-    }
-
-    public String getLabel(NakedObjectField field) {
-        return null;
-    }
-
     public Object getObject() {
         return collection;
     }
 
     public Oid getOid() {
         return null;
-    }
-
-    public ActionParameterSet getParameters(Action action, NakedObjectSpecification[] parameterTypes) {
-        throw new UnexpectedCallException();
     }
 
     public NakedObjectSpecification getSpecification() {
@@ -135,45 +83,9 @@ public class InternalCollectionVectorAdapter implements InternalCollection {
         return version;
     }
 
-    public void initAssociation(NakedObjectAssociation field, NakedObject associatedObject) {}
-
-    public void initOneToManyAssociation(OneToManyAssociation association, NakedObject[] instances) {}
-
-    public void initValue(OneToOneAssociation field, Object object) {}
-
     public boolean isAggregated() {
         return false;
     }
-
-    public boolean isEmpty() {
-        return size() == 0;
-    }
-
-    public boolean isEmpty(NakedObjectField field) {
-        return collection.isEmpty();
-    }
-
-    public boolean isParsable() {
-        return false;
-    }
-
-    public boolean isPersistDirty() {
-        return false;
-    }
-
-    public boolean isPersistent() {
-        return false;
-    }
-
-    public boolean isResolved() {
-        return false;
-    }
-    
-    public boolean isViewDirty() {
-        return false;
-    }
-
-    public void markDirty() {}
 
     public Enumeration oids() {
         throw new NotImplementedException();
@@ -183,22 +95,9 @@ public class InternalCollectionVectorAdapter implements InternalCollection {
         return null;
     }
 
-    public void parseTextEntry(OneToOneAssociation specification, String text) throws TextEntryParseException,
-            InvalidEntryException {
-        throw new NotImplementedException();
-    }
-
-    public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {}
-
     public void setOid(Oid oid) {}
 
     public void setResolved() {}
-
-    public void setValue(OneToOneAssociation field, Object object) {}
-
-    public void setVersion(long version) {
-        this.version = version;
-    }
 
     public int size() {
         return collection.size();
