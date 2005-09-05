@@ -17,10 +17,16 @@ import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.AbstractViewDecorator;
 
-
+/**
+ * A scroll border provides a window on a larger view, providing scrollbars as a way of moving the 
+ * visible part of that view around the actual visible viewing area. To achieve this the view is divided up into five 
+ * main areas, not all of which are used.  In the centre is the viewing area of the underlying view.  At the bottom
+ * and to the right...
+ * At the top and to the left are headers that  
+ */
 public class ScrollBorder extends AbstractViewDecorator {
     private static final int SCROLLBAR_WIDTH = 16;
-    
+
     protected int bottom;
     private int dragOffset;
     private int horizontalMaximum;
@@ -51,12 +57,14 @@ public class ScrollBorder extends AbstractViewDecorator {
     protected void debugDetails(StringBuffer b) {
         super.debugDetails(b);
         b.append("\n           Vertical scrollbar ");
+        b.append("\n             offset " + top);
         b.append("\n             position " + verticalScrollPosition);
         b.append("\n             minimum " + verticalMinimum);
         b.append("\n             maximum " + verticalMaximum);
         b.append("\n             visible amount " + verticalVisibleAmount);
 
         b.append("\n           Horizontal scrollbar ");
+        b.append("\n             offset " + left);
         b.append("\n             position " + horizontalScrollPosition);
         b.append("\n             minimum " + horizontalMinimum);
         b.append("\n             maximum " + horizontalMaximum);
@@ -122,16 +130,13 @@ public class ScrollBorder extends AbstractViewDecorator {
         int y = offset.getDeltaY();
         Canvas subCanvas = canvas.createSubcanvas(left, top, contentWidth, contentHeight);
         subCanvas.offset(-x, -y);
-        
-        //drawScrollBars(subCanvas, contentWidth, contentHeight);
 
-        if(AbstractView.debug) {
-        canvas
-                .drawRectangle(contents.getX(), contents.getY(), contents.getWidth(), contents.getHeight(),
-                        Color.DEBUG_DRAW_BOUNDS);
+        if (AbstractView.debug) {
+            canvas.drawRectangle(contents.getX(), contents.getY(), contents.getWidth(), contents.getHeight(),
+                    Color.DEBUG_DRAW_BOUNDS);
         }
-        
-//        drawContent(canvas, contentWidth, contentHeight);
+
+        //        drawContent(canvas, contentWidth, contentHeight);
         wrappedView.draw(subCanvas);
 
         if (AbstractView.debug) {
@@ -150,8 +155,8 @@ public class ScrollBorder extends AbstractViewDecorator {
         Canvas subCanvas = canvas.createSubcanvas(left, top, contentWidth, contentHeight);
         subCanvas.offset(-x, -y);
         wrappedView.draw(subCanvas);
-        
-        if(AbstractView.debug) {
+
+        if (AbstractView.debug) {
             subCanvas.drawRectangle(0, 0, contentWidth, contentHeight, Color.DEBUG_DRAW_BOUNDS);
         }
     }
@@ -159,6 +164,7 @@ public class ScrollBorder extends AbstractViewDecorator {
     private void drawScrollBars(Canvas canvas, int contentWidth, int contentHeight) {
         Color color = Style.PRIMARY2;
 
+        // horizontal scrollbar
         if (horizontalScrollPosition > left || horizontalVisibleAmount < contentWidth) {
             canvas.drawSolidRectangle(left, contentHeight + top + 1, contentWidth, SCROLLBAR_WIDTH - 2, Style.SECONDARY3);
             canvas.drawSolidRectangle(horizontalScrollPosition, contentHeight + top + 1, horizontalVisibleAmount,
@@ -168,6 +174,7 @@ public class ScrollBorder extends AbstractViewDecorator {
             canvas.drawRectangle(left, contentHeight + top, contentWidth, SCROLLBAR_WIDTH - 1, Style.SECONDARY2);
         }
 
+        // vertical scrollbar
         if (verticalScrollPosition > top || verticalVisibleAmount < contentHeight) {
             canvas.drawSolidRectangle(contentWidth + left + 1, top, SCROLLBAR_WIDTH - 2, contentHeight, Style.SECONDARY3);
             canvas.drawSolidRectangle(contentWidth + left + 1, verticalScrollPosition, SCROLLBAR_WIDTH - 3,
@@ -226,7 +233,6 @@ public class ScrollBorder extends AbstractViewDecorator {
         return new Size(size);
     }
 
-
     public View identify(Location location) {
         getViewManager().getSpy().addTrace(this, "mouse location within border", location);
         getViewManager().getSpy().addTrace(this, "non border area", contentArea());
@@ -248,6 +254,31 @@ public class ScrollBorder extends AbstractViewDecorator {
     }
 
     public void mouseMoved(Location location) {
+        Bounds contents = contentArea();
+
+        if (contents.contains(location)) {
+            location.add(offset());
+            location.move(-left, -top);
+            System.out.println("content " + location);
+        } else {
+            int x = location.getX();
+            int y = location.getY();
+
+            if (x > contents.getX2() && y >= contents.getY() && y <= contents.getY2()) {
+	            // vertical scrollbar 
+                System.out.println("vertical scroll " + (y - contents.getY()));
+            } else if (y > contents.getY2() && x >= contents.getX() && x <= contents.getX2()) {
+                // horzontal scrollbar
+                System.out.println("horizontal scroll " + (x - contents.getX()));
+            } else if (y < contents.getY() && x >= contents.getX() && x <= contents.getX2()) {
+                // top border
+                System.out.println("top header " + (x - left + offset().getDeltaX()) + "," + y);
+            } else if (x < contents.getX()  && y >= contents.getY() && y <= contents.getY2()) {
+                // left border
+                System.out.println("left header " + x + "," + (y - top + offset().getDeltaY()) );
+            } 
+        }
+
         if (contentArea().contains(location)) {
             location.add(offset());
             location.move(-left, -top);
@@ -267,22 +298,21 @@ public class ScrollBorder extends AbstractViewDecorator {
     }
 
     /**
-     * Moves the scrollbar to beginning or the end when a double click occurs on
-     * that side.
+     * Moves the scrollbar to beginning or the end when a double click occurs on that side.
      */
     public void secondClick(Click click) {
         int x = click.getLocation().getX();
         int y = click.getLocation().getY();
         Bounds contents = contentArea();
-        
+
         if (x >= contents.getWidth()) {
             int position = (y < contents.getHeight() / 2) ? verticalMinimum : verticalMaximum;
             setVerticalPostion(position);
-            
+
         } else if (y >= contents.getHeight()) {
             int position = (x < contents.getWidth() / 2) ? horizontalMinimum : horizontalMaximum;
             setHorizontalPostion(position);
-            
+
         } else {
             click.add(offset());
             click.subtract(left, top);
@@ -301,12 +331,12 @@ public class ScrollBorder extends AbstractViewDecorator {
         horizontalScrollPosition = Math.max(horizontalScrollPosition, horizontalMinimum);
         markDamaged();
     }
-    
-	public void setRequiredSize(Size size) {
+
+    public void setRequiredSize(Size size) {
         Size wrappedSize = new Size(size);
         wrappedSize.contract(left + right, top + bottom);
         wrappedView.setRequiredSize(wrappedSize);
-	}
+    }
 
     public void setSize(Size size) {
         // TODO need to restore the offset after size change
@@ -351,7 +381,7 @@ public class ScrollBorder extends AbstractViewDecorator {
             return ViewAreaType.INTERNAL;
         }
     }
-    
+
     public void reset() {
         horizontalScrollPosition = 0;
         verticalScrollPosition = 0;
@@ -359,25 +389,21 @@ public class ScrollBorder extends AbstractViewDecorator {
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if
+ * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ * 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
+ * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */
