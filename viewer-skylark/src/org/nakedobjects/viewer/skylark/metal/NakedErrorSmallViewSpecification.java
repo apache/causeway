@@ -12,7 +12,7 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
-import org.nakedobjects.viewer.skylark.basic.ActionDialogSpecification;
+import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
@@ -29,7 +29,7 @@ public class NakedErrorSmallViewSpecification implements ViewSpecification {
 
     public View createView(Content content, ViewAxis axis) {
         // TODO extract the 'close window' action
-        ButtonAction actions[] = new ButtonAction[] { new ActionDialogSpecification.CloseAction() };
+        ButtonAction actions[] = new ButtonAction[] { new CloseAction() };
         return new DialogBorder(new ButtonBorder(actions, new SmallErrorView(content, this, null)), false);
     }
 
@@ -44,9 +44,23 @@ public class NakedErrorSmallViewSpecification implements ViewSpecification {
     public boolean isSubView() {
         return false;
     }
+
+    public static class CloseAction extends AbstractButtonAction {
+        public CloseAction() {
+            super("Close");
+        }
+
+        public void execute(Workspace workspace, View view, Location at) {
+            workspace.removeView(view);
+        }
+    }
 }
 
 class SmallErrorView extends AbstractErrorView {
+    private static final int left = 20;
+    private static final int top = 15;
+    private static final int PADDING = 10;
+
     private static Image errorIcon;
     {
         errorIcon = ImageFactory.getInstance().createIcon("error", 32, null);
@@ -61,42 +75,34 @@ class SmallErrorView extends AbstractErrorView {
 
     public Size getRequiredSize() {
         Size size = new Size();
-        size.extend(20, 20);
 
         size.extendWidth(errorIcon.getWidth());
-        size.extendWidth(20);
-
-        size.extendHeight(Style.TITLE.getAscent());
-
-        size.extendHeight(30);
+        size.extendWidth(PADDING);
         size.extendWidth(Style.NORMAL.stringWidth(message));
-        size.extendHeight(Style.NORMAL.getTextHeight());
 
-        size.extend(40, 20);
+        size.ensureHeight(errorIcon.getHeight());
+        size.ensureHeight(Style.NORMAL.getLineHeight());
+
+        size.extend(left * 2, top * 2);
         return size;
     }
 
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
-        int left = 20;
-        int top = 20;
-
         canvas.clearBackground(this, Style.WHITE);
 
         canvas.drawIcon(errorIcon, left, top);
 
-        left += errorIcon.getWidth() + 20;
-        top += Style.TITLE.getAscent();
-        canvas.drawText(name, left, top, Color.BLACK, Style.TITLE);
-
-        top += 30;
-        canvas.drawText(message, left, top, Color.BLACK, Style.NORMAL);
+        int x = left + errorIcon.getWidth() + PADDING;
+        int y = top + Style.NORMAL.getAscent();
+        canvas.drawText(message, x, y, Color.BLACK, Style.NORMAL);
     }
 
     public ViewAreaType viewAreaType(Location mouseLocation) {
         return ViewAreaType.VIEW;
     }
+
 }
 
 /*

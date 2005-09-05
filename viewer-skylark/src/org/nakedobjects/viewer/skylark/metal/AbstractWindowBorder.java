@@ -18,7 +18,7 @@ import org.nakedobjects.viewer.skylark.core.AbstractBorder;
 import org.nakedobjects.viewer.skylark.core.DragViewOutline;
 
 
-public class AbstractWindowBorder extends AbstractBorder {
+public abstract class AbstractWindowBorder extends AbstractBorder {
     private final static int LINE_THICKNESS = 5;
     private final static Text TITLE_STYLE = Style.TITLE;
     private final int baseline;
@@ -119,7 +119,7 @@ public class AbstractWindowBorder extends AbstractBorder {
                 getState().isRootViewIdentified() ? Style.PRIMARY2 : Style.SECONDARY2);
         canvas.drawLine(x, top - 1, width - right - 1, top - 1, Style.SECONDARY1);
 
-        canvas.drawText(getContent().windowTitle(), x + HPADDING, baseline, Style.BLACK, TITLE_STYLE);
+        canvas.drawText(title(), x + HPADDING, baseline, Style.BLACK, TITLE_STYLE);
 
         for (int i = 0; controls != null && i < controls.length; i++) {
             Canvas controlCanvas = canvas.createSubcanvas(controls[i].getBounds());
@@ -129,9 +129,11 @@ public class AbstractWindowBorder extends AbstractBorder {
         super.draw(canvas);
     }
 
+    protected abstract String title();
+
     public Size getRequiredSize() {
         Size size = super.getRequiredSize();
-        int width = getLeft() + HPADDING + TITLE_STYLE.stringWidth(getContent().windowTitle()) + HPADDING + controls.length
+        int width = getLeft() + HPADDING + TITLE_STYLE.stringWidth(title()) + HPADDING + controls.length
                 * (WindowControl.WIDTH + HPADDING) + HPADDING + getRight();
         size.ensureWidth(width);
         return size;

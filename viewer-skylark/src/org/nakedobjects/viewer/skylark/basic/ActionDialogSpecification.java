@@ -26,8 +26,8 @@ import org.nakedobjects.viewer.skylark.util.ViewFactory;
 
 public class ActionDialogSpecification extends AbstractCompositeViewSpecification {
 
-    public static class CloseAction extends AbstractButtonAction {
-        public CloseAction() {
+    public static class CancelAction extends AbstractButtonAction {
+        public CancelAction() {
             super("Cancel");
         }
 
@@ -141,7 +141,7 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
     public View createView(Content content, ViewAxis axis) {
         // TODO reintroduce the 'Apply' notion, but under control from the method declaration
         // UserAction[] actions = new UserAction[] { new ExecuteAndCloseAction(), new CloseAction(), new ExecuteAction(), };
-        ButtonAction[] actions = new ButtonAction[] { new ExecuteAndCloseAction(), new CloseAction()};
+        ButtonAction[] actions = new ButtonAction[] { new ExecuteAndCloseAction(), new CancelAction()};
         return new DialogBorder(new ButtonBorder(actions, super.createView(content, new LabelAxis())), false);
     }
 

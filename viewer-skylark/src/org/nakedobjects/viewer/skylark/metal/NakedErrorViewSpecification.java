@@ -29,7 +29,7 @@ public class NakedErrorViewSpecification implements ViewSpecification {
 
     public View createView(Content content, ViewAxis axis) {
         ButtonAction actions[] = new ButtonAction[] {
-                new ActionDialogSpecification.CloseAction()
+                new ActionDialogSpecification.CancelAction()
          };
         return new DialogBorder(new ButtonBorder(actions,new ScrollBorder(new ErrorView(content, this, null))), true);
     }

@@ -1,9 +1,8 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.NakedReference;
-import org.nakedobjects.object.Persistable;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
+import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
@@ -20,17 +19,17 @@ public class WindowBorder extends AbstractWindowBorder {
     public WindowBorder(View wrappedView, boolean scrollable) {
         super(addTransientBorderIfNeccessary(scrollable ? new ScrollBorder(wrappedView) : wrappedView));
 
-        if (isTransient(this)) {
+        if (isTransient()) {
             setControls(new WindowControl[] { new CloseWindowControl(this) });
         } else {
             setControls(new WindowControl[] { new IconizeWindowControl(this), new ResizeWindowControl(this),
                     new CloseWindowControl(this) });
         }
-
     }
 
     private static View addTransientBorderIfNeccessary(View view) {
-         if (isTransient(view)) {
+        Content content = view.getContent();
+        if (content.isPersistable() && content.isTransient()) {
             return new SaveTransientObjectBorder(view);
         } else {
             return view;
@@ -40,7 +39,7 @@ public class WindowBorder extends AbstractWindowBorder {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
-        if (isTransient(this)) {
+        if (isTransient()) {
             int height = top - 2;
             int x = 100;
             Image icon = ImageFactory.getInstance().createIcon("transient", height, null);
@@ -52,9 +51,9 @@ public class WindowBorder extends AbstractWindowBorder {
         }
     }
 
-    private static boolean isTransient(View view) {
-        NakedReference object = (NakedReference) view.getContent().getNaked();
-        return object.persistable() == Persistable.USER_PERSISTABLE && object.getResolveState().isTransient();
+    private boolean isTransient() {
+        Content content = getContent();
+        return content.isPersistable() && content.isTransient();
     }
 
     private void iconize(Workspace workspace, View view) {
@@ -78,6 +77,10 @@ public class WindowBorder extends AbstractWindowBorder {
         } else {
             super.secondClick(click);
         }
+    }
+
+    protected String title() {
+        return getContent().windowTitle();
     }
 
     public String toString() {

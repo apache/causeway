@@ -1,5 +1,7 @@
 package org.nakedobjects.viewer.skylark.metal;
 
+import org.nakedobjects.object.NakedObjectApplicationException;
+import org.nakedobjects.object.persistence.ConcurrencyException;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.special.ScrollBorder;
 
@@ -9,6 +11,18 @@ public class DialogBorder extends AbstractWindowBorder {
     public DialogBorder(View wrappedView, boolean scrollable) {
         super(scrollable ? new ScrollBorder(wrappedView) : wrappedView);
         setControls(new WindowControl[] { new CloseWindowControl(this) });
+    }
+
+    protected String title() {
+        Object exception = getContent().getNaked().getObject();
+        if (exception instanceof NakedObjectApplicationException) {
+            return "Application Exception";
+        } else if (exception instanceof ConcurrencyException) {
+            return "Concurrency Exception";
+        } else {
+            return "System Error";
+        }
+
     }
 
     public String toString() {
