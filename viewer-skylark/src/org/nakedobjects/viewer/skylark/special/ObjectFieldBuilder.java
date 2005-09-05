@@ -119,9 +119,12 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
 
         int fld = 0;
 
+        // TODO remove fields, from the view, that are no longer visible
+        // TODO add fields, to the view, that now visible
         for (int i = 0; i < subviews.length; i++) {
             View subview = subviews[i];
-            while (((FieldContent) subview.getContent()).getFieldReflector() != flds[fld]) {
+            NakedObjectField fieldReflector = ((FieldContent) subview.getContent()).getFieldReflector();
+            while (fieldReflector != flds[fld]) {
                 fld++;
             }
             Assert.assertTrue(fld < flds.length);
