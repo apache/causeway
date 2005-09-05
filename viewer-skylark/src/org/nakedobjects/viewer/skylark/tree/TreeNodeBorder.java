@@ -34,8 +34,11 @@ import org.nakedobjects.viewer.skylark.basic.TitleText;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 
+import org.apache.log4j.Logger;
+
 
 public class TreeNodeBorder extends AbstractBorder {
+    private static final Logger LOG = Logger.getLogger(TreeNodeBorder.class);
     private static final int BOX_PADDING = 2;
     private static final int BOX_X_OFFSET = 5;
     private static final int BOX_SIZE = 8;
@@ -135,10 +138,12 @@ public class TreeNodeBorder extends AbstractBorder {
         int y = click.getLocation().getY();
         
         if (withinBox(x, y) && canClick()) {
+            LOG.debug((getSpecification().isOpen() ? "close" : "open") + " node " + getContent().getNaked());
             resolveContent();
             View newView = replaceWithSpecification.createView(getContent(), getViewAxis());
             getParent().replaceView(getView(), newView);
         } else if (y < top && x > left) {
+            LOG.debug("node selected " + getContent().getNaked());
             ((TreeBrowserFrame) getViewAxis()).setSelectedNode(getView());
         } else {
             super.firstClick(click);
