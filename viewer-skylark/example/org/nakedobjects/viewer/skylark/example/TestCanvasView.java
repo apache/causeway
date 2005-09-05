@@ -5,6 +5,7 @@ import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 
 
@@ -42,6 +43,16 @@ public class TestCanvasView extends AbstractView {
         subcanvas.drawRectangle(0, 0, 120, 220, Color.GREEN);
         
         
+        left = 10;
+        top = 180;
+        
+  //     int leading = Style.NORMAL.get();
+        int ascent = Style.NORMAL.getAscent();
+        int line = Style.NORMAL.getLineHeight();
+        
+        canvas.drawRectangle(left, top, 200 - 1, line - 1, Color.GRAY);
+        canvas.drawLine(left, top + ascent, left + 200, top + ascent, Color.GRAY);
+        canvas.drawText("12345 abcdefghijklmo ABCDEFGHIJK", left, top + ascent, Color.BLACK, Style.NORMAL);
         /*
         int width = getSize().getWidth();
         int height = getSize().getHeight();

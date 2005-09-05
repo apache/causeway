@@ -39,7 +39,7 @@ public class TestWorkspaceView extends AbstractView implements Workspace {
         for (int i = 0; i < subviews.length; i++) {
             b.append(subviews[i].debugDetails());
             b.append("\nContent: ");
-            b.append(subviews[i].getContent().getNaked());
+            b.append(subviews[i].getContent() == null ? "none": subviews[i].getContent().getNaked().toString());
             b.append("\n----------------\n");
         }
         return b.toString();
