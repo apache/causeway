@@ -23,6 +23,16 @@ import java.util.Enumeration;
 import org.apache.log4j.Logger;
 
 
+/**
+ * WorkspaceBuilder builds a workspace view for an ObjectContent view by finding a collection of
+ * classes from a field called 'classes' and adding an icon for each element. Similarly, if there is
+ * a collection called 'objects' its elements are also added to the display.
+ * 
+ * <p>
+ * During layout any icons that have an UNPLACE location (-1, -1) are given a location. Objects of
+ * type NakedClass are added to the left-hand side, while all other icons are placed on the
+ * right-hand side of the workspace view.  Open windows are displayed in the centre.
+ */
 public class WorkspaceBuilder extends AbstractViewBuilder {
     private static final Logger LOG = Logger.getLogger(WorkspaceBuilder.class);
     private static final int PADDING = 10;
@@ -35,7 +45,7 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
             NakedObjectField[] flds = object.getVisibleFields();
             ViewFactory viewFactory = Skylark.getViewFactory();
             ContentFactory contentFactory = Skylark.getContentFactory();
-            
+
             for (int f = 0; f < flds.length; f++) {
                 NakedObjectField field = flds[f];
                 Naked attribute = object.getField(field);
@@ -46,7 +56,6 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
                         NakedObject cls = (NakedObject) elements.nextElement();
                         Content content = contentFactory.createRootContent(cls);
                         View classIcon = viewFactory.createIcon(content);
-                        //View classIcon = viewFactory.createWorkspaceIcon(cls);
                         classIcon.setLocation(WorkspaceBuilder.UNPLACED);
                         view.addView(classIcon);
                     }
@@ -57,7 +66,6 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
                         NakedObject obj = (NakedObject) elements.nextElement();
                         Content content = contentFactory.createRootContent(obj);
                         View objectIcon = viewFactory.createIcon(content);
-                        //View objectIcon = viewFactory.createWorkspaceIcon(obj);
                         view.addView(objectIcon);
                     }
                 }
@@ -87,7 +95,7 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
         Size size = view.getSize();
         size.contract(view.getPadding());
 
-        LOG.debug("Laying out workspace within " + size);
+        LOG.debug("laying out workspace within " + size);
 
         int maxHeight = size.getHeight();
 
@@ -118,9 +126,9 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
                             yClass = PADDING;
                             xClass += maxClassWidth + PADDING;
                             maxClassWidth = 0;
-                            LOG.debug("Creating new column at " + xClass + ", " + yClass);
+                            LOG.debug("creating new column at " + xClass + ", " + yClass);
                         }
-                        LOG.debug("Class icon at " + xClass + ", " + yClass);
+                        LOG.debug("class icon at " + xClass + ", " + yClass);
                         v.setLocation(new Location(xClass, yClass));
                         maxClassWidth = Math.max(maxClassWidth, componentSize.getWidth());
                         yClass += height;
@@ -143,25 +151,21 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
+ * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if
+ * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ * 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
+ * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */

@@ -108,7 +108,7 @@ public class Viewer {
 
     public void clearOverlayView(View view) {
         if (this.getOverlayView() != view) {
-            LOG.warn("No such view to remove: " + view);
+            LOG.warn("no such view to remove: " + view);
         }
         this.clearOverlayView();
     }
@@ -537,7 +537,7 @@ public class Viewer {
         synchronized (redrawArea) {
 	        rootView.layout();
             if (!redrawArea.equals(NO_REDRAW)) {
-                LOG.debug("Repaint viewer " + redrawArea);
+                LOG.debug("repaint viewer " + redrawArea);
                 Bounds area = new Bounds(redrawArea);
                 area.translate(insets.left, insets.top);
                 renderingArea.repaint(area.x, area.y, area.width, area.height);
@@ -616,7 +616,7 @@ public class Viewer {
     private void setupViewFactory() throws ConfigurationException, ComponentException {
         ViewFactory viewFactory = Skylark.getViewFactory();
 
-        LOG.debug("Setting up default views (provided by the framework)");
+        LOG.debug("setting up default views (provided by the framework)");
 
         /*
          * viewFactory.addValueFieldSpecification(loadSpecification("field.option",
@@ -664,13 +664,13 @@ public class Viewer {
                     try {
                         ViewSpecification spec;
                         spec = (ViewSpecification) Class.forName(specName).newInstance();
-                        LOG.info("Adding view specification: " + spec);
+                        LOG.info("adding view specification: " + spec);
 
                         viewFactory.addCompositeRootViewSpecification(spec);
                     } catch (ClassNotFoundException e) {
-                        LOG.error("Failed to find view specification class " + specName);
+                        LOG.error("failed to find view specification class " + specName);
                     } catch (InstantiationException e1) {
-                        LOG.error("Failed to instantiate view specification " + specName);
+                        LOG.error("failed to instantiate view specification " + specName);
                     } catch (IllegalAccessException e1) {
                         e1.printStackTrace();
                     }

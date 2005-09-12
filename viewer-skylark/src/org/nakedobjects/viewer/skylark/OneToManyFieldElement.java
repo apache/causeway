@@ -47,7 +47,7 @@ public class OneToManyFieldElement extends ObjectContent implements FieldContent
     public void clear() {
         NakedObject parentObject = getParent();
         OneToManyAssociation association = getOneToManyAssociation();
-        LOG.debug("Remove " + element + " from " + parentObject);
+        LOG.debug("remove " + element + " from " + parentObject);
         association.clearAssociation(parentObject, element);
     }
 
@@ -106,7 +106,7 @@ public class OneToManyFieldElement extends ObjectContent implements FieldContent
     /*
      * NakedObject parentObject = getParent(); OneToManyAssociationSpecification
      * association = getOneToManyAssociation(); NakedObject associatedObject =
-     * getObject(); LOG.debug("Remove " + associatedObject + " from " +
+     * getObject(); LOG.debug("remove " + associatedObject + " from " +
      * parentObject); association.clearAssociation(parentObject,
      * associatedObject);
      */

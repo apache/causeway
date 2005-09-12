@@ -102,7 +102,7 @@ public class ViewUpdateNotifier extends DirtyObjectSetImpl implements DebugInfo 
        Enumeration objects = dirtyObjects();
         while (objects.hasMoreElements()) {
             NakedObject object = (NakedObject) objects.nextElement();
-            LOG.debug("Invalidate views for " + object);
+            LOG.debug("invalidate views for " + object);
             Object viewsVector = this.views.get(object);
             if(viewsVector == null) {
                 continue;

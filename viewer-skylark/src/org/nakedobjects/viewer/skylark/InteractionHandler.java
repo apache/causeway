@@ -132,7 +132,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     }
 
     private void log(Exception e) {
-        LOG.error("Error during user interaction", e);
+        LOG.error("error during user interaction", e);
     }
 
     /**
