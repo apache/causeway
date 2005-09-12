@@ -81,6 +81,8 @@ public class TreeNodeBorder extends AbstractBorder {
         b.append("TreeNodeBorder " + left + " pixels\n");
         b.append("           titlebar " + (top) + " pixels\n");
         b.append("           replace with  " + replaceWithSpecification);
+        b.append("           text " + text);
+        b.append("           icon " + icon);
        	super.debugDetails(b);
         
     }
