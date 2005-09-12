@@ -47,7 +47,7 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + addMethod, e);
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + addMethod, ignore);
+            LOG.error("illegal access of " + addMethod, ignore);
             throw new RuntimeException(ignore.getMessage());
         }
     }
@@ -67,7 +67,7 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + addMethod, e);
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + addMethod, ignore);
+            LOG.error("illegal access of " + addMethod, ignore);
             throw new RuntimeException(ignore.getMessage());
         }
     }
@@ -89,7 +89,7 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
             } catch (InvocationTargetException e) {
                invocationException("Exception executing " + aboutMethod, e);
             } catch (IllegalAccessException ignore) {
-                LOG.error("Illegal access of " + aboutMethod, ignore);
+                LOG.error("illegal access of " + aboutMethod, ignore);
             }
             return null;
         } else {
@@ -115,7 +115,7 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + clearMethod, e);
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + clearMethod, ignore);
+            LOG.error("illegal access of " + clearMethod, ignore);
             throw new RuntimeException(ignore.getMessage());
         }
     }
@@ -140,7 +140,7 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + addMethod, e);
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + addMethod, ignore);
+            LOG.error("illegal access of " + addMethod, ignore);
             throw new RuntimeException(ignore.getMessage());
         }
     }
@@ -162,7 +162,7 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
              invocationException("Exception executing " + getMethod, e);
              throw new ReflectionException(e);
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + getMethod, ignore);
+            LOG.error("illegal access of " + getMethod, ignore);
             throw new ReflectionException(ignore);
         }
     }
@@ -175,7 +175,7 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
             invocationException("Exception executing " + getMethod, e);
             throw new ReflectionException(e);
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + getMethod, ignore);
+            LOG.error("illegal access of " + getMethod, ignore);
             throw new ReflectionException(ignore);
         }
     }
@@ -189,10 +189,10 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
                 collection.add(instances[i].getObject());
             }
        } catch (InvocationTargetException e) {
-            LOG.error("Exception executing " + getMethod, e.getTargetException());
+            LOG.error("exception executing " + getMethod, e.getTargetException());
             throw new ReflectionException(e);
        } catch (IllegalAccessException ignore) {
-           LOG.error("Illegal access of " + getMethod, ignore);
+           LOG.error("illegal access of " + getMethod, ignore);
            throw new ReflectionException(ignore);
        }
     }

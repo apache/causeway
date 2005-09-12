@@ -112,7 +112,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
             }
 
             if (hint == null) {
-                LOG.error("No about returned from " + aboutMethod + " allowing action by default.");
+                LOG.error("no about returned from " + aboutMethod + " allowing action by default.");
                 return new DefaultHint();
             }
             if(hint.getDescription().equals("")) {
@@ -123,7 +123,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + aboutMethod, e);
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + aboutMethod, ignore);
+            LOG.error("illegal access of " + aboutMethod, ignore);
         }
 
         return new DefaultHint();

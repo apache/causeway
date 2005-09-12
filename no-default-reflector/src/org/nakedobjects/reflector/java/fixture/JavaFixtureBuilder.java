@@ -25,7 +25,7 @@ public final class JavaFixtureBuilder extends FixtureBuilder {
         try {
             for (int i = 0; i < newInstances.size(); i++) {
                 NakedObject object = (NakedObject) newInstances.elementAt(i);
-                LOG.debug("Persisting " + object);
+                LOG.debug("persisting " + object);
 
                 boolean notPersistent = object.getOid() == null;
                 if (notPersistent) {
@@ -35,11 +35,11 @@ public final class JavaFixtureBuilder extends FixtureBuilder {
             objectManager.saveChanges();
             objectManager.endTransaction();
         } catch (RuntimeException e) {
-            LOG.error("Exception during fixture installation; aborting transaction", e);
+            LOG.error("exception during fixture installation; aborting transaction", e);
             try {
                 objectManager.abortTransaction();
             } catch (Exception e2) {
-                LOG.error("Failure during abort", e2);
+                LOG.error("failure during abort", e2);
             }
             throw e;
         }
@@ -80,7 +80,7 @@ public final class JavaFixtureBuilder extends FixtureBuilder {
         }
         NakedObjectManager objectManager = NakedObjects.getObjectManager();
         NakedObject object = objectManager.createTransientInstance(nc);
-        LOG.debug("Adding " + object);
+        LOG.debug("adding " + object);
         newInstances.addElement(object);
         return object.getObject();
     }

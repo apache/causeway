@@ -48,7 +48,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + setMethod, e);
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + setMethod, ignore);
+            LOG.error("illegal access of " + setMethod, ignore);
             throw new RuntimeException(ignore.getMessage());
         }
     }
@@ -71,7 +71,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
             invocationException("Exception executing " + getMethod, e);
             return null;
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + getMethod, ignore);
+            LOG.error("illegal access of " + getMethod, ignore);
             throw new ReflectionException(ignore);
         }
     }
@@ -124,7 +124,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + aboutMethod, e);
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + aboutMethod, ignore);
+            LOG.error("illegal access of " + aboutMethod, ignore);
         }
 
         return new DefaultHint();
@@ -148,7 +148,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + setMethod, e);
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + setMethod, ignore);
+            LOG.error("illegal access of " + setMethod, ignore);
             throw new RuntimeException(ignore.getMessage());
         }
     }
@@ -175,9 +175,9 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + setMethod, e);
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + setMethod, ignore);
+            LOG.error("illegal access of " + setMethod, ignore);
         } catch (ValueParseException e) {
-            LOG.error("Parse error: " + setValue, e);
+            LOG.error("parse error: " + setValue, e);
         }
     }
 
@@ -194,7 +194,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
             invocationException("Exception executing " + getMethod, e);
             throw new ReflectionException(e);
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + getMethod, ignore);
+            LOG.error("illegal access of " + getMethod, ignore);
             throw new ReflectionException(ignore);
         }
     }
@@ -213,7 +213,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
             } catch (InvocationTargetException e) {
                 invocationException("Exception executing " + getMethod, e);
             } catch (IllegalAccessException ignore) {
-                LOG.error("Illegal access of " + getMethod, ignore);
+                LOG.error("illegal access of " + getMethod, ignore);
                 throw new ReflectionException("Illegal access of " + getMethod, ignore);
             } catch (ValueParseException e) {
                 throw new TextEntryParseException(e);
@@ -225,7 +225,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
             } catch (InvocationTargetException e) {
                 invocationException("Exception executing " + setMethod, e);
             } catch (IllegalAccessException ignore) {
-                LOG.error("Illegal access of " + setMethod, ignore);
+                LOG.error("llegal access of " + setMethod, ignore);
                 throw new ReflectionException("Illegal access of " + setMethod, ignore);
             }
 
@@ -255,7 +255,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + setMethod, e);
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + setMethod, ignore);
+            LOG.error("illegal access of " + setMethod, ignore);
             throw new RuntimeException(ignore.getMessage());
         }
     }
@@ -272,7 +272,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         } catch (InvocationTargetException e) {
             invocationException("Exception executing " + setMethod, e);
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + setMethod, ignore);
+            LOG.error("illegal access of " + setMethod, ignore);
         } catch (ValueParseException e) {
             e.printStackTrace();
             throw e;

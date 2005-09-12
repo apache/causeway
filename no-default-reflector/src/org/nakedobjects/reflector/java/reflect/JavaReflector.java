@@ -122,7 +122,7 @@ public class JavaReflector implements Reflector {
                 }
 
             } else {
-                LOG.warn("Method " + aClass.getName() + "." + type + "Order() must be decared as static");
+                LOG.warn("method " + aClass.getName() + "." + type + "Order() must be decared as static");
             }
         } catch (NoSuchMethodException ignore) {} catch (IllegalAccessException ignore) {} catch (InvocationTargetException ignore) {}
 
@@ -146,7 +146,7 @@ public class JavaReflector implements Reflector {
     private Method methods[];
 
     public JavaReflector(String name) throws ReflectionException {
-        LOG.info("Introspecting " + name);
+        LOG.info("introspecting " + name);
 
         Class cls;
         try {
@@ -273,7 +273,7 @@ public class JavaReflector implements Reflector {
         } catch (IllegalArgumentException e) {
             throw new NakedObjectRuntimeException(e);
         } catch (IllegalAccessException e) {
-            LOG.error("Illegal access of " + isDirtyMethod, e);
+            LOG.error("illegal access of " + isDirtyMethod, e);
         } catch (InvocationTargetException e) {
             JavaMember.invocationException("Exception executing " + isDirtyMethod, e);
         }
@@ -534,7 +534,7 @@ public class JavaReflector implements Reflector {
         } catch (IllegalArgumentException e) {
             throw new NakedObjectRuntimeException(e);
         } catch (IllegalAccessException e) {
-            LOG.error("Illegal access of " + isDirtyMethod, e);
+            LOG.error("illegal access of " + isDirtyMethod, e);
             return false;
         } catch (InvocationTargetException e) {
             JavaMember.invocationException("Exception executing " + isDirtyMethod, e);
@@ -568,7 +568,7 @@ public class JavaReflector implements Reflector {
         } catch (IllegalArgumentException e) {
             throw new NakedObjectRuntimeException(e);
         } catch (IllegalAccessException e) {
-            LOG.error("Illegal access of " + isDirtyMethod, e);
+            LOG.error("illegal access of " + isDirtyMethod, e);
         } catch (InvocationTargetException e) {
             JavaMember.invocationException("Exception executing " + isDirtyMethod, e);
         }
@@ -631,7 +631,7 @@ public class JavaReflector implements Reflector {
             }
 
             if (addMethod == null || removeMethod == null) {
-                LOG.error("There must be both add and remove methods for " + name + " in " + className());
+                LOG.error("there must be both add and remove methods for " + name + " in " + className());
                 return;
             }
 
@@ -648,13 +648,13 @@ public class JavaReflector implements Reflector {
             elementType = (removeType == null) ? elementType : removeType;
 
             if (elementType == null) {
-                LOG.warn("Cannot determine a type for the collection " + name + "; not added as a field");
+                LOG.warn("cannot determine a type for the collection " + name + "; not added as a field");
                 return;
             }
 
             if (((aboutType != null) && (aboutType != elementType)) || ((addType != null) && (addType != elementType))
                     || ((removeType != null) && (removeType != elementType))) {
-                LOG.error("The add/remove/associate/dissociate/about methods in " + className() + " must "
+                LOG.error("the add/remove/associate/dissociate/about methods in " + className() + " must "
                         + "all deal with same type of object.  There are at least two different " + "types");
             }
 
@@ -712,7 +712,7 @@ public class JavaReflector implements Reflector {
 
             if (((aboutType != null) && (aboutType != elementType)) || ((addType != null) && (addType != elementType))
                     || ((removeType != null) && (removeType != elementType))) {
-                LOG.error("The add/remove/associate/dissociate/about methods in " + className() + " must "
+                LOG.error("the add/remove/associate/dissociate/about methods in " + className() + " must "
                         + "all deal with same type of object.  There are at least two different " + "types");
             }
 
@@ -774,7 +774,7 @@ public class JavaReflector implements Reflector {
                 continue;
             }
 
-            LOG.info("One-to-one association " + name + " ->" + addMethod);
+            LOG.info("one-to-one association " + name + " ->" + addMethod);
             JavaOneToOneAssociation association = new JavaOneToOneAssociation(name, getMethod.getReturnType(), getMethod,
                     setMethod, addMethod, removeMethod, aboutMethod);
             associations.addElement(association);
@@ -857,11 +857,11 @@ public class JavaReflector implements Reflector {
 
             if ((findMethod(OBJECT, SET_PREFIX + name, void.class, params) != null)
                     || (findMethod(OBJECT, "set_" + name, void.class, params) != null)) {
-                LOG.error("The method set" + name + " is not needed for the NakedValue class " + className());
+                LOG.error("the method set" + name + " is not needed for the NakedValue class " + className());
             }
 
             if (findMethod(OBJECT, "associate" + name, void.class, params) != null) {
-                LOG.error("The method associate" + name + " is not needed for the NakedValue class " + className());
+                LOG.error("the method associate" + name + " is not needed for the NakedValue class " + className());
             }
 
             // create Field

@@ -69,11 +69,11 @@ public class SimpleSession extends Session {
         String roleName = role.getName().stringValue();
         for (int i = 0; i < roles.length; i++) {
             if (roles[i].getName().isSameAs(roleName)) {
-                LOG.debug("Role " + roleName + " matches for " + this);
+                LOG.debug("role " + roleName + " matches for " + this);
                 return true;
             }
         }
-        LOG.debug("Role " + roleName + " not matched for " + this);
+        LOG.debug("role " + roleName + " not matched for " + this);
         return false;
     }
 
