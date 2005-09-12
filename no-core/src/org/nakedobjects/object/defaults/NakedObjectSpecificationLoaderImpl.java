@@ -45,7 +45,7 @@ public class NakedObjectSpecificationLoaderImpl implements NakedObjectSpecificat
                     reflector = reflectorFactory.createReflector(className);
                 }
 
-                LOG.info("Initialising specification for " + className);
+                LOG.info("initialising specification for " + className);
                 NakedObjectSpecificationImpl spec = new NakedObjectSpecificationImpl();
                 classes.put(className, spec);
                 spec.reflect(className, reflector);

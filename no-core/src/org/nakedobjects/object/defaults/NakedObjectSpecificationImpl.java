@@ -310,10 +310,10 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
 
     public NakedObjectField[] getVisibleFields(NakedObject object) {
         // TODO don't cache fields, to allow the visibility to change on the fly - comment out the following if
-        if (this.viewFields != null) {
+      /*  if (this.viewFields != null) {
             return viewFields;
         }
-
+*/
         NakedObjectField[] viewFields = new NakedObjectField[fields.length];
         int v = 0;
         for (int i = 0; i < fields.length; i++) {
@@ -341,7 +341,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         if (reflector == null) {
             throw new NullPointerException("No reflector specified");
         }
-        LOG.debug("Init specification " + this);
+        LOG.debug("init specification " + this);
         this.reflector = reflector;
         NakedObjectSpecificationLoader loader = NakedObjects.getSpecificationLoader();
         if (superclass != null) {
@@ -359,7 +359,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         }
 
         if (isValue() && fields.length > 0) {
-            LOG.warn("Naked values cannot have fields, they will be ignored");
+            LOG.warn("naked values cannot have fields, they will be ignored");
         } else {
             this.fields = fields;
         }
@@ -458,7 +458,7 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
                 }
 
                 if (!order[orderIndex].trim().equals("")) {
-                    LOG.warn("Invalid ordering element '" + order[orderIndex] + "' in " + nakedClassName);
+                    LOG.warn("invalid ordering element '" + order[orderIndex] + "' in " + nakedClassName);
                 }
             }
 
