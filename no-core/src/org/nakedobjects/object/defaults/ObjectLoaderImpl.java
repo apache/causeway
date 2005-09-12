@@ -116,6 +116,15 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
         return adapter;
     }
 
+    public NakedCollection recreateCollection(NakedObjectSpecification specification) {
+        Assert.assertFalse("must not be object", specification.isObject());
+        Assert.assertFalse("must not be value", specification.isValue());
+        LOG.debug("recreating collection " + specification);
+        Object object = objectFactory.createObject(specification);
+        NakedCollection adapter = createCollectionAdapter(object);
+        return adapter;        
+    }
+    
     public NakedObject recreateTransientInstance(NakedObjectSpecification specification) {
         Assert.assertTrue("must be an object", specification.isObject());
         LOG.debug("recreating transient instance of for " + specification);
@@ -133,14 +142,12 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
 
     public NakedObject getAdapterFor(final Object object) {
         Assert.assertNotNull("can't get an adapter for null", this, object);
-        LOG.debug("get adapter for " + object);
         NakedObject adapter = (NakedObject) pojoAdapterMap.getPojo(object);
         return adapter;
     }
 
     public NakedObject getAdapterFor(final Oid oid) {
         Assert.assertNotNull("OID should not be null", this, oid);
-        LOG.debug("get adapter for " + oid);
         updateOid(oid);
         NakedObject adapter = (NakedObject) identityAdapterMap.get(oid);
         return adapter;
@@ -149,7 +156,7 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
     public NakedObject getAdapterForElseCreateAdapterForTransient(final Object object) {
         NakedObject adapter = getAdapterFor(object);
         if (adapter == null) {
-            LOG.debug("No existing adapter found for " + object + "; creating a new transient one");
+            LOG.debug("no existing adapter found for " + object + "; creating a new transient one");
             adapter = NakedObjects.getObjectLoader().createAdapterForTransient(object);
         }
         Assert.assertNotNull("should have an adapter for ", object, adapter);
@@ -308,10 +315,11 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
     }
 
     public void unloaded(NakedObject object) {
-        Assert.assertTrue("cannot unload object as it is not loaded", object, identityAdapterMap.contains(object));
-        LOG.debug("removed loaded object " + object);
-        identityAdapterMap.remove(object.getOid());
-        pojoAdapterMap.remove(object);
+        if(identityAdapterMap.containsKey(object)) {
+	        LOG.debug("removed loaded object " + object);
+	        identityAdapterMap.remove(object.getOid());
+	        pojoAdapterMap.remove(object);
+        }
     }
     
     private void updateOid(Oid oid) {

@@ -101,12 +101,20 @@ public interface NakedObjectLoader extends NakedObjectsComponent, DebugInfo {
     void madePersistent(NakedObject object, Oid oid);
 
     /**
-     * Recreates an adapter for a persistent busines object that is being loaded into the system. If
+     * Recreates an adapter for a persistent business object that is being loaded into the system. If
      * an adapter already exists for the specified OID then that adapter is returned. Otherwise a
      * new instance of the specified business object is created and an adapter is created for it.
      * The adapter will then be in the state UNRESOLVED.
      */
     NakedObject recreateAdapterForPersistent(Oid oid, NakedObjectSpecification spec);
+
+    /**
+     * Recreates a new collection instance - normally within another machine - of the type declared
+     * by the specification, and creates an adapter for it.
+     * 
+     * @see #createCollectionAdapter(Object)
+     */
+    NakedCollection recreateCollection(NakedObjectSpecification specification);
 
     /**
      * Recreates a new transient instance - normally within another machine - of the type declared
