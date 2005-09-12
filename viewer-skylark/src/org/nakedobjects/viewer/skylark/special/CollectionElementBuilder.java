@@ -55,7 +55,8 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
         View[] subviews = view.getSubviews();
         Naked[] existingElements = new NakedObject[subviews.length];
         for (int i = 0; i < subviews.length; i++) {
-			subviews[i].dispose();
+//			subviews[i].dispose();
+            view.removeView(subviews[i]);
 			existingElements[i] = subviews[i].getContent().getNaked();
 		}
 
