@@ -41,6 +41,10 @@ public class DebugView implements DebugInfo {
             type = type.substring(type.lastIndexOf('.') + 1);
             debug.appendln(0, "Content", type);
             content.debugDetails(debug);
+
+            debug.appendln(4, "Icon name", content.getIconName());
+            debug.appendln(4, "Window title", content.windowTitle());
+             
             debug.appendln(4, "Object", content.isObject());
             debug.appendln(4, "Collection", content.isCollection());
             debug.appendln(4, "Value", content.isValue());
