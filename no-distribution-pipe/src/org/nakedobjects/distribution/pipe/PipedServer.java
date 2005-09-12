@@ -23,7 +23,7 @@ public class PipedServer {
 	                request.execute(facade);
 	                LOG.debug("server updates: " + updateNotifier.updateList());
 	            } catch (Exception e) {
-	                LOG.error("Failure during request", e);
+	                LOG.error("failure during request", e);
 	            }
 
                 Response response = new Response(request);
