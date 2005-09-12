@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.utility.ToString;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Size;
@@ -98,6 +99,12 @@ public abstract class TitleText {
     }
 
     protected abstract String title();
+    
+    public String toString() {
+        ToString str = new ToString(this);
+        str.append("style", style);
+        return str.toString();
+    }
 }
 
 /*
