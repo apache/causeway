@@ -136,7 +136,7 @@ public final class XmlSnapshot {
             this.rootPlace = appendXml(rootObject);
 
         } catch (ParserConfigurationException e) {
-            LOG.error("Unable to build snapshot", e);
+            LOG.error("unable to build snapshot", e);
             throw new NakedObjectRuntimeException(e);
         }
 
