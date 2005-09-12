@@ -98,17 +98,21 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         LOG.debug("build new view " + view + " for " + object);
         for (int f = 0; f < flds.length; f++) {
             NakedObjectField field = flds[f];
-            try {
-                Naked value = object.getField(field);
-                Content content = createContent(object, value, field);
-                View fieldView = subviewDesign.createSubview(content, view.getViewAxis());
-                if (fieldView != null) {
-                    view.addView(decorateSubview(fieldView));
-                }
-            } catch (NakedObjectDefinitionException e) {
-                LOG.error("Invalid field", e);
-                view.addView(new FieldErrorView(e.getMessage()));
+            addField(view, object, field);
+        }
+    }
+
+    private void addField(View view, NakedObject object, NakedObjectField field) {
+        try {
+            Naked value = object.getField(field);
+            Content content = createContent(object, value, field);
+            View fieldView = subviewDesign.createSubview(content, view.getViewAxis());
+            if (fieldView != null) {
+                view.addView(decorateSubview(fieldView));
             }
+        } catch (NakedObjectDefinitionException e) {
+            LOG.error("invalid field", e);
+            view.addView(new FieldErrorView(e.getMessage()));
         }
     }
 
@@ -116,7 +120,88 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         LOG.debug("rebuild view " + view + " for " + object);
 
         View[] subviews = view.getSubviews();
+        
+        // remove views for fields that no longer exist
+        outer:
+            for (int i = 0; i < subviews.length; i++) {
+                FieldContent fieldContent = ((FieldContent) subviews[i].getContent());
+                
+                for (int j = 0; j < flds.length; j++) {
+                    NakedObjectField field = flds[j];
+                    if(fieldContent.getFieldReflector() == field) {
+                        continue outer;
+                    }
+                }
 
+                view.removeView(subviews[i]);
+            }
+        
+        
+        // update existing fields if needed
+        subviews = view.getSubviews();
+        for (int i = 0; i < subviews.length; i++) {
+            View subview = subviews[i];
+            NakedObjectField fieldReflector = ((FieldContent) subview.getContent()).getFieldReflector();
+            Naked value = object.getField(fieldReflector);
+            if (fieldReflector.isValue()) {
+                subview.refresh();
+            } else if (value instanceof NakedCollection) {
+                subview.update(value);
+            } else {
+                NakedObject existing = ((ObjectContent) subviews[i].getContent()).getObject();
+                boolean changedValue = value != existing;
+                if (changedValue) {
+                    View fieldView;
+                    try {
+                        fieldView = subviewDesign.createSubview(createContent(object, value, fieldReflector), view.getViewAxis());
+                    } catch (NakedObjectDefinitionException e) {
+                        LOG.error("invalid field", e);
+                        fieldView = new FieldErrorView(e.getMessage());
+                    }
+                    if (fieldView != null) {
+                        view.replaceView(subview, decorateSubview(fieldView));
+                    }
+                }
+            }
+        }
+        
+        // add new fields
+        outer2:
+        for (int j = 0; j < flds.length; j++) {
+            NakedObjectField field = flds[j];
+            for (int i = 0; i < subviews.length; i++) {
+                FieldContent fieldContent = ((FieldContent) subviews[i].getContent());
+                if(fieldContent.getFieldReflector() == field) {
+                    continue outer2;
+                }
+            }
+            
+            addField(view, object, field);
+        }
+            
+        
+        // debug
+        {
+	       View[] dsubviews = view.getSubviews();
+	        for (int i = 0; i < flds.length; i++) {
+	            LOG.debug(i + " " + flds[i].getName() + " " + flds[i].hashCode());
+	        }
+	        
+	        for (int i = 0; i < dsubviews.length; i++) {
+	            FieldContent fieldContent = ((FieldContent) dsubviews[i].getContent());
+	            LOG.debug(i + " " + fieldContent.getFieldName() + " " + fieldContent.getFieldReflector().hashCode());
+	        }
+        }
+        // end debug
+        
+        /*
+         * 1/ To remove fields: look through views and remove any that don't  exists in visible fields
+         * 2/ From remaining views chaeck for changes as already being done, and replace if needed
+         * 3/ Finally look through fields to see if there is no existing subview; and add one
+         */
+        
+       
+    /*    	
         int fld = 0;
 
         // TODO remove fields, from the view, that are no longer visible
@@ -147,12 +232,12 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
                     }
                 }
             } catch (NakedObjectDefinitionException e) {
-                LOG.error("Invalid field", e);
+                LOG.error("invalid field", e);
                 view.addView(new FieldErrorView(e.getMessage()));
             }
 
             fld++;
-        }
+        */
     }
 }
 
