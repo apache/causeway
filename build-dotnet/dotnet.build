@@ -294,7 +294,8 @@
 			</fileset>
 		</zip>
 		
-		<zip zipfile="../../../no-builds/nakedobjects.net-${build.id}.zip">
+		<!-- TODO use variables and a properties file -->
+		<zip zipfile="M:/naked-objects-builds/nakedobjects.net-${build.id}.zip">
 			<fileset basedir="build">
 				<include name="*.dll"/>
 				<include name="*.pdb"/>
@@ -314,7 +315,7 @@
 
         <mkdir dir="e:/transfer" failonerror="false"/>
         <copy todir="e:/transfer" failonerror="false">
-			<fileset basedir="../../../no-builds/">
+			<fileset basedir="M:/naked-objects-builds/">
 				<include name="nakedobjects.net-${build.id}.zip"/>
 			</fileset>
 		</copy>

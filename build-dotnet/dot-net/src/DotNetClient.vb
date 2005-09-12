@@ -22,24 +22,9 @@ Namespace org.nakedobjects.dotnet
     Public MustInherit Class DotNetClient
         Inherits DotNetBootstrapper
 
-        '     Public Overridable Overloads Sub run(ByVal containerId As String, _
-        '    ByVal userContextId As String, _
-        '   ByVal viewerId As String)
-        '      Me.run(containerId, userContextId, viewerId, False)
-        ' End Sub
-
-
         Public Overrides Sub display(ByVal userContextId As String)
-
             'To-Do needs to be an interface
             Dim thisViewer As org.nakedobjects.viewer.skylark.SkylarkViewer
-
-            '         Dim splash As SplashWindow
-            '       If Not consoleOnly Then splash = New SplashWindow
-
-            '  Try
-
-            '  MyBase.run(containerId, userContextId, viewerId, consoleOnly)
 
             thisViewer = _
                    New org.nakedobjects.viewer.skylark.SkylarkViewer
@@ -61,20 +46,6 @@ Namespace org.nakedobjects.dotnet
             'Need to set the Exploration off 
             thisViewer.setExploration(False)
             thisViewer.init()
-
-
-            'Catch ex As Exception
-            '    ExceptionHelper.dumpException(ex)
-            '    Throw ex
-            ' Finally
-            '    thisViewer = Nothing
-            'If Not splash Is Nothing Then
-            '    splash.toFront()
-            '    splash.removeAfterDelay(3)
-            'End If
-            '  End Try
-
-
         End Sub
 
         Public Overrides Sub initExtensions()
