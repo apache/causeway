@@ -58,7 +58,7 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 
 	public void loadInternalCollection(DatabaseConnector connector, NakedObject parent)
 			throws ResolveException, SqlObjectStoreException {
-		LOG.debug("Loading internal collection " + field);
+		LOG.debug("loading internal collection " + field);
 		String parentId = mapper.primaryKey(parent.getOid());
 		
 		String statement = "select " + elementIdColumn + "," + elementClassColumn + " from " + table + " where "
@@ -77,7 +77,7 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 
 	public void saveInternalCollection(DatabaseConnector connector, NakedObject parent) throws SqlObjectStoreException {
 		InternalCollection collection = (InternalCollection) parent.getField(field);
-		LOG.debug("Saving internal collection " + collection);
+		LOG.debug("saving internal collection " + collection);
 		String parentId = mapper.primaryKey(parent.getOid());
 		
 		connector.update("delete from " + table + " where " + parentColumn + " = " + parentId);

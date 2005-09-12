@@ -66,7 +66,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 		    setupSpecifiedMapping(nakedClass, configParameters, parameterBase);
 		}
 		
-		LOG.info("Table mapping: " + table +  " " + idColumn + " (" + columnList() + ")");
+		LOG.info("table mapping: " + table +  " " + idColumn + " (" + columnList() + ")");
 	}
 
 	protected String columnList() {
