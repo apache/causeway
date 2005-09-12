@@ -41,7 +41,7 @@ public final class ProxyAction extends AbstractActionPeer {
                 throw e;
             }
             Naked returnedObject;
-            returnedObject = result instanceof NullData ? null : DataHelper.recreateNaked((ObjectData) result);
+            returnedObject = result instanceof NullData ? null : DataHelper.recreate(result);
             return returnedObject;
         } else {
             LOG.debug(debug("execute locally", identifier, target, parameters));

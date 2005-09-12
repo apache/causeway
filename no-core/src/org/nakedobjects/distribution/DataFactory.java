@@ -18,17 +18,17 @@ import java.util.Enumeration;
 public abstract class DataFactory {
     private int persistentGraphDepth = 100;
 
-    private ObjectData createCollectionData(NakedCollection collection, boolean recursePersistentObjects, int depth) {
+    private CollectionData createCollectionData(NakedCollection collection, boolean recursePersistentObjects, int depth) {
         Oid oid = collection.getOid();
-        String type =  collection.getSpecification().getFullName();;
+        String type =  collection.getSpecification().getFullName();
         Enumeration e = collection.elements();
-        Object[] fieldContent = new Object[collection.size()];
+        ObjectData[] elements = new ObjectData[collection.size()];
         int i = 0;
         while (e.hasMoreElements()) {
             NakedObject element = (NakedObject) e.nextElement();
-            fieldContent[i++] = createObjectData(element, recursePersistentObjects, depth);
+            elements[i++] = createObjectData(element, recursePersistentObjects, depth);
         }
-        return createObjectData(oid, type, fieldContent, true, collection.getVersion());
+        return createCollectionData(oid, type, elements, collection.getVersion());
     }
 
     /**
@@ -56,9 +56,7 @@ public abstract class DataFactory {
     }
 
     protected abstract NullData createNullData(String type);
-
-    //protected abstract ExceptionData createExceptionData(String type, String message, String trace);
-
+ 
     /**
      * Creates an ObjectData that contains the data for the specified object, but not the data for
      * any referenced objects. For each referenced object only the reference is passed across.
@@ -117,6 +115,7 @@ public abstract class DataFactory {
 
     protected abstract ObjectData createObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved, long version);
     
+    protected abstract CollectionData createCollectionData(Oid oid, String type, ObjectData[] elements, long version);
 
     /**
      * Creates a ReferenceData that contains the type, version and OID for the specified object.  This can only be used 

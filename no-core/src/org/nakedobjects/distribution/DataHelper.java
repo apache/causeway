@@ -3,6 +3,7 @@ package org.nakedobjects.distribution;
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -21,30 +22,46 @@ public class DataHelper {
             return recreateValue((ValueData) data);
         } else if (data instanceof NullData) {
             return null;
+        } else if (data instanceof CollectionData) {
+            return recreateCollection((CollectionData) data);
         } else {
-            return recreateNaked((ObjectData) data);
+            return recreateObject((ObjectData) data);
         }
     }
 
-    private static Naked recreateValue(ValueData valueData) {
-        Naked value = NakedObjects.getObjectLoader().createAdapterForValue(valueData.getValue());
-        return value;
-    }
-
-    public static Naked recreateNaked(ObjectData data) {
+    private static NakedCollection recreateCollection(CollectionData data) {
         Oid oid = data.getOid();
         String type = data.getType();
         NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
         NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
 
-        return recreateObject(data, oid, specification, objectLoader);
+        /*
+         * if we are to deal with internal collections then we need to be able to get the collection
+         * from it's parent via its field
+         */
+        NakedCollection collection;
+        collection = objectLoader.recreateCollection(specification);
+        collection.setOid(oid);
+        if (data.getElements() == null) {
+            return collection;
+        } else {
+            ObjectData[] elements = data.getElements();
+            Object[] initData = new Object[elements.length];
+            for (int i = 0; i < elements.length; i++) {
+                NakedObject element = recreateObject(elements[i]);
+                initData[i] = element.getObject();
+            }
+            collection.init(initData);
+            return collection;
+        }
     }
 
-    private static NakedObject recreateObject(
-            ObjectData data,
-            Oid oid,
-            NakedObjectSpecification specification,
-            NakedObjectLoader objectLoader) {
+    private static NakedObject recreateObject(ObjectData data) {
+        Oid oid = data.getOid();
+        String type = data.getType();
+        NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
+        NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
+
         NakedObject object;
         if (oid == null) {
             object = objectLoader.recreateTransientInstance(specification);
@@ -79,24 +96,25 @@ public class DataHelper {
             for (int i = 0; i < fields.length; i++) {
                 if (fieldContent[i] instanceof NullData && partResolving) {
                     /*
-                     * Note - if fully resolving or updating the object then nulls should
-                     * clear the field; if only part-resolving then nulls can be ignored as
-                     * the fields are likely to be null at this point
+                     * Note - if fully resolving or updating the object then nulls should clear the
+                     * field; if only part-resolving then nulls can be ignored as the fields are
+                     * likely to be null at this point
                      */
                     continue;
                 }
                 if (fields[i].isCollection()) {
                     if (fieldContent[i] != null) {
-                        ObjectData collection = (ObjectData) fieldContent[i];
-                        NakedObject[] instances = new NakedObject[collection.getFieldContent().length];
+                        CollectionData collection = (CollectionData) fieldContent[i];
+                        NakedObject[] instances = new NakedObject[collection.getElements().length];
                         for (int j = 0; j < instances.length; j++) {
-                            instances[j] = (NakedObject) recreateNaked(((ObjectData) collection.getFieldContent()[j]));
+                            instances[j] = recreateObject(((ObjectData) collection.getElements()[j]));
                         }
                         object.initOneToManyAssociation((OneToManyAssociation) fields[i], instances);
                     }
                 } else if (fields[i].isValue()) {
                     if (fieldContent[i] != null) {
-                        object.initValue((OneToOneAssociation) fields[i], fieldContent[i] instanceof NullData ? null : ((ValueData) fieldContent[i]).getValue());
+                        object.initValue((OneToOneAssociation) fields[i], fieldContent[i] instanceof NullData ? null
+                                : ((ValueData) fieldContent[i]).getValue());
                     }
                 } else {
                     if (fieldContent[i] != null) {
@@ -109,18 +127,21 @@ public class DataHelper {
         }
     }
 
-    public static void update(ObjectData data, DirtyObjectSet updateNotifier) {
-        loadData(data, ResolveState.UPDATING, updateNotifier);
+    private static Naked recreateValue(ValueData valueData) {
+        Naked value = NakedObjects.getObjectLoader().createAdapterForValue(valueData.getValue());
+        return value;
     }
 
     public static void resolve(ObjectData data, DirtyObjectSet updateNotifier) {
-        loadData(data, ResolveState.RESOLVING, updateNotifier);
+        update(data, ResolveState.RESOLVING, updateNotifier);
     }
 
-    private static void loadData(ObjectData data, ResolveState initialState, DirtyObjectSet updateNotifier) {
+    public static void update(ObjectData data, DirtyObjectSet updateNotifier) {
+        update(data, ResolveState.UPDATING, updateNotifier);
+    }
+
+    private static void update(ObjectData data, ResolveState initialState, DirtyObjectSet updateNotifier) {
         Oid oid = data.getOid();
-        Object[] fieldContent = data.getFieldContent();
-        long version = data.getVersion();
 
         NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
         if (!objectLoader.isIdentityKnown(oid)) {
@@ -129,17 +150,20 @@ public class DataHelper {
             // will get references to shortly
             return;
         } else {
-            NakedObject object = updateExistingObject(oid, version, fieldContent, initialState, objectLoader);
-            updateNotifier.addDirty(object);
+            update(data, initialState, objectLoader, updateNotifier);
         }
     }
 
-    private static NakedObject updateExistingObject(
-            Oid oid,
-            long version,
-            Object[] fieldContent,
+    private static void update(
+            ObjectData data,
             ResolveState initialState,
-            NakedObjectLoader objectLoader) {
+            NakedObjectLoader objectLoader,
+            DirtyObjectSet updateNotifier) {
+
+        Oid oid = data.getOid();
+        Object[] fieldContent = data.getFieldContent();
+        long version = data.getVersion();
+
         NakedObject object;
         object = objectLoader.getAdapterFor(oid);
         object.setOptimisticLock(version, "", null);
@@ -154,11 +178,12 @@ public class DataHelper {
         if (fields.length > 0) {
             for (int i = 0; i < fields.length; i++) {
                 if (fields[i].isCollection()) {
-                    ObjectData collection = (ObjectData) fieldContent[i];
-                    Object[] elements = collection.getFieldContent();
+                    CollectionData collection = (CollectionData) fieldContent[i];
+                    Object[] elements = collection.getElements();
                     NakedObject[] instances = new NakedObject[elements.length];
                     for (int j = 0; j < instances.length; j++) {
-                        instances[j] = (NakedObject) recreateNaked((ObjectData) elements[j]);
+                        ObjectData objectData = (ObjectData) elements[j];
+                        instances[j] = recreateObject(objectData);
                     }
                     object.initOneToManyAssociation((OneToManyAssociation) fields[i], instances);
 
@@ -170,18 +195,15 @@ public class DataHelper {
                     if (fieldContent[i] instanceof NullData) {
                         field = null;
                     } else {
-                        field = (NakedObject) recreateNaked((ObjectData) fieldContent[i]);
+                        field = recreateObject((ObjectData) fieldContent[i]);
                     }
                     object.initAssociation((NakedObjectAssociation) fields[i], field);
                 }
             }
         }
         objectLoader.end(object);
-        return object;
-    }
 
-    public static NakedObject recreateObject(ObjectData data) {
-        return (NakedObject) recreateNaked(data);
+        updateNotifier.addDirty(object);
     }
 }
 

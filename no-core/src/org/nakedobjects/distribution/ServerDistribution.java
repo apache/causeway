@@ -66,7 +66,7 @@ public class ServerDistribution implements Distribution {
         if (target instanceof ReferenceData && ((ReferenceData) target).getOid() != null) {
             object = getPersistentNakedObject(session, (ReferenceData) target);
         } else if (target instanceof ObjectData) {
-            object = (NakedObject) DataHelper.recreateNaked((ObjectData) target);
+            object = (NakedObject) DataHelper.recreate(target);
         } else {
             throw new NakedObjectRuntimeException();
         }
@@ -90,7 +90,7 @@ public class ServerDistribution implements Distribution {
             if (data instanceof ReferenceData && ((ReferenceData) data).getOid() != null) {
                 parameters[i] = getPersistentNakedObject(session, (ReferenceData) data);
             } else if (data instanceof ObjectData) {
-                parameters[i] = DataHelper.recreateObject((ObjectData) data);
+                parameters[i] = DataHelper.recreate((ObjectData) data);
             } else if (data instanceof ValueData) {
                 ValueData valueData = (ValueData) data;
                 parameters[i] = NakedObjects.getObjectLoader().createAdapterForValue(valueData.getValue());
@@ -157,7 +157,7 @@ public class ServerDistribution implements Distribution {
 
     public Oid[] makePersistent(Session session, ObjectData data) {
         LOG.debug("request makePersistent " + data +  " for " + session);
-        NakedObject object = DataHelper.recreateObject(data);
+        NakedObject object = (NakedObject) DataHelper.recreate(data);
         objectFactory.initRecreatedObject(object.getObject());
         objectManager().startTransaction();
         objectManager().makePersistent(object);
