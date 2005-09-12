@@ -33,7 +33,7 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
                 ReferenceData associateReference = objectDataFactory.createReference(associate);
                 connection.setAssociation(NakedObjects.getCurrentSession(), getName(), targetReference, associateReference);
             } catch (NakedObjectRuntimeException e) {
-                LOG.error("Problem with distribution ", e.getCause());
+                LOG.error("problem with distribution ", e.getCause());
                 throw (NakedObjectRuntimeException) e.getCause();
             }
         } else {
@@ -59,7 +59,7 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
             throw new NotImplementedException();
             //    				return new AboutFieldRequest(element, this).about();
             //  			} catch (ObjectStoreException e) {
-            //    				LOG.error("Problem with distribution", e.getCause());
+            //    				LOG.error("problem with distribution", e.getCause());
             //    				return null;
             //    			}
         } else {
