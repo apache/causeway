@@ -121,7 +121,7 @@ public class JavaExploration {
             nakedObjects.init();
 
         } catch (Exception e) {
-            LOG.error("Exploration startup problem", e);
+            LOG.error("exploration startup problem", e);
         } finally {
             if (splash != null) {
                 splash.removeAfterDelay(4);
@@ -142,7 +142,7 @@ public class JavaExploration {
                 locale = new Locale(language, country);
             }
             Locale.setDefault(locale);
-            LOG.info("Locale set to " + locale);
+            LOG.info("locale set to " + locale);
         }
 
         LOG.debug("locale is " + Locale.getDefault());
@@ -177,7 +177,7 @@ public class JavaExploration {
             viewer.init();
 
         } catch (RuntimeException e) {
-            LOG.error("Exploration startup problem", e);
+            LOG.error("exploration startup problem", e);
             throw e;
         }
         if (splash != null) {
