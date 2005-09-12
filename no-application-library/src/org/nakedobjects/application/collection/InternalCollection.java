@@ -3,6 +3,8 @@ package org.nakedobjects.application.collection;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import junit.framework.Assert;
+
 
 public class InternalCollection {
     private Vector elements;
@@ -47,6 +49,14 @@ public class InternalCollection {
 
     public boolean isEmpty() {
         return size() == 0;
+    }
+
+
+    public void init(Object[] initElements) {
+        Assert.assertEquals("Collection not empty", 0, this.elements.size());
+        for (int i = 0; i < initElements.length; i++) {
+            elements.addElement(initElements[i]);
+        }
     }
 
     public void remove(Object object) {
