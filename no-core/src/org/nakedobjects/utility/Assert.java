@@ -57,6 +57,12 @@ public class Assert {
         }
     }
 
+    public static void assertEquals(String message, int expected, int value) {
+        if(expected != value) {
+            throw new NakedObjectAssertException(message + " expected " + expected + "; but was "+ value);
+        }
+    }
+
 }
 
 /*
