@@ -1,5 +1,6 @@
 package org.nakedobjects.distribution.java;
 
+import org.nakedobjects.distribution.CollectionData;
 import org.nakedobjects.distribution.DataFactory;
 import org.nakedobjects.distribution.NullData;
 import org.nakedobjects.distribution.ObjectData;
@@ -9,6 +10,11 @@ import org.nakedobjects.object.persistence.Oid;
 
 
 public class JavaObjectDataFactory extends DataFactory {
+
+    protected CollectionData createCollectionData(Oid oid, String type, ObjectData[] elements, long version) {
+        return new JavaCollectionData(oid, type, elements, version);
+    }
+
     protected NullData createNullData(String type) {
         return new JavaNullData(type);
     }
