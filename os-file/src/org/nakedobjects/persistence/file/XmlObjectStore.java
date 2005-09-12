@@ -79,7 +79,7 @@ public class XmlObjectStore implements NakedObjectStore {
     }
 
     private ObjectData createObjectData(NakedObject object, boolean ensurePersistent) {
-        LOG.debug("Compiling object data for " + object);
+        LOG.debug("compiling object data for " + object);
 
         ObjectData data;
         data = new ObjectData(object.getSpecification(), (SerialOid) object.getOid());
@@ -359,7 +359,7 @@ public class XmlObjectStore implements NakedObjectStore {
          * if (loadedObjects().isLoaded(oid)) { return
          * loadedObjects().getLoadedObject(oid); } NakedObjectSpecification nc =
          * classFor(data.getClassName()); NakedObject object = (NakedObject)
-         * nc.acquireInstance(); LOG.debug("Recreating object " +
+         * nc.acquireInstance(); LOG.debug("recreating object " +
          * nc.getFullName() + "/" + oid); object.setOid(oid);
          * loadedObjects().loaded(object);
          */

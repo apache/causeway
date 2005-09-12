@@ -75,7 +75,7 @@ public class XmlDataManagerTest extends TestCase {
 		}
 		*/
 		super.setUp();
-		LOG.debug("Test starting...");
+		LOG.debug("test starting...");
 	}
 	
 	protected void tearDown() throws Exception {
