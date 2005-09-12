@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.utility.ToString;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
@@ -89,6 +90,14 @@ public class IconGraphic {
         }
         
         return icon;
+    }
+    
+
+    public String toString() {
+        ToString str = new ToString(this);
+        str.append("baseline", baseline);
+        str.append("icon", icon);
+        return str.toString();
     }
 }
 
