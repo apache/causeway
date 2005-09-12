@@ -73,6 +73,10 @@ public class DummyObjectLoader implements NakedObjectLoader {
     public NakedObject recreateAdapterForPersistent(Oid oid, NakedObjectSpecification spec) {
         return null;
     }
+    
+    public NakedCollection recreateCollection(NakedObjectSpecification specification) {
+        return null;
+    }
 
     public NakedObject recreateTransientInstance(NakedObjectSpecification specification) {
         return null;

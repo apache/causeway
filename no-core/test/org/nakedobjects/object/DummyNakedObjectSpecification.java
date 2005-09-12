@@ -165,8 +165,13 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         isValue = false;
     }
 
-    public void setupIsValue(boolean is) {
+    public void setupIsValue() {
         isValue = true;
+        isObject = false;
+    }
+
+    public void setupIsCollection() {
+        isValue = false;
         isObject = false;
     }
 

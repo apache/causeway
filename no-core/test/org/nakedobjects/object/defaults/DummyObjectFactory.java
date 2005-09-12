@@ -2,6 +2,7 @@ package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectFactory;
+import org.nakedobjects.utility.Assert;
 
 import java.util.Vector;
 
@@ -18,6 +19,7 @@ public class DummyObjectFactory implements ObjectFactory {
     public void initRecreatedObject(Object object) {}
 
     public Object createObject(NakedObjectSpecification specification) {
+        Assert.assertTrue(createdObjects.size() > 0);
         Object firstElement = createdObjects.firstElement();
         createdObjects.removeElementAt(0);
         return firstElement;

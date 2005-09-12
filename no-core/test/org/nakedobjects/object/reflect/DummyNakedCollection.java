@@ -6,37 +6,37 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.utility.Assert;
 
 import java.util.Enumeration;
+import java.util.Vector;
 
 
 public class DummyNakedCollection implements NakedCollection {
+    private Vector collection = new Vector();
+    private Oid oid;
+    private NakedObjectSpecification specification;
+
+    public DummyNakedCollection() {}
+
+    public DummyNakedCollection(Vector vector) {
+        this.collection = vector;
+    }
+
     public boolean contains(NakedObject object) {
-        return false;
+        return collection.contains(object);
     }
 
     public NakedObject elementAt(int index) {
-        return null;
+        return (NakedObject) collection.elementAt(index);
     }
 
     public Enumeration elements() {
-        return new Enumeration() {
-            public boolean hasMoreElements() {
-                return false;
-            }
-
-            public Object nextElement() {
-                return null;
-            }
-        };
+        return collection.elements();
     }
-
-    public Enumeration oids() {
+    
+    public Hint getHint(NakedObjectField field, Naked value) {
         return null;
-    }
-
-    public int size() {
-        return 0;
     }
 
     public String getIconName() {
@@ -44,33 +44,49 @@ public class DummyNakedCollection implements NakedCollection {
     }
 
     public Object getObject() {
-        return null;
+        return collection;
     }
 
     public Oid getOid() {
-        return null;
+        return oid;
     }
 
     public NakedObjectSpecification getSpecification() {
-        return null;
-    }
-
-    public String titleString() {
-        return null;
-    }
-
-    public Hint getHint(NakedObjectField field, Naked value) {
-        return null;
+        return specification;
     }
 
     public long getVersion() {
         return 0;
     }
 
-    public void setOid(Oid oid) {}
+    public void init(Object[] initElements) {
+        Assert.assertEquals("Collection not empty", 0, this.collection.size());
+        for (int i = 0; i < initElements.length; i++) {
+            collection.addElement(initElements[i]);
+        }
+    }
+
+    public Enumeration oids() {
+        return null;
+    }
+
+    public void setOid(Oid oid) {
+        this.oid = oid;
+    }
 
     public void setResolved() {}
 
+    public void setupSpecification(NakedObjectSpecification specification) {
+        this.specification = specification;
+    }
+
+    public int size() {
+        return collection.size();
+    }
+
+    public String titleString() {
+        return "title";
+    }
 }
 
 /*

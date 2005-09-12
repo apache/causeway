@@ -1,6 +1,7 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.TestSystem;
+import org.nakedobjects.distribution.dummy.DummyCollectionData;
 import org.nakedobjects.distribution.dummy.DummyObjectData;
 import org.nakedobjects.distribution.dummy.DummyValueData;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
@@ -41,7 +42,7 @@ public class DataHelperTest extends TestCase {
         DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification(TestPojo.class.getName());
 
         DummyNakedObjectSpecification valueFieldSpec = new DummyNakedObjectSpecification();
-        valueFieldSpec.setupIsValue(true);
+        valueFieldSpec.setupIsValue();
         OneToOneAssociation field1 = new OneToOneAssociation("cls", "one", valueFieldSpec, new TestPojoValuePeer());
         DummyNakedObjectSpecification referenceFieldSpec = new DummyNakedObjectSpecification();
         referencedObject = new TestPojo();
@@ -79,11 +80,13 @@ public class DataHelperTest extends TestCase {
 
     public void testRecreateObjectWithFieldData() {
         // TODO test the one-to-many collection aswell
-        Object fields[] = new Object[2];
+        Object fields[] = new Object[3];
         fields[0] = new DummyValueData(new Integer(13), "");
         MockOid fieldOid = new MockOid(345);
         fields[1] = new DummyObjectData(fieldOid, "type.1", null, false, 2);
 
+        fields[2] = new DummyCollectionData();
+        
         MockOid rootOid = new MockOid(123);
         Data data = new DummyObjectData(rootOid, "type.1", fields, false, 4);
 

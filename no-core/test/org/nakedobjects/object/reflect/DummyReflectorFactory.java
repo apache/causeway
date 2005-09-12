@@ -8,6 +8,8 @@ import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.control.Hint;
 
+import java.util.Vector;
+
 public class DummyReflectorFactory extends ReflectorFactory {
 
     public Reflector createReflector(String className) throws ReflectionException {
@@ -117,7 +119,7 @@ public class DummyReflectorFactory extends ReflectorFactory {
     }
 
     public NakedCollection createCollectionAdapter(Object object) {
-        return null;
+        return new DummyNakedCollection((Vector) object);
     }
 
     public void init() {}

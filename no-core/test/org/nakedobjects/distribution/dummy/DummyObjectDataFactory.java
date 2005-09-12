@@ -1,5 +1,6 @@
 package org.nakedobjects.distribution.dummy;
 
+import org.nakedobjects.distribution.CollectionData;
 import org.nakedobjects.distribution.DataFactory;
 import org.nakedobjects.distribution.NullData;
 import org.nakedobjects.distribution.ObjectData;
@@ -24,6 +25,10 @@ public class DummyObjectDataFactory extends DataFactory {
 
     protected ReferenceData createReferenceData(String type, Oid oid, long version) {
         throw new NotImplementedException();
+    }
+
+    protected CollectionData createCollectionData(Oid oid, String type, ObjectData[] elements, long version) {
+        return new DummyCollectionData(oid, type, elements, version);
     }
 }
 

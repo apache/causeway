@@ -103,16 +103,21 @@ public class DataFactoryTest extends TestCase {
 
     public void testCreateActionResultWithCollection() {
         DummyNakedCollection collection = new DummyNakedCollection();
+        DummyNakedObjectSpecification type = new DummyNakedObjectSpecification();
+        collection.setupSpecification(type);
         Data data = factory.createActionResult(collection);
-        assertTrue(data instanceof ObjectData);
-    }
+        assertTrue(data instanceof CollectionData);
+        assertEquals(type.getFullName(), data.getType());
+   }
 
     public void testCreateActionResultWithObject() {
         DummyNakedObject object = new DummyNakedObject();
         object.setupResolveState(ResolveState.PART_RESOLVED);
-        object.setupSpecification(new DummyNakedObjectSpecification());
+        DummyNakedObjectSpecification type = new DummyNakedObjectSpecification();
+        object.setupSpecification(type);
         Data data = factory.createActionResult(object);
         assertTrue(data instanceof ObjectData);
+        assertEquals(type.getFullName(), data.getType());
     }
 
     public void testCreateCompletePersistentGraph() {

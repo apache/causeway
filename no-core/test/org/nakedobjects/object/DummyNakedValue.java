@@ -11,7 +11,7 @@ public class DummyNakedValue implements NakedValue {
     private Object object;
 
     public DummyNakedValue() {
-        specification.setupIsValue(true);
+        specification.setupIsValue();
     }
 
     public void parseTextEntry(String text) throws InvalidEntryException {}
