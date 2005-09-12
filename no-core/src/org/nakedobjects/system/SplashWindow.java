@@ -30,7 +30,7 @@ public class SplashWindow extends Window implements Runnable {
         File file = new File(DIRECTORY + filename);
 
         if (!file.exists()) {
-            LOG.error("Could not find image file: " + file.getAbsolutePath());
+            LOG.error("could not find image file: " + file.getAbsolutePath());
 
             return null;
         } else {
@@ -48,12 +48,12 @@ public class SplashWindow extends Window implements Runnable {
                 }
 
                 if (mt.isErrorAny()) {
-                    LOG.error("Failed to load image from file: " + file.getAbsolutePath());
+                    LOG.error("failed to load image from file: " + file.getAbsolutePath());
                     mt.removeImage(image);
                     image = null;
                 } else {
                     mt.removeImage(image);
-                    LOG.info("Image loaded from file: " + file);
+                    LOG.info("image loaded from file: " + file);
                 }
             }
 
@@ -67,7 +67,7 @@ public class SplashWindow extends Window implements Runnable {
      */
     private static Image loadAsResource(String ref) {
         URL url = SplashWindow.class.getResource("/" + DIRECTORY + ref);
-        LOG.debug("Image from " + url);
+        LOG.debug("image from " + url);
         if (url == null) {
             return null;
         }
@@ -83,12 +83,12 @@ public class SplashWindow extends Window implements Runnable {
             }
 
             if (mt.isErrorAny()) {
-                LOG.error("Failed to load image from resources: " + url + " " + mt.getErrorsAny()[0]);
+                LOG.error("failed to load image from resources: " + url + " " + mt.getErrorsAny()[0]);
                 mt.removeImage(image);
                 image = null;
             } else {
                 mt.removeImage(image);
-                LOG.info("Image loaded from resources: " + url);
+                LOG.info("image loaded from resources: " + url);
             }
         }
         return image;

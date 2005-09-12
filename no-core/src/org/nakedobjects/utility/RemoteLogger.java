@@ -54,9 +54,9 @@ public class RemoteLogger {
             in.close();
 
         } catch (UnknownHostException e) {
-            LOG.info("Could not find host (unknown host) to submit log to");
+            LOG.info("could not find host (unknown host) to submit log to");
         } catch (IOException e) {
-            LOG.debug("IO problem submitting log", e);
+            LOG.debug("i/o problem submitting log", e);
         }
 
     }

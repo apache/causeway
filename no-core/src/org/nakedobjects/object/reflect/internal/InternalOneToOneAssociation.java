@@ -58,9 +58,9 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
     		    aboutMethod.invoke(object.getObject(), parameters);
         		return about;
         } catch (InvocationTargetException e) {
-            LOG.error("Exception executing " + aboutMethod, e.getTargetException());
+            LOG.error("exception executing " + aboutMethod, e.getTargetException());
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + aboutMethod, ignore);
+            LOG.error("illegal access of " + aboutMethod, ignore);
         }
 
         return new DefaultHint();
@@ -84,7 +84,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
                 	setMethod.invoke(inObject.getObject(), new Object[] { value });
             }
         } catch (InvocationTargetException e) {
-            LOG.error("Exception executing " + setMethod, e.getTargetException());
+            LOG.error("exception executing " + setMethod, e.getTargetException());
             
             if (e.getTargetException() instanceof RuntimeException) {
                 throw (RuntimeException) e.getTargetException();
@@ -92,7 +92,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
                 throw new RuntimeException(e.getTargetException().getMessage());
             }
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + setMethod, ignore);
+            LOG.error("illegal access of " + setMethod, ignore);
         } 
     }
     
@@ -105,7 +105,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
         try {
             setMethod.invoke(inObject.getObject(), new Object[] { setValue });
         } catch (InvocationTargetException e) {
-            LOG.error("Exception executing " + setMethod, e.getTargetException());
+            LOG.error("exception executing " + setMethod, e.getTargetException());
             
             if (e.getTargetException() instanceof RuntimeException) {
                 throw (RuntimeException) e.getTargetException();
@@ -113,7 +113,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
                 throw new RuntimeException(e.getTargetException().getMessage());
             }
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + setMethod, ignore);
+            LOG.error("illegal access of " + setMethod, ignore);
         } 
     }
 
@@ -130,10 +130,10 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
                 throw new IllegalArgumentException("set method expects a " + getType().getFullName() +
                     " object; not a " + associate.getClass().getName());
             } catch (InvocationTargetException e) {
-                LOG.error("Exception executing " + setMethod, e.getTargetException());
+                LOG.error("exception executing " + setMethod, e.getTargetException());
                 throw (RuntimeException) e.getTargetException();
             } catch (IllegalAccessException ignore) {
-                LOG.error("Illegal access of " + setMethod, ignore);
+                LOG.error("illegal access of " + setMethod, ignore);
                 throw new RuntimeException(ignore.getMessage());
             }
     }
@@ -146,7 +146,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(setMethod + " method doesn't expect a " + associate.getClass().getName());
         } catch (InvocationTargetException e) {
-            LOG.error("Exception executing " + setMethod, e.getTargetException());
+            LOG.error("exception executing " + setMethod, e.getTargetException());
 
             if (e.getTargetException() instanceof RuntimeException) {
                 throw (RuntimeException) e.getTargetException();
@@ -154,7 +154,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
                 throw new RuntimeException(e.getTargetException().getMessage());
             }
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + setMethod, ignore);
+            LOG.error("illegal access of " + setMethod, ignore);
             throw new RuntimeException(ignore.getMessage());
         }
     }
@@ -184,7 +184,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
                 throw new IllegalArgumentException(setMethod + " method doesn't expect a " +
                     associate.getClass().getName());
             } catch (InvocationTargetException e) {
-                LOG.error("Exception executing " + setMethod, e.getTargetException());
+                LOG.error("exception executing " + setMethod, e.getTargetException());
 
                 if (e.getTargetException() instanceof RuntimeException) {
                     throw (RuntimeException) e.getTargetException();
@@ -192,7 +192,7 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
                     throw new RuntimeException(e.getTargetException().getMessage());
                 }
             } catch (IllegalAccessException ignore) {
-                LOG.error("Illegal access of " + setMethod, ignore);
+                LOG.error("illegal access of " + setMethod, ignore);
                 throw new RuntimeException(ignore.getMessage());
             }
     }
@@ -237,10 +237,10 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
             }
             
         } catch (InvocationTargetException e) {
-             LOG.error("Exception executing " + getMethod, e.getTargetException());
+             LOG.error("exception executing " + getMethod, e.getTargetException());
              throw new NakedObjectRuntimeException(e);
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + getMethod, ignore);
+            LOG.error("illegal access of " + getMethod, ignore);
             throw new NakedObjectRuntimeException(ignore);
         }
     }

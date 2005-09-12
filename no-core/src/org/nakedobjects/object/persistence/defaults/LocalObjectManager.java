@@ -419,7 +419,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
                 try {
                     abortTransaction();
                 } catch (Exception e2) {
-                    LOG.error("Failure during abort", e2);
+                    LOG.error("failure during abort", e2);
                 }
     		}
             objectsToBeSaved.shutdown();

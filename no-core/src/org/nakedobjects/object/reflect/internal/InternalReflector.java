@@ -59,7 +59,7 @@ public class InternalReflector implements Reflector {
                 }
 
             } else {
-                LOG.warn("Method " + aClass.getName() + "." + type + "Order() must be decared as static");
+                LOG.warn("method " + aClass.getName() + "." + type + "Order() must be decared as static");
             }
         } catch (NoSuchMethodException ignore) {} catch (IllegalAccessException ignore) {} catch (InvocationTargetException ignore) {}
 
@@ -79,7 +79,7 @@ public class InternalReflector implements Reflector {
     private Method methods[];
 
     public InternalReflector(String name) throws ReflectionException {
-        LOG.info("Introspecting " + name);
+        LOG.info("introspecting " + name);
 
         Class cls;
         try {
@@ -501,7 +501,7 @@ public class InternalReflector implements Reflector {
             }
 
             if (addMethod == null || removeMethod == null) {
-                LOG.error("There must be both add and remove methods for " + name + " in " + className());
+                LOG.error("there must be both add and remove methods for " + name + " in " + className());
             }
 
             Class removeType = (removeMethod == null) ? null : removeMethod.getParameterTypes()[0];
@@ -518,7 +518,7 @@ public class InternalReflector implements Reflector {
 
             if (((aboutType != null) && (aboutType != elementType)) || ((addType != null) && (addType != elementType))
                     || ((removeType != null) && (removeType != elementType))) {
-                LOG.error("The add/remove/associate/dissociate/about methods in " + className() + " must "
+                LOG.error("the add/remove/associate/dissociate/about methods in " + className() + " must "
                         + "all deal with same type of object.  There are at least two different " + "types");
             }
 
@@ -582,7 +582,7 @@ public class InternalReflector implements Reflector {
                 continue;
             }
 
-            LOG.info("One-to-one association " + name + " ->" + addMethod);
+            LOG.info("one-to-one association " + name + " ->" + addMethod);
             InternalOneToOneAssociation association = new InternalOneToOneAssociation(name, getMethod.getReturnType(), getMethod,
                     setMethod, addMethod, removeMethod, aboutMethod);
             associations.addElement(association);
@@ -651,11 +651,11 @@ public class InternalReflector implements Reflector {
             Class[] params = new Class[] { returnType };
 
             if ((findMethod(OBJECT, SET_PREFIX + name, void.class, params) != null)) {
-                LOG.error("The method set" + name + " is not needed for the NakedValue class " + className());
+                LOG.error("the method set" + name + " is not needed for the NakedValue class " + className());
             }
 
             if (findMethod(OBJECT, "associate" + name, void.class, params) != null) {
-                LOG.error("The method associate" + name + " is not needed for the NakedValue class " + className());
+                LOG.error("the method associate" + name + " is not needed for the NakedValue class " + className());
             }
 
             // create Field

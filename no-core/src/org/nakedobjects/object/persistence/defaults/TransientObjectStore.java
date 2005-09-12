@@ -39,7 +39,7 @@ public class TransientObjectStore implements NakedObjectStore {
     protected final Hashtable instances;
 
     public TransientObjectStore() {
-        LOG.info("Creating object store");
+        LOG.info("creating object store");
         instances = new Hashtable();
         objects = new Hashtable();
     }

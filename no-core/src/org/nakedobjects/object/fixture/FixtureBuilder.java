@@ -32,14 +32,14 @@ public abstract class FixtureBuilder {
             try {
                 Fixture fixture = (Fixture) fixtures.elementAt(i);
                 fixture.setBuilder(this);
-                LOG.info("Installing fixture: " + fixture);
+                LOG.info("installing fixture: " + fixture);
                 installFixture(objectManager, fixture);
             } catch (RuntimeException e) {
-                LOG.error("Installing fixtures failed; aborting ", e);
+                LOG.error("installing fixtures failed; aborting ", e);
                 try {
                     objectManager.abortTransaction();
                 } catch (Exception e2) {
-                    LOG.error("Failure during abort", e2);
+                    LOG.error("failure during abort", e2);
                 }
                 throw e;
             }

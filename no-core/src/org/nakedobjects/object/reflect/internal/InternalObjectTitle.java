@@ -27,9 +27,9 @@ public class InternalObjectTitle implements ObjectTitle {
             Object title = titleMethod.invoke(object.getObject(), new Object[0]);
             return title == null ? "" : title.toString();
         } catch (InvocationTargetException e) {
-            LOG.error("Exception executing " + titleMethod, e.getTargetException());
+            LOG.error("exception executing " + titleMethod, e.getTargetException());
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + titleMethod, ignore);
+            LOG.error("illegal access of " + titleMethod, ignore);
         }
 
         return "title error...";

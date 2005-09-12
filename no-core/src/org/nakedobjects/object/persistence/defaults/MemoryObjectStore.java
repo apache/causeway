@@ -31,7 +31,7 @@ public class MemoryObjectStore implements NakedObjectStore {
     protected Hashtable instances;
 
     public MemoryObjectStore() {
-        LOG.info("Creating object store");
+        LOG.info("creating object store");
         instances = new Hashtable();
     }
 

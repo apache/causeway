@@ -40,7 +40,7 @@ public class InternalAction extends InternalMember implements ActionPeer {
             LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);
         }
         try {
-            LOG.debug("Action: invoke " + inObject + "." + getName());
+            LOG.debug("action: invoke " + inObject + "." + getName());
             Object[] executionParameters = new Object[parameters.length];
             for (int i = 0; i < parameters.length; i++) {
                 executionParameters[i] = parameters[i] == null ? null : parameters[i].getObject();
@@ -54,7 +54,7 @@ public class InternalAction extends InternalMember implements ActionPeer {
             e.fillInStackTrace();
             throw new ReflectionException(e);
         } catch (IllegalAccessException e) {
-            LOG.error("Illegal access of " + actionMethod, e);
+            LOG.error("illegal access of " + actionMethod, e);
         }
 
         return null;
@@ -94,14 +94,14 @@ public class InternalAction extends InternalMember implements ActionPeer {
             }
 
             if (about == null) {
-                LOG.error("No about returned from " + aboutMethod + " allowing action by default.");
+                LOG.error("no about returned from " + aboutMethod + " allowing action by default.");
                 return new DefaultHint();
             }
             return about;
         } catch (InvocationTargetException e) {
-            LOG.error("Exception executing " + aboutMethod, e.getTargetException());
+            LOG.error("exception executing " + aboutMethod, e.getTargetException());
         } catch (IllegalAccessException ignore) {
-            LOG.error("Illegal access of " + aboutMethod, ignore);
+            LOG.error("illegal access of " + aboutMethod, ignore);
         }
 
         return new DefaultHint();

@@ -55,11 +55,11 @@ public class ActionTransaction extends AbstractActionPeer {
 
             return result;
         } catch (RuntimeException e) {
-            LOG.info("Exception executing " + getName() + "; aborting transaction");
+            LOG.info("exception executing " + getName() + "; aborting transaction");
             try {
                 objectManager.abortTransaction();
             } catch (Exception e2) {
-                LOG.error("Failure during abort", e2);
+                LOG.error("failure during abort", e2);
             }
             throw e;
         }

@@ -218,7 +218,7 @@ public class PojoAdapter implements NakedObject {
     private void resolveIfOnlyAGhost(NakedObject object) {
         ResolveState resolveState = object.getResolveState();
         if (resolveState.isGhost()) {
-            LOG.info("Unresolved object attempting to be used; resolving it immediately: " + object);
+            LOG.info("unresolved object attempting to be used; resolving it immediately: " + object);
             NakedObjects.getObjectManager().resolveImmediately(object);
         }
     }
