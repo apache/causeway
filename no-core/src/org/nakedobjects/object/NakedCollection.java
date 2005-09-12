@@ -21,12 +21,14 @@ public interface NakedCollection extends Naked {
     Oid getOid();
 
     long getVersion();
+    
+    void init(Object[] elements);
 
     /**
      * Return all the OIDs of all elements in this collection. The elements do not need to be
      * resolved to do this (though the collection does)
      */
-    public Enumeration oids();
+    Enumeration oids();
 
     /** @deprecated 
      * TODO remove 
