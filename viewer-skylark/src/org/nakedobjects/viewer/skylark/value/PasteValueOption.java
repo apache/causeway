@@ -42,9 +42,9 @@ public class PasteValueOption extends AbstractValueOption {
             objectContent.parseEntry(pasteValue);
 	        updateParent(view);
         } catch (TextEntryParseException e) {
-            LOG.error("Invalid clipboard operation " + e);
+            LOG.error("invalid clipboard operation " + e);
         } catch (InvalidEntryException e) {
-            LOG.error("Invalid clipboard operation " + e);
+            LOG.error("invalid clipboard operation " + e);
         }
     }
 
@@ -56,7 +56,7 @@ public class PasteValueOption extends AbstractValueOption {
 		 try {
 			 value = ((String) content.getTransferData(DataFlavor.stringFlavor));
 		 } catch (Throwable e) {
-			 LOG.error("Invalid clipboard operation " + e);
+			 LOG.error("invalid clipboard operation " + e);
 		 }
 		return value;
 	}

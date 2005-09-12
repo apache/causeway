@@ -227,7 +227,7 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
         // do nothing if entry is same as the value object
         NakedValue value = getValue();
         if (!entry.equals(value == null ? "" : value.titleString())) {
-            LOG.debug("Field edited: \'" + entry + "\' to replace \'" + (value == null ? "" : value.titleString()) + "\'");
+            LOG.debug("field edited: \'" + entry + "\' to replace \'" + (value == null ? "" : value.titleString()) + "\'");
             
             if(entry.length() < minumumLength) {
                 invalidReason = "Entry not long enough, must be at least " + minumumLength + " characters";
@@ -458,7 +458,7 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
 
         markDamaged();
 
-        LOG.debug("Character at " + cursor.getCharacter() + " line " + cursor.getLine());
+        LOG.debug("character at " + cursor.getCharacter() + " line " + cursor.getLine());
         LOG.debug(selection);
     }
 
@@ -585,7 +585,7 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
             insert(text);
             LOG.debug("pasted " + text);
         } catch (Throwable e) {
-            LOG.error("Invalid paste operation " + e);
+            LOG.error("invalid paste operation " + e);
         }
     }
 
