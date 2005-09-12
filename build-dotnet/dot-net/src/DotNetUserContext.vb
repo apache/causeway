@@ -106,8 +106,7 @@ Public Class DotNetUserContext
     ' in myRootClasses (either programmatically or by dependency injection)
     ' with the framework.
     Public Sub created()
-        If myRootClassTypes.Count = 0 AndAlso _
-           myRootClassNames.Count = 0 Then
+        If myRootClassTypes.Count = 0 AndAlso myRootClassNames.Count = 0 Then
             Throw New ApplicationException("No root classes registered.")
         End If
         ensureClassTypesAreValid()
@@ -156,13 +155,18 @@ Public Class DotNetUserContext
 
 #Region "Override base class"
     Protected Overridable Overloads Sub addClass(ByVal systype As Type)
-        MyBase.addClass(systype.FullName)
+    	if canAddClass(systype) then MyBase.addClass(systype.FullName)
     End Sub
     Public Overloads Overrides Function addClass(ByVal className As String) As NakedClass
         Throw New ApplicationException("Specify classes either programmatically in registerRootClasses or through dependency injection of the RootClasses property")
     End Function
 #End Region
 
+	'*
+	'The added of a specific class can be vetoed by returning false from this function
+	Protected Overridable Function canAddClass(ByVal systype As Type) as Boolean
+		return True
+	End Function
 
     Public Shared Function singleName() As String
         Return "Application"
