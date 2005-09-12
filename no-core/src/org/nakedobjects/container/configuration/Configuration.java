@@ -187,7 +187,7 @@ public class Configuration {
      * Gets the set of properties with the specified prefix
      */
     public Properties getProperties(String withPrefix, String stripPrefix) {
-        int prefixLength = stripPrefix.length();            
+        int prefixLength = stripPrefix.length();
         
         Properties pp = new Properties();
         Enumeration e = p.keys();
@@ -217,7 +217,7 @@ public class Configuration {
     }
 
     public Properties getPropertiesStrippingPrefix(String prefix) {
-        return getProperties(prefix, prefix);
+        return getProperties(fullName(prefix), fullName(prefix));
     }
     /*
     public Properties getPropertySubset(String prefix) {
