@@ -76,6 +76,7 @@ public class CheckboxField extends AbstractField {
             BooleanValue value = (BooleanValue) getContent().getNaked();
             value.toggle();
             markDamaged();
+	        getParent().invalidateContent();
         }
     }
 }
