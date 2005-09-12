@@ -151,7 +151,7 @@ public class TestingStandalone {
                 locale = new Locale(language, country);
             }
             Locale.setDefault(locale);
-            LOG.info("Locale set to " + locale);
+            LOG.info("locale set to " + locale);
         }
         
         LOG.debug("locale is " + Locale.getDefault());
