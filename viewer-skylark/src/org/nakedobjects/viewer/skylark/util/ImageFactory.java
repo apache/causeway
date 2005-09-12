@@ -132,12 +132,12 @@ public class ImageFactory {
         String className = specification.getFullName().replace('.', '_') + extension;
         Image loadIcon = loadIcon(className, iconHeight);
         if (loadIcon == null) {
-            loadIcon = loadIconWIthShortName(specification, extension, iconHeight);
+            loadIcon = loadIconWithShortName(specification, extension, iconHeight);
         }
         return loadIcon;
     }
 
-    private Image loadIconWIthShortName(final NakedObjectSpecification specification, final String extension, int iconHeight) {
+    private Image loadIconWithShortName(final NakedObjectSpecification specification, final String extension, int iconHeight) {
         String className = specification.getShortName().replace('.', '_') + extension;
         Image loadIcon = loadIcon(className, iconHeight);
         if (loadIcon == null) {
