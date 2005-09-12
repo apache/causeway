@@ -69,12 +69,12 @@ class TemplateImage {
                 }
 
                 if (mt.isErrorAny()) {
-                    LOG.error("Failed to create scaled image: " + iconImage + " " + mt.getErrorsAny()[0]);
+                    LOG.error("failed to create scaled image: " + iconImage + " " + mt.getErrorsAny()[0]);
                     mt.removeImage(iconImage);
                     iconImage = null;
                 } else {
                     mt.removeImage(iconImage);
-                    LOG.info("Image " + iconImage + " scaled to " + height);
+                    LOG.info("image " + iconImage + " scaled to " + height);
                 }
             }
 

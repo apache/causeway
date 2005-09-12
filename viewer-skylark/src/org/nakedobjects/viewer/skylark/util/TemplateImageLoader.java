@@ -72,6 +72,8 @@ class TemplateImageLoader {
             return null;
             
         } else {
+	        LOG.debug("searching for image " + path);
+	
             Image image = null;
             if (extensionAt >= 0) {
                 image = load(path);
@@ -84,6 +86,7 @@ class TemplateImageLoader {
                     }
                 }
             }
+            LOG.debug("failed to find image for " + path);
             missingImages.addElement(root);
             return null;
         }
@@ -105,13 +108,8 @@ class TemplateImageLoader {
         final File file = new File(path);
 
         if (!file.exists()) {
-            //          LOG.debug("Could not find image file: " +
-            // file.getAbsolutePath());
-
             return null;
         } else {
-            LOG.debug("Attempting to load image file " + file.getAbsolutePath());
-
             Toolkit t = Toolkit.getDefaultToolkit();
             Image image = t.getImage(file.getAbsolutePath());
 
@@ -125,15 +123,14 @@ class TemplateImageLoader {
                 }
 
                 if (mt.isErrorAny()) {
-                    LOG.error("Found image file but failed to load it: " + file.getAbsolutePath());
+                    LOG.error("found image file but failed to load it: " + file.getAbsolutePath());
                     mt.removeImage(image);
                     image = null;
                 } else {
                     mt.removeImage(image);
-                    LOG.info("Image loaded from file: " + file);
+                    LOG.info("image loaded from file: " + file);
                 }
             }
-
             return image;
         }
     }
@@ -158,12 +155,12 @@ class TemplateImageLoader {
             }
 
             if (mt.isErrorAny()) {
-                LOG.error("Found image but failed to load it from resources: " + url + " " + mt.getErrorsAny()[0]);
+                LOG.error("found image but failed to load it from resources: " + url + " " + mt.getErrorsAny()[0]);
                 mt.removeImage(image);
                 image = null;
             } else {
                 mt.removeImage(image);
-                LOG.info("Image loaded from resources: " + url);
+                LOG.info("image loaded from resources: " + url);
             }
         }
 

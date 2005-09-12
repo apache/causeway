@@ -131,7 +131,7 @@ public class ViewFactory implements DebugInfo {
     private View createView(ViewSpecification specification, Content content) {
         View view;
         if (specification == null) {
-            LOG.warn("No suitable view for " + content + " using fallback view");
+            LOG.warn("no suitable view for " + content + " using fallback view");
             specification = new FallbackView.Specification();
         }
         view = specification.createView(content, null);
@@ -163,7 +163,7 @@ public class ViewFactory implements DebugInfo {
             }
         }
 
-        LOG.warn("No suitable view for " + content + " using fallback view");
+        LOG.warn("no suitable view for " + content + " using fallback view");
         return new FallbackView.Specification();
     }
 

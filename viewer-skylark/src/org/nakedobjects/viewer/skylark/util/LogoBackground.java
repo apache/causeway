@@ -25,7 +25,7 @@ public class LogoBackground implements Background {
         logo = ImageFactory.getInstance().createImage(fileName);
 
         if (logo == null) {
-            LOG.warn("Logo image not found");
+            LOG.warn("logo image not found");
         } else {
             location = new Location();
             location.setX(cp.getInteger(PARAMETER_BASE + "position.x", 0));

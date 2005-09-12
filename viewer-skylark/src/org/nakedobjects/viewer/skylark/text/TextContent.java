@@ -128,7 +128,7 @@ public class TextContent {
             TextBlock block = (TextBlock) blocks.elementAt(i);
             int noLines = block.noLines();
             if (lineWithinBlock < noLines) {
-                LOG.debug("Block " + i + ", line " + lineWithinBlock);
+                LOG.debug("block " + i + ", line " + lineWithinBlock);
                 return new TextBlockReference(i, block, lineWithinBlock);
             }
             lineWithinBlock -= noLines;
@@ -275,7 +275,7 @@ public class TextContent {
     }
 
     int cursorAtLine(Location atLocation) {
-        LOG.debug("Pointer at " + atLocation);
+        LOG.debug("pointer at " + atLocation);
         int y = atLocation.getY(); // -
                                                        // (forField.getBaseline()
                                                        // -
@@ -294,7 +294,7 @@ public class TextContent {
                 String text2 = getText(i);
                 if (text2 != null) {
                     int at =  text2.length();
-                    LOG.debug("Character at " + at + " line " + lineOffset);
+                    LOG.debug("character at " + at + " line " + lineOffset);
                    return at;
                 }
             }
@@ -316,7 +316,7 @@ public class TextContent {
             at++;
         }
 
-        LOG.debug("Character at " + at + " line " + lineOffset);
+        LOG.debug("character at " + at + " line " + lineOffset);
         return at;
     }
 
