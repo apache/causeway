@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.special;
 
+import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
@@ -14,40 +15,106 @@ import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
+import org.nakedobjects.viewer.skylark.basic.NullView;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.AbstractViewDecorator;
 
+
 /**
- * A scroll border provides a window on a larger view, providing scrollbars as a way of moving the 
- * visible part of that view around the actual visible viewing area. To achieve this the view is divided up into five 
- * main areas, not all of which are used.  In the centre is the viewing area of the underlying view.  At the bottom
- * and to the right...
- * At the top and to the left are headers that  
+ * A scroll border provides a window on a larger view, providing scrollbars as a way of moving the
+ * visible part of that view around the actual visible viewing area. To achieve this the view is
+ * divided up into five main areas, not all of which are used. In the centre is the viewing area of
+ * the underlying view. At the bottom and to the right... At the top and to the left are headers
+ * that
  */
 public class ScrollBorder extends AbstractViewDecorator {
+    private static final int CENTER = 3;
+    private static final int NORTH = 1;
+    private static final int SOUTH = 5;
+    private static final int CORNER = 0;
     private static final int SCROLLBAR_WIDTH = 16;
+    private static final int WEST = 2;
+    private static final int EAST = 4;
 
     protected int bottom;
-    private int dragOffset;
     private int horizontalMaximum;
     private int horizontalMinimum;
     private int horizontalScrollPosition = 0;
     private int horizontalVisibleAmount;
     protected int left;
+
+    private final View leftHeader;
     protected int right;
     private Size size = new Size();
     protected int top;
-    private boolean verticalDrag;
+    private final View topHeader;
     private int verticalMaximum;
     private int verticalMinimum;
     private int verticalScrollPosition = 0;
     private int verticalVisibleAmount;
+    private int dragArea;
+    private int offsetToThumbEdge;
 
     public ScrollBorder(View view) {
-        super(view);
+        this(view, new NullView(), new NullView());
+    }
+
+    /**
+     * Note - the leftHeader, if it is specified, view must be the same height as the content view
+     * and the rightHeader, if it is specified, must be the same width.
+     */
+    public ScrollBorder(View content, View leftHeader, View topHeader) {
+        super(content);
         bottom = right = SCROLLBAR_WIDTH;
         setHorizontalPostion(0);
         setVerticalPostion(0);
+        this.leftHeader = leftHeader;
+        this.topHeader = topHeader;
+
+        top = topHeader.getRequiredSize().getHeight();
+        left = leftHeader.getRequiredSize().getWidth();
+    }
+
+    private int adjust(Click click) {
+        return adjust(click.getLocation());
+    }
+
+    private int adjust(Location location) {
+        Bounds contents = contentArea();
+        if (contents.contains(location)) {
+            location.add(offset());
+            location.move(-left, -top);
+            return CENTER;
+        } else {
+            int x = location.getX();
+            int y = location.getY();
+
+            if (x > contents.getX2() && y >= contents.getY() && y <= contents.getY2()) {
+                // vertical scrollbar
+                location.subtract(0, contents.getY());
+                return EAST;
+            } else if (y > contents.getY2() && x >= contents.getX() && x <= contents.getX2()) {
+                // horzontal scrollbar
+                location.subtract(contents.getX(), 0);
+                return SOUTH;
+            } else if (y < contents.getY() && x >= contents.getX() && x <= contents.getX2()) {
+                // top border
+                location.subtract(left, 0);
+                location.add(offset().getDeltaX(), 0);
+                return NORTH;
+            } else if (x < contents.getX() && y >= contents.getY() && y <= contents.getY2()) {
+                // left border
+                location.subtract(0, top);
+                location.add(0, offset().getDeltaY());
+                return WEST;
+            } else {
+                // ignore;
+                location.setX(-1);
+                location.setY(-1);
+                return CORNER;
+            }
+        }
+
     }
 
     protected Bounds contentArea() {
@@ -74,62 +141,132 @@ public class ScrollBorder extends AbstractViewDecorator {
     }
 
     public void drag(InternalDrag drag) {
-        if (dragOffset == -1) {
-            super.drag(drag);
-        } else {
-            if (verticalDrag) {
-                int y = drag.getLocation().getY();
-                setVerticalPostion(y - dragOffset);
-            } else {
-                int x = drag.getLocation().getX();
-                setHorizontalPostion(x - dragOffset);
-            }
+        switch (dragArea) {
+        case NORTH:
+            drag.getLocation().subtract(offset().getDeltaX(), top);
+            topHeader.drag(drag);
+            break;
+
+        case WEST:
+            drag.getLocation().subtract(left, offset().getDeltaY());
+            leftHeader.drag(drag);
+            break;
+
+        case CENTER:
+            drag.getLocation().subtract(offset());
+            wrappedView.drag(drag);
+            break;
+
+        case SOUTH:
+            int x = drag.getLocation().getX() - left;
+            setHorizontalPostion(x - offsetToThumbEdge);
+            break;
+
+        case EAST:
+            int y = drag.getLocation().getY() - top;
+            setVerticalPostion(y - offsetToThumbEdge);
+            break;
+
+        default:
+            return;
         }
+
+        /*
+         * if (dragOffset == -1) { super.drag(drag); } else { if (verticalDrag) { int y =
+         * drag.getLocation().getY(); setVerticalPostion(y - dragOffset); } else { int x =
+         * drag.getLocation().getX(); setHorizontalPostion(x - dragOffset); } }
+         */
     }
 
     public Drag dragStart(DragStart drag) {
+        int area = adjust(drag);
+        dragArea = area;
+        switch (area) {
+        case NORTH:
+            throw new NotImplementedException();
+        //  return topHeader.dragStart(drag);
+
+        case WEST:
+            throw new NotImplementedException();
+            //  return leftHeader.dragStart(drag);
+
+        case CENTER:
+            throw new NotImplementedException();
+        //    return wrappedView.dragStart(drag);
+
+        case SOUTH:
+            return dragStartSouth(drag);
+
+        case EAST:
+            return dragStartEast(drag);
+
+        default:
+            return null;
+        }
+        /*
+         * Location location = drag.getLocation(); int x = location.getX(); int y = location.getY();
+         * 
+         * Bounds contents = contentArea(); dragOffset = -1; if (x >= contents.getWidth()) { if (y >
+         * verticalScrollPosition && y < verticalScrollPosition + verticalVisibleAmount) {
+         * dragOffset = y - verticalScrollPosition; verticalDrag = true; return new
+         * SimpleInternalDrag(this, location); } } else if (y >= contents.getHeight()) { if (x >
+         * horizontalScrollPosition && x < horizontalScrollPosition + horizontalVisibleAmount) {
+         * dragOffset = x - horizontalScrollPosition; verticalDrag = false; return new
+         * SimpleInternalDrag(this, location); } } else { drag.add(offset()); drag.subtract(left,
+         * top); return wrappedView.dragStart(drag); }
+         * 
+         * return null;
+         */
+    }
+
+    private Drag dragStartEast(DragStart drag) {
+        Location location = drag.getLocation();
+        int y = location.getY();
+        if (y > verticalScrollPosition && y < verticalScrollPosition + verticalVisibleAmount) {
+            // offset is the distance from the left/top of the thumb to the pointer
+            offsetToThumbEdge = y - verticalScrollPosition;
+            return new SimpleInternalDrag(this, location);
+        } else {
+            return null;
+        }
+    }
+
+    private Drag dragStartSouth(DragStart drag) {
         Location location = drag.getLocation();
         int x = location.getX();
-        int y = location.getY();
-
-        Bounds contents = contentArea();
-        dragOffset = -1;
-        if (x >= contents.getWidth()) {
-            if (y > verticalScrollPosition && y < verticalScrollPosition + verticalVisibleAmount) {
-                dragOffset = y - verticalScrollPosition;
-                verticalDrag = true;
-                return new SimpleInternalDrag(this, location);
-            }
-
-        } else if (y >= contents.getHeight()) {
-            if (x > horizontalScrollPosition && x < horizontalScrollPosition + horizontalVisibleAmount) {
-                dragOffset = x - horizontalScrollPosition;
-                verticalDrag = false;
-                return new SimpleInternalDrag(this, location);
-            }
-
+        if (x > horizontalScrollPosition && x < horizontalScrollPosition + horizontalVisibleAmount) {
+            offsetToThumbEdge = x - horizontalScrollPosition;
+            return new SimpleInternalDrag(this, location);
         } else {
-            drag.add(offset());
-            drag.subtract(left, top);
-            return wrappedView.dragStart(drag);
+            return null;
         }
+    }
 
-        return null;
+    private int adjust(DragStart drag) {
+        return adjust(drag.getLocation());
     }
 
     public void draw(Canvas canvas) {
         Bounds contents = contentArea();
+        Offset offset = offset();
+        int x = offset.getDeltaX();
+        int y = offset.getDeltaY();
 
         int contentWidth = contents.getWidth();
         int contentHeight = contents.getHeight();
 
+        Canvas headerCanvasLeft = canvas.createSubcanvas(0, top, left, contentHeight);
+        headerCanvasLeft.offset(0, -y);
+        leftHeader.draw(headerCanvasLeft);
+
+        Canvas headerCanvasRight = canvas.createSubcanvas(left, 0, contentWidth, top);
+        headerCanvasRight.offset(-x, 0);
+        topHeader.draw(headerCanvasRight);
+
         drawScrollBars(canvas, contentWidth, contentHeight);
 
-        Offset offset = offset();
-        int x = offset.getDeltaX();
-        int y = offset.getDeltaY();
-        Canvas subCanvas = canvas.createSubcanvas(left, top, contentWidth, contentHeight);
-        subCanvas.offset(-x, -y);
+        Canvas contentCanvas = canvas.createSubcanvas(left, top, contentWidth, contentHeight);
+        contentCanvas.offset(-x, -y);
 
         if (AbstractView.debug) {
             canvas.drawRectangle(contents.getX(), contents.getY(), contents.getWidth(), contents.getHeight(),
@@ -137,7 +274,7 @@ public class ScrollBorder extends AbstractViewDecorator {
         }
 
         //        drawContent(canvas, contentWidth, contentHeight);
-        wrappedView.draw(subCanvas);
+        wrappedView.draw(contentCanvas);
 
         if (AbstractView.debug) {
             Size size = getSize();
@@ -167,55 +304,78 @@ public class ScrollBorder extends AbstractViewDecorator {
         // horizontal scrollbar
         if (horizontalScrollPosition > left || horizontalVisibleAmount < contentWidth) {
             canvas.drawSolidRectangle(left, contentHeight + top + 1, contentWidth, SCROLLBAR_WIDTH - 2, Style.SECONDARY3);
-            canvas.drawSolidRectangle(horizontalScrollPosition, contentHeight + top + 1, horizontalVisibleAmount,
+            canvas.drawSolidRectangle(left + horizontalScrollPosition, contentHeight + top + 1, horizontalVisibleAmount,
                     SCROLLBAR_WIDTH - 3, color);
-            canvas.drawRectangle(horizontalScrollPosition, contentHeight + top + 1, horizontalVisibleAmount, SCROLLBAR_WIDTH - 3,
-                    Style.SECONDARY1);
             canvas.drawRectangle(left, contentHeight + top, contentWidth, SCROLLBAR_WIDTH - 1, Style.SECONDARY2);
+            canvas.drawRectangle(left + horizontalScrollPosition, contentHeight + top + 1, horizontalVisibleAmount,
+                    SCROLLBAR_WIDTH - 3, Style.SECONDARY1);
         }
 
         // vertical scrollbar
         if (verticalScrollPosition > top || verticalVisibleAmount < contentHeight) {
             canvas.drawSolidRectangle(contentWidth + left + 1, top, SCROLLBAR_WIDTH - 2, contentHeight, Style.SECONDARY3);
-            canvas.drawSolidRectangle(contentWidth + left + 1, verticalScrollPosition, SCROLLBAR_WIDTH - 3,
+            canvas.drawSolidRectangle(contentWidth + left + 1, top + verticalScrollPosition, SCROLLBAR_WIDTH - 3,
                     verticalVisibleAmount, color);
-            canvas.drawRectangle(contentWidth + left + 1, verticalScrollPosition, SCROLLBAR_WIDTH - 3, verticalVisibleAmount,
-                    Style.SECONDARY1);
             canvas.drawRectangle(contentWidth + left, top, SCROLLBAR_WIDTH - 1, contentHeight, Style.SECONDARY2);
+            canvas.drawRectangle(contentWidth + left + 1, top + verticalScrollPosition, SCROLLBAR_WIDTH - 3,
+                    verticalVisibleAmount, Style.SECONDARY1);
         }
     }
 
     public void firstClick(Click click) {
-        int x = click.getLocation().getX();
-        int y = click.getLocation().getY();
+        // TODO allow modified click to move thumb to the pointer, rather than paging.
+        int area = adjust(click);
+        switch (area) {
+        case NORTH:
+            topHeader.firstClick(click);
+            break;
 
-        Bounds contents = contentArea();
-        if (x >= contents.getWidth()) {
-            if (click.button3()) {
-                setVerticalPostion(y - verticalVisibleAmount / 2);
-            } else if (click.button1()) {
-                if (y < verticalScrollPosition) {
-                    setVerticalPostion(verticalScrollPosition - verticalVisibleAmount);
-                } else if (y > verticalScrollPosition + verticalVisibleAmount) {
-                    setVerticalPostion(verticalScrollPosition + verticalVisibleAmount);
-                }
-            }
+        case WEST:
+            leftHeader.firstClick(click);
+            break;
 
-        } else if (y >= contents.getHeight()) {
-            if (click.button3()) {
-                setHorizontalPostion(x - horizontalVisibleAmount / 2);
-            } else if (click.button1()) {
-                if (x < horizontalScrollPosition) {
-                    setHorizontalPostion(horizontalScrollPosition - horizontalVisibleAmount);
-                } else if (x > horizontalScrollPosition + horizontalVisibleAmount) {
-                    setHorizontalPostion(horizontalScrollPosition + horizontalVisibleAmount);
-                }
-            }
-
-        } else {
-            click.add(offset());
-            click.subtract(left, top);
+        case CENTER:
             wrappedView.firstClick(click);
+            break;
+
+        case SOUTH:
+            firstClickSouth(click);
+            break;
+
+        case EAST:
+            firstClickEast(click);
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    private void firstClickEast(Click click) {
+        Location location2 = click.getLocation();
+        int y = location2.getY();
+        if (click.button3()) {
+            setVerticalPostion(y - verticalVisibleAmount / 2);
+        } else if (click.button1()) {
+            if (y < verticalScrollPosition) {
+                setVerticalPostion(verticalScrollPosition - verticalVisibleAmount);
+            } else if (y > verticalScrollPosition + verticalVisibleAmount) {
+                setVerticalPostion(verticalScrollPosition + verticalVisibleAmount);
+            }
+        }
+    }
+
+    private void firstClickSouth(Click click) {
+        Location location1 = click.getLocation();
+        int x = location1.getX();
+        if (click.button3()) {
+            setHorizontalPostion(x - horizontalVisibleAmount / 2);
+        } else if (click.button1()) {
+            if (x < horizontalScrollPosition) {
+                setHorizontalPostion(horizontalScrollPosition - horizontalVisibleAmount);
+            } else if (x > horizontalScrollPosition + horizontalVisibleAmount) {
+                setHorizontalPostion(horizontalScrollPosition + horizontalVisibleAmount);
+            }
         }
     }
 
@@ -237,13 +397,27 @@ public class ScrollBorder extends AbstractViewDecorator {
         getViewManager().getSpy().addTrace(this, "mouse location within border", location);
         getViewManager().getSpy().addTrace(this, "non border area", contentArea());
 
-        if (overContent(location)) {
-            location.add(-left, -top);
-            location.add(offset().getDeltaX(), offset().getDeltaY());
+        int area = adjust(location);
+        switch (area) {
+        case NORTH:
+           	return topHeader.identify(location);
+
+        case WEST:
+            return leftHeader.identify(location);
+
+        case CENTER:
             return wrappedView.identify(location);
-        } else {
-            getViewManager().getSpy().addTrace(this, "over border area", contentArea());
+
+        case SOUTH:
+            getViewManager().getSpy().addTrace(this, "over scroll bar area", contentArea());
             return getView();
+
+        case EAST:
+            getViewManager().getSpy().addTrace(this, "over scroll bar area", contentArea());
+            return getView();
+
+        default:
+            return null;
         }
     }
 
@@ -256,27 +430,41 @@ public class ScrollBorder extends AbstractViewDecorator {
     public void mouseMoved(Location location) {
         Bounds contents = contentArea();
 
-        if (contents.contains(location)) {
-            location.add(offset());
-            location.move(-left, -top);
-            System.out.println("content " + location);
-        } else {
-            int x = location.getX();
-            int y = location.getY();
+        // TODO remove this block
+        if (true) {
+            Location l = new Location(location);
+            int pos = adjust(l);
+            System.out.println(pos + ": " + l);
 
-            if (x > contents.getX2() && y >= contents.getY() && y <= contents.getY2()) {
-	            // vertical scrollbar 
-                System.out.println("vertical scroll " + (y - contents.getY()));
-            } else if (y > contents.getY2() && x >= contents.getX() && x <= contents.getX2()) {
-                // horzontal scrollbar
-                System.out.println("horizontal scroll " + (x - contents.getX()));
-            } else if (y < contents.getY() && x >= contents.getX() && x <= contents.getX2()) {
-                // top border
-                System.out.println("top header " + (x - left + offset().getDeltaX()) + "," + y);
-            } else if (x < contents.getX()  && y >= contents.getY() && y <= contents.getY2()) {
-                // left border
-                System.out.println("left header " + x + "," + (y - top + offset().getDeltaY()) );
-            } 
+            /*
+             * TODO this border needs to be the controller of three views: the content view; and top
+             * and left header views. For each interaction (such as firstClick) the border needs to
+             * work out if the interaction is on the scrollbars - and therefore adjust the view area -
+             * or on one of the three views - therefore adjust the positiion and delegate to that
+             * view.
+             */
+            if (contents.contains(location)) {
+                location.add(offset());
+                location.move(-left, -top);
+                System.out.println("content " + location);
+            } else {
+                int x = location.getX();
+                int y = location.getY();
+
+                if (x > contents.getX2() && y >= contents.getY() && y <= contents.getY2()) {
+                    // vertical scrollbar
+                    System.out.println("vertical scroll " + (y - contents.getY()));
+                } else if (y > contents.getY2() && x >= contents.getX() && x <= contents.getX2()) {
+                    // horzontal scrollbar
+                    System.out.println("horizontal scroll " + (x - contents.getX()));
+                } else if (y < contents.getY() && x >= contents.getX() && x <= contents.getX2()) {
+                    // top border
+                    System.out.println("top header " + (x - left + offset().getDeltaX()) + "," + y);
+                } else if (x < contents.getX() && y >= contents.getY() && y <= contents.getY2()) {
+                    // left border
+                    System.out.println("left header " + x + "," + (y - top + offset().getDeltaY()));
+                }
+            }
         }
 
         if (contentArea().contains(location)) {
@@ -297,26 +485,76 @@ public class ScrollBorder extends AbstractViewDecorator {
         return contentArea().contains(location);
     }
 
+    public void reset() {
+        horizontalScrollPosition = 0;
+        verticalScrollPosition = 0;
+    }
+
     /**
      * Moves the scrollbar to beginning or the end when a double click occurs on that side.
      */
     public void secondClick(Click click) {
-        int x = click.getLocation().getX();
-        int y = click.getLocation().getY();
-        Bounds contents = contentArea();
+        int area = adjust(click);
+        switch (area) {
+        case NORTH:
+           	topHeader.secondClick(click);
+           	break;
 
-        if (x >= contents.getWidth()) {
-            int position = (y < contents.getHeight() / 2) ? verticalMinimum : verticalMaximum;
-            setVerticalPostion(position);
+        case WEST:
+            leftHeader.secondClick(click);
+            break;
 
-        } else if (y >= contents.getHeight()) {
-            int position = (x < contents.getWidth() / 2) ? horizontalMinimum : horizontalMaximum;
-            setHorizontalPostion(position);
-
-        } else {
-            click.add(offset());
-            click.subtract(left, top);
+        case CENTER:
             wrappedView.secondClick(click);
+            break;
+
+        case SOUTH:
+            secondClickSouth(click);
+            break;
+
+        case EAST:
+            secondClickEast(click);
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    private void secondClickEast(Click click) {
+        int y = click.getLocation().getY();
+        int midpoint = (getSize().getHeight() - top - bottom) / 2;
+        int position = (y < midpoint) ? verticalMinimum : verticalMaximum;
+        setVerticalPostion(position);
+    }
+
+    private void secondClickSouth(Click click) {
+        int x = click.getLocation().getX();
+        int midpoint = (getSize().getWidth() - left - right) / 2;
+        int position = (x < midpoint) ? horizontalMinimum : horizontalMaximum;
+        setHorizontalPostion(position);
+    }
+    
+    public void thirdClick(Click click) {
+        int area = adjust(click);
+        switch (area) {
+        case NORTH:
+           	topHeader.thirdClick(click);
+           	break;
+
+        case WEST:
+            leftHeader.thirdClick(click);
+            break;
+
+        case CENTER:
+            wrappedView.thirdClick(click);
+            break;
+
+        case SOUTH:
+        case EAST:
+        default:
+            // ignore
+            break;
         }
     }
 
@@ -327,7 +565,7 @@ public class ScrollBorder extends AbstractViewDecorator {
 
     public void setHorizontalPostion(final int position) {
         getViewManager().addSpyAction("Move to horizontal position " + position);
-        horizontalScrollPosition = Math.min(position + left, horizontalMaximum);
+        horizontalScrollPosition = Math.min(position, horizontalMaximum);
         horizontalScrollPosition = Math.max(horizontalScrollPosition, horizontalMinimum);
         markDamaged();
     }
@@ -351,7 +589,7 @@ public class ScrollBorder extends AbstractViewDecorator {
         int displayHeight = displayArea.getHeight();
         int contentHeight = Math.max(displayHeight, contentSize.getHeight());
         verticalVisibleAmount = displayHeight * displayHeight / (contentHeight - SCROLLBAR_WIDTH);
-        verticalMinimum = top;
+        //verticalMinimum = top;
         verticalMaximum = displayHeight - verticalVisibleAmount;
         //       verticalScrollPosition = (int) (verticalScrollPosition *
         // verticalRatio);
@@ -359,7 +597,7 @@ public class ScrollBorder extends AbstractViewDecorator {
         int displayWidth = displayArea.getWidth();
         int contentWidth = Math.max(displayWidth, contentSize.getWidth());
         horizontalVisibleAmount = displayWidth * displayWidth / (contentWidth - SCROLLBAR_WIDTH);
-        horizontalMinimum = left;
+        //horizontalMinimum = left;
         horizontalMaximum = displayWidth - horizontalVisibleAmount;
 
         wrappedView.setSize(wrappedView.getRequiredSize());
@@ -367,24 +605,28 @@ public class ScrollBorder extends AbstractViewDecorator {
 
     public void setVerticalPostion(final int position) {
         getViewManager().addSpyAction("Move to vertical position " + position);
-        verticalScrollPosition = Math.min(position + top, verticalMaximum);
+        verticalScrollPosition = Math.min(position, verticalMaximum);
         verticalScrollPosition = Math.max(verticalScrollPosition, verticalMinimum);
         markDamaged();
     }
 
     public ViewAreaType viewAreaType(Location location) {
-        if (overContent(location)) {
-            location.add(offset());
-            location.subtract(left, top);
+        int area = adjust(location);
+        switch (area) {
+        case NORTH:
+           	return topHeader.viewAreaType(location);
+
+        case WEST:
+            return leftHeader.viewAreaType(location);
+
+        case CENTER:
             return wrappedView.viewAreaType(location);
-        } else {
+
+        case SOUTH:
+        case EAST:
+        default:
             return ViewAreaType.INTERNAL;
         }
-    }
-
-    public void reset() {
-        horizontalScrollPosition = 0;
-        verticalScrollPosition = 0;
     }
 }
 
