@@ -24,7 +24,7 @@ public abstract class ApplicationContext implements InternalNakedObject {
     }
 
     protected NakedClass addClass(String className) {
-        LOG.info("Added class " + className + " to " + this);
+        LOG.info("added class " + className + " to " + this);
         NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(className);
         NakedClass nakedClass = NakedObjects.getObjectManager().getNakedClass(nc);
         classes.addElement(nakedClass);

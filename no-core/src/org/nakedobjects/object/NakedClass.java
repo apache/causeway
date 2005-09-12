@@ -120,7 +120,7 @@ public class NakedClass implements InternalNakedObject {
                 getObjectManager().makePersistent(object);
             } catch (NotPersistableException e) {
                 object = NakedObjects.getObjectLoader().createAdapterForTransient(new Error("Failed to create instance of " + this, e));
-                LOG.error("Failed to create instance of " + this, e);
+                LOG.error("failed to create instance of " + this, e);
             }
         }
 
