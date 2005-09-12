@@ -9,6 +9,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.utility.ToString;
 
@@ -107,6 +108,13 @@ public class VectorCollectionAdapter implements InternalCollection {
 
     public long getVersion() {
         return version;
+    }
+
+    public void init(Object[] initElements) {
+        Assert.assertEquals("Collection not empty", 0, this.collection.size());
+        for (int i = 0; i < initElements.length; i++) {
+            collection.addElement(initElements[i]);
+        }
     }
 
     public boolean isAggregated() {

@@ -7,7 +7,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.NotImplementedException;
 
@@ -79,10 +78,6 @@ public class InternalCollectionAdapter implements InternalCollection {
         return elementSpecification;
     }
 
-    public Hint getHint(Action action, Naked[] parameters) {
-        return null;
-    }
-
     public Hint getHint(NakedObjectField field, Naked value) {
         return null;
     }
@@ -110,6 +105,10 @@ public class InternalCollectionAdapter implements InternalCollection {
         return version;
     }
 
+    public void init(Object[] initElements) {
+        collection.init(initElements);
+    }
+
     public boolean isAggregated() {
         return false;
     }
@@ -127,10 +126,6 @@ public class InternalCollectionAdapter implements InternalCollection {
     }
 
     public void setResolved() {}
-
-    public void setVersion(long version) {
-        this.version = version;
-    }
 
     public int size() {
         return collection.size();
