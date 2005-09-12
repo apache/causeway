@@ -21,11 +21,11 @@ public class ClientConnection {
 
     public void init() {
         try {
-            LOG.debug("Client end-point ");
+            LOG.debug("client end-point ");
             socket = new Socket("localhost", 9567);
             input = new ObjectInputStream(socket.getInputStream());
             output = new ObjectOutputStream(socket.getOutputStream());
-            LOG.debug("Connnection established " + socket);
+            LOG.debug("connnection established " + socket);
         } catch (MalformedURLException e) {
             throw new NakedObjectRuntimeException(e);
         } catch (UnknownHostException e) {
@@ -37,7 +37,7 @@ public class ClientConnection {
 
     public String request(String requestData) {
         try {
-            LOG.debug("Sending request \n" + requestData);
+            LOG.debug("sending request \n" + requestData);
             output.writeObject(requestData);
             output.flush();
             String response = (String) input.readObject();

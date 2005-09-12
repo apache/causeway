@@ -44,7 +44,7 @@ class ServerConnection implements Runnable {
 			t.interrupt();
 			socket.close();
 		} catch (IOException e) {
-			LOG.error("Failed to close connection", e);
+			LOG.error("failed to close connection", e);
 		}
 	}
 
@@ -61,33 +61,33 @@ class ServerConnection implements Runnable {
 		while(true) {
 			try {
 				String requestData = (String) input.readObject();
-				LOG.debug("Request received \n" + requestData);
+				LOG.debug("request received \n" + requestData);
 				XStream xstream = new XStream();
 				Request request = (Request) xstream.fromXML(requestData);
-				LOG.debug("Request received " + request);
+				LOG.debug("request received " + request);
 				String responseData;
                 try {
 				    request.execute(server);
 					Response response;
 				    response = new Response(request);
 				    response.setUpdates(updateNotifier.getUpdates());
-					LOG.debug("Sending " + response);
+					LOG.debug("sending " + response);
 					responseData = xstream.toXML(response);
 				} catch(Exception e) {
-				    LOG.debug("Sending exception " + e);
+				    LOG.debug("sending exception " + e);
 				    responseData = xstream.toXML(e);
 				}
-                LOG.debug("Send response \n" + responseData);
+                LOG.debug("send response \n" + responseData);
 				output.writeObject(responseData);
                 output.flush();
             } catch (SocketException e) {
-                LOG.info("Shutting down receiver (" + e + ")");
+                LOG.info("shutting down receiver (" + e + ")");
                 break;
 			} catch (IOException e) {
-				LOG.info("Connection exception; closing connection", e);
+				LOG.info("connection exception; closing connection", e);
 				break;
 			} catch (ClassNotFoundException e) {
-				LOG.error("Unknown class received; closing connection: " + e.getMessage(), e);
+				LOG.error("unknown class received; closing connection: " + e.getMessage(), e);
 				break;
 			}
 		}

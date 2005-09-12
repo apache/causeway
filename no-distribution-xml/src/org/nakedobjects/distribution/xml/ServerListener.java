@@ -32,22 +32,22 @@ public class ServerListener implements Runnable {
 	    	while(acceptConnection) {
 	    		try {
 					ServerConnection connection = new ServerConnection(socket.accept(), server, updateNotifier);
-					LOG.debug("Connection requested from "  + connection.getClient());
+					LOG.debug("connection requested from "  + connection.getClient());
 					clients.addElement(connection);
 					connection.start();
 				} catch (InterruptedIOException ignore) {
 					continue;
 				} catch (IOException e) {
-					LOG.warn("Connection exception", e);
+					LOG.warn("connection exception", e);
 				}
 	    	}
 		} catch (SocketException e) {
-			LOG.error("Listener failure", e);
+			LOG.error("listener failure", e);
 		}
 	}
 
 	public void start() {
-    	LOG.info("Creating listener on localhost");
+    	LOG.info("creating listener on localhost");
     	try{
     		socket = new ServerSocket(9567);
     	} catch (IOException e) {
