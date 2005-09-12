@@ -13,7 +13,7 @@ public class AwtText implements Text {
     private static final Logger LOG = Logger.getLogger(AwtText.class);
     private static final String FONT_PROPERTY_STEM = Viewer.PROPERTY_BASE + "font.";
     private static final String SPACING_PROPERTY_STEM = Viewer.PROPERTY_BASE + "spacing.";
-    private final int maxCharWidth;
+    private int maxCharWidth;
     private Font font;
     private FontMetrics metrics;
     private Frame fontMetricsComponent = new Frame();
@@ -30,7 +30,10 @@ public class AwtText implements Text {
 
         metrics = fontMetricsComponent.getFontMetrics(font);
         
-        maxCharWidth = (charWidth('X') + 3);
+        maxCharWidth = metrics.getMaxAdvance() + 1;
+        if(maxCharWidth == 0) {
+            maxCharWidth = (charWidth('X') + 3);
+        }
 
         lineSpacing = cfg.getInteger(SPACING_PROPERTY_STEM + propertyName, 0);
         
@@ -62,7 +65,7 @@ public class AwtText implements Text {
     public int stringWidth(String text) {
         int stringWidth = metrics.stringWidth(text);
         if(stringWidth > text.length() * maxCharWidth) {
-            LOG.debug("spurious length of string; calculating manually: " + stringWidth  + " for "+ this);
+            LOG.debug("spurious width of string; calculating manually: " + stringWidth  + " for "+ this + ": " + text);
             /*
              * This fixes an intermittent bug in .NET where stringWidth() returns a ridiculous number is returned for the width.
              * 
@@ -70,7 +73,12 @@ public class AwtText implements Text {
              */
             stringWidth = 0;
             for (int i = 0; i < text.length(); i++) {
-                stringWidth += charWidth(text.charAt(i));
+                int charWidth = charWidth(text.charAt(i));
+                if(charWidth > maxCharWidth) {
+                    LOG.debug("spurious width of character; using max width: " + charWidth + " for "+ text.charAt(i));
+                    charWidth = maxCharWidth;
+                }
+                stringWidth += charWidth;
                 LOG.debug(i + " " + stringWidth);
             }
         }
