@@ -95,7 +95,7 @@ public class Memento implements Transferable, Serializable {
             } else {
                 object = objectLoader.recreateAdapterForPersistent(getOid(), spec);
             }
-            LOG.debug("Recreated object " + object.getOid());
+            LOG.debug("recreated object " + object.getOid());
             updateObject(object, ResolveState.UPDATING);
             return object;
         }
