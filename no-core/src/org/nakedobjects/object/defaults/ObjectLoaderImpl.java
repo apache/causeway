@@ -54,7 +54,7 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
     public NakedValue createAdapterForValue(final Object value) {
         Assert.assertFalse("can't create an adapter for a NOF adapter", value instanceof Naked);
         Assert.assertFalse("can't create an adapter for a NO Specification", value instanceof NakedObjectSpecification);
-        LOG.debug("creating adapter (value) for " + value);
+        //LOG.debug("creating adapter (value) for " + value);
 
         NakedValue adapter;
         if (value instanceof String) {
@@ -135,7 +135,7 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
 
     public NakedValue createValueInstance(NakedObjectSpecification specification) {
         Assert.assertTrue("must be a value", specification.isValue());
-        LOG.debug("creating value instance of for " + specification);
+        //LOG.debug("creating value instance of for " + specification);
         Object object = objectFactory.createValueObject(specification);
         return createAdapterForValue(object);
     }
@@ -315,11 +315,12 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
     }
 
     public void unloaded(NakedObject object) {
-        if(identityAdapterMap.containsKey(object)) {
-	        LOG.debug("removed loaded object " + object);
-	        identityAdapterMap.remove(object.getOid());
-	        pojoAdapterMap.remove(object);
+        LOG.debug("removed loaded object " + object);
+        Oid oid = object.getOid();
+        if(oid != null) {
+            identityAdapterMap.remove(oid);
         }
+        pojoAdapterMap.remove(object);
     }
     
     private void updateOid(Oid oid) {
