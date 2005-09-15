@@ -57,7 +57,7 @@ public interface NakedObject extends Naked {
 
     void initAssociation(NakedObjectAssociation field, NakedObject associatedObject);
 
-    void initOneToManyAssociation(OneToManyAssociation association, NakedObject[] instances);
+    void initAssociation(OneToManyAssociation association, NakedObject[] instances);
 
     void initValue(OneToOneAssociation field, Object object);
 
