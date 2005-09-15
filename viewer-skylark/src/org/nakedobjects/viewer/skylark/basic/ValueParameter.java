@@ -9,12 +9,12 @@ import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.DebugString;
-import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.utility.ToString;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.ParameterContent;
 import org.nakedobjects.viewer.skylark.ValueContent;
+import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
 class ValueParameter extends ValueContent implements ParameterContent {
@@ -33,11 +33,11 @@ class ValueParameter extends ValueContent implements ParameterContent {
     }
 
     public String getIconName() {
-        throw new NotImplementedException();
+        return "";
     }
 
     public Image getIconPicture(int iconHeight) {
-        throw new NotImplementedException();
+        return ImageFactory.getInstance().createUnknownIcon(12);
     }
 
     public Naked getNaked() {
