@@ -374,7 +374,7 @@ public final class XmlSchema
 			Class extensionClass = (Class)enum.nextElement();
 			Object extensionObject = extensions.get(extensionClass);
 			// xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element name="%extensionClassShortName%"
-			Element xsExtensionElementElement = xsMeta.createXsElementElement(helper.docFor(parentElement), shortName(extensionClass.getName()));
+			Element xsExtensionElementElement = xsMeta.createXsElementElement(helper.docFor(parentElement), "x-" + shortName(extensionClass.getName()));
 			xsExtensionElementElement.setAttribute("default", extensionObject.toString()); // the value
 			xsExtensionElementElement.setAttribute("minOccurs", "0"); // doesn't need to appear in XML (and indeed won't)
 			parentElement.appendChild(xsExtensionElementElement);
@@ -411,7 +411,7 @@ public final class XmlSchema
 		//							<xs:sequence minOccurs="0" maxOccurs="1"/>
 		//						</xs:sequence>
 		//						<xs:attribute ref="nof:feature" fixed="reference"/>
-		//						<xs:attribute ref="nof:type" fixed="%%appX%%:%%type%%"/>
+		//						<xs:attribute ref="nof:type" default="%%appX%%:%%type%%"/>
 		//						<xs:attribute ref="nof:isEmpty"/>
 		//						<xs:attribute ref="nof:annotation"/>
 		//					</xs:complexType>
@@ -446,7 +446,7 @@ public final class XmlSchema
 		xsMeta.setXsCardinality(xsReferencedElementSequenceElement, 0, 1);
 
 		xsMeta.addXsNofFeatureAttributeElements(xsFieldComplexTypeElement, "reference");
-		xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "type", referencedClassName);
+		xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "type", "app:" + referencedClassName, false);
 		xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "isEmpty");
 		xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "annotation");
 
@@ -515,7 +515,7 @@ public final class XmlSchema
 
 
 		xsMeta.addXsNofFeatureAttributeElements(xsFieldComplexTypeElement, "collection");
-		xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "type", referencedClassName);
+		xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "type", "app:" + referencedClassName, false);
 		xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "size");
 		xsMeta.addXsNofAttribute(xsFieldComplexTypeElement, "annotation");
 

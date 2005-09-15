@@ -132,11 +132,25 @@ public final class XsMetaModel {
 	 * specified parent XSD element.
 	 */
 	Element addXsNofAttribute(final Element parentXsElement, final String nofAttributeRef, final String fixedValue) {
+		return addXsNofAttribute(parentXsElement, nofAttributeRef, fixedValue, true);
+	}
+	/**
+	 * Adds <code>xs:attribute ref="nof:xxx" default="yyy"</code> element, and appends to
+	 * specified parent XSD element.
+	 * 
+	 * The last parameter determines whether to use <code>fixed="yyy"</code> rather than
+	 * <code>default="yyy"</code>.
+	 */
+	Element addXsNofAttribute(final Element parentXsElement, final String nofAttributeRef, final String value, final boolean useFixed) {
 		Element xsNofAttributeElement = createXsElement(helper.docFor(parentXsElement), "attribute");
 		xsNofAttributeElement.setAttribute("ref", NofMetaModel.NOF_METAMODEL_NS_PREFIX+":"+nofAttributeRef);
 		parentXsElement.appendChild(xsNofAttributeElement);
-		if (fixedValue != null) {
-			xsNofAttributeElement.setAttribute("fixed", fixedValue);
+		if (value != null) {
+			if (useFixed) {
+				xsNofAttributeElement.setAttribute("fixed", value);
+			} else {
+				xsNofAttributeElement.setAttribute("default", value);
+			}
 		}
 		return parentXsElement;
 	}
@@ -154,14 +168,31 @@ public final class XsMetaModel {
 	}
 
 	/**
-	 * returns child <code>xs:sequence</code> element for supplied parent XSD
-	 * element, creating and appending if necessary.
+	 * returns child <code>xs:complexType</code> element allowing mixed content 
+	 * for supplied parent XSD element, creating and appending if necessary.
 	 * 
+	 * <p>
 	 * The supplied element is presumed to be one for which <code>xs:complexType</code>
 	 * is valid as a child (eg <code>xs:element</code>).
 	 */
 	Element complexTypeFor(final Element parentXsElement) {
-		return childXsElement(parentXsElement, "complexType");
+		return complexTypeFor(parentXsElement, true);
+	}
+
+	/**
+	 * returns child <code>xs:complexType</code> element, optionally allowing mixed
+	 * content, for supplied parent XSD element, creating and appending if necessary.
+	 * 
+	 * <p>
+	 * The supplied element is presumed to be one for which <code>xs:complexType</code>
+	 * is valid as a child (eg <code>xs:element</code>).
+	 */
+	Element complexTypeFor(final Element parentXsElement, final boolean mixed) {
+		Element el = childXsElement(parentXsElement, "complexType");
+		if (mixed) {
+			el.setAttribute("mixed", "true");
+		}
+		return el;
 	}
 
 	/**
