@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 public class TextContent {
     private static final Logger LOG = Logger.getLogger(TextContent.class);
+    private static final Logger UI_LOG = Logger.getLogger("ui." + TextContent.class.getName());
     public static final int NO_WRAPPING = 1;
     public static final int WRAPPING = 0;
     private Vector blocks;
@@ -128,7 +129,7 @@ public class TextContent {
             TextBlock block = (TextBlock) blocks.elementAt(i);
             int noLines = block.noLines();
             if (lineWithinBlock < noLines) {
-                LOG.debug("block " + i + ", line " + lineWithinBlock);
+                UI_LOG.debug("block " + i + ", line " + lineWithinBlock);
                 return new TextBlockReference(i, block, lineWithinBlock);
             }
             lineWithinBlock -= noLines;

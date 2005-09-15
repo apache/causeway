@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 
 public abstract class ResizeBorder extends AbstractBorder {
     private static final Logger LOG = Logger.getLogger(ResizeBorder.class);
+    private static final Logger UI_LOG = Logger.getLogger("ui." + ResizeBorder.class.getName());
     public static final int LEFT = 1;
     public static final int RIGHT = 2;
     public static final int UP = 4;
@@ -148,7 +149,7 @@ public abstract class ResizeBorder extends AbstractBorder {
                 markDamaged();
                 break;
             }
-            LOG.debug("on resize border " + onBorder + " " + resizing);
+            UI_LOG.debug("on resize border " + onBorder + " " + resizing);
         }
         this.onBorder = onBorder;
     }
@@ -158,7 +159,7 @@ public abstract class ResizeBorder extends AbstractBorder {
         resizing = false;
         onBorder = 0;
         markDamaged();
-        LOG.debug("off resize border " + onBorder + " " + resizing);
+        UI_LOG.debug("off resize border " + onBorder + " " + resizing);
         super.exited();
     }
 

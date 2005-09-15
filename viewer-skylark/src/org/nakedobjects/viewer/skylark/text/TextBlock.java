@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 class TextBlock {
 	private static final Logger LOG = Logger.getLogger(TextBlock.class);
+	private static final Logger UI_LOG = Logger.getLogger("ui." + TextBlock.class.getName());
 	private final TextBlockTarget forField;
 	private String text;
 	private int[] lineBreaks;
@@ -130,13 +131,13 @@ class TextBlock {
 
 	private int lineStart(int line) {
 		int pos = line == 0 ? 0 : lineBreaks[line - 1];
-		LOG.debug("line " + line + " starts at " + pos);
+		UI_LOG.debug("line " + line + " starts at " + pos);
 		return pos;
 	}
 
 	private int lineEnd(int line) {
 		int pos = line >= lineCount ? text.length() : lineBreaks[line];
-		LOG.debug("line " + line + " ends at " + pos);
+		UI_LOG.debug("line " + line + " ends at " + pos);
 		return pos;
 	}
 

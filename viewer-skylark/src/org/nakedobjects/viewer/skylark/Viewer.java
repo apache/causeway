@@ -52,9 +52,9 @@ import org.apache.log4j.Logger;
 
 
 public class Viewer {
-
     private static Viewer instance;
     private static final Logger LOG = Logger.getLogger(Viewer.class);
+    private static final Logger UI_LOG = Logger.getLogger("ui." + Viewer.class.getName());
     private static final Bounds NO_REDRAW = new Bounds();
     public static final String PROPERTY_BASE = "viewer.skylark.";
     private static final String SPECIFICATION_BASE = PROPERTY_BASE + "specification.";
@@ -282,10 +282,10 @@ public class Viewer {
         synchronized (redrawArea) {
             if (redrawArea.equals(NO_REDRAW)) {
                 redrawArea.setBounds(bounds);
-                LOG.debug("damage - new area " + redrawArea);
+                UI_LOG.debug("damage - new area " + redrawArea);
             } else {
                 redrawArea.union(bounds);
-                LOG.debug("damage - extend area " + redrawArea + " - to include " + bounds);
+                UI_LOG.debug("damage - extend area " + redrawArea + " - to include " + bounds);
             }
         }
     }
@@ -537,7 +537,7 @@ public class Viewer {
         synchronized (redrawArea) {
 	        rootView.layout();
             if (!redrawArea.equals(NO_REDRAW)) {
-                LOG.debug("repaint viewer " + redrawArea);
+                UI_LOG.debug("repaint viewer " + redrawArea);
                 Bounds area = new Bounds(redrawArea);
                 area.translate(insets.left, insets.top);
                 renderingArea.repaint(area.x, area.y, area.width, area.height);
@@ -604,7 +604,7 @@ public class Viewer {
     public void setStatus(String status) {
         if (!status.equals(this.userStatus)) {
             this.userStatus = status;
-            LOG.debug("changed user status " + status + " " + statusBarArea);
+            UI_LOG.debug("changed user status " + status + " " + statusBarArea);
             renderingArea.repaint(statusBarArea.x, statusBarArea.y, statusBarArea.width, statusBarArea.height);
         }
     }
