@@ -315,12 +315,15 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
     }
 
     public void unloaded(NakedObject object) {
+        LOG.debug("unload ignored: " + object);
+/*
         LOG.debug("removed loaded object " + object);
         Oid oid = object.getOid();
         if(oid != null) {
             identityAdapterMap.remove(oid);
         }
         pojoAdapterMap.remove(object);
+        */
     }
     
     private void updateOid(Oid oid) {
