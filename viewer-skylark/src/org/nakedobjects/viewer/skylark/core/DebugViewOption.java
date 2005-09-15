@@ -10,9 +10,9 @@ import org.nakedobjects.viewer.skylark.Workspace;
 /**
  * Display debug window
  */
-public class DebugOption extends MenuOption {
-    public DebugOption() {
-        super("Debug Info...");
+public class DebugViewOption extends MenuOption {
+    public DebugViewOption() {
+        super("Debug view...");
     }
 
     public void execute(Workspace workspace, View view, Location at) {
