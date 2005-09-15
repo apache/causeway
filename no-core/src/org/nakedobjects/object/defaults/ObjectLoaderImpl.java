@@ -316,6 +316,14 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
 
     public void unloaded(NakedObject object) {
         LOG.debug("unload ignored: " + object);
+        
+        /*
+         * TODO need to unload object that are no longer referenced
+         * 
+         * If an object is unloaded while its pojo still exist then accessing that pojo via the
+         * reflector will create a different PojoAdapter and no OID will exist to identify - hence
+         * the adapter will appear as transient and will no longer be usable as a persistent object
+         */
 /*
         LOG.debug("removed loaded object " + object);
         Oid oid = object.getOid();
