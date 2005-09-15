@@ -5,7 +5,7 @@ import org.apache.log4j.spi.TriggeringEventEvaluator;
 
 
 public class WebSnapshotAppender extends SnapshotAppender {
-    private String proxyAddess;
+    private String proxyAddress;
     private int proxyPort = -1;
 
     /**
@@ -20,8 +20,8 @@ public class WebSnapshotAppender extends SnapshotAppender {
         super(evaluator);
     }
 
-    public String getProxyAddess() {
-        return proxyAddess;
+    public String getProxyAddress() {
+        return proxyAddress;
     }
 
     public int getProxyPort() {
@@ -29,11 +29,11 @@ public class WebSnapshotAppender extends SnapshotAppender {
     }
     
    protected void writeSnapshot(String message, String details) {
-        RemoteLogger.submitLog(message, details, proxyAddess, proxyPort);
+        RemoteLogger.submitLog(message, details, proxyAddress, proxyPort);
     }
 
-    public void setProxyAddess(String proxyAddess) {
-        this.proxyAddess = proxyAddess;
+    public void setProxyAddress(String proxyAddess) {
+        this.proxyAddress = proxyAddess;
     }
 
     public void setProxyPort(int proxyPort) {

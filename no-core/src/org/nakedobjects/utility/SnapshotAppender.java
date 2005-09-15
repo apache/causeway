@@ -46,7 +46,10 @@ public abstract class SnapshotAppender extends AppenderSkeleton {
         }
     }
 
-
+    public void forceSnapshot() {
+        writeSnapshot(buffer);
+    }
+    
     /**
       * Send the contents of the cyclic buffer as an web server posting.
       */
