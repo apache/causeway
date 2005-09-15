@@ -3,11 +3,16 @@ package org.nakedobjects.viewer.skylark.metal;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
+import org.nakedobjects.viewer.skylark.special.ScrollBorder;
+import org.nakedobjects.viewer.skylark.table.TableHeader;
 
 public class TableSpecification extends org.nakedobjects.viewer.skylark.table.TableSpecification {
 
     public View createView(Content content, ViewAxis axis) {
-        return new WindowBorder(super.createView(content, axis), true);
+        View view = super.createView(content, axis);
+        ScrollBorder scrollingView = new ScrollBorder(view);
+    //    scrollingView.setTopHeader(new TableHeader(view.getViewAxis()));
+        return new WindowBorder(scrollingView, false);
     }
 	
     public String getName() {

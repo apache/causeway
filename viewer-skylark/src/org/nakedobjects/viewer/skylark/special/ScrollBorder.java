@@ -43,11 +43,11 @@ public class ScrollBorder extends AbstractViewDecorator {
     private int horizontalVisibleAmount;
     protected int left;
 
-    private final View leftHeader;
+    private View leftHeader;
     protected int right;
     private Size size = new Size();
     protected int top;
-    private final View topHeader;
+    private View topHeader;
     private int verticalMaximum;
     private int verticalMinimum;
     private int verticalScrollPosition = 0;
@@ -68,13 +68,20 @@ public class ScrollBorder extends AbstractViewDecorator {
         bottom = right = SCROLLBAR_WIDTH;
         setHorizontalPostion(0);
         setVerticalPostion(0);
-        this.leftHeader = leftHeader;
-        this.topHeader = topHeader;
-
-        top = topHeader.getRequiredSize().getHeight();
-        left = leftHeader.getRequiredSize().getWidth();
+        setLeftHeader(leftHeader);
+        setTopHeader(topHeader);
     }
 
+    public void setTopHeader(View topHeader) {
+        this.topHeader = topHeader;
+        top = topHeader.getRequiredSize().getHeight();
+    }
+    
+    public void setLeftHeader(View leftHeader) {
+        this.leftHeader = leftHeader;
+        left = leftHeader.getRequiredSize().getWidth();
+    }
+    
     private int adjust(Click click) {
         return adjust(click.getLocation());
     }
@@ -191,8 +198,7 @@ public class ScrollBorder extends AbstractViewDecorator {
             //  return leftHeader.dragStart(drag);
 
         case CENTER:
-            throw new NotImplementedException();
-        //    return wrappedView.dragStart(drag);
+            return wrappedView.dragStart(drag);
 
         case SOUTH:
             return dragStartSouth(drag);
@@ -431,7 +437,7 @@ public class ScrollBorder extends AbstractViewDecorator {
         Bounds contents = contentArea();
 
         // TODO remove this block
-        if (true) {
+        if (false) {
             Location l = new Location(location);
             int pos = adjust(l);
             System.out.println(pos + ": " + l);
@@ -600,6 +606,14 @@ public class ScrollBorder extends AbstractViewDecorator {
         //horizontalMinimum = left;
         horizontalMaximum = displayWidth - horizontalVisibleAmount;
 
+        if(leftHeader != null) {
+            leftHeader.setSize(new Size(left, contentHeight));
+        }
+
+        if(topHeader != null) {
+            topHeader.setSize(new Size(contentWidth, top));
+        }
+        
         wrappedView.setSize(wrappedView.getRequiredSize());
     }
 

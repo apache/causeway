@@ -28,6 +28,7 @@ class TableHeaderBuilder extends AbstractBuilderDecorator {
 
     public View createCompositeView(Content content, CompositeViewSpecification specification, ViewAxis axis) {
         View view = wrappedBuilder.createCompositeView(content, specification, axis);
+        // TODO remove
         return new TableBorder(view);
     }
 }
