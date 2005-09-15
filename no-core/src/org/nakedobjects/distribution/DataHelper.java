@@ -54,15 +54,15 @@ public class DataHelper {
             NakedObject object;
             object =  objectLoader.getAdapterFor(oid);
             object.setOptimisticLock(data.getVersion(), "", null);
-            ResolveState state = ResolveState.UPDATING;
-            if (object.getResolveState().isResolvable(state)) {
-	            objectLoader.start(object, state);
-	            setUpFields(data, object, data.isResolved());
-	            objectLoader.end(object);
+            if(data.getFieldContent() != null) {
+	            ResolveState state = ResolveState.UPDATING;
+	            if (object.getResolveState().isResolvable(state)) {
+		            objectLoader.start(object, state);
+		            setUpFields(data, object, data.isResolved());
+		            objectLoader.end(object);
+	            }
+	            updateNotifier.addDirty(object);
             }
-            
-            updateNotifier.addDirty(object);
-
             return object;
         } else {
             // unknown object; create an instance
