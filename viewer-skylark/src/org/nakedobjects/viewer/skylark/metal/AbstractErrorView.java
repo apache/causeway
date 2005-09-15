@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.NakedObjectApplicationException;
 import org.nakedobjects.object.reflect.NameConvertor;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.utility.ExceptionHelper;
@@ -20,20 +19,12 @@ public class AbstractErrorView extends AbstractView {
         super(content, specification, axis);
 
         Exception error = (Exception) ((PojoAdapter) ((ObjectContent) getContent()).getObject()).getObject();
-        if(error instanceof NakedObjectApplicationException) {
-            Throwable t = ((NakedObjectApplicationException) error).getCause();
-	        String name = t.getClass().getName();
-	        name = name.substring(name.lastIndexOf('.') + 1);
-	        this.name = NameConvertor.naturalName(name);
-	        this.message = t.getMessage();
-	        this.trace = ExceptionHelper.exceptionTraceAsString(t);
-        } else {
-            String name = error.getClass().getName();
-	        name = name.substring(name.lastIndexOf('.') + 1);
-	        this.name = NameConvertor.naturalName(name);
-	        this.message = error.getMessage();
-	        this.trace = ExceptionHelper.exceptionTraceAsString(error);
-        }
+        
+        String name = error.getClass().getName();
+        name = name.substring(name.lastIndexOf('.') + 1);
+        this.name = NameConvertor.naturalName(name);
+        this.message = error.getMessage();
+        this.trace = ExceptionHelper.exceptionTraceAsString(error);
         
         if(this.name == null) {
             this.name = "";
