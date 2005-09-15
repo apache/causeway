@@ -113,7 +113,7 @@ public class DummyNakedObject implements NakedObject {
 
     public void initAssociation(NakedObjectAssociation field, NakedObject associatedObject) {}
 
-    public void initOneToManyAssociation(OneToManyAssociation association, NakedObject[] instances) {}
+    public void initAssociation(OneToManyAssociation association, NakedObject[] instances) {}
 
     public void initValue(OneToOneAssociation field, Object object) {}
 

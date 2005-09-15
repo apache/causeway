@@ -1,7 +1,6 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.TestSystem;
-import org.nakedobjects.distribution.dummy.DummyCollectionData;
 import org.nakedobjects.distribution.dummy.DummyObjectData;
 import org.nakedobjects.distribution.dummy.DummyValueData;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
@@ -65,7 +64,7 @@ public class DataHelperTest extends TestCase {
         Object fields[] = new Object[0];
         Data data = new DummyObjectData(oid, "type.1", fields, false, 4);
 
-        NakedObject naked = (NakedObject) DataHelper.recreate(data);
+        NakedObject naked = (NakedObject) DataHelper.restore(data);
         assertEquals(ResolveState.PART_RESOLVED, ((NakedObject) naked).getResolveState());
     }
 
@@ -74,23 +73,23 @@ public class DataHelperTest extends TestCase {
         Object fields[] = new Object[0];
         Data data = new DummyObjectData(oid, "type.1", fields, true, 4);
 
-        NakedObject naked = (NakedObject) DataHelper.recreate(data);
+        NakedObject naked = (NakedObject) DataHelper.restore(data);
         assertEquals(ResolveState.RESOLVED, ((NakedObject) naked).getResolveState());
     }
 
     public void testRecreateObjectWithFieldData() {
-        // TODO test the one-to-many collection aswell
         Object fields[] = new Object[3];
         fields[0] = new DummyValueData(new Integer(13), "");
         MockOid fieldOid = new MockOid(345);
         fields[1] = new DummyObjectData(fieldOid, "type.1", null, false, 2);
-
-        fields[2] = new DummyCollectionData();
+        
+        // TODO test the one-to-many collection aswell
+   //     fields[2] = new DummyCollectionData();
         
         MockOid rootOid = new MockOid(123);
         Data data = new DummyObjectData(rootOid, "type.1", fields, false, 4);
 
-        NakedObject naked = (NakedObject) DataHelper.recreate(data);
+        NakedObject naked = (NakedObject) DataHelper.restore(data);
         assertEquals(4, naked.getVersion());
         assertEquals(rootOid, naked.getOid());
 
@@ -106,7 +105,7 @@ public class DataHelperTest extends TestCase {
 
         Data data = new DummyObjectData(oid, "type.1", null, false, 4);
 
-        NakedObject naked = (NakedObject) DataHelper.recreate(data);
+        NakedObject naked = (NakedObject) DataHelper.restore(data);
         assertEquals(object, naked.getObject());
         assertEquals(4, naked.getVersion());
         assertEquals(oid, naked.getOid());
@@ -116,7 +115,7 @@ public class DataHelperTest extends TestCase {
     public void testRecreateTransientObjectGivenDataObject() {
         Data data = new DummyObjectData(null, "type.1", null, false, 4);
 
-        NakedObject naked = (NakedObject) DataHelper.recreate(data);
+        NakedObject naked = (NakedObject) DataHelper.restore(data);
         assertEquals(object, naked.getObject());
         assertEquals(4, naked.getVersion());
         assertNull(naked.getOid());
@@ -125,7 +124,7 @@ public class DataHelperTest extends TestCase {
     public void testRecreateTransientObjectWithFieldData() {
         Data data = new DummyObjectData(null, "type.1", null, false, 4);
 
-        NakedObject naked = (NakedObject) DataHelper.recreate(data);
+        NakedObject naked = (NakedObject) DataHelper.restore(data);
         assertEquals(object, naked.getObject());
         assertEquals(4, naked.getVersion());
         assertNull(naked.getOid());
@@ -134,7 +133,7 @@ public class DataHelperTest extends TestCase {
     public void testRecreateValue() {
         Data data = new DummyValueData(new Integer(11), "");
 
-        Naked naked = DataHelper.recreate(data);
+        Naked naked = DataHelper.restore(data);
         assertEquals(new Integer(11), naked.getObject());
         assertNull(naked.getOid());
     }

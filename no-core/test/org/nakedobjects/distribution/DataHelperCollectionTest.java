@@ -57,7 +57,7 @@ public class DataHelperCollectionTest extends TestCase {
         MockOid collectionOid = new MockOid(123);
         CollectionData data = new DummyCollectionData(collectionOid, "type.2", elements, 4);
 
-        NakedCollection naked = (NakedCollection) DataHelper.recreateCollection(data);
+        NakedCollection naked = (NakedCollection) DataHelper.restore(data);
         //		assertEquals(4, naked.getVersion());
         assertEquals(collectionOid, naked.getOid());
 
