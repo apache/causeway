@@ -16,20 +16,129 @@ import org.nakedobjects.object.reflect.OneToOneAssociation;
 
 
 public class DataHelper {
+    private static DirtyObjectSet updateNotifier;
 
-    public static Naked recreate(Data data) {
+    public static Naked restore(Data data) {
         if (data instanceof ValueData) {
-            return recreateValue((ValueData) data);
+            return restoreValue((ValueData) data);
         } else if (data instanceof NullData) {
             return null;
         } else if (data instanceof CollectionData) {
-            return recreateCollection((CollectionData) data);
+            return restoreCollection((CollectionData) data);
         } else {
-            return recreateObject((ObjectData) data);
+            return restoreObject((ObjectData) data);
+        }
+    }
+    
+    private static NakedObject restoreObject(ObjectData data) {
+        Oid oid = data.getOid();
+        String type = data.getType();
+        NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
+        NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
+
+        
+        /*
+         * either create a new transient object, get an existing object and update it if data is for
+         * resolved object, or create new object and set it
+         */ 
+        if (oid == null) {
+            // create transient object
+            NakedObject object;
+            object = objectLoader.recreateTransientInstance(specification);
+            object.setOptimisticLock(data.getVersion(), "", null);
+            setUpFields(data, object, true);
+            return object;
+            
+        } else if(objectLoader.isIdentityKnown(oid)) {
+            // object known and we have all the latetest data; update the object
+            NakedObject object;
+            object =  objectLoader.getAdapterFor(oid);
+            object.setOptimisticLock(data.getVersion(), "", null);
+            ResolveState state = ResolveState.UPDATING;
+            if (object.getResolveState().isResolvable(state)) {
+	            objectLoader.start(object, state);
+	            setUpFields(data, object, data.isResolved());
+	            objectLoader.end(object);
+            }
+            
+            updateNotifier.addDirty(object);
+
+            return object;
+        } else {
+            // unknown object; create an instance
+            NakedObject object;
+            object = objectLoader.recreateAdapterForPersistent(oid, specification);
+            object.setOptimisticLock(data.getVersion(), "", null);
+            if(data.getFieldContent() != null) {
+	            ResolveState state;
+	            state = data.isResolved() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART;
+	            if (object.getResolveState().isResolvable(state)) {
+		            objectLoader.start(object, state);
+		            setUpFields(data, object, data.isResolved());
+		            objectLoader.end(object);
+	            }
+            }
+            return object;
+ 	     }
+    }
+
+    private static void setUpFields(ObjectData data, NakedObject object, boolean completeData) {        
+        Object[] fieldContent = data.getFieldContent();
+        if (fieldContent != null && fieldContent.length > 0) {
+            NakedObjectField[] fields = object.getSpecification().getFields();
+            for (int i = 0; i < fields.length; i++) {
+                if (fieldContent[i] instanceof NullData && ! completeData) {
+                    /*
+                     * Note - if fully resolving or updating the object then nulls should clear the
+                     * field; if only part-resolving then nulls can be ignored as the fields are
+                     * likely to be null at this point
+                     */
+                    continue;
+                }
+                
+                if (fields[i].isCollection()) {
+                    if (fieldContent[i] != null) {
+                        /*
+                         * TODO we need to be wary of the resolved state of the collection data - if
+                         * the server collection is marked as resolved, but has no elements then the
+                         * internal collection will be cleared out!
+                         * 
+                         * collection adapters should be initally marked as unresolved, and the OSes
+                         * should mark them as resolved when they load in elements for them.
+                         */
+                        CollectionData collection = (CollectionData) fieldContent[i];
+                        int size = collection.getElements().length;
+                        // TODO remove this fudge
+                        if(completeData || size > 0 ) {
+	                        NakedObject[] instances = new NakedObject[size];
+	                        for (int j = 0; j < instances.length; j++) {
+	                            instances[j] = restoreObject(((ObjectData) collection.getElements()[j]));
+	                        }
+	                        object.initAssociation((OneToManyAssociation) fields[i], instances);
+                        }
+                    }
+                } else if (fields[i].isValue()) {
+                    if (fieldContent[i] != null) {
+                        object.initValue((OneToOneAssociation) fields[i], fieldContent[i] instanceof NullData ? null
+                                : ((ValueData) fieldContent[i]).getValue());
+                    }
+                } else {
+                    if (fieldContent[i] != null) {
+                        NakedObjectAssociation field = (NakedObjectAssociation) fields[i];
+                        NakedObject associate;
+                        if(fieldContent[i] instanceof NullData) {
+                            associate = null;
+                        } else {
+                            associate = restoreObject((ObjectData) fieldContent[i]);
+                        }
+                        object.initAssociation(field, associate);
+                    }
+                }
+            }
         }
     }
 
-    private static NakedCollection recreateCollection(CollectionData data) {
+    private static Naked restoreCollection(CollectionData data) {
         Oid oid = data.getOid();
         String type = data.getType();
         NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
@@ -48,7 +157,7 @@ public class DataHelper {
             ObjectData[] elements = data.getElements();
             Object[] initData = new Object[elements.length];
             for (int i = 0; i < elements.length; i++) {
-                NakedObject element = recreateObject(elements[i]);
+                NakedObject element = restoreObject(elements[i]);
                 initData[i] = element.getObject();
             }
             collection.init(initData);
@@ -56,155 +165,32 @@ public class DataHelper {
         }
     }
 
-    private static NakedObject recreateObject(ObjectData data) {
-        Oid oid = data.getOid();
-        String type = data.getType();
-        NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
-        NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
-
-        NakedObject object;
-        if (oid == null) {
-            object = objectLoader.recreateTransientInstance(specification);
-            object.setOptimisticLock(data.getVersion(), "", null);
-            recreateObjectsInFields(data, object);
-            return object;
-        } else {
-            object = objectLoader.recreateAdapterForPersistent(oid, specification);
-            object.setOptimisticLock(data.getVersion(), "", null);
-
-            ResolveState state;
-            if (data.getFieldContent() == null) {
-                return object;
-            } else {
-                state = data.isResolved() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART;
-
-                if (object.getResolveState().isResolvable(state)) {
-                    objectLoader.start(object, state);
-                    recreateObjectsInFields(data, object);
-                    objectLoader.end(object);
-                }
-                return object;
-            }
-        }
-    }
-
-    private static void recreateObjectsInFields(ObjectData data, NakedObject object) {
-        Object[] fieldContent = data.getFieldContent();
-        boolean partResolving = object.getResolveState() == ResolveState.RESOLVING_PART;
-        if (fieldContent != null && fieldContent.length > 0) {
-            NakedObjectField[] fields = object.getSpecification().getFields();
-            for (int i = 0; i < fields.length; i++) {
-                if (fieldContent[i] instanceof NullData && partResolving) {
-                    /*
-                     * Note - if fully resolving or updating the object then nulls should clear the
-                     * field; if only part-resolving then nulls can be ignored as the fields are
-                     * likely to be null at this point
-                     */
-                    continue;
-                }
-                if (fields[i].isCollection()) {
-                    if (fieldContent[i] != null) {
-                        CollectionData collection = (CollectionData) fieldContent[i];
-                        NakedObject[] instances = new NakedObject[collection.getElements().length];
-                        for (int j = 0; j < instances.length; j++) {
-                            instances[j] = recreateObject(((ObjectData) collection.getElements()[j]));
-                        }
-                        object.initOneToManyAssociation((OneToManyAssociation) fields[i], instances);
-                    }
-                } else if (fields[i].isValue()) {
-                    if (fieldContent[i] != null) {
-                        object.initValue((OneToOneAssociation) fields[i], fieldContent[i] instanceof NullData ? null
-                                : ((ValueData) fieldContent[i]).getValue());
-                    }
-                } else {
-                    if (fieldContent[i] != null) {
-                        NakedObjectAssociation field = (NakedObjectAssociation) fields[i];
-                        NakedObject associate = (NakedObject) recreate((Data) fieldContent[i]);
-                        object.initAssociation(field, associate);
-                    }
-                }
-            }
-        }
-    }
-
-    private static Naked recreateValue(ValueData valueData) {
+    private static Naked restoreValue(ValueData valueData) {
         Naked value = NakedObjects.getObjectLoader().createAdapterForValue(valueData.getValue());
         return value;
     }
 
+    
+    
+    /* ------------------------------------------------------------------------------ */
+    
+    /** @deprecated  use restore(ObjectData) */
+    public static Naked recreate(Data data) {
+        return restore(data);
+    }
+
+    /** @deprecated use restore(ObjectData)*/
     public static void resolve(ObjectData data, DirtyObjectSet updateNotifier) {
-        update(data, ResolveState.RESOLVING, updateNotifier);
+        restore(data);
     }
 
+    /** @deprecated use restore(ObjectData) */
     public static void update(ObjectData data, DirtyObjectSet updateNotifier) {
-        update(data, ResolveState.UPDATING, updateNotifier);
+        restore(data);
     }
 
-    private static void update(ObjectData data, ResolveState initialState, DirtyObjectSet updateNotifier) {
-        Oid oid = data.getOid();
-
-        NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
-        if (!objectLoader.isIdentityKnown(oid)) {
-            // if we don't have an object in use then ignore the data about it.
-            // TODO decide if we should recreate these objects, as they may be new objects that we
-            // will get references to shortly
-            return;
-        } else {
-            update(data, initialState, objectLoader, updateNotifier);
-        }
-    }
-
-    private static void update(
-            ObjectData data,
-            ResolveState initialState,
-            NakedObjectLoader objectLoader,
-            DirtyObjectSet updateNotifier) {
-
-        Oid oid = data.getOid();
-        Object[] fieldContent = data.getFieldContent();
-        long version = data.getVersion();
-
-        NakedObject object;
-        object = objectLoader.getAdapterFor(oid);
-        object.setOptimisticLock(version, "", null);
-        /*
-         * note - we are not interested in the user and date - these are only used on the server
-         * side when generating a concurrency exception
-         */
-
-        objectLoader.start(object, initialState);
-
-        NakedObjectField[] fields = object.getSpecification().getFields();
-        if (fields.length > 0) {
-            for (int i = 0; i < fields.length; i++) {
-                if (fields[i].isCollection()) {
-                    CollectionData collection = (CollectionData) fieldContent[i];
-                    Object[] elements = collection.getElements();
-                    NakedObject[] instances = new NakedObject[elements.length];
-                    for (int j = 0; j < instances.length; j++) {
-                        ObjectData objectData = (ObjectData) elements[j];
-                        instances[j] = recreateObject(objectData);
-                    }
-                    object.initOneToManyAssociation((OneToManyAssociation) fields[i], instances);
-
-                } else if (fields[i].isValue()) {
-                    object.initValue((OneToOneAssociation) fields[i], ((ValueData) fieldContent[i]).getValue());
-
-                } else {
-                    NakedObject field;
-                    if (fieldContent[i] instanceof NullData) {
-                        field = null;
-                    } else {
-                        field = recreateObject((ObjectData) fieldContent[i]);
-                    }
-                    object.initAssociation((NakedObjectAssociation) fields[i], field);
-                }
-            }
-        }
-        objectLoader.end(object);
-
-        updateNotifier.addDirty(object);
-    }
+    public static void setUpdateNotifer(DirtyObjectSet updateNotifier) {
+        DataHelper.updateNotifier = updateNotifier;}
 }
 
 /*

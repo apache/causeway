@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.NullDirtyObjectSet;
 import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.control.DefaultHint;
@@ -27,6 +28,10 @@ public class ServerDistribution implements Distribution {
     private DataFactory objectDataFactory;
     private ObjectFactory objectFactory;
 
+    public ServerDistribution() {
+        DataHelper.setUpdateNotifer(new NullDirtyObjectSet());
+    }
+    
     public ObjectData[] allInstances(Session session, String fullName, boolean includeSubclasses) {
         LOG.debug("request allInstances of " + fullName  + (includeSubclasses ? "(including subclasses)" : "") + " from " + session);
         TypedNakedCollection instances = objectManager().allInstances(getSpecification(fullName), includeSubclasses);

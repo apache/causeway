@@ -136,7 +136,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
 
     public void reload(NakedObject object) {
         ObjectData update = connection.resolveImmediately(session, objectDataFactory.createReference(object));
-        DataHelper.update(update, updateNotifier);
+        DataHelper.restore(update);
     }
     
     public synchronized void resolveImmediately(NakedObject object) {
@@ -145,7 +145,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
             Oid oid = object.getOid();
             LOG.debug("resolve object (remotely from server)" + oid);
             ObjectData data = connection.resolveImmediately(session, objectDataFactory.createReference(object));
-            DataHelper.resolve(data, updateNotifier);
+            DataHelper.restore(data);
         }
     }
 
@@ -179,6 +179,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
      * @property
      */
     public void set_UpdateNotifier(DirtyObjectSet updateNotifier) {
+        DataHelper.setUpdateNotifer(updateNotifier);
         this.updateNotifier = updateNotifier;
     }
 
@@ -191,6 +192,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     }
 
     public void setUpdateNotifier(DirtyObjectSet updateNotifier) {
+        DataHelper.setUpdateNotifer(updateNotifier);
         this.updateNotifier = updateNotifier;
     }
 
