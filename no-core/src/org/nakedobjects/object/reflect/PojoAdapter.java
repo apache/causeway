@@ -200,7 +200,7 @@ public class PojoAdapter implements NakedObject {
         field.initAssociation(this, associatedObject);
     }
 
-    public void initOneToManyAssociation(OneToManyAssociation field, NakedObject[] instances) {
+    public void initAssociation(OneToManyAssociation field, NakedObject[] instances) {
         LOG.debug("initAssociation " + field.getName() + " with " + instances.length + "instances in " + this);
         field.initOneToManyAssociation(this, instances);
     }
