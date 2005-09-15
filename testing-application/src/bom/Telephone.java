@@ -2,6 +2,7 @@ package bom;
 
 import org.nakedobjects.application.BusinessObjectContainer;
 import org.nakedobjects.application.Title;
+import org.nakedobjects.application.control.ActionAbout;
 import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.application.value.IntegerNumber;
 import org.nakedobjects.application.valueholder.Logical;
@@ -23,6 +24,11 @@ public class Telephone {
         hide = new Logical();
     }
 
+    public void aboutActionConvertToOffice(ActionAbout about) {
+        if(temporary.isSet()) about.unusable();
+        if(hide.isSet()) about.invisible();
+    }
+    
     public void actionConvertToOffice() {
         number.setValue(number.stringValue()+ " ext ");
         knownAs.setValue("Office");

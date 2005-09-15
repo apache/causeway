@@ -81,12 +81,6 @@ public class Location {
         System.out.println("  " + city.title());
         System.out.println("  " + customer.title());
     }
-
-
-    public Booking actionRemoteNewBookingFromTransientLocation(Location location) {
-        container.makePersistent(this);
-        return actionNewBooking(location);
-    }
     
     public Booking actionNewBooking(Location location) {
         Booking booking = (Booking) container.createTransientInstance(Booking.class);
@@ -113,13 +107,24 @@ public class Location {
     }
 */
 
+    public static void actionSlowClassAction() {
+        sleep();
+    }
+    
+    public static void actionSlowClassAction(TextString text) {
+        sleep();
+    }
+    
+    public void actionSlowAction() {
+        sleep();
+    } 
+    
+    public void actionSlowAction(TextString text) {
+        sleep();
+    }
+    /*
     public Booking actionSlowAction() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        sleep();
         Booking booking = (Booking) container.createTransientInstance(Booking.class);
         booking.setPickUp(this);
         booking.setCity(getCity());
@@ -133,6 +138,16 @@ public class Location {
         }
 
         return booking;
+    }
+        */
+
+    private static void sleep() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void aboutCity(FieldAbout  about, City city) {
@@ -203,7 +218,7 @@ public class Location {
     }
 
     public boolean isLondon() {
-        return getCity().getName().equals("London");
+        return getCity().getName().isSameAs("London");
     }
 
     /*public DerivedObject getDerived() {
