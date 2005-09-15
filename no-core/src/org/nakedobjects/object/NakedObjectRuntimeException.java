@@ -1,6 +1,12 @@
 package org.nakedobjects.object;
 
+import java.io.PrintStream;
+import java.io.PrintWriter;
+
+
 public class NakedObjectRuntimeException extends RuntimeException {
+    boolean IN_JAVA2 = false;
+
     private final Throwable cause;
 
     public NakedObjectRuntimeException() {
@@ -14,7 +20,7 @@ public class NakedObjectRuntimeException extends RuntimeException {
     }
 
     public NakedObjectRuntimeException(Throwable cause) {
-        super(cause==null ? null : cause.toString());
+        super(cause == null ? null : cause.toString());
         this.cause = cause;
     }
 
@@ -25,6 +31,42 @@ public class NakedObjectRuntimeException extends RuntimeException {
 
     public Throwable getCause() {
         return (cause == this ? null : cause);
+    }
+
+    public void printStackTrace(PrintStream s) {
+        if (IN_JAVA2) {
+            super.printStackTrace(s);
+        } else {
+            synchronized (s) {
+                s.println(" Exception: " + this);
+                super.printStackTrace(s);
+                
+                // TODO remove common trace elements between two stacks
+                Throwable c = getCause();
+                if (c != null) {
+                    s.println("Caused by: " + this);
+                    c.printStackTrace(s);
+                }
+            }
+        }
+    }
+
+    public void printStackTrace(PrintWriter s) {
+        if (IN_JAVA2) {
+            super.printStackTrace(s);
+        } else {
+            synchronized (s) {
+                s.println(" Exception: " + this);
+                super.printStackTrace(s);
+                
+                // TODO remove common trace elements between two stacks
+                Throwable c = getCause();
+                if (c != null) {
+                    s.println("Caused by: " + this);
+                    c.printStackTrace(s);
+                }
+            }
+        }
     }
 }
 
