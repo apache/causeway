@@ -50,18 +50,26 @@ public class DataHelper {
             return object;
             
         } else if(objectLoader.isIdentityKnown(oid)) {
-            // object known and we have all the latetest data; update the object
+            // object known and we have all the latetest data; update/resolve the object
             NakedObject object;
             object =  objectLoader.getAdapterFor(oid);
             object.setOptimisticLock(data.getVersion(), "", null);
             if(data.getFieldContent() != null) {
-	            ResolveState state = ResolveState.UPDATING;
-	            if (object.getResolveState().isResolvable(state)) {
-		            objectLoader.start(object, state);
-		            setUpFields(data, object, data.isResolved());
-		            objectLoader.end(object);
+	            ResolveState initialState = object.getResolveState();
+                ResolveState state = null;
+                if (initialState == ResolveState.RESOLVED) {
+                    state = ResolveState.UPDATING;
+                } else if (initialState == ResolveState.PART_RESOLVED) {
+                    state = data.isResolved() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART;
+                }
+                if (state != null) {
+                    if (object.getResolveState().isResolvable(state)) {
+                        objectLoader.start(object, state);
+                        setUpFields(data, object, data.isResolved());
+                        objectLoader.end(object);
+                    }
+                    updateNotifier.addDirty(object);
 	            }
-	            updateNotifier.addDirty(object);
             }
             return object;
         } else {

@@ -125,7 +125,7 @@ public final class ResolveState {
         } else if (this == RESOLVING) {
             return nextState == RESOLVED;
         } else if (this == PART_RESOLVED) {
-            return nextState == RESOLVING || nextState == SERIALIZING_PART_RESOLVED
+            return nextState == RESOLVING_PART || nextState == RESOLVING || nextState == SERIALIZING_PART_RESOLVED
                     || (nextState == UPDATING && updatesContainCompleteState);
         } else if (this == RESOLVED) {
             return nextState == UPDATING || nextState == SERIALIZING_RESOLVED;
