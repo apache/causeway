@@ -14,7 +14,7 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 
-public class JournalImpl {
+public class JournalImpl implements Journal {
     private final static Logger LOG = Logger.getLogger(JournalImpl.class);
   private ObjectOutputStream journal;
 

@@ -250,7 +250,7 @@ public class CacheObjectStore implements NakedObjectStore {
     }
 
     private void saveSnapshot() throws ObjectManagerException {
-        SnapShotWriter writer = new SnapShotWriter();
+        SnapshotWriter writer = new SnapshotWriter();
         writer.open();
         saveIdentities(writer);
         saveData(writer);

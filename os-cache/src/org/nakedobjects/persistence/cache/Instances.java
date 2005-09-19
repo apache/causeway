@@ -1,12 +1,11 @@
 package org.nakedobjects.persistence.cache;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.persistence.ObjectManagerException;
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.reflect.PojoAdapterFactory;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -18,6 +17,7 @@ import org.apache.log4j.Logger;
 class Instances {
     private final static Logger LOG = Logger.getLogger(Instances.class);
     private NakedObjectSpecification specification;
+    // TODO replace this hash with the object loader
     private Hashtable index = new Hashtable();
     private Vector orderedInstances = new Vector();
 
@@ -44,7 +44,7 @@ class Instances {
             Memento memento = (Memento) reader.readObject();
             LOG.debug("read 2: " + i + " " + memento);
 
-            NakedObject object = loadedObjects().getLoadedObject(memento.getOid());
+            NakedObject object = loader.getAdapterFor(memento.getOid());
             memento.updateObject(object);
             LOG.debug("recreated " + object + " " + object.titleString());
             size++;
@@ -62,12 +62,8 @@ class Instances {
             Oid oid = (Oid) reader.readOid();
             LOG.debug("read 1: " + i + " " + specification.getFullName() + "/" + oid);
 
-            NakedObject obj = objectLoader.recreateAdapterForPersistent(oid, specification);
-            
-//            NakedObject obj = (NakedObject) specification.acquireInstance();
-//            obj.setOid(oid);
+            NakedObject obj = loader.recreateAdapterForPersistent(oid, specification);
             preload(oid, obj);
-//            loadedObjects().loaded(obj);
         }
     }
 
