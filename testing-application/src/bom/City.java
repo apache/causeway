@@ -4,7 +4,6 @@ import org.nakedobjects.application.BusinessObjectContainer;
 import org.nakedobjects.application.Lookup;
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.TitledObject;
-import org.nakedobjects.application.control.ClassAbout;
 import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.application.valueholder.TextString;
 
@@ -15,11 +14,6 @@ public class City implements Lookup, TitledObject {
     private TextString name = new TextString();
     private transient BusinessObjectContainer container;
 
-    public static void aboutCity(ClassAbout about) {
-        about.uninstantiable();
-        about.instancesUnavailable();
-    }
-    
     public static Vector actionAllCities() {
         return CityRepository.instances();        
     }

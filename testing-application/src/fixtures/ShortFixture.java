@@ -3,6 +3,7 @@ package fixtures;
 import org.nakedobjects.reflector.java.fixture.JavaFixture;
 
 import bom.City;
+import bom.Customer;
 import bom.Location;
 
 public class ShortFixture extends JavaFixture {
@@ -12,10 +13,22 @@ public class ShortFixture extends JavaFixture {
         City city = (City) createInstance(City.class);
         city.getName().setValue("London");
         
+        Customer newCustomer = (Customer) createInstance(Customer.class);
+        newCustomer.getFirstName().setValue("Richard");
+        newCustomer.getLastName().setValue("Pawson");
+
         Location l = (Location) createInstance(Location.class);
         l.setCity(city);
         l.getKnownAs().setValue("Home");
         l.getStreetAddress().setValue("433 Pine St.");
+        newCustomer.addToLocations(l);
+
+        l = (Location) createInstance(Location.class);
+        l.setCity(city);
+        l.getKnownAs().setValue("Office");
+        l.getStreetAddress().setValue("944 Main St, Cambridge");
+        newCustomer.addToLocations(l);
+        
     }
 }
 

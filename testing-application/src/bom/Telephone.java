@@ -4,7 +4,6 @@ import org.nakedobjects.application.BusinessObjectContainer;
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.control.ActionAbout;
 import org.nakedobjects.application.control.FieldAbout;
-import org.nakedobjects.application.value.IntegerNumber;
 import org.nakedobjects.application.valueholder.Logical;
 import org.nakedobjects.application.valueholder.TextString;
 
@@ -15,7 +14,6 @@ public class Telephone {
     private final Logical temporary;
     private final Logical hide;
     private transient BusinessObjectContainer container;
-    private IntegerNumber ringCount;
     
     public Telephone() {
         number = new TextString();
@@ -73,15 +71,6 @@ public class Telephone {
         }
     }
     
-    public IntegerNumber getRingCount() {
-        return ringCount;
-    }
-    
-    public void setRingCount(IntegerNumber ringCount) {
-        this.ringCount = ringCount;
-        container.objectChanged(this);
-    }
-
     public void setContainer(BusinessObjectContainer container) {
         this.container = container;
     }

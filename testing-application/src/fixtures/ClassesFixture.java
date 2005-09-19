@@ -8,6 +8,7 @@ import bom.CompanyCreditCard;
 import bom.CreditCard;
 import bom.Customer;
 import bom.Location;
+import bom.LocationGroup;
 import bom.Telephone;
 
 public class ClassesFixture extends JavaFixture {
@@ -20,6 +21,7 @@ public class ClassesFixture extends JavaFixture {
         registerClass(CompanyCreditCard.class);
         registerClass(Customer.class);
         registerClass(Telephone.class);  
+        registerClass(LocationGroup.class);  
     }
     
     

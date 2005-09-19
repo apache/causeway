@@ -145,6 +145,14 @@ public class Customer {
         return v;
     }
 
+    public Location[] actionLocationsAsArray() {
+        Location[] v = new Location[locations.size()];
+        for (int i = 0; i < locations.size(); i++) {
+            v[i] = (Location) locations.elementAt(i);
+        }
+        return v;
+    }
+
     public Booking actionUsePaymentMethod(PaymentMethod method) {
         Booking booking = (Booking) container.createInstance(Booking.class);
         booking.associateCustomer(this);
@@ -239,6 +247,14 @@ public class Customer {
         return locations;
     }
 
+    public final Location[] getLocations2() {
+        Location[] locs = new Location[locations.size()];
+        for (int i = 0; i < locs.length; i++) {
+            locs[i] = (Location) locations.elementAt(i);
+        }
+        return locs;
+    }
+    
     public Percentage getMembership() {
         return membership;
     }
@@ -247,6 +263,10 @@ public class Customer {
         return phoneNumbers;
     }
 
+    public int getNoOfPhoneNumbers() {
+        return getPhoneNumbers().size();
+    }
+    
     public PaymentMethod getPreferredPaymentMethod() {
         container.resolve(this, preferredPaymentMethod);
 
