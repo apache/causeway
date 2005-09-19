@@ -4,6 +4,7 @@ import org.nakedobjects.application.valueholder.Date;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.distribution.DataFactory;
+import org.nakedobjects.distribution.DistributionLogger;
 import org.nakedobjects.distribution.ProxyObjectManager;
 import org.nakedobjects.distribution.ProxyReflectionFactory;
 import org.nakedobjects.distribution.ServerDistribution;
@@ -176,6 +177,8 @@ public abstract class StandaloneClientServer {
         
         PipedClient client =  new PipedClient();
         client.setConnection(connection);
+        
+        DistributionLogger clientLogger = new DistributionLogger(client, "client-connection.log");
 
         Date.setClock(new SystemClock());
 
@@ -188,7 +191,7 @@ public abstract class StandaloneClientServer {
         JavaObjectDataFactory objectDataFactory = new JavaObjectDataFactory();
 
         ProxyObjectManager proxyObjectManager = new ProxyObjectManager();
-        proxyObjectManager.setConnection(client);
+        proxyObjectManager.setConnection(clientLogger);
         proxyObjectManager.setObjectDataFactory(objectDataFactory);
 
         NakedObjectManager objectManager = new ObjectManagerLogger(proxyObjectManager, "client-manager.log");
@@ -197,7 +200,7 @@ public abstract class StandaloneClientServer {
         new NakedObjectSpecificationLoaderImpl();
 
         ProxyReflectionFactory reflectionFactory = new ProxyReflectionFactory();
-        reflectionFactory.setConnection(client);
+        reflectionFactory.setConnection(clientLogger);
         reflectionFactory.setObjectDataFactory(objectDataFactory);
 
         JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
