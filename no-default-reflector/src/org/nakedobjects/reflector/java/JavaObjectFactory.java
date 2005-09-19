@@ -11,56 +11,85 @@ import java.lang.reflect.Modifier;
 
 import org.apache.log4j.Logger;
 
+
 public class JavaObjectFactory implements ObjectFactory {
     private static final Logger LOG = Logger.getLogger(JavaObjectFactory.class);
 
     private BusinessObjectContainer container;
-    
+
     public JavaObjectFactory() {}
-    
+
     public void setContainer(BusinessObjectContainer container) {
         this.container = container;
     }
 
-
     public Object createValueObject(NakedObjectSpecification specification) {
-        if(specification.getFullName().equals("float")) {
+        String name = specification.getFullName();
+        if (name.equals("boolean")) {
+            return new Boolean(false);
+        } else if (name.equals("char")) {
+            return new Character(' ');
+        } else if (name.equals("byte")) {
+            return new Byte((byte) 0);
+        } else if (name.equals("short")) {
+            return new Short((short) 0);
+        } else if (name.equals("int")) {
+            return new Integer(0);
+        } else if (name.equals("long")) {
+            return new Long(0);
+        } else if (name.equals("float")) {
             return new Float(0);
+        } else if (name.equals("double")) {
+            return new Double(0);
         }
-        
+
         Class cls = classFor(specification);
-        Object object = createObject(cls);        
+        Object object = createObject(cls);
         return object;
     }
-    
+
     public void setUpAsNewLogicalObject(Object object) {
         logicalCreation(object, object.getClass());
     }
-    
+
     public Object createObject(NakedObjectSpecification specification) {
         Class cls = classFor(specification);
         Object object = createObject(cls);
         setContainer(object, cls);
-        
+
         return object;
     }
-    
+
     public Object createFakeObject(NakedObjectSpecification specification) {
         Class cls = classFor(specification);
         Object object = createObject(cls);
-        setContainer(object, cls);        
-        
+        setContainer(object, cls);
+
         return object;
     }
-     
+
     private Class classFor(NakedObjectSpecification specification) {
         String className = specification.getFullName();
         Class cls;
         try {
             cls = Class.forName(className);
         } catch (ClassNotFoundException e) {
-            if(className.equals("float")) {
+            if (className.equals("boolean")) {
+                return boolean.class;
+            } else if (className.equals("char")) {
+                return char.class;
+            } else if (className.equals("byte")) {
+                return byte.class;
+            } else if (className.equals("short")) {
+                return short.class;
+            } else if (className.equals("int")) {
+                return int.class;
+            } else if (className.equals("long")) {
+                return long.class;
+            } else if (className.equals("float")) {
                 return float.class;
+            } else if (className.equals("double")) {
+                return double.class;
             }
             throw new ReflectionException(e);
         }
@@ -68,12 +97,12 @@ public class JavaObjectFactory implements ObjectFactory {
     }
 
     /**
-     * Creates a new instance of the specified type, and then call the new
-     * objects setContainer() methods if it has one.
+     * Creates a new instance of the specified type, and then call the new objects setContainer() methods if
+     * it has one.
      */
     private Object createObject(Class cls) {
         if (Modifier.isAbstract(cls.getModifiers())) {
-            throw new ReflectionException("Cannot create an instance of an abstract classS: " + cls);
+            throw new ReflectionException("Cannot create an instance of an abstract class: " + cls);
         }
 
         Object object;
@@ -134,27 +163,21 @@ public class JavaObjectFactory implements ObjectFactory {
     }
 }
 
-
 /*
-Naked Objects - a framework that exposes behaviourally complete
-business objects directly to the user.
-Copyright (C) 2000 - 2005  Naked Objects Group Ltd
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-The authors can be contacted via www.nakedobjects.org (the
-registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-Road, Woking GU21 1NR, UK).
-*/
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
+ */

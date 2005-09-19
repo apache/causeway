@@ -59,7 +59,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
             if (result != null) {
                 Naked adapter = NakedObjects.getObjectLoader().getAdapterFor(result);
                 if(adapter == null) {
-                    adapter = NakedObjects.getObjectLoader().createCollectionAdapter(result);
+                    adapter = NakedObjects.getObjectLoader().createAdapterForCollection(result, null);
                     if(adapter == null) {
                         adapter = NakedObjects.getObjectLoader().createAdapterForTransient(result);
                     }

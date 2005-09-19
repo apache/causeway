@@ -5,6 +5,7 @@ import org.nakedobjects.application.collection.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
@@ -157,8 +158,14 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
     private Naked get(NakedObject fromObject) {
         try {
             InternalCollection collection = (InternalCollection) getMethod.invoke(fromObject.getObject(), new Object[0]);
-            return InternalCollectionAdapter.createAdapter(collection, type);
-        } catch (InvocationTargetException e) {
+            NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
+            NakedCollection adapter = objectLoader.getAdapterForElseCreateAdapterForCollection(fromObject, getName(), getType(), collection);
+            if (adapter == null) {
+                throw new ReflectionException();
+            } else {
+                return adapter;
+            }
+      } catch (InvocationTargetException e) {
              invocationException("Exception executing " + getMethod, e);
              throw new ReflectionException(e);
         } catch (IllegalAccessException ignore) {

@@ -3,7 +3,6 @@ package org.nakedobjects.reflector.java.valueholder;
 import org.nakedobjects.application.valueholder.MultilineTextString;
 import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;
 import org.nakedobjects.object.value.MultilineStringValue;
-import org.nakedobjects.object.value.StringValue;
 import org.nakedobjects.utility.ToString;
 
 public class MultilineTextStringAdapter extends AbstractNakedValue implements MultilineStringValue {

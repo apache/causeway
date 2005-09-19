@@ -1,7 +1,8 @@
 package org.nakedobjects.reflector.java.reflect;
 
+import org.nakedobjects.application.collection.InternalCollection;
 import org.nakedobjects.application.value.Date;
-import org.nakedobjects.application.value.IntegerNumber;
+import org.nakedobjects.application.value.SimpleBusinessValue;
 import org.nakedobjects.application.valueholder.BusinessValueHolder;
 import org.nakedobjects.application.valueholder.Color;
 import org.nakedobjects.application.valueholder.Logical;
@@ -9,12 +10,16 @@ import org.nakedobjects.application.valueholder.MultilineTextString;
 import org.nakedobjects.application.valueholder.Password;
 import org.nakedobjects.application.valueholder.TextString;
 import org.nakedobjects.object.NakedCollection;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.Reflector;
+import org.nakedobjects.reflector.java.collection.ArrayAdapter;
+import org.nakedobjects.reflector.java.collection.InternalCollectionAdapter;
+import org.nakedobjects.reflector.java.collection.VectorCollectionAdapter;
 import org.nakedobjects.reflector.java.value.DateValueAdapter;
-import org.nakedobjects.reflector.java.value.IntegerNumberAdapter;
+import org.nakedobjects.reflector.java.value.SimpleBusinessValueAdapter;
 import org.nakedobjects.reflector.java.valueholder.BusinessValueAdapter;
 import org.nakedobjects.reflector.java.valueholder.ColorValueObjectAdapter;
 import org.nakedobjects.reflector.java.valueholder.LogicalValueObjectAdapter;
@@ -44,22 +49,26 @@ public class JavaReflectorFactory extends ReflectorFactory {
             return new LogicalValueObjectAdapter((Logical) object);
         } else if (object instanceof Color){
             return new ColorValueObjectAdapter((Color) object);
-        } else if (object instanceof IntegerNumber){
-            return new IntegerNumberAdapter((IntegerNumber) object);
         } else if (object instanceof Date){
             return new DateValueAdapter((Date) object);
+ 
+        } else if (object instanceof SimpleBusinessValue){
+            return new SimpleBusinessValueAdapter((SimpleBusinessValue) object);
+        
         } else if (object instanceof BusinessValueHolder ){
             return new BusinessValueAdapter((BusinessValueHolder) object);
         } else {
             return null;
         }
     }
-    
-    
-    public NakedCollection createCollectionAdapter(Object object) {
-        if (object instanceof Vector){
-            return VectorCollectionAdapter.createAdapter((Vector) object, Object.class);
-
+     
+    public NakedCollection createCollectionAdapter(Object collection, NakedObjectSpecification specification) {
+        if (collection instanceof Vector){
+            return new VectorCollectionAdapter((Vector) collection, specification);
+        } else if (collection instanceof InternalCollection){
+            return new InternalCollectionAdapter((InternalCollection) collection, specification);
+        } else if (collection instanceof Object[]){
+            return new ArrayAdapter((Object[]) collection, specification);
         } else {
            return null;
        }

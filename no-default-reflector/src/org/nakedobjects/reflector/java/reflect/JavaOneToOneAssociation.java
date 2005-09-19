@@ -26,8 +26,8 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
     protected Method removeMethod;
     protected Method setMethod;
 
-    public JavaOneToOneAssociation(String name, Class type, Method get, Method set, Method add, Method remove, Method about) {
-        super(name, type, get, about, false);
+    public JavaOneToOneAssociation(String name, Class type, Method get, Method set, Method add, Method remove, Method about, boolean derived) {
+        super(name, type, get, about, derived);
         this.setMethod = set;
         this.addMethod = add;
         removeMethod = remove;

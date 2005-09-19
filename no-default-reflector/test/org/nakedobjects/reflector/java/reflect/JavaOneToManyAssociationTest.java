@@ -39,6 +39,7 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         Logger.getRootLogger().setLevel(Level.OFF);
 
         system = new TestSystem();
+     //   system.addSpecification(new DummyNakedObjectSpecification(InternalCollection.class.getName()));
         system.init();
 
         objectWithVector = new JavaObjectWithVector();
@@ -60,7 +61,7 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
     }
 
     public void testType() {
-        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
+        DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification(InternalCollection.class.getName());
         system.addSpecification(spec);
     	assertEquals(spec, collectionField.getType());
     }

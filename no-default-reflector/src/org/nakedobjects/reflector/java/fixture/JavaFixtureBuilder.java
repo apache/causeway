@@ -29,6 +29,7 @@ public final class JavaFixtureBuilder extends FixtureBuilder {
 
                 boolean notPersistent = object.getOid() == null;
                 if (notPersistent) {
+	                LOG.debug("persisting " + object);
                     objectManager.makePersistent(object);
                 }
             }

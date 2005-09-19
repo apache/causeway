@@ -316,7 +316,7 @@ public class JavaReflector implements Reflector {
             //            fields.addElement(attribute);
 
             JavaOneToOneAssociation association = new JavaOneToOneAssociation(name, method.getReturnType(), method, null, null,
-                    null, aboutMethod);
+                    null, aboutMethod, true);
             fields.addElement(association);
 
         }
@@ -331,6 +331,8 @@ public class JavaReflector implements Reflector {
             return new FieldPeer[0];
         }
 
+        removeMethod(false, "getClass", Class.class, null);
+        
         LOG.debug("  looking  for fields for " + cls);
         Vector elements = new Vector();
         defaultAboutFieldMethod = findMethod(OBJECT, ABOUT_FIELD_DEFAULT, null, new Class[] { FieldAbout.class });
@@ -339,14 +341,19 @@ public class JavaReflector implements Reflector {
         valueFields(elements, BusinessValue.class);
         valueFields(elements, String.class);
         valueFields(elements, Date.class);
-        valueFields(elements, float.class);
-        valueFields(elements, int.class);
         valueFields(elements, boolean.class);
+        valueFields(elements, char.class);
+        valueFields(elements, byte.class);
+        valueFields(elements, short.class);
+        valueFields(elements, int.class);
+        valueFields(elements, long.class);
+        valueFields(elements, float.class);
+        valueFields(elements, double.class);
 
-        //        primitiveFields(elements);
         derivedFields(elements);
         oneToManyAssociationFields(elements);
         oneToManyAssociationFieldsInternalCollection(elements);
+        oneToManyAssociationFieldsArray(elements);
         // need to find one-many first, so they are not mistaken as one-one
         // associations
         oneToOneAssociationFields(elements);
@@ -365,6 +372,10 @@ public class JavaReflector implements Reflector {
         LOG.info("finalizing reflector " + this);
     }
 
+    private void removeMethod(boolean forClass, String name, Class returnType, Class[] paramTypes) {
+        findMethod(forClass, name, returnType, paramTypes);
+    }
+    
     /**
      * Returns a specific public methods that: have the specified prefix; have
      * the specified return type, or void, if canBeVoid is true; and has the
@@ -555,7 +566,7 @@ public class JavaReflector implements Reflector {
     }
 
     public boolean isValue() {
-        return BusinessValueHolder.class.isAssignableFrom(cls) || BusinessValue.class.isAssignableFrom(cls);
+        return BusinessValueHolder.class.isAssignableFrom(cls) || BusinessValue.class.isAssignableFrom(cls) || cls.getName().startsWith("java.");
     }
 
     public void markDirty(NakedObject object) {
@@ -594,6 +605,7 @@ public class JavaReflector implements Reflector {
      * returned.
      *  
      */
+    // TODO merge this method and next
     private void oneToManyAssociationFields(Vector associations) {
         Vector v = findPrefixedMethods(OBJECT, GET_PREFIX, Vector.class, 0);
 
@@ -721,6 +733,63 @@ public class JavaReflector implements Reflector {
         }
     }
 
+
+    private void oneToManyAssociationFieldsArray(Vector associations) {
+        Vector v = findPrefixedMethods(OBJECT, GET_PREFIX, Object[].class, 0);
+
+        // create vector of multiRoles from all get methods
+        Enumeration e = v.elements();
+
+        while (e.hasMoreElements()) {
+            Method getMethod = (Method) e.nextElement();
+            LOG.info("  identified 1-many association method " + getMethod);
+            String name = javaBaseName(getMethod.getName());
+
+            Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class, null,
+                    boolean.class });
+            Class aboutType = (aboutMethod == null) ? null : aboutMethod.getParameterTypes()[1];
+            if (aboutMethod == null) {
+                aboutMethod = defaultAboutFieldMethod;
+            }
+
+            // look for corresponding add and remove methods
+            Method addMethod = findMethod(OBJECT, "addTo" + name, void.class, null);
+            if (addMethod == null) {
+                addMethod = findMethod(OBJECT, "add" + name, void.class, null);
+            }
+            if (addMethod == null) {
+                addMethod = findMethod(OBJECT, "associate" + name, void.class, null);
+            }
+
+            Method removeMethod = findMethod(OBJECT, "removeFrom" + name, void.class, null);
+            if (removeMethod == null) {
+                removeMethod = findMethod(OBJECT, "remove" + name, void.class, null);
+            }
+            if (removeMethod == null) {
+                removeMethod = findMethod(OBJECT, "dissociate" + name, void.class, null);
+            }
+
+            Class removeType = (removeMethod == null) ? null : removeMethod.getParameterTypes()[0];
+            Class addType = (addMethod == null) ? null : addMethod.getParameterTypes()[0];
+
+            /*
+             * The type of element can be ascertained if there is an
+             * add/associate method, otherwise it can not be determined until
+             * runtime.
+             */
+            Class elementType = getMethod.getReturnType().getComponentType();
+
+            if (((aboutType != null) && (aboutType != elementType)) || ((addType != null) && (addType != elementType))
+                    || ((removeType != null) && (removeType != elementType))) {
+                LOG.error("The add/remove/associate/dissociate/about methods in " + className() + " must "
+                        + "all deal with same type of object.  There are at least two different " + "types");
+            }
+
+            associations
+                    .addElement(new JavaOneToManyAssociation(name, elementType, getMethod, addMethod, removeMethod, aboutMethod));
+        }
+    }
+
     /**
      * Returns a vector of Association fields for all the get methods that use
      * NakedObjects.
@@ -769,14 +838,9 @@ public class JavaReflector implements Reflector {
             // look for set set method
             Method setMethod = findMethod(OBJECT, SET_PREFIX + name, void.class, params);
 
-            // confirm a set method exists
-            if (setMethod == null) {
-                continue;
-            }
-
             LOG.info("one-to-one association " + name + " ->" + addMethod);
             JavaOneToOneAssociation association = new JavaOneToOneAssociation(name, getMethod.getReturnType(), getMethod,
-                    setMethod, addMethod, removeMethod, aboutMethod);
+                    setMethod, addMethod, removeMethod, aboutMethod, setMethod == null);
             associations.addElement(association);
         }
     }
@@ -838,11 +902,10 @@ public class JavaReflector implements Reflector {
         Vector v = findPrefixedMethods(OBJECT, GET_PREFIX, type, 0);
 
         // create vector of attributes from all get methods
-        Enumeration e = v.elements();
-
-        while (e.hasMoreElements()) {
+        for(Enumeration e = v.elements(); e.hasMoreElements();) {
             Method getMethod = (Method) e.nextElement();
             Class returnType = getMethod.getReturnType();
+            boolean valueHolder = BusinessValueHolder.class.isAssignableFrom(returnType);
             String name = javaBaseName(getMethod.getName());
 
             Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class, returnType });
@@ -863,16 +926,13 @@ public class JavaReflector implements Reflector {
             if (findMethod(OBJECT, "associate" + name, void.class, params) != null) {
                 LOG.error("the method associate" + name + " is not needed for the NakedValue class " + className());
             }
+            
+            
 
             // create Field
             LOG.info("  value " + name + " ->" + getMethod);
-            /*
-             * ValueField attribute = createValueField(getMethod, setMethod,
-             * name, aboutMethod, validMethod); fields.addElement(attribute);
-             */
-
             JavaOneToOneAssociation association = new JavaOneToOneAssociation(name, getMethod.getReturnType(), getMethod,
-                    setMethod, null, null, aboutMethod);
+                    setMethod, null, null, aboutMethod, setMethod == null && ! valueHolder);
             fields.addElement(association);
         }
 
