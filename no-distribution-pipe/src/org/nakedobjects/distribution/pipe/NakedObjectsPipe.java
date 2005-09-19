@@ -4,11 +4,7 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.NakedObjectsData;
 import org.nakedobjects.NakedObjectsServer;
 
-import org.apache.log4j.Logger;
-
 public class NakedObjectsPipe extends NakedObjectsServer {
-    private static final Logger LOG = Logger.getLogger(NakedObjectsPipe.class);
-    
     private Thread server;
     private NakedObjectsData serverData = new NakedObjectsData();
     private NakedObjectsData clientData = new NakedObjectsData();
@@ -27,7 +23,6 @@ public class NakedObjectsPipe extends NakedObjectsServer {
 
     protected NakedObjectsData getLocal() {
         Thread thread = Thread.currentThread();
-        LOG.info("in " + thread);       
 
         if(thread == server) {
             return serverData;
