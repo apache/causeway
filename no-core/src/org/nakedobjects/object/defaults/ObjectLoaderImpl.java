@@ -137,8 +137,8 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
     }
 
     public NakedCollection recreateCollection(NakedObjectSpecification specification) {
-        Assert.assertFalse("must not be object", specification.isObject());
-        Assert.assertFalse("must not be value", specification.isValue());
+        Assert.assertFalse("must not be an object", specification.isObject());
+        Assert.assertFalse("must not be a value", specification.isValue());
         LOG.debug("recreating collection " + specification);
         Object object = objectFactory.createObject(specification);
         NakedCollection adapter = createAdapterForCollection(object, specification);
