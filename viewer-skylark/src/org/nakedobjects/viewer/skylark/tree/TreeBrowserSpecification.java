@@ -13,29 +13,27 @@ import org.nakedobjects.viewer.skylark.basic.WindowBorder;
  * collections and objects containing collections.
  */
 public class TreeBrowserSpecification implements ViewSpecification {
-    private final OpenCollectionNodeSpecification openCollectionNode;
-    private final OpenObjectNodeSpecification openObjectNode;
+    private final OpenCollectionNodeSpecification openCollection;
+    private final OpenObjectNodeSpecification openObject;
 
     public TreeBrowserSpecification() {
-        EmptyNodeSpecification emptyNode = new EmptyNodeSpecification();
+        ClosedObjectNodeSpecification closedObject = new ClosedObjectNodeSpecification(false);
+        NodeSpecification closedCollection = new ClosedCollectionNodeSpecification();
+        EmptyNodeSpecification noNode = new EmptyNodeSpecification();        
 
-        NodeSpecification elementNode = new ElementNodeSpecification();
+        openCollection = new OpenCollectionNodeSpecification();
+        openCollection.setCollectionSubNodeSpecification(noNode);
+        openCollection.setObjectSubNodeSpecification(closedObject);
+        openCollection.setReplacementNodeSpecification(closedCollection);
 
-        NodeSpecification fieldNode = new FieldNodeSpecification();
+        openObject = new OpenObjectNodeSpecification();
+        openObject.setCollectionSubNodeSpecification(closedCollection);
+        openObject.setObjectSubNodeSpecification(noNode);
+        openObject.setReplacementNodeSpecification(closedObject);
 
-        openCollectionNode = new OpenCollectionNodeSpecification();
-        openCollectionNode.setCollectionSubNodeSpecification(emptyNode);
-        openCollectionNode.setObjectSubNodeSpecification(elementNode);
-        openCollectionNode.setReplacementNodeSpecification(fieldNode);
+        closedObject.setReplacementNodeSpecification(openObject);
 
-        openObjectNode = new OpenObjectNodeSpecification();
-        openObjectNode.setCollectionSubNodeSpecification(fieldNode);
-        openObjectNode.setObjectSubNodeSpecification(emptyNode);
-        openObjectNode.setReplacementNodeSpecification(elementNode);
-
-        elementNode.setReplacementNodeSpecification(openObjectNode);
-
-        fieldNode.setReplacementNodeSpecification(openCollectionNode);
+        closedCollection.setReplacementNodeSpecification(openCollection);
     }
 
     protected View addBorder(View frame) {
@@ -43,7 +41,7 @@ public class TreeBrowserSpecification implements ViewSpecification {
     }
 
     public boolean canDisplay(Content content) {
-        return openCollectionNode.canDisplay(content) || openObjectNode.canDisplay(content);
+        return openCollection.canDisplay(content) || openObject.canDisplay(content);
     }
 
     public View createView(Content content, ViewAxis axis) {
@@ -52,10 +50,10 @@ public class TreeBrowserSpecification implements ViewSpecification {
         View view = addBorder(frame);
         View rootNode;
         axis = frame;
-        if (openCollectionNode.canDisplay(content)) {
-            rootNode = openCollectionNode.createView(content, axis);
+        if (openCollection.canDisplay(content)) {
+            rootNode = openCollection.createView(content, axis);
         } else {
-            rootNode = openObjectNode.createView(content, axis);
+            rootNode = openObject.createView(content, axis);
             frame.setSelectedNode(rootNode);
         }
         View leftPane = rootNode;

@@ -52,6 +52,10 @@ public class DummyContent implements Content {
     public boolean isCollection() {
         return false;
     }
+    
+    public boolean isDerived() {
+        return false;
+    }
 
     public boolean isObject() {
         return false;

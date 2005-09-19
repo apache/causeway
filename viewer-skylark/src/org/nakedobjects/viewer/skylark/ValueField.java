@@ -91,6 +91,10 @@ public class ValueField extends ValueContent implements FieldContent {
         }
     }
 
+    public boolean isDerived() {
+        return getOneToOneAssociation().isDerived();
+    }
+    
     public boolean isEmpty() {
         return getParent().isEmpty(getField());
     }
@@ -99,21 +103,16 @@ public class ValueField extends ValueContent implements FieldContent {
         return getOneToOneAssociation().isMandatory();
     }
     
-    public boolean isTransient() {
-        return false;
-    }
-
-    public boolean isValue() {
-        return true;
-    }
-
     public void parseEntry(String entryText) throws TextEntryParseException, InvalidEntryException {
         if (object == null) {
             object = NakedObjects.getObjectLoader().createValueInstance(getSpecification());
         }
         object.parseTextEntry(entryText);
-        getParent().setValue(getOneToOneAssociation(), object.getObject());
+//        entryComplete();
+    }
 
+    public void entryComplete() {
+        getParent().setValue(getOneToOneAssociation(), object.getObject());
     }
 
     public String title() {

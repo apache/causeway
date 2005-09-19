@@ -9,36 +9,34 @@ import org.nakedobjects.viewer.skylark.metal.WindowBorder;
 
 
 /**
- * Specification for a tree browser frame with a tree displaying any objects or
- * collections (but no values).
+ * Specification for a tree browser that displays any object or
+ * collection and can display all its contained objects and collection (but not values).
  */
 public class FullTreeBrowserSpecification implements ViewSpecification {
-    private final CollectionCompositeNodeSpecification rootCollectionNode;
-    private final ObjectCompositeNodeSpecification rootObjectNode;
+    private final OpenCollectionNodeSpecification openCollection;
+    private final OpenObjectNodeSpecification openObject;
 
     public FullTreeBrowserSpecification() {
-        ObjectLeafNodeSpecification objectLeafNode = new ObjectLeafNodeSpecification();
-        CollectionLeafNodeSpecification collectionLeafNode = new CollectionLeafNodeSpecification();
+        ClosedObjectNodeSpecification closedObject = new ClosedObjectNodeSpecification(true);
+        ClosedCollectionNodeSpecification closedCollection = new ClosedCollectionNodeSpecification();
 
-        rootObjectNode = new ObjectCompositeNodeSpecification();
+        openObject = new OpenObjectNodeSpecification();
+        openObject.setCollectionSubNodeSpecification(closedCollection);
+        openObject.setObjectSubNodeSpecification(closedObject);
+        openObject.setReplacementNodeSpecification(closedObject);
 
-        rootObjectNode.setCollectionSubNodeSpecification(collectionLeafNode);
-        rootObjectNode.setObjectSubNodeSpecification(objectLeafNode);
-        rootObjectNode.setReplacementNodeSpecification(objectLeafNode);
+        closedObject.setReplacementNodeSpecification(openObject);
 
-        objectLeafNode.setReplacementNodeSpecification(rootObjectNode);
+        openCollection = new OpenCollectionNodeSpecification();
+        openCollection.setCollectionSubNodeSpecification(closedCollection);
+        openCollection.setObjectSubNodeSpecification(closedObject);
+        openCollection.setReplacementNodeSpecification(closedCollection);
 
-        rootCollectionNode = new CollectionCompositeNodeSpecification();
-
-        rootCollectionNode.setCollectionSubNodeSpecification(collectionLeafNode);
-        rootCollectionNode.setObjectSubNodeSpecification(objectLeafNode);
-        rootCollectionNode.setReplacementNodeSpecification(objectLeafNode);
-
-        collectionLeafNode.setReplacementNodeSpecification(rootCollectionNode);
+        closedCollection.setReplacementNodeSpecification(openCollection);
     }
 
     public boolean canDisplay(Content content) {
-        return rootCollectionNode.canDisplay(content) || rootObjectNode.canDisplay(content);
+        return openCollection.canDisplay(content) || openObject.canDisplay(content);
     }
 
     public View createView(Content content, ViewAxis axis) {
@@ -47,10 +45,10 @@ public class FullTreeBrowserSpecification implements ViewSpecification {
         View view = addBorder(frame);
         View rootNode;
         axis = frame;
-        if (rootCollectionNode.canDisplay(content)) {
-            rootNode = rootCollectionNode.createView(content, axis);
+        if (openCollection.canDisplay(content)) {
+            rootNode = openCollection.createView(content, axis);
         } else {
-            rootNode = rootObjectNode.createView(content, axis);
+            rootNode = openObject.createView(content, axis);
             frame.setSelectedNode(rootNode);
         }
         View leftPane = rootNode;

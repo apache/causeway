@@ -22,18 +22,18 @@ public class TreeLeafNodeExample extends TestViews {
         
         Content content = new RootObject(object);
         
-        View view = new CollectionLeafNodeSpecification().createView(content, axis);
+        View view = new ClosedCollectionNodeSpecification().createView(content, axis);
         view.setLocation(new Location(100, 20));
         view.setSize(view.getRequiredSize());
         workspace.addView(view);
         
-        view = new CollectionLeafNodeSpecification().createView(content, axis);
+        view = new ClosedCollectionNodeSpecification().createView(content, axis);
         view.setLocation(new Location(100, 60));
         view.setSize(view.getRequiredSize());
         workspace.addView(view);
         view.getState().setObjectIdentified();
 
-        view = new CollectionLeafNodeSpecification().createView(content, axis);
+        view = new ClosedCollectionNodeSpecification().createView(content, axis);
         view.setLocation(new Location(100, 100));
         view.setSize(view.getRequiredSize());
         workspace.addView(view);

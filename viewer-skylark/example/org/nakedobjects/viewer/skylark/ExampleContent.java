@@ -50,6 +50,10 @@ public class ExampleContent implements Content {
         return false;
     }
 
+    public boolean isDerived() {
+        return false;
+    }
+    
     public boolean isObject() {
         return false;
     }

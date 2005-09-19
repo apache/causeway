@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.Persistable;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 
@@ -9,10 +8,18 @@ public abstract class AbstractContent implements Content {
         return false;
     }
 
+    public boolean isDerived() {
+        return false;
+    }
+    
     public boolean isValue() {
         return false;
     }
 
+	public boolean isPersistable() {
+	    return false;
+	}
+	
     public boolean isObject() {
         return false;
     }
@@ -23,9 +30,6 @@ public abstract class AbstractContent implements Content {
 
     public void menuOptions(MenuOptionSet options) {}
     
-    public boolean isPersistable() {
-        return getSpecification().persistable() == Persistable.USER_PERSISTABLE;
-    }
 }
 
 

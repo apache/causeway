@@ -1,46 +1,37 @@
 package org.nakedobjects.viewer.skylark.tree;
 
+import org.nakedobjects.object.NakedCollection;
+import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
-import org.nakedobjects.viewer.skylark.ViewSpecification;
+import org.nakedobjects.viewer.skylark.basic.ObjectBorder;
 
 
-abstract class NodeSpecification implements ViewSpecification {
-    public static final int CAN_OPEN = 1;
-    public static final int CANT_OPEN = 2;
-    public static final int UNKNOWN = 0;
-    private ViewSpecification replacementNodeSpecification;
-
-    public abstract int canOpen(Content content);
-
-    protected abstract View createNodeView(Content content, ViewAxis axis);
-
-    public final View createView(final Content content, final ViewAxis axis) {
-        View view = createNodeView(content, axis);
-        return new TreeNodeBorder(view, replacementNodeSpecification);
+/**
+ * Specification for a tree node that will display a closed collection as a root node or within an object. 
+ * 
+ * @see org.nakedobjects.viewer.skylark.tree.OpenCollectionNodeSpecification for displaying 
+ * an open collection within an object.
+ */
+class ClosedCollectionNodeSpecification extends NodeSpecification {
+    public boolean canDisplay(Content content) {
+        return content.isCollection() && content.getNaked() != null;
     }
 
-    public String getName() {
-        return null;
+    public int canOpen(Content content) {
+        NakedCollection collection = ((CollectionContent) content).getCollection();
+        if (collection.getResolveState().isGhost()) {
+            return UNKNOWN;
+        } else {
+            return collection.size() > 0 ? CAN_OPEN : CANT_OPEN;
+        }
     }
 
-    public boolean isOpen() {
-        return false;
+    protected View createNodeView(Content content, ViewAxis axis) {
+        View treeLeafNode = new LeafNodeView(content, this, axis);
+        return new ObjectBorder(treeLeafNode);
     }
-
-    public boolean isReplaceable() {
-        return false;
-    }
-
-    public boolean isSubView() {
-        return true;
-    }
-
-    final void setReplacementNodeSpecification(final ViewSpecification replacementNodeSpecification) {
-        this.replacementNodeSpecification = replacementNodeSpecification;
-    }
-
 }
 
 /*

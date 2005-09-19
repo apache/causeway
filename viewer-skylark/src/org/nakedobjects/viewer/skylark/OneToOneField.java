@@ -120,6 +120,10 @@ public class OneToOneField extends ObjectContent implements FieldContent {
     public NakedObjectSpecification getSpecification() {
         return getOneToOneAssociation().getSpecification();
     }
+    
+    public boolean isDerived() {
+        return getOneToOneAssociation().isDerived();
+    }
 
     public boolean isLookup() {
         return getOneToOneAssociation().getSpecification().isLookup();

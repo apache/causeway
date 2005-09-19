@@ -14,6 +14,7 @@ import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Skylark;
 import org.nakedobjects.viewer.skylark.Style;
+import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -35,7 +36,7 @@ public abstract class AbstractField extends AbstractView {
     }
 
     public boolean canChangeValue() {
-        return getContent().getHint().canUse().isAllowed();
+        return ! getContent().isDerived() && getContent().getHint().canUse().isAllowed();
     }
     
     /**
@@ -103,7 +104,7 @@ public abstract class AbstractField extends AbstractView {
     public void exited() {
         identified = false;
     }
-    
+
     public boolean getIdentified() {
         return identified;
     }
@@ -189,7 +190,9 @@ public abstract class AbstractField extends AbstractView {
     }
 
     protected void parseEntry(String entryText) throws InvalidEntryException {
-        getContent().parseTextEntry(entryText);
+        ValueContent content = (ValueContent) getContent();
+        content.parseTextEntry(entryText);
+        content.entryComplete();
     }
 
     public String toString() {

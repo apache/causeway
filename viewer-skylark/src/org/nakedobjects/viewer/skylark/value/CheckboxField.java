@@ -7,12 +7,17 @@ import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
+import org.nakedobjects.viewer.skylark.ValueContent;
+import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
 
-
+/*
+ * TODO this class does not set the underlying business object  via its boolean adapter.  Need
+ * to create an content type for flags.
+ */
 public class CheckboxField extends AbstractField {
     private static final int size = Style.NORMAL.getTextHeight();
 
@@ -72,12 +77,13 @@ public class CheckboxField extends AbstractField {
     }
 
     protected void save() {
-        if (canChangeValue()) {
+        // TODO canChangeValue does not work for this type - need to fix
+ //      if (canChangeValue()) {
             BooleanValue value = (BooleanValue) getContent().getNaked();
             value.toggle();
             markDamaged();
-	        getParent().invalidateContent();
-        }
+            ((ValueContent) getContent()).entryComplete();
+            getParent().invalidateContent();
     }
 }
 

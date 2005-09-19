@@ -4,13 +4,18 @@ import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 
-public class EmptyNodeSpecification extends ObjectLeafNodeSpecification {
+/**
+ * A simple specification that always returns false when asked if it can display any content.
+ * 
+ * @see #canDisplay(Content)
+ */
+public class EmptyNodeSpecification extends NodeSpecification {
 
-    public boolean canOpen(Content content) {
-        return false;
+    public int canOpen(Content content) {
+        return CANT_OPEN;
     }
 
-    protected View createView(View treeLeafNode, Content content, ViewAxis axis) {
+    protected View createNodeView(Content content, ViewAxis axis) {
         return null;
     }
 

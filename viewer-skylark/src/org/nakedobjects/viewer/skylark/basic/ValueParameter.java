@@ -32,6 +32,8 @@ class ValueParameter extends ValueContent implements ParameterContent {
         debug.appendln(4, "object", object);
     }
 
+    public void entryComplete() {}
+
     public String getIconName() {
         return "";
     }

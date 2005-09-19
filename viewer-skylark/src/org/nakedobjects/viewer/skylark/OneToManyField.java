@@ -112,6 +112,10 @@ public class OneToManyField extends CollectionContent implements FieldContent {
         return true;
     }
 
+    public boolean isDerived() {
+        return getOneToManyAssociation().isDerived();
+    }
+    
     public boolean isTransient() {
         return false;
     }

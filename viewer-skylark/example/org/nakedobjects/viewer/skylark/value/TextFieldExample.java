@@ -209,6 +209,8 @@ class Value extends ValueContent {
     public void clear() {}
     
 
+    public void entryComplete() {}
+
 }
 /*
  * Naked Objects - a framework that exposes behaviourally complete business

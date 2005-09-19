@@ -88,10 +88,7 @@ public class TreeNodeBorder extends AbstractBorder {
     }
 
     public void draw(Canvas canvas) {
-        boolean isOpen = getSpecification().isOpen();
-        boolean canOpen = isOpen || canClick();
-        
-        if (((TreeBrowserFrame) getViewAxis()).getSelectedNode() == getView()) {
+         if (((TreeBrowserFrame) getViewAxis()).getSelectedNode() == getView()) {
             canvas.drawSolidRectangle(left, 0, getSize().getWidth() - left - 1, top - 1, Style.PRIMARY2);
         }
         if (getState().isObjectIdentified()) {
@@ -102,17 +99,28 @@ public class TreeNodeBorder extends AbstractBorder {
         int x = 0;
         int y = top / 2;
         canvas.drawLine(x, y, x + left, y, Style.SECONDARY2);
-        if (canOpen) {
+
+        
+        boolean isOpen = getSpecification().isOpen();
+        boolean addBox = isOpen || canOpen() != NodeSpecification.CANT_OPEN;
+        if (addBox) {
             x += BOX_X_OFFSET;
             canvas.drawLine(x, y, x + BOX_SIZE, y, Style.SECONDARY3);
+            canvas.drawSolidRectangle(x, y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE, Style.WHITE);
             canvas.drawRectangle(x, y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE, Style.SECONDARY1);
-            canvas.drawLine(x + BOX_PADDING, y, x + BOX_SIZE - BOX_PADDING, y, Style.BLACK);
-            if (!isOpen) {
-                x += BOX_SIZE / 2;
-                canvas.drawLine(x, y - BOX_SIZE / 2 + BOX_PADDING, x, y + BOX_SIZE / 2 - BOX_PADDING, Style.BLACK);
+            
+            if(canOpen() == NodeSpecification.UNKNOWN) {
+                
+            } else {
+	            canvas.drawLine(x + BOX_PADDING, y, x + BOX_SIZE - BOX_PADDING, y, Style.BLACK);
+	            if (!isOpen) {
+	                x += BOX_SIZE / 2;
+	                canvas.drawLine(x, y - BOX_SIZE / 2 + BOX_PADDING, x, y + BOX_SIZE / 2 - BOX_PADDING, Style.BLACK);
+	            }
             }
         }
 
+        
         View[] nodes = getSubviews();
         if (nodes.length > 0) {
             int y1 = top / 2;
@@ -139,11 +147,16 @@ public class TreeNodeBorder extends AbstractBorder {
         int x = click.getLocation().getX();
         int y = click.getLocation().getY();
         
-        if (withinBox(x, y) && canClick()) {
+        if (withinBox(x, y)) {
+            if(canOpen() == NodeSpecification.UNKNOWN) {
+                resolveContent();
+                markDamaged();
+            }
             LOG.debug((getSpecification().isOpen() ? "close" : "open") + " node " + getContent().getNaked());
-            resolveContent();
-            View newView = replaceWithSpecification.createView(getContent(), getViewAxis());
-            getParent().replaceView(getView(), newView);
+            if(canOpen() == NodeSpecification.CAN_OPEN) {
+                View newView = replaceWithSpecification.createView(getContent(), getViewAxis());
+	            getParent().replaceView(getView(), newView);
+            }
         } else if (y < top && x > left) {
             LOG.debug("node selected " + getContent().getNaked());
             ((TreeBrowserFrame) getViewAxis()).setSelectedNode(getView());
@@ -168,9 +181,8 @@ public class TreeNodeBorder extends AbstractBorder {
         }
     }
 
-    private boolean canClick() {
+    private int canOpen() {
     	return ((NodeSpecification) getSpecification()).canOpen(getContent());
-    //    return true;
     }
 
     private boolean withinBox(int x, int y) {
@@ -184,7 +196,6 @@ public class TreeNodeBorder extends AbstractBorder {
 
     public Size getRequiredSize() {
         Size size = super.getRequiredSize();
-
         size.ensureWidth(left + icon.getSize().getWidth() + text.getSize().getWidth() + right);
         return size;
     }
@@ -192,39 +203,6 @@ public class TreeNodeBorder extends AbstractBorder {
     public String toString() {
         return wrappedView.toString() + "/TreeNodeBorder";
     }
-
- /*    public ViewAreaType viewAreaType(Location location) {
-        View subview = subviewFor(location);
-        if(subview == null) {
-            Size size = wrappedView.getSize();
-            Bounds bounds = new Bounds(getLeft(), getTop(), size.getWidth(), size.getHeight());
-            if (bounds.contains(location)) {
-                return ViewAreaType.CONTENT;
-            } else {
-                return ViewAreaType.VIEW;
-            }
-        } else {
-            location.subtract(subview.getLocation());
-            return subview.viewAreaType(location);
-        }
-        /*
-        Size size = wrappedView.getSize();
-        Bounds bounds = new Bounds(getLeft(), getTop(), size.getWidth(), size.getHeight());
-
-/*        int iconWidth = icon.getSize().getWidth();
-        int textWidth = text.getSize().getWidth();
-
-        Bounds bounds = new Bounds(0, 0, iconWidth + textWidth, top);
-* /
-        if (bounds.contains(location)) {
-            return ViewAreaType.CONTENT;
-        } else {
-            return super.viewAreaType(location);
-
-        }
-        */
- //   }
-    
     
     public Drag dragStart(DragStart drag) {
         if(overBorder(drag.getLocation())) {
@@ -261,7 +239,6 @@ public class TreeNodeBorder extends AbstractBorder {
 
             Hint about = target.getHint(field, result);
             if (about.canUse().isAllowed()) {
-                //	          if(field.canAssociate(target, (NakedObject) result)) {
                 target.setAssociation(field, (NakedObject) result);
             }
         }
@@ -269,7 +246,6 @@ public class TreeNodeBorder extends AbstractBorder {
     }
 
     protected Bounds contentArea() {
-    //    return new Bounds(getLeft(), getTop(), getSize().getWidth() -getLeft() - getRight(), getSize().getHeight() - getTop() - getBottom());
         return new Bounds(getLeft(), getTop(), wrappedView.getSize().getWidth(), wrappedView.getSize().getHeight());
     }
     
@@ -284,7 +260,6 @@ public class TreeNodeBorder extends AbstractBorder {
         getState().clearObjectIdentified();
         markDamaged();
     }
-
 }
 
 /*

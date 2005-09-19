@@ -49,6 +49,11 @@ public interface Content {
      */
     boolean isCollection();
 
+    /*
+     * Returns true is the content is generated or calculated rather than being stored.
+     */
+    boolean isDerived();
+    
     /**
      * Returns true if this content represents a NakedObject.
      */
