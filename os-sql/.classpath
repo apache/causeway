@@ -7,5 +7,7 @@
 	<classpathentry kind="var" path="JUNIT"/>
 	<classpathentry kind="var" path="LOG4J"/>
 	<classpathentry kind="lib" path="/lib/hsqldb.jar"/>
+	<classpathentry kind="src" path="/utility-memento"/>
+	<classpathentry kind="src" path="/no-application-library"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

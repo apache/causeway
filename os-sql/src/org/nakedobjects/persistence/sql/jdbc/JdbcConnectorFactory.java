@@ -1,19 +1,17 @@
 package org.nakedobjects.persistence.sql.jdbc;
 
-import org.nakedobjects.object.defaults.value.Date;
-import org.nakedobjects.object.defaults.value.DatePeriod;
-import org.nakedobjects.object.defaults.value.DateTime;
-import org.nakedobjects.object.defaults.value.FloatingPointNumber;
-import org.nakedobjects.object.defaults.value.Logical;
-import org.nakedobjects.object.defaults.value.Money;
-import org.nakedobjects.object.defaults.value.MultilineTextString;
-import org.nakedobjects.object.defaults.value.Option;
-import org.nakedobjects.object.defaults.value.Percentage;
-import org.nakedobjects.object.defaults.value.SerialNumber;
-import org.nakedobjects.object.defaults.value.TextString;
-import org.nakedobjects.object.defaults.value.Time;
-import org.nakedobjects.object.defaults.value.TimeStamp;
-import org.nakedobjects.object.defaults.value.WholeNumber;
+import org.nakedobjects.application.valueholder.Color;
+import org.nakedobjects.application.valueholder.Date;
+import org.nakedobjects.application.valueholder.FloatingPointNumber;
+import org.nakedobjects.application.valueholder.Logical;
+import org.nakedobjects.application.valueholder.Money;
+import org.nakedobjects.application.valueholder.MultilineTextString;
+import org.nakedobjects.application.valueholder.Option;
+import org.nakedobjects.application.valueholder.Percentage;
+import org.nakedobjects.application.valueholder.SerialNumber;
+import org.nakedobjects.application.valueholder.TextString;
+import org.nakedobjects.application.valueholder.Time;
+import org.nakedobjects.application.valueholder.WholeNumber;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.DatabaseConnectorFactory;
 import org.nakedobjects.persistence.sql.ValueMapperLookup;
@@ -24,20 +22,28 @@ public class JdbcConnectorFactory implements DatabaseConnectorFactory {
     public JdbcConnectorFactory() {
         ValueMapperLookup lookup = ValueMapperLookup.getInstance();
 
-        lookup.add(TextString.class, new JdbcGeneralValueMapper("VARCHAR(65)"));
-        lookup.add(Option.class, new JdbcGeneralValueMapper("VARCHAR(65)"));
-        lookup.add(MultilineTextString.class, new JdbcGeneralValueMapper("VARCHAR(250)"));
-        lookup.add(WholeNumber.class, new JdbcGeneralValueMapper("INT"));
-        lookup.add(SerialNumber.class, new JdbcGeneralValueMapper("INT"));
-        lookup.add(FloatingPointNumber.class, new JdbcGeneralValueMapper("FLOAT"));
-        lookup.add(Money.class, new JdbcGeneralValueMapper("FLOAT"));
-        lookup.add(Percentage.class, new JdbcGeneralValueMapper("FLOAT"));
+        lookup.add(TextString.class, new JdbcGeneralValueHolderMapper("VARCHAR(65)"));
+        lookup.add(Option.class, new JdbcGeneralValueHolderMapper("VARCHAR(65)"));
+        lookup.add(MultilineTextString.class, new JdbcGeneralValueHolderMapper("VARCHAR(250)"));
+        lookup.add(WholeNumber.class, new JdbcGeneralValueHolderMapper("INT"));
+        lookup.add(SerialNumber.class, new JdbcGeneralValueHolderMapper("INT"));
+        lookup.add(FloatingPointNumber.class, new JdbcGeneralValueHolderMapper("FLOAT"));
+        lookup.add(Money.class, new JdbcGeneralValueHolderMapper("FLOAT"));
+        lookup.add(Percentage.class, new JdbcGeneralValueHolderMapper("FLOAT"));
+        lookup.add(Logical.class, new JdbcGeneralValueHolderMapper("VARCHAR(21)"));
+        lookup.add(Color.class, new JdbcGeneralValueHolderMapper("INT"));
+        
+        
+        lookup.add(String.class, new JdbcGeneralValueMapper("VARCHAR(65)"));
+          
         lookup.add(Date.class, new JdbcDateMapper());
         lookup.add(Time.class, new JdbcTimeMapper());
+ /*
         lookup.add(DateTime.class, new JdbcDateTimeMapper());
         lookup.add(TimeStamp.class, new JdbcTimestampMapper());
         lookup.add(DatePeriod.class, new JdbcGeneralValueMapper("VHARCHAR(21)"));
-        lookup.add(Logical.class, new JdbcGeneralValueMapper("VHARCHAR(21)"));
+        
+        */
     }
 
     public DatabaseConnector createConnector() {

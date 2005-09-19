@@ -7,7 +7,7 @@ import java.util.Hashtable;
 
 
 public class ValueMapperLookup {
-	private final static String PREFIX = "sql-object-store.value-mapper";
+//	private final static String PREFIX = "sql-object-store.value-mapper";
 	private static ValueMapperLookup instance;
 	
 	

@@ -6,6 +6,7 @@ import org.nakedobjects.persistence.sql.SqlObjectStoreException;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
 
 public class JdbcResults implements Results {
@@ -17,7 +18,7 @@ public class JdbcResults implements Results {
         this.set = set;
     }
 
-    public void close() throws SqlObjectStoreException {
+    public void close() {
         try {
             set.close();
         } catch (SQLException e) {
@@ -25,7 +26,7 @@ public class JdbcResults implements Results {
         }
     }
 
-    public int getInt(String columnName) throws SqlObjectStoreException {
+    public int getInt(String columnName) {
         try {
             return set.getInt(columnName);
         } catch (SQLException e) {
@@ -33,7 +34,7 @@ public class JdbcResults implements Results {
         }
     }
 
-    public long getLong(String columnName) throws SqlObjectStoreException {
+    public long getLong(String columnName) {
         try {
             return set.getLong(columnName);
         } catch (SQLException e) {
@@ -41,7 +42,7 @@ public class JdbcResults implements Results {
         }
     }
 
-    public String getString(String columnName) throws SqlObjectStoreException {
+    public String getString(String columnName) {
         try {
             return set.getString(columnName);
         } catch (SQLException e) {
@@ -49,7 +50,7 @@ public class JdbcResults implements Results {
         }
     }
 
-    public boolean next() throws SqlObjectStoreException {
+    public boolean next() {
         try {
             return set.next();
         } catch (SQLException e) {
@@ -57,6 +58,22 @@ public class JdbcResults implements Results {
         }
     }
 
+    public Date getDate(String columnName) {
+        try {
+            return set.getDate(columnName);
+        } catch (SQLException e) {
+            throw new SqlObjectStoreException(e);
+        }
+    }
+
+
+    public Object getObject(String columnName) {
+        try {
+            return set.getObject(columnName);
+        } catch (SQLException e) {
+            throw new SqlObjectStoreException(e);
+        }
+    }
 }
 
 /*

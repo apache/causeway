@@ -1,18 +1,24 @@
 package org.nakedobjects.persistence.sql;
 
+import java.util.Date;
+
 
 
 public interface Results {
 
-    void close() throws SqlObjectStoreException;
+    void close();
 
-    int getInt(String columnName) throws SqlObjectStoreException;
+    int getInt(String columnName);
 
-    long getLong(String columnName) throws SqlObjectStoreException;
+    long getLong(String columnName);
 
-    String getString(String columnName) throws SqlObjectStoreException;
+    String getString(String columnName);
 
-    boolean next() throws SqlObjectStoreException;
+    boolean next();
+
+    Date getDate(String lastActivityDateColumn);
+
+    Object getObject(String column);
 }
 
 /*

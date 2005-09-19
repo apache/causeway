@@ -2,9 +2,10 @@ package org.nakedobjects.persistence.sql.auto;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InternalCollection;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.ResolveException;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
@@ -16,83 +17,84 @@ import org.nakedobjects.persistence.sql.SqlObjectStoreException;
 
 import org.apache.log4j.Logger;
 
+
 public class AutoAssociationMapper extends AbstractObjectMapper implements CollectionMapper {
-	private static final Logger LOG = Logger.getLogger(AutoAssociationMapper.class);
-	private String table;
-	private String parentColumn;
-	private String elementIdColumn;
-	private String elementClassColumn;
-	private NakedObjectField field;
-	private AbstractAutoMapper mapper;
+    private static final Logger LOG = Logger.getLogger(AutoAssociationMapper.class);
+    private String elementClassColumn;
+    private String elementIdColumn;
+    private NakedObjectField field;
+    private AbstractAutoMapper mapper;
+    private String parentColumn;
+    private String table;
 
-	public AutoAssociationMapper(AbstractAutoMapper mapper, NakedObjectSpecification nakedClass, NakedObjectField field) throws SqlObjectStoreException {
-		this.mapper = mapper;
-		this.field = field;
+    public AutoAssociationMapper(AbstractAutoMapper mapper, NakedObjectSpecification nakedClass, NakedObjectField field)
+            throws SqlObjectStoreException {
+        this.mapper = mapper;
+        this.field = field;
 
-		// TODO load in properties
-		String className = nakedClass.getShortName().toLowerCase();
+        // TODO load in properties
+        String className = nakedClass.getShortName().toLowerCase();
 
-		parentColumn = "FK" + className;
+        parentColumn = "FK" + className;
+
+        String columnName = mapper.fieldMapper.getColumnName(field.getName());
+        elementIdColumn = "PK" + columnName;
+
+        elementClassColumn = columnName + "Class";
+
+        table = className + "_" + columnName;
+        if (nakedClass.getFullName().startsWith("org.nakedobjects.")) {
+            table = "no_" + table;
+        }
+    }
+
 	
-		String columnName = mapper.fieldMapper.getColumnName(field.getName());
-		elementIdColumn = "PK" + columnName;
-	
-		elementClassColumn = columnName + "Class";
 
-		table = className + "_" + columnName;
-		if(nakedClass.getFullName().startsWith("org.nakedobjects.")) {
-			table = "no_" + table;
-		}
-	}
+    public void loadInternalCollection(DatabaseConnector connector, NakedObject parent) {
+        NakedCollection collection = (NakedCollection) parent.getField(field);
+        if (collection.getResolveState().isResolvable(ResolveState.RESOLVING)) {
+            LOG.debug("loading internal collection " + field);
+            String parentId = mapper.primaryKey(parent.getOid());
 
-	public boolean needsTables(DatabaseConnector connector) throws SqlObjectStoreException {
-		return ! connector.hasTable(table);
-	}
-	
-	public void createTables(DatabaseConnector connector) throws SqlObjectStoreException {
-		// TODO load in properties
+            NakedObjects.getObjectLoader().start(collection, ResolveState.RESOLVING);
+            String statement = "select " + quote(elementIdColumn) + "," + quote(elementClassColumn) + " from " + quote(table)
+                    + " where " + quote(parentColumn) + " = " + parentId;
+            Results rs = connector.select(statement);
+            while (rs.next()) {
+                String cls = rs.getString(elementClassColumn);
+                NakedObjectSpecification elementCls = NakedObjects.getSpecificationLoader().loadSpecification(cls);
+                Oid oid = recreateOid(rs, elementCls, elementIdColumn);
+                NakedObject element = mapper.getAdapter(elementCls, oid);
+                LOG.debug("  element  " + element.getOid());
+                parent.initAssociation((NakedObjectAssociation) field, element);
+            }
+            rs.close();
+            NakedObjects.getObjectLoader().end(collection);
+        }
+    }
 
-		String columns = parentColumn + " int, " + elementClassColumn + " varchar(255), " + elementIdColumn + " int";
-		connector.update("create table " + table + " (" + columns + ")");
-	}
+    public boolean needsTables(DatabaseConnector connector) throws SqlObjectStoreException {
+        return !connector.hasTable(table);
+    }
 
-	public void loadInternalCollection(DatabaseConnector connector, NakedObject parent)
-			throws ResolveException, SqlObjectStoreException {
-		LOG.debug("loading internal collection " + field);
-		String parentId = mapper.primaryKey(parent.getOid());
-		
-		String statement = "select " + elementIdColumn + "," + elementClassColumn + " from " + table + " where "
-				+ parentColumn + " = " + parentId;
-		Results rs = connector.select(statement);
-		while (rs.next()) {
-			String cls = rs.getString(elementClassColumn);
-			NakedObjectSpecification elementCls = NakedObjects.getSpecificationLoader().loadSpecification(cls);
-			Oid oid = recreateOid(rs, elementCls, elementIdColumn);
-			NakedObject element = mapper.loadObject(elementCls, oid);
-			LOG.debug("  element  " + element.getOid());
-			parent.setAssociation((NakedObjectAssociation) field, element);
-		}
-		rs.close();
-	}
+    public void saveInternalCollection(DatabaseConnector connector, NakedObject parent) throws SqlObjectStoreException {
+        InternalCollection collection = (InternalCollection) parent.getField(field);
+        LOG.debug("saving internal collection " + collection);
+        String parentId = mapper.primaryKey(parent.getOid());
 
-	public void saveInternalCollection(DatabaseConnector connector, NakedObject parent) throws SqlObjectStoreException {
-		InternalCollection collection = (InternalCollection) parent.getField(field);
-		LOG.debug("saving internal collection " + collection);
-		String parentId = mapper.primaryKey(parent.getOid());
-		
-		connector.update("delete from " + table + " where " + parentColumn + " = " + parentId);
-		
-		String columns = parentColumn + ", " + elementIdColumn + ", " + elementClassColumn;
-		int size = collection.size();
-		for (int i = 0; i < size; i++) {
-			NakedObject element = collection.elementAt(i);
-			
-			String elementId = mapper.primaryKey(element.getOid());
-			String cls = element.getSpecification().getFullName();
-			String values = parentId + "," + elementId + ", '" + cls + "'";
-			String statement = "insert into " + table + " (" + columns + ") values (" + values + ")";
-			connector.update(statement);
-		}
-	}
+        connector.update("delete from " + quote(table) + " where " + quote(parentColumn) + " = " + parentId);
+
+        String columns = quote(parentColumn) + ", " + quote(elementIdColumn) + ", " + quote(elementClassColumn);
+        int size = collection.size();
+        for (int i = 0; i < size; i++) {
+            NakedObject element = collection.elementAt(i);
+
+            String elementId = mapper.primaryKey(element.getOid());
+            String cls = element.getSpecification().getFullName();
+            String values = parentId + "," + elementId + ", '" + cls + "'";
+            String statement = "insert into " + quote(table) + " (" + columns + ") values (" + values + ")";
+            connector.update(statement);
+        }
+    }
 
 }

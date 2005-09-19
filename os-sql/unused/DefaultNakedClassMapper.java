@@ -1,12 +1,10 @@
 package org.nakedobjects.persistence.sql.auto;
 
-import org.nakedobjects.container.configuration.ConfigurationFactory;
+import org.nakedobjects.NakedObjects;
+import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.defaults.NakedClass;
-import org.nakedobjects.object.defaults.value.TextString;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
@@ -29,7 +27,7 @@ public class DefaultNakedClassMapper extends AbstractObjectMapper implements Nak
 	private String nameColumn;
 
     public DefaultNakedClassMapper() {
-    	ConfigurationFactory params = ConfigurationFactory.getConfiguration();
+    	Configuration params = NakedObjects.getConfiguration();
     	table = params.getString(PREFIX + "table", "nakedclass");
     	idColumn = params.getString(PREFIX + "column.id", "id");
     	nameColumn = params.getString(PREFIX + "column.name", "name");

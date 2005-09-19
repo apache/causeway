@@ -20,12 +20,12 @@ public class SqlOidGenerator implements OidGenerator {
         DatabaseConnector db = connectorFactory.createConnector();
         try {
             db.open();
-            if(!db.hasTable("NO_SERIAL_ID")) {
-                db.update("create table no_serial_id (number INTEGER)");
-                db.update("insert into no_serial_id values (1)");
+            if(!db.hasTable("no_serial_id")) {
+                db.update("create table \"no_serial_id\" (\"number\" INTEGER)");
+                db.update("insert into \"no_serial_id\" values (1)");
             }
 
-            Results rs = db.select("select number from no_serial_id");
+            Results rs = db.select("select \"number\" from \"no_serial_id\"");
             rs.next();
             number = rs.getLong("number");
             rs.close();
@@ -49,7 +49,7 @@ public class SqlOidGenerator implements OidGenerator {
          DatabaseConnector db = connectorFactory.createConnector();
          try {
             db.open();
-            db.update("update no_serial_id set number = " + number);
+            db.update("update \"no_serial_id\" set \"number\" = " + number);
         } catch (ObjectManagerException e) {
             throw new NakedObjectRuntimeException(e);
         } finally {

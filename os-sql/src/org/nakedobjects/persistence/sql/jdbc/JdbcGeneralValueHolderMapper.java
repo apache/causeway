@@ -8,33 +8,37 @@ import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
 import org.nakedobjects.persistence.sql.ValueMapper;
 
-public class JdbcDateMapper implements ValueMapper {
+public class JdbcGeneralValueHolderMapper implements ValueMapper {
+
+    private String type;
+    
+    public JdbcGeneralValueHolderMapper(String type) {
+        this.type = type;
+    }
 
     public String valueAsDBString(NakedValue value) throws SqlObjectStoreException {
        	if(value == null) {
     		return "NULL";
     	} else {
     		String ts = new String(value.asEncodedString());
-    		if(ts.equals("NULL")) {
-    			return ts;
+    		if(ts == null || ts.equals("NULL")) {
+    			return "NULL";
     		}
-        	String dbts = ts.substring(0,4) + "-" + ts.substring(4,6) + "-" + ts.substring(6,8);
-        	return "'" + dbts + "'";
+        	return "'" + ts + "'";
     	}
 
     }
 
     public void setFromDBColumn(String columnName, NakedObjectField field, NakedObject object, Results rs) throws SqlObjectStoreException {       
         String val = rs.getString(columnName);
-        // convert date to yyyymmdd
-        val = val.substring(0,4) + val.substring(5,7) + val.substring(8,10);
-		val = val == null ? "NULL" : val;
-		object.initValue((OneToOneAssociation) field, val);
-//		((NakedValue) field).restoreFromEncodedString(val.getBytes());
+        if(val == null) {
+            val = "";
+        }
+        object.initValue((OneToOneAssociation) field, val);
     }
     
     public String columnType() {
-        return "DATE";
+        return type;
     }
 
 }

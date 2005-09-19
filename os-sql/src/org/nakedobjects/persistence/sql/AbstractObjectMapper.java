@@ -11,7 +11,7 @@ public abstract class AbstractObjectMapper {
 	private ObjectMapperLookup objectMapperLookup;
 	private Hashtable keyMapping = new Hashtable();
 
-	protected void createTables(DatabaseConnector connector) throws SqlObjectStoreException {
+	public void createTables(DatabaseConnector connector) throws SqlObjectStoreException {
 	}
 
 	protected boolean needsTables(DatabaseConnector connector) throws SqlObjectStoreException {
@@ -36,17 +36,25 @@ public abstract class AbstractObjectMapper {
 		return objectMapperLookup;
 	}
 	
-	
+    protected String quote(String name) {
+        return "\"" + name + "\"";
+    }
+    
 	protected Oid recreateOid(Results rs, NakedObjectSpecification cls, String column) throws SqlObjectStoreException {
 	    PrimaryKey key;
 	    if(keyMapping.containsKey(column)) {
 	        key = ((PrimaryKeyMapper) keyMapping.get(column)).generateKey(rs, column);
 	    } else {
-		    int id = rs.getInt(column);
-	        key = new IntegerPrimaryKey(id);
+		    Object object = rs.getObject(column);
+		    if(object == null) {
+		        return null;
+		    } else {
+			    int id = ((Integer) object).intValue(); 
+		        key = new IntegerPrimaryKey(id);
+		    }
 	    }
-    	Oid object = new SqlOid(cls.getFullName(), key);
-    	return object;
+    	Oid oid = new SqlOid(cls.getFullName(), key);
+    	return oid;
 	}
 
 	protected void addPrimaryKeyMapper(String columnName, PrimaryKeyMapper mapper) {

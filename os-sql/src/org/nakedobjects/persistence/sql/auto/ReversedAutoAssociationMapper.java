@@ -53,12 +53,11 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 		Results rs = connector.select(statement);
 		while (rs.next()) {
 			Oid oid = recreateOid(rs, nakedClass, elementIdColumn);
-			NakedObject element = loadObject(nakedClass, oid);
+			NakedObject element = getAdapter(nakedClass, oid);
 			LOG.debug("  element  " + element);
 			parent.setAssociation((NakedObjectAssociation) field, element);
 		}
         rs.close();
-        ((NakedObject) parent.getField(field)).setResolved();
 	}
 
 	public void saveInternalCollection(DatabaseConnector connector, NakedObject parent) throws SqlObjectStoreException {
