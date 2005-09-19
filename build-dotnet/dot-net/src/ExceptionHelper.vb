@@ -23,8 +23,6 @@ Public Class ExceptionHelper
 
             If ex Is Nothing Then Return
 
-            trace.Append(ex.Message)
-            trace.Append(Environment.NewLine)
             trace.Append(ex.StackTrace)
             trace.Append(Environment.NewLine)
 
@@ -35,7 +33,10 @@ Public Class ExceptionHelper
             Next
             trace.Append("INNER EXCEPTION >>>")
             trace.Append(Environment.NewLine)
-            dumpExceptionRecursively(trace, ex.InnerException, indent + 3)
+            Dim inner as Exception = ex.InnerException
+            trace.Append(inner.Message)
+            trace.Append(Environment.NewLine)
+            dumpExceptionRecursively(trace, inner, indent + 3)
         End Sub
 
 
