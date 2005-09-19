@@ -175,10 +175,10 @@ public class Memento implements Transferable, Serializable {
 
     private void updateOneToManyAssociation(NakedObject object, OneToManyAssociation field, CollectionData collectionData) {
         InternalCollection collection = (InternalCollection) object.getField(field);
-        if (collection.getOid() == null) {
+    /*    if (collection.getOid() == null) {
             collection.setOid(collectionData.getOid());
         }
-
+*/
         Vector original = new Vector();
         int size = collection.size();
         for (int i = 0; i < size; i++) {
