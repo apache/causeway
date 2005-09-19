@@ -44,6 +44,10 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         return forObject;
     }
 
+    protected final NakedObject getForNakedObject() {
+        return forObject;
+    }
+
     public final Object getForObject() {
         return forObject.getObject();
     }
@@ -444,7 +448,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         }
         try {
             nakedValue.parseTextEntry(value);
-            Hint about = getForNaked().getHint(field, nakedValue);
+            Hint about = getForNakedObject().getHint(field, nakedValue);
             boolean isAllowed = about.isValid().isAllowed();
             if (isAllowed) {
                 throw new NakedAssertionFailedError("Value was unexpectedly validated");
@@ -466,7 +470,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         NakedObjectField field = fieldAccessorFor(fieldName);
         // boolean canAccess =
         // getForNaked().canAccess(ClientSession.getSession(), field);
-        boolean canAccess = getForNaked().getHint(field, null).canAccess().isAllowed();
+        boolean canAccess = getForNakedObject().getHint(field, null).canAccess().isAllowed();
         assertFalse("Field '" + fieldName + "' is visible", canAccess);
     }
 
@@ -477,14 +481,14 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
     private void assertFieldModifiable(String fieldName, NakedObjectField field) {
         //boolean canUse = getForNaked().canUse(session, field);
-        boolean canUse = getForNaked().getHint(field, null).canUse().isAllowed();
+        boolean canUse = getForNakedObject().getHint(field, null).canUse().isAllowed();
         assertTrue("Field '" + fieldName + "' in " + getForNaked() + " is unmodifiable", canUse);
     }
 
     public void assertFieldUnmodifiable(final String fieldName) {
         NakedObjectField field = fieldAccessorFor(fieldName);
         //boolean canUse = getForNaked().canUse(session, field);
-        boolean canUse = getForNaked().getHint(field, null).canUse().isAllowed();
+        boolean canUse = getForNakedObject().getHint(field, null).canUse().isAllowed();
         assertFalse("Field '" + fieldName + "' is modifiable", canUse);
     }
 
@@ -494,7 +498,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     }
 
     private void assertFieldVisible(NakedObjectField field) {
-        boolean canAccess = getForNaked().getHint(field, null).canAccess().isAllowed();
+        boolean canAccess = getForNakedObject().getHint(field, null).canAccess().isAllowed();
         assertTrue("Field '" + field.getName() + "' is invisible", canAccess);
     }
 
