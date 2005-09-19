@@ -1,23 +1,8 @@
 package org.nakedobjects.application.value;
 
 
-public abstract class BusinessValue {
-    /** By default all values are changeable by the user */
-	public boolean userChangeable() {
-	    return true;
-	}
-
-//    public abstract boolean isSameAs(BusinessValue object);
-    
-/*    public Object getValue() {
-        return this;
-    }
-    public abstract void parseUserEntry(String text) throws ValueParseException;
-    
-    public abstract void restoreFromEncodedString(String data);
-
-    public abstract String asEncodedString();
-*/
+public interface BusinessValue {
+	boolean userChangeable();
 }
 
 /*

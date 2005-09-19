@@ -1,12 +1,17 @@
 package org.nakedobjects.application.value;
 
 
-public abstract class Magnitude extends BusinessValue {
+public abstract class Magnitude implements BusinessValue {
     public boolean isBetween(Magnitude minMagnitude, Magnitude maxMagnitude) {
         return isGreaterThanOrEqualTo(minMagnitude) && 
                isLessThanOrEqualTo(maxMagnitude);
     }
 
+    /** By default all values are changeable by the user */
+	public boolean userChangeable() {
+	    return true;
+	}
+	
     public abstract boolean isEqualTo(Magnitude magnitude);
 
     public boolean isGreaterThan(Magnitude magnitude) {

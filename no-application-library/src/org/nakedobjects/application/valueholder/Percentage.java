@@ -16,7 +16,8 @@ import java.text.ParseException;
  */
 public class Percentage extends Magnitude {
 	private static final long serialVersionUID = 1L;
-    private static final NumberFormat FORMAT = NumberFormat.getPercentInstance();
+	private static final NumberFormat PERCENTAGE_FORMAT = NumberFormat.getPercentInstance();
+	private static final NumberFormat DECIMAL_FORMAT = NumberFormat.getNumberInstance();
     private float value;
     private boolean isNull;
     public Percentage() {
@@ -150,9 +151,13 @@ public class Percentage extends Magnitude {
             clear();
         } else {
             try {
-                value = FORMAT.parse(text).floatValue();
+                value = PERCENTAGE_FORMAT.parse(text).floatValue();
             } catch (ParseException e) {
-                throw new ValueParseException("Invalid number", e);
+                try {
+                    value = DECIMAL_FORMAT.parse(text).floatValue();
+                } catch (ParseException ee) {
+                    throw new ValueParseException("Invalid number; can;t parse '" + text + "'", ee);
+                }
             }
         }
     }
@@ -188,7 +193,7 @@ public class Percentage extends Magnitude {
     }
 
     public Title title() {
-        return new Title(isEmpty() ? "" : FORMAT.format(value));
+        return new Title(isEmpty() ? "" : PERCENTAGE_FORMAT.format(value));
     }
     
 	public void restoreFromEncodedString(String data) {
