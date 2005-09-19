@@ -62,6 +62,12 @@ public abstract class CommandClient implements Distribution {
         return request.getUpdateData();
     }
 
+    public Data resolveField(Session session, ReferenceData target, String name) {
+        ResolveField request = new ResolveField(session, target, name);
+        execute(request);
+        return request.getUpdateData();
+    }
+    
     public boolean hasInstances(Session session, String fullName) {
         HasInstances request = new HasInstances(session, fullName);
         execute(request);
@@ -91,7 +97,7 @@ public abstract class CommandClient implements Distribution {
         ObjectData[] updates = response.getUpdates();
         for (int i = 0; i < updates.length; i++) {
             LOG.debug("update " + updates[i]);
-            DataHelper.update(updates[i], updateNotifier);
+            DataHelper.restore(updates[i]);
         }
     }
 
