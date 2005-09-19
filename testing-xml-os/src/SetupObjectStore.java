@@ -81,14 +81,17 @@ public class SetupObjectStore {
             XmlObjectStore objectStore = new XmlObjectStore();
             objectStore.setDataManager(new XmlDataManager());
 
+            DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
             OidGenerator oidGenerator = new SimpleOidGenerator(1000);            
+            persistAlgorithm.setOidGenerator(oidGenerator);
+            
 
             DefaultPersistAlgorithm algo = new DefaultPersistAlgorithm();
             algo.setOidGenerator(oidGenerator);
             
             LocalObjectManager objectManager = new LocalObjectManager();
             objectManager.setObjectStore(objectStore);
-            objectManager.setPersistAlgorithm(algo);
+            objectManager.setPersistAlgorithm(persistAlgorithm);
             objectManager.setCheckObjectsForDirtyFlag(true);
 
             nakedObjects.setObjectManager(objectManager);
