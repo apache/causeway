@@ -35,7 +35,7 @@ public class PojoAdapterTest extends TestCase {
         system.shutdown();
     }
 
-    private DummyNakedObjectSpecification setupSpec(final String titleString) {
+    private DummyNakedObjectSpecification setupSpecificationTitleString(final String titleString) {
         DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification(){
             public String getFullName() {
                 return TestPojo.class.getName();
@@ -48,14 +48,14 @@ public class PojoAdapterTest extends TestCase {
     }
 
     public void testEmptyTitle() {
-        setupSpec("");        
+        setupSpecificationTitleString("");        
         NakedObject pa = objectLoader.createAdapterForTransient(new TestPojo());
         pa.getSpecification();
         assertEquals("", pa.titleString());
     }
 
     public void testTitleStringWhereSpecificationProvidesTitleFromObject() {
-        setupSpec("object title from specification");
+        setupSpecificationTitleString("object title from specification");
 
         NakedObject pa = system.createAdapterForTransient(new TestPojo());
         pa.getSpecification();
@@ -65,7 +65,7 @@ public class PojoAdapterTest extends TestCase {
     }
 
     public void testTitleStringWhereSpecificationReturnNullAsTitle() {
-        setupSpec(null);
+        setupSpecificationTitleString(null);
 
         NakedObject pa = system.createAdapterForTransient(new TestPojo());
         pa.getSpecification();

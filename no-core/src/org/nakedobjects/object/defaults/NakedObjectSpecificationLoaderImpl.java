@@ -39,7 +39,8 @@ public class NakedObjectSpecificationLoaderImpl implements NakedObjectSpecificat
             Reflector reflector;
             try {
                 Class cls = Class.forName(className);
-                if (InternalNakedObject.class.isAssignableFrom(cls) || cls.getName().startsWith("java.") || Exception.class.isAssignableFrom(cls)) {
+          //      if (InternalNakedObject.class.isAssignableFrom(cls) || cls.getName().startsWith("java.") || Exception.class.isAssignableFrom(cls)) {
+                if (InternalNakedObject.class.isAssignableFrom(cls) || Exception.class.isAssignableFrom(cls)) {
                     reflector = new InternalReflector(className);
                 } else {
                     reflector = reflectorFactory.createReflector(className);

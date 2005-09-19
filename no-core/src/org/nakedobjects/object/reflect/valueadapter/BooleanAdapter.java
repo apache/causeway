@@ -9,10 +9,6 @@ import org.nakedobjects.object.value.BooleanValue;
 public class BooleanAdapter extends AbstractNakedValue implements BooleanValue {
     private boolean flag;
 
-    public BooleanAdapter(boolean flag) {
-        this.flag = flag;
-    }
-
     public BooleanAdapter(Boolean flag) {
         this.flag = flag.booleanValue();
     }
@@ -75,7 +71,7 @@ public class BooleanAdapter extends AbstractNakedValue implements BooleanValue {
     }
 
     public String toString() {
-        return "POJO BooleanAdapter: " + flag;
+        return "BooleanAdapter: " + flag;
     }
 
     public String getValueClass() {

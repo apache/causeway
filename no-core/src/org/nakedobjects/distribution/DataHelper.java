@@ -14,8 +14,11 @@ import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 
+import org.apache.log4j.Logger;
+
 
 public class DataHelper {
+    private static final Logger LOG = Logger.getLogger(DataHelper.class);
     private static DirtyObjectSet updateNotifier;
 
     public static Naked restore(Data data) {
@@ -46,6 +49,7 @@ public class DataHelper {
             NakedObject object;
             object = objectLoader.recreateTransientInstance(specification);
             object.setOptimisticLock(data.getVersion(), "", null);
+            LOG.debug("restore transient object " + object);
             setUpFields(data, object, true);
             return object;
             
@@ -59,10 +63,11 @@ public class DataHelper {
                 ResolveState state = null;
                 if (initialState == ResolveState.RESOLVED) {
                     state = ResolveState.UPDATING;
-                } else if (initialState == ResolveState.PART_RESOLVED) {
+                } else if (initialState == ResolveState.GHOST || initialState == ResolveState.PART_RESOLVED) {
                     state = data.isResolved() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART;
                 }
                 if (state != null) {
+	                LOG.debug("updating existing object (" + state.name() + ") " + object);
                     if (object.getResolveState().isResolvable(state)) {
                         objectLoader.start(object, state);
                         setUpFields(data, object, data.isResolved());
@@ -80,6 +85,7 @@ public class DataHelper {
             if(data.getFieldContent() != null) {
 	            ResolveState state;
 	            state = data.isResolved() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART;
+                LOG.debug("restoring existing object (" + state.name() + ") " + object);
 	            if (object.getResolveState().isResolvable(state)) {
 		            objectLoader.start(object, state);
 		            setUpFields(data, object, data.isResolved());
@@ -101,6 +107,7 @@ public class DataHelper {
                      * field; if only part-resolving then nulls can be ignored as the fields are
                      * likely to be null at this point
                      */
+                    LOG.debug("no data for field " + fields[i].getName());
                     continue;
                 }
                 
@@ -118,15 +125,17 @@ public class DataHelper {
                         int size = collection.getElements().length;
                         // TODO remove this fudge
                         if(completeData || size > 0 ) {
-	                        NakedObject[] instances = new NakedObject[size];
-	                        for (int j = 0; j < instances.length; j++) {
-	                            instances[j] = restoreObject(((ObjectData) collection.getElements()[j]));
+	                        NakedObject[] elements = new NakedObject[size];
+	                        for (int j = 0; j < elements.length; j++) {
+	                            elements[j] = restoreObject(((ObjectData) collection.getElements()[j]));
+	                            LOG.debug("adding element to " + fields[i].getName() + ": " + elements[j]);
 	                        }
-	                        object.initAssociation((OneToManyAssociation) fields[i], instances);
+	                        object.initAssociation((OneToManyAssociation) fields[i], elements);
                         }
                     }
                 } else if (fields[i].isValue()) {
                     if (fieldContent[i] != null) {
+                        LOG.debug("setting value for field " + fields[i].getName() + ": " + fieldContent[i]);
                         object.initValue((OneToOneAssociation) fields[i], fieldContent[i] instanceof NullData ? null
                                 : ((ValueData) fieldContent[i]).getValue());
                     }
@@ -139,6 +148,7 @@ public class DataHelper {
                         } else {
                             associate = restoreObject((ObjectData) fieldContent[i]);
                         }
+                        LOG.debug("setting association for field " + fields[i].getName() + ": " + associate);
                         object.initAssociation(field, associate);
                     }
                 }
@@ -158,14 +168,17 @@ public class DataHelper {
          */
         NakedCollection collection;
         collection = objectLoader.recreateCollection(specification);
-        collection.setOid(oid);
+      //  collection.setOid(oid);
         if (data.getElements() == null) {
+            LOG.debug("restoring empty collection");
             return collection;
         } else {
             ObjectData[] elements = data.getElements();
+            LOG.debug("restoring collection " + elements.length + " elements");
             Object[] initData = new Object[elements.length];
             for (int i = 0; i < elements.length; i++) {
                 NakedObject element = restoreObject(elements[i]);
+                LOG.debug("restoring collection element :" + element);
                 initData[i] = element.getObject();
             }
             collection.init(initData);

@@ -26,6 +26,8 @@ public interface Distribution {
 
     ObjectData resolveImmediately(Session session, ReferenceData target);
 
+    Data resolveField(Session session, ReferenceData data, String name);
+
     boolean hasInstances(Session session, String fullName);
 
     Oid[] makePersistent(Session session, ObjectData object);

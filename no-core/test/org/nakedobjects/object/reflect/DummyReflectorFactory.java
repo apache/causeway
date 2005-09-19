@@ -2,15 +2,15 @@ package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.control.Hint;
 
-import java.util.Vector;
-
 public class DummyReflectorFactory extends ReflectorFactory {
+
+    private NakedCollection nakedCollection;
 
     public Reflector createReflector(String className) throws ReflectionException {
         return new Reflector() {
@@ -110,18 +110,18 @@ public class DummyReflectorFactory extends ReflectorFactory {
             public void destroyed(NakedObject object) {}};
     }
 
-    public ObjectFactory getObjectFactory() {
-        return null;
-    }
-
     public NakedValue createValueAdapter(Object pojo) {
         return null;
     }
 
-    public NakedCollection createCollectionAdapter(Object object) {
-        return new DummyNakedCollection((Vector) object);
+    public NakedCollection createCollectionAdapter(Object collection, NakedObjectSpecification specification) {
+       return nakedCollection;
     }
 
+    public void setupNakedCollection(NakedCollection nakedCollection) {
+        this.nakedCollection = nakedCollection;
+    }
+    
     public void init() {}
 
     public void shutdown() {}

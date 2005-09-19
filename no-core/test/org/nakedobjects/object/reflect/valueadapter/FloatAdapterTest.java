@@ -14,7 +14,7 @@ public class FloatAdapterTest extends TestCase {
     private FloatAdapter fpv;
 
     protected void setUp() throws Exception {
-        fpv = new FloatAdapter(32.5f);
+        fpv = new FloatAdapter(new Float(32.5f));
     }
 
     public void testIntegerValue() {

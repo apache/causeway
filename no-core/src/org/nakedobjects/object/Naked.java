@@ -1,8 +1,6 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.reflect.NakedObjectField;
 
 
 /**
@@ -23,8 +21,6 @@ import org.nakedobjects.object.reflect.NakedObjectField;
  * @see org.nakedobjects.object.NakedObject - reference objects
  */
 public interface Naked {
-    Hint getHint(NakedObjectField field, Naked value);
-
     String getIconName();
 
     Object getObject();

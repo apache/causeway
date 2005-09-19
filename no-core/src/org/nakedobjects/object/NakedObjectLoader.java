@@ -20,10 +20,17 @@ import java.util.Enumeration;
  * persistent storage.
  */
 public interface NakedObjectLoader extends NakedObjectsComponent, DebugInfo {
+
     /**
-     * Creates an adpater for the specified transient object, and add that adapter to Pojo-adapter
-     * map. If the specified object object already exists in the map then the previously generated
-     * adapter will be returned instead of creating one.
+     * Creates an adpater for the specified collection.
+     * @param specification TODO
+     */
+    NakedCollection createAdapterForCollection(final Object collection, NakedObjectSpecification specification);
+    /**
+     * Creates an adpater for the specified transient object, and add that
+     * adapter to Pojo-adapter map. If the specified object object already
+     * exists in the map then the previously generated adapter will be returned
+     * instead of creating one.
      */
     NakedObject createAdapterForTransient(Object object);
 
@@ -32,11 +39,6 @@ public interface NakedObjectLoader extends NakedObjectsComponent, DebugInfo {
      * will always create new adapter.
      */
     NakedValue createAdapterForValue(Object value);
-
-    /**
-     * Creates an adpater for the specified collection.
-     */
-    NakedCollection createCollectionAdapter(final Object collection);
 
     /**
      * Creates a new transient instance of the type declared by the specification, and creates an
@@ -58,11 +60,11 @@ public interface NakedObjectLoader extends NakedObjectsComponent, DebugInfo {
     NakedValue createValueInstance(NakedObjectSpecification specification);
 
     /**
-     * Marks the specified object as loaded: resolved, partly resolve or updated as specified by the
-     * second parameter. Attempting to specify any other state throws a runtime exception.
+     * Marks the specified object as loaded: resolved, partly resolve or updated
+     * as specified by the second parameter. Attempting to specify any other
+     * state throws a runtime exception.
      */
-    //  void loaded(NakedObject object, ResolveState state);
-    void end(NakedObject object);
+    void end(NakedReference reference); 
 
     /**
      * Retrieves an existing adapter, from the Pojo-adapter map, for the specified object. If the
@@ -75,6 +77,8 @@ public interface NakedObjectLoader extends NakedObjectsComponent, DebugInfo {
      * the OID is not in the map then null is returned.
      */
     NakedObject getAdapterFor(Oid oid);
+
+    NakedCollection getAdapterForElseCreateAdapterForCollection(NakedObject parent, String fieldName, NakedObjectSpecification elementSpecification, Object collection);
 
     /**
      * Retrieves an existing adapter, from the Pojo-adapter map, for the specified object. If the
@@ -98,7 +102,7 @@ public interface NakedObjectLoader extends NakedObjectsComponent, DebugInfo {
      * Marks the specified adapter as perstient (as opposed to to being transient) and sets the OID
      * on the adapter. The adapter is added to the identity-adapter map.
      */
-    void madePersistent(NakedObject object, Oid oid);
+    void madePersistent(NakedReference object, Oid oid);
 
     /**
      * Recreates an adapter for a persistent business object that is being loaded into the system. If
@@ -112,7 +116,7 @@ public interface NakedObjectLoader extends NakedObjectsComponent, DebugInfo {
      * Recreates a new collection instance - normally within another machine - of the type declared
      * by the specification, and creates an adapter for it.
      * 
-     * @see #createCollectionAdapter(Object)
+     * @see #createAdapterForCollection(Object, NakedObjectSpecification)
      */
     NakedCollection recreateCollection(NakedObjectSpecification specification);
 
@@ -125,6 +129,8 @@ public interface NakedObjectLoader extends NakedObjectsComponent, DebugInfo {
      * @see #createAdapterForTransient(Object)
      */
     NakedObject recreateTransientInstance(NakedObjectSpecification specification);
+    
+    NakedObject recreateAdapterForPersistent(Oid oid, Object object);
 
     /**
      * Resets the loader to a known state.
@@ -132,12 +138,11 @@ public interface NakedObjectLoader extends NakedObjectsComponent, DebugInfo {
     void reset();
 
     /**
-     * Marks the specified object as being loaded: resolving, partly resolving or updating as
-     * specified by the second parameter. Attempting to specify any other state throws a runtime
-     * exception.
+     * Marks the specified object as being loaded: resolving, partly resolving
+     * or updating as specified by the second parameter. Attempting to specify
+     * any other state throws a runtime exception.
      */
-    //  void loading(NakedObject object, ResolveState state);
-    void start(NakedObject object, ResolveState targetState);
+    void start(NakedReference reference, ResolveState targetState);
 
     /**
      * Unloads the specified object from both the identity-adapter map, and the pojo-adapter map.
@@ -145,8 +150,6 @@ public interface NakedObjectLoader extends NakedObjectsComponent, DebugInfo {
      * within the system.
      */
     void unloaded(NakedObject object);
-
-    //    void serializing(NakedObject object);
 }
 
 /*

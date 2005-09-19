@@ -14,7 +14,7 @@ public class BooleanAdapterTest extends TestCase {
     private BooleanAdapter fpv;
 
     protected void setUp() throws Exception {
-        fpv = new BooleanAdapter(true);
+        fpv = new BooleanAdapter(new Boolean(true));
     }
 
     public void testBooleanValue() {

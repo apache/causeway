@@ -10,17 +10,13 @@ import java.text.ParseException;
 
 public class FloatAdapter extends AbstractNakedValue implements FloatingPointValue {
     private static NumberFormat FORMAT = NumberFormat.getNumberInstance();
-
     private float value;
 
-    public FloatAdapter(float value) {
-        this.value = value;
-    }
-
+    
     public FloatAdapter(Float value) {
         this.value = value.floatValue();
     }
-
+    
     public byte[] asEncodedString() {
         return null;
     }

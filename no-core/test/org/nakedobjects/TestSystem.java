@@ -2,6 +2,7 @@ package org.nakedobjects;
 
 import org.nakedobjects.container.configuration.TestConfiguration;
 import org.nakedobjects.object.DummyNakedObjectSpecificationLoader;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -22,7 +23,8 @@ public class TestSystem {
     private NakedObjectManager objectManager;
     private DummyObjectFactory objectFactory;
     private DummyNakedObjectSpecificationLoader specificationLoader;
-
+    private  DummyReflectorFactory reflectorFactory;
+      
     public TestSystem() {
         specificationLoader = new DummyNakedObjectSpecificationLoader();
 
@@ -32,6 +34,8 @@ public class TestSystem {
         objectFactory = new DummyObjectFactory();
         objectLoader.setObjectFactory(objectFactory);
 
+        reflectorFactory = new DummyReflectorFactory();
+        
         this.objectLoader = objectLoader;
 
         objectManager = new MockObjectManager();
@@ -44,7 +48,7 @@ public class TestSystem {
         nakedObjects.setSpecificationLoader(specificationLoader);
         nakedObjects.setObjectLoader(objectLoader);
         nakedObjects.setObjectManager(objectManager);
-        nakedObjects.setReflectorFactory(new DummyReflectorFactory());
+        nakedObjects.setReflectorFactory(reflectorFactory);
         nakedObjects.setReflectionFactory(new MockReflectionFactory());
 
         nakedObjects.init();
@@ -60,6 +64,11 @@ public class TestSystem {
 
     public void addCreatedObject(Object object) {
         objectFactory.setupCreateObject(object);
+    }
+    
+
+    public void addNakedCollectionAdapter(NakedCollection collection) {
+        reflectorFactory.setupNakedCollection(collection);
     }
 
     public NakedObject createAdapterForTransient(Object associate) {

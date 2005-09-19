@@ -6,41 +6,22 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.persistence.ConcurrencyException;
+import org.nakedobjects.object.defaults.AbstractNakedReference;
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.ToString;
-
-import java.util.Date;
 
 import org.apache.log4j.Logger;
 
 
-public class PojoAdapter implements NakedObject {
+public class PojoAdapter extends AbstractNakedReference implements NakedObject {
     private final static Logger LOG = Logger.getLogger(PojoAdapter.class);
-    private String defaultTitle;
-    private Date modifiedTime;
-    private String modifierBy;
-    private Oid oid;
     private Object pojo;
-    private transient ResolveState resolveState;
-    private NakedObjectSpecification specification;
-    private long version;
-
+ 
     public PojoAdapter(Object pojo) {
         this.pojo = pojo;
-        resolveState = ResolveState.NEW;
-    }
-
-    public void checkLock(long version) {
-        if (version != this.version) {
-            throw new ConcurrencyException(modifierBy + " changed " + specification.getShortName() + " object (" + titleString() + ") at " + modifiedTime +
-                    " (" + this.version + "~" + version + ")");
-        }
-    }
+     }
 
     public void clearAssociation(NakedObjectAssociation specification, NakedObject associate) {
         resolveIfOnlyAGhost(this);
@@ -60,24 +41,13 @@ public class PojoAdapter implements NakedObject {
         association.clearValue(this);
     }
 
-    public void debugClearResolved() {
-        resolveState = ResolveState.GHOST;
-    }
-
     /**
      * Asks the reflector to tell the pojo that this object has been deleted.
      */
     public void destroyed() {
         resolveIfOnlyAGhost(this);
         LOG.debug("deleted notification for " + this);
-        specification.deleted(this);
-    }
-
-    /**
-     * Dissociates the POJO from this adapter.
-     */
-    public void dispose() {
-        pojo = null;
+        getSpecification().deleted(this);
     }
 
     public boolean equals(Object other) {
@@ -145,14 +115,6 @@ public class PojoAdapter implements NakedObject {
         }
     }
 
-    /**
-     * Returns the short name from this objects NakedObjectSpecification
-     * 
-     * TODO allow the reflector to set up a icon name
-     */
-    public String getIconName() {
-        return null;
-    }
 
     public String getLabel(Action action) {
         return action.getLabel(this);
@@ -166,30 +128,18 @@ public class PojoAdapter implements NakedObject {
         return pojo;
     }
 
-    public Oid getOid() {
-        return oid;
-    }
-
     public ActionParameterSet getParameters(Action action) {
         return action.getParameters(this);
     }
 
-    public NakedObjectSpecification getSpecification() {
-        if (specification == null) {
-            specification = NakedObjects.getSpecificationLoader().loadSpecification(getObject().getClass());
-            defaultTitle = "A " + specification.getSingularName().toLowerCase();
-        }
-        return specification;
-    }
+ 
 
     public NakedValue getValue(OneToOneAssociation field) {
         resolveIfOnlyAGhost(this);
         return (NakedValue) field.get(this);
     }
 
-    public long getVersion() {
-        return version;
-    }
+
 
     public NakedObjectField[] getVisibleFields() {
         return getSpecification().getVisibleFields(this);
@@ -215,37 +165,21 @@ public class PojoAdapter implements NakedObject {
         return field.isEmpty(this);
     }
 
+
     private void resolveIfOnlyAGhost(NakedObject object) {
         ResolveState resolveState = object.getResolveState();
         if (resolveState.isGhost()) {
-            LOG.info("unresolved object attempting to be used; resolving it immediately: " + object);
+            LOG.info("attempting to use unresolved object; resolving it immediately: " + object);
             NakedObjects.getObjectManager().resolveImmediately(object);
         }
     }
 
-    public Persistable persistable() {
-        return getSpecification().persistable();
-    }
-
-    public void persistedAs(Oid oid) {
-        LOG.debug("set OID " + oid + " " + this);
-        Assert.assertTrue("Cannot make a non-transient object persistent", this, getResolveState().isTransient());
-        Assert.assertTrue("Oid can't be set again", this, getOid() == null);
-
-        this.oid = oid;
-        resolveState = ResolveState.RESOLVED;
-    }
+  
 
     public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
         resolveIfOnlyAGhost(this);
         LOG.debug("setAssociation " + field.getName() + " with " + associatedObject + " in " + this);
         field.setAssociation(this, associatedObject);
-    }
-
-    public void setOptimisticLock(long version, String modifierBy, Date modifiedTime) {
-        this.version = version;
-        this.modifierBy = modifierBy;
-        this.modifiedTime = modifiedTime;
     }
 
     public void setValue(OneToOneAssociation field, Object object) {
@@ -268,49 +202,32 @@ public class PojoAdapter implements NakedObject {
             resolveIfOnlyAGhost(this);
         }
         if (title == null) {
-            title = defaultTitle;
+            title = getDefaultTitle();
         }
         return title;
     }
 
     public synchronized String toString() {
         ToString str = new ToString(this);
-        str.append(resolveState.code());
-        Oid oid = getOid();
-        if (oid != null) {
-            str.append(":");
-            str.append(oid.toString());
-        } else {
-            str.append(":-");
-        }
-        str.setAddComma();
-
-        str.append("specification", specification == null ? "undetermined" : specification.getShortName());
+        toString(str);
+        
+        ResolveState resolveState = getResolveState();
         if (resolveState.isTransient() || resolveState.isResolved()) {
             // don't do title of unresolved objects as this may force the resolving of the object.
             str.append("title", titleString());
         }
         str.appendAsHex("pojo-hash", pojo.hashCode());
-        str.appendAsHex("version", version);
-        str.appendAsTimestamp("modified", modifiedTime);
         return str.toString();
     }
 
+    
+
     public void recreatedAs(Oid oid) {
         changeState(ResolveState.GHOST);
-        this.oid = oid;
+        setOid(oid);
     }
 
-    public void changeState(ResolveState newState) {
-        Assert.assertTrue("can't change from " + resolveState.name() + " to " + newState.name() + ": " + this, resolveState
-                .isValidToChangeTo(newState));
-        LOG.debug("recreate - change state " + this + " to " + newState);
-        resolveState = newState;
-    }
 
-    public ResolveState getResolveState() {
-        return resolveState;
-    }
 }
 
 /*

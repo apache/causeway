@@ -79,7 +79,7 @@ class MockOneToOneAssociation implements OneToOnePeer {
     }
 
     public boolean isDerived() {
-        throw new NotImplementedException();
+        return false;
     }
 
     public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {

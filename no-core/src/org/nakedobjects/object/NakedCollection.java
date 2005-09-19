@@ -1,11 +1,9 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.persistence.Oid;
-
 import java.util.Enumeration;
 
 
-public interface NakedCollection extends Naked {
+public interface NakedCollection extends NakedReference {
     /**
      * Returns true if the logical collection contains the specified object.
      */
@@ -17,29 +15,9 @@ public interface NakedCollection extends Naked {
      * Return all elements in this collection
      */
     Enumeration elements();
-
-    Oid getOid();
-
-    long getVersion();
     
     void init(Object[] elements);
-
-    /**
-     * Return all the OIDs of all elements in this collection. The elements do not need to be
-     * resolved to do this (though the collection does)
-     */
-    Enumeration oids();
-
-    /** @deprecated 
-     * TODO remove 
-     */
-    void setOid(Oid oid);
-
-    /** @deprecated 
-     * TODO Remove
-     * */
-    void setResolved();
-
+    
     int size();
 }
 

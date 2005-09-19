@@ -8,6 +8,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedReference;
 import org.nakedobjects.object.NullDirtyObjectSet;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
@@ -16,8 +17,8 @@ import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.NotPersistableException;
-import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.ObjectManagerException;
+import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
@@ -156,27 +157,26 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
         try {
             NakedObject[] instances = objectStore.getInstances(specification, false);
             collateChanges();
-            //objectsToBeSaved.remove(instances);
             return instances;
         } catch (ObjectManagerException e) {
             throw new NakedObjectRuntimeException(e);
         }
     }
 
-    public NakedClass getNakedClass(NakedObjectSpecification nakedClass) {
-        if (nakedClasses.contains(nakedClass)) {
-            return (NakedClass) nakedClasses.get(nakedClass);
+    public NakedClass getNakedClass(NakedObjectSpecification specification) {
+        if (nakedClasses.contains(specification)) {
+            return (NakedClass) nakedClasses.get(specification);
         }
 
         NakedClass spec;
         try {
-            spec = objectStore.getNakedClass(nakedClass.getFullName());
+            spec = objectStore.getNakedClass(specification.getFullName());
         } catch (ObjectNotFoundException e) {
-            spec = new NakedClass(nakedClass.getFullName());
+            spec = new NakedClass(specification.getFullName());
         } catch (ObjectManagerException e) {
             throw new NakedObjectRuntimeException(e);
         }
-        nakedClasses.put(nakedClass, spec);
+        nakedClasses.put(specification, spec);
         return spec;
     }
 
@@ -229,7 +229,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
         objectStore.init();
     }
 
-    private boolean isPersistent(NakedObject object) {
+    private boolean isPersistent(NakedReference object) {
         return object.getOid() != null;
     }
 
@@ -257,7 +257,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
         if (isPersistent(object)) {
             throw new NotPersistableException("Object already persistent");
         }
-        if(object.getSpecification().persistable() == Persistable.TRANSIENT) {
+        if(object.persistable() == Persistable.TRANSIENT) {
             throw new NotPersistableException("Object must be transient");
        }
  
@@ -332,16 +332,19 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
     }
 
     public void resolveLazily(NakedObject object, NakedObjectField field) {
-        // TODO skip this if field if alreay resolved?
-        if (object.getResolveState().isResolved() || !isPersistent(object)) {
+        if(field.isValue()) {
             return;
         }
-        LOG.info("resolve-eagerly" + object + "/" + field.getName());
-        try {
-            objectStore.resolveEagerly(object, field);
-        } catch (ObjectManagerException e) {
-            throw new NakedObjectRuntimeException(e);
+        NakedReference reference = (NakedReference) object.getField(field);
+        if(reference.getResolveState().isResolved()) {
+            return;
         }
+        if (! reference.getResolveState().isPersistent()) {
+            return;
+        }
+        
+        LOG.info("resolve-eagerly" + object + "/" + field.getName());
+        objectStore.resolveEagerly(object, field);
     }
     
     public void reload(NakedObject object) {}
@@ -376,11 +379,14 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
             LOG.debug("collating changed objects");
             Enumeration e = loader().getIdentifiedObjects();
             while (e.hasMoreElements()) {
-                NakedObject object = (NakedObject) e.nextElement();
-                if (object.getSpecification().isDirty(object)) {
-                    LOG.debug("  found dirty object " + object);
-                    objectChanged(object);
-                    object.getSpecification().clearDirty(object);
+                Object o = e.nextElement();
+                if (o instanceof NakedObject) {
+                    NakedObject object = (NakedObject) o;
+                    if (object.getSpecification().isDirty(object)) {
+                        LOG.debug("  found dirty object " + object);
+                        objectChanged(object);
+                        object.getSpecification().clearDirty(object);
+                    }
                 }
             }
         }

@@ -1,5 +1,6 @@
 package org.nakedobjects.object.persistence.defaults;
 
+import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.persistence.InstancesCriteria;
@@ -51,10 +52,8 @@ class MemoryObjectStoreInstances {
                 return null;
             }
             NakedObject adapter;
-            adapter = objectLoader.getAdapterForElseCreateAdapterForTransient(pojo);
-            objectLoader.madePersistent(adapter, oid);
-
-            return objectLoader.recreateAdapterForPersistent(oid, null);
+            adapter = objectLoader.recreateAdapterForPersistent(oid, pojo);
+            return adapter;
         }
     }
 
@@ -122,6 +121,16 @@ class MemoryObjectStoreInstances {
         titleIndex.clear();
     }
 
+
+    public void reset() {
+        for (Enumeration e = objectInstances.keys(); e.hasMoreElements();) {
+            Oid oid = (Oid) e.nextElement();
+            Object object = getObject(oid);
+            
+ //           objectLoader.recreateAdapterForPersistent(oid, object);
+        }
+
+    }
 }
 
 /*

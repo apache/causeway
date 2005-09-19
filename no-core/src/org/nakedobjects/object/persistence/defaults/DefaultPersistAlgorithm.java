@@ -6,6 +6,8 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.Persistable;
+import org.nakedobjects.object.ResolveState;
+import org.nakedobjects.object.defaults.AbstractNakedReference;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.reflect.NakedObjectField;
@@ -25,10 +27,12 @@ public class DefaultPersistAlgorithm implements PersistAlgorithm {
         return oid;
     }
 
-    public void init() {}
+    public void init() {
+        oidGenerator.init();
+    }
 
     public void makePersistent(NakedObject object, PersistedObjectAdder manager) {
-        if (object.getResolveState().isPersistent() || object.getSpecification().persistable() == Persistable.TRANSIENT) {
+        if (object.getResolveState().isPersistent() || object.persistable() == Persistable.TRANSIENT) {
             return;
         }
 
@@ -44,11 +48,7 @@ public class DefaultPersistAlgorithm implements PersistAlgorithm {
                 continue;
             } else if (field instanceof OneToManyAssociation) {
                 InternalCollection collection = (InternalCollection) object.getField(field);
-                collection.setOid(createOid(collection));
-                collection.setResolved();
-                for (int j = 0; j < collection.size(); j++) {
-                    makePersistent(collection.elementAt(j), manager);
-                }
+                makePersistent(collection, manager);                
             } else {
                 Object fieldValue = object.getField(field);
                 if (fieldValue == null) {
@@ -64,6 +64,21 @@ public class DefaultPersistAlgorithm implements PersistAlgorithm {
         manager.createObject(object);
     }
 
+    public void makePersistent(InternalCollection collection, PersistedObjectAdder manager) {
+     /*   if (collection.getResolveState().isPersistent() || collection.persistable() == Persistable.TRANSIENT) {
+            return;
+        }
+        */
+        LOG.info("persist " + collection);
+        //NakedObjects.getObjectLoader().madePersistent(collection, createOid(collection));
+        ((AbstractNakedReference) collection).changeState(ResolveState.RESOLVING);
+        ((AbstractNakedReference) collection).changeState(ResolveState.RESOLVED);
+               for (int j = 0; j < collection.size(); j++) {
+            makePersistent(collection.elementAt(j), manager);
+        }
+
+    }
+    
     public String name() {
         return "Simple Bottom Up Persistence Walker";
     }

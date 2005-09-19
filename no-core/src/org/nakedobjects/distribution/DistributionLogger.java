@@ -37,8 +37,8 @@ public class DistributionLogger extends Logger implements Distribution {
             str.append("ValueData " + valueData.getType() + ":" + valueData.getValue());
         } else if (data instanceof ObjectData) {
             ObjectData objectData = ((ObjectData) data);
-            str.append("ObjectData " + objectData.getType() + ":" + objectData.getOid() + ":" + objectData.getVersion() + ":"
-                    + (objectData.isResolved() ? "R" : "-"));
+            str.append("ObjectData " + objectData.getType() + ":" + objectData.getOid() + ":"
+                    + (objectData.isResolved() ? "R" : "-") + ":" + objectData.getVersion());
             Object[] fields = objectData.getFieldContent();
             for (int i = 0; fields != null && i < fields.length; i++) {
                 str.append("\n");
@@ -150,6 +150,11 @@ public class DistributionLogger extends Logger implements Distribution {
         int numberOfInstances = decorated.numberOfInstances(sessionId, fullName);
         log("number of instances " + numberOfInstances);
         return numberOfInstances;
+    }
+    
+    public Data resolveField(Session session, ReferenceData data, String name) {
+        log("resolve field " + name + " - " + dump(data));
+        return decorated.resolveField(session, data, name);
     }
 
     public ObjectData resolveImmediately(Session session, ReferenceData target) {

@@ -18,7 +18,7 @@ public class TestPojoValuePeer implements OneToOnePeer {
         Assert.assertTrue(inObject.getObject()  instanceof TestPojo);
 
         int value = ((TestPojo) inObject).getValue();
-        return new IntAdapter(value);
+        return new IntAdapter(new Integer(value));
     }
 
     public Object getExtension(Class cls) {

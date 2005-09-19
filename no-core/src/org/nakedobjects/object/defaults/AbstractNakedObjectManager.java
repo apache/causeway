@@ -7,14 +7,11 @@ import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
 import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
 
 
 public abstract class AbstractNakedObjectManager implements NakedObjectManager {
     public abstract void abortTransaction();
-
-    public void debugCheckObjectForOid(Oid oid, NakedObject object) {}
 
     public TypedNakedCollection allInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
         NakedObject[] instances = getInstances(specification, includeSubclasses);

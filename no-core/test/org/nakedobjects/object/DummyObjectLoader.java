@@ -9,10 +9,6 @@ import java.util.Enumeration;
 public class DummyObjectLoader implements NakedObjectLoader {
     private NakedObject adapter;
 
-    public boolean canBeLoaded(NakedObject object, ResolveState newState) {
-        return false;
-    }
-
     public NakedObject createAdapterForTransient(Object object) {
         return adapter;
     }
@@ -21,7 +17,7 @@ public class DummyObjectLoader implements NakedObjectLoader {
         return null;
     }
 
-    public NakedCollection createCollectionAdapter(Object collection) {
+    public NakedCollection createAdapterForCollection(Object collection, NakedObjectSpecification specification) {
         return null;
     }
 
@@ -33,10 +29,7 @@ public class DummyObjectLoader implements NakedObjectLoader {
         return null;
     }
 
-    public void end(NakedObject object) {
- /*       ((DummyNakedObject) object).getResolveState().getEndState():
-            ((DummyNakedObject) object).s   setupResolveState(targetState);    
-*/    }
+    public void end(NakedReference object) {}
 
     public NakedObject getAdapterFor(Object object) {
         return null;
@@ -68,7 +61,7 @@ public class DummyObjectLoader implements NakedObjectLoader {
         return false;
     }
 
-    public void madePersistent(NakedObject object, Oid oid) {}
+    public void madePersistent(NakedReference object, Oid oid) {}
 
     public NakedObject recreateAdapterForPersistent(Oid oid, NakedObjectSpecification spec) {
         return null;
@@ -78,7 +71,11 @@ public class DummyObjectLoader implements NakedObjectLoader {
         return null;
     }
 
-    public NakedObject recreateTransientInstance(NakedObjectSpecification specification) {
+    public NakedObject recreateAdapterForPersistent(Oid oid, Object object) {
+        return adapter;
+    }
+
+  	public NakedObject recreateTransientInstance(NakedObjectSpecification specification) {
         return null;
     }
     
@@ -90,29 +87,36 @@ public class DummyObjectLoader implements NakedObjectLoader {
 
     public void shutdown() {}
 
-    public void start(NakedObject object, ResolveState targetState) {
+    public void start(NakedReference object, ResolveState targetState) {
         ((DummyNakedObject) object).setupResolveState(targetState);
     }
 
     public void unloaded(NakedObject object) {}
+
+  public NakedCollection getAdapterForElseCreateAdapterForCollection(
+            NakedObject parent,
+            String fieldName,
+            NakedObjectSpecification elementSpecification,
+            Object collection) {
+        return null;
+    }
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with this program; if
- * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- * 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
- * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */

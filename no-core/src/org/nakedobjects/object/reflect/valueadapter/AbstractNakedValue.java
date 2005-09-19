@@ -14,7 +14,6 @@ import org.nakedobjects.object.reflect.NakedObjectField;
 public abstract class AbstractNakedValue implements NakedValue {
     private NakedObjectSpecification specification;
 
-    // TODO this is same as NakedObjectSpec;  need a common superclass
     public NakedObjectSpecification getSpecification() {
         if(specification == null) {
             specification = NakedObjects.getSpecificationLoader().loadSpecification(getValueClass());

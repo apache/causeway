@@ -139,9 +139,17 @@ public abstract class DataFactory {
         return persistentGraphDepth;
     }
 
-    // TODO add .NET property
     // TODO add property for update depth
     public void setPersistentGraphDepth(int persistentGraphDepth) {
+        this.persistentGraphDepth = persistentGraphDepth;
+    }
+
+    /**
+     * .NET property
+     * 
+     * @property
+     */
+    public void set_PersistentGraphDepth(int persistentGraphDepth) {
         this.persistentGraphDepth = persistentGraphDepth;
     }
 
@@ -160,6 +168,14 @@ public abstract class DataFactory {
             throw new NakedObjectRuntimeException();
         }
     }
+
+ 	public Data createForResolveField(Naked resolvedFieldContent) {
+	    if (resolvedFieldContent instanceof NakedCollection) {
+	        return createCollectionData((NakedCollection) resolvedFieldContent, true, persistentGraphDepth);
+	    } else {
+	        return createObjectData((NakedObject) resolvedFieldContent,  true, persistentGraphDepth);
+	    }
+	}
 }
 
 /*

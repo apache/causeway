@@ -5,6 +5,7 @@ import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedReference;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
@@ -149,7 +150,23 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         }
     }
 
-    public void resolveLazily(NakedObject object, NakedObjectField field) {}
+    public void resolveLazily(NakedObject object, NakedObjectField field) {
+        if(field.isValue()) {
+            return;
+        }
+        NakedReference reference = (NakedReference) object.getField(field);
+        if(reference.getResolveState().isResolved()) {
+            return;
+        }
+        if (! reference.getResolveState().isPersistent()) {
+            return;
+        }
+        
+        LOG.info("resolve-eagerly on server " + object + "/" + field.getName());
+        Data data = connection.resolveField(session, objectDataFactory.createReference(object), field.getName());
+//        DataHelper.resolveField(object, field, data, updateNotifier);
+        DataHelper.restore(data);
+    }
 
     public void saveChanges() {
         LOG.debug("saveChanges - ignored by proxy manager");

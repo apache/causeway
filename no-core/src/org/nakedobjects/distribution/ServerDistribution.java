@@ -16,6 +16,7 @@ import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
+import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.security.Session;
@@ -71,7 +72,7 @@ public class ServerDistribution implements Distribution {
         if (target instanceof ReferenceData && ((ReferenceData) target).getOid() != null) {
             object = getPersistentNakedObject(session, (ReferenceData) target);
         } else if (target instanceof ObjectData) {
-            object = (NakedObject) DataHelper.recreate(target);
+            object = (NakedObject) DataHelper.restore(target);
         } else {
             throw new NakedObjectRuntimeException();
         }
@@ -95,7 +96,7 @@ public class ServerDistribution implements Distribution {
             if (data instanceof ReferenceData && ((ReferenceData) data).getOid() != null) {
                 parameters[i] = getPersistentNakedObject(session, (ReferenceData) data);
             } else if (data instanceof ObjectData) {
-                parameters[i] = DataHelper.recreate((ObjectData) data);
+                parameters[i] = DataHelper.restore((ObjectData) data);
             } else if (data instanceof ValueData) {
                 ValueData valueData = (ValueData) data;
                 parameters[i] = NakedObjects.getObjectLoader().createAdapterForValue(valueData.getValue());
@@ -151,6 +152,19 @@ public class ServerDistribution implements Distribution {
         return objectDataFactory.createCompletePersistentGraph(object);
     }
 
+    public Data resolveField(Session session, ReferenceData target, String fieldName) {
+        LOG.debug("request resolveEagerly " + target + "/" + fieldName +" for " + session);
+         
+        NakedObjectSpecification spec = getSpecification(target.getType());
+        NakedObjectField field = spec.getField(fieldName);
+        NakedObject object = NakedObjects.getObjectManager().getObject(target.getOid(), spec);
+        NakedObjects.getObjectManager().resolveLazily(object, field);
+        
+        Naked resolvedFieldContent = object.getField(field);
+        
+        return objectDataFactory.createForResolveField(resolvedFieldContent);
+    }
+
     private NakedObjectSpecification getSpecification(String fullName) {
         return NakedObjects.getSpecificationLoader().loadSpecification(fullName);
     }
@@ -162,7 +176,7 @@ public class ServerDistribution implements Distribution {
 
     public Oid[] makePersistent(Session session, ObjectData data) {
         LOG.debug("request makePersistent " + data +  " for " + session);
-        NakedObject object = (NakedObject) DataHelper.recreate(data);
+        NakedObject object = (NakedObject) DataHelper.restore(data);
         objectFactory.initRecreatedObject(object.getObject());
         objectManager().startTransaction();
         objectManager().makePersistent(object);

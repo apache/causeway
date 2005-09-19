@@ -10,13 +10,8 @@ import java.text.ParseException;
 
 public class IntAdapter extends AbstractNakedValue implements IntegerValue {
     private static NumberFormat FORMAT = NumberFormat.getNumberInstance();
-
     private int value;
-
-    public IntAdapter(int value) {
-        this.value = value;
-    }
-    
+        
     public IntAdapter(Integer value) {
         this.value = value.intValue();
     }
@@ -61,6 +56,10 @@ public class IntAdapter extends AbstractNakedValue implements IntegerValue {
 
     public String getValueClass() {
         return float.class.getName();
+    }
+
+    public String toString() {
+        return "IntAdapter: " + value;
     }
 }
 

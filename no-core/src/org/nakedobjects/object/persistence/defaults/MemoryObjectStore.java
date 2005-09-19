@@ -5,6 +5,8 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedReference;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.persistence.CreateObjectCommand;
 import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.InstancesCriteria;
@@ -325,10 +327,20 @@ public class MemoryObjectStore implements NakedObjectStore {
         return numberOfInstances;
     }
 
-    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectManagerException {}
+    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectManagerException {
+        NakedReference reference = (NakedReference) object.getField(field);
+        NakedObjects.getObjectLoader().start(reference, ResolveState.RESOLVING);
+        NakedObjects.getObjectLoader().end(reference);
+    }
 
     public void reset() {
         NakedObjects.getObjectLoader().reset();
+        
+        Enumeration e = instances.elements();
+        while (e.hasMoreElements()) {
+            MemoryObjectStoreInstances element = (MemoryObjectStoreInstances) e.nextElement();
+            element.reset();
+        }
     }
     
     public void runTransaction(PersistenceCommand[] commands) throws ObjectManagerException {
@@ -356,19 +368,29 @@ public class MemoryObjectStore implements NakedObjectStore {
     public void resolveImmediately(NakedObject object) throws ObjectManagerException {
         LOG.debug("resolve " + object);
         setupReferencedObjects(object);
+
+        NakedObjects.getObjectLoader().start(object, ResolveState.RESOLVING);
+        NakedObjects.getObjectLoader().end(object);
     }
     
     private void setupReferencedObjects(NakedObject object, Vector all) {
+        if(true) return;
+        
+        
         if(object == null || all.contains(object)) {
             return;    
         }
         all.addElement(object);
+        /*
         if (object != null && object.getOid() == null) {
             Oid fieldOid = instancesFor(object.getSpecification()).getOidFor(object.getObject());
 //            object.setOid(fieldOid);
 //            NakedObjects.getObjectLoader().loaded(object);
         }
-
+*/
+        
+        NakedObjects.getObjectLoader().start(object, ResolveState.RESOLVING);
+        
         NakedObjectField[] fields = object.getFields();
         for (int i = 0; i < fields.length; i++) {
             NakedObjectField field = fields[i];
@@ -383,6 +405,9 @@ public class MemoryObjectStore implements NakedObjectStore {
                 setupReferencedObjects(fieldContent, all);
             }
         }
+        
+        NakedObjects.getObjectLoader().end(object);
+        
     }
 
     public void shutdown() {
@@ -403,13 +428,16 @@ public class MemoryObjectStore implements NakedObjectStore {
         for (int i = 0; i < ins.length; i++) {
             NakedObject object = (NakedObject) instances.elementAt(i);
             setupReferencedObjects(object);
+            if(object.getResolveState().isResolvable(ResolveState.RESOLVING)) {
+	            NakedObjects.getObjectLoader().start(object, ResolveState.RESOLVING);
+	            NakedObjects.getObjectLoader().end(object);
+            }
             ins[i] = object;
         }
         return ins;
     }
 
     public void init() {}
-
 }
 
 /*

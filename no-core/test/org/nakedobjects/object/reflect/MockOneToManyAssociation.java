@@ -85,7 +85,7 @@ class MockOneToManyAssociation implements OneToManyPeer {
     }
 
     public boolean isDerived() {
-        throw new NotImplementedException();
+        return false;
     }
 
     public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {

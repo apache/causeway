@@ -28,7 +28,7 @@ public class TwoPassPersistAlgorithm implements PersistAlgorithm {
     public void init() {}
 
     public void makePersistent(NakedObject object, PersistedObjectAdder manager) {
-        if (object.getResolveState().isPersistent() || object.getSpecification().persistable() == Persistable.TRANSIENT) {
+        if (object.getResolveState().isPersistent() || object.persistable() == Persistable.TRANSIENT) {
             return;
         }
 
@@ -65,8 +65,8 @@ public class TwoPassPersistAlgorithm implements PersistAlgorithm {
                 continue;
             } else if (field instanceof OneToManyAssociation) {
                 InternalCollection collection = (InternalCollection) object.getField(field);
-                collection.setOid(createOid(collection));
-                collection.setResolved();
+                makePersistent(collection, manager);
+                NakedObjects.getObjectLoader().madePersistent(collection, createOid(object));
                 for (int j = 0; j < collection.size(); j++) {
                     makePersistent(collection.elementAt(j), manager);
                 }
@@ -77,6 +77,17 @@ public class TwoPassPersistAlgorithm implements PersistAlgorithm {
         }
 
         manager.createObject(object);
+    }
+
+    public void makePersistent(InternalCollection collection, PersistedObjectAdder manager) {
+        if (collection.getResolveState().isPersistent() || collection.persistable() == Persistable.TRANSIENT) {
+            return;
+        }
+        LOG.info("persist " + collection);
+        NakedObjects.getObjectLoader().madePersistent(collection, createOid(collection));
+        for (int j = 0; j < collection.size(); j++) {
+            makePersistent(collection.elementAt(j), manager);
+        }
     }
 
     public String name() {
@@ -112,21 +123,20 @@ public class TwoPassPersistAlgorithm implements PersistAlgorithm {
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with this program; if
- * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- * 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
- * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */

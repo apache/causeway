@@ -10,12 +10,7 @@ import java.text.ParseException;
 
 public class LongAdapter extends AbstractNakedValue implements LongValue {
     private static NumberFormat FORMAT = NumberFormat.getNumberInstance();
-
     private long value;
-
-    public LongAdapter(long value) {
-        this.value = value;
-    }
 
     public LongAdapter(Long value) {
         this.value = value.longValue();
@@ -61,6 +56,11 @@ public class LongAdapter extends AbstractNakedValue implements LongValue {
 
     public String getValueClass() {
         return long.class.getName();
+    }
+
+
+    public String toString() {
+        return "LongAdapter: " + value;
     }
 }
 

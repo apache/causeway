@@ -2,14 +2,16 @@ package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.persistence.CreateObjectCommand;
 import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.NakedObjectStore;
-import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.ObjectManagerException;
+import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.PersistenceCommand;
 import org.nakedobjects.object.persistence.SaveObjectCommand;
@@ -17,6 +19,7 @@ import org.nakedobjects.object.persistence.UnsupportedFindException;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.Dump;
+import org.nakedobjects.utility.UnexpectedCallException;
 
 import java.util.Date;
 import java.util.Enumeration;
@@ -277,7 +280,15 @@ public class TransientObjectStore implements NakedObjectStore {
         return numberOfInstances;
     }
 
-    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectManagerException {}
+    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectManagerException {
+        if(field.isCollection()) {
+            NakedCollection collection = (NakedCollection) object.getField(field);
+            NakedObjects.getObjectLoader().start(collection, ResolveState.RESOLVING);
+            NakedObjects.getObjectLoader().end(collection);
+        } else {
+            throw new UnexpectedCallException();
+        }
+    }
 
     public void reset() {
     }

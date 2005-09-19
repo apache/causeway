@@ -10,12 +10,7 @@ import java.text.ParseException;
 
 public class ShortAdapter extends AbstractNakedValue implements ShortValue {
     private static NumberFormat FORMAT = NumberFormat.getNumberInstance();
-
     private short value;
-
-    public ShortAdapter(short value) {
-        this.value = value;
-    }
 
     public ShortAdapter(Short value) {
         this.value = value.shortValue();
@@ -61,6 +56,10 @@ public class ShortAdapter extends AbstractNakedValue implements ShortValue {
 
     public String getValueClass() {
         return short.class.getName();
+    }
+    
+    public String toString() {
+        return "ShortAdapter: " + value;
     }
 }
 

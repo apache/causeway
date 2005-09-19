@@ -10,15 +10,10 @@ import java.text.ParseException;
 
 public class DoubleAdapter extends AbstractNakedValue implements DoubleFloatingPointValue {
     private static NumberFormat FORMAT = NumberFormat.getNumberInstance();
-
     private double value;
 
-    public DoubleAdapter(double value) {
-        this.value = value;
-    }
-
     public DoubleAdapter(Double value) {
-        this.value = value.floatValue();
+        this.value = value.doubleValue();
     }
 
     public byte[] asEncodedString() {
@@ -61,6 +56,10 @@ public class DoubleAdapter extends AbstractNakedValue implements DoubleFloatingP
 
     public String getValueClass() {
         return double.class.getName();
+    }
+    
+    public String toString() {
+        return "DoubleAdapter: " + value;
     }
 }
 

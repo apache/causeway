@@ -11,13 +11,8 @@ import java.text.ParseException;
 public class ByteAdapter extends AbstractNakedValue implements ByteValue {
 
     private static NumberFormat FORMAT = NumberFormat.getNumberInstance();
-
     private byte value;
-
-    public ByteAdapter(byte value) {
-        this.value = value;
-    }
-
+    
     public ByteAdapter(Byte value) {
         this.value = value.byteValue();
     }
@@ -62,6 +57,10 @@ public class ByteAdapter extends AbstractNakedValue implements ByteValue {
 
     public String titleString() {
         return FORMAT.format(value);
+    }
+    
+    public String toString() {
+        return "ByteAdapter: " + value;
     }
 }
 

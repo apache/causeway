@@ -2,7 +2,7 @@ package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.NakedReference;
 import org.nakedobjects.utility.DebugString;
 
 import java.util.Enumeration;
@@ -33,7 +33,7 @@ public class PojoAdapterHashImpl implements PojoAdapterHash {
         int count = 0;
         while (e.hasMoreElements()) {
             Object pojo = (Object) e.nextElement();
-            NakedObject object = (NakedObject) pojos.get(pojo);
+            NakedReference object = (NakedReference) pojos.get(pojo);
             debug.append(count++, 5);
             debug.append(" '");
             debug.append(pojo.toString(), 25);
@@ -56,9 +56,6 @@ public class PojoAdapterHashImpl implements PojoAdapterHash {
     }
 
     public void shutdown() {
-        for(Enumeration e = pojos.elements(); e.hasMoreElements();) {
-            ((PojoAdapter) e.nextElement()).dispose();
-        }
         pojos.clear();
     }
 

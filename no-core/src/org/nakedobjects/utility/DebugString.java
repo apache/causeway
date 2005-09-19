@@ -27,9 +27,14 @@ public class DebugString {
     private void regularizeWidth(int width, int len) {
         if(width > 0) {
             int textWidth = string.length() - len;
-            int spaces = width - textWidth;
-            spaces = Math.max(0, spaces);
-            string.append(SPACES.substring(0, spaces));
+            if(textWidth > width) {
+                string.setLength(len + width - 3);
+                string.append("...");
+            } else {
+	            int spaces = width - textWidth;
+	            spaces = Math.max(0, spaces);
+	            string.append(SPACES.substring(0, spaces));
+            }
         }
     }
 
