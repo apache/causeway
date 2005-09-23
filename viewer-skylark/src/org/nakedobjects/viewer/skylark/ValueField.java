@@ -78,7 +78,9 @@ public class ValueField extends ValueContent implements FieldContent {
 	            example.parseTextEntry(entryText);
 	        } catch (final InvalidEntryException e) {
 	            return new DefaultHint() {
-	                public Consent isValid() {
+	                private static final long serialVersionUID = 1L;
+
+                    public Consent isValid() {
 	                    return new Veto(e.getMessage());
 	                }
 	            };
@@ -108,7 +110,6 @@ public class ValueField extends ValueContent implements FieldContent {
             object = NakedObjects.getObjectLoader().createValueInstance(getSpecification());
         }
         object.parseTextEntry(entryText);
-//        entryComplete();
     }
 
     public void entryComplete() {
