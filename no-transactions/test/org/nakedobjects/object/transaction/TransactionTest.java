@@ -151,9 +151,9 @@ public class TransactionTest extends TestCase {
         role.setReferencedObject(person);
 
         Role transactionRole = (Role) t.getObject(roleOid, role);
-        assertTrue(transactionRole.isResolved());
+        assertTrue(transactionRole.hasAllElements());
         Person transactionPerson = transactionRole.getReferencedObject();
-        assertFalse(transactionPerson.isResolved());
+        assertFalse(transactionPerson.hasAllElements());
 
         assertEquals(person, transactionPerson);
         assertEquals("same oid", person.getOid(), transactionPerson.getOid());
@@ -162,12 +162,12 @@ public class TransactionTest extends TestCase {
 
         t.resolve(transactionPerson, person);
         assertEquals("Fred", transactionPerson.getName().stringValue());
-        assertTrue(transactionPerson.isResolved());
+        assertTrue(transactionPerson.hasAllElements());
     }
 
     public void testIsolatedObjectWithEmptyOneToManyAssociation() {
         Team transactionTeam = (Team) t.getObject(teamOid, team);
-        assertTrue(transactionTeam.isResolved());
+        assertTrue(transactionTeam.hasAllElements());
         InternalCollection transactionMembers = transactionTeam.getMembers();
         
         assertEquals(membersOid, transactionMembers.getOid());
@@ -175,7 +175,7 @@ public class TransactionTest extends TestCase {
 
         t.resolve(transactionMembers, team.getMembers());
         assertEquals(0, transactionMembers.size());
-        assertTrue(transactionMembers.isResolved());
+        assertTrue(transactionMembers.hasAllElements());
     }
 
     public void testIsolatedObjectWithNullReferences() {
@@ -187,7 +187,7 @@ public class TransactionTest extends TestCase {
         role.setupOid(roleOid);
 
         Role transactionRole = (Role) t.getObject(roleOid, role);
-        assertTrue(transactionRole.isResolved());
+        assertTrue(transactionRole.hasAllElements());
 
         assertEquals("same oid", role.getOid(), transactionRole.getOid());
         assertFalse("but different instance", role == transactionRole);
@@ -208,7 +208,7 @@ public class TransactionTest extends TestCase {
         team.getMembers().add(person);
 
         Team transactionTeam = (Team) t.getObject(roleOid, team);
-        assertTrue(transactionTeam.isResolved());
+        assertTrue(transactionTeam.hasAllElements());
 
         InternalCollection transactionMembers = transactionTeam.getMembers();
   //      assertFalse(transactionMembers.isResolved());
@@ -217,7 +217,7 @@ public class TransactionTest extends TestCase {
         assertFalse(members == transactionMembers);
 
         t.resolve(transactionMembers, team.getMembers());
-        assertTrue(transactionMembers.isResolved());
+        assertTrue(transactionMembers.hasAllElements());
         assertEquals(1, transactionMembers.size());
 
         Person transactionPerson = (Person) transactionMembers.elementAt(0);
@@ -236,7 +236,7 @@ public class TransactionTest extends TestCase {
         person.getName().setValue("Fred");
 
         Person transactionPerson = (Person) t.getObject(personOid, person);
-        assertTrue(transactionPerson.isResolved());
+        assertTrue(transactionPerson.hasAllElements());
 
         assertEquals(person, transactionPerson);
         assertEquals("same oid", person.getOid(), transactionPerson.getOid());

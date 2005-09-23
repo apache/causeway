@@ -257,7 +257,7 @@ public class Transaction {
                     NakedObject originalElement = (NakedObject) proxyCollection.elementAt(j);
                     Object originalElementOid = originalElement.getOid();
                     NakedObject elementCopy = getObject(originalElementOid, originalElement);
-                    if (elementCopy.isResolved()) {
+                    if (elementCopy.hasAllElements()) {
                         publicCollection.added(elementCopy);
                         log("  copy: " + elementCopy + " -> " + association.getName());
                     }
@@ -326,7 +326,7 @@ public class Transaction {
             log("  copy: " + elementCopy + " -> " + association.getName());
         }
 
-        if (!collectionCopy.isResolved()) {
+        if (!collectionCopy.hasAllElements()) {
             collectionCopy.setResolved();
         }
     }
@@ -406,7 +406,7 @@ public class Transaction {
     final void resolve(NakedObject copy, NakedObject original) {
         if (inCommit) { throw new NakedObjectRuntimeException(); }
 
-        if (copy.isResolved()) { return; }
+        if (copy.hasAllElements()) { return; }
         loaded(copy);
 
         copy.setResolved();
