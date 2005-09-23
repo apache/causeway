@@ -32,12 +32,7 @@ class ImmediateObjectOption extends MenuOption {
         String labelName = object.getLabel(action);
         ImmediateObjectOption option = new ImmediateObjectOption(labelName, object, action);
 
-        // if method returns something then add ... to indicate a new window is
-        // shown
-        if (action.hasReturn()) {
-            option.setName(labelName + "...");
-        }
-        return option;
+	    return option;
     }
 
     private final Action action;
