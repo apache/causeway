@@ -47,7 +47,7 @@ public class Customer {
         text.toString();
         date.toString();
         
-        about.setParameter(2, "Name", new TextString("#23"));
+        about.setParameter(2, "Name", new TextString("#23"), true);
     }
 
     public Booking actionCreateBooking(Location from, Location to, TextString text, Date date) {
