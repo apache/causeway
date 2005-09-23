@@ -1,5 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.utility.ToString;
+
 public class SimpleInternalDrag extends InternalDrag {
 
     private final Location location;
@@ -59,7 +61,10 @@ public class SimpleInternalDrag extends InternalDrag {
     protected void start(Viewer viewer) {}
     
     public String toString() {
-        return "InternalDrag [location=" + location + ",relative=" + getLocation() + "," + super.toString() + "]";
+        ToString s = new ToString(this, super.toString());
+        s.append("location", location);
+        s.append("relative", getLocation());
+        return s.toString();
     }
 
 }
