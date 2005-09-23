@@ -173,7 +173,7 @@ public class TreeNodeBorder extends AbstractBorder {
         
         if(getContent() instanceof FieldContent) {
             NakedObjectField field = ((FieldContent) getContent()).getFieldReflector();
-            NakedObjects.getObjectManager().resolveLazily((NakedObject) parent, field);
+            NakedObjects.getObjectManager().resolveField((NakedObject) parent, field);
         } else if(getContent() instanceof CollectionContent) {
             NakedObjects.getObjectManager().resolveImmediately((NakedObject) parent);
         } else if(getContent() instanceof CollectionElement) {

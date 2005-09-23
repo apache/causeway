@@ -23,7 +23,7 @@ public class OpenObjectNodeSpecification extends CompositeNodeSpecification {
      * with fields that are collections.
      */
     public boolean canDisplay(Content content) {
-        if (content.isObject()) {
+        if (content.isObject() && content.getNaked() != null) {
             NakedObject object = (NakedObject) content.getNaked();
             NakedObjectField[] fields = object.getVisibleFields();
             for (int i = 0; i < fields.length; i++) {
