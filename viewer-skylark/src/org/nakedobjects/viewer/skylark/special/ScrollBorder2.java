@@ -27,7 +27,7 @@ import org.nakedobjects.viewer.skylark.core.AbstractViewDecorator;
  * the underlying view. At the bottom and to the right... At the top and to the left are headers
  * that
  */
-public class ScrollBorder extends AbstractViewDecorator {
+public class ScrollBorder2 extends AbstractViewDecorator {
     private static final int CENTER = 3;
     private static final int NORTH = 1;
     private static final int SOUTH = 5;
@@ -43,11 +43,11 @@ public class ScrollBorder extends AbstractViewDecorator {
     private int horizontalVisibleAmount;
     protected int left;
 
-    private View leftHeader;
+    private OffsetBorder leftHeader;
     protected int right;
     private Size size = new Size();
     protected int top;
-    private View topHeader;
+    private OffsetBorder topHeader;
     private int verticalMaximum;
     private int verticalMinimum;
     private int verticalScrollPosition = 0;
@@ -55,7 +55,7 @@ public class ScrollBorder extends AbstractViewDecorator {
     private int dragArea;
     private int offsetToThumbEdge;
 
-    public ScrollBorder(View view) {
+    public ScrollBorder2(View view) {
         this(view, new NullView(), new NullView());
     }
 
@@ -63,23 +63,23 @@ public class ScrollBorder extends AbstractViewDecorator {
      * Note - the leftHeader, if it is specified, view must be the same height as the content view
      * and the rightHeader, if it is specified, must be the same width.
      */
-    public ScrollBorder(View content, View leftHeader, View topHeader) {
-        super(content);
+    public ScrollBorder2(View content, View leftHeader, View topHeader) {
+        super(new OffsetBorder(content));
         bottom = right = SCROLLBAR_WIDTH;
-        setHorizontalPostion(0);
-        setVerticalPostion(0);
         setLeftHeader(leftHeader);
         setTopHeader(topHeader);
+        setHorizontalPostion(0);
+        setVerticalPostion(0);
     }
 
     public void setTopHeader(View topHeader) {
-        this.topHeader = topHeader;
+        this.topHeader = new OffsetBorder(topHeader);
         topHeader.setParent(getView());
         top = topHeader.getRequiredSize().getHeight();
     }
     
     public void setLeftHeader(View leftHeader) {
-        this.leftHeader = leftHeader;
+        this.leftHeader = new OffsetBorder(leftHeader);
         leftHeader.setParent(getView());
         left = leftHeader.getRequiredSize().getWidth();
     }
@@ -91,7 +91,7 @@ public class ScrollBorder extends AbstractViewDecorator {
     private int adjust(Location location) {
         Bounds contentArea = contentArea();
         if (contentArea.contains(location)) {
-            location.add(offset());
+//            location.add(offset());
             location.move(-left, -top);
             return CENTER;
         } else {
@@ -109,12 +109,12 @@ public class ScrollBorder extends AbstractViewDecorator {
             } else if (y < contentArea.getY() && x >= contentArea.getX() && x <= contentArea.getX2()) {
                 // top border
                 location.subtract(left, 0);
-                location.add(offset().getDeltaX(), 0);
+   //             location.add(offset().getDeltaX(), 0);
                 return NORTH;
             } else if (x < contentArea.getX() && y >= contentArea.getY() && y <= contentArea.getY2()) {
                 // left border
                 location.subtract(0, top);
-                location.add(0, offset().getDeltaY());
+      //          location.add(0, offset().getDeltaY());
                 return WEST;
             } else {
                 // ignore;
@@ -280,24 +280,24 @@ public class ScrollBorder extends AbstractViewDecorator {
     public void draw(Canvas canvas) {
         Bounds contents = contentArea();
         Offset offset = offset();
-        int x = offset.getDeltaX();
-        int y = offset.getDeltaY();
+       // int x = offset.getDeltaX();
+    //    int y = offset.getDeltaY();
 
         int contentWidth = contents.getWidth();
         int contentHeight = contents.getHeight();
 
         Canvas headerCanvasLeft = canvas.createSubcanvas(0, top, left, contentHeight);
-        headerCanvasLeft.offset(0, -y);
+      //  headerCanvasLeft.offset(0, -y);
         leftHeader.draw(headerCanvasLeft);
 
         Canvas headerCanvasRight = canvas.createSubcanvas(left, 0, contentWidth, top);
-        headerCanvasRight.offset(-x, 0);
+      //  headerCanvasRight.offset(-x, 0);
         topHeader.draw(headerCanvasRight);
 
         drawScrollBars(canvas, contentWidth, contentHeight);
 
         Canvas contentCanvas = canvas.createSubcanvas(left, top, contentWidth, contentHeight);
-        contentCanvas.offset(-x, -y);
+      //  contentCanvas.offset(-x, -y);
 
         if (AbstractView.debug) {
             canvas.drawRectangle(contents.getX(), contents.getY(), contents.getWidth(), contents.getHeight(),
@@ -455,8 +455,8 @@ public class ScrollBorder extends AbstractViewDecorator {
     public void markDamaged(Bounds bounds) {
         // TODO this only works for the main content area, not for the headers.
         // how do we figure out which area to adjust for?
-        Offset offset = offset();
-        bounds.translate(-offset.getDeltaX(), -offset.getDeltaY());
+   //     Offset offset = offset();
+   //     bounds.translate(-offset.getDeltaX(), -offset.getDeltaY());
         bounds.translate(left, top);
         super.markDamaged(bounds);
     }
@@ -473,9 +473,7 @@ public class ScrollBorder extends AbstractViewDecorator {
             break;
 
         case CENTER:
-      //      location.add(offset());
-      //      location.move(-left, -top);
-            wrappedView.mouseMoved(location);
+             wrappedView.mouseMoved(location);
             break;
 
         case SOUTH:
@@ -578,6 +576,10 @@ public class ScrollBorder extends AbstractViewDecorator {
         getViewManager().addSpyAction("Move to horizontal position " + position);
         horizontalScrollPosition = Math.min(position, horizontalMaximum);
         horizontalScrollPosition = Math.max(horizontalScrollPosition, horizontalMinimum);
+        
+        topHeader.setOffset(new Offset(offset().getDeltaX() ,0));
+        ((OffsetBorder) wrappedView).setOffset(offset());
+        
         markDamaged();
     }
 
@@ -626,6 +628,10 @@ public class ScrollBorder extends AbstractViewDecorator {
         getViewManager().addSpyAction("Move to vertical position " + position);
         verticalScrollPosition = Math.min(position, verticalMaximum);
         verticalScrollPosition = Math.max(verticalScrollPosition, verticalMinimum);
+        
+        leftHeader.setOffset(new Offset(0, offset().getDeltaY()));
+        ((OffsetBorder) wrappedView).setOffset(offset());
+
         markDamaged();
     }
 
