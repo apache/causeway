@@ -29,7 +29,7 @@ public class DataFormSpecification extends AbstractCompositeViewSpecification {
         }
 
         public View decorateSubview(View view) {
-            return new FieldLabel(view);
+            return view;
         }
 
         public boolean isContentShown(Content content) {
