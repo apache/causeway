@@ -108,7 +108,8 @@ class MemoryObjectStoreInstances {
         NakedObject object;
         object = getObject(oid);
         objectInstances.remove(oid);
-        objectLoader.unloaded(object);
+        // TODO need to do garbage collection instead
+        //objectLoader.unloaded(object);        
     }
 
     public void save(NakedObject object) {

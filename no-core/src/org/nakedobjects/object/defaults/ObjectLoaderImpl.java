@@ -402,14 +402,13 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
          * reflector will create a different PojoAdapter and no OID will exist to identify - hence
          * the adapter will appear as transient and will no longer be usable as a persistent object
          */
-/*
+
         LOG.debug("removed loaded object " + object);
         Oid oid = object.getOid();
         if(oid != null) {
             identityAdapterMap.remove(oid);
         }
         pojoAdapterMap.remove(object);
-        */
     }
     
     private void updateOid(Oid oid) {

@@ -85,7 +85,8 @@ public class TransientObjectStore implements NakedObjectStore {
                 TransientObjectStoreInstances ins = instancesFor(specification);
                 ins.remove(object.getOid());
                 
-                NakedObjects.getObjectLoader().unloaded(object);
+                // TODO need to do garbage collection instead
+                //NakedObjects.getObjectLoader().unloaded(object);
             }
 
             public NakedObject onObject() {
@@ -280,7 +281,7 @@ public class TransientObjectStore implements NakedObjectStore {
         return numberOfInstances;
     }
 
-    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectManagerException {
+    public void resolveField(NakedObject object, NakedObjectField field) throws ObjectManagerException {
         if(field.isCollection()) {
             NakedCollection collection = (NakedCollection) object.getField(field);
             NakedObjects.getObjectLoader().start(collection, ResolveState.RESOLVING);
