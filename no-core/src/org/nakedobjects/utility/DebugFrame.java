@@ -2,6 +2,7 @@ package org.nakedobjects.utility;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
@@ -43,7 +44,7 @@ public abstract class DebugFrame extends Frame {
         setLayout(new BorderLayout(7, 7));
 
         addWindowListener(new WindowAdapter() {
-            DebugFrame frame = DebugFrame.this;
+           // DebugFrame frame = DebugFrame.this;
 
             public void windowClosing(WindowEvent e) {
                 closeDialog();
@@ -137,8 +138,34 @@ public abstract class DebugFrame extends Frame {
     public void show(int x, int y) {
         refresh();
         pack();
-        setLocation(x, y);
+        limitBounds(x, y);
         show();
+    }
+
+    private void limitBounds(int x, int y) {
+        Dimension screenSize = getToolkit().getScreenSize();
+        int maxWidth = screenSize.width - 50;
+        int maxHeight = screenSize.height - 50;
+
+        int width = getSize().width;
+        int height = getSize().height;
+        
+        if(x + width > maxWidth) {
+            x = 0;
+            if(x + width > maxWidth) {
+                width = maxWidth;
+            }
+        }
+
+        if(y + height > maxHeight) {
+            y = 0;
+            if(y + height > maxHeight) {
+                height = maxHeight;
+            }
+        }
+        
+        setSize(width, height);
+        setLocation(x, y);
     }
 }
 

@@ -2,6 +2,7 @@ package org.nakedobjects.utility;
 
 
 public class InfoDebugFrame extends DebugFrame {
+    private static final long serialVersionUID = 1L;
     private DebugInfo info;
 
     protected DebugInfo getInfo() {
