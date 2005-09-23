@@ -58,8 +58,7 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
         for (int f = 0; f < noParameters; f++) {
             ParameterContent parameter = actionContent.getParameterContent(f);
             View fieldView = createFieldView(view, parameter);
-            String label = parameter.getParameterName();
-            View decoratedSubview = decorateSubview(new LabelBorder(label, fieldView));
+            View decoratedSubview = decorateSubview(ParameterLabel.createInstance(fieldView));
             view.addView(decoratedSubview);
             
             // set focus to first value field
@@ -89,8 +88,7 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
                 if(subviewsObject != invocationsObject) {
                     ObjectParameter parameter = new ObjectParameter((ObjectParameter) content, (NakedObject) invocationsObject);
                     View fieldView = createFieldView(view, parameter);
-                    String label = parameter.getParameterName();
-                    view.replaceView(subview, decorateSubview(new LabelBorder(label, fieldView)));                    
+                    view.replaceView(subview, decorateSubview(ParameterLabel.createInstance(fieldView)));                    
                 }
             } else {
                 subview.refresh();
