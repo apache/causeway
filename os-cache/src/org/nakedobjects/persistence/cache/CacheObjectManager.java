@@ -150,7 +150,7 @@ public class CacheObjectManager extends AbstractNakedObjectManager {
     // do nothing
     }
 
-    public void resolveLazily(NakedObject object, NakedObjectField field) {
+    public void resolveField(NakedObject object, NakedObjectField field) {
     // do nothing
     }
 

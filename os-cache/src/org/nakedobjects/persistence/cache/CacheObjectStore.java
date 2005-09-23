@@ -213,7 +213,7 @@ public class CacheObjectStore implements NakedObjectStore {
         return instances(spec).numberInstances();
     }
 
-    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectManagerException {}
+    public void resolveField(NakedObject object, NakedObjectField field) throws ObjectManagerException {}
 
     public void resolveImmediately(NakedObject object) {}
 
