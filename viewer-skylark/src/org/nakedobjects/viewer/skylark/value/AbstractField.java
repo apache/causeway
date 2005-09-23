@@ -99,10 +99,12 @@ public abstract class AbstractField extends AbstractView {
 
     public void entered() {
         identified = true;
+        markDamaged();
     }
 
     public void exited() {
         identified = false;
+        markDamaged();
     }
 
     public boolean getIdentified() {

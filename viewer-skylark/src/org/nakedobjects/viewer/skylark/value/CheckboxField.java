@@ -39,10 +39,15 @@ public class CheckboxField extends AbstractField {
         super(content, specification, axis);
     }
 
+    public boolean canFocus() {
+        return true;
+    }
+    
     public void draw(Canvas canvas) {
         Color color;
-        color = getState().isObjectIdentified() ? Style.PRIMARY2 : Style.SECONDARY1;
-
+        color = getIdentified() ? Style.IDENTIFIED : Style.SECONDARY2;
+        color = hasFocus() ? Style.PRIMARY1 : color;
+        
         int top = VPADDING;
         int left = HPADDING;
         canvas.drawRectangle(left, top, size - 1, size - 1, color);

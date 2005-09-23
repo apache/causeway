@@ -313,7 +313,7 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
 
     public void focusLost() {
     	super.focusLost();
-        editComplete();
+    	editComplete();
     }
 
     public void focusReceived() {
