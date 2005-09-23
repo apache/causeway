@@ -32,19 +32,19 @@ public class ActionParameterSetTest extends TestCase {
 
     public void testMultipleParameters() {
         ActionParameterSet parameters = new ActionParameterSet(new Object[] { new Date(), new String(), new Vector() },
-                new String[3]);
+                new String[3], new boolean[3]);
         parameters.checkParameters("methodName", parameterSpecs);
     }
 
     public void testMultipleParametersWithNoDefault() {
         ActionParameterSet parameters = new ActionParameterSet(new Object[] { new Date(), null, new Vector() },
-                new String[3]);
+                new String[3], new boolean[3]);
         parameters.checkParameters("methodName", parameterSpecs);
     }
 
     public void testMultipleParametersWithWrongType() {
         ActionParameterSet parameters = new ActionParameterSet(new Object[] { new Date(), new Integer(10), new Vector() },
-                new String[3]);
+                new String[3], new boolean[3]);
         loader.addSpec(Integer.class.getName());
         try {
             parameters.checkParameters("methodName", parameterSpecs);
@@ -56,7 +56,7 @@ public class ActionParameterSetTest extends TestCase {
 
     public void testZeroParameters() {
         NakedObjectSpecification[] parameterSpecs = new NakedObjectSpecification[0];
-        ActionParameterSet parameters = new ActionParameterSet(new Object[0], new String[0]);
+        ActionParameterSet parameters = new ActionParameterSet(new Object[0], new String[0], new boolean[0]);
         parameters.checkParameters("", parameterSpecs);
     }
 

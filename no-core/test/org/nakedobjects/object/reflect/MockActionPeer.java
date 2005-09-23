@@ -43,7 +43,7 @@ public final class MockActionPeer implements ActionPeer {
 
     public ActionParameterSet getParameters(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
         return new ActionParameterSet(new Object[] { new String(), new Integer(123), new Vector() }, new String[] { "one", "two",
-                "three" });
+                "three" }, new boolean[3]);
     }
 
     public Target getTarget() {

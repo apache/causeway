@@ -11,11 +11,13 @@ import org.nakedobjects.object.NakedObjectSpecification;
 public class ActionParameterSet {
     private final Object[] defaultValues;
     private final String[] labels;
+    private final boolean[] required;
 
-    public ActionParameterSet(final Object[] defaultValues, final String[] labels) {
+    public ActionParameterSet(final Object[] defaultValues, final String[] labels, final boolean[] required) {
         super();
         this.defaultValues = defaultValues;
         this.labels = labels;
+        this.required = required;
     }
 
     public Object[] getDefaultParameterValues() {
@@ -24,6 +26,10 @@ public class ActionParameterSet {
 
     public String[] getParameterLabels() {
         return labels;
+    }
+    
+    public boolean[] getRequiredParameters() {
+        return required;
     }
 
     public void checkParameters(String name, NakedObjectSpecification requiredTypes[]) {
