@@ -21,12 +21,15 @@ public class ActionHelper {
         ActionParameterSet parameterHints = target.getParameters(action);
         Object[] defaultValues;
         String[] labels;
+        boolean[] required;
         if (parameterHints != null) {
             labels = parameterHints.getParameterLabels();
             defaultValues = parameterHints.getDefaultParameterValues();
+            required = parameterHints.getRequiredParameters();
         } else {
             labels = new String[numberParameters];
             defaultValues = new Naked[numberParameters];
+            required = new boolean[numberParameters];
         }
 
         Naked[] parameterValues;
@@ -61,7 +64,7 @@ public class ActionHelper {
             }
         }
 
-        return new ActionHelper(target, action, labels, parameters, parameterTypes);
+        return new ActionHelper(target, action, labels, parameters, parameterTypes, required);
     }
 
     private final Action action;
@@ -69,22 +72,24 @@ public class ActionHelper {
     private final Naked[] parameters;
     private final NakedObjectSpecification[] parameterTypes;
     private final NakedObject target;
+    private final boolean[] required;
 
-    protected ActionHelper(NakedObject target, Action action, String[] labels, Naked[] parameters, NakedObjectSpecification[] parameterTypes) {
+    protected ActionHelper(NakedObject target, Action action, String[] labels, Naked[] parameters, NakedObjectSpecification[] parameterTypes, boolean[] required) {
         this.target = target;
         this.action = action;
         this.labels = labels;
         this.parameters = parameters;
         this.parameterTypes = parameterTypes;
+        this.required = required;
     }
 
     public ParameterContent[] createParameters() {
         ParameterContent[] parameterContents = new ParameterContent[parameters.length];
         for (int i = 0; i < parameters.length; i++) {
             if (parameterTypes[i].isValue()) {
-                parameterContents[i] = new ValueParameter(labels[i], parameters[i], parameterTypes[i]);
+                parameterContents[i] = new ValueParameter(labels[i], parameters[i], parameterTypes[i], required[i]);
             } else {
-                parameterContents[i] = new ObjectParameter(labels[i], parameters[i], parameterTypes[i], i, this);
+                parameterContents[i] = new ObjectParameter(labels[i], parameters[i], parameterTypes[i], required[i], i, this);
             }
         }
 
