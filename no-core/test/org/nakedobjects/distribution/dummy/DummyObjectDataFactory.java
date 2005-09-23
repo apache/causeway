@@ -11,8 +11,8 @@ import org.nakedobjects.utility.NotImplementedException;
 
 
 public class DummyObjectDataFactory extends DataFactory {
-    protected ObjectData createObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved, long version) {
-        return new DummyObjectData(oid, type, fieldContent, resolved, version);
+    protected ObjectData createObjectData(Oid oid, String type, Object[] fieldContent, boolean hasCompleteData, long version) {
+        return new DummyObjectData(oid, type, fieldContent, hasCompleteData, version);
     }
 
     public ValueData createValueData(String fullName, Object object) {
@@ -27,7 +27,7 @@ public class DummyObjectDataFactory extends DataFactory {
         throw new NotImplementedException();
     }
 
-    protected CollectionData createCollectionData(Oid oid, String type, ObjectData[] elements, long version) {
+    protected CollectionData createCollectionData(Oid oid, String type, ObjectData[] elements, boolean hasAllElements, long version) {
         return new DummyCollectionData(oid, type, elements, version);
     }
 }

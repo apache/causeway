@@ -40,6 +40,8 @@ class MockOneToManyAssociation implements OneToManyPeer {
         actions.addElement("about " + add);
         
         about = new Hint() {
+            private static final long serialVersionUID = 1L;
+
             public Consent canAccess() {
                 return canAccess;
             }

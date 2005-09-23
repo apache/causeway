@@ -118,7 +118,7 @@ public class MockObjectStore implements NakedObjectStore {
     public void resolveImmediately(NakedObject object) {
     }
 
-    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectManagerException {}
+    public void resolveField(NakedObject object, NakedObjectField field) throws ObjectManagerException {}
     
     public void setupInstancesCount(int i) {
         instanceCount = i;

@@ -16,6 +16,10 @@ public class DummyCollectionData extends DummyReferenceData implements Collectio
     public ObjectData[] getElements() {
         return elements;
     }
+    
+    public boolean hasAllElements() {
+        return false;
+    }
 }
 
 

@@ -126,7 +126,7 @@ public class MockObjectManager extends AbstractNakedObjectManager {
 
     public void resolveImmediately(NakedObject object) {}
 
-    public void resolveLazily(NakedObject object, NakedObjectField field) {}
+    public void resolveField(NakedObject object, NakedObjectField field) {}
 
     public void saveChanges() {}
 

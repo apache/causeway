@@ -32,6 +32,8 @@ class MockOneToOneAssociation implements OneToOnePeer {
 
     public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked value) {
             about = new Hint() {
+                private static final long serialVersionUID = 1L;
+
                 public Consent canAccess() {
                     return canAccess;
                 }
