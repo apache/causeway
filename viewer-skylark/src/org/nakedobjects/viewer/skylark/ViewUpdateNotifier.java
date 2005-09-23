@@ -85,7 +85,8 @@ public class ViewUpdateNotifier extends DirtyObjectSetImpl implements DebugInfo 
                     LOG.debug("removed observer list for " + object);
                     
                     NakedObjectLoader loader = NakedObjects.getObjectLoader();
-                    loader.unloaded((NakedObject) object);
+                    // TODO need to do garbage collection instead
+                    //loader.unloaded((NakedObject) object);
                 }
             } else {
                 throw new NakedObjectRuntimeException("Tried to remove a non-existant view " + view + " from observers for "
