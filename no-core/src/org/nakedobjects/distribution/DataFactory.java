@@ -101,11 +101,15 @@ public abstract class DataFactory {
             NakedObjectField[] fields = specification.getFields();
             fieldContent = new Object[fields.length];
 
+            boolean isResolved = object.getResolveState() == ResolveState.RESOLVED;
+            
             NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
             for (int i = 0; i < fields.length; i++) {
                 Naked field = object.getField(fields[i]);
-                if (field == null) {
+                if (field == null && isResolved) {
                     fieldContent[i] = createNullData(fields[i].getSpecification().getFullName());
+                } else if (field == null && !isResolved) {
+                    fieldContent[i] = null;                    
                 } else if (fields[i].isValue()) {
                     fieldContent[i] = createValueData(field);
                 } else if (fields[i].isCollection()) {
