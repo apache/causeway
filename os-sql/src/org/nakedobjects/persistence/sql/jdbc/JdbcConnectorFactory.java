@@ -7,6 +7,7 @@ import org.nakedobjects.application.valueholder.Logical;
 import org.nakedobjects.application.valueholder.Money;
 import org.nakedobjects.application.valueholder.MultilineTextString;
 import org.nakedobjects.application.valueholder.Option;
+import org.nakedobjects.application.valueholder.Password;
 import org.nakedobjects.application.valueholder.Percentage;
 import org.nakedobjects.application.valueholder.SerialNumber;
 import org.nakedobjects.application.valueholder.TextString;
@@ -31,6 +32,7 @@ public class JdbcConnectorFactory implements DatabaseConnectorFactory {
         lookup.add(Money.class, new JdbcGeneralValueHolderMapper("FLOAT"));
         lookup.add(Percentage.class, new JdbcGeneralValueHolderMapper("FLOAT"));
         lookup.add(Logical.class, new JdbcGeneralValueHolderMapper("VARCHAR(21)"));
+        lookup.add(Password.class, new JdbcGeneralValueHolderMapper("VARCHAR(12)"));
         lookup.add(Color.class, new JdbcGeneralValueHolderMapper("INT"));
         
         
