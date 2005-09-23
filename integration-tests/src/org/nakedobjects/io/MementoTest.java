@@ -5,6 +5,7 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.Person;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.Role;
 import org.nakedobjects.object.Team;
 import org.nakedobjects.object.io.Memento;
@@ -29,16 +30,32 @@ public class MementoTest extends TestCase {
         junit.textui.TestRunner.run(MementoTest.class);
     }
 
+    private NakedObjectLoader objectLoader;
     private Person person;
     private Person person2;
-    private Role role;
-    private Team team;
-    private NakedObjectLoader objectLoader;
-    private BasicSystem system;
-    private NakedObject personAdapter2;
     private NakedObject personAdapter;
+    private NakedObject personAdapter2;
+    private Role role;
     private NakedObject roleAdapter;
+    private BasicSystem system;
+    private Team team;
 
+    private Memento mementoTransfer(Object pojo) throws Exception {
+        NakedObject object = objectLoader.getAdapterFor(pojo);
+        assertNotNull(object);
+        Memento mem = new Memento(object);
+        
+        ByteArrayOutputStream baos;
+        ObjectOutputStream oos = new ObjectOutputStream(baos = new ByteArrayOutputStream());
+        oos.writeObject(mem);
+        oos.close();
+        byte[] data = baos.toByteArray();
+        oos.close();
+        
+        ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data));
+        return (Memento) ois.readObject();
+    }
+    
     protected void setUp() {
         BasicConfigurator.configure();
         Logger.getRootLogger().setLevel(Level.ERROR);
@@ -55,8 +72,6 @@ public class MementoTest extends TestCase {
         objectLoader.madePersistent(teamAdapter, new SerialOid(11));
         
         
- //       team.getMembers().setOid(new SerialOid(13));
-
         person = new Person();
         personAdapter = objectLoader.createAdapterForTransient(person);
         objectLoader.madePersistent(personAdapter, new SerialOid(9));
@@ -75,27 +90,34 @@ public class MementoTest extends TestCase {
         role.getName().setValue("One");
         role.setPerson(person2);
     }
-    
+
     protected void tearDown() throws Exception {
         system.shutdown();
     }
 
     public void testManyReferencesInRecreated() throws Exception {
+        // TODO memento is not recursing into the objects - specifically values in person are missing
         Memento mem = mementoTransfer(team);
 
-        Person expected = new Person();
-  //      expected.setOid(new SerialOid(17));
-  //      objectLoader.loaded(expected);
-
-        Team t2 = (Team) mem.recreateObject();
+        objectLoader.unloaded(objectLoader.getAdapterFor(team));
+        objectLoader.unloaded(objectLoader.getAdapterFor(person));
+        objectLoader.unloaded(objectLoader.getAdapterFor(person2));
+                      
         
-        Person recreated = (Person) t2.getMembers().elementAt(0);
-   //     assertEquals(person.getOid(), recreated.getOid());
-        assertFalse(person == recreated);
+        NakedObject teamAdapter = mem.recreateObject();
+        assertEquals(new SerialOid(11), teamAdapter.getOid());
+        assertEquals(ResolveState.RESOLVED, teamAdapter.getResolveState());
+        
+        Team rt = (Team) teamAdapter.getObject();
+        assertNotSame(team, rt);
+        
+        Person rp1 = (Person) rt.getMembers().elementAt(0);
+        assertNotSame(person, rp1);
+        assertEquals("Fred", rp1.getName().stringValue());
  
-        recreated = (Person) t2.getMembers().elementAt(1);
-     //   assertEquals(person2.getOid(), recreated.getOid());
-        assertSame(expected, recreated);
+        Person rp2 = (Person) rt.getMembers().elementAt(1);
+        assertNotSame(person2, rp1);
+        assertEquals("John", rp2.getName().stringValue());
     }
 
     public void testManyReferencesInRecreatedWithNewAssociatedInstances() throws Exception {
@@ -140,6 +162,16 @@ public class MementoTest extends TestCase {
         assertFalse(recreated == person2);
      //   assertEquals(person2.getOid(), recreated.getOid());
     }
+    
+    public void testReferencesInRecreated2() throws Exception {
+        Memento mem = mementoTransfer(role);
+
+        NakedObject adapter = mem.recreateObject();
+        Role r2 = (Role) adapter.getObject();
+        assertFalse(role == r2);
+        assertEquals(role.getName(), r2.getName());
+        assertEquals(roleAdapter.getOid(), adapter.getOid());
+    }
 
     public void testValuesInRecreatedObject() throws Exception {
         Memento mem = mementoTransfer(person);
@@ -149,32 +181,6 @@ public class MementoTest extends TestCase {
         assertFalse(person == p2);
         assertEquals(person.getName(), p2.getName());
         assertEquals(personAdapter.getOid(), adapter.getOid());
-    }
-    
-    private Memento mementoTransfer(Object pojo) throws Exception {
-        NakedObject object = objectLoader.getAdapterFor(pojo);
-        assertNotNull(object);
-        Memento mem = new Memento(object);
-        
-        ByteArrayOutputStream baos;
-        ObjectOutputStream oos = new ObjectOutputStream(baos = new ByteArrayOutputStream());
-        oos.writeObject(mem);
-        oos.close();
-        byte[] data = baos.toByteArray();
-        oos.close();
-        
-        ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data));
-        return (Memento) ois.readObject();
-    }
-
-    public void testReferencesInRecreated2() throws Exception {
-        Memento mem = mementoTransfer(role);
-
-        NakedObject adapter = mem.recreateObject();
-        Role r2 = (Role) adapter.getObject();
-        assertFalse(role == r2);
-        assertEquals(role.getName(), r2.getName());
-        assertEquals(roleAdapter.getOid(), adapter.getOid());
     }
 }
 

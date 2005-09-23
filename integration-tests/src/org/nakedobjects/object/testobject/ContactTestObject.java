@@ -4,9 +4,9 @@ package org.nakedobjects.object.testobject;
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.control.ActionAbout;
 import org.nakedobjects.application.control.FieldAbout;
-import org.nakedobjects.application.value.Logical;
-import org.nakedobjects.application.value.Money;
-import org.nakedobjects.application.value.TextString;
+import org.nakedobjects.application.valueholder.Logical;
+import org.nakedobjects.application.valueholder.Money;
+import org.nakedobjects.application.valueholder.TextString;
 import org.nakedobjects.object.NakedObject;
 
 

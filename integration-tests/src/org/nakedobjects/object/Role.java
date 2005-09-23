@@ -12,7 +12,7 @@ public class Role {
     public final TextString name = new TextString();
     public Person person;
     
-    public void aboutPerson(FieldAbout about, LoadedObject person) {
+    public void aboutPerson(FieldAbout about, Person person) {
     }
     
     public void setPerson(Person v) {

@@ -1,6 +1,6 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.application.value.FloatingPointNumber;
+import org.nakedobjects.application.valueholder.FloatingPointNumber;
 
 
 public class ObjectContainingFloatingPointNumber {

@@ -1,6 +1,6 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.application.value.WholeNumber;
+import org.nakedobjects.application.valueholder.WholeNumber;
 
 
 public class ObjectContainingWholeNumber {

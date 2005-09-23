@@ -1,6 +1,5 @@
 package org.nakedobjects.object.testobject;
 
-import org.nakedobjects.object.defaults.LoadedObject;
 
 public class BigPerson extends LoadedObject {
 

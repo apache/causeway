@@ -1,6 +1,6 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.application.value.DateTime;
+import org.nakedobjects.application.valueholder.DateTime;
 
 
 public class ObjectContainingDateTime{

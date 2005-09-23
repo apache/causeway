@@ -5,7 +5,6 @@ import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ReflectionFactory;
 import org.nakedobjects.object.ReflectorFactory;
-import org.nakedobjects.object.defaults.DummyObjectFactory;
 import org.nakedobjects.object.defaults.IdentityAdapterMapImpl;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
@@ -14,41 +13,50 @@ import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.defaults.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
+import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
+import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.reflect.JavaReflectorFactory;
 
 
 public class BasicSystem {
-    private NakedObjectSpecificationLoader specificationLoader;
-    private NakedObjectLoader objectLoader;
-    private NakedObjectsClient nakedObjects;
-    private NakedObjectManager objectManager;
-    private ReflectorFactory reflectorFactory;
-    private ReflectionFactory reflectionFactory;
+    private final NakedObjectSpecificationLoader specificationLoader;
+    private final NakedObjectLoader objectLoader;
+    private final NakedObjectsClient nakedObjects;
+    private final NakedObjectManager objectManager;
+    private final ReflectorFactory reflectorFactory;
+    private final ReflectionFactory reflectionFactory;
 
     public BasicSystem() {
         specificationLoader = new NakedObjectSpecificationLoaderImpl();
         
+        this.objectLoader = setupObjectLoader();
+        this.objectManager = setupObjectManager();
+        reflectionFactory = new LocalReflectionFactory();
+        reflectorFactory = new JavaReflectorFactory();
+        
+        nakedObjects = new NakedObjectsClient();
+    }
+
+    protected LocalObjectManager setupObjectManager() {
+        LocalObjectManager objectManager = new LocalObjectManager();
+        DefaultPersistAlgorithm defaultPersistAlgorithm = new DefaultPersistAlgorithm();
+        defaultPersistAlgorithm.setOidGenerator(new SimpleOidGenerator());
+        objectManager.setPersistAlgorithm(defaultPersistAlgorithm);
+        objectManager.setObjectStore(new TransientObjectStore());
+        return objectManager;
+    }
+
+    protected ObjectLoaderImpl setupObjectLoader() {
         ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
         objectLoader.setPojoAdapterMap(new PojoAdapterHashImpl());
         objectLoader.setIdentityAdapterMap(new IdentityAdapterMapImpl());
-        objectLoader.setObjectFactory(new DummyObjectFactory());
-        this.objectLoader = objectLoader;
-        
-        LocalObjectManager objectManager = new LocalObjectManager();
-        objectManager.setPersistAlgorithm(new DefaultPersistAlgorithm());
-        objectManager.setObjectStore(new TransientObjectStore());
-        this.objectManager = objectManager;
-        
-        reflectionFactory = new LocalReflectionFactory();
-        
-        reflectorFactory = new JavaReflectorFactory();
+        objectLoader.setObjectFactory(new JavaObjectFactory());
+        return objectLoader;
     }
     
     public void init() {
-        nakedObjects = new NakedObjectsClient();
-        
-        nakedObjects.setConfiguration(new TestConfiguration());
+         nakedObjects.setConfiguration(new TestConfiguration());
         nakedObjects.setSpecificationLoader(specificationLoader);
         nakedObjects.setObjectLoader(objectLoader);
         nakedObjects.setObjectManager(objectManager);        
@@ -64,10 +72,6 @@ public class BasicSystem {
 
     public void shutdown() {
        NakedObjects.shutdown();
-    }
-
-    public void setObjectManager(LocalObjectManager objectManager) {
-        this.objectManager = objectManager;
     }
 }
 

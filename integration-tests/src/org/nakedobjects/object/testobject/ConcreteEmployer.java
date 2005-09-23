@@ -1,6 +1,6 @@
 package org.nakedobjects.object.testobject;
 
-import org.nakedobjects.application.value.TextString;
+import org.nakedobjects.application.valueholder.TextString;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedCollection;
 

@@ -2,8 +2,8 @@ package org.nakedobjects.object.testobject;
 
 
 import org.nakedobjects.application.Title;
-import org.nakedobjects.application.value.Money;
-import org.nakedobjects.application.value.TextString;
+import org.nakedobjects.application.valueholder.Money;
+import org.nakedobjects.application.valueholder.TextString;
 
 
 public class ProductTestObject {

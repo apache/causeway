@@ -1,6 +1,6 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.application.value.TextString;
+import org.nakedobjects.application.valueholder.TextString;
 
 
 public class ObjectContainingTextString {

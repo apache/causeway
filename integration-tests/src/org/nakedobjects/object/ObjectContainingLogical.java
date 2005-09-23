@@ -1,6 +1,6 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.application.value.Logical;
+import org.nakedobjects.application.valueholder.Logical;
 
 
 public class ObjectContainingLogical {

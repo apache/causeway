@@ -1,6 +1,6 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.application.value.Money;
+import org.nakedobjects.application.valueholder.Money;
 
 
 public class ObjectContainingMoney  {

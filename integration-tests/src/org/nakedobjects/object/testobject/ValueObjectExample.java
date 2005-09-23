@@ -2,17 +2,17 @@ package org.nakedobjects.object.testobject;
 
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.value.Date;
-import org.nakedobjects.application.value.FloatingPointNumber;
-import org.nakedobjects.application.value.Label;
-import org.nakedobjects.application.value.Logical;
-import org.nakedobjects.application.value.Money;
-import org.nakedobjects.application.value.Option;
-import org.nakedobjects.application.value.Percentage;
-import org.nakedobjects.application.value.TextString;
 import org.nakedobjects.application.value.Time;
-import org.nakedobjects.application.value.TimeStamp;
-import org.nakedobjects.application.value.URLString;
-import org.nakedobjects.application.value.WholeNumber;
+import org.nakedobjects.application.valueholder.FloatingPointNumber;
+import org.nakedobjects.application.valueholder.Label;
+import org.nakedobjects.application.valueholder.Logical;
+import org.nakedobjects.application.valueholder.Money;
+import org.nakedobjects.application.valueholder.Option;
+import org.nakedobjects.application.valueholder.Percentage;
+import org.nakedobjects.application.valueholder.TextString;
+import org.nakedobjects.application.valueholder.TimeStamp;
+import org.nakedobjects.application.valueholder.URLString;
+import org.nakedobjects.application.valueholder.WholeNumber;
 
 
 public class ValueObjectExample {
