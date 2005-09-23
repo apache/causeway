@@ -23,10 +23,12 @@ class ObjectParameter extends ObjectContent implements ParameterContent {
     private final NakedObjectSpecification specification;
     private final ActionHelper invocation;
     private final int i;
+    private final boolean isRequired;
 
-    public ObjectParameter(String name, Naked naked, NakedObjectSpecification specification, int i, ActionHelper invocation) {
+    public ObjectParameter(String name, Naked naked, NakedObjectSpecification specification, boolean required, int i, ActionHelper invocation) {
         this.name = name;
         this.specification = specification;
+        this.isRequired = required;
         this.i = i;
         this.invocation = invocation;
         object = (NakedObject) naked;
@@ -35,6 +37,7 @@ class ObjectParameter extends ObjectContent implements ParameterContent {
     public ObjectParameter(ObjectParameter content, NakedObject object) {
         name = content.name;
         specification = content.specification;
+        isRequired = content.isRequired;
         i = content.i;
         invocation = content.invocation;
         this.object = object;
@@ -57,6 +60,8 @@ class ObjectParameter extends ObjectContent implements ParameterContent {
     }
 
     public void debugDetails(DebugString debug) {
+        debug.appendln(4, "name", name);
+        debug.appendln(4, "required", isRequired);
         debug.appendln(4, "object", object);
     }
 
@@ -81,6 +86,14 @@ class ObjectParameter extends ObjectContent implements ParameterContent {
         return true;
     }
 
+    public boolean isRequired() {
+        return isRequired;
+    }
+    
+    public boolean isPersistable() {
+        return false;
+    }
+    
     public boolean isTransient() {
         return object != null && object.getResolveState().isTransient();
     }
@@ -107,8 +120,10 @@ class ObjectParameter extends ObjectContent implements ParameterContent {
 
     public String toString() {
         ToString toString = new ToString(this);
-        toString.append("object", object);
-        toString.append("spec", getSpecification());
+        toString.append("label", name);
+        toString.append("required", isRequired);
+        toString.append("spec", getSpecification().getFullName());
+        toString.append("object", object == null ? "null" : object.titleString());
         return toString.toString();
     }
 

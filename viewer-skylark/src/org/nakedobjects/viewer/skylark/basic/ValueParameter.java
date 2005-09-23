@@ -21,14 +21,18 @@ class ValueParameter extends ValueContent implements ParameterContent {
     private final NakedValue object;
     private final String name;
     private final NakedObjectSpecification specification;
+    private final boolean isRequired;
     
-    public ValueParameter(String name, Naked naked, NakedObjectSpecification specification) {
+    public ValueParameter(String name, Naked naked, NakedObjectSpecification specification, boolean required) {
         this.name = name;
         this.specification = specification;
+        this.isRequired = required;
         object = (NakedValue) naked;
     }
 
     public void debugDetails(DebugString debug) {
+        debug.appendln(4, "name", name);
+        debug.appendln(4, "required", isRequired);
         debug.appendln(4, "object", object);
     }
 
@@ -56,6 +60,10 @@ class ValueParameter extends ValueContent implements ParameterContent {
 
     public boolean isEmpty() {
         return object.isEmpty();
+    }
+    
+    public boolean isRequired() {
+        return isRequired;
     }
     
     public void clear() {
