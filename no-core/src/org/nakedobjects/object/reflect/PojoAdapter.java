@@ -24,19 +24,16 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
      }
 
     public void clearAssociation(NakedObjectAssociation specification, NakedObject associate) {
-        resolveIfOnlyAGhost(this);
         LOG.debug("clearAssociation " + specification.getName() + "/" + associate + " in " + this);
         specification.clearAssociation(this, associate);
     }
 
     public void clearCollection(OneToManyAssociation association) {
-        resolveIfOnlyAGhost(this);
         LOG.debug("clearCollection " + association.getName() + " in " + this);
         association.clearCollection(this);
     }
 
     public void clearValue(OneToOneAssociation association) {
-        resolveIfOnlyAGhost(this);
         LOG.debug("clearValue " + association.getName() + " in " + this);
         association.clearValue(this);
     }
@@ -45,7 +42,6 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
      * Asks the reflector to tell the pojo that this object has been deleted.
      */
     public void destroyed() {
-        resolveIfOnlyAGhost(this);
         LOG.debug("deleted notification for " + this);
         getSpecification().deleted(this);
     }
@@ -69,13 +65,7 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
      */
 
     public Naked execute(Action action, Naked[] parameters) {
-        resolveIfOnlyAGhost(this);
         LOG.debug("execute " + action.getName() + " in " + this);
-        for (int i = 0; parameters != null && i < parameters.length; i++) {
-            if (parameters[i] instanceof NakedObject) {
-                resolveIfOnlyAGhost((NakedObject) parameters[i]);
-            }
-        }
         Naked result = action.execute(this, parameters);
         return result;
     }
@@ -86,12 +76,10 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
     }
 
     public NakedObject getAssociation(OneToOneAssociation field) {
-        resolveIfOnlyAGhost(this);
         return (NakedObject) field.get(this);
     }
 
     public Naked getField(NakedObjectField field) {
-        resolveIfOnlyAGhost(this);
         return field.get(this);
     }
 
@@ -100,12 +88,10 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
     }
 
     public Hint getHint(Action action, Naked[] parameterValues) {
-        resolveIfOnlyAGhost(this);
         return action.getHint(this, parameterValues);
     }
 
     public Hint getHint(NakedObjectField field, Naked value) {
-        resolveIfOnlyAGhost(this);
         if (field instanceof OneToOneAssociation) {
             return ((OneToOneAssociation) field).getHint(this, value);
         } else if (field instanceof OneToManyAssociation) {
@@ -132,14 +118,9 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
         return action.getParameters(this);
     }
 
- 
-
     public NakedValue getValue(OneToOneAssociation field) {
-        resolveIfOnlyAGhost(this);
         return (NakedValue) field.get(this);
     }
-
-
 
     public NakedObjectField[] getVisibleFields() {
         return getSpecification().getVisibleFields(this);
@@ -161,29 +142,15 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
     }
 
     public boolean isEmpty(NakedObjectField field) {
-        resolveIfOnlyAGhost(this);
         return field.isEmpty(this);
     }
 
-
-    private void resolveIfOnlyAGhost(NakedObject object) {
-        ResolveState resolveState = object.getResolveState();
-        if (resolveState.isGhost()) {
-            LOG.info("attempting to use unresolved object; resolving it immediately: " + object);
-            NakedObjects.getObjectManager().resolveImmediately(object);
-        }
-    }
-
-  
-
     public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
-        resolveIfOnlyAGhost(this);
         LOG.debug("setAssociation " + field.getName() + " with " + associatedObject + " in " + this);
         field.setAssociation(this, associatedObject);
     }
 
     public void setValue(OneToOneAssociation field, Object object) {
-        resolveIfOnlyAGhost(this);
         LOG.debug("setValue " + field.getName() + " with " + object + " in " + this);
         field.setValue(this, object);
     }
@@ -199,7 +166,11 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
         NakedObjectSpecification specification = getSpecification();
         String title = specification.getTitle(this);
         if(title == null) {
-            resolveIfOnlyAGhost(this);
+            ResolveState resolveState = getResolveState();
+            if (resolveState.isGhost()) {
+                LOG.info("attempting to use unresolved object; resolving it immediately: " + this);
+                NakedObjects.getObjectManager().resolveImmediately(this);
+            }
         }
         if (title == null) {
             title = getDefaultTitle();
@@ -227,6 +198,7 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
         setOid(oid);
     }
 
+    
 
 }
 
