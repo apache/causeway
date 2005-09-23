@@ -57,7 +57,8 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     public synchronized void destroyObject(NakedObject object) {
         LOG.debug("destroyObject " + object);
         connection.destroyObject(session, objectDataFactory.createReference(object));
-        NakedObjects.getObjectLoader().unloaded(object);
+        // TODO need to do garbage collection instead
+        //NakedObjects.getObjectLoader().unloaded(object);
     }
 
     public void endTransaction() {
@@ -150,7 +151,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         }
     }
 
-    public void resolveLazily(NakedObject object, NakedObjectField field) {
+    public void resolveField(NakedObject object, NakedObjectField field) {
         if(field.isValue()) {
             return;
         }
@@ -164,7 +165,6 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         
         LOG.info("resolve-eagerly on server " + object + "/" + field.getName());
         Data data = connection.resolveField(session, objectDataFactory.createReference(object), field.getName());
-//        DataHelper.resolveField(object, field, data, updateNotifier);
         DataHelper.restore(data);
     }
 

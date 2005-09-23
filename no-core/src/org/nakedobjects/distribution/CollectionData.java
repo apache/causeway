@@ -3,6 +3,8 @@ package org.nakedobjects.distribution;
 
 public interface CollectionData extends ReferenceData {
     ObjectData[] getElements();
+    
+    boolean hasAllElements();
 }
 
 

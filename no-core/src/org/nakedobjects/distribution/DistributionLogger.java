@@ -38,7 +38,7 @@ public class DistributionLogger extends Logger implements Distribution {
         } else if (data instanceof ObjectData) {
             ObjectData objectData = ((ObjectData) data);
             str.append("ObjectData " + objectData.getType() + ":" + objectData.getOid() + ":"
-                    + (objectData.isResolved() ? "R" : "-") + ":" + objectData.getVersion());
+                    + (objectData.isResolved() ? "C" : "-") + ":" + objectData.getVersion());
             Object[] fields = objectData.getFieldContent();
             for (int i = 0; fields != null && i < fields.length; i++) {
                 str.append("\n");
@@ -46,6 +46,18 @@ public class DistributionLogger extends Logger implements Distribution {
                 str.append(i + 1);
                 str.append(") ");
                 dump(str, (Data) fields[i], indent + 1);
+            }
+        } else if (data instanceof CollectionData) {
+            CollectionData objectData = ((CollectionData) data);
+            str.append("CollectionData " + objectData.getType() + ":" + objectData.getOid() + ":"
+                    + (objectData.hasAllElements() ? "A" : "-") + ":" + objectData.getVersion());
+            Object[] elements = objectData.getElements();
+            for (int i = 0; elements != null && i < elements.length; i++) {
+                str.append("\n");
+                str.append(padding(indent));
+                str.append(i + 1);
+                str.append(") ");
+                dump(str, (Data) elements[i], indent + 1);
             }
         } else if (data instanceof ReferenceData) {
             ReferenceData referenceData = (ReferenceData) data;
@@ -154,12 +166,17 @@ public class DistributionLogger extends Logger implements Distribution {
     
     public Data resolveField(Session session, ReferenceData data, String name) {
         log("resolve field " + name + " - " + dump(data));
-        return decorated.resolveField(session, data, name);
+        Data result = decorated.resolveField(session, data, name);
+        log("resolve field " + dump(result));
+        return result;
     }
 
     public ObjectData resolveImmediately(Session session, ReferenceData target) {
-        log("resolve " + dump(target));
-        return decorated.resolveImmediately(session, target);
+        log("resolve immediately" + dump(target));
+        ObjectData result = decorated.resolveImmediately(session, target);
+        log("resolve immediately " + dump(result));
+        return result;
+        
     }
 
     public void setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {

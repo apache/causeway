@@ -50,7 +50,7 @@ public class DataHelper {
             object = objectLoader.recreateTransientInstance(specification);
             object.setOptimisticLock(data.getVersion(), "", null);
             LOG.debug("restore transient object " + object);
-            setUpFields(data, object, true);
+            setUpFields(data, object);
             return object;
             
         } else if(objectLoader.isIdentityKnown(oid)) {
@@ -70,7 +70,7 @@ public class DataHelper {
 	                LOG.debug("updating existing object (" + state.name() + ") " + object);
                     if (object.getResolveState().isResolvable(state)) {
                         objectLoader.start(object, state);
-                        setUpFields(data, object, data.isResolved());
+                        setUpFields(data, object);
                         objectLoader.end(object);
                     }
                     updateNotifier.addDirty(object);
@@ -88,7 +88,7 @@ public class DataHelper {
                 LOG.debug("restoring existing object (" + state.name() + ") " + object);
 	            if (object.getResolveState().isResolvable(state)) {
 		            objectLoader.start(object, state);
-		            setUpFields(data, object, data.isResolved());
+		            setUpFields(data, object);
 		            objectLoader.end(object);
 	            }
             }
@@ -96,61 +96,60 @@ public class DataHelper {
  	     }
     }
 
-    private static void setUpFields(ObjectData data, NakedObject object, boolean completeData) {        
+    private static void setUpFields(ObjectData data, NakedObject object) {
         Object[] fieldContent = data.getFieldContent();
         if (fieldContent != null && fieldContent.length > 0) {
             NakedObjectField[] fields = object.getSpecification().getFields();
             for (int i = 0; i < fields.length; i++) {
-                if (fieldContent[i] instanceof NullData && ! completeData) {
-                    /*
-                     * Note - if fully resolving or updating the object then nulls should clear the
-                     * field; if only part-resolving then nulls can be ignored as the fields are
-                     * likely to be null at this point
-                     */
+                if (fieldContent[i] == null) {
                     LOG.debug("no data for field " + fields[i].getName());
                     continue;
                 }
-                
+
                 if (fields[i].isCollection()) {
-                    if (fieldContent[i] != null) {
-                        /*
-                         * TODO we need to be wary of the resolved state of the collection data - if
-                         * the server collection is marked as resolved, but has no elements then the
-                         * internal collection will be cleared out!
-                         * 
-                         * collection adapters should be initally marked as unresolved, and the OSes
-                         * should mark them as resolved when they load in elements for them.
-                         */
-                        CollectionData collection = (CollectionData) fieldContent[i];
+                    CollectionData collection = (CollectionData) fieldContent[i];
+                    if (collection.hasAllElements()) {
                         int size = collection.getElements().length;
-                        // TODO remove this fudge
-                        if(completeData || size > 0 ) {
-	                        NakedObject[] elements = new NakedObject[size];
-	                        for (int j = 0; j < elements.length; j++) {
-	                            elements[j] = restoreObject(((ObjectData) collection.getElements()[j]));
-	                            LOG.debug("adding element to " + fields[i].getName() + ": " + elements[j]);
-	                        }
-	                        object.initAssociation((OneToManyAssociation) fields[i], elements);
+                        NakedObject[] elements = new NakedObject[size];
+                        for (int j = 0; j < elements.length; j++) {
+                            elements[j] = restoreObject(((ObjectData) collection.getElements()[j]));
+                            LOG.debug("adding element to " + fields[i].getName() + ": " + elements[j]);
+                        }
+
+                        NakedCollection col = (NakedCollection) object.getField(fields[i]);
+                        ResolveState initialState = col.getResolveState();
+                        ResolveState state = null;
+                        // TODO how do we deal with transient internal collections (as part a transient
+                        // object)
+                        if (initialState == ResolveState.RESOLVED) {
+                            state = ResolveState.UPDATING;
+                        } else if (initialState == ResolveState.GHOST || initialState == ResolveState.PART_RESOLVED) {
+                            state = data.isResolved() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART;
+                        } else if (initialState == ResolveState.TRANSIENT) {
+                            state = ResolveState.SERIALIZING_TRANSIENT;
+                        }
+                        if (state != null) {
+                            NakedObjects.getObjectLoader().start(col, state);
+                            object.initAssociation((OneToManyAssociation) fields[i], elements);
+                            NakedObjects.getObjectLoader().end(col);
+                        } else {
+                            LOG.warn("not initialising collection " + col + " due to current state " + initialState);
                         }
                     }
                 } else if (fields[i].isValue()) {
-                    if (fieldContent[i] != null) {
-                        LOG.debug("setting value for field " + fields[i].getName() + ": " + fieldContent[i]);
-                        object.initValue((OneToOneAssociation) fields[i], fieldContent[i] instanceof NullData ? null
-                                : ((ValueData) fieldContent[i]).getValue());
-                    }
+                    LOG.debug("setting value for field " + fields[i].getName() + ": " + fieldContent[i]);
+                    object.initValue((OneToOneAssociation) fields[i], fieldContent[i] instanceof NullData ? null
+                            : ((ValueData) fieldContent[i]).getValue());
                 } else {
-                    if (fieldContent[i] != null) {
-                        NakedObjectAssociation field = (NakedObjectAssociation) fields[i];
-                        NakedObject associate;
-                        if(fieldContent[i] instanceof NullData) {
-                            associate = null;
-                        } else {
-                            associate = restoreObject((ObjectData) fieldContent[i]);
-                        }
-                        LOG.debug("setting association for field " + fields[i].getName() + ": " + associate);
-                        object.initAssociation(field, associate);
+                    NakedObjectAssociation field = (NakedObjectAssociation) fields[i];
+                    NakedObject associate;
+                    if (fieldContent[i] instanceof NullData) {
+                        associate = null;
+                    } else {
+                        associate = restoreObject((ObjectData) fieldContent[i]);
                     }
+                    LOG.debug("setting association for field " + fields[i].getName() + ": " + associate);
+                    object.initAssociation(field, associate);
                 }
             }
         }

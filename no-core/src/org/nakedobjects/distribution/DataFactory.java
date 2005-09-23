@@ -14,13 +14,18 @@ import org.nakedobjects.utility.Assert;
 
 import java.util.Enumeration;
 
-
+/**
+ * Utility class to create Data objects representing a graph of NakedObjects.
+ * 
+ *  As each object is serialised its resovled state is changed to SERIALIZING; any object 
+ *  that is marked as SERIALIZING is skipped.
+ */
 public abstract class DataFactory {
     private int persistentGraphDepth = 100;
 
     private CollectionData createCollectionData(NakedCollection collection, boolean recursePersistentObjects, int depth) {
         Oid oid = collection.getOid();
-        String type =  collection.getSpecification().getFullName();
+        String type = collection.getSpecification().getFullName();
         Enumeration e = collection.elements();
         ObjectData[] elements = new ObjectData[collection.size()];
         int i = 0;
@@ -28,13 +33,15 @@ public abstract class DataFactory {
             NakedObject element = (NakedObject) e.nextElement();
             elements[i++] = createObjectData(element, recursePersistentObjects, depth);
         }
-        return createCollectionData(oid, type, elements, collection.getVersion());
+        boolean hasAllElements = collection.getResolveState() == ResolveState.TRANSIENT
+                || collection.getResolveState() == ResolveState.RESOLVED;
+        return createCollectionData(oid, type, elements, hasAllElements, collection.getVersion());
     }
 
     /**
-     * Creates an ObjectData that contains all the data for all the objects in the graph. This
-     * allows the client to recieve all data it might need without having to return to the server to
-     * get referenced objects.
+     * Creates an ObjectData that contains all the data for all the objects in the graph. This allows the
+     * client to recieve all data it might need without having to return to the server to get referenced
+     * objects.
      */
     public final ObjectData createCompletePersistentGraph(NakedObject object) {
         return createObjectData(object, true, persistentGraphDepth);
@@ -56,19 +63,19 @@ public abstract class DataFactory {
     }
 
     protected abstract NullData createNullData(String type);
- 
+
     /**
-     * Creates an ObjectData that contains the data for the specified object, but not the data for
-     * any referenced objects. For each referenced object only the reference is passed across.
+     * Creates an ObjectData that contains the data for the specified object, but not the data for any
+     * referenced objects. For each referenced object only the reference is passed across.
      */
     public final ObjectData createForUpdate(NakedObject object) {
         return createObjectData(object, true, 1);
     }
 
     /**
-     * Creates an ObjectData that contains all the data for all the transient objects in the
-     * specified transient object. For any referenced persistent object in the graph, only the
-     * reference is passed across.
+     * Creates an ObjectData that contains all the data for all the transient objects in the specified
+     * transient object. For any referenced persistent object in the graph, only the reference is passed
+     * across.
      */
     public final ObjectData createMakePersistentGraph(NakedObject object) {
         Assert.assertTrue(object.getResolveState().isTransient());
@@ -113,19 +120,28 @@ public abstract class DataFactory {
         return createObjectData(oid, type, fieldContent, resolveState.isResolved(), object.getVersion());
     }
 
-    protected abstract ObjectData createObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved, long version);
-    
-    protected abstract CollectionData createCollectionData(Oid oid, String type, ObjectData[] elements, long version);
+    protected abstract ObjectData createObjectData(
+            Oid oid,
+            String type,
+            Object[] fieldContent,
+            boolean hasCompleteData,
+            long version);
+
+    protected abstract CollectionData createCollectionData(
+            Oid oid,
+            String type,
+            ObjectData[] elements,
+            boolean hasAllElements,
+            long version);
 
     /**
-     * Creates a ReferenceData that contains the type, version and OID for the specified object.  This can only be used 
-     * for peristent objects.
+     * Creates a ReferenceData that contains the type, version and OID for the specified object. This can only
+     * be used for peristent objects.
      */
     public final ReferenceData createReference(NakedObject object) {
         Assert.assertNotNull(object.getOid());
         return createReferenceData(object.getSpecification().getFullName(), object.getOid(), object.getVersion());
     }
-
 
     protected abstract ReferenceData createReferenceData(String type, Oid oid, long version);
 
@@ -158,42 +174,65 @@ public abstract class DataFactory {
     }
 
     public Data createActionResult(Naked result) {
-        if(result == null) {
+        if (result == null) {
             return createNullData("");
         } else if (result instanceof NakedCollection) {
             return createCollectionData((NakedCollection) result, true, persistentGraphDepth);
         } else if (result instanceof NakedObject) {
-	        return createCompletePersistentGraph((NakedObject) result);
+            return createCompletePersistentGraph((NakedObject) result);
         } else {
             throw new NakedObjectRuntimeException();
         }
     }
 
- 	public Data createForResolveField(Naked resolvedFieldContent) {
-	    if (resolvedFieldContent instanceof NakedCollection) {
-	        return createCollectionData((NakedCollection) resolvedFieldContent, true, persistentGraphDepth);
-	    } else {
-	        return createObjectData((NakedObject) resolvedFieldContent,  true, persistentGraphDepth);
-	    }
-	}
+    // TODO pass accross only the field within the object
+    public Data createForResolveField(NakedObject object, String fieldName) {
+        Oid oid = object.getOid();
+        NakedObjectSpecification specification = object.getSpecification();
+        String type = specification.getFullName();
+        ResolveState resolveState = object.getResolveState();
+
+        Object[] fieldContent;
+        NakedObjectField[] fields = specification.getFields();
+        fieldContent = new Object[fields.length];
+
+        NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
+        for (int i = 0; i < fields.length; i++) {
+            if (fields[i].getName().equals(fieldName)) {
+                Naked field = object.getField(fields[i]);
+                if (field == null) {
+                    fieldContent[i] = createNullData(fields[i].getSpecification().getFullName());
+                } else if (fields[i].isValue()) {
+                    fieldContent[i] = createValueData(field);
+                } else if (fields[i].isCollection()) {
+                    fieldContent[i] = createCollectionData((NakedCollection) field,  true, persistentGraphDepth);
+                } else {
+                    fieldContent[i] = createObjectData((NakedObject) field,  true, persistentGraphDepth);
+                }
+                break;
+            }
+        }
+        NakedObjects.getObjectLoader().end(object);
+
+        return createObjectData(oid, type, fieldContent, resolveState.isResolved(), object.getVersion());
+    }
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with this program; if
- * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- * 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
- * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */

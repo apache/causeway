@@ -157,12 +157,10 @@ public class ServerDistribution implements Distribution {
          
         NakedObjectSpecification spec = getSpecification(target.getType());
         NakedObjectField field = spec.getField(fieldName);
-        NakedObject object = NakedObjects.getObjectManager().getObject(target.getOid(), spec);
-        NakedObjects.getObjectManager().resolveLazily(object, field);
-        
-        Naked resolvedFieldContent = object.getField(field);
-        
-        return objectDataFactory.createForResolveField(resolvedFieldContent);
+//        NakedObject object = NakedObjects.getObjectManager().getObject(target.getOid(), spec);
+        NakedObject object = NakedObjects.getObjectLoader().recreateAdapterForPersistent(target.getOid(), spec);
+        NakedObjects.getObjectManager().resolveField(object, field);
+        return objectDataFactory.createForResolveField(object, fieldName);
     }
 
     private NakedObjectSpecification getSpecification(String fullName) {
