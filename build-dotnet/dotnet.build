@@ -7,6 +7,9 @@
 	<property name="build.dir" value=".\build"/>
 	<property name="build.src.dir" value="${build.dir}/src"/>
 	
+	<property name="debug" value="true"/>
+	
+	
     <exec program="C:/Program Files/Java/apache-ant-1.6.2/bin/ant.bat" useruntimeengine="true">
           <arg line="-buildfile ../build-templates/version.xml" />
     </exec>
@@ -228,7 +231,7 @@
             </attributes>
         </asminfo-->
 	
-		<vjc target="library" output="build/nakedobjects.net.dll" debug="true">
+		<vjc target="library" output="build/nakedobjects.net.dll" debug="${debug}">
 	                <sources basedir=".">
 				<include name="${build.src.dir}/**/*.java"/>
 				<include name="${build.src.dir}/**/*.jsl"/>
@@ -236,7 +239,7 @@
 			</sources>
 		</vjc>
 
-        <vbc target="library" output="build/nakedobjects.dotnet.dll" debug="true">
+        <vbc target="library" output="build/nakedobjects.dotnet.dll" debug="${debug}">
 			<sources basedir=".">
 				<include name="dot-net/src/**/*.vb"/>
                 <include name="AssemblyInfo.vb"/>
