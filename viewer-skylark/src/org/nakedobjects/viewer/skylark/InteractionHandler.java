@@ -26,6 +26,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     private View previouslyIdentifiedView;
     private InteractionSpy spy;
     private final Viewer viewer;
+    private KeyEvent lastTyped;
 
     InteractionHandler(Viewer viewer, InteractionSpy spy) {
         this.viewer = viewer;
@@ -63,8 +64,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     }
 
     /**
-     * Returns true when the point is outside the area around the downAt
-     * location
+     * Returns true when the point is outside the area around the downAt location
      */
     private boolean isOverThreshold(Location pressed, Point dragged) {
         int xDown = pressed.x;
@@ -76,13 +76,14 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     }
 
     /**
-     * Listener for key presses. Cancels popup and drags, and forwards key
-     * presses to the view that has the keyboard focus.
+     * Listener for key presses. Cancels popup and drags, and forwards key presses to the view that has the
+     * keyboard focus.
      * 
      * @see java.awt.event.KeyListener#keyPressed(KeyEvent)
      */
     public void keyPressed(KeyEvent ke) {
-        LOG.debug("pressed " + KeyEvent.getKeyText(ke.getKeyCode()));
+        // LOG.debug("pressed " + KeyEvent.getKeyText(ke.getKeyCode()));
+        lastTyped = null;
         try {
             if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
                 if (drag != null) {
@@ -101,14 +102,23 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     }
 
     /**
-     * Listener for key releases and forward them to the view that has the
-     * keyboard focus.
+     * Listener for key releases and forward them to the view that has the keyboard focus.
      * 
      * @see java.awt.event.KeyListener#keyReleased(KeyEvent)
      */
     public void keyReleased(KeyEvent ke) {
         try {
-            LOG.debug("released " + KeyEvent.getKeyText(ke.getKeyCode()));
+            /*
+             LOG.debug("released " + ke.getKeyCode());
+             * LOG.debug("released " + KeyEvent.getKeyText(ke.getKeyCode())); LOG.debug(" - " +
+             * ke.isActionKey()); LOG.debug(" - " + ke.getKeyChar());
+             */
+            if (lastTyped == null && ke.getKeyCode() != KeyEvent.VK_SHIFT && ke.getKeyCode() != KeyEvent.VK_ALT
+                    && ke.getKeyCode() != KeyEvent.VK_CONTROL) {
+                if(ke.getKeyCode() >= KeyEvent.VK_SPACE && ke.getKeyCode() <= KeyEvent.VK_DIVIDE) {
+                    LOG.error("no type event for " + KeyEvent.getKeyText(ke.getKeyCode()));
+                }
+            }
             keyboardManager.released(ke.getKeyCode(), ke.getModifiers());
             redraw();
         } catch (Exception e) {
@@ -118,16 +128,19 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     }
 
     /**
-     * Listener for key press, and subsequent release, and forward it as one
-     * event to the view that has the keyboard focus.
+     * Listener for key press, and subsequent release, and forward it as one event to the view that has the
+     * keyboard focus.
      * 
      * @see java.awt.event.KeyListener#keyTyped(KeyEvent)
      */
     public void keyTyped(KeyEvent ke) {
-        LOG.debug("typed " + ke.getKeyChar());
-       if (!ke.isActionKey()) {
+        lastTyped = ke;
+        if (!ke.isActionKey()) {
+            LOG.debug("typed " + ke.getKeyChar());
             keyboardManager.typed(ke.getKeyChar());
             redraw();
+        } else {
+            LOG.debug("typed (ignored) " + ke.getKeyChar());
         }
     }
 
@@ -136,9 +149,8 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     }
 
     /**
-     * Responds to mouse click events by calling <code>firstClick</code>,
-     * <code>secondClick</code>, and <code>thirdClick</code> on the view
-     * that the mouse is over. Ignored if the mouse is not over a view.
+     * Responds to mouse click events by calling <code>firstClick</code>, <code>secondClick</code>, and
+     * <code>thirdClick</code> on the view that the mouse is over. Ignored if the mouse is not over a view.
      * 
      * @see java.awt.event.MouseListener#mouseClicked(MouseEvent)
      */
@@ -178,8 +190,8 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     }
 
     /**
-     * Responds to mouse dragged according to the button used. If the left
-     * button then identified view is moved.
+     * Responds to mouse dragged according to the button used. If the left button then identified view is
+     * moved.
      * 
      * @see java.awt.event.MouseMotionListener#mouseDragged(MouseEvent)
      */
@@ -221,10 +233,9 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     public void mouseExited(MouseEvent arg0) {}
 
     /**
-     * responds to mouse moved event by setting the view found underneath the
-     * mouse as the idetified view. Views normally respond by changing the
-     * colour of themselves so they are visual distinct and hence shows itself
-     * as special compared to the rest.
+     * responds to mouse moved event by setting the view found underneath the mouse as the idetified view.
+     * Views normally respond by changing the colour of themselves so they are visual distinct and hence shows
+     * itself as special compared to the rest.
      * 
      * @see java.awt.event.MouseMotionListener#mouseMoved(MouseEvent)
      */
@@ -272,12 +283,11 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                     spy.addTrace("--> mouse moved");
                     viewer.mouseMoved(location);
                     spy.addTrace(overView, " mouse location", location);
-                    if((me.getModifiers() & InputEvent.ALT_MASK) > 0) {
+                    if ((me.getModifiers() & InputEvent.ALT_MASK) > 0) {
                         Naked object = overView.getContent().getNaked();
                         viewer.setStatus("Mouse over " + object);
                     }
 
-                    
                     redraw();
                 }
             }
@@ -288,9 +298,9 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     }
 
     /**
-     * Responds to the mouse pressed event (with the left button pressed) by
-     * initiating a drag. This sets up the <code>View</code>'s dragging state
-     * to the view that the mouse was over when the button was pressed.
+     * Responds to the mouse pressed event (with the left button pressed) by initiating a drag. This sets up
+     * the <code>View</code>'s dragging state to the view that the mouse was over when the button was
+     * pressed.
      * 
      * @see java.awt.event.MouseListener#mousePressed(MouseEvent)
      */
@@ -327,12 +337,10 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     }
 
     /**
-     * Repsonds to the mouse released event (with the left button pressed) by
-     * telling the identified view (the drop zone) that the dragged object is
-     * being dropped on it (via the views <code>drop</code> method). If the
-     * drop takes place outside of all of the other views then the
-     * <code>workspaceDrop</code> method is called instead to indicate a drop
-     * onto the workspace.
+     * Repsonds to the mouse released event (with the left button pressed) by telling the identified view (the
+     * drop zone) that the dragged object is being dropped on it (via the views <code>drop</code> method).
+     * If the drop takes place outside of all of the other views then the <code>workspaceDrop</code> method
+     * is called instead to indicate a drop onto the workspace.
      * 
      * @see java.awt.event.MouseListener#mouseReleased(MouseEvent)
      */
@@ -361,25 +369,20 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */

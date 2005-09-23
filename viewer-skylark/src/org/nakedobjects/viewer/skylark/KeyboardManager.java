@@ -7,7 +7,6 @@ import java.awt.event.KeyEvent;
 
 
 public class KeyboardManager {
-  //  private static final Logger LOG = Logger.getLogger(KeyboardManager.class);
     private final Viewer viewer;
 
     public KeyboardManager(Viewer viewer) {
@@ -25,7 +24,6 @@ public class KeyboardManager {
     public void pressed(final int keyCode, final int modifiers) {
         View keyboardFocus = getFocus();
         if (keyboardFocus != null) {
-            //LOG.debug("pressed " + keyCode);
             keyboardFocus.keyPressed(keyCode, modifiers);
         }
 
@@ -48,7 +46,6 @@ public class KeyboardManager {
             focusNextRootView(keyboardFocus);
             break;
         case KeyboardAction.PREVIOUS_WINDOW:
-            //    focusPreviousRootView(keyboardFocus);
             break;
         }
     }
@@ -82,7 +79,6 @@ public class KeyboardManager {
     public void typed(final char keyChar) {
         View keyboardFocus = getFocus();
         if (keyboardFocus != null) {
-            //LOG.debug("typed " + keyCode);
             if (!Character.isISOControl(keyChar)) {
                 keyboardFocus.keyTyped(keyChar);
             }
