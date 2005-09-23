@@ -67,7 +67,7 @@ public final class ResolveState {
 
     public boolean isPersistent() {
         return this == GHOST || this == PART_RESOLVED || this == RESOLVED || this == RESOLVING || this == RESOLVING_PART
-                || this == UPDATING;
+                || this == UPDATING || this == SERIALIZING_PART_RESOLVED || this == SERIALIZING_RESOLVED|| this == SERIALIZING_GHOST;
     }
 
     /**
