@@ -74,7 +74,7 @@ public class ActionFieldBuilderTest extends TestCase {
     public void testUpdateBuild() {
         MockView[] views = new MockView[2];
         views[1] = new MockView();
-        views[1].setupContent(new ObjectParameter("name", null, null, 1, actionContent));
+        views[1].setupContent(new ObjectParameter("name", null, null, false, 1, actionContent));
         view.setupSubviews(views);
 
         builder.build(view);
@@ -87,7 +87,7 @@ public class ActionFieldBuilderTest extends TestCase {
     public void xxxtestUpdateBuildWhereParameterHasChangedFromNullToAnObject() {
         MockView[] views = new MockView[2];
         views[1] = new MockView();
-        ObjectParameter objectParameter = new ObjectParameter("name", null, null, 1, actionContent);
+        ObjectParameter objectParameter = new ObjectParameter("name", null, null, false, 1, actionContent);
         views[1].setupContent(objectParameter);
         view.setupSubviews(views);
         
@@ -104,7 +104,7 @@ public class ActionFieldBuilderTest extends TestCase {
     public void xxxtestUpdateBuildWhereParameterHasChangedFromAnObjectToNull() {
         MockView[] views = new MockView[2];
         views[1] = new MockView();
-        ObjectParameter objectParameter = new ObjectParameter("name", new DummyNakedObject(), null, 1, actionContent);
+        ObjectParameter objectParameter = new ObjectParameter("name", new DummyNakedObject(), null, false, 1, actionContent);
         views[1].setupContent(objectParameter);
         view.setupSubviews(views);
         
@@ -120,7 +120,7 @@ public class ActionFieldBuilderTest extends TestCase {
     public void xxxtestUpdateBuildWhereParameterHasChangedFromOneObjectToAnother() {
         MockView[] views = new MockView[2];
         views[1] = new MockView();
-        ObjectParameter objectParameter = new ObjectParameter("name", new DummyNakedObject(), null, 1, actionContent);
+        ObjectParameter objectParameter = new ObjectParameter("name", new DummyNakedObject(), null, false, 1, actionContent);
         views[1].setupContent(objectParameter);
         view.setupSubviews(views);
         
@@ -137,7 +137,7 @@ public class ActionFieldBuilderTest extends TestCase {
         MockView[] views = new MockView[2];
         views[1] = new MockView();
         DummyNakedObject dummyNakedObject = new DummyNakedObject();
-        ObjectParameter objectParameter = new ObjectParameter("name", dummyNakedObject, null, 1, actionContent);
+        ObjectParameter objectParameter = new ObjectParameter("name", dummyNakedObject, null, false, 1, actionContent);
         views[1].setupContent(objectParameter);
         view.setupSubviews(views);
         

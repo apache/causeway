@@ -41,7 +41,7 @@ public class ActionHelperTest extends TestCase {
         NakedObjectSpecification[] types = new DummyNakedObjectSpecification[] { new DummyNakedObjectSpecification(),
                 new DummyNakedObjectSpecification() };
         String[] labels = {"one", "two"};
-        actionHelper = new ActionHelper(target, action, labels, values, types);
+        actionHelper = new ActionHelper(target, action, labels, values, types, new boolean[2]);
     }
 
     public void testInvokeAction() {
