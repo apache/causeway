@@ -6,6 +6,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
@@ -106,6 +107,10 @@ public abstract class ObjectContent extends AbstractContent {
     }
 
     public abstract NakedObject getObject();
+    
+    public boolean isPersistable() {
+        return getObject().persistable() == Persistable.USER_PERSISTABLE;
+    }
 
     public void menuOptions(MenuOptionSet options) {
         final NakedObject object = getObject();
