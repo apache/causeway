@@ -218,7 +218,7 @@ public final class SqlObjectStore implements NakedObjectStore {
 
     public void reset() {}
 
-    public void resolveEagerly(NakedObject object, NakedObjectField field) {
+    public void resolveField(NakedObject object, NakedObjectField field) {
         if(field.isCollection()) {
             DatabaseConnector connection = getDatabaseConnector();
             NakedObjectSpecification spec = object.getSpecification();
