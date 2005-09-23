@@ -54,7 +54,7 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
 	}
 
     public boolean canDisplay(Content content) {
-        return content.isObject() && content.getNaked().getObject() instanceof FastFinder;
+        return content.isObject() && content.getNaked() != null && content.getNaked().getObject() instanceof FastFinder;
     }
 	
     public View createView(Content content, ViewAxis axis) {
