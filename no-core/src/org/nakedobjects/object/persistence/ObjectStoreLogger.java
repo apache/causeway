@@ -109,9 +109,9 @@ public class ObjectStoreLogger extends Logger implements NakedObjectStore {
         decorated.reset();
     }
 
-    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectManagerException {
+    public void resolveField(NakedObject object, NakedObjectField field) throws ObjectManagerException {
         log("Resolve eagerly object in field " + field + " of " + object);
-        decorated.resolveEagerly(object, field);
+        decorated.resolveField(object, field);
     }
 
     public void resolveImmediately(NakedObject object) throws ObjectManagerException {
