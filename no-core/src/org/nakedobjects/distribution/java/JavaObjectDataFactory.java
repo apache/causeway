@@ -11,16 +11,16 @@ import org.nakedobjects.object.persistence.Oid;
 
 public class JavaObjectDataFactory extends DataFactory {
 
-    protected CollectionData createCollectionData(Oid oid, String type, ObjectData[] elements, long version) {
-        return new JavaCollectionData(oid, type, elements, version);
+    protected CollectionData createCollectionData(Oid oid, String type, ObjectData[] elements, boolean hasAllElements, long version) {
+        return new JavaCollectionData(oid, type, elements, hasAllElements, version);
     }
 
     protected NullData createNullData(String type) {
         return new JavaNullData(type);
     }
 
-    public ObjectData createObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved, long version) {
-        return new JavaObjectData(oid, type, fieldContent, resolved, version);
+    public ObjectData createObjectData(Oid oid, String type, Object[] fieldContent, boolean hasCompleteData, long version) {
+        return new JavaObjectData(oid, type, fieldContent, hasCompleteData, version);
     }
 
     protected ReferenceData createReferenceData(String type, Oid oid, long version) {

@@ -10,12 +10,14 @@ public class JavaCollectionData implements CollectionData {
     private final ObjectData elements[];
     private final Oid oid;
     private final String type;
-    private long version;
+    private final long version;
+    private final boolean hasAllElements;
 
-    public JavaCollectionData(Oid oid, String type, ObjectData[] elements, long version) {
+    public JavaCollectionData(Oid oid, String type, ObjectData[] elements, boolean hasAllElements, long version) {
         this.oid = oid;
         this.type = type;
         this.elements = elements;
+        this.hasAllElements = hasAllElements;
         this.version = version;
     }
 
@@ -35,6 +37,9 @@ public class JavaCollectionData implements CollectionData {
         return version;
     }
     
+    public boolean hasAllElements() {
+        return hasAllElements;
+    }
     
     public String toString() {
         ToString str = new ToString(this);
