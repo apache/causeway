@@ -1,6 +1,6 @@
 package org.nakedobjects.distribution.pipe;
 
-import org.nakedobjects.distribution.ServerDistribution;
+import org.nakedobjects.distribution.Distribution;
 import org.nakedobjects.distribution.SingleResponseUpdateNotifier;
 import org.nakedobjects.distribution.command.Request;
 import org.nakedobjects.distribution.command.Response;
@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 public class PipedServer {
     private static final Logger LOG = Logger.getLogger(PipedServer.class);
-    private ServerDistribution facade;
+    private Distribution facade;
     private PipedConnection communication;
     private SingleResponseUpdateNotifier updateNotifier;
 
@@ -40,7 +40,7 @@ public class PipedServer {
         this.communication = communication;
     }
 
-    public void setFacade(ServerDistribution facade) {
+    public void setFacade(Distribution facade) {
         this.facade = facade;
     }
 
