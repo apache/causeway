@@ -93,7 +93,8 @@ public class OneToManyField extends CollectionContent implements FieldContent {
     }
 
     public String getIconName() {
-        return "internal-collection";
+        return null;
+    // return "internal-collection";    
     }
 
     public Naked getNaked() {
@@ -149,15 +150,7 @@ public class OneToManyField extends CollectionContent implements FieldContent {
 
     public Image getIconPicture(int iconHeight) {
         NakedObjectSpecification specification = getOneToManyAssociation().getSpecification();
-        
-/*        NakedObject nakedObject = getObject();
-        Object object = nakedObject.getObject();
-        if( object instanceof NakedClass) {
-            NakedObjectSpecification specification = ((NakedClass) object).forObjectType();
-            return ImageFactory.getInstance().loadClassIcon(specification, "", iconHeight);
-        } else {
-	        NakedObjectSpecification specification = nakedObject.getSpecification();
-*/	        return ImageFactory.getInstance().loadObjectIcon(specification, "", iconHeight);
+        return ImageFactory.getInstance().loadObjectIcon(specification, "", iconHeight);
     }
 }
 
