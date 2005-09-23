@@ -22,14 +22,11 @@ public class NakedObjectsByThread extends NakedObjectsServer {
 
     protected NakedObjectsData getLocal() {
         Thread thread = Thread.currentThread();
-        LOG.info("in " + thread);
         NakedObjectsData local = (NakedObjectsData) threads.get(thread);
         if (local == null) {
             local = new NakedObjectsData();
             threads.put(thread, local);
             LOG.info("  creating local " + local + "; now have " + threads.size() + " locals");
-        } else {
-            LOG.info("  using local " + local);
         }
         return local;
     }
