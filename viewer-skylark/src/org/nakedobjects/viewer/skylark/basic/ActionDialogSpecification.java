@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.viewer.skylark.Content;
@@ -72,21 +73,35 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
 
         public Consent disabled(View view) {
             View[] subviews = view.getSubviews();
+            StringBuffer missingFields = new StringBuffer();
             StringBuffer invalidFields = new StringBuffer();
-            for (int i = 0; i < subviews.length; i++) {
+            for (int i = 1; i < subviews.length; i++) {
                 View field = subviews[i];
-                if(field.getState().isInvalid()) {
-                    String parameterName = ((ParameterContent) field.getContent()).getParameterName();
-                    if(invalidFields.length() > 0) {
+                ParameterContent content = ((ParameterContent) field.getContent());
+                if (content.isRequired()
+                        && (content.getNaked() == null || (content.getNaked() instanceof NakedValue && ((NakedValue) content
+                                .getNaked()).isEmpty()))) {
+                    String parameterName = content.getParameterName();
+                    if (missingFields.length() > 0) {
+                        missingFields.append(", ");
+                    }
+                    missingFields.append(parameterName);
+
+                } else if (field.getState().isInvalid()) {
+                    String parameterName = content.getParameterName();
+                    if (invalidFields.length() > 0) {
                         invalidFields.append(", ");
                     }
                     invalidFields.append(parameterName);
                 }
             }
-            if(invalidFields.length() > 0) {
+            if (missingFields.length() > 0) {
+                return new Veto("Fields needed: " + missingFields);
+            }
+            if (invalidFields.length() > 0) {
                 return new Veto("Invalid fields: " + invalidFields);
             }
-            
+
             ActionContent actionContent = ((ActionContent) view.getContent());
             return actionContent.disabled();
         }
@@ -140,8 +155,9 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
 
     public View createView(Content content, ViewAxis axis) {
         // TODO reintroduce the 'Apply' notion, but under control from the method declaration
-        // UserAction[] actions = new UserAction[] { new ExecuteAndCloseAction(), new CloseAction(), new ExecuteAction(), };
-        ButtonAction[] actions = new ButtonAction[] { new ExecuteAndCloseAction(), new CancelAction()};
+        // UserAction[] actions = new UserAction[] { new ExecuteAndCloseAction(), new CloseAction(), new
+        // ExecuteAction(), };
+        ButtonAction[] actions = new ButtonAction[] { new ExecuteAndCloseAction(), new CancelAction() };
         return new DialogBorder(new ButtonBorder(actions, super.createView(content, new LabelAxis())), false);
     }
 
@@ -152,25 +168,20 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */
