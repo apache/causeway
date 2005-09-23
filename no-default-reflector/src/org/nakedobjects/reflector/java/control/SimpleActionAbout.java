@@ -11,8 +11,10 @@ import org.nakedobjects.object.security.Session;
  * An About for contolling the action methods within a NakedObject.
  */
 public class SimpleActionAbout extends AbstractAbout implements ActionAbout {
+    private static final long serialVersionUID = 1L;
     private Object[] defaultValues;
     private String[] labels;
+    private boolean[] required;
 
     public SimpleActionAbout(Session session, Object object, Object[] parameters) {
         super(session, object);
@@ -20,6 +22,7 @@ public class SimpleActionAbout extends AbstractAbout implements ActionAbout {
         int noParams = parameters.length;
         labels = new String[noParams];
         defaultValues = new Object[noParams];
+        required = new boolean[noParams];
     }
 
     public void changeNameIfUsable(String name) {
@@ -36,6 +39,10 @@ public class SimpleActionAbout extends AbstractAbout implements ActionAbout {
         return labels;
     }
 
+    public boolean[] getRequired() {
+        return required;
+    }
+    
     public void invisible() {
         super.invisible();
     }
@@ -62,12 +69,20 @@ public class SimpleActionAbout extends AbstractAbout implements ActionAbout {
         labels[index] = label;
     }
 
-    public void setParameter(int index, String label, Object defaultValue) {
+    public void setParameter(int index, boolean required) {
+        if (index < 0 || index >= defaultValues.length) {
+            throw new IllegalArgumentException("No parameter index " + index);
+        }
+        this.required[index] = required;
+    }
+
+    public void setParameter(int index, String label, Object defaultValue, boolean required) {
         if (index < 0 || index >= defaultValues.length) {
             throw new IllegalArgumentException("No parameter index " + index);
         }
         labels[index] = label;
         defaultValues[index] = defaultValue;
+        this.required[index] = required;
     }
 
     public void setParameters(Object[] defaultValues) {
@@ -83,6 +98,13 @@ public class SimpleActionAbout extends AbstractAbout implements ActionAbout {
             throw new IllegalArgumentException("Expected " + this.labels.length + " defaults but got " + labels.length);
         }
         this.labels = labels;
+    }
+
+    public void setParameters(boolean[] required) {
+        if (this.labels.length != labels.length) {
+            throw new IllegalArgumentException("Expected " + this.labels.length + " defaults but got " + labels.length);
+        }
+        this.required = required;
     }
 
     public void unusable() {
