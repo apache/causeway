@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.utility.ToString;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.Text;
@@ -45,7 +46,8 @@ public class LabelBorder extends AbstractBorder {
 	}
 	
 	public String toString() {
-		return wrappedView.toString() + "/LabelBorder";
+        return wrappedView.toString() + "/" + ToString.name(this);
+		//return wrappedView.toString() + "/LabelBorder";
 	}
 }
 
