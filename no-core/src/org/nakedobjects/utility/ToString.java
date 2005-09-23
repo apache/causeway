@@ -10,10 +10,20 @@ public final class ToString {
     private boolean addComma = false;
     private final StringBuffer string;
 
+    public ToString(final Object forObject, String text) {
+        this(forObject);
+        string.append(text);
+        addComma = text.length() > 0;
+    }
+    
+    public static String name(final Object forObject) {
+        String name = forObject.getClass().getName();
+        return name.substring(name.lastIndexOf('.') + 1);
+    }
+    
     public ToString(final Object forObject) {
         string = new StringBuffer();
-        String name = forObject.getClass().getName();
-        string.append(name.substring(name.lastIndexOf('.') + 1));
+        string.append(name(forObject));
         string.append("@");
         string.append(Integer.toHexString(forObject.hashCode()));
         string.append(" [");
