@@ -5,6 +5,8 @@ package org.nakedobjects.viewer.skylark;
 public interface ParameterContent extends Content {
 
     String getParameterName();
+    
+    boolean isRequired();
 }
 
 /*
