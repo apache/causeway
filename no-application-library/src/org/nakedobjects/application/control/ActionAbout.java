@@ -8,6 +8,8 @@ public interface ActionAbout {
     Object[] getDefaultParameterValues();
 
     String[] getParameterLabels();
+    
+    boolean[] getRequired();
 
     void invisible();
 
@@ -23,11 +25,15 @@ public interface ActionAbout {
 
     void setParameter(int index, String label);
 
-    void setParameter(int index, String label, Object defaultValue);
+    void setParameter(int index, boolean required);
+
+    void setParameter(int index, String label, Object defaultValue, boolean required);
 
     void setParameters(Object[] defaultValues);
 
     void setParameters(String[] labels);
+
+    void setParameters(boolean[] required);
 
     void unusable();
 
