@@ -4,6 +4,7 @@ import org.nakedobjects.application.valueholder.Date;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.distribution.DataFactory;
+import org.nakedobjects.distribution.Distribution;
 import org.nakedobjects.distribution.DistributionLogger;
 import org.nakedobjects.distribution.ProxyObjectManager;
 import org.nakedobjects.distribution.ProxyReflectionFactory;
@@ -137,7 +138,9 @@ public abstract class StandaloneClientServer {
                 sd.setObjectFactory(objectFactory);
                 sd.setObjectDataFactory(objectDataFactory);
                 
-                server.setFacade(sd);
+                Distribution serverLogger = new DistributionLogger(sd, "server-connection.log");
+                
+                server.setFacade(serverLogger);
                 server.setUpdateNotifier(updateNotifier);
 
                 objectManager.addObjectChangedListener(updateNotifier);
@@ -152,6 +155,8 @@ public abstract class StandaloneClientServer {
                 fb.installFixtures();
 
                 InfoDebugFrame debugFrame = new InfoDebugFrame() {
+                    private static final long serialVersionUID = 1L;
+
                     public void dialogClosing() {
                         System.exit(0);
                     }
