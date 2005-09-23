@@ -12,6 +12,7 @@ import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.ToString;
 
 import org.apache.log4j.Logger;
@@ -21,25 +22,42 @@ public class DefaultPersistAlgorithm implements PersistAlgorithm {
     private static final Logger LOG = Logger.getLogger(DefaultPersistAlgorithm.class);
     private OidGenerator oidGenerator;
 
-    private final synchronized Oid createOid(Naked object) {
+    protected final synchronized Oid createOid(Naked object) {
         Oid oid = oidGenerator.next(object);
         LOG.debug("createOid " + oid);
         return oid;
     }
 
     public void init() {
+        Assert.assertNotNull("oid generator required", oidGenerator);
         oidGenerator.init();
     }
 
     public void makePersistent(NakedObject object, PersistedObjectAdder manager) {
         if (object.getResolveState().isPersistent() || object.persistable() == Persistable.TRANSIENT) {
+            LOG.warn("can't make object persistent - either already persistent, or transient only: " + object);
             return;
         }
 
+		/*
+		this loop forces collection as references to be loaded in in a transient state
+		rather than ghost state (which they will be once the parent object is
+		marked as persistent.
+		*/
+        NakedObjectField[] fields = object.getFields();
+        for (int i = 0; i < fields.length; i++) {
+            NakedObjectField field = fields[i];
+            if (field.isDerived() || field.isValue()) {
+                continue;
+            } 
+            Object fieldValue = object.getField(field);
+        }
+
+
+        
         LOG.info("persist " + object);
         NakedObjects.getObjectLoader().madePersistent(object, createOid(object));
 
-        NakedObjectField[] fields = object.getFields();
         for (int i = 0; i < fields.length; i++) {
             NakedObjectField field = fields[i];
             if (field.isDerived()) {
@@ -64,16 +82,18 @@ public class DefaultPersistAlgorithm implements PersistAlgorithm {
         manager.createObject(object);
     }
 
-    public void makePersistent(InternalCollection collection, PersistedObjectAdder manager) {
-     /*   if (collection.getResolveState().isPersistent() || collection.persistable() == Persistable.TRANSIENT) {
+    protected void makePersistent(InternalCollection collection, PersistedObjectAdder manager) {
+        if (collection.getResolveState().isPersistent()) {
+    //    if(collection.getResolveState() != ResolveState.GHOST) {
             return;
         }
-        */
+        
         LOG.info("persist " + collection);
         //NakedObjects.getObjectLoader().madePersistent(collection, createOid(collection));
-        ((AbstractNakedReference) collection).changeState(ResolveState.RESOLVING);
-        ((AbstractNakedReference) collection).changeState(ResolveState.RESOLVED);
-               for (int j = 0; j < collection.size(); j++) {
+        ((AbstractNakedReference) collection).persistedAs(null);
+//        ((AbstractNakedReference) collection).changeState(ResolveState.RESOLVING);
+//        ((AbstractNakedReference) collection).changeState(ResolveState.RESOLVED);
+        for (int j = 0; j < collection.size(); j++) {
             makePersistent(collection.elementAt(j), manager);
         }
 
