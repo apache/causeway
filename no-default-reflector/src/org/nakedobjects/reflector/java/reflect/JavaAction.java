@@ -164,7 +164,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
         Hint hint= getHint(identifier, object, parameters);
         if(hint instanceof SimpleActionAbout) {
             SimpleActionAbout about = (SimpleActionAbout) hint;
-            return new ActionParameterSet(about.getDefaultParameterValues(), about.getParameterLabels());
+            return new ActionParameterSet(about.getDefaultParameterValues(), about.getParameterLabels(), about.getRequired());
         }  else if (hint instanceof DefaultHint) {
             return null;
         }else {

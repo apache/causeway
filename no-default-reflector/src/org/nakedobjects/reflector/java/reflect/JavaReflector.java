@@ -566,7 +566,7 @@ public class JavaReflector implements Reflector {
     }
 
     public boolean isValue() {
-        return BusinessValueHolder.class.isAssignableFrom(cls) || BusinessValue.class.isAssignableFrom(cls) || cls.getName().startsWith("java.");
+        return BusinessValueHolder.class.isAssignableFrom(cls) || BusinessValue.class.isAssignableFrom(cls) || (cls.getName().startsWith("java.") && ! cls.isAssignableFrom(Vector.class));
     }
 
     public void markDirty(NakedObject object) {
