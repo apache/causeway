@@ -104,7 +104,8 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
         clear(object);
         loader().end(object);
 
-        loader().unloaded(object);
+        // TODO need to do garbage collection instead
+        //loader().unloaded(object);
     }
 
     private NakedObjectLoader loader() {
@@ -225,6 +226,8 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
      * persisted objects and persist changes to the object that are saved.
      */
     public void init() throws StartupException {
+        Assert.assertNotNull("persist algorithm required", persistAlgorithm);
+        Assert.assertNotNull("object store required", objectStore);
         persistAlgorithm.init();
         objectStore.init();
     }
@@ -331,7 +334,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
         objectStore.reset();
     }
 
-    public void resolveLazily(NakedObject object, NakedObjectField field) {
+    public void resolveField(NakedObject object, NakedObjectField field) {
         if(field.isValue()) {
             return;
         }
@@ -343,8 +346,8 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
             return;
         }
         
-        LOG.info("resolve-eagerly" + object + "/" + field.getName());
-        objectStore.resolveEagerly(object, field);
+        LOG.info("resolve-field" + object + "/" + field.getName());
+        objectStore.resolveField(object, field);
     }
     
     public void reload(NakedObject object) {}

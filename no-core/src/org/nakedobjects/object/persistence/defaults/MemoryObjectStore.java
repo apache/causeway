@@ -327,7 +327,7 @@ public class MemoryObjectStore implements NakedObjectStore {
         return numberOfInstances;
     }
 
-    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectManagerException {
+    public void resolveField(NakedObject object, NakedObjectField field) throws ObjectManagerException {
         NakedReference reference = (NakedReference) object.getField(field);
         NakedObjects.getObjectLoader().start(reference, ResolveState.RESOLVING);
         NakedObjects.getObjectLoader().end(reference);
