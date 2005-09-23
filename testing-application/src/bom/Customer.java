@@ -97,8 +97,10 @@ public class Customer {
             Date returning) {
         about.setParameter(0, "Pick up");
         about.setParameter(1, "Drop off");
+        about.setParameter(1, true);
         about.setParameter(3, "Date");
         about.setParameter(4, "Return on");
+     //   about.setParameter(4, true);
 
         /*
          * if (!getLocations().isEmpty()) { about.setParameter(0, getLocations().firstElement()); }
@@ -106,7 +108,7 @@ public class Customer {
         text.toString();
         date.toString();
 
-        about.setParameter(3, "Name", new TextString("#23"));
+        about.setParameter(3, "Name", new TextString("#23"), true);
         //    about.setParameter(3, (Object) "hsadaskll");
 
         about.setDescription("From " + from + " to " + to + ", call on " + telephone);

@@ -48,7 +48,7 @@ public class Location {
         return allInstances;
     }
     
-    public Location actionCreateCopy() {
+    public Location actionCreateTransientCopy() {
        Location copy = (Location) container.createTransientInstance(Location.class);
        copy.city = city;
        copy.customer = customer;
