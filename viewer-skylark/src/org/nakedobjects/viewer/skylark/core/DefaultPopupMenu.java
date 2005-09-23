@@ -91,15 +91,15 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
      */
     public void draw(Canvas canvas) {
         super.draw(canvas);
-
+    
         int width = getSize().getWidth();
         int height = getSize().getHeight();
         canvas.drawSolidRectangle(0, 0, width - 1, height - 1, backgroundColor);
         canvas.draw3DRectangle(0, 0, width - 1, height - 1, true);
-
+    
         int baseLine = style().getAscent() + VPADDING;
         int left = getPadding().getLeft();
-
+    
         for (int i = 0; i < items.length; i++) {
             if (items[i].isBlank) {
                 int y = baseLine - (style().getAscent() / 2);
@@ -107,7 +107,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
                 canvas.drawLine(1, y - 1, width - 2, y - 1, backgroundColor.darker());
             } else {
                 Color color;
-
+    
                 if (items[i].isDisabled || items[i].action == null) {
                     color = disabledColor();
                 } else if (getOption() == i) {
@@ -117,10 +117,10 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
                 } else {
                     color = normalColor();
                 }
-
+    
                 canvas.drawText(items[i].name, left, baseLine, color, style());
             }
-
+    
             baseLine += style().getTextHeight() + VPADDING;
         }
     }

@@ -43,6 +43,7 @@ public class DebugView implements DebugInfo {
             content.debugDetails(debug);
 
             debug.appendln(4, "Icon name", content.getIconName());
+            debug.appendln(4, "Icon ", content.getIconPicture(32));
             debug.appendln(4, "Window title", content.windowTitle());
              
             debug.appendln(4, "Object", content.isObject());
