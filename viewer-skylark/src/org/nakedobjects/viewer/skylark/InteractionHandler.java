@@ -97,7 +97,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 
             redraw();
         } catch (Exception e) {
-            log(e);
+            log("keyPressed", e);
         }
     }
 
@@ -122,7 +122,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
             keyboardManager.released(ke.getKeyCode(), ke.getModifiers());
             redraw();
         } catch (Exception e) {
-            log(e);
+            log("keyReleased", e);
         }
 
     }
@@ -144,8 +144,12 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
         }
     }
 
-    private void log(Exception e) {
-        LOG.error("error during user interaction", e);
+    private void log(String action, Exception e) {
+        LOG.error("error during user interaction: " + action  , e);
+        
+        // TODO create an exception layer (within Viewer) that displays dialog to user and allows them to abort or continue
+        viewer.setStatus("error during interaction, see log");
+//        getWorkspace().addOpenViewFor(result, at);
     }
 
     /**
@@ -185,7 +189,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
             }
             redraw();
         } catch (Exception e) {
-            log(e);
+            log("mouseClicked", e);
         }
     }
 
@@ -213,7 +217,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                 }
             }
         } catch (Exception e) {
-            log(e);
+            log("mouseDragged", e);
         }
 
     }
@@ -292,7 +296,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                 }
             }
         } catch (Exception e) {
-            log(e);
+            log("mouseMoved", e);
         }
 
     }
@@ -331,7 +335,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
             canDrag = overView != null && me.getClickCount() == 1;
             previouslyIdentifiedView = overView;
         } catch (Exception e) {
-            log(e);
+            log("mousePressed", e);
         }
 
     }
@@ -359,7 +363,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                 drag = null;
             }
         } catch (Exception e) {
-            log(e);
+            log("mouseReleased", e);
         }
     }
 
