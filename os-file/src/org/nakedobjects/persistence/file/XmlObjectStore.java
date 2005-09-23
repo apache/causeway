@@ -368,7 +368,7 @@ public class XmlObjectStore implements NakedObjectStore {
         return object;
     }
 
-    public void resolveEagerly(NakedObject object, NakedObjectField field) throws ObjectManagerException {}
+    public void resolveField(NakedObject object, NakedObjectField field) throws ObjectManagerException {}
 
     public void resolveImmediately(NakedObject object) throws ObjectManagerException {
         LOG.info("resolve-immediately: " + object);
