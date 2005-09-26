@@ -1,4 +1,5 @@
 package org.nakedobjects.utility;
+
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Color;
@@ -6,11 +7,14 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.Image;
 import java.awt.Panel;
 import java.awt.TextArea;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.URL;
 import java.util.Vector;
 
 
@@ -40,6 +44,14 @@ public abstract class DebugFrame extends Frame {
     private TextArea field;
 
     public DebugFrame() {
+        URL url = DebugFrame.class.getResource("/" + "images/debug.png");
+        if (url != null) {
+            Image image = Toolkit.getDefaultToolkit().getImage(url);
+            if(image != null) {
+                setIconImage(image);
+            }
+        }
+
         frames.addElement(this);
         setLayout(new BorderLayout(7, 7));
 
