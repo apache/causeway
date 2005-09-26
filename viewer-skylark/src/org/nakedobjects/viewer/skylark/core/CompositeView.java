@@ -148,11 +148,14 @@ public class CompositeView extends ObjectView {
      */
     public void layout() {
         if (buildInvalid) {
+            getViewManager().showWaitCursor();
             buildInvalid = false;
             builder.build(getView());
             buildCount++;
+            getViewManager().showDefaultCursor();
         }
         if (layoutInvalid) {
+            getViewManager().showWaitCursor();
             markDamaged();
             View views[] = getSubviews();
             for (int i = 0; i < views.length; i++) {
@@ -168,6 +171,7 @@ public class CompositeView extends ObjectView {
              
             layoutCount++;
             markDamaged();
+            getViewManager().showDefaultCursor();
         }
     }
 

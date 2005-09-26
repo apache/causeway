@@ -17,6 +17,7 @@ public final class BackgroundThread {
         Thread t = new Thread("background task") {
             public void run() {
                 view.getState().setActive();
+                view.getViewManager().setBusy(view);
                 repaint(view);
                 try {
                     task.execute();
@@ -32,6 +33,7 @@ public final class BackgroundThread {
                     view.getWorkspace().addOpenViewFor(error, new Location(20, 20));
                 }
                 view.getState().setInactive();
+                view.getViewManager().clearBusy(view);
                 repaint(view);
             }
         };

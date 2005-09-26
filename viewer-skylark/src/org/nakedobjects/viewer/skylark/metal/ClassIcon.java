@@ -31,6 +31,8 @@ import org.nakedobjects.viewer.skylark.basic.ClassTitleText;
 import org.nakedobjects.viewer.skylark.basic.DragContentIcon;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
 import org.nakedobjects.viewer.skylark.basic.ObjectBorder;
+import org.nakedobjects.viewer.skylark.core.BackgroundTask;
+import org.nakedobjects.viewer.skylark.core.BackgroundThread;
 import org.nakedobjects.viewer.skylark.core.DragViewOutline;
 import org.nakedobjects.viewer.skylark.core.ObjectView;
 
@@ -137,34 +139,47 @@ public class ClassIcon extends ObjectView {
         return false;
     }
 
-    public void secondClick(Click click) {
-        NakedClass nakedClass = getNakedClass();
-
-        Naked object = null;
-        InternalAbout about = new InternalAbout();
-        if (click.isCtrl()) {
-            if (getViewManager().isRunningAsExploration()) {
-                nakedClass.aboutExplorationActionInstances(about);
-                if (about.canUse().isAllowed()) {
-                    NakedCollection instances = nakedClass.allInstances();
-                    object = instances;
-
+    public void secondClick(final Click click) {
+        BackgroundThread.run(this, new BackgroundTask() {
+            public void execute() {
+                NakedClass nakedClass = getNakedClass();
+        
+                Naked object = null;
+                InternalAbout about = new InternalAbout();
+                if (click.isCtrl()) {
+                    if (getViewManager().isRunningAsExploration()) {
+                        nakedClass.aboutExplorationActionInstances(about);
+                        if (about.canUse().isAllowed()) {
+                            NakedCollection instances = nakedClass.allInstances();
+                            object = instances;
+        
+                        }
+                    }
+                } else {
+                    nakedClass.aboutExplorationActionFind(about);
+                    if (about.canUse().isAllowed() && getViewManager().isRunningAsExploration()) {
+                        FastFinder finder = nakedClass.explorationActionFind();
+                        object = NakedObjects.getObjectLoader().createAdapterForTransient(finder);
+                    }
+                }
+        
+                if (object != null) {
+                    Location location = getView().getAbsoluteLocation();
+                    location.subtract(getWorkspace().getAbsoluteLocation());
+                    location.add(getSize().getWidth() + 10, 0);
+                    getWorkspace().addOpenViewFor(object, location);
                 }
             }
-        } else {
-            nakedClass.aboutExplorationActionFind(about);
-            if (about.canUse().isAllowed() && getViewManager().isRunningAsExploration()) {
-                FastFinder finder = nakedClass.explorationActionFind();
-                object = NakedObjects.getObjectLoader().createAdapterForTransient(finder);
-            }
-        }
 
-        if (object != null) {
-            Location location = getView().getAbsoluteLocation();
-            location.subtract(getWorkspace().getAbsoluteLocation());
-            location.add(getSize().getWidth() + 10, 0);
-            getWorkspace().addOpenViewFor(object, location);
-        }
+            
+            public String getName() {
+                return "Open all instances";
+            }
+
+            public String getDescription() {
+                return "";
+            }
+        });
     }
 
     private NakedClass getNakedClass() {

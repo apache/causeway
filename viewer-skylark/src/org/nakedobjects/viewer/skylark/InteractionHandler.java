@@ -41,10 +41,6 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     }
 
     private void dragStart(MouseEvent me) {
-        if (!isOverThreshold(downAt, me.getPoint())) {
-            return;
-        }
-
         spy.addAction("Drag start  at " + downAt);
         drag = viewer.dragStart(new DragStart(downAt, me.getModifiers()));
 
@@ -82,7 +78,11 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * @see java.awt.event.KeyListener#keyPressed(KeyEvent)
      */
     public void keyPressed(KeyEvent ke) {
-        // LOG.debug("pressed " + KeyEvent.getKeyText(ke.getKeyCode()));
+        if(isBusy(null)) {
+            return;
+        }
+        
+       // LOG.debug("pressed " + KeyEvent.getKeyText(ke.getKeyCode()));
         lastTyped = null;
         try {
             if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -107,6 +107,10 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * @see java.awt.event.KeyListener#keyReleased(KeyEvent)
      */
     public void keyReleased(KeyEvent ke) {
+        if(isBusy(null)) {
+            return;
+        }
+        
         try {
             /*
              LOG.debug("released " + ke.getKeyCode());
@@ -134,6 +138,10 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * @see java.awt.event.KeyListener#keyTyped(KeyEvent)
      */
     public void keyTyped(KeyEvent ke) {
+        if(isBusy(null)) {
+            return;
+        }
+        
         lastTyped = ke;
         if (!ke.isActionKey()) {
             LOG.debug("typed " + ke.getKeyChar());
@@ -159,6 +167,10 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * @see java.awt.event.MouseListener#mouseClicked(MouseEvent)
      */
     public void mouseClicked(MouseEvent me) {
+        if(isBusy(null)) {
+            return;
+        }
+        
         try {
             Click click = new Click(previouslyIdentifiedView, downAt, me.getModifiers());
             spy.addAction("Mouse clicked " + click.getLocation());
@@ -200,6 +212,10 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * @see java.awt.event.MouseMotionListener#mouseDragged(MouseEvent)
      */
     public void mouseDragged(MouseEvent me) {
+        if(isBusy(null)) {
+            return;
+        }
+        
         try {
             if (canDrag) {
                 // checked to ensure that dragging over a view doesn't start a
@@ -244,6 +260,11 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * @see java.awt.event.MouseMotionListener#mouseMoved(MouseEvent)
      */
     public void mouseMoved(MouseEvent me) {
+        if(isBusy(null)) {
+            return;
+        }
+        
+
         try {
             if (drag == null) {
                 spy.reset();
@@ -265,6 +286,9 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                                 previouslyIdentifiedView.enteredSubview();
                             } else {
                                 spy.addAction("exited " + previouslyIdentifiedView);
+                                if(!isBusy(previouslyIdentifiedView)) {
+                                   // viewer.showDefaultCursor();
+                                }
                                 previouslyIdentifiedView.exited();
                             }
 
@@ -277,6 +301,9 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                                     overView.exitedSubview();
                                 } else {
                                     spy.addAction("entered " + overView);
+                                    if(isBusy(overView)) {
+                                      //  viewer.showWaitCursor();
+                                    }
                                     overView.entered();
                                 }
                             }
@@ -287,7 +314,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                     spy.addTrace("--> mouse moved");
                     viewer.mouseMoved(location);
                     spy.addTrace(overView, " mouse location", location);
-                    if ((me.getModifiers() & InputEvent.ALT_MASK) > 0) {
+                    if ((me.getModifiers() & InputEvent.ALT_MASK) > 0 && overView.getContent() != null) {
                         Naked object = overView.getContent().getNaked();
                         viewer.setStatus("Mouse over " + object);
                     }
@@ -301,6 +328,10 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 
     }
 
+    private boolean isBusy(View view) {
+        return viewer.isBusy(view);
+    }
+
     /**
      * Responds to the mouse pressed event (with the left button pressed) by initiating a drag. This sets up
      * the <code>View</code>'s dragging state to the view that the mouse was over when the button was
@@ -310,6 +341,10 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      */
     public void mousePressed(MouseEvent me) {
         try {
+            if(isBusy(null)) {
+                return;
+            }
+            
             spy.reset();
             viewer.translate(me);
 
@@ -349,6 +384,10 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
      * @see java.awt.event.MouseListener#mouseReleased(MouseEvent)
      */
     public void mouseReleased(MouseEvent me) {
+        if(isBusy(null)) {
+            return;
+        }
+        
         try {
             if (drag != null) {
                 mouseDragged(me);

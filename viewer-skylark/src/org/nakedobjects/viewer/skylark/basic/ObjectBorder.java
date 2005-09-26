@@ -48,7 +48,7 @@ public class ObjectBorder extends AbstractBorder {
 		Color color = null;
 		ViewState state = getState();
         if(state.isActive()) {
-		    color = Style.ACTIVE;
+	//	    color = Style.ACTIVE;
         } else if(state.canDrop()) {
 		    color = Style.VALID;
 		} else if(state.cantDrop()) {

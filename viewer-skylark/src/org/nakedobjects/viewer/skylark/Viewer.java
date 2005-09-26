@@ -45,6 +45,7 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
@@ -84,6 +85,7 @@ public class Viewer {
     private final UndoStack undoStack = new UndoStack();
     protected ViewUpdateNotifier updateNotifier;
     private String userStatus;
+    private Vector busy  = new Vector();
 
     public Viewer() {
         instance = this;
@@ -803,6 +805,21 @@ public class Viewer {
         if(spy != null) {
             spy.addAction(actionMessage);
         }
+    }
+
+    public void setBusy(View view) {
+        showWaitCursor();
+        busy.addElement(view);
+    }
+
+    public void clearBusy(View view) {
+        showDefaultCursor();
+        busy.removeElement(view);
+    }
+
+    public boolean isBusy(View view) {
+//        return busy.contains(view);
+        return busy.size() > 0;
     }
 }
 
