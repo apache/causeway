@@ -13,7 +13,7 @@ import org.nakedobjects.viewer.skylark.example.ExampleViewSpecification;
 import org.nakedobjects.viewer.skylark.example.TestObjectViewWithDragging;
 import org.nakedobjects.viewer.skylark.example.TestViews;
 import org.nakedobjects.viewer.skylark.example.border.TestHeaderView;
-import org.nakedobjects.viewer.skylark.special.ScrollBorder2;
+import org.nakedobjects.viewer.skylark.special.ScrollBorder;
 
 
 public class ScrollableTableBorderExample extends TestViews {
@@ -33,20 +33,20 @@ public class ScrollableTableBorderExample extends TestViews {
         
         TestHeaderView leftHeader = new TestHeaderView(axis, 40, 800);
         TestHeaderView topHeader = new TestHeaderView(axis, 800, 20);
-        View view =new ScrollBorder2(new TestObjectViewWithDragging(content, specification, axis, 800, 800, "both"),
+        View view =new ScrollBorder(new TestObjectViewWithDragging(content, specification, axis, 800, 800, "both"),
                 leftHeader, topHeader);
         view.setLocation(new Location(50, 60));
         view.setSize(new Size(216, 216));
         view.setParent(workspace);
         workspace.addView(view);
         
-        view = new ScrollBorder2(new TestObjectViewWithDragging(content, specification, axis, 200, 800, "vertical"));
+        view = new ScrollBorder(new TestObjectViewWithDragging(content, specification, axis, 200, 800, "vertical"));
         view.setLocation(new Location(300, 60));
         view.setSize(new Size(216, 216));
         view.setParent(workspace);
         workspace.addView(view);
         
-        view = new ScrollBorder2(new TestObjectViewWithDragging(content, specification, axis, 800, 200, "horizontal"));
+        view = new ScrollBorder(new TestObjectViewWithDragging(content, specification, axis, 800, 200, "horizontal"));
         view.setLocation(new Location(550, 60));
         view.setSize(new Size(216, 216));
         view.setParent(workspace);

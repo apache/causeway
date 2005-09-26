@@ -2,6 +2,8 @@ package org.nakedobjects.viewer.skylark;
 
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
@@ -11,11 +13,17 @@ import java.lang.reflect.Method;
 
 
 public class ViewerFrame extends Frame implements RenderingArea {
+    private static final long serialVersionUID = 1L;
     private Viewer viewer;
  
     public ViewerFrame() {} {	    
         setBackground(Style.APPLICATION_BACKGROUND.getAwtColor());
-
+        
+        Image image = Toolkit.getDefaultToolkit().getImage("images/small-logo.png");
+        if(image != null && image.getWidth(this) > 0) {
+            setIconImage(image);
+        }
+        
         /*
          * compensate for change in tab handling in Java 1.4
          */

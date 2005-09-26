@@ -7,7 +7,7 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.core.AbstractBuilderDecorator;
 import org.nakedobjects.viewer.skylark.special.CollectionElementBuilder;
-import org.nakedobjects.viewer.skylark.special.ScrollBorder2;
+import org.nakedobjects.viewer.skylark.special.ScrollBorder;
 import org.nakedobjects.viewer.skylark.special.StackLayout;
 import org.nakedobjects.viewer.skylark.table.TableHeader;
 
@@ -27,14 +27,17 @@ class TableHeaderBuilder extends AbstractBuilderDecorator {
 public class TableSpecification2 extends org.nakedobjects.viewer.skylark.table.TableSpecification {
 
     public TableSpecification2() {
+        // TODO does this do anything anymore?
         builder = new TableHeaderBuilder(new StackLayout(new CollectionElementBuilder(this, true)));
     }
 
     public View createView(Content content, ViewAxis axis) {
         View view = super.createView(content, axis);
-        ScrollBorder2 scrollingView = new ScrollBorder2(view);
+        ScrollBorder scrollingView = new ScrollBorder(view);
+        WindowBorder viewWithWindowBorder = new WindowBorder(scrollingView, false);
+        // note - the next call needs to be after the creation of the window border so that it exists when the header is set up
         scrollingView.setTopHeader(new TableHeader(view.getViewAxis()));
-        return new WindowBorder(scrollingView, false);
+        return viewWithWindowBorder;
     }
 	
     public String getName() {

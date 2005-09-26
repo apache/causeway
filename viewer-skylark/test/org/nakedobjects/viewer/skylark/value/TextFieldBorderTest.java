@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark.value;
 
 import org.nakedobjects.viewer.skylark.Padding;
+import org.nakedobjects.viewer.skylark.special.MockView;
 
 import junit.framework.TestCase;
 

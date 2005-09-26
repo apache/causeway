@@ -195,8 +195,8 @@ public class CompositeView extends ObjectView {
     public void removeView(View view) {
         if (views.contains(view)) {
             LOG.debug("removing " + view + " from " + this);
-            markDamaged();
             views.removeElement(view);
+            markDamaged();
             invalidateLayout();
         } else {
             throw new NakedObjectRuntimeException(view + " not in " + getView());

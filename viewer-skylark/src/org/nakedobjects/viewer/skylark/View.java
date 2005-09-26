@@ -165,7 +165,7 @@ public interface View extends Cloneable {
     Location getLocation();
 
     Padding getPadding();
-
+    
     View getParent();
 
     Size getRequiredSize();
@@ -302,8 +302,6 @@ public interface View extends Cloneable {
 
     /**
      * Specifies the location of this view, relative to its enclosing view.
-     * 
-     * @param point
      */
     void setLocation(Location point);
 

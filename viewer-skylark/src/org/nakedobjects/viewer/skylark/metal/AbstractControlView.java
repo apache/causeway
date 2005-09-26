@@ -140,7 +140,7 @@ public abstract class AbstractControlView implements View {
     public Location getLocation() {
         return new Location(location);
     }
-
+    
     public Padding getPadding() {
         return null;
     }
@@ -234,7 +234,7 @@ public abstract class AbstractControlView implements View {
     public void setLocation(Location point) {
         this.location = point;
     }
-
+    
     public void setParent(View view) {}
 
     public void setRequiredSize(Size size) {}

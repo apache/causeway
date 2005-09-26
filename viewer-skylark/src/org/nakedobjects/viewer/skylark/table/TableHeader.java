@@ -36,7 +36,6 @@ public class TableHeader extends AbstractView {
             resizeColumn = axis.getColumnBorderAt(drag.getLocation().getX());
             Bounds resizeArea = new Bounds(getView().getAbsoluteLocation(), getSize());
             resizeArea.translate(getView().getPadding().getLeft(), getView().getPadding().getTop());
-            resizeArea.translate(0, -height);
             if (resizeColumn == 0) {
                 resizeArea.setWidth(axis.getHeaderOffset());
             } else {
@@ -78,12 +77,12 @@ public class TableHeader extends AbstractView {
         TableAxis axis = ((TableAxis) getViewAxis());
 
         int x = axis.getHeaderOffset() - 2;
-        canvas.drawLine(0, height - 1, getSize().getWidth() - 1, height - 1, Style.SECONDARY2);
-        canvas.drawLine(x, 0, x, getSize().getHeight() - 1, Style.SECONDARY2);
+        canvas.drawLine(0, height - 1, getSize().getWidth() - 1, height - 1, Style.BLACK);
+        canvas.drawLine(x, 0, x, getSize().getHeight() - 1, Style.BLACK);
         x++;
         int columns = axis.getColumnCount();
         for (int i = 0; i < columns; i++) {
-            canvas.drawLine(x, 0, x, getSize().getHeight() - 1, Style.SECONDARY2);
+            canvas.drawLine(x, 0, x, getSize().getHeight() - 1, Style.BLACK);
             Canvas headerCanvas = canvas.createSubcanvas(x, 0, axis.getColumnWidth(i) - 1, height);
             headerCanvas.drawText(axis.getColumnName(i), HPADDING, y, Style.SECONDARY1, Style.LABEL);
             x += axis.getColumnWidth(i);

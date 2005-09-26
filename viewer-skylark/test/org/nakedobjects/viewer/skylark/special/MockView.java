@@ -128,7 +128,7 @@ public class MockView implements View {
     }
 
     public Padding getPadding() {
-        return null;
+        return new Padding();
     }
 
     public View getParent() {
@@ -136,7 +136,7 @@ public class MockView implements View {
     }
 
     public Size getRequiredSize() {
-        return null;
+        return new Size();
     }
 
     public Size getSize() {

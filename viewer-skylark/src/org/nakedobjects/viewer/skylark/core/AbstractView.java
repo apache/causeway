@@ -249,7 +249,7 @@ public abstract class AbstractView implements View {
     public Location getLocation() {
         return new Location(x, y);
     }
-
+    
     public Padding getPadding() {
         return new Padding(0, 0, 0, 0);
     }
@@ -513,7 +513,7 @@ public abstract class AbstractView implements View {
         x = location.getX();
         y = location.getY();
     }
-
+    
     public final void setParent(View view) {
         parent = view.getView();
 

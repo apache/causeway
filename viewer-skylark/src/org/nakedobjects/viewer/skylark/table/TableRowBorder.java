@@ -35,12 +35,23 @@ public class TableRowBorder extends AbstractBorder {
     public void draw(Canvas canvas) {
         int baseline = getBaseline();
 
-        int width = ((TableAxis) getViewAxis()).getHeaderOffset();
+        TableAxis axis = ((TableAxis) getViewAxis());
+        int width = axis.getHeaderOffset();
         Canvas subcanvas = canvas.createSubcanvas(0, 0, width, getSize().getHeight());
         int offset = HPADDING;
         icon.draw(subcanvas, offset, baseline);
         offset += icon.getSize().getWidth() + HPADDING + 0 + HPADDING;
         title.draw(subcanvas, offset, baseline, getLeft() - offset);
+
+        int columns = axis.getColumnCount();
+        int x = -1;
+        x += axis.getHeaderOffset();
+        canvas.drawLine(x - 1, 0, x - 1, getSize().getHeight() - 1, Style.BLACK);
+        canvas.drawLine(x, 0, x, getSize().getHeight() - 1, Style.BLACK);
+        for (int i = 0; i < columns; i++) {
+            x += axis.getColumnWidth(i);
+            canvas.drawLine(x, 0, x, getSize().getHeight() - 1, Style.BLACK);
+        }
 
         int y = getSize().getHeight() - 1;
         canvas.drawLine(0, y, getSize().getWidth(), y, Style.SECONDARY2);
