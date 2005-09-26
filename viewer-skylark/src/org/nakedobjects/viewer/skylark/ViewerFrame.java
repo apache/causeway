@@ -10,6 +10,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
 
 
 public class ViewerFrame extends Frame implements RenderingArea {
@@ -19,11 +20,14 @@ public class ViewerFrame extends Frame implements RenderingArea {
     public ViewerFrame() {} {	    
         setBackground(Style.APPLICATION_BACKGROUND.getAwtColor());
         
-        Image image = Toolkit.getDefaultToolkit().getImage("images/small-logo.png");
-        if(image != null && image.getWidth(this) > 0) {
-            setIconImage(image);
+        URL url = ViewerFrame.class.getResource("/" + "images/small-logo.png");
+        if (url != null) {
+            Image image = Toolkit.getDefaultToolkit().getImage(url);
+            if(image != null) {
+                setIconImage(image);
+            }
         }
-        
+
         /*
          * compensate for change in tab handling in Java 1.4
          */
