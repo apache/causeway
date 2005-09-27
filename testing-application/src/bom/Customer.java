@@ -307,6 +307,8 @@ public class Customer {
     public void setPreferredPaymentMethod(PaymentMethod method) {
         preferredPaymentMethod = method;
         isChanged = true;
+        
+    //    throw new NakedObjectRuntimeException();
     }
 
     public Title title() {
