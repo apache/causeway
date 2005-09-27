@@ -16,9 +16,6 @@ import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
 
 
 class LookupOverlaySpecification extends AbstractCompositeViewSpecification implements SubviewSpec {
-
-
-    
     public LookupOverlaySpecification() {
         builder = new StackLayout(new CollectionElementBuilder(this, true), true);
     }
@@ -38,11 +35,11 @@ class LookupOverlaySpecification extends AbstractCompositeViewSpecification impl
         TypedNakedCollection instances = manager.allInstances(type, true);
         instances.sort();
         RootCollection instanceContent = new RootCollection(instances);
-        return new PanelBorder(2, new ScrollBorder(super.createView(instanceContent, axis)));
+        return new PanelBorder(1, new ScrollBorder(super.createView(instanceContent, axis)));
     }
 
     public String getName() {
-        return "List";
+        return "Lookup Overlay";
     }
 }
 
