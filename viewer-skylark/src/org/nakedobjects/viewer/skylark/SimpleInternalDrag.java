@@ -3,8 +3,8 @@ package org.nakedobjects.viewer.skylark;
 import org.nakedobjects.utility.ToString;
 
 public class SimpleInternalDrag extends InternalDrag {
-
     private final Location location;
+    // TODO replace Location with Offset
     private final Location offset;
     private final View view;
 
@@ -18,6 +18,8 @@ public class SimpleInternalDrag extends InternalDrag {
      *                       the view over which the pointer was when this event started
      * @param location
      *                       the location within the viewer (the Frame/Applet/Window etc)
+     *                       
+     *                       TODO combine the two constructors
      */
     public SimpleInternalDrag(View view, Location location) {
         this.view = view;
