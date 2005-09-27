@@ -87,10 +87,6 @@ public class ScrollBorder extends AbstractViewDecorator {
     private int adjust(Click click) {
         return adjust(click.getLocation());
     }
-
-    private int adjust(InternalDrag drag) {
-        return adjust(drag.getLocation());
-    }
     
     private int adjust(ContentDrag drag) {
         return adjust(drag.getTargetLocation());
@@ -135,7 +131,20 @@ public class ScrollBorder extends AbstractViewDecorator {
     }
 
     protected Bounds contentArea() {
-        return new Bounds(left, top, getSize().getWidth() - left - right, getSize().getHeight() - top - bottom);
+        
+     /*   
+        int availableHeight = getSize().getHeight() - top;
+        int contentHeight = wrappedView.getRequiredSize().getHeight();
+  
+        int width = getSize().getWidth() - left;
+  //      int height = getSize().getHeight() - top;
+     
+        bottom =  availableHeight > contentHeight ? 0 : 16;
+        return new Bounds(left, top, width - right, availableHeight - (availableHeight > contentHeight ? 0 : bottom));
+
+        */
+        
+              return new Bounds(left, top, getSize().getWidth() - left - right, getSize().getHeight() - top - bottom);
     }
 
     protected void debugDetails(StringBuffer b) {
@@ -158,7 +167,6 @@ public class ScrollBorder extends AbstractViewDecorator {
     }
 
     public void drag(InternalDrag drag) {
-        adjust(drag.getLocation());
         switch (dragArea) {
         case NORTH:
             drag.getLocation().subtract(offset().getDeltaX(), top);
@@ -215,34 +223,38 @@ public class ScrollBorder extends AbstractViewDecorator {
     }
     
     public void dragCancel(InternalDrag drag) {
-        adjust(drag);
         switch (dragArea) {
         case NORTH:
+            drag.getLocation().subtract(offset().getDeltaX(), top);
             topHeader.dragCancel(drag);
             break;
 
         case WEST:
+            drag.getLocation().subtract(left, offset().getDeltaY());
             leftHeader.dragCancel(drag);
             break;
 
         case CENTER:
+            drag.getLocation().subtract(offset());
             wrappedView.dragCancel(drag);
             break;
         }
     }
     
     public void dragTo(InternalDrag drag) {
-        adjust(drag);
         switch (dragArea) {
         case NORTH:
+            drag.getLocation().subtract(offset().getDeltaX(), top);
             topHeader.dragTo(drag);
             break;
 
         case WEST:
+            drag.getLocation().subtract(left, offset().getDeltaY());
             leftHeader.dragTo(drag);
             break;
 
         case CENTER:
+            drag.getLocation().subtract(offset());
             wrappedView.dragTo(drag);
             break;
 
@@ -320,7 +332,7 @@ public class ScrollBorder extends AbstractViewDecorator {
         if (y > verticalScrollPosition && y < verticalScrollPosition + verticalVisibleAmount) {
             // offset is the distance from the left/top of the thumb to the pointer
             offsetToThumbEdge = y - verticalScrollPosition;
-            return new SimpleInternalDrag(this, location);
+            return new SimpleInternalDrag(this, new Offset(super.getAbsoluteLocation()));
         } else {
             return null;
         }
@@ -331,7 +343,7 @@ public class ScrollBorder extends AbstractViewDecorator {
         int x = location.getX();
         if (x > horizontalScrollPosition && x < horizontalScrollPosition + horizontalVisibleAmount) {
             offsetToThumbEdge = x - horizontalScrollPosition;
-            return new SimpleInternalDrag(this, location);
+            return new SimpleInternalDrag(this, new Offset(super.getAbsoluteLocation()));
         } else {
             return null;
         }
@@ -397,7 +409,7 @@ public class ScrollBorder extends AbstractViewDecorator {
         Color color = Style.PRIMARY2;
 
         // horizontal scrollbar
-        if (horizontalScrollPosition > left || horizontalVisibleAmount < contentWidth) {
+        if (bottom > 0 && (horizontalScrollPosition > left || horizontalVisibleAmount < contentWidth)) {
             canvas.drawSolidRectangle(left, contentHeight + top + 1, contentWidth, SCROLLBAR_WIDTH - 2, Style.SECONDARY3);
             canvas.drawSolidRectangle(left + horizontalScrollPosition, contentHeight + top + 1, horizontalVisibleAmount,
                     SCROLLBAR_WIDTH - 3, color);
@@ -407,7 +419,7 @@ public class ScrollBorder extends AbstractViewDecorator {
         }
 
         // vertical scrollbar
-        if (verticalScrollPosition > top || verticalVisibleAmount < contentHeight) {
+        if (right > 0 && (verticalScrollPosition > top || verticalVisibleAmount < contentHeight)) {
             canvas.drawSolidRectangle(contentWidth + left + 1, top, SCROLLBAR_WIDTH - 2, contentHeight, Style.SECONDARY3);
             canvas.drawSolidRectangle(contentWidth + left + 1, top + verticalScrollPosition, SCROLLBAR_WIDTH - 3,
                     verticalVisibleAmount, color);
@@ -486,7 +498,8 @@ public class ScrollBorder extends AbstractViewDecorator {
 
     public Size getRequiredSize() {
         Size size = wrappedView.getRequiredSize();
-        size.extend(left + right, top + bottom);
+        size.extend(left, top);
+ //       size.extend(SCROLLBAR_WIDTH, SCROLLBAR_WIDTH);
         return size;
     }
 
@@ -654,7 +667,7 @@ public class ScrollBorder extends AbstractViewDecorator {
 
     public void setRequiredSize(Size size) {
         Size wrappedSize = new Size(size);
-        wrappedSize.contract(left + right, top + bottom);
+        wrappedSize.contract(left, top);
         wrappedView.setRequiredSize(wrappedSize);
     }
 
@@ -663,9 +676,22 @@ public class ScrollBorder extends AbstractViewDecorator {
         //      float verticalRatio = ((float) verticalScrollPosition) /
         // contentArea().getHeight();
 
+        Size requiredSize = wrappedView.getRequiredSize();
+
+        int availableHeight2 = size.getHeight() - top;
+        int contentHeight2 = requiredSize.getHeight();
+        right =  availableHeight2 >= contentHeight2 ? 0 : SCROLLBAR_WIDTH;
+
+        int availableWidth2 = size.getWidth() - left;
+        int contentWidth2 = requiredSize.getWidth();
+        bottom =  availableWidth2 >= contentWidth2 ? 0 : SCROLLBAR_WIDTH;
+
+
         this.size = new Size(size);
+      //  this.size.contract(16, 16);
+        
         Bounds boundsOfVisibleArea = contentArea();
-        Size contentSize = wrappedView.getRequiredSize();
+        Size contentSize = requiredSize;
 
         int availableHeight = boundsOfVisibleArea.getHeight();
         int contentHeight = Math.max(availableHeight, contentSize.getHeight());
@@ -685,7 +711,7 @@ public class ScrollBorder extends AbstractViewDecorator {
             topHeader.setSize(new Size(contentWidth, top));
         }
         
-        wrappedView.setSize(wrappedView.getRequiredSize());
+        wrappedView.setSize(requiredSize);
     }
 
     public void setVerticalPostion(final int position) {
