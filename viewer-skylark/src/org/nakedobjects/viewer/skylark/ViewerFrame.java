@@ -27,6 +27,7 @@ public class ViewerFrame extends Frame implements RenderingArea {
                 setIconImage(image);
             }
         }
+        setTitle("Naked Objects");
 
         /*
          * compensate for change in tab handling in Java 1.4
@@ -108,7 +109,6 @@ public class ViewerFrame extends Frame implements RenderingArea {
 	public void set_Title(String title) {
 		setTitle(title);
 	}
-
 }
 
 
