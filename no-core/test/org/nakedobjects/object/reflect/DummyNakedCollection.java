@@ -2,21 +2,15 @@ package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.Persistable;
-import org.nakedobjects.object.ResolveState;
-import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.defaults.AbstractNakedReference;
 import org.nakedobjects.utility.Assert;
 
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.Vector;
 
 
-public class DummyNakedCollection implements NakedCollection {
+public class DummyNakedCollection extends AbstractNakedReference implements NakedCollection {
     private Vector collection = new Vector();
-    private Oid oid;
-    private NakedObjectSpecification specification;
 
     public DummyNakedCollection() {}
 
@@ -28,10 +22,6 @@ public class DummyNakedCollection implements NakedCollection {
         return collection.contains(object);
     }
 
-    public void checkLock(long version) {}
-    
-    public void debugClearResolved() {}
-
     public void destroyed() {}
 
     public NakedObject elementAt(int index) {
@@ -42,28 +32,8 @@ public class DummyNakedCollection implements NakedCollection {
         return collection.elements();
     }
 
-    public String getIconName() {
-        return null;
-    }
-
     public Object getObject() {
         return collection;
-    }
-
-    public Oid getOid() {
-        return oid;
-    }
-
-    public ResolveState getResolveState() {
-        return null;
-    }
-
-    public NakedObjectSpecification getSpecification() {
-        return specification;
-    }
-
-    public long getVersion() {
-        return 0;
     }
 
     public void init(Object[] initElements) {
@@ -71,16 +41,6 @@ public class DummyNakedCollection implements NakedCollection {
         for (int i = 0; i < initElements.length; i++) {
             collection.addElement(initElements[i]);
         }
-    }
-
-    public Persistable persistable() {
-        return Persistable.USER_PERSISTABLE;
-    }
-    
-    public void setOptimisticLock(long version, String user, Date time) {}
-
-    public void setupSpecification(NakedObjectSpecification specification) {
-        this.specification = specification;
     }
 
     public int size() {

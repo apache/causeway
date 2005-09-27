@@ -9,7 +9,7 @@ import org.nakedobjects.object.MockOid;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.reflect.DummyField;
-import org.nakedobjects.object.reflect.DummyNakedCollection;
+import org.nakedobjects.object.reflect.DummyInternalCollection;
 import org.nakedobjects.object.reflect.DummyNakedObject;
 import org.nakedobjects.object.reflect.NakedObjectField;
 
@@ -102,7 +102,7 @@ public class DataFactoryTest extends TestCase {
     }
 
     public void testCreateActionResultWithCollection() {
-        DummyNakedCollection collection = new DummyNakedCollection();
+        DummyInternalCollection collection = new DummyInternalCollection();
         DummyNakedObjectSpecification type = new DummyNakedObjectSpecification();
         collection.setupSpecification(type);
         Data data = factory.createActionResult(collection);
@@ -238,7 +238,6 @@ public class DataFactoryTest extends TestCase {
 
         NullData emptyFieldData = (NullData) rootData.getFieldContent()[2];
         assertNotNull(emptyFieldData);
-
     }
 
     public void testCreateMakePersistentGraphWereAllTransient() {
@@ -270,7 +269,6 @@ public class DataFactoryTest extends TestCase {
 
         NullData emptyFieldData = (NullData) rootData.getFieldContent()[2];
         assertNotNull(emptyFieldData);
-
     }
 
     public void testPersistentObjectParameter() {
@@ -335,7 +333,6 @@ public class DataFactoryTest extends TestCase {
 
         NullData emptyFieldData = (NullData) rootData.getFieldContent()[2];
         assertNotNull(emptyFieldData);
-
     }
 
     public void testValueParameter() {

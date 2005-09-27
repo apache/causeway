@@ -156,7 +156,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
 
         NakedClass spec;
         try {
-        spec = objectStore.getNakedClass(specification.getFullName());
+            spec = objectStore.getNakedClass(specification.getFullName());
         } catch (ObjectNotFoundException e) {
             spec = new NakedClass(specification.getFullName());
         }
