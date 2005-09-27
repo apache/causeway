@@ -120,7 +120,7 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
                     yWindow += height;
 
                 } else {
-                    NakedObject object = ((ObjectContent) v.getContent()).getObject();
+                    Naked object = v.getContent().getNaked();
                     if (object.getObject() instanceof NakedClass) {
                         if (yClass + height > maxHeight) {
                             yClass = PADDING;
