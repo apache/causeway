@@ -46,11 +46,11 @@ public class TableRowBorder extends AbstractBorder {
         int columns = axis.getColumnCount();
         int x = -1;
         x += axis.getHeaderOffset();
-        canvas.drawLine(x - 1, 0, x - 1, getSize().getHeight() - 1, Style.BLACK);
-        canvas.drawLine(x, 0, x, getSize().getHeight() - 1, Style.BLACK);
+        canvas.drawLine(x - 1, 0, x - 1, getSize().getHeight() - 1, Style.SECONDARY1);
+        canvas.drawLine(x, 0, x, getSize().getHeight() - 1, Style.SECONDARY1);
         for (int i = 0; i < columns; i++) {
             x += axis.getColumnWidth(i);
-            canvas.drawLine(x, 0, x, getSize().getHeight() - 1, Style.BLACK);
+            canvas.drawLine(x, 0, x, getSize().getHeight() - 1, Style.SECONDARY1);
         }
 
         int y = getSize().getHeight() - 1;
