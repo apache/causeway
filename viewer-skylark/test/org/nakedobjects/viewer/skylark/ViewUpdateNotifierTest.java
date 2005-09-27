@@ -1,5 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.NakedObjectsClient;
+import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.special.MockView;
@@ -24,6 +26,10 @@ public class ViewUpdateNotifierTest extends TestCase {
 
     protected void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
+
+
+        new NakedObjectsClient().setConfiguration(new Configuration());
+        
 
         notifier = new ExposedViewUpdateNotifier();
 

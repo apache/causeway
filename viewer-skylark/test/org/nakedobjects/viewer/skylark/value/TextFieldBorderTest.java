@@ -3,6 +3,9 @@ package org.nakedobjects.viewer.skylark.value;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.special.MockView;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import junit.framework.TestCase;
 
 public class TextFieldBorderTest extends TestCase {
@@ -11,6 +14,11 @@ public class TextFieldBorderTest extends TestCase {
         junit.textui.TestRunner.run(TextFieldBorderTest.class);
     }
 
+
+    protected void setUp() throws Exception {
+        Logger.getRootLogger().setLevel(Level.OFF);
+    }
+    
     public void testBorder() {
         MockView mockView = new MockView();
         TextFieldBorder border = new TextFieldBorder(mockView);

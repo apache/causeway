@@ -9,6 +9,9 @@ import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.core.DummyView;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import junit.framework.TestCase;
 
 
@@ -24,6 +27,8 @@ public class TitleTextTest extends TestCase {
     }
 
     protected void setUp() throws Exception {
+        Logger.getRootLogger().setLevel(Level.OFF);
+
         system = new TestSystem();
         system.init();
         

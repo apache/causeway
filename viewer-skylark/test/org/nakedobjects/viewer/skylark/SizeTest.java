@@ -24,6 +24,9 @@
 
 package org.nakedobjects.viewer.skylark;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import junit.framework.TestCase;
 
 
@@ -36,6 +39,8 @@ public class SizeTest extends TestCase {
 	}
 
 	protected void setUp() throws Exception {
+	    Logger.getRootLogger().setLevel(Level.OFF);
+
 		s = new Size(10, 20);
 	}
 	
