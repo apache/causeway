@@ -22,15 +22,17 @@ public abstract class OpenOptionFieldBorder extends AbstractBorder {
         Size size = getSize();
         int x = size.getWidth() - right + 5 - HPADDING;
         int y = (size.getHeight() - 6) / 2;
-        Color color = over ?  Style.SECONDARY1 : Style.PRIMARY2;
 
-        Shape triangle = new Shape(0, 0);
-        triangle.addVertex(6, 6);
-        triangle.addVertex(12, 0);
-
-        canvas.drawShape(triangle, x, y, Style.SECONDARY2);
         if(isAvailable()) {
-	        canvas.drawSolidShape(triangle, x, y, color); 
+            Shape triangle = new Shape(0, 0);
+            triangle.addVertex(6, 6);
+            triangle.addVertex(12, 0);
+            
+            canvas.drawShape(triangle, x, y, Style.SECONDARY2);
+            if(over) {
+                Color color = over ?  Style.SECONDARY1 : Style.PRIMARY2;
+                canvas.drawSolidShape(triangle, x, y, color);
+            }
         }
         
         super.draw(canvas);
