@@ -4,11 +4,16 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.system.AboutNakedObjects;
 import org.nakedobjects.utility.StartupException;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -18,6 +23,8 @@ public class StartUp {
     private static final String CONTAINER = "container";
 
     public static void main(String[] args) {
+        LogManager.getRootLogger().setLevel(Level.OFF);
+        
         String name = args.length > 0 ? args[0] : "nakedobjects.properties";
         Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(name, true));
 
@@ -43,7 +50,7 @@ public class StartUp {
         Enumeration e = properties.propertyNames();
         while (e.hasMoreElements()) {
             String key = (String) e.nextElement();
-            if (key.startsWith(prefix)) {
+            if (key.startsWith(prefix) && key.length() > prefix.length()) {
       /*          if(key.substring(0, prefix.length() + 1).)
                 {
                     
@@ -66,15 +73,15 @@ public class StartUp {
         LOG.debug("  getting set method for " + field + "/" +  value.getClass());
         Method setter;
         try {
-            setter = c.getMethod("set" + field, new Class[] { value.getClass() });
+            PropertyDescriptor property = new PropertyDescriptor(field, c, null, "set" + field);
+            setter = property.getWriteMethod();
+            
+            //setter = c.getMethod("set" + field, new Class[] { value.getClass() });
             setter.invoke(object, new Object[] { value });
         } catch (SecurityException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
-        } catch (NoSuchMethodException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        } catch (IllegalArgumentException e1) {
+         } catch (IllegalArgumentException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         } catch (IllegalAccessException e1) {
@@ -83,6 +90,9 @@ public class StartUp {
         } catch (InvocationTargetException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
+        } catch (IntrospectionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
