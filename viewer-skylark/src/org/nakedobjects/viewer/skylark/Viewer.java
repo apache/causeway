@@ -150,7 +150,8 @@ public class Viewer {
 
     public Drag dragStart(DragStart start) {
         if (onOverlay(start.getLocation())) {
-            return null;
+            start.subtract(overlayView.getLocation());
+            return overlayView.dragStart(start);
         } else {
             return rootView.dragStart(start);
         }
