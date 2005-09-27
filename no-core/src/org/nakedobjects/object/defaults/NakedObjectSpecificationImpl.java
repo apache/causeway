@@ -27,6 +27,9 @@ import org.apache.log4j.Logger;
 
 
 public final class NakedObjectSpecificationImpl implements NakedObjectSpecification {
+    private final static Logger LOG = Logger.getLogger(NakedObjectSpecificationImpl.class);
+
+    
     private class SubclassList {
         private Vector classes = new Vector();
 
@@ -41,7 +44,6 @@ public final class NakedObjectSpecificationImpl implements NakedObjectSpecificat
         }
     }
 
-    private final static Logger LOG = Logger.getLogger(NakedObjectSpecificationImpl.class);
 
    /**
      * Expose as a .NET property
