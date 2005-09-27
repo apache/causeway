@@ -37,10 +37,13 @@ public class JavaAssociationTest extends TestCase {
 
     	system = new TestSystem();
         system.init();
-        system.addSpecification(spec = new DummyNakedObjectSpecification()); // for String
+        system.addSpecification(new DummyNakedObjectSpecification()); // for String
     	system.addSpecification(new DummyNakedObjectSpecification()); // for Date	
     	system.addSpecification(new DummyNakedObjectSpecification()); // for float
-        
+     
+        system.addSpecification(new DummyNakedObjectSpecification(JavaObjectWithOneToOneAssociations.class.getName()));
+        system.addSpecification(spec = new DummyNakedObjectSpecification(JavaReferencedObject.class.getName()));
+
         javaObjectWithOneToOneAssociations = new JavaObjectWithOneToOneAssociations();
         nakedObjectHoldingObjectWithAssociations = system.createAdapterForTransient(javaObjectWithOneToOneAssociations);        
         

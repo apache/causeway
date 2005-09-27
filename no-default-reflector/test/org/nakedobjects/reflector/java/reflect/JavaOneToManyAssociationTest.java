@@ -6,10 +6,10 @@ import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectTestCase;
+import org.nakedobjects.object.reflect.DummyNakedCollection;
 import org.nakedobjects.object.reflect.internal.DummyIdentifier;
 
 import java.lang.reflect.Method;
-import java.util.Vector;
 
 import junit.framework.TestSuite;
 
@@ -39,7 +39,9 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         Logger.getRootLogger().setLevel(Level.OFF);
 
         system = new TestSystem();
-     //   system.addSpecification(new DummyNakedObjectSpecification(InternalCollection.class.getName()));
+        system.addSpecification(new DummyNakedObjectSpecification(JavaObjectWithVector.class.getName()));
+        system.addSpecification(new DummyNakedObjectSpecification(JavaReferencedObject.class.getName()));
+        system.addSpecification(new DummyNakedObjectSpecification(InternalCollection.class.getName()));
         system.init();
 
         objectWithVector = new JavaObjectWithVector();
@@ -103,9 +105,11 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         spec = new DummyNakedObjectSpecification();
         system.addSpecification(spec);
         
-    	//objectWithVector.collection = new DummyInternalCollection();
+        DummyNakedCollection collection = new DummyNakedCollection();
+        system.addNakedCollectionAdapter(collection);
+        
     	assertNotNull(collectionField.getAssociations(new DummyIdentifier(), nakedObject));
-    	assertEquals(new Vector(), collectionField.getAssociations(new DummyIdentifier(), nakedObject).getObject());
+    	assertEquals(collection.getObject(), collectionField.getAssociations(new DummyIdentifier(), nakedObject).getObject());
     }     	
     
     public void testName() {

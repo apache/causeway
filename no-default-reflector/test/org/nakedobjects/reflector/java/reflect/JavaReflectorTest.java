@@ -121,6 +121,195 @@ public class JavaReflectorTest extends TestCase {
     public void testLookup() {
         assertFalse(reflector.isLookup());
     }
+    
+    
+    
+    
+    
+    
+   /* 
+
+    public void testGetClassActionByParam() {
+        NakedObjectSpecification[] params = new NakedObjectSpecification[] { nakedObjectSpecification(NakedClassTestParameter.class) };
+        Action action = nakedObjectSpecification.getClassAction(Action.USER, "example method", params);
+        assertNotNull(action);
+        assertEquals("examplemethod", action.getName());
+        assertEquals(Action.USER, action.getActionType());
+        assertEquals(null, action.getReturnType());
+
+        params = new NakedObjectSpecification[] { nakedObjectSpecification(ProductTestObject.class) };
+        assertNull(nakedObjectSpecification.getClassAction(Action.USER, "no method", params));
+    }
+
+    public void testGetClassActions() {
+        NakedObjectSpecification c = nakedObjectSpecification(ContactTestObject.class);
+        Action[] actions = c.getClassActions(Action.USER);
+        ExpectationSet exp = new ExpectationSet("action names");
+        exp.addExpected("classop");
+        exp.addExpected("dowhatever");
+        exp.addExpected("example");
+
+        for (int i = 0; i < actions.length; i++) {
+            assertNotNull(actions[i]);
+            exp.addActual(actions[i].getName());
+        }
+        exp.verify();
+    }
+
+    public void testGetExplorationActions() {
+        Action[] actions = nakedObjectSpecification.getObjectActions(Action.EXPLORATION);
+        ExpectationSet exp = new ExpectationSet("action names");
+        exp.addExpected("explore");
+
+        for (int i = 0; i < actions.length; i++) {
+            exp.addActual(actions[i].getName());
+        }
+        exp.verify();
+    }
+
+    public void testGetObjectsActions() {
+        NakedObjectSpecification c = nakedObjectSpecification(ContactTestObject.class);
+        Action[] actions = c.getObjectActions(Action.USER);
+        //assertEquals(6, actions.length);
+
+        ExpectationSet exp = new ExpectationSet("action names");
+        // 1 param actions
+        exp.addExpected("addcontact");
+        exp.addExpected("renew");
+
+        // 0 param actions
+        exp.addExpected("createinvoice");
+        exp.addExpected("duplicate");
+        exp.addExpected("setup");
+        exp.addExpected("resetworth");
+        exp.addExpected("persist");
+
+        for (int i = 0; i < actions.length; i++) {
+            exp.addActual(actions[i].getName());
+        }
+        exp.verify();
+    }
+
+    public void testHashCodes() {
+        NakedObjectSpecification c1 = nakedObjectSpecification(Role.class);
+        NakedObjectSpecification c2 = nakedObjectSpecification(AssociationExample.class);
+
+        assertTrue(c1.hashCode() != c2.hashCode());
+
+    }
+
+    public void testMemberOrdering() {
+        NakedObjectSpecification c = nakedObjectSpecification(GenericTestObject.class);
+        com.mockobjects.ExpectationList exp2 = new com.mockobjects.ExpectationList("ordered names");
+
+        exp2.addExpected("customer");
+        exp2.addExpected("products");
+        exp2.addExpected("datecreated");
+        exp2.addExpected("lastactivity");
+        FieldSpecification[] attributes = c.getFields();
+
+        for (int i = 0; i < attributes.length; i++) {
+            exp2.addActual(attributes[i].getName());
+        }
+        exp2.verify();
+    }
+
+    public void testNameAttribute() {
+        NakedObjectSpecification c = nakedObjectSpecification(ContactTestObject.class);
+        FieldSpecification[] actions = c.getFields();
+
+        for (int i = 0; i < actions.length; i++) {
+            if (actions[i].getName().equals("name")) {
+                FieldSpecification att = actions[i];
+
+                assertEquals(true, att.isValue());
+                assertEquals(TextString.class.getName(), att.getType().getFullName());
+                assertEquals("name", att.getName());
+                return;
+            }
+        }
+        fail("Didn't find  Name attribute");
+    }
+
+    public void testNames() {
+        NakedObjectSpecification c = nakedObjectSpecification(ContactTestObject.class);
+
+        assertEquals("org.nakedobjects.object.ContactTestObject", c.getFullName());
+        assertEquals("ContactTestObject", c.getShortName());
+        assertEquals("Contact", c.getSingularName());
+        assertEquals("Contacts", c.getPluralName());
+    }
+
+    public void testObject() {
+        NakedObjectSpecification c = nakedObjectSpecification(GenericTestObject.class);
+
+        assertEquals("Generic Objects", c.getPluralName());
+    }
+
+    public void testProduct() {
+        nakedObjectSpecification(ProductTestObject.class);
+    }
+
+    public void testRepeatability() {
+        NakedObjectSpecification a = nakedObjectSpecification(ContactTestObject.class);
+        NakedObjectSpecification b = nakedObjectSpecification(ProductTestObject.class);
+
+        // repeated calls gets the same objects
+        assertEquals(a, nakedObjectSpecification(ContactTestObject.class));
+        assertEquals(b, nakedObjectSpecification(ProductTestObject.class));
+    }
+
+    public void testTypes() {
+        // concrete classes maintain their type
+        NakedObjectSpecification c1 = nakedObjectSpecification(ConcreteEmployee.class);
+
+        //      assertEquals("org.nakedobjects.object.ConcreteEmployee",
+        // c1.getJavaType().getNameAsString());
+        Object obj1 = c1.acquireInstance();
+
+        assertEquals("org.nakedobjects.object.ConcreteEmployee", obj1.getClass().getName());
+
+        // abstract classes become ...$Proxy
+        //
+        //       NakedClass c2 = nakedClass(Employee.class);
+
+        //       assertEquals("org.nakedobjects.object.Employee",
+        // c2.getJavaType().getNameAsString());
+        //        Object obj2 = c2.acquireInstance();
+
+        //       assertEquals("org.nakedobjects.unittesting.testobjects.Employee$Proxy",
+        // obj2.getClass().getName());
+    }
+
+
+    public void testSubclasses() {
+        NakedObjectSpecification cls = nakedObjectSpecification(Person.class);
+        NakedObjectSpecification subclass1 = nakedObjectSpecification(LittlePerson.class);
+        NakedObjectSpecification subclass2 = nakedObjectSpecification(BigPerson.class);
+        NakedObjectSpecification subclass3 = nakedObjectSpecification(SmallPerson.class);
+
+        ExpectationSet set = new ExpectationSet("");
+        set.addExpected(subclass1);
+        set.addExpected(subclass2);
+
+        NakedObjectSpecification[] subclasses = cls.subclasses();
+        set.addActualMany(subclasses);
+        set.verify();
+
+        assertTrue(cls.isOfType(cls));
+        assertTrue(subclass1.isOfType(cls));
+        assertTrue(subclass2.isOfType(cls));
+        assertTrue(subclass3.isOfType(cls));
+
+        assertFalse(cls.isOfType(subclass1));
+        assertFalse(cls.isOfType(subclass2));
+        assertFalse(cls.isOfType(subclass3));
+
+    }
+    private NakedObjectSpecification nakedObjectSpecification(Class cls) {
+        return NakedObjects.getSpecificationLoader().loadSpecification(cls.getName());
+    }
+    */
 }
 
 /*
