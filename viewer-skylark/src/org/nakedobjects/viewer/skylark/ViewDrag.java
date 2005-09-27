@@ -72,6 +72,7 @@ public class ViewDrag extends Drag {
      */
     protected void end(Viewer viewer) {
         viewsDecoratedWorkspace.drop(this);
+        viewer.disposeOverlayView();
     }
 
     public View getOverlay() {

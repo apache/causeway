@@ -395,7 +395,6 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                 Location location = new Location(me.getPoint());
                 drag.drag(viewer, location, me.getModifiers());
                 viewer.clearStatus();
-                viewer.disposeOverlayView();
                 drag.end(viewer);
                 redraw();
 
