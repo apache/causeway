@@ -32,6 +32,20 @@ public class SimpleInternalDrag extends InternalDrag {
         this.location.subtract(offset);
     }
 
+    public SimpleInternalDrag(View view, Offset off) {
+        this.view = view;
+ 
+        location = new Location();
+        
+        offset = new Location(off.getDeltaX(), off.getDeltaY());
+        
+        Padding targetPadding = view.getPadding();
+        Padding containerPadding = view.getView().getPadding();
+        offset.add(containerPadding.getLeft() - targetPadding.getLeft(), containerPadding.getTop() - targetPadding.getTop());
+        
+        this.location.subtract(offset);
+    }
+
     protected void cancel(Viewer viewer) {
         view.dragCancel(this);
     }
