@@ -19,7 +19,7 @@ public class PanelBorder extends LineBorder {
     }
     
     public PanelBorder(int size, View wrappedView) {
-        super(size, wrappedView);
+        super(size, Style.SECONDARY2, wrappedView);
 		background = Style.WHITE;
     }
     
@@ -36,6 +36,11 @@ public class PanelBorder extends LineBorder {
 	
 	public void setBackground(Color color) {
         this.background = color;
+    }
+    
+
+    public String toString() {
+        return wrappedView.toString() + "/PanelBorder";
     }
 }
 
