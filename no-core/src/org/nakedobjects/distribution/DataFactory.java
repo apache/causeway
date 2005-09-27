@@ -93,6 +93,7 @@ public abstract class DataFactory {
         NakedObjectSpecification specification = object.getSpecification();
         String type = specification.getFullName();
         ResolveState resolveState = object.getResolveState();
+        boolean isComplete = object.getResolveState() == ResolveState.TRANSIENT|| object.getResolveState() == ResolveState.RESOLVED;
 
         Object[] fieldContent;
         if (resolveState.isSerializing() || !nextLevel || depth == 0 || resolveState.isGhost()) {
@@ -101,14 +102,13 @@ public abstract class DataFactory {
             NakedObjectField[] fields = specification.getFields();
             fieldContent = new Object[fields.length];
 
-            boolean isResolved = object.getResolveState() == ResolveState.RESOLVED;
             
             NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
             for (int i = 0; i < fields.length; i++) {
                 Naked field = object.getField(fields[i]);
-                if (field == null && isResolved) {
+                if (field == null && isComplete) {
                     fieldContent[i] = createNullData(fields[i].getSpecification().getFullName());
-                } else if (field == null && !isResolved) {
+                } else if (field == null && !isComplete) {
                     fieldContent[i] = null;                    
                 } else if (fields[i].isValue()) {
                     fieldContent[i] = createValueData(field);
@@ -121,7 +121,7 @@ public abstract class DataFactory {
             NakedObjects.getObjectLoader().end(object);
         }
 
-        return createObjectData(oid, type, fieldContent, resolveState.isResolved(), object.getVersion());
+        return createObjectData(oid, type, fieldContent, isComplete, object.getVersion());
     }
 
     protected abstract ObjectData createObjectData(
