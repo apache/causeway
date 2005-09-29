@@ -57,9 +57,10 @@ public class JavaAction extends JavaMember implements ActionPeer {
             Object result = actionMethod.invoke(inObject.getObject(), executionParameters);
             LOG.debug(" action result " + result);
             if (result != null) {
-                Naked adapter = NakedObjects.getObjectLoader().getAdapterFor(result);
+                Naked adapter;
+                adapter = NakedObjects.getObjectLoader().createAdapterForCollection(result, null);
                 if(adapter == null) {
-                    adapter = NakedObjects.getObjectLoader().createAdapterForCollection(result, null);
+                    adapter = NakedObjects.getObjectLoader().getAdapterFor(result);
                     if(adapter == null) {
                         adapter = NakedObjects.getObjectLoader().createAdapterForTransient(result);
                     }
@@ -141,7 +142,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
         return target;
     }
 
-    private NakedObjectSpecification nakedClass(Class returnType) {
+    private NakedObjectSpecification specification(Class returnType) {
         return NakedObjects.getSpecificationLoader().loadSpecification(returnType.getName());
     }
 
@@ -149,7 +150,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
         Class[] cls = actionMethod.getParameterTypes();
         NakedObjectSpecification[] naked = new NakedObjectSpecification[cls.length];
         for (int i = 0; i < cls.length; i++) {
-            naked[i] = nakedClass(cls[i]);
+            naked[i] = specification(cls[i]);
         }
         return naked;
     }
@@ -157,7 +158,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
     public NakedObjectSpecification returnType() {
         Class returnType = actionMethod.getReturnType();
         boolean hasReturn = returnType != void.class && returnType != NakedError.class;
-        return hasReturn ? nakedClass(returnType) : null;
+        return hasReturn ? specification(returnType) : null;
     }
     
     public ActionParameterSet getParameters(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
