@@ -5,7 +5,6 @@ import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.distribution.DataFactory;
 import org.nakedobjects.distribution.Distribution;
-import org.nakedobjects.distribution.DistributionLogger;
 import org.nakedobjects.distribution.ProxyObjectManager;
 import org.nakedobjects.distribution.ProxyReflectionFactory;
 import org.nakedobjects.distribution.ServerDistribution;
@@ -22,7 +21,6 @@ import org.nakedobjects.object.defaults.ObjectLoaderImpl;
 import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.NakedObjectStore;
-import org.nakedobjects.object.persistence.ObjectManagerLogger;
 import org.nakedobjects.object.persistence.ObjectStoreLogger;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.defaults.DefaultPersistAlgorithm;
@@ -114,7 +112,8 @@ public abstract class StandaloneClientServer {
                 localObjectManager.setPersistAlgorithm(persistAlgorithm);
                 localObjectManager.setCheckObjectsForDirtyFlag(true);
 
-                NakedObjectManager objectManager = new ObjectManagerLogger(localObjectManager, "server-manager.log");
+                NakedObjectManager objectManager = localObjectManager;
+          //      objectManager = new ObjectManagerLogger(objectManager, "server-manager.log");
                 nakedObjects.setObjectManager(objectManager);
 
                 LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
@@ -138,8 +137,9 @@ public abstract class StandaloneClientServer {
                 sd.setObjectFactory(objectFactory);
                 sd.setObjectDataFactory(objectDataFactory);
                 
-                Distribution serverLogger = new DistributionLogger(sd, "server-connection.log");
-                
+                Distribution serverLogger = sd;
+                //serverLogger = new DistributionLogger(serverLogger, "server-connection.log");
+                    
                 server.setFacade(serverLogger);
                 server.setUpdateNotifier(updateNotifier);
 
@@ -166,6 +166,8 @@ public abstract class StandaloneClientServer {
                 debugFrame.setBounds(500, 300, 1000, 700);
                 debugFrame.refresh();
                 debugFrame.show();
+                
+                updateNotifier.getUpdates();
 
                 server.run();
             }
@@ -183,7 +185,7 @@ public abstract class StandaloneClientServer {
         PipedClient client =  new PipedClient();
         client.setConnection(connection);
         
-        DistributionLogger clientLogger = new DistributionLogger(client, "client-connection.log");
+        Distribution clientLogger = client; //new DistributionLogger(client, "client-connection.log");
 
         Date.setClock(new SystemClock());
 
@@ -199,7 +201,7 @@ public abstract class StandaloneClientServer {
         proxyObjectManager.setConnection(clientLogger);
         proxyObjectManager.setObjectDataFactory(objectDataFactory);
 
-        NakedObjectManager objectManager = new ObjectManagerLogger(proxyObjectManager, "client-manager.log");
+        NakedObjectManager objectManager = proxyObjectManager; //new ObjectManagerLogger(proxyObjectManager, "client-manager.log");
         nakedObjects.setObjectManager(objectManager);
 
         new NakedObjectSpecificationLoaderImpl();
