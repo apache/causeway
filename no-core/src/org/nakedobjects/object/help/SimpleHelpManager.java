@@ -3,6 +3,7 @@ package org.nakedobjects.object.help;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -17,10 +18,13 @@ public class SimpleHelpManager implements HelpManager {
     
     
     public String help(MemberIdentifier identifier) {
-    
         BufferedReader reader = null;
         try {
             reader = getReader();
+            
+            if(reader == null) {
+                return "No help available";
+            }
 
             String className = CLASS_PREFIX  + identifier.getClassName();
             String name = NAME_PREFIX + identifier.getName();
@@ -93,7 +97,14 @@ public class SimpleHelpManager implements HelpManager {
 
 
     protected BufferedReader getReader() throws FileNotFoundException {
-        return new BufferedReader(new FileReader(fileName));
+        File file = new File(fileName);
+        if(! file.exists()) {
+            String message = "No help file found: " + file.getAbsolutePath();
+            LOG.warn(message);
+            return null;
+        }
+
+        return new BufferedReader(new FileReader(file));
     }    
     
     public void setFileName(String fileName) {
