@@ -77,7 +77,7 @@ public class RootCollection extends CollectionContent {
     }
 
     public String windowTitle() {
-        return "Instances";
+        return collection.titleString();
     }
 
     public String toString() {
