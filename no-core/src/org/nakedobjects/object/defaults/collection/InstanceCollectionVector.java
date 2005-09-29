@@ -38,7 +38,7 @@ public class InstanceCollectionVector extends AbstractNakedReference implements 
 
     public String titleString() {
         //        return getElementSpecification().getPluralName() + "(" + size() + ")";
-        return name + "(" + size() + ")";
+        return name + ", " + size();
     }
 
     public int size() {
