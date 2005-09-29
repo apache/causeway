@@ -66,13 +66,19 @@ public class Customer {
         about.setParameter(0, "number");
         about.setParameter(0, new WholeNumber(10));
     }
-    
-    public void actionTestInput(WholeNumber number) {
-        
+
+    public List actionTransientCollectionObject() {
+        return new List();
     }
 
-    public void actionUseAllInstances() {
-        container.allInstances(Location.class);
+    public Vector actionCollectionObject() {
+        List list = new List();
+        container.makePersistent(list);
+        return list;
+    }
+    
+    public Vector actionUseAllInstances() {
+        return container.allInstances(Location.class);
     }
 
     public Vector actionNewLocations() {
