@@ -43,6 +43,7 @@ public class JavaExploration {
 
     private SplashWindow splash;
     private JavaFixtureBuilder builder;
+    private String title;
 
     public JavaExploration() {
         ConfigurationPropertiesLoader loadedProperties = new ConfigurationPropertiesLoader("log4j.properties", false);
@@ -166,6 +167,7 @@ public class JavaExploration {
                     System.exit(0);
                 }
             });
+            viewer.setTitle(title);
 
             String[] classes = builder.getClasses();
             JavaExplorationContext context = new JavaExplorationContext();
@@ -193,6 +195,10 @@ public class JavaExploration {
 
     public Object createInstance(Class cls) {
         return builder.createInstance(cls.getName());
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
 
