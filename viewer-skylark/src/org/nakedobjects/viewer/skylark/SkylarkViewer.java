@@ -15,6 +15,7 @@ public class SkylarkViewer {
     private boolean inExplorationMode;
     private ApplicationContext applicationContext;
     private Bounds bounds;
+    private String title;
     
     public void init() {
         if(updateNotifier == null) {
@@ -35,7 +36,7 @@ public class SkylarkViewer {
         viewer.setUpdateNotifier(updateNotifier);
         viewer.setListener(shutdownListener);
         viewer.setExploration(inExplorationMode);
-
+ 
         frame.setViewer(viewer);
         
         NakedObjects.getObjectManager().addObjectChangedListener(updateNotifier);
@@ -48,8 +49,7 @@ public class SkylarkViewer {
  
         viewer.init();
         
-
-        frame.setTitle(applicationContext.name());
+        frame.setTitle(title == null ? applicationContext.name() : title);
         frame.init();
         frame.show();    
 
@@ -114,6 +114,18 @@ public class SkylarkViewer {
         setShutdownListener(listener);
     }
 
+    /**
+     * Expose as a .NET property
+     * 
+     * @property
+     */
+    public void set_Title(String title) {
+        this.title = title;
+    }
+    
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }
 
 
