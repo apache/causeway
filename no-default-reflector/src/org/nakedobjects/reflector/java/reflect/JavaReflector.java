@@ -351,7 +351,7 @@ public class JavaReflector implements Reflector {
         valueFields(elements, double.class);
 
         derivedFields(elements);
-        oneToManyAssociationFields(elements);
+        oneToManyAssociationFieldsVector(elements);
         oneToManyAssociationFieldsInternalCollection(elements);
         oneToManyAssociationFieldsArray(elements);
         // need to find one-many first, so they are not mistaken as one-one
@@ -599,6 +599,62 @@ public class JavaReflector implements Reflector {
         return names;
     }
 
+    private void oneToManyAssociationFieldsArray(Vector associations) {
+        Vector v = findPrefixedMethods(OBJECT, GET_PREFIX, Object[].class, 0);
+    
+        // create vector of multiRoles from all get methods
+        Enumeration e = v.elements();
+    
+        while (e.hasMoreElements()) {
+            Method getMethod = (Method) e.nextElement();
+            LOG.info("  identified 1-many association method " + getMethod);
+            String name = javaBaseName(getMethod.getName());
+    
+            Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class, null,
+                    boolean.class });
+            Class aboutType = (aboutMethod == null) ? null : aboutMethod.getParameterTypes()[1];
+            if (aboutMethod == null) {
+                aboutMethod = defaultAboutFieldMethod;
+            }
+    
+            // look for corresponding add and remove methods
+            Method addMethod = findMethod(OBJECT, "addTo" + name, void.class, null);
+            if (addMethod == null) {
+                addMethod = findMethod(OBJECT, "add" + name, void.class, null);
+            }
+            if (addMethod == null) {
+                addMethod = findMethod(OBJECT, "associate" + name, void.class, null);
+            }
+    
+            Method removeMethod = findMethod(OBJECT, "removeFrom" + name, void.class, null);
+            if (removeMethod == null) {
+                removeMethod = findMethod(OBJECT, "remove" + name, void.class, null);
+            }
+            if (removeMethod == null) {
+                removeMethod = findMethod(OBJECT, "dissociate" + name, void.class, null);
+            }
+    
+            Class removeType = (removeMethod == null) ? null : removeMethod.getParameterTypes()[0];
+            Class addType = (addMethod == null) ? null : addMethod.getParameterTypes()[0];
+    
+            /*
+             * The type of element can be ascertained if there is an
+             * add/associate method, otherwise it can not be determined until
+             * runtime.
+             */
+            Class elementType = getMethod.getReturnType().getComponentType();
+    
+            if (((aboutType != null) && (aboutType != elementType)) || ((addType != null) && (addType != elementType))
+                    || ((removeType != null) && (removeType != elementType))) {
+                LOG.error("The add/remove/associate/dissociate/about methods in " + className() + " must "
+                        + "all deal with same type of object.  There are at least two different " + "types");
+            }
+    
+            associations
+                    .addElement(new JavaOneToManyAssociation(name, elementType, getMethod, addMethod, removeMethod, aboutMethod));
+        }
+    }
+
     /**
      * Returns the details about the basic accessor/mutator methods. Based on
      * each suitable get... method a vector of OneToManyAssociation objects are
@@ -606,7 +662,7 @@ public class JavaReflector implements Reflector {
      *  
      */
     // TODO merge this method and next
-    private void oneToManyAssociationFields(Vector associations) {
+    private void oneToManyAssociationFieldsVector(Vector associations) {
         Vector v = findPrefixedMethods(OBJECT, GET_PREFIX, Vector.class, 0);
 
         // create vector of multiRoles from all get methods
@@ -734,62 +790,6 @@ public class JavaReflector implements Reflector {
     }
 
 
-    private void oneToManyAssociationFieldsArray(Vector associations) {
-        Vector v = findPrefixedMethods(OBJECT, GET_PREFIX, Object[].class, 0);
-
-        // create vector of multiRoles from all get methods
-        Enumeration e = v.elements();
-
-        while (e.hasMoreElements()) {
-            Method getMethod = (Method) e.nextElement();
-            LOG.info("  identified 1-many association method " + getMethod);
-            String name = javaBaseName(getMethod.getName());
-
-            Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class, null,
-                    boolean.class });
-            Class aboutType = (aboutMethod == null) ? null : aboutMethod.getParameterTypes()[1];
-            if (aboutMethod == null) {
-                aboutMethod = defaultAboutFieldMethod;
-            }
-
-            // look for corresponding add and remove methods
-            Method addMethod = findMethod(OBJECT, "addTo" + name, void.class, null);
-            if (addMethod == null) {
-                addMethod = findMethod(OBJECT, "add" + name, void.class, null);
-            }
-            if (addMethod == null) {
-                addMethod = findMethod(OBJECT, "associate" + name, void.class, null);
-            }
-
-            Method removeMethod = findMethod(OBJECT, "removeFrom" + name, void.class, null);
-            if (removeMethod == null) {
-                removeMethod = findMethod(OBJECT, "remove" + name, void.class, null);
-            }
-            if (removeMethod == null) {
-                removeMethod = findMethod(OBJECT, "dissociate" + name, void.class, null);
-            }
-
-            Class removeType = (removeMethod == null) ? null : removeMethod.getParameterTypes()[0];
-            Class addType = (addMethod == null) ? null : addMethod.getParameterTypes()[0];
-
-            /*
-             * The type of element can be ascertained if there is an
-             * add/associate method, otherwise it can not be determined until
-             * runtime.
-             */
-            Class elementType = getMethod.getReturnType().getComponentType();
-
-            if (((aboutType != null) && (aboutType != elementType)) || ((addType != null) && (addType != elementType))
-                    || ((removeType != null) && (removeType != elementType))) {
-                LOG.error("The add/remove/associate/dissociate/about methods in " + className() + " must "
-                        + "all deal with same type of object.  There are at least two different " + "types");
-            }
-
-            associations
-                    .addElement(new JavaOneToManyAssociation(name, elementType, getMethod, addMethod, removeMethod, aboutMethod));
-        }
-    }
-
     /**
      * Returns a vector of Association fields for all the get methods that use
      * NakedObjects.
@@ -890,7 +890,7 @@ public class JavaReflector implements Reflector {
         if (titleMethod == null) {
             return new ObjectTitle() {
                 public String title(NakedObject object) {
-                    return object.getObject().toString();
+                    return null;
                 }
             };
         } else {
