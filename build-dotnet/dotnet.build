@@ -6,6 +6,7 @@
 	<property name="java.sources" value=".."/>
 	<property name="build.dir" value=".\build"/>
 	<property name="build.src.dir" value="${build.dir}/src"/>
+	<property name="release-dir" value="M:/naked-objects-builds"/>
 	
 	<property name="debug" value="true"/>
 	
@@ -298,7 +299,7 @@
 		</zip>
 		
 		<!-- TODO use variables and a properties file -->
-		<zip zipfile="M:/naked-objects-builds/nakedobjects.net-${build.id}.zip">
+		<zip zipfile="${release-dir}/nakedobjects.net-${build.id}.zip">
 			<fileset basedir="build">
 				<include name="*.dll"/>
 				<include name="*.pdb"/>
@@ -318,7 +319,7 @@
 
         <mkdir dir="e:/transfer" failonerror="false"/>
         <copy todir="e:/transfer" failonerror="false">
-			<fileset basedir="M:/naked-objects-builds/">
+			<fileset basedir="${release-dir}">
 				<include name="nakedobjects.net-${build.id}.zip"/>
 			</fileset>
 		</copy>
