@@ -14,6 +14,7 @@ import java.net.URL;
 
 
 public class ViewerFrame extends Frame implements RenderingArea {
+    private static final String DEFAULT_TITLE = "Naked Objects";
     private static final long serialVersionUID = 1L;
     private Viewer viewer;
  
@@ -27,7 +28,7 @@ public class ViewerFrame extends Frame implements RenderingArea {
                 setIconImage(image);
             }
         }
-        setTitle("Naked Objects");
+        setTitle(null);
 
         /*
          * compensate for change in tab handling in Java 1.4
@@ -109,6 +110,10 @@ public class ViewerFrame extends Frame implements RenderingArea {
 	public void set_Title(String title) {
 		setTitle(title);
 	}
+    
+    public void setTitle(String title) {
+        super.setTitle(title == null ? DEFAULT_TITLE : title);
+    }
 }
 
 
