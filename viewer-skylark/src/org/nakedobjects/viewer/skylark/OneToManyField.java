@@ -24,24 +24,28 @@ public class OneToManyField extends CollectionContent implements FieldContent {
     private final ObjectField field;
 
     public Consent canDrop(Content sourceContent) {
-        NakedObject object = (NakedObject) sourceContent.getNaked();
-        NakedObject parent = field.getParent();
-
-        InternalCollection collection = (InternalCollection) getNaked();
-        if(!object.getSpecification().isOfType(collection.getElementSpecification())) {
-            return new Veto("Only objects of type " + collection.getElementSpecification().getSingularName() + " are allowed in this collection");
-        }
-        if(parent.getOid() != null && object.getOid() == null) {
-            return new Veto("Can't set field in persistent object with reference to non-persistent object");
-        }
-        if(object instanceof Aggregated) {
-            Aggregated aggregated = ((Aggregated) object);
-            if(aggregated.isAggregated() && aggregated.parent() != parent) {
-                return new Veto("Object is already associated with another object: " + aggregated.parent());
+        if(sourceContent.getNaked() instanceof NakedObject) {
+            NakedObject object = (NakedObject) sourceContent.getNaked();
+            NakedObject parent = field.getParent();
+    
+            InternalCollection collection = (InternalCollection) getNaked();
+            if(!object.getSpecification().isOfType(collection.getElementSpecification())) {
+                return new Veto("Only objects of type " + collection.getElementSpecification().getSingularName() + " are allowed in this collection");
             }
+            if(parent.getOid() != null && object.getOid() == null) {
+                return new Veto("Can't set field in persistent object with reference to non-persistent object");
+            }
+            if(object instanceof Aggregated) {
+                Aggregated aggregated = ((Aggregated) object);
+                if(aggregated.isAggregated() && aggregated.parent() != parent) {
+                    return new Veto("Object is already associated with another object: " + aggregated.parent());
+                }
+            }
+            Hint about = getOneToManyAssociation().getHint(parent, object, true);
+            return about.canUse();
+        } else {
+            return Veto.DEFAULT;
         }
-        Hint about = getOneToManyAssociation().getHint(parent, object, true);
-        return about.canUse();
     }
     
     public Naked drop(Content sourceContent) {
