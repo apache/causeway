@@ -1,6 +1,7 @@
 package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.reflect.NameConvertor;
 import org.nakedobjects.utility.Assert;
 
 
@@ -18,7 +19,7 @@ class InternalCollectionKey {
         Assert.assertNotNull("fieldName", fieldName);
         
         this.parent = parent;
-        this.fieldName = fieldName;
+        this.fieldName = NameConvertor.simpleName(fieldName);
     }
 
     public int hashCode() {
