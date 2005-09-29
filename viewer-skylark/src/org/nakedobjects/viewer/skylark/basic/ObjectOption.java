@@ -11,7 +11,9 @@ import org.nakedobjects.viewer.skylark.MenuOptionSet;
 
 
 public class ObjectOption {
-
+    // TODO options should be available for NakedReference objects not just NakedObjects
+    // TODO update hierachy to bring NakedCollection into line with NakedObject
+    
     public static void menuOptions(final NakedObject object, MenuOptionSet options) {
         if (object != null) {
             if (object.getObject() instanceof FastFinder) {
