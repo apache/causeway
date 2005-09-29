@@ -26,15 +26,22 @@ public abstract class DataFactory {
     private CollectionData createCollectionData(NakedCollection collection, boolean recursePersistentObjects, int depth) {
         Oid oid = collection.getOid();
         String type = collection.getSpecification().getFullName();
-        Enumeration e = collection.elements();
-        ObjectData[] elements = new ObjectData[collection.size()];
-        int i = 0;
-        while (e.hasMoreElements()) {
-            NakedObject element = (NakedObject) e.nextElement();
-            elements[i++] = createObjectData(element, recursePersistentObjects, depth);
-        }
         boolean hasAllElements = collection.getResolveState() == ResolveState.TRANSIENT
-                || collection.getResolveState() == ResolveState.RESOLVED;
+        || collection.getResolveState() == ResolveState.RESOLVED;
+        ObjectData[] elements;
+
+        if (hasAllElements) {
+            Enumeration e = collection.elements();
+            elements = new ObjectData[collection.size()];
+            int i = 0;
+            while (e.hasMoreElements()) {
+                NakedObject element = (NakedObject) e.nextElement();
+                elements[i++] = createObjectData(element, recursePersistentObjects, depth);
+            }
+        } else {
+            elements = new ObjectData[0];
+        }
+        
         return createCollectionData(oid, type, elements, hasAllElements, collection.getVersion());
     }
 

@@ -124,7 +124,7 @@ public class DataHelper {
                         if (initialState == ResolveState.RESOLVED) {
                             state = ResolveState.UPDATING;
                         } else if (initialState == ResolveState.GHOST || initialState == ResolveState.PART_RESOLVED) {
-                            state = data.isResolved() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART;
+                            state = collection.hasAllElements() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART;
                         } else if (initialState == ResolveState.TRANSIENT) {
                             state = ResolveState.SERIALIZING_TRANSIENT;
                         }
