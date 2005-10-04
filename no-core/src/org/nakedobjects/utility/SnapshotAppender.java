@@ -1,7 +1,12 @@
 package org.nakedobjects.utility;
 
+import org.nakedobjects.system.AboutNakedObjects;
+
+import java.util.Date;
+
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.apache.log4j.helpers.CyclicBuffer;
 import org.apache.log4j.helpers.OptionConverter;
 import org.apache.log4j.spi.LoggingEvent;
@@ -19,10 +24,11 @@ public abstract class SnapshotAppender extends AppenderSkeleton {
     protected CyclicBuffer buffer = new CyclicBuffer(bufferSize);
     private boolean locationInfo = false;
     protected TriggeringEventEvaluator triggerEvaluator;
+    private boolean addInfo;
 
     /**
-     * The default constructor will instantiate the appender with a {@link TriggeringEventEvaluator}
-     * that will trigger on events with level ERROR or higher.
+     * The default constructor will instantiate the appender with a {@link TriggeringEventEvaluator} that will
+     * trigger on events with level ERROR or higher.
      */
     public SnapshotAppender() {
         this(new DefaultEvaluator());
@@ -49,42 +55,59 @@ public abstract class SnapshotAppender extends AppenderSkeleton {
     public void forceSnapshot() {
         writeSnapshot(buffer);
     }
-    
+
     /**
-      * Send the contents of the cyclic buffer as an web server posting.
-      */
-     private void writeSnapshot(CyclicBuffer buffer) {
-         StringBuffer details = new StringBuffer();
-         String header = layout.getHeader();
-         if (header != null) {
-             details.append(header);
-         }
-         int len = buffer.length();
-         String message = "";
-         for (int i = 0; i < len; i++) {
-             LoggingEvent event = buffer.get();
-             message = event.getLoggerName() + ": " + event.getMessage();
-             details.append(layout.format(event));
-             if (layout.ignoresThrowable()) {
-                 String[] s = event.getThrowableStrRep();
-                 if (s != null) {
-                     for (int j = 0; j < s.length; j++) {
-                         details.append(s[j]);
-                         details.append('\n');
-                     }
-                 }
-             }
-         }
-         String footer = layout.getFooter();
-         if (footer != null) {
-             details.append(footer);
-         }
-         
-         writeSnapshot(message, details.toString());
-     }
-     
+     * Send the contents of the cyclic buffer as an web server posting.
+     */
+    private void writeSnapshot(CyclicBuffer buffer) {
+        StringBuffer details = new StringBuffer();
+        String header = layout.getHeader();
+        if (header != null) {
+            details.append(header);
+        }
+        int len = buffer.length();
+        String message = "";
+        for (int i = 0; i < len; i++) {
+            LoggingEvent event = buffer.get();
+            message = event.getLoggerName() + ": " + event.getMessage();
+            details.append(layout.format(event));
+            if (layout.ignoresThrowable()) {
+                String[] s = event.getThrowableStrRep();
+                if (s != null) {
+                    for (int j = 0; j < s.length; j++) {
+                        details.append(s[j]);
+                        details.append('\n');
+                    }
+                }
+            }
+        }
+        
+        if (addInfo) {
+            String user = System.getProperty("user.name");
+            String system = System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") "
+                    + System.getProperty("os.version");
+            String java = System.getProperty("java.vm.name") + " " + System.getProperty("java.vm.version");
+            String version = AboutNakedObjects.getVersion() + " " + AboutNakedObjects.getBuildId();
+
+            LoggingEvent infoEvent = new LoggingEvent("", Logger.getRootLogger(), Level.INFO, "Snapshot:- " + new Date() + "\n\t" + user + "\n\t" + system
+                    + "\n\t" + java + "\n\t" + version, null);
+            // Logger.getRootLogger().info("Snapshot:- " + new Date() + "\n\t" + user + "\n\t" + system +
+            // "\n\t" + java + "\n\t" + version);
+            
+            details.append(layout.format(infoEvent));
+        }
+
+
+        String footer = layout.getFooter();
+        if (footer != null) {
+            details.append(footer);
+        }
+
+        writeSnapshot(message, details.toString());
+    }
+
     protected abstract void writeSnapshot(String message, String details);
-    
+
     synchronized public void close() {
         this.closed = true;
     }
@@ -116,6 +139,10 @@ public abstract class SnapshotAppender extends AppenderSkeleton {
     public void setEvaluatorClass(String value) {
         triggerEvaluator = (TriggeringEventEvaluator) OptionConverter.instantiateByClassName(value,
                 TriggeringEventEvaluator.class, triggerEvaluator);
+    }
+
+    public void setAddInfo(boolean addInfo) {
+        this.addInfo = addInfo;
     }
 
     public void setLocationInfo(boolean locationInfo) {
