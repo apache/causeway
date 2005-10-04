@@ -165,7 +165,7 @@ public class OneToOneField extends ObjectContent implements FieldContent {
     }
 
     public String title() {
-        return object.titleString();
+        return object == null ? "" : object.titleString();
     }
 
     public String toString() {
