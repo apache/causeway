@@ -18,7 +18,7 @@ public class DummyObjectData extends DummyReferenceData implements ObjectData {
         return fieldContent;
     }
 
-    public boolean isResolved() {
+    public boolean hasCompleteData() {
         return resolved;
     }
 

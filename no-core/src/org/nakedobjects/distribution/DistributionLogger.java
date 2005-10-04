@@ -38,7 +38,7 @@ public class DistributionLogger extends Logger implements Distribution {
         } else if (data instanceof ObjectData) {
             ObjectData objectData = ((ObjectData) data);
             str.append("ObjectData " + objectData.getType() + ":" + objectData.getOid() + ":"
-                    + (objectData.isResolved() ? "C" : "-") + ":" + objectData.getVersion());
+                    + (objectData.hasCompleteData() ? "C" : "-") + ":" + objectData.getVersion());
             Object[] fields = objectData.getFieldContent();
             for (int i = 0; fields != null && i < fields.length; i++) {
                 str.append("\n");

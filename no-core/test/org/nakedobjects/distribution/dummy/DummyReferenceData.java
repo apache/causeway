@@ -25,6 +25,10 @@ public class DummyReferenceData implements ReferenceData {
     public long getVersion() {
         return version;
     }
+
+    public boolean hasVersion() {
+        return false;
+    }
 }
 
 /*

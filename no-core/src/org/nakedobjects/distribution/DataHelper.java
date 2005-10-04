@@ -45,10 +45,8 @@ public class DataHelper {
          * resolved object, or create new object and set it
          */ 
         if (oid == null) {
-            // create transient object
             NakedObject object;
             object = objectLoader.recreateTransientInstance(specification);
-            object.setOptimisticLock(data.getVersion(), "", null);
             LOG.debug("restore transient object " + object);
             setUpFields(data, object);
             return object;
@@ -57,14 +55,16 @@ public class DataHelper {
             // object known and we have all the latetest data; update/resolve the object
             NakedObject object;
             object =  objectLoader.getAdapterFor(oid);
-            object.setOptimisticLock(data.getVersion(), "", null);
             if(data.getFieldContent() != null) {
+                if(data.hasVersion()) {
+                    object.setOptimisticLock(data.getVersion(), "", null);
+                }
 	            ResolveState initialState = object.getResolveState();
                 ResolveState state = null;
                 if (initialState == ResolveState.RESOLVED) {
                     state = ResolveState.UPDATING;
                 } else if (initialState == ResolveState.GHOST || initialState == ResolveState.PART_RESOLVED) {
-                    state = data.isResolved() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART;
+                    state = data.hasCompleteData() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART;
                 }
                 if (state != null) {
 	                LOG.debug("updating existing object (" + state.name() + ") " + object);
@@ -75,22 +75,34 @@ public class DataHelper {
                     }
                     updateNotifier.addDirty(object);
 	            }
+            } else {
+                if(data.hasVersion() && data.getVersion() != object.getVersion()) {
+                    // TODO reload the object
+                }
+
             }
             return object;
         } else {
             // unknown object; create an instance
             NakedObject object;
             object = objectLoader.recreateAdapterForPersistent(oid, specification);
-            object.setOptimisticLock(data.getVersion(), "", null);
             if(data.getFieldContent() != null) {
-	            ResolveState state;
-	            state = data.isResolved() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART;
+                if(data.hasVersion()) {
+                    object.setOptimisticLock(data.getVersion(), "", null);
+                }
+                ResolveState state;
+	            state = data.hasCompleteData() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART;
                 LOG.debug("restoring existing object (" + state.name() + ") " + object);
 	            if (object.getResolveState().isResolvable(state)) {
 		            objectLoader.start(object, state);
 		            setUpFields(data, object);
 		            objectLoader.end(object);
 	            }
+            } else {
+                if(data.hasVersion() && data.getVersion() != object.getVersion()) {
+                    // TODO reload the object if on cient; fail on server
+                }
+
             }
             return object;
  	     }
@@ -156,7 +168,7 @@ public class DataHelper {
     }
 
     private static Naked restoreCollection(CollectionData data) {
-        Oid oid = data.getOid();
+    //    Oid oid = data.getOid();
         String type = data.getType();
         NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
         NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
@@ -188,25 +200,6 @@ public class DataHelper {
     private static Naked restoreValue(ValueData valueData) {
         Naked value = NakedObjects.getObjectLoader().createAdapterForValue(valueData.getValue());
         return value;
-    }
-
-    
-    
-    /* ------------------------------------------------------------------------------ */
-    
-    /** @deprecated  use restore(ObjectData) */
-    public static Naked recreate(Data data) {
-        return restore(data);
-    }
-
-    /** @deprecated use restore(ObjectData)*/
-    public static void resolve(ObjectData data, DirtyObjectSet updateNotifier) {
-        restore(data);
-    }
-
-    /** @deprecated use restore(ObjectData) */
-    public static void update(ObjectData data, DirtyObjectSet updateNotifier) {
-        restore(data);
     }
 
     public static void setUpdateNotifer(DirtyObjectSet updateNotifier) {

@@ -9,14 +9,16 @@ public class JavaObjectData implements ObjectData {
     private final Object fieldContent[];
     private final Oid oid;
     private final String type;
-    private boolean resolved;
-    private long version;
+    private final boolean resolved;
+    private final long version;
+    private final boolean hasVersion;
 
-    public JavaObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved, long version) {
+    public JavaObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved, boolean hasVersion, long version) {
         this.oid = oid;
         this.type = type;
         this.fieldContent = fieldContent;
         this.resolved = resolved;
+        this.hasVersion = hasVersion;
         this.version = version;
     }
 
@@ -32,7 +34,7 @@ public class JavaObjectData implements ObjectData {
         return type;
     }
     
-    public boolean isResolved() {
+    public boolean hasCompleteData() {
         return resolved;
     }
     
@@ -40,6 +42,9 @@ public class JavaObjectData implements ObjectData {
         return version;
     }
     
+    public boolean hasVersion() {
+        return hasVersion;
+    }
     
     public String toString() {
         ToString str = new ToString(this);

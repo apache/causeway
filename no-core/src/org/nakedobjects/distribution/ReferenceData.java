@@ -6,6 +6,8 @@ public interface ReferenceData extends Data {
     Oid getOid();
     
     long getVersion();
+    
+    boolean hasVersion();
 }
 
 

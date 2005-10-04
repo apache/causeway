@@ -293,7 +293,7 @@ public class DataFactoryTest extends TestCase {
 
         ObjectData od = factory.createObjectData(rootObject, false, 10);
 
-        assertEquals(false, od.isResolved());
+        assertEquals(false, od.hasCompleteData());
         assertEquals(ResolveState.GHOST, rootObject.getResolveState());
 
         rootObject.setupResolveState(ResolveState.RESOLVED);
@@ -301,7 +301,7 @@ public class DataFactoryTest extends TestCase {
 
         od = factory.createObjectData(rootObject, false, 10);
 
-        assertEquals(true, od.isResolved());
+        assertEquals(true, od.hasCompleteData());
         assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
     }
 

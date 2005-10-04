@@ -49,7 +49,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
     private TypedNakedCollection convertToNakedObjects(NakedObjectSpecification specification, ObjectData[] data) {
         NakedObject[] instances = new NakedObject[data.length];
         for (int i = 0; i < data.length; i++) {
-            instances[i] = (NakedObject) DataHelper.recreate(data[i]);
+            instances[i] = (NakedObject) DataHelper.restore(data[i]);
         }
         return new InstanceCollectionVector(specification, instances);
     }

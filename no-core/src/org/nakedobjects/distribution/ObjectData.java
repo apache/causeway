@@ -9,7 +9,7 @@ package org.nakedobjects.distribution;
 public interface ObjectData extends ReferenceData {
     Object[] getFieldContent();
     
-    boolean isResolved();
+    boolean hasCompleteData();
 }
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
