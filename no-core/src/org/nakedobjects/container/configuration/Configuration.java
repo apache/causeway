@@ -17,7 +17,7 @@ public class Configuration {
 
     public Configuration() {}
 
-    public Configuration(ConfigurationPropertiesLoader loader) {
+    public Configuration(ConfigurationLoader loader) {
         add(loader.getProperties());
     }
 

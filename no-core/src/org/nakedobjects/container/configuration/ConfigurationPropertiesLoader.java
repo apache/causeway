@@ -13,7 +13,7 @@ import java.net.URLConnection;
 import java.util.Properties;
 
 
-public class ConfigurationPropertiesLoader {
+public class ConfigurationPropertiesLoader implements ConfigurationLoader {
 
     private Properties properties;
 
