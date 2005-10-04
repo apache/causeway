@@ -1,6 +1,7 @@
 package org.nakedobjects.object;
 
 public class NakedObjectDefinitionException extends NakedObjectRuntimeException {
+    private static final long serialVersionUID = 730819879598414522L;
 
     public NakedObjectDefinitionException() {
         super();

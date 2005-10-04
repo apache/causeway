@@ -4,6 +4,7 @@ package org.nakedobjects.object;
  * Indicates an error in the application code; essentailly any invalid convention following.
  */
 public class NakedObjectApplicationException extends NakedObjectRuntimeException {
+    private static final long serialVersionUID = 5526281393674150252L;
 
     public NakedObjectApplicationException() {
         super();
