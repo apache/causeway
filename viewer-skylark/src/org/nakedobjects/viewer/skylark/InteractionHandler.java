@@ -112,14 +112,9 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
         }
         
         try {
-            /*
-             LOG.debug("released " + ke.getKeyCode());
-             * LOG.debug("released " + KeyEvent.getKeyText(ke.getKeyCode())); LOG.debug(" - " +
-             * ke.isActionKey()); LOG.debug(" - " + ke.getKeyChar());
-             */
             if (lastTyped == null && ke.getKeyCode() != KeyEvent.VK_SHIFT && ke.getKeyCode() != KeyEvent.VK_ALT
                     && ke.getKeyCode() != KeyEvent.VK_CONTROL) {
-                if(ke.getKeyCode() >= KeyEvent.VK_SPACE && ke.getKeyCode() <= KeyEvent.VK_DIVIDE) {
+                if(ke.getKeyCode() >= KeyEvent.VK_0 && ke.getKeyCode() <= KeyEvent.VK_DIVIDE) {
                     LOG.error("no type event for " + KeyEvent.getKeyText(ke.getKeyCode()));
                 }
             }
