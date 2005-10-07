@@ -104,7 +104,6 @@ public class XmlClient {
             ViewUpdateNotifier updateNotifier = new ViewUpdateNotifier();
 
             proxyObjectManager.setUpdateNotifier(updateNotifier);
-            conn.setUpdateNotifier(updateNotifier);
             
             nakedObjects.init();
             
