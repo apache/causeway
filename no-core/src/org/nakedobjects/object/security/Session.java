@@ -1,21 +1,9 @@
 package org.nakedobjects.object.security;
 
-import org.nakedobjects.utility.DebugInfo;
 
 
-public class Session implements DebugInfo {
-
-    public String getDebugData() {
-        return "";
-    }
-
-    public String getDebugTitle() {
-        return "";
-    }
-
-    public String getUserName() {
-        return "user";
-    }
+public interface Session {
+    public String getUserName();
 }
 
 /*
