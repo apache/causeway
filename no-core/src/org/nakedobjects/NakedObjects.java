@@ -13,7 +13,9 @@ import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.utility.DebugString;
 
-
+/**
+ * A repository of all the NOF components that are shared by a running system
+ */
 public abstract class NakedObjects implements DebugInfo {
     private static NakedObjects singleton;
 
@@ -21,10 +23,16 @@ public abstract class NakedObjects implements DebugInfo {
         return getInstance();
     }
 
+    /**
+     * Returns the configuration component.
+     */
     public static Configuration getConfiguration() {
         return getInstance().configuration();
     }
 
+    /**
+     * Returns the current session.
+     */
     public static Session getCurrentSession() {
         return getInstance().currentSession();
     }
@@ -33,10 +41,16 @@ public abstract class NakedObjects implements DebugInfo {
         return singleton;
     }
 
+    /**
+     * Return the object loader.
+     */
     public static NakedObjectLoader getObjectLoader() {
         return getInstance().objectLoader();
     }
 
+    /**
+     * Returns the object manager.
+     */
     public static NakedObjectManager getObjectManager() {
         return getInstance().objectManager();
     }
@@ -51,6 +65,9 @@ public abstract class NakedObjects implements DebugInfo {
         return getInstance().reflectorFactory();
     }
 
+    /*
+     * Return the specification loader. 
+     */
     public static NakedObjectSpecificationLoader getSpecificationLoader() {
         return getInstance().specificationLoader();
     }
@@ -59,10 +76,6 @@ public abstract class NakedObjects implements DebugInfo {
         singleton = null;
     }
 
-    /*
-     * public static void setObjectLoader(PojoAdapterFactory factory) {
-     * getInstance().setObjectLoader(factory); }
-     */
     public static void shutdown() {
         getObjectManager().shutdown();
         getObjectLoader().shutdown();
