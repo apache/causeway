@@ -230,7 +230,6 @@ public abstract class StandaloneClientServer {
         ViewUpdateNotifier updateNotifier = new ViewUpdateNotifier();
 
         proxyObjectManager.setUpdateNotifier(updateNotifier);
-        client.setUpdateNotifier(updateNotifier);
 
         SkylarkViewer skylark = new SkylarkViewer();
         skylark.setUpdateNotifier(updateNotifier);
