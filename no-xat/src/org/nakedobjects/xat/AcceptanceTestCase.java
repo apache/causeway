@@ -10,7 +10,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.fixture.Fixture;
 import org.nakedobjects.object.fixture.FixtureBuilder;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.security.NullSession;
 
 import java.io.File;
 import java.util.Hashtable;
@@ -125,7 +125,7 @@ public abstract class AcceptanceTestCase extends TestCase {
 
 	      setupFramework(nakedObjects);
 
-        nakedObjects.setSession(new Session());
+        nakedObjects.setSession(new NullSession());
         nakedObjects.init();
         
         setUpFixtures();
