@@ -7,10 +7,12 @@ public class DummyReferenceData implements ReferenceData {
     private final Oid oid;
     private final String type;
     private final long version;
+    private final boolean hasVersion;
 
-    public DummyReferenceData(final Oid oid, final String type, final long version) {
+    public DummyReferenceData(final Oid oid, final String type, final boolean hasVersion, final long version) {
         this.oid = oid;
         this.type = type;
+        this.hasVersion = hasVersion;
         this.version = version;
     }
 
@@ -27,7 +29,7 @@ public class DummyReferenceData implements ReferenceData {
     }
 
     public boolean hasVersion() {
-        return false;
+        return hasVersion;
     }
 }
 

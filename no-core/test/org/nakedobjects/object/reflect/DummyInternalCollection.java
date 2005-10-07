@@ -57,7 +57,7 @@ public class DummyInternalCollection extends AbstractNakedReference implements N
     }
 
     public ResolveState getResolveState() {
-        return null;
+        return ResolveState.GHOST;
     }
 
     public NakedObjectSpecification getSpecification() {

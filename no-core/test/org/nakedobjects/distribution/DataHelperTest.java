@@ -62,7 +62,7 @@ public class DataHelperTest extends TestCase {
     public void testRecreatedObjectIsPartResolved() {
         MockOid oid = new MockOid(123);
         Object fields[] = new Object[0];
-        Data data = new DummyObjectData(oid, "type.1", fields, false, 4);
+        Data data = new DummyObjectData(oid, "type.1", fields, false, false, 4);
 
         NakedObject naked = (NakedObject) DataHelper.restore(data);
         assertEquals(ResolveState.PART_RESOLVED, ((NakedObject) naked).getResolveState());
@@ -71,7 +71,7 @@ public class DataHelperTest extends TestCase {
     public void testRecreatedObjectIsResolved() {
         MockOid oid = new MockOid(123);
         Object fields[] = new Object[0];
-        Data data = new DummyObjectData(oid, "type.1", fields, true, 4);
+        Data data = new DummyObjectData(oid, "type.1", fields, true, false, 4);
 
         NakedObject naked = (NakedObject) DataHelper.restore(data);
         assertEquals(ResolveState.RESOLVED, ((NakedObject) naked).getResolveState());
@@ -81,13 +81,13 @@ public class DataHelperTest extends TestCase {
         Object fields[] = new Object[3];
         fields[0] = new DummyValueData(new Integer(13), "");
         MockOid fieldOid = new MockOid(345);
-        fields[1] = new DummyObjectData(fieldOid, "type.1", null, false, 2);
+        fields[1] = new DummyObjectData(fieldOid, "type.1", null, false, true, 2);
         
         // TODO test the one-to-many collection aswell
    //     fields[2] = new DummyCollectionData();
         
         MockOid rootOid = new MockOid(123);
-        Data data = new DummyObjectData(rootOid, "type.1", fields, false, 4);
+        Data data = new DummyObjectData(rootOid, "type.1", fields, false, true, 4);
 
         NakedObject naked = (NakedObject) DataHelper.restore(data);
         assertEquals(4, naked.getVersion());
@@ -103,30 +103,30 @@ public class DataHelperTest extends TestCase {
     public void testRecreateObjectWithNoFieldData() {
         MockOid oid = new MockOid(123);
 
-        Data data = new DummyObjectData(oid, "type.1", null, false, 4);
+        Data data = new DummyObjectData(oid, "type.1", null, false, true, 4);
 
         NakedObject naked = (NakedObject) DataHelper.restore(data);
         assertEquals(object, naked.getObject());
-        assertEquals(4, naked.getVersion());
+        assertEquals("no field data therefore only passing across reference", 0, naked.getVersion());
         assertEquals(oid, naked.getOid());
         assertEquals(ResolveState.GHOST, ((NakedObject) naked).getResolveState());
     }
 
     public void testRecreateTransientObjectGivenDataObject() {
-        Data data = new DummyObjectData(null, "type.1", null, false, 4);
+        Data data = new DummyObjectData(null, "type.1", null, false, true, 4);
 
         NakedObject naked = (NakedObject) DataHelper.restore(data);
         assertEquals(object, naked.getObject());
-        assertEquals(4, naked.getVersion());
+        assertEquals("no field data therefore only passing across reference", 0, naked.getVersion());
         assertNull(naked.getOid());
     }
 
     public void testRecreateTransientObjectWithFieldData() {
-        Data data = new DummyObjectData(null, "type.1", null, false, 4);
+        Data data = new DummyObjectData(null, "type.1", new Object[0], false, true, 4);
 
         NakedObject naked = (NakedObject) DataHelper.restore(data);
         assertEquals(object, naked.getObject());
-        assertEquals(4, naked.getVersion());
+        assertEquals("transient objects have no version number", 0, naked.getVersion());
         assertNull(naked.getOid());
     }
 

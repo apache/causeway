@@ -8,8 +8,8 @@ import org.nakedobjects.object.persistence.Oid;
 public class DummyCollectionData extends DummyReferenceData implements CollectionData {
     private final ObjectData[] elements;
 
-    public DummyCollectionData(Oid oid, String type, ObjectData[] elements, long version) {
-        super(oid, type, version);
+    public DummyCollectionData(Oid oid, String type, ObjectData[] elements, final boolean hasVersion, long version) {
+        super(oid, type, hasVersion, version);
         this.elements = elements;
     }
 

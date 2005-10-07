@@ -8,8 +8,8 @@ public class DummyObjectData extends DummyReferenceData implements ObjectData {
     private final Object[] fieldContent;
     private final boolean resolved;
 
-    public DummyObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved, long version) {
-        super(oid, type, version);
+    public DummyObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved, final boolean hasVersion, long version) {
+        super(oid, type, hasVersion, version);
         this.fieldContent = fieldContent;
         this.resolved = resolved;
     }

@@ -55,12 +55,12 @@ public class DataHelperCollectionTest extends TestCase {
     public void testRecreateCollection() {
         ObjectData elements[] = new ObjectData[2];
         MockOid fieldOid = new MockOid(345);
-        elements[0] = new DummyObjectData(fieldOid, "type.1", null, false, 2);
+        elements[0] = new DummyObjectData(fieldOid, "type.1", null, false, false, 2);
         fieldOid = new MockOid(678);
-        elements[1] = new DummyObjectData(fieldOid, "type.1", null, false, 2);
+        elements[1] = new DummyObjectData(fieldOid, "type.1", null, false, false, 2);
 
         MockOid collectionOid = new MockOid(123);
-        CollectionData data = new DummyCollectionData(collectionOid, "type.2", elements, 4);
+        CollectionData data = new DummyCollectionData(collectionOid, "type.2", elements, true, 4);
 
         NakedCollection naked = (NakedCollection) DataHelper.restore(data);
         //	assertEquals(4, naked.getVersion());

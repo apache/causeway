@@ -14,6 +14,8 @@ class AuthorisationHint {
         boolean isVisible = authorisationManager.isVisible(session, identifier);
         if (!isVisible) {
             return new DefaultHint() {
+                private static final long serialVersionUID = 219219947009299041L;
+
                 public Consent canAccess() {
                     return new Veto("Cannot be seen for security reasons");
                 }
@@ -22,6 +24,7 @@ class AuthorisationHint {
         
         if (!isUsable) {
             return new DefaultHint() {
+                private static final long serialVersionUID = 4381086950339064075L;
 
                 public Consent canAccess() {
                     return originalHint.canAccess();

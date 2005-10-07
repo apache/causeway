@@ -3,7 +3,6 @@ package org.nakedobjects.object.security;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 
 public class MockAuthorisationManager implements AuthorisationManager {
-
     private boolean visible;
     private boolean usable;
 
@@ -22,6 +21,10 @@ public class MockAuthorisationManager implements AuthorisationManager {
     public void setupUsable(boolean usable) {
         this.usable = usable;
     }
+
+    public void init() {}
+
+    public void shutdown() {}
 }
 
 
