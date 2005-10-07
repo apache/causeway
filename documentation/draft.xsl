@@ -7,11 +7,11 @@
 
   <xsl:output indent="yes"/>
 
-  <xsl:key name="parts" match="part" use="."/>
-  <xsl:key name="chapters" match="chapter|section" use="."/>
+  <xsl:key name="parts" match="/publication/section" use="."/>
+  <xsl:key name="chapters" match="/publication/section//section" use="."/>
 
-  <xsl:template match="/publication/include">
-    <xsl:apply-templates select="document(@file)/part"/>
+  <xsl:template match="include">
+    <xsl:apply-templates select="document(@file)/section"/>
   </xsl:template>
 
   <xsl:template match="/">
@@ -49,9 +49,9 @@
 
 
       <!-- create Acrobat index and keys -->
-      <xsl:for-each select="publication|chapter">
+      <xsl:for-each select="publication|section">
         
-        <xsl:for-each select="chapter">
+        <xsl:for-each select="section">
           <fox:outline internal-destination="{generate-id(.)}">
             <fox:label><xsl:value-of select="@title"/></fox:label>
             
@@ -86,18 +86,18 @@
             space-before="12cm"
             font-size="30pt" 
             font-family="sans-serif">
-            <xsl:value-of select="/publication/info/title"/>
+            <xsl:value-of select="/publication/title"/>
           </fo:block>
           <fo:block text-align="center" 
             font-size="20pt" 
             font-family="sans-serif" >
-            <xsl:value-of select="/publication/info/subtitle"/>
+            <xsl:value-of select="/publication/subtitle"/>
           </fo:block>
           <fo:block text-align="right" 
             space-before="2cm"
             font-size="16pt" 
             font-family="serif" >
-            <xsl:value-of select="/publication/info/author"/>
+            <xsl:value-of select="/publication/author"/>
           </fo:block>
         </fo:flow>
       </fo:page-sequence>
@@ -113,13 +113,13 @@
             &#xA9;
             <xsl:text> </xsl:text>
             Copyright
-            <xsl:value-of select="/publication/info/copyright/year"/>
+            <xsl:value-of select="/publication/copyright/year"/>
             <xsl:text> </xsl:text>
-            <xsl:value-of select="/publication/info/copyright/holder"/>
+            <xsl:value-of select="/publication/copyright/holder"/>
 
           </fo:block>
 
-          <xsl:for-each select="/publication/info/copyright/license/para">
+          <xsl:for-each select="/publication/copyright/license/para">
             <fo:block text-align="left" 
               space-before="6px"
               font-size="10pt" 
@@ -138,14 +138,14 @@
             Contents
           </fo:block>
 
-          <xsl:for-each select="/publication">
+          <xsl:for-each select="/publication/section">
             <fo:block text-align-last="justify" 
               font-size="120%"
               >
               <xsl:value-of select="@title"/>
               <fo:leader leader-pattern="dots"/>
               <fo:page-number-citation ref-id="section"/>
-              <xsl:for-each select="chapter">
+              <xsl:for-each select="section">
                 <fo:block text-align-last="justify" >
                   <xsl:value-of select="@title"/>
                   <fo:leader leader-pattern="dots"/>
@@ -163,7 +163,7 @@
 
 
       <!-- content -->
-      <xsl:for-each select="/publication/include">
+      <xsl:for-each select="/publication/section">
         
         <fo:page-sequence master-reference="regular">
           <fo:static-content flow-name="xsl-region-before">
@@ -206,13 +206,15 @@
             </fo:block>
           </fo:flow>
         </fo:page-sequence>
+        
+        
       </xsl:for-each>
 
     </fo:root>
   </xsl:template>
 
 
-  <xsl:template match="part">
+  <xsl:template match="/publication/section"> <!-- top level: part -->
     <fo:block 
       font-size="22pt"
       line-height="130%"
@@ -223,25 +225,26 @@
       border-color="black"
       keep-with-next="always"
       id="{generate-id(key('parts', .))}"
+      
+      page-break-after="always"
       >
       <fo:block>
         <xsl:text>Part </xsl:text>
-        <xsl:number level="multiple" count="part" format="I - "/>
-        <xsl:value-of select="@title"/>
+        <xsl:number level="multiple" count="/publication/section" format="I - "/>
+        <xsl:value-of select="title"/>
         <xsl:if test="@draft='yes'">
           <fo:inline font-size="60%" font-style="italic"> draft</fo:inline>
         </xsl:if>
       </fo:block>
     </fo:block>
-    <fo:block 
-      
-      >
+    
+    <fo:block>
       <xsl:apply-templates/> 
     </fo:block>
   </xsl:template>
         
 
-  <xsl:template match="chapter">
+  <xsl:template match="section">
     <fo:block 
       font-size="16pt"
       line-height="130%"
@@ -255,17 +258,16 @@
       >
       <fo:block>
         <xsl:if test="@numbered='on'">
-          <xsl:number level="multiple" count="//chapter[@numbered='on']" format="1. "/>
+          <xsl:number level="multiple" count="//section[@numbered='on']" format="1. "/>
         </xsl:if>
-        <xsl:value-of select="@title"/>
+        <xsl:value-of select="title"/>
         <xsl:if test="@draft='yes'">
           <fo:inline font-size="60%" font-style="italic"> draft</fo:inline>
         </xsl:if>
       </fo:block>
     </fo:block>
-    <fo:block 
-      
-      >
+    
+    <fo:block>
       <xsl:apply-templates/> 
     </fo:block>
   </xsl:template>
@@ -465,7 +467,7 @@
         <xsl:value-of select="caption"/>
       </fo:block>
       <fo:external-graphic>
-        <xsl:attribute name="src"><xsl:value-of select="@fileref"/></xsl:attribute>
+        <xsl:attribute name="src">src/<xsl:value-of select="@fileref"/></xsl:attribute>
         <xsl:attribute name="width">150mm</xsl:attribute>
       </fo:external-graphic>
       <fo:block

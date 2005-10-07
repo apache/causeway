@@ -8,34 +8,39 @@
   <xsl:output indent="yes"/>
 
   <xsl:template match="/">
-	<html>
-		<head>
-			<link rel="STYLESHEET" href="./screen.css" media="screen"/>
-			<link rel="STYLESHEET" href="./print.css" media="print" />
-			<title> Naked Objects Notebook </title>
-		</head>
-		<body>
-			<h1>Naked Objects Notebook</h1>
-			<xsl:apply-templates/>
-		</body>
-	</html>
+    <html>
+        <head>
+            <link rel="STYLESHEET" href="./screen.css" media="screen"/>
+            <link rel="STYLESHEET" href="./print.css" media="print" />
+            <title> Naked Objects Notebook </title>
+        </head>
+        <body>
+            <h1>Naked Objects Notebook</h1>
+            <xsl:apply-templates/>
+        </body>
+    </html>
   </xsl:template>
 
-	<xsl:template match="page">
-		<p class="index">
-			<a>
-				<xsl:attribute name="href">
-					<xsl:value-of select="substring(@file, 0, string-length(@file) - 2)"/>
-					<xsl:text>html</xsl:text>
-				</xsl:attribute>
-				<xsl:apply-templates select="document(@file)//title"/>
-			</a>
-		</p>
-	</xsl:template>
+    <xsl:template match="section">
+        <p class="index">
+            <a>
+                <xsl:attribute name="href">
+                        <xsl:value-of select="substring(@file, 0, string-length(@file) - 2)"/>
+                        <xsl:text>html</xsl:text>
+                </xsl:attribute>
+                <xsl:apply-templates select="document(@file)//title"/>
+            </a>
+             <xsl:apply-templates select="document(@file)//description"/>
+        </p>
+    </xsl:template>
 
 
-	<xsl:template match="//title">
-		<xsl:value-of select="."/>
-	</xsl:template>
+    <xsl:template match="/title">
+        <xsl:value-of select="."/>
+    </xsl:template>
+    
+    <xsl:template match="/description">
+        <xsl:value-of select="."/>
+    </xsl:template>
 
 </xsl:stylesheet>

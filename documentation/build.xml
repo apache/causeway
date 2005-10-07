@@ -8,12 +8,40 @@
          default="html"
          basedir=".">
 
-	<property name="dest.dir" value="build"/>
+    <property name="dest.dir" value="build"/>
+
+    <property name="fop.dir" value="C:/Program Files/Java/fop-0.20.5"/>
+    <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop">
+        <classpath>
+            <pathelement location="${fop.dir}/build/fop.jar"/>
+            <pathelement location="${fop.dir}/lib/avalon-framework-cvs-20020806.jar"/>
+            <pathelement location="${fop.dir}/lib/batik.jar"/>
+        </classpath>
+    </taskdef>
+
 
     <target name="clean">
         <delete dir="build"/>
     </target>
 
+    <target name="pdf" description="Generates a single PDF file">
+        <mkdir dir="${dest.dir}"/>
+    
+        <xslt basedir="src" destdir="${dest.dir}"
+           style="draft.xsl">
+        	 <mapper type="glob" from="manual.xml" to="document.fo"/>
+        </xslt>
+        
+         <!--xslt basedir="build" destdir="${dest.dir}"
+           style="draft.xsl">
+        	 <mapper type="glob" from="document.xml" to="foDocument.fo"/>
+        </xslt-->
+    
+       <fop format="application/pdf" 
+            fofile="${dest.dir}\document.fo"
+            outfile="${dest.dir}\pdfDocument.pdf" />
+    </target>
+    
     <target name="html">
         <mkdir dir="${dest.dir}"/>
     
@@ -22,15 +50,16 @@
         	 <mapper type="glob" from="notebook.xml" to="index.html"/>
         </xslt>
     
-		<xslt basedir="src" destdir="${dest.dir}"
+        <xslt basedir="src" destdir="${dest.dir}"
            extension=".html" style="html.xsl" includes="*.xml" excludes="build.xml">
         </xslt>
-        
+    
         <copy todir="${dest.dir}">
             <fileset file="src/*.css"/>
             
             <fileset dir="src">
                 <include name="**/*.png"/>
+                <include name="**/*.svg"/>
             </fileset>
         </copy>
     </target>

@@ -3,16 +3,9 @@
 
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:fo="http://www.w3.org/1999/XSL/Format">
+  >
 
   <xsl:output indent="yes"/>
-
-  <!--xsl:key name="parts" match="part" use="."/>
-  <xsl:key name="chapters" match="chapter|section" use="."/>
-
-  <xsl:template match="/publication/include">
-    <xsl:apply-templates select="document(@file)/part"/>
-  </xsl:template-->
 
   <xsl:template match="/">
     <html>
@@ -202,6 +195,8 @@
   </xsl:template-->
         
 
+  <xsl:template match ="section/description">
+  </xsl:template>
 
   <xsl:template match ="intro">
     <p class="intro">
@@ -262,6 +257,21 @@
     </p>
   </xsl:template>
 
+ <xsl:template match ="inline-graphic">
+    <div class="inline">
+    <img>
+        <xsl:attribute name="src">
+            <xsl:value-of select="@fileref"/>
+        </xsl:attribute>
+        <xsl:apply-templates/> 
+    </img>
+    </div>
+  </xsl:template>
+
+    <xsl:template match ="inline-graphic/description">
+        <xsl:value-of select="."/>
+    </xsl:template>
+
   <xsl:template match ="biblio">
     <p>
         [<xsl:value-of select="@name"/><xsl:value-of select="@year"/>]
@@ -274,34 +284,17 @@
   </xsl:template>
 
 
-  <xsl:template match ="para/comment">
-    <p class="comment">
-      [Note: <xsl:apply-templates/>]
-    </p>
-  </xsl:template>
-
   <xsl:template match ="comment">
   </xsl:template>
 
-  <xsl:template match ="command-listing">
-    <pre class="command">
-      <xsl:apply-templates/> 
+  <xsl:template match ="command-listing|property-listing|program-listing">
+    <pre>
+        <xsl:attribute name="class">
+            <xsl:value-of select="name()"/>
+        </xsl:attribute>
+        <xsl:apply-templates/> 
     </pre>
   </xsl:template>
-
-  <xsl:template match ="property-listing">
-    <pre class="property">
-      <xsl:apply-templates/> 
-    </pre>
-  </xsl:template>
-
-
-  <xsl:template match ="program-listing">
-    <pre class="program">
-      <xsl:apply-templates/> 
-    </pre>
-  </xsl:template>
-
 
   <xsl:template match ="program-listing/listing-note">
     <p class="listing-note">
@@ -328,21 +321,12 @@
 
 
 
-  <xsl:template match="class|method|variable">
-    <span class="class">
-      <xsl:apply-templates/> 
-    </span>
-  </xsl:template>
-
-  <xsl:template match="object|menu|field">
-    <span class="object">
-      <xsl:apply-templates/> 
-    </span>
-  </xsl:template>
-
-  <xsl:template match="code|path|property">
-    <span class="code">
-      <xsl:apply-templates/> 
+  <xsl:template match="class|method|variable|object|menu|field|code|path|property">
+    <span>
+        <xsl:attribute name="class">
+            <xsl:value-of select="name()"/>
+        </xsl:attribute>
+        <xsl:apply-templates/> 
     </span>
   </xsl:template>
 
