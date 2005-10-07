@@ -92,6 +92,7 @@ public class ResizeDrag extends InternalDrag {
 
     protected void end(Viewer viewer) {
         view.dragTo(this);
+        view.getViewManager().clearOverlayView(view);
     }
 
     /*
