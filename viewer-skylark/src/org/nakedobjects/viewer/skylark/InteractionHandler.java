@@ -115,7 +115,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
             if (lastTyped == null && ke.getKeyCode() != KeyEvent.VK_SHIFT && ke.getKeyCode() != KeyEvent.VK_ALT
                     && ke.getKeyCode() != KeyEvent.VK_CONTROL) {
                 if(ke.getKeyCode() >= KeyEvent.VK_0 && ke.getKeyCode() <= KeyEvent.VK_DIVIDE) {
-                    LOG.error("no type event for " + KeyEvent.getKeyText(ke.getKeyCode()));
+                    LOG.error("no type event for '" + KeyEvent.getKeyText(ke.getKeyCode()) + "':  " + ke);
                 }
             }
             keyboardManager.released(ke.getKeyCode(), ke.getModifiers());
@@ -139,7 +139,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
         
         lastTyped = ke;
         if (!ke.isActionKey()) {
-            LOG.debug("typed " + ke.getKeyChar());
+            LOG.debug("typed '" + ke.getKeyChar() + "':  " + ke);
             keyboardManager.typed(ke.getKeyChar());
             redraw();
         } else {
