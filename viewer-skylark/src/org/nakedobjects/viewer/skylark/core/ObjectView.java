@@ -5,7 +5,6 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.CollectionContent;
@@ -98,19 +97,19 @@ public abstract class ObjectView extends AbstractView {
      * the source object in as the only parameter.
      */
     public void drop(ContentDrag drag) {
-        Assert.assertTrue(drag.getSourceContent() instanceof ObjectContent);
+        if (drag.getSourceContent() instanceof ObjectContent) {
+            Naked result = getContent().drop(drag.getSourceContent());
+            getParent().invalidateContent();
+            if (result != null) {
+                View view = getWorkspace().createSubviewFor(result, false);
+                Location location = new Location();
+                location.move(10, 10);
+                view.setLocation(location);
+                getWorkspace().addView(view);
+            }
 
-        Naked result = getContent().drop(drag.getSourceContent());
-        getParent().invalidateContent();
-        if (result != null) {
-            View view = getWorkspace().createSubviewFor(result, false);
-            Location location = new Location();
-            location.move(10, 10);
-            view.setLocation(location);
-            getWorkspace().addView(view);
+            markDamaged();
         }
-
-        markDamaged();
     }
 
 

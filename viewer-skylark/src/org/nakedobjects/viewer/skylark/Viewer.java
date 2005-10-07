@@ -300,14 +300,6 @@ public class Viewer {
             }
         });
 
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Vew context details...") {
-            public void execute(Workspace workspace, View view, Location at) {
-                InfoDebugFrame f = new InfoDebugFrame();
-                f.setInfo(NakedObjects.getCurrentSession());
-                f.show(at.x + 50, workspace.getBounds().y + 6);
-            }
-        });
-
         options.add(MenuOptionSet.DEBUG, loggingOption("Off", Level.OFF));
         options.add(MenuOptionSet.DEBUG, loggingOption("Error", Level.ERROR));
         options.add(MenuOptionSet.DEBUG, loggingOption("Warn", Level.WARN));
