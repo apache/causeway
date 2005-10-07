@@ -9,8 +9,8 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
 
-public class SimpleSession extends Session {
-    private static final Logger LOG = Logger.getLogger(Session.class);
+public class SimpleSession implements Session {
+    private static final Logger LOG = Logger.getLogger(SimpleSession.class);
     
     private Role roles[];
 
@@ -60,6 +60,9 @@ public class SimpleSession extends Session {
         return user;
     }
 
+    public String getUserName() {
+        return user.getName().stringValue();
+    }
     
     public boolean hasRole(Role role) {
         if (user == null) {
