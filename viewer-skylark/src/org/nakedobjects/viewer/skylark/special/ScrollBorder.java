@@ -499,7 +499,7 @@ public class ScrollBorder extends AbstractViewDecorator {
     public Size getRequiredSize() {
         Size size = wrappedView.getRequiredSize();
         size.extend(left, top);
- //       size.extend(SCROLLBAR_WIDTH, SCROLLBAR_WIDTH);
+        size.extend(SCROLLBAR_WIDTH, SCROLLBAR_WIDTH);
         return size;
     }
 
@@ -712,6 +712,10 @@ public class ScrollBorder extends AbstractViewDecorator {
         }
         
         wrappedView.setSize(requiredSize);
+        
+        // temp TODO fix
+        verticalScrollPosition = 0;
+        horizontalScrollPosition = 0;
     }
 
     public void setVerticalPostion(final int position) {
