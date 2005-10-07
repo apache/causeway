@@ -5,7 +5,6 @@ import org.nakedobjects.distribution.DataHelper;
 import org.nakedobjects.distribution.Distribution;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ReferenceData;
-import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.InstancesCriteria;
@@ -19,7 +18,6 @@ import org.apache.log4j.Logger;
 
 public abstract class CommandClient implements Distribution {
     private static final Logger LOG = Logger.getLogger(CommandClient.class);
-    private DirtyObjectSet updateNotifier;
 
     public ObjectData[] allInstances(Session session, String fullName, boolean includeSubclasses) {
         AllInstances request = new AllInstances(session, fullName, includeSubclasses);
@@ -127,11 +125,6 @@ public abstract class CommandClient implements Distribution {
         Request request = new StartTransaction(session);
         execute(request);
     }
-
-    public void setUpdateNotifier(DirtyObjectSet updateNotifier) {
-        this.updateNotifier = updateNotifier;
-    }
-
 }
 
 /*
