@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section SYSTEM "./documentation.dtd">
+<section>
+  <title>Distribution file naming convention</title>
+
+  <description></description>
+
+  <intro></intro>
+
+  <para>Version numbers allow you to distinguish what the product is, what
+  platform it runs on, and what version it is. Through the version number you
+  can also determine how stable the system should be.</para>
+
+  <property-listing>nakedobjects-2.0-java.zip</property-listing>
+
+  <property-listing>nakedobjects-2.0-dotnet.zip</property-listing>
+
+  <property-listing>os-xml-1.2-java.zip</property-listing>
+
+  <property-listing>[product]-[version]-[platform].zip</property-listing>
+
+  <para>The main products are:-</para>
+
+  <list>
+    <para>nakedobjects</para>
+
+    <para>examples</para>
+
+    <para></para>
+  </list>
+
+  <para></para>
+
+  <para></para>
+</section>

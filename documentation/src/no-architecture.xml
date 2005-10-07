@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section SYSTEM "./documentation.dtd">
+<section>
+  <title>Components of the NOF</title>
+
+  <description>How the framework is componentised, what those components are,
+  hwo they are used, and when they need to be replaced</description>
+
+  <para>Components within the NOF can be exchanged so that the system can be
+  tailored to work in specific ways. The main components in the NOF
+  are:-</para>
+
+  <list>
+    <para>Distribution</para>
+
+    <para>Reflector</para>
+
+    <para>Authorisation Manager</para>
+
+    <para>XAT framework</para>
+
+    <para>Object Manager (and object store)</para>
+
+    <para>Object Loader</para>
+
+    <para>Viewer</para>
+
+    <para>Help manager</para>
+
+    <para>Configuration</para>
+  </list>
+
+  <para></para>
+
+  <subheading>Reflector</subheading>
+
+  <para></para>
+
+  <subheading>Object Loader</subheading>
+
+  <para></para>
+
+  <subheading>Object Manager</subheading>
+
+  <subheading>Distribution</subheading>
+
+  <para></para>
+
+  <subheading>Configuration</subheading>
+
+  <para>The configuratiin component provides the rest of the framework with a
+  central place to access all the configuration properties. Each property is
+  accessed by a fully qualified name, and can be accessed by type. The
+  Configuration class is concrete and therefore can only be subclassed, but it
+  be be created using a <class>ConfigurationLoader</class>, which loads the
+  properties into the configuration. The provided
+  <class>ConfigurationLoader</class> is
+  <class>ConfigurationPropertiesLoader</class>, which loads the properties
+  from a Java style properties file.</para>
+
+  <subheading>Viewer</subheading>
+
+  <para></para>
+
+  <para><comment>[describe skylark in detail]</comment></para>
+
+  <subheading>XAT Framework</subheading>
+
+  <para></para>
+</section>

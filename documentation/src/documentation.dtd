@@ -18,15 +18,31 @@
    command-listing|property-listing|inline-graphic|figure|panel|
    comment|index|anchor|biblio">
 
+<!-- publication - made up of a number of sections -->
+<!ELEMENT publication (title?, subtitle?, author?, copyright?, preamble, section*)>
+
+<!ELEMENT author (#PCDATA)>
+
+<!ELEMENT copyright (year, holder, license)>
+
+<!ELEMENT year (#PCDATA)>
+
+<!ELEMENT holder (#PCDATA)>
+
+<!ELEMENT license (para*)>
+
+<!ELEMENT preamble (section*)>
 
 <!-- sections - each document is split into sections, each section can
 contain other sections -->
-<!ELEMENT section (title,index*,description+,comment?,intro+,(section|(%section-elements;))*)>
+<!ELEMENT section (title,subtitle?,index*,description?,comment?,intro?,(section|(%section-elements;))*)>
 <!ATTLIST section
         label CDATA #IMPLIED
         numbered (on|off) "on">
 
 <!ELEMENT title (%text;)*>
+
+<!ELEMENT subtitle (#PCDATA)>
 
 <!ELEMENT description (%text;)*>
 
@@ -47,14 +63,28 @@ contain other sections -->
 <!ELEMENT note (%para-elements;)*> <!-- footnotes -->
 
 <!ELEMENT program-listing (%text;|listing-note)*>
+<!ATTLIST program-listing
+  xml:space (preserve) #FIXED 'preserve'
+>
 
 <!ELEMENT listing-note (%para-elements;)*> 
 
 <!ELEMENT command-listing (%text;)*>
+<!ATTLIST command-listing
+  xml:space (preserve) #FIXED 'preserve'
+>
 
 <!ELEMENT screenshot (%text;)*>
 
 <!ELEMENT property-listing (%text;)*>
+<!ATTLIST property-listing
+  xml:space (preserve) #FIXED 'preserve'
+>
+
+<!ELEMENT include EMPTY>
+<!ATTLIST include
+      file CDATA #REQUIRED
+>
 
 <!ELEMENT biblio (%para-elements;)*> <!-- bibliographic reference -->
 <!ATTLIST biblio

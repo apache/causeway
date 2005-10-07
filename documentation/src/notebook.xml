@@ -1,9 +1,15 @@
 <!DOCTYPE content SYSTEM "./content.dtd">
 
 <content>
-	<page file="how no works.xml"/>
-	<page file="running an example.xml"/>
-	<page file="logging.xml"/>
-	<page file="images.xml"/>
-	<page file="viewer properties.xml"/>
+    <section file="introduction.xml"/>
+    <section file="nakedobjects.xml"/>
+    <section file="no-architecture.xml"/>
+    <section file="how no works.xml"/>
+    <section file="running an example.xml"/>
+    <section file="logging.xml"/>
+    <section file="images.xml"/>
+    <section file="skylark viewer.xml"/>
+    <section file="viewer properties.xml"/>
+    <section file="nakedobjects-repository.xml"/>
+    
 </content>

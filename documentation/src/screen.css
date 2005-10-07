@@ -2,7 +2,7 @@ BODY {
       		font-family: Tahoma, Arial, Sans-Serif;
       		line-height: 140%;
 
-      		margin-top: 10px;
+      		margin-top: 20px;
       		margin-left: 30px;
       		margin-right: 50px;
 }
@@ -69,19 +69,24 @@ th {			font-size: 80%; background-color: #aaa;
 p, li {		letter-spacing:1.0pt; font-size: 80%;}
 p b {			color: #333;}
 
-li {			margin-bottom: 10px; clear: both;}
+ul {    margin-bottom: 10px; }
+li {			margin-bottom: 0px; clear: both;}
 
 
 
 img{			margin-left: 6px;}
-img.border {	margin-left: 0px;
+
+img.border {	margin-left: 0px; }
+
 img.wrapped {	margin-right: 10px;  margin-bottom: 10px;  float: left;
   			clear: left;}
 
-pre {			font-family: andale mono, monospaced; font-size: 10pt; 
-			color: #6600CC; margin-left: 0.25in; margin-right: 0.25in;
-			clear: both;}
-pre.b {		color:black;}
+pre {	font-family: andale mono, lucida fixed, monospaced; 
+        line-height: 100%;
+	color: #6600CC; margin-left: 0.25in; margin-right: 0.25in;
+	clear: both;}
+
+pre.b {	color:black;}
 
 pre.property-listing {
     background: #ffdddd;
@@ -95,18 +100,15 @@ pre.program-listing {
     background: #ddffd;
 }
 
-code 
-{		color: #6600CC; font: monospaced;}
-
-
+.code {	color: #6600CC; font: andale mono, lucida fixed, monospaced;}
 
 .class, .method {
-    font-family: andale mono, monospaced; 
+    font-family: andale mono, lucida fixed, monospaced; 
     color: blue
 }
 
 .path {
-    font-family: andale mono, monospaced; 
+    font-family: andale mono, lucida fixed, monospaced; 
     color: green
 }
 

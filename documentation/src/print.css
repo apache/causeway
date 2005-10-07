@@ -1,6 +1,6 @@
 BODY {
       		font-family: Tahoma, Arial, Sans-Serif;
-      		line-height: 140%;
+      		line-height: 200%;
 
       		margin-top: 60px;
       		margin-left: 30px;
@@ -68,12 +68,15 @@ th {			font-size: 80%; background-color: #aaa;
 p, li {		letter-spacing:1.0pt; font-size: 80%;}
 p b {			color: #333;}
 
-li {			margin-bottom: 10px; clear: both;}
+ul {    margin-bottom: 10px; }
+li {			margin-bottom: 0px; clear: both;}
 
 
 
 img{			margin-left: 6px;}
-img.border {	margin-left: 0px;
+
+img.border {	margin-left: 0px; }
+
 img.wrapped {	margin-right: 10px;  margin-bottom: 10px;  float: left;
   			clear: left;}
 
@@ -82,14 +85,22 @@ pre {			font-family: andale mono, monospaced; font-size: 10pt;
 			clear: both;}
 pre.b {		color:black;}
 
-code 
+
+
+.code 
 {		color: #6600CC; font: monospaced;}
 
 
 
+.class, .method {
+    font-family: andale mono, monospaced; 
+    color: blue
+}
 
-
-
+span.path {
+    font-family: andale mono, monospaced; 
+    color: green
+}
 
 
 

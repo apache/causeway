@@ -2,6 +2,7 @@
 
 <!ELEMENT content (page)*>
 
-<!ELEMENT page EMPTY>
-	<!ATTLIST page 
-		file CDATA #REQUIRED>
+<!ELEMENT section EMPTY>
+<!ATTLIST section 
+    file CDATA #REQUIRED
+>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section SYSTEM "./documentation.dtd">
+<section>
+  <title>Security</title>
+
+  <para>A basic form of authorisation control is provided by the NOF through
+  the decoration of the reflection peers (ActionPeer, OneToOnePeer and
+  OneToManyPeer) and though an interface to an external security
+  service.</para>
+
+  <subheading>How it works</subheading>
+
+  <para>The reflection peers <class>ActionAuthorisation</class>,
+  <class>OneToOneAuthorisation</class> and
+  <class>OneToManyAuthorisation</class> forward requests to the
+  <class>AuthorisationManager</class> (all from the
+  <class>org.nakedobjects.security</class> package) when compiling
+  <class>Hint</class>s. The authorisation manager interface has two method
+  that determine if the action or field should be visible and usable. These
+  states are merged into the hint passed up from the underlying relfection
+  peers. Both methods take a <class>Session</class> object and a
+  <class>MemberIdentifier</class>. The identifier contains the class name,
+  member name and array of parameter names for the method to be executed,
+  allowing the external system to determine what method is trying to be
+  executed without any reference ti the NOF itself.</para>
+
+  <subheading>Installation</subheading>
+
+  <para>To install security you need to add the reflection decorator
+  <class>org.nakedobjects.security.SecurityPeerFactory</class> to the
+  reflection mechanism <comment>describe this when implemented</comment>. This
+  factory needs to be set up with a security manager via its
+  <method>setAuthorisationManager</method> method.</para>
+
+  <subheading>Extending this component</subheading>
+
+  <para>To create an security manager (none are provided with the NOF) you
+  must implement the
+  <class>org.nakedobjects.security.AuthorisationManager</class> class, which
+  is a <class>NakedObjectComponent</class>.</para>
+
+  <para><comment>Add in javadoc refs</comment></para>
+</section>

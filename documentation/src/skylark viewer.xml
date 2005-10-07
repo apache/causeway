@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE section SYSTEM "./documentation.dtd">
+<section label="labelxxx" numbered="on">
+  <title>title ??? </title>
 
-<section numbered="on">
-  <title></title>
-  <description></description>
+  <description>description of page</description>
 
-  <para></para>
+  <intro>
+    <para>into para</para>
+  </intro>
 
+  <para>parapdsdjlkasj</para>
 </section>
