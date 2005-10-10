@@ -4,7 +4,7 @@
 	<!ENTITY distribution SYSTEM "file:../build-templates/distribution-build.xml">
 ]>
 
-<project name="Naked Objects framework - developers edition"
+<project name="Naked Objects framework - java version"
          default="idebuild"
          basedir=".">
 	
