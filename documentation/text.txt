@@ -1,0 +1,4 @@
+[INFO] Using org.apache.xerces.parsers.SAXParser as SAX2 Parser
+[INFO] FOP 0.20.5
+[INFO] Using org.apache.xerces.parsers.SAXParser as SAX2 Parser
+[ERROR] no protocol: ./documentation.dtd

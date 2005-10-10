@@ -10,21 +10,23 @@
 
     <property name="dest.dir" value="build"/>
 
-    <property name="fop.dir" value="C:/Program Files/Java/fop-0.20.5"/>
-    <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop">
-        <classpath>
-            <pathelement location="${fop.dir}/build/fop.jar"/>
-            <pathelement location="${fop.dir}/lib/avalon-framework-cvs-20020806.jar"/>
-            <pathelement location="${fop.dir}/lib/batik.jar"/>
-        </classpath>
-    </taskdef>
-
-
-    <target name="clean">
+     <target name="clean">
         <delete dir="build"/>
     </target>
 
     <target name="pdf" description="Generates a single PDF file">
+	   	<property name="fop.dir" value="C:/Program Files/Java/fop-0.20.5"/>
+		<taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop">
+	        <classpath>
+	            <pathelement location="${fop.dir}/build/fop.jar"/>
+	            <pathelement location="${fop.dir}/lib/avalon-framework-cvs-20020806.jar"/>
+	            <pathelement location="${fop.dir}/lib/batik.jar"/>
+	            <pathelement location="${fop.dir}/lib/jimi-1.0.jar"/>
+	        </classpath>
+	 	</taskdef>
+
+
+
         <mkdir dir="${dest.dir}"/>
     
         <xslt basedir="src" destdir="${dest.dir}"

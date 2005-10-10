@@ -70,7 +70,6 @@
       <title>Getting Started</title>
       
       <include file="introduction.xml"/>
-      <include file="nakedobjects.xml"/>
       <include file="how no works.xml"/>
         <include file="running an example.xml"/>
   </section>
@@ -95,6 +94,17 @@
     <include file="skylark viewer.xml"/>
     <include file="nakedobjects-repository.xml"/>
   </section>
+  
+  <section numbered="on">
+      <title>Other</title>
+      
+    <include file="framework design introduction.xml"/>
+    <include file="configuration.xml"/>
+    <include file="distribution.xml"/>
+    <include file="filename-convention.xml"/>
+    <include file="security.xml"/>
+</section>
+  
   
   <section numbered="on">
       <title>Framework Development</title>
