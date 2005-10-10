@@ -36,9 +36,8 @@ import org.apache.log4j.Logger;
 public class ObjectLoaderImpl implements NakedObjectLoader {
     private static final Logger LOG = Logger.getLogger(ObjectLoaderImpl.class);
     private ObjectFactory objectFactory;
-    private PojoAdapterHash pojoAdapterMap;
+    private PojoAdapterMap pojoAdapterMap;
     private IdentityAdapterMap identityAdapterMap;
-    //private ReflectorFactory reflectorFactory;
     private AdapterFactory adapterFactory;
 
     private void addIdentityMapping(Oid oid, NakedReference adapter) {
@@ -365,7 +364,7 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
      * 
      * @property
      */
-    public void set_PojoAdapterMap(PojoAdapterHash pojos) {
+    public void set_PojoAdapterMap(PojoAdapterMap pojos) {
         this.pojoAdapterMap = pojos;
     }
 
@@ -377,7 +376,7 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
         this.objectFactory = objectFactory;
     }
 
-    public void setPojoAdapterMap(PojoAdapterHash pojoAdpaterMap) {
+    public void setPojoAdapterMap(PojoAdapterMap pojoAdpaterMap) {
         this.pojoAdapterMap = pojoAdpaterMap;
     }
 

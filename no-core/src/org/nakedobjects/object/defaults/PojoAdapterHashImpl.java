@@ -1,73 +1,10 @@
 package org.nakedobjects.object.defaults;
 
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedReference;
-import org.nakedobjects.utility.DebugString;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-
-import org.apache.log4j.Logger;
-
-
-public class PojoAdapterHashImpl implements PojoAdapterHash {
-    private static final Logger LOG = Logger.getLogger(PojoAdapterHashImpl.class);
-    protected Hashtable pojos = new Hashtable();
-
-    public void add(Object pojo, Naked adapter) {
-        LOG.debug("add " + pojo + " as " + adapter);
-        pojos.put(pojo, adapter);
-    }
-
-    public boolean containsPojo(Object pojo) {
-        return pojos.containsKey(pojo);
-    }
-
-    protected void finalize() throws Throwable {
-        super.finalize();
-        LOG.info("finalizing hash of pojos");
-    }
-
-    public String getDebugData() {
-        DebugString debug = new DebugString();
-        Enumeration e = pojos.keys();
-        int count = 0;
-        while (e.hasMoreElements()) {
-            Object pojo = (Object) e.nextElement();
-            NakedReference object = (NakedReference) pojos.get(pojo);
-            debug.append(count++, 5);
-            debug.append(" '");
-            debug.append(pojo.toString(), 25);
-            debug.append("'    ");
-            debug.appendln(object.toString());
-        }
-        return debug.toString();
-    }
-
-    public String getDebugTitle() {
-        return "POJO Adapter Hashtable";
-    }
-
-    public Naked getPojo(Object pojo) {
-        return (Naked) pojos.get(pojo);
-    }
-
-    public void reset() {
-        LOG.debug("reset");
-        pojos.clear();
-    }
-
-    public void shutdown() {
-        LOG.debug("shutdown");
-        pojos.clear();
-    }
-
-    public void remove(NakedObject object) {
-        LOG.debug("remove " + object);
-        pojos.remove(object.getObject());
-    }
-}
+/** @deprecated replaced by pojoAdapterHashMap
+ * @see org.nakedobjects.object.defaults.PojoAdapterHashMap 
+ */
+public class PojoAdapterHashImpl extends PojoAdapterHashMap {}
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.

@@ -1,10 +1,23 @@
 package org.nakedobjects.object.defaults;
 
+import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.utility.DebugInfo;
 
-/** @deprecated replaced by PojoAdapterMap
- * @see org.nakedobjects.object.defaults.PojoAdapterMap
- * */
-public interface PojoAdapterHash extends PojoAdapterMap {
+
+public interface PojoAdapterMap extends DebugInfo {
+
+    public void add(Object pojo, Naked adapter);
+
+    public boolean containsPojo(Object pojo);
+
+    public Naked getPojo(Object pojo);
+
+    public void reset();
+
+    public void shutdown();
+
+    public void remove(NakedObject object);
 }
 
 /*

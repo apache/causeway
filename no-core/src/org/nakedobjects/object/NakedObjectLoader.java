@@ -13,7 +13,7 @@ import java.util.Enumeration;
  * adapter for the POJOs that are in use by the NOF and ensuring that the same object is not loaded
  * twice into memory.
  * 
- * Each POJO is given an adapted so that the NOF can work with the POJOs even though it does not
+ * Each POJO is given an adapter so that the NOF can work with the POJOs even though it does not
  * understand their types. Each POJO maps to an adapter and these are reused
  * 
  * Loading of an object refers to the initializing of state within each object as it is restored for
@@ -23,9 +23,9 @@ public interface NakedObjectLoader extends NakedObjectsComponent, DebugInfo {
 
     /**
      * Creates an adpater for the specified collection.
-     * @param specification TODO
      */
     NakedCollection createAdapterForCollection(final Object collection, NakedObjectSpecification specification);
+    
     /**
      * Creates an adpater for the specified transient object, and add that
      * adapter to Pojo-adapter map. If the specified object object already
