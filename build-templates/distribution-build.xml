@@ -291,7 +291,7 @@
 		
 		<!-- produce release zip -->
 		<mkdir dir="${release.dir}" />
-		<zip zipfile="${release.dir}/nakedobjects-${distribution}-${build.id}.zip">
+		<zip zipfile="${release.dir}/nakedobjects-${distribution}-${build.id}-java.zip">
 			<zipfileset dir="${dist.dir}" prefix="nakedobjects-${distribution}-${build.id}"/>
 		</zip>
 
@@ -309,7 +309,8 @@
 	</target>
 
 	<target name="artifacts" if="artifacts.dir" description="copies the build artifacts">
-		<copy todir="${artifacts.dir}">
+		<mkdir dir="${artifacts.dir}/test"/>
+		<copy todir="${artifacts.dir}/test">
 			<fileset dir="${dist.dir}/doc/test">
 			</fileset>
 		</copy>
