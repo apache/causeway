@@ -56,7 +56,7 @@ public class TitleTextTest extends TestCase {
     /*
      * Class under test for void draw(Canvas, int, int, int)
      */
-    public void testDrawCanvas() {
+    public void XXtestDrawCanvas() {
         title = "abcde";
         
         TestCanvas canvas = new TestCanvas() ;
@@ -159,7 +159,7 @@ class TestCanvas extends DummyCanvas {
        this.text = text; 
        this.x = x;
        this.y = y;
-        this.color = color;     
+       this.color = color;     
     }
     
 }
