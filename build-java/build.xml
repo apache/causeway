@@ -10,7 +10,7 @@
 	
 	<property file="build.properties"/>
 	
-	<property name="distribution" value="development" />
+	<property name="distribution" value="framework" />
 
 	
 	&distribution;
