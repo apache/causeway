@@ -298,11 +298,7 @@
 	</target>
 	
 
-
-	<!-- - - - - - - - - - - - - - - - - - 
-          target: install  - installs the latest build in the install directory
-         - - - - - - - - - - - - - - - - - -->
-	<target name="install">
+	<target name="install" description="installs the latest build in the install directory">
 		<delete dir="${latest.dir}" failonerror="false"/>
 		<copy todir="${latest.dir}">
 			<fileset dir="build/dist">
@@ -311,3 +307,13 @@
 	
 		<touch file="${latest.dir}/version-${build.id}"/>
 	</target>
+
+	<target name="artifacts" description="copies the build artifacts">
+		<copy todir="${artifacts.dir}">
+			<fileset dir="build/dist">
+			</fileset>
+		</copy>
+	
+		<touch file="${artifacts.dir}/version-${build.id}"/>
+	</target>
+
