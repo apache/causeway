@@ -19,15 +19,6 @@
       xmlns:fox="http://xml.apache.org/fop/extensions">
 
       <fo:layout-master-set>
-         <fo:simple-page-master master-name="regular"
-          page-width="210mm"  page-height="297mm"
-           margin-top="5mm"  margin-bottom="3mm"
-           margin-left="50mm" margin-right="20mm">
-          <fo:region-body margin-top="15mm" margin-bottom="15mm"/>
-          <fo:region-before extent="15mm"/>
-          <fo:region-after extent="10mm"/>
-        </fo:simple-page-master>
-
          <fo:simple-page-master master-name="title"
           page-width="210mm"  page-height="297mm"
            margin-top="5mm"  margin-bottom="3mm"
@@ -45,7 +36,25 @@
           <fo:region-before extent="15mm"/>
           <fo:region-after extent="10mm"/>
         </fo:simple-page-master>
-      </fo:layout-master-set>
+
+        <fo:simple-page-master master-name="first"
+          page-width="210mm"  page-height="297mm"
+           margin-top="5mm"  margin-bottom="3mm"
+           margin-left="50mm" margin-right="20mm">
+          <fo:region-body margin-top="15mm" margin-bottom="15mm"/>
+          <fo:region-before extent="15mm"/>
+          <fo:region-after extent="10mm"/>
+        </fo:simple-page-master>
+
+        <fo:simple-page-master master-name="regular"
+          page-width="210mm"  page-height="297mm"
+           margin-top="5mm"  margin-bottom="3mm"
+           margin-left="50mm" margin-right="20mm">
+          <fo:region-body margin-top="15mm" margin-bottom="15mm"/>
+          <fo:region-before extent="15mm"/>
+          <fo:region-after extent="10mm"/>
+        </fo:simple-page-master>
+    </fo:layout-master-set>
 
 
       <!-- create Acrobat index and keys -->
@@ -53,19 +62,19 @@
         
         <xsl:for-each select="section">
           <fox:outline internal-destination="{generate-id(.)}">
-            <fox:label><xsl:value-of select="@title"/></fox:label>
+            <fox:label><xsl:value-of select="title"/></fox:label>
             
             <xsl:for-each select="section">
               <fox:outline internal-destination="{generate-id(.)}">
-                <fox:label><xsl:value-of select="@title"/></fox:label>
+                <fox:label><xsl:value-of select="title"/></fox:label>
                 
-                <xsl:for-each select="subsection">
+                <xsl:for-each select="section">
                   <fox:outline internal-destination="{generate-id(.)}">
-                    <fox:label><xsl:value-of select="@title"/></fox:label>
+                    <fox:label><xsl:value-of select="title"/></fox:label>
                     
                     <xsl:for-each select="section">
                       <fox:outline internal-destination="{generate-id(.)}">
-                        <fox:label><xsl:value-of select="@title"/></fox:label>
+                        <fox:label><xsl:value-of select="title"/></fox:label>
                       </fox:outline>
                     </xsl:for-each>
                     
@@ -141,20 +150,28 @@
           <xsl:for-each select="/publication/section">
             <fo:block text-align-last="justify" 
               font-size="120%"
-              >
-              <xsl:value-of select="@title"/>
+              background-color="grey"
+              > 
+              
+              <xsl:text>Part </xsl:text>
+              <xsl:number level="multiple" count="/publication/section" format="I - "/>  
+              <xsl:value-of select="title"/>
               <fo:leader leader-pattern="dots"/>
-              <fo:page-number-citation ref-id="section"/>
+              <fo:page-number-citation ref-id="/publication/section"/>
+              
               <xsl:for-each select="section">
-                <fo:block text-align-last="justify" >
-                  <xsl:value-of select="@title"/>
+                <fo:block font-size="90%" 
+                    text-align-last="justify" 
+                    background-color="white"
+                    text-align="start" 
+                    text-indent="1.5cm">
+                  <xsl:value-of select="title"/>
                   <fo:leader leader-pattern="dots"/>
                   <fo:page-number-citation ref-id="section"/>
                 </fo:block>
               </xsl:for-each>
             </fo:block>
-
-            </xsl:for-each>
+          </xsl:for-each>
 
         </fo:flow>
       </fo:page-sequence>
@@ -162,25 +179,9 @@
       <!-- xsl:apply-templates select="/publication/preamble"/-->
 
 
-      <!-- content -->
+      <!-- main content -->
       <xsl:for-each select="/publication/section">
-        
-        <fo:page-sequence master-reference="regular">
-          <fo:static-content flow-name="xsl-region-before">
-            <fo:block font-size="8pt" line-height="10pt" space-before="0cm" 
-              font-family="sans-serif" 
-              text-align="start" text-indent="-3.5cm">
-              <xsl:value-of select="/publication/title"/>
-            </fo:block>
-            <fo:block text-align="end" 
-              font-size="8pt" 
-              font-family="sans-serif" 
-              space-before="-10pt" 
-              line-height="14pt" >
-              <xsl:value-of select="attribute::title"/>
-            </fo:block>
-          </fo:static-content>
-
+        <fo:page-sequence master-reference="first">
           <fo:static-content flow-name="xsl-region-after">
             <fo:block font-size="8pt" line-height="10pt" space-before="0cm" 
               font-family="sans-serif" 
@@ -196,53 +197,76 @@
           </fo:static-content> 
         
           <fo:flow flow-name="xsl-region-body">
-            <fo:block font-size="11pt" 
-              font-family="serif" 
-              line-height="145%"
-              text-align="left"
-
+              <fo:block 
+                font-size="46pt"
+                space-before="8cm"
+                font-family="sans-serif"
+                space-after=".65cm"
+                id="{generate-id(key('parts', .))}"
               >
-              <xsl:apply-templates select="."/>
-            </fo:block>
+                <xsl:text>Part </xsl:text>
+                <xsl:number level="multiple" count="/publication/section" format="I"/>
+             </fo:block>
+             
+             <fo:block 
+                font-size="23pt"
+                line-height="130%"
+                font-family="sans-serif"
+                space-after=".65cm"
+              >
+                <xsl:value-of select="title"/>
+                <xsl:if test="@draft='yes'">
+                  <fo:inline font-size="60%" font-style="italic"> draft</fo:inline>
+                </xsl:if>
+             </fo:block>
           </fo:flow>
         </fo:page-sequence>
+ 
+
+        <xsl:for-each select="section">
+     
+        <fo:page-sequence master-reference="regular">
+          <fo:static-content flow-name="xsl-region-before">
+            <fo:block font-size="8pt" line-height="10pt" space-before="0cm" 
+              font-family="sans-serif" 
+              text-align="start" text-indent="-3.5cm">
+              <xsl:value-of select="title"/>
+            </fo:block>
+            <fo:block text-align="end" 
+              font-size="8pt" 
+              font-family="sans-serif" 
+              space-before="-10pt" 
+              line-height="14pt" >
+              <xsl:value-of select="attribute::title"/>
+            </fo:block>
+          </fo:static-content>
+    
+          <fo:static-content flow-name="xsl-region-after">
+            <fo:block font-size="8pt" line-height="10pt" space-before="0cm" 
+              font-family="sans-serif" 
+              text-align="start" text-indent="-3.5cm">
+              Draft 
+            </fo:block>
+            <fo:block font-size="8pt"
+              space-before="-10pt" 
+              font-family="sans-serif" 
+              text-align="end">
+              <fo:page-number></fo:page-number>
+            </fo:block>
+          </fo:static-content> 
         
-        
-      </xsl:for-each>
+          <fo:flow flow-name="xsl-region-body">
+                <xsl:apply-templates select="."/>
+                <block/>
+           </fo:flow>
+        </fo:page-sequence>
+         </xsl:for-each>
+
+    </xsl:for-each>
 
     </fo:root>
   </xsl:template>
 
-
-  <xsl:template match="/publication/section"> <!-- top level: part -->
-    <fo:block 
-      font-size="22pt"
-      line-height="130%"
-      font-family="sans-serif"
-      space-after=".65cm"
-      border-after-style="solid"
-      border-width="2mm"
-      border-color="black"
-      keep-with-next="always"
-      id="{generate-id(key('parts', .))}"
-      
-      page-break-after="always"
-      >
-      <fo:block>
-        <xsl:text>Part </xsl:text>
-        <xsl:number level="multiple" count="/publication/section" format="I - "/>
-        <xsl:value-of select="title"/>
-        <xsl:if test="@draft='yes'">
-          <fo:inline font-size="60%" font-style="italic"> draft</fo:inline>
-        </xsl:if>
-      </fo:block>
-    </fo:block>
-    
-    <fo:block>
-      <xsl:apply-templates/> 
-    </fo:block>
-  </xsl:template>
-        
 
   <xsl:template match="section">
     <fo:block 
@@ -251,7 +275,7 @@
       font-family="sans-serif"
       space-after=".65cm"
       border-after-style="solid"
-      border-width=".5mm"
+      border-width="2mm"
       border-color="black"
       keep-with-next="always"
       id="{generate-id(key('chapters', .))}"
@@ -292,11 +316,32 @@
       text-align="start"
       space-before=".2cm"
       space-after=".2cm"
+      border-after-style="solid"
+      border-width="1mm"
+      border-color="black"
       keep-with-next="always"
       >
       <xsl:apply-templates/> 
     </fo:block>
   </xsl:template>
+  
+  
+  <xsl:template match ="minorheading">
+    <fo:block
+      font-family="sans-serif"
+      font-size="14pt"
+      text-align="start"
+      space-before=".2cm"
+      space-after=".2cm"
+      border-after-style="solid"
+      border-width="0.5mm"
+      border-color="black"
+      keep-with-next="always"
+      >
+      <xsl:apply-templates/> 
+    </fo:block>
+  </xsl:template>
+
 
   <xsl:template match="list">
     <fo:list-block  start-indent="5mm" provisional-distance-between-starts="5mm">
@@ -455,6 +500,7 @@
     <fo:block
       space-before="0px"
       space-after="10px"
+      width="10cm"
       padding="20px"
       border-style="solid"
       keep-with-next="always"
@@ -464,29 +510,22 @@
         font-style="italic"
         keep-with-next="always"
         >
-        <xsl:value-of select="caption"/>
+        <xsl:value-of select="@label"/>
       </fo:block>
-      <fo:external-graphic>
-        <xsl:attribute name="src">src/<xsl:value-of select="@fileref"/></xsl:attribute>
-        <xsl:attribute name="width">150mm</xsl:attribute>
-      </fo:external-graphic>
+      <fo:block keep-with-next="always">
+          <fo:external-graphic scaling="uniform" width="250px">
+            <xsl:attribute name="src">src/<xsl:value-of select="@fileref"/></xsl:attribute>
+            <!--xsl:attribute name="content-height"><xsl:value-of select="@width"/></xsl:attribute-->
+          </fo:external-graphic>
+      </fo:block>
       <fo:block
         color="gray"
         font-size="8pt"
         line-height="11pt"
         space-after="8px"
+        keep-with-next="always"
         >
-        <!--
-        <xsl:text>[IMAGE </xsl:text>
-        <xsl:value-of select="@fileref"/>: <xsl:value-of select="description"/>
-        <xsl:text>]</xsl:text> 
-        -->
-      </fo:block>
-      <fo:block 
-        font-size="80%"
-        font-style="italic"
-        >
-        <xsl:apply-templates/>
+        <xsl:value-of select="description"/>
       </fo:block>
     </fo:block>
   </xsl:template>

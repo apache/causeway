@@ -99,7 +99,9 @@
       <title>Other</title>
       
     <include file="framework design introduction.xml"/>
+    <include file="configure and running.xml"/>
     <include file="configuration.xml"/>
+    <include file="object loader.xml"/>
     <include file="distribution.xml"/>
     <include file="filename-convention.xml"/>
     <include file="security.xml"/>

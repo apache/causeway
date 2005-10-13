@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section SYSTEM "./documentation.dtd">
+<section>
+  <title>Configuring and Running the NOF</title>
+
+  <para>The NOF is designed to be configured and run in a number of ways,
+  specifically from within a container such as <weblink
+  address="???">Spring</weblink> or <weblink
+  address="http://www.picocontainer.org/">PicoContainer</weblink>. The NOF is
+  a collection of components that are designed to work together to build a
+  particular kind of system. By providing flexibility in the configuration of
+  the system it allows you to set up stand alone exploration demo, a client,
+  or a server system from same set of components.</para>
+
+  <para>Each component in the NOF must be told of the other components it
+  depends upon, and must be configured with its own parameters. To make this
+  as flexible as possible the components are defined as Java classes and each
+  dependency and property is declared as an mutator method (i.e. in the form
+  <method>set<ital>Property</ital>(<ital>Type</ital>
+  <ital>value</ital>)</method>); both Java and .Net compatible methods have
+  been used in all classes to allow configuration from both platforms. At its
+  most basic the NOF can be configured and run by writing a Java or .Net
+  program that creates each component and sets up its parameters and
+  dependencies, as the example below shows.</para>
+
+  <program-listing>        LocalObjectManager objectManager = new LocalObjectManager();
+        objectManager.setObjectStore(objectStore);
+        objectManager.setPersistAlgorithm(persistAlgorithm);
+        objectManager.setCheckObjectsForDirtyFlag(true);
+
+        nakedObjects.setObjectManager(objectManager);
+</program-listing>
+
+  <para>This example sets up the object manager by creating a
+  <class>LocalObjectManager</class> instance and specifying it dependicies as
+  the object store and persist algorithm, and setting up the 'check objects
+  for dirty' flag. The last line then takes this new component and sets it up
+  as a dependent of the naked objects repository
+  (<class>NakedObjects</class>), see
+  <class>org.nakedobjects.example.exploration.JavaExploration</class> and
+  <class>org.nakedobjects.xat.AcceptanceTestCase</class>.</para>
+
+  <subheading>Properties Configuration</subheading>
+
+  <para>A special class called
+  <class>org.nakedobjects.container.configuration.Startup</class> is provided
+  with the NOF that loads up a coniguration file, which can can specified on
+  the command line, that specifies what components are to be loaded, and how
+  they are to be configured. Using a pattern that is used in products such the
+  Jetty web server and Log4J the components are specified by their class names
+  and identified by name. These names can then be used to set up the
+  dependencies. The following properties do the same job as the Java code
+  previously. </para>
+
+  <program-listing>nakedobjects.container.objectManager=org.nakedobjects.object.persistence.defaults.LocalObjectManager
+nakedobjects.container.objectManager.objectStore= org.nakedobjects.object.persistence.defaults.TransientObjectStore
+nakedobjects.container.objectManager.checkObjectsForDirtyFlag= true  
+</program-listing>
+
+  <para>The first line creates the object manager instance and assigns it the
+  container object, which was described ealier - but is not shown - in the
+  configuration. The second line creates the object store instance and assigns
+  it to the object manager using its <method>setObjectStore</method> method.
+  The final line similarly calls the
+  <method>setcheckObjectsForDirtyFlag</method> method, passing in a literal
+  instead of another object.</para>
+
+  <subheading>Spring Configuration</subheading>
+
+  <comment>to add</comment>
+</section>

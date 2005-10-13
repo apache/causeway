@@ -100,25 +100,6 @@
   object. Second, it provides the mapping between an adapter for a domain
   object that is persistent and its OID that uniquely identifies it.</para>
 
-  <para></para>
-
-  <para>The object loader manages the domain objects in local memory, creating
-  an adapter for each domain object that is in use within the system. The NOF
-  only knows about the adapters and hence uses these throughout the system,
-  and interacts with the domain object indirectly through the adapter. The
-  adapters use the reflector to actually manipulate the domain objects. There
-  should only ever be one adapter for any domain objects, so the second job
-  for the loader is ensure that any time that a adapter is needed for a domain
-  object it must find the existing one, if it exists, or create a new
-  one.</para>
-
-  <para>Every persistent object within the NOF has a unique identifier that is
-  used identify each an every object within the object manager and when
-  objects are passed between nodes on the network. Using such an identifier
-  the NOF can persist relationships between objects in the persistance layer,
-  and see two physical objects on separate machines as being the same logical
-  object.</para>
-
   <subheading>User Interface</subheading>
 
   <para>Once the NOF has a way to reference objects in the DOM and it has an

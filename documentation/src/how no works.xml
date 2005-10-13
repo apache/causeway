@@ -23,8 +23,9 @@
   that could form the start-point of a user activity is shown as a class icon
   on the left of the window.</para>
 
-  <figure fileref="intro/classes.png"
-          label="The opening screen of the Naked Objects example showing the six classes" />
+  <figure width="50%" 
+        fileref="intro/classes.png"
+        label="The opening screen of the Naked Objects example showing the six classes" />
 
   <list>
     <para>These are the six business classes that constitute the prototype
@@ -173,6 +174,7 @@
   icon.</para>
 
   <figure fileref="intro/behaviour.png"
+          width="50%"
           label="Each object displays all its behaviours when you right-click." />
 
   <list>

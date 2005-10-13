@@ -8,7 +8,8 @@
          default="html"
          basedir=".">
 
-    <property name="dest.dir" value="build"/>
+	 <property name="dest.dir" value="build"/>
+	 <property name="src.dir" value="src"/>
 
      <target name="clean">
         <delete dir="build"/>
@@ -29,17 +30,11 @@
 
         <mkdir dir="${dest.dir}"/>
     
-        <xslt basedir="src" destdir="${dest.dir}"
-           style="draft.xsl">
-        	 <mapper type="glob" from="manual.xml" to="document.fo"/>
-        </xslt>
+        <xslt in="${src.dir}/manual.xml" out="${dest.dir}/merge.xml" style="merge.xsl"/>
         
-         <!--xslt basedir="build" destdir="${dest.dir}"
-           style="draft.xsl">
-        	 <mapper type="glob" from="document.xml" to="foDocument.fo"/>
-        </xslt-->
-    
-       <fop format="application/pdf" 
+        <xslt in="${dest.dir}/merge.xml" out="${dest.dir}/document.fo" style="draft.xsl"/>
+        
+	<fop format="application/pdf" 
             fofile="${dest.dir}\document.fo"
             outfile="${dest.dir}\pdfDocument.pdf" />
     </target>
@@ -47,19 +42,16 @@
     <target name="html">
         <mkdir dir="${dest.dir}"/>
     
-        <xslt basedir="src" destdir="${dest.dir}"
-           style="html-set.xsl">
-        	 <mapper type="glob" from="notebook.xml" to="index.html"/>
-        </xslt>
+        <xslt in="${src.dir}/notebook.xml" out="${dest.dir}/index.html" style="html-set.xsl"/>
     
-        <xslt basedir="src" destdir="${dest.dir}"
+        <xslt basedir="${src.dir}" destdir="${dest.dir}"
            extension=".html" style="html.xsl" includes="*.xml" excludes="build.xml">
         </xslt>
     
         <copy todir="${dest.dir}">
-            <fileset file="src/*.css"/>
+            <fileset file="${src.dir}/*.css"/>
             
-            <fileset dir="src">
+            <fileset dir="${src.dir}">
                 <include name="**/*.png"/>
                 <include name="**/*.svg"/>
             </fileset>
