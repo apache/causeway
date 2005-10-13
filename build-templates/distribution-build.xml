@@ -310,7 +310,7 @@
 
 	<target name="artifacts" if="artifacts.dir" description="copies the build artifacts">
 		<copy todir="${artifacts.dir}">
-			<fileset dir="build/dist">
+			<fileset dir="${dist.dir}/doc/test">
 			</fileset>
 		</copy>
 	
