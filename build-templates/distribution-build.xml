@@ -68,7 +68,7 @@
 		<delete dir="${build.dir}" />
 	</target>
 
-	<target name="distribution" depends="-init, prepare, compile, test, copy-images, dists">
+	<target name="distribution" depends="-init, prepare, compile, test, copy-images, dists, artifacts">
 		<fail if="failure" message="Tests failed" />
 	</target>
 	
@@ -77,7 +77,7 @@
 		<echo>Version ${build.version}  ${build.id}</echo>
 	</target>
 
-	<target name="check" depends="prepare, compile, test, artifacts">
+	<target name="check" depends="prepare, compile, test">
 		<fail if="failure" message="Tests failed" />
 	</target>
 
