@@ -77,7 +77,7 @@
 		<echo>Version ${build.version}  ${build.id}</echo>
 	</target>
 
-	<target name="check" depends="prepare, compile, test">
+	<target name="check" depends="prepare, compile, test, artifacts">
 		<fail if="failure" message="Tests failed" />
 	</target>
 
@@ -308,7 +308,7 @@
 		<touch file="${latest.dir}/version-${build.id}"/>
 	</target>
 
-	<target name="artifacts" description="copies the build artifacts">
+	<target name="artifacts" if="artifacts.dir" description="copies the build artifacts">
 		<copy todir="${artifacts.dir}">
 			<fileset dir="build/dist">
 			</fileset>
