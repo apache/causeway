@@ -9,10 +9,10 @@ import org.nakedobjects.application.valueholder.Logical;
 import org.nakedobjects.application.valueholder.MultilineTextString;
 import org.nakedobjects.application.valueholder.Password;
 import org.nakedobjects.application.valueholder.TextString;
+import org.nakedobjects.object.AdapterFactory;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.Reflector;
 import org.nakedobjects.reflector.java.collection.ArrayAdapter;
@@ -31,8 +31,8 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
-public class JavaReflectorFactory extends ReflectorFactory {
-    private final static Logger LOG = Logger.getLogger(JavaReflectorFactory.class);
+public class JavaAdapterFactory implements AdapterFactory {
+    private final static Logger LOG = Logger.getLogger(JavaAdapterFactory.class);
     
     public Reflector createReflector(String className) throws ReflectionException {
          return new JavaReflector(className);
