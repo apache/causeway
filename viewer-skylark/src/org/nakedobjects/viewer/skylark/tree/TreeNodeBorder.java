@@ -3,7 +3,7 @@ package org.nakedobjects.viewer.skylark.tree;
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedReference;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
@@ -18,6 +18,7 @@ import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.FieldContent;
 import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.OneToManyField;
@@ -27,6 +28,7 @@ import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
+import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.DragContentIcon;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
 import org.nakedobjects.viewer.skylark.basic.ObjectTitleText;
@@ -38,14 +40,14 @@ import org.apache.log4j.Logger;
 
 
 public class TreeNodeBorder extends AbstractBorder {
-    private static final Logger LOG = Logger.getLogger(TreeNodeBorder.class);
     private static final int BOX_PADDING = 2;
-    private static final int BOX_X_OFFSET = 5;
     private static final int BOX_SIZE = 8;
+    private static final int BOX_X_OFFSET = 5;
     private final static Text LABEL_STYLE = Style.NORMAL;
+    private static final Logger LOG = Logger.getLogger(TreeNodeBorder.class);
     private int baseline;
-    private ViewSpecification replaceWithSpecification;
     private IconGraphic icon;
+    private ViewSpecification replaceWithSpecification;
     private TitleText text;
 
     public TreeNodeBorder(View wrappedView, ViewSpecification replaceWith) {
@@ -53,20 +55,8 @@ public class TreeNodeBorder extends AbstractBorder {
 
         replaceWithSpecification = replaceWith;
 
-        if (getContent() instanceof OneToManyField) {
-            String type = ((OneToManyField) getContent()).getSpecification().getFullName();
-            final NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(type);
-            icon = new IconGraphic(this, LABEL_STYLE) {
-                protected String iconName(NakedObject object) {
-                    return nc.getShortName();
-                }
-            };
-            text = new ObjectTitleText(this, LABEL_STYLE);
-
-        } else {
-            icon = new IconGraphic(this, LABEL_STYLE);
-            text = new ObjectTitleText(this, LABEL_STYLE);
-        }
+        icon = new IconGraphic(this, LABEL_STYLE);
+        text = new ObjectTitleText(this, LABEL_STYLE);
         int height = icon.getSize().getHeight();
 
         baseline = icon.getBaseline();
@@ -77,18 +67,58 @@ public class TreeNodeBorder extends AbstractBorder {
         bottom = 0;
     }
 
+    private int canOpen() {
+        return ((NodeSpecification) getSpecification()).canOpen(getContent());
+    }
+
+    protected Bounds contentArea() {
+        return new Bounds(getLeft(), getTop(), wrappedView.getSize().getWidth(), wrappedView.getSize().getHeight());
+    }
+
+    public void contentMenuOptions(MenuOptionSet menuOptions) {
+        super.contentMenuOptions(menuOptions);
+
+        Naked object = getView().getContent().getNaked();
+        if(object instanceof NakedReference && ! ((NakedReference) object).getResolveState().isResolved()) {
+            menuOptions.add(MenuOptionSet.VIEW, new MenuOption("Load object") {
+                public void execute(Workspace workspace, View view, Location at) {
+                    resolveContent();
+                }
+            });
+        }
+
+        menuOptions.add(MenuOptionSet.VIEW, new MenuOption("Select node") {
+            public void execute(Workspace workspace, View view, Location at) {
+                selectNode();
+            }
+
+            public String getDescription(View view) {
+                return "Show this node in the right-hand pane";
+            }
+        });
+    }
+
     public void debugDetails(StringBuffer b) {
         b.append("TreeNodeBorder " + left + " pixels\n");
         b.append("           titlebar " + (top) + " pixels\n");
         b.append("           replace with  " + replaceWithSpecification);
         b.append("           text " + text);
         b.append("           icon " + icon);
-       	super.debugDetails(b);
-        
+        super.debugDetails(b);
+
+    }
+
+    public Drag dragStart(DragStart drag) {
+        if (overBorder(drag.getLocation())) {
+            View dragOverlay = new DragContentIcon(getContent());
+            return new ContentDrag(this, drag.getLocation(), dragOverlay);
+        } else {
+            return super.dragStart(drag);
+        }
     }
 
     public void draw(Canvas canvas) {
-         if (((TreeBrowserFrame) getViewAxis()).getSelectedNode() == getView()) {
+        if (((TreeBrowserFrame) getViewAxis()).getSelectedNode() == getView()) {
             canvas.drawSolidRectangle(left, 0, getSize().getWidth() - left - 1, top - 1, Style.PRIMARY2);
         }
         if (getState().isObjectIdentified()) {
@@ -100,7 +130,6 @@ public class TreeNodeBorder extends AbstractBorder {
         int y = top / 2;
         canvas.drawLine(x, y, x + left, y, Style.SECONDARY2);
 
-        
         boolean isOpen = getSpecification().isOpen();
         boolean addBox = isOpen || canOpen() != NodeSpecification.CANT_OPEN;
         if (addBox) {
@@ -108,19 +137,18 @@ public class TreeNodeBorder extends AbstractBorder {
             canvas.drawLine(x, y, x + BOX_SIZE, y, Style.SECONDARY3);
             canvas.drawSolidRectangle(x, y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE, Style.WHITE);
             canvas.drawRectangle(x, y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE, Style.SECONDARY1);
-            
-            if(canOpen() == NodeSpecification.UNKNOWN) {
-                
+
+            if (canOpen() == NodeSpecification.UNKNOWN) {
+
             } else {
-	            canvas.drawLine(x + BOX_PADDING, y, x + BOX_SIZE - BOX_PADDING, y, Style.BLACK);
-	            if (!isOpen) {
-	                x += BOX_SIZE / 2;
-	                canvas.drawLine(x, y - BOX_SIZE / 2 + BOX_PADDING, x, y + BOX_SIZE / 2 - BOX_PADDING, Style.BLACK);
-	            }
+                canvas.drawLine(x + BOX_PADDING, y, x + BOX_SIZE - BOX_PADDING, y, Style.BLACK);
+                if (!isOpen) {
+                    x += BOX_SIZE / 2;
+                    canvas.drawLine(x, y - BOX_SIZE / 2 + BOX_PADDING, x, y + BOX_SIZE / 2 - BOX_PADDING, Style.BLACK);
+                }
             }
         }
 
-        
         View[] nodes = getSubviews();
         if (nodes.length > 0) {
             int y1 = top / 2;
@@ -143,51 +171,37 @@ public class TreeNodeBorder extends AbstractBorder {
         super.draw(canvas);
     }
 
+    public void entered() {
+        super.entered();
+        getState().setObjectIdentified();
+        markDamaged();
+    }
+
+    public void exited() {
+        super.exited();
+        getState().clearObjectIdentified();
+        markDamaged();
+    }
+
     public void firstClick(Click click) {
         int x = click.getLocation().getX();
         int y = click.getLocation().getY();
-        
+
         if (withinBox(x, y)) {
-            if(canOpen() == NodeSpecification.UNKNOWN) {
+            if (canOpen() == NodeSpecification.UNKNOWN) {
                 resolveContent();
                 markDamaged();
             }
             LOG.debug((getSpecification().isOpen() ? "close" : "open") + " node " + getContent().getNaked());
-            if(canOpen() == NodeSpecification.CAN_OPEN) {
+            if (canOpen() == NodeSpecification.CAN_OPEN) {
                 View newView = replaceWithSpecification.createView(getContent(), getViewAxis());
-	            getParent().replaceView(getView(), newView);
+                getParent().replaceView(getView(), newView);
             }
         } else if (y < top && x > left) {
-            LOG.debug("node selected " + getContent().getNaked());
-            ((TreeBrowserFrame) getViewAxis()).setSelectedNode(getView());
+            selectNode();
         } else {
             super.firstClick(click);
         }
-    }
-
-    private void resolveContent() {
-        Naked parent = getParent().getContent().getNaked();
-        if(!(parent instanceof NakedObject)) {
-            parent = getParent().getParent().getContent().getNaked();
-        }
-        
-        if(getContent() instanceof FieldContent) {
-            NakedObjectField field = ((FieldContent) getContent()).getFieldReflector();
-            NakedObjects.getObjectManager().resolveField((NakedObject) parent, field);
-        } else if(getContent() instanceof CollectionContent) {
-            NakedObjects.getObjectManager().resolveImmediately((NakedObject) parent);
-        } else if(getContent() instanceof CollectionElement) {
-            NakedObjects.getObjectManager().resolveImmediately((NakedObject) getContent().getNaked());
-        }
-    }
-
-    private int canOpen() {
-    	return ((NodeSpecification) getSpecification()).canOpen(getContent());
-    }
-
-    private boolean withinBox(int x, int y) {
-        return x >= BOX_X_OFFSET
-                && x <= BOX_X_OFFSET + BOX_SIZE && y >= (top - BOX_SIZE) / 2 && y <= (top + BOX_SIZE) / 2;
     }
 
     public int getBaseline() {
@@ -200,19 +214,46 @@ public class TreeNodeBorder extends AbstractBorder {
         return size;
     }
 
+    public void objectActionResult(Naked result, Location at) {
+        if (getContent() instanceof OneToManyField) {
+            // same as InternalCollectionBorder
+            OneToManyField internalCollectionContent = (OneToManyField) getContent();
+            OneToManyAssociation field = internalCollectionContent.getOneToManyAssociation();
+            NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
+
+            Hint about = target.getHint(field, result);
+            if (about.canUse().isAllowed()) {
+                target.setAssociation(field, (NakedObject) result);
+            }
+        }
+        super.objectActionResult(result, at);
+    }
+
+    private void resolveContent() {
+        Naked parent = getParent().getContent().getNaked();
+        if (!(parent instanceof NakedObject)) {
+            parent = getParent().getParent().getContent().getNaked();
+        }
+
+        if (getContent() instanceof FieldContent) {
+            NakedObjectField field = ((FieldContent) getContent()).getFieldReflector();
+            NakedObjects.getObjectManager().resolveField((NakedObject) parent, field);
+        } else if (getContent() instanceof CollectionContent) {
+            NakedObjects.getObjectManager().resolveImmediately((NakedObject) parent);
+        } else if (getContent() instanceof CollectionElement) {
+            NakedObjects.getObjectManager().resolveImmediately((NakedObject) getContent().getNaked());
+        }
+    }
+
+    private void selectNode() {
+        LOG.debug("node selected " + getContent().getNaked());
+        ((TreeBrowserFrame) getViewAxis()).setSelectedNode(getView());
+    }
+
     public String toString() {
         return wrappedView.toString() + "/TreeNodeBorder";
     }
-    
-    public Drag dragStart(DragStart drag) {
-        if(overBorder(drag.getLocation())) {
-            View dragOverlay = new DragContentIcon(getContent());
-            return new ContentDrag(this, drag.getLocation(), dragOverlay);
-        } else {
-            return super.dragStart(drag);
-        }
-    }
-    
+
     public ViewAreaType viewAreaType(Location mouseLocation) {
         int iconWidth = icon.getSize().getWidth();
         int textWidth = text.getSize().getWidth();
@@ -229,59 +270,27 @@ public class TreeNodeBorder extends AbstractBorder {
         super.viewMenuOptions(options);
         TreeDisplayRules.menuOptions(options);
     }
-    
-    public void objectActionResult(Naked result, Location at) {
-        if (getContent() instanceof OneToManyField) {
-            // same as InternalCollectionBorder
-            OneToManyField internalCollectionContent = (OneToManyField) getContent();
-            OneToManyAssociation field = internalCollectionContent.getOneToManyAssociation();
-            NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
 
-            Hint about = target.getHint(field, result);
-            if (about.canUse().isAllowed()) {
-                target.setAssociation(field, (NakedObject) result);
-            }
-        }
-        super.objectActionResult(result, at);
-    }
-
-    protected Bounds contentArea() {
-        return new Bounds(getLeft(), getTop(), wrappedView.getSize().getWidth(), wrappedView.getSize().getHeight());
-    }
-    
-    public void entered() {
-        super.entered();
-        getState().setObjectIdentified();
-        markDamaged();
-    }
-
-    public void exited() {
-        super.exited();
-        getState().clearObjectIdentified();
-        markDamaged();
+    private boolean withinBox(int x, int y) {
+        return x >= BOX_X_OFFSET && x <= BOX_X_OFFSET + BOX_SIZE && y >= (top - BOX_SIZE) / 2 && y <= (top + BOX_SIZE) / 2;
     }
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */
