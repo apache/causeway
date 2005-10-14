@@ -244,7 +244,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
 
         options.add(MenuOptionSet.DEBUG, new MenuOption("Naked Classes...") {
             public void execute(Workspace workspace, View view, Location at) {
-                NakedObjectSpecification[] specs = NakedObjects.getSpecificationLoader().getAllSpecifications();
+                NakedObjectSpecification[] specs = NakedObjects.getSpecificationLoader().allSpecifications();
                 //ArbitraryCollectionVector classCollection = new
                 // ArbitraryCollectionVector("Naked Classes");
                 Vector classCollection = new Vector();

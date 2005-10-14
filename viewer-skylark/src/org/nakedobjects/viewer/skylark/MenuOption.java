@@ -42,7 +42,7 @@ public abstract class MenuOption implements UserAction {
         return description;
     }
 
-    public Consent disabled(View component) {
+    public Consent disabled(View view) {
         return Allow.DEFAULT;
     }
 
