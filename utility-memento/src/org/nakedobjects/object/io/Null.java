@@ -3,6 +3,7 @@ package org.nakedobjects.object.io;
 import java.io.Serializable;
 
 class Null implements Transferable, Serializable {
+    private static final long serialVersionUID = 5729106816298944191L;
 
     public Null() {}
 

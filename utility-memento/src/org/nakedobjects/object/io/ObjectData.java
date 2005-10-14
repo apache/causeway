@@ -7,6 +7,7 @@ import java.util.Hashtable;
 
 
 class ObjectData extends Data {
+    private static final long serialVersionUID = 7121411963269613347L;
     private final static Transferable NO_ENTRY = new Null();
     private final Hashtable fields = new Hashtable();
 

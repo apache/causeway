@@ -4,6 +4,7 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 
 
 public class TransferableException extends NakedObjectRuntimeException {
+    private static final long serialVersionUID = 9158127548960584345L;
 
     public TransferableException() {
         super();
