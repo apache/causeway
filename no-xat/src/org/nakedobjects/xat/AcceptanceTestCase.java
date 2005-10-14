@@ -14,12 +14,11 @@ import org.nakedobjects.object.security.NullSession;
 
 import java.io.File;
 import java.util.Hashtable;
-import java.util.Properties;
 
 import junit.framework.TestCase;
+import junit.framework.TestResult;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -34,12 +33,19 @@ public abstract class AcceptanceTestCase extends TestCase {
     private FixtureBuilder fixtureBuilder;
 
     public AcceptanceTestCase() {
-        LOG.info("creating acceptance test");
+        this(null);
     }
 
     public AcceptanceTestCase(String name) {
         super(name);
-        LOG.info("creating acceptance test " + name);
+        
+        File f = new File("xat.properties");
+        if (f.exists()) {
+            PropertyConfigurator.configure("xat.properties");
+            Logger.getLogger(AcceptanceTestCase.class).debug("XAT Logging enabled - first test: " + getName());
+        } else {
+            BasicConfigurator.configure();
+        }
     }
 
     protected void append(String text) {
@@ -90,6 +96,11 @@ public abstract class AcceptanceTestCase extends TestCase {
         return new TestNakedNullParameter(cls);
     }
 
+    public void run(TestResult result) {
+        LOG.info("run " + getName());
+        super.run(result);
+    }
+    
     protected void setUp() throws Exception {
         File f = new File("xat.properties");
         Configuration configuration;
@@ -102,15 +113,7 @@ public abstract class AcceptanceTestCase extends TestCase {
         NakedObjectsClient nakedObjects = new NakedObjectsClient();
         nakedObjects.setConfiguration(configuration);
           
-        Properties logProperties = configuration.getProperties("log4j");
-        if (logProperties.size() == 0) {
-            LogManager.getRootLogger().setLevel(Level.OFF);
-        } else {
-            PropertyConfigurator.configure(logProperties);
-        }
-
-        Logger.getLogger(AcceptanceTestCase.class).debug("XAT Logging enabled - new test: " + getName());
-
+      
         fixtureBuilder = createFixtureBuilder();
 
         if (testObjectFactory == null) {
