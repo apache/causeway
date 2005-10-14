@@ -203,6 +203,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
      * changes to the object that are saved.
      */
     public void init() throws StartupException {
+        LOG.info("initialising " + this);
         Assert.assertNotNull("persist algorithm required", persistAlgorithm);
         Assert.assertNotNull("object store required", objectStore);
         persistAlgorithm.init();

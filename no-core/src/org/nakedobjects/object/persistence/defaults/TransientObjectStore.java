@@ -254,7 +254,7 @@ public class TransientObjectStore implements NakedObjectStore {
     }
 
     public void init() throws ObjectManagerException {
-        LOG.info("init");
+        LOG.info("initialising " + this);
     }
 
     private TransientObjectStoreInstances instancesFor(NakedObjectSpecification spec) {
@@ -307,7 +307,7 @@ public class TransientObjectStore implements NakedObjectStore {
     }
 
     public void shutdown() throws ObjectManagerException {
-        LOG.info("shutdown " + this);
+        LOG.info("shutting down " + this);
         objects.clear();
         for (Enumeration e = instances.elements(); e.hasMoreElements();) {
             TransientObjectStoreInstances inst = (TransientObjectStoreInstances) e.nextElement();
