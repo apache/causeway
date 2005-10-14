@@ -3,7 +3,7 @@ package org.nakedobjects.object;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
+import org.nakedobjects.object.defaults.AbstractSpecificationLoader;
 import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.defaults.SerialOid;
@@ -42,7 +42,7 @@ public abstract class NakedObjectStoreTestCase extends TestCase {
         Logger.getRootLogger().setLevel(Level.ERROR);     
         LOG.debug("test setup");
        
-        new NakedObjectSpecificationLoaderImpl();
+        new AbstractSpecificationLoader();
         NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
 //        NakedObjectSpecificationImpl.setReflectorFactory(new InternalReflectorFactory());
 

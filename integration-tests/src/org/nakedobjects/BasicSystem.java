@@ -5,9 +5,9 @@ import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ReflectionFactory;
 import org.nakedobjects.object.ReflectorFactory;
-import org.nakedobjects.object.defaults.IdentityAdapterMapImpl;
+import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
+import org.nakedobjects.object.defaults.AbstractSpecificationLoader;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
 import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.persistence.NakedObjectManager;
@@ -16,7 +16,7 @@ import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
-import org.nakedobjects.reflector.java.reflect.JavaReflectorFactory;
+import org.nakedobjects.reflector.java.reflect.JavaAdapterFactory;
 
 
 public class BasicSystem {
@@ -28,12 +28,12 @@ public class BasicSystem {
     private final ReflectionFactory reflectionFactory;
 
     public BasicSystem() {
-        specificationLoader = new NakedObjectSpecificationLoaderImpl();
+        specificationLoader = new AbstractSpecificationLoader();
         
         this.objectLoader = setupObjectLoader();
         this.objectManager = setupObjectManager();
         reflectionFactory = new LocalReflectionFactory();
-        reflectorFactory = new JavaReflectorFactory();
+        reflectorFactory = new JavaAdapterFactory();
         
         nakedObjects = new NakedObjectsClient();
     }
@@ -50,7 +50,7 @@ public class BasicSystem {
     protected ObjectLoaderImpl setupObjectLoader() {
         ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
         objectLoader.setPojoAdapterMap(new PojoAdapterHashImpl());
-        objectLoader.setIdentityAdapterMap(new IdentityAdapterMapImpl());
+        objectLoader.setIdentityAdapterMap(new IdentityAdapterHashMap());
         objectLoader.setObjectFactory(new JavaObjectFactory());
         return objectLoader;
     }

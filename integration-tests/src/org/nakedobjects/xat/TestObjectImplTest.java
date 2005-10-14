@@ -5,7 +5,7 @@ import org.nakedobjects.object.NakedObjectContext;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
+import org.nakedobjects.object.defaults.AbstractSpecificationLoader;
 import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.object.security.ClientSession;
 import org.nakedobjects.object.security.Session;
@@ -36,7 +36,7 @@ public class TestObjectImplTest extends TestCase {
         Logger.getRootLogger().setLevel(Level.OFF);
 
         om = MockObjectManager.setup();
-        new NakedObjectSpecificationLoaderImpl();
+        new AbstractSpecificationLoader();
         NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
 //        NakedObjectSpecificationImpl.setReflectorFactory(new InternalReflectorFactory());
 

@@ -6,7 +6,7 @@ import org.nakedobjects.object.NakedObjectTestCase;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
+import org.nakedobjects.object.defaults.AbstractSpecificationLoader;
 
 public class TestValueImplTest extends NakedObjectTestCase {
     private MockObjectManager om;
@@ -20,9 +20,9 @@ public class TestValueImplTest extends NakedObjectTestCase {
         super.setUp();
         
         om = MockObjectManager.setup();
-        new NakedObjectSpecificationLoaderImpl();
+        new AbstractSpecificationLoader();
         NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
-        NakedObjectSpecificationLoaderImpl.setReflectorFactory(new InternalReflectorFactory());
+        AbstractSpecificationLoader.setReflectorFactory(new InternalReflectorFactory());
         context = new NakedObjectContext(om);
     }
     

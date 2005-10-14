@@ -3,9 +3,9 @@ package org.nakedobjects.object.utility.snapshot;
 import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
+import org.nakedobjects.object.defaults.AbstractSpecificationLoader;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
-import org.nakedobjects.reflector.java.reflect.JavaReflectorFactory;
+import org.nakedobjects.reflector.java.reflect.JavaAdapterFactory;
 import org.nakedobjects.utility.xmlsnapshot.DomSerializer;
 import org.nakedobjects.utility.xmlsnapshot.DomSerializerCrimson;
 import org.nakedobjects.utility.xmlsnapshot.XmlSnapshot;
@@ -25,9 +25,9 @@ public class SnapshotBuilderTest extends TestCase {
         NakedObjectsClient nakedObjects = new NakedObjectsClient();
         nakedObjects.setConfiguration(new Configuration());
         
-        new NakedObjectSpecificationLoaderImpl();
+        new AbstractSpecificationLoader();
         
-          nakedObjects.setReflectorFactory(new JavaReflectorFactory());
+          nakedObjects.setReflectorFactory(new JavaAdapterFactory());
           nakedObjects.setReflectionFactory(new LocalReflectionFactory());
              
           
