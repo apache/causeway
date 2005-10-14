@@ -10,7 +10,7 @@ import org.nakedobjects.object.Role;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
+import org.nakedobjects.object.defaults.AbstractSpecificationLoader;
 import org.nakedobjects.object.persistence.defaults.SerialOid;
 import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
 import org.nakedobjects.object.system.TestClock;
@@ -43,9 +43,9 @@ public class InstancesTest extends TestCase {
        Logger.getRootLogger().setLevel(Level.OFF);
         
         new TestClock();
-        new NakedObjectSpecificationLoaderImpl();
+        new AbstractSpecificationLoader();
         NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
-        NakedObjectSpecificationLoaderImpl.setReflectorFactory(new InternalReflectorFactory());
+        AbstractSpecificationLoader.setReflectorFactory(new InternalReflectorFactory());
         
         
         NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(Person.class.getName());
