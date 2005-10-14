@@ -8,7 +8,7 @@ import org.nakedobjects.application.valueholder.Logical;
 import org.nakedobjects.application.valueholder.TextString;
 
 
-public class Telephone {
+public class Telephone implements Common {
     private final TextString number;
     private final TextString knownAs;
     private final Logical temporary;
@@ -50,6 +50,9 @@ public class Telephone {
         if(hide.isSet()) about.invisible();
     }
     
+    public void aboutHideFields(FieldAbout about, Logical entry) {
+        about.unmodifiableOnCondition(temporary.isSet(), "Flag set");
+      }
 
     public final TextString getNumber() {
         return number;

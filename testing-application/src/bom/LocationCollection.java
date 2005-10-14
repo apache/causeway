@@ -6,6 +6,7 @@ import org.nakedobjects.application.NonPersistable;
 import java.util.Vector;
 
 public class LocationCollection extends Vector implements NonPersistable {
+    private static final long serialVersionUID = -3634529164821432983L;
     private BusinessObjectContainer container;
     
     public void setContainer(BusinessObjectContainer container) {

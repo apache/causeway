@@ -3,8 +3,8 @@ package bom;
 import java.util.Vector;
 
 public class LocationVector extends Vector {
+    private static final long serialVersionUID = -2050716786564114808L;
 
-    
     public Location actionTest() {
         return (Location) elementAt(0);
     }

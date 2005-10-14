@@ -6,8 +6,12 @@ import org.nakedobjects.reflector.java.fixture.JavaFixture;
 import org.nakedobjects.utility.Profiler;
 
 import java.util.Locale;
+import java.util.Vector;
 
 import junit.framework.TestSuite;
+
+import org.apache.log4j.PropertyConfigurator;
+
 import bom.Booking;
 import bom.City;
 import bom.CreditCard;
@@ -19,21 +23,24 @@ import bom.Telephone;
 
 public class RepeatedTestTest extends JavaAcceptanceTestCase {
     static Profiler profiler= new Profiler("");
-    
     static RepeatedTestTest tests[] = new RepeatedTestTest[20];
 
- //   private static int next = 0;
+    static Vector memoryLeak = new Vector();
+    
     
     public static void main(java.lang.String[] args) {
+        PropertyConfigurator.configure("xat.properties");
         for (int j = 0; j < 1; j++) {
             
             TestSuite suite = new TestSuite("xxxt");
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 3; i++) {
                 suite.addTestSuite(RepeatedTestTest.class);
             }
             junit.textui.TestRunner.run(suite);
         }
         
+        
+        System.out.println(memoryLeak);
     }
     
     public RepeatedTestTest(String name) {
@@ -78,6 +85,8 @@ public class RepeatedTestTest extends JavaAcceptanceTestCase {
                      l.getStreetAddress().setValue(i + " Main St.");
                      c.getFirstName().setValue("Harry");
                      c.addToLocations(l);
+                     
+                     memoryLeak.addElement(c);
                  }                 
                  profiler.stop();
                  System.out.println("install fixture exit \t" + profiler.timeLog() + " \t" + Profiler.memoryLog());
@@ -158,7 +167,16 @@ public class RepeatedTestTest extends JavaAcceptanceTestCase {
         profiler.stop();
         System.out.println("test \t" + profiler.timeLog() + " \t" + Profiler.memoryLog());
 
+        leakMemory();
     }
+
+    private void leakMemory() {
+  //      memoryLeak.addElement(NakedObjects.getObjectLoader());
+        
+  //      System.out.println(NakedObjects.getObjectLoader().getDebugData());
+    }
+    
+    
 
 }
 

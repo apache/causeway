@@ -10,7 +10,7 @@ import org.nakedobjects.application.valueholder.TextString;
 import java.util.Vector;
 
 
-public class Location {
+public class Location implements Common {
     private final TextString streetAddress;
     private final TextString knownAs;
     private City city;

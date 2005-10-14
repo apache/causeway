@@ -9,7 +9,7 @@ import org.nakedobjects.application.valueholder.TextString;
 import org.nakedobjects.application.valueholder.WholeNumber;
 
 
-public class CreditCard implements PaymentMethod {
+public class CreditCard implements PaymentMethod, Common {
     private final TextString nameOnCard;
     private final TextString number;
     private final TextString expires;

@@ -32,9 +32,11 @@ public class Customer {
     private Percentage membership;
     private final Vector phoneNumbers;
     private PaymentMethod preferredPaymentMethod;
-    private final Vector PaymentMethods = new Vector();
+    private final Vector paymentMethods = new Vector();
     private final Password password = new Password(8);
     private MultilineTextString notes = new MultilineTextString();
+    private final Vector objects = new Vector();
+    private final Vector common = new Vector();
 
     public Password getPassword() {
         return password;
@@ -45,7 +47,34 @@ public class Customer {
     }
 
     public Vector getPaymentMethods() {
-        return PaymentMethods;
+        return paymentMethods;
+    }
+
+    public Vector getObjects() {
+        return objects;
+    }
+
+    public Vector getCommon() {
+        return common;
+    }
+
+    public void addToObjects(Object object) {
+        objects.addElement(object);
+        markDirty();
+    }
+
+    public void removeFromObjects(Object object) {
+        objects.addElement(object);
+        markDirty();
+    }
+    public void addToCommon(Common object) {
+        common.addElement(object);
+        markDirty();
+    }
+
+    public void removeFromCommon(Common object) {
+        common.addElement(object);
+        markDirty();
     }
 
     public void addToPaymentMethods(PaymentMethod method) {}

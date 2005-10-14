@@ -5,11 +5,11 @@ import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
-import org.nakedobjects.object.defaults.IdentityAdapterMapImpl;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
-import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
+import org.nakedobjects.object.defaults.PojoAdapterHashMap;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.ObjectManagerLogger;
@@ -23,7 +23,8 @@ import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.control.SimpleSession;
 import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
-import org.nakedobjects.reflector.java.reflect.JavaReflectorFactory;
+import org.nakedobjects.reflector.java.reflect.JavaAdapterFactory;
+import org.nakedobjects.reflector.java.reflect.JavaSpecificationLoader;
 import org.nakedobjects.system.AboutNakedObjects;
 import org.nakedobjects.system.SplashWindow;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;
@@ -36,7 +37,6 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-import fixtures.EcsFixture;
 import fixtures.ShortFixture;
 
 
@@ -94,22 +94,20 @@ public class TestingCollectionResolving {
             NakedObjectManager objectManager = new ObjectManagerLogger(lom, "manager.log");
             nakedObjects.setObjectManager(objectManager);
             
-            NakedObjectSpecificationLoaderImpl specificationLoader = new NakedObjectSpecificationLoaderImpl();
+            NakedObjectSpecificationLoader specificationLoader = new JavaSpecificationLoader();
 
             nakedObjects.setSpecificationLoader(specificationLoader);
             
             LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
 
-            JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
-  
             ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
             objectLoader.setObjectFactory(objectFactory);
-            objectLoader.setPojoAdapterMap(new PojoAdapterHashImpl());
-            objectLoader.setIdentityAdapterMap(new IdentityAdapterMapImpl());
+            objectLoader.setPojoAdapterMap(new PojoAdapterHashMap());
+            objectLoader.setIdentityAdapterMap(new IdentityAdapterHashMap());
+            objectLoader.setAdapterFactory(new JavaAdapterFactory());
             nakedObjects.setObjectLoader(objectLoader);
             
             nakedObjects.setReflectionFactory(reflectionFactory);
-            nakedObjects.setReflectorFactory(reflectorFactory);
 
             nakedObjects.init();
             
