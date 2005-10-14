@@ -14,11 +14,10 @@ import org.nakedobjects.distribution.pipe.NakedObjectsPipe;
 import org.nakedobjects.distribution.pipe.PipedClient;
 import org.nakedobjects.distribution.pipe.PipedConnection;
 import org.nakedobjects.distribution.pipe.PipedServer;
-import org.nakedobjects.object.defaults.IdentityAdapterMapImpl;
+import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
-import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
+import org.nakedobjects.object.defaults.PojoAdapterHashMap;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.ObjectStoreLogger;
@@ -29,7 +28,8 @@ import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
-import org.nakedobjects.reflector.java.reflect.JavaReflectorFactory;
+import org.nakedobjects.reflector.java.reflect.JavaAdapterFactory;
+import org.nakedobjects.reflector.java.reflect.JavaSpecificationLoader;
 import org.nakedobjects.system.AboutNakedObjects;
 import org.nakedobjects.system.SplashWindow;
 import org.nakedobjects.utility.DebugInfo;
@@ -118,20 +118,16 @@ public abstract class StandaloneClientServer {
 
                 LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
 
-                JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
-
                 ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
-                objectLoader.setPojoAdapterMap(new PojoAdapterHashImpl());
+                objectLoader.setPojoAdapterMap(new PojoAdapterHashMap());
                 objectLoader.setObjectFactory(objectFactory);
-                objectLoader.setIdentityAdapterMap(new IdentityAdapterMapImpl());
+                objectLoader.setAdapterFactory(new JavaAdapterFactory());
+                objectLoader.setIdentityAdapterMap(new IdentityAdapterHashMap());
                 nakedObjects.setObjectLoader(objectLoader);
 
                 nakedObjects.setReflectionFactory(reflectionFactory);
 
-                NakedObjectSpecificationLoaderImpl specificationLoader = new NakedObjectSpecificationLoaderImpl();
-                nakedObjects.setReflectorFactory(reflectorFactory);
-
-                nakedObjects.setSpecificationLoader(specificationLoader);
+                nakedObjects.setSpecificationLoader(new JavaSpecificationLoader());
 
                 ServerDistribution sd = new ServerDistribution();
                 sd.setObjectFactory(objectFactory);
@@ -204,25 +200,20 @@ public abstract class StandaloneClientServer {
         NakedObjectManager objectManager = proxyObjectManager; //new ObjectManagerLogger(proxyObjectManager, "client-manager.log");
         nakedObjects.setObjectManager(objectManager);
 
-        new NakedObjectSpecificationLoaderImpl();
-
         ProxyReflectionFactory reflectionFactory = new ProxyReflectionFactory();
         reflectionFactory.setConnection(clientLogger);
         reflectionFactory.setObjectDataFactory(objectDataFactory);
 
-        JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
-
         ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
-        objectLoader.setPojoAdapterMap(new PojoAdapterHashImpl());
+        objectLoader.setPojoAdapterMap(new PojoAdapterHashMap());
+        objectLoader.setAdapterFactory(new JavaAdapterFactory());
         objectLoader.setObjectFactory(objectFactory);
-        objectLoader.setIdentityAdapterMap(new IdentityAdapterMapImpl());
+        objectLoader.setIdentityAdapterMap(new IdentityAdapterHashMap());
         nakedObjects.setObjectLoader(objectLoader);
 
         nakedObjects.setReflectionFactory(reflectionFactory);
-        NakedObjectSpecificationLoaderImpl specificationLoader = new NakedObjectSpecificationLoaderImpl();
-        nakedObjects.setReflectorFactory(reflectorFactory);
 
-        nakedObjects.setSpecificationLoader(specificationLoader);
+        nakedObjects.setSpecificationLoader(new JavaSpecificationLoader());
 
         nakedObjects.init();
         
