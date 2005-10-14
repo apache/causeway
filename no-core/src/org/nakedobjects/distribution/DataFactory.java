@@ -230,7 +230,10 @@ public abstract class DataFactory {
         }
         NakedObjects.getObjectLoader().end(object);
 
-        return createObjectData(oid, type, fieldContent, resolveState.isResolved(), !resolveState.isGhost(), object.getVersion());
+        // TODO remove the fudge - needed as collections are part of parents, hence parent object gets set as 
+        // resolving (is not a ghost) yet it has no version number
+        //return createObjectData(oid, type, fieldContent, resolveState.isResolved(), !resolveState.isGhost(), object.getVersion());
+        return createObjectData(oid, type, fieldContent, resolveState.isResolved(), false, object.getVersion());
     }
 }
 
