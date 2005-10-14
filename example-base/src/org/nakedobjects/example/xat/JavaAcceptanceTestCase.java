@@ -1,10 +1,13 @@
 package org.nakedobjects.example.xat;
 
 import org.nakedobjects.NakedObjectsClient;
-import org.nakedobjects.object.defaults.IdentityAdapterMapImpl;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
+import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
-import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
+import org.nakedobjects.object.defaults.PojoAdapterHashMap;
 import org.nakedobjects.object.fixture.FixtureBuilder;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.defaults.DefaultPersistAlgorithm;
@@ -14,7 +17,8 @@ import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
-import org.nakedobjects.reflector.java.reflect.JavaReflectorFactory;
+import org.nakedobjects.reflector.java.reflect.JavaAdapterFactory;
+import org.nakedobjects.reflector.java.reflect.JavaReflector;
 import org.nakedobjects.utility.Profiler;
 import org.nakedobjects.xat.AcceptanceTestCase;
 import org.nakedobjects.xat.StaticNakedObjectSpecificationLoader;
@@ -62,7 +66,7 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
         LOG.info("test tear down " + getName());
         methodProfiler.reset();
         methodProfiler.start();
-       super.tearDown();
+        super.tearDown();
         methodProfiler.stop();
         LOG.info("test tear down complete " + getName() + " " + methodProfiler.timeLog());
         if(PROFILER_ON) {System.out.println(" \t" + methodProfiler.timeLog());}
@@ -98,23 +102,31 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
 
         nakedObjects.setObjectManager(objectManager);
 
-        StaticNakedObjectSpecificationLoader specificationLoader = new StaticNakedObjectSpecificationLoader();
+        NakedObjectSpecificationLoader specificationLoader;
+        specificationLoader = new StaticNakedObjectSpecificationLoader() {
+            // TODO this is duplicated in JavaNakedObjectSpecificationLoader
+            protected NakedObjectSpecification load(String className) {
+                JavaReflector reflector = new JavaReflector(className);
+                NakedObjectSpecificationImpl specification = new NakedObjectSpecificationImpl();
+                ((NakedObjectSpecificationImpl) specification).reflect(className, reflector);
+                return specification;
+            }
+        };
 
+        //specificationLoader = new JavaSpecificationLoader();
         nakedObjects.setSpecificationLoader(specificationLoader);
         
         LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
 
-        JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
-        
         ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
     	nakedObjects.setObjectLoader(objectLoader);
         objectLoader.setObjectFactory(objectFactory);
-        objectLoader.setPojoAdapterMap(new PojoAdapterHashImpl());
-        objectLoader.setIdentityAdapterMap(new IdentityAdapterMapImpl());
-             
+        objectLoader.setPojoAdapterMap(new PojoAdapterHashMap());
+        objectLoader.setIdentityAdapterMap(new IdentityAdapterHashMap());
+        objectLoader.setAdapterFactory(new JavaAdapterFactory());     
+        
         nakedObjects.setReflectionFactory(reflectionFactory);
-        nakedObjects.setReflectorFactory(reflectorFactory);
-
+        
         objectManager.init();
     }   
 }
