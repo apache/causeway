@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.Properties;
+import java.util.Vector;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
@@ -20,7 +21,7 @@ import org.apache.log4j.PropertyConfigurator;
 public class StartUp {
     private static final Logger LOG = Logger.getLogger(StartUp.class);
     private static final String CONTAINER = "container";
-    private static final String VIEWER = "viewer";
+//    private static final String VIEWER = "viewer";
 
     public static void main(String[] args) {
         LogManager.getRootLogger().setLevel(Level.OFF);
@@ -30,7 +31,46 @@ public class StartUp {
 
         // set up logging immediately
         PropertyConfigurator.configure(configuration.getProperties("log4j"));
-        Properties properties = configuration.getProperties("nakedobjects.container");
+        AboutNakedObjects.logVersion();
+        
+        LOG.debug("Configuring system using " + name);
+        Properties properties = configuration.getProperties("nakedobjects.install");
+        
+        Vector components = new Vector();
+        Enumeration keys = properties.keys();
+        while (keys.hasMoreElements()) {
+            String key = (String) keys.nextElement();
+            String component = key.substring("nakedobjects.install".length(), key.indexOf('.', "nakedobjects.install".length() + 1));
+            if(!components.contains(component)) {
+                components.addElement(component);
+            }
+        }
+        
+        try {
+            
+            Enumeration e = components.elements();
+            while (e.hasMoreElements()) {
+                String component = (String) e.nextElement();
+                
+                String containerName = configuration.getString("install." + component);
+                LOG.debug("loading core component " + containerName);
+                NakedObjects container = (NakedObjects) loadComponent(containerName, NakedObjects.class);
+                setProperties(container, "nakedobjects." + "install." + component, properties);
+                
+            }
+            
+            
+//            container.init();
+            
+        } catch(StartupException e) {
+            LOG.error("Failed to start NOF: " + e.getMessage(), e);
+        }
+        
+        
+        
+        
+        /*
+        Properties properties = configuration.getProperties("nakedobjects.install.container");
 
         AboutNakedObjects.logVersion();
 
@@ -38,11 +78,11 @@ public class StartUp {
 
 
         try {
-            String containerName = configuration.getString(CONTAINER);
+            String containerName = configuration.getString("install." + CONTAINER);
             LOG.debug("loading core component " + containerName);
             NakedObjects container = (NakedObjects) loadComponent(containerName, NakedObjects.class);
             setProperty(container, "configuration", configuration);
-            setProperties(container, "nakedobjects." + CONTAINER, properties);
+            setProperties(container, "nakedobjects." + "install." + CONTAINER, properties);
             
             
             // TODO need to load viewer, server listener etc
@@ -50,9 +90,11 @@ public class StartUp {
       //      loadComponent(containerName, NakedObjects.class);
             
             container.init();
+            
         } catch(StartupException e) {
             LOG.error("Failed to start NOF: " + e.getMessage(), e);
         }
+        */
     }
 
     private static void setProperties(Object object, String prefix, Properties properties) {
@@ -66,9 +108,9 @@ public class StartUp {
                 
                 Object value;
                 if(className.equalsIgnoreCase("true")) {
-                   value = Boolean.valueOf(true);
+                   value = Boolean.TRUE;
                 } else if (className.equalsIgnoreCase("false")) {
-                    value = Boolean.valueOf(false);
+                    value = Boolean.FALSE;
                 } else {
                     value = load(className, key, properties);
                 }
