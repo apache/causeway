@@ -56,7 +56,7 @@ public class InternalObjectSpecification implements NakedObjectSpecification {
         return null;
     }
 
-    public Class[] geFieldExtensions(String name) {
+    public Class[] getFieldExtensions(String name) {
         return new Class[0];
     }
     
@@ -104,6 +104,8 @@ public class InternalObjectSpecification implements NakedObjectSpecification {
         return false;
     }
 
+    public void introspect() {}
+    
     public NakedObjectSpecification[] interfaces() {
         return new NakedObjectSpecification[0];
     }

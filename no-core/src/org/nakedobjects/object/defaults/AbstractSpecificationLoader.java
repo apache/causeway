@@ -1,11 +1,7 @@
 package org.nakedobjects.object.defaults;
 
-import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.ReflectorFactory;
-import org.nakedobjects.object.reflect.Reflector;
 import org.nakedobjects.object.reflect.internal.InternalReflector;
 
 import java.util.Enumeration;
@@ -14,12 +10,11 @@ import java.util.Hashtable;
 import org.apache.log4j.Logger;
 
 
-public class NakedObjectSpecificationLoaderImpl implements NakedObjectSpecificationLoader {
-    private final static Logger LOG = Logger.getLogger(NakedObjectSpecificationLoaderImpl.class);
+public abstract class AbstractSpecificationLoader implements NakedObjectSpecificationLoader {
+    private final static Logger LOG = Logger.getLogger(AbstractSpecificationLoader.class);
     private Hashtable classes;
-    private ReflectorFactory reflectorFactory;
  
-    public NakedObjectSpecificationLoaderImpl() {
+    public AbstractSpecificationLoader() {
         classes = new Hashtable();    
     }
    
@@ -32,37 +27,51 @@ public class NakedObjectSpecificationLoaderImpl implements NakedObjectSpecificat
             throw new NullPointerException("No class name specified");
         }
 
-		NakedObjectSpecification nos = (NakedObjectSpecification) classes.get(className);
+		Object object = classes.get(className);
+        NakedObjectSpecification nos = (NakedObjectSpecification) object;
         if (nos != null) {
             return nos;
         } else {
-            Reflector reflector;
+            NakedObjectSpecification specification;
             try {
                 Class cls = Class.forName(className);
-          //      if (InternalNakedObject.class.isAssignableFrom(cls) || cls.getName().startsWith("java.") || Exception.class.isAssignableFrom(cls)) {
+
+                // if (InternalNakedObject.class.isAssignableFrom(cls) || cls.getName().startsWith("java.") ||
+                // Exception.class.isAssignableFrom(cls)) {
                 if (InternalNakedObject.class.isAssignableFrom(cls) || Exception.class.isAssignableFrom(cls)) {
-                    reflector = new InternalReflector(className);
+                    LOG.info("initialising specification for " + className + " using internal reflector");
+                    InternalReflector reflector = new InternalReflector(className);
+                    specification = new NakedObjectSpecificationImpl();
+                    ((NakedObjectSpecificationImpl) specification).reflect(className, reflector);
+
                 } else {
-                    reflector = reflectorFactory.createReflector(className);
+                    specification = load(className);
                 }
 
-                LOG.info("initialising specification for " + className);
-                NakedObjectSpecificationImpl spec = new NakedObjectSpecificationImpl();
-                classes.put(className, spec);
-                spec.reflect(className, reflector);
-                return spec;
+                if (specification == null) {
+                    LOG.info("unrecognised class " + className + "; 'null' specification created");
+                    NakedObjectSpecificationImpl spec = new NakedObjectSpecificationImpl();
+                    spec.nonReflect(className);
+                    return spec;
+
+                }
             } catch (ClassNotFoundException e) {
-                 LOG.debug("non class " + className);
-                NakedObjectSpecificationImpl spec = new NakedObjectSpecificationImpl();
-                spec.nonReflect(className);
-                classes.put(className, spec);
-                return spec;
+                LOG.warn("not a class " + className + "; 'null' specification created");
+                //specification = new NullSpecification(className);
+                specification = new NakedObjectSpecificationImpl();
+                ((NakedObjectSpecificationImpl) specification).nonReflect(className);
             }
 
+            classes.put(className, specification);
+            specification.introspect();
+            return specification;
+ 
         }
     }
+    
+    protected abstract NakedObjectSpecification load(String className);
 
-    public NakedObjectSpecification[] getAllSpecifications() {
+    public NakedObjectSpecification[] allSpecifications() {
         int size = classes.size();
         NakedObjectSpecification[] cls = new NakedObjectSpecification[size];
         Enumeration e = classes.elements();
@@ -82,22 +91,12 @@ public class NakedObjectSpecificationLoaderImpl implements NakedObjectSpecificat
     }
     
     public void shutdown() {
+        LOG.info("shutting down " + this);
         classes.clear();
     }
     
-    /** 
-     * @property
-     * 
-     * @deprecated */
-    public void set_ReflectorFactory(ReflectorFactory reflectorFactory) {
-        this.reflectorFactory = reflectorFactory;
-    }
-
     public void init() {
-        reflectorFactory = NakedObjects.getReflectorFactory();
-        if (reflectorFactory == null) {
-            throw new NakedObjectRuntimeException("No reflector factory has be set up");
-        }
+        LOG.info("initialising " + this);
     }
 }
 

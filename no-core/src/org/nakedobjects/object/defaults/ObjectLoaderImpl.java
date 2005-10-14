@@ -1,6 +1,5 @@
 package org.nakedobjects.object.defaults;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.AdapterFactory;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
@@ -10,7 +9,6 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedReference;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectFactory;
-import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.PojoAdapter;
@@ -106,12 +104,13 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
 
         NakedCollection adapter;
         adapter = adapterFactory.createCollectionAdapter(collection, specification);
-        pojoAdapterMap.add(collection, adapter);
-        LOG.debug("created " + adapter + " for " + collection);
-        ((AbstractNakedReference) adapter).changeState(ResolveState.TRANSIENT);
-
-        Assert.assertNotNull(adapter);
-
+        if(adapter != null) {
+            pojoAdapterMap.add(collection, adapter);
+            LOG.debug("created " + adapter + " for " + collection);
+            ((AbstractNakedReference) adapter).changeState(ResolveState.TRANSIENT);
+    
+            Assert.assertNotNull(adapter);
+        }
         return adapter;
     }
 
@@ -178,7 +177,6 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
             NakedObjectSpecification specification,
             Object collection) {
         Assert.assertNotNull("can't get an adapter for null", this, collection);
-        LOG.debug("get adapter for " + collection);
         InternalCollectionKey key = new InternalCollectionKey(parent, fieldName);
         NakedCollection adapter = (NakedCollection) pojoAdapterMap.getPojo(key);
 
@@ -187,10 +185,10 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
             pojoAdapterMap.add(key, adapter);
             
             if(parent.getResolveState().isPersistent()) {
-	            LOG.debug("no existing adapter found; creating adapter for persistent collection: " + collection);
+	            LOG.debug("creating adapter for persistent collection: " + collection);
 	            ((AbstractNakedReference) adapter).changeState(ResolveState.GHOST);
             } else {
-	            LOG.debug("no existing adapter found; creating adapter for transient collection: " + collection);
+	            LOG.debug("creating adapter for transient collection: " + collection);
 	            ((AbstractNakedReference) adapter).changeState(ResolveState.TRANSIENT);
             }
         }
@@ -238,10 +236,11 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
     }
 
     public void init() {
+        LOG.info("initialising " + this);
         Assert.assertNotNull("needs an identity-adapter map", identityAdapterMap);
         Assert.assertNotNull("needs a pojo-adapter map", pojoAdapterMap);
         Assert.assertNotNull("needs an object factory", objectFactory);
-        adapterFactory = NakedObjects.getReflectorFactory();
+        Assert.assertNotNull("needs an adapter factory", adapterFactory);
     }
 
     public boolean isIdentityKnown(Oid oid) {
@@ -346,15 +345,6 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
      * 
      * @property
      */
-    public void set_ReflectorFactory(ReflectorFactory reflectorFactory) {
-        this.adapterFactory = reflectorFactory;
-    }
-    
-    /**
-     * Expose as a .Net property.
-     * 
-     * @property
-     */
     public void set_AdapterFactory(AdapterFactory adapterFactory) {
         this.adapterFactory = adapterFactory;
     }
@@ -385,6 +375,7 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
     }
     
     public void shutdown() {
+        LOG.info("shutting down " + this);
         identityAdapterMap.clear();
         identityAdapterMap = null;
         pojoAdapterMap.shutdown();

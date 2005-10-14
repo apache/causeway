@@ -4,7 +4,6 @@ import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ReflectionFactory;
-import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.security.Session;
 
@@ -14,7 +13,6 @@ public class NakedObjectsClient extends NakedObjects {
     protected Configuration configuration;
     protected NakedObjectManager objectManager;
     private ReflectionFactory reflectionFactory;
-    private ReflectorFactory reflectorFactory;
     protected Session session;
     protected NakedObjectSpecificationLoader specificationLoader;
 
@@ -40,10 +38,6 @@ public class NakedObjectsClient extends NakedObjects {
 
     protected ReflectionFactory reflectionFactory() {
         return reflectionFactory;
-    }
-
-    protected ReflectorFactory reflectorFactory() {
-        return reflectorFactory;
     }
 
     /**
@@ -87,15 +81,6 @@ public class NakedObjectsClient extends NakedObjects {
      * 
      * @property
      */
-    public void set_ReflectorFactory(ReflectorFactory reflectorFactory) {
-        this.reflectorFactory = reflectorFactory;
-    }
-
-    /**
-     * Expose as a .NET property
-     * 
-     * @property
-     */
     public void set_Session(Session session) {
         setSession(session);
     }
@@ -123,10 +108,6 @@ public class NakedObjectsClient extends NakedObjects {
 
     public void setReflectionFactory(ReflectionFactory reflectionFactory) {
         this.reflectionFactory = reflectionFactory;
-    }
-
-    public void setReflectorFactory(ReflectorFactory reflectorFactory) {
-        this.reflectorFactory = reflectorFactory;
     }
 
     public void setSession(Session session) {

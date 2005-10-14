@@ -6,17 +6,19 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ReflectionFactory;
-import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.utility.DebugString;
 
+import org.apache.log4j.Logger;
+
 /**
  * A repository of all the NOF components that are shared by a running system
  */
 public abstract class NakedObjects implements DebugInfo {
+    private static final Logger LOG = Logger.getLogger(NakedObjects.class);
     private static NakedObjects singleton;
 
     public static DebugInfo debug() {
@@ -60,11 +62,6 @@ public abstract class NakedObjects implements DebugInfo {
         return getInstance().reflectionFactory();
     }
 
-    /** @deprecated */
-    public static ReflectorFactory getReflectorFactory() {
-        return getInstance().reflectorFactory();
-    }
-
     /*
      * Return the specification loader. 
      */
@@ -77,11 +74,11 @@ public abstract class NakedObjects implements DebugInfo {
     }
 
     public static void shutdown() {
+        LOG.info("shutting down " + getInstance());
         getObjectManager().shutdown();
         getObjectLoader().shutdown();
         getSpecificationLoader().shutdown();
         getReflectionFactory().shutdown();
-        getReflectorFactory().shutdown();
         getInstance().clearReferences();
     }
 
@@ -116,7 +113,7 @@ public abstract class NakedObjects implements DebugInfo {
         debug.appendTitle("specification loader");
         NakedObjectSpecificationLoader loader = specificationLoader();
         debug.appendln(0, "instance", loader);
-        NakedObjectSpecification[] specs = loader.getAllSpecifications();
+        NakedObjectSpecification[] specs = loader.allSpecifications();
         for (int i = 0; i < specs.length; i++) {
             debug.appendln(4, i + ")", specs[i].toString());
         }
@@ -127,14 +124,13 @@ public abstract class NakedObjects implements DebugInfo {
     }
 
     public void init() {
+        LOG.info("initialising " + this);
         Assert.assertNotNull("no object manager set up", getObjectManager());
         Assert.assertNotNull("no configuration set up", getConfiguration());
         Assert.assertNotNull("no object loader set up", getObjectLoader());
         Assert.assertNotNull("no specification loader set up", getSpecificationLoader());
         Assert.assertNotNull("no reflection factory set up", getReflectionFactory());
-        Assert.assertNotNull("no reflector factory set up", getReflectorFactory());
-        
-        getReflectorFactory().init();
+
         getReflectionFactory().init();
         getSpecificationLoader().init();
         getObjectLoader().init();
@@ -146,8 +142,6 @@ public abstract class NakedObjects implements DebugInfo {
     protected abstract NakedObjectManager objectManager();
 
     protected abstract ReflectionFactory reflectionFactory();
-
-    protected abstract ReflectorFactory reflectorFactory();
 
     public abstract void setConfiguration(Configuration configuration);
 

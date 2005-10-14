@@ -7,7 +7,7 @@ public interface NakedObjectSpecificationLoader extends NakedObjectsComponent {
     
     public abstract NakedObjectSpecification loadSpecification(Class cls);
     
-    public abstract NakedObjectSpecification[] getAllSpecifications();
+    public abstract NakedObjectSpecification[] allSpecifications();
 }
 
 

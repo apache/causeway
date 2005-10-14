@@ -18,7 +18,7 @@ public class DummyNakedObjectSpecificationLoader implements NakedObjectSpecifica
         return loadSpecification(cls.getName());
     }
 
-    public NakedObjectSpecification[] getAllSpecifications() {
+    public NakedObjectSpecification[] allSpecifications() {
         NakedObjectSpecification[] specsArray;
         specsArray = new NakedObjectSpecification[specs.size()];
         int i = 0;

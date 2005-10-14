@@ -31,7 +31,7 @@ public class MockNakedObjectSpecificationLoader implements NakedObjectSpecificat
         return object;
     }
 
-    public NakedObjectSpecification[] getAllSpecifications() {
+    public NakedObjectSpecification[] allSpecifications() {
         throw new NotImplementedException();
     }
 

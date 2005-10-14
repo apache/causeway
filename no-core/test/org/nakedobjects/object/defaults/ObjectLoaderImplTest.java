@@ -40,7 +40,7 @@ public class ObjectLoaderImplTest extends TestCase {
         objectLoader = new ObjectLoaderImpl();
         pojoAdapterMap = new PojoAdapterHashImpl();
         objectLoader.setPojoAdapterMap(pojoAdapterMap);
-        identityAdapterMap = new IdentityAdapterMapImpl();
+        identityAdapterMap = new IdentityAdapterHashMap();
         objectLoader.setIdentityAdapterMap(identityAdapterMap);
         objectFactory = new DummyObjectFactory();
         objectLoader.setObjectFactory(objectFactory);

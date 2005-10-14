@@ -8,24 +8,26 @@ import org.nakedobjects.object.reflect.NakedObjectField;
 public interface NakedObjectSpecification {
     void clearDirty(NakedObject object);
 
+    void deleted(NakedObject object);
+
     Action getClassAction(Action.Type type, String name);
 
     Action getClassAction(Action.Type type, String name, NakedObjectSpecification[] parameters);
 
     Action[] getClassActions(Action.Type type);
-
+    
     Hint getClassHint();
     
     Object getExtension(Class cls);
-    
+
     Class[] getExtensions();
-
+    
     NakedObjectField getField(String name);
-    
-    Object getFieldExtension(String name, Class cls);
 
-    Class[] geFieldExtensions(String name);
+    Object getFieldExtension(String name, Class cls);
     
+    Class[] getFieldExtensions(String name);
+
     NakedObjectField[] getFields();
 
     /**
@@ -65,11 +67,15 @@ public interface NakedObjectSpecification {
      */
     String getSingularName();
 
+    String getTitle(NakedObject naked);
+
     NakedObjectField[] getVisibleFields(NakedObject object);
 
     boolean hasSubclasses();
 
     NakedObjectSpecification[] interfaces();
+
+    void introspect();
 
     boolean isAbstract();
 
@@ -85,6 +91,10 @@ public interface NakedObjectSpecification {
      */
     boolean isOfType(NakedObjectSpecification cls);
 
+    boolean isValue();
+
+    void markDirty(NakedObject object);
+
     /**
      * Determines if objects of this specification can be persisted or not. If
      * it can be persisted (i.e. it return something other than
@@ -96,17 +106,9 @@ public interface NakedObjectSpecification {
      */
     Persistable persistable();
 
-    boolean isValue();
-
-    void markDirty(NakedObject object);
-
     NakedObjectSpecification[] subclasses();
 
     NakedObjectSpecification superclass();
-
-    void deleted(NakedObject object);
-
-    String getTitle(NakedObject naked);
 }
 
 /*

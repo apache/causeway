@@ -7,35 +7,33 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.defaults.DummyObjectFactory;
-import org.nakedobjects.object.defaults.IdentityAdapterMapImpl;
+import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.MockReflectionFactory;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
-import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
+import org.nakedobjects.object.defaults.PojoAdapterHashMap;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
-import org.nakedobjects.object.reflect.DummyReflectorFactory;
+import org.nakedobjects.object.reflect.DummyAdapterFactory;
 
 
 public class TestSystem {
     private NakedObjectLoader objectLoader;
     private NakedObjectsClient nakedObjects;
     private NakedObjectManager objectManager;
-    private DummyObjectFactory objectFactory;
-    private DummyNakedObjectSpecificationLoader specificationLoader;
-    private  DummyReflectorFactory reflectorFactory;
+    private final DummyObjectFactory objectFactory;
+    private final DummyNakedObjectSpecificationLoader specificationLoader;
+    private final DummyAdapterFactory adapterFactory;
       
     public TestSystem() {
         specificationLoader = new DummyNakedObjectSpecificationLoader();
 
         ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
-        objectLoader.setPojoAdapterMap(new PojoAdapterHashImpl());
-        objectLoader.setIdentityAdapterMap(new IdentityAdapterMapImpl());
-        objectFactory = new DummyObjectFactory();
-        objectLoader.setObjectFactory(objectFactory);
+        objectLoader.setPojoAdapterMap(new PojoAdapterHashMap());
+        objectLoader.setIdentityAdapterMap(new IdentityAdapterHashMap());
+        objectLoader.setObjectFactory(objectFactory = new DummyObjectFactory());
+        objectLoader.setAdapterFactory(adapterFactory = new DummyAdapterFactory());
 
-        reflectorFactory = new DummyReflectorFactory();
-        
         this.objectLoader = objectLoader;
 
         objectManager = new MockObjectManager();
@@ -48,7 +46,6 @@ public class TestSystem {
         nakedObjects.setSpecificationLoader(specificationLoader);
         nakedObjects.setObjectLoader(objectLoader);
         nakedObjects.setObjectManager(objectManager);
-        nakedObjects.setReflectorFactory(reflectorFactory);
         nakedObjects.setReflectionFactory(new MockReflectionFactory());
 
         nakedObjects.init();
@@ -68,7 +65,8 @@ public class TestSystem {
     
 
     public void addNakedCollectionAdapter(NakedCollection collection) {
-        reflectorFactory.setupNakedCollection(collection);
+  //      throw new NotImplementedException();
+        adapterFactory.setupNakedCollection(collection);
     }
 
     public NakedObject createAdapterForTransient(Object associate) {

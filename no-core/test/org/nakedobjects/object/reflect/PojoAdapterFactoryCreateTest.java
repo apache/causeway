@@ -5,7 +5,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.defaults.DummyObjectFactory;
-import org.nakedobjects.object.defaults.IdentityAdapterMapImpl;
+import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
 import org.nakedobjects.object.defaults.PojoAdapterHash;
 import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;
@@ -30,9 +30,9 @@ public class PojoAdapterFactoryCreateTest extends TestCase {
         objectLoader = new ObjectLoaderImpl();
         cache = new Cache();
         objectLoader.setPojoAdapterMap(cache);
-        objectLoader.setIdentityAdapterMap(new IdentityAdapterMapImpl());
+        objectLoader.setIdentityAdapterMap(new IdentityAdapterHashMap());
         objectLoader.setObjectFactory(new DummyObjectFactory());
-        
+        objectLoader.setAdapterFactory(new DummyAdapterFactory());
         system.setObjectLoader(objectLoader);
         system.init();
     }
