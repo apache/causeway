@@ -8,11 +8,10 @@ import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.distribution.SingleResponseUpdateNotifier;
 import org.nakedobjects.distribution.java.JavaObjectDataFactory;
 import org.nakedobjects.distribution.xml.ServerListener;
-import org.nakedobjects.object.defaults.IdentityAdapterMapImpl;
+import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationLoaderImpl;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
-import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
+import org.nakedobjects.object.defaults.PojoAdapterHashMap;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.defaults.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
@@ -21,7 +20,8 @@ import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
-import org.nakedobjects.reflector.java.reflect.JavaReflectorFactory;
+import org.nakedobjects.reflector.java.reflect.JavaAdapterFactory;
+import org.nakedobjects.reflector.java.reflect.JavaSpecificationLoader;
 import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.utility.InfoDebugFrame;
 
@@ -71,19 +71,14 @@ public class XmlServer {
         LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
         nakedObjects.setReflectionFactory(reflectionFactory);
 
-        JavaReflectorFactory reflectorFactory = new JavaReflectorFactory();
-        nakedObjects.setReflectorFactory(reflectorFactory);
-
         ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
-        objectLoader.setPojoAdapterMap(new PojoAdapterHashImpl());
+        objectLoader.setPojoAdapterMap(new PojoAdapterHashMap());
+        objectLoader.setAdapterFactory(new JavaAdapterFactory());
         objectLoader.setObjectFactory(objectFactory);
-        objectLoader.setIdentityAdapterMap(new IdentityAdapterMapImpl());
+        objectLoader.setIdentityAdapterMap(new IdentityAdapterHashMap());
         nakedObjects.setObjectLoader(objectLoader);
 
-
-        NakedObjectSpecificationLoaderImpl specificationLoader = new NakedObjectSpecificationLoaderImpl();
-
-        nakedObjects.setSpecificationLoader(specificationLoader);
+        nakedObjects.setSpecificationLoader(new JavaSpecificationLoader());
 
         ServerDistribution sd = new ServerDistribution();
         sd.setObjectFactory(objectFactory);
@@ -107,6 +102,8 @@ public class XmlServer {
         fb.installFixtures();
 
         InfoDebugFrame debugFrame = new InfoDebugFrame() {
+            private static final long serialVersionUID = 1L;
+
             public void dialogClosing() {
                 System.exit(0);
             }
