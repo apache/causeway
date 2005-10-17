@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE project [
-	<!ENTITY properties SYSTEM "file:../build-templates/properties.xml">
-	<!ENTITY distribution SYSTEM "file:../build-templates/distribution-build.xml">
+	<!ENTITY xxdistribution SYSTEM "file:../build-templates/distribution-build.xml">
 ]>
 
 <project name="Naked Objects framework - java version"
@@ -11,9 +10,6 @@
 	<property file="build.properties"/>
 	
 	<property name="distribution" value="framework" />
-
-	
-	&distribution;
 
 	<target name="copy-src">
 		<copy todir="${build.src.dir}">
@@ -64,6 +60,336 @@
 		</copy>
 	</target>
 
+	
+	
+	
+	
+	
+
+	<!-- allow compliation for Java 1.2 & with debug -->
+	<property name="compile.debug" value="yes" />
+	<property name="compile.target" value="1.1" />
+
+	<!-- classpath -->
+	<path id="libs.external">
+		<fileset dir="../lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!-- subdirectories -->
+	<property name="src.dir" value="src"/>
+	<property name="test.dir" value="test"/>
+		
+	<!-- resources -->
+	<property name="core.dir" value="../no-core"/>
+
+	<!-- output directories -->
+	<!-- build directories -->
+	<property name="build.dir" value="build" />
+	<property name="build.src.dir" value="${build.dir}/src" />
+	<property name="build.example.dir" value="${build.dir}/example" />
+	<property name="build.test.dir" value="${build.dir}/test" />
+	<property name="build.classes.src" value="${build.dir}/classes/src" />
+	<property name="build.classes.test" value="${build.dir}/classes/test" />
+	<property name="build.classes.example" value="${build.dir}/classes/example" />
+	
+	<!-- test directories -->
+	<property name="test.run.dir" value="${build.dir}/test-run" />
+	<property name="test.results.dir" value="${build.relase.dir}/tests" />
+
+	<!-- distribution directories -->
+	<property name="dist.dir" value="build/dist" />
+	<property name="release.dir" value="release" />
+	<property name="dist.images.dir" value="${dist.dir}/resources/images" />
+	<property name="dist.test.dir" value="${dist.dir}/doc/test" />
+	<property name="dist.example.dir" value="${dist.dir}/example" />
+	<property name="dist.api.dir" value="${dist.dir}/doc/api" />
+
+
+	<property environment="env" />
+
+	<target name="idebuild" depends="clean, check">
+	</target>
+
+	<target name="release" depends=" new-release-number, distribution, install">
+	</target>
+
+
+	<target name="serverbuild" depends="-serverbuild-init, distribution">
+	</target>
+
+	<target name="-serverbuild-init">
+		<property name="build.id" value="${label}" />
+	</target>
+
+	<target name="new-release-number">
+		<ant antfile="../build-templates/version.xml" inheritall="false"/>
+		<property file="../build-templates/version.properties"/>
+		<property name="build.id" value="${version}"/>
+
+		<!--tstamp>
+			<format property="build.date" pattern="yyyyMMdd-HH00" locale="GMT" />
+		</tstamp>
+		<property name="build.id" value="pojo-${build.date}"/>
+		<! - -echo>Build number: ${build.id}</echo-->
+	</target>
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="distribution" depends="-init, prepare, compile, test, copy-images, dists, artifacts">
+		<fail if="failure" message="Tests failed" />
+	</target>
+	
+	<target name="-init">
+		<echo>Create ${distribution} distribution</echo>
+		<echo>Version ${build.version}  ${build.id}</echo>
+	</target>
+
+	<target name="check" depends="prepare, compile, test">
+		<fail if="failure" message="Tests failed" />
+	</target>
+
+	<target name="prepare">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build.src.dir}" />
+		<mkdir dir="${build.test.dir}" />
+
+		<!-- copy across source and add version -->
+		<copy todir="${build.src.dir}">
+			<fileset dir="${core.dir}/${src.dir}" />
+			<fileset dir="../no-application-library/${src.dir}" />
+			<fileset dir="../no-default-reflector/${src.dir}" />
+		</copy>
+
+		<replace dir="${build.src.dir}">
+			<include name="**/AboutNakedObjects.java" />
+			<replacefilter token="%VERSION%" value="${build.version}" />
+			<replacefilter token="%BUILD_ID%" value="${build.id}" />
+			<replacefilter token="%NAME%" value="${build.name}" />
+			<replacefilter token="%COPYRIGHT_NOTICE%" value="${build.copyright}" />
+			<replacefilter token="%IMAGE_FILE%" value="${build.image-file}" />
+		</replace>
+
+		<copy todir="${build.test.dir}">
+			<fileset dir="${core.dir}/${test.dir}" />
+			<fileset dir="../no-application-library/${test.dir}" />
+			<fileset dir="../no-default-reflector/${test.dir}" />
+		</copy>
+
+		<copy todir="${dist.images.dir}">
+			<fileset dir="${core.dir}/${src.dir}/images" />
+		</copy>
+
+		<!-- other projects -->
+		<antcall target="copy-src"/>
+		<!-- end copy other projects -->
+	</target>
+
+	<target name="compile">
+		<!-- compile  framework -->
+		<mkdir dir="${build.classes.src}" />
+		<javac srcdir="${build.src.dir}"
+		       destdir="${build.classes.src}"
+		       includes="**/*.java"
+		       target="${compile.target}"
+		       debug="${compile.debug}"
+		       deprecation="false">
+
+			<classpath refid="libs.external" />
+		</javac>
+
+
+		<!-- compile  examples -->
+		<mkdir dir="${build.classes.example}" />
+		<javac srcdir="${build.example.dir}"
+		       destdir="${build.classes.example}"
+		       includes="**/*.java"
+		       target="${compile.target}"
+		       debug="${compile.debug}"
+		       deprecation="false">
+
+			<classpath refid="libs.external" />
+			<classpath path="${build.classes.src}"/>
+		</javac>
+
+		
+		<!--                              -->
+		<!--  compile the test srcs  -->
+		<!--                              -->
+		<mkdir dir="${build.classes.test}" />
+		<javac destdir="${build.classes.test}"
+		       includes="**/*.java"
+		       target="${compile.target}"
+		       debug="${compile.debug}"
+		       deprecation="false">
+
+			<src path="${build.test.dir}" />
+
+			<classpath refid="libs.external" />
+			<classpath path="${build.classes.src}" />
+			<classpath path="${build.classes.example}"/>
+		</javac>
+
+	</target>
+
+	<target name="test">
+		<!-- Run the tests -->
+		<delete failonerror="false" dir="${test.run.dir}" />
+		<mkdir dir="${test.run.dir}" />
+
+		<patternset id="test.sources">
+			<include name="**/*Test.java" />
+			<include name="**/*Tests.java" />
+			<exclude name="**/All*Tests.java" />
+		</patternset>
+
+		<junit fork="yes"
+		       printsummary="no"
+		       errorproperty="failure"
+		       failureproperty="failure"
+		       haltonfailure="no"
+		       dir="${test.run.dir}">
+			<classpath refid="libs.external" />
+			<classpath path="${build.classes.src}" />
+			<classpath path="${build.classes.test}" />
+			<classpath path="${build.classes.example}"/>
+
+			<formatter type="xml" />
+
+			<batchtest todir="${test.run.dir}">
+				<fileset dir="${build.test.dir}">
+					<patternset refid="test.sources" />
+				</fileset>
+			</batchtest>
+		</junit>
+
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${dist.dir}/lib" />
+
+		<mkdir dir="${build.dir}/tmp" />
+		<junitreport tofile="${build.dir}/tmp/combined.xml">
+			<fileset dir="build/test-run" includes="TEST*.xml" />
+			<report format="frames" todir="${dist.test.dir}" />
+		</junitreport>
+		<delete dir="${build.dir}/tmp" />
+	</target>
+		
+
+
+
+	<target name="dists">
+		<!-- copy in:
+				properties files
+				examples & example code in html
+				docs
+				-->
+
+		<!-- generate docs -->
+		<ant dir="../documentation" target="html">
+			<property name="dest.dir" value="${basedir}/build/dist/doc/docs"/>
+		</ant>
+
+		<!-- generate javadocs -->
+		<javadoc destDir="${dist.api.dir}"
+		         windowtitle="Naked Objects ${distribution} API version ${build.version}"
+		         additionalparam="-breakiterator -tag group -tag testpackage -tag testcase -tag testkind -tag testfamily -tag testsetup -tag testedclass -tag property">
+
+			<classpath refid="libs.external" />
+
+			<packageset dir="${build.src.dir}" defaultexcludes="yes">
+				<include name="org/nakedobjects/**" />
+			</packageset>
+		</javadoc>
+
+		<!-- generate HTML browseable source -->
+		<taskdef name="java2html" classname="com.java2html.Java2HTMLTask"/>
+	
+		<java2html title="Naked Objects Framework - ${distribution}-${build.id}"
+			simple="no"
+	       	tabsize="4"
+			marginsize="6"
+			header="true"
+			footer="true"
+			destination="build/dist/doc/src">
+			<fileset dir="${build.src.dir}">
+				<include name="**/*.java"/>
+			</fileset>
+			<!--javadoc localRef="c:\jdk1.4\docs\api" httpRef="http://somewebsite.com/docs/api"/-->
+		</java2html>
+
+
+		<!-- create jars -->
+		<jar jarfile="${dist.dir}/lib/nakedobjects.jar">
+			<fileset dir="${build.classes.src}" />
+			<fileset dir="${build.src.dir}">
+				<include name="images/*" />
+			</fileset>
+		</jar>
+
+		<jar jarfile="${dist.dir}/lib/${distribution}-test.jar">
+			<fileset dir="${build.classes.test}" />
+		</jar>
+
+		<jar jarfile="${dist.dir}/resources/${distribution}-src.jar">
+			<fileset dir="${build.src.dir}" />
+		</jar>
+
+		<jar jarfile="${dist.dir}/lib/examples.jar">
+			<fileset dir="${build.classes.example}" />
+			<fileset dir="${build.example.dir}">
+				<include name="images/*"/>
+			</fileset>
+
+			<manifest>
+      			<attribute name="version" value="${build.version}"/>
+				<attribute name="Main-Class" value="${example-class}"/>
+				<attribute name="Class-Path" value="./nakedobjects.jar ./log4j-1.2.6.jar"/>
+    		</manifest>	
+		</jar>
+
+		<mkdir dir="${dist.example.dir}"/>
+		<copy todir="${dist.example.dir}">
+			<fileset dir="${build.example.dir}"/>
+		</copy>
+
+		<copy todir="${dist.dir}/lib/">
+			<fileset file="../lib/junit*.jar"/>
+			<fileset file="../lib/log4j*.jar"/>
+		</copy>
+		
+		<!-- produce release zip -->
+		<mkdir dir="${release.dir}" />
+		<zip zipfile="${release.dir}/nakedobjects-${distribution}-${build.id}-java.zip">
+			<zipfileset dir="${dist.dir}" prefix="nakedobjects-${distribution}-${build.id}"/>
+		</zip>
+
+	</target>
+	
+
+	<target name="install" description="installs the latest build in the install directory">
+		<delete dir="${latest.dir}" failonerror="false"/>
+		<copy todir="${latest.dir}">
+			<fileset dir="build/dist">
+			</fileset>
+		</copy>
+	
+		<touch file="${latest.dir}/version-${build.id}"/>
+	</target>
+
+	<target name="artifacts" if="artifacts.dir" description="copies the build artifacts">
+		<mkdir dir="${artifacts.dir}/test"/>
+		<copy todir="${artifacts.dir}/test">
+			<fileset dir="${dist.dir}/doc/test">
+			</fileset>
+		</copy>
+	
+		<touch file="${artifacts.dir}/version-${build.id}"/>
+	</target>
+
+	
 
 </project>
 
