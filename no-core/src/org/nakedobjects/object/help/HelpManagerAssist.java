@@ -22,6 +22,10 @@ public class HelpManagerAssist implements HelpManager {
         return showIdentifier ?  (identifier.toString() + "\n") : "" + help;
     }
 
+    public void init() {}
+
+    public void shutdown() {}
+
     
 }
 

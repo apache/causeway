@@ -1,7 +1,6 @@
 package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.ReflectionFactory;
-import org.nakedobjects.object.help.HelpLookup;
 import org.nakedobjects.object.help.HelpManager;
 import org.nakedobjects.object.help.OneToOneHelp;
 import org.nakedobjects.object.persistence.ActionTransaction;
@@ -17,10 +16,10 @@ import org.nakedobjects.object.reflect.OneToOnePeer;
 
 
 public class LocalReflectionFactory implements ReflectionFactory {
-    private HelpLookup helpLookup = new HelpLookup(null);
+    private HelpManager helpManager;
     
     public void setHelpManager(HelpManager helpManager) {
-        this.helpLookup = new HelpLookup(helpManager);
+        this.helpManager = helpManager;
     }
 
     public void set_HelpManager(HelpManager helpManager) {
@@ -41,7 +40,7 @@ public class LocalReflectionFactory implements ReflectionFactory {
 
     public NakedObjectField createField(String className, OneToOnePeer peer) {
         OneToOnePeer oneToOneDelegate = new OneToOneTransaction(peer);
-        oneToOneDelegate = new OneToOneHelp(oneToOneDelegate, helpLookup);
+        oneToOneDelegate = new OneToOneHelp(oneToOneDelegate, helpManager);
         OneToOneAssociation association = new OneToOneAssociation(className, oneToOneDelegate.getName(), oneToOneDelegate.getType(),
                 oneToOneDelegate);
         return association;

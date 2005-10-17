@@ -1,7 +1,6 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.ReflectionFactory;
-import org.nakedobjects.object.help.HelpLookup;
 import org.nakedobjects.object.help.HelpManager;
 import org.nakedobjects.object.help.OneToOneHelp;
 import org.nakedobjects.object.reflect.Action;
@@ -15,8 +14,7 @@ import org.nakedobjects.object.reflect.OneToOnePeer;
 
 public class ProxyReflectionFactory implements ReflectionFactory {
     private Distribution connection;
-
-    private HelpLookup helpLookup = new HelpLookup(null);
+    private HelpManager helpManger;
     private DataFactory objectDataFactory;
 
     public ProxyReflectionFactory() {}
@@ -36,7 +34,7 @@ public class ProxyReflectionFactory implements ReflectionFactory {
     public NakedObjectField createField(String className, OneToOnePeer local) {
 
         OneToOnePeer oneToOneDelegate = new ProxyOneToOneAssociation(local, connection, objectDataFactory);
-        oneToOneDelegate = new OneToOneHelp(oneToOneDelegate, helpLookup);
+        oneToOneDelegate = new OneToOneHelp(oneToOneDelegate, helpManger);
         OneToOneAssociation association = new OneToOneAssociation(className, oneToOneDelegate.getName(), oneToOneDelegate
                 .getType(), oneToOneDelegate);
         return association;
@@ -76,7 +74,7 @@ public class ProxyReflectionFactory implements ReflectionFactory {
     }
 
     public void setHelpManager(HelpManager helpManager) {
-        this.helpLookup = new HelpLookup(helpManager);
+        this.helpManger = helpManager;
     }
 
     public void setObjectDataFactory(DataFactory objectDataFactory) {

@@ -15,8 +15,7 @@ public class SimpleHelpManager implements HelpManager {
     private static final String CLASS_PREFIX = "C:";
     private static final String NAME_PREFIX = "M:";
     private String fileName = "help.txt";
-    
-    
+      
     public String help(MemberIdentifier identifier) {
         BufferedReader reader = null;
         try {
@@ -110,6 +109,12 @@ public class SimpleHelpManager implements HelpManager {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
+
+
+    public void init() {}
+
+
+    public void shutdown() {}
 }
 
 

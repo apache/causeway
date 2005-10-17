@@ -3,19 +3,13 @@ package org.nakedobjects.object.help;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.reflect.MemberIdentifier;
 
 public class HelpLookup {
-    private final HelpManager helpManager;
-
-    public HelpLookup(HelpManager helpManager) {
-        this.helpManager = helpManager;
-    }
-    
-     Hint createMergedHint(final MemberIdentifier identifier, final Hint hint) {
-        final String help = helpManager == null ? "" : helpManager.help(identifier);
+     static Hint mergeHint(final String help, final Hint hint) {
         Hint mergedHint = new DefaultHint() {
             
+            private static final long serialVersionUID = 6122170472620576420L;
+
             public Consent isValid() {
                 return hint.isValid();
             }

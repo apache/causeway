@@ -1,8 +1,9 @@
 package org.nakedobjects.object.help;
 
+import org.nakedobjects.NakedObjectsComponent;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 
-public interface HelpManager {
+public interface HelpManager extends NakedObjectsComponent {
 
     /**
      * Returns help text for the specified identifier.  If no help text is available 

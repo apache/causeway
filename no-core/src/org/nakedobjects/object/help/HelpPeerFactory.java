@@ -1,36 +1,51 @@
 package org.nakedobjects.object.help;
 
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.reflect.AbstractOneToOnePeer;
-import org.nakedobjects.object.reflect.MemberIdentifier;
+import org.nakedobjects.object.ReflectionPeerFactory;
+import org.nakedobjects.object.reflect.ActionPeer;
+import org.nakedobjects.object.reflect.OneToManyPeer;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 
 
-public class OneToOneHelp extends AbstractOneToOnePeer {
-    private final HelpManager helpManager;
+public class HelpPeerFactory implements ReflectionPeerFactory {
+    private HelpManager manager;
 
-    public OneToOneHelp(OneToOnePeer local, HelpManager helpManager) {
-        super(local);
-        this.helpManager = helpManager;
+    public void setHelpManager(HelpManager manager) {
+        this.manager = manager;
+    }
+    
+    /**
+     * Expose as a .NET property
+     * 
+     * @property
+     */
+    public void set_HelpManager(HelpManager manager) {
+        setHelpManager(manager);
+    }
+    
+    public ActionPeer createAction(ActionPeer peer) {
+        return new ActionHelp(peer, manager);
     }
 
-    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked association) {
-        Hint hint = super.getHint(identifier, object, association);
-        final String help = helpManager == null ? "" : helpManager.help(identifier);
-        return HelpLookup.mergeHint(help, hint);
+    public OneToManyPeer createField(OneToManyPeer peer) {
+        return new OneToManyHelp(peer, manager);
     }
 
-    public boolean hasHint() {
-        return true;
+    public OneToOnePeer createField(OneToOnePeer peer) {
+        return new OneToOneHelp(peer, manager);
+     }
+
+    public void init() {
+        manager.init();
     }
 
+    public void shutdown() {
+        manager.shutdown();        
+    }
 }
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2004 Naked Objects Group
+ * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
  * Ltd
  * 
  * This program is free software; you can redistribute it and/or modify it under
