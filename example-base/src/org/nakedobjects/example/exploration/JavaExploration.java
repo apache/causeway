@@ -61,7 +61,7 @@ public class JavaExploration {
             String name = this.getClass().getName();
             name = name.substring(name.lastIndexOf('.') + 1);
 
-            Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(DEFAULT_CONFIG, false));
+            Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(configurationFile(), false));
             NakedObjectsClient nakedObjects = new NakedObjectsClient();
             nakedObjects.setConfiguration(configuration);
             PropertyConfigurator.configure(configuration.getProperties("log4j"));
@@ -127,6 +127,10 @@ public class JavaExploration {
                 splash.removeAfterDelay(4);
             }
         }
+    }
+
+    protected String configurationFile() {
+        return DEFAULT_CONFIG;
     }
 
     private void setUpLocale() {
