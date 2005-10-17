@@ -1,18 +1,17 @@
 package org.nakedobjects.distribution.dummy;
 
 import org.nakedobjects.distribution.ReferenceData;
+import org.nakedobjects.object.Version;
 import org.nakedobjects.object.persistence.Oid;
 
 public class DummyReferenceData implements ReferenceData {
     private final Oid oid;
     private final String type;
-    private final long version;
-    private final boolean hasVersion;
+    private final Version version;
 
-    public DummyReferenceData(final Oid oid, final String type, final boolean hasVersion, final long version) {
+    public DummyReferenceData(final Oid oid, final String type, final Version version) {
         this.oid = oid;
         this.type = type;
-        this.hasVersion = hasVersion;
         this.version = version;
     }
 
@@ -24,13 +23,10 @@ public class DummyReferenceData implements ReferenceData {
         return type;
     }
 
-    public long getVersion() {
+    public Version getVersion() {
         return version;
     }
 
-    public boolean hasVersion() {
-        return hasVersion;
-    }
 }
 
 /*

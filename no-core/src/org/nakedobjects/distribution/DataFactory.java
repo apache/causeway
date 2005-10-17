@@ -8,6 +8,7 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ResolveState;
+import org.nakedobjects.object.Version;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.Assert;
@@ -43,7 +44,7 @@ public abstract class DataFactory {
             elements = new ObjectData[0];
         }
 
-        return createCollectionData(oid, type, elements, hasAllElements, !collection.getResolveState().isGhost(), collection
+        return createCollectionData(oid, type, elements, hasAllElements, collection
                 .getVersion());
     }
 
@@ -130,7 +131,7 @@ public abstract class DataFactory {
             NakedObjects.getObjectLoader().end(object);
         }
 
-        return createObjectData(oid, type, fieldContent, isComplete, !resolveState.isGhost(), object.getVersion());
+        return createObjectData(oid, type, fieldContent, isComplete, object.getVersion());
     }
 
     protected abstract ObjectData createObjectData(
@@ -138,16 +139,14 @@ public abstract class DataFactory {
             String type,
             Object[] fieldContent,
             boolean hasCompleteData,
-            boolean hasVersion,
-            long version);
+            Version version);
 
     protected abstract CollectionData createCollectionData(
             Oid oid,
             String type,
             ObjectData[] elements,
             boolean hasAllElements,
-            boolean hasVersion,
-            long version);
+            Version version);
 
     /**
      * Creates a ReferenceData that contains the type, version and OID for the specified object. This can only
@@ -155,11 +154,10 @@ public abstract class DataFactory {
      */
     public final ReferenceData createReference(NakedObject object) {
         Assert.assertNotNull(object.getOid());
-        return createReferenceData(object.getSpecification().getFullName(), object.getOid(), !object.getResolveState().isGhost(),
-                object.getVersion());
+        return createReferenceData(object.getSpecification().getFullName(), object.getOid(), object.getVersion());
     }
 
-    protected abstract ReferenceData createReferenceData(String type, Oid oid, boolean hasVersion, long version);
+    protected abstract ReferenceData createReferenceData(String type, Oid oid, Version version);
 
     private final ValueData createValueData(Naked object) {
         return createValueData(object.getSpecification().getFullName(), ((NakedValue) object).getObject());
@@ -233,7 +231,7 @@ public abstract class DataFactory {
         // TODO remove the fudge - needed as collections are part of parents, hence parent object gets set as 
         // resolving (is not a ghost) yet it has no version number
         //return createObjectData(oid, type, fieldContent, resolveState.isResolved(), !resolveState.isGhost(), object.getVersion());
-        return createObjectData(oid, type, fieldContent, resolveState.isResolved(), false, object.getVersion());
+        return createObjectData(oid, type, fieldContent, resolveState.isResolved(), object.getVersion());
     }
 }
 

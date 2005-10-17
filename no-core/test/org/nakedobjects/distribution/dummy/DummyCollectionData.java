@@ -2,14 +2,15 @@ package org.nakedobjects.distribution.dummy;
 
 import org.nakedobjects.distribution.CollectionData;
 import org.nakedobjects.distribution.ObjectData;
+import org.nakedobjects.object.Version;
 import org.nakedobjects.object.persistence.Oid;
 
 
 public class DummyCollectionData extends DummyReferenceData implements CollectionData {
     private final ObjectData[] elements;
 
-    public DummyCollectionData(Oid oid, String type, ObjectData[] elements, final boolean hasVersion, long version) {
-        super(oid, type, hasVersion, version);
+    public DummyCollectionData(Oid oid, String type, ObjectData[] elements, Version version) {
+        super(oid, type, version);
         this.elements = elements;
     }
 

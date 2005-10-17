@@ -1,11 +1,12 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
+import org.nakedobjects.object.TestVersion;
+import org.nakedobjects.object.Version;
 import org.nakedobjects.object.defaults.AbstractNakedReference;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.utility.Assert;
@@ -26,7 +27,7 @@ public class DummyInternalCollection extends AbstractNakedReference implements N
         this.collection = vector;
     }
 
-    public void checkLock(long version) {}
+    public void checkLock(Version version) {}
 
     public boolean contains(NakedObject object) {
         return collection.contains(object);
@@ -64,8 +65,8 @@ public class DummyInternalCollection extends AbstractNakedReference implements N
         return specification;
     }
 
-    public long getVersion() {
-        return 0;
+    public Version getVersion() {
+        return new TestVersion();
     }
 
     public void init(Object[] initElements) {
@@ -79,7 +80,7 @@ public class DummyInternalCollection extends AbstractNakedReference implements N
         return Persistable.USER_PERSISTABLE;
     }
 
-    public void setOptimisticLock(long version, String user, Date time) {}
+    public void setOptimisticLock(Version version, String user, Date time) {}
 
     public void setupSpecification(NakedObjectSpecification specification) {
         this.specification = specification;

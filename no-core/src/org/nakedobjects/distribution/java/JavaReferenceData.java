@@ -1,20 +1,19 @@
 package org.nakedobjects.distribution.java;
 
 import org.nakedobjects.distribution.ReferenceData;
+import org.nakedobjects.object.Version;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.utility.ToString;
 
 
 public class JavaReferenceData implements ReferenceData {
-    private final boolean hasVersion;
     private final Oid oid;
     private final String type;
-    private final long version;
+    private final Version version;
 
-    public JavaReferenceData(String type, Oid oid, boolean hasVersion, long version) {
+    public JavaReferenceData(String type, Oid oid, Version version) {
         this.type = type;
         this.oid = oid;
-        this.hasVersion = hasVersion;
         this.version = version;
     }
 
@@ -26,12 +25,8 @@ public class JavaReferenceData implements ReferenceData {
         return type;
     }
 
-    public long getVersion() {
+    public Version getVersion() {
         return version;
-    }
-
-    public boolean hasVersion() {
-        return hasVersion;
     }
 
     public String toString() {

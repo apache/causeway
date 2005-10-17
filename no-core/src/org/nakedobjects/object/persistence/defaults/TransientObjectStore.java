@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ResolveState;
+import org.nakedobjects.object.defaults.LongNumberVersion;
 import org.nakedobjects.object.persistence.CreateObjectCommand;
 import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.InstancesCriteria;
@@ -61,7 +62,7 @@ public class TransientObjectStore implements NakedObjectStore {
                 ins.add(object);
                 objects.put(object.getOid(), object);
                 
-                object.setOptimisticLock(object.getVersion() + 1, "user", new Date());
+                object.setOptimisticLock(new LongNumberVersion(1), "user", new Date());
             }
 
             public NakedObject onObject() {
@@ -107,7 +108,7 @@ public class TransientObjectStore implements NakedObjectStore {
                 TransientObjectStoreInstances ins = instancesFor(specification);
                 ins.save(object);
                 
-                object.setOptimisticLock(object.getVersion() + 1, "user", new Date());
+                object.setOptimisticLock(object.getVersion().next(), "user", new Date());
             }
 
             public NakedObject onObject() {

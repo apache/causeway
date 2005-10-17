@@ -1,29 +1,13 @@
 package org.nakedobjects.object;
 
-import java.util.Date;
+public interface Version {
 
+    boolean different(Version version);
 
-public interface NakedReference extends Naked {
+    Version next();
 
-    void checkLock(Version version);
-
-    public void debugClearResolved();
-
-    /**
-     * A lifecycle method called when the object is delete, after it is removed from the object store.
-     */
-    void destroyed();
-
-    String getIconName();
-
-    ResolveState getResolveState();
-
-    Version getVersion();
-
-    Persistable persistable();
-
-    void setOptimisticLock(Version version, String user, Date time);
 }
+
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.

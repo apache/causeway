@@ -2,6 +2,7 @@ package org.nakedobjects.distribution.java;
 
 import org.nakedobjects.distribution.CollectionData;
 import org.nakedobjects.distribution.ObjectData;
+import org.nakedobjects.object.Version;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.utility.ToString;
 
@@ -10,16 +11,14 @@ public class JavaCollectionData implements CollectionData {
     private final ObjectData elements[];
     private final Oid oid;
     private final String type;
-    private final long version;
+    private final Version version;
     private final boolean hasAllElements;
-    private final boolean hasVersion;
 
-    public JavaCollectionData(Oid oid, String type, ObjectData[] elements, boolean hasAllElements, boolean hasVersion, long version) {
+    public JavaCollectionData(Oid oid, String type, ObjectData[] elements, boolean hasAllElements, Version version) {
         this.oid = oid;
         this.type = type;
         this.elements = elements;
         this.hasAllElements = hasAllElements;
-        this.hasVersion = hasVersion;
         this.version = version;
     }
 
@@ -35,18 +34,14 @@ public class JavaCollectionData implements CollectionData {
         return type;
     }
     
-    public long getVersion() {
+    public Version getVersion() {
         return version;
     }
     
     public boolean hasAllElements() {
         return hasAllElements;
     }
-    
-    public boolean hasVersion() {
-        return hasVersion;
-    }
-    
+        
     public String toString() {
         ToString str = new ToString(this);
         str.append("type", type);

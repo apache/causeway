@@ -1,13 +1,12 @@
 package org.nakedobjects.distribution;
 
+import org.nakedobjects.object.Version;
 import org.nakedobjects.object.persistence.Oid;
 
 public interface ReferenceData extends Data {
     Oid getOid();
     
-    long getVersion();
-    
-    boolean hasVersion();
+    Version getVersion();
 }
 
 

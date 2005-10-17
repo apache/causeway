@@ -6,6 +6,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
+import org.nakedobjects.object.Version;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.Oid;
 
@@ -23,14 +24,14 @@ public class DummyNakedObject implements NakedObject {
     private NakedObjectSpecification spec;
     private ResolveState state;
     private String titleString;
-     private long version;
+    private Version version;
 
      
     public DummyNakedObject() {
         super();
     }
 
-    public void checkLock(long version) {}
+    public void checkLock(Version version) {}
 
     public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
 
@@ -102,7 +103,7 @@ public class DummyNakedObject implements NakedObject {
         return null;
     }
     
-    public long getVersion() {
+    public Version getVersion() {
         return version;
     }
 
@@ -127,7 +128,7 @@ public class DummyNakedObject implements NakedObject {
 
     public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {}
 
-    public void setOptimisticLock(long version, String user, Date time) {}
+    public void setOptimisticLock(Version version, String user, Date time) {}
 
     public void setupFields(NakedObjectField[] fields) {
         this.fields = fields;
@@ -165,7 +166,7 @@ public class DummyNakedObject implements NakedObject {
         this.titleString = titleString;
     }
 
-    public void setupVersion(long version) {
+    public void setupVersion(Version version) {
         this.version = version;
     }
 

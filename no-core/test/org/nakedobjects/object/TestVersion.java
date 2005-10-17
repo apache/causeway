@@ -1,29 +1,41 @@
 package org.nakedobjects.object;
 
-import java.util.Date;
+import org.nakedobjects.utility.UnexpectedCallException;
 
+public class TestVersion implements Version {
+    private final int value;
 
-public interface NakedReference extends Naked {
+    public TestVersion() {
+        this(13);
+    }
 
-    void checkLock(Version version);
+    public TestVersion(int value) {
+        this.value = value;}
 
-    public void debugClearResolved();
+    
+    public boolean equals(Object obj) {
+        if (obj instanceof TestVersion) {
+            TestVersion other = (TestVersion) obj;
+            return other.value == value;
+        } 
+        
+        return false;
+    }
+    
+    public boolean different(Version version) {
+        return true;
+    }
 
-    /**
-     * A lifecycle method called when the object is delete, after it is removed from the object store.
-     */
-    void destroyed();
+    public Version next() {
+        throw new UnexpectedCallException();
+    }
+    
+    public String toString() {
+        return "TestVersion#" + value;
+    }
 
-    String getIconName();
-
-    ResolveState getResolveState();
-
-    Version getVersion();
-
-    Persistable persistable();
-
-    void setOptimisticLock(Version version, String user, Date time);
 }
+
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.

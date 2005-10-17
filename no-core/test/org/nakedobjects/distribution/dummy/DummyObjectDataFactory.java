@@ -6,13 +6,14 @@ import org.nakedobjects.distribution.NullData;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ReferenceData;
 import org.nakedobjects.distribution.ValueData;
+import org.nakedobjects.object.Version;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.utility.NotImplementedException;
 
 
 public class DummyObjectDataFactory extends DataFactory {
-    protected ObjectData createObjectData(Oid oid, String type, Object[] fieldContent, boolean hasCompleteData, boolean hasVersion, long version) {
-        return new DummyObjectData(oid, type, fieldContent, hasCompleteData, hasVersion, version);
+    protected ObjectData createObjectData(Oid oid, String type, Object[] fieldContent, boolean hasCompleteData, Version version) {
+        return new DummyObjectData(oid, type, fieldContent, hasCompleteData,  version);
     }
 
     public ValueData createValueData(String fullName, Object object) {
@@ -23,12 +24,12 @@ public class DummyObjectDataFactory extends DataFactory {
         return new DummyNullValue(type);
     }
 
-    protected ReferenceData createReferenceData(String type, Oid oid, boolean hasVersion, long version) {
+    protected ReferenceData createReferenceData(String type, Oid oid, Version version) {
         throw new NotImplementedException();
     }
 
-    protected CollectionData createCollectionData(Oid oid, String type, ObjectData[] elements, boolean hasAllElements, boolean hasVersion, long version) {
-        return new DummyCollectionData(oid, type, elements, hasVersion, version);
+    protected CollectionData createCollectionData(Oid oid, String type, ObjectData[] elements, boolean hasAllElements, Version version) {
+        return new DummyCollectionData(oid, type, elements, version);
     }
 }
 

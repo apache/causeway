@@ -5,6 +5,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedReference;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
+import org.nakedobjects.object.Version;
 import org.nakedobjects.object.persistence.ConcurrencyException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.utility.Assert;
@@ -22,7 +23,7 @@ public abstract class AbstractNakedReference implements NakedReference {
     private Oid oid;
     private transient ResolveState resolveState;
     private NakedObjectSpecification specification;
-    private long version;
+    private Version version;
     private String defaultTitle;
     
     public AbstractNakedReference() {
@@ -36,8 +37,8 @@ public abstract class AbstractNakedReference implements NakedReference {
         resolveState = newState;
     }
 
-    public void checkLock(long version) {
-        if (version != this.version) {
+    public void checkLock(Version version) {
+        if (this.version.different(version)) {
             throw new ConcurrencyException(modifierBy + " changed " + specification.getShortName() + " object (" + titleString()
                     + ") at " + modifiedTime + " (" + this.version + "~" + version + ")");
         }
@@ -72,7 +73,7 @@ public abstract class AbstractNakedReference implements NakedReference {
         return specification;
     }
 
-    public long getVersion() {
+    public Version getVersion() {
         return version;
     }
 
@@ -101,7 +102,7 @@ public abstract class AbstractNakedReference implements NakedReference {
         this.oid = oid;
     }
 
-    public void setOptimisticLock(long version, String modifierBy, Date modifiedTime) {
+    public void setOptimisticLock(Version version, String modifierBy, Date modifiedTime) {
         this.version = version;
         this.modifierBy = modifierBy;
         this.modifiedTime = modifiedTime;
@@ -122,7 +123,7 @@ public abstract class AbstractNakedReference implements NakedReference {
         }
         str.setAddComma();
         str.append("specification", specification == null ? "undetermined" : specification.getShortName());
-        str.appendAsHex("version", version);
+        str.append("version", version);
         str.appendAsTimestamp("modified", modifiedTime);
     }
 

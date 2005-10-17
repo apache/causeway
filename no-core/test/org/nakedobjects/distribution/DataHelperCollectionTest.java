@@ -6,6 +6,7 @@ import org.nakedobjects.distribution.dummy.DummyObjectData;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockOid;
 import org.nakedobjects.object.NakedCollection;
+import org.nakedobjects.object.TestVersion;
 import org.nakedobjects.object.persistence.defaults.TestObject;
 import org.nakedobjects.object.reflect.internal.InternalCollectionVectorAdapter;
 
@@ -55,12 +56,12 @@ public class DataHelperCollectionTest extends TestCase {
     public void testRecreateCollection() {
         ObjectData elements[] = new ObjectData[2];
         MockOid fieldOid = new MockOid(345);
-        elements[0] = new DummyObjectData(fieldOid, "type.1", null, false, false, 2);
+        elements[0] = new DummyObjectData(fieldOid, "type.1", null, false, new TestVersion());
         fieldOid = new MockOid(678);
-        elements[1] = new DummyObjectData(fieldOid, "type.1", null, false, false, 2);
+        elements[1] = new DummyObjectData(fieldOid, "type.1", null, false, new TestVersion());
 
         MockOid collectionOid = new MockOid(123);
-        CollectionData data = new DummyCollectionData(collectionOid, "type.2", elements, true, 4);
+        CollectionData data = new DummyCollectionData(collectionOid, "type.2", elements, new TestVersion());
 
         NakedCollection naked = (NakedCollection) DataHelper.restore(data);
         //	assertEquals(4, naked.getVersion());

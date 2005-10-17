@@ -6,25 +6,26 @@ import org.nakedobjects.distribution.NullData;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ReferenceData;
 import org.nakedobjects.distribution.ValueData;
+import org.nakedobjects.object.Version;
 import org.nakedobjects.object.persistence.Oid;
 
 
 public class JavaObjectDataFactory extends DataFactory {
 
-    protected CollectionData createCollectionData(Oid oid, String type, ObjectData[] elements, boolean hasAllElements, boolean hasVersion, long version) {
-        return new JavaCollectionData(oid, type, elements, hasAllElements, hasVersion, version);
+    protected CollectionData createCollectionData(Oid oid, String type, ObjectData[] elements, boolean hasAllElements, Version version) {
+        return new JavaCollectionData(oid, type, elements, hasAllElements, version);
     }
 
     protected NullData createNullData(String type) {
         return new JavaNullData(type);
     }
 
-    public ObjectData createObjectData(Oid oid, String type, Object[] fieldContent, boolean hasCompleteData, boolean hasVersion, long version) {
-        return new JavaObjectData(oid, type, fieldContent, hasCompleteData, hasVersion, version);
+    public ObjectData createObjectData(Oid oid, String type, Object[] fieldContent, boolean hasCompleteData, Version version) {
+        return new JavaObjectData(oid, type, fieldContent, hasCompleteData,  version);
     }
 
-    protected ReferenceData createReferenceData(String type, Oid oid, boolean hasVersion, long version) {
-        return new JavaReferenceData(type, oid, hasVersion, version);
+    protected ReferenceData createReferenceData(String type, Oid oid, Version version) {
+        return new JavaReferenceData(type, oid, version);
     }
 
     public ValueData createValueData(String type, Object value) {

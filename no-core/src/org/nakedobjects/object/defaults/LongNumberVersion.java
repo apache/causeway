@@ -1,29 +1,32 @@
-package org.nakedobjects.object;
+package org.nakedobjects.object.defaults;
 
-import java.util.Date;
+import org.nakedobjects.object.Version;
 
+public class LongNumberVersion implements Version {
+    private final long versionNumber;
 
-public interface NakedReference extends Naked {
+    public LongNumberVersion(long number) {
+        versionNumber = number;
+    }
 
-    void checkLock(Version version);
+    public boolean different(Version version) {
+        if(version instanceof LongNumberVersion) {
+            LongNumberVersion other = (LongNumberVersion) version;
+            return versionNumber != other.versionNumber;
+        } else {
+            return false;
+        }
+    }
 
-    public void debugClearResolved();
+    public Version next() {
+        return new LongNumberVersion(versionNumber + 1);
+    }
 
-    /**
-     * A lifecycle method called when the object is delete, after it is removed from the object store.
-     */
-    void destroyed();
-
-    String getIconName();
-
-    ResolveState getResolveState();
-
-    Version getVersion();
-
-    Persistable persistable();
-
-    void setOptimisticLock(Version version, String user, Date time);
+    public String toString() {
+        return "LongNumberVersion#" + versionNumber;
+    }
 }
+
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.

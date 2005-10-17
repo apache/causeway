@@ -1,6 +1,7 @@
 package org.nakedobjects.distribution.java;
 
 import org.nakedobjects.distribution.ObjectData;
+import org.nakedobjects.object.Version;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.utility.ToString;
 
@@ -10,15 +11,13 @@ public class JavaObjectData implements ObjectData {
     private final Oid oid;
     private final String type;
     private final boolean resolved;
-    private final long version;
-    private final boolean hasVersion;
+    private final Version version;
 
-    public JavaObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved, boolean hasVersion, long version) {
+    public JavaObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved, Version version) {
         this.oid = oid;
         this.type = type;
         this.fieldContent = fieldContent;
         this.resolved = resolved;
-        this.hasVersion = hasVersion;
         this.version = version;
     }
 
@@ -38,12 +37,8 @@ public class JavaObjectData implements ObjectData {
         return resolved;
     }
     
-    public long getVersion() {
+    public Version getVersion() {
         return version;
-    }
-    
-    public boolean hasVersion() {
-        return hasVersion;
     }
     
     public String toString() {

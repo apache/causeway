@@ -8,6 +8,7 @@ import org.nakedobjects.object.DummyObjectLoader;
 import org.nakedobjects.object.MockOid;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ResolveState;
+import org.nakedobjects.object.TestVersion;
 import org.nakedobjects.object.reflect.DummyField;
 import org.nakedobjects.object.reflect.DummyInternalCollection;
 import org.nakedobjects.object.reflect.DummyNakedObject;
@@ -55,7 +56,7 @@ public class DataFactoryTest extends TestCase {
         rootSpecification.fields = new NakedObjectField[3];
 
         rootObject = new DummyNakedObject();
-        rootObject.setupVersion(11);
+        rootObject.setupVersion(new TestVersion(11));
         rootObject.setupResolveState(ResolveState.RESOLVED);
         rootObject.setupSpecification(rootSpecification);
 
@@ -64,7 +65,7 @@ public class DataFactoryTest extends TestCase {
         rootSpecification.fields[0] = new DummyField("one", referencedSpecification);
 
         referencedObjectField = new DummyNakedObject();
-        referencedObjectField.setupVersion(12);
+        referencedObjectField.setupVersion(new TestVersion(12));
         referencedObjectField.setupResolveState(ResolveState.RESOLVED);
         referencedObjectField.setupSpecification(referencedSpecification);
         rootObject.setupFieldValue("one", referencedObjectField);
@@ -85,7 +86,7 @@ public class DataFactoryTest extends TestCase {
         referencedSpecification.fields[0] = new DummyField("four", referencedSpecification);
 
         referencedReferencedObjectField = new DummyNakedObject();
-        referencedReferencedObjectField.setupVersion(13);
+        referencedReferencedObjectField.setupVersion(new TestVersion(13));
         referencedReferencedObjectField.setupResolveState(ResolveState.RESOLVED);
         referencedReferencedObjectField.setupSpecification(referencedReferencedSpecification);
         referencedObjectField.setupFieldValue("four", referencedReferencedObjectField);
@@ -135,19 +136,19 @@ public class DataFactoryTest extends TestCase {
 
         assertEquals(rootOid, rootData.getOid());
         assertEquals(rootSpecification.getFullName(), rootData.getType());
-        assertEquals(11, rootData.getVersion());
+        assertEquals(new TestVersion(11), rootData.getVersion());
         assertEquals(3, rootData.getFieldContent().length);
 
         ObjectData referencedFieldData = (ObjectData) rootData.getFieldContent()[0];
         assertEquals(referencedOid, referencedFieldData.getOid());
         assertEquals(1, referencedFieldData.getFieldContent().length);
-        assertEquals(12, referencedFieldData.getVersion());
+        assertEquals(new TestVersion(12), referencedFieldData.getVersion());
         assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
 
         ObjectData referencedFieldData2 = (ObjectData) referencedFieldData.getFieldContent()[0];
         assertEquals(referencedOid2, referencedFieldData2.getOid());
         assertEquals(0, referencedFieldData2.getFieldContent().length);
-        assertEquals(13, referencedFieldData2.getVersion());
+        assertEquals(new TestVersion(), referencedFieldData2.getVersion());
         assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
 
         ValueData valueData = (ValueData) rootData.getFieldContent()[1];
@@ -173,13 +174,13 @@ public class DataFactoryTest extends TestCase {
 
         assertEquals(rootOid, rootData.getOid());
         assertEquals(rootSpecification.getFullName(), rootData.getType());
-        assertEquals(11, rootData.getVersion());
+        assertEquals(new TestVersion(11), rootData.getVersion());
         assertEquals(3, rootData.getFieldContent().length);
 
         ObjectData referencedFieldData = (ObjectData) rootData.getFieldContent()[0];
         assertEquals(referencedOid, referencedFieldData.getOid());
         assertEquals(null, referencedFieldData.getFieldContent());
-        assertEquals(12, referencedFieldData.getVersion());
+        assertEquals(new TestVersion(12), referencedFieldData.getVersion());
         assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
 
         ValueData valueData = (ValueData) rootData.getFieldContent()[1];
@@ -199,12 +200,12 @@ public class DataFactoryTest extends TestCase {
 
         assertEquals(null, rootData.getOid());
         assertEquals(rootSpecification.getFullName(), rootData.getType());
-        assertEquals(11, rootData.getVersion());
+        assertEquals(new TestVersion(11), rootData.getVersion());
         assertEquals(3, rootData.getFieldContent().length);
 
         ObjectData referencedFieldData = (ObjectData) rootData.getFieldContent()[0];
         assertEquals(null, referencedFieldData.getFieldContent());
-        assertEquals(12, referencedFieldData.getVersion());
+        assertEquals(new TestVersion(12), referencedFieldData.getVersion());
         assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
 
         ValueData valueData = (ValueData) rootData.getFieldContent()[1];
@@ -224,12 +225,12 @@ public class DataFactoryTest extends TestCase {
 
         assertEquals(null, rootData.getOid());
         assertEquals(rootSpecification.getFullName(), rootData.getType());
-        assertEquals(11, rootData.getVersion());
+        assertEquals(new TestVersion(11), rootData.getVersion());
         assertEquals(3, rootData.getFieldContent().length);
 
         ObjectData referencedFieldData = (ObjectData) rootData.getFieldContent()[0];
         assertEquals(null, referencedFieldData.getFieldContent());
-        assertEquals(12, referencedFieldData.getVersion());
+        assertEquals(new TestVersion(12), referencedFieldData.getVersion());
         assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
 
         ValueData valueData = (ValueData) rootData.getFieldContent()[1];
@@ -250,17 +251,17 @@ public class DataFactoryTest extends TestCase {
 
         assertEquals(null, rootData.getOid());
         assertEquals(rootSpecification.getFullName(), rootData.getType());
-        assertEquals(11, rootData.getVersion());
+        assertEquals(new TestVersion(11), rootData.getVersion());
         assertEquals(3, rootData.getFieldContent().length);
 
         ObjectData referencedFieldData = (ObjectData) rootData.getFieldContent()[0];
         assertEquals(1, referencedFieldData.getFieldContent().length);
-        assertEquals(12, referencedFieldData.getVersion());
+        assertEquals(new TestVersion(12), referencedFieldData.getVersion());
         assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
 
         ObjectData referencedFieldData2 = (ObjectData) referencedFieldData.getFieldContent()[0];
         assertEquals(0, referencedFieldData2.getFieldContent().length);
-        assertEquals(13, referencedFieldData2.getVersion());
+        assertEquals(new TestVersion(13), referencedFieldData2.getVersion());
         assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
 
         ValueData valueData = (ValueData) rootData.getFieldContent()[1];
@@ -282,7 +283,7 @@ public class DataFactoryTest extends TestCase {
 
         assertEquals(rootOid, rootData.getOid());
         assertEquals(rootSpecification.getFullName(), rootData.getType());
-        assertEquals(11, rootData.getVersion());
+        assertEquals(new TestVersion(11), rootData.getVersion());
         assertNull(rootData.getFieldContent());
 
     }
@@ -314,17 +315,17 @@ public class DataFactoryTest extends TestCase {
 
         assertEquals(null, rootData.getOid());
         assertEquals(rootSpecification.getFullName(), rootData.getType());
-        assertEquals(11, rootData.getVersion());
+        assertEquals(new TestVersion(11), rootData.getVersion());
         assertEquals(3, rootData.getFieldContent().length);
 
         ObjectData referencedFieldData = (ObjectData) rootData.getFieldContent()[0];
         assertEquals(1, referencedFieldData.getFieldContent().length);
-        assertEquals(12, referencedFieldData.getVersion());
+        assertEquals(new TestVersion(12), referencedFieldData.getVersion());
         assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
 
         ObjectData referencedFieldData2 = (ObjectData) referencedFieldData.getFieldContent()[0];
         assertEquals(null, referencedFieldData2.getFieldContent());
-        assertEquals(13, referencedFieldData2.getVersion());
+        assertEquals(new TestVersion(13), referencedFieldData2.getVersion());
         assertEquals(referencedSpecification.getFullName(), referencedFieldData.getType());
 
         ValueData valueData = (ValueData) rootData.getFieldContent()[1];

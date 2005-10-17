@@ -1,6 +1,7 @@
 package org.nakedobjects.distribution.dummy;
 
 import org.nakedobjects.distribution.ObjectData;
+import org.nakedobjects.object.Version;
 import org.nakedobjects.object.persistence.Oid;
 
 
@@ -8,8 +9,8 @@ public class DummyObjectData extends DummyReferenceData implements ObjectData {
     private final Object[] fieldContent;
     private final boolean resolved;
 
-    public DummyObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved, final boolean hasVersion, long version) {
-        super(oid, type, hasVersion, version);
+    public DummyObjectData(Oid oid, String type, Object[] fieldContent, boolean resolved, final Version version) {
+        super(oid, type, version);
         this.fieldContent = fieldContent;
         this.resolved = resolved;
     }
