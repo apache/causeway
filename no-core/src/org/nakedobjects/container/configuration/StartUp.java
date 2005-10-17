@@ -24,9 +24,13 @@ public class StartUp {
 //    private static final String VIEWER = "viewer";
 
     public static void main(String[] args) {
+        String configurationFile = args.length > 0 ? args[0] : "nakedobjects.properties";
+        start(configurationFile);
+    }
+
+    protected static void start(String name) {
         LogManager.getRootLogger().setLevel(Level.OFF);
         
-        String name = args.length > 0 ? args[0] : "nakedobjects.properties";
         Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(name, true));
 
         // set up logging immediately
