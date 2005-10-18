@@ -1,7 +1,9 @@
 package org.nakedobjects.container.configuration;
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsComponent;
 import org.nakedobjects.system.AboutNakedObjects;
+import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.StartupException;
 
 import java.beans.IntrospectionException;
@@ -10,6 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.Properties;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.apache.log4j.Level;
@@ -37,14 +40,32 @@ public class StartUp {
         PropertyConfigurator.configure(configuration.getProperties("log4j"));
         AboutNakedObjects.logVersion();
         
+
         LOG.debug("Configuring system using " + name);
-        Properties properties = configuration.getProperties("nakedobjects.install");
+        String componentNames = configuration.getString("components");
+        StringTokenizer st = new StringTokenizer(componentNames, ",;/:");
+        Properties properties = configuration.getProperties("nakedobjects.component");
+        while (st.hasMoreTokens()) {
+            String componentName = ((String) st.nextToken()).trim();
+
+            String componentClass = properties.getProperty("nakedobjects.component." + componentName);
+            LOG.debug("loading core component " + componentName + ": " + componentClass);
+            if (componentClass == null) {
+                throw new StartupException("No component specified for nakedobjects.component." + componentName);
+            }
+            NakedObjectsComponent component = (NakedObjectsComponent) loadComponent(componentClass, NakedObjectsComponent.class);
+            setProperties(component, "nakedobjects." + "component." + componentName, properties);
+            
+            component.init();
+        }
         
+        
+        /*
         Vector components = new Vector();
         Enumeration keys = properties.keys();
         while (keys.hasMoreElements()) {
             String key = (String) keys.nextElement();
-            String component = key.substring("nakedobjects.install".length(), key.indexOf('.', "nakedobjects.install".length() + 1));
+            String component = key.substring("nakedobjects.components".length(), key.indexOf('.', "nakedobjects.components".length() + 1));
             if(!components.contains(component)) {
                 components.addElement(component);
             }
@@ -69,7 +90,7 @@ public class StartUp {
         } catch(StartupException e) {
             LOG.error("Failed to start NOF: " + e.getMessage(), e);
         }
-        
+        */
         
         
         

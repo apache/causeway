@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 /**
  * A repository of all the NOF components that are shared by a running system
  */
-public abstract class NakedObjects implements DebugInfo {
+public abstract class NakedObjects implements NakedObjectsComponent, DebugInfo {
     private static final Logger LOG = Logger.getLogger(NakedObjects.class);
     private static NakedObjects singleton;
 
@@ -73,13 +73,13 @@ public abstract class NakedObjects implements DebugInfo {
         singleton = null;
     }
 
-    public static void shutdown() {
+    public void shutdown() {
         LOG.info("shutting down " + getInstance());
-        getObjectManager().shutdown();
-        getObjectLoader().shutdown();
-        getSpecificationLoader().shutdown();
-        getReflectionFactory().shutdown();
-        getInstance().clearReferences();
+        objectManager().shutdown();
+        objectLoader().shutdown();
+        specificationLoader().shutdown();
+        reflectionFactory().shutdown();
+        clearReferences();
     }
 
     protected NakedObjects() {
