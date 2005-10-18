@@ -102,7 +102,13 @@ public abstract class AbstractNakedReference implements NakedReference {
     }
 
     public void setOptimisticLock(Version version) {
-        this.version = version;
+        if (shouldSetVersion(version)) {
+            this.version = version;
+        }
+    }
+
+    private boolean shouldSetVersion(Version version) {
+        return this.version == null || version.different(this.version);
     }
 
     protected void setResolveState(ResolveState resolveState) {
