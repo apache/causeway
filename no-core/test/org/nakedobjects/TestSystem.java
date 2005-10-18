@@ -74,7 +74,7 @@ public class TestSystem {
     }
 
     public void shutdown() {
-        NakedObjects.shutdown();
+        nakedObjects.shutdown();
     }
 
     public void setObjectManager(LocalObjectManager objectManager) {

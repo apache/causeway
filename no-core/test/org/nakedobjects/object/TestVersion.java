@@ -2,6 +2,8 @@ package org.nakedobjects.object;
 
 import org.nakedobjects.utility.UnexpectedCallException;
 
+import java.util.Date;
+
 public class TestVersion implements Version {
     private final int value;
 
@@ -32,6 +34,18 @@ public class TestVersion implements Version {
     
     public String toString() {
         return "TestVersion#" + value;
+    }
+
+    public Version next(String user, Date time) {
+        return null;
+    }
+
+    public String getUser() {
+        return null;
+    }
+
+    public Date getTime() {
+        return null;
     }
 
 }

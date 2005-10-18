@@ -3,14 +3,24 @@ package org.nakedobjects.object.defaults;
 import org.nakedobjects.object.Version;
 import org.nakedobjects.utility.UnexpectedCallException;
 
+import java.util.Date;
+
 public class NullVersion implements Version {
 
     public boolean different(Version version) {
-        return true;
+        return false;
     }
 
-    public Version next() {
+    public Version next(String user, Date time) {
         throw new UnexpectedCallException();
+    }
+
+    public String getUser() {
+        return "";
+    }
+
+    public Date getTime() {
+        return new Date();
     }
 
 }

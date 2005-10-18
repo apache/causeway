@@ -88,8 +88,12 @@ public final class ToString {
     }
 
     public void appendAsTimestamp(String name, Date date) {
-        String dateString = date == null ? "" : dateFormat.format(date);
+        String dateString = timestamp(date);
         append(name, dateString);
+    }
+
+    public static String timestamp(Date date) {
+        return date == null ? "" : dateFormat.format(date);
     }
 
     public ToString appendAsHex(final String name, final long number) {

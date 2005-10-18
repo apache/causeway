@@ -1,28 +1,38 @@
-package org.nakedobjects.object;
+package org.nakedobjects.object.defaults;
+
+import org.nakedobjects.object.Version;
+
+import java.util.Date;
 
 
+public abstract class AbstractVersion implements Version {
+    protected String user;
+    protected Date time;
+    
+    public AbstractVersion(String user, Date time) {
+        this.user = user;
+        this.time = time;
+    }
 
-public interface NakedReference extends Naked {
+    public Date getTime() {
+        return time;
+    }
+    
+    public String getUser() {
+        return user;
+    }
 
-    void checkLock(Version version);
+    public Version next(String user, Date time) {
+        AbstractVersion newVersion = next();
+        newVersion.user = user;
+        newVersion.time = time;
+        return newVersion;
+    }
 
-    public void debugClearResolved();
+    protected abstract AbstractVersion next();
 
-    /**
-     * A lifecycle method called when the object is delete, after it is removed from the object store.
-     */
-    void destroyed();
-
-    String getIconName();
-
-    ResolveState getResolveState();
-
-    Version getVersion();
-
-    Persistable persistable();
-
-    void setOptimisticLock(Version version);
 }
+
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.

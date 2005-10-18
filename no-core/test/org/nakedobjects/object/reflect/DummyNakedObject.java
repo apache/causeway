@@ -10,7 +10,6 @@ import org.nakedobjects.object.Version;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.Oid;
 
-import java.util.Date;
 import java.util.Hashtable;
 
 
@@ -128,7 +127,7 @@ public class DummyNakedObject implements NakedObject {
 
     public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {}
 
-    public void setOptimisticLock(Version version, String user, Date time) {}
+    public void setOptimisticLock(Version version) {}
 
     public void setupFields(NakedObjectField[] fields) {
         this.fields = fields;

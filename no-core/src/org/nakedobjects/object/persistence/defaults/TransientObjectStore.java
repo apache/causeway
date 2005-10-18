@@ -62,7 +62,7 @@ public class TransientObjectStore implements NakedObjectStore {
                 ins.add(object);
                 objects.put(object.getOid(), object);
                 
-                object.setOptimisticLock(new LongNumberVersion(1), "user", new Date());
+                object.setOptimisticLock(new LongNumberVersion(1, "user", new Date()));
             }
 
             public NakedObject onObject() {
@@ -108,7 +108,7 @@ public class TransientObjectStore implements NakedObjectStore {
                 TransientObjectStoreInstances ins = instancesFor(specification);
                 ins.save(object);
                 
-                object.setOptimisticLock(object.getVersion().next(), "user", new Date());
+                object.setOptimisticLock(((LongNumberVersion) object.getVersion()).next("user", new Date()));
             }
 
             public NakedObject onObject() {

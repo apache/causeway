@@ -11,15 +11,14 @@ import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.ToString;
 
-import java.util.Date;
+import java.text.DateFormat;
 
 import org.apache.log4j.Logger;
 
 
 public abstract class AbstractNakedReference implements NakedReference {
     private final static Logger LOG = Logger.getLogger(AbstractNakedReference.class);
-    private Date modifiedTime;
-    private String modifierBy;
+    private final static DateFormat DATE_TIME = DateFormat.getDateTimeInstance();
     private Oid oid;
     private transient ResolveState resolveState;
     private NakedObjectSpecification specification;
@@ -39,8 +38,8 @@ public abstract class AbstractNakedReference implements NakedReference {
 
     public void checkLock(Version version) {
         if (this.version.different(version)) {
-            throw new ConcurrencyException(modifierBy + " changed " + specification.getShortName() + " object (" + titleString()
-                    + ") at " + modifiedTime + " (" + this.version + "~" + version + ")");
+            throw new ConcurrencyException(version.getUser() + " changed "
+                    + titleString() + " at " + DATE_TIME.format(version.getTime()) + " (" + this.version + "~" + version + ")");
         }
     }
 
@@ -102,10 +101,8 @@ public abstract class AbstractNakedReference implements NakedReference {
         this.oid = oid;
     }
 
-    public void setOptimisticLock(Version version, String modifierBy, Date modifiedTime) {
+    public void setOptimisticLock(Version version) {
         this.version = version;
-        this.modifierBy = modifierBy;
-        this.modifiedTime = modifiedTime;
     }
 
     protected void setResolveState(ResolveState resolveState) {
@@ -124,7 +121,6 @@ public abstract class AbstractNakedReference implements NakedReference {
         str.setAddComma();
         str.append("specification", specification == null ? "undetermined" : specification.getShortName());
         str.append("version", version);
-        str.appendAsTimestamp("modified", modifiedTime);
     }
 
 }

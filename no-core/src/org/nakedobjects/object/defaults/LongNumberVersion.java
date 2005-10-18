@@ -1,11 +1,15 @@
 package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.Version;
+import org.nakedobjects.utility.ToString;
 
-public class LongNumberVersion implements Version {
+import java.util.Date;
+
+public class LongNumberVersion extends AbstractVersion {
     private final long versionNumber;
 
-    public LongNumberVersion(long number) {
+    public LongNumberVersion(long number, String user, Date time) {
+        super(user, time);
         versionNumber = number;
     }
 
@@ -18,13 +22,14 @@ public class LongNumberVersion implements Version {
         }
     }
 
-    public Version next() {
-        return new LongNumberVersion(versionNumber + 1);
+    protected AbstractVersion next() {
+        return new LongNumberVersion(versionNumber + 1, null, null);
     }
 
     public String toString() {
-        return "LongNumberVersion#" + versionNumber;
+        return "LongNumberVersion#" + versionNumber + " " + ToString.timestamp(time);
     }
+    
 }
 
 

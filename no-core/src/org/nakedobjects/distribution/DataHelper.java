@@ -56,7 +56,7 @@ public class DataHelper {
             NakedObject object;
             object =  objectLoader.getAdapterFor(oid);
             if(data.getFieldContent() != null) {
-                object.setOptimisticLock(data.getVersion(), "", null);
+                object.setOptimisticLock(data.getVersion());
 	            ResolveState initialState = object.getResolveState();
                 ResolveState state = null;
                 if (initialState == ResolveState.RESOLVED) {
@@ -85,7 +85,7 @@ public class DataHelper {
             NakedObject object;
             object = objectLoader.recreateAdapterForPersistent(oid, specification);
             if(data.getFieldContent() != null) {
-                object.setOptimisticLock(data.getVersion(), "", null);
+                object.setOptimisticLock(data.getVersion());
                 ResolveState state;
 	            state = data.hasCompleteData() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART;
                 LOG.debug("restoring existing object (" + state.name() + ") " + object);
