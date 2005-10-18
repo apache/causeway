@@ -55,6 +55,7 @@ Namespace org.nakedobjects.dotnet
                 ByVal containerId As String, ByVal testObjectFactoryId As String, _
                 ByVal springConfigFile As String)
             MyBase.new(name)
+ 			startLogging()
             Me.myContainerId = containerId
             Me.myTestObjectFactoryId = testObjectFactoryId
             Me.mySpringConfigFile = springConfigFile
@@ -64,6 +65,8 @@ Namespace org.nakedobjects.dotnet
         Private myContainerId As String
         Private myTestObjectFactoryId As String
         Private mySpringConfigFile As String
+        
+        Private nakedObjects as NakedObjects
 
         Private time As Double
 #End Region
@@ -75,14 +78,15 @@ Namespace org.nakedobjects.dotnet
         Public Overrides Sub setUp()
 
             Try
-                startLogging()
-                'org.apache.log4j.BasicConfigurator.configure()
+               'org.apache.log4j.BasicConfigurator.configure()
                 'LogManager.getRootLogger().setLevel(Level.ERROR)
 
                 initSpringContext()
+                
+                nakedObjects = DirectCast(myCtx.GetObject("NakedObjects"), NakedObjects)
 
-                Dim rf As ReflectorFactory = _
-                DirectCast(myCtx.GetObject("SdmReflectorFactory"), ReflectorFactory)
+                'Dim rf As AdapterFactory = _
+                'DirectCast(myCtx.GetObject("SdmReflectorFactory"), AdapterFactory)
 
                ' Dim factory As PojoAdapterFactoryImpl = New PojoAdapterFactoryImpl
                 'NakedObjects.setAdapterFactory(factory)
@@ -123,7 +127,7 @@ Namespace org.nakedobjects.dotnet
         Public Overrides Sub tearDown()
             stopDocumenting()
 
-            NakedObjects.shutdown()
+            nakedObjects.shutdown()
             'NakedObjects.getObjectManager().shutdown()
             'NakedObjects.setObjectManager(Nothing)
             'NakedObjects.getPojoAdapterFactory().shutdown()
@@ -220,7 +224,7 @@ Namespace org.nakedobjects.dotnet
         Private Sub setUpTestClasses()
 
             Dim noSpecs As NakedObjectSpecification() = _
-                NakedObjects.getSpecificationLoader().getAllSpecifications()
+                NakedObjects.getSpecificationLoader().allSpecifications()
 
             For Each noSpec As NakedObjectSpecification In noSpecs
                 Dim noSpecFullName As String = noSpec.getFullName()

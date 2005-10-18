@@ -15,7 +15,7 @@ Public Class ExceptionHelper
         Public Shared Function exceptionAsString(ByVal ex As Exception) as String
             Dim trace As StringBuilder = New StringBuilder
             dumpExceptionRecursively(trace, ex, 0)
-            return trace.ToString()
+            return ex.Message + Environment.NewLine + trace.ToString()
         End Function
 
         Private Shared Sub dumpExceptionRecursively( _
