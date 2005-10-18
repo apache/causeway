@@ -1,13 +1,14 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.NakedObjects;
+import org.nakedobjects.NakedObjectsComponent;
 import org.nakedobjects.object.ApplicationContext;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.utility.StartupException;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.special.RootWorkspaceSpecification;
 
-public class SkylarkViewer {
+public class SkylarkViewer implements NakedObjectsComponent {
     private ViewUpdateNotifier updateNotifier;
     private ViewerFrame frame;
     private Viewer viewer;
@@ -23,6 +24,9 @@ public class SkylarkViewer {
         }
         if(shutdownListener == null) {
             throw new StartupException("No shutdown listener set for " + this);
+        }
+        if(applicationContext == null) {
+            throw new StartupException("No application context set for " + this);
         }
         if(bounds == null) {
             bounds = new Bounds(10, 10, 800, 600);
@@ -126,6 +130,8 @@ public class SkylarkViewer {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public void shutdown() {}
 }
 
 
