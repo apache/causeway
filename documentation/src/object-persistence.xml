@@ -1,0 +1,675 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section SYSTEM "./documentation.dtd">
+<section>
+  <title>Object Persistence</title>
+
+  <intro>
+    <para>One of the key issues with Naked Objects is how its domain objects
+    are persisted. Applications designed to work with the NOF are designed
+    around objects whereas most persistence mechanisms currently look at all
+    storage requirements as data. Add to this is the common requirement that
+    these conventional data stores, such as relational databases, must be an
+    integral part of any development, then it is important to bridge this
+    divide and convert or map from one to the other. Again, the framework
+    provides an interface that allows the rest of the NOF to save domain
+    objects to any type of persistence mechanism. This section looks at how a
+    persistence mecahnism must work and what is needed to implement such an
+    interface.</para>
+  </intro>
+
+  <para><class>NakedObjectPersistor</class> is the interface to one of the
+  core mechanisms in the NOF and is charged with persisting all the objects it
+  is told about. How it persists these objects is independent of the rest of
+  the framework, and can be achieved by writing the objects to files,
+  connecting to relational or object databases, delegating the requests to
+  other persistent mechanisms, or by passing on the requests on to another
+  <class>NakedObjectStore</class>. It is even possible just to store the
+  objects in memory (assuming your hardware and software is reliable), as long
+  as the client can be shut down and started up again and is still be able to
+  access the data.</para>
+
+  <para>To provide the services specified by the
+  <class>NakedObjectPersistor</class> interface any implemention must be
+  capable of persisting business objects and collections, managing the
+  relationships between those objects and maintaining the resulting sets of
+  instances. Persisting the objects means that we need a way to create,
+  retreive, update and delete the business objects (commonly refered to as the
+  CRUD operations) wihin long term storage, storing all the values and
+  relationships of each object. Managing the relationships means that we need
+  to use some form of identifiers for each object, instead of the simple
+  memory addresses, to reference the other objects. The sets of instances for
+  each type of object also needs to be maintained so the persistor can make
+  all objects available to the user.</para>
+
+  <section>
+    <title>Persistent objects</title>
+
+    <para>The pivotal role of the persistor is to take a domain object and
+    preserve its data. Later, when that object is requested, most likely after
+    the original object has been removed from working memory, the persistor
+    should be able to recreate and return the object in its original state.
+    Ideally, a specific <class>NakedObjectPersistor</class> implementation
+    should be able to persist any domain object, even those of a type it has
+    not seen before. Often this is possible, but if existing data structures
+    are being used then they will normally be a need for some manual
+    configuration.</para>
+
+    <para>How an object's data is stored is specified by the persistor and
+    this must relate to, and work with, the chosen persistence mechanism. As
+    most persistence mechanisms can't store objects directly some form of
+    mapping of the object's data to the persistence mechanism's data is
+    required. This mapping is usually achieved reflectively.</para>
+
+    <para>Objects held by the persistor should be held separately, that is,
+    the object's whole <term>graph</term> should not stored as a part of the
+    object, where the object graph is the object itself, the objects it refers
+    to and the objects that they in turn refer to, and so on. To maintain the
+    relationships that exist within the graph each object is, therefore,
+    assigned a unique identifier (which we refer to these as the <term>Object
+    Identifier</term> or OID) and any real references are then replaced,
+    within the object store, by the referenced object's OID. Then to retrieve
+    an object from the persistor it must be requested by specifying the
+    object's OID.</para>
+
+    <inline-graphic fileref="no-systems/references.png">
+      <description>Diagram showing a normal java object referring (show
+      addresses) to other objects and how this is done in the object store.
+      This would show the reference replaced by OID object and no explicity
+      links to the other objects - showing the objects in
+      isolation.</description>
+    </inline-graphic>
+
+    <para>When an object is retreived from persistent memory we would expect
+    that object to be in the same state as when we saved it, and for its
+    related objects to be retreived also, i.e. the ones within its graph.
+    Thefore, we need the NOF to ensure that for every object we explicitly
+    retrieve it retrieves any objects that we might be able to reach, via any
+    references, before we actually use those referenced objects. For example,
+    a booking object displays its fields - a city, pick up and drop off
+    locations etc. - when it is shown in an an open representation, such as a
+    form, rather than a closed one, such as an icon. The NOF must therefore
+    retrieve the related <class>City</class> and <class>Location</class>
+    objects as well as the <class>Booking</class> object that was requested.
+    The recreation of the object graph, however, could be limited to only
+    those nodes that are required, i.e. the city objects held by the two
+    locations need not be retreived.</para>
+
+    <para>The persistor must, therefore, be able to retrieve an object given
+    its OID. The data for the requested object should be solicited from the
+    persistor and all the value objects initialised using the relevant data.
+    Associationed objects should be recreated (or retrieved from the cache if
+    they exist there) by instantiating an object of the required type and
+    setting its OID, but no other data need be read in or set up within the
+    associated object. At the end of the request we will have, in working
+    memory, the requested object complete with all its value data and
+    references to all the objects that it did when it was persisted. The fact
+    that all the referenced objects are not necessarily in same state as when
+    they where persisted is minor inconvenience and can be resolved later,
+    before those objects are ever used.</para>
+
+    <para>When a restored object is used within the framework, e.g. when
+    displayed, it will probably need to access its referenced objects.
+    Associated objects, however, might not contain any of their data yet. If
+    they are accessed through a properly processed accessor method then the
+    object's missing data will be restored (this is why when using the NOF's
+    default Java reflector you must have the <method>resolve</method> method
+    call in your association accessors). The persistor must respond,
+    therefore, to such requests to set up the associated object and, if the
+    object is not already marked as resolved, load the data for that object
+    and re-initialise the object so its values and associations are set up.
+    Each association should then either refer to its the relevant cached
+    object, if it was already held by the cache, or to a newly created object
+    of the proper type with its OID properly set. The object itself should
+    then be marked as resolved while its uncached associations should be left
+    as unresolved. An associated object can subsequently also be resolved by
+    asking the persistor to complete the object's loading, thereby assuring
+    that its data has been loaded.</para>
+
+    <inline-graphic fileref="no-systems/resolving.png">
+      <description>Diagram showing unresolved object and transition to
+      resolved object.</description>
+    </inline-graphic>
+
+    <para>When an object should be no longer kept then it has to be explicitly
+    removed from the set of persistent objects. The
+    <class>NakedObjectPersistor</class> provide a specific method to request
+    this, but it should be remembered that while removing an object is
+    normally a straight forward process, ensuring that other objects do not
+    currently refer to it, and, hence, will subsequently have an invalid
+    reference, is another matter entirely and must be catered for within the
+    persistor implementation.</para>
+
+    <subheading>The naked object lifecyle</subheading>
+
+    <para>To put this into context we will briefly examine the lifecyle of a
+    domain object that is persisted within the NOF. This should be contrasted
+    with the simple lifecyle that Java objects have where each object is
+    created when required (using the <code>new</code> operator) and is garbage
+    collected and finalized when it no longer has any references to it. The
+    need to be able to persist objects so that they can be removed from
+    working memory and be restore later, often in a different invocation of
+    the virtual machine, complicates this by requiring new objects to be made
+    explicitly persistent and then when they are no longer required to
+    explicitly delete them. An added complexity is that the objects are not
+    necessarily in working memory even though they exist within the persistent
+    mechanism. The full life cycle is as follows:-</para>
+
+    <list>
+      <item2>
+        <label>new</label>
+
+        <para>All new objects are transient and are not immediately added to
+        the persistence mechanism.</para>
+
+        <para>New objects are instantiated using the <code>new</code>
+        operator, or the <method>newInstance</method> method in
+        <class>Class</class>. After a naked object is first created, however,
+        its <method>created</method> method should be called. This normally
+        happens within Naked Objects as the objects are usually created by the
+        user selecting the <menu>New Instance...</menu> menu item on the class
+        icon or the programmer invoking the static
+        <method>createInstance...</method> methods in the
+        <class>AbstractNakedObject</class> class.</para>
+
+        <para>A transient object need never move on to the next stage, but
+        unless it does it can not be referenced by other persistent
+        objects.</para>
+      </item2>
+
+      <item2>
+        <label>persistent</label>
+
+        <para>A transient object is made <term>persistent</term> by calling
+        its <method>makePersistent</method> method. This adds the object to
+        the set of retrievable objects by placing it within the persistent
+        mechanism and gives the object an OID. This normally also occurs as
+        part of the <menu>New Instance...</menu> menu option or by another
+        explicit action by the user. This method is also invoked by the
+        <method>createInstance</method> method but not by
+        <method>createInstanceTransient</method>.</para>
+
+        <para>The newly persistent object can now be referenced by other
+        persistent objects.</para>
+      </item2>
+
+      <item2>
+        <label>dirty</label>
+
+        <para>Whenever an object is changed - its values are edited or
+        associations are added or removed - then the object becomes
+        <term>dirty</term>. Object changes will occur through editing fields,
+        dropping and removing objects from fields and during some action
+        method invocations. The programmer can explicitly tells an object that
+        it has changed during a method invocation by calling its
+        <method>objectChanged</method> method. In response to an object being
+        changed the data in the persistent store is updated.</para>
+      </item2>
+
+      <item2>
+        <label>restored</label>
+
+        <para></para>
+      </item2>
+
+      <item2>
+        <label>resolved</label>
+      </item2>
+
+      <item2>
+        <label>destroyed</label>
+
+        <para>An object is <term>deleted</term> by calling its
+        <method>destroy</method> method. At this point the object will no
+        longer be persisted. The user normally deletes an object by selecting
+        the <menu>Destroy</menu> option for that object.</para>
+      </item2>
+    </list>
+
+    <para>In addition to these four main states a persistent object can be in
+    two minor states:-</para>
+
+    <list>
+      <para>An object that does not yet have its data loaded and its
+      associations set is <term>unresolved</term>.</para>
+
+      <para>Once an unresolved object has had it data loaded and its
+      association recreated it is <term>resolved</term>. The loading of data
+      is requested by invoking the objects <method>resolve</method>
+      method.</para>
+
+      <el>test element</el>
+    </list>
+
+    <subheading>Object IDs and Java references</subheading>
+
+    <para>The relationship between the objects held by the object store, their
+    Java references, and the Naked Objects OID is an important one, and must
+    be maintained while an object remains in working memory. That is, while an
+    object is in working memory any requests to the persistor for that object
+    (using its OID) must return that same object, i.e. the same Java instance.
+    The persistor must, therefore, store business objects and be able to
+    return an object given its OID.</para>
+
+    <para>When an object is no longer being referenced it can be removed from
+    working memory. When it is needed next it will have to be restored from
+    the persistent mechanism and placed back in working memory.</para>
+
+    <para>Failure to do this will result in more than one Java object being in
+    use for the same naked object.</para>
+
+    <para>The following two methods from the
+    <class>NakedObjectPersistor</class> must be implemented (these method are
+    already implemented in <class>AbstractObjectStore</class>):-</para>
+
+    <list>
+      <para><code>public boolean isInWorkingMemory(Object oid)</code>
+      determines if the specified object is currently held by the cache,
+      returning <code>true</code> if it is.</para>
+
+      <para><code>public void dispose(NakedObject object)</code> removes the
+      specified object from working memory. This method should only be called
+      when an object is no longer being referenced within working
+      memory.</para>
+
+      <para><code>public NakedObject recreateObject(ExternalOid oid)</code>
+      recreates the object that is identified by the external OID.</para>
+    </list>
+
+    <subheading>Object persistence methods</subheading>
+
+    <para>The persistence of an object must be guaranteed by implementing the
+    following methods of the <class>NakedObjectPersistor</class> interface.
+    This is offen refered to as the <term>CRUD</term> functionality - Create,
+    Retrieve, Update and Delete - and is to be provided by the
+    <method>makePersistent</method>, <method>getObject</method> and
+    <method>resolve</method>, <method>save</method> and
+    <method>destroy</method> methods respectively.</para>
+
+    <list>
+      <item>
+        <para><code>public void makePersistent(NakedObject object)</code>
+        makes a naked object persistent. The specified object should have an
+        OID created for it, be stored away via the persistor and then once it
+        has been stored should have the OID assigned to it by calling the
+        objects <method>setOid</method> method. The object, with its OID set,
+        should also be added to the cache.</para>
+
+        <para>If the object has any associations then each of these, that
+        aren't already persistent, should also be made persistent by
+        recursively calling this method.</para>
+
+        <para>If the object to be persisted is actually a collection, then
+        each element of that collection, that is not already persistent,
+        should be made persistent by recursively calling this method.</para>
+      </item>
+
+      <para><code>public void save(NakedObject object)</code> updates the
+      specified object in the object store. The specified object should cause
+      the data held by the persistor to be updated. Once updated, the
+      persistor should issue a notification to all the object's users via the
+      <class>UpdateNotifier</class> object. This can be achieved simply, if
+      extending the <class>AbstractObjectStore</class>, by calling
+      <method>broadcastUpdate</method>.</para>
+
+      <para><code>public void destroyObject(NakedObject object)</code> removes
+      the specified object from the object store. The specified object's data
+      should be removed from the persistor and, if it is cached, removed from
+      the cache also.</para>
+
+      <item>
+        <para><code>public NakedObject getObject(Object oid)</code> retrieves
+        the object identified by the specified OID from the object store. The
+        cache should be checked first and, if the object is cached, the cached
+        version should be returned. It is important that if this method is
+        called again, while the originally returned object is in working
+        memory, then this method must return that same Java object.</para>
+
+        <para>Assuming that the object is not cached then the data for the
+        object should be retreived from the persistor and the object recreated
+        (as describe previously). The specified OID should then be assigned to
+        the recreated object by calling its <method>setOID</method>. Before
+        returning the object its resolved flag should also be set by calling
+        its <method>setResolved</method> method as well.</para>
+
+        <para>If the persistor does not known of an object with the specified
+        OID then a <class>ObjectNotFoundException</class> should be
+        thrown.</para>
+      </item>
+
+      <para><code>public void resolve(NakedObject object)</code>
+      re-initialises the fields of an object. This method should return
+      immediately if the object's resolved flag (determined by calling
+      <method>isResolved</method> on the object) is already set. If the object
+      is unresolved then the object's data should be retreieved from the
+      persistor and used to set up the value objects and associations. The
+      object should be set up in the same manner as in
+      <method>getObject</method> above.</para>
+    </list>
+  </section>
+
+  <section>
+    <title>Persistent collections</title>
+
+    <para>Collections are objects that reference an arbitrary number of other
+    objects. It is, however, not feasible to deal with collections simply as a
+    type of object as they can be become unwieldy to manage; from both the
+    user's and the programmer's perspective. To deal with an unknown and
+    potentially large number of elements the framework views a collection as a
+    virtual object. It maintains a cache of locally accessible elements
+    (referred to as a <term>page</term>) and then provides another smaller
+    view onto part of that cache (called a <term>window</term>) that can
+    always be visually accommodated.</para>
+
+    <inline-graphic fileref="extending-no/collections.png">
+      <description>a diagram might help here</description>
+    </inline-graphic>
+
+    <para>The burden of working in such a manner is placed on the object
+    store, which must be able to, not only, add and remove elements from the
+    collection but also to provide specific subsets of all the elements. The
+    collection object and the persistor work in concert to move through the
+    virtual collection a window, and then a page, at a time.</para>
+
+    <para>The abstract class <class>AbstractNakedCollection</class> is the
+    supertype collection in Naked Objects. It implements most of the required
+    functionality and interaction with the object store. The two collections
+    that the 'application' developers make use of -
+    <class>InternalCollection</class> and <class>ArbitraryCollection</class> -
+    provide the rest. It is, of course, possible to create your own
+    collections by subclassing <class>AbstractNakedCollection</class> or any
+    of its subclasses.</para>
+
+    <para>When the collection is first used it requests the first page from
+    the object store. The store responds by returning an agreed number of
+    elements that are placed in the collection's cache. The user's window on
+    the cache is also reset so that the first element in the collection is the
+    first element in the window. As the user scrolls through the collection
+    view the window on the cached objects is moved down as its elements are
+    displayed to the user. When the window reaches the end of the cache the
+    collection requests the next page from the persistor and the process
+    repeats. If the user move back up the collection, or jumps to the
+    beginning or the end, the window is adjusted to view the relevant part of
+    the cache. If the required elements are not in the cache then the
+    collection requests the relevant objects from the persistor and sets up
+    the window accordingly.</para>
+
+    <para>In additions to the complexities of providing access to the elements
+    of a collection the collection classes provide ways of adding to and
+    removing elements from the collection. When its <method>add</method>
+    method is called the object to be added is passed on to the persistor and
+    added to the list of elements held by the persistence mechanism. Removing
+    an object (by calling <method>remove</method>) works in a similar fashion
+    except the object is removed from the list of items for that
+    collection.</para>
+
+    <para>To enable the collections the following methods need to be
+    implmented in the object store. Each method that returns a result should
+    generate the same result for successive calls where the collection has not
+    changed.</para>
+
+    <list>
+      <para><code>public void addElement(Object collectionOid, NakedObject
+      element)</code> adds an element to the collection. The logical
+      collection held by the persistence mechanism, identified by the
+      specified OID, should have the specified element added to it. Once
+      updated, the persistor should issue a notification to all the
+      collection's users via the <class>UpdateNotifier</class> object. This
+      can be achieved simply, if extending the
+      <class>AbstractObjectStore</class>, by calling
+      <method>broadcastAdd</method>.</para>
+
+      <para><code>public void removeElement(Object collectionOid, NakedObject
+      element)</code> removes an element from the collection. As for
+      <method>add</method> except the specified element is removed from the
+      list and the <class>AbstractObjectStore</class> notification method to
+      be called is <method>broadcastRemove</method>.</para>
+
+      <para><code>public boolean containsElement(Object collectionOid,
+      NakedObject element)</code> checks whether a collection contains an
+      element. The logical collection held by the persistence mechanism,
+      identified by the OID, should be searched and if the specified element
+      is found within it then <code>true</code> should be returned; otherwise
+      <code>false</code>.</para>
+
+      <para><code>public int numberOfElements(Object collectionOid)</code>
+      counts the number of elements in a collection. The number of elements
+      found with the logical held by the persistence mechanism, identified by
+      the specified OID, should be counted and returned.</para>
+
+      <para><code>public Vector getNextElements(Object collectionOid,
+      NakedObject fromObject, int count)</code> loads the next page from the
+      collection. The persistor should creates a vector and add to it the
+      elements held within the persistor for the logical collection that is
+      identified by the specified OID. The first element in the vector should
+      be the <variable>fromObject</variable> or the collection's first element
+      if <variable>fromObject</variable> is <code>null</code>. The subsequent
+      elements should be added to the vector in the order they are kept. The
+      number of elements added to the vector should be limited to the number
+      specified in <variable>count</variable> or by the addition of the last
+      element, whichever come first.</para>
+
+      <para><code>public Vector getPreviousElements(Object collectionOid,
+      NakedObject toObject, int count)</code> loads the previous page from the
+      collection. As for the previous method. The last element in the vector,
+      however, should be the <variable>toObject</variable> or the collection's
+      last element if <variable>toObject</variable> is <code>null</code>. The
+      previous <variable>count</variable> minus one elements (or fewer if the
+      first element is reached) should be added to the vector in the order
+      they are kept.</para>
+
+      <para><code>public boolean isFirstElement(Object collectionOid,
+      NakedObject element))</code> checks whether an element is the first one
+      in a collection. The collection's elements should be retreived in
+      exactly the same manner as in the <method>getNextElements</method>
+      method and the first element compared with the object specifed in
+      <variable>element</variable>. If the two objects are the same, i.e.
+      their OIDs match, then <code>true</code> should be returned; otherwise
+      <code>false</code>.</para>
+
+      <para><code>public boolean isLastElement(Object collectionOid,
+      NakedObject element)</code> checks whether an element is the last one in
+      a collection. The collection's elements should be retreived in exactly
+      the same manner as in the <method>getNextElements</method> method and
+      the first element compared with the object specifed in
+      <variable>element</variable>. Similarly, if the two objects are the same
+      then <code>true</code> should be returned; otherwise
+      <code>false</code>.</para>
+    </list>
+  </section>
+
+  <section>
+    <title>Managing instances</title>
+
+    <para></para>
+
+    <para>Naked Objects provides access to each and every instance of every
+    type of business object within the system. Again, it is the persistor that
+    shoulders the burden of compiling the instances and making them available
+    on request. A set of instances (as opposed to all instances) for a
+    specific type are requested by specifying the seach criteria within a
+    pattern object. A pattern object is an ordinary business object that is
+    non-persistent (strictly speaking its <method>isPersistent</method> method
+    must return <code>false</code> and its <method>isFinder</method> method
+    must return <code>true</code>). Any object that matches the pattern object
+    type and any of its content - values or references to other object - is
+    made available.</para>
+
+    <para>At present the user can create a pattern object by selecting the
+    <menu>New Finder...</menu> option on the class's popup menu. A request for
+    specific instances can then be requested by selection the finder's
+    <menu>Find Matching Objects</menu> option. Finder objects can be created
+    programmatically by creating a naked object and invoking
+    <method>makeFinder</method> on it. (The object, however, cannot be marked
+    as persistent.)</para>
+
+    <para>Instances are made available through the
+    <class>InstanceCollection</class> class. This extends
+    <class>AbstractNakedCollection</class> and so also support paging through
+    a logical collection. The instance collection differs from the the other
+    two collections we have looked at: the instance collection does not allow
+    the adding or removing of objects and the instances are dealt with
+    seperately by the object store.</para>
+
+    <para>A set of instances is accessed by instantiating an
+    <class>InstanceCollection</class> object and then asking it for the first
+    or last page of instances, which are downloaded to the local collection.
+    As for collections in general, when the user scrolls through the
+    collection the objects store is asked for the relevant pages.</para>
+
+    <para>To support the accessing of the instances the persistor must
+    implement the following methods. As for the generic collections, each
+    method should generate the same result for successive calls where no new
+    instances have been persistent or existing ones destroyed.</para>
+
+    <list>
+      <item>
+        <para><code>public Vector getNextInstances(NakedObject pattern,
+        NakedObject fromObject, int count)</code> gets the next page of
+        instances. The persistor should create a vector and add to it those
+        instances held by the persistor that:-</para>
+
+        <para>1) are of the type that the pattern object is;</para>
+
+        <para>2) have the same content as the pattern object where the pattern
+        object has values or references specified, i.e. empty value objects
+        and <code>null</code> references are to be ignored;</para>
+
+        <para>3) matches the <variable>fromObject</variable> object, or those
+        that are found after it, unless <variable>fromObject</variable> is
+        <code>null</code> in which case this last condition does not
+        apply.</para>
+
+        <para>The number of instances added to the vector should be limited to
+        the number specified in <variable>count</variable>.</para>
+      </item>
+
+      <para><code>public Vector getPreviousInstances(NakedObject pattern,
+      NakedObject toObject, int count)</code> gets the previous page of
+      instances. This should be implemented as the
+      <method>getNextInstances</method> method was, except the last instance
+      in the vector should be the one specified in
+      <variable>toObject</variable>. If, however, the
+      <variable>toObject</variable> is <code>null</code> then the vector
+      should contain the last <variable>count</variable> instances.</para>
+
+      <para><code>public boolean isFirstInstance(NakedObject pattern,
+      NakedObject instance)</code> checks whether an instance is the first
+      one. The persistor should find the instances as specified in the
+      <method>getNextInstances</method> method. It should then check the first
+      instance to see if it is the same as the one specified in
+      <variable>instance</variable> and return <code>true</code> if it is, or
+      <code>false</code> if it isn't.</para>
+
+      <para><code>public boolean isLastInstance(NakedObject pattern,
+      NakedObject instance)</code> checks whether an instance is the last one.
+      The persistor should find the instances as specified in the
+      <method>getPreviousInstances</method> method. It should then check the
+      last instance to see if it is the same as the one specified in
+      <variable>instance</variable> and return <code>true</code> if it is, or
+      <code>false</code> if it isn't.</para>
+
+      <para><code>public boolean hasInstances(NakedClass type)</code> checks
+      whether there are instances of a particular type. The persistor should
+      look for instances of the type represented by <variable>type</variable>
+      and return <code>true</code> if there are, or <code>false</code> if
+      there are not.</para>
+    </list>
+  </section>
+
+  <section>
+    <title>Transactions</title>
+
+    <para>A transaction groups a set of operations together so that they are
+    executed as single operation, i.e. all complete successfully or none
+    complete at all. In Naked Objects each user action, as seen by the
+    framework, is deemed to be a transaction, for example, the selection of a
+    menu option, the droping of an object into a field or the editing of a
+    value. The <method>startTransaction</method> method is called as the
+    action is started and <method>endTransaction</method> is called after it
+    completes. If an exception is thrown after
+    <method>startTransaction</method> was called then
+    <method>abortTransaction</method> will be called instead of
+    <method>endTransaction</method>.</para>
+
+    <list>
+      <para><code>public void startTransaction()</code> starts a transaction.
+      The persistor should tell the persistor (assuming it supports
+      transactions) that a transaction is starting.</para>
+
+      <para><code>public void endTransaction()</code> ends the transaction.
+      The persistor should tell the persistor (assuming it supports
+      transactions) that a transaction has ended succesfully.</para>
+
+      <para><code>public void abortTransaction()</code> aborts the
+      transaction. The persistor should tell the persistor (assuming it
+      supports transactions) that a transaction has failed and that all
+      changes need to be reversed/undone.</para>
+    </list>
+  </section>
+
+  <section>
+    <title>Other methods</title>
+
+    <para>In addition to the <class>NakedObjectPersistor</class> methods that
+    directly interact with the persistor there are also methods that support
+    the object store, which also need to be implemented. As for the cache most
+    of these are already implemented in <class>AbstractObjectStore</class>,
+    but are listed here for completeness.</para>
+
+    <list>
+      <para><code>public String name()</code> gives the persistor a name. The
+      persistor should return its name, including a version number, for
+      logging purposes.</para>
+
+      <para><code>public init()</code> initialises the object store. The
+      persistor should initialise itself by connecting to resources it will
+      require, and log any opening comments.</para>
+
+      <para><code>public void shutdown()</code> shuts down the object store.
+      The persistor should take this as a signal to disconnect itself from any
+      services it is using, dispose of any objects in the cache and free up
+      resources. There should be no more requests after this has been
+      invoked.</para>
+
+      <para><code>public abstract long serialNumber(String sequence)</code>
+      creates the next unique number in a named sequence. The persistor should
+      keep a named series of numbers, which are incremented every time one is
+      requested. This method should retrieve (which is why the method can
+      throw a <class>ObjectStoreException</class>) the number for the named
+      <variable>sequence</variable>, increment it and re-store the new value.
+      The new value should then be returned to the caller.</para>
+
+      <para><code>public void setLog(Log newLog)</code> specifies where the
+      persistor should log access events to. The persistor should store the
+      <class>Log</class> object so that its two <method>log</method> methods
+      can be invoked. <class>AbstractObjectStore</class> implements this and
+      provides its own two <method>log</method> methods, which delegate to
+      this <class>Log</class> object, thereby simplifying the adding of log
+      entries.</para>
+
+      <para><code>public setUpdateNotifier(UpdateNotifier notifier)</code>
+      links this persistor with an UpdateNotifier, through which the viewer
+      and users of the objects held by this persistor can be notified.</para>
+
+      <para><code>public boolean areObjectsDistributed()</code> determines if
+      the persistor requests should be forwarded on to a remote object store.
+      A persistent persistor should return <code>false</code> as is done by
+      <class>AbstractNakedObjectStore</class>.</para>
+
+      <para><code>public boolean areObjectsProxied()</code> determines if all
+      naked object requests are to be forwarded on to their corrsponding
+      remote objects. This is only relevant if the objects are distributed so
+      a persistent persistor should return <code>false</code>. The
+      <class>AbstractNakedObjectStore</class> implements this method and
+      returns <code>false</code>.</para>
+
+      <para><code>public int persistenceType()</code> determines how the naked
+      objects should be dealt with. If this returns
+      <variable>PersistenceType.AUTHORATIVE</variable> then this persistor is
+      actually persisting the objects. Any other values indicates that they
+      are being stored remotely. The <class>AbstractNakedObjectStore</class>
+      implements this method and returns
+      <variable>AUTHORATIVE</variable>.</para>
+    </list>
+  </section>
+</section>

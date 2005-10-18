@@ -34,10 +34,9 @@
 
   <subheading>Extending this component</subheading>
 
-  <para>To create an security manager (none are provided with the NOF) you
-  must implement the
-  <class>org.nakedobjects.security.AuthorisationManager</class> class, which
-  is a <class>NakedObjectComponent</class>.</para>
+  <para>To create a security manager (none are provided with the NOF) you must
+  implement the <class>org.nakedobjects.security.AuthorisationManager</class>
+  class, which is a <class>NakedObjectComponent</class>.</para>
 
   <para><comment>Add in javadoc refs</comment></para>
 </section>

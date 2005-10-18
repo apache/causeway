@@ -16,10 +16,10 @@
 
 <!ENTITY  % section-elements "heading|subheading|minorheading|para|list|program-listing|
    command-listing|property-listing|inline-graphic|figure|panel|
-   comment|index|anchor|biblio">
+   comment|index|anchor|biblio|include">
 
 <!-- publication - made up of a number of sections -->
-<!ELEMENT publication (title?, subtitle?, author?, copyright?, preamble, section*)>
+<!ELEMENT publication (title?, subtitle?, author?, copyright?, preamble, (section|include)*)>
 
 <!ELEMENT author (#PCDATA)>
 
@@ -54,9 +54,12 @@ contain other sections -->
 
 <!ELEMENT para (%para-elements;)*>
 
-<!ELEMENT list (para|item|comment|index|el)*>
-<!ELEMENT el (#PCDATA)*>
+<!ELEMENT list (para|item|item2|comment|index|el)*>
+<!ELEMENT el (%text;|%code;)*>
 <!ELEMENT item (para|index|program-listing|command-listing|screenshot|note)*>
+<!ELEMENT item2 (label,(para|index|program-listing|command-listing|screenshot|note)*)>
+<!ELEMENT label (%para-elements;)*>
+
 
 <!ELEMENT comment ANY> <!-- authors notes -->
 

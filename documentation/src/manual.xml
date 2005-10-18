@@ -25,21 +25,20 @@
     <section numbered="off">
         <title>Preface</title>
       
-      <para>This manual documents the use and development of Naked Object
-      applications using the Naked Objects framework, its associated
-      components and tools. The is primarily a reference guide for application
-      developers and developers of the framework. For an introduction to Naked
+      <para>This manual documents  the Naked Objects Framework, the development of Naked Objects
+      applications, and the development of its associated
+      components and tools. The is both a reference guide for application
+      developers and for developers of the components. For an introduction to Naked
       Objects and the the ideas behind the framework please refer to the book
       <ital>Naked Objects</ital> (by Richard Pawson and Robert Matthews)
       published by Wiley.</para>
 
-      <para>This manual is currently available as PDF document, to be viewed
-      using Adobe Acrobat, but will be available as a printed book in due
-      course, made available from the nakedobjects web site.</para>
+      <para>This manual is currently available as a PDF document, to be viewed
+      using Adobe Acrobat, and online via a browser.</para>
 
-      <para>This edition of the manual is intended for use with version 1.0 of
+      <para>This edition of the manual is intended for use with version 2.0 of
       the Naked Objects framework, which works with version 1.1, and higher,
-      of Java. The latest framework is available from the download's page of
+      of Java and version 1.1 of .Net. The latest framework is available from the download's page of
       the naked objects website <weblink
       address="http://www.nakedobjects.org/downloads" />.</para>
     </section>
@@ -57,61 +56,63 @@
       <para>The simplest way to get hold of a copy of Naked Objects is to
       download it from the naked object website: <weblink
       address="http://www.nakedobjects.org/downloads" />, or to get a copy
-      from a colleague or friend. If needed you can order a copy (on CD) from
-      us for a nominal fee.</para>
+      from a colleague or friend.</para>
 
-      <para>Contributors to the Naked Objects framework and associated
-      software include: Franz Achermann, Jochen Bedersdorfer, Alan Chandler,
-      Stephan Eggermont, Dan Haywood, Dave Slaughter, Johan Stover.</para>
+      <para>I would like to acknowledge the contributions that Dan Haywood has made toward the
+      development of the framework, and would like to also thank all those at the DSFA and Bearing Point for their questions, comments and 
+      suggestions.</para>
     </section>
   </preamble>
   
   <section numbered="on">
       <title>Getting Started</title>
-      
       <include file="introduction.xml"/>
       <include file="how no works.xml"/>
-        <include file="running an example.xml"/>
+      <include file="running an example.xml"/>
   </section>
   
   <section numbered="on">
-      <title>Configuration</title>
+      <title>Configuring and Running</title>
       
+      <include file="configuring and running.xml"/>
+    <include file="properties-configuration.xml"/>
     <include file="logging.xml"/>
-    <include file="images.xml"/>
-    <include file="viewer properties.xml"/>
   </section>
   
   <section numbered="on">
       <title>Developing with Naked Objects</title>
-      
-      <include file=""/>
   </section>
   
   <section numbered="on">
-      <title>How it Works</title>
-      
-    <include file="skylark viewer.xml"/>
-    <include file="nakedobjects-repository.xml"/>
-  </section>
-  
-  <section numbered="on">
-      <title>Other</title>
+      <title>Naked Objects Components</title>
       
     <include file="framework design introduction.xml"/>
-    <include file="configure and running.xml"/>
+    
+    
+    <include file="components.xml"/>
+    <include file="nakedobjects-repository.xml"/>
     <include file="configuration.xml"/>
     <include file="object loader.xml"/>
-    <include file="distribution.xml"/>
-    <include file="filename-convention.xml"/>
+    <include file="object-persistence.xml"/>
+    <include file="reflector.xml"/>
     <include file="security.xml"/>
-</section>
-  
+    <include file="help.xml"/>
+    <include file="distribution.xml"/>
+
+    <!-- add short section on dirty object set -->
+  </section>
+
+  <section numbered="on">
+      <title>Other Parts</title>
+ 
+      <include file="skylark-viewer.xml"/>
+  </section>
   
   <section numbered="on">
       <title>Framework Development</title>
       
-     
+    <include file="filename-convention.xml"/>
   </section>
+
   
 </publication>

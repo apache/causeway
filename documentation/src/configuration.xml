@@ -9,7 +9,7 @@
   <class>Configuration</class> class is concrete and therefore can only be
   subclassed, but it can be instantiated using a
   <class>ConfigurationLoader</class>, which loads the properties into the
-  configuration. </para>
+  configuration.</para>
 
   <subheading>Installling this Component</subheading>
 
@@ -42,6 +42,18 @@
   contains a specific property and get specific properties by name. The get
   methods return specific type such as boolean, integer, font, color and
   strings.</para>
+
+  <minorheading>Programmatically configuring options</minorheading>
+
+  <para>All of the configuration options can be set programmatically, which
+  can be convienient when developing and running the exploration code,
+  avoiding the need to create a separate configuration file. To add a
+  key-value pair simply call the <method>add</method> method on the
+  configuration object with a key <class>String</class> and a value
+  <class>String</class>. To change the title style, for example, add the
+  following to the <method>main</method> method:</para>
+
+  <program-listing>NakedObjects.getConfiuration.add("nakedobjects.skylark.font.title", "Serif-bold-18");</program-listing>
 
   <comment>Add the javadoc methods</comment>
 

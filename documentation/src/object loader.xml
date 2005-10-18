@@ -34,7 +34,8 @@
   <method>get...</method> methods provide a way of retrieving known adapters
   from loader for a specified domain object or an OID.</para>
 
-  <comment><command-listing>Expand on the process of creating an adapter. - values, collections, objects</command-listing></comment>
+  <comment>Expand on the process of creating an adapter. - values,
+  collections, objects</comment>
 
   <para>To keep the loader from forever growing an <method>unload</method>
   method is provided.</para>
@@ -49,6 +50,9 @@
   resolved state of of lazily loaded objects in a controlled fashion,
   informing the rest of the framework whether an object is fully loaded or not
   and whether changes should be recorded or not.</para>
+
+  <comment>Detail how ResolvedState is used &amp; what the possible states
+  are</comment>
 
   <subheading>Installation</subheading>
 

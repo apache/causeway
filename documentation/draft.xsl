@@ -139,6 +139,25 @@
         </fo:flow>
       </fo:page-sequence>
       
+      <!-- preamble -->
+      <xsl:for-each select="/publication/preamble/section">
+        <fo:page-sequence master-reference="regular" initial-page-number="1">
+          <fo:static-content flow-name="xsl-region-after">
+            <fo:block font-size="8pt"
+              space-before="-10pt" 
+              font-family="sans-serif" 
+              text-align="end">
+              <fo:page-number format="i"/>
+            </fo:block>
+          </fo:static-content> 
+        
+          <fo:flow flow-name="xsl-region-body">
+                <xsl:apply-templates select="."/>
+                <block/>
+           </fo:flow>
+        </fo:page-sequence>
+    </xsl:for-each>
+
 
       <!-- Table of contents -->
       <fo:page-sequence initial-page-number="0" master-reference="toc">
@@ -157,7 +176,7 @@
               <xsl:number level="multiple" count="/publication/section" format="I - "/>  
               <xsl:value-of select="title"/>
               <fo:leader leader-pattern="dots"/>
-              <fo:page-number-citation ref-id="/publication/section"/>
+              <fo:page-number-citation ref-id="{generate-id()}"/>
               
               <xsl:for-each select="section">
                 <fo:block font-size="90%" 
@@ -167,7 +186,7 @@
                     text-indent="1.5cm">
                   <xsl:value-of select="title"/>
                   <fo:leader leader-pattern="dots"/>
-                  <fo:page-number-citation ref-id="section"/>
+                  <fo:page-number-citation ref-id="{generate-id()}"/>
                 </fo:block>
               </xsl:for-each>
             </fo:block>
@@ -175,8 +194,6 @@
 
         </fo:flow>
       </fo:page-sequence>
-
-      <!-- xsl:apply-templates select="/publication/preamble"/-->
 
 
       <!-- main content -->
@@ -237,7 +254,7 @@
               font-family="sans-serif" 
               space-before="-10pt" 
               line-height="14pt" >
-              <xsl:value-of select="attribute::title"/>
+              <xsl:value-of select="../title"/>
             </fo:block>
           </fo:static-content>
     
@@ -296,7 +313,8 @@
     </fo:block>
   </xsl:template>
         
-
+  <xsl:template match ="title">
+  </xsl:template>
 
   <xsl:template match ="intro">
     <fo:block 
@@ -321,6 +339,8 @@
       border-color="black"
       keep-with-next="always"
       >
+      <xsl:number level="multiple" count="//section[@numbered='on']" format="1."/>
+      <xsl:number level="multiple" count="//section[@numbered='on']//subheading" format="1. "/>
       <xsl:apply-templates/> 
     </fo:block>
   </xsl:template>
@@ -338,6 +358,9 @@
       border-color="black"
       keep-with-next="always"
       >
+      <xsl:number level="multiple" count="//section[@numbered='on']" format="1."/>
+      <xsl:number level="multiple" count="//section[@numbered='on']//subheading" format="1. "/>
+      <xsl:number level="multiple" count="//section[@numbered='on']//minorheading" format="1. "/>
       <xsl:apply-templates/> 
     </fo:block>
   </xsl:template>
@@ -572,6 +595,7 @@
 
   <xsl:template match="class|method|variable">
     <fo:inline
+      hyphenation-keep="column"
       font-family="monospace"
       >
       <xsl:apply-templates/> 

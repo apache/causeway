@@ -3,20 +3,25 @@
 <section numbered="on">
   <title>Viewer properties</title>
 
+  <para>The look of the viewing mechanism can be changed by using different
+  fonts, colours and icons.</para>
+
+  <subheading>Fonts</subheading>
+
   <para>Fonts can be specified for the following areas:-</para>
 
   <list>
-    <para>class</para>
+    <para><em>normal</em>, for edit fields and object labels in fields</para>
 
-    <para>debug</para>
+    <para><em>class</em>, for labeling class icons</para>
 
-    <para>label</para>
+    <para><em>title</em>, for top-level form and list titles</para>
 
-    <para>normal</para>
+    <para><em>label</em>, for the field labels</para>
 
-    <para>status</para>
+    <para><em>debug</em>, for the listing in the debug dialog</para>
 
-    <para>title</para>
+    <para><em>status</em>, for text on the status bar</para>
   </list>
 
   <para>A particular font can be specifed for an area by specifying</para>
@@ -29,29 +34,114 @@
   java.awt.Font</class>). This essentially is a contationation of the name,
   style and size as below:</para>
 
-  <property-listing>&lt;logical font name&gt;-&lt;style&gt;-&lt;point
-  size&gt;</property-listing>
+  <property-listing>&lt;logical font name&gt;-&lt;style&gt;-&lt;point size&gt;</property-listing>
 
   <para>In addition to the font the amount of space between lines of text can
   also be specified.</para>
 
   <property-listing>org.nakedobjects.viewer.skylark.spacing.&lt;area&gt;=&lt;pixels&gt;</property-listing>
 
-
-  <para>Exploration menus are only shown during exploration, and not when running as a client 
-	or standalone. This property allows you to turn off the default displaying of exploration option
-	during exploration: to then bring the options up you can hold down the Ctrl key while right-clicking
-	to bring up the menu.</para>
+  <para>Exploration menus are only shown during exploration, and not when
+  running as a client or standalone. This property allows you to turn off the
+  default displaying of exploration option during exploration: to then bring
+  the options up you can hold down the Ctrl key while right-clicking to bring
+  up the menu.</para>
 
   <property-listing>nakedobjects.viewer.skylark.show-exploration=off</property-listing>
 
-
-  <para>For debugging purposes details about the mouse interaction can be seen in a separate window.  Add the following property to show the window.</para>
+  <para>For debugging purposes details about the mouse interaction can be seen
+  in a separate window. Add the following property to show the window.</para>
 
   <property-listing>nakedobjects.viewer.skylark.show-mouse-spy</property-listing>
 
+  <subheading>Colours</subheading>
 
-	<property-listing>
+  <para>The colour properties are prefixed with 'nakedobjects.basic-gui.color'
+  and take a numerical value. The most useful form is in hexadecimal where
+  where the six digits are grouped into twos to represent the red, green and
+  blue components. The following example specifies the colours green, red and
+  black respectively.</para>
+
+  <command-listing>nakedobjects.viewer.skylark.color.normal=0x0000FF
+nakedobjects.viewer.skylark.color.label=0xFF0000
+nakedobjects.viewer.skylark.color.text.edit=0xFFFFFF</command-listing>
+
+  <para>The valid colour properies are:</para>
+
+  <comment>to correct and complete this list</comment>
+
+  <list>
+    <para><em>application.background</em>, for all window backgrounds</para>
+
+    <para><em>window.background</em>, for all window backgrounds</para>
+
+    <para><em>foreground</em>, the basic colour for drawing the views</para>
+
+    <para><em>text.normal</em>, for text being displayed</para>
+
+    <para><em>text.edit</em>, for text being edited</para>
+
+    <para><em>text.highlight</em>, for area of text being highlighted for
+    deleting/copying</para>
+
+    <para><em>text.cursor</em>, for the text-edit cursor bar</para>
+
+    <para><em>field.label</em>, for the text used to label fields in forms and
+    headings in table columns</para>
+
+    <para><em>debug.label</em>, for the OID labels shown when debugging</para>
+
+    <para><em>field.normal</em>, for the outline of value fields</para>
+
+    <para><em>field.highlight</em>, for the outline of value fields when they
+    are being edited</para>
+
+    <para><em>field.selected</em>, for the marker in a selection field, i.e.
+    radio button, check box, when selected</para>
+
+    <para><em>field.unselected</em>, for the marker in a selection field, i.e.
+    radio button, check box, when not selected</para>
+
+    <para><em>object.identified</em>, for the label of an object when the
+    mouse is over it</para>
+
+    <para><em>object.dragging</em>, for the label of an object when it is
+    being dragged</para>
+
+    <para><em>object.can-drop</em>, for the label of a target object when it
+    will accept the drop object</para>
+
+    <para><em>object.cant-drop</em>, for the label of a target object when it
+    will not accept the drop object</para>
+  </list>
+
+  <inline-graphic fileref="images/gui-params.png"></inline-graphic>
+
+  <subheading>Icons</subheading>
+
+  <para>The default icons - for instances and unknown objects (which is used
+  when a specified icon cannot be found) - can also be specifed as a
+  properties. Theses require a file name for a image file that will be found
+  in the <path>images</path> directory. The fallback image is
+  <path>Unknown.gif</path> by default.</para>
+
+  <list>
+    <para><em>image-directory</em> alternative directory to load the images
+    from</para>
+
+    <para><em>fallback-image</em> the image to use if no other image can be
+    found</para>
+  </list>
+
+  <para></para>
+
+  <para></para>
+
+  <para></para>
+
+  <para></para>
+
+  <property-listing>
 # uncomment to hide splash
 #nakedobjects.nosplash
 

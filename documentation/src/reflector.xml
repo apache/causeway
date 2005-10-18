@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section SYSTEM "./documentation.dtd">
+<section>
+  <title>Reflector</title>
+
+  <para>To make the domain objects useful within the framework the objects'
+  public interfaces must be exposed. Reflection capabilities are used to
+  determine what fields or properties an object has, what behaviour it can
+  offer, and to find other information about each domain object (such as the
+  object's title, a suggested order of it fields, when the actions can or
+  can't be used). This interface is recorded in an instance of
+  <class>NakedObjectSpecification</class>. As each class of domain object is
+  loaded into the system introspection is performed and an instance of
+  <class>NakedObjectSpecification</class> is generated. That specification
+  object is subsequently available from any object adapter (using the
+  <method>NakedObject.getSpecification</method> method) for that type of
+  domain object; or it can be retrieved by querying the
+  <class>NakedObjectSpecification</class> class directly.</para>
+
+  <para>Through the <class>NakedObjectSpecification</class> instance the rest
+  of the NOF can find out the fields that an object has, the methods it
+  offers, the title to use to identify the object, and other details about the
+  object. These are used normally used by the implementations of NakedObject
+  etc when another component ask the adapter for details about another object.
+  For example For example the statement
+  <code>adapter.getField(no.getFields()[0])</code> would retrieve the first
+  field in the domain object held by the naked object referenced by
+  <code>adapter</code>.</para>
+
+  <subheading>How it Works</subheading>
+
+  <para>When a domain object is used within the NOF the
+  <class>NakedObjectSpecificationLoader</class> instance (obtained from the
+  <class>NakedObjects</class> repository) is asked for the
+  NakedObjectSpecification for the domain object's class (by name or
+  <class>java.lang.Class</class> object). If the class has previously been
+  introspected then the cached version is returned. The first time that class
+  is requested however the loader is responsible for performing the
+  introspection and creating a complete
+  <class>NakedObjectSpecification</class>.</para>
+
+  <para>For each field that the reflector recognises the loader must create
+  either a <class>OneToOneAssociation</class> object for a value field or a
+  reference field, or a <class>OneToManyAssociation</class> object for a
+  collection or array. Using the field objects the NOF can access or change
+  the values and references in the domain object. The fields can also inform
+  the NOF if the fields are visible and can be modified.</para>
+
+  <para>For each action method that the reflector recognises the loader must
+  create either an <class>Action</class> object. Using the action object the
+  NOF can invoke the the method on the domain object. The action object can
+  also inform the NOF if the action is visible and whether it can be
+  executed.</para>
+
+  <para>In addition to the fields and actions the specification must also
+  implement the methods that: return the various forms of class name
+  (singular; plural; short; and full); retrieve a title from, or generate a
+  title for, the domain object; flag the type of object (abstract, lookup,
+  object, value, and whether persistable); refer to its superclass, any
+  inteferfaces it implements and any subclasses; and allow objects to
+  marked/cleared as being dirty.</para>
+
+  <subheading>Installation</subheading>
+
+  <para>To set up the NOF to use a reflection mechanism the
+  <class>NakedObjects</class> repository must be given a
+  <class>NakedObjectSpecificationLoader</class> instance before the repository
+  is initialised. This can be done using the repository's static
+  <method>setSpecificationLoader</method> method. For example, the following
+  sets the NOF up to use the basic reflector.</para>
+
+  <program-listing>NakedObjectSpecificationLoader loader = new JavaSpecificationLoader();</program-listing>
+
+  <program-listing>NakedObjects.setSpecificationLoader(loader);</program-listing>
+
+  <para>In addition the core reflection mechanism, additional peers can be
+  added that provide services like security authourisation, help and
+  internationalisation, transactional management and distribution. To add an
+  addition layer to the reflection mechanism...</para>
+
+  <program-listing>loader.addPeer(new SecurityPeerFactory());</program-listing>
+
+  <subheading>Implementation</subheading>
+
+  <para>The NOF provides a Java 1.1 compatible reflector in the class
+  <class>JavaReflector</class>. Methods beginning with 'get', 'set' and
+  'action' are recognised, along with any methods that are additionally
+  prefixed with 'about', as fields and methods respectivley. </para>
+
+  <para>As certain methods must match one another, the method names must be
+  consistently spelt with just the prefix changing e.g., getCustomer with
+  setCustomer and actionRelease aboutActionRelease. Certain other aspects of
+  the declaration are also checked to ensure that only valid method are made
+  available e.g., get methods must return a valid type and cannot be void,
+  whereas set methods must be void and have to have a parameter type that
+  matches the type specified by the corresponding get. It should be noted that
+  all non-public method are completely ignored as they will not be able to be
+  accessed when needed.</para>
+
+  <para>The <class>JavaReflector</class> is defined in the package
+  <class>org.nakedobjects.reflector.java.reflect</class>.</para>
+</section>

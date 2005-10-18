@@ -5,7 +5,7 @@
 
   <para>The NOF is designed to be configured and run in a number of ways,
   specifically from within a container such as <weblink
-  address="???">Spring</weblink> or <weblink
+  address="http://www.springframework.org/">Spring</weblink> or <weblink
   address="http://www.picocontainer.org/">PicoContainer</weblink>. The NOF is
   a collection of components that are designed to work together to build a
   particular kind of system. By providing flexibility in the configuration of
@@ -50,7 +50,7 @@
   Jetty web server and Log4J the components are specified by their class names
   and identified by name. These names can then be used to set up the
   dependencies. The following properties do the same job as the Java code
-  previously. </para>
+  previously.</para>
 
   <program-listing>nakedobjects.container.objectManager=org.nakedobjects.object.persistence.defaults.LocalObjectManager
 nakedobjects.container.objectManager.objectStore= org.nakedobjects.object.persistence.defaults.TransientObjectStore

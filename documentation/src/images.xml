@@ -10,16 +10,16 @@
   Jar file that is found on the classpath.</para>
 
   <para>Images for objects are picked up by class name in the form of
-  <path>&lt;ClassName&gt;.&lt;extension</path>&gt; and are case sensitive.
-  Images for classes are picked up as for objects, but with <em>_class</em>
-  appended to the class name
-  (<path>&lt;ClassName&gt;_class.&lt;extension&gt;</path>). This can be
+  <path>&lt;ClassName&gt;.&lt;extension</path>&gt; and will be case sensitive
+  on Unix/Linux, but case insensitive on Windows. Images for classes are
+  picked up as for objects, but with <em>_class</em> appended to the class
+  name (<path>&lt;ClassName&gt;_class.&lt;extension&gt;</path>). This can be
   overriden by the reflector, which can pass back a name of an image that has
-  be got from the business object. This provides a mechanism for objects to be
-  shown with images of there specification.</para>
+  to be got from the business object. This provides a mechanism for objects to
+  be shown with images of there specification.</para>
 
   <para><ital>ClassName</ital> is either the short form or the fully qualified
-  name and is case sensitive.</para>
+  name, and case can be important depending on the platform.</para>
 
   <para>Extensions that are currently supported are <path>.gif</path>,
   <path>.jpg</path>, <path>.jpeg</path> and <path>.png</path>.</para>
