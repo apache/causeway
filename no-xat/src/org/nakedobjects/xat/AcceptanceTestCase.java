@@ -31,6 +31,7 @@ public abstract class AcceptanceTestCase extends TestCase {
     private Documentor documentor;
     private TestObjectFactory testObjectFactory;
     private FixtureBuilder fixtureBuilder;
+    private NakedObjectsClient nakedObjects;
 
     public AcceptanceTestCase() {
         this(null);
@@ -110,7 +111,7 @@ public abstract class AcceptanceTestCase extends TestCase {
             configuration = new Configuration();
         }
         
-        NakedObjectsClient nakedObjects = new NakedObjectsClient();
+        nakedObjects = new NakedObjectsClient();
         nakedObjects.setConfiguration(configuration);
           
       
@@ -209,7 +210,7 @@ public abstract class AcceptanceTestCase extends TestCase {
         documentor.stop();
 
         LOG.info("tear down " + getName());
-        NakedObjects.shutdown();
+        nakedObjects.shutdown();
         
         classes.clear();
         classes = null;
