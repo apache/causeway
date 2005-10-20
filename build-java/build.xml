@@ -4,7 +4,7 @@
 ]>
 
 <project name="Naked Objects framework - java version"
-         default="idebuild"
+         default="check"
          basedir=".">
 
 	<property file="build.properties"/>
@@ -52,9 +52,6 @@
 
 
 	<property environment="env" />
-
-	<target name="idebuild" depends="check">
-	</target>
 
 	<target name="release" depends=" new-release-number, distribution, install">
 	</target>
@@ -248,11 +245,11 @@
 
 
 
-	
-    <!-- ================================= 
+
+	<!-- ================================= 
           target: jars
          ================================= -->
-    <target name="jars" depends="" description="create jars">
+	<target name="jars" depends="" description="create jars">
 		<jar jarfile="${dist.dir}/lib/nakedobjects.jar">
 			<fileset dir="${build.classes.src}" />
 			<fileset dir="${build.src.dir}">
@@ -280,10 +277,10 @@
 				<attribute name="Class-Path" value="./nakedobjects.jar ./log4j-1.2.6.jar"/>
 			</manifest>
 		</jar>
-    </target>
+	</target>
 
 
-	
+
 	<target name="dists" depends="jars">
 		<!-- copy in:
 				properties files
@@ -362,6 +359,14 @@
 
 		<touch file="${artifacts.dir}/version-${build.id}"/>
 	</target>
+
+
+	<target name="changelog" description="Create a changelong from the subversion logs">
+		<exec executable="svn">
+			<arg line="log --xml --verbose ${svn.projecturl} ${project.build.root} -r ${svn.revision} --username ${svn.username} --password ${svn.password}"/>
+		</exec>
+	</target>
+
 
 
 
