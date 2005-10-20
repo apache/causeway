@@ -53,10 +53,10 @@ public class TestingCollectionResolving {
         Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(DEFAULT_CONFIG, false));
         nakedObjects.setConfiguration(configuration);
         
-        if (NakedObjects.getConfiguration().getString(SHOW_EXPLORATION_OPTIONS) == null) {
-            NakedObjects.getConfiguration().add(SHOW_EXPLORATION_OPTIONS, "yes");
+        if (configuration.getString(SHOW_EXPLORATION_OPTIONS) == null) {
+            configuration.add(SHOW_EXPLORATION_OPTIONS, "yes");
         }
-        PropertyConfigurator.configure(NakedObjects.getConfiguration().getProperties("log4j"));
+        PropertyConfigurator.configure(configuration.getProperties("log4j"));
 
         Logger log = Logger.getLogger("Naked Objects");
         log.info(AboutNakedObjects.getName());
