@@ -10,7 +10,7 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 
 
-public class Configuration {
+public class Configuration implements NakedObjectConfiguration {
     private static final Logger LOG = Logger.getLogger(Configuration.class);
     public static final String PREFIX = "nakedobjects.";    
     private final Properties p = new Properties();
@@ -40,11 +40,8 @@ public class Configuration {
     public void add(String key, String value) {
         p.put(key, value);
     }
-    
-    /**
-     * @deprecated
-     */
-    public String fullName(String name) {
+   
+    public String referedToAs(String name) {
         return PREFIX + name;
     }
 
@@ -207,7 +204,7 @@ public class Configuration {
     }
 
     private String getProperty(String name, String defaultValue) {
-        String key = fullName(name);
+        String key = referedToAs(name);
         if (key.indexOf("..") >= 0) {
             throw new NakedObjectRuntimeException("property names should not have '..' within them: " + name);
         }
@@ -217,7 +214,7 @@ public class Configuration {
     }
 
     public Properties getPropertiesStrippingPrefix(String prefix) {
-        return getProperties(fullName(prefix), fullName(prefix));
+        return getProperties(referedToAs(prefix), referedToAs(prefix));
     }
     /*
     public Properties getPropertySubset(String prefix) {
@@ -252,7 +249,7 @@ public class Configuration {
     }
 
     public boolean hasProperty(String name) {
-        String key = fullName(name);
+        String key = referedToAs(name);
         return p.containsKey(key);
     }
 

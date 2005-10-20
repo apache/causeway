@@ -1,6 +1,6 @@
 package org.nakedobjects;
 
-import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.NakedObjectConfiguration;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ReflectionFactory;
@@ -10,7 +10,7 @@ import org.nakedobjects.utility.ToString;
 
 public class NakedObjectsData {
     protected NakedObjectLoader objectLoader;
-    protected Configuration configuration;
+    protected NakedObjectConfiguration configuration;
     protected NakedObjectManager objectManager;
     protected Session session;
     protected NakedObjectSpecificationLoader specificationLoader;

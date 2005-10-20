@@ -1,6 +1,6 @@
 package org.nakedobjects;
 
-import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.NakedObjectConfiguration;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ReflectionFactory;
@@ -10,13 +10,13 @@ import org.nakedobjects.object.security.Session;
 
 public class NakedObjectsClient extends NakedObjects {
     protected NakedObjectLoader objectLoader;
-    protected Configuration configuration;
+    protected NakedObjectConfiguration configuration;
     protected NakedObjectManager objectManager;
     private ReflectionFactory reflectionFactory;
     protected Session session;
     protected NakedObjectSpecificationLoader specificationLoader;
 
-    protected Configuration configuration() {
+    protected NakedObjectConfiguration configuration() {
         return configuration;
     }
 
@@ -45,7 +45,7 @@ public class NakedObjectsClient extends NakedObjects {
      * 
      * @property
      */
-    public void set_Configuration(Configuration configuration) {
+    public void set_Configuration(NakedObjectConfiguration configuration) {
         setConfiguration(configuration);
     }
 
@@ -94,7 +94,7 @@ public class NakedObjectsClient extends NakedObjects {
         setSpecificationLoader(specificationLoader);
     }
 
-    public void setConfiguration(Configuration configuration) {
+    public void setConfiguration(NakedObjectConfiguration configuration) {
         this.configuration = configuration;
     }
 

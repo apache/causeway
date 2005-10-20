@@ -1,6 +1,6 @@
 package org.nakedobjects;
 
-import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.NakedObjectConfiguration;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -28,7 +28,7 @@ public abstract class NakedObjects implements NakedObjectsComponent, DebugInfo {
     /**
      * Returns the configuration component.
      */
-    public static Configuration getConfiguration() {
+    public static NakedObjectConfiguration getConfiguration() {
         return getInstance().configuration();
     }
 
@@ -99,7 +99,7 @@ public abstract class NakedObjects implements NakedObjectsComponent, DebugInfo {
         setSession(null);
     }
 
-    protected abstract Configuration configuration();
+    protected abstract NakedObjectConfiguration configuration();
 
     protected abstract Session currentSession();
 
@@ -143,7 +143,7 @@ public abstract class NakedObjects implements NakedObjectsComponent, DebugInfo {
 
     protected abstract ReflectionFactory reflectionFactory();
 
-    public abstract void setConfiguration(Configuration configuration);
+    public abstract void setConfiguration(NakedObjectConfiguration configuration);
 
     public abstract void setObjectLoader(NakedObjectLoader loader);
 

@@ -1,6 +1,6 @@
 package org.nakedobjects;
 
-import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.NakedObjectConfiguration;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ReflectionFactory;
@@ -12,7 +12,7 @@ public abstract class NakedObjectsServer extends NakedObjects {
 
     protected NakedObjectsServer() {}
 
-    protected Configuration configuration() {
+    protected NakedObjectConfiguration configuration() {
         return getLocal().configuration;
     }
 
@@ -39,7 +39,7 @@ public abstract class NakedObjectsServer extends NakedObjects {
      * 
      * @property
      */
-    public void set_Configuration(Configuration configuration) {
+    public void set_Configuration(NakedObjectConfiguration configuration) {
         setConfiguration(configuration);
     }
 
@@ -88,7 +88,7 @@ public abstract class NakedObjectsServer extends NakedObjects {
         setSpecificationLoader(specificationLoader);
     }
 
-    public void setConfiguration(Configuration configuration) {
+    public void setConfiguration(NakedObjectConfiguration configuration) {
         getLocal().configuration = configuration;
     }
 

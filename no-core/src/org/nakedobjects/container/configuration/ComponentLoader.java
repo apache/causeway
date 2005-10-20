@@ -47,7 +47,7 @@ public class ComponentLoader {
 
         if (className == null || className.trim().equals("")) {
             if (mustLoad) {
-                throw new ConfigurationException("Configuration parameter " + params().fullName(paramName) + " must be set");
+                throw new ConfigurationException("Configuration parameter " + params().referedToAs(paramName) + " must be set");
             } else {
                 return null;
             }
@@ -92,7 +92,7 @@ public class ComponentLoader {
         return loadComponent(paramName, defaultType, requiredClass, false);
     }
 
-    private static Configuration params() {
+    private static NakedObjectConfiguration params() {
         return NakedObjects.getConfiguration();
     }
 }
