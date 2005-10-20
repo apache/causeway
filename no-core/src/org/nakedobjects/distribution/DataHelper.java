@@ -74,7 +74,7 @@ public class DataHelper {
                     updateNotifier.addDirty(object);
 	            }
             } else {
-                if(object.getResolveState().isPersistent() && data.getVersion().different(object.getVersion())) {
+                if(data.getVersion().different(object.getVersion())) {
                     // TODO reload the object
                 }
 
@@ -95,7 +95,7 @@ public class DataHelper {
 		            objectLoader.end(object);
 	            }
             } else {
-                if(object.getResolveState().isPersistent() && data.getVersion().different(object.getVersion())) {
+                if(data.getVersion().different(object.getVersion())) {
                     // TODO reload the object if on cient; fail on server
                 }
 
