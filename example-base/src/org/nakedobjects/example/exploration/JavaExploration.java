@@ -66,10 +66,7 @@ public class JavaExploration {
             nakedObjects.setConfiguration(configuration);
             PropertyConfigurator.configure(configuration.getProperties("log4j"));
 
-            Logger log = Logger.getLogger("Naked Objects");
-            log.info(AboutNakedObjects.getName());
-            log.info(AboutNakedObjects.getVersion());
-            log.info(AboutNakedObjects.getBuildId());
+            AboutNakedObjects.logVersion();
 
             boolean noSplash = configuration.getBoolean("nosplash", false);
             if (!noSplash) {
