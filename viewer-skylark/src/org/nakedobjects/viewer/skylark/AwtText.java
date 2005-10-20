@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.NakedObjectConfiguration;
 
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -20,7 +20,7 @@ public class AwtText implements Text {
     private int lineSpacing;
 
     protected AwtText(String propertyName, String defaultFont) {
-        Configuration cfg = NakedObjects.getConfiguration();
+        NakedObjectConfiguration cfg = NakedObjects.getConfiguration();
         font = cfg.getFont(FONT_PROPERTY_STEM + propertyName, Font.decode(defaultFont));
         LOG.info("font " + propertyName + " loaded as " + font);
 

@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.util;
 
 import org.nakedobjects.NakedObjects;
-import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.container.configuration.NakedObjectConfiguration;
 import org.nakedobjects.viewer.skylark.Background;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Image;
@@ -20,7 +20,7 @@ public class LogoBackground implements Background {
     private Size logoSize;
 
     public LogoBackground() {
-        Configuration cp = NakedObjects.getConfiguration();
+        NakedObjectConfiguration cp = NakedObjects.getConfiguration();
         String fileName = cp.getString(PARAMETER_BASE + "image", "logo.gif");
         logo = ImageFactory.getInstance().createImage(fileName);
 
