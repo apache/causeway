@@ -1,6 +1,6 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.NakedObjectsClient;
+import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.MockOneToManyPeer;
@@ -8,7 +8,6 @@ import org.nakedobjects.object.MockOneToOnePeer;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.control.MockHint;
 import org.nakedobjects.object.control.NoOpAllow;
-import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.DummyNakedCollection;
 import org.nakedobjects.object.reflect.DummyNakedObject;
@@ -32,22 +31,27 @@ public class TestObjectImplFieldTest extends TestCase {
     private MockNakedObject object;
     private MockObjectFactory factory;
 
+    TestSystem system;
+
     protected void setUp() throws Exception {
         BasicConfigurator.configure();
         Logger.getRootLogger().setLevel(Level.OFF);
         
-        object = new MockNakedObject();
+        system = new TestSystem();
+        
         factory = new MockObjectFactory();
+
+        object = new MockNakedObject();
         target = new TestObjectImplExt(object, factory);
-        
-        
         MockHint hint = new MockHint();
         hint.setupCanAccess(new NoOpAllow());
         hint.setupCanUse(new NoOpAllow());
         object.setupHint(hint);
 
 
-        new NakedObjectsClient().setObjectManager(new MockObjectManager());
+        //new NakedObjectsClient().setObjectManager(new MockObjectManager());
+        
+        system.init();
     }
 
     public void testGetField() {
