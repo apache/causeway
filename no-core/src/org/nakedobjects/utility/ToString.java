@@ -20,12 +20,20 @@ public final class ToString {
         String name = forObject.getClass().getName();
         return name.substring(name.lastIndexOf('.') + 1);
     }
-    
+
     public ToString(final Object forObject) {
         string = new StringBuffer();
         string.append(name(forObject));
         string.append("@");
         string.append(Integer.toHexString(forObject.hashCode()));
+        string.append(" [");
+    }
+
+    public ToString(final Object forObject, int id) {
+        string = new StringBuffer();
+        string.append(name(forObject));
+        string.append("#");
+        string.append(id);
         string.append(" [");
     }
 
