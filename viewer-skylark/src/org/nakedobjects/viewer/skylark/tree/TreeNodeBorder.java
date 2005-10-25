@@ -86,16 +86,6 @@ public class TreeNodeBorder extends AbstractBorder {
                 }
             });
         }
-
-        menuOptions.add(MenuOptionSet.VIEW, new MenuOption("Select node") {
-            public void execute(Workspace workspace, View view, Location at) {
-                selectNode();
-            }
-
-            public String getDescription(View view) {
-                return "Show this node in the right-hand pane";
-            }
-        });
     }
 
     public void debugDetails(StringBuffer b) {
@@ -269,6 +259,16 @@ public class TreeNodeBorder extends AbstractBorder {
     public void viewMenuOptions(MenuOptionSet options) {
         super.viewMenuOptions(options);
         TreeDisplayRules.menuOptions(options);
+        
+        options.add(MenuOptionSet.VIEW, new MenuOption("Select node") {
+            public void execute(Workspace workspace, View view, Location at) {
+                selectNode();
+            }
+
+            public String getDescription(View view) {
+                return "Show this node in the right-hand pane";
+            }
+        });
     }
 
     private boolean withinBox(int x, int y) {
