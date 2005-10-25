@@ -86,8 +86,9 @@ public class InternalOneToOneAssociationTest extends TestCase {
     	assertNull(objectWithOneToOneAssoications.getReferencedObject());
     }     	
     
-    public void testGet() {
-    //    NakedObject pojoFromLoader = system.createAdapterForTransient(referencedObject);
+    public void testGetAssociation() {
+        system.setupLoadedObject(referencedObject, associate);
+        
     	objectWithOneToOneAssoications.setReferencedObject(referencedObject);
     	
     	Naked association = personField.getAssociation(new DummyIdentifier(), nakedObject);

@@ -1,16 +1,26 @@
 package org.nakedobjects.object.reflect;
 
+import org.nakedobjects.object.DummyVersion;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.defaults.AbstractNakedReference;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.Persistable;
+import org.nakedobjects.object.ResolveState;
+import org.nakedobjects.object.Version;
+import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.utility.Assert;
 
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Vector;
 
 
-public class DummyNakedCollection extends AbstractNakedReference implements NakedCollection {
+public class DummyNakedCollection implements NakedCollection {
     private Vector collection = new Vector();
+    private Oid oid;
+    private ResolveState resolveState = ResolveState.GHOST;
+    private NakedObjectSpecification specification;
+    private DummyVersion version;
 
     public DummyNakedCollection() {}
 
@@ -18,9 +28,13 @@ public class DummyNakedCollection extends AbstractNakedReference implements Nake
         this.collection = vector;
     }
 
+    public void checkLock(Version version) {}
+
     public boolean contains(NakedObject object) {
         return collection.contains(object);
     }
+
+    public void debugClearResolved() {}
 
     public void destroyed() {}
 
@@ -32,8 +46,29 @@ public class DummyNakedCollection extends AbstractNakedReference implements Nake
         return collection.elements();
     }
 
+    public String getIconName() {
+        return null;
+    }
+
     public Object getObject() {
         return collection;
+    }
+
+    public Oid getOid() {
+        return oid;
+    }
+
+    public ResolveState getResolveState() {
+
+        return resolveState;
+    }
+
+    public NakedObjectSpecification getSpecification() {
+        return specification;
+    }
+
+    public Version getVersion() {
+        return version;
     }
 
     public void init(Object[] initElements) {
@@ -43,6 +78,26 @@ public class DummyNakedCollection extends AbstractNakedReference implements Nake
         }
     }
 
+    public Persistable persistable() {
+        return Persistable.USER_PERSISTABLE;
+    }
+
+    public void setOptimisticLock(Version version) {}
+
+    public void setOptimisticLock(Version version, String user, Date time) {}
+
+    public void setupResolveState(ResolveState resolveState) {
+        this.resolveState = resolveState;
+    }
+
+    public void setupSpecification(NakedObjectSpecification specification) {
+        this.specification = specification;
+    }
+
+    public void setupOid(Oid oid) {
+        this.oid = oid;
+    }
+    
     public int size() {
         return collection.size();
     }
@@ -50,6 +105,9 @@ public class DummyNakedCollection extends AbstractNakedReference implements Nake
     public String titleString() {
         return "title";
     }
+
+    public void setupVersion(DummyVersion version) {
+        this.version = version;}
 }
 
 /*

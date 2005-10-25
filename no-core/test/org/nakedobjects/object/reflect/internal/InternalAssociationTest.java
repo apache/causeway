@@ -4,6 +4,7 @@ package org.nakedobjects.object.reflect.internal;
 import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.defaults.ObjectLoaderImpl;
 
 import java.lang.reflect.Method;
 

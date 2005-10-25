@@ -4,7 +4,7 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
-import org.nakedobjects.object.MockOid;
+import org.nakedobjects.object.DummyOid;
 
 import java.util.Enumeration;
 
@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 
 
 public class MemoryObjectStoreInstancesTest extends TestCase {
-    private MockOid oid;
+    private DummyOid oid;
     private MockMemoryObjectStoreInstances instances;
     private TestObject object;
     private TestSystem system;
@@ -31,13 +31,13 @@ public class MemoryObjectStoreInstancesTest extends TestCase {
         system.addSpecification(new DummyNakedObjectSpecification());
         instances = new MockMemoryObjectStoreInstances(NakedObjects.getObjectLoader());
 
-        instances.addElement(new MockOid(1), new TestObject(), "one");
+        instances.addElement(new DummyOid(1), new TestObject(), "one");
 
-        oid = new MockOid(2);
+        oid = new DummyOid(2);
         object = new TestObject();
         instances.addElement(oid, object, "two");
 
-        instances.addElement(new MockOid(3), new TestObject(), "three");
+        instances.addElement(new DummyOid(3), new TestObject(), "three");
     }
 
     protected void tearDown() throws Exception {
@@ -121,7 +121,7 @@ public class MemoryObjectStoreInstancesTest extends TestCase {
 
     public void testSave() {
         MockNakedObject mockNakedObject = new MockNakedObject();
-        MockOid oid = new MockOid(0);
+        DummyOid oid = new DummyOid(0);
         mockNakedObject.setupOid(oid);
         TestObject object = new TestObject();
         mockNakedObject.setupObject(object);

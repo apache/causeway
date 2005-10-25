@@ -2,40 +2,29 @@ package org.nakedobjects;
 
 import org.nakedobjects.container.configuration.TestConfiguration;
 import org.nakedobjects.object.DummyNakedObjectSpecificationLoader;
+import org.nakedobjects.object.DummyObjectLoader;
+import org.nakedobjects.object.DummyOid;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.defaults.DummyObjectFactory;
-import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
+import org.nakedobjects.object.NakedReference;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.defaults.MockObjectManager;
 import org.nakedobjects.object.defaults.MockReflectionFactory;
-import org.nakedobjects.object.defaults.ObjectLoaderImpl;
-import org.nakedobjects.object.defaults.PojoAdapterHashMap;
 import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
-import org.nakedobjects.object.reflect.DummyAdapterFactory;
+import org.nakedobjects.object.reflect.DummyNakedObject;
 
 
 public class TestSystem {
-    private NakedObjectLoader objectLoader;
+    private final DummyObjectLoader objectLoader;
     private NakedObjectsClient nakedObjects;
     private NakedObjectManager objectManager;
-    private final DummyObjectFactory objectFactory;
     private final DummyNakedObjectSpecificationLoader specificationLoader;
-    private final DummyAdapterFactory adapterFactory;
+ //   private final DummyAdapterFactory adapterFactory;
       
     public TestSystem() {
         specificationLoader = new DummyNakedObjectSpecificationLoader();
-
-        ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
-        objectLoader.setPojoAdapterMap(new PojoAdapterHashMap());
-        objectLoader.setIdentityAdapterMap(new IdentityAdapterHashMap());
-        objectLoader.setObjectFactory(objectFactory = new DummyObjectFactory());
-        objectLoader.setAdapterFactory(adapterFactory = new DummyAdapterFactory());
-
-        this.objectLoader = objectLoader;
-
+        objectLoader = new DummyObjectLoader();
         objectManager = new MockObjectManager();
     }
 
@@ -51,34 +40,60 @@ public class TestSystem {
         nakedObjects.init();
     }
 
-    public void setObjectLoader(NakedObjectLoader objectLoader) {
-        this.objectLoader = objectLoader;
-    }
-
     public void addSpecification(NakedObjectSpecification specification) {
         specificationLoader.addSpecification(specification);
     }
 
-    public void addCreatedObject(Object object) {
-        objectFactory.setupCreateObject(object);
-    }
-    
-
     public void addNakedCollectionAdapter(NakedCollection collection) {
-  //      throw new NotImplementedException();
-        adapterFactory.setupNakedCollection(collection);
+        objectLoader.addAdapter(collection.getObject(), collection);
     }
 
     public NakedObject createAdapterForTransient(Object associate) {
-        return objectLoader.createAdapterForTransient(associate);
+        NakedObject createAdapterForTransient = objectLoader.createAdapterForTransient(associate);
+        objectLoader.addAdapter(associate, createAdapterForTransient);
+        return createAdapterForTransient;
+        
     }
 
     public void shutdown() {
         nakedObjects.shutdown();
     }
 
-    public void setObjectManager(LocalObjectManager objectManager) {
+    public void setObjectManager(NakedObjectManager objectManager) {
         this.objectManager = objectManager;
+    }
+    
+    public void setupLoadedObject(Object forObject, NakedObject adapter) {
+        ((DummyObjectLoader) objectLoader).addAdapter(forObject, adapter);
+    }
+
+    public void addLoadedIdentity(DummyOid oid, NakedReference adapter) {
+        objectLoader.addIdentity(oid, adapter);
+    }
+
+   /* public void addCreatedObject(Object object) {
+        DummyNakedObject dummyNakedObject = new DummyNakedObject();
+        dummyNakedObject.setupSpecification(new DummyNakedObjectSpecification());
+        objectLoader.addAdapter(object, dummyNakedObject);
+    }
+*/
+    public void addValue(Object object, NakedValue adapter) {
+        objectLoader.addAdapter(object, adapter);
+        
+    }
+
+    public void addAdapter(Object object, DummyNakedObject adapter) {
+        objectLoader.addAdapter(object, adapter);
+    }
+
+    public void addRecreated(DummyOid oid, DummyNakedObject adapter) {
+        objectLoader.addRecreated(oid, adapter);
+        
+    }
+
+    public void addRecreatedTransient(DummyNakedObject adapter) {
+        objectLoader.addRecreatedTransient(adapter);
+        
     }
 }
 

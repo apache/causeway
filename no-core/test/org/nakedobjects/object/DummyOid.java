@@ -3,10 +3,10 @@ package org.nakedobjects.object;
 import org.nakedobjects.object.persistence.Oid;
 
 
-public class MockOid implements Oid {
+public class DummyOid implements Oid {
     private int id;
 
-    public MockOid(int id) {
+    public DummyOid(int id) {
         this.id = id;
     }
 
@@ -14,8 +14,8 @@ public class MockOid implements Oid {
         if (obj == this) {
             return true;
         }
-        if (obj instanceof MockOid) {
-            return ((MockOid) obj).id == id;
+        if (obj instanceof DummyOid) {
+            return ((DummyOid) obj).id == id;
         }
         return false;
     }
@@ -25,7 +25,7 @@ public class MockOid implements Oid {
     }
     
     public String toString() {
-        return "MockOid#" + id;
+        return "DummyOid#" + id;
     }
 
     public boolean hasPrevious() {

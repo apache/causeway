@@ -3,7 +3,6 @@ package org.nakedobjects.object.persistence.defaults;
 import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
-import org.nakedobjects.object.DummyObjectLoader;
 import org.nakedobjects.object.MockObjectStore;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.reflect.NakedObjectField;
@@ -24,7 +23,6 @@ public class LocalObjectManagerTest extends TestCase {
     private DummyNakedObjectSpecification objectSpecification;
     private MockObjectStore objectStore;
     private MockNakedObject testNakedObject;
-    private DummyObjectLoader objectLoader;
     private TestSystem system;
 
     protected void setUp() throws Exception {
@@ -39,9 +37,6 @@ public class LocalObjectManagerTest extends TestCase {
 
         system.setObjectManager(objectManager);
         
-        objectLoader = new DummyObjectLoader();
-        system.setObjectLoader(objectLoader);
-
         system.init();
         
         testNakedObject = new MockNakedObject();
@@ -75,8 +70,6 @@ public class LocalObjectManagerTest extends TestCase {
 
     public void testDestroy() {
         objectSpecification.fields = new NakedObjectField[0];
-
-        system.createAdapterForTransient(testNakedObject);
 
         objectManager.startTransaction();
         objectManager.destroyObject(testNakedObject);

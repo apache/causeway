@@ -1,6 +1,6 @@
 package org.nakedobjects.object.persistence.defaults;
 
-import org.nakedobjects.object.MockOid;
+import org.nakedobjects.object.DummyOid;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.DummyNakedObject;
 
@@ -19,7 +19,7 @@ public class TransientObjectStoreInstancesTest extends TestCase {
     private Oid oid;
 
     private Oid addInstance(String title) {
-        Oid oid = new MockOid(nextId++);
+        Oid oid = new DummyOid(nextId++);
         instances.addElement(oid, "one");
         return oid;
     }
@@ -36,7 +36,7 @@ public class TransientObjectStoreInstancesTest extends TestCase {
     }
 
     public void testAdd() {
-        Oid oid = new MockOid(2);
+        Oid oid = new DummyOid(2);
         DummyNakedObject object = new DummyNakedObject();
         object.setupOid(oid);
 

@@ -1,11 +1,9 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
-import org.nakedobjects.object.MockOid;
+import org.nakedobjects.object.DummyOid;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.ResolveState;
 
 import junit.framework.TestCase;
@@ -20,15 +18,12 @@ public class PojoAdapterTest extends TestCase {
         junit.textui.TestRunner.run(PojoAdapterTest.class);
     }
 
-    private NakedObjectLoader objectLoader;
-    //  private NakedObjectsClient nakedObjects;
     private TestSystem system;
 
     protected void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
         system = new TestSystem();
         system.init();
-        objectLoader = NakedObjects.getObjectLoader();
     }
 
     protected void tearDown() throws Exception {
@@ -49,28 +44,25 @@ public class PojoAdapterTest extends TestCase {
 
     public void testEmptyTitle() {
         setupSpecificationTitleString("");        
-        NakedObject pa = objectLoader.createAdapterForTransient(new TestPojo());
-        pa.getSpecification();
+        NakedObject pa =   new PojoAdapter(new TestPojo());
         assertEquals("", pa.titleString());
     }
 
     public void testTitleStringWhereSpecificationProvidesTitleFromObject() {
         setupSpecificationTitleString("object title from specification");
 
-        NakedObject pa = system.createAdapterForTransient(new TestPojo());
-        pa.getSpecification();
-        objectLoader.madePersistent(pa, new MockOid(1));
-        assertEquals(ResolveState.RESOLVED, pa.getResolveState());
+        PojoAdapter pa =   new PojoAdapter(new TestPojo());
+        pa.changeState(ResolveState.TRANSIENT);
+        pa.persistedAs(new DummyOid(1));
         assertEquals("object title from specification", pa.titleString());
     }
 
     public void testTitleStringWhereSpecificationReturnNullAsTitle() {
         setupSpecificationTitleString(null);
 
-        NakedObject pa = system.createAdapterForTransient(new TestPojo());
-        pa.getSpecification();
-        objectLoader.madePersistent(pa, new MockOid(1));
-        assertEquals(ResolveState.RESOLVED, pa.getResolveState());
+        PojoAdapter pa =   new PojoAdapter(new TestPojo());
+        pa.changeState(ResolveState.TRANSIENT);
+        pa.persistedAs(new DummyOid(2));
         assertEquals("A singular name", pa.titleString());
     }
 }

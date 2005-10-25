@@ -1,11 +1,11 @@
 package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.DummyNakedObjectSpecification;
+import org.nakedobjects.object.DummyOid;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.persistence.defaults.DummyOid;
 import org.nakedobjects.object.reflect.PojoAdapter;
 
 import java.util.Date;
@@ -48,7 +48,7 @@ public class ObjectLoaderImplTest extends TestCase {
         specification = new DummyNakedObjectSpecification();
                 
         pojo1 = new Date();
-        oid1 = new DummyOid();
+        oid1 = new DummyOid(1);
         adapter1 = new PojoAdapter(pojo1) {
             public NakedObjectSpecification getSpecification() {
                 return specification;
@@ -56,7 +56,7 @@ public class ObjectLoaderImplTest extends TestCase {
         };
         
         pojo2 = new Date();
-        oid2 = new DummyOid();
+        oid2 = new DummyOid(2);
         adapter2 = new PojoAdapter(pojo2) {
             public Oid getOid() {
                 return oid2;

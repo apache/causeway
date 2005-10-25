@@ -3,8 +3,7 @@ package org.nakedobjects.object.persistence.defaults;
 import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
-import org.nakedobjects.object.DummyObjectLoader;
-import org.nakedobjects.object.MockOid;
+import org.nakedobjects.object.DummyOid;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.persistence.InstancesCriteria;
@@ -102,7 +101,7 @@ public class TransientObjectStoreTest extends TestCase {
 
     private NakedObject createTestObject() {
         MockNakedObject nakedObject = new MockNakedObject();
-        MockOid oid = new MockOid(nextId++);
+        DummyOid oid = new DummyOid(nextId++);
         nakedObject.setupOid(oid);
         nakedObject.setupSpecification(objectSpec);
         return nakedObject;
@@ -123,7 +122,6 @@ public class TransientObjectStoreTest extends TestCase {
         objectStore.instances.put(objectSpec, transientObjectStoreInstancesForClass);
 
         system = new TestSystem();
-        system.setObjectLoader(new DummyObjectLoader());
         system.init();
 
     }
@@ -219,7 +217,7 @@ public class TransientObjectStoreTest extends TestCase {
     }
 
     public void testGetObject() throws Exception {
-        Oid oid = new MockOid(0);
+        Oid oid = new DummyOid(0);
         MockNakedObject object = new MockNakedObject();
         objectStore.objects.put(oid, object);
 
@@ -228,12 +226,12 @@ public class TransientObjectStoreTest extends TestCase {
     }
 
     public void testGetObjectCantFindObject() throws Exception {
-        Oid oid = new MockOid(0);
+        Oid oid = new DummyOid(0);
         MockNakedObject object = new MockNakedObject();
         objectStore.objects.put(oid, object);
 
         try {
-            objectStore.getObject(new MockOid(1), objectSpec);
+            objectStore.getObject(new DummyOid(1), objectSpec);
             fail();
         } catch (ObjectNotFoundException expected) {}
     }

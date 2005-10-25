@@ -4,11 +4,12 @@ import org.nakedobjects.TestSystem;
 import org.nakedobjects.distribution.dummy.DummyCollectionData;
 import org.nakedobjects.distribution.dummy.DummyObjectData;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
-import org.nakedobjects.object.MockOid;
+import org.nakedobjects.object.DummyOid;
+import org.nakedobjects.object.DummyVersion;
 import org.nakedobjects.object.NakedCollection;
-import org.nakedobjects.object.TestVersion;
+import org.nakedobjects.object.NullDirtyObjectSet;
 import org.nakedobjects.object.persistence.defaults.TestObject;
-import org.nakedobjects.object.reflect.internal.InternalCollectionVectorAdapter;
+import org.nakedobjects.object.reflect.DummyNakedObject;
 
 import java.util.Vector;
 
@@ -32,21 +33,25 @@ public class DataHelperCollectionTest extends TestCase {
         LogManager.getRootLogger().setLevel(Level.OFF);
         system = new TestSystem();
 
-        Vector collection = new Vector();
-        system.addCreatedObject(collection);
-
         system.addSpecification(new DummyNakedObjectSpecification("type.1"));
         DummyNakedObjectSpecification collectionType = new DummyNakedObjectSpecification("type.2");
         collectionType.setupIsCollection();
         system.addSpecification(collectionType);
 
-        system.addCreatedObject(testObject1 = new TestObject());
-        system.addCreatedObject(testObject2 = new TestObject());
-
+        testObject1 = new TestObject();
+        DummyNakedObject element1 = new DummyNakedObject();
+        element1.setupObject(testObject1);
+        system.addRecreated(new DummyOid(345), element1);
+        DummyNakedObject element2 = new DummyNakedObject();
+        element2.setupObject(testObject2);
+        system.addRecreated(new DummyOid(678), element2);
+        
         system.init();
 
         system.addSpecification(new DummyNakedObjectSpecification(Object.class.getName()));
-        system.addNakedCollectionAdapter(new InternalCollectionVectorAdapter(collection, Object.class));
+  //      system.addNakedCollectionAdapter(new InternalCollectionVectorAdapter(collection, Object.class));
+        
+        DataHelper.setUpdateNotifer(new NullDirtyObjectSet());
     }
 
     protected void tearDown() throws Exception {
@@ -55,17 +60,18 @@ public class DataHelperCollectionTest extends TestCase {
 
     public void testRecreateCollection() {
         ObjectData elements[] = new ObjectData[2];
-        MockOid fieldOid = new MockOid(345);
-        elements[0] = new DummyObjectData(fieldOid, "type.1", null, false, new TestVersion());
-        fieldOid = new MockOid(678);
-        elements[1] = new DummyObjectData(fieldOid, "type.1", null, false, new TestVersion());
+        DummyOid fieldOid = new DummyOid(345);
+        elements[0] = new DummyObjectData(fieldOid, "type.1", null, false, new DummyVersion());
+        fieldOid = new DummyOid(678);
+        elements[1] = new DummyObjectData(fieldOid, "type.1", null, false, new DummyVersion());
 
-        MockOid collectionOid = new MockOid(123);
-        CollectionData data = new DummyCollectionData(collectionOid, "type.2", elements, new TestVersion());
+        DummyOid collectionOid = new DummyOid(123);
+        CollectionData data = new DummyCollectionData(collectionOid, "type.2", elements, new DummyVersion());
 
+   //     system.addLoadedIdentity(new DummyOid(345), testObject1);
+   //     system.addLoadedIdentity(new DummyOid(678), testObject2);
+        
         NakedCollection naked = (NakedCollection) DataHelper.restore(data);
-        //	assertEquals(4, naked.getVersion());
-        // assertEquals(collectionOid, naked.getOid());
 
         Vector restoredCollection = (Vector) naked.getObject();
         assertEquals(2, restoredCollection.size());

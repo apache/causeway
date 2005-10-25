@@ -1,46 +1,104 @@
 package org.nakedobjects.object;
 
 import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.reflect.DummyNakedCollection;
 import org.nakedobjects.object.reflect.DummyNakedObject;
 
 import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import junit.framework.Assert;
 
 
 public class DummyObjectLoader implements NakedObjectLoader {
-    private NakedObject adapter;
+    private Hashtable identites = new Hashtable();
+    private Hashtable objectAdapters = new Hashtable();
+    private Hashtable collectionAdapters = new Hashtable();
+    private Hashtable valueAdapters = new Hashtable();
+    private Hashtable recreatedPersistent = new Hashtable();
+    private Vector recreatedTransient = new Vector();
 
-    public NakedObject createAdapterForTransient(Object object) {
-        return adapter;
+    public void addAdapter(Object object, NakedObject nakedobject) {
+        objectAdapters.put(object, nakedobject);
     }
 
-    public NakedValue createAdapterForValue(Object value) {
-        return null;
+    public void addAdapter(Object object, NakedValue value) {
+        valueAdapters.put(object, value);
+    }
+
+    public void addAdapter(Object object, NakedCollection collection) {
+        collectionAdapters.put(object, collection);
+    }
+
+    public void addIdentity(Oid oid, NakedReference adapter) {
+        identites.put(oid, adapter);
+    }
+
+    public void addRecreated(Oid oid, NakedReference adapter) {
+        recreatedPersistent.put(oid, adapter);
+    }
+    public void addRecreatedTransient(NakedReference adapter) {
+        recreatedTransient.addElement(adapter);
     }
 
     public NakedCollection createAdapterForCollection(Object collection, NakedObjectSpecification specification) {
-        return null;
+        throw new NakedObjectRuntimeException();
+    }
+
+    public NakedObject createAdapterForTransient(Object object) {
+        DummyNakedObject no = new DummyNakedObject();
+        no.setupObject(object);
+        return no;
+    }
+
+    public NakedValue createAdapterForValue(Object value) {
+        return (NakedValue) valueAdapters.get(value);
     }
 
     public NakedObject createTransientInstance(NakedObjectSpecification specification) {
-        return adapter;
+        throw new NakedObjectRuntimeException();
     }
 
     public NakedValue createValueInstance(NakedObjectSpecification specification) {
-        return null;
+        throw new NakedObjectRuntimeException();
     }
 
-    public void end(NakedReference object) {}
+    public void end(NakedReference object) {
+        ResolveState finalState = object.getResolveState().getEndState();
+        ((DummyNakedObject) object).setupResolveState(finalState);
+    }
 
     public NakedObject getAdapterFor(Object object) {
-        return null;
+        throw new NakedObjectRuntimeException();
     }
 
     public NakedObject getAdapterFor(Oid oid) {
-        return null;
+        NakedObject no = (NakedObject) identites.get(oid);
+        if (no == null) {
+            throw new DummyException("No object for oid: " + oid);
+        }
+        return no;
+    }
+
+    public NakedCollection getAdapterForElseCreateAdapterForCollection(
+            NakedObject parent,
+            String fieldName,
+            NakedObjectSpecification elementSpecification,
+            Object collection) {
+        NakedCollection adapter = (NakedCollection) collectionAdapters.get(collection);
+        if(adapter ==  null) {
+            throw new DummyException("No adapter for collection: " + collection);
+        }
+        return adapter;
     }
 
     public NakedObject getAdapterForElseCreateAdapterForTransient(Object object) {
-        return null;
+        NakedObject adapter = (NakedObject) objectAdapters.get(object);
+        if(adapter ==  null) {
+            throw new DummyException("No adapter for object: " + object);
+        }
+        return adapter;
     }
 
     public String getDebugData() {
@@ -52,38 +110,50 @@ public class DummyObjectLoader implements NakedObjectLoader {
     }
 
     public Enumeration getIdentifiedObjects() {
-        return null;
+        throw new NakedObjectRuntimeException();
     }
 
     public void init() {}
 
     public boolean isIdentityKnown(Oid oid) {
-        return false;
+        return identites.containsKey(oid);
     }
 
-    public void madePersistent(NakedReference object, Oid oid) {}
+    public void madePersistent(NakedReference object, Oid oid) {
+        Assert.assertFalse(identites.containsKey(oid));
+        ((DummyNakedObject) object).setupOid(oid);
+        identites.put(oid, object);
+    }
 
     public NakedObject recreateAdapterForPersistent(Oid oid, NakedObjectSpecification spec) {
-        return null;
-    }
-    
-    public NakedCollection recreateCollection(NakedObjectSpecification specification) {
-        return null;
+        DummyNakedObject nakedObject = (DummyNakedObject) recreatedPersistent.get(oid);
+        if (nakedObject == null) {
+            throw new DummyException("No adapter for " + oid);
+        }
+        nakedObject.setupOid(oid);
+        return nakedObject;
     }
 
     public NakedObject recreateAdapterForPersistent(Oid oid, Object object) {
-        return adapter;
-    }
-
-  	public NakedObject recreateTransientInstance(NakedObjectSpecification specification) {
-        return null;
+        DummyNakedObject nakedObject = (DummyNakedObject) recreatedPersistent.get(oid);
+        if (nakedObject == null) {
+            throw new DummyException("No adapter for " + oid);
+        }
+        nakedObject.setupOid(oid);
+        return nakedObject;
     }
     
-    public void reset() {}
-
-    public void setupAdapter(NakedObject adapter) {
-        this.adapter = adapter;
+    public NakedCollection recreateCollection(NakedObjectSpecification specification) {
+        return new DummyNakedCollection();
     }
+
+    public NakedObject recreateTransientInstance(NakedObjectSpecification specification) {
+        NakedObject element = (NakedObject) recreatedTransient.elementAt(0);
+        recreatedTransient.removeElementAt(0);
+        return element;
+    }
+
+    public void reset() {}
 
     public void shutdown() {}
 
@@ -93,13 +163,6 @@ public class DummyObjectLoader implements NakedObjectLoader {
 
     public void unloaded(NakedObject object) {}
 
-  public NakedCollection getAdapterForElseCreateAdapterForCollection(
-            NakedObject parent,
-            String fieldName,
-            NakedObjectSpecification elementSpecification,
-            Object collection) {
-        return null;
-    }
 }
 
 /*

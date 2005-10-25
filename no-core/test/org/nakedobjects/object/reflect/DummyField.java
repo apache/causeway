@@ -31,6 +31,10 @@ public class DummyField extends NakedObjectField {
         return false;
     }
 
+    public boolean isCollection() {
+        return ! isObject() && ! isValue();
+    }
+    
     public boolean isDerived() {
         return false;
     }

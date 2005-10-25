@@ -4,7 +4,7 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.TestSystem;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.MockNakedObject;
-import org.nakedobjects.object.MockOid;
+import org.nakedobjects.object.DummyOid;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -229,7 +229,7 @@ public class MemoryObjectStoreTest extends TestCase {
 
 
     public void xxxxtestGetObject() throws Exception {
-        Oid oid = new MockOid(0);
+        Oid oid = new DummyOid(0);
         MockNakedObject object = new MockNakedObject();
         transientObjectStoreInstancesForClass.setupObject(object);
 

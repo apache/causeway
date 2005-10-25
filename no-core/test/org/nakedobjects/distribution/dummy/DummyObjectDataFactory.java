@@ -1,6 +1,7 @@
 package org.nakedobjects.distribution.dummy;
 
 import org.nakedobjects.distribution.CollectionData;
+import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.DataFactory;
 import org.nakedobjects.distribution.NullData;
 import org.nakedobjects.distribution.ObjectData;
@@ -8,11 +9,10 @@ import org.nakedobjects.distribution.ReferenceData;
 import org.nakedobjects.distribution.ValueData;
 import org.nakedobjects.object.Version;
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.utility.NotImplementedException;
 
 
 public class DummyObjectDataFactory extends DataFactory {
-    protected ObjectData createObjectData(Oid oid, String type, Object[] fieldContent, boolean hasCompleteData, Version version) {
+    protected ObjectData createObjectData(Oid oid, String type, Data[] fieldContent, boolean hasCompleteData, Version version) {
         return new DummyObjectData(oid, type, fieldContent, hasCompleteData,  version);
     }
 
@@ -25,7 +25,7 @@ public class DummyObjectDataFactory extends DataFactory {
     }
 
     protected ReferenceData createReferenceData(String type, Oid oid, Version version) {
-        throw new NotImplementedException();
+        return new DummyReferenceData(oid, type, version);
     }
 
     protected CollectionData createCollectionData(Oid oid, String type, ObjectData[] elements, boolean hasAllElements, Version version) {

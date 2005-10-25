@@ -1,23 +1,21 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.utility.UnexpectedCallException;
-
 import java.util.Date;
 
-public class TestVersion implements Version {
+public class DummyVersion implements Version {
     private final int value;
 
-    public TestVersion() {
-        this(13);
+    public DummyVersion() {
+        this(-13);
     }
 
-    public TestVersion(int value) {
-        this.value = value;}
-
+    public DummyVersion(int value) {
+        this.value = value;
+    }
     
     public boolean equals(Object obj) {
-        if (obj instanceof TestVersion) {
-            TestVersion other = (TestVersion) obj;
+        if (obj instanceof DummyVersion) {
+            DummyVersion other = (DummyVersion) obj;
             return other.value == value;
         } 
         
@@ -28,16 +26,8 @@ public class TestVersion implements Version {
         return true;
     }
 
-    public Version next() {
-        throw new UnexpectedCallException();
-    }
-    
     public String toString() {
         return "TestVersion#" + value;
-    }
-
-    public Version next(String user, Date time) {
-        return null;
     }
 
     public String getUser() {
