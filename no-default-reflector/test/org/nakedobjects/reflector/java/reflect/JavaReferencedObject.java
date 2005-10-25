@@ -1,10 +1,17 @@
 package org.nakedobjects.reflector.java.reflect;
 
 public class JavaReferencedObject {
-
+    private static int next;
+    private final int id = next++;
+    
     public JavaReferencedObject() {
         super();
     }
+    
+    public String toString() {
+        return "JavaReferencedObject#" + id;
+    }
+    
 
 }
 

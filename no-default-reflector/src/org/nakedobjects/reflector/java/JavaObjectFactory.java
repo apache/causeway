@@ -48,8 +48,11 @@ public class JavaObjectFactory implements ObjectFactory {
         return object;
     }
 
+    /**
+     * Set up a new logical object by calling its created() method.
+     */
     public void setUpAsNewLogicalObject(Object object) {
-        logicalCreation(object, object.getClass());
+        invokeMethod(object.getClass(), object, "created", new Class[0], new Object[0]);
     }
 
     public Object createObject(NakedObjectSpecification specification) {
@@ -115,13 +118,6 @@ public class JavaObjectFactory implements ObjectFactory {
         }
         setContainer(object, cls);
         return object;
-    }
-
-    /**
-     * Call the new object's created method if it has one.
-     */
-    private void logicalCreation(Object object, Class cls) {
-        invokeMethod(cls, object, "created", new Class[0], new Object[0]);
     }
 
     public void initRecreatedObject(Object object) {

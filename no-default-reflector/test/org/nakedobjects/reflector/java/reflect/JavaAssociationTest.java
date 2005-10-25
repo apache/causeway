@@ -1,7 +1,6 @@
 package org.nakedobjects.reflector.java.reflect;
 
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.TestSystem;
 import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
@@ -55,7 +54,7 @@ public class JavaAssociationTest extends TestCase {
         personField = new JavaOneToOneAssociation(PERSON_FIELD_NAME, JavaReferencedObject.class, get, set, null, null, about, false);
         
         javaObjectForReferencing = new JavaReferencedObject();
-        associate = NakedObjects.getObjectLoader().createAdapterForTransient(javaObjectForReferencing);
+        associate = system.createAdapterForTransient(javaObjectForReferencing);
     }
 
     protected void tearDown() throws Exception {

@@ -155,11 +155,10 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
             if (collection == null) {
                 return null;
             } else {
-           //     boolean persistent = fromObject.getResolveState().isPersistent();
                 NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
                 adapter = objectLoader.getAdapterForElseCreateAdapterForCollection(fromObject, getName(), getType(), collection);
                 if (adapter == null) {
-                    throw new ReflectionException();
+                    throw new ReflectionException("no adapter created");
                 } else {
                     return adapter;
                 }
