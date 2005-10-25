@@ -237,10 +237,15 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
 
     public void init() {
         LOG.info("initialising " + this);
-        Assert.assertNotNull("needs an identity-adapter map", identityAdapterMap);
-        Assert.assertNotNull("needs a pojo-adapter map", pojoAdapterMap);
         Assert.assertNotNull("needs an object factory", objectFactory);
         Assert.assertNotNull("needs an adapter factory", adapterFactory);
+        
+        if(identityAdapterMap == null) {
+            identityAdapterMap = new IdentityAdapterHashMap();
+        }
+        if(pojoAdapterMap == null) {
+            pojoAdapterMap = new PojoAdapterHashMap();
+        }
     }
 
     public boolean isIdentityKnown(Oid oid) {
