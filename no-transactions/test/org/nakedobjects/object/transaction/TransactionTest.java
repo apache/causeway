@@ -3,7 +3,7 @@ package org.nakedobjects.object.transaction;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.MockLoadedObjects;
 import org.nakedobjects.object.MockObjectStore;
-import org.nakedobjects.object.MockOid;
+import org.nakedobjects.object.DummyOid;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.persistence.Oid;
 
@@ -50,16 +50,16 @@ public class TransactionTest extends TestCase {
         objectStore = new MockObjectStore();
         loadedObjects = (MockLoadedObjects) objectStore.getLoadedObjects();
 
-        personOid = new MockOid(1);
+        personOid = new DummyOid(1);
         person = new Person();
         person.setupOid(personOid);
 
-        roleOid = new MockOid(2);
+        roleOid = new DummyOid(2);
         role = new Role();
         role.setupOid(roleOid);
 
-        teamOid = new MockOid(3);
-        membersOid = new MockOid(5);
+        teamOid = new DummyOid(3);
+        membersOid = new DummyOid(5);
         team = new Team();
         team.setupOid(teamOid);
         members = team.getMembers();
@@ -179,7 +179,7 @@ public class TransactionTest extends TestCase {
     }
 
     public void testIsolatedObjectWithNullReferences() {
-        Oid roleOid = new MockOid(3);
+        Oid roleOid = new DummyOid(3);
         String roleName = "Orator";
 
         Role role = new Role();
@@ -195,8 +195,8 @@ public class TransactionTest extends TestCase {
     }
 
     public void testIsolatedObjectWithOneToManyAssociation() {
-        Oid roleOid = new MockOid(3);
-        Oid membersOid = new MockOid(5);
+        Oid roleOid = new DummyOid(3);
+        Oid membersOid = new DummyOid(5);
         String personName = "Fred";
 
         person.getName().setValue(personName);
@@ -324,7 +324,7 @@ public class TransactionTest extends TestCase {
     
    public void test() {     
         Role r = new Role(); // transient object
-        Oid roleOid = new MockOid(11);
+        Oid roleOid = new DummyOid(11);
         r.setupOid(roleOid);
         
         Person transactionPerson = (Person) t.getObject(personOid, person);
