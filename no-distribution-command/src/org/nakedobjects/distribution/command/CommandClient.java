@@ -72,10 +72,10 @@ public abstract class CommandClient implements Distribution {
         return request.getFlag();
     }
 
-    public Oid[] makePersistent(Session session, ObjectData data) {
+    public ObjectData makePersistent(Session session, ObjectData data) {
         MakePersistent request = new MakePersistent(session, data);
         execute(request);
-        return request.getOids();
+        return request.getResults();
     }
 
     public int numberOfInstances(Session session, String fullName) {
