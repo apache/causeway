@@ -2,7 +2,6 @@ package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.InstancesCriteria;
-import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.security.Session;
 
 
@@ -30,7 +29,7 @@ public interface Distribution {
 
     boolean hasInstances(Session session, String fullName);
 
-    Oid[] makePersistent(Session session, ObjectData object);
+    ObjectData makePersistent(Session session, ObjectData object);
 
     int numberOfInstances(Session sessionId, String fullName);
 

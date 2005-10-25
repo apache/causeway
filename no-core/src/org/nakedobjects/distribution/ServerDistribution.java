@@ -7,13 +7,11 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.NullDirtyObjectSet;
-import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
@@ -27,7 +25,6 @@ import org.apache.log4j.Logger;
 public class ServerDistribution implements Distribution {
     private static final Logger LOG = Logger.getLogger(ServerDistribution.class);
     private DataFactory objectDataFactory;
-    private ObjectFactory objectFactory;
 
     public ServerDistribution() {
         DataHelper.setUpdateNotifer(new NullDirtyObjectSet());
@@ -172,15 +169,15 @@ public class ServerDistribution implements Distribution {
         return objectManager().hasInstances(getSpecification(objectType));
     }
 
-    public Oid[] makePersistent(Session session, ObjectData data) {
+    public ObjectData makePersistent(Session session, ObjectData data) {
         LOG.debug("request makePersistent " + data +  " for " + session);
         NakedObject object = (NakedObject) DataHelper.restore(data);
-        objectFactory.initRecreatedObject(object.getObject());
         objectManager().startTransaction();
         objectManager().makePersistent(object);
         objectManager().endTransaction();
-        return new Oid[] { object.getOid() };
+        return objectDataFactory.createMadePersistentGraph(data, object);
     }
+
 
     public int numberOfInstances(Session session, String objectType) {
         LOG.debug("request numberOfInstances of " + objectType + " for " + session);
@@ -194,15 +191,6 @@ public class ServerDistribution implements Distribution {
      */
     public void set_ObjectDataFactory(DataFactory objectDataFactory) {
         this.objectDataFactory = objectDataFactory;
-    }
-
-    /**
-     * .NET property
-     * 
-     * @property
-     */
-    public void set_ObjectFactory(ObjectFactory objectFactory) {
-        this.objectFactory = objectFactory;
     }
 
     public void setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associated) {
@@ -223,10 +211,6 @@ public class ServerDistribution implements Distribution {
      */
     public void setObjectDataFactory(DataFactory objectDataFactory) {
         this.objectDataFactory = objectDataFactory;
-    }
-
-    public void setObjectFactory(ObjectFactory objectFactory) {
-        this.objectFactory = objectFactory;
     }
 
     public void setValue(Session session, String fieldIdentifier, ReferenceData target, Object value) {

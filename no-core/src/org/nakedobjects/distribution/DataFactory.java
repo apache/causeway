@@ -44,8 +44,7 @@ public abstract class DataFactory {
             elements = new ObjectData[0];
         }
 
-        return createCollectionData(oid, type, elements, hasAllElements, collection
-                .getVersion());
+        return createCollectionData(oid, type, elements, hasAllElements, collection.getVersion());
     }
 
     /**
@@ -88,8 +87,51 @@ public abstract class DataFactory {
      * across.
      */
     public final ObjectData createMakePersistentGraph(NakedObject object) {
-        Assert.assertTrue(object.getResolveState().isTransient());
+        Assert.assertTrue("transient", object.getResolveState().isTransient());
         return createObjectData(object, false, persistentGraphDepth);
+    }
+
+    /**
+     * Creates a a graph of ReferenceData objects to transfer the OIDs and Versions for each object that was
+     * made persistent during the makePersistent call.
+     */
+    public ObjectData createMadePersistentGraph(ObjectData data, NakedObject object) {
+        Oid oid = object.getOid();
+        String type = data.getType();
+        ReferenceData[] fieldContent = data.getFieldContent() == null ? null : new ReferenceData[data.getFieldContent().length];
+        Version version = object.getVersion();
+
+        NakedObjectField[] fields = object.getFields();
+
+        NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
+        for (int i = 0; i < fields.length; i++) {
+            if (fields[i].isValue() || data.getFieldContent()[i] == null) {
+                continue;
+            } else if (fields[i].isCollection()) {
+                CollectionData f = (CollectionData) data.getFieldContent()[i];
+                ObjectData[] elements = new ObjectData[f.getElements().length];
+                NakedCollection coll = (NakedCollection) object.getField(fields[i]);
+                for (int j = 0; j < f.getElements().length; j++) {
+                    ObjectData element = f.getElements()[j];
+                    if (element != null && element.getOid() == null) {
+                        NakedObject el = coll.elementAt(j);
+                        elements[j] = createMadePersistentGraph(element, el);
+                    }
+                }
+                fieldContent[i] = createCollectionData(coll.getOid(), f.getType(), elements, f.hasAllElements(), coll.getVersion());
+            } else {
+                Data f = data.getFieldContent()[i];
+                if (f != null && !(f instanceof NullData) && ((ObjectData) f).getOid() == null) {
+                    NakedObject o = (NakedObject) object.getField(fields[i]);
+                    fieldContent[i] = createMadePersistentGraph(((ObjectData) f), o);
+                }
+            }
+
+        }
+        NakedObjects.getObjectLoader().end(object);
+
+        ObjectData createReferenceData = createObjectData(oid, type, fieldContent, true, version);
+        return createReferenceData;
     }
 
     protected final ObjectData createObjectData(NakedObject object, boolean recursePersistentObjects, int depth) {
@@ -106,12 +148,12 @@ public abstract class DataFactory {
         boolean isComplete = object.getResolveState() == ResolveState.TRANSIENT
                 || object.getResolveState() == ResolveState.RESOLVED;
 
-        Object[] fieldContent;
+        Data[] fieldContent;
         if (resolveState.isSerializing() || !nextLevel || depth == 0 || resolveState.isGhost()) {
             fieldContent = null;
         } else {
             NakedObjectField[] fields = specification.getFields();
-            fieldContent = new Object[fields.length];
+            fieldContent = new Data[fields.length];
 
             NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
             for (int i = 0; i < fields.length; i++) {
@@ -137,7 +179,7 @@ public abstract class DataFactory {
     protected abstract ObjectData createObjectData(
             Oid oid,
             String type,
-            Object[] fieldContent,
+            Data[] fieldContent,
             boolean hasCompleteData,
             Version version);
 
@@ -206,9 +248,9 @@ public abstract class DataFactory {
         String type = specification.getFullName();
         ResolveState resolveState = object.getResolveState();
 
-        Object[] fieldContent;
+        Data[] fieldContent;
         NakedObjectField[] fields = specification.getFields();
-        fieldContent = new Object[fields.length];
+        fieldContent = new Data[fields.length];
 
         NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
         for (int i = 0; i < fields.length; i++) {
@@ -228,9 +270,10 @@ public abstract class DataFactory {
         }
         NakedObjects.getObjectLoader().end(object);
 
-        // TODO remove the fudge - needed as collections are part of parents, hence parent object gets set as 
+        // TODO remove the fudge - needed as collections are part of parents, hence parent object gets set as
         // resolving (is not a ghost) yet it has no version number
-        //return createObjectData(oid, type, fieldContent, resolveState.isResolved(), !resolveState.isGhost(), object.getVersion());
+        // return createObjectData(oid, type, fieldContent, resolveState.isResolved(),
+        // !resolveState.isGhost(), object.getVersion());
         return createObjectData(oid, type, fieldContent, resolveState.isResolved(), object.getVersion());
     }
 }

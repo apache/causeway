@@ -3,6 +3,7 @@ package org.nakedobjects.distribution;
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.NakedClass;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedReference;
@@ -15,6 +16,7 @@ import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.UnsupportedFindException;
 import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.NotImplementedException;
@@ -117,8 +119,36 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
 
     public synchronized void makePersistent(NakedObject object) {
         LOG.debug("makePersistent " + object);
-        Oid[] oid = connection.makePersistent(session, objectDataFactory.createMakePersistentGraph(object));
-        NakedObjects.getObjectLoader().madePersistent(object, oid[0]);
+        ObjectData updates = connection.makePersistent(session, objectDataFactory.createMakePersistentGraph(object));
+        madePersistent(object, updates);
+    }
+
+    private void madePersistent(NakedObject object, ObjectData updates) {
+        if(object.getOid() == null) {
+            NakedObjects.getObjectLoader().madePersistent(object, updates.getOid());
+        }
+        
+        Data[] fieldData = updates.getFieldContent();
+        NakedObjectField[] fields = object.getSpecification().getFields();
+        for (int i = 0; i < fieldData.length; i++) {
+            if(fieldData[i] == null) {
+                continue;
+            }
+            if(fieldData[i] instanceof ObjectData) {
+//            if(fields[i].isObject()) {
+                NakedObject field = object.getAssociation((OneToOneAssociation) fields[i]);
+                if(field != null) {
+                    madePersistent(field, (ObjectData) updates.getFieldContent()[i]);
+                }
+            } else if(fieldData[i] instanceof CollectionData) {
+//            } else if(fields[i].isCollection()) {
+                CollectionData collectionData = (CollectionData) updates.getFieldContent()[i];
+                for (int j = 0; j < collectionData.getElements().length; j++) {
+                    NakedObject element = ((NakedCollection) object.getField(fields[i])).elementAt(j);
+                    madePersistent(element, collectionData.getElements()[j]);
+                }
+            }
+        }
     }
 
     public int numberOfInstances(NakedObjectSpecification specification) {

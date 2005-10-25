@@ -1,6 +1,7 @@
 package org.nakedobjects.distribution.java;
 
 import org.nakedobjects.distribution.CollectionData;
+import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.DataFactory;
 import org.nakedobjects.distribution.NullData;
 import org.nakedobjects.distribution.ObjectData;
@@ -20,7 +21,7 @@ public class JavaObjectDataFactory extends DataFactory {
         return new JavaNullData(type);
     }
 
-    public ObjectData createObjectData(Oid oid, String type, Object[] fieldContent, boolean hasCompleteData, Version version) {
+    public ObjectData createObjectData(Oid oid, String type, Data[] fieldContent, boolean hasCompleteData, Version version) {
         return new JavaObjectData(oid, type, fieldContent, hasCompleteData,  version);
     }
 

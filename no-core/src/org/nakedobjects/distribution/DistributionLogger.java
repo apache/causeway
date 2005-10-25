@@ -2,7 +2,6 @@ package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.InstancesCriteria;
-import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.Logger;
 
@@ -152,7 +151,7 @@ public class DistributionLogger extends Logger implements Distribution {
         return hasInstances;
     }
 
-    public Oid[] makePersistent(Session session, ObjectData object) {
+    public ObjectData makePersistent(Session session, ObjectData object) {
         log("make persistent " + dump(object));
         return decorated.makePersistent(session, object);
     }

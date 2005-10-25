@@ -7,7 +7,7 @@ package org.nakedobjects.distribution;
  * in a form that can be passed over the network between a client and a server.
  */
 public interface ObjectData extends ReferenceData {
-    Object[] getFieldContent();
+    Data[] getFieldContent();
     
     boolean hasCompleteData();
 }
