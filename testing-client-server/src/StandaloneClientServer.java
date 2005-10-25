@@ -130,7 +130,6 @@ public abstract class StandaloneClientServer {
                 nakedObjects.setSpecificationLoader(new JavaSpecificationLoader());
 
                 ServerDistribution sd = new ServerDistribution();
-                sd.setObjectFactory(objectFactory);
                 sd.setObjectDataFactory(objectDataFactory);
                 
                 Distribution serverLogger = sd;
