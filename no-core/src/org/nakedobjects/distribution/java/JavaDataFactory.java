@@ -11,7 +11,7 @@ import org.nakedobjects.object.Version;
 import org.nakedobjects.object.persistence.Oid;
 
 
-public class JavaObjectDataFactory extends DataFactory {
+public class JavaDataFactory extends DataFactory {
 
     protected CollectionData createCollectionData(Oid oid, String type, ObjectData[] elements, boolean hasAllElements, Version version) {
         return new JavaCollectionData(oid, type, elements, hasAllElements, version);
