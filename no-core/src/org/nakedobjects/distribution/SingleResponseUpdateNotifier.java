@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 
 public class SingleResponseUpdateNotifier implements DirtyObjectSet {
     private static final Logger LOG = Logger.getLogger(SingleResponseUpdateNotifier.class);
-    private DataFactory factory;
     private Vector updates = new Vector();
 
     public void addDirty(NakedObject object) {
@@ -22,35 +21,25 @@ public class SingleResponseUpdateNotifier implements DirtyObjectSet {
         }
     }
 
-    public ObjectData[] getUpdates() {
+    public NakedObject[] getUpdates() {
         int noUpdates = updates.size();
         LOG.debug(noUpdates + " updates for request");
-        ObjectData[] updatesArray = new ObjectData[noUpdates];
+        NakedObject[] updatesArray = new NakedObject[noUpdates];
 
         int i = 0;
         for (Enumeration e = updates.elements(); e.hasMoreElements();) {
             NakedObject object = (NakedObject) e.nextElement();
-            ObjectData objectData = factory.createForUpdate(object);
-            updatesArray[i++] = objectData;
+            updatesArray[i++] = object;
         }
         updates.removeAllElements();
         return updatesArray;
     }
 
+    public void clearUpdates() {
+        updates.removeAllElements();
+    }
+    
     public void init() {}
-
-    /**
-     * .NET property
-     * 
-     * @property
-     */
-    public void set_Factory(DataFactory factory) {
-        this.factory = factory;
-    }
-
-    public void setFactory(DataFactory factory) {
-        this.factory = factory;
-    }
 
     public void shutdown() {}
 
@@ -62,6 +51,10 @@ public class SingleResponseUpdateNotifier implements DirtyObjectSet {
 
     public String updateList() {
         return updates.toString();
+    }
+
+    public void removeUpdateFor(NakedObject object) {
+        updates.removeElement(object);
     }
 }
 

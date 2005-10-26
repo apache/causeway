@@ -163,12 +163,21 @@ public class DataHelper {
         }
     }
 
+    private static Naked restoreValue(ValueData valueData) {
+        Naked value = NakedObjects.getObjectLoader().createAdapterForValue(valueData.getValue());
+        return value;
+    }
+
+    public static void setUpdateNotifer(DirtyObjectSet updateNotifier) {
+        DataHelper.updateNotifier = updateNotifier;
+    }
+
     private static Naked restoreCollection(CollectionData data) {
     //    Oid oid = data.getOid();
         String type = data.getType();
         NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
         NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
-
+    
         /*
          * if we are to deal with internal collections then we need to be able to get the collection
          * from it's parent via its field
@@ -192,14 +201,6 @@ public class DataHelper {
             return collection;
         }
     }
-
-    private static Naked restoreValue(ValueData valueData) {
-        Naked value = NakedObjects.getObjectLoader().createAdapterForValue(valueData.getValue());
-        return value;
-    }
-
-    public static void setUpdateNotifer(DirtyObjectSet updateNotifier) {
-        DataHelper.updateNotifier = updateNotifier;}
 }
 
 /*

@@ -94,13 +94,16 @@ public abstract class DataFactory {
     /**
      * Creates a a graph of ReferenceData objects to transfer the OIDs and Versions for each object that was
      * made persistent during the makePersistent call.
+     * @param updateNotifier 
      */
-    public ObjectData createMadePersistentGraph(ObjectData data, NakedObject object) {
+    public ObjectData createMadePersistentGraph(ObjectData data, NakedObject object, SingleResponseUpdateNotifier updateNotifier) {
         Oid oid = object.getOid();
         String type = data.getType();
         ReferenceData[] fieldContent = data.getFieldContent() == null ? null : new ReferenceData[data.getFieldContent().length];
         Version version = object.getVersion();
 
+        updateNotifier.removeUpdateFor(object);
+        
         NakedObjectField[] fields = object.getFields();
 
         NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
@@ -115,7 +118,7 @@ public abstract class DataFactory {
                     ObjectData element = f.getElements()[j];
                     if (element != null && element.getOid() == null) {
                         NakedObject el = coll.elementAt(j);
-                        elements[j] = createMadePersistentGraph(element, el);
+                        elements[j] = createMadePersistentGraph(element, el, updateNotifier);
                     }
                 }
                 fieldContent[i] = createCollectionData(coll.getOid(), f.getType(), elements, f.hasAllElements(), coll.getVersion());
@@ -123,7 +126,7 @@ public abstract class DataFactory {
                 Data f = data.getFieldContent()[i];
                 if (f != null && !(f instanceof NullData) && ((ObjectData) f).getOid() == null) {
                     NakedObject o = (NakedObject) object.getField(fields[i]);
-                    fieldContent[i] = createMadePersistentGraph(((ObjectData) f), o);
+                    fieldContent[i] = createMadePersistentGraph(((ObjectData) f), o, updateNotifier);
                 }
             }
 

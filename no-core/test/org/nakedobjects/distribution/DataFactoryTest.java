@@ -356,7 +356,7 @@ public class DataFactoryTest extends TestCase {
         rootObject.setupOid(new DummyOid(712));
         
         // test
-        ObjectData updates = factory.createMadePersistentGraph(data, rootObject);
+        ObjectData updates = factory.createMadePersistentGraph(data, rootObject, new SingleResponseUpdateNotifier());
         assertEquals(new DummyOid(712), updates.getOid());
         assertEquals(new DummyVersion(11), updates.getVersion());
         assertEquals(4, updates.getFieldContent().length);
@@ -429,7 +429,7 @@ public class DataFactoryTest extends TestCase {
         rootObject.setupOid(new DummyOid(712));
         
         // test
-        ObjectData updates = factory.createMadePersistentGraph(data, rootObject);
+        ObjectData updates = factory.createMadePersistentGraph(data, rootObject, new SingleResponseUpdateNotifier());
         assertEquals(new DummyOid(712), updates.getOid());
         assertEquals(new DummyVersion(11), updates.getVersion());
         assertEquals(4, updates.getFieldContent().length);

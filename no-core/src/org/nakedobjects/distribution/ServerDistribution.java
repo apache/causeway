@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 public class ServerDistribution implements Distribution {
     private static final Logger LOG = Logger.getLogger(ServerDistribution.class);
     private DataFactory objectDataFactory;
+    private SingleResponseUpdateNotifier updateNotifier;
 
     public ServerDistribution() {
         DataHelper.setUpdateNotifer(new NullDirtyObjectSet());
@@ -175,7 +176,7 @@ public class ServerDistribution implements Distribution {
         objectManager().startTransaction();
         objectManager().makePersistent(object);
         objectManager().endTransaction();
-        return objectDataFactory.createMadePersistentGraph(data, object);
+        return objectDataFactory.createMadePersistentGraph(data, object, updateNotifier);
     }
 
 
@@ -248,6 +249,35 @@ public class ServerDistribution implements Distribution {
 
     private NakedObjectManager objectManager() {
         return NakedObjects.getObjectManager();
+    }
+
+    /**
+     * .NET property
+     * 
+     * @property
+     * 
+     */
+    public void set_UpdateNotifier(SingleResponseUpdateNotifier updateNotifier) {
+        setUpdateNotifier(updateNotifier);
+    }
+    
+    public void setUpdateNotifier(SingleResponseUpdateNotifier updateNotifier) {
+        this.updateNotifier = updateNotifier;
+    }
+
+    public ObjectData[] getUpdates() {
+        NakedObject[] updateObjects = updateNotifier.getUpdates();
+        int noUpdates = updateObjects.length;
+        ObjectData[] updateData = new ObjectData[noUpdates];
+        for (int i = 0; i < noUpdates; i++) {
+            ObjectData objectData = objectDataFactory.createForUpdate(updateObjects[i]);
+            updateData[i] = objectData;
+        }
+        return updateData;
+    }
+
+    public String updateList() {
+        return updateNotifier.updateList();
     }
 
 }
