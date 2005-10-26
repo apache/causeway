@@ -6,7 +6,7 @@ import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.distribution.DataFactory;
 import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.distribution.SingleResponseUpdateNotifier;
-import org.nakedobjects.distribution.java.JavaObjectDataFactory;
+import org.nakedobjects.distribution.java.JavaDataFactory;
 import org.nakedobjects.distribution.xml.ServerListener;
 import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
@@ -49,10 +49,10 @@ public class XmlServer {
 
         TransientObjectStore objectStore = new TransientObjectStore();
 
-        DataFactory objectDataFactory = new JavaObjectDataFactory();
+        DataFactory objectDataFactory = new JavaDataFactory();
 
         SingleResponseUpdateNotifier updateNotifier = new SingleResponseUpdateNotifier();
-        updateNotifier.setFactory(objectDataFactory);
+     //   updateNotifier.setFactory(objectDataFactory);
 
         JavaObjectFactory objectFactory = new JavaObjectFactory();
         objectFactory.setContainer(container);
@@ -81,11 +81,9 @@ public class XmlServer {
         nakedObjects.setSpecificationLoader(new JavaSpecificationLoader());
 
         ServerDistribution sd = new ServerDistribution();
-        sd.setObjectFactory(objectFactory);
         sd.setObjectDataFactory(objectDataFactory);
 
         ServerListener serverListener = new ServerListener();
-        serverListener.setUpdateNotifier(updateNotifier);
         serverListener.setServerDistribution(sd);
 
         objectManager.addObjectChangedListener(updateNotifier);
