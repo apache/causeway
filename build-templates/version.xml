@@ -22,19 +22,19 @@
 			<srcfileset dir="../no-default-reflector/src/" includes="**/*.java" />
 			-->
 			
-			<targetfilelist dir="." files="version.properties"/>
+			<targetfilelist dir="." files="build.number.properties"/>
 		</dependset>
 			
-		<property file="version.properties" />
+		<property file="build.number.properties" />
 		
 		<tstamp>
 			<format property="build.date" pattern="yyyyMMdd-HHmm" locale="GMT" />
 		</tstamp>
-		<property name="version" value="pojo-${build.date}"/>
-		<echo>Build number: ${version}</echo>
+		<property name="build.number" value="${build.date}"/>
+		<echo>Build number: ${build.number}</echo>
 		
-		<propertyfile file="version.properties">
-			<entry key="version" value="${version}"/>
+		<propertyfile file="build.number.properties">
+			<entry key="build.number" value="${build.number}"/>
 		</propertyfile>
 	</target>
 	
