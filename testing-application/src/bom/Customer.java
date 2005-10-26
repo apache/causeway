@@ -163,9 +163,18 @@ public class Customer {
         booking.getReference().setValue(text);
         booking.getDate().setValue(date);
         return booking;
-
     }
 
+    public Customer actionCreateTransientGraph() {
+        Customer c = (Customer) container.createTransientInstance(Customer.class);
+        c.getLastName().setValue(getLastName());
+        c.setPreferredPaymentMethod(new CreditCard());
+        Location loc = (Location) container.createTransientInstance(Location.class);
+        loc.getKnownAs().setValue("Home");
+        c.addToLocations(loc);
+        return c;
+    }
+    
     public Vector actionLocations() {
         Vector v = new Vector();
         for (int i = 0; i < locations.size(); i++) {
