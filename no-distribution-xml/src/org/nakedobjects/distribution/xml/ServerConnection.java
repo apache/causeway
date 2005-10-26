@@ -1,7 +1,6 @@
 package org.nakedobjects.distribution.xml;
 
 import org.nakedobjects.distribution.ServerDistribution;
-import org.nakedobjects.distribution.SingleResponseUpdateNotifier;
 import org.nakedobjects.distribution.command.Request;
 import org.nakedobjects.distribution.command.Response;
 
@@ -25,12 +24,10 @@ class ServerConnection implements Runnable {
 	private ObjectInputStream input;
 	private ServerDistribution server;
 	private Thread t;
-    private final SingleResponseUpdateNotifier updateNotifier;
 
-	public ServerConnection(Socket socket, ServerDistribution server, SingleResponseUpdateNotifier updateNotifier) {
+	public ServerConnection(Socket socket, ServerDistribution server) {
 		this.socket = socket;
 		this.server = server;
-        this.updateNotifier = updateNotifier;
 		try {
 			output = new ObjectOutputStream(socket.getOutputStream());
 			input = new ObjectInputStream(socket.getInputStream());
@@ -70,7 +67,7 @@ class ServerConnection implements Runnable {
 				    request.execute(server);
 					Response response;
 				    response = new Response(request);
-				    response.setUpdates(updateNotifier.getUpdates());
+				    response.setUpdates(server.getUpdates());
 					LOG.debug("sending " + response);
 					responseData = xstream.toXML(response);
 				} catch(Exception e) {

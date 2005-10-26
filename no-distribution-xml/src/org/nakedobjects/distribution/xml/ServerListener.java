@@ -1,7 +1,6 @@
 package org.nakedobjects.distribution.xml;
 
 import org.nakedobjects.distribution.ServerDistribution;
-import org.nakedobjects.distribution.SingleResponseUpdateNotifier;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 
 import java.io.IOException;
@@ -20,7 +19,6 @@ public class ServerListener implements Runnable {
 	private ServerDistribution server;
 	private ServerSocket socket;
 	private boolean acceptConnection;
-    private SingleResponseUpdateNotifier updateNotifier;
 	
 	public void setServerDistribution(ServerDistribution server) {
 		this.server = server;
@@ -31,7 +29,7 @@ public class ServerListener implements Runnable {
 			socket.setSoTimeout(1000);
 	    	while(acceptConnection) {
 	    		try {
-					ServerConnection connection = new ServerConnection(socket.accept(), server, updateNotifier);
+					ServerConnection connection = new ServerConnection(socket.accept(), server);
 					LOG.debug("connection requested from "  + connection.getClient());
 					clients.addElement(connection);
 					connection.start();
@@ -71,11 +69,6 @@ public class ServerListener implements Runnable {
     public String toString() {
 		return "Listener " + clients.size() + " connections  ";
 	}
-
-    public void setUpdateNotifier(SingleResponseUpdateNotifier updateNotifier) {
-        this.updateNotifier = updateNotifier;
-	}
-
 }
 
 
