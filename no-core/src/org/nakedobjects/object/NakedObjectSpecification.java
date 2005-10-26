@@ -79,10 +79,18 @@ public interface NakedObjectSpecification {
 
     boolean isAbstract();
 
+    /**
+     * Returns true if this specification represents a collection of objects; will be adapted using a NakedCollection.
+     */
+    boolean isCollection();
+
     boolean isDirty(NakedObject object);
 
     boolean isLookup();
 
+    /**
+     * Returns true if this specification represents an object; will be adapted using a NakedObject.
+     */
     boolean isObject();
 
     /**
@@ -91,6 +99,10 @@ public interface NakedObjectSpecification {
      */
     boolean isOfType(NakedObjectSpecification cls);
 
+
+    /**
+     * Returns true if this specification represents a value; will be adapted using NakedValue.
+     */
     boolean isValue();
 
     void markDirty(NakedObject object);

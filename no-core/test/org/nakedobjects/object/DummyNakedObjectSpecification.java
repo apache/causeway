@@ -124,6 +124,10 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
         return false;
     }
 
+    public boolean isCollection() {
+        return !isObject && !isValue;
+    }
+    
     public boolean isDirty(NakedObject object) {
         return false;
     }

@@ -128,6 +128,10 @@ public class NakedObjectSpecificationImpl extends AbstractNakedObjectSpecificati
         return reflector.isAbstract();
     }
 
+    public boolean isCollection() {
+        return reflector.isCollection();
+    }
+    
     public boolean isDirty(NakedObject object) {
         return reflector.isDirty(object);
     }

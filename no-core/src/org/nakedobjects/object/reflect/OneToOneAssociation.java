@@ -11,10 +11,13 @@ import org.nakedobjects.utility.ToString;
 
 public class OneToOneAssociation extends NakedObjectAssociation {
     private final OneToOnePeer reflectiveAdapter;
+    private final boolean isObject;
 
-    public OneToOneAssociation(String className, String fieldName, NakedObjectSpecification type, OneToOnePeer association) {
-        super(fieldName, type, new MemberIdentifier(className, fieldName));
+    public OneToOneAssociation(String className, String fieldName, NakedObjectSpecification specification, OneToOnePeer association) {
+        super(fieldName, specification, new MemberIdentifier(className, fieldName));
         this.reflectiveAdapter = association;
+        
+        isObject = specification.isObject();
     }
 
     protected void clearAssociation(NakedObject inObject, NakedObject associate) {
@@ -109,11 +112,11 @@ public class OneToOneAssociation extends NakedObjectAssociation {
     }
 
     public boolean isObject() {
-        return getSpecification().isObject();
+        return isObject;
     }
 
     public boolean isValue() {
-        return getSpecification().isValue();
+        return ! isObject;
     }
 }
 

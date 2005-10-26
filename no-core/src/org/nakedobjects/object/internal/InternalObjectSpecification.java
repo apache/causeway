@@ -114,6 +114,10 @@ public class InternalObjectSpecification implements NakedObjectSpecification {
         return false;
     }
 
+    public boolean isCollection() {
+        return false;
+    }
+    
     public boolean isDirty(NakedObject object) {
         return false;
     }

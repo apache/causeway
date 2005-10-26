@@ -1,6 +1,7 @@
 package org.nakedobjects.object.reflect.internal;
 
 import org.nakedobjects.object.Aggregated;
+import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.Persistable;
@@ -416,6 +417,10 @@ public class InternalReflector implements Reflector {
 
     public boolean isAbstract() {
         return Modifier.isAbstract(cls.getModifiers());
+    }
+
+    public boolean isCollection() {
+        return NakedCollection.class.isAssignableFrom(cls);
     }
 
     public boolean isDirty(NakedObject object) {

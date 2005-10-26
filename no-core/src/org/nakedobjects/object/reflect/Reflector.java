@@ -47,6 +47,8 @@ public interface Reflector {
 
     boolean isAbstract();
 
+    boolean isCollection();
+    
     boolean isDirty(NakedObject object);
 
     boolean isLookup();

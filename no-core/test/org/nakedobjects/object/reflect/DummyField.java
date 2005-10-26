@@ -1,22 +1,22 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.reflect.NakedObjectField;
 
 
 public class DummyField extends NakedObjectField {
-
     private Naked contentObject;
-
-    public DummyField(String name) {
-        this(name, new DummyNakedObjectSpecification());
-    }
+    private boolean isObject;
+    private boolean isCollection;
+    private boolean isValue;
 
     public DummyField(String name, NakedObjectSpecification spec) {
         super(name, spec, null);
+        
+        isObject = spec.isObject();
+        isCollection = spec.isCollection();
+        isValue = spec.isValue();
     }
 
     protected Naked get(NakedObject fromObject) {
@@ -29,10 +29,6 @@ public class DummyField extends NakedObjectField {
 
     public boolean hasHint() {
         return false;
-    }
-
-    public boolean isCollection() {
-        return ! isObject() && ! isValue();
     }
     
     public boolean isDerived() {
@@ -55,6 +51,17 @@ public class DummyField extends NakedObjectField {
         return new Class[0];
     }
 
+    public boolean isCollection() {
+        return isCollection;
+    }
+    
+    public boolean isObject() {
+        return isObject;
+    }
+    
+    public boolean isValue() {
+        return isValue;
+    }
 }
 
 /*

@@ -7,10 +7,11 @@ import org.nakedobjects.object.reflect.NakedObjectAssociation;
 import org.nakedobjects.object.reflect.NakedObjectField;
 
 public class DummyNakedValue implements NakedValue {
-    private DummyNakedObjectSpecification specification = new DummyNakedObjectSpecification();
+    private final DummyNakedObjectSpecification specification;
     private Object object;
 
     public DummyNakedValue() {
+        specification = new DummyNakedObjectSpecification();
         specification.setupIsValue();
     }
 

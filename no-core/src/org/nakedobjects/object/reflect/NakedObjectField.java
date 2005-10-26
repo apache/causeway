@@ -19,18 +19,23 @@ public abstract class NakedObjectField extends NakedObjectMember {
     protected abstract Naked get(NakedObject fromObject);
 
     /**
-     * return the object type, as a Class object, that the method returns.
+     * Return the specification of the object (or objects) that this field holds. For a value are one-to-one
+     * reference this will be type that the accessor returns. For a collection it will be the type of element,
+     * not the type of collection.
      */
     public NakedObjectSpecification getSpecification() {
         return specification;
     }
 
+    /**
+     * Returns true if this field is for a collection
+     */
     public boolean isCollection() {
         return false;
     }
 
     /**
-     * Returns true if this attribute is derived - is calculated from other data in the object - and should
+     * Returns true if this field is derived - is calculated from other data in the object - and should
      * therefore not be editable nor persisted.
      */
     // TODO confirm that Value is the only type that can be derived. If so move it?
@@ -38,12 +43,18 @@ public abstract class NakedObjectField extends NakedObjectMember {
 
     public abstract boolean isEmpty(NakedObject adapter);
 
+    /**
+     * Returns true if this field is for an object, not a collection.
+     */
     public boolean isObject() {
-		return specification.isObject();
+        return false;
     }
 
+    /**
+     * Returns true if this field is for a value
+     */
     public boolean isValue() {
-	    return specification.isValue();
+	    return false;
     }
 
     public boolean isMandatory() {

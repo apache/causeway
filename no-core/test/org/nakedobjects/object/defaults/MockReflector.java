@@ -58,6 +58,10 @@ public class MockReflector implements Reflector {
     public boolean isAbstract() {
         return false;
     }
+    
+    public boolean isCollection() {
+        return false;
+    }
 
     public boolean isDirty(NakedObject object) {
         return false;
