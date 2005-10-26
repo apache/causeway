@@ -1,51 +1,49 @@
 <?xml version="1.0" ?>
 <project name="nakedobjects" default="compile" basedir="." xmlns="http://nant.sf.net/schemas/nant-0.85.win32.net-1.0.xsd">
 
-	<!-- Properties -->
-	<property name="nant.settings.currentframework" value="net-1.1"/>
-	<property name="java.sources" value=".."/>
-	<property name="build.dir" value=".\build"/>
-	<property name="build.src.dir" value="${build.dir}/src"/>
+    <!-- Properties -->
+    <property name="nant.settings.currentframework" value="net-1.1"/>
+    <property name="java.sources" value=".."/>
+    <property name="build.dir" value=".\build"/>
+    <property name="build.src.dir" value="${build.dir}/src"/>
 	<property name="release-dir" value="M:/naked-objects-builds"/>
-	
+    <property name="version" value="Version 2"/>
 	<property name="debug" value="true"/>
 	
 	
     <exec program="C:/Program Files/Java/apache-ant-1.6.2/bin/ant.bat" useruntimeengine="true">
-          <arg line="-buildfile ../build-templates/version.xml" />
+        <arg line="-buildfile ../build-templates/version.xml" />
     </exec>
 		
-	<script language="VB" failonerror="true"> 
-		<imports>
-			<import name="System.IO.StreamReader"/>	
-		</imports>
-		
-		<code>	
-			<![CDATA[ 
-		Public Shared Sub ScriptMain(project As Project) 
-			Dim strFullFileName as String = project.Properties.Item("build.src.dir") & "/org/nakedobjects/system/AboutNakedObjects.java"
-            	
-            Dim sr As StreamReader = New StreamReader("../build-templates/version.properties")				
-          	Dim line As String
-			line = sr.ReadLine()
+    <script language="VB" failonerror="true"> 
+        <imports>
+                <import name="System.IO.StreamReader"/>	
+        </imports>
+        
+        <code><![CDATA[ 
+        Public Shared Sub ScriptMain(project As Project) 
+            Dim strFullFileName as String = project.Properties.Item("build.src.dir") & "/org/nakedobjects/system/AboutNakedObjects.java"
+        
+            Dim sr As StreamReader = New StreamReader("../build-templates/build.number.properties")				
+            Dim line As String
+            line = sr.ReadLine()
             Do
-				line = sr.ReadLine()
-				if not line is nothing andAlso line.startsWith("version=") then
-					project.Log(Level.Info, line.substring(8))
-					project.Properties.Add("build.id", line.substring(8))
-				end if
-			Loop Until line Is Nothing
-           	sr.Close()
-          End Sub 			
-			]]>
-		</code>
-	</script> 
-	
-
-  
-	<echo message="Using '${nant.settings.currentframework}' Framework"/>
-	<echo>Build number: ${build.id}</echo>
-	<echo>Build source: ${java.sources}</echo>
+                line = sr.ReadLine()
+                if not line is nothing andAlso line.startsWith("build.number=") then
+                		Dim len as Integer = "build.number=".length()
+                        project.Log(Level.Info, line.substring(len))
+                        project.Properties.Add("build.number", line.substring(len))
+                end if
+            Loop Until line Is Nothing
+            sr.Close()
+        End Sub 			
+        ]]></code>
+    </script> 
+      
+    <echo message="Using '${nant.settings.currentframework}' Framework"/>
+    <echo>Version: ${version}</echo>
+    <echo>Build number: ${build.number}</echo>
+    <echo>Build source: ${java.sources}</echo>
 
 
 
@@ -151,7 +149,8 @@
 	      	Dim line As String
 		line = sr.ReadLine()
             	Do
-			line = line.Replace("%BUILD_ID%", project.Properties.Item("build.id") )
+			line = line.Replace("%VERSION%", project.Properties.Item("version") )
+			line = line.Replace("%BUILD_ID%", project.Properties.Item("build.number") )
 			line = line.Replace("%COPYRIGHT_NOTICE%", "Copyright Naked Objects Group 2000 - 2005" )
 			' Console.WriteLine(line)
 			sw.WriteLine(line)
@@ -250,10 +249,9 @@
 				<include name="C:/WINDOWS/Microsoft.NET/Framework/v1.1.4322/vjslib.dll"/>
 				<include name="C:/WINDOWS/Microsoft.NET/Framework/v1.1.4322/System.dll"/>
 	    		<include name="C:/WINDOWS/Microsoft.NET/Framework/v1.1.4322/System.Data.dll"/>
-	 
-	 
-	             <include name="D:/no-development/nakedobjects/build-dotnet/build/nakedobjects.net.dll"/>                    
-	             <include name="D:/no-development/nakedobjects/build-dotnet/dot-net/Spring.Core.dll"/>
+	 	 
+	             <include name="build/nakedobjects.net.dll"/>                    
+	             <include name="dot-net/Spring.Core.dll"/>
 			</references>
 	
 			<!-- references basedir="C:/WINDOWS/Microsoft.NET/Framework/v1.1.4322/">
@@ -299,7 +297,7 @@
 		</zip>
 		
 		<!-- TODO use variables and a properties file -->
-		<zip zipfile="${release-dir}/nakedobjects.net-${build.id}.zip">
+		<zip zipfile="${release-dir}/nakedobjects-${build.number}-dotnet.zip">
 			<fileset basedir="build">
 				<include name="*.dll"/>
 				<include name="*.pdb"/>
@@ -320,7 +318,7 @@
         <mkdir dir="e:/transfer" failonerror="false"/>
         <copy todir="e:/transfer" failonerror="false">
 			<fileset basedir="${release-dir}">
-				<include name="nakedobjects.net-${build.id}.zip"/>
+				<include name="nakedobjects.net-${build.number}.zip"/>
 			</fileset>
 		</copy>
     </target>
@@ -328,11 +326,11 @@
 
 
     <target name="quick-release" depends="copy-source, dist">
-    	<echo>Completed quick release ${build.id} (docs not up-to-date)</echo>
+    	<echo>Completed quick release ${build.number} (docs not up-to-date)</echo>
     </target>
 
     <target name="release" depends="copy-source, docs, dist">
-    	<echo>Completed release ${build.id}</echo>
+    	<echo>Completed release ${build.number}</echo>
     </target>
 
     
