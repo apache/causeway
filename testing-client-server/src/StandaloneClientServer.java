@@ -9,7 +9,7 @@ import org.nakedobjects.distribution.ProxyObjectManager;
 import org.nakedobjects.distribution.ProxyReflectionFactory;
 import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.distribution.SingleResponseUpdateNotifier;
-import org.nakedobjects.distribution.java.JavaObjectDataFactory;
+import org.nakedobjects.distribution.java.JavaDataFactory;
 import org.nakedobjects.distribution.pipe.NakedObjectsPipe;
 import org.nakedobjects.distribution.pipe.PipedClient;
 import org.nakedobjects.distribution.pipe.PipedConnection;
@@ -94,10 +94,6 @@ public abstract class StandaloneClientServer {
                 new SystemClock();
 
 
-                DataFactory objectDataFactory = new JavaObjectDataFactory();
-
-                SingleResponseUpdateNotifier updateNotifier = new SingleResponseUpdateNotifier();
-                updateNotifier.setFactory(objectDataFactory);
 
                 JavaObjectFactory objectFactory = new JavaObjectFactory();
                 objectFactory.setContainer(container);
@@ -129,14 +125,21 @@ public abstract class StandaloneClientServer {
 
                 nakedObjects.setSpecificationLoader(new JavaSpecificationLoader());
 
+                SingleResponseUpdateNotifier updateNotifier = new SingleResponseUpdateNotifier();
+             //   updateNotifier.setFactory(dataFactory);
+
+
                 ServerDistribution sd = new ServerDistribution();
-                sd.setObjectDataFactory(objectDataFactory);
+                DataFactory dataFactory = new JavaDataFactory();
+                sd.setObjectDataFactory(dataFactory);
+                sd.setUpdateNotifier(updateNotifier);
                 
                 Distribution serverLogger = sd;
                 //serverLogger = new DistributionLogger(serverLogger, "server-connection.log");
                     
                 server.setFacade(serverLogger);
-                server.setUpdateNotifier(updateNotifier);
+                //server.setUpdateNotifier(updateNotifier);
+                server.setDistribution(sd);
 
                 objectManager.addObjectChangedListener(updateNotifier);
 
@@ -162,7 +165,7 @@ public abstract class StandaloneClientServer {
                 debugFrame.refresh();
                 debugFrame.show();
                 
-                updateNotifier.getUpdates();
+                updateNotifier.clearUpdates();
 
                 server.run();
             }
@@ -190,7 +193,7 @@ public abstract class StandaloneClientServer {
         objectFactory.setContainer(container);
 
 
-        JavaObjectDataFactory objectDataFactory = new JavaObjectDataFactory();
+        JavaDataFactory objectDataFactory = new JavaDataFactory();
 
         ProxyObjectManager proxyObjectManager = new ProxyObjectManager();
         proxyObjectManager.setConnection(clientLogger);
