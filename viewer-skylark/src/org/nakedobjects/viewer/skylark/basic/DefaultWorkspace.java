@@ -249,10 +249,10 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
                 // ArbitraryCollectionVector("Naked Classes");
                 Vector classCollection = new Vector();
                 for (int i = 0; i < specs.length; i++) {
-                    NakedObjectSpecification cls = specs[i];
-                    if (cls.isObject()) {
+                    NakedObjectSpecification spec = specs[i];
+                    if (spec.isObject()) {
                         classCollection.addElement(NakedObjects.getObjectLoader().createAdapterForTransient(
-                                NakedObjects.getObjectManager().getNakedClass(cls)));
+                                NakedObjects.getObjectManager().getNakedClass(spec)));
                     }
                 }
                 View classesView = createSubviewFor(NakedObjects.getObjectLoader().createAdapterForTransient(classCollection), false);

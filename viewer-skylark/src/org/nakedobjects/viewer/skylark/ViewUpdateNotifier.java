@@ -84,8 +84,8 @@ public class ViewUpdateNotifier extends DirtyObjectSetImpl implements DebugInfo 
                     views.remove(object);
                     LOG.debug("removed observer list for " + object);
                     
-                    NakedObjectLoader loader = NakedObjects.getObjectLoader();
                     // TODO need to do garbage collection instead
+                    //NakedObjectLoader loader = NakedObjects.getObjectLoader();
                     //loader.unloaded((NakedObject) object);
                 }
             } else {
