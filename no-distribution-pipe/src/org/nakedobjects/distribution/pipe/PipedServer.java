@@ -1,7 +1,7 @@
 package org.nakedobjects.distribution.pipe;
 
 import org.nakedobjects.distribution.Distribution;
-import org.nakedobjects.distribution.SingleResponseUpdateNotifier;
+import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.distribution.command.Request;
 import org.nakedobjects.distribution.command.Response;
 
@@ -12,8 +12,8 @@ public class PipedServer {
     private static final Logger LOG = Logger.getLogger(PipedServer.class);
     private Distribution facade;
     private PipedConnection communication;
-    private SingleResponseUpdateNotifier updateNotifier;
-
+    private ServerDistribution server;
+    
     public synchronized void run() {
         while (true) {
                 Request request = communication.getRequest();
@@ -21,7 +21,7 @@ public class PipedServer {
 
  	            try {
 	                request.execute(facade);
-	                LOG.debug("server updates: " + updateNotifier.updateList());
+	                LOG.debug("server updates: " + server.updateList());
 	            } catch (Exception e) {
 	                LOG.error("failure during request", e);
 	            }
@@ -29,7 +29,7 @@ public class PipedServer {
                 Response response = new Response(request);
                 LOG.debug("server response: " + response);
 
-                response.setUpdates(updateNotifier.getUpdates());
+                response.setUpdates(server.getUpdates());
 
                 communication.setResponse(response);
         }
@@ -44,8 +44,8 @@ public class PipedServer {
         this.facade = facade;
     }
 
-    public void setUpdateNotifier(SingleResponseUpdateNotifier updateNotifier) {
-        this.updateNotifier = updateNotifier;
+    public void setDistribution(ServerDistribution server) {
+        this.server = server;
     }
 }
 
