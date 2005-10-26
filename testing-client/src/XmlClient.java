@@ -8,7 +8,7 @@ import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.distribution.DistributionLogger;
 import org.nakedobjects.distribution.ProxyObjectManager;
 import org.nakedobjects.distribution.ProxyReflectionFactory;
-import org.nakedobjects.distribution.java.JavaObjectDataFactory;
+import org.nakedobjects.distribution.java.JavaDataFactory;
 import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
 import org.nakedobjects.object.defaults.PojoAdapterHashMap;
@@ -71,7 +71,7 @@ public class XmlClient {
             JavaObjectFactory objectFactory = new JavaObjectFactory();
             objectFactory.setContainer(container);
 
-            JavaObjectDataFactory objectDataFactory = new JavaObjectDataFactory();    
+            JavaDataFactory objectDataFactory = new JavaDataFactory();    
 
             ProxyObjectManager proxyObjectManager = new ProxyObjectManager();
             proxyObjectManager.setConnection(connection);
