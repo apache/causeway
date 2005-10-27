@@ -1,11 +1,8 @@
 package org.nakedobjects.example.xat;
 
 import org.nakedobjects.NakedObjectsClient;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.ReflectionPeerFactory;
 import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
-import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
 import org.nakedobjects.object.defaults.PojoAdapterHashMap;
 import org.nakedobjects.object.fixture.FixtureBuilder;
@@ -14,14 +11,14 @@ import org.nakedobjects.object.persistence.defaults.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.TimeBasedOidGenerator;
 import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
+import org.nakedobjects.object.transaction.TransactionPeerFactory;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
 import org.nakedobjects.reflector.java.reflect.JavaAdapterFactory;
-import org.nakedobjects.reflector.java.reflect.JavaReflector;
+import org.nakedobjects.reflector.java.reflect.JavaSpecificationLoader;
 import org.nakedobjects.utility.Profiler;
 import org.nakedobjects.xat.AcceptanceTestCase;
-import org.nakedobjects.xat.StaticNakedObjectSpecificationLoader;
 
 import org.apache.log4j.Logger;
 
@@ -102,8 +99,17 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
 
         nakedObjects.setObjectManager(objectManager);
 
-        NakedObjectSpecificationLoader specificationLoader;
-        specificationLoader = new StaticNakedObjectSpecificationLoader() {
+
+        ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
+                new TransactionPeerFactory(),
+        };
+        JavaSpecificationLoader specificationLoader = new JavaSpecificationLoader();
+        specificationLoader.setReflectionPeerBuilder(factories);
+
+        
+        /*        NakedObjectSpecificationLoader specificationLoader;
+        specificationLoader = new JavaSpecificationLoader(); 
+        /* {
             // TODO this is duplicated in JavaNakedObjectSpecificationLoader
             protected NakedObjectSpecification load(String className) {
                 JavaReflector reflector = new JavaReflector(className);
@@ -112,11 +118,11 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
                 return specification;
             }
         };
-
+*/
         //specificationLoader = new JavaSpecificationLoader();
         nakedObjects.setSpecificationLoader(specificationLoader);
         
-        LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
+    //    LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
 
         ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
     	nakedObjects.setObjectLoader(objectLoader);
@@ -125,7 +131,7 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
         objectLoader.setIdentityAdapterMap(new IdentityAdapterHashMap());
         objectLoader.setAdapterFactory(new JavaAdapterFactory());     
         
-        nakedObjects.setReflectionFactory(reflectionFactory);
+ //       nakedObjects.setReflectionFactory(reflectionFactory);
         
         objectManager.init();
     }   

@@ -5,18 +5,21 @@ import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.ReflectionPeerFactory;
 import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
 import org.nakedobjects.object.defaults.PojoAdapterHashMap;
 import org.nakedobjects.object.fixture.Fixture;
 import org.nakedobjects.object.help.HelpManagerAssist;
+import org.nakedobjects.object.help.HelpPeerFactory;
 import org.nakedobjects.object.help.SimpleHelpManager;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.defaults.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
 import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
 import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
+import org.nakedobjects.object.transaction.TransactionPeerFactory;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.control.SimpleSession;
@@ -92,15 +95,25 @@ public class JavaExploration {
             objectManager.setPersistAlgorithm(persistAlgorithm);
 
             nakedObjects.setObjectManager(objectManager);
-
-            NakedObjectSpecificationLoader specificationLoader = new JavaSpecificationLoader();
-
-            nakedObjects.setSpecificationLoader(specificationLoader);
-
-            LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
+            
             HelpManagerAssist helpManager = new HelpManagerAssist();
             helpManager.setDecorated(new SimpleHelpManager());
-            reflectionFactory.setHelpManager(helpManager);
+            HelpPeerFactory helpPeerFactory = new HelpPeerFactory();
+            helpPeerFactory.setHelpManager(helpManager);
+
+            ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
+                    helpPeerFactory,
+                    new TransactionPeerFactory(),
+            };
+
+        //    LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
+        //    reflectionFactory.setHelpManager(helpManager);
+
+            JavaSpecificationLoader specificationLoader = new JavaSpecificationLoader();
+            specificationLoader.setReflectionPeerBuilder(factories);
+// specificationLoader.setReflectionPeerBuilder(reflectionFactory.getFactories());
+
+            nakedObjects.setSpecificationLoader(specificationLoader);
 
             ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
             objectLoader.setObjectFactory(objectFactory);
@@ -109,8 +122,6 @@ public class JavaExploration {
             objectLoader.setAdapterFactory(new JavaAdapterFactory());
             nakedObjects.setObjectLoader(objectLoader);
             
-            nakedObjects.setReflectionFactory(reflectionFactory);
-
             nakedObjects.setSession(new SimpleSession());
 
             builder = new JavaFixtureBuilder();
