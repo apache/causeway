@@ -12,7 +12,6 @@ import org.nakedobjects.object.NullDirtyObjectSet;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
-import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.NakedObjectStore;
 import org.nakedobjects.object.persistence.NotPersistableException;
@@ -22,6 +21,9 @@ import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.transaction.DestroyObjectCommand;
+import org.nakedobjects.object.transaction.Transaction;
+import org.nakedobjects.object.transaction.TransactionException;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.StartupException;
@@ -115,7 +117,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
         if (transactionLevel == 0) {
             // TODO collate changes before committing
             saveChanges();
-            getTransaction().commit(objectStore);
+            getTransaction().commit();
             transaction = null;
         }
     }
@@ -385,7 +387,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
 
     public void startTransaction() {
         if (transaction == null) {
-            transaction = new Transaction();
+            transaction = new ObjectStoreTransaction(objectStore);
             transactionLevel = 0;
         }
         transactionLevel++;

@@ -1,6 +1,6 @@
-package org.nakedobjects.object.persistence;
+package org.nakedobjects.object.transaction;
 
-public interface DestroyObjectCommand extends PersistenceCommand {
+public interface SaveObjectCommand  extends PersistenceCommand {
 
 }
 

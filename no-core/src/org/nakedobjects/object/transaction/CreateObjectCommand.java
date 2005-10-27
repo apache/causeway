@@ -1,4 +1,4 @@
-package org.nakedobjects.object.persistence;
+package org.nakedobjects.object.transaction;
 
 public interface CreateObjectCommand extends PersistenceCommand {
 

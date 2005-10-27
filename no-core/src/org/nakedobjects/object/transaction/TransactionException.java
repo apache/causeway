@@ -1,5 +1,5 @@
 
-package org.nakedobjects.object.persistence.defaults;
+package org.nakedobjects.object.transaction;
 
 public class TransactionException extends RuntimeException {
 

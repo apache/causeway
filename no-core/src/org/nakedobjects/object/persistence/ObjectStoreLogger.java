@@ -6,6 +6,10 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.transaction.CreateObjectCommand;
+import org.nakedobjects.object.transaction.DestroyObjectCommand;
+import org.nakedobjects.object.transaction.PersistenceCommand;
+import org.nakedobjects.object.transaction.SaveObjectCommand;
 import org.nakedobjects.utility.Logger;
 
 

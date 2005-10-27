@@ -1,27 +1,28 @@
-package org.nakedobjects.object.persistence;
+package org.nakedobjects.object.transaction;
 
 import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.AbstractOneToOnePeer;
+import org.nakedobjects.object.persistence.NakedObjectManager;
+import org.nakedobjects.object.reflect.AbstractOneToManyPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
-import org.nakedobjects.object.reflect.OneToOnePeer;
+import org.nakedobjects.object.reflect.OneToManyPeer;
 
 import org.apache.log4j.Logger;
 
 
-public class OneToOneTransaction extends AbstractOneToOnePeer {
-    private final static Logger LOG = Logger.getLogger(OneToOneTransaction.class);
+public class OneToManyTransaction extends AbstractOneToManyPeer {
+    private final static Logger LOG = Logger.getLogger(OneToManyTransaction.class);
 
-    public OneToOneTransaction(OneToOnePeer local) {
-        super(local);
+    public OneToManyTransaction(OneToManyPeer peer) {
+        super(peer);
     }
 
-    public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+    public void addAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
         NakedObjectManager objectManager = NakedObjects.getObjectManager();
         if (inObject.getResolveState().isPersistent()) {
             try {
                 objectManager.startTransaction();
-                super.clearAssociation(identifier, inObject, associate);
+                super.addAssociation(identifier, inObject, associate);
                 objectManager.saveChanges();
                 objectManager.endTransaction();
             } catch (RuntimeException e) {
@@ -29,33 +30,16 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
                 throw e;
             }
         } else {
-            super.clearAssociation(identifier, inObject, associate);
+            super.addAssociation(identifier, inObject, associate);
         }
     }
 
-    public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+    public void removeAllAssociations(MemberIdentifier identifier, NakedObject inObject) {
         NakedObjectManager objectManager = NakedObjects.getObjectManager();
         if (inObject.getResolveState().isPersistent()) {
             try {
                 objectManager.startTransaction();
-                super.setAssociation(identifier, inObject, associate);
-                objectManager.saveChanges();
-                objectManager.endTransaction();
-            } catch (RuntimeException e) {
-                abort(objectManager);
-               throw e;
-            }
-        } else {
-            super.setAssociation(identifier, inObject, associate);
-        }
-    }
-
-    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object value) {
-        NakedObjectManager objectManager = NakedObjects.getObjectManager();
-        if (inObject.getResolveState().isPersistent()) {
-            try {
-                objectManager.startTransaction();
-                super.setValue(identifier, inObject, value);
+                super.removeAllAssociations(identifier, inObject);
                 objectManager.saveChanges();
                 objectManager.endTransaction();
             } catch (RuntimeException e) {
@@ -63,11 +47,10 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
                 throw e;
             }
         } else {
-            super.setValue(identifier, inObject, value);
-        }
+            super.removeAllAssociations(identifier, inObject);
 
+        }
     }
-    
 
     private void abort(NakedObjectManager objectManager) {
         LOG.info("exception executing " + getName() + ", aborting transaction");
@@ -78,6 +61,23 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
         }
     }
 
+    public void removeAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+        NakedObjectManager objectManager = NakedObjects.getObjectManager();
+        if (inObject.getResolveState().isPersistent()) {
+            try {
+                objectManager.startTransaction();
+                super.removeAssociation(identifier, inObject, associate);
+                objectManager.saveChanges();
+                objectManager.endTransaction();
+            } catch (RuntimeException e) {
+                abort(objectManager);
+                throw e;
+            }
+        } else {
+            super.removeAssociation(identifier, inObject, associate);
+        }
+
+    }
 }
 
 /*
