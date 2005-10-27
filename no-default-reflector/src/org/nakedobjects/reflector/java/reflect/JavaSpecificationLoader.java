@@ -1,18 +1,16 @@
 package org.nakedobjects.reflector.java.reflect;
 
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.defaults.AbstractSpecificationLoader;
 import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
 
 public class JavaSpecificationLoader extends AbstractSpecificationLoader {
 
-    protected NakedObjectSpecification load(String className) {
+    protected NakedObjectSpecificationImpl load(String className) {
         JavaReflector reflector = new JavaReflector(className);
         NakedObjectSpecificationImpl specification = new NakedObjectSpecificationImpl();
         ((NakedObjectSpecificationImpl) specification).reflect(className, reflector);
         return specification;
     }
-
 }
 
 
