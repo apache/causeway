@@ -4,6 +4,7 @@ import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedReference;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.object.reflect.OneToManyAssociation;
@@ -79,7 +80,8 @@ public class TreeNodeBorder extends AbstractBorder {
         super.contentMenuOptions(menuOptions);
 
         Naked object = getView().getContent().getNaked();
-        if(object instanceof NakedReference && ! ((NakedReference) object).getResolveState().isResolved()) {
+        ResolveState resolveState = ((NakedReference) object).getResolveState();
+        if(object instanceof NakedReference && (resolveState.isGhost() || resolveState.isPartlyResolved())) {
             menuOptions.add(MenuOptionSet.VIEW, new MenuOption("Load object") {
                 public void execute(Workspace workspace, View view, Location at) {
                     resolveContent();
