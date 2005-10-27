@@ -1,26 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE section SYSTEM "./documentation.dtd">
 <section>
-  <title>Introduction - the Naked Objects Framework</title>
+  <title>Introduction</title>
 
   <description>A look at the Naked Objects Framework and how it
   works</description>
 
   <para>The Naked Objects Framework (NOF) transforms a domain object model
-  (DOM) into an application that the user can interact with, and the objects
-  the users create and manipulate can be managed, persisted and distributed in
-  a way that allows multiple users to work simultaneously on separate
-  machines, and even use different types of interface.</para>
-
-  <subheading>Separating Concerns</subheading>
+  (DOM) into an <rephrase>application</rephrase> that the user can interact
+  with. Where the objects the users create and manipulate can be managed,
+  persisted and distributed in a way that allows multiple users to work
+  simultaneously on separate machines, and even use different types of
+  interface.</para>
 
   <para>To run an application in NOF the domain objects need not be part of
   the NOF and should ideally just be plain Java or .Net objects (refered to as
-  POJOs, plain old Java objects), although they will need to be consistent and
-  transparent enough so that their properties and behaviours can be determined
-  simply by looking at their definitions. By defining the DOM separately from
-  any particular system, specifically the NOF, we can create a portable and
-  reusable system.</para>
+  POJOs or plain old Java objects), although they will need to be consistent
+  and transparent enough so that their properties and behaviours can be
+  determined simply by looking at their definitions. By defining the DOM
+  separately from any particular system, specifically the NOF, we can create a
+  portable and reusable system.</para>
+
+  <para>The NOF is divided into three distinct parts (see the following
+  diagram) that we will look at now. The main part as far as the application
+  developer is concerned is the Domain Object Model (DOM) with its supporting
+  library and container. The server manipulates and manges the DOM, providing
+  the necessary services such as persistence and distribution through
+  reflection and adapters. Clients - such as command and graphical user
+  interfaces, testing frameworks and scripts - indirectly display and
+  manipulate the DOM via the server.</para>
+
+  <figure fileref="architecture/nakedobjects.png"
+          label="The architecture of the NOF"></figure>
+
+  <subheading>Domain objects and container</subheading>
 
   <para>To use the framework a set of domain objects are defined in Java/.Net
   that adhere to number of simple coding convention. These object defintions
@@ -31,9 +44,6 @@
   and <method>set...</method>) might be noted in the profile as an object's
   field, while an <method>action...</method> method is seen as a behaviour to
   offer to the user.</para>
-
-  <figure fileref="architecture/nakedobjects.png"
-          label="The architecture of the NOF"></figure>
 
   <para>With such a DOM the NOF has to turn it into an application
   <comment>this term is probably wrong</comment>. To make it an application
@@ -67,7 +77,14 @@
   implementing system, and hence should be part of an application
   library.</para>
 
-  <subheading>Reflection</subheading>
+  <subheading>Server</subheading>
+
+  <para>The server makes the DOM useable by providing access to the domain
+  objects using reflection and wrapping each in an adapter. A memory
+  management and persistent storage layer ensures that object can be
+  saved.</para>
+
+  <minorheading>Reflector</minorheading>
 
   <para>To enable the NOF to make use of the DOM the framework uses reflection
   to identify each objects fields or properties and its behaviours, theses are
@@ -77,11 +94,12 @@
   methods are defined, how it flags different object types, and how it
   provides control over its properties and methods.</para>
 
-  <para>The NOF runs the application providing the user with access to the
-  objects, persisting and distributing the objects, authorising usage, and
-  testing the application.</para>
+  <para>The NOF builds up a specification for each type of domain object and
+  provides the user with access to the objects. I can then persist and
+  distribute those objects, authorise thier use, and test the
+  application.</para>
 
-  <subheading>Object Adapters and Object Identity</subheading>
+  <minorheading>Adapters and Identifiers</minorheading>
 
   <para>To deal with domain objects the NOF provides an adapter, or proxy, for
   each object. These adapters are internal to the NOF and provide a way for
@@ -90,17 +108,80 @@
   assigned an identifier - refered to as its object identifier (OID) - that
   uniquely identifies an object over space and time. By giving objects OIDs
   two copies of an object on two difference machines are known to be the same
-  because their OIDs are same. SImilarly in the persistent store references to
+  because their OIDs are same. Similarly in the persistent store references to
   other objects can be stored using OIDs instead of memory pointers, which are
   only valid while objects are in memory.</para>
 
-  <para>The object loader deals with these requirements, providing two core
-  services. First, it provides the mapping between a domain object and its
-  wrapper and ensures that only one wrapper ever exists for any one domain
-  object. Second, it provides the mapping between an adapter for a domain
-  object that is persistent and its OID that uniquely identifies it.</para>
+  <minorheading>Objects in memory and in persistent storage</minorheading>
 
-  <subheading>User Interface</subheading>
+  <para>The object loader manges all objects in memory and affords two core
+  services. First, it provides the mapping between a domain object and its
+  wrapper, ensuring that only one wrapper ever exists for any one domain
+  object. Second, it provides the mapping between an adapter for a persistent
+  domain object and its OID that uniquely identifies it.</para>
+
+  <para>The object persistor manages the peristence of objects that need to
+  kept across invocations of the virtual machine. When an object needs to be
+  persisted it is past to the object persistor. This asks the reflection
+  mechanism to provide it with each of the object's fields which it then
+  writes out to the persistent store. The persistor also loads objects back
+  into memory by recreating the requested domain object, retrieving its data,
+  and then setting each of its properties through requests to the reflector.
+  The persistor supports all the needs of persistence such as saving,
+  updating, loading and deleting objects, as well as providing a generalised
+  mechanism for searching for objects. Finally it allows the NOF to request
+  that groups of requests are treated as a transaction, and hence will be
+  persisted as their entirety or not at all.</para>
+
+  <minorheading>Configuration properties</minorheading>
+
+  <para>A set of configuration properties are made available within the NOF,
+  allowing any component to look up properties. The configuration can be
+  loaded from anywhere, but by defualt it is loaded from a Java style
+  properties files.</para>
+
+  <minorheading>Repository</minorheading>
+
+  <para>A globally accessible repository makes all the core available to all
+  those parts of the NOF that need them. The accessible components include the
+  configuration, object loader and persistor, and the specification
+  loader.</para>
+
+  <minorheading>Fixtures</minorheading>
+
+  <para>A mechanism is provided with the server that loads in object fixture
+  specification and will create a series of objects ready use once the
+  framework has started.</para>
+
+  <minorheading>Event handling</minorheading>
+
+  <para>A number of listeners are are available within the NOF that allow the
+  framework to notify clients that exceptions have occurred that need to be
+  dealt with, that objects have changed, or that there are messages to be
+  conveyed to the user.</para>
+
+  <minorheading>Utilities and development tools</minorheading>
+
+  <para>The NOF also provides a number of general utilities such as splash
+  window, assert logic (for Java 1.1), logging appenders, performance
+  profiling utilities and an exception helper that prints out the full details
+  of an exception even in .Net.</para>
+
+  <para>The NOF provides a number of tools to the developer of the NOF and to
+  those extending it. These hekp to make the framework and it component more
+  transparent, showing the developer what state the system is in, and what it
+  has been doing. There is a simple debug interface that allows any component
+  or subcomponent to provide information via a dialog or window. Dumping the
+  content of objects and specifications is provided in helper classes, as well
+  as helper classes to do things like generate to-string values simply.</para>
+
+  <subheading>Clients</subheading>
+
+  <para>Numerous clients use the server to make the domain objects visible or
+  to manipulate them. These include the supplied Graphical User Interface, the
+  acceptance testing (XAT) framework.</para>
+
+  <minorheading>User Interface</minorheading>
 
   <para>Once the NOF has a way to reference objects in the DOM and it has an
   understanding of the objects structures it can make them visible to user,
@@ -138,44 +219,33 @@
   to modify the objects and invoke methods on them. All this is done via the
   reflector without direct access with the domain objects.</para>
 
-  <subheading>Persistence</subheading>
+  <minorheading>Testing</minorheading>
 
-  <para>When an object needs to be persisted it is past to the object manager.
-  Using the same techniques, the object manager asks the reflection layer to
-  provide it with each of the object's fields which it then writes out to the
-  persistent store. The OM also loads objects back into memory, loading in an
-  object's data, recreating the domain object and then setting each of its
-  properties via requests to the reflector. The OM supports all the needs of
-  persistence such as saving, updating, loading and deleting objects, in
-  addition it also allows for objects to be searched for, and transactions to
-  be used. <comment>what do we mean by used?</comment></para>
+  <para>Like the viewer, the testing framework makes use of the NOF and
+  effectively pretends that it is a user interface. The tests describe each
+  step in generalised fashion and the XAT Framework exececutes those steps
+  manipulating the underlying domain objects. Having manipulated the objects
+  the tests then assert that certain conditions are met. Additional
+  manipulations and assertions can be undertaking. If all conditions are met
+  then the test passes, otherwise it will fail. The tests are written using an
+  extended Junit framework so the results are normally displayed as green or
+  red bar.</para>
 
-  <para></para>
+  <subheading>Dealing with Other Concerns</subheading>
 
-  <para>The object manager takes care of the persistence of the domain
-  objects. This covers the creation of new objects, removal of old ones,
-  updaing of existing ones, and the retrieval of persisted objects back into
-  memory - individually, as instances of a particulay class, or as defined by
-  some criteria. In addition to these tasks the object manager responsible for
-  maintaining transactional integrity, and must provide the ability to
-  demarcate transaction and provide rollback if necessary. In the NOF every
-  user directed change of an doman object and every invocation of an action
-  method is seen as a transaction.</para>
+  <para>The above descriptions do not discuss other concerns that you might
+  need to address in an enterprise system, such as security, distribution and
+  transactional integrity. All of these, and others, are dealt with in the NOF
+  by adapting the components we have already discussed so that they can
+  perform the needed work.</para>
 
-  <para>The main implementation of the object manager deals with the basic
-  requirements of the object manager and then delegates those explicitly
-  requiring persistence to an object store subcomponent. This deals with the
-  issues of persistence....</para>
-
-  <subheading>Distribution</subheading>
+  <minorheading>Distribution</minorheading>
 
   <para>To allow the application to work across multiple tiers the NOF
   distributes requests to the object manager and reflector, passing the
   request to a remote machine instead of invoking it locally. Using the
   reflection mechanism the NOF is able serialize and deserialize objects and
   pass them across the network.</para>
-
-  <para></para>
 
   <para>Distributing the NOF over multiple tiers is accomplished not through a
   specific component, but through the implementations of specific components,
@@ -187,38 +257,25 @@
   such as determining whether an action can be invoked, can be executed on the
   client as all the necessary information is to hand.</para>
 
-  <subheading>Security</subheading>
+  <minorheading>Transactions</minorheading>
+
+  <para>The object persistor has start, end and abort methods to tell the
+  underlying persistent layer to group together requests into atomic units and
+  these need to be called by the NOF to create the transactions. The NOF
+  provides an addition to the reflection mechanism that will start and stop
+  transactions.</para>
+
+  <minorheading>Security</minorheading>
 
   <para>Providing control over who can access the domain objects and what
   properties and behaviours are available is achieved by getting the
-  reflection mecahism to check each reflective request. The reflector will
+  reflection mechanism to check each reflective request. The reflector will
   only make available those fields and behaviours that the security layer
   allows.</para>
 
-  <subheading>Localisation</subheading>
+  <minorheading>Localisation</minorheading>
 
   <para>In addition to security the reflection mechanism can also intercepts
-  requests for names and descriptions of field and behavious and return
+  requests for names and descriptions of field and behaviours and return
   internationalized version, allowing an application to be localised.</para>
-
-  <subheading>Testing</subheading>
-
-  <para>Like the viewer the testing framework makes use of the NOF and
-  effectively pretends that it is a user interface. The tests describe each
-  step in generalised fashion and the XAT Framework exececutes those steps
-  manipulating the underlying domain objects. Having manipulated the objects
-  the tests then assert that certain conditions are met. Additional
-  manipulations and assertions can be undertaking. If all conditions are met
-  then the test passes, otherwise it will fail. The tests are written using an
-  extended Junit framework so the results are normally displayed as green or
-  red bar.</para>
-
-  <subheading>Configuration</subheading>
-
-  <para>The NOF is configured in two ways. First, the components are
-  instantiated and wired together either programmatically or via some kind of
-  configuration such as Spring. Second, a set of configuration properties are
-  made available within the NOF, allowing any component to look up properties.
-  The configuration can be loaded from anywhere, but by defualt it is loaded
-  from a Java style properties files.</para>
 </section>

@@ -7,17 +7,68 @@
   implemented:-</para>
 
   <list>
-    <el>Configuration</el>
+    <el>NakedObjectComponent</el>
+
+    <el>DebugInfo</el>
+
+    <el>AboutNakedObjects</el>
+
+    <el>SplashWindow</el>
 
     <el></el>
 
+    <el></el>
+
+    <el>NakedObjectConfiguration</el>
+
+    <item>
+      <para></para>
+    </item>
+
+    <el>Adapters</el>
+
     <el>NakedObjects - repository (abstract singleton - a class)</el>
+
+    <el></el>
+
+    <el>NakedValue</el>
+
+    <el>NakedReference</el>
+
+    <el>NakedObject</el>
+
+    <el>NakedCollection</el>
+
+    <el></el>
+
+    <el>ResolveState</el>
+
+    <el>Persistable</el>
+
+    <el>Version</el>
+
+    <el>Oid -&gt; SerialOid</el>
 
     <el></el>
 
     <el>NakedObjectLoader</el>
 
     <el>NakedObjectPersistor</el>
+
+    <el>-- DirtyObjectSet</el>
+
+    <el>-- InstancesCriteria -&gt; PatternCriteria, PatternObjectCriteria,
+    TitleCriteria</el>
+
+    <el></el>
+
+    <el>Hint</el>
+
+    <el>Consent</el>
+
+    <el>-- Allow</el>
+
+    <el>-- Veto</el>
 
     <el></el>
 
@@ -31,26 +82,79 @@
 
     <el>OneToManyPeer</el>
 
+    <el>MemberIdentifier</el>
+
     <el></el>
 
     <el>Session</el>
+
+    <el></el>
+
+    <el>ObjectViewingMechanismListener -&gt; SystemExitShutdownListener</el>
+
+    <el>UserFeedback</el>
   </list>
 
   <para>The following are second-class interfaces, used to extend the core
   components above:-</para>
 
-  <list>
-    <el>NakedObjectStore</el>
-
-    <el>HelpManager</el>
-
-    <el>AuthorisationManager</el>
-  </list>
+  <list></list>
 
   <para></para>
 
   <list>
+    <el>SkylarkViewer (implements NakedObjectComponent)</el>
+
+    <el>AcceptanceTestCase -&gt; JavaAcceptanceTestCase</el>
+
+    <el>.. what about all the XAT classes?</el>
+
+    <el></el>
+
+    <el>PrimitiveReflector?</el>
+
+    <el>InternalReflector? - how are these to be replaced by
+    NOSpecLoader?</el>
+
+    <el></el>
+
+    <el>Fixture</el>
+
+    <el>FixtureBuilder</el>
+
+    <el></el>
+
+    <el>LocalObjectManager</el>
+
+    <el>-- Transaction</el>
+
+    <el>-- PersistenceCommand</el>
+
+    <el>---- CreateObjectCommand</el>
+
+    <el>---- DestroyObjectCommand</el>
+
+    <el>---- SaveObjectCommand</el>
+
+    <el></el>
+
+    <el>-- NakedObjectStore</el>
+
+    <el>---- TransientObjectStore</el>
+
+    <el>---- MemoryObjectStore</el>
+
+    <el>---- XMLObjectStore</el>
+
+    <el>-- PersistAlgorithm - DefaultPersistAlgorithm</el>
+
+    <el>---- OidGenerator - SimpleOidGenerator, TimeBasedOidGenerator</el>
+
+    <el></el>
+
     <el>ProxyObjectManager</el>
+
+    <el></el>
 
     <el>ProxyPeerFactory</el>
 
@@ -59,6 +163,22 @@
     <el>ProxyOneToOne</el>
 
     <el>ProxyOneToMany</el>
+
+    <el></el>
+
+    <el>Distribution</el>
+
+    <el>-- ServerDistribution</el>
+
+    <el>-- CommandClient</el>
+
+    <el>-- Data -&gt; ValueData, ObjectData, CollectionData, NullData</el>
+
+    <el>-- DataFactory</el>
+
+    <el>-- DataHelper</el>
+
+    <el>SingleResponseUpdateNotifier</el>
 
     <el></el>
 
@@ -86,9 +206,7 @@
 
     <el></el>
 
-    <el>LocalObjectManager</el>
-
-    <el>TransactionPeerFactory</el>
+    <el>TransactionalPeerFactory</el>
 
     <el>ActionTransaction</el>
 
@@ -100,10 +218,57 @@
 
     <el>ObjectLoaderImpl</el>
 
-    <el>PojoAdapterMap</el>
+    <el>-- AdapterFactory</el>
 
-    <el>IdentityAdapterMap</el>
+    <el>-- ObjectFactory</el>
+
+    <el>-- PojoAdapterMap - PojoAdapterHashMap</el>
+
+    <el>-- IdentityAdapterMap - IdentityAdapterHashMap</el>
 
     <el></el>
+
+    <el></el>
+
+    <el></el>
+
+    <el>JavaBusinessObjectContainer</el>
+
+    <el>JavaObjectFactory</el>
+
+    <el>JavaSpecificationLoader</el>
+
+    <el>JavaAdapterFactory</el>
+
+    <el>JavaFixtureBuilder</el>
+
+    <el></el>
+  </list>
+
+  <para>Java Applications</para>
+
+  <list>
+    <el>BusinessObjectContainer</el>
+
+    <el>Lookup</el>
+
+    <el>NonPersistable</el>
+
+    <el>ApplicationException</el>
+
+    <el>InternalCollection</el>
+
+    <el>FieldAbout</el>
+
+    <el>ActionAbout</el>
+
+    <el>Validity</el>
+
+    <el>Clock</el>
+
+    <el>BusinessValue -&gt; Color, Date, PhoneNumber etc</el>
+
+    <el>BusinessValueHolder - &gt; TextString, FloatingPointNumber, Logical,
+    Password etc</el>
   </list>
 </section>

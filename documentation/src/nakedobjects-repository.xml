@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE section SYSTEM "./documentation.dtd">
 <section>
-  <title><em>NakedObjects</em> Repository</title>
+  <title>Repository</title>
 
   <para><class>NakedObjects</class> is a respository for NOF providing a
   central access point for the <class>Configuration</class>,
@@ -22,21 +22,30 @@
   implementations:-</para>
 
   <list>
-    <para><class>org.nakedonbjects.NakedObjectsClient</class> - is a
-    single-threaded version that simply store all the component references and
-    will return those components regardless of the thread that it call
-    with.</para>
+    <item2>
+      <label><class>org.nakedonbjects.NakedObjectsClient</class></label>
 
-    <para><class>org.nakedonbjects.NakedObjectsByThread</class> - is a
-    multi-threaded version that stores a unique reference to each for each
-    thread in use. This way every thread has it own configuration, loader,
-    object manager etc.</para>
+      <para>a single-threaded version that simply store all the component
+      references and will return those components regardless of the thread
+      that it call with.</para>
+    </item2>
 
-    <para><class>org.nakedonbjects.NakedObjectsPipe</class> - is a dual
-    context version that provides one context for the server thread, and a
-    second context for all other threads. This is used for running a
-    client-server configuration in a single memory space, where the threads
-    are used to keep the components separate.</para>
+    <item2>
+      <label><class>org.nakedonbjects.NakedObjectsByThread</class></label>
+
+      <para>a multi-threaded version that stores a unique reference to each
+      for each thread in use. This way every thread has it own configuration,
+      loader, object manager etc.</para>
+    </item2>
+
+    <item2>
+      <label><class>org.nakedonbjects.NakedObjectsPipe</class></label>
+
+      <para>a dual context version that provides one context for the server
+      thread, and a second context for all other threads. This is used for
+      running a client-server configuration in a single memory space, where
+      the threads are used to keep the components separate.</para>
+    </item2>
   </list>
 
   <para>To get hold of one of the components held by the repository use the

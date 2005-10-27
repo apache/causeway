@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE section SYSTEM "./documentation.dtd">
 <section>
-  <title>Configuring and Running the NOF</title>
+  <title>Running the NOF</title>
 
   <para>The NOF is designed to be configured and run in a number of ways,
   specifically from within a container such as <weblink

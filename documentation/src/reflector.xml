@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE section SYSTEM "./documentation.dtd">
 <section>
-  <title>Reflector</title>
+  <title>Specification Loader</title>
 
   <para>To make the domain objects useful within the framework the objects'
   public interfaces must be exposed. Reflection capabilities are used to
@@ -85,7 +85,7 @@
   <para>The NOF provides a Java 1.1 compatible reflector in the class
   <class>JavaReflector</class>. Methods beginning with 'get', 'set' and
   'action' are recognised, along with any methods that are additionally
-  prefixed with 'about', as fields and methods respectivley. </para>
+  prefixed with 'about', as fields and methods respectivley.</para>
 
   <para>As certain methods must match one another, the method names must be
   consistently spelt with just the prefix changing e.g., getCustomer with

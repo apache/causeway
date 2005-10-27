@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE section SYSTEM "./documentation.dtd">
 <section numbered="on">
-  <title>Introduction - Naked Objects Applications</title>
+  <title>Naked Objects Applications</title>
 
-  <description />
+  <description></description>
 
   <para>This manual is about the Naked Objects framework, an open source
   Java/.Net implementation of the naked objects pattern. This pattern states

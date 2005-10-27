@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE section SYSTEM "./documentation.dtd">
 <section numbered="on">
-  <title>How Naked Objects Works</title>
+  <title>How Naked Objects Applications Work</title>
 
   <comment>This document details how to get started with Naked objects -
   covering:</comment>
@@ -23,9 +23,9 @@
   that could form the start-point of a user activity is shown as a class icon
   on the left of the window.</para>
 
-  <figure width="50%" 
-        fileref="intro/classes.png"
-        label="The opening screen of the Naked Objects example showing the six classes" />
+  <figure fileref="intro/classes.png"
+          label="The opening screen of the Naked Objects example showing the six classes"
+          width="50%"></figure>
 
   <list>
     <para>These are the six business classes that constitute the prototype
@@ -61,7 +61,7 @@
   </list>
 
   <figure fileref="intro/example-code.png"
-          label="The code for this example is in example\org\nakedobjects\example\ecs" />
+          label="The code for this example is in example\org\nakedobjects\example\ecs"></figure>
 
   <subheading>Instances</subheading>
 
@@ -72,7 +72,7 @@
   vary the icon according to the identity or the status of the object.</para>
 
   <figure fileref="intro/instances.png"
-          label="Instances of customer (top-left window) and an open instance." />
+          label="Instances of customer (top-left window) and an open instance."></figure>
 
   <list>
     <para>By default, instances use the icon of their class, but instances
@@ -101,7 +101,7 @@
   invoke its behaviours in situ or open up a new view of it.</para>
 
   <figure fileref="intro/fields.png"
-          label="Two windows showing empty and full fields" />
+          label="Two windows showing empty and full fields"></figure>
 
   <list>
     <para>The top window shows a new location object with text fields for the
@@ -124,7 +124,7 @@
   </list>
 
   <figure fileref="intro/dropping-field.png"
-          label="Dropping an object into a field where such a drop is valid." />
+          label="Dropping an object into a field where such a drop is valid."></figure>
 
   <subheading>Associations</subheading>
 
@@ -135,7 +135,7 @@
   about each other.</para>
 
   <figure fileref="intro/associations.png"
-          label="Two views showing one-to-many and bidirectional associations" />
+          label="Two views showing one-to-many and bidirectional associations"></figure>
 
   <list>
     <para>The larger window, for a Customer shows the set of Locations
@@ -174,8 +174,8 @@
   icon.</para>
 
   <figure fileref="intro/behaviour.png"
-          width="50%"
-          label="Each object displays all its behaviours when you right-click." />
+          label="Each object displays all its behaviours when you right-click."
+          width="50%"></figure>
 
   <list>
     <para>The pop-up menu for an object shows the business methods that can be
@@ -191,7 +191,7 @@
     Customer.</para>
   </list>
 
-  <figure fileref="intro/drag-and-drop.png" />
+  <figure fileref="intro/drag-and-drop.png"></figure>
 
   <subheading>Control</subheading>
 
@@ -205,7 +205,7 @@
   framework works.</para>
 
   <figure fileref="intro/control.png"
-          label="Menus options are greyed out to show they are unavailable." />
+          label="Menus options are greyed out to show they are unavailable."></figure>
 
   <list>
     <para>Here, the Return Booking option is greyed out, but the user can Copy
@@ -218,5 +218,5 @@
     time the use brings up the booking object menu.</para>
   </list>
 
-  <figure fileref="intro/control2.png" />
+  <figure fileref="intro/control2.png"></figure>
 </section>

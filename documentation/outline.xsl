@@ -93,11 +93,11 @@
       font-family="sans-serif"
       font-size="14pt"
       text-align="start"
-      text-indent="1.5cm"
+      text-indent="2.5cm"
       >
-      <xsl:number level="multiple" count="//section[@numbered='on']" format="1."/>
-      <xsl:number level="multiple" count="//section[@numbered='on']//subheading" format="1."/>
-      <xsl:number level="multiple" count="//section[@numbered='on']//minorheading" format="1. "/>
+      <!--xsl:number level="multiple" count="//section[@numbered='on']" format="1.1.1.1."/>
+      <xsl:number level="multiple" count="//section[@numbered='on']/subheading" format="1."/>
+      <sl:number level="single" from="section/subheading" count="minorheading" format="a. "/-->
       <xsl:apply-templates/> 
     </fo:block>
   </xsl:template>

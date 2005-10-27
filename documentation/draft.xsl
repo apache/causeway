@@ -182,12 +182,48 @@
                 <fo:block font-size="90%" 
                     text-align-last="justify" 
                     background-color="white"
-                    text-align="start" 
-                    text-indent="1.5cm">
+                    text-align="start">
                   <xsl:value-of select="title"/>
                   <fo:leader leader-pattern="dots"/>
                   <fo:page-number-citation ref-id="{generate-id()}"/>
                 </fo:block>
+                
+                <xsl:for-each select="subheading">
+                    <fo:block font-size="90%" 
+                        text-align-last="justify" 
+                        background-color="white"
+                        text-align="start" 
+                        text-indent="1.0cm">
+                      <xsl:value-of select="."/>
+                      <fo:leader leader-pattern="dots"/>
+                      <fo:page-number-citation ref-id="{generate-id()}"/>
+                    </fo:block>
+                  </xsl:for-each>
+
+                <xsl:for-each select="section">
+                    <fo:block font-size="90%" 
+                        text-align-last="justify" 
+                        background-color="white"
+                        text-align="start" 
+                        text-indent="1.0cm">
+                      <xsl:value-of select="title"/>
+                      <fo:leader leader-pattern="dots"/>
+                      <fo:page-number-citation ref-id="{generate-id()}"/>
+                    </fo:block>
+                                   <xsl:for-each select="subheading">
+                    <fo:block font-size="90%" 
+                        text-align-last="justify" 
+                        background-color="white"
+                        text-align="start" 
+                        text-indent="1.0cm">
+                      <xsl:value-of select="."/>
+                      <fo:leader leader-pattern="dots"/>
+                      <fo:page-number-citation ref-id="{generate-id()}"/>
+                    </fo:block>
+                  </xsl:for-each>
+
+                  </xsl:for-each>
+
               </xsl:for-each>
             </fo:block>
           </xsl:for-each>
@@ -289,15 +325,16 @@
     <fo:block 
       font-size="16pt"
       line-height="130%"
-      font-family="sans-serif"
+      font-family="Arial, Garamond, sans-serif"
       space-after=".65cm"
-      border-after-style="solid"
       border-width="2mm"
       border-color="black"
       keep-with-next="always"
       id="{generate-id(key('chapters', .))}"
       >
-      <fo:block>
+      <xsl:if test="string-length(title) > 0">
+        <xsl:attribute name="border-after-style">solid</xsl:attribute>
+      </xsl:if>
         <xsl:if test="@numbered='on'">
           <xsl:number level="multiple" count="//section[@numbered='on']" format="1. "/>
         </xsl:if>
@@ -305,7 +342,6 @@
         <xsl:if test="@draft='yes'">
           <fo:inline font-size="60%" font-style="italic"> draft</fo:inline>
         </xsl:if>
-      </fo:block>
     </fo:block>
     
     <fo:block>
@@ -313,6 +349,21 @@
     </fo:block>
   </xsl:template>
         
+  <xsl:template match ="description">
+   <fo:block>
+      <fo:block font-size="10pt" 
+      font-family="serif" 
+      text-align="start"
+      space-after="10px"
+      color="#609"
+      white-space-collapse="true">
+      <fo:inline font-weight="bold">Description</fo:inline>
+      <xsl:text>: </xsl:text>
+      <xsl:apply-templates/> 
+    </fo:block>
+    </fo:block>
+  </xsl:template>
+
   <xsl:template match ="title">
   </xsl:template>
 
@@ -349,7 +400,7 @@
   <xsl:template match ="minorheading">
     <fo:block
       font-family="sans-serif"
-      font-size="14pt"
+      font-size="12pt"
       text-align="start"
       space-before=".2cm"
       space-after=".2cm"
@@ -358,21 +409,22 @@
       border-color="black"
       keep-with-next="always"
       >
-      <xsl:number level="multiple" count="//section[@numbered='on']" format="1."/>
+      <!--xsl:number level="multiple" count="//section[@numbered='on']" format="1."/>
       <xsl:number level="multiple" count="//section[@numbered='on']//subheading" format="1. "/>
-      <xsl:number level="multiple" count="//section[@numbered='on']//minorheading" format="1. "/>
+      <xsl:number level="single" count="//section[@numbered='on']//minorheading" format="1. "/-->
       <xsl:apply-templates/> 
     </fo:block>
   </xsl:template>
 
 
   <xsl:template match="list">
-    <fo:list-block  start-indent="5mm" provisional-distance-between-starts="5mm">
+    <fo:list-block  start-indent="5mm" provisional-distance-between-starts="5mm"
+        space-after="9px">
       <xsl:apply-templates/>
     </fo:list-block>
   </xsl:template>
 
-  <xsl:template match="list/para">
+  <xsl:template match="list/para|list/el">
     <fo:list-item>
       <fo:list-item-label end-indent="label-end()">
         <fo:block font-size="140%">&#x2022;</fo:block>
@@ -380,7 +432,8 @@
       
       <fo:list-item-body start-indent="body-start()">
         <fo:block
-          space-after="6px">
+            font-family="Times"
+            font-size="11pt">
           <xsl:apply-templates/>
         </fo:block>
       </fo:list-item-body>
@@ -402,10 +455,32 @@
     </fo:list-item>
   </xsl:template>
 
+  <xsl:template match="item2">
+    <fo:list-item>
+    <fo:list-item-label end-indent="label-end()">
+    <fo:block
+        space-before=".2cm"
+        space-after="1.2pc"
+        font-family="Times"
+        font-size="11pt">
+        <xsl:apply-templates select="label"/>
+    </fo:block>
+    </fo:list-item-label>
+    
+    <fo:list-item-body start-indent="body-start()">
+    <fo:block>
+        <xsl:apply-templates select="para|commnad-listing|program-listing|screenshot"/>
+    </fo:block>
+    </fo:list-item-body>
+    </fo:list-item>
+  </xsl:template>
+
 
 
   <xsl:template match ="para">
     <fo:block
+      font-family="Times"
+      font-size="11pt"
       text-indent="0.0cm"
       space-after="9px"
       >
@@ -596,7 +671,8 @@
   <xsl:template match="class|method|variable">
     <fo:inline
       hyphenation-keep="column"
-      font-family="monospace"
+      color="#888"
+      font-family="sans-serif"
       >
       <xsl:apply-templates/> 
     </fo:inline>
@@ -614,7 +690,7 @@
 
   <xsl:template match="code|path|property">
     <fo:inline
-      font-family="monospace"
+      font-family="sans-serif"
       font-weight="bold"
       >
       <xsl:apply-templates/> 
@@ -706,6 +782,16 @@
     <xsl:apply-templates/>
     (<xsl:value-of select="@address"/>)
   </xsl:template>
+
+
+
+
+
+
+
+
+
+
 
 
 
