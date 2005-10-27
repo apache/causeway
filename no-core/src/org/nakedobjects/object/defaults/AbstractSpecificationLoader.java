@@ -2,6 +2,8 @@ package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
+import org.nakedobjects.object.ReflectionPeerBuilder;
+import org.nakedobjects.object.ReflectionPeerFactory;
 import org.nakedobjects.object.reflect.internal.InternalReflector;
 
 import java.util.Enumeration;
@@ -13,16 +15,17 @@ import org.apache.log4j.Logger;
 public abstract class AbstractSpecificationLoader implements NakedObjectSpecificationLoader {
     private final static Logger LOG = Logger.getLogger(AbstractSpecificationLoader.class);
     private Hashtable classes;
+    protected ReflectionPeerBuilder reflectionPeerBuilder;
  
     public AbstractSpecificationLoader() {
         classes = new Hashtable();    
     }
    
-    public NakedObjectSpecification loadSpecification(Class cls) {
+    public final NakedObjectSpecification loadSpecification(Class cls) {
         return loadSpecification(cls.getName());
     }
 
-    public NakedObjectSpecification loadSpecification(String className) {
+    public final NakedObjectSpecification loadSpecification(String className) {
         if (className == null) {
             throw new NullPointerException("No class name specified");
         }
@@ -32,7 +35,7 @@ public abstract class AbstractSpecificationLoader implements NakedObjectSpecific
         if (nos != null) {
             return nos;
         } else {
-            NakedObjectSpecification specification;
+            NakedObjectSpecificationImpl specification;
             try {
                 Class cls = Class.forName(className);
 
@@ -63,13 +66,13 @@ public abstract class AbstractSpecificationLoader implements NakedObjectSpecific
             }
 
             classes.put(className, specification);
-            specification.introspect();
+            specification.introspect(reflectionPeerBuilder);
             return specification;
  
         }
     }
     
-    protected abstract NakedObjectSpecification load(String className);
+    protected abstract NakedObjectSpecificationImpl load(String className);
 
     public NakedObjectSpecification[] allSpecifications() {
         int size = classes.size();
@@ -89,6 +92,23 @@ public abstract class AbstractSpecificationLoader implements NakedObjectSpecific
         super.finalize();
         LOG.info("finalizing specification loader " + this);
     }
+    
+
+
+    /**
+     * Expose as a .NET property
+     * 
+     * @property
+     */
+    public void set_ReflectionPeerBuilder(ReflectionPeerFactory[] factories) {
+        setReflectionPeerBuilder(factories);
+    }
+    
+    public void setReflectionPeerBuilder(ReflectionPeerFactory[] factories) {
+        reflectionPeerBuilder = new ReflectionPeerBuilder();
+        reflectionPeerBuilder.setFactories(factories);
+    }
+
     
     public void shutdown() {
         LOG.info("shutting down " + this);

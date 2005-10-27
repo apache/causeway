@@ -10,9 +10,9 @@ import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.persistence.PersistenceCommand;
 import org.nakedobjects.object.persistence.TitleCriteria;
 import org.nakedobjects.object.reflect.DummyNakedObject;
+import org.nakedobjects.object.transaction.PersistenceCommand;
 
 import java.util.Enumeration;
 import java.util.Vector;

@@ -6,7 +6,7 @@ import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.ReflectionFactory;
+import org.nakedobjects.object.ReflectionPeerBuilder;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionPeer;
@@ -51,25 +51,23 @@ public abstract class AbstractNakedObjectSpecification implements NakedObjectSpe
     private NakedObjectField[] viewFields;
     private String shortName;
 
-    public AbstractNakedObjectSpecification() {}
-
-    private Action[] createActions(ActionPeer[] actions) {
+    private Action[] createActions(ReflectionPeerBuilder builder, ActionPeer[] actions) {
         Action actionChains[] = new Action[actions.length];
 
         for (int i = 0; i < actions.length; i++) {
-            actionChains[i] = reflectionFactory().createAction(getFullName(), actions[i]);
+            actionChains[i] = builder.createAction(getFullName(), actions[i]);
         }
 
         return actionChains;
     }
 
-    protected Action[] createActions(ActionPeer[] delegates, String[] order) {
-        Action[] actions = createActions(delegates);
+    protected Action[] createActions(ReflectionPeerBuilder builder, ActionPeer[] delegates, String[] order) {
+        Action[] actions = createActions(builder, delegates);
         Action[] objectActions = (Action[]) orderArray(Action.class, actions, order);
         return objectActions;
     }
 
-    protected NakedObjectField[] createFields(FieldPeer fieldPeers[]) {
+    protected NakedObjectField[] createFields(ReflectionPeerBuilder builder, FieldPeer fieldPeers[]) {
         NakedObjectField[] fields = new NakedObjectField[fieldPeers.length];
 
         for (int i = 0; i < fieldPeers.length; i++) {
@@ -77,10 +75,10 @@ public abstract class AbstractNakedObjectSpecification implements NakedObjectSpe
             Object object = fieldPeers[i];
 
             if (object instanceof OneToOnePeer) {
-                fields[i] = reflectionFactory().createField(getFullName(), (OneToOnePeer) object);
+                fields[i] = builder.createField(getFullName(), (OneToOnePeer) object);
 
             } else if (object instanceof OneToManyPeer) {
-                fields[i] = reflectionFactory().createField(getFullName(), (OneToManyPeer) object);
+                fields[i] = builder.createField(getFullName(), (OneToManyPeer) object);
 
             } else {
                 throw new NakedObjectRuntimeException();
@@ -88,10 +86,6 @@ public abstract class AbstractNakedObjectSpecification implements NakedObjectSpe
         }
 
         return fields;
-    }
-
-    private ReflectionFactory reflectionFactory() {
-        return NakedObjects.getReflectionFactory();
     }
     
     private Action getAction(Action[] availableActions, Action.Type type, String name, NakedObjectSpecification[] parameters) {

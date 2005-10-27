@@ -3,7 +3,6 @@ package org.nakedobjects;
 import org.nakedobjects.container.configuration.NakedObjectConfiguration;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.ReflectionFactory;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.ToString;
@@ -12,9 +11,8 @@ public class NakedObjectsData {
     protected NakedObjectLoader objectLoader;
     protected NakedObjectConfiguration configuration;
     protected NakedObjectManager objectManager;
-    protected Session session;
     protected NakedObjectSpecificationLoader specificationLoader;
-    protected ReflectionFactory reflectionFactory;
+    protected Session session;
 
     
     public String toString() {
@@ -23,7 +21,6 @@ public class NakedObjectsData {
         toString.append("objectManager", objectManager);
         toString.append("session", session);
         toString.append("objectLoader", objectLoader);
-        toString.append("reflectionFactory", reflectionFactory);
         return toString.toString();
     }
 }

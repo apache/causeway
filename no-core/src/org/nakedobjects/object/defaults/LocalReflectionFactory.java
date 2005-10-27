@@ -1,11 +1,9 @@
 package org.nakedobjects.object.defaults;
 
-import org.nakedobjects.object.ReflectionFactory;
+import org.nakedobjects.object.ReflectionPeerFactory;
 import org.nakedobjects.object.help.HelpManager;
+import org.nakedobjects.object.help.HelpPeerFactory;
 import org.nakedobjects.object.help.OneToOneHelp;
-import org.nakedobjects.object.persistence.ActionTransaction;
-import org.nakedobjects.object.persistence.OneToManyTransaction;
-import org.nakedobjects.object.persistence.OneToOneTransaction;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.NakedObjectField;
@@ -13,18 +11,41 @@ import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.object.reflect.OneToManyPeer;
 import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.OneToOnePeer;
+import org.nakedobjects.object.transaction.ActionTransaction;
+import org.nakedobjects.object.transaction.OneToManyTransaction;
+import org.nakedobjects.object.transaction.OneToOneTransaction;
+import org.nakedobjects.object.transaction.TransactionPeerFactory;
 
 
-public class LocalReflectionFactory implements ReflectionFactory {
+public class LocalReflectionFactory {
+   public ReflectionPeerFactory[] getFactories() {
+        HelpPeerFactory helpPeerFactory = new HelpPeerFactory();
+        helpPeerFactory.setHelpManager(helpManager);
+        
+        ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
+                helpPeerFactory,
+                new TransactionPeerFactory(),
+        };
+        return factories;
+    }
+    
     private HelpManager helpManager;
     
     public void setHelpManager(HelpManager helpManager) {
         this.helpManager = helpManager;
     }
 
+    /**
+     * Expose as a .NET property
+     * 
+     * @property
+     */
     public void set_HelpManager(HelpManager helpManager) {
         setHelpManager(helpManager);
     }
+    
+    
+    
     
     public Action createAction(String className, ActionPeer peer) {
         ActionPeer fullDelegate = new ActionTransaction(peer);

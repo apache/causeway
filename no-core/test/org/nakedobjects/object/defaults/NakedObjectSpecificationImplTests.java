@@ -32,10 +32,6 @@ public class NakedObjectSpecificationImplTests extends TestCase {
         mockReflector = new MockReflector();
         mockReflector.superClass = new NakedObjectSpecificationImpl();
         nakedObjectSpecification = new NakedObjectSpecificationImpl();
-        
- //       system.addSpecification(mockReflector.superClass);
-        
- //       nakedObjectSpecification.reflect("class-x", mockReflector);
     }
 
     protected void tearDown() throws Exception {

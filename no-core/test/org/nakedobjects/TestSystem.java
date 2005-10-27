@@ -10,7 +10,6 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedReference;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.defaults.MockObjectManager;
-import org.nakedobjects.object.defaults.MockReflectionFactory;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.reflect.DummyNakedObject;
 
@@ -20,7 +19,6 @@ public class TestSystem {
     private NakedObjectsClient nakedObjects;
     private NakedObjectManager objectManager;
     private final DummyNakedObjectSpecificationLoader specificationLoader;
- //   private final DummyAdapterFactory adapterFactory;
       
     public TestSystem() {
         specificationLoader = new DummyNakedObjectSpecificationLoader();
@@ -35,7 +33,6 @@ public class TestSystem {
         nakedObjects.setSpecificationLoader(specificationLoader);
         nakedObjects.setObjectLoader(objectLoader);
         nakedObjects.setObjectManager(objectManager);
-        nakedObjects.setReflectionFactory(new MockReflectionFactory());
 
         nakedObjects.init();
     }
@@ -71,12 +68,6 @@ public class TestSystem {
         objectLoader.addIdentity(oid, adapter);
     }
 
-   /* public void addCreatedObject(Object object) {
-        DummyNakedObject dummyNakedObject = new DummyNakedObject();
-        dummyNakedObject.setupSpecification(new DummyNakedObjectSpecification());
-        objectLoader.addAdapter(object, dummyNakedObject);
-    }
-*/
     public void addValue(Object object, NakedValue adapter) {
         objectLoader.addAdapter(object, adapter);
         

@@ -75,8 +75,6 @@ public interface NakedObjectSpecification {
 
     NakedObjectSpecification[] interfaces();
 
-    void introspect();
-
     boolean isAbstract();
 
     /**

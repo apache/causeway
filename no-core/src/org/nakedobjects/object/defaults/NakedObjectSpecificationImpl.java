@@ -2,6 +2,7 @@ package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.Persistable;
+import org.nakedobjects.object.ReflectionPeerBuilder;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.ActionPeer;
@@ -15,13 +16,9 @@ import org.apache.log4j.Logger;
 
 public class NakedObjectSpecificationImpl extends AbstractNakedObjectSpecification {
     private final static Logger LOG = Logger.getLogger(NakedObjectSpecificationImpl.class);
-
     private String asString;
-
     private Reflector reflector;
-
-    public NakedObjectSpecificationImpl() {}
-
+   
     public void clearDirty(NakedObject object) {
         reflector.clearDirty(object);
     }
@@ -100,18 +97,18 @@ public class NakedObjectSpecificationImpl extends AbstractNakedObjectSpecificati
         return singularName != null ? singularName : NameConvertor.naturalName(getShortName());
     }
 
-    public void introspect() {
+    public void introspect(ReflectionPeerBuilder builder) {
         if (!(reflector instanceof PrimitiveReflector)) {
             ActionPeer delegates[] = reflector.actionPeers(Reflector.OBJECT);
             String[] order = reflector.actionSortOrder();
-            Action[] objectActions = createActions(delegates, order);
+            Action[] objectActions = createActions(builder, delegates, order);
 
             delegates = reflector.actionPeers(Reflector.CLASS);
             order = reflector.classActionSortOrder();
-            Action[] classActions = createActions(delegates, order);
+            Action[] classActions = createActions(builder, delegates, order);
 
             FieldPeer fieldDelegates[] = reflector.fields();
-            NakedObjectField[] fieldVector = createFields(fieldDelegates);
+            NakedObjectField[] fieldVector = createFields(builder, fieldDelegates);
             NakedObjectField[] fields = (NakedObjectField[]) orderArray(NakedObjectField.class, fieldVector, reflector
                     .fieldSortOrder());
 

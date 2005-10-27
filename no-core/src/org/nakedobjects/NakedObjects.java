@@ -5,7 +5,6 @@ import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.ReflectionFactory;
 import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.Assert;
@@ -57,11 +56,6 @@ public abstract class NakedObjects implements NakedObjectsComponent, DebugInfo {
         return getInstance().objectManager();
     }
 
-    /** @deprecated */
-    public static ReflectionFactory getReflectionFactory() {
-        return getInstance().reflectionFactory();
-    }
-
     /*
      * Return the specification loader. 
      */
@@ -78,7 +72,6 @@ public abstract class NakedObjects implements NakedObjectsComponent, DebugInfo {
         objectManager().shutdown();
         objectLoader().shutdown();
         specificationLoader().shutdown();
-        reflectionFactory().shutdown();
         clearReferences();
     }
 
@@ -129,9 +122,7 @@ public abstract class NakedObjects implements NakedObjectsComponent, DebugInfo {
         Assert.assertNotNull("no configuration set up", getConfiguration());
         Assert.assertNotNull("no object loader set up", getObjectLoader());
         Assert.assertNotNull("no specification loader set up", getSpecificationLoader());
-        Assert.assertNotNull("no reflection factory set up", getReflectionFactory());
 
-        getReflectionFactory().init();
         getSpecificationLoader().init();
         getObjectLoader().init();
         getObjectManager().init();
@@ -140,8 +131,6 @@ public abstract class NakedObjects implements NakedObjectsComponent, DebugInfo {
     protected abstract NakedObjectLoader objectLoader();
 
     protected abstract NakedObjectManager objectManager();
-
-    protected abstract ReflectionFactory reflectionFactory();
 
     public abstract void setConfiguration(NakedObjectConfiguration configuration);
 

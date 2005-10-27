@@ -9,7 +9,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.persistence.InstancesCriteria;
 import org.nakedobjects.object.persistence.ObjectNotFoundException;
 import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.persistence.PersistenceCommand;
+import org.nakedobjects.object.transaction.PersistenceCommand;
 
 import java.util.Vector;
 
