@@ -2,11 +2,13 @@ package org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.object.MockObjectStore;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.persistence.CreateObjectCommand;
-import org.nakedobjects.object.persistence.DestroyObjectCommand;
 import org.nakedobjects.object.persistence.ObjectManagerException;
-import org.nakedobjects.object.persistence.SaveObjectCommand;
 import org.nakedobjects.object.reflect.DummyNakedObject;
+import org.nakedobjects.object.transaction.CreateObjectCommand;
+import org.nakedobjects.object.transaction.DestroyObjectCommand;
+import org.nakedobjects.object.transaction.SaveObjectCommand;
+import org.nakedobjects.object.transaction.Transaction;
+import org.nakedobjects.object.transaction.TransactionException;
 
 import junit.framework.TestCase;
 
@@ -90,8 +92,8 @@ public class TransactionTest extends TestCase {
 
         //system = new TestSystem();
         
-        t = new Transaction();
         os = new MockObjectStore();
+        t = new ObjectStoreTransaction(os);
         
         object1 = new DummyNakedObject();
         object2 = new DummyNakedObject();
@@ -116,7 +118,7 @@ public class TransactionTest extends TestCase {
         t.addCommand(createCommandThatAborts(object2, "command 2"));
         t.addCommand(createSaveCommand(object1, "command 3"));
         try {
-            t.commit(os);
+            t.commit();
             fail();
         } catch (ObjectManagerException expected) {}
         os.assertAction(0, "start");
@@ -128,7 +130,7 @@ public class TransactionTest extends TestCase {
     public void testAddCommands() throws Exception {
         t.addCommand(createSaveCommand(object1, "command 1"));
         t.addCommand(createSaveCommand(object2, "command 2"));
-        t.commit(os);
+        t.commit();
 
         os.assertAction(0, "start");
         os.assertAction(1, "run command 1");
@@ -145,7 +147,7 @@ public class TransactionTest extends TestCase {
          */
         t.addCommand(createSaveCommand(object1, "save object 1"));
         t.addCommand(createSaveCommand(object2, "save object 2"));
-        t.commit(os);
+        t.commit();
 
         os.assertAction(0, "start");
         os.assertAction(1, "run create object 1");
@@ -157,7 +159,7 @@ public class TransactionTest extends TestCase {
     public void testAddDestoryCommandsButRemovePreviousSaveForSameObject() throws Exception {
         t.addCommand(createSaveCommand(object1, "save object 1"));
         t.addCommand(createDestroyCommand(object1, "destroy object 1"));
-        t.commit(os);
+        t.commit();
 
         os.assertAction(0, "start");
         os.assertAction(1, "run destroy object 1");
@@ -169,7 +171,7 @@ public class TransactionTest extends TestCase {
         t.addCommand(createCreateCommand(object1, "create object 1"));
         t.addCommand(createDestroyCommand(object1, "destroy object 1"));
         t.addCommand(createDestroyCommand(object2, "destroy object 2"));
-        t.commit(os);
+        t.commit();
 
         os.assertAction(0, "start");
         os.assertAction(1, "run destroy object 2");
@@ -180,7 +182,7 @@ public class TransactionTest extends TestCase {
     public void testIgnoreSaveAfterDeleteForSameObject() throws Exception {
         t.addCommand(createDestroyCommand(object1, "destroy object 1"));
         t.addCommand(createSaveCommand(object1, "save object 1"));
-        t.commit(os);
+        t.commit();
 
         os.assertAction(0, "start");
         os.assertAction(1, "run destroy object 1");
@@ -189,14 +191,14 @@ public class TransactionTest extends TestCase {
     }
 
     public void testNoCommands() throws Exception {
-        t.commit(os);
+        t.commit();
         assertEquals(0, os.getActions().size());
     }
 
     public void testNoTransactionsWhenCommandCancelEachOtherOut() throws Exception {
         t.addCommand(createCreateCommand(object1, "create object 1"));
         t.addCommand(createDestroyCommand(object1, "destroy object 1"));
-        t.commit(os);
+        t.commit();
 
         assertEquals(0, os.getActions().size());
     }
@@ -210,13 +212,13 @@ public class TransactionTest extends TestCase {
         } catch (TransactionException expected) {}
 
         try {
-            t.commit(os);
+            t.commit();
             fail();
         } catch (TransactionException expected) {}
     }
 
     public void testTransactionAlreadyCompleteAfterCommit() throws Exception {
-        t.commit(os);
+        t.commit();
 
         try {
             t.abort();
@@ -224,7 +226,7 @@ public class TransactionTest extends TestCase {
         } catch (TransactionException expected) {}
 
         try {
-            t.commit(os);
+            t.commit();
             fail();
         } catch (TransactionException expected) {}
     }
