@@ -1,6 +1,5 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.ReflectionFactory;
 import org.nakedobjects.object.help.HelpManager;
 import org.nakedobjects.object.help.OneToOneHelp;
 import org.nakedobjects.object.reflect.Action;
@@ -12,7 +11,7 @@ import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 
 
-public class ProxyReflectionFactory implements ReflectionFactory {
+public class ProxyReflectionFactory  {
     private Distribution connection;
     private HelpManager helpManger;
     private DataFactory objectDataFactory;
