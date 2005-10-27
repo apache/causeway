@@ -4,10 +4,8 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.ReflectionFactory;
-import org.nakedobjects.object.ReflectorFactory;
 import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
 import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.AbstractSpecificationLoader;
 import org.nakedobjects.object.defaults.ObjectLoaderImpl;
 import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
 import org.nakedobjects.object.persistence.NakedObjectManager;
@@ -24,16 +22,14 @@ public class BasicSystem {
     private final NakedObjectLoader objectLoader;
     private final NakedObjectsClient nakedObjects;
     private final NakedObjectManager objectManager;
-    private final ReflectorFactory reflectorFactory;
     private final ReflectionFactory reflectionFactory;
 
     public BasicSystem() {
-        specificationLoader = new AbstractSpecificationLoader();
+        specificationLoader = new NakedObjectSpecificationLoaderImpl();
         
         this.objectLoader = setupObjectLoader();
         this.objectManager = setupObjectManager();
         reflectionFactory = new LocalReflectionFactory();
-        reflectorFactory = new JavaAdapterFactory();
         
         nakedObjects = new NakedObjectsClient();
     }
@@ -60,8 +56,6 @@ public class BasicSystem {
         nakedObjects.setSpecificationLoader(specificationLoader);
         nakedObjects.setObjectLoader(objectLoader);
         nakedObjects.setObjectManager(objectManager);        
-        nakedObjects.setReflectorFactory(reflectorFactory);
-        nakedObjects.setReflectionFactory(reflectionFactory);
 
         nakedObjects.init();
     }
@@ -71,7 +65,7 @@ public class BasicSystem {
     }
 
     public void shutdown() {
-       NakedObjects.shutdown();
+       nakedObjects.shutdown();
     }
 }
 
