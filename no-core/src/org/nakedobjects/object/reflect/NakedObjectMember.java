@@ -31,7 +31,7 @@ public abstract class NakedObjectMember {
      * 
      * @see #getName()
      */
-    protected String getLabel() {
+    public String getLabel() {
         return label;
     }
 

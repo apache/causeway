@@ -1,7 +1,6 @@
 package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.TestSystem;
-import org.nakedobjects.distribution.TestPojo;
 import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.DummyNakedValue;
 import org.nakedobjects.object.DummyOid;

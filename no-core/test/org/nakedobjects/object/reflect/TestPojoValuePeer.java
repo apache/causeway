@@ -1,6 +1,5 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.distribution.TestPojo;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;

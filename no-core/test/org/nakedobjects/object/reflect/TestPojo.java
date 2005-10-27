@@ -1,12 +1,44 @@
 package org.nakedobjects.object.reflect;
 
-public class TestPojo {
+import java.util.Vector;
 
-    public TestPojo() {
-        super();
+public class TestPojo {
+    private int value;
+    private Object reference;
+    private Vector collection = new Vector();
+    
+    public TestPojo(int value, Object reference, Object[] elements) {
+        this.value = value;
+        this.reference = reference;
+        for (int j = 0; j < elements.length; j++) {
+            collection.addElement(elements[value]);
+        }
     }
 
+    public TestPojo() {}
+
+    public int getValue() {
+        return value;
+    }
+    
+    public void setValue(int value) {
+        this.value = value;
+    }
+    
+    public void setReference(Object reference) {
+        this.reference = reference;
+    }
+    
+    public Object getReference() {
+        return reference;
+    }
+    
+    public Vector getCollection() {
+        return collection;
+    }
+    
 }
+
 
 
 /*
