@@ -23,7 +23,21 @@ import java.util.Enumeration;
  * SERIALIZING is skipped.
  */
 public abstract class DataFactory {
+    private int actionGraphDepth = 100;
     private int persistentGraphDepth = 100;
+    private int updateGraphDepth = 1;
+
+    public Data createActionResult(Naked result) {
+        if (result == null) {
+            return createNullData("");
+        } else if (result instanceof NakedCollection) {
+            return createCollectionData((NakedCollection) result, true, persistentGraphDepth);
+        } else if (result instanceof NakedObject) {
+            return createCompletePersistentGraph((NakedObject) result);
+        } else {
+            throw new NakedObjectRuntimeException();
+        }
+    }
 
     private CollectionData createCollectionData(NakedCollection collection, boolean recursePersistentObjects, int depth) {
         Oid oid = collection.getOid();
@@ -47,6 +61,13 @@ public abstract class DataFactory {
         return createCollectionData(oid, type, elements, hasAllElements, collection.getVersion());
     }
 
+    protected abstract CollectionData createCollectionData(
+            Oid oid,
+            String type,
+            ObjectData[] elements,
+            boolean hasAllElements,
+            Version version);
+
     /**
      * Creates an ObjectData that contains all the data for all the objects in the graph. This allows the
      * client to recieve all data it might need without having to return to the server to get referenced
@@ -54,6 +75,10 @@ public abstract class DataFactory {
      */
     public final ObjectData createCompletePersistentGraph(NakedObject object) {
         return createObjectData(object, true, persistentGraphDepth);
+    }
+
+    public final ObjectData createDataForActionTarget(NakedObject object) {
+        return createObjectData(object, false, actionGraphDepth);
     }
 
     public final Data createDataForParameter(String type, Naked object) {
@@ -71,30 +96,55 @@ public abstract class DataFactory {
         }
     }
 
-    protected abstract NullData createNullData(String type);
+    // TODO pass accross only the field within the object
+    public Data createForResolveField(NakedObject object, String fieldName) {
+        Oid oid = object.getOid();
+        NakedObjectSpecification specification = object.getSpecification();
+        String type = specification.getFullName();
+        ResolveState resolveState = object.getResolveState();
+
+        Data[] fieldContent;
+        NakedObjectField[] fields = specification.getFields();
+        fieldContent = new Data[fields.length];
+
+        NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
+        for (int i = 0; i < fields.length; i++) {
+            if (fields[i].getName().equals(fieldName)) {
+                Naked field = object.getField(fields[i]);
+                if (field == null) {
+                    fieldContent[i] = createNullData(fields[i].getSpecification().getFullName());
+                } else if (fields[i].isValue()) {
+                    fieldContent[i] = createValueData(field);
+                } else if (fields[i].isCollection()) {
+                    fieldContent[i] = createCollectionData((NakedCollection) field, true, persistentGraphDepth);
+                } else {
+                    fieldContent[i] = createObjectData((NakedObject) field, true, persistentGraphDepth);
+                }
+                break;
+            }
+        }
+        NakedObjects.getObjectLoader().end(object);
+
+        // TODO remove the fudge - needed as collections are part of parents, hence parent object gets set as
+        // resolving (is not a ghost) yet it has no version number
+        // return createObjectData(oid, type, fieldContent, resolveState.isResolved(),
+        // !resolveState.isGhost(), object.getVersion());
+        return createObjectData(oid, type, fieldContent, resolveState.isResolved(), object.getVersion());
+    }
 
     /**
      * Creates an ObjectData that contains the data for the specified object, but not the data for any
      * referenced objects. For each referenced object only the reference is passed across.
      */
     public final ObjectData createForUpdate(NakedObject object) {
-        return createObjectData(object, true, 1);
-    }
-
-    /**
-     * Creates an ObjectData that contains all the data for all the transient objects in the specified
-     * transient object. For any referenced persistent object in the graph, only the reference is passed
-     * across.
-     */
-    public final ObjectData createMakePersistentGraph(NakedObject object) {
-        Assert.assertTrue("transient", object.getResolveState().isTransient());
-        return createObjectData(object, false, persistentGraphDepth);
+        return createObjectData(object, true, updateGraphDepth);
     }
 
     /**
      * Creates a a graph of ReferenceData objects to transfer the OIDs and Versions for each object that was
      * made persistent during the makePersistent call.
-     * @param updateNotifier 
+     * 
+     * @param updateNotifier
      */
     public ObjectData createMadePersistentGraph(ObjectData data, NakedObject object, SingleResponseUpdateNotifier updateNotifier) {
         Oid oid = object.getOid();
@@ -103,7 +153,7 @@ public abstract class DataFactory {
         Version version = object.getVersion();
 
         updateNotifier.removeUpdateFor(object);
-        
+
         NakedObjectField[] fields = object.getFields();
 
         NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
@@ -121,7 +171,8 @@ public abstract class DataFactory {
                         elements[j] = createMadePersistentGraph(element, el, updateNotifier);
                     }
                 }
-                fieldContent[i] = createCollectionData(coll.getOid(), f.getType(), elements, f.hasAllElements(), coll.getVersion());
+                fieldContent[i] = createCollectionData(coll.getOid(), f.getType(), elements, f.hasAllElements(), coll
+                        .getVersion());
             } else {
                 Data f = data.getFieldContent()[i];
                 if (f != null && !(f instanceof NullData) && ((ObjectData) f).getOid() == null) {
@@ -136,6 +187,18 @@ public abstract class DataFactory {
         ObjectData createReferenceData = createObjectData(oid, type, fieldContent, true, version);
         return createReferenceData;
     }
+
+    /**
+     * Creates an ObjectData that contains all the data for all the transient objects in the specified
+     * transient object. For any referenced persistent object in the graph, only the reference is passed
+     * across.
+     */
+    public final ObjectData createMakePersistentGraph(NakedObject object) {
+        Assert.assertTrue("transient", object.getResolveState().isTransient());
+        return createObjectData(object, false, persistentGraphDepth);
+    }
+
+    protected abstract NullData createNullData(String type);
 
     protected final ObjectData createObjectData(NakedObject object, boolean recursePersistentObjects, int depth) {
         if (object == null) {
@@ -186,13 +249,6 @@ public abstract class DataFactory {
             boolean hasCompleteData,
             Version version);
 
-    protected abstract CollectionData createCollectionData(
-            Oid oid,
-            String type,
-            ObjectData[] elements,
-            boolean hasAllElements,
-            Version version);
-
     /**
      * Creates a ReferenceData that contains the type, version and OID for the specified object. This can only
      * be used for peristent objects.
@@ -210,74 +266,56 @@ public abstract class DataFactory {
 
     protected abstract ValueData createValueData(String fullName, Object object);
 
-    public int getPersistentGraphDepth() {
-        return persistentGraphDepth;
-    }
-
-    // TODO add property for update depth
-    public void setPersistentGraphDepth(int persistentGraphDepth) {
-        this.persistentGraphDepth = persistentGraphDepth;
+    /**
+     * .NET property
+     * 
+     * @property
+     * @see #setActionGraphDepth(int)
+     */
+    public void set_ActionGraphDepth(int actionGraphDepth) {
+        setActionGraphDepth(actionGraphDepth);
     }
 
     /**
      * .NET property
      * 
      * @property
+     * @see #setPersistentGraphDepth(int)
      */
     public void set_PersistentGraphDepth(int persistentGraphDepth) {
+        setPersistentGraphDepth(persistentGraphDepth);
+    }
+
+    /**
+     * .NET property
+     * 
+     * @property
+     * @see #setUpdateGraphDepth(int)
+     */
+    public void set_UpdateGraphDepth(int updateGraphDepth) {
+        setUpdateGraphDepth(updateGraphDepth);
+    }
+
+    /**
+     * Specifies the maximum depth to recurse when creaing data graphs for the method
+     * createDataForActionTarget. Defaults to 100.
+     */
+    public void setActionGraphDepth(int actionGraphDepth) {
+        this.actionGraphDepth = actionGraphDepth;
+    }
+
+    /**
+     * Specifies the maximum depth to recurse when creaing data graphs of persistent objects. Defaults to 100.
+     */
+    public void setPersistentGraphDepth(int persistentGraphDepth) {
         this.persistentGraphDepth = persistentGraphDepth;
     }
 
-    public final ObjectData createDataForActionTarget(NakedObject object) {
-        return createObjectData(object, false, 100);
-    }
-
-    public Data createActionResult(Naked result) {
-        if (result == null) {
-            return createNullData("");
-        } else if (result instanceof NakedCollection) {
-            return createCollectionData((NakedCollection) result, true, persistentGraphDepth);
-        } else if (result instanceof NakedObject) {
-            return createCompletePersistentGraph((NakedObject) result);
-        } else {
-            throw new NakedObjectRuntimeException();
-        }
-    }
-
-    // TODO pass accross only the field within the object
-    public Data createForResolveField(NakedObject object, String fieldName) {
-        Oid oid = object.getOid();
-        NakedObjectSpecification specification = object.getSpecification();
-        String type = specification.getFullName();
-        ResolveState resolveState = object.getResolveState();
-
-        Data[] fieldContent;
-        NakedObjectField[] fields = specification.getFields();
-        fieldContent = new Data[fields.length];
-
-        NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
-        for (int i = 0; i < fields.length; i++) {
-            if (fields[i].getName().equals(fieldName)) {
-                Naked field = object.getField(fields[i]);
-                if (field == null) {
-                    fieldContent[i] = createNullData(fields[i].getSpecification().getFullName());
-                } else if (fields[i].isValue()) {
-                    fieldContent[i] = createValueData(field);
-                } else if (fields[i].isCollection()) {
-                    fieldContent[i] = createCollectionData((NakedCollection) field, true, persistentGraphDepth);
-                } else {
-                    fieldContent[i] = createObjectData((NakedObject) field, true, persistentGraphDepth);
-                }
-                break;
-            }
-        }
-        NakedObjects.getObjectLoader().end(object);
-
-        // TODO remove the fudge - needed as collections are part of parents, hence parent object gets set as
-        // resolving (is not a ghost) yet it has no version number
-        // return createObjectData(oid, type, fieldContent, resolveState.isResolved(),
-        // !resolveState.isGhost(), object.getVersion());
-        return createObjectData(oid, type, fieldContent, resolveState.isResolved(), object.getVersion());
+    /**
+     * Specifies the maximum depth to recurse when creaing data graphs for updates. Defaults to 1.
+     */
+    public void setUpdateGraphDepth(int updateGraphDepth) {
+        this.updateGraphDepth = updateGraphDepth;
     }
 }
 
