@@ -1,7 +1,7 @@
 package org.nakedobjects.object.undo;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.OneToOneAssociation;
 
 
 public class AssociateCommand implements Command {

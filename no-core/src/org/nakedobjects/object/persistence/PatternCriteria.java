@@ -1,10 +1,11 @@
 package org.nakedobjects.object.persistence;
 
+import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.OneToOneAssociation;
 
 
 public class PatternCriteria implements InstancesCriteria {

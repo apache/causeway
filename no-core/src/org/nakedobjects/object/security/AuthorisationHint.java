@@ -1,11 +1,12 @@
 package org.nakedobjects.object.security;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.MemberIdentifier;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.Session;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
-import org.nakedobjects.object.reflect.MemberIdentifier;
 
 class AuthorisationHint {
     static Hint hint(MemberIdentifier identifier, final Hint originalHint, AuthorisationManager authorisationManager) {

@@ -1,8 +1,8 @@
 package org.nakedobjects.object.reflect.internal;
 
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
 
 import java.lang.reflect.Method;
 

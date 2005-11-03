@@ -1,5 +1,6 @@
 package org.nakedobjects.object.reflect;
 
+import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -38,6 +39,8 @@ public interface OneToOnePeer extends FieldPeer {
     Class[] getExtensions();
 
     boolean isMandatory();
+
+    boolean isObject();
 }
 
 

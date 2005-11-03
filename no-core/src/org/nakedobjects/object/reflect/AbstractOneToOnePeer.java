@@ -1,5 +1,6 @@
 package org.nakedobjects.object.reflect;
 
+import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -61,6 +62,10 @@ public class AbstractOneToOnePeer implements OneToOnePeer {
         return decorated.isMandatory();
     }
 
+    public boolean isObject() {
+        return decorated.isObject();
+    }
+    
     public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
         return decorated.isEmpty(identifier, inObject);
     }

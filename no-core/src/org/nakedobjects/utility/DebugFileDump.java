@@ -1,6 +1,5 @@
 package org.nakedobjects.utility;
 
-import org.nakedobjects.object.NakedObjectRuntimeException;
 
 import java.io.FileWriter;
 import java.io.IOException;

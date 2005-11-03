@@ -1,15 +1,15 @@
 package org.nakedobjects.object.reflect.valueadapter;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.Action;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectAssociation;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.NakedObjectAssociation;
-import org.nakedobjects.object.reflect.NakedObjectField;
 
 public abstract class AbstractNakedValue implements NakedValue {
     private NakedObjectSpecification specification;

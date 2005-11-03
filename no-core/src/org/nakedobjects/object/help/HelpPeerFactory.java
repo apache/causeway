@@ -1,9 +1,9 @@
 package org.nakedobjects.object.help;
 
-import org.nakedobjects.object.ReflectionPeerFactory;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.OneToManyPeer;
 import org.nakedobjects.object.reflect.OneToOnePeer;
+import org.nakedobjects.object.reflect.ReflectionPeerFactory;
 
 
 public class HelpPeerFactory implements ReflectionPeerFactory {

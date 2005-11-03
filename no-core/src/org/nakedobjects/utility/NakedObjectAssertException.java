@@ -1,6 +1,5 @@
 package org.nakedobjects.utility;
 
-import org.nakedobjects.object.NakedObjectRuntimeException;
 
 
 public class NakedObjectAssertException extends NakedObjectRuntimeException {

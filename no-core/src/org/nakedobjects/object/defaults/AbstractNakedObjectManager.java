@@ -1,16 +1,15 @@
 package org.nakedobjects.object.defaults;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectPersistenceManager;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.TypedNakedCollection;
-import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
-import org.nakedobjects.object.persistence.InstancesCriteria;
-import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.persistence.UnsupportedFindException;
+import org.nakedobjects.object.UnsupportedFindException;
 
 
-public abstract class AbstractNakedObjectManager implements NakedObjectManager {
+public abstract class AbstractNakedObjectManager implements NakedObjectPersistenceManager {
     public abstract void abortTransaction();
 
     public TypedNakedCollection allInstances(NakedObjectSpecification specification, boolean includeSubclasses) {

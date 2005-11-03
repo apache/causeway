@@ -1,10 +1,10 @@
 package org.nakedobjects.object.transaction;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.persistence.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.reflect.AbstractOneToOnePeer;
-import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 
 import org.apache.log4j.Logger;
@@ -18,7 +18,7 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
     }
 
     public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        NakedObjectManager objectManager = NakedObjects.getObjectManager();
+        NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
         if (inObject.getResolveState().isPersistent()) {
             try {
                 objectManager.startTransaction();
@@ -35,7 +35,7 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
     }
 
     public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        NakedObjectManager objectManager = NakedObjects.getObjectManager();
+        NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
         if (inObject.getResolveState().isPersistent()) {
             try {
                 objectManager.startTransaction();
@@ -52,7 +52,7 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
     }
 
     public void setValue(MemberIdentifier identifier, NakedObject inObject, Object value) {
-        NakedObjectManager objectManager = NakedObjects.getObjectManager();
+        NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
         if (inObject.getResolveState().isPersistent()) {
             try {
                 objectManager.startTransaction();
@@ -70,7 +70,7 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
     }
     
 
-    private void abort(NakedObjectManager objectManager) {
+    private void abort(NakedObjectPersistenceManager objectManager) {
         LOG.info("exception executing " + getName() + ", aborting transaction");
         try {
             objectManager.abortTransaction();

@@ -1,10 +1,10 @@
 package org.nakedobjects.object.transaction;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.persistence.ObjectManagerException;
+import org.nakedobjects.object.ObjectPerstsistenceException;
 
 public interface PersistenceCommand {
-    void execute() throws ObjectManagerException;
+    void execute() throws ObjectPerstsistenceException;
     
     NakedObject onObject();
 }

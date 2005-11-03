@@ -1,6 +1,6 @@
 package org.nakedobjects.object.help;
 
-import org.nakedobjects.object.reflect.MemberIdentifier;
+import org.nakedobjects.object.MemberIdentifier;
 
 public class HelpManagerAssist implements HelpManager {
     private HelpManager decorated;

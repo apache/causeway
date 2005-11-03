@@ -1,11 +1,12 @@
 package org.nakedobjects.object.reflect;
 
+import org.nakedobjects.object.Action;
+import org.nakedobjects.object.ActionParameterSet;
+import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.reflect.Action.Target;
-import org.nakedobjects.object.reflect.Action.Type;
 
 public abstract class AbstractActionPeer implements ActionPeer {
     private final ActionPeer decorated;
@@ -39,7 +40,7 @@ public abstract class AbstractActionPeer implements ActionPeer {
         return decorated.getParameterCount();
     }
 
-    public Type getType() {
+    public Action.Type getType() {
         return decorated.getType();
     }
 
@@ -55,7 +56,7 @@ public abstract class AbstractActionPeer implements ActionPeer {
         return decorated.getParameters(identifier, object, parameters);
     }
 
-    public Target getTarget() {
+    public Action.Target getTarget() {
         return decorated.getTarget();
     }
 }

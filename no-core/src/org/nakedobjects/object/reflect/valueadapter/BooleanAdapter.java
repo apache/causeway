@@ -1,9 +1,9 @@
 package org.nakedobjects.object.reflect.valueadapter;
 
 import org.nakedobjects.object.InvalidEntryException;
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.value.BooleanValue;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 
 public class BooleanAdapter extends AbstractNakedValue implements BooleanValue {

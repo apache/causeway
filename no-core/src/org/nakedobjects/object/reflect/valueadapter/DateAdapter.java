@@ -1,8 +1,8 @@
 package org.nakedobjects.object.reflect.valueadapter;
 
 import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.TextEntryParseException;
-import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.value.DateValue;
 
 import java.text.DateFormat;

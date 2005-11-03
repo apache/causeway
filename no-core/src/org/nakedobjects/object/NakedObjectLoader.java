@@ -1,7 +1,5 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.NakedObjectsComponent;
-import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.utility.DebugInfo;
 
 import java.util.Enumeration;

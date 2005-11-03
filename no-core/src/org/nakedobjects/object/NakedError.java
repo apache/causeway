@@ -1,6 +1,5 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.defaults.InternalNakedObject;
 
 public interface NakedError extends InternalNakedObject {
 

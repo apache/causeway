@@ -1,5 +1,7 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.utility.NakedObjectRuntimeException;
+
 /**
  * Indicates an error in the application code; essentailly any invalid convention following.
  */

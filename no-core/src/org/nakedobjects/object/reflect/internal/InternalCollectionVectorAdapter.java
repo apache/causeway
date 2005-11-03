@@ -1,11 +1,11 @@
 package org.nakedobjects.object.reflect.internal;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.defaults.AbstractNakedReference;
-import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.base.AbstractNakedReference;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.utility.ToString;

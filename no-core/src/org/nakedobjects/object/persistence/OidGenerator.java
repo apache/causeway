@@ -1,7 +1,7 @@
 package org.nakedobjects.object.persistence;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.utility.StartupException;
+import org.nakedobjects.object.Oid;
 
 
 public interface OidGenerator {
@@ -9,7 +9,7 @@ public interface OidGenerator {
 
 	String name();
 	
-	void init() throws StartupException;
+	void init();
 	
 	void shutdown();
 }

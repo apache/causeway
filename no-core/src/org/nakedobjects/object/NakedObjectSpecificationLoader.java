@@ -1,6 +1,5 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.NakedObjectsComponent;
 
 public interface NakedObjectSpecificationLoader extends NakedObjectsComponent {
     public abstract NakedObjectSpecification loadSpecification(String name);

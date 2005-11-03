@@ -1,11 +1,11 @@
 package org.nakedobjects.object.help;
 
+import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.AbstractActionPeer;
 import org.nakedobjects.object.reflect.ActionPeer;
-import org.nakedobjects.object.reflect.MemberIdentifier;
 
 public class ActionHelp extends AbstractActionPeer {
     private final HelpManager helpManager;

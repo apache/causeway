@@ -1,9 +1,9 @@
 package org.nakedobjects.object.help;
 
+import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.AbstractOneToManyPeer;
-import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToManyPeer;
 
 public class OneToManyHelp extends AbstractOneToManyPeer {

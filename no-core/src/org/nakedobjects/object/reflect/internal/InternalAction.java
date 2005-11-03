@@ -1,19 +1,17 @@
 package org.nakedobjects.object.reflect.internal;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.Action;
+import org.nakedobjects.object.ActionParameterSet;
+import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.ActionParameterSet;
 import org.nakedobjects.object.reflect.ActionPeer;
-import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.ReflectionException;
-import org.nakedobjects.object.reflect.Action.Target;
-import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.utility.UnexpectedCallException;
 
 import java.lang.reflect.InvocationTargetException;
@@ -26,9 +24,9 @@ public class InternalAction extends InternalMember implements ActionPeer {
     final static Logger LOG = Logger.getLogger(InternalAction.class);
     private final Method actionMethod;
     private final int paramCount;
-    private Type type;
+    private Action.Type type;
 
-    public InternalAction(String name, Type type, Method action, Method about) {
+    public InternalAction(String name, Action.Type type, Method action, Method about) {
         super(name, about);
         this.type = type;
         this.actionMethod = action;
@@ -111,11 +109,11 @@ public class InternalAction extends InternalMember implements ActionPeer {
         return paramCount;
     }
 
-    public Type getType() {
+    public Action.Type getType() {
         return type;
     }
 
-    public Target getTarget() {
+    public Action.Target getTarget() {
         return Action.DEFAULT;
     }
     

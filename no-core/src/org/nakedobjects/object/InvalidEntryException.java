@@ -1,5 +1,7 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.utility.NakedObjectRuntimeException;
+
 
 public class InvalidEntryException extends NakedObjectRuntimeException {
 	public InvalidEntryException() {

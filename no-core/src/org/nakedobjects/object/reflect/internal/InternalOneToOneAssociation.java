@@ -1,14 +1,14 @@
 package org.nakedobjects.object.reflect.internal;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.object.reflect.valueadapter.StringAdapter;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.lang.reflect.InvocationTargetException;
@@ -22,10 +22,12 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
     protected Method addMethod;
     protected Method removeMethod;
     protected Method setMethod;
+    private final boolean isObject;
 
-    public InternalOneToOneAssociation(String name, Class type, Method get, Method set, Method add, Method remove,
+    public InternalOneToOneAssociation(boolean isObject, String name, Class type, Method get, Method set, Method add, Method remove,
         Method about) {
         super(name, type, get, about, false);
+        this.isObject = isObject;
         this.setMethod = set;
         this.addMethod = add;
         removeMethod = remove;
@@ -251,6 +253,10 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
     
     public boolean isMandatory() {
         return false;
+    }
+    
+    public boolean isObject() {
+        return isObject;
     }
 }
 

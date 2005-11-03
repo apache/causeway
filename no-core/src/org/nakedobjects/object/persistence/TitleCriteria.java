@@ -1,5 +1,6 @@
 package org.nakedobjects.object.persistence;
 
+import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 

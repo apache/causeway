@@ -1,5 +1,7 @@
 package org.nakedobjects.object.security;
 
+import org.nakedobjects.object.Session;
+
 public class NullSession implements Session {
 
     public String getUserName() {
