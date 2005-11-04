@@ -7,7 +7,8 @@ import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.OneToOnePeer;
-import org.nakedobjects.object.reflect.valueadapter.StringAdapter;
+import org.nakedobjects.object.reflect.internal.about.InternalAbout;
+import org.nakedobjects.object.value.adapter.StringAdapter;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.utility.NotImplementedException;
 

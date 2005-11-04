@@ -17,8 +17,6 @@ public interface OneToManyPeer extends FieldPeer {
 
     Hint getHint(MemberIdentifier identifier, NakedObject inObject, NakedObject associate, boolean add);
 
-    String getName();
-
     NakedObjectSpecification getType();
 
     boolean hasHint();

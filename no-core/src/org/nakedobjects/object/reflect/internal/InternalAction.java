@@ -12,6 +12,7 @@ import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.ReflectionException;
+import org.nakedobjects.object.reflect.internal.about.InternalAbout;
 import org.nakedobjects.utility.UnexpectedCallException;
 
 import java.lang.reflect.InvocationTargetException;

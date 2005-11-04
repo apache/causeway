@@ -13,7 +13,7 @@ public abstract class AbstractNakedObjectField extends AbstractNakedObjectMember
     public AbstractNakedObjectField(String name, NakedObjectSpecification type, MemberIdentifier identifier) {
         super(name, identifier);
         if (type == null) {
-            throw new IllegalArgumentException("type cannot be null");
+            throw new IllegalArgumentException("type cannot be null for " + name);
         }
         this.specification = type;
     }

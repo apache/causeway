@@ -7,6 +7,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.OneToManyPeer;
+import org.nakedobjects.object.reflect.internal.about.InternalAbout;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.utility.NotImplementedException;
 

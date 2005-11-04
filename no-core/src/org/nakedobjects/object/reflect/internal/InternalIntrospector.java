@@ -20,6 +20,7 @@ import org.nakedobjects.object.reflect.OneToManyPeer;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.ReflectionPeerBuilder;
+import org.nakedobjects.object.reflect.internal.about.InternalAbout;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import java.lang.reflect.Array;
@@ -99,9 +100,7 @@ public class InternalIntrospector {
 
     private ReflectionPeerBuilder builder;
     private Action[] classActions;
-    private String className;
     private Class cls;
-  //  private Method defaultAboutFieldMethod;
     private NakedObjectField[] fields;
     private Method methods[];
     private Action[] objectActions;
@@ -427,7 +426,7 @@ public class InternalIntrospector {
         Action actionChains[] = new Action[actions.length];
 
         for (int i = 0; i < actions.length; i++) {
-            actionChains[i] = builder.createAction(className, actions[i]);
+            actionChains[i] = builder.createAction(getFullName(), actions[i]);
         }
 
         return actionChains;
@@ -447,10 +446,10 @@ public class InternalIntrospector {
             Object object = fieldPeers[i];
 
             if (object instanceof OneToOnePeer) {
-                fields[i] = builder.createField(className, (OneToOnePeer) object);
+                fields[i] = builder.createField(getFullName(), (OneToOnePeer) object);
 
             } else if (object instanceof OneToManyPeer) {
-                fields[i] = builder.createField(className, (OneToManyPeer) object);
+                fields[i] = builder.createField(getFullName(), (OneToManyPeer) object);
 
             } else {
                 throw new NakedObjectRuntimeException();
@@ -489,7 +488,7 @@ public class InternalIntrospector {
                 }
 
                 if (!order[orderIndex].trim().equals("")) {
-                    LOG.warn("invalid ordering element '" + order[orderIndex] + "' in " + className);
+                    LOG.warn("invalid ordering element '" + order[orderIndex] + "' in " + getFullName());
                 }
             }
 

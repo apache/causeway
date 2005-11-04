@@ -17,8 +17,6 @@ public interface OneToOnePeer extends FieldPeer {
 
 	Hint getHint(MemberIdentifier identifier, NakedObject object, Naked value);
 	
-	String getName();
-	
 	/** TODO do we need to get the type from here? **/
 	NakedObjectSpecification getType();
 

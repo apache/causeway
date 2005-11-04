@@ -2,6 +2,8 @@ package org.nakedobjects.object.reflect;
 
 public interface FieldPeer {
 
+    String getName();
+
 }
 
 

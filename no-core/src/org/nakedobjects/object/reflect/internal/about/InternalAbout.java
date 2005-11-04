@@ -1,4 +1,4 @@
-package org.nakedobjects.object.reflect.internal;
+package org.nakedobjects.object.reflect.internal.about;
 
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Allow;
