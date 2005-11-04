@@ -1,6 +1,6 @@
 package org.nakedobjects.object.io;
 
-import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.Oid;
 
 import java.util.Enumeration;
 import java.util.Hashtable;

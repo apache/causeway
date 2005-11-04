@@ -1,6 +1,6 @@
 package org.nakedobjects.object.io;
 
-import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.Oid;
 
 class CollectionData extends Data {
     private final static long serialVersionUID = 1L;

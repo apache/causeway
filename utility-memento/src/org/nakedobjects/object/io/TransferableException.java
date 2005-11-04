@@ -1,6 +1,6 @@
 package org.nakedobjects.object.io;
 
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 
 public class TransferableException extends NakedObjectRuntimeException {

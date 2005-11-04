@@ -1,6 +1,6 @@
 package org.nakedobjects.object.io;
 
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
