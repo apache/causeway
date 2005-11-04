@@ -1,6 +1,6 @@
 package exploration;
 
-import org.nakedobjects.object.ApplicationContext;
+import org.nakedobjects.object.defaults.ApplicationContext;
 
 import bom.Booking;
 import bom.City;
@@ -26,7 +26,7 @@ public class Context extends ApplicationContext {
         addClass(LocationGroup.class);
     }
 
-    public String name() {
+    public String getName() {
         return "ECS Bookings";
     }
 }

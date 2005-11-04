@@ -1,32 +1,32 @@
 package exploration;
 
-import org.nakedobjects.NakedObjects;
-import org.nakedobjects.NakedObjectsClient;
-import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.container.configuration.ConfigurationException;
-import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
-import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.ObjectLoaderImpl;
-import org.nakedobjects.object.defaults.PojoAdapterHashMap;
-import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.persistence.NakedObjectStore;
-import org.nakedobjects.object.persistence.ObjectManagerLogger;
-import org.nakedobjects.object.persistence.ObjectStoreLogger;
+import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.loader.IdentityAdapterHashMap;
+import org.nakedobjects.object.loader.ObjectLoaderImpl;
+import org.nakedobjects.object.loader.PojoAdapterHashMap;
+import org.nakedobjects.object.persistence.DefaultPersistAlgorithm;
+import org.nakedobjects.object.persistence.ObjectPesistorLogger;
 import org.nakedobjects.object.persistence.OidGenerator;
-import org.nakedobjects.object.persistence.defaults.DefaultPersistAlgorithm;
-import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
-import org.nakedobjects.object.persistence.defaults.MemoryObjectStore;
-import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
+import org.nakedobjects.object.persistence.SimpleOidGenerator;
+import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistenceManager;
+import org.nakedobjects.object.persistence.objectstore.NakedObjectStore;
+import org.nakedobjects.object.persistence.objectstore.ObjectStoreLogger;
+import org.nakedobjects.object.persistence.objectstore.inmemory.MemoryObjectStore;
+import org.nakedobjects.object.reflect.ReflectionPeerFactory;
+import org.nakedobjects.object.repository.NakedObjectsClient;
+import org.nakedobjects.object.transaction.TransactionPeerFactory;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.control.SimpleSession;
 import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
 import org.nakedobjects.reflector.java.reflect.JavaAdapterFactory;
 import org.nakedobjects.reflector.java.reflect.JavaSpecificationLoader;
-import org.nakedobjects.system.AboutNakedObjects;
-import org.nakedobjects.system.SplashWindow;
+import org.nakedobjects.utility.AboutNakedObjects;
+import org.nakedobjects.utility.SplashWindow;
+import org.nakedobjects.utility.configuration.PropertiesConfiguration;
+import org.nakedobjects.utility.configuration.ConfigurationException;
+import org.nakedobjects.utility.configuration.PropertiesFileLoader;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.SkylarkViewer;
 import org.nakedobjects.viewer.skylark.ViewUpdateNotifier;
@@ -50,7 +50,7 @@ public class TestingCollectionResolving {
 
         NakedObjectsClient nakedObjects = new NakedObjectsClient();
         
-        Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(DEFAULT_CONFIG, false));
+        PropertiesConfiguration configuration = new PropertiesConfiguration(new PropertiesFileLoader(DEFAULT_CONFIG, false));
         nakedObjects.setConfiguration(configuration);
         
         if (configuration.getString(SHOW_EXPLORATION_OPTIONS) == null) {
@@ -86,28 +86,28 @@ public class TestingCollectionResolving {
             DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
             persistAlgorithm.setOidGenerator(oidGenerator);
 
-            LocalObjectManager lom = new LocalObjectManager();
+            ObjectStorePersistenceManager lom = new ObjectStorePersistenceManager();
             lom.setObjectStore(objectStore);
             lom.setCheckObjectsForDirtyFlag(true);
             lom.setPersistAlgorithm(persistAlgorithm);
             
-            NakedObjectManager objectManager = new ObjectManagerLogger(lom, "manager.log");
-            nakedObjects.setObjectManager(objectManager);
+            NakedObjectPersistenceManager objectManager = new ObjectPesistorLogger(lom, "manager.log");
+            nakedObjects.setPersistenceManager(objectManager);
+ 
+            ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
+                    new TransactionPeerFactory(),
+            };
             
-            NakedObjectSpecificationLoader specificationLoader = new JavaSpecificationLoader();
-
+            JavaSpecificationLoader specificationLoader = new JavaSpecificationLoader();
+            specificationLoader.setReflectionPeerFactories(factories);
             nakedObjects.setSpecificationLoader(specificationLoader);
             
-            LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
-
             ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
             objectLoader.setObjectFactory(objectFactory);
             objectLoader.setPojoAdapterMap(new PojoAdapterHashMap());
             objectLoader.setIdentityAdapterMap(new IdentityAdapterHashMap());
             objectLoader.setAdapterFactory(new JavaAdapterFactory());
             nakedObjects.setObjectLoader(objectLoader);
-            
-            nakedObjects.setReflectionFactory(reflectionFactory);
 
             nakedObjects.init();
             

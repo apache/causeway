@@ -10,7 +10,7 @@ import org.nakedobjects.application.valueholder.Password;
 import org.nakedobjects.application.valueholder.Percentage;
 import org.nakedobjects.application.valueholder.TextString;
 import org.nakedobjects.application.valueholder.WholeNumber;
-import org.nakedobjects.object.persistence.ConcurrencyException;
+import org.nakedobjects.object.ConcurrencyException;
 
 import java.net.SocketException;
 import java.util.Vector;

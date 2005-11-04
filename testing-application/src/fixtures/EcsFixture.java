@@ -13,11 +13,12 @@ public class EcsFixture extends JavaFixture {
 
     public void install() {
         setupClasses();  
-        setupClock();
+   /*     setupClock();
         City[] cities = setupCities();
         setupObjects(cities);    
     //    setUsers();
         resetClock();
+        */
     }
 
 /*    private void setUsers() {

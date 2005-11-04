@@ -1,8 +1,8 @@
 package exploration;
 
 import org.nakedobjects.JavaExploration;
-import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistenceManager;
 
 import fixtures.BookingsFixture;
 import fixtures.CitiesFixture;
@@ -14,7 +14,7 @@ public class TestingExplorationWithNewSystem {
     public static void main(String[] args) {
         JavaExploration e = new JavaExploration();
         
-        ((LocalObjectManager) NakedObjects.getObjectManager()).setCheckObjectsForDirtyFlag(true);
+        ((ObjectStorePersistenceManager) NakedObjects.getPersistenceManager()).setCheckObjectsForDirtyFlag(true);
         
         CitiesFixture cities;
         e.addFixture(cities = new CitiesFixture());

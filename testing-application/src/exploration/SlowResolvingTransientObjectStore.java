@@ -1,10 +1,10 @@
 package exploration;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.ObjectPerstsistenceException;
 import org.nakedobjects.object.ResolveState;
-import org.nakedobjects.object.persistence.ObjectManagerException;
-import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
+import org.nakedobjects.object.persistence.objectstore.inmemory.TransientObjectStore;
 
 public class SlowResolvingTransientObjectStore extends TransientObjectStore {
 
@@ -13,7 +13,7 @@ public class SlowResolvingTransientObjectStore extends TransientObjectStore {
     /**
      * Simply marks the specified object as Resolved.
      */
-    public void resolveImmediately(NakedObject object) throws ObjectManagerException {
+    public void resolveImmediately(NakedObject object) throws ObjectPerstsistenceException {
         if(object.getResolveState().isResolvable(ResolveState.RESOLVING)) {
             super.resolveImmediately(object);
         
