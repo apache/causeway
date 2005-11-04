@@ -1,10 +1,11 @@
 package org.nakedobjects.xat;
 
 import org.nakedobjects.application.control.Validity;
-import org.nakedobjects.application.value.Money;
-import org.nakedobjects.application.value.TextString;
 
 import java.util.Vector;
+
+import test.org.nakedobjects.object.repository.application.value.Money;
+import test.org.nakedobjects.object.repository.application.value.TextString;
 
 
 public class TestObjectExample {

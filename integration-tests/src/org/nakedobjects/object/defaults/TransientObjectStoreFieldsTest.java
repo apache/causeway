@@ -1,11 +1,13 @@
 package org.nakedobjects.object.defaults;
 
 
-import org.nakedobjects.container.configuration.ComponentException;
-import org.nakedobjects.container.configuration.ConfigurationException;
-import org.nakedobjects.object.NakedObjectStore;
 import org.nakedobjects.object.NakedObjectStoreFieldsTestCase;
-import org.nakedobjects.object.ObjectStoreException;
+import org.nakedobjects.object.ObjectPerstsistenceException;
+import org.nakedobjects.utility.configuration.ComponentException;
+import org.nakedobjects.utility.configuration.ConfigurationException;
+
+import test.org.nakedobjects.object.repository.object.NakedObjectStore;
+import test.org.nakedobjects.object.repository.object.ObjectStoreException;
 
 import junit.framework.TestSuite;
 
@@ -20,11 +22,11 @@ public class TransientObjectStoreFieldsTest extends NakedObjectStoreFieldsTestCa
       junit.textui.TestRunner.run(new TestSuite(TransientObjectStoreFieldsTest.class));
    }
 
-	public NakedObjectStore installObjectStore() throws ObjectManagerException {
+	public NakedObjectStore installObjectStore() throws ObjectPerstsistenceException {
       return new TransientObjectStore();
    }
 	
-	protected void restartObjectStore() throws ObjectManagerException, Exception, ConfigurationException, ComponentException {
+	protected void restartObjectStore() throws ObjectPerstsistenceException, Exception, ConfigurationException, ComponentException {
 	    // override so the store is not restarted
 	}
 }

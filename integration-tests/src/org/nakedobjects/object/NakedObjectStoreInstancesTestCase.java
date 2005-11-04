@@ -1,8 +1,8 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.container.configuration.ComponentException;
-import org.nakedobjects.container.configuration.ConfigurationException;
-import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.defaults.PojoAdapter;
+import org.nakedobjects.utility.configuration.ComponentException;
+import org.nakedobjects.utility.configuration.ConfigurationException;
 
 
 public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStoreTestCase {
@@ -20,7 +20,7 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
         super(name);
     }
 
-    private void cleanPersonInstances() throws ObjectManagerException, UnsupportedFindException {
+    private void cleanPersonInstances() throws ObjectPerstsistenceException, UnsupportedFindException {
         NakedObject[] initialInstances;
 
         do {
@@ -35,7 +35,7 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
         assertTrue("no person objects", !objectStore.hasInstances(personClass, false));
     }
 
-    private void cleanRoleInstances() throws ObjectManagerException, UnsupportedFindException {
+    private void cleanRoleInstances() throws ObjectPerstsistenceException, UnsupportedFindException {
         NakedObject[] initialInstances;
 
         do {
@@ -163,7 +163,7 @@ public abstract class NakedObjectStoreInstancesTestCase extends NakedObjectStore
         assertEquals(p1, p2);
     }
 
-    public void testInstancesRepeatability() throws ConfigurationException, ComponentException, ObjectManagerException, Exception {
+    public void testInstancesRepeatability() throws ConfigurationException, ComponentException, ObjectPerstsistenceException, Exception {
         restartObjectStore();
 
         try {

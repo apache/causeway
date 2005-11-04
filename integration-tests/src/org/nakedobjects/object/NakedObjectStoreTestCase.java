@@ -1,12 +1,8 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.MockObjectManager;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
-import org.nakedobjects.object.defaults.AbstractSpecificationLoader;
-import org.nakedobjects.object.persistence.NakedObjectStore;
-import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.persistence.defaults.SerialOid;
+import org.nakedobjects.LocalReflectionFactory;
+import org.nakedobjects.object.persistence.SerialOid;
+import org.nakedobjects.object.persistence.objectstore.NakedObjectStore;
 
 import junit.framework.TestCase;
 
@@ -14,12 +10,16 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import test.org.nakedobjects.object.defaults.MockObjectPersistenceManager;
+import test.org.nakedobjects.object.repository.object.defaults.AbstractSpecificationLoader;
+import test.org.nakedobjects.object.repository.object.defaults.NakedObjectSpecificationImpl;
+
 
 public abstract class NakedObjectStoreTestCase extends TestCase {
     private static final Logger LOG = Logger.getLogger(NakedObjectStoreTestCase.class);
     protected static NakedObjectStore objectStore;
     private int next;
-    protected MockObjectManager manager;
+    protected MockObjectPersistenceManager manager;
     protected NakedObjectContext context;
     
     public NakedObjectStoreTestCase(String name) {
@@ -46,7 +46,7 @@ public abstract class NakedObjectStoreTestCase extends TestCase {
         NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
 //        NakedObjectSpecificationImpl.setReflectorFactory(new InternalReflectorFactory());
 
-        manager = MockObjectManager.setup();
+        manager = MockObjectPersistenceManager.setup();
          
         context = new NakedObjectContext(manager);
         

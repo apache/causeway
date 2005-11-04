@@ -1,15 +1,15 @@
 package org.nakedobjects.io;
 
 import org.nakedobjects.BasicSystem;
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectLoader;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.Person;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.Role;
 import org.nakedobjects.object.Team;
 import org.nakedobjects.object.io.Memento;
-import org.nakedobjects.object.persistence.defaults.SerialOid;
+import org.nakedobjects.object.persistence.SerialOid;
 import org.nakedobjects.object.system.TestClock;
 
 import java.io.ByteArrayInputStream;

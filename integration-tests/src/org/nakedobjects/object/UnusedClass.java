@@ -1,7 +1,6 @@
 package org.nakedobjects.object;
 
 import org.nakedobjects.application.Title;
-import org.nakedobjects.object.persistence.Oid;
 
 
 public class UnusedClass {

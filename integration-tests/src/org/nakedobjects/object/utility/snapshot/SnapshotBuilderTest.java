@@ -1,11 +1,10 @@
 package org.nakedobjects.object.utility.snapshot;
 
-import org.nakedobjects.NakedObjectsClient;
-import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.AbstractSpecificationLoader;
-import org.nakedobjects.object.defaults.ObjectLoaderImpl;
+import org.nakedobjects.LocalReflectionFactory;
+import org.nakedobjects.object.loader.ObjectLoaderImpl;
+import org.nakedobjects.object.repository.NakedObjectsClient;
 import org.nakedobjects.reflector.java.reflect.JavaAdapterFactory;
+import org.nakedobjects.utility.configuration.PropertiesConfiguration;
 import org.nakedobjects.utility.xmlsnapshot.DomSerializer;
 import org.nakedobjects.utility.xmlsnapshot.DomSerializerCrimson;
 import org.nakedobjects.utility.xmlsnapshot.XmlSnapshot;
@@ -13,6 +12,8 @@ import org.nakedobjects.utility.xmlsnapshot.XmlSnapshot;
 import junit.framework.TestCase;
 
 import org.w3c.dom.Element;
+
+import test.org.nakedobjects.object.repository.object.defaults.AbstractSpecificationLoader;
 
 
 public class SnapshotBuilderTest extends TestCase {
@@ -23,7 +24,7 @@ public class SnapshotBuilderTest extends TestCase {
 
     public void testSnapshot() {
         NakedObjectsClient nakedObjects = new NakedObjectsClient();
-        nakedObjects.setConfiguration(new Configuration());
+        nakedObjects.setConfiguration(new PropertiesConfiguration());
         
         new AbstractSpecificationLoader();
         

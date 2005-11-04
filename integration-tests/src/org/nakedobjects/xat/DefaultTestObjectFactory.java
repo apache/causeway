@@ -2,7 +2,7 @@ package org.nakedobjects.xat;
 
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.Session;
 
 import java.util.Hashtable;
 

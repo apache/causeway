@@ -146,7 +146,7 @@ public abstract class NakedObjectStoreFieldsTestCase extends NakedObjectStoreTes
         assertTrue(restored.getValue().isEmpty());
     }
 
-    private NakedObject saveAndGet(NakedObject object) throws ObjectManagerException, Exception, ObjectNotFoundException {
+    private NakedObject saveAndGet(NakedObject object) throws ObjectPerstsistenceException, Exception, ObjectNotFoundException {
         NakedObjectSpecification spec = object.getSpecification();
         Oid oid = nextOid();
         object.setupOid(oid);

@@ -1,27 +1,28 @@
 package org.nakedobjects;
-import org.nakedobjects.container.configuration.TestConfiguration;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectLoader;
+import org.nakedobjects.object.NakedObjectPersistenceManager;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.ReflectionFactory;
-import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
-import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.ObjectLoaderImpl;
-import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
-import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.persistence.defaults.DefaultPersistAlgorithm;
-import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
-import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
-import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
+import org.nakedobjects.object.loader.IdentityAdapterHashMap;
+import org.nakedobjects.object.loader.ObjectLoaderImpl;
+import org.nakedobjects.object.loader.PojoAdapterHashImpl;
+import org.nakedobjects.object.persistence.DefaultPersistAlgorithm;
+import org.nakedobjects.object.persistence.SimpleOidGenerator;
+import org.nakedobjects.object.persistence.objectstore.ObjectStorePersitenceManager;
+import org.nakedobjects.object.persistence.objectstore.inmemory.TransientObjectStore;
+import org.nakedobjects.object.repository.NakedObjectsClient;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.reflect.JavaAdapterFactory;
+
+import test.org.nakedobjects.object.repository.object.ReflectionFactory;
+import test.org.nakedobjects.utility.configuration.TestConfiguration;
 
 
 public class BasicSystem {
     private final NakedObjectSpecificationLoader specificationLoader;
     private final NakedObjectLoader objectLoader;
     private final NakedObjectsClient nakedObjects;
-    private final NakedObjectManager objectManager;
+    private final NakedObjectPersistenceManager objectManager;
     private final ReflectionFactory reflectionFactory;
 
     public BasicSystem() {
@@ -34,8 +35,8 @@ public class BasicSystem {
         nakedObjects = new NakedObjectsClient();
     }
 
-    protected LocalObjectManager setupObjectManager() {
-        LocalObjectManager objectManager = new LocalObjectManager();
+    protected ObjectStorePersitenceManager setupObjectManager() {
+        ObjectStorePersitenceManager objectManager = new ObjectStorePersitenceManager();
         DefaultPersistAlgorithm defaultPersistAlgorithm = new DefaultPersistAlgorithm();
         defaultPersistAlgorithm.setOidGenerator(new SimpleOidGenerator());
         objectManager.setPersistAlgorithm(defaultPersistAlgorithm);
@@ -55,7 +56,7 @@ public class BasicSystem {
          nakedObjects.setConfiguration(new TestConfiguration());
         nakedObjects.setSpecificationLoader(specificationLoader);
         nakedObjects.setObjectLoader(objectLoader);
-        nakedObjects.setObjectManager(objectManager);        
+        nakedObjects.setPersistenceManager(objectManager);        
 
         nakedObjects.init();
     }

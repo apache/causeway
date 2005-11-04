@@ -1,14 +1,8 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.application.value.Money;
-import org.nakedobjects.object.NakedObjectContext;
-import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.MockObjectManager;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
-import org.nakedobjects.object.defaults.AbstractSpecificationLoader;
-import org.nakedobjects.object.reflect.PojoAdapter;
-import org.nakedobjects.object.security.ClientSession;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.LocalReflectionFactory;
+import org.nakedobjects.object.Session;
+import org.nakedobjects.object.defaults.PojoAdapter;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
@@ -16,6 +10,13 @@ import junit.framework.TestCase;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import test.org.nakedobjects.object.defaults.MockObjectPersistenceManager;
+import test.org.nakedobjects.object.repository.application.value.Money;
+import test.org.nakedobjects.object.repository.object.NakedObjectContext;
+import test.org.nakedobjects.object.repository.object.defaults.AbstractSpecificationLoader;
+import test.org.nakedobjects.object.repository.object.defaults.NakedObjectSpecificationImpl;
+import test.org.nakedobjects.object.repository.object.security.ClientSession;
 
 
 public class TestObjectImplTest extends TestCase {
@@ -26,7 +27,7 @@ public class TestObjectImplTest extends TestCase {
     private TestObject elementThree;
 
     private TestNaked[] multipleParameters;
-    private MockObjectManager om;
+    private MockObjectPersistenceManager om;
     private TestObject singleParameter;
     private TestObject target;
     private TestObjectExample targetObject;
@@ -35,7 +36,7 @@ public class TestObjectImplTest extends TestCase {
         BasicConfigurator.configure();
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        om = MockObjectManager.setup();
+        om = MockObjectPersistenceManager.setup();
         new AbstractSpecificationLoader();
         NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
 //        NakedObjectSpecificationImpl.setReflectorFactory(new InternalReflectorFactory());

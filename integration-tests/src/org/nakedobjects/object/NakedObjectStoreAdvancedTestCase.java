@@ -1,7 +1,7 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.container.configuration.ComponentException;
-import org.nakedobjects.container.configuration.ConfigurationException;
+import org.nakedobjects.utility.configuration.ComponentException;
+import org.nakedobjects.utility.configuration.ConfigurationException;
 
 
 
@@ -133,7 +133,7 @@ public abstract class NakedObjectStoreAdvancedTestCase extends NakedObjectStoreT
         }
     }
 
-    public void testResolve() throws ConfigurationException, ComponentException, ObjectManagerException, Exception {
+    public void testResolve() throws ConfigurationException, ComponentException, ObjectPerstsistenceException, Exception {
         restartObjectStore();
 
         Role role = (Role) objectStore.getObject(roles[1].getOid(), roleClass);

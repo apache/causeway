@@ -1,24 +1,24 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.NakedObjectsClient;
-import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.MockObjectManager;
-import org.nakedobjects.object.defaults.AbstractSpecificationLoader;
-import org.nakedobjects.object.reflect.NakedObjectAssociation;
+import org.nakedobjects.LocalReflectionFactory;
+import org.nakedobjects.object.repository.NakedObjectsClient;
 
 import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 
+import test.org.nakedobjects.object.defaults.MockObjectPersistenceManager;
+import test.org.nakedobjects.object.repository.object.defaults.AbstractSpecificationLoader;
+
 public abstract class IntegrationTestCase extends TestCase {
-    protected MockObjectManager manager;
+    protected MockObjectPersistenceManager manager;
 
     protected void setUp() throws Exception {
         super.setUp();
 
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
-        manager = MockObjectManager.setup();
+        manager = MockObjectPersistenceManager.setup();
         new AbstractSpecificationLoader();
         new NakedObjectsClient().setReflectionFactory(new LocalReflectionFactory());
     }
