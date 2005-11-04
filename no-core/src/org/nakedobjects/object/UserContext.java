@@ -4,6 +4,14 @@ import java.util.Vector;
 
 
 public interface UserContext extends InternalNakedObject {
+    public void addToClasses(NakedClass cls);
+
+    public void addToObjects(NakedObject cls);
+
+    public void removeFromClasses(NakedClass cls);
+
+    public void removeFromObjects(NakedObject cls);
+
 
     Vector getClasses();
 

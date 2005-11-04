@@ -1,5 +1,7 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.object.control.Consent;
+
 
 
 public interface NakedClass extends InternalNakedObject {
@@ -19,6 +21,10 @@ public interface NakedClass extends InternalNakedObject {
     public String getSingularName();
 
     public String title();
+
+    public Consent useAllInstance();
+
+    public Consent useCreate();
     }
 
 /*
