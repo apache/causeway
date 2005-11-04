@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE project [
-	<!ENTITY properties SYSTEM "file:../build-templates/properties.xml">
-<!ENTITY distribution SYSTEM "file:../build-templates/distribution-build.xml">
+	<!ENTITY distribution SYSTEM "file:../build-templates/distribution-build.xml">
 ]>
 
 <project name="Naked Objects framework - exploration edition"
@@ -9,6 +8,7 @@
          basedir=".">
 
 	<property file="build.properties" />
+
 	<property name="distribution" value="exploration" />
 	<property name="example-class"
 	          value="org.nakedobjects.example.ecs.exploration.EcsExploration" />
@@ -45,19 +45,6 @@
 			<fileset dir="../example-expenses/src/images" />
 			<fileset dir="../example-library/src/images" />
 		</copy>
-	</target>
-
-
-
-	<target name="changelog">
-		<cvschangelog cvsroot=":ext:rcm@81.168.57.193:/home/cvs"
-			              dir="../viewer-skylark/${src.dir}"
-			              command="log"
-						destfile="testcvs.txt"/>
-	
-		<cvschangelog cvsroot=":ext:rcm@81.168.57.193:/home/cvs"
-		              dir="../viewer-skylark/${src.dir}"
-		              destfile="changelog.xml" />
 	</target>
 
 
