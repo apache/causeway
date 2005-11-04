@@ -5,10 +5,10 @@
 ]>
 
 <project name="test build numbers"
-         default="release-number"
+         default="build-id"
          basedir=".">
 
-	<target name="release-number">
+	<target name="build-id">
 		<dependset>
 			<srcfileset dir="..">
 				<include name="*/src/**/*.java"/>
@@ -31,7 +31,7 @@
 			<format property="build.date" pattern="yyyyMMdd-HHmm" locale="GMT" />
 		</tstamp>
 		<property name="build.number" value="${build.date}"/>
-		<echo>Build number: ${build.number}</echo>
+		<echo>Build id: ${build.number}</echo>
 		
 		<propertyfile file="build.number.properties">
 			<entry key="build.number" value="${build.number}"/>
