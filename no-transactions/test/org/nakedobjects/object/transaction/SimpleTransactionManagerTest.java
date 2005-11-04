@@ -1,14 +1,12 @@
 package org.nakedobjects.object.transaction;
 
-import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.MockObjectStore;
-import org.nakedobjects.object.MockUpdateNotifier;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectPersistenceManager;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.persistence.ObjectNotFoundException;
-import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.ObjectNotFoundException;
+import org.nakedobjects.object.persistence.SimpleOidGenerator;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -17,6 +15,9 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
+
+import test.org.nakedobjects.object.MockObjectStore;
+import test.org.nakedobjects.object.repository.object.MockUpdateNotifier;
 
 
 public class SimpleTransactionManagerTest extends TestCase {
@@ -27,7 +28,7 @@ public class SimpleTransactionManagerTest extends TestCase {
     }
     private NakedObjectSpecification accountClass;
 
-    private NakedObjectManager objectManager;
+    private NakedObjectPersistenceManager objectManager;
 
     private MockObjectStore objectstore;
 

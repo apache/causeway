@@ -1,8 +1,9 @@
 package org.nakedobjects.persistence.cache;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.persistence.ObjectStoreException;
-import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.Oid;
+
+import test.org.nakedobjects.object.repository.object.persistence.ObjectStoreException;
 
 
 public interface SnapshotReader {

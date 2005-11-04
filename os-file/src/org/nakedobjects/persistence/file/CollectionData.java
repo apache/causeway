@@ -1,7 +1,7 @@
 package org.nakedobjects.persistence.file;
 
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.persistence.defaults.SerialOid;
+import org.nakedobjects.object.persistence.SerialOid;
 
 
 /**

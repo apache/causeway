@@ -1,9 +1,10 @@
 package org.nakedobjects.persistence.cache.simple;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.persistence.ObjectStoreException;
-import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.persistence.cache.SnapshotReader;
+
+import test.org.nakedobjects.object.repository.object.persistence.ObjectStoreException;
 
 public class SimpleSnapshotReader implements SnapshotReader {
 

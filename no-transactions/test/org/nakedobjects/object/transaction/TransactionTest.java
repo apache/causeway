@@ -1,11 +1,11 @@
 package org.nakedobjects.object.transaction;
 
 import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.MockLoadedObjects;
-import org.nakedobjects.object.MockObjectStore;
-import org.nakedobjects.object.DummyOid;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.Person;
+import org.nakedobjects.object.Role;
+import org.nakedobjects.object.Team;
 
 import java.util.Vector;
 
@@ -13,6 +13,10 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
+
+import test.org.nakedobjects.object.DummyOid;
+import test.org.nakedobjects.object.MockObjectStore;
+import test.org.nakedobjects.object.repository.object.MockLoadedObjects;
 
 
 public class TransactionTest extends TestCase {

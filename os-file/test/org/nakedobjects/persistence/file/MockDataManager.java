@@ -1,8 +1,8 @@
 package org.nakedobjects.persistence.file;
 
-import org.nakedobjects.object.persistence.ObjectNotFoundException;
-import org.nakedobjects.object.persistence.ObjectManagerException;
-import org.nakedobjects.object.persistence.defaults.SerialOid;
+import org.nakedobjects.object.ObjectNotFoundException;
+import org.nakedobjects.object.ObjectPerstsistenceException;
+import org.nakedobjects.object.persistence.SerialOid;
 
 import java.util.Vector;
 
@@ -30,7 +30,7 @@ public class MockDataManager implements DataManager {
 
     public void getNakedClass(String name) {}
 
-    public void insert(Data data) throws ObjectManagerException {}
+    public void insert(Data data) throws ObjectPerstsistenceException {}
 
     public CollectionData loadCollectionData(SerialOid oid) {
         return null;
@@ -40,9 +40,9 @@ public class MockDataManager implements DataManager {
         return null;
     }
 
-    public void remove(SerialOid oid) throws ObjectNotFoundException, ObjectManagerException {}
+    public void remove(SerialOid oid) throws ObjectNotFoundException, ObjectPerstsistenceException {}
 
-    public void save(Data data) throws ObjectManagerException {
+    public void save(Data data) throws ObjectPerstsistenceException {
         actions.addElement(data);
     }
 

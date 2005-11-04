@@ -3,13 +3,13 @@ package org.nakedobjects.object.transaction;
 
 import Title;
 
-import org.nakedobjects.object.control.ActionAbout;
-import org.nakedobjects.object.control.FieldAbout;
-import org.nakedobjects.object.defaults.value.Date;
-import org.nakedobjects.object.defaults.value.Money;
-import org.nakedobjects.object.persistence.defaults.TransactionException;
 
 import java.util.Vector;
+
+import test.org.nakedobjects.object.repository.object.control.ActionAbout;
+import test.org.nakedobjects.object.repository.object.control.FieldAbout;
+import test.org.nakedobjects.object.repository.object.defaults.value.Date;
+import test.org.nakedobjects.object.repository.object.defaults.value.Money;
 
 
 public class Transfer {

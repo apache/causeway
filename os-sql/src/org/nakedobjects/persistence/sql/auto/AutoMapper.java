@@ -1,18 +1,19 @@
 package org.nakedobjects.persistence.sql.auto;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.ObjectNotFoundException;
+import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.ResolveState;
-import org.nakedobjects.object.persistence.ObjectNotFoundException;
-import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.persistence.UnsupportedFindException;
-import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.UnsupportedFindException;
+import org.nakedobjects.object.Version;
+import org.nakedobjects.object.persistence.LongNumberVersion;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.ObjectMapper;
 import org.nakedobjects.persistence.sql.Results;
@@ -20,6 +21,7 @@ import org.nakedobjects.persistence.sql.SqlObjectStoreException;
 import org.nakedobjects.persistence.sql.SqlOid;
 import org.nakedobjects.persistence.sql.ValueMapper;
 import org.nakedobjects.persistence.sql.ValueMapperLookup;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import java.util.Date;
 import java.util.Vector;
@@ -120,10 +122,11 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
             NakedObjects.getObjectLoader();
         }
 		
-		long version = rs.getLong(versionColumn);
+		long number = rs.getLong(versionColumn);
 		String user = rs.getString(lastActivityUserColumn);
 		Date time = rs.getDate(lastActivityDateColumn);
-		object.setOptimisticLock(version, user, time);
+		Version version = new LongNumberVersion(number, user, time);
+		object.setOptimisticLock(version);
 		
 	    NakedObjects.getObjectLoader().end(object);
 
@@ -200,7 +203,7 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 		String updateWhereClause = updateWhereClause(object, true);
 		
 		// TODO reset optimistic lock
-		object.setOptimisticLock(0, "", new Date());
+		object.setOptimisticLock(new LongNumberVersion(0, "", new Date()));
 
 		StringBuffer assignments = new StringBuffer();
 		int fld = 0;

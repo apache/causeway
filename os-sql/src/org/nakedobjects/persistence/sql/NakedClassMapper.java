@@ -1,7 +1,7 @@
 package org.nakedobjects.persistence.sql;
 
 import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.persistence.ObjectNotFoundException;
+import org.nakedobjects.object.ObjectNotFoundException;
 
 
 public interface NakedClassMapper extends ObjectMapper {

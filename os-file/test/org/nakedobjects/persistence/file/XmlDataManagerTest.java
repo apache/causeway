@@ -1,19 +1,20 @@
 package org.nakedobjects.persistence.file;
 
-import org.nakedobjects.NakedObjects;
-import org.nakedobjects.NakedObjectsClient;
-import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
-import org.nakedobjects.object.persistence.ObjectManagerException;
-import org.nakedobjects.object.persistence.defaults.SerialOid;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.ObjectPerstsistenceException;
+import org.nakedobjects.object.persistence.SerialOid;
+import org.nakedobjects.object.repository.NakedObjectsClient;
+import org.nakedobjects.utility.configuration.PropertiesConfiguration;
 
 import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+
+import test.org.nakedobjects.object.DummyNakedObjectSpecification;
+import test.org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
 
 public class XmlDataManagerTest extends TestCase {
 	private static final Logger LOG = Logger.getLogger(XmlDataManagerTest.class);
@@ -32,7 +33,7 @@ public class XmlDataManagerTest extends TestCase {
 	protected void setUp() throws Exception {		
 		LogManager.getLoggerRepository().setThreshold(Level.OFF);
 		
-		new NakedObjectsClient().setConfiguration(new Configuration());
+		new NakedObjectsClient().setConfiguration(new PropertiesConfiguration());
  		XmlDataManager.clearTestDirectory();
 		manager = new XmlDataManager("tmp/tests");
 
@@ -100,7 +101,7 @@ public class XmlDataManagerTest extends TestCase {
 		assertEquals(first + 3, manager.nextId());
 	}
 
-	public void testInsertObjectWithFields() throws ObjectManagerException {
+	public void testInsertObjectWithFields() throws ObjectPerstsistenceException {
 		ObjectData data = createData(Role.class, 99);
 		data.set("Person", new SerialOid(101));
 		assertNotNull(data.get("Person"));
@@ -118,7 +119,7 @@ public class XmlDataManagerTest extends TestCase {
 	}
 
 
-	public void testInsertObjectWithEmptyOneToManyAssociations() throws ObjectManagerException {
+	public void testInsertObjectWithEmptyOneToManyAssociations() throws ObjectPerstsistenceException {
 		ObjectData data = createData(Team.class, 99);
 
 		SerialOid coid = new SerialOid(103);
@@ -134,7 +135,7 @@ public class XmlDataManagerTest extends TestCase {
 		assertNull(c);
 	}
 
-	public void testInsertObjectWithOneToManyAssociations() throws ObjectManagerException {
+	public void testInsertObjectWithOneToManyAssociations() throws ObjectPerstsistenceException {
 		ObjectData data = createData(Team.class, 99);
 		
 		SerialOid coid = new SerialOid(103);

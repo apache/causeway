@@ -1,11 +1,11 @@
 package org.nakedobjects.persistence.sql;
 
-import org.nakedobjects.object.persistence.ObjectManagerException;
+import org.nakedobjects.object.ObjectPerstsistenceException;
 
 public interface Parameter {
-	void setupParameter(int parameter, StoredProcedure procedure) throws ObjectManagerException;
+	void setupParameter(int parameter, StoredProcedure procedure) throws ObjectPerstsistenceException;
 
 //	String getRestoreString();
 
-	void retrieve(int parameter, StoredProcedure procedure) throws ObjectManagerException;
+	void retrieve(int parameter, StoredProcedure procedure) throws ObjectPerstsistenceException;
 }

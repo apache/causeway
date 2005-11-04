@@ -1,19 +1,11 @@
 package org.nakedobjects.persistence.cache;
 
-import org.nakedobjects.object.LoadedObjects;
-import org.nakedobjects.object.MockLoadedObjects;
+import org.nakedobjects.LocalReflectionFactory;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.Person;
-import org.nakedobjects.object.Role;
-import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.MockObjectManager;
-import org.nakedobjects.object.defaults.NakedObjectSpecificationImpl;
-import org.nakedobjects.object.defaults.AbstractSpecificationLoader;
-import org.nakedobjects.object.persistence.defaults.SerialOid;
-import org.nakedobjects.object.reflect.defaults.JavaReflectorFactory;
-import org.nakedobjects.object.system.TestClock;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.persistence.SerialOid;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -23,6 +15,16 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import test.org.nakedobjects.object.defaults.MockObjectPersistenceManager;
+import test.org.nakedobjects.object.repository.object.LoadedObjects;
+import test.org.nakedobjects.object.repository.object.MockLoadedObjects;
+import test.org.nakedobjects.object.repository.object.Person;
+import test.org.nakedobjects.object.repository.object.Role;
+import test.org.nakedobjects.object.repository.object.defaults.AbstractSpecificationLoader;
+import test.org.nakedobjects.object.repository.object.defaults.NakedObjectSpecificationImpl;
+import test.org.nakedobjects.object.repository.object.reflect.defaults.JavaReflectorFactory;
+import test.org.nakedobjects.object.repository.object.system.TestClock;
 
 import junit.framework.TestCase;
 
@@ -114,7 +116,7 @@ public class InstancesTest extends TestCase {
         ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
         ObjectInputStream ois = new ObjectInputStream(bais);
         
-        MockObjectManager manager = MockObjectManager.setup();
+        MockObjectPersistenceManager manager = MockObjectPersistenceManager.setup();
         
         
         NakedObjectSpecification personClass = NakedObjects.getSpecificationLoader().loadSpecification(Person.class);
@@ -163,7 +165,7 @@ public class InstancesTest extends TestCase {
         ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
         ObjectInputStream ois = new ObjectInputStream(bais);
         
-        MockObjectManager manager = MockObjectManager.setup();
+        MockObjectPersistenceManager manager = MockObjectPersistenceManager.setup();
         
         
         NakedObjectSpecification roleClass = NakedObjects.getSpecificationLoader().loadSpecification(Person.class);

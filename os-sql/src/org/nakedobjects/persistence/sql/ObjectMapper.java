@@ -1,11 +1,11 @@
 package org.nakedobjects.persistence.sql;
 
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.persistence.ObjectNotFoundException;
-import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.persistence.UnsupportedFindException;
-import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.ObjectNotFoundException;
+import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.UnsupportedFindException;
 
 
 public interface ObjectMapper {

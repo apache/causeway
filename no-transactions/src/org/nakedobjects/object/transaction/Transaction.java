@@ -3,12 +3,12 @@ package org.nakedobjects.object.transaction;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.persistence.NakedObjectStore;
-import org.nakedobjects.object.persistence.ObjectManagerException;
-import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.ObjectPerstsistenceException;
+import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.persistence.objectore.NakedObjectStore;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import java.util.Date;
 import java.util.Enumeration;
@@ -108,11 +108,11 @@ public class Transaction {
             }
             store.endTransaction();
         }
-        }catch(ObjectManagerException ose) {
+        }catch(ObjectPerstsistenceException ose) {
             try {
                 store.abortTransaction();
                 return;
-            } catch (ObjectManagerException e1) {
+            } catch (ObjectPerstsistenceException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }

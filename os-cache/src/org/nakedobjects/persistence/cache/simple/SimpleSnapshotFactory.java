@@ -2,7 +2,8 @@ package org.nakedobjects.persistence.cache.simple;
 
 import org.nakedobjects.persistence.cache.SnapshotFactory;
 import org.nakedobjects.persistence.cache.SnapshotReader;
-import org.nakedobjects.persistence.cache.SnapshotWriter;
+
+import test.org.nakedobjects.object.repository.persistence.cache.SnapshotWriter;
 
 public class SimpleSnapshotFactory implements SnapshotFactory {
     private String directory = "tmp";

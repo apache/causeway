@@ -1,8 +1,8 @@
 package org.nakedobjects.persistence.cache;
 
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.ObjectPerstsistenceException;
 import org.nakedobjects.object.io.Memento;
-import org.nakedobjects.object.persistence.ObjectManagerException;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -18,7 +18,7 @@ public class SnapShotWriter {
 
     private ObjectOutputStream oos;
 
-    public void open() throws ObjectManagerException {
+    public void open() throws ObjectPerstsistenceException {
         File tempFile = file(snapshotFilename, version, true);
         LOG.info("Saving objects in " + tempFile + "...");
 
@@ -26,9 +26,9 @@ public class SnapShotWriter {
         try {
             oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(tempFile)));
          } catch (FileNotFoundException e) {
-            throw new ObjectManagerException("Failed to find file " + tempFile, e);
+            throw new ObjectPerstsistenceException("Failed to find file " + tempFile, e);
         } catch (IOException e) {
-            throw new ObjectManagerException("Failed to write to file " + tempFile, e);
+            throw new ObjectPerstsistenceException("Failed to write to file " + tempFile, e);
         } finally {
         }
     }

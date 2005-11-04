@@ -2,7 +2,6 @@ package org.nakedobjects.persistence.cache;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.io.Memento;
-import org.nakedobjects.object.persistence.ObjectStoreException;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -12,6 +11,8 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 import org.apache.log4j.Logger;
+
+import test.org.nakedobjects.object.repository.object.persistence.ObjectStoreException;
 
 
 public class SnapshotWriterImpl implements SnapshotWriter {

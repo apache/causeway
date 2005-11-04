@@ -1,12 +1,13 @@
 package org.nakedobjects.persistence.cache.simple;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.persistence.ObjectStoreException;
-import org.nakedobjects.persistence.cache.SnapshotWriter;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+
+import test.org.nakedobjects.object.repository.object.persistence.ObjectStoreException;
+import test.org.nakedobjects.object.repository.persistence.cache.SnapshotWriter;
 
 
 public class SimpleSnapshotWriter implements SnapshotWriter {

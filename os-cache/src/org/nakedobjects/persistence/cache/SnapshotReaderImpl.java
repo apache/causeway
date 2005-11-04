@@ -1,8 +1,7 @@
 package org.nakedobjects.persistence.cache;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.persistence.ObjectStoreException;
-import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.Oid;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -13,6 +12,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import org.apache.log4j.Logger;
+
+import test.org.nakedobjects.object.repository.object.persistence.ObjectStoreException;
 
 
 public class SnapshotReaderImpl implements SnapshotReader {

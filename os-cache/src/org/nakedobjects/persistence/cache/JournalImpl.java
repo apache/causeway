@@ -1,8 +1,8 @@
 package org.nakedobjects.persistence.cache;
 
+import org.nakedobjects.object.ObjectPerstsistenceException;
 import org.nakedobjects.object.io.BinaryTransferableWriter;
 import org.nakedobjects.object.io.Memento;
-import org.nakedobjects.object.persistence.ObjectManagerException;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -19,16 +19,16 @@ public class JournalImpl implements Journal {
   private ObjectOutputStream journal;
 
 
-    public void closeJournal() throws ObjectManagerException {
+    public void closeJournal() throws ObjectPerstsistenceException {
         try {
             LOG.info("Closing journal " + journalFilename);
             journal.close();
         } catch (IOException e) {
-            throw new ObjectManagerException("Failed to close journal", e);
+            throw new ObjectPerstsistenceException("Failed to close journal", e);
         }
     }
 
-    public void openJounal() throws ObjectManagerException {
+    public void openJounal() throws ObjectPerstsistenceException {
         File file = file(journalFilename, version, false);
 
         try {
@@ -37,9 +37,9 @@ public class JournalImpl implements Journal {
             journal.writeObject("Journal opened " + new Date());
             journal.flush();
         } catch (FileNotFoundException e) {
-            throw new ObjectManagerException("Failed to open jounal file " + file, e);
+            throw new ObjectPerstsistenceException("Failed to open jounal file " + file, e);
         } catch (IOException e) {
-            throw new ObjectManagerException("Failed to write jounal file " + file, e);
+            throw new ObjectPerstsistenceException("Failed to write jounal file " + file, e);
         }
     }
 
@@ -63,7 +63,7 @@ public class JournalImpl implements Journal {
     }
 
 
-    public void applyJournals() throws ObjectManagerException {
+    public void applyJournals() throws ObjectPerstsistenceException {
     /*
      * File file = file(journalFilename, version, false);
      * 

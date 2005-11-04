@@ -1,6 +1,6 @@
 package org.nakedobjects.persistence.file.utility;
 
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

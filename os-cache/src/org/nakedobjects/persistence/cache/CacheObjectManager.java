@@ -1,28 +1,29 @@
 package org.nakedobjects.persistence.cache;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DirtyObjectSet;
+import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NullDirtyObjectSet;
-import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.ObjectNotFoundException;
+import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.UnsupportedFindException;
+import org.nakedobjects.object.defaults.AbstracObjectPersistenceManager;
+import org.nakedobjects.object.defaults.NullDirtyObjectSet;
 import org.nakedobjects.object.io.Memento;
-import org.nakedobjects.object.persistence.InstancesCriteria;
-import org.nakedobjects.object.persistence.ObjectNotFoundException;
-import org.nakedobjects.object.persistence.ObjectStoreException;
-import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.OidGenerator;
-import org.nakedobjects.object.persistence.UnsupportedFindException;
-import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.Assert;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import test.org.nakedobjects.object.repository.object.persistence.ObjectStoreException;
 
-public class CacheObjectManager extends AbstractNakedObjectManager {
+
+public class CacheObjectManager extends AbstracObjectPersistenceManager {
     private Journal journal;
     private final Hashtable nakedClasses = new Hashtable();
     private ObjectStore objectStore;

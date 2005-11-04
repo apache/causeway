@@ -1,9 +1,10 @@
 package org.nakedobjects.persistence.file;
 
-import org.nakedobjects.object.DummyNakedObjectSpecification;
-import org.nakedobjects.object.persistence.defaults.SerialOid;
+import org.nakedobjects.object.persistence.SerialOid;
 
 import java.util.Enumeration;
+
+import test.org.nakedobjects.object.DummyNakedObjectSpecification;
 
 import junit.framework.TestCase;
 

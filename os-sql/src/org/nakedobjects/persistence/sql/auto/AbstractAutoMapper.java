@@ -1,14 +1,14 @@
 package org.nakedobjects.persistence.sql.auto;
 
-import org.nakedobjects.NakedObjects;
-import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.Version;
 import org.nakedobjects.persistence.sql.AbstractObjectMapper;
 import org.nakedobjects.persistence.sql.CollectionMapper;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
@@ -16,7 +16,9 @@ import org.nakedobjects.persistence.sql.FieldNameMapper;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
 import org.nakedobjects.persistence.sql.ValueMapper;
 import org.nakedobjects.persistence.sql.ValueMapperLookup;
+import org.nakedobjects.utility.NakedObjectConfiguration;
 import org.nakedobjects.utility.NotImplementedException;
+import org.nakedobjects.utility.configuration.PropertiesConfiguration;
 
 import java.util.Enumeration;
 import java.util.Properties;
@@ -49,7 +51,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 	}
 
 	private void setUpMapper(String nakedClassName, String parameterBase) {
-        Configuration configParameters = NakedObjects.getConfiguration();
+        NakedObjectConfiguration configParameters = NakedObjects.getConfiguration();
 
 		table = configParameters.getString(parameterBase + "table");
 		if (table == null) {
@@ -187,7 +189,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 		return !connection.hasTable(table);
 	}
 
-	private void setupFullMapping(String nakedClassName, Configuration configParameters, String parameterBase) throws SqlObjectStoreException {
+	private void setupFullMapping(String nakedClassName, NakedObjectConfiguration configParameters, String parameterBase) throws SqlObjectStoreException {
 	    NakedObjectField[] allFields = nakedClass.getFields();
 
 		int simpleFieldCount = 0;
@@ -243,7 +245,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 		}
 	}
 
-	private void setupSpecifiedMapping(NakedObjectSpecification nakedClass, Configuration configParameters, String parameterBase) throws SqlObjectStoreException {
+	private void setupSpecifiedMapping(NakedObjectSpecification nakedClass, NakedObjectConfiguration configParameters, String parameterBase) throws SqlObjectStoreException {
 		Properties columnMappings = configParameters.getProperties(parameterBase + "column");
 		int columnsSize = columnMappings.size();
 		columnNames = new String[columnsSize];
@@ -309,7 +311,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 	}
 
     protected String updateWhereClause(NakedObject object, boolean and) throws SqlObjectStoreException {
-        long version = object.getVersion();
+        Version version = object.getVersion();
         return (and ? " and " +  version + " = \"version\"" : "");
     }
 }

@@ -1,17 +1,19 @@
 package org.nakedobjects.persistence.sql;
 
-import org.nakedobjects.NakedObjects;
-import org.nakedobjects.container.configuration.ComponentException;
-import org.nakedobjects.container.configuration.ComponentLoader;
-import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.persistence.ObjectManagerException;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.ObjectPerstsistenceException;
 import org.nakedobjects.persistence.sql.auto.AutoMapper;
+import org.nakedobjects.utility.NakedObjectConfiguration;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.utility.NotImplementedException;
+import org.nakedobjects.utility.configuration.ComponentException;
+import org.nakedobjects.utility.configuration.ComponentLoader;
+import org.nakedobjects.utility.configuration.PropertiesConfiguration;
+import org.nakedobjects.utility.configuration.ConfigurationException;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -83,8 +85,10 @@ public class ObjectMapperLookup {
     public void init() {
         String BASE_NAME = SqlObjectStore.BASE_NAME;
 
-        Properties properties = NakedObjects.getConfiguration().getPropertiesStrippingPrefix(BASE_NAME + ".mapper.");
+     //   Properties properties = NakedObjects.getConfiguration().getPropertiesStrippingPrefix(BASE_NAME + ".mapper.");
 
+        NakedObjectConfiguration subset = NakedObjects.getConfiguration().getConfigurationSubsetStrippingPrefix(BASE_NAME + ".mapper.");
+        
         if (properties.size() == 0) {
             throw new ConfigurationException("No mappers defined");
 
@@ -104,7 +108,7 @@ public class ObjectMapperLookup {
 	
 	            try {
 	                add(className, (ObjectMapper) ComponentLoader.loadNamedComponent(value, ObjectMapper.class));
-	            } catch (ObjectManagerException ex) {
+	            } catch (ObjectPerstsistenceException ex) {
 	                throw new ComponentException("Failed to set up mapper for " + className, ex);
 	            }
             }
@@ -117,7 +121,7 @@ public class ObjectMapperLookup {
             ObjectMapper mapper = (ObjectMapper) e.nextElement();
             try {
                 mapper.shutdown();
-            } catch (ObjectManagerException ex) {
+            } catch (ObjectPerstsistenceException ex) {
                 LOG.error("Shutdown mapper " + mapper, ex);
             }
         }

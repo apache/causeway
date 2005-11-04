@@ -1,6 +1,6 @@
 package org.nakedobjects.persistence.file;
 
-import org.nakedobjects.object.persistence.defaults.SerialOid;
+import org.nakedobjects.object.persistence.SerialOid;
 import org.nakedobjects.utility.ToString;
 
 import java.util.Vector;

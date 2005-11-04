@@ -1,13 +1,14 @@
 package org.nakedobjects.persistence.file;
 
-import org.nakedobjects.object.DummyNakedObjectSpecification;
-import org.nakedobjects.object.reflect.DummyNakedObject;
-import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.NakedObjectField;
 
 import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
+
+import test.org.nakedobjects.object.DummyNakedObjectSpecification;
+import test.org.nakedobjects.object.reflect.DummyNakedObject;
 
 public class XmlObjectStoreTest extends TestCase {
     private XmlObjectStore objectStore;

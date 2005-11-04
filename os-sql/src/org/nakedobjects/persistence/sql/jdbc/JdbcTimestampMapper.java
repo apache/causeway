@@ -1,9 +1,9 @@
 package org.nakedobjects.persistence.sql.jdbc;
 
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
 import org.nakedobjects.persistence.sql.ValueMapper;

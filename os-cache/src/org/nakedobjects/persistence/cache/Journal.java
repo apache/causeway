@@ -1,7 +1,8 @@
 package org.nakedobjects.persistence.cache;
 
 import org.nakedobjects.object.io.Memento;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+
+import test.org.nakedobjects.object.repository.object.persistence.ObjectStoreException;
 
 
 public interface Journal {

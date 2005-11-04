@@ -1,7 +1,7 @@
 package org.nakedobjects.persistence.sql;
 
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import java.util.Hashtable;
 

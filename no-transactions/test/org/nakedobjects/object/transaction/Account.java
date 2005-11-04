@@ -1,7 +1,6 @@
 
 package org.nakedobjects.object.transaction;
 
-import org.nakedobjects.object.persistence.defaults.TransactionException;
 
 import java.util.Vector;
 

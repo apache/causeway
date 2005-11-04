@@ -1,18 +1,16 @@
 package org.nakedobjects.object.transaction;
 
-import org.nakedobjects.NakedObjects;
-import org.nakedobjects.container.configuration.ComponentException;
-import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.UpdateNotifier;
-import org.nakedobjects.object.persistence.NakedObjectStore;
-import org.nakedobjects.object.persistence.ObjectManagerException;
-import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.ObjectPerstsistenceException;
+import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.persistence.OidGenerator;
-import org.nakedobjects.object.persistence.UnsupportedFindException;
-import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
-import org.nakedobjects.utility.StartupException;
+import org.nakedobjects.object.persistence.objectore.LocalObjectManager;
+import org.nakedobjects.object.persistence.objectore.NakedObjectStore;
+import org.nakedobjects.utility.configuration.ComponentException;
+import org.nakedobjects.utility.configuration.ConfigurationException;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,6 +19,9 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
+
+import test.org.nakedobjects.object.repository.StartupException;
+import test.org.nakedobjects.object.repository.object.UpdateNotifier;
 
 public class SimpleTransactionManager extends LocalObjectManager implements TransactionManager {
     private static final Logger LOG = Logger.getLogger(SimpleTransactionManager.class);
@@ -42,7 +43,7 @@ public class SimpleTransactionManager extends LocalObjectManager implements Tran
         write("");
     }
     
-    protected void createObject(NakedObject object) throws ObjectManagerException {
+    protected void createObject(NakedObject object) throws ObjectPerstsistenceException {
         log("schedule create - " + object);
         Transaction t = getTransaction();
         if(t == null) {

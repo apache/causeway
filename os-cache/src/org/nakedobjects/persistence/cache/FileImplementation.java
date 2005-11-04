@@ -1,6 +1,6 @@
 package org.nakedobjects.persistence.cache;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.NakedObjects;
 
 import java.io.File;
 import java.io.FilenameFilter;

@@ -2,10 +2,10 @@ package org.nakedobjects.persistence.cache;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectLoader;
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.persistence.ObjectManagerException;
-import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.ObjectPerstsistenceException;
+import org.nakedobjects.object.Oid;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -37,7 +37,7 @@ class Instances {
         return orderedInstances.elements();
     }
 
-    public int loadData(SnapshotImpl reader) throws ObjectManagerException {
+    public int loadData(SnapshotImpl reader) throws ObjectPerstsistenceException {
         int noInstances = reader.readInt();
         int size = 0;
         for (int i = 0; i < noInstances; i++) {
@@ -56,7 +56,7 @@ class Instances {
         return NakedObjects.getObjectLoader();
     }
 
-    public void loadIdentities(SnapshotImpl reader) throws ObjectManagerException {
+    public void loadIdentities(SnapshotImpl reader) throws ObjectPerstsistenceException {
         int noInstances = reader.readInt();
         for (int i = 0; i < noInstances; i++) {
             Oid oid = (Oid) reader.readOid();
@@ -87,7 +87,7 @@ class Instances {
         index.remove(object.getOid());
     }
 
-    public long saveData(SnapShotWriter writer) throws ObjectManagerException {
+    public long saveData(SnapShotWriter writer) throws ObjectPerstsistenceException {
         writer.writeInt(numberInstances());
 
         Enumeration e = instances();
@@ -99,7 +99,7 @@ class Instances {
         return i;
     }
 
-    public void saveIdentities(SnapShotWriter writer) throws ObjectManagerException {
+    public void saveIdentities(SnapShotWriter writer) throws ObjectPerstsistenceException {
         writer.writeInt(numberInstances());
 
         Enumeration e = instances();

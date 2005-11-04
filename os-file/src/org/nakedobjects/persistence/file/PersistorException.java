@@ -1,6 +1,6 @@
 package org.nakedobjects.persistence.file;
 
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 
 public class PersistorException extends NakedObjectRuntimeException {

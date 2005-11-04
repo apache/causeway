@@ -1,15 +1,16 @@
 package org.nakedobjects.persistence.cache;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.persistence.ObjectNotFoundException;
-import org.nakedobjects.object.persistence.ObjectStoreException;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.ObjectNotFoundException;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
+
+import test.org.nakedobjects.object.repository.object.persistence.ObjectStoreException;
 
 public class ObjectStore {
     private final static Logger LOG = Logger.getLogger(ObjectStore.class);

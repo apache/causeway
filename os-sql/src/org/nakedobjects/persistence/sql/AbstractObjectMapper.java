@@ -1,8 +1,8 @@
 package org.nakedobjects.persistence.sql;
 
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.persistence.defaults.SerialOid;
+import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.persistence.SerialOid;
 
 import java.util.Hashtable;
 

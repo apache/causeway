@@ -1,31 +1,31 @@
 package org.nakedobjects.persistence.file;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectAssociation;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectLoader;
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.ObjectNotFoundException;
+import org.nakedobjects.object.ObjectPerstsistenceException;
+import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.OneToManyAssociation;
+import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.ResolveState;
-import org.nakedobjects.object.persistence.InstancesCriteria;
-import org.nakedobjects.object.persistence.NakedObjectStore;
-import org.nakedobjects.object.persistence.ObjectNotFoundException;
-import org.nakedobjects.object.persistence.ObjectManagerException;
-import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.persistence.UnsupportedFindException;
-import org.nakedobjects.object.persistence.defaults.SerialOid;
-import org.nakedobjects.object.reflect.NakedObjectAssociation;
-import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.UnsupportedFindException;
+import org.nakedobjects.object.persistence.SerialOid;
+import org.nakedobjects.object.persistence.objectstore.NakedObjectStore;
 import org.nakedobjects.object.transaction.CreateObjectCommand;
 import org.nakedobjects.object.transaction.DestroyObjectCommand;
 import org.nakedobjects.object.transaction.PersistenceCommand;
 import org.nakedobjects.object.transaction.SaveObjectCommand;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.DebugString;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import org.apache.log4j.Logger;
 
@@ -45,7 +45,7 @@ public class XmlObjectStore implements NakedObjectStore {
 
     public CreateObjectCommand createCreateObjectCommand(final NakedObject object) {
         return new CreateObjectCommand() {
-            public void execute() throws ObjectManagerException {
+            public void execute() throws ObjectPerstsistenceException {
                 LOG.debug("  create object " + object);
                 Data data = createObjectData(object, true);
                 dataManager.insert(data);
@@ -63,7 +63,7 @@ public class XmlObjectStore implements NakedObjectStore {
 
     public DestroyObjectCommand createDestroyObjectCommand(final NakedObject object) {
         return new DestroyObjectCommand() {
-            public void execute() throws ObjectManagerException {
+            public void execute() throws ObjectPerstsistenceException {
                 LOG.debug("  destroy object " + object);
                 dataManager.remove((SerialOid) object.getOid());
             }
@@ -110,7 +110,7 @@ public class XmlObjectStore implements NakedObjectStore {
 
     public SaveObjectCommand createSaveObjectCommand(final NakedObject object) {
         return new SaveObjectCommand() {
-            public void execute() throws ObjectManagerException {
+            public void execute() throws ObjectPerstsistenceException {
                 LOG.debug("  save object " + object);
 
                 if (object instanceof InternalCollection) {
@@ -149,14 +149,14 @@ public class XmlObjectStore implements NakedObjectStore {
         return "XML Object Store";
     }
 
-    public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectManagerException, UnsupportedFindException {
+    public NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectPerstsistenceException, UnsupportedFindException {
         LOG.debug("getInstances of " + criteria.getSpecification() + " where " + criteria);
         ObjectData patternData = new ObjectData(criteria.getSpecification(), null);
         NakedObject[] instances = getInstances(patternData, criteria);
         return instances;
     }
 
-    private NakedObject[] getInstances(NakedObjectSpecification specification) throws ObjectManagerException {
+    private NakedObject[] getInstances(NakedObjectSpecification specification) throws ObjectPerstsistenceException {
         LOG.debug("getInstances of " + specification);
         ObjectData patternData = new ObjectData(specification, null);
         NakedObject[] instances = getInstances(patternData, null);
@@ -164,7 +164,7 @@ public class XmlObjectStore implements NakedObjectStore {
     }
 
     public NakedObject[] getInstances(NakedObjectSpecification specification, boolean includeSubclasses)
-            throws ObjectManagerException {
+            throws ObjectPerstsistenceException {
         LOG.debug("getInstances of " + specification);
         if (includeSubclasses) {
             NakedObject[] instances = getInstances(specification);
@@ -184,7 +184,7 @@ public class XmlObjectStore implements NakedObjectStore {
         }
     }
 
-    private NakedObject[] getInstances(ObjectData patternData, InstancesCriteria criteria) throws ObjectManagerException {
+    private NakedObject[] getInstances(ObjectData patternData, InstancesCriteria criteria) throws ObjectPerstsistenceException {
         ObjectDataVector data = dataManager.getInstances(patternData);
         NakedObject[] instances = new NakedObject[data.size()];
         int count = 0;
@@ -209,11 +209,11 @@ public class XmlObjectStore implements NakedObjectStore {
         return array;
     }
 
-    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectManagerException {
+    public NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectPerstsistenceException {
         throw new ObjectNotFoundException();
     }
 
-    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectManagerException {
+    public NakedObject getObject(Oid oid, NakedObjectSpecification hint) throws ObjectNotFoundException, ObjectPerstsistenceException {
         LOG.debug("getObject " + oid);
         Data data = dataManager.loadData((SerialOid) oid);
         LOG.debug("  data read " + data);
@@ -236,11 +236,11 @@ public class XmlObjectStore implements NakedObjectStore {
         return numberOfInstances(cls, includeSubclasses) > 0;
     }
 
-    public void init() throws ObjectManagerException {
+    public void init() throws ObjectPerstsistenceException {
         objectLoader = NakedObjects.getObjectLoader();
     }
 
-    private void initObject(NakedObject object, ObjectData data) throws ObjectManagerException {
+    private void initObject(NakedObject object, ObjectData data) throws ObjectPerstsistenceException {
         if (object.getResolveState().isResolvable(ResolveState.RESOLVING)) {
             objectLoader.start(object, ResolveState.RESOLVING);
 
@@ -347,7 +347,7 @@ public class XmlObjectStore implements NakedObjectStore {
      * The ObjectData holds all references for internal collections, so the
      * object should haves its internal collection populated by this method.
      */
-    private NakedObject recreateObject(ObjectData data) throws ObjectManagerException {
+    private NakedObject recreateObject(ObjectData data) throws ObjectPerstsistenceException {
         SerialOid oid = data.getOid();
 
         NakedObjectSpecification spec = specFor(data);
@@ -368,9 +368,9 @@ public class XmlObjectStore implements NakedObjectStore {
         return object;
     }
 
-    public void resolveField(NakedObject object, NakedObjectField field) throws ObjectManagerException {}
+    public void resolveField(NakedObject object, NakedObjectField field) throws ObjectPerstsistenceException {}
 
-    public void resolveImmediately(NakedObject object) throws ObjectManagerException {
+    public void resolveImmediately(NakedObject object) throws ObjectPerstsistenceException {
         LOG.info("resolve-immediately: " + object);
         ObjectData data = (ObjectData) dataManager.loadData((SerialOid) object.getOid());
         Assert.assertNotNull("Not able to read in data during resolve", object, data);
@@ -379,7 +379,7 @@ public class XmlObjectStore implements NakedObjectStore {
 
     public void reset() {}
 
-    public void runTransaction(PersistenceCommand[] commands) throws ObjectManagerException {
+    public void runTransaction(PersistenceCommand[] commands) throws ObjectPerstsistenceException {
         LOG.info("start execution of transaction");
         for (int i = 0; i < commands.length; i++) {
             PersistenceCommand command = commands[i];
@@ -401,7 +401,7 @@ public class XmlObjectStore implements NakedObjectStore {
         this.dataManager = dataManager;
     }
 
-    public void shutdown() throws ObjectManagerException {
+    public void shutdown() throws ObjectPerstsistenceException {
         LOG.info("shutdown " + this);
     }
 

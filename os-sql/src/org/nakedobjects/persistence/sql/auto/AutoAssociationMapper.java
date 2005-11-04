@@ -1,14 +1,14 @@
 package org.nakedobjects.persistence.sql.auto;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectAssociation;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.ResolveState;
-import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.reflect.NakedObjectAssociation;
-import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.persistence.sql.AbstractObjectMapper;
 import org.nakedobjects.persistence.sql.CollectionMapper;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
