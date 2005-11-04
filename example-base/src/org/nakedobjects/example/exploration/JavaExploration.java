@@ -1,24 +1,20 @@
 package org.nakedobjects.example.exploration;
 
-import org.nakedobjects.NakedObjects;
-import org.nakedobjects.NakedObjectsClient;
-import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
-import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.ReflectionPeerFactory;
-import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
-import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.ObjectLoaderImpl;
-import org.nakedobjects.object.defaults.PojoAdapterHashMap;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.fixture.Fixture;
 import org.nakedobjects.object.help.HelpManagerAssist;
 import org.nakedobjects.object.help.HelpPeerFactory;
 import org.nakedobjects.object.help.SimpleHelpManager;
+import org.nakedobjects.object.loader.IdentityAdapterHashMap;
+import org.nakedobjects.object.loader.ObjectLoaderImpl;
+import org.nakedobjects.object.loader.PojoAdapterHashMap;
+import org.nakedobjects.object.persistence.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.OidGenerator;
-import org.nakedobjects.object.persistence.defaults.DefaultPersistAlgorithm;
-import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
-import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
-import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
+import org.nakedobjects.object.persistence.SimpleOidGenerator;
+import org.nakedobjects.object.persistence.objectstore.ObjectStorePersitenceManager;
+import org.nakedobjects.object.persistence.objectstore.inmemory.TransientObjectStore;
+import org.nakedobjects.object.reflect.ReflectionPeerFactory;
+import org.nakedobjects.object.repository.NakedObjectsClient;
 import org.nakedobjects.object.transaction.TransactionPeerFactory;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
@@ -26,8 +22,10 @@ import org.nakedobjects.reflector.java.control.SimpleSession;
 import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
 import org.nakedobjects.reflector.java.reflect.JavaAdapterFactory;
 import org.nakedobjects.reflector.java.reflect.JavaSpecificationLoader;
-import org.nakedobjects.system.AboutNakedObjects;
-import org.nakedobjects.system.SplashWindow;
+import org.nakedobjects.utility.AboutNakedObjects;
+import org.nakedobjects.utility.SplashWindow;
+import org.nakedobjects.utility.configuration.PropertiesConfiguration;
+import org.nakedobjects.utility.configuration.PropertiesFileLoader;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.SkylarkViewer;
 import org.nakedobjects.viewer.skylark.ViewUpdateNotifier;
@@ -50,7 +48,7 @@ public class JavaExploration {
     private String title;
 
     public JavaExploration() {
-        ConfigurationPropertiesLoader loadedProperties = new ConfigurationPropertiesLoader("log4j.properties", false);
+        PropertiesFileLoader loadedProperties = new PropertiesFileLoader("log4j.properties", false);
         Properties p = loadedProperties.getProperties();
         if (p.size() == 0) {
             BasicConfigurator.configure();
@@ -64,7 +62,7 @@ public class JavaExploration {
             String name = this.getClass().getName();
             name = name.substring(name.lastIndexOf('.') + 1);
 
-            Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(configurationFile(), false));
+            PropertiesConfiguration configuration = new PropertiesConfiguration(new PropertiesFileLoader(configurationFile(), false));
             NakedObjectsClient nakedObjects = new NakedObjectsClient();
             nakedObjects.setConfiguration(configuration);
             PropertyConfigurator.configure(configuration.getProperties("log4j"));
@@ -90,11 +88,11 @@ public class JavaExploration {
             DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
             persistAlgorithm.setOidGenerator(oidGenerator);
 
-            LocalObjectManager objectManager = new LocalObjectManager();
+            ObjectStorePersitenceManager objectManager = new ObjectStorePersitenceManager();
             objectManager.setObjectStore(objectStore);
             objectManager.setPersistAlgorithm(persistAlgorithm);
 
-            nakedObjects.setObjectManager(objectManager);
+            nakedObjects.setPersistenceManager(objectManager);
             
             HelpManagerAssist helpManager = new HelpManagerAssist();
             helpManager.setDecorated(new SimpleHelpManager());
@@ -110,11 +108,17 @@ public class JavaExploration {
         //    reflectionFactory.setHelpManager(helpManager);
 
             JavaSpecificationLoader specificationLoader = new JavaSpecificationLoader();
-            specificationLoader.setReflectionPeerBuilder(factories);
+            specificationLoader.setReflectionPeerFactories(factories);
 // specificationLoader.setReflectionPeerBuilder(reflectionFactory.getFactories());
 
+//            NakedObjectSpecificationLoader specificationLoader = new NullSpecifcationLoader();
             nakedObjects.setSpecificationLoader(specificationLoader);
 
+            
+            
+            
+            
+            
             ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
             objectLoader.setObjectFactory(objectFactory);
             objectLoader.setPojoAdapterMap(new PojoAdapterHashMap());

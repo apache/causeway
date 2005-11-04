@@ -1,8 +1,8 @@
 package org.nakedobjects.example.exploration;
 
-import org.nakedobjects.object.ApplicationContext;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
+import org.nakedobjects.object.defaults.ApplicationContext;
 
 public class JavaExplorationContext extends ApplicationContext  {
     private String name;
@@ -10,7 +10,7 @@ public class JavaExplorationContext extends ApplicationContext  {
     public void setUpUsers(NakedCollection users) {
     }
     
-    public String name() {
+    public String getName() {
         return name;
     }
 

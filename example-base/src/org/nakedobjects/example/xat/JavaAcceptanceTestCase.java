@@ -1,16 +1,16 @@
 package org.nakedobjects.example.xat;
 
-import org.nakedobjects.NakedObjectsClient;
-import org.nakedobjects.object.ReflectionPeerFactory;
-import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
-import org.nakedobjects.object.defaults.ObjectLoaderImpl;
-import org.nakedobjects.object.defaults.PojoAdapterHashMap;
 import org.nakedobjects.object.fixture.FixtureBuilder;
+import org.nakedobjects.object.loader.IdentityAdapterHashMap;
+import org.nakedobjects.object.loader.ObjectLoaderImpl;
+import org.nakedobjects.object.loader.PojoAdapterHashMap;
+import org.nakedobjects.object.persistence.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.OidGenerator;
-import org.nakedobjects.object.persistence.defaults.DefaultPersistAlgorithm;
-import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
-import org.nakedobjects.object.persistence.defaults.TimeBasedOidGenerator;
-import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
+import org.nakedobjects.object.persistence.TimeBasedOidGenerator;
+import org.nakedobjects.object.persistence.objectstore.ObjectStorePersitenceManager;
+import org.nakedobjects.object.persistence.objectstore.inmemory.TransientObjectStore;
+import org.nakedobjects.object.reflect.ReflectionPeerFactory;
+import org.nakedobjects.object.repository.NakedObjectsClient;
 import org.nakedobjects.object.transaction.TransactionPeerFactory;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
@@ -92,19 +92,19 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
         DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
         persistAlgorithm.setOidGenerator(oidGenerator);
 
-        LocalObjectManager objectManager = new LocalObjectManager();
+        ObjectStorePersitenceManager objectManager = new ObjectStorePersitenceManager();
         objectManager.setObjectStore(objectStore);
         objectManager.setPersistAlgorithm(persistAlgorithm);
 
 
-        nakedObjects.setObjectManager(objectManager);
+        nakedObjects.setPersistenceManager(objectManager);
 
 
         ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
                 new TransactionPeerFactory(),
         };
         JavaSpecificationLoader specificationLoader = new JavaSpecificationLoader();
-        specificationLoader.setReflectionPeerBuilder(factories);
+        specificationLoader.setReflectionPeerFactories(factories);
 
         
         /*        NakedObjectSpecificationLoader specificationLoader;
