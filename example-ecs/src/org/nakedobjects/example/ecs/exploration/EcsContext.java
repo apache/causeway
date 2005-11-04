@@ -7,7 +7,7 @@ import org.nakedobjects.example.ecs.Customer;
 import org.nakedobjects.example.ecs.Location;
 import org.nakedobjects.example.ecs.LocationGroup;
 import org.nakedobjects.example.ecs.Telephone;
-import org.nakedobjects.object.ApplicationContext;
+import org.nakedobjects.object.defaults.ApplicationContext;
 
 
 public class EcsContext extends ApplicationContext {
@@ -22,7 +22,7 @@ public class EcsContext extends ApplicationContext {
         addClass(LocationGroup.class);
     }
 
-    public String name() {
+    public String getName() {
         return "ECS Bookings";
     }
 }
