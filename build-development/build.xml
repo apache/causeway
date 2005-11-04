@@ -4,11 +4,12 @@
 	<!ENTITY distribution SYSTEM "file:../build-templates/distribution-build.xml">
 ]>
 
-<project name="Naked Objects framework - exploration edition"
+<project name="Naked Objects framework - developers edition"
          default="idebuild"
          basedir=".">
 	
 	<property file="build.properties"/>
+	
 	<property name="distribution" value="development" />
 
 	
