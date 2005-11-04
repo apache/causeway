@@ -7,8 +7,7 @@ Imports Spring.Context.Support
 
 Imports org.apache.log4j
 
-Imports org.nakedobjects.container.configuration
-Imports org.nakedobjects.system
+Imports org.nakedobjects.utility
 
 Imports org.nakedobjects.viewer
 Imports org.nakedobjects.viewer.skylark
@@ -16,6 +15,7 @@ Imports org.nakedobjects.viewer.skylark.special
 Imports org.nakedobjects.object
 Imports org.nakedobjects.object.fixture
 Imports org.nakedobjects.object.reflect
+
 Namespace org.nakedobjects.dotnet
 
 

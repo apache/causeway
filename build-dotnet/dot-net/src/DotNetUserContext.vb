@@ -3,6 +3,7 @@ Imports System.Collections
 
 
 Imports org.nakedobjects.object
+Imports org.nakedobjects.object.defaults
 
 
 '*
@@ -26,7 +27,7 @@ Imports org.nakedobjects.object
 namespace org.nakedobjects.dotnet
 
 Public Class DotNetUserContext
-    Inherits org.nakedobjects.object.ApplicationContext
+    Inherits ApplicationContext
 
 
     Public Sub New()
@@ -91,11 +92,11 @@ Public Class DotNetUserContext
 #End Region
 
 #Region "property: name"
-    Public Overrides Function name() As String
+    Public Overrides Function getName() As String
         Return "Naked Objects"
     End Function
     Public Overridable Function title() As String
-        Return name()
+        Return getName()
     End Function
 #End Region
 

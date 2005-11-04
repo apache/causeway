@@ -6,8 +6,6 @@ Imports System.Configuration
 Imports Spring.Context
 Imports Spring.Context.Support
 
-Imports org.nakedobjects.container.configuration
-Imports org.nakedobjects
 Imports org.nakedobjects.object
 Imports org.nakedobjects.object.defaults
 Imports org.nakedobjects.object.fixture
@@ -66,7 +64,7 @@ Namespace org.nakedobjects.dotnet
         Private myTestObjectFactoryId As String
         Private mySpringConfigFile As String
         
-        Private nakedObjects as NakedObjects
+        Private nakedObjects as org.nakedobjects.object.NakedObjects
 
         Private time As Double
 #End Region
@@ -83,7 +81,7 @@ Namespace org.nakedobjects.dotnet
 
                 initSpringContext()
                 
-                nakedObjects = DirectCast(myCtx.GetObject("NakedObjects"), NakedObjects)
+                nakedObjects = DirectCast(myCtx.GetObject("NakedObjects"), org.nakedobjects.object.NakedObjects)
 
                 'Dim rf As AdapterFactory = _
                 'DirectCast(myCtx.GetObject("SdmReflectorFactory"), AdapterFactory)
@@ -229,7 +227,7 @@ Namespace org.nakedobjects.dotnet
             For Each noSpec As NakedObjectSpecification In noSpecs
                 Dim noSpecFullName As String = noSpec.getFullName()
                 If noSpec.isObject() Then
-                    Dim cls As NakedClass = New NakedClass(noSpec.getFullName())
+                    Dim cls As NakedClass = New NakedClassImpl(noSpec.getFullName())
                     Dim view As TestClass = _
                         myTestObjectFactory.createTestClass(cls)
                     myClasses.put(noSpec.getFullName().ToLower(), view)
