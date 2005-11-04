@@ -1,9 +1,22 @@
 package org.nakedobjects.reflector.java.reflect;
 
-import test.org.nakedobjects.object.MockNakedObject;
+import org.nakedobjects.object.MemberIdentifier;
 
-public class MockPerson extends MockNakedObject {
 
+
+public class DummyIdentifier implements MemberIdentifier {
+
+    public String getClassName() {
+        return "class name";
+    }
+
+    public String getName() {
+        return "feild name";
+    }
+
+    public String[] getParameters() {
+        return null;
+    }
 }
 
 

@@ -1,13 +1,11 @@
 package org.nakedobjects.reflector.java.reflect;
 
-import org.nakedobjects.NakedObjects;
-import org.nakedobjects.TestSystem;
 import org.nakedobjects.application.control.ActionAbout;
-import org.nakedobjects.object.DummyNakedObjectSpecification;
+import org.nakedobjects.object.Action;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.reflect.Action;
 
 import java.lang.reflect.Method;
 
@@ -15,6 +13,9 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import test.org.nakedobjects.object.DummyNakedObjectSpecification;
+import test.org.nakedobjects.object.TestSystem;
 
 
 public class JavaActionTest extends TestCase {

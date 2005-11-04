@@ -3,8 +3,8 @@ package org.nakedobjects.reflector.java.reflect;
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.application.valueholder.TextString;
-import org.nakedobjects.object.MockNakedObject;
-import org.nakedobjects.object.reflect.internal.InternalObjectForReferencing;
+
+import test.org.nakedobjects.object.MockNakedObject;
 
 
 public class MockRole extends MockNakedObject {

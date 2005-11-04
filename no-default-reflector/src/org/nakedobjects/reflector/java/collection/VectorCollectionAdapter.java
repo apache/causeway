@@ -1,9 +1,9 @@
 package org.nakedobjects.reflector.java.collection;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.defaults.AbstractNakedReference;
 import org.nakedobjects.utility.Assert;

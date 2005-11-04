@@ -4,12 +4,12 @@ import org.nakedobjects.application.control.Role;
 import org.nakedobjects.application.control.State;
 import org.nakedobjects.application.control.StatefulObject;
 import org.nakedobjects.application.control.User;
+import org.nakedobjects.object.Session;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
-import org.nakedobjects.object.security.Session;
 
 
 public abstract class AbstractAbout implements Hint {

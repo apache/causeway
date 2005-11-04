@@ -1,15 +1,15 @@
 package org.nakedobjects.reflector.java.reflect;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.application.ValueParseException;
 import org.nakedobjects.application.valueholder.BusinessValueHolder;
 import org.nakedobjects.object.InvalidEntryException;
+import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.reflector.java.control.SimpleFieldAbout;
@@ -25,12 +25,14 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
     protected Method addMethod;
     protected Method removeMethod;
     protected Method setMethod;
+    private boolean isObject;
 
-    public JavaOneToOneAssociation(String name, Class type, Method get, Method set, Method add, Method remove, Method about, boolean derived) {
+    public JavaOneToOneAssociation(boolean isObject, String name, Class type, Method get, Method set, Method add, Method remove, Method about, boolean derived) {
         super(name, type, get, about, derived);
         this.setMethod = set;
         this.addMethod = add;
         removeMethod = remove;
+        this.isObject = isObject;
     }
 
     public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
@@ -202,6 +204,10 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
     public boolean isMandatory() {
         return false;
     }
+    
+    public boolean isObject() {
+        return isObject;
+    }
 
     public void parseTextEntry(NakedObject inObject, String text) throws TextEntryParseException, InvalidEntryException {
         if (setMethod == null) {
@@ -209,7 +215,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
                 Object obj = getMethod.invoke(inObject.getObject(), new Object[0]);
                 BusinessValueHolder value = (BusinessValueHolder) obj;
                 value.parseUserEntry(text);
-                NakedObjects.getObjectManager().objectChanged(inObject);
+                NakedObjects.getPersistenceManager().objectChanged(inObject);
             } catch (InvocationTargetException e) {
                 invocationException("Exception executing " + getMethod, e);
             } catch (IllegalAccessException ignore) {
@@ -265,7 +271,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
 
         try {
             if (setMethod == null) {
-                NakedObjects.getObjectManager().objectChanged(inObject);
+                NakedObjects.getPersistenceManager().objectChanged(inObject);
             } else {
                 setMethod.invoke(inObject.getObject(), new Object[] { setValue });
             }

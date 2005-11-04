@@ -22,19 +22,56 @@ public class JavaObjectForReflector implements Interface1, Interface2 {
         return "Singular";
     }
     
-    public String getValue() {
+    public String getOne() {
         return "";
     }
+    
+    public static String getFour() {
+        return "";
+    }
+    
+    public static void setFour(String value) {
+    }
+    
+    public void setOne(String value) {
+    }
+
+
+    private JavaReferencedObject object;
+
+    public JavaReferencedObject getTwo() {
+        return object;
+    }
+
+    public void setTwo(JavaReferencedObject object) {
+        this.object = object;
+    }
+
+    public JavaReferencedObject getThree() {
+        return null;
+    }
+
+    public void setThree(JavaReferencedObject object) {
+    }
+
     
     public void setValue(String value) {}
     
     public void aboutValue(FieldAbout about, String value) {}
     
     public void validValue(Validity validity) {}
-    
-    public void actionMethodOne() {}
 
-    public void aboutActionMethodOne(ActionAbout about) {    }
+    public void actionStop() {}
+
+    public void actionStart() {}
+
+    public void aboutStart(ActionAbout about) {    }
+
+
+    public static void actionTop() {
+    }
+    public static void actionBottom() {
+    }
 
     public static String actionOrder() {
         return "start, stop";

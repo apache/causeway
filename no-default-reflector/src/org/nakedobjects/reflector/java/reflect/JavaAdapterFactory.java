@@ -13,8 +13,6 @@ import org.nakedobjects.object.AdapterFactory;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.reflect.ReflectionException;
-import org.nakedobjects.object.reflect.Reflector;
 import org.nakedobjects.reflector.java.collection.ArrayAdapter;
 import org.nakedobjects.reflector.java.collection.InternalCollectionAdapter;
 import org.nakedobjects.reflector.java.collection.VectorCollectionAdapter;
@@ -33,10 +31,6 @@ import org.apache.log4j.Logger;
 
 public class JavaAdapterFactory implements AdapterFactory {
     private final static Logger LOG = Logger.getLogger(JavaAdapterFactory.class);
-    
-    public Reflector createReflector(String className) throws ReflectionException {
-         return new JavaReflector(className);
-    }
     
     public NakedValue createValueAdapter(Object object) {
         if (object instanceof MultilineTextString ){

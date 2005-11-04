@@ -1,11 +1,10 @@
 package org.nakedobjects.reflector.java.reflect;
 
-import org.nakedobjects.TestSystem;
-import org.nakedobjects.object.DummyNakedObjectSpecification;
+import org.nakedobjects.object.Action;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.reflect.ActionPeer;
-import org.nakedobjects.object.reflect.FieldPeer;
+import org.nakedobjects.object.reflect.OneToOnePeer;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -13,10 +12,14 @@ import junit.framework.TestSuite;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 
+import test.org.nakedobjects.object.DummyNakedObjectSpecification;
+import test.org.nakedobjects.object.DummyOneToOneAssociation;
+import test.org.nakedobjects.object.TestSystem;
+
 
 public class JavaReflectorTest extends TestCase {
 
-    private MockJavaReflector reflector;
+    private JavaIntrospector reflector;
     private TestSystem system;
 
     public static void main(String[] args) {
@@ -30,7 +33,8 @@ public class JavaReflectorTest extends TestCase {
         system.init();
         system.addSpecification(new DummyNakedObjectSpecification());
     	
-        reflector = new MockJavaReflector(JavaObjectForReflector.class.getName());
+        reflector = new JavaIntrospector(JavaObjectForReflector.class, new DummyBuilder());
+        reflector.introspect();
     }
 
     protected void tearDown() throws Exception {
@@ -38,34 +42,39 @@ public class JavaReflectorTest extends TestCase {
     }
 
     public void testObjectActions() throws NakedObjectSpecificationException {
-         ActionPeer[] actions = reflector.actionPeers(false);
-         assertEquals(1, actions.length);
+         Action[] actions = reflector.getObjectActions();
+         assertEquals(2, actions.length);
          
-         ActionPeer member = actions[0];
-         assertEquals("MethodOne", member.getName());
+         Action member = actions[0];
+         assertEquals("Stop", member.getName());
      }
     
     public void testFieldSortOrder() throws NakedObjectSpecificationException {
-        String[] fields = reflector.fieldSortOrder();
+
+
+        NakedObjectField[] fields = reflector.getFields();
+        
         assertEquals(3, fields.length);
-        assertEquals("one", fields[0]);
-        assertEquals("two", fields[1]);
-        assertEquals("three", fields[2]);
+        assertEquals("One", fields[0].getName());
+        assertEquals("Two", fields[1].getName());
+        assertEquals("Three", fields[2].getName());
         
     }
     
     public void testActionSortOrder() throws NakedObjectSpecificationException {
-        String[] names = reflector.actionSortOrder();
-        assertEquals(2, names.length);
-        assertEquals("start", names[0]);
-        assertEquals("stop", names[1]);
+        Action[] actions = reflector.getObjectActions();
+        
+        assertEquals(2, actions.length);
+        assertEquals("Stop", actions[0].getName());
+        assertEquals("Start", actions[1].getName());
     }
     
     public void testClassActionSortOrder() throws NakedObjectSpecificationException {
-        String[] names = reflector.classActionSortOrder();
-        assertEquals(2, names.length);
-        assertEquals("top", names[0]);
-        assertEquals("bottom", names[1]);
+        Action[] actions = reflector.getClassActions();
+
+        assertEquals(2, actions.length);
+        assertEquals("Top", actions[0].getName());
+        assertEquals("Bottom", actions[1].getName());
     }
     
    public void testShortName() {
@@ -87,23 +96,27 @@ public class JavaReflectorTest extends TestCase {
     }
 
     public void testFields() throws Exception {
-        system.addSpecification(new DummyNakedObjectSpecification()); // for Date
-        system.addSpecification(new DummyNakedObjectSpecification()); // for float
+//        system.addSpecification(new DummyNakedObjectSpecification()); // for Date
+//        system.addSpecification(new DummyNakedObjectSpecification()); // for float
         
-        FieldPeer[] fields = reflector.fields();
+        NakedObjectField[] fields = reflector.getFields();
         
-        assertEquals(1, fields.length);
+        assertEquals(3, fields.length);
         
-       JavaField member = (JavaField) fields[0];
-        assertEquals("Value", member.getName());
-        assertEquals("aboutValue", member.getAboutMethod().getName());
+       OneToOnePeer member = ((DummyOneToOneAssociation) fields[0]).getPeer();
+       assertEquals("One", member.getName());
+       assertEquals(false, member.isObject());
+       
+       member = ((DummyOneToOneAssociation) fields[2]).getPeer();
+       assertEquals("Three", member.getName());
+       assertEquals(true, member.isObject());
     }
 
     public void testNameManipulations() {
-        assertEquals("CarRegistration", JavaReflector.javaBaseName("getCarRegistration"));
-        assertEquals("Driver", JavaReflector.javaBaseName("Driver"));
-        assertEquals("Register", JavaReflector.javaBaseName("actionRegister"));
-        assertEquals("", JavaReflector.javaBaseName("action"));
+        assertEquals("CarRegistration", JavaIntrospector.javaBaseName("getCarRegistration"));
+        assertEquals("Driver", JavaIntrospector.javaBaseName("Driver"));
+        assertEquals("Register", JavaIntrospector.javaBaseName("actionRegister"));
+        assertEquals("", JavaIntrospector.javaBaseName("action"));
     }
     
     public void testSuperclass() {

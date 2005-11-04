@@ -1,8 +1,8 @@
 package org.nakedobjects.reflector.java.value;
 
 import org.nakedobjects.object.InvalidEntryException;
-import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;
 import org.nakedobjects.object.value.DateValue;
+import org.nakedobjects.object.value.adapter.AbstractNakedValue;
 
 import java.util.Date;
 

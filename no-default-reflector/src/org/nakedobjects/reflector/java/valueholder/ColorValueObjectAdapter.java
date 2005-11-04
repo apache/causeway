@@ -3,8 +3,8 @@ package org.nakedobjects.reflector.java.valueholder;
 import org.nakedobjects.application.valueholder.Color;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.TextEntryParseException;
-import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;
 import org.nakedobjects.object.value.ColorValue;
+import org.nakedobjects.object.value.adapter.AbstractNakedValue;
 
 public class ColorValueObjectAdapter extends AbstractNakedValue implements ColorValue {
     private final Color adaptee;

@@ -2,9 +2,9 @@ package org.nakedobjects.reflector.java.valueholder;
 
 import org.nakedobjects.application.valueholder.Logical;
 import org.nakedobjects.object.InvalidEntryException;
-import org.nakedobjects.object.NakedObjectRuntimeException;
-import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;
 import org.nakedobjects.object.value.BooleanValue;
+import org.nakedobjects.object.value.adapter.AbstractNakedValue;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 public class LogicalValueObjectAdapter extends AbstractNakedValue implements BooleanValue {
     private final Logical adaptee;

@@ -1,19 +1,19 @@
 package org.nakedobjects.reflector.java.reflect;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.Action;
+import org.nakedobjects.object.ActionParameterSet;
+import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.reflect.ActionParameterSet;
+import org.nakedobjects.object.reflect.ActionParameterSetImpl;
 import org.nakedobjects.object.reflect.ActionPeer;
-import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.ReflectiveActionException;
-import org.nakedobjects.object.reflect.Action.Target;
-import org.nakedobjects.object.reflect.Action.Type;
 import org.nakedobjects.object.transaction.TransactionException;
 import org.nakedobjects.reflector.java.control.SimpleActionAbout;
 
@@ -33,10 +33,10 @@ public class JavaAction extends JavaMember implements ActionPeer {
     final static Logger LOG = Logger.getLogger(JavaAction.class);
     private final Method actionMethod;
     private final int paramCount;
-    private Type type;
-    private Target target;
+    private Action.Type type;
+    private Action.Target target;
 
-    public JavaAction(String name, Type type, Target target, Method action, Method about) {
+    public JavaAction(String name, Action.Type type, Action.Target target, Method action, Method about) {
         super(name, about);
         this.type = type;
         this.actionMethod = action;
@@ -134,11 +134,11 @@ public class JavaAction extends JavaMember implements ActionPeer {
         return paramCount;
     }
 
-    public Type getType() {
+    public Action.Type getType() {
         return type;
     }
     
-    public Target getTarget() {
+    public Action.Target getTarget() {
         return target;
     }
 
@@ -165,7 +165,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
         Hint hint= getHint(identifier, object, parameters);
         if(hint instanceof SimpleActionAbout) {
             SimpleActionAbout about = (SimpleActionAbout) hint;
-            return new ActionParameterSet(about.getDefaultParameterValues(), about.getParameterLabels(), about.getRequired());
+            return new ActionParameterSetImpl(about.getDefaultParameterValues(), about.getParameterLabels(), about.getRequired());
         }  else if (hint instanceof DefaultHint) {
             return null;
         }else {

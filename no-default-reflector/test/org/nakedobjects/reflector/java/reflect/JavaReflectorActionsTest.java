@@ -1,16 +1,16 @@
 package org.nakedobjects.reflector.java.reflect;
 
-import org.nakedobjects.TestSystem;
-import org.nakedobjects.object.DummyNakedObjectSpecification;
+import org.nakedobjects.object.Action;
 import org.nakedobjects.object.NakedObjectSpecificationException;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.ActionPeer;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
+
+import test.org.nakedobjects.object.DummyNakedObjectSpecification;
+import test.org.nakedobjects.object.TestSystem;
 
 
 public class JavaReflectorActionsTest extends TestCase {
@@ -19,8 +19,8 @@ public class JavaReflectorActionsTest extends TestCase {
         junit.textui.TestRunner.run(new TestSuite(JavaReflectorActionsTest.class));
     }
 
-    private ActionPeer[] actions;
-    private JavaReflector reflector;
+    private Action[] actions;
+    private JavaIntrospector reflector;
     private TestSystem system;
 
     protected void setUp() throws ClassNotFoundException {
@@ -30,8 +30,9 @@ public class JavaReflectorActionsTest extends TestCase {
         system.init();
         system.addSpecification(new DummyNakedObjectSpecification());
 
-        reflector = new JavaReflector(BusinessObjectWithActions.class.getName());
-        actions = reflector.actionPeers(false);
+        reflector = new JavaIntrospector(BusinessObjectWithActions.class, new DummyBuilder());
+        reflector.introspect();
+        actions = reflector.getObjectActions();
     }
 
     protected void tearDown() throws Exception {
@@ -39,7 +40,7 @@ public class JavaReflectorActionsTest extends TestCase {
     }
 
     public void testAbout() {
-        ActionPeer action = actions[3];
+        Action action = actions[3];
         assertEquals("WithAbout", action.getName());
         
         assertTrue(action.hasHint());
@@ -50,36 +51,36 @@ public class JavaReflectorActionsTest extends TestCase {
     }
 
     public void testObjectDefaultActionsWithOneParameter() throws Exception {
-        ActionPeer action = actions[4];
+        Action action = actions[4];
         assertEquals("Two", action.getName());
         assertFalse(action.hasHint());
-        assertEquals(Action.DEFAULT, action.getTarget());
-        assertEquals(Action.DEBUG, action.getType());
-        assertEquals(0, action.parameterTypes().length);
+        assertEquals(Action.DEFAULT, action.getActionTarget());
+        assertEquals(Action.DEBUG, action.getActionType());
+        assertEquals(0, action.getParameterCount());
         //   assertEquals(String.class.getName(),
         // action.returnType().getFullName());
     }
 
     public void testObjectDefaultActionsWithZeroParameters() throws Exception {
-        ActionPeer action = actions[1];
+        Action action = actions[1];
         assertEquals("One", action.getName());
         assertFalse(action.hasHint());
-        assertEquals(Action.DEFAULT, action.getTarget());
-        assertEquals(Action.USER, action.getType());
-        assertEquals(null, action.returnType());
-        assertEquals(0, action.parameterTypes().length);
+        assertEquals(Action.DEFAULT, action.getActionTarget());
+        assertEquals(Action.USER, action.getActionType());
+        assertEquals(null, action.getReturnType());
+        assertEquals(0, action.getParameterCount());
     }
 
     public void testObjectLocalAction() throws NakedObjectSpecificationException {
-        ActionPeer action = actions[0];
+        Action action = actions[0];
         assertEquals("RunOnClient", action.getName());
-        assertEquals(Action.LOCAL, action.getTarget());
+        assertEquals(Action.LOCAL, action.getActionTarget());
     }
 
     public void testObjectRemoteAction() throws NakedObjectSpecificationException {
-        ActionPeer action = actions[2];
+        Action action = actions[2];
         assertEquals("RunOnServer", action.getName());
-        assertEquals(Action.REMOTE, action.getTarget());
+        assertEquals(Action.REMOTE, action.getActionTarget());
     }
 
 }

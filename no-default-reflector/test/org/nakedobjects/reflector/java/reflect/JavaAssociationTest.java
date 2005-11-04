@@ -1,11 +1,9 @@
 package org.nakedobjects.reflector.java.reflect;
 
 
-import org.nakedobjects.TestSystem;
+
 import org.nakedobjects.application.control.FieldAbout;
-import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.internal.DummyIdentifier;
 
 import java.lang.reflect.Method;
 
@@ -14,6 +12,9 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import test.org.nakedobjects.object.DummyNakedObjectSpecification;
+import test.org.nakedobjects.object.TestSystem;
 
 
 public class JavaAssociationTest extends TestCase {
@@ -51,7 +52,7 @@ public class JavaAssociationTest extends TestCase {
         Method set = cls.getDeclaredMethod("setReferencedObject", new Class[] {JavaReferencedObject.class});
         Method about = cls.getDeclaredMethod("aboutReferencedObject", new Class[] {FieldAbout.class, JavaReferencedObject.class});
         
-        personField = new JavaOneToOneAssociation(PERSON_FIELD_NAME, JavaReferencedObject.class, get, set, null, null, about, false);
+        personField = new JavaOneToOneAssociation(true, PERSON_FIELD_NAME, JavaReferencedObject.class, get, set, null, null, about, false);
         
         javaObjectForReferencing = new JavaReferencedObject();
         associate = system.createAdapterForTransient(javaObjectForReferencing);

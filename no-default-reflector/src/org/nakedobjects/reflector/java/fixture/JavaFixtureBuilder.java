@@ -1,13 +1,13 @@
 package org.nakedobjects.reflector.java.fixture;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.application.system.ExplorationClock;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectPersistenceManager;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.defaults.Error;
 import org.nakedobjects.object.fixture.Fixture;
 import org.nakedobjects.object.fixture.FixtureBuilder;
-import org.nakedobjects.object.persistence.NakedObjectManager;
 
 import java.util.Vector;
 
@@ -19,7 +19,7 @@ public final class JavaFixtureBuilder extends FixtureBuilder {
     private ExplorationClock clock;
     private Vector newInstances = new Vector();
 
-    protected void postInstallFixtures(NakedObjectManager objectManager) {
+    protected void postInstallFixtures(NakedObjectPersistenceManager objectManager) {
         // make all new objects persistent
         objectManager.startTransaction();
         try {
@@ -47,7 +47,7 @@ public final class JavaFixtureBuilder extends FixtureBuilder {
         newInstances.removeAllElements();
     }
 
-    protected void installFixture(NakedObjectManager objectManager, Fixture fixture) {
+    protected void installFixture(NakedObjectPersistenceManager objectManager, Fixture fixture) {
         objectManager.startTransaction();
         fixture.install();
         objectManager.saveChanges();
@@ -79,7 +79,7 @@ public final class JavaFixtureBuilder extends FixtureBuilder {
         if (nc == null) {
             return new Error("Could not create an object of class " + className, null);
         }
-        NakedObjectManager objectManager = NakedObjects.getObjectManager();
+        NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
         NakedObject object = objectManager.createTransientInstance(nc);
         LOG.debug("adding " + object);
         newInstances.addElement(object);

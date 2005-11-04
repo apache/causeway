@@ -1,12 +1,12 @@
 package org.nakedobjects.reflector.java;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.application.BusinessObjectContainer;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectPersistenceManager;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.TypedNakedCollection;
-import org.nakedobjects.object.persistence.NakedObjectManager;
 
 import java.util.Enumeration;
 import java.util.Vector;
@@ -95,8 +95,8 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
         }
     }
 
-    private NakedObjectManager objectManager() {
-        return NakedObjects.getObjectManager();
+    private NakedObjectPersistenceManager objectManager() {
+        return NakedObjects.getPersistenceManager();
     }
 
     public void resolve(Object parent, Object field) {

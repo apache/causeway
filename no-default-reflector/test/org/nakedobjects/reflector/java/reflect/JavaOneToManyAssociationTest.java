@@ -1,13 +1,9 @@
 package org.nakedobjects.reflector.java.reflect;
 
 
-import org.nakedobjects.TestSystem;
-import org.nakedobjects.object.DummyNakedObjectSpecification;
+
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectTestCase;
-import org.nakedobjects.object.reflect.DummyNakedCollection;
-import org.nakedobjects.object.reflect.internal.DummyIdentifier;
 
 import java.lang.reflect.Method;
 
@@ -15,6 +11,11 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import test.org.nakedobjects.object.DummyNakedObjectSpecification;
+import test.org.nakedobjects.object.NakedObjectTestCase;
+import test.org.nakedobjects.object.TestSystem;
+import test.org.nakedobjects.object.reflect.DummyNakedCollection;
 
 
 public class JavaOneToManyAssociationTest extends NakedObjectTestCase {

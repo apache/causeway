@@ -1,8 +1,8 @@
 package org.nakedobjects.reflector.java.valueholder;
 
 import org.nakedobjects.application.valueholder.Password;
-import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;
 import org.nakedobjects.object.value.PasswordValue;
+import org.nakedobjects.object.value.adapter.AbstractNakedValue;
 
 public class PasswordAdapter extends AbstractNakedValue implements PasswordValue {
     private final Password adaptee;

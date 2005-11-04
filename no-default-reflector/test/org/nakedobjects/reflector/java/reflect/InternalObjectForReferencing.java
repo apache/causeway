@@ -1,8 +1,8 @@
 package org.nakedobjects.reflector.java.reflect;
 
-import test.org.nakedobjects.object.MockNakedObject;
+import org.nakedobjects.object.InternalNakedObject;
 
-public class MockPerson extends MockNakedObject {
+public class InternalObjectForReferencing implements InternalNakedObject {
 
 }
 

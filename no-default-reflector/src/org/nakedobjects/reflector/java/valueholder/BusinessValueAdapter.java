@@ -3,7 +3,7 @@ package org.nakedobjects.reflector.java.valueholder;
 import org.nakedobjects.application.ValueParseException;
 import org.nakedobjects.application.valueholder.BusinessValueHolder;
 import org.nakedobjects.object.TextEntryParseException;
-import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;
+import org.nakedobjects.object.value.adapter.AbstractNakedValue;
 
 public class BusinessValueAdapter extends AbstractNakedValue {
     private final BusinessValueHolder adaptee;

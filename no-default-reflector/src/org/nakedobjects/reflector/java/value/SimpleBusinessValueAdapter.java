@@ -4,7 +4,7 @@ import org.nakedobjects.application.ValueParseException;
 import org.nakedobjects.application.value.SimpleBusinessValue;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;
+import org.nakedobjects.object.value.adapter.AbstractNakedValue;
 
 /**
  * Generic value adapter for all SimpleBusinessValue objects.

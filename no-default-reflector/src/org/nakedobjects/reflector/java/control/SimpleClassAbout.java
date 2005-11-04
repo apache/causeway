@@ -3,7 +3,7 @@ package org.nakedobjects.reflector.java.control;
 import org.nakedobjects.application.control.ClassAbout;
 import org.nakedobjects.application.control.Role;
 import org.nakedobjects.application.control.User;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.Session;
 
 
 /**
