@@ -8,7 +8,7 @@ import org.nakedobjects.object.loader.ObjectLoaderImpl;
 import org.nakedobjects.object.loader.PojoAdapterHashImpl;
 import org.nakedobjects.object.persistence.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.SimpleOidGenerator;
-import org.nakedobjects.object.persistence.objectstore.ObjectStorePersitenceManager;
+import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistenceManager;
 import org.nakedobjects.object.persistence.objectstore.inmemory.TransientObjectStore;
 import org.nakedobjects.object.repository.NakedObjectsClient;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
@@ -35,8 +35,8 @@ public class BasicSystem {
         nakedObjects = new NakedObjectsClient();
     }
 
-    protected ObjectStorePersitenceManager setupObjectManager() {
-        ObjectStorePersitenceManager objectManager = new ObjectStorePersitenceManager();
+    protected ObjectStorePersistenceManager setupObjectManager() {
+        ObjectStorePersistenceManager objectManager = new ObjectStorePersistenceManager();
         DefaultPersistAlgorithm defaultPersistAlgorithm = new DefaultPersistAlgorithm();
         defaultPersistAlgorithm.setOidGenerator(new SimpleOidGenerator());
         objectManager.setPersistAlgorithm(defaultPersistAlgorithm);
