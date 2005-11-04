@@ -4,7 +4,7 @@ import org.nakedobjects.distribution.NakedObjectsRemoteException;
 import org.nakedobjects.distribution.command.CommandClient;
 import org.nakedobjects.distribution.command.Request;
 import org.nakedobjects.distribution.command.Response;
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import com.thoughtworks.xstream.XStream;
 

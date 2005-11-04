@@ -1,7 +1,7 @@
 package org.nakedobjects.distribution.xml;
 
 import org.nakedobjects.distribution.ServerDistribution;
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;

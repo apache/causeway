@@ -1,8 +1,8 @@
 package org.nakedobjects.distribution.pipe;
 
-import org.nakedobjects.NakedObjects;
-import org.nakedobjects.NakedObjectsData;
-import org.nakedobjects.NakedObjectsServer;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.repository.NakedObjectsData;
+import org.nakedobjects.object.repository.NakedObjectsServer;
 
 public class NakedObjectsPipe extends NakedObjectsServer {
     private Thread server;
