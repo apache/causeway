@@ -1,4 +1,4 @@
-package org.nakedobjects.object.persistence.objectore.inmemory;
+package org.nakedobjects.object.persistence.objectstore.inmemory;
 
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.NakedObject;

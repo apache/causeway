@@ -1,4 +1,4 @@
-package org.nakedobjects.object.persistence.objectore;
+package org.nakedobjects.object.persistence.objectstore;
 
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.NakedClass;

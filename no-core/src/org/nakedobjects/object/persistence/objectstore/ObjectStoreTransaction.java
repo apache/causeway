@@ -1,4 +1,4 @@
-package org.nakedobjects.object.persistence.objectore;
+package org.nakedobjects.object.persistence.objectstore;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ObjectPerstsistenceException;

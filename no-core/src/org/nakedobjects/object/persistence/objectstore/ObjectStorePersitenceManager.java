@@ -1,4 +1,4 @@
-package org.nakedobjects.object.persistence.objectore;
+package org.nakedobjects.object.persistence.objectstore;
 
 import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.InstancesCriteria;
@@ -17,7 +17,7 @@ import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
-import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
+import org.nakedobjects.object.defaults.AbstracObjectPersistenceManager;
 import org.nakedobjects.object.defaults.DirtyObjectSetImpl;
 import org.nakedobjects.object.defaults.NakedClassImpl;
 import org.nakedobjects.object.defaults.NullDirtyObjectSet;
@@ -36,8 +36,8 @@ import java.util.Hashtable;
 import org.apache.log4j.Logger;
 
 
-public class LocalObjectManager extends AbstractNakedObjectManager implements PersistedObjectAdder {
-    private static final Logger LOG = Logger.getLogger(LocalObjectManager.class);
+public class ObjectStorePersitenceManager extends AbstracObjectPersistenceManager implements PersistedObjectAdder {
+    private static final Logger LOG = Logger.getLogger(ObjectStorePersitenceManager.class);
     private boolean checkObjectsForDirtyFlag;
     private final Hashtable nakedClasses = new Hashtable();
     private final DirtyObjectSetImpl objectsToBeSaved = new DirtyObjectSetImpl();
@@ -47,7 +47,7 @@ public class LocalObjectManager extends AbstractNakedObjectManager implements Pe
     private int transactionLevel;
     private PersistAlgorithm persistAlgorithm;
 
-    public LocalObjectManager() {
+    public ObjectStorePersitenceManager() {
         LOG.info("creating object manager");
     }
 
