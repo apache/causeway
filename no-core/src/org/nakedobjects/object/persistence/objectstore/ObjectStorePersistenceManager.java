@@ -36,8 +36,8 @@ import java.util.Hashtable;
 import org.apache.log4j.Logger;
 
 
-public class ObjectStorePersitenceManager extends AbstracObjectPersistenceManager implements PersistedObjectAdder {
-    private static final Logger LOG = Logger.getLogger(ObjectStorePersitenceManager.class);
+public class ObjectStorePersistenceManager extends AbstracObjectPersistenceManager implements PersistedObjectAdder {
+    private static final Logger LOG = Logger.getLogger(ObjectStorePersistenceManager.class);
     private boolean checkObjectsForDirtyFlag;
     private final Hashtable nakedClasses = new Hashtable();
     private final DirtyObjectSetImpl objectsToBeSaved = new DirtyObjectSetImpl();
@@ -47,7 +47,7 @@ public class ObjectStorePersitenceManager extends AbstracObjectPersistenceManage
     private int transactionLevel;
     private PersistAlgorithm persistAlgorithm;
 
-    public ObjectStorePersitenceManager() {
+    public ObjectStorePersistenceManager() {
         LOG.info("creating object manager");
     }
 
