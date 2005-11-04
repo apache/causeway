@@ -7,12 +7,11 @@
     <property name="build.dir" value=".\build"/>
     <property name="build.src.dir" value="${build.dir}/src"/>
 	<property name="release-dir" value="M:/naked-objects-builds"/>
-    <property name="version" value="Version 2"/>
-	<property name="debug" value="true"/>
+ 	<property name="debug" value="true"/>
 	
 	
     <exec program="C:/Program Files/Java/apache-ant-1.6.2/bin/ant.bat" useruntimeengine="true">
-        <arg line="-buildfile ../build-templates/version.xml" />
+        <arg line="-buildfile ../build-templates/buildnumber.xml" />
     </exec>
 		
     <script language="VB" failonerror="true"> 
@@ -22,7 +21,33 @@
         
         <code><![CDATA[ 
         Public Shared Sub ScriptMain(project As Project) 
-            Dim strFullFileName as String = project.Properties.Item("build.src.dir") & "/org/nakedobjects/system/AboutNakedObjects.java"
+            Dim sr As StreamReader = New StreamReader("../build-templates/version.properties")				
+            Dim line As String = sr.ReadLine()
+
+            While not line is nothing
+            	if not line.startsWith("#") 
+	                Dim start As String = line.substring(0, line.indexOf("=")).trim()
+	           		Dim len as Integer = start.length() + 2
+	                Dim value As String = line.substring(len).trim()
+	                'project.Log(Level.Info, start + ":" + value)
+	                project.Properties.Add(start, value)
+            	end if
+                
+				line = sr.ReadLine()
+            End While
+            sr.Close()
+        End Sub 			
+        ]]></code>
+    </script> 
+ 		
+    <script language="VB" failonerror="true"> 
+        <imports>
+                <import name="System.IO.StreamReader"/>	
+        </imports>
+        
+        <code><![CDATA[ 
+        Public Shared Sub ScriptMain(project As Project) 
+            Dim strFullFileName as String = project.Properties.Item("build.src.dir") & "/org/nakedobjects/utility/AboutNakedObjects.java"
         
             Dim sr As StreamReader = New StreamReader("../build-templates/build.number.properties")				
             Dim line As String
@@ -41,8 +66,8 @@
     </script> 
       
     <echo message="Using '${nant.settings.currentframework}' Framework"/>
-    <echo>Version: ${version}</echo>
-    <echo>Build number: ${build.number}</echo>
+    <echo>Builing ${build.name}</echo>
+   	<echo>Version: ${build.version}, ${build.number}</echo>
     <echo>Build source: ${java.sources}</echo>
 
 
@@ -59,7 +84,7 @@
 		<mkdir dir="${build.src.dir}" failonerror="true" />
 
 		<!-- always remove this file, so we get a fresh copy each time as we will change it during the build -->
-        <delete failonerror="false" file="${build.src.dir}/org/nakedobjects/system/AboutNakedObjects.java" />
+        <delete failonerror="false" file="${build.src.dir}/org/nakedobjects/utility/AboutNakedObjects.java" />
 
 		<copy todir="${build.src.dir}">
 			<fileset basedir="${java.sources}/no-core/src">
@@ -143,15 +168,17 @@
 			<code>	
 			<![CDATA[ 
 	Public Shared Sub ScriptMain(project As Project) 
-		Dim strFullFileName as String = project.Properties.Item("build.src.dir") & "/org/nakedobjects/system/AboutNakedObjects.java"
+		Dim strFullFileName as String = project.Properties.Item("build.src.dir") & "/org/nakedobjects/utility/AboutNakedObjects.java"
             	Dim sr As StreamReader = New StreamReader(strFullFileName)				
            	Dim sw As StreamWriter = New StreamWriter(strFullFileName & ".tmp")				
 	      	Dim line As String
 		line = sr.ReadLine()
             	Do
-			line = line.Replace("%VERSION%", project.Properties.Item("version") )
+			line = line.Replace("%VERSION%", project.Properties.Item("build.version") )
 			line = line.Replace("%BUILD_ID%", project.Properties.Item("build.number") )
-			line = line.Replace("%COPYRIGHT_NOTICE%", "Copyright Naked Objects Group 2000 - 2005" )
+			line = line.Replace("%NAME%", project.Properties.Item("build.name"))
+			line = line.Replace("%COPYRIGHT_NOTICE%", project.Properties.Item("build.copyright"))
+			line = line.Replace("%IMAGE_FILE%", project.Properties.Item("build.image-file"))
 			' Console.WriteLine(line)
 			sw.WriteLine(line)
 			line = sr.ReadLine()
@@ -165,8 +192,8 @@
 	
 	
 		<move overwrite="true"
-			file="${build.src.dir}/org/nakedobjects/system/AboutNakedObjects.java.tmp" 
-			tofile="${build.src.dir}/org/nakedobjects/system/AboutNakedObjects.java" />
+			file="${build.src.dir}/org/nakedobjects/utility/AboutNakedObjects.java.tmp" 
+			tofile="${build.src.dir}/org/nakedobjects/utility/AboutNakedObjects.java" />
 	
 	
 		<!-- copy the library sources across -->	
@@ -297,8 +324,8 @@
 		</zip>
 		
 		<!-- TODO use variables and a properties file -->
-		<zip zipfile="${release-dir}/nakedobjects-${build.number}-dotnet.zip">
-			<fileset basedir="build">
+		<zip zipfile="${release-dir}/nakedobjects-${build.version}-${build.number}-dotnet.zip">
+			<fileset basedir="build" prefix="nakedobjects-${build.version}-${build.number}">
 				<include name="*.dll"/>
 				<include name="*.pdb"/>
 				<include name="src.zip"/>
@@ -318,7 +345,7 @@
         <mkdir dir="e:/transfer" failonerror="false"/>
         <copy todir="e:/transfer" failonerror="false">
 			<fileset basedir="${release-dir}">
-				<include name="nakedobjects.net-${build.number}.zip"/>
+				<include name="nakedobjects.net-${build.version}-${build.number}-dotnet.zip"/>
 			</fileset>
 		</copy>
     </target>
@@ -326,11 +353,11 @@
 
 
     <target name="quick-release" depends="copy-source, dist">
-    	<echo>Completed quick release ${build.number} (docs not up-to-date)</echo>
+    	<echo>Completed quick release ${build.version}-${build.number} (docs not up-to-date)</echo>
     </target>
 
     <target name="release" depends="copy-source, docs, dist">
-    	<echo>Completed release ${build.number}</echo>
+    	<echo>Completed release ${build.version}-${build.number}</echo>
     </target>
 
     
