@@ -11,7 +11,7 @@ import org.nakedobjects.object.loader.PojoAdapterHashMap;
 import org.nakedobjects.object.persistence.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.SimpleOidGenerator;
-import org.nakedobjects.object.persistence.objectstore.ObjectStorePersitenceManager;
+import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistenceManager;
 import org.nakedobjects.object.persistence.objectstore.inmemory.TransientObjectStore;
 import org.nakedobjects.object.reflect.ReflectionPeerFactory;
 import org.nakedobjects.object.repository.NakedObjectsClient;
@@ -88,7 +88,7 @@ public class JavaExploration {
             DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
             persistAlgorithm.setOidGenerator(oidGenerator);
 
-            ObjectStorePersitenceManager objectManager = new ObjectStorePersitenceManager();
+            ObjectStorePersistenceManager objectManager = new ObjectStorePersistenceManager();
             objectManager.setObjectStore(objectStore);
             objectManager.setPersistAlgorithm(persistAlgorithm);
 
