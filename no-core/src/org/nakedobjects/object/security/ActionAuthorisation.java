@@ -18,7 +18,7 @@ public class ActionAuthorisation extends AbstractActionPeer {
 
     public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
         Hint hint = super.getHint(identifier, object, parameters);
-        return AuthorisationHint.hint(identifier, hint, authorisationManager);
+        return AuthorisationHint.merge(identifier, hint, authorisationManager);
     }
 
     public boolean hasHint() {

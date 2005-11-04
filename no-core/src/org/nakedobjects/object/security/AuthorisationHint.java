@@ -8,8 +8,8 @@ import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
 
-class AuthorisationHint {
-    static Hint hint(MemberIdentifier identifier, final Hint originalHint, AuthorisationManager authorisationManager) {
+public class AuthorisationHint {
+    public static Hint merge(MemberIdentifier identifier, final Hint originalHint, AuthorisationManager authorisationManager) {
         Session session = NakedObjects.getCurrentSession();
         boolean isUsable = authorisationManager.isUsable(session, identifier);
         boolean isVisible = authorisationManager.isVisible(session, identifier);

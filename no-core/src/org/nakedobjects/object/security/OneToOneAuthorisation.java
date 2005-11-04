@@ -18,7 +18,7 @@ public class OneToOneAuthorisation extends AbstractOneToOnePeer {
 
     public Hint getHint(MemberIdentifier identifier, NakedObject inObject, Naked associate) {
         Hint hint = super.getHint(identifier, inObject, associate);
-        return AuthorisationHint.hint(identifier, hint, authorisationManager);
+        return AuthorisationHint.merge(identifier, hint, authorisationManager);
     }
 
     public boolean hasHint() {
