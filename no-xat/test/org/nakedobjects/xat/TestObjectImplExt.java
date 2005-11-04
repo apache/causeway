@@ -1,9 +1,10 @@
 package org.nakedobjects.xat;
 
+import org.nakedobjects.object.Action;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.utility.ExpectedCalls;
+import org.nakedobjects.object.NakedObjectField;
+
+import test.org.nakedobjects.utility.ExpectedCalls;
 
 import junit.framework.Assert;
 

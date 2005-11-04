@@ -1,5 +1,6 @@
 package org.nakedobjects.xat;
 
+import org.nakedobjects.object.Action;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
@@ -7,7 +8,6 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.object.reflect.NameConvertor;
 
 

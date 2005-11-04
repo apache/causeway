@@ -1,7 +1,7 @@
 package org.nakedobjects.xat;
 
+import org.nakedobjects.object.Action;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.Action;
 
 
 public interface TestObject extends TestNaked {

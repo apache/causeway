@@ -1,23 +1,23 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.Action;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectAssociation;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationException;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.OneToManyAssociation;
+import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.NakedObjectAssociation;
-import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -807,7 +807,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         } catch (InvalidEntryException e) {
             throw new IllegalActionError("");
         }
-        NakedObjects.getObjectManager().saveChanges();
+        NakedObjects.getPersistenceManager().saveChanges();
     }
 
     protected NakedObjectField fieldAccessorFor(final String fieldName) {
@@ -942,7 +942,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         if(field instanceof NakedObject) {
             NakedObject nakedObject = (NakedObject) field;
             if(nakedObject.getResolveState().isResolvable(ResolveState.RESOLVING)) {
-                NakedObjects.getObjectManager().resolveImmediately(nakedObject);
+                NakedObjects.getPersistenceManager().resolveImmediately(nakedObject);
             }
         }
         fieldObject.setForNaked(field);
@@ -990,7 +990,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         }
 
         if(selectedObject.getResolveState().isResolvable(ResolveState.RESOLVING)) {
-            NakedObjects.getObjectManager().resolveImmediately(selectedObject);
+            NakedObjects.getPersistenceManager().resolveImmediately(selectedObject);
         }
         
         return factory.createTestObject(selectedObject);

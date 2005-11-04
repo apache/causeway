@@ -1,6 +1,6 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.object.DummyNakedValue;
+import test.org.nakedobjects.object.DummyNakedValue;
 
 import junit.framework.TestCase;
 

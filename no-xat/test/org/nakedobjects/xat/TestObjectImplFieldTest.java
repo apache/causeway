@@ -1,26 +1,30 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.TestSystem;
-import org.nakedobjects.object.DummyNakedObjectSpecification;
-import org.nakedobjects.object.MockNakedObject;
-import org.nakedobjects.object.MockOneToManyPeer;
-import org.nakedobjects.object.MockOneToOnePeer;
+import org.nakedobjects.object.Action;
+import org.nakedobjects.object.NakedObjectField;
+import org.nakedobjects.object.OneToManyAssociation;
+import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.ResolveState;
-import org.nakedobjects.object.control.MockHint;
-import org.nakedobjects.object.control.NoOpAllow;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.DummyNakedCollection;
-import org.nakedobjects.object.reflect.DummyNakedObject;
-import org.nakedobjects.object.reflect.MockActionPeer;
-import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.ActionImpl;
+import org.nakedobjects.object.reflect.OneToManyAssociationImpl;
+import org.nakedobjects.object.reflect.OneToOneAssociationImpl;
 
 import junit.framework.TestCase;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import test.org.nakedobjects.object.DummyNakedObjectSpecification;
+import test.org.nakedobjects.object.MockNakedObject;
+import test.org.nakedobjects.object.TestSystem;
+import test.org.nakedobjects.object.control.MockHint;
+import test.org.nakedobjects.object.control.NoOpAllow;
+import test.org.nakedobjects.object.reflect.DummyActionPeer;
+import test.org.nakedobjects.object.reflect.DummyNakedCollection;
+import test.org.nakedobjects.object.reflect.DummyNakedObject;
+import test.org.nakedobjects.object.reflect.DummyOneToManyPeer;
+import test.org.nakedobjects.object.reflect.DummyOneToOnePeer;
 
 
 public class TestObjectImplFieldTest extends TestCase {
@@ -58,8 +62,8 @@ public class TestObjectImplFieldTest extends TestCase {
         DummyNakedObjectSpecification fieldSpec = new DummyNakedObjectSpecification();
 
         DummyNakedObjectSpecification objectSpec = new DummyNakedObjectSpecification();
-        OneToOneAssociation field1 = new OneToOneAssociation("cls", "one", fieldSpec, new MockOneToOnePeer());
-        OneToOneAssociation field2 = new OneToOneAssociation("cls", "two", fieldSpec, new MockOneToOnePeer());
+        OneToOneAssociation field1 = new OneToOneAssociationImpl("cls", "one", fieldSpec, new DummyOneToOnePeer());
+        OneToOneAssociation field2 = new OneToOneAssociationImpl("cls", "two", fieldSpec, new DummyOneToOnePeer());
         objectSpec.setupFields(new NakedObjectField[] { field1, field2 });
         object.setupSpecification(objectSpec);
     
@@ -98,8 +102,8 @@ public class TestObjectImplFieldTest extends TestCase {
         DummyNakedObjectSpecification fieldSpec = new DummyNakedObjectSpecification();
 
         DummyNakedObjectSpecification objectSpec = new DummyNakedObjectSpecification();
-        OneToOneAssociation field1 = new OneToOneAssociation("cls", "one", fieldSpec, new MockOneToOnePeer());
-        OneToManyAssociation field2 = new OneToManyAssociation("cls", "two", fieldSpec, new MockOneToManyPeer());
+        OneToOneAssociation field1 = new OneToOneAssociationImpl("cls", "one", fieldSpec, new DummyOneToOnePeer());
+        OneToManyAssociation field2 = new OneToManyAssociationImpl("cls", "two", fieldSpec, new DummyOneToManyPeer());
         objectSpec.setupFields(new NakedObjectField[] { field1, field2 });
         object.setupSpecification(objectSpec);
         
@@ -141,8 +145,8 @@ public class TestObjectImplFieldTest extends TestCase {
         DummyNakedObjectSpecification fieldSpec = new DummyNakedObjectSpecification();
 
         DummyNakedObjectSpecification objectSpec = new DummyNakedObjectSpecification();
-        OneToOneAssociation field1 = new OneToOneAssociation("cls", "one", fieldSpec, new MockOneToOnePeer());
-        OneToOneAssociation field2 = new OneToOneAssociation("cls", "two", fieldSpec, new MockOneToOnePeer());
+        OneToOneAssociation field1 = new OneToOneAssociationImpl("cls", "one", fieldSpec, new DummyOneToOnePeer());
+        OneToOneAssociation field2 = new OneToOneAssociationImpl("cls", "two", fieldSpec, new DummyOneToOnePeer());
         objectSpec.setupFields(new NakedObjectField[] { field1, field2 });
         object.setupSpecification(objectSpec);
     
@@ -183,7 +187,7 @@ public class TestObjectImplFieldTest extends TestCase {
         target.expected.addExpectedMethod("getAction");
         target.expected.addExpectedParameter("testaction");
 
-        Action action = new Action("cls", "method", new MockActionPeer());
+        Action action = new ActionImpl("cls", "method", new DummyActionPeer());
         target.setupAction(action);
  
         object.calls.addExpectedMethod("execute");

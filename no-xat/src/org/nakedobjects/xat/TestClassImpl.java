@@ -1,19 +1,19 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.Action;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectPersistenceManager;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.NotPersistableException;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.defaults.Error;
-import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.persistence.NotPersistableException;
 import org.nakedobjects.object.persistence.TitleCriteria;
-import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 
 public class TestClassImpl extends AbstractTestObject implements TestClass {
@@ -32,7 +32,7 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
      */
     public TestObject findInstance(String title) {
         NakedObjectSpecification type = ((NakedClass) getForNaked().getObject()).forObjectType();
-        TypedNakedCollection instances = NakedObjects.getObjectManager().findInstances(new TitleCriteria(type, title, true));
+        TypedNakedCollection instances = NakedObjects.getPersistenceManager().findInstances(new TitleCriteria(type, title, true));
         if (instances.size() == 0) {
             throw new IllegalActionError("No instance found with title " + title);
         } else {
@@ -56,7 +56,7 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
      * Get the instances of this class.
      */
     public TestCollection instances() {
-        NakedCollection instances = NakedObjects.getObjectManager().allInstances(nakedClass.forObjectType(), false);
+        NakedCollection instances = NakedObjects.getPersistenceManager().allInstances(nakedClass.forObjectType(), false);
         if (instances.size() == 0) {
             throw new IllegalActionError("Find must find at least one object");
         } else {
@@ -76,7 +76,7 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
     private NakedObject newInstance(NakedClass cls) {
         NakedObject object;
 
-        NakedObjectManager objectManager = NakedObjects.getObjectManager();
+        NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
         try {
             object = objectManager.createTransientInstance(cls.forObjectType());
             objectManager.startTransaction();
@@ -102,7 +102,6 @@ public class TestClassImpl extends AbstractTestObject implements TestClass {
     protected Action getAction(String name, NakedObjectSpecification[] parameterClasses) {
         NakedObjectSpecification spec = this.nakedClass.forObjectType();
         return spec.getClassAction(Action.USER, simpleName(name), parameterClasses);
-        
     }
 }
 

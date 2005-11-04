@@ -28,9 +28,6 @@ package org.nakedobjects.xat;
 import org.nakedobjects.object.NakedObject;
 
 
-/**
- * @author: 
- */
 class ExpectationValue {
     //private String value;
     private NakedObject reference;

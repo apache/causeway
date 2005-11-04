@@ -1,8 +1,8 @@
 package org.nakedobjects.xat;
 
+import org.nakedobjects.object.Action;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.Action;
 
 
 public abstract class TestObjectDecorator implements TestObject {

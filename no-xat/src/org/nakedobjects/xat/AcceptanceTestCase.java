@@ -1,16 +1,17 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.NakedObjects;
-import org.nakedobjects.NakedObjectsClient;
-import org.nakedobjects.container.configuration.ComponentLoader;
-import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.defaults.NakedClassImpl;
 import org.nakedobjects.object.fixture.Fixture;
 import org.nakedobjects.object.fixture.FixtureBuilder;
+import org.nakedobjects.object.repository.NakedObjectsClient;
 import org.nakedobjects.object.security.NullSession;
+import org.nakedobjects.utility.configuration.ComponentLoader;
+import org.nakedobjects.utility.configuration.PropertiesConfiguration;
+import org.nakedobjects.utility.configuration.PropertiesFileLoader;
 
 import java.io.File;
 import java.util.Hashtable;
@@ -39,7 +40,7 @@ public abstract class AcceptanceTestCase extends TestCase {
 
     public AcceptanceTestCase(String name) {
         super(name);
-        
+
         File f = new File("xat.properties");
         if (f.exists()) {
             PropertyConfigurator.configure("xat.properties");
@@ -61,15 +62,15 @@ public abstract class AcceptanceTestCase extends TestCase {
         super.finalize();
         LOG.info("finalizing acceptance test");
     }
-    
+
     protected TestClass getTestClass(String name) {
         TestClass view = (TestClass) classes.get(name.toLowerCase());
-        
+
         NakedObject object = (NakedObject) view.getForNaked();
-        if(object.getResolveState().isPersistent()) {
-            NakedObjects.getObjectManager().resolveImmediately(object);
+        if (object.getResolveState().isPersistent()) {
+            NakedObjects.getPersistenceManager().resolveImmediately(object);
         }
-        
+
         if (view == null) {
             throw new IllegalArgumentException("Invalid class name " + name);
         } else {
@@ -101,25 +102,28 @@ public abstract class AcceptanceTestCase extends TestCase {
         LOG.info("run " + getName());
         super.run(result);
     }
-    
+
     protected void setUp() throws Exception {
         File f = new File("xat.properties");
-        Configuration configuration;
+        PropertiesConfiguration configuration;
         if (f.exists()) {
-            configuration = new Configuration(new ConfigurationPropertiesLoader(f.getAbsolutePath(), true));
+            configuration = new PropertiesConfiguration(new PropertiesFileLoader(f.getAbsolutePath(), true));
         } else {
-            configuration = new Configuration();
+            configuration = new PropertiesConfiguration();
         }
-        
+
         nakedObjects = new NakedObjectsClient();
         nakedObjects.setConfiguration(configuration);
-          
-      
+
         fixtureBuilder = createFixtureBuilder();
 
         if (testObjectFactory == null) {
-            testObjectFactory = (TestObjectFactory) ComponentLoader.loadComponent(TEST_OBJECT_FACTORY,
-                    NonDocumentingTestObjectFactory.class, TestObjectFactory.class);
+            String factoryName = configuration.getString(TEST_OBJECT_FACTORY);
+            if (factoryName != null) {
+                testObjectFactory = (TestObjectFactory) ComponentLoader.loadComponent(factoryName, TestObjectFactory.class);
+            } else {
+                testObjectFactory = new NonDocumentingTestObjectFactory();
+            }
         }
         documentor = testObjectFactory.getDocumentor();
         documentor.start();
@@ -127,11 +131,11 @@ public abstract class AcceptanceTestCase extends TestCase {
         String methodName = getName().substring(4);
         testObjectFactory.testStarting(className, methodName);
 
-	      setupFramework(nakedObjects);
+        setupFramework(nakedObjects);
 
         nakedObjects.setSession(new NullSession());
         nakedObjects.init();
-        
+
         setUpFixtures();
 
         try {
@@ -139,8 +143,8 @@ public abstract class AcceptanceTestCase extends TestCase {
             String[] cls = fixtureBuilder.getClasses();
             for (int i = 0; i < cls.length; i++) {
                 NakedObjectSpecification spec = NakedObjects.getSpecificationLoader().loadSpecification(cls[i]);
-                NakedClass nakedClass = new NakedClass(cls[i]);
-//                NakedObjects.getPojoAdapterFactory().createNOAdapter(nakedClass).setResolved();
+                NakedClass nakedClass = new NakedClassImpl(cls[i]);
+                // NakedObjects.getPojoAdapterFactory().createNOAdapter(nakedClass).setResolved();
                 TestClass view = testObjectFactory.createTestClass(nakedClass);
                 classes.put(spec.getFullName().toLowerCase(), view);
             }
@@ -148,11 +152,11 @@ public abstract class AcceptanceTestCase extends TestCase {
             // If an exception is thrown in setUp then tearDown is not called,
             // hence object manager is left running, but shouldn't be.
             e.printStackTrace();
-            //           objectManager.shutdown();
+            // objectManager.shutdown();
             throw e;
         }
-        
-        NakedObjects.getObjectManager().reset();
+
+        NakedObjects.getPersistenceManager().reset();
     }
 
     protected abstract FixtureBuilder createFixtureBuilder();
@@ -173,9 +177,8 @@ public abstract class AcceptanceTestCase extends TestCase {
     }
 
     /**
-     * Marks the start of a new step within a story. Adds the specified text to
-     * the script documentation, which will then be followed by the generated
-     * text from the action methods.
+     * Marks the start of a new step within a story. Adds the specified text to the script documentation,
+     * which will then be followed by the generated text from the action methods.
      */
     protected void nextStep(String text) {
         documentor.step(text);
@@ -192,8 +195,8 @@ public abstract class AcceptanceTestCase extends TestCase {
     }
 
     /*
-     * public void setTestObjectFactory(TestObjectFactory testObjectFactory) {
-     * this.testObjectFactory = testObjectFactory; }
+     * public void setTestObjectFactory(TestObjectFactory testObjectFactory) { this.testObjectFactory =
+     * testObjectFactory; }
      */
     protected void stopDocumenting() {
         documentor.stop();
@@ -211,14 +214,14 @@ public abstract class AcceptanceTestCase extends TestCase {
 
         LOG.info("tear down " + getName());
         nakedObjects.shutdown();
-        
+
         classes.clear();
         classes = null;
         fixtureBuilder = null;
         documentor = null;
-        
+
         testObjectFactory.testEnding();
-        
+
         testObjectFactory = null;
         super.tearDown();
     }
@@ -252,8 +255,13 @@ public abstract class AcceptanceTestCase extends TestCase {
                 asTestNaked(parameter4), asTestNaked(parameter5) };
     }
 
-    protected TestNaked[] parameters(Object parameter1, Object parameter2, Object parameter3, Object parameter4,
-            Object parameter5, Object parameter6) {
+    protected TestNaked[] parameters(
+            Object parameter1,
+            Object parameter2,
+            Object parameter3,
+            Object parameter4,
+            Object parameter5,
+            Object parameter6) {
         return new TestNaked[] { asTestNaked(parameter1), asTestNaked(parameter2), asTestNaked(parameter3),
                 asTestNaked(parameter4), asTestNaked(parameter5), asTestNaked(parameter6) };
     }
@@ -268,25 +276,20 @@ public abstract class AcceptanceTestCase extends TestCase {
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */

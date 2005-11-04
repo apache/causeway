@@ -4,9 +4,10 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.utility.ExpectedCalls;
 
 import java.util.Hashtable;
+
+import test.org.nakedobjects.utility.ExpectedCalls;
 
 public class MockObjectFactory implements TestObjectFactory {
     ExpectedCalls calls = new ExpectedCalls();

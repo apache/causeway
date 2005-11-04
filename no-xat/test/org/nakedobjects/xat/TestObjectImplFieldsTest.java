@@ -1,20 +1,21 @@
 package org.nakedobjects.xat;
 
-import org.nakedobjects.object.DummyNakedObjectSpecification;
-import org.nakedobjects.object.MockNakedObject;
-import org.nakedobjects.object.MockOneToOnePeer;
-import org.nakedobjects.object.control.MockHint;
-import org.nakedobjects.object.control.NoOpAllow;
-import org.nakedobjects.object.control.NoOpVeto;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.MockActionPeer;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.ActionImpl;
+import org.nakedobjects.object.reflect.OneToOneAssociationImpl;
 
 import junit.framework.TestCase;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import test.org.nakedobjects.object.DummyNakedObjectSpecification;
+import test.org.nakedobjects.object.MockNakedObject;
+import test.org.nakedobjects.object.control.MockHint;
+import test.org.nakedobjects.object.control.NoOpAllow;
+import test.org.nakedobjects.object.control.NoOpVeto;
+import test.org.nakedobjects.object.reflect.DummyActionPeer;
+import test.org.nakedobjects.object.reflect.DummyOneToOnePeer;
 
 
 public class TestObjectImplFieldsTest extends TestCase {
@@ -50,7 +51,7 @@ public class TestObjectImplFieldsTest extends TestCase {
 
     private void expectCallToGetAction(boolean returnAction, int parameters) {
         if(returnAction) {
-            target.setupAction(new Action("cls", "method", new MockActionPeer()));
+            target.setupAction(new ActionImpl("cls", "method", new DummyActionPeer()));
         }
         
         target.expected.addExpectedMethod("getAction");
@@ -72,7 +73,7 @@ public class TestObjectImplFieldsTest extends TestCase {
     
 
     private void expectCallToFieldFor() {
-        target.setupField(new OneToOneAssociation("", "", new DummyNakedObjectSpecification(), new MockOneToOnePeer()));
+        target.setupField(new OneToOneAssociationImpl("", "", new DummyNakedObjectSpecification(), new DummyOneToOnePeer()));
         
         target.expected.addExpectedMethod("fieldAccessorFor");
         target.expected.addExpectedParameter("Field Name");

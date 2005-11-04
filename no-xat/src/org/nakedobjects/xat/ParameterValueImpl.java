@@ -1,9 +1,9 @@
 package org.nakedobjects.xat;
 
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 
 public class ParameterValueImpl implements TestValue {
