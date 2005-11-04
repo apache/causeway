@@ -1,11 +1,11 @@
 package org.nakedobjects.utility;
 
-class ProfilerSystem {
-    long memory() {
+public class ProfilerSystem {
+    protected long memory() {
         return Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
     }
 
-    long time() {
+    protected long time() {
         return System.currentTimeMillis();
     }
 }

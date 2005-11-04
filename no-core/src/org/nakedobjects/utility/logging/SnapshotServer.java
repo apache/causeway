@@ -1,7 +1,7 @@
 package org.nakedobjects.utility.logging;
 
 import org.nakedobjects.utility.configuration.PropertiesConfiguration;
-import org.nakedobjects.utility.configuration.ConfigurationPropertiesLoader;
+import org.nakedobjects.utility.configuration.PropertiesFileLoader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class SnapshotServer {
         String fileName;
         String extension;
         
-        ConfigurationPropertiesLoader loader = new ConfigurationPropertiesLoader("nakedobjects.properties", true);
+        PropertiesFileLoader loader = new PropertiesFileLoader("nakedobjects.properties", true);
         PropertiesConfiguration c = new PropertiesConfiguration(loader);
 
         String prefix = "snapshotserver.";

@@ -26,7 +26,9 @@ public class Profiler {
         return profilerSystem.time();
     }
 
-    
+    public static void setProfilerSystem(ProfilerSystem profilerSystem) {
+        Profiler.profilerSystem = profilerSystem;
+    }
     
     private long elapsedTime = 0;
     private final int id;
