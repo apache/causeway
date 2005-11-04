@@ -6,24 +6,24 @@
 <project name="Naked Objects framework - upload to server" default="upload" basedir=".">
 
 	<target name="upload">
+		<property file="version.properties"/>
 		<property file="build.number.properties"/>
 		<property file="upload.properties"/>
 		<property file="common.properties"/>
 		
 		<echo>Uploading distributions</echo>
-		<echo>Build ${build.number}</echo>
+		<echo>Version ${build.version}, build ${build.number}</echo>
 
 		<fileset dir="${release.dir}" id="released-files">
-			<include name="test.txt" />
-			<include name="xx nakedobjects-${build.number}-java.zip" />
-			<include name="xx  nakedobjects-${build.number}-dotnet.zip" />
+			<include name="nakedobjects-${build.version}-${build.number}-java.zip" />
+			<include name="nakedobjects-${build.version}-${build.number}-dotnet.zip" />
 		</fileset>
 
 		<ftp action="mkdir" remotedir="test" password="${password}" server="${server}" userid="${userid}" verbose="yes">
 			<fileset><include name="*.*"/></fileset>
 		</ftp>
 
-		<ftp password="${password}" server="${server}" userid="${userid}" remotedir="." verbose="yes" binary="no">
+		<ftp password="${password}" server="${server}" userid="${userid}" remotedir="." verbose="yes" binary="no" passive="yes">
 			<fileset refid="released-files"/>
 		</ftp>
 
