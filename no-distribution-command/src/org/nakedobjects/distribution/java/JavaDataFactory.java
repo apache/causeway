@@ -7,8 +7,8 @@ import org.nakedobjects.distribution.NullData;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ReferenceData;
 import org.nakedobjects.distribution.ValueData;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.Version;
-import org.nakedobjects.object.persistence.Oid;
 
 
 public class JavaDataFactory extends DataFactory {

@@ -1,24 +1,25 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.DirtyObjectSet;
+import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedReference;
+import org.nakedobjects.object.ObjectNotFoundException;
+import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
+import org.nakedobjects.object.Session;
 import org.nakedobjects.object.TypedNakedCollection;
-import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
-import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
-import org.nakedobjects.object.persistence.InstancesCriteria;
-import org.nakedobjects.object.persistence.ObjectNotFoundException;
-import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.persistence.UnsupportedFindException;
-import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.UnsupportedFindException;
+import org.nakedobjects.object.defaults.AbstracObjectPersistenceManager;
+import org.nakedobjects.object.defaults.InstanceCollectionVector;
+import org.nakedobjects.object.defaults.NakedClassImpl;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.NotImplementedException;
 
@@ -29,8 +30,8 @@ import org.apache.log4j.Logger;
 
 // TODO this class replaces most of AbstractNakedObjectManager, therefore just
 // implement NakedObjectManager
-public final class ProxyObjectManager extends AbstractNakedObjectManager {
-    final static Logger LOG = Logger.getLogger(ProxyObjectManager.class);
+public final class ProxyPersistenceManager extends AbstracObjectPersistenceManager {
+    final static Logger LOG = Logger.getLogger(ProxyPersistenceManager.class);
     private Distribution connection;
     private final Hashtable nakedClasses = new Hashtable();
     private DataFactory objectDataFactory;
@@ -102,7 +103,7 @@ public final class ProxyObjectManager extends AbstractNakedObjectManager {
         }
 
         NakedClass cls;
-        cls = new NakedClass(nakedClass.getFullName());
+        cls = new NakedClassImpl(nakedClass.getFullName());
         nakedClasses.put(nakedClass, cls);
         return cls;
     }

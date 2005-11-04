@@ -1,15 +1,9 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.TestSystem;
 import org.nakedobjects.distribution.dummy.DummyCollectionData;
 import org.nakedobjects.distribution.dummy.DummyObjectData;
-import org.nakedobjects.object.DummyNakedObjectSpecification;
-import org.nakedobjects.object.DummyOid;
-import org.nakedobjects.object.DummyVersion;
 import org.nakedobjects.object.NakedCollection;
-import org.nakedobjects.object.NullDirtyObjectSet;
-import org.nakedobjects.object.persistence.defaults.TestObject;
-import org.nakedobjects.object.reflect.DummyNakedObject;
+import org.nakedobjects.object.defaults.NullDirtyObjectSet;
 
 import java.util.Vector;
 
@@ -17,6 +11,13 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
+
+import test.org.nakedobjects.object.DummyNakedObjectSpecification;
+import test.org.nakedobjects.object.DummyOid;
+import test.org.nakedobjects.object.TestSystem;
+import test.org.nakedobjects.object.persistence.defaults.TestObject;
+import test.org.nakedobjects.object.reflect.DummyNakedObject;
+import test.org.nakedobjects.object.reflect.DummyVersion;
 
 
 public class DataHelperCollectionTest extends TestCase {

@@ -2,7 +2,7 @@ package org.nakedobjects.distribution.command;
 
 import org.nakedobjects.distribution.Distribution;
 import org.nakedobjects.distribution.ObjectData;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.Session;
 
 public class MakePersistent extends AbstractRequest {
     private ObjectData object;

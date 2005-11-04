@@ -1,23 +1,24 @@
 
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.NakedObjects;
-import org.nakedobjects.TestSystem;
 import org.nakedobjects.distribution.dummy.DummyObjectData;
 import org.nakedobjects.distribution.dummy.DummyObjectDataFactory;
-import org.nakedobjects.object.DummyOid;
-import org.nakedobjects.object.DummyVersion;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.ResolveState;
-import org.nakedobjects.object.reflect.TestObjectBuilder;
-import org.nakedobjects.object.reflect.TestPojo;
-import org.nakedobjects.object.reflect.TestPojoValuePeer;
-import org.nakedobjects.object.reflect.TestValue;
 
 import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
+
+import test.org.nakedobjects.object.DummyOid;
+import test.org.nakedobjects.object.TestObjectBuilder;
+import test.org.nakedobjects.object.TestSystem;
+import test.org.nakedobjects.object.reflect.DummyVersion;
+import test.org.nakedobjects.object.reflect.TestPojo;
+import test.org.nakedobjects.object.reflect.TestPojoValuePeer;
+import test.org.nakedobjects.object.reflect.defaults.TestValue;
 
 public class ProxyObjectManagerTest extends TestCase {
 
@@ -32,7 +33,7 @@ public class ProxyObjectManagerTest extends TestCase {
         LogManager.getRootLogger().setLevel(Level.OFF);
         
         system = new TestSystem();
-        ProxyObjectManager om = new ProxyObjectManager();
+        ProxyPersistenceManager om = new ProxyPersistenceManager();
         distribution = new DummyDistribution();
         om.setConnection(distribution);
         om.setObjectDataFactory(new DummyObjectDataFactory());
@@ -61,7 +62,7 @@ public class ProxyObjectManagerTest extends TestCase {
         distribution.setupMakePersistentResults(new DummyObjectData(new DummyOid(123), "type", new Data[] {null, field2}, true, new DummyVersion(456) ));
        
         NakedObject transientObject = obj.getAdapter();
-        NakedObjects.getObjectManager().makePersistent(transientObject);
+        NakedObjects.getPersistenceManager().makePersistent(transientObject);
        
         assertEquals(new DummyOid(123), transientObject.getOid());
         assertEquals(new DummyOid(345), referencedObject.getAdapter().getOid());

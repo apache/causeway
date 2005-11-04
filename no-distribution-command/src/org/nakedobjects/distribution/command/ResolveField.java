@@ -3,7 +3,7 @@ package org.nakedobjects.distribution.command;
 import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.Distribution;
 import org.nakedobjects.distribution.ReferenceData;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.Session;
 import org.nakedobjects.utility.ToString;
 
 

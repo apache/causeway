@@ -1,8 +1,8 @@
 package org.nakedobjects.distribution.java;
 
 import org.nakedobjects.distribution.ReferenceData;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.Version;
-import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.utility.ToString;
 
 

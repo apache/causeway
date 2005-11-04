@@ -1,8 +1,8 @@
 package org.nakedobjects.distribution;
 
+import org.nakedobjects.object.InstancesCriteria;
+import org.nakedobjects.object.Session;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.persistence.InstancesCriteria;
-import org.nakedobjects.object.security.Session;
 import org.nakedobjects.utility.Logger;
 
 

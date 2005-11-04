@@ -1,17 +1,17 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.Version;
-import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.Assert;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import java.util.Enumeration;
 

@@ -1,20 +1,12 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.TestSystem;
 import org.nakedobjects.distribution.dummy.DummyCollectionData;
 import org.nakedobjects.distribution.dummy.DummyObjectData;
 import org.nakedobjects.distribution.dummy.DummyObjectDataFactory;
 import org.nakedobjects.distribution.dummy.DummyValueData;
-import org.nakedobjects.object.DummyNakedObjectSpecification;
-import org.nakedobjects.object.DummyNakedValue;
-import org.nakedobjects.object.DummyOid;
-import org.nakedobjects.object.DummyVersion;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ResolveState;
-import org.nakedobjects.object.reflect.DummyField;
-import org.nakedobjects.object.reflect.DummyNakedCollection;
-import org.nakedobjects.object.reflect.DummyNakedObject;
-import org.nakedobjects.object.reflect.NakedObjectField;
 
 import java.util.Date;
 
@@ -22,6 +14,15 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
+
+import test.org.nakedobjects.object.DummyNakedObjectSpecification;
+import test.org.nakedobjects.object.DummyNakedValue;
+import test.org.nakedobjects.object.DummyOid;
+import test.org.nakedobjects.object.TestSystem;
+import test.org.nakedobjects.object.reflect.DummyField;
+import test.org.nakedobjects.object.reflect.DummyNakedCollection;
+import test.org.nakedobjects.object.reflect.DummyNakedObject;
+import test.org.nakedobjects.object.reflect.DummyVersion;
 
 
 public class DataFactoryTest extends TestCase {

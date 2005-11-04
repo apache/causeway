@@ -5,12 +5,12 @@ import org.nakedobjects.distribution.DataHelper;
 import org.nakedobjects.distribution.Distribution;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ReferenceData;
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.InstancesCriteria;
+import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.Session;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.persistence.InstancesCriteria;
-import org.nakedobjects.object.persistence.Oid;
 import org.nakedobjects.object.persistence.TitleCriteria;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.utility.NotImplementedException;
 
 import org.apache.log4j.Logger;

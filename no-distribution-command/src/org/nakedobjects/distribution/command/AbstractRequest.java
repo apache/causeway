@@ -1,6 +1,6 @@
 package org.nakedobjects.distribution.command;
 
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.Session;
 
 
 public abstract class AbstractRequest implements Request {

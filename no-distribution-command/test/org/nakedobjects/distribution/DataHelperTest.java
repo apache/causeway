@@ -1,26 +1,27 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.TestSystem;
 import org.nakedobjects.distribution.dummy.DummyObjectData;
 import org.nakedobjects.distribution.dummy.DummyValueData;
-import org.nakedobjects.object.DummyNakedValue;
-import org.nakedobjects.object.DummyOid;
-import org.nakedobjects.object.DummyVersion;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NullDirtyObjectSet;
 import org.nakedobjects.object.ResolveState;
-import org.nakedobjects.object.defaults.NullVersion;
-import org.nakedobjects.object.reflect.DummyNakedObject;
-import org.nakedobjects.object.reflect.TestObjectBuilder;
-import org.nakedobjects.object.reflect.TestPojo;
-import org.nakedobjects.object.reflect.TestPojoValuePeer;
-import org.nakedobjects.object.reflect.TestValue;
+import org.nakedobjects.object.defaults.NullDirtyObjectSet;
+import org.nakedobjects.object.persistence.NullVersion;
 
 import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
+
+import test.org.nakedobjects.object.DummyNakedValue;
+import test.org.nakedobjects.object.DummyOid;
+import test.org.nakedobjects.object.TestObjectBuilder;
+import test.org.nakedobjects.object.TestSystem;
+import test.org.nakedobjects.object.reflect.DummyNakedObject;
+import test.org.nakedobjects.object.reflect.DummyVersion;
+import test.org.nakedobjects.object.reflect.TestPojo;
+import test.org.nakedobjects.object.reflect.TestPojoValuePeer;
+import test.org.nakedobjects.object.reflect.defaults.TestValue;
 
 
 public class DataHelperTest extends TestCase {

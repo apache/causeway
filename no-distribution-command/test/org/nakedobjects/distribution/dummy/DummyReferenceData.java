@@ -1,8 +1,8 @@
 package org.nakedobjects.distribution.dummy;
 
 import org.nakedobjects.distribution.ReferenceData;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.Version;
-import org.nakedobjects.object.persistence.Oid;
 
 public class DummyReferenceData implements ReferenceData {
     private final Oid oid;

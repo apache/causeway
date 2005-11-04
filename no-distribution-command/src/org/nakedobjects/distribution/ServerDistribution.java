@@ -1,23 +1,23 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.Action;
+import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectAssociation;
+import org.nakedobjects.object.NakedObjectField;
+import org.nakedobjects.object.NakedObjectPersistenceManager;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.NullDirtyObjectSet;
+import org.nakedobjects.object.OneToOneAssociation;
+import org.nakedobjects.object.Session;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.persistence.InstancesCriteria;
-import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.NakedObjectAssociation;
-import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
-import org.nakedobjects.object.reflect.Action.Type;
-import org.nakedobjects.object.security.Session;
+import org.nakedobjects.object.defaults.NullDirtyObjectSet;
+import org.nakedobjects.object.reflect.ActionImpl;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import org.apache.log4j.Logger;
 
@@ -117,7 +117,7 @@ public class ServerDistribution implements Distribution {
         for (int i = 0; i < parameterSpecifiactions.length; i++) {
             parameterSpecifiactions[i] = getSpecification(parameterData[i].getType());
         }
-        Type type = Action.getType(actionType);
+        Action.Type type = ActionImpl.getType(actionType);
         Action action = (Action) object.getSpecification().getObjectAction(type, actionIdentifier, parameterSpecifiactions);
         return action;
     }
@@ -136,7 +136,7 @@ public class ServerDistribution implements Distribution {
     private NakedObject getPersistentNakedObject(Session session, ReferenceData object) {
         LOG.debug("get object " + object + " for " + session);
         NakedObjectSpecification spec = getSpecification(object.getType());
-        NakedObject obj = NakedObjects.getObjectManager().getObject(object.getOid(), spec);
+        NakedObject obj = NakedObjects.getPersistenceManager().getObject(object.getOid(), spec);
         obj.checkLock(object.getVersion());
         return obj;
      }
@@ -145,7 +145,7 @@ public class ServerDistribution implements Distribution {
         LOG.debug("request resolveImmediately " + target +" for " + session);
          
         NakedObjectSpecification spec = getSpecification(target.getType());
-        NakedObject object = NakedObjects.getObjectManager().getObject(target.getOid(), spec);
+        NakedObject object = NakedObjects.getPersistenceManager().getObject(target.getOid(), spec);
 
         return objectDataFactory.createCompletePersistentGraph(object);
     }
@@ -157,7 +157,7 @@ public class ServerDistribution implements Distribution {
         NakedObjectField field = spec.getField(fieldName);
 //        NakedObject object = NakedObjects.getObjectManager().getObject(target.getOid(), spec);
         NakedObject object = NakedObjects.getObjectLoader().recreateAdapterForPersistent(target.getOid(), spec);
-        NakedObjects.getObjectManager().resolveField(object, field);
+        NakedObjects.getPersistenceManager().resolveField(object, field);
         return objectDataFactory.createForResolveField(object, fieldName);
     }
 
@@ -247,8 +247,8 @@ public class ServerDistribution implements Distribution {
         objectManager().startTransaction();
     }
 
-    private NakedObjectManager objectManager() {
-        return NakedObjects.getObjectManager();
+    private NakedObjectPersistenceManager objectManager() {
+        return NakedObjects.getPersistenceManager();
     }
 
     /**

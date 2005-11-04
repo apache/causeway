@@ -1,6 +1,6 @@
 package org.nakedobjects.distribution.command;
 
-import org.nakedobjects.object.persistence.Oid;
+import org.nakedobjects.object.Oid;
 
 class ObjectTransferCarrier {
     private Object object;

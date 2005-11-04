@@ -1,6 +1,6 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 
 /**
