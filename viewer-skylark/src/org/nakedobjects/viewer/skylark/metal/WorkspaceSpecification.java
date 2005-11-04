@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.ApplicationContext;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.UserContext;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Size;
@@ -20,7 +20,7 @@ public class WorkspaceSpecification implements org.nakedobjects.viewer.skylark.s
 	public View createView(Content content, ViewAxis axis) {
 			View workspace;
 			Naked root = content.getNaked();
-			if(root instanceof ApplicationContext) {
+			if(root instanceof UserContext) {
 				workspace = new WindowBorder(new UserContextWorkspace(content, this, axis), false);
 			} else {
 				workspace = new WindowBorder(new LineBorder(5, new DefaultWorkspace(content, this, axis)), false);
@@ -53,7 +53,7 @@ public class WorkspaceSpecification implements org.nakedobjects.viewer.skylark.s
 	}
 
 	public boolean canDisplay(Content content) {
-	    return content.isObject() && content.getNaked() instanceof ApplicationContext;
+	    return content.isObject() && content.getNaked() instanceof UserContext;
 	}
 }
 

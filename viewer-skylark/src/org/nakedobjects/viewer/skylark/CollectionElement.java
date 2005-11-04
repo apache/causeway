@@ -2,11 +2,11 @@ package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.DebugString;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 
 public class CollectionElement extends ObjectContent {

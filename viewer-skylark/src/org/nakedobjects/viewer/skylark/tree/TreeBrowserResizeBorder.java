@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark.tree;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;

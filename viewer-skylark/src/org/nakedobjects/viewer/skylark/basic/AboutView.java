@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.system.AboutNakedObjects;
+import org.nakedobjects.utility.AboutNakedObjects;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Image;

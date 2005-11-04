@@ -1,10 +1,9 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.NakedObjects;
-import org.nakedobjects.NakedObjectsComponent;
-import org.nakedobjects.object.ApplicationContext;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.utility.StartupException;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.NakedObjectsComponent;
+import org.nakedobjects.object.UserContext;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.special.RootWorkspaceSpecification;
 
@@ -14,19 +13,19 @@ public class SkylarkViewer implements NakedObjectsComponent {
     private Viewer viewer;
     private ObjectViewingMechanismListener shutdownListener;
     private boolean inExplorationMode;
-    private ApplicationContext applicationContext;
+    private UserContext applicationContext;
     private Bounds bounds;
     private String title;
     
     public void init() {
         if(updateNotifier == null) {
-            throw new StartupException("No update notifier set for " + this);
+            throw new NullPointerException("No update notifier set for " + this);
         }
         if(shutdownListener == null) {
-            throw new StartupException("No shutdown listener set for " + this);
+            throw new NullPointerException("No shutdown listener set for " + this);
         }
         if(applicationContext == null) {
-            throw new StartupException("No application context set for " + this);
+            throw new NullPointerException("No application context set for " + this);
         }
         if(bounds == null) {
             bounds = new Bounds(10, 10, 800, 600);
@@ -43,7 +42,7 @@ public class SkylarkViewer implements NakedObjectsComponent {
  
         frame.setViewer(viewer);
         
-        NakedObjects.getObjectManager().addObjectChangedListener(updateNotifier);
+        NakedObjects.getPersistenceManager().addObjectChangedListener(updateNotifier);
                 
     
         NakedObject rootObject = NakedObjects.getObjectLoader().createAdapterForTransient(applicationContext);
@@ -53,7 +52,7 @@ public class SkylarkViewer implements NakedObjectsComponent {
  
         viewer.init();
         
-        frame.setTitle(title == null ? applicationContext.name() : title);
+        frame.setTitle(title == null ? applicationContext.getName() : title);
         frame.init();
         frame.show();    
 
@@ -61,7 +60,7 @@ public class SkylarkViewer implements NakedObjectsComponent {
         viewer.sizeChange();
     }
 
-    public void setApplication(ApplicationContext applicationContext) {
+    public void setApplication(UserContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
@@ -91,7 +90,7 @@ public class SkylarkViewer implements NakedObjectsComponent {
      * 
      * @property
      */
-    public void set_Application(ApplicationContext applicationContext) {
+    public void set_Application(UserContext applicationContext) {
         setApplication(applicationContext);
     }
     

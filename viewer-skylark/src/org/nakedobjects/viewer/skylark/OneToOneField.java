@@ -4,13 +4,13 @@ import org.nakedobjects.object.Aggregated;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
-import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.viewer.skylark.basic.RemoveOneToOneAssociationOption;
 

@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.core;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
@@ -43,7 +43,7 @@ public abstract class AbstractCompositeViewSpecification implements CompositeVie
     protected void resolveObject(Content content) {
         NakedObject object = ((ObjectContent) content).getObject();
         if(!object.getResolveState().isResolved()) {
-            NakedObjects.getObjectManager().resolveImmediately(object);
+            NakedObjects.getPersistenceManager().resolveImmediately(object);
         }
     }
 

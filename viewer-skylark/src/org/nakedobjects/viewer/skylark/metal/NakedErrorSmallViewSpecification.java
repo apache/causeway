@@ -1,8 +1,8 @@
 package org.nakedobjects.viewer.skylark.metal;
 
+import org.nakedobjects.object.ConcurrencyException;
 import org.nakedobjects.object.NakedObjectApplicationException;
-import org.nakedobjects.object.persistence.ConcurrencyException;
-import org.nakedobjects.object.reflect.PojoAdapter;
+import org.nakedobjects.object.defaults.PojoAdapter;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;

@@ -1,10 +1,10 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.persistence.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.persistence.PatternObjectCriteria;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
@@ -19,7 +19,7 @@ public class FindFirstOption extends MenuOption {
     }
 
     public void execute(Workspace workspace, View view, Location at) {
-        NakedObjectManager objectManager = NakedObjects.getObjectManager();
+        NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
         NakedObject pattern = ((ObjectContent) view.getContent()).getObject();
         NakedCollection instances = objectManager.findInstances(new PatternObjectCriteria(pattern, true));
 

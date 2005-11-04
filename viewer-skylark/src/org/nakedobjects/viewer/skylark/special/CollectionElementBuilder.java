@@ -2,7 +2,7 @@ package org.nakedobjects.viewer.skylark.special;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
+import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.CollectionElement;

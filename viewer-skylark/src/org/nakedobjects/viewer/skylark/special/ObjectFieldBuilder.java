@@ -4,14 +4,14 @@ import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectDefinitionException;
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjectFieldException;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.OneToManyAssociation;
+import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.utility.Assert;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.FieldContent;
@@ -77,11 +77,11 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         }
 
         Content content;
-        if (field.isCollection()) {
+        if (field instanceof OneToManyAssociation) {
             content = new OneToManyField(parent, (InternalCollection) object, (OneToManyAssociation) field);
         } else if (field.isValue()) {
             content = new ValueField(parent, (NakedValue) object, (OneToOneAssociation) field);
-        } else if (field.isObject()) {
+        } else if (field instanceof OneToOneAssociation) {
             content = new OneToOneField(parent, (NakedObject) object, (OneToOneAssociation) field);
         } else {
             throw new NakedObjectRuntimeException();
@@ -98,17 +98,21 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         LOG.debug("build new view " + view + " for " + object);
         for (int f = 0; f < flds.length; f++) {
             NakedObjectField field = flds[f];
-            try {
-                Naked value = object.getField(field);
-                Content content = createContent(object, value, field);
-                View fieldView = subviewDesign.createSubview(content, view.getViewAxis());
-                if (fieldView != null) {
-                    view.addView(decorateSubview(fieldView));
-                }
-            } catch (NakedObjectDefinitionException e) {
-                LOG.error("Invalid field", e);
-                view.addView(new FieldErrorView(e.getMessage()));
+            addField(view, object, field);
+        }
+    }
+
+    private void addField(View view, NakedObject object, NakedObjectField field) {
+        try {
+            Naked value = object.getField(field);
+            Content content = createContent(object, value, field);
+            View fieldView = subviewDesign.createSubview(content, view.getViewAxis());
+            if (fieldView != null) {
+                view.addView(decorateSubview(fieldView));
             }
+        } catch (NakedObjectFieldException e) {
+            LOG.error("invalid field", e);
+            view.addView(new FieldErrorView(e.getMessage()));
         }
     }
 
@@ -116,40 +120,85 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         LOG.debug("rebuild view " + view + " for " + object);
 
         View[] subviews = view.getSubviews();
-
-        int fld = 0;
-
-        for (int i = 0; i < subviews.length; i++) {
-            View subview = subviews[i];
-            while (((FieldContent) subview.getContent()).getFieldReflector() != flds[fld]) {
-                fld++;
-            }
-            Assert.assertTrue(fld < flds.length);
-
-            NakedObjectField field = flds[fld];
-            try {
-                Naked value = object.getField(field);
-                if (field.isValue()) {
-                    subview.refresh();
-                } else if (value instanceof NakedCollection) {
-                    subview.update(value);
-                } else {
-                    NakedObject existing = ((ObjectContent) subviews[i].getContent()).getObject();
-                    boolean changedValue = value != existing;
-                    if (changedValue) {
-                        View fieldView = subviewDesign.createSubview(createContent(object, value, field), view.getViewAxis());
-                        if (fieldView != null) {
-                            view.replaceView(subview, decorateSubview(fieldView));
-                        }
+        
+        // remove views for fields that no longer exist
+        outer:
+            for (int i = 0; i < subviews.length; i++) {
+                FieldContent fieldContent = ((FieldContent) subviews[i].getContent());
+                
+                for (int j = 0; j < flds.length; j++) {
+                    NakedObjectField field = flds[j];
+                    if(fieldContent.getFieldReflector() == field) {
+                        continue outer;
                     }
                 }
-            } catch (NakedObjectDefinitionException e) {
-                LOG.error("Invalid field", e);
-                view.addView(new FieldErrorView(e.getMessage()));
-            }
 
-            fld++;
+                view.removeView(subviews[i]);
+            }
+        
+        
+        // update existing fields if needed
+        subviews = view.getSubviews();
+        for (int i = 0; i < subviews.length; i++) {
+            View subview = subviews[i];
+            NakedObjectField fieldReflector = ((FieldContent) subview.getContent()).getFieldReflector();
+            Naked value = object.getField(fieldReflector);
+            if (fieldReflector.isValue()) {
+                subview.refresh();
+            } else if (value instanceof NakedCollection) {
+                subview.update(value);
+            } else {
+                NakedObject existing = ((ObjectContent) subviews[i].getContent()).getObject();
+                boolean changedValue = value != existing;
+                if (changedValue) {
+                    View fieldView;
+                    try {
+                        fieldView = subviewDesign.createSubview(createContent(object, value, fieldReflector), view.getViewAxis());
+                    } catch (NakedObjectFieldException e) {
+                        LOG.error("invalid field", e);
+                        fieldView = new FieldErrorView(e.getMessage());
+                    }
+                    if (fieldView != null) {
+                        view.replaceView(subview, decorateSubview(fieldView));
+                    }
+                }
+            }
         }
+        
+        // add new fields
+        outer2:
+        for (int j = 0; j < flds.length; j++) {
+            NakedObjectField field = flds[j];
+            for (int i = 0; i < subviews.length; i++) {
+                FieldContent fieldContent = ((FieldContent) subviews[i].getContent());
+                if(fieldContent.getFieldReflector() == field) {
+                    continue outer2;
+                }
+            }
+            
+            addField(view, object, field);
+        }
+            
+        
+        // debug
+        {
+	       View[] dsubviews = view.getSubviews();
+	        for (int i = 0; i < flds.length; i++) {
+	            LOG.debug(i + " " + flds[i].getName() + " " + flds[i].hashCode());
+	        }
+	        
+	        for (int i = 0; i < dsubviews.length; i++) {
+	            FieldContent fieldContent = ((FieldContent) dsubviews[i].getContent());
+	            LOG.debug(i + " " + fieldContent.getFieldName() + " " + fieldContent.getFieldReflector().hashCode());
+	        }
+        }
+        // end debug
+        
+        /*
+         * 1/ To remove fields: look through views and remove any that don't  exists in visible fields
+         * 2/ From remaining views chaeck for changes as already being done, and replace if needed
+         * 3/ Finally look through fields to see if there is no existing subview; and add one
+         */
     }
 }
 

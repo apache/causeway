@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.core;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;

@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark.value;
 
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;

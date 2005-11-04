@@ -3,9 +3,9 @@ package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.DefaultPopupMenu;
 

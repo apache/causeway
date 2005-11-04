@@ -1,8 +1,8 @@
 package org.nakedobjects.viewer.skylark.core;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectApplicationException;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.View;
 

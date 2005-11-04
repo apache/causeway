@@ -1,9 +1,9 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.persistence.NakedObjectManager;
+import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -34,7 +34,7 @@ public class DestroyObjectOption extends MenuOption {
 */		
         // TODO remove any views in the instance collections
         
-        NakedObjectManager manager = NakedObjects.getObjectManager();
+        NakedObjectPersistenceManager manager = NakedObjects.getPersistenceManager();
         manager.destroyObject(object);
         workspace.removeViewsFor(object);
 	}

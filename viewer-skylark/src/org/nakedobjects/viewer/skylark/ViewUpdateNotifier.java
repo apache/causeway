@@ -1,12 +1,10 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.DirtyObjectSetImpl;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectLoader;
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.defaults.DirtyObjectSetImpl;
 import org.nakedobjects.utility.DebugInfo;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import java.util.Enumeration;
 import java.util.Hashtable;

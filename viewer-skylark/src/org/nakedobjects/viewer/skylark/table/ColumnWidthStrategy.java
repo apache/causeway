@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark.table;
 
-import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.NakedObjectField;
 
 
 public interface ColumnWidthStrategy {

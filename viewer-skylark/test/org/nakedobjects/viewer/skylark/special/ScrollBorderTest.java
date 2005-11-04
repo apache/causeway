@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.NakedObjectsClient;
-import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.object.repository.NakedObjectsClient;
+import org.nakedobjects.utility.configuration.PropertiesConfiguration;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
@@ -16,7 +16,7 @@ public class ScrollBorderTest extends TestCase {
     }
 
     public void testScrollBar() {
-        new NakedObjectsClient().setConfiguration(new Configuration());
+        new NakedObjectsClient().setConfiguration(new PropertiesConfiguration());
         
        View  view = new ScrollBorder(new MockView());
        view.setRequiredSize(new Size(100, 200));

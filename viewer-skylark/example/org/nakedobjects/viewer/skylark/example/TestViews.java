@@ -1,8 +1,5 @@
 package org.nakedobjects.viewer.skylark.example;
-import org.nakedobjects.TestSystem;
-import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.DummyNakedObject;
 import org.nakedobjects.utility.InfoDebugFrame;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
@@ -16,6 +13,10 @@ import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.DebugView;
 
 import org.apache.log4j.BasicConfigurator;
+
+import test.org.nakedobjects.object.DummyNakedObjectSpecification;
+import test.org.nakedobjects.object.TestSystem;
+import test.org.nakedobjects.object.reflect.DummyNakedObject;
 
 
 public class TestViews {

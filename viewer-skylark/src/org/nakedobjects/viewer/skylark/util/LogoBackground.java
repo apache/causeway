@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.util;
 
-import org.nakedobjects.NakedObjects;
-import org.nakedobjects.container.configuration.NakedObjectConfiguration;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.utility.NakedObjectConfiguration;
 import org.nakedobjects.viewer.skylark.Background;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Image;

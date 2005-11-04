@@ -1,13 +1,12 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.defaults.FastFinder;
-import org.nakedobjects.object.reflect.internal.InternalAbout;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
@@ -145,23 +144,23 @@ public class ClassIcon extends ObjectView {
                 NakedClass nakedClass = getNakedClass();
         
                 Naked object = null;
-                InternalAbout about = new InternalAbout();
+     //          InternalAbout about = new InternalAbout();
                 if (click.isCtrl()) {
                     if (getViewManager().isRunningAsExploration()) {
-                        nakedClass.aboutExplorationActionInstances(about);
-                        if (about.canUse().isAllowed()) {
+                        Consent consent = nakedClass.useAllInstance();
+                        if (consent.isAllowed()) {
                             NakedCollection instances = nakedClass.allInstances();
                             object = instances;
         
                         }
                     }
-                } else {
+/*                } else {
                     nakedClass.aboutExplorationActionFind(about);
                     if (about.canUse().isAllowed() && getViewManager().isRunningAsExploration()) {
                         FastFinder finder = nakedClass.explorationActionFind();
                         object = NakedObjects.getObjectLoader().createAdapterForTransient(finder);
                     }
-                }
+   */             }
         
                 if (object != null) {
                     Location location = getView().getAbsoluteLocation();

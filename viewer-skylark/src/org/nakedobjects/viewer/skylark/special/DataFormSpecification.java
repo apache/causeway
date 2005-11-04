@@ -7,7 +7,6 @@ import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
-import org.nakedobjects.viewer.skylark.basic.FieldLabel;
 import org.nakedobjects.viewer.skylark.basic.LabelAxis;
 import org.nakedobjects.viewer.skylark.basic.WindowDecorator;
 import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;

@@ -1,13 +1,13 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.Action;
+import org.nakedobjects.object.ActionParameterSet;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.ActionParameterSet;
 import org.nakedobjects.viewer.skylark.ParameterContent;
 
 

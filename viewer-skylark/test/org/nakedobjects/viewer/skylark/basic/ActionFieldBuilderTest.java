@@ -1,12 +1,10 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.NakedObjectsClient;
-import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.object.DummyNakedObjectSpecification;
+import org.nakedobjects.object.Action;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.DummyNakedObject;
-import org.nakedobjects.object.reflect.MockActionPeer;
+import org.nakedobjects.object.reflect.ActionImpl;
+import org.nakedobjects.object.repository.NakedObjectsClient;
+import org.nakedobjects.utility.configuration.PropertiesConfiguration;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -17,6 +15,10 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import test.org.nakedobjects.object.DummyNakedObjectSpecification;
+import test.org.nakedobjects.object.reflect.DummyActionPeer;
+import test.org.nakedobjects.object.reflect.DummyNakedObject;
 
 
 public class ActionFieldBuilderTest extends TestCase {
@@ -44,14 +46,14 @@ public class ActionFieldBuilderTest extends TestCase {
         };
 
         MockView.next = 0;
-        new NakedObjectsClient().setConfiguration(new Configuration());
+        new NakedObjectsClient().setConfiguration(new PropertiesConfiguration());
 
         builder = new ActionFieldBuilder(subviewSpec);
 
         DummyNakedObject object = new DummyNakedObject();
-        MockActionPeer mockActionPeer = new MockActionPeer();
+        DummyActionPeer mockActionPeer = new DummyActionPeer();
         mockActionPeer.setUpParamterTypes(new NakedObjectSpecification[] { new DummyNakedObjectSpecification(), new DummyNakedObjectSpecification() });
-        Action action = new Action("cls name", "method name", mockActionPeer);
+        Action action = new ActionImpl("cls name", "method name", mockActionPeer);
         actionContent = ActionHelper.createInstance(object, action);
 
         view = new MockView();

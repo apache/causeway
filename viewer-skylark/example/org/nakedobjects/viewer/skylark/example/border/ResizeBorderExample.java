@@ -1,8 +1,8 @@
 package org.nakedobjects.viewer.skylark.example.border;
 
-import org.nakedobjects.NakedObjectsClient;
-import org.nakedobjects.container.configuration.Configuration;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.repository.NakedObjectsClient;
+import org.nakedobjects.utility.configuration.PropertiesConfiguration;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.RootObject;
@@ -25,7 +25,7 @@ public class ResizeBorderExample extends TestViews {
     }
 
     protected void views(Workspace workspace) {
-        Configuration config = new Configuration();
+        PropertiesConfiguration config = new PropertiesConfiguration();
         config.add("" , "");
         new NakedObjectsClient().setConfiguration(config);
         

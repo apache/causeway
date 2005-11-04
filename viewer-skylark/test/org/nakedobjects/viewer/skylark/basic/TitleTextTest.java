@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.TestSystem;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.DummyCanvas;
 import org.nakedobjects.viewer.skylark.DummyText;
@@ -12,6 +11,8 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import test.org.nakedobjects.object.TestSystem;
 
 
 public class TitleTextTest extends TestCase {

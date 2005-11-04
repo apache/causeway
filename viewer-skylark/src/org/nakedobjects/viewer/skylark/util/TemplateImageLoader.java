@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark.util;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.viewer.skylark.Viewer;
 
 import java.awt.Canvas;

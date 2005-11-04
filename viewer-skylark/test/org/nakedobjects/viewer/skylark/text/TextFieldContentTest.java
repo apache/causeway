@@ -1,8 +1,8 @@
 package org.nakedobjects.viewer.skylark.text;
 
 
-import org.nakedobjects.NakedObjectsClient;
-import org.nakedobjects.container.configuration.Configuration;
+import org.nakedobjects.object.repository.NakedObjectsClient;
+import org.nakedobjects.utility.configuration.PropertiesConfiguration;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.text.CursorPosition;
@@ -28,7 +28,7 @@ public class TextFieldContentTest extends TestCase {
     protected void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        new NakedObjectsClient().setConfiguration(new Configuration());
+        new NakedObjectsClient().setConfiguration(new PropertiesConfiguration());
         
         TextBlockTarget target = new TextBlockTarget() {
             /* with this configuration:

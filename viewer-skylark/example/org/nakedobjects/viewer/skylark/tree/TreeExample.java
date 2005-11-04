@@ -1,14 +1,13 @@
 package org.nakedobjects.viewer.skylark.tree;
 
-import org.nakedobjects.object.DummyNakedObjectSpecification;
+import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.reflect.DummyNakedObject;
-import org.nakedobjects.object.reflect.MemberIdentifier;
-import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.OneToOneAssociation;
+import org.nakedobjects.object.reflect.OneToOneAssociationImpl;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
@@ -19,6 +18,9 @@ import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.example.TestViews;
 import org.nakedobjects.viewer.skylark.metal.FormSpecification;
 import org.nakedobjects.viewer.skylark.metal.TreeBrowserSpecification;
+
+import test.org.nakedobjects.object.DummyNakedObjectSpecification;
+import test.org.nakedobjects.object.reflect.DummyNakedObject;
 
 
 public class TreeExample extends TestViews {
@@ -104,9 +106,13 @@ public class TreeExample extends TestViews {
             public Class[] getExtensions() {
                 return new Class[0];
             }
+
+            public boolean isObject() {
+                return false;
+            }
         };
 
-        NakedObjectField[] fields = new NakedObjectField[] { new OneToOneAssociation("cls", "fld", spec, peer),
+        NakedObjectField[] fields = new NakedObjectField[] { new OneToOneAssociationImpl("cls", "fld", spec, peer),
         /* new OneToManyAssociation() */
         };
         return fields;

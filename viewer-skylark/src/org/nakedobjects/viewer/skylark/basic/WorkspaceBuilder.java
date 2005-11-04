@@ -4,7 +4,7 @@ import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;

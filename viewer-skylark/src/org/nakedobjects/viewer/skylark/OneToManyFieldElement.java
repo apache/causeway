@@ -2,13 +2,13 @@ package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
-import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.viewer.skylark.basic.RemoveOneToManyAssociationOption;
 

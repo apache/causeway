@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.tree;
 
-import org.nakedobjects.TestSystem;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
@@ -14,6 +13,8 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import test.org.nakedobjects.object.TestSystem;
 
 
 /*

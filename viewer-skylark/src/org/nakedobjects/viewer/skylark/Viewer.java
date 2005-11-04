@@ -1,19 +1,18 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.NakedObjects;
-import org.nakedobjects.container.configuration.ComponentException;
-import org.nakedobjects.container.configuration.ComponentLoader;
-import org.nakedobjects.container.configuration.ConfigurationException;
 import org.nakedobjects.object.NakedObjectLoader;
+import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.object.undo.UndoStack;
 import org.nakedobjects.utility.DebugFileDump;
 import org.nakedobjects.utility.DebugFrame;
 import org.nakedobjects.utility.InfoDebugFrame;
-import org.nakedobjects.utility.StartupException;
 import org.nakedobjects.utility.ToString;
+import org.nakedobjects.utility.configuration.ComponentException;
+import org.nakedobjects.utility.configuration.ComponentLoader;
+import org.nakedobjects.utility.configuration.ConfigurationException;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.basic.EmptyField;
 import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
@@ -209,10 +208,10 @@ public class Viewer {
 
     public void init() {
         if (updateNotifier == null) {
-            throw new StartupException("No update notifier set for " + this);
+            throw new NullPointerException("No update notifier set for " + this);
         }
         if (rootView == null) {
-            throw new StartupException("No root view set for " + this);
+            throw new NullPointerException("No root view set for " + this);
         }
 
         insets = new Insets(0, 0, 0, 0);
@@ -240,8 +239,15 @@ public class Viewer {
         return spy.isVisible();
     }
 
-    private ViewSpecification loadSpecification(String name, Class cls) throws ConfigurationException, ComponentException {
-        return (ViewSpecification) ComponentLoader.loadComponent(SPECIFICATION_BASE + name, cls, ViewSpecification.class);
+    private ViewSpecification loadSpecification(String name, Class cls) {
+        String factoryName = NakedObjects.getConfiguration().getString(SPECIFICATION_BASE + name);
+        ViewSpecification spec;
+        if (factoryName != null) {
+            spec= (ViewSpecification) ComponentLoader.loadComponent(factoryName, ViewSpecification.class);
+        } else {
+            spec= (ViewSpecification) ComponentLoader.loadComponent(cls.getName(), ViewSpecification.class);
+        }
+        return spec;
     }
 
     private MenuOption loggingOption(String name, final Level level) {
@@ -323,7 +329,7 @@ public class Viewer {
 
         options.add(MenuOptionSet.DEBUG, new MenuOption("Restart object manager") {
             public void execute(Workspace workspace, View view, Location at) {
-                NakedObjects.getObjectManager().reset();
+                NakedObjects.getPersistenceManager().reset();
                 //           NakedObjects.getPojoAdapterFactory().reset();
             }
         });
@@ -338,7 +344,7 @@ public class Viewer {
 
         options.add(MenuOptionSet.DEBUG, new MenuOption("Debug object manager") {
             public void execute(Workspace workspace, View view, Location at) {
-                NakedObjectManager om = NakedObjects.getObjectManager();
+                NakedObjectPersistenceManager om = NakedObjects.getPersistenceManager();
                 InfoDebugFrame f = new InfoDebugFrame();
                 f.setInfo(om);
                 f.show(at.x + 50, workspace.getBounds().y + 6);
@@ -351,6 +357,15 @@ public class Viewer {
                 NakedObjectLoader om = NakedObjects.getObjectLoader();
                 InfoDebugFrame f = new InfoDebugFrame();
                 f.setInfo(om);
+                f.show(at.x + 50, workspace.getBounds().y + 6);
+            }
+        });
+
+
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Debug repository") {
+            public void execute(Workspace workspace, View view, Location at) {
+                InfoDebugFrame f = new InfoDebugFrame();
+                f.setInfo(NakedObjects.debug());
                 f.show(at.x + 50, workspace.getBounds().y + 6);
             }
         });

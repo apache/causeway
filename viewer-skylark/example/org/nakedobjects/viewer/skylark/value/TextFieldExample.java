@@ -1,18 +1,18 @@
 package org.nakedobjects.viewer.skylark.value;
 
+import org.nakedobjects.object.Action;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectAssociation;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.persistence.Oid;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.NakedObjectAssociation;
-import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.ToString;
 import org.nakedobjects.viewer.skylark.Content;

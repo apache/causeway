@@ -1,20 +1,20 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.object.ApplicationContext;
+import org.nakedobjects.object.Action;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectAssociation;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.Persistable;
+import org.nakedobjects.object.UserContext;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.NakedObjectAssociation;
-import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.UnexpectedCallException;
 import org.nakedobjects.viewer.skylark.basic.AbstractContent;
@@ -120,10 +120,10 @@ public abstract class ObjectContent extends AbstractContent {
             ClassOption.menuOptions(getSpecification(), options);
         }
 
-        if (object instanceof ApplicationContext) {
+        if (object instanceof UserContext) {
             options.add(MenuOptionSet.VIEW, new MenuOption("New Workspace") {
                 public Consent disabled(View component) {
-                    return AbstractConsent.allow(object instanceof ApplicationContext);
+                    return AbstractConsent.allow(object instanceof UserContext);
                 }
 
                 public void execute(Workspace workspace, View view, Location at) {

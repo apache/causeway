@@ -1,9 +1,8 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.NakedObjects;
-import org.nakedobjects.object.DummyNakedObjectSpecification;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.RootObject;
@@ -11,6 +10,8 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.example.TestViews;
+
+import test.org.nakedobjects.object.DummyNakedObjectSpecification;
 
 
 public class ErrorViewExample extends TestViews {

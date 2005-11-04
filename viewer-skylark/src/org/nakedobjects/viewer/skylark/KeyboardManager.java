@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;

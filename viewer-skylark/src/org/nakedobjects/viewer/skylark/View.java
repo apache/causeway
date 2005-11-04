@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObjects;
 
 
 public interface View extends Cloneable {

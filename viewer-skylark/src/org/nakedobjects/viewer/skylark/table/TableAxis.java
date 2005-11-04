@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.table;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 

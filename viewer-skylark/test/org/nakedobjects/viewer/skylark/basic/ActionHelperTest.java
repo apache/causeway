@@ -1,17 +1,19 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.DummyNakedObjectSpecification;
+import org.nakedobjects.object.Action;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.DummyNakedObject;
-import org.nakedobjects.object.reflect.MockActionPeer;
+import org.nakedobjects.object.reflect.ActionImpl;
 import org.nakedobjects.viewer.skylark.ParameterContent;
 
 import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import test.org.nakedobjects.object.DummyNakedObjectSpecification;
+import test.org.nakedobjects.object.reflect.DummyActionPeer;
+import test.org.nakedobjects.object.reflect.DummyNakedObject;
 
 
 public class ActionHelperTest extends TestCase {
@@ -28,10 +30,10 @@ public class ActionHelperTest extends TestCase {
     protected void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        MockActionPeer mockActionPeer = new MockActionPeer();
+        DummyActionPeer mockActionPeer = new DummyActionPeer();
         mockActionPeer.setUpParamterTypes(new NakedObjectSpecification[] {});
 
-        Action action = new Action("cls name", "method name", mockActionPeer);
+        Action action = new ActionImpl("cls name", "method name", mockActionPeer);
 
         target = new DummyNakedObject();
 

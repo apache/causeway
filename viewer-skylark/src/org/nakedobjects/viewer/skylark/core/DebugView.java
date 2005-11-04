@@ -1,11 +1,11 @@
 package org.nakedobjects.viewer.skylark.core;
 
+import org.nakedobjects.object.Dump;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.utility.DebugString;
-import org.nakedobjects.utility.Dump;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.Content;

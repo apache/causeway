@@ -1,9 +1,8 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.NakedObjectsClient;
-import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.object.MockNakedObject;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.repository.NakedObjectsClient;
+import org.nakedobjects.utility.configuration.PropertiesConfiguration;
 import org.nakedobjects.viewer.skylark.special.MockView;
 
 import java.util.Vector;
@@ -13,6 +12,8 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import test.org.nakedobjects.object.MockNakedObject;
 
 
 public class ViewUpdateNotifierTest extends TestCase {
@@ -28,7 +29,7 @@ public class ViewUpdateNotifierTest extends TestCase {
         Logger.getRootLogger().setLevel(Level.OFF);
 
 
-        new NakedObjectsClient().setConfiguration(new Configuration());
+        new NakedObjectsClient().setConfiguration(new PropertiesConfiguration());
         
 
         notifier = new ExposedViewUpdateNotifier();

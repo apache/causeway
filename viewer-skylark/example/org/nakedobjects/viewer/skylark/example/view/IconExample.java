@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark.example.view;
-import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.defaults.NakedClassImpl;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.RootObject;
@@ -20,7 +20,7 @@ public class IconExample extends TestViews {
     
 
     protected void views(Workspace workspace) {
-        NakedObject object = (NakedObject) new NakedClass("test naked class");
+        NakedObject object = (NakedObject) new NakedClassImpl("test naked class");
         Content content = new RootObject(object);
         ViewSpecification specification = null;
         ViewAxis axis = null;

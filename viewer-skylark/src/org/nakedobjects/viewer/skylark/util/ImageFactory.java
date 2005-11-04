@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.util;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Viewer;

@@ -1,8 +1,8 @@
  package org.nakedobjects.viewer.skylark.core;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.viewer.skylark.Canvas;
@@ -160,7 +160,7 @@ public abstract class ObjectView extends AbstractView {
         options.add(MenuOptionSet.OBJECT, new MenuOption("Reload") {
             public void execute(Workspace workspace, View view, Location at) {
                 NakedObject object = (NakedObject) getContent().getNaked();
-                NakedObjects.getObjectManager().reload(object);
+                NakedObjects.getPersistenceManager().reload(object);
             }
         });
     }

@@ -1,9 +1,9 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.NakedObjectPersistenceManager;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.TypedNakedCollection;
-import org.nakedobjects.object.persistence.NakedObjectManager;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.RootCollection;
@@ -31,7 +31,7 @@ class LookupOverlaySpecification extends AbstractCompositeViewSpecification impl
     public View createView(final Content content, final ViewAxis axis) {
         ObjectContent field = (ObjectContent) content;
         NakedObjectSpecification type = field.getSpecification();
-        NakedObjectManager manager = NakedObjects.getObjectManager();
+        NakedObjectPersistenceManager manager = NakedObjects.getPersistenceManager();
         TypedNakedCollection instances = manager.allInstances(type, true);
         instances.sort();
         RootCollection instanceContent = new RootCollection(instances);

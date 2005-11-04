@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Shape;
 import org.nakedobjects.viewer.skylark.Size;

@@ -1,12 +1,12 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.Action;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.reflect.Action;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
@@ -84,7 +84,7 @@ public class SaveTransientObjectBorder extends ButtonBorder {
             action = view.getContent().getSpecification().getObjectAction(Action.USER, "persist");
         }
         if(action == null) {
-	        NakedObjectManager objectManager = NakedObjects.getObjectManager();
+	        NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
 	        try {
 		        objectManager.startTransaction();
 	            objectManager.makePersistent(transientObject);

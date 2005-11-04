@@ -1,11 +1,10 @@
 package org.nakedobjects.viewer.skylark.basic;
 
+import org.nakedobjects.object.Action;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.defaults.FastFinder;
-import org.nakedobjects.object.defaults.collection.InstanceCollectionVector;
-import org.nakedobjects.object.reflect.Action;
-import org.nakedobjects.object.reflect.Action.Type;
+import org.nakedobjects.object.defaults.InstanceCollectionVector;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 
@@ -43,7 +42,7 @@ public class ObjectOption {
         }
     }
             
-    private static void menuOption(NakedObject object, MenuOptionSet menuOptionSet, Type actionType, int menuSection) {
+    private static void menuOption(NakedObject object, MenuOptionSet menuOptionSet, Action.Type actionType, int menuSection) {
         Action[] actions = object.getSpecification().getObjectActions(actionType);
 
         for (int i = 0; i < actions.length; i++) {

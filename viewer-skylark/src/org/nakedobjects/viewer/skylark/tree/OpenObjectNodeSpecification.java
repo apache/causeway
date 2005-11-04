@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.tree;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.special.ObjectFieldBuilder;
 import org.nakedobjects.viewer.skylark.special.StackLayout;

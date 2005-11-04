@@ -1,13 +1,13 @@
 package org.nakedobjects.viewer.skylark.tree;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectField;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedReference;
+import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.reflect.NakedObjectField;
-import org.nakedobjects.object.reflect.OneToManyAssociation;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
@@ -229,11 +229,11 @@ public class TreeNodeBorder extends AbstractBorder {
 
         if (getContent() instanceof FieldContent) {
             NakedObjectField field = ((FieldContent) getContent()).getFieldReflector();
-            NakedObjects.getObjectManager().resolveField((NakedObject) parent, field);
+            NakedObjects.getPersistenceManager().resolveField((NakedObject) parent, field);
         } else if (getContent() instanceof CollectionContent) {
-            NakedObjects.getObjectManager().resolveImmediately((NakedObject) parent);
+            NakedObjects.getPersistenceManager().resolveImmediately((NakedObject) parent);
         } else if (getContent() instanceof CollectionElement) {
-            NakedObjects.getObjectManager().resolveImmediately((NakedObject) getContent().getNaked());
+            NakedObjects.getPersistenceManager().resolveImmediately((NakedObject) getContent().getNaked());
         }
     }
 

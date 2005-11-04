@@ -1,17 +1,17 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.Action;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.reflect.Action;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 
 
 public class ClassOption {
     public static void menuOptions(NakedObjectSpecification specificaton, MenuOptionSet menuOptionSet) {
-        NakedClass nakedClass = NakedObjects.getObjectManager().getNakedClass(specificaton);
+        NakedClass nakedClass = NakedObjects.getPersistenceManager().getNakedClass(specificaton);
         NakedObject classAdapter = NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(nakedClass);
 
         Action[] actions;

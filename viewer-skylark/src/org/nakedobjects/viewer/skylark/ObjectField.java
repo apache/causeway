@@ -1,8 +1,8 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.reflect.NakedObjectField;
 import org.nakedobjects.utility.DebugString;
 
 

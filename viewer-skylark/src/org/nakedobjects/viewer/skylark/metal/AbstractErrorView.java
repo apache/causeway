@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.metal;
 
+import org.nakedobjects.object.defaults.PojoAdapter;
 import org.nakedobjects.object.reflect.NameConvertor;
-import org.nakedobjects.object.reflect.PojoAdapter;
 import org.nakedobjects.utility.ExceptionHelper;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;

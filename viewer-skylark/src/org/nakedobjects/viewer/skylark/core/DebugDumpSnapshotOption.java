@@ -3,7 +3,7 @@ package org.nakedobjects.viewer.skylark.core;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
-import org.nakedobjects.utility.SnapshotAppender;
+import org.nakedobjects.utility.logging.SnapshotAppender;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.View;

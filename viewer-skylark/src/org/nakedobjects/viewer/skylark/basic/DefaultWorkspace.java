@@ -1,12 +1,12 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.NakedObjects;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectPersistenceManager;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.reflect.internal.InternalAbout;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
@@ -72,10 +72,9 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
 
         View newView;
         if (source.getObject() instanceof NakedClass && drag.isCtrl()) {
-            InternalAbout about = new InternalAbout();
             NakedClass nakedClass = ((NakedClass) source.getObject());
-            nakedClass.aboutExplorationActionNewInstance(about);
-            if (about.canUse().isVetoed() || !getViewManager().isRunningAsExploration()) {
+            Consent consent = nakedClass.useCreate();
+            if (consent.isVetoed() || !getViewManager().isRunningAsExploration()) {
                 return;
             }
 
@@ -180,7 +179,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
     }
 
     private View newInstance(NakedObjectSpecification cls, boolean openAView) {
-        NakedObjectManager objectManager = NakedObjects.getObjectManager();
+        NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
         objectManager.startTransaction();
         NakedObject newInstance = objectManager.createPersistentInstance(cls);
         objectManager.endTransaction();
@@ -252,7 +251,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
                     NakedObjectSpecification spec = specs[i];
                     if (spec.isObject()) {
                         classCollection.addElement(NakedObjects.getObjectLoader().createAdapterForTransient(
-                                NakedObjects.getObjectManager().getNakedClass(spec)));
+                                NakedObjects.getPersistenceManager().getNakedClass(spec)));
                     }
                 }
                 View classesView = createSubviewFor(NakedObjects.getObjectLoader().createAdapterForTransient(classCollection), false);

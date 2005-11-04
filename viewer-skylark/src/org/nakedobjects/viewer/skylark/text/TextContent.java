@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark.text;
 
-import org.nakedobjects.object.NakedObjectRuntimeException;
 import org.nakedobjects.utility.Assert;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.Location;
 

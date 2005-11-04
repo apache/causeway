@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark.value;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.ValueContent;
@@ -23,7 +23,7 @@ public abstract class AbstractValueOption extends MenuOption {
 	}
 
 	protected void updateParent(View view) {
-       NakedObjects.getObjectManager().saveChanges();
+       NakedObjects.getPersistenceManager().saveChanges();
        view.markDamaged();
        view.getParent().invalidateContent();
     }
