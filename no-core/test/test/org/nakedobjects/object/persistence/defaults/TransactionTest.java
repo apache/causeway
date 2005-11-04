@@ -2,7 +2,7 @@ package test.org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ObjectPerstsistenceException;
-import org.nakedobjects.object.persistence.objectore.ObjectStoreTransaction;
+import org.nakedobjects.object.persistence.objectstore.ObjectStoreTransaction;
 import org.nakedobjects.object.transaction.CreateObjectCommand;
 import org.nakedobjects.object.transaction.DestroyObjectCommand;
 import org.nakedobjects.object.transaction.SaveObjectCommand;

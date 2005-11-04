@@ -5,7 +5,8 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.persistence.objectore.inmemory.TransientObjectStore;
+import org.nakedobjects.object.persistence.objectstore.inmemory.MockTransientObjectStoreInstances;
+import org.nakedobjects.object.persistence.objectstore.inmemory.TransientObjectStore;
 import org.nakedobjects.object.transaction.PersistenceCommand;
 
 import java.util.Vector;
@@ -50,49 +51,23 @@ class TestCriteria implements InstancesCriteria {
 
 }
 
-/*
- * class MockTransientObjectStoreInstances2 extends TransientObjectStoreInstances { private Vector actions = new Vector(); private
- * boolean hasInstances; private Oid[] instances = new Oid[0]; private int numberOfInstances;
- * 
- * public void assertAction(int index, String expected) { if (index >= actions.size()) { throw new AssertionError("No such action: " +
- * index); } Assert.assertEquals(expected, actions.elementAt(index).toString()); }
- * 
- * public void assertNoActions() { Assert.assertEquals("actions", 0, actions.size()); }
- * 
- * public Enumeration elements() { actions.addElement("elements"); return null; }
- * 
- * public boolean hasInstances() { actions.addElement("has instances"); return hasInstances; }
- * 
- * public NakedObject instanceMatching(String title) { return null; }
- * 
- * public void instances(Vector instanceVector) { actions.addElement("get instances"); for(int i = 0; i < instances.length; i++) {
- * instanceVector.addElement(instances[i]); } }
- * 
- * public void instances(InstancesCriteria criteria, Vector instanceVector) { instances(instanceVector); }
- * 
- * public int numberOfInstances() { return numberOfInstances; }
- * 
- * public void setupNumberOfInstances(int numberOfInstances) { this.numberOfInstances = numberOfInstances; }
- * 
- * public void remove(Oid oid) { actions.addElement("remove " + oid); }
- * 
- * public void add(NakedObject object) { actions.addElement("add " + object); }
- * 
- * public void save(NakedObject object) { actions.addElement("save " + object); }
- * 
- * public void setupHasInstances(boolean hasInstances) { this.hasInstances = hasInstances; }
- * 
- * public void setupInstances(Oid[] instances) { this.instances = instances; }
- * 
- * public void shutdown() { actions.addElement("shutdown"); } }
- */
+
+class MockTransientObjectStore extends TransientObjectStore {
+
+    public void put(DummyNakedObjectSpecification superClassObjectSpec, 
+            MockTransientObjectStoreInstances transientObjectStoreInstancesForSuperClass) {
+        
+        instances.put(superClassObjectSpec, transientObjectStoreInstancesForSuperClass);
+        
+    }
+}
 
 public class TransientObjectStoreTest extends TestCase {
     private DummyNakedObjectSpecification objectSpec;
-    private TransientObjectStore objectStore;
+    private MockTransientObjectStore objectStore;
     private DummyNakedObjectSpecification superClassObjectSpec;
-    private TransientObjectStoreInstances transientObjectStoreInstancesForClass;
-    private TransientObjectStoreInstances transientObjectStoreInstancesForSuperClass;
+    private MockTransientObjectStoreInstances transientObjectStoreInstancesForClass;
+    private MockTransientObjectStoreInstances transientObjectStoreInstancesForSuperClass;
     private int nextId;
     private TestSystem system;
 
@@ -117,11 +92,11 @@ public class TransientObjectStoreTest extends TestCase {
         objectSpec = new DummyNakedObjectSpecification();
         superClassObjectSpec.setupSubclasses(new NakedObjectSpecification[] { objectSpec });
 
-        transientObjectStoreInstancesForSuperClass = new TransientObjectStoreInstances();
-        transientObjectStoreInstancesForClass = new TransientObjectStoreInstances();
-        objectStore = new TransientObjectStore();
-        objectStore.instances.put(superClassObjectSpec, transientObjectStoreInstancesForSuperClass);
-        objectStore.instances.put(objectSpec, transientObjectStoreInstancesForClass);
+        transientObjectStoreInstancesForSuperClass = new MockTransientObjectStoreInstances();
+        transientObjectStoreInstancesForClass = new MockTransientObjectStoreInstances();
+        objectStore = new MockTransientObjectStore();
+        objectStore.put(superClassObjectSpec, transientObjectStoreInstancesForSuperClass);
+        objectStore.put(objectSpec, transientObjectStoreInstancesForClass);
 
         system = new TestSystem();
         system.init();
@@ -190,7 +165,7 @@ public class TransientObjectStoreTest extends TestCase {
         assertEquals(object, instances[0]);
     }
 
-    private NakedObject addObject(TransientObjectStoreInstances instances) {
+    private NakedObject addObject(MockTransientObjectStoreInstances instances) {
         NakedObject object = createTestObject();
         Oid oid = object.getOid();
         objectStore.objects.put(oid, object);

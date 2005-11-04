@@ -2,11 +2,11 @@ package test.org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
-import org.nakedobjects.object.defaults.ObjectLoaderImpl;
 import org.nakedobjects.object.defaults.PojoAdapter;
-import org.nakedobjects.object.defaults.PojoAdapterMap;
-import org.nakedobjects.object.reflect.valueadapter.AbstractNakedValue;
+import org.nakedobjects.object.loader.IdentityAdapterHashMap;
+import org.nakedobjects.object.loader.ObjectLoaderImpl;
+import org.nakedobjects.object.loader.PojoAdapterMap;
+import org.nakedobjects.object.value.adapter.AbstractNakedValue;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import junit.framework.Assert;

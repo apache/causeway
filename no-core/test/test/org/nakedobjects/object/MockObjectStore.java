@@ -9,7 +9,7 @@ import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.ObjectPerstsistenceException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.UnsupportedFindException;
-import org.nakedobjects.object.persistence.objectore.NakedObjectStore;
+import org.nakedobjects.object.persistence.objectstore.NakedObjectStore;
 import org.nakedobjects.object.transaction.CreateObjectCommand;
 import org.nakedobjects.object.transaction.DestroyObjectCommand;
 import org.nakedobjects.object.transaction.PersistenceCommand;

@@ -1,20 +1,37 @@
-package test.org.nakedobjects.object.persistence.defaults;
+package org.nakedobjects.object.persistence.objectstore.inmemory;
 
+import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.persistence.objectstore.inmemory.MemoryObjectStoreInstances;
 
-public class MockTransientObjectStoreInstances extends TransientObjectStoreInstances {
-    public void addElement(Oid oid, String title) {
-        objectInstances.addElement(oid);
+public class MockMemoryObjectStoreInstances extends MemoryObjectStoreInstances {
+    public MockMemoryObjectStoreInstances(NakedObjectLoader objectLoader) {
+        super(objectLoader);
+    }
+
+    /*
+    private PojoAdapterFactory factory;
+    
+    protected PojoAdapterFactory loaded() {
+        return factory;
+    }
+*/
+    public void addElement(Oid oid, Object object, String title) {
+        objectInstances.put(oid, object);
         titleIndex.put(title, oid);
     }
 
     public boolean contains(Oid oid) {
-        return objectInstances.contains(oid);
+        return objectInstances.containsKey(oid);
     }
 
     public int size() {
         return objectInstances.size();
     }
+
+   /* public void setLoaded(PojoAdapterFactory factory) {
+        this.factory = factory;}
+   */ 
 }
 
 

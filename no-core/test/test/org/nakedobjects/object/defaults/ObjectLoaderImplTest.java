@@ -4,12 +4,12 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.ResolveState;
-import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
-import org.nakedobjects.object.defaults.IdentityAdapterMap;
-import org.nakedobjects.object.defaults.ObjectLoaderImpl;
 import org.nakedobjects.object.defaults.PojoAdapter;
-import org.nakedobjects.object.defaults.PojoAdapterHash;
-import org.nakedobjects.object.defaults.PojoAdapterHashImpl;
+import org.nakedobjects.object.loader.IdentityAdapterHashMap;
+import org.nakedobjects.object.loader.IdentityAdapterMap;
+import org.nakedobjects.object.loader.ObjectLoaderImpl;
+import org.nakedobjects.object.loader.PojoAdapterHash;
+import org.nakedobjects.object.loader.PojoAdapterHashImpl;
 
 import java.util.Date;
 

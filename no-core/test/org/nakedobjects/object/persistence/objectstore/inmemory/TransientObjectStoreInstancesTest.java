@@ -1,4 +1,4 @@
-package test.org.nakedobjects.object.persistence.defaults;
+package org.nakedobjects.object.persistence.objectstore.inmemory;
 
 import org.nakedobjects.object.Oid;
 
@@ -11,7 +11,6 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import test.org.nakedobjects.object.DummyOid;
-import test.org.nakedobjects.object.persistence.defaults.MockTransientObjectStoreInstances;
 import test.org.nakedobjects.object.reflect.DummyNakedObject;
 
 

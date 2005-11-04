@@ -9,9 +9,10 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.ActionParameterSetImpl;
 import org.nakedobjects.object.reflect.ActionPeer;
-import org.nakedobjects.utility.ExpectedSet;
 
 import java.util.Vector;
+
+import test.org.nakedobjects.utility.ExpectedSet;
 
 
 public final class DummyActionPeer implements ActionPeer {

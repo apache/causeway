@@ -17,13 +17,15 @@ import org.apache.log4j.LogManager;
 import test.org.nakedobjects.object.DummyNakedObjectSpecification;
 import test.org.nakedobjects.object.NakedObjectTestCase;
 import test.org.nakedobjects.object.TestSystem;
+import test.org.nakedobjects.object.control.MockHint;
 import test.org.nakedobjects.object.reflect.DummyNakedObject;
 import test.org.nakedobjects.object.reflect.DummyOneToOnePeer;
 
 
-public class AssociationTest extends NakedObjectTestCase {
-    private static final String FIELD_NAME = "person";
-    private static final String FIELD_LABEL = "Person";
+public class OneToOneAssociationTest extends NakedObjectTestCase {
+    private static final String NAME = "SmallPerson";
+    private static final String FIELD_NAME = "smallperson";
+    private static final String FIELD_LABEL = "Small Person";
     private NakedObject nakedObject;
     private OneToOneAssociation association;
     private NakedObject associate;
@@ -31,12 +33,12 @@ public class AssociationTest extends NakedObjectTestCase {
     private DummyOneToOnePeer associationDelegate;
     private TestSystem system;
 
-    public AssociationTest(String name) {
+    public OneToOneAssociationTest(String name) {
         super(name);
     }
 
     public static void main(String[] args) {
-        junit.textui.TestRunner.run(new TestSuite(AssociationTest.class));
+        junit.textui.TestRunner.run(new TestSuite(OneToOneAssociationTest.class));
     }
 
     protected void setUp() throws Exception {
@@ -50,7 +52,7 @@ public class AssociationTest extends NakedObjectTestCase {
         
         associationDelegate = new DummyOneToOnePeer();
         type = new DummyNakedObjectSpecification();
-        association = new OneToOneAssociationImpl("", FIELD_NAME, type, associationDelegate);
+        association = new OneToOneAssociationImpl("", NAME, type, associationDelegate);
     }
     
     protected void tearDown() throws Exception {
@@ -83,22 +85,20 @@ public class AssociationTest extends NakedObjectTestCase {
         associationDelegate.assertAction(0, "get " + nakedObject);
     }
 
-    public void testInitGet() {
-   //     association.initData(nakedObject, person);
-
-  //      assertEquals(person, role.getPerson());
-    }
-
     public void testName() {
         assertEquals(FIELD_NAME, association.getName());
     }
 
     public void testLabel() {
-        assertEquals(FIELD_NAME, association.getLabel(nakedObject));
-
-        associationDelegate.label = FIELD_LABEL;
-        associationDelegate.hasAbout = true;
         assertEquals(FIELD_LABEL, association.getLabel(nakedObject));
+
+        MockHint mockHint = new MockHint();
+        mockHint.setupName("label from hint");
+        associationDelegate.hint = mockHint;
+
+        associationDelegate.expect("getHint " + "#SmallPerson()" + " " + nakedObject + " null");
+        
+        assertEquals("label from hint", association.getLabel(nakedObject));
     }
 
     public void testAbout() {
@@ -108,8 +108,9 @@ public class AssociationTest extends NakedObjectTestCase {
         assertNull(associationDelegate.hint);
         assertTrue(about instanceof DefaultHint);
 
-        associationDelegate.hasAbout = true;
-        assertTrue(association.hasHint());
+        associationDelegate.hint = new DefaultHint();
+
+        associationDelegate.expect("getHint " + "#SmallPerson()" + " " + nakedObject + " null");
 
         about = association.getHint(nakedObject, null);
         assertEquals(associationDelegate.hint, about);

@@ -10,7 +10,7 @@ import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectPerstsistenceException;
 import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.defaults.AbstractNakedObjectManager;
+import org.nakedobjects.object.defaults.AbstracObjectPersistenceManager;
 import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Vector;
@@ -19,11 +19,11 @@ import junit.framework.Assert;
 import test.org.nakedobjects.object.MockNakedObject;
 
 
-public class MockObjectManager extends AbstractNakedObjectManager {
+public class MockObjectPersistenceManager extends AbstracObjectPersistenceManager {
 
-    public static MockObjectManager setup() {
-        MockObjectManager manager;
-        manager = new MockObjectManager();
+    public static MockObjectPersistenceManager setup() {
+        MockObjectPersistenceManager manager;
+        manager = new MockObjectPersistenceManager();
         manager.reset();
         return manager;
     }

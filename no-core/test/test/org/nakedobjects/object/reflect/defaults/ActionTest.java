@@ -21,7 +21,7 @@ import test.org.nakedobjects.object.DummyNakedObjectSpecification;
 import test.org.nakedobjects.object.DummyNakedObjectSpecificationLoader;
 import test.org.nakedobjects.object.NakedObjectTestCase;
 import test.org.nakedobjects.object.control.MockHint;
-import test.org.nakedobjects.object.defaults.MockObjectManager;
+import test.org.nakedobjects.object.defaults.MockObjectPersistenceManager;
 import test.org.nakedobjects.object.reflect.DummyActionPeer;
 import test.org.nakedobjects.object.reflect.DummyNakedObject;
 
@@ -47,7 +47,7 @@ public class ActionTest extends NakedObjectTestCase {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
         NakedObjectsClient nakedObjects = new NakedObjectsClient();
-        nakedObjects.setPersistenceManager(new MockObjectManager());
+        nakedObjects.setPersistenceManager(new MockObjectPersistenceManager());
         nakedObjects.setSpecificationLoader(new DummyNakedObjectSpecificationLoader());
         
         actionPeer = new DummyActionPeer();

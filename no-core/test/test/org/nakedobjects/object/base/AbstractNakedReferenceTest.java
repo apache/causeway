@@ -3,8 +3,8 @@ package test.org.nakedobjects.object.base;
 import org.nakedobjects.object.ConcurrencyException;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.Version;
-import org.nakedobjects.object.base.AbstractNakedReference;
-import org.nakedobjects.object.defaults.LongNumberVersion;
+import org.nakedobjects.object.defaults.AbstractNakedReference;
+import org.nakedobjects.object.persistence.LongNumberVersion;
 
 import java.util.Date;
 

@@ -1,20 +1,25 @@
 package test.org.nakedobjects.utility;
 
-import org.nakedobjects.utility.ProfilerSystem;
+import java.util.Vector;
 
+import junit.framework.Assert;
 
-public class ProfilerTestSystem extends ProfilerSystem {
-    long[] memory = new long[] {10000, 20300, 30000};
-    int memoryIndex = 0;
-    long[] time = new long[] {1000, 1100, 1300, 1600, 2000};
-    int timeIndex = 0;
+public class ExpectedSet {
+    private Vector expectedObjects = new Vector();
+    private Vector actualObjects = new Vector();
     
-    protected long memory() {
-        return memory[memoryIndex++];
+    public void addActual(Object object) {
+        actualObjects.addElement(object);
+        Assert.assertTrue("More actuals than expected; only expected "+ expectedObjects.size(), actualObjects.size() <= expectedObjects.size());
+        Assert.assertEquals("Actual does not match expected.\n", expectedObjects.elementAt(actualObjects.size() - 1), object);
     }
-    
-    protected long time() {
-        return time[timeIndex++];
+
+    public void addExpected(Object object) {
+        expectedObjects.addElement(object);
+    }
+
+    public void verify() {
+        Assert.assertTrue("Too few actuals added\n  Expected " + expectedObjects + "\n  but got " + actualObjects, actualObjects.size() == expectedObjects.size());
     }
 }
 

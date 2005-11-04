@@ -9,9 +9,10 @@ import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.OneToOnePeer;
-import org.nakedobjects.utility.ExpectedSet;
 
 import java.util.Vector;
+
+import test.org.nakedobjects.utility.ExpectedSet;
 
 import junit.framework.Assert;
 
@@ -20,12 +21,11 @@ public class DummyOneToOnePeer implements OneToOnePeer {
     private ExpectedSet expectedActions = new ExpectedSet();
     public Hint hint;
     Vector actions = new Vector();
-    public String label;
-    Consent canAccess;
-    Consent canUse;
-    public boolean hasAbout;
+    //Consent canAccess;
+    //Consent canUse;
+    //public boolean hasAbout;
     public NakedObject getObject;
-    String name;
+    //String name;
     public boolean isEmpty;
 
     public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
@@ -38,7 +38,8 @@ public class DummyOneToOnePeer implements OneToOnePeer {
     }
 
     public Naked getAssociation(MemberIdentifier identifier, NakedObject inObject) {
-        return null;
+        actions.addElement("get " + inObject);
+        return getObject;
     }
 
     public Object getExtension(Class cls) {
@@ -51,6 +52,7 @@ public class DummyOneToOnePeer implements OneToOnePeer {
 
     public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked value) {
         expectedActions.addActual("getHint " + identifier + " " + object + " " + value);
+        
         return hint;
     }
 
@@ -63,7 +65,7 @@ public class DummyOneToOnePeer implements OneToOnePeer {
     }
 
     public boolean hasHint() {
-        return false;
+        return hint != null;
     }
 
     public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
@@ -73,7 +75,8 @@ public class DummyOneToOnePeer implements OneToOnePeer {
     }
 
     public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
-        return false;
+        actions.addElement("empty " + inObject);
+               return isEmpty;
     }
 
     public boolean isMandatory() {

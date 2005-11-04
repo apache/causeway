@@ -2,9 +2,9 @@ package test.org.nakedobjects.object;
 
 import org.nakedobjects.object.Action;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.utility.ExpectedCalls;
 
 import test.org.nakedobjects.object.reflect.DummyNakedObject;
+import test.org.nakedobjects.utility.ExpectedCalls;
 
 
 public class MockNakedObject extends DummyNakedObject {

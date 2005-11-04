@@ -18,14 +18,15 @@ import org.apache.log4j.LogManager;
 
 import test.org.nakedobjects.object.DummyNakedObjectSpecification;
 import test.org.nakedobjects.object.NakedObjectTestCase;
-import test.org.nakedobjects.object.defaults.MockObjectManager;
+import test.org.nakedobjects.object.control.MockHint;
+import test.org.nakedobjects.object.defaults.MockObjectPersistenceManager;
 import test.org.nakedobjects.object.reflect.DummyNakedCollection;
 import test.org.nakedobjects.object.reflect.DummyNakedObject;
 import test.org.nakedobjects.object.reflect.DummyOneToManyPeer;
 
 
 public class OneToManyAssociationTest extends NakedObjectTestCase {
-    private static final String FIELD_LABEL = "Members";
+   // private static final String FIELD_LABEL = "Members";
     private static final String FIELD_NAME = "members";
 	private NakedObject nakedObject;
 	private NakedObject associate;
@@ -44,7 +45,7 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     public void setUp()  throws ObjectPerstsistenceException {
     	LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
-    	new NakedObjectsClient().setPersistenceManager(new MockObjectManager());
+    	new NakedObjectsClient().setPersistenceManager(new MockObjectPersistenceManager());
     	
        	nakedObject = new DummyNakedObject();
         associate = new DummyNakedObject();
@@ -106,9 +107,13 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
         
         assertEquals(FIELD_NAME, association.getLabel(nakedObject));
 
-        associationDelegate.label = FIELD_LABEL;
-        associationDelegate.hasAbout = true;
-        assertEquals(FIELD_LABEL, association.getLabel(nakedObject));
+        MockHint mockHint = new MockHint();
+        mockHint.setupName("label from hint");
+        associationDelegate.hint = mockHint;
+        
+        associationDelegate.expect("getHint " + "#members()" + " " + nakedObject + " null true");
+
+        assertEquals("label from hint", association.getLabel(nakedObject));
    }
     
     public void testAboutForSet() {
@@ -119,7 +124,11 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
        assertTrue(about instanceof DefaultHint);
        associationDelegate.assertActions(0);
 
-       associationDelegate.hasAbout = true;
+       MockHint mockHint = new MockHint();
+       associationDelegate.hint = mockHint;
+       
+       associationDelegate.expect("getHint " + "#members()" + " " + nakedObject + " " + associate + " true");
+
        assertTrue(association.hasHint());
 
        about = association.getHint(nakedObject, associate, true);
@@ -138,7 +147,11 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
        assertTrue(about instanceof DefaultHint);
        associationDelegate.assertActions(0);
 
-       associationDelegate.hasAbout = true;
+       MockHint mockHint = new MockHint();
+       associationDelegate.hint = mockHint;
+       
+       associationDelegate.expect("getHint " + "#members()" + " " + nakedObject  + " " + associate + " false");
+
        assertTrue(association.hasHint());
 
        about = association.getHint(nakedObject, associate, false);
@@ -155,8 +168,12 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
        assertNull(associationDelegate.hint);
        assertTrue(about instanceof DefaultHint);
 
-       associationDelegate.hasAbout = true;
-       assertTrue(association.hasHint());
+       MockHint mockHint = new MockHint();
+       associationDelegate.hint = mockHint;
+       
+       associationDelegate.expect("getHint " + "#members()" + " " + nakedObject  + " null true");
+
+      assertTrue(association.hasHint());
 
        about = association.getHint(nakedObject);
        assertEquals(associationDelegate.hint, about);

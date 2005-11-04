@@ -1,4 +1,4 @@
-package test.org.nakedobjects.object.persistence.defaults;
+package org.nakedobjects.object.persistence.objectstore.inmemory;
 
 import org.nakedobjects.object.NakedObjects;
 
@@ -14,6 +14,7 @@ import test.org.nakedobjects.object.DummyNakedObjectSpecification;
 import test.org.nakedobjects.object.DummyOid;
 import test.org.nakedobjects.object.MockNakedObject;
 import test.org.nakedobjects.object.TestSystem;
+import test.org.nakedobjects.object.persistence.defaults.TestObject;
 
 
 public class MemoryObjectStoreInstancesTest extends TestCase {

@@ -1,6 +1,5 @@
 package test.org.nakedobjects.utility;
 
-import org.nakedobjects.utility.ExpectedSet;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;

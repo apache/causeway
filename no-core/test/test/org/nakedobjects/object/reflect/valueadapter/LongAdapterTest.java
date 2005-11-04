@@ -1,7 +1,7 @@
 package test.org.nakedobjects.object.reflect.valueadapter;
 
 import org.nakedobjects.object.TextEntryParseException;
-import org.nakedobjects.object.reflect.valueadapter.LongAdapter;
+import org.nakedobjects.object.value.adapter.LongAdapter;
 
 import junit.framework.TestCase;
 

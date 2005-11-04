@@ -7,8 +7,8 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.persistence.TitleCriteria;
-import org.nakedobjects.object.persistence.objectore.inmemory.MemoryObjectStore;
-import org.nakedobjects.object.persistence.objectore.inmemory.MemoryObjectStoreInstances;
+import org.nakedobjects.object.persistence.objectstore.inmemory.MemoryObjectStore;
+import org.nakedobjects.object.persistence.objectstore.inmemory.MemoryObjectStoreInstances;
 import org.nakedobjects.object.transaction.PersistenceCommand;
 
 import java.util.Enumeration;

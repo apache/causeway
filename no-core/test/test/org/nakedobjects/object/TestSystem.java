@@ -8,7 +8,7 @@ import org.nakedobjects.object.NakedReference;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.repository.NakedObjectsClient;
 
-import test.org.nakedobjects.object.defaults.MockObjectManager;
+import test.org.nakedobjects.object.defaults.MockObjectPersistenceManager;
 import test.org.nakedobjects.object.reflect.DummyNakedObject;
 import test.org.nakedobjects.utility.configuration.TestConfiguration;
 
@@ -22,7 +22,7 @@ public class TestSystem {
     public TestSystem() {
         specificationLoader = new DummyNakedObjectSpecificationLoader();
         objectLoader = new DummyObjectLoader();
-        objectManager = new MockObjectManager();
+        objectManager = new MockObjectPersistenceManager();
     }
 
     public void init() {

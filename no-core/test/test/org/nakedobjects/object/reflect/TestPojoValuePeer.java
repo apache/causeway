@@ -6,7 +6,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.OneToOnePeer;
-import org.nakedobjects.object.reflect.valueadapter.IntAdapter;
+import org.nakedobjects.object.value.adapter.IntAdapter;
 import org.nakedobjects.utility.UnexpectedCallException;
 
 import junit.framework.Assert;

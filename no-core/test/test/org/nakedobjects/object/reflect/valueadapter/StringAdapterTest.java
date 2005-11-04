@@ -1,6 +1,6 @@
 package test.org.nakedobjects.object.reflect.valueadapter;
 
-import org.nakedobjects.object.reflect.valueadapter.StringAdapter;
+import org.nakedobjects.object.value.adapter.StringAdapter;
 
 import junit.framework.TestCase;
 

@@ -4,12 +4,12 @@ import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.OneToManyPeer;
-import org.nakedobjects.utility.ExpectedSet;
 
 import java.util.Vector;
+
+import test.org.nakedobjects.utility.ExpectedSet;
 
 import junit.framework.Assert;
 
@@ -20,11 +20,11 @@ public class DummyOneToManyPeer implements OneToManyPeer {
     public Hint hint;
     Vector actions = new Vector();
 
-    Consent canAccess;
-    Consent canUse;
+ //   Consent canAccess;
+ //   Consent canUse;
     private ExpectedSet expectedActions = new ExpectedSet();
     public NakedCollection getCollection;
-    public boolean hasAbout;
+//    public boolean hasAbout;
     public boolean isEmpty;
     public String label;
     String name;
@@ -62,6 +62,8 @@ public class DummyOneToManyPeer implements OneToManyPeer {
     }
 
     public Hint getHint(MemberIdentifier identifier, NakedObject inObject, NakedObject associate, boolean add) {
+        expectedActions.addActual("getHint " + identifier + " " + inObject + " " + associate + " " + add);
+        
         actions.addElement("about " + inObject);
         actions.addElement("about " + associate);
         actions.addElement("about " + add);
@@ -78,7 +80,7 @@ public class DummyOneToManyPeer implements OneToManyPeer {
     }
 
     public boolean hasHint() {
-        return hasAbout;
+        return hint != null;
     }
 
     public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
