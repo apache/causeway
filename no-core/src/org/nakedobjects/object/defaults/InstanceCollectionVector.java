@@ -6,7 +6,6 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.TypedNakedCollection;
-import org.nakedobjects.object.base.AbstractNakedReference;
 import org.nakedobjects.utility.Assert;
 
 import java.util.Enumeration;

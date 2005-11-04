@@ -1,7 +1,7 @@
 package org.nakedobjects.object.defaults;
 
 import org.nakedobjects.object.NakedError;
-import org.nakedobjects.object.reflect.internal.InternalAbout;
+import org.nakedobjects.object.reflect.internal.about.InternalAbout;
 import org.nakedobjects.utility.ExceptionHelper;
 
 import org.apache.log4j.Logger;

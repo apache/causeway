@@ -13,7 +13,6 @@ import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.ResolveState;
-import org.nakedobjects.object.base.AbstractNakedReference;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.utility.ToString;

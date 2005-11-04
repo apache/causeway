@@ -7,9 +7,12 @@ import org.nakedobjects.object.NakedObjectPersistenceManager;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NotPersistableException;
+import org.nakedobjects.object.control.AbstractConsent;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.persistence.FastFinder;
-import org.nakedobjects.object.reflect.internal.InternalAbout;
+import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.object.reflect.internal.about.InternalAbout;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import org.apache.log4j.Logger;
@@ -40,7 +43,16 @@ public class NakedClassImpl implements NakedClass {
         }
     }
 
-    public void aboutExplorationActionInstances(InternalAbout about) {
+    public Consent useAllInstance() {
+        Hint ca = specification.getClassHint();
+        if (ca != null && ca.canAccess().isVetoed()) {
+            return Veto.DEFAULT;
+        } else {
+            return AbstractConsent.create(getObjectManager().hasInstances(forObjectType()), "", "No instances available");
+        }
+    }
+    
+ /*   public void aboutExplorationActionInstances(InternalAbout about) {
         about.setDescription("Get the " + getSingularName() + " instances");
         about.setName(getPluralName());
         Hint ca = specification.getClassHint();
@@ -50,7 +62,20 @@ public class NakedClassImpl implements NakedClass {
             about.unusableOnCondition(!getObjectManager().hasInstances(forObjectType()), "No instances available");
         }
     }
-
+*/
+    
+    public Consent useCreate() {
+        Hint ca = specification.getClassHint();
+        if (ca != null && ca.canUse().isVetoed()) {
+            return Veto.DEFAULT;
+        }
+        if(specification.isAbstract()) {
+           return new Veto("Cannot create an instance of an abstract class");
+        }
+        
+        return Allow.DEFAULT;
+    }
+    
     public void aboutExplorationActionNewInstance(InternalAbout about) {
         about.setDescription("Create a new " + getSingularName() + " instance");
         about.setName("New " + getSingularName());

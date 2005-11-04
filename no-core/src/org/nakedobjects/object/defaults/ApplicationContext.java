@@ -41,7 +41,7 @@ public abstract class ApplicationContext implements UserContext {
         objectChanged();
     }
 
-    public String name() {
+    public String getName() {
         return "Naked Object Application";
     }
 

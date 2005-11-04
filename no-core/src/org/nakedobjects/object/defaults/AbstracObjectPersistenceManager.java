@@ -9,7 +9,7 @@ import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.UnsupportedFindException;
 
 
-public abstract class AbstractNakedObjectManager implements NakedObjectPersistenceManager {
+public abstract class AbstracObjectPersistenceManager implements NakedObjectPersistenceManager {
     public abstract void abortTransaction();
 
     public TypedNakedCollection allInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
