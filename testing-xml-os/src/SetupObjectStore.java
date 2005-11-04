@@ -1,15 +1,13 @@
-import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.application.system.SystemClock;
-import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.container.configuration.ConfigurationException;
-import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
-import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.ObjectLoaderImpl;
-import org.nakedobjects.object.defaults.PojoAdapterHashMap;
+import org.nakedobjects.object.loader.ObjectLoaderImpl;
+import org.nakedobjects.object.loader.PojoAdapterHashMap;
+import org.nakedobjects.object.persistence.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.OidGenerator;
-import org.nakedobjects.object.persistence.defaults.DefaultPersistAlgorithm;
-import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
-import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
+import org.nakedobjects.object.persistence.SimpleOidGenerator;
+import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistenceManager;
+import org.nakedobjects.object.reflect.ReflectionPeerFactory;
+import org.nakedobjects.object.repository.NakedObjectsClient;
+import org.nakedobjects.object.transaction.TransactionPeerFactory;
 import org.nakedobjects.persistence.file.XmlDataManager;
 import org.nakedobjects.persistence.file.XmlObjectStore;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
@@ -18,8 +16,11 @@ import org.nakedobjects.reflector.java.control.SimpleSession;
 import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
 import org.nakedobjects.reflector.java.reflect.JavaAdapterFactory;
 import org.nakedobjects.reflector.java.reflect.JavaSpecificationLoader;
-import org.nakedobjects.system.AboutNakedObjects;
-import org.nakedobjects.system.SplashWindow;
+import org.nakedobjects.utility.AboutNakedObjects;
+import org.nakedobjects.utility.SplashWindow;
+import org.nakedobjects.utility.configuration.ConfigurationException;
+import org.nakedobjects.utility.configuration.PropertiesConfiguration;
+import org.nakedobjects.utility.configuration.PropertiesFileLoader;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -40,7 +41,7 @@ public class SetupObjectStore {
     public static void main(String[] args) throws ConfigurationException {
         BasicConfigurator.configure();
 
-        Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(DEFAULT_CONFIG, false));
+        PropertiesConfiguration configuration = new PropertiesConfiguration(new PropertiesFileLoader(DEFAULT_CONFIG, false));
         PropertyConfigurator.configure(configuration.getProperties("log4j"));
         if (configuration.getString(SHOW_EXPLORATION_OPTIONS) == null) {
             configuration.add(SHOW_EXPLORATION_OPTIONS, "yes");
@@ -89,18 +90,20 @@ public class SetupObjectStore {
             DefaultPersistAlgorithm algo = new DefaultPersistAlgorithm();
             algo.setOidGenerator(oidGenerator);
             
-            LocalObjectManager objectManager = new LocalObjectManager();
+            ObjectStorePersistenceManager objectManager = new ObjectStorePersistenceManager();
             objectManager.setObjectStore(objectStore);
             objectManager.setPersistAlgorithm(persistAlgorithm);
             objectManager.setCheckObjectsForDirtyFlag(true);
 
-            nakedObjects.setObjectManager(objectManager);
+            nakedObjects.setPersistenceManager(objectManager);
  
-            nakedObjects.setSpecificationLoader(new JavaSpecificationLoader());
-            
-            LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
+            ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
+                    new TransactionPeerFactory(),
+            };
 
-            nakedObjects.setReflectionFactory(reflectionFactory);
+            JavaSpecificationLoader specificationLoader = new JavaSpecificationLoader();
+            specificationLoader.setReflectionPeerFactories(factories);
+            nakedObjects.setSpecificationLoader(specificationLoader);
 
             new SystemClock();
         

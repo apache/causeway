@@ -1,6 +1,6 @@
-import org.nakedobjects.container.configuration.ConfigurationException;
-import org.nakedobjects.object.persistence.NakedObjectStore;
-import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
+import org.nakedobjects.object.persistence.objectstore.NakedObjectStore;
+import org.nakedobjects.object.persistence.objectstore.inmemory.TransientObjectStore;
+import org.nakedobjects.utility.configuration.ConfigurationException;
 
 
 public class StandaloneClientServerWithTransientStore extends StandaloneClientServer {

@@ -1,5 +1,5 @@
+import org.nakedobjects.StartUp;
 
-import org.nakedobjects.container.configuration.StartUp;
 
 
 public class StartServer extends StartUp {

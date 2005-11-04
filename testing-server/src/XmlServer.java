@@ -1,22 +1,21 @@
 
-import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.application.system.SystemClock;
-import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.distribution.DataFactory;
 import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.distribution.SingleResponseUpdateNotifier;
 import org.nakedobjects.distribution.java.JavaDataFactory;
 import org.nakedobjects.distribution.xml.ServerListener;
-import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
-import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.ObjectLoaderImpl;
-import org.nakedobjects.object.defaults.PojoAdapterHashMap;
+import org.nakedobjects.object.loader.IdentityAdapterHashMap;
+import org.nakedobjects.object.loader.ObjectLoaderImpl;
+import org.nakedobjects.object.loader.PojoAdapterHashMap;
+import org.nakedobjects.object.persistence.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.OidGenerator;
-import org.nakedobjects.object.persistence.defaults.DefaultPersistAlgorithm;
-import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
-import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
-import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
+import org.nakedobjects.object.persistence.SimpleOidGenerator;
+import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistenceManager;
+import org.nakedobjects.object.persistence.objectstore.inmemory.TransientObjectStore;
+import org.nakedobjects.object.reflect.ReflectionPeerFactory;
+import org.nakedobjects.object.repository.NakedObjectsClient;
+import org.nakedobjects.object.transaction.TransactionPeerFactory;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
@@ -24,6 +23,8 @@ import org.nakedobjects.reflector.java.reflect.JavaAdapterFactory;
 import org.nakedobjects.reflector.java.reflect.JavaSpecificationLoader;
 import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.utility.InfoDebugFrame;
+import org.nakedobjects.utility.configuration.PropertiesConfiguration;
+import org.nakedobjects.utility.configuration.PropertiesFileLoader;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.PropertyConfigurator;
@@ -39,7 +40,7 @@ public class XmlServer {
 
         NakedObjectsClient nakedObjects = new NakedObjectsClient();
 
-        Configuration configuration = new Configuration(new ConfigurationPropertiesLoader("server.properties", true));
+        PropertiesConfiguration configuration = new PropertiesConfiguration(new PropertiesFileLoader("server.properties", true));
         nakedObjects.setConfiguration(configuration);
 
         PropertyConfigurator.configure(configuration.getProperties("log4j"));
@@ -61,15 +62,20 @@ public class XmlServer {
         DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
         persistAlgorithm.setOidGenerator(oidGenerator);
 
-        LocalObjectManager objectManager = new LocalObjectManager();
+        ObjectStorePersistenceManager objectManager = new ObjectStorePersistenceManager();
         objectManager.setObjectStore(objectStore);
         objectManager.setPersistAlgorithm(persistAlgorithm);
         objectManager.setCheckObjectsForDirtyFlag(true);
 
-        nakedObjects.setObjectManager(objectManager);
+        nakedObjects.setPersistenceManager(objectManager);
 
-        LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
-        nakedObjects.setReflectionFactory(reflectionFactory);
+        ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
+                new TransactionPeerFactory(),
+        };
+
+        JavaSpecificationLoader specificationLoader = new JavaSpecificationLoader();
+        specificationLoader.setReflectionPeerFactories(factories);
+        nakedObjects.setSpecificationLoader(specificationLoader);
 
         ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
         objectLoader.setPojoAdapterMap(new PojoAdapterHashMap());
@@ -77,8 +83,6 @@ public class XmlServer {
         objectLoader.setObjectFactory(objectFactory);
         objectLoader.setIdentityAdapterMap(new IdentityAdapterHashMap());
         nakedObjects.setObjectLoader(objectLoader);
-
-        nakedObjects.setSpecificationLoader(new JavaSpecificationLoader());
 
         ServerDistribution sd = new ServerDistribution();
         sd.setObjectDataFactory(objectDataFactory);

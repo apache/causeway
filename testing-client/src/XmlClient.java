@@ -1,25 +1,26 @@
 
-import org.nakedobjects.NakedObjectsClient;
 import org.nakedobjects.application.system.SystemClock;
 import org.nakedobjects.application.valueholder.Date;
-import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.container.configuration.ConfigurationException;
-import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.distribution.DistributionLogger;
-import org.nakedobjects.distribution.ProxyObjectManager;
-import org.nakedobjects.distribution.ProxyReflectionFactory;
+import org.nakedobjects.distribution.ProxyPersistenceManager;
+import org.nakedobjects.distribution.ProxyPeerFactory;
 import org.nakedobjects.distribution.java.JavaDataFactory;
-import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
-import org.nakedobjects.object.defaults.ObjectLoaderImpl;
-import org.nakedobjects.object.defaults.PojoAdapterHashMap;
-import org.nakedobjects.object.persistence.NakedObjectManager;
-import org.nakedobjects.object.persistence.ObjectManagerLogger;
+import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.loader.IdentityAdapterHashMap;
+import org.nakedobjects.object.loader.ObjectLoaderImpl;
+import org.nakedobjects.object.loader.PojoAdapterHashMap;
+import org.nakedobjects.object.persistence.ObjectPesistorLogger;
+import org.nakedobjects.object.reflect.ReflectionPeerFactory;
+import org.nakedobjects.object.repository.NakedObjectsClient;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.reflect.JavaAdapterFactory;
 import org.nakedobjects.reflector.java.reflect.JavaSpecificationLoader;
-import org.nakedobjects.system.AboutNakedObjects;
-import org.nakedobjects.system.SplashWindow;
+import org.nakedobjects.utility.AboutNakedObjects;
+import org.nakedobjects.utility.SplashWindow;
+import org.nakedobjects.utility.configuration.ConfigurationException;
+import org.nakedobjects.utility.configuration.PropertiesConfiguration;
+import org.nakedobjects.utility.configuration.PropertiesFileLoader;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.SkylarkViewer;
 import org.nakedobjects.viewer.skylark.ViewUpdateNotifier;
@@ -41,7 +42,7 @@ public class XmlClient {
 
         NakedObjectsClient nakedObjects = new NakedObjectsClient();
         
-        Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(DEFAULT_CONFIG, true));
+        PropertiesConfiguration configuration = new PropertiesConfiguration(new PropertiesFileLoader(DEFAULT_CONFIG, true));
         if (configuration.getString(SHOW_EXPLORATION_OPTIONS) == null) {
             configuration.add(SHOW_EXPLORATION_OPTIONS, "yes");
         }
@@ -73,16 +74,12 @@ public class XmlClient {
 
             JavaDataFactory objectDataFactory = new JavaDataFactory();    
 
-            ProxyObjectManager proxyObjectManager = new ProxyObjectManager();
+            ProxyPersistenceManager proxyObjectManager = new ProxyPersistenceManager();
             proxyObjectManager.setConnection(connection);
             proxyObjectManager.setObjectDataFactory(objectDataFactory);
 
-            NakedObjectManager objectManager = new ObjectManagerLogger(proxyObjectManager, "manager.log");
-            nakedObjects.setObjectManager(objectManager);
- 
-            ProxyReflectionFactory reflectionFactory = new ProxyReflectionFactory();
-            reflectionFactory.setConnection(connection);
-            reflectionFactory.setObjectDataFactory(objectDataFactory);
+            NakedObjectPersistenceManager objectManager = new ObjectPesistorLogger(proxyObjectManager, "manager.log");
+            nakedObjects.setPersistenceManager(objectManager);
             
             ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
             objectLoader.setPojoAdapterMap(new PojoAdapterHashMap());
@@ -91,9 +88,18 @@ public class XmlClient {
             objectLoader.setIdentityAdapterMap(new IdentityAdapterHashMap());
             nakedObjects.setObjectLoader(objectLoader);
 
-            nakedObjects.setReflectionFactory(reflectionFactory);
-            
-            nakedObjects.setSpecificationLoader(new JavaSpecificationLoader());
+
+            ProxyPeerFactory reflectionFactory = new ProxyPeerFactory();
+            reflectionFactory.setConnection(connection);
+            reflectionFactory.setObjectDataFactory(objectDataFactory);
+ 
+            ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
+                    reflectionFactory,
+            };
+
+            JavaSpecificationLoader specificationLoader = new JavaSpecificationLoader();
+            specificationLoader.setReflectionPeerFactories(factories);
+            nakedObjects.setSpecificationLoader(specificationLoader);
             
             
             ViewUpdateNotifier updateNotifier = new ViewUpdateNotifier();

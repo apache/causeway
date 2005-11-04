@@ -1,11 +1,12 @@
 package org.nakedobjects.utility.xmlsnapshot;
 
-import org.nakedobjects.NakedObjectsClient;
-import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.object.DummyNakedObjectSpecification;
-import org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
-import org.nakedobjects.object.reflect.DummyNakedObject;
-import org.nakedobjects.object.reflect.NakedObjectField;
+import org.nakedobjects.object.NakedObjectField;
+import org.nakedobjects.object.repository.NakedObjectsClient;
+import org.nakedobjects.utility.configuration.PropertiesConfiguration;
+
+import test.org.nakedobjects.object.DummyNakedObjectSpecification;
+import test.org.nakedobjects.object.defaults.MockNakedObjectSpecificationLoader;
+import test.org.nakedobjects.object.reflect.DummyNakedObject;
 
 import junit.framework.TestCase;
 
@@ -17,7 +18,7 @@ public class SnapshotBuilderTest extends TestCase {
     }
 
     public void testSnapshot() {
-        new NakedObjectsClient().setConfiguration(new Configuration());
+        new NakedObjectsClient().setConfiguration(new PropertiesConfiguration());
         
       	MockNakedObjectSpecificationLoader loader = new MockNakedObjectSpecificationLoader();
         DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();

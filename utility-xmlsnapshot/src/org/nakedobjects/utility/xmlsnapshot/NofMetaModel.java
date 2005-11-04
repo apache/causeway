@@ -1,7 +1,7 @@
 package org.nakedobjects.utility.xmlsnapshot;
 
 import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.NakedObjectRuntimeException;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
