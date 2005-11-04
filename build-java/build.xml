@@ -8,6 +8,7 @@
          basedir=".">
 
 	<property file="build.properties"/>
+	<property file="../build-templates/version.properties"/>
 	<property file="../build-templates/common.properties"/>
 
 
@@ -54,12 +55,12 @@
 
 	<property environment="env" />
 
-	<target name="release" depends=" new-release-number, distribution, install">
+	<target name="release" depends=" new-build-id, distribution, install">
 	</target>
 
-	<target name="new-release-number">
-		<ant antfile="../build-templates/version.xml" inheritall="false"/>
-		<property file="../build-templates/version.properties"/>
+	<target name="new-build-id">
+		<ant antfile="../build-templates/buildnumber.xml" inheritall="false"/>
+		<property file="../build-templates/build.number.properties"/>
 	</target>
 
 	<target name="clean">
@@ -71,7 +72,7 @@
 	</target>
 
 	<target name="-init">
-		<echo>Create Java distribution</echo>
+		<echo>Create Java distribution: ${build.name}</echo>
 		<echo>Version ${build.version}  ${build.number}</echo>
 	</target>
 
@@ -369,7 +370,27 @@
 
 
 
+	
+    <!-- ================================= 
+          target: anaylsis              
+         ================================= -->
+    <target name="anaylsis" depends="prepare" description="do all the static analysis">
+        
+    	<jdepend classpathref="base.path" format="xml" outputfile="build/dependencies.xml">
+    	    <exclude name="java.*" />
+    	    <exclude name="javax.*" />
 
+    	    <classespath>
+    	        <pathelement location="build/classes/src"/>
+    	    </classespath>
+    	</jdepend>
+    	
+
+    	<style basedir="build" destdir="build" includes="dependencies.xml" style="${ant.home}/etc/jdepend-frames.xsl"/>
+    </target>
+
+
+	
 </project>
 
 
