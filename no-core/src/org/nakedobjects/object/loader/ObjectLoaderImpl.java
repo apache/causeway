@@ -11,7 +11,6 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.ObjectFactory;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.ResolveState;
-import org.nakedobjects.object.defaults.AbstractNakedReference;
 import org.nakedobjects.object.defaults.PojoAdapter;
 import org.nakedobjects.object.value.adapter.BooleanAdapter;
 import org.nakedobjects.object.value.adapter.ByteAdapter;
@@ -108,7 +107,7 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
         if(adapter != null) {
             pojoAdapterMap.add(collection, adapter);
             LOG.debug("created " + adapter + " for " + collection);
-            ((AbstractNakedReference) adapter).changeState(ResolveState.TRANSIENT);
+            adapter.changeState(ResolveState.TRANSIENT);
     
             Assert.assertNotNull(adapter);
         }
@@ -187,10 +186,10 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
             
             if(parent.getResolveState().isPersistent()) {
 	            LOG.debug("creating adapter for persistent collection: " + collection);
-	            ((AbstractNakedReference) adapter).changeState(ResolveState.GHOST);
+	            adapter.changeState(ResolveState.GHOST);
             } else {
 	            LOG.debug("creating adapter for transient collection: " + collection);
-	            ((AbstractNakedReference) adapter).changeState(ResolveState.TRANSIENT);
+	            adapter.changeState(ResolveState.TRANSIENT);
             }
         }
         Assert.assertNotNull("should have an adapter for ", collection, adapter);
@@ -257,24 +256,22 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
 
     public void start(NakedReference object, ResolveState state) {
         LOG.debug("start " + object + " as " + state.name());
-        AbstractNakedReference pojoAdapter = ((AbstractNakedReference) object);
-        pojoAdapter.changeState(state);
+        object.changeState(state);
     }
 
     public void end(NakedReference object) {
         ResolveState endState = object.getResolveState().getEndState();
         LOG.debug("end " + object + " as " + endState.name());
-        AbstractNakedReference pojoAdapter = ((AbstractNakedReference) object);
-        pojoAdapter.changeState(endState);
+        object.changeState(endState);
     }
 
     public void madePersistent(final NakedReference adapter, final Oid assignedOid) {
         LOG.debug("made persistent " + adapter + " as " + assignedOid);
-        Assert.assertTrue("No adapter found in map", pojoAdapterMap.getPojo(adapter.getObject()) != null);
-        Assert.assertTrue("Not the same adapter in map", pojoAdapterMap.getPojo(adapter.getObject()) == adapter);
-        Assert.assertNull("OID should not already map to a known adapter", identityAdapterMap.get(assignedOid));
-
-        ((AbstractNakedReference) adapter).persistedAs(assignedOid);
+            Assert.assertTrue("No adapter found in map", pojoAdapterMap.getPojo(adapter.getObject()) != null );
+            Assert.assertTrue("Not the same adapter in map", pojoAdapterMap.getPojo(adapter.getObject()) == adapter);
+            Assert.assertNull("OID should not already map to a known adapter", identityAdapterMap.get(assignedOid));
+        
+        adapter.persistedAs(assignedOid);
 
         addIdentityMapping(assignedOid, adapter);
     }

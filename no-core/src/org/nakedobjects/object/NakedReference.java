@@ -22,6 +22,10 @@ public interface NakedReference extends Naked {
     Persistable persistable();
 
     void setOptimisticLock(Version version);
+    
+    void persistedAs(Oid oid);
+    
+    void changeState(ResolveState newState);
 }
 
 /*

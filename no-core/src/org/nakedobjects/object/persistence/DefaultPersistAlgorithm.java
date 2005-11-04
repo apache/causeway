@@ -87,8 +87,7 @@ public class DefaultPersistAlgorithm implements PersistAlgorithm {
         
         LOG.info("persist " + collection);
         //NakedObjects.getObjectLoader().madePersistent(collection, createOid(collection));
-        NakedObjects.getObjectLoader().madePersistent(collection, null);
-        //((AbstractNakedReference) collection).persistedAs(null);
+        collection.persistedAs(null);
 //        ((AbstractNakedReference) collection).changeState(ResolveState.RESOLVING);
 //        ((AbstractNakedReference) collection).changeState(ResolveState.RESOLVED);
         for (int j = 0; j < collection.size(); j++) {
