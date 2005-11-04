@@ -3,6 +3,7 @@ package org.nakedobjects.reflector.java.reflect;
 import org.nakedobjects.object.Action;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecificationException;
+import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 
@@ -84,12 +85,21 @@ public class JavaReflectorTest extends TestCase {
     public void testPluralName() {
         assertEquals("Plural", reflector.pluralName());
     }
+    
+    public void testPersistable() {
+        assertEquals(Persistable.USER_PERSISTABLE, reflector.persistable());
+        
+        
+        reflector = new JavaIntrospector(JavaObjectForReflectorTransient.class, new DummyBuilder());
+        reflector.introspect();
+        assertEquals(Persistable.TRANSIENT, reflector.persistable());
+
+    }
 
     public void testClassAbout() {
         Hint about = reflector.classHint();
         assertEquals(about, JavaObjectForReflector.about);
     }
-
 
     public void testSingularName() {
         assertEquals("Singular", reflector.singularName());
