@@ -1,24 +1,25 @@
 package org.nakedobjects;
 
-import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedCollection;
-import org.nakedobjects.object.defaults.ApplicationContext;
+import org.nakedobjects.utility.NakedObjectRuntimeException;
 
-public class DefaultApplicationContext extends ApplicationContext  {
-    private String name;
-    
-    public void setUpUsers(NakedCollection users) {
-    }
-    
-    public String getName() {
-        return name;
+
+public class StartupException extends NakedObjectRuntimeException {
+	public StartupException() {
+        super();
     }
 
-	public NakedClass addClass(String className) {
-	    return super.addClass(className);
+    public StartupException(String s) {
+        super(s);
+    }
+    
+	public StartupException(Throwable cause) {
+		super(cause);
+	}
+
+	public StartupException(String msg, Throwable cause) {
+		super(msg, cause);
 	}
 }
-
 
 /*
 Naked Objects - a framework that exposes behaviourally complete

@@ -1,28 +1,28 @@
 package org.nakedobjects;
 
-import org.nakedobjects.container.configuration.Configuration;
-import org.nakedobjects.container.configuration.ConfigurationPropertiesLoader;
 import org.nakedobjects.object.AdapterFactory;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
-import org.nakedobjects.object.defaults.AbstractSpecificationLoader;
-import org.nakedobjects.object.defaults.IdentityAdapterHashMap;
-import org.nakedobjects.object.defaults.LocalReflectionFactory;
-import org.nakedobjects.object.defaults.ObjectLoaderImpl;
-import org.nakedobjects.object.defaults.PojoAdapterHashMap;
-import org.nakedobjects.object.help.HelpManagerAssist;
-import org.nakedobjects.object.help.SimpleHelpManager;
+import org.nakedobjects.object.help.HelpPeerFactory;
+import org.nakedobjects.object.loader.IdentityAdapterHashMap;
+import org.nakedobjects.object.loader.ObjectLoaderImpl;
+import org.nakedobjects.object.loader.PojoAdapterHashMap;
+import org.nakedobjects.object.persistence.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.OidGenerator;
-import org.nakedobjects.object.persistence.defaults.DefaultPersistAlgorithm;
-import org.nakedobjects.object.persistence.defaults.LocalObjectManager;
-import org.nakedobjects.object.persistence.defaults.SimpleOidGenerator;
-import org.nakedobjects.object.persistence.defaults.TransientObjectStore;
+import org.nakedobjects.object.persistence.SimpleOidGenerator;
+import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistenceManager;
+import org.nakedobjects.object.persistence.objectstore.inmemory.TransientObjectStore;
+import org.nakedobjects.object.reflect.ReflectionPeerFactory;
+import org.nakedobjects.object.repository.NakedObjectsClient;
+import org.nakedobjects.object.transaction.TransactionPeerFactory;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.control.SimpleSession;
 import org.nakedobjects.reflector.java.reflect.JavaAdapterFactory;
 import org.nakedobjects.reflector.java.reflect.JavaSpecificationLoader;
-import org.nakedobjects.system.AboutNakedObjects;
-import org.nakedobjects.system.SplashWindow;
+import org.nakedobjects.utility.AboutNakedObjects;
+import org.nakedobjects.utility.SplashWindow;
+import org.nakedobjects.utility.configuration.PropertiesConfiguration;
+import org.nakedobjects.utility.configuration.PropertiesFileLoader;
 import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.SkylarkViewer;
 import org.nakedobjects.viewer.skylark.ViewUpdateNotifier;
@@ -54,7 +54,7 @@ public class NakedObjectsSystem {
 
         splash = null;
         try {
-            Configuration configuration = new Configuration(new ConfigurationPropertiesLoader(configurationFile, false));
+            PropertiesConfiguration configuration = new PropertiesConfiguration(new PropertiesFileLoader(configurationFile, false));
 
             boolean noSplash = configuration.getBoolean("nosplash", false);
             if (!noSplash) {
@@ -63,14 +63,13 @@ public class NakedObjectsSystem {
 
             setUpLocale(configuration.getString("locale"));
 
-            LocalObjectManager objectManager = createObjectManager();
+            ObjectStorePersistenceManager objectManager = createObjectManager();
             NakedObjectSpecificationLoader specificationLoader = createSpecificationLoader();
-            LocalReflectionFactory reflectionFactory = createReflectionFactory();
-            AdapterFactory reflectorFactory = createReflectorFactory();
+            AdapterFactory adapterFactory = createReflectorFactory();
             ObjectLoaderImpl objectLoader = createObjectLoader();
 
             NakedObjectsClient nakedObjects = setupNakedObjects(configuration, objectManager, specificationLoader,
-                    reflectionFactory, reflectorFactory, objectLoader);
+                    adapterFactory, objectLoader);
             nakedObjects.init();
         } catch (Exception e) {
             LOG.error("Exploration startup problem", e);
@@ -82,14 +81,13 @@ public class NakedObjectsSystem {
     }
 
     private NakedObjectsClient setupNakedObjects(
-            Configuration configuration,
-            LocalObjectManager objectManager,
+            PropertiesConfiguration configuration,
+            ObjectStorePersistenceManager objectManager,
             NakedObjectSpecificationLoader specificationLoader,
-            LocalReflectionFactory reflectionFactory,
-            AdapterFactory reflectorFactory,
+            AdapterFactory adapterFactory,
             ObjectLoaderImpl objectLoader) {
         NakedObjectsClient nakedObjects = new NakedObjectsClient();
-        nakedObjects.setObjectManager(objectManager);
+        nakedObjects.setPersistenceManager(objectManager);
         nakedObjects.setSpecificationLoader(specificationLoader);
         nakedObjects.setConfiguration(configuration);
         nakedObjects.setObjectLoader(objectLoader);
@@ -115,26 +113,23 @@ public class NakedObjectsSystem {
     }
 
     protected NakedObjectSpecificationLoader createSpecificationLoader() {
-        AbstractSpecificationLoader specificationLoader = new JavaSpecificationLoader();
+        JavaSpecificationLoader specificationLoader = new JavaSpecificationLoader();
+        ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
+                new TransactionPeerFactory(),
+                new HelpPeerFactory(),
+        };
+        specificationLoader.setReflectionPeerFactories(factories);
         return specificationLoader;
     }
 
-    protected LocalReflectionFactory createReflectionFactory() {
-        LocalReflectionFactory reflectionFactory = new LocalReflectionFactory();
-        HelpManagerAssist helpManager = new HelpManagerAssist();
-        helpManager.setDecorated(new SimpleHelpManager());
-        reflectionFactory.setHelpManager(helpManager);
-        return reflectionFactory;
-    }
-
-    protected LocalObjectManager createObjectManager() {
+    protected ObjectStorePersistenceManager createObjectManager() {
         TransientObjectStore objectStore = new TransientObjectStore();
         OidGenerator oidGenerator = new SimpleOidGenerator();
 
         DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
         persistAlgorithm.setOidGenerator(oidGenerator);
 
-        LocalObjectManager objectManager = new LocalObjectManager();
+        ObjectStorePersistenceManager objectManager = new ObjectStorePersistenceManager();
         objectManager.setObjectStore(objectStore);
         objectManager.setPersistAlgorithm(persistAlgorithm);
         return objectManager;
