@@ -50,20 +50,20 @@ public class InstancesTest extends TestCase {
         AbstractSpecificationLoader.setReflectorFactory(new InternalReflectorFactory());
         
         
-        NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(Person.class.getName());
+        NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(Person.class.getIdentifier());
         LoadedObjects loaded = new MockLoadedObjects();
         ins = new Instances(nc, loaded);
         assertEquals(0, ins.numberInstances());
 
         p1 = new Person();
-        p1.getName().setValue("Harry");
+        p1.getIdentifier().setValue("Harry");
         p1.getSalary().setValue(1234);
         p1Oid = new SerialOid(1);
         p1.setupOid(p1Oid);
         ins.create(p1);
         
         p2 = new Person();
-        p2.getName().setValue("Fred");
+        p2.getIdentifier().setValue("Fred");
         p1.getSalary().setValue(2345);
         p2Oid = new SerialOid(2);
         p2.setupOid(p2Oid);
@@ -137,12 +137,12 @@ public class InstancesTest extends TestCase {
         
         assertEquals(p1, p1r);
         assertFalse(p1 == p1r);
-        assertEquals(p1.getName(), p1r.getName());
+        assertEquals(p1.getIdentifier(), p1r.getIdentifier());
         assertEquals(p1.getSalary(), p1r.getSalary());
         
         assertEquals(p2, p2r);
         assertFalse(p2 == p2r);
-        assertEquals(p2.getName(), p2r.getName());
+        assertEquals(p2.getIdentifier(), p2r.getIdentifier());
         assertEquals(p2.getSalary(), p2r.getSalary());
     }
 
