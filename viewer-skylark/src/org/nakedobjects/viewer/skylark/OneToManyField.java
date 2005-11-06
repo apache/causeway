@@ -121,10 +121,6 @@ public class OneToManyField extends CollectionContent implements FieldContent {
         return getOneToManyAssociation().isDerived();
     }
     
-    public Consent isEditable() {
-        return getOneToManyAssociation().isEditable();
-    }
-    
     public boolean isTransient() {
         return false;
     }
@@ -161,11 +157,11 @@ public class OneToManyField extends CollectionContent implements FieldContent {
     }
 
     public String getName() {
-        return getOneToManyAssociation().getName();
+        return getOneToManyAssociation().getId();
     }
     
     public String getDescription() {
-        return getOneToManyAssociation().getName();
+        return getOneToManyAssociation().getId();
     }
 
 }

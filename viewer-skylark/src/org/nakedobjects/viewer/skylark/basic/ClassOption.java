@@ -11,7 +11,7 @@ import org.nakedobjects.viewer.skylark.MenuOptionSet;
 
 public class ClassOption {
     public static void menuOptions(NakedObjectSpecification specificaton, MenuOptionSet menuOptionSet) {
-        NakedClass nakedClass = NakedObjects.getPersistenceManager().getNakedClass(specificaton);
+        NakedClass nakedClass = NakedObjects.getObjectPersistor().getNakedClass(specificaton);
         NakedObject classAdapter = NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(nakedClass);
 
         Action[] actions;

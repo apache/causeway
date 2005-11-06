@@ -66,7 +66,7 @@ class ImmediateObjectOption extends MenuOption {
             }
             
             public String getName() {
-                return "Action " + action.getName();
+                return "Action " + action.getId();
             }
 
             public String getDescription() {
@@ -76,7 +76,7 @@ class ImmediateObjectOption extends MenuOption {
     }
 
     public String toString() {
-        return "ObjectOption for " + action.getName();
+        return "ObjectOption for " + action.getId();
     }
 }
 

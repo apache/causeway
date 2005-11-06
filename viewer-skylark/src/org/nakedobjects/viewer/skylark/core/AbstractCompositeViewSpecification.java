@@ -43,7 +43,7 @@ public abstract class AbstractCompositeViewSpecification implements CompositeVie
     protected void resolveObject(Content content) {
         NakedObject object = ((ObjectContent) content).getObject();
         if(!object.getResolveState().isResolved()) {
-            NakedObjects.getPersistenceManager().resolveImmediately(object);
+            NakedObjects.getObjectPersistor().resolveImmediately(object);
         }
     }
 

@@ -42,7 +42,7 @@ public class SkylarkViewer implements NakedObjectsComponent {
  
         frame.setViewer(viewer);
         
-        NakedObjects.getPersistenceManager().addObjectChangedListener(updateNotifier);
+        NakedObjects.getObjectPersistor().addObjectChangedListener(updateNotifier);
                 
     
         NakedObject rootObject = NakedObjects.getObjectLoader().createAdapterForTransient(applicationContext);

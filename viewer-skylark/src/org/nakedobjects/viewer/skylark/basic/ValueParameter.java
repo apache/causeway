@@ -4,9 +4,8 @@ import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.control.DefaultHint;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.ToString;
@@ -110,6 +109,10 @@ class ValueParameter extends ValueContent implements ParameterContent {
 
     public String getName() {
         return null;
+    }
+    
+    public Consent isEditable() {
+        return Allow.DEFAULT;
     }
 }
 

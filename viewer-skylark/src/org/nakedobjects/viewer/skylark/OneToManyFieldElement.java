@@ -89,10 +89,6 @@ public class OneToManyFieldElement extends ObjectContent implements FieldContent
     public boolean isObject() {
         return true;
     }
-
-    public Consent isEditable() {
-        return getOneToManyAssociation().isEditable();
-    }
     
     public boolean isTransient() {
         return false;

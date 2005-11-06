@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.basic.AbstractContent;
 
@@ -33,6 +34,7 @@ public abstract class ValueContent extends AbstractContent {
 
     public abstract void parseTextEntry(String entryText);
 
+    public abstract Consent isEditable();    
 }
 
 /*

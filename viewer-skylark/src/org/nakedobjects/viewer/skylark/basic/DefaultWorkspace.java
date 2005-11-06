@@ -3,7 +3,7 @@ package org.nakedobjects.viewer.skylark.basic;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.control.Consent;
@@ -179,7 +179,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
     }
 
     private View newInstance(NakedObjectSpecification cls, boolean openAView) {
-        NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
+        NakedObjectPersistor objectManager = NakedObjects.getObjectPersistor();
         objectManager.startTransaction();
         NakedObject newInstance = objectManager.createPersistentInstance(cls);
         objectManager.endTransaction();
@@ -251,7 +251,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
                     NakedObjectSpecification spec = specs[i];
                     if (spec.isObject()) {
                         classCollection.addElement(NakedObjects.getObjectLoader().createAdapterForTransient(
-                                NakedObjects.getPersistenceManager().getNakedClass(spec)));
+                                NakedObjects.getObjectPersistor().getNakedClass(spec)));
                     }
                 }
                 View classesView = createSubviewFor(NakedObjects.getObjectLoader().createAdapterForTransient(classCollection), false);

@@ -27,7 +27,7 @@ public abstract class CollectionContent extends AbstractContent implements Conte
         for (int i = 0; i < actions.length; i++) {
             
             MenuOption option;
-            option = new MenuOption(actions[i].getName()) {
+            option = new MenuOption(actions[i].getId()) {
                 public void execute(Workspace workspace, View view, Location at) {}
             };
             

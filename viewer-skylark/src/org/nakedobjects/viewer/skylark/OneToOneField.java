@@ -9,7 +9,6 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.viewer.skylark.basic.RemoveOneToOneAssociationOption;
@@ -88,7 +87,7 @@ public class OneToOneField extends ObjectContent implements FieldContent {
     }
     
     public Consent isEditable() {
-        return getField().isEditable();
+        return getField().isEditable(getParent());
     }
 
     /*public String getIconName() {

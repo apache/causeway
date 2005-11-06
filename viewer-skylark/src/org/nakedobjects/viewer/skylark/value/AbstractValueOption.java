@@ -23,7 +23,7 @@ public abstract class AbstractValueOption extends MenuOption {
 	}
 
 	protected void updateParent(View view) {
-       NakedObjects.getPersistenceManager().saveChanges();
+       NakedObjects.getObjectPersistor().saveChanges();
        view.markDamaged();
        view.getParent().invalidateContent();
     }

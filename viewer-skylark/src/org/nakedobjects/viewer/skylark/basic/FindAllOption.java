@@ -3,7 +3,7 @@ package org.nakedobjects.viewer.skylark.basic;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.persistence.PatternObjectCriteria;
 import org.nakedobjects.viewer.skylark.Location;
@@ -19,7 +19,7 @@ public class FindAllOption extends MenuOption {
     }
 
     public void execute(Workspace workspace, View view, Location at) {
-        NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
+        NakedObjectPersistor objectManager = NakedObjects.getObjectPersistor();
         NakedObject pattern = ((ObjectContent) view.getContent()).getObject();
         NakedCollection instances = objectManager.findInstances(new PatternObjectCriteria(pattern, true));
 

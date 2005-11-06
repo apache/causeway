@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedObjectLoader;
-import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Consent;
@@ -329,7 +329,7 @@ public class Viewer {
 
         options.add(MenuOptionSet.DEBUG, new MenuOption("Restart object manager") {
             public void execute(Workspace workspace, View view, Location at) {
-                NakedObjects.getPersistenceManager().reset();
+                NakedObjects.getObjectPersistor().reset();
                 //           NakedObjects.getPojoAdapterFactory().reset();
             }
         });
@@ -344,7 +344,7 @@ public class Viewer {
 
         options.add(MenuOptionSet.DEBUG, new MenuOption("Debug object manager") {
             public void execute(Workspace workspace, View view, Location at) {
-                NakedObjectPersistenceManager om = NakedObjects.getPersistenceManager();
+                NakedObjectPersistor om = NakedObjects.getObjectPersistor();
                 InfoDebugFrame f = new InfoDebugFrame();
                 f.setInfo(om);
                 f.show(at.x + 50, workspace.getBounds().y + 6);

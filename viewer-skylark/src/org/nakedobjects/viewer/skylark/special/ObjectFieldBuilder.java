@@ -184,7 +184,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         {
 	       View[] dsubviews = view.getSubviews();
 	        for (int i = 0; i < flds.length; i++) {
-	            LOG.debug(i + " " + flds[i].getName() + " " + flds[i].hashCode());
+	            LOG.debug(i + " " + flds[i].getId() + " " + flds[i].hashCode());
 	        }
 	        
 	        for (int i = 0; i < dsubviews.length; i++) {

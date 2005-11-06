@@ -50,7 +50,7 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
                 NakedObjectField field = flds[f];
                 Naked attribute = object.getField(field);
 
-                if (field.getName().equals("classes") && field.isCollection()) {
+                if (field.getId().equals("classes") && field.isCollection()) {
                     Enumeration elements = ((InternalCollection) attribute).elements();
                     while (elements.hasMoreElements()) {
                         NakedObject cls = (NakedObject) elements.nextElement();
@@ -60,7 +60,7 @@ public class WorkspaceBuilder extends AbstractViewBuilder {
                         view.addView(classIcon);
                     }
 
-                } else if (field.getName().equals("objects") && field.isCollection()) {
+                } else if (field.getId().equals("objects") && field.isCollection()) {
                     Enumeration elements = ((InternalCollection) attribute).elements();
                     while (elements.hasMoreElements()) {
                         NakedObject obj = (NakedObject) elements.nextElement();
