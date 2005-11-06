@@ -65,14 +65,14 @@ public class Memento implements Transferable, Serializable {
             if (!field.isDerived()) {
                if (field.isCollection()) {
                     InternalCollection coll = (InternalCollection) object.getField(field);
-                    d.addField(field.getName(), createData(coll));
+                    d.addField(field.getId(), createData(coll));
                } else if (field.isObject()) {
                    NakedObject ref = object.getAssociation((OneToOneAssociation) field);
                    Object refOid = ref == null ? null : new Data(ref.getOid(), ref.getResolveState().name(), ref.getSpecification().getFullName());
-                   d.addField(field.getName(), refOid);
+                   d.addField(field.getId(), refOid);
                } else if (field.isValue()) {
                    NakedValue value = object.getValue((OneToOneAssociation) field);
-                   d.addField(field.getName(), value.asEncodedString());
+                   d.addField(field.getId(), value.asEncodedString());
                 }
             }
         }
@@ -153,7 +153,7 @@ public class Memento implements Transferable, Serializable {
 
                 for (int i = 0; i < fields.length; i++) {
                     NakedObjectField field = fields[i];
-                    Object fieldData = od.getEntry(field.getName());
+                    Object fieldData = od.getEntry(field.getId());
                     if (!field.isDerived()) {
                         if (field.isCollection()) {
                             updateOneToManyAssociation(object, (OneToManyAssociation) field,
