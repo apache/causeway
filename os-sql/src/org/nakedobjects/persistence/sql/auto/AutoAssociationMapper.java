@@ -37,7 +37,7 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
 
         parentColumn = "FK" + className;
 
-        String columnName = mapper.fieldMapper.getColumnName(field.getName());
+        String columnName = mapper.fieldMapper.getColumnName(field.getId());
         elementIdColumn = "PK" + columnName;
 
         elementClassColumn = columnName + "Class";

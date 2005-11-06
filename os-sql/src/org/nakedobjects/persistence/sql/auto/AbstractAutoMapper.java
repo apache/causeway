@@ -156,7 +156,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 	}
 
 	protected String fieldName(NakedObjectField  field) {
-		return fieldMapper.getColumnName(field.getName());
+		return fieldMapper.getColumnName(field.getId());
 	}
 
 	/*
@@ -216,11 +216,11 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 			} else if (allFields[i].isCollection()) {
 				oneToManyFields[collectionFieldNo] = allFields[i];
 				
-				String type = collectionMappings.getProperty(allFields[i].getName());
+				String type = collectionMappings.getProperty(allFields[i].getId());
 				if(type == null || type.equals("association-table")) {
 					collectionMappers[collectionFieldNo] = new AutoAssociationMapper(this, nakedClass, oneToManyFields[collectionFieldNo]);
 				} else if(type.equals("fk-table")) 	{
-					String property = parameterBase + allFields[i].getName() + ".element-type";
+					String property = parameterBase + allFields[i].getId() + ".element-type";
 					String elementType = configParameters.getString(property);
 					if(elementType == null) {
 						throw new SqlObjectStoreException("Expected property " + property);

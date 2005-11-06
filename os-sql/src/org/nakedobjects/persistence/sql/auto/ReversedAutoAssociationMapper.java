@@ -33,9 +33,9 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 		parentColumn = "FK" + className;
 	
 	
-		table = fieldMapper.getColumnName(field.getName());
+		table = fieldMapper.getColumnName(field.getId());
 		
-		String columnName = fieldMapper.getColumnName(field.getName());
+		String columnName = fieldMapper.getColumnName(field.getId());
 		elementIdColumn = "PK" + columnName;
 
 		if(nakedClass.getFullName().startsWith("org.nakedobjects.")) {
