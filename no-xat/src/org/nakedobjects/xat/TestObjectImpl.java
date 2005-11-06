@@ -16,7 +16,7 @@ import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.TextEntryParseException;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import java.util.Enumeration;
@@ -448,9 +448,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         }
         try {
             nakedValue.parseTextEntry(value);
-            Hint about = getForNakedObject().getHint(field, nakedValue);
-            boolean isAllowed = about.isValid().isAllowed();
-            if (isAllowed) {
+            if (getForNakedObject().isValid((OneToOneAssociation) field, nakedValue).isAllowed()) {
                 throw new NakedAssertionFailedError("Value was unexpectedly validated");
             }
         } catch (InvalidEntryException expected) {}
@@ -468,9 +466,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
     public void assertFieldInvisible(final String fieldName) {
         NakedObjectField field = fieldAccessorFor(fieldName);
-        // boolean canAccess =
-        // getForNaked().canAccess(ClientSession.getSession(), field);
-        boolean canAccess = getForNakedObject().getHint(field, null).canAccess().isAllowed();
+        boolean canAccess = field.isAccessible() && getForNakedObject().isVisible(field).isAllowed();
         assertFalse("Field '" + fieldName + "' is visible", canAccess);
     }
 
@@ -481,14 +477,14 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
     private void assertFieldModifiable(String fieldName, NakedObjectField field) {
         //boolean canUse = getForNaked().canUse(session, field);
-        boolean canUse = getForNakedObject().getHint(field, null).canUse().isAllowed();
+        boolean canUse = field.isEditable().isAllowed();
         assertTrue("Field '" + fieldName + "' in " + getForNaked() + " is unmodifiable", canUse);
     }
 
     public void assertFieldUnmodifiable(final String fieldName) {
         NakedObjectField field = fieldAccessorFor(fieldName);
         //boolean canUse = getForNaked().canUse(session, field);
-        boolean canUse = getForNakedObject().getHint(field, null).canUse().isAllowed();
+        boolean canUse = field.isEditable().isAllowed();
         assertFalse("Field '" + fieldName + "' is modifiable", canUse);
     }
 
@@ -498,7 +494,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     }
 
     private void assertFieldVisible(NakedObjectField field) {
-        boolean canAccess = getForNakedObject().getHint(field, null).canAccess().isAllowed();
+        boolean canAccess = field.isAccessible() && getForNakedObject().isVisible(field).isAllowed();
         assertTrue("Field '" + field.getName() + "' is invisible", canAccess);
     }
 
@@ -684,23 +680,28 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         }
 
         NakedObject nakedObject = (NakedObject) getForNaked();
-        Hint about;
+
+        boolean isAccessible = true;
+        isAccessible = association.isAccessible() && nakedObject.isVisible(association).isVetoed();
+        if (!isAccessible) {
+            throw new IllegalActionError("Cannot access the field " + field);
+        }
+        
+        Consent valid;
         if (association instanceof OneToOneAssociation) {
             assertEmpty(fieldName);
-            about = nakedObject.getHint(association, obj);
+            valid = nakedObject.isValid((OneToOneAssociation) association, obj);
+//            about = nakedObject.getHint(association, obj);
         } else if (association instanceof OneToManyAssociation) {
-            about = ((OneToManyAssociation) association).getHint(nakedObject, obj, true);
+            valid = nakedObject.canAdd((OneToManyAssociation) association, obj);
+//             about = ((OneToManyAssociation) association).getHint(nakedObject, obj, true);
         } else {
             throw new NakedObjectRuntimeException();
         }
 
-        if (about.canAccess().isVetoed()) {
-            throw new IllegalActionError("Cannot access the field " + field);
-        }
-
-        if (about.canUse().isVetoed()) {
+        if (!valid.isVetoed()) {
             throw new IllegalActionError("Cannot associate " + obj + " in the field " + field + " within " + nakedObject + ": "
-                    + about.canUse().getReason());
+                    + valid.getReason());
         }
 
         nakedObject.setAssociation(association, obj);
@@ -796,8 +797,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
             }
             value.parseTextEntry(textEntry);
 
-            Hint hint = object.getHint(field, value);
-            if (hint.isValid().isVetoed()) {
+            if (object.isValid((OneToOneAssociation) field, value).isVetoed()) {
                 throw new NakedAssertionFailedError("Value is not valid: " + textEntry);
             }
 

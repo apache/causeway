@@ -98,8 +98,7 @@ abstract class AbstractTestObject {
     }
 
     private void assertActionInvisible(String name, Action action, TestNaked[] parameters) {
-        Hint hint = getForNakedObject().getHint(action, nakedObjects(parameters));
-        if (hint.canAccess().isAllowed()) {
+        if (action.isAccessible() && getForNakedObject().isVisible(action).isAllowed()) {
             throw new NakedAssertionFailedError("Action '" + name + "' is visible");
         }
     }
@@ -121,8 +120,11 @@ abstract class AbstractTestObject {
     }
 
     private void assertActionUnusable(String name, Action action, TestNaked[] parameters) {
+        assertTrue("Action cannot be seen (by this user): " + action.getLabel(), !action.isAccessible());
+        assertTrue("Action cannot be seen (in current state): " + action.getLabel(), getForNakedObject().isVisible(action).isAllowed());
+        
         Naked[] parameterObjects = nakedObjects(parameters);
-        Consent canUse = getForNakedObject().getHint(action, parameterObjects).canUse();
+        Consent canUse = getForNakedObject().isValid(action, parameterObjects);
         boolean allowed = canUse.isAllowed();
         if (allowed) {
             throw new NakedAssertionFailedError("Action '" + name + "' is usable: " + canUse.getReason());
@@ -142,8 +144,11 @@ abstract class AbstractTestObject {
     }
 
     protected void assertActionUsable(String name, Action action, final TestNaked[] parameters) {
+        assertTrue("Action cannot be seen (by this user): " + action.getLabel(), !action.isAccessible());
+        assertTrue("Action cannot be seen (in current state): " + action.getLabel(), getForNakedObject().isVisible(action).isAllowed());
+        
         Naked[] paramaterObjects = nakedObjects(parameters);
-        Consent canUse = getForNakedObject().getHint(action, paramaterObjects).canUse();
+        Consent canUse =  getForNakedObject().isValid(action, paramaterObjects);
         boolean vetoed = canUse.isVetoed();
         if (vetoed) {
             throw new NakedAssertionFailedError("Action '" + name + "' is unusable: " + canUse.getReason());
@@ -163,9 +168,15 @@ abstract class AbstractTestObject {
     }
 
     protected void assertActionVisible(String name, Action action, TestNaked[] parameters) {
-        boolean allowed = getForNakedObject().getHint(action, nakedObjects(parameters)).canAccess()
-                .isAllowed();
-        assertTrue("action '" + name + "' is invisible", allowed);
+        assertTrue("action '" + name + "' is invisible (to user)", action.isAccessible());
+        
+        
+        
+        boolean allowed = getForNakedObject().isVisible(action).isAllowed();
+        
+//        boolean allowed = getForNakedObject().getHint(action, nakedObjects(parameters)).canAccess()
+//                .isAllowed();
+        assertTrue("action '" + name + "' is invisible (for state)", allowed);
     }
 
     protected void assertTrue(String message, boolean condition) {
