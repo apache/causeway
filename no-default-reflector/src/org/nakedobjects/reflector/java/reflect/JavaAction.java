@@ -90,6 +90,10 @@ public class JavaAction extends JavaMember implements ActionPeer {
         return null;
     }
 
+    public String getName() {
+        return null;
+    }
+    
     private Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
         if(parameters == null) {
             parameters = new Naked[0];

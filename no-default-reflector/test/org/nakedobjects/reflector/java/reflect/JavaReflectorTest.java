@@ -47,7 +47,7 @@ public class JavaReflectorTest extends TestCase {
          assertEquals(2, actions.length);
          
          Action member = actions[0];
-         assertEquals("Stop", member.getName());
+         assertEquals("Stop", member.getId());
      }
     
     public void testFieldSortOrder() throws NakedObjectSpecificationException {
@@ -56,9 +56,9 @@ public class JavaReflectorTest extends TestCase {
         NakedObjectField[] fields = reflector.getFields();
         
         assertEquals(3, fields.length);
-        assertEquals("One", fields[0].getName());
-        assertEquals("Two", fields[1].getName());
-        assertEquals("Three", fields[2].getName());
+        assertEquals("One", fields[0].getId());
+        assertEquals("Two", fields[1].getId());
+        assertEquals("Three", fields[2].getId());
         
     }
     
@@ -66,16 +66,16 @@ public class JavaReflectorTest extends TestCase {
         Action[] actions = reflector.getObjectActions();
         
         assertEquals(2, actions.length);
-        assertEquals("Stop", actions[0].getName());
-        assertEquals("Start", actions[1].getName());
+        assertEquals("Stop", actions[0].getId());
+        assertEquals("Start", actions[1].getId());
     }
     
     public void testClassActionSortOrder() throws NakedObjectSpecificationException {
         Action[] actions = reflector.getClassActions();
 
         assertEquals(2, actions.length);
-        assertEquals("Top", actions[0].getName());
-        assertEquals("Bottom", actions[1].getName());
+        assertEquals("Top", actions[0].getId());
+        assertEquals("Bottom", actions[1].getId());
     }
     
    public void testShortName() {

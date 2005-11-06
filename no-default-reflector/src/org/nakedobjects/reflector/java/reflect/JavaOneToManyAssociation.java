@@ -4,7 +4,6 @@ import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjects;
-import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
@@ -108,6 +107,10 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
 
     public Class[] getExtensions() {
         return new Class[0];
+    }
+    
+    public String getName() {
+        return null;
     }
     
     public void removeAllAssociations(NakedObject inObject) {
@@ -235,8 +238,8 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
           return edit;
     }
     
-    public Consent isEditable() {
-        return Allow.DEFAULT;
+    public Consent isEditable(NakedObject target) {
+        return getHint(null, target, null, true).canUse();
     }
 
     public Consent isVisible(NakedObject target) {

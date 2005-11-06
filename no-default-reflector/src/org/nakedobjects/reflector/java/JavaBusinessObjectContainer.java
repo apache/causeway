@@ -2,7 +2,7 @@ package org.nakedobjects.reflector.java;
 
 import org.nakedobjects.application.BusinessObjectContainer;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.ResolveState;
@@ -95,8 +95,8 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
         }
     }
 
-    private NakedObjectPersistenceManager objectManager() {
-        return NakedObjects.getPersistenceManager();
+    private NakedObjectPersistor objectManager() {
+        return NakedObjects.getObjectPersistor();
     }
 
     public void resolve(Object parent, Object field) {

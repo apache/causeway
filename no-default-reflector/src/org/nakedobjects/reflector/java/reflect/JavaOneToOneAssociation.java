@@ -8,7 +8,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.TextEntryParseException;
-import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
@@ -93,12 +92,17 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         return new Class[0];
     }
 
-    private Hint getHint(MemberIdentifier identifier, NakedObject object, Naked associate) {
+    public String getName() {
+        return null;
+    }
+    
+    private Hint getHint(NakedObject object, Naked associate) {
         Method aboutMethod = getAboutMethod();
 
         Class parameter = getMethod.getReturnType();
+        Object object2 = object.getObject();
         if (associate != null && associate.getObject() != null && !parameter.isAssignableFrom(associate.getObject().getClass())) {
-            SimpleFieldAbout about = new SimpleFieldAbout(NakedObjects.getCurrentSession(), object.getObject());
+            SimpleFieldAbout about = new SimpleFieldAbout(NakedObjects.getCurrentSession(), object2);
             about.unmodifiable("Invalid type: field must be set with a "
                     + NakedObjects.getSpecificationLoader().loadSpecification(parameter.getName()));
             return about;
@@ -113,7 +117,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         }
 
         try {
-            SimpleFieldAbout hint = new SimpleFieldAbout(NakedObjects.getCurrentSession(), object.getObject());
+            SimpleFieldAbout hint = new SimpleFieldAbout(NakedObjects.getCurrentSession(), object2);
             Object[] parameters;
             if (aboutMethod.getParameterTypes().length == 2) {
                 parameters = new Object[] { hint, associate == null ? null : associate.getObject() };
@@ -121,7 +125,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
                 // default about
                 parameters = new Object[] { hint };
             }
-            aboutMethod.invoke(object.getObject(), parameters);
+            aboutMethod.invoke(object2, parameters);
             if(hint.getDescription().equals("") && associate != null) {
                 hint.setDescription("Set field " + getIdentifier() + " to " + associate.getObject());
             }
@@ -218,7 +222,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
                 Object obj = getMethod.invoke(inObject.getObject(), new Object[0]);
                 BusinessValueHolder value = (BusinessValueHolder) obj;
                 value.parseUserEntry(text);
-                NakedObjects.getPersistenceManager().objectChanged(inObject);
+                NakedObjects.getObjectPersistor().objectChanged(inObject);
             } catch (InvocationTargetException e) {
                 invocationException("Exception executing " + getMethod, e);
             } catch (IllegalAccessException ignore) {
@@ -274,7 +278,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
 
         try {
             if (setMethod == null) {
-                NakedObjects.getPersistenceManager().objectChanged(inObject);
+                NakedObjects.getObjectPersistor().objectChanged(inObject);
             } else {
                 setMethod.invoke(inObject.getObject(), new Object[] { setValue });
             }
@@ -300,20 +304,20 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
     
 
     public Consent validAssociation(NakedObject inObject, NakedObject value) {
-        return getHint(null, inObject, value).canUse();
+        return getHint(inObject, value).canUse();
      }
     
     public Consent validValue(NakedObject inObject, NakedValue value) {
-        return getHint(null, inObject, value).canUse();
+        return getHint(inObject, value).canUse();
     }
     
 
-    public Consent isEditable() {
-        return Allow.DEFAULT;
+    public Consent isEditable(NakedObject target) {
+        return getHint(target, null).canUse();
     }
 
     public Consent isVisible(NakedObject target) {
-        return getHint(null, target, null).canAccess();
+        return getHint(target, null).canAccess();
     }
 
     public boolean isAccessible() {

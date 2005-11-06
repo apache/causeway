@@ -105,7 +105,7 @@ public class JavaSpecification implements NakedObjectSpecification {
         outer: for (int i = 0; i < availableActions.length; i++) {
             Action action = availableActions[i];
             if (action.getActionType().equals(type)) {
-                if (action.getName().equals(searchName)) {
+                if (action.getId().equals(searchName)) {
                     if (action.parameters().length == parameters.length) {
                         for (int j = 0; j < parameters.length; j++) {
                             if (!parameters[j].isOfType(action.parameters()[j])) {
@@ -192,7 +192,7 @@ public class JavaSpecification implements NakedObjectSpecification {
         // TODO put fields into hash
         String searchName = searchName(name);
         for (int i = 0; i < fields.length; i++) {
-            if (fields[i].getName().equals(searchName)) {
+            if (fields[i].getId().equals(searchName)) {
                 return fields[i];
             }
         }
@@ -248,7 +248,21 @@ public class JavaSpecification implements NakedObjectSpecification {
     }
 
     public NakedObjectField[] getVisibleFields(NakedObject object) {
-        return getFields();
+        NakedObjectField[] viewFields = new NakedObjectField[fields.length];
+        int v = 0;
+        for (int i = 0; i < fields.length; i++) {
+            boolean useField = fields[i].isAccessible() && object.isVisible(fields[i]).isAllowed();
+            if (useField) {
+                viewFields[v++] = fields[i];
+            }
+        }
+
+        NakedObjectField[] selectedFields = new NakedObjectField[v];
+        for (int i = 0; i < selectedFields.length; i++) {
+            selectedFields[i] = viewFields[i];
+        }
+        return selectedFields;
+
     }
 
     public boolean hasSubclasses() {

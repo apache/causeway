@@ -7,7 +7,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
-import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
@@ -98,6 +97,11 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
         } else {
             return new DefaultHint();
         }
+    }
+    
+    
+    public String getName() {
+        return null;
     }
 
     public NakedCollection getAssociations(NakedObject fromObject) {
@@ -222,8 +226,8 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
         return getHint(null, container, element, true).canUse();
     }
 
-    public Consent isEditable() {
-        return Allow.DEFAULT;
+    public Consent isEditable(NakedObject target) {
+        return getHint(null, target, null, true).canUse();
     }
 
     public Consent isVisible(NakedObject target) {
