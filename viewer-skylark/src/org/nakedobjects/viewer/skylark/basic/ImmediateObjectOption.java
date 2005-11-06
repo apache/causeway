@@ -5,7 +5,6 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
@@ -24,12 +23,10 @@ class ImmediateObjectOption extends MenuOption {
 
     public static ImmediateObjectOption createOption(Action action, NakedObject object) {
         Assert.assertTrue("Only suitable for 0 param methods", action.parameters().length == 0);
-
-        Hint about = object.getHint(action, null);
-        if (about.canAccess().isVetoed()) {
+        if (! action.isAccessible() || object.isVisible(action).isVetoed()) {
             return null;
         }
-        String labelName = object.getLabel(action);
+        String labelName = action.getLabel();
         ImmediateObjectOption option = new ImmediateObjectOption(labelName, object, action);
 
 	    return option;
@@ -45,15 +42,15 @@ class ImmediateObjectOption extends MenuOption {
     }
 
     public Consent disabled(View view) {
-        Hint about = object.getHint(action, null);
-        if (about.canUse().isAllowed()) {
-            String description = getName(view) + ": " + about.getDescription();
+        Consent valid = object.isValid(action, null);
+        if (valid.isAllowed()) {
+            String description = getName(view) + ": " + action.getDescription();
             if (action.hasReturn()) {
                 description += " returns a " + action.getReturnType().getSingularName();
             }
             return new Allow(description);
         } else {
-            return about.canUse();
+            return valid;
         }
     }
 

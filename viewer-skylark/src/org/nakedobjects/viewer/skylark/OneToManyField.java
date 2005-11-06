@@ -9,7 +9,6 @@ import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
@@ -41,8 +40,9 @@ public class OneToManyField extends CollectionContent implements FieldContent {
                     return new Veto("Object is already associated with another object: " + aggregated.parent());
                 }
             }
-            Hint about = getOneToManyAssociation().getHint(parent, object, true);
-            return about.canUse();
+            return getOneToManyAssociation().validToAdd(parent, object);
+//            Hint about = getOneToManyAssociation().getHint(parent, object, true);
+//            return about.canUse();
         } else {
             return Veto.DEFAULT;
         }
@@ -121,6 +121,10 @@ public class OneToManyField extends CollectionContent implements FieldContent {
         return getOneToManyAssociation().isDerived();
     }
     
+    public Consent isEditable() {
+        return getOneToManyAssociation().isEditable();
+    }
+    
     public boolean isTransient() {
         return false;
     }
@@ -151,11 +155,19 @@ public class OneToManyField extends CollectionContent implements FieldContent {
         ClassOption.menuOptions(getOneToManyAssociation().getSpecification(), options);
     }
     
-
     public Image getIconPicture(int iconHeight) {
         NakedObjectSpecification specification = getOneToManyAssociation().getSpecification();
         return ImageFactory.getInstance().loadObjectIcon(specification, "", iconHeight);
     }
+
+    public String getName() {
+        return getOneToManyAssociation().getName();
+    }
+    
+    public String getDescription() {
+        return getOneToManyAssociation().getName();
+    }
+
 }
 
 /*

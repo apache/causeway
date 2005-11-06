@@ -18,7 +18,7 @@ public class PasswordFieldExample extends TestViews {
     protected void views(Workspace workspace) {
         View parent = new ParentView();
 
-        Content content = new Value("password");
+        Content content = new DummyValue("password");
         ViewSpecification specification = new ExampleViewSpecification();
         ViewAxis axis = null;
 
@@ -36,7 +36,7 @@ public class PasswordFieldExample extends TestViews {
         textField.setSize(textField.getRequiredSize());
         workspace.addView(textField);
 
-        content = new Value("pa");
+        content = new DummyValue("pa");
         PasswordField view = new PasswordField(content, specification, axis, 20);
         view.setParent(parent);
     //    view.setMaxWidth(200);

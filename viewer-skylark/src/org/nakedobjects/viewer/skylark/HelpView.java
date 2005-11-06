@@ -18,12 +18,9 @@ public class HelpView extends AbstractView implements View, TextBlockTarget {
 
         if (forView != null) {
 	        Content content = forView.getContent();
-	        if(content.getHint() != null) {
-	            name = content.getHint().getName();
-	            description = content.getHint().getDescription();
-	        } else {
-	            name = content.title();
-	        }
+	        description = content.getDescription();
+            name = content.getName();
+	        name =  name == null ? content.title() : name;
         }
         
         String text = (name == null ? "" : (name  + "\n\n")) + (description == null ? "" : description);

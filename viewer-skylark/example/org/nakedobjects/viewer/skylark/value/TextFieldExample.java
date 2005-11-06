@@ -1,15 +1,10 @@
 package org.nakedobjects.viewer.skylark.value;
 
-import org.nakedobjects.object.Action;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectAssociation;
-import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
@@ -42,7 +37,7 @@ public class TextFieldExample extends TestViews {
     protected void views(Workspace workspace) {
         View parent = new ParentView();
 
-        Content content = new Value(SHORT_TEXT);
+        Content content = new DummyValue(SHORT_TEXT);
         ViewSpecification specification = new ExampleViewSpecification();
         ViewAxis axis = null;
 
@@ -60,7 +55,7 @@ public class TextFieldExample extends TestViews {
         textField.setSize(textField.getRequiredSize());
         workspace.addView(textField);
 
-        content = new Value(LONG_TEXT);
+        content = new DummyValue(LONG_TEXT);
         WrappedTextField view = new WrappedTextField(content, specification, axis, false, 20);
         view.setParent(parent);
         view.setNoLines(5);
@@ -81,7 +76,7 @@ public class TextFieldExample extends TestViews {
     }
 }
 
-class Value extends ValueContent {
+class DummyValue extends ValueContent {
     private String text;
     private NakedValue object = new NakedValue() {
 
@@ -92,22 +87,6 @@ class Value extends ValueContent {
         }
         
         public byte[] asEncodedString() {
-            return null;
-        }
-
-        public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
-
-        public void copyObject(Naked object) {}
-
-        public Naked execute(Action action, Naked[] parameters) {
-            return null;
-        }
-
-        public Hint getHint(Action action, Naked[] parameters) {
-            return null;
-        }
-
-        public Hint getHint(NakedObjectField field, Naked value) {
             return null;
         }
 
@@ -136,7 +115,7 @@ class Value extends ValueContent {
         }
 
         public void parseTextEntry(String text) throws InvalidEntryException {
-            Value.this.text = text;
+            DummyValue.this.text = text;
         }
 
         public void restoreFromEncodedString(byte[] data) {}
@@ -156,7 +135,7 @@ class Value extends ValueContent {
         }
     };
 
-    public Value(String text) {
+    public DummyValue(String text) {
         this.text = text;
     }
 
@@ -186,16 +165,8 @@ class Value extends ValueContent {
         return null;
     }
 
-    public Hint getValueHint(String entryText) {
-        return new DefaultHint();
-    }
-
     public boolean isTransient() {
         return false;
-    }
-
-    public void parseEntry(String entryText) throws TextEntryParseException, InvalidEntryException {
-        object.parseTextEntry(entryText);
     }
 
     public String title() {
@@ -210,6 +181,16 @@ class Value extends ValueContent {
     
 
     public void entryComplete() {}
+
+    public String getDescription() {
+        return null;
+    }
+
+    public String getName() {
+        return null;
+    }
+
+    public void parseTextEntry(String entryText) throws InvalidEntryException {}
 
 }
 /*

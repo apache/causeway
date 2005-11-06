@@ -54,7 +54,7 @@ public class SaveTransientObjectBorder extends ButtonBorder {
                 return Allow.DEFAULT;
             } else {
 		        NakedObject transientObject = (NakedObject) view.getContent().getNaked();
-                return transientObject.getHint(action, new Naked[0]).canUse();
+                return transientObject.isValid(action, new Naked[0]); 
             }
         }
         

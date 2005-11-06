@@ -36,9 +36,7 @@ public abstract class ObjectContent extends AbstractContent {
 
             Action action = dropAction(source, target);
             if (action != null) {
-                Hint about = target.getHint(action, new NakedObject[] { source });
-                return about.canUse();
-
+                return target.isValid(action, new NakedObject[] { source });
             } else {
                 if (target.getOid() != null && source.getOid() == null) {
                     return new Veto("Can't set field in persistent object with reference to non-persistent object");
@@ -48,7 +46,7 @@ public abstract class ObjectContent extends AbstractContent {
                     for (int i = 0; i < fields.length; i++) {
                         if (source.getSpecification().isOfType(fields[i].getSpecification())) {
                             if (target.getField(fields[i]) == null) {
-                                return new Allow("Set field " + target.getLabel(fields[i]));
+                                return new Allow("Set field " + fields[i].getLabel());
                             }
                         }
                     }
@@ -72,7 +70,7 @@ public abstract class ObjectContent extends AbstractContent {
         if (canDrop(sourceContent).isAllowed()) {
             Action action = dropAction(source, target);
 
-            if ((action != null) && target.getHint(action, new NakedObject[] { source }).canUse().isAllowed()) {
+            if ((action != null) && target.isValid(action, new NakedObject[] { source }).isAllowed()) {
                 return target.execute(action, new NakedObject[] { source });
 
             } else {

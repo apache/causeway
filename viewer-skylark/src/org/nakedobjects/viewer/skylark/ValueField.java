@@ -8,10 +8,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.OneToOneAssociation;
-import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.control.DefaultHint;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.DebugString;
 
@@ -25,6 +22,19 @@ public class ValueField extends ValueContent implements FieldContent {
         this.object = object;
     }
 
+    public Consent canDrop(Content sourceContent) {
+        return Veto.DEFAULT;
+    }
+
+    private void checkValidEntry(String entryText) {
+        NakedValue example = NakedObjects.getObjectLoader().createValueInstance(getSpecification());
+        example.parseTextEntry(entryText);
+        Consent valid = getParent().isValid((OneToOneAssociation) getField(), example);
+        if (valid.isVetoed()) {
+            throw new InvalidEntryException(valid.getReason());
+        }
+    }
+
     public void clear() {
         object.clear();
     }
@@ -32,6 +42,18 @@ public class ValueField extends ValueContent implements FieldContent {
     public void debugDetails(DebugString debug) {
         field.debugDetails(debug);
         debug.appendln(4, "object", object);
+    }
+
+    public Naked drop(Content sourceContent) {
+        return null;
+    }
+
+    public void entryComplete() {
+        getParent().setValue(getOneToOneAssociation(), object.getObject());
+    }
+
+    public String getDescription() {
+        return field.getDescription();
     }
 
     private NakedObjectField getField() {
@@ -46,12 +68,16 @@ public class ValueField extends ValueContent implements FieldContent {
         return field.getFieldReflector();
     }
 
-   public String getIconName() {
+    public String getIconName() {
         return object.getIconName();
     }
 
     public Naked getNaked() {
         return object;
+    }
+
+    public String getName() {
+        return field.getName();
     }
 
     public NakedValue getObject() {
@@ -70,31 +96,12 @@ public class ValueField extends ValueContent implements FieldContent {
         return getOneToOneAssociation().getSpecification();
     }
 
-    public Hint getValueHint(String entryText) {
-        NakedValue example = NakedObjects.getObjectLoader().createValueInstance(getSpecification());
-
-        if (example != null) {
-	        try {
-	            example.parseTextEntry(entryText);
-	        } catch (final InvalidEntryException e) {
-	            return new DefaultHint() {
-	                private static final long serialVersionUID = 1L;
-
-                    public Consent isValid() {
-	                    return new Veto(e.getMessage());
-	                }
-	            };
-	        }
-	        // TODO need the Value object to parse the entry string
-	        return getParent().getHint((NakedObjectField) getField(), example);
-        } else {
-           // throw new NakedObjectRuntimeException("Can't create an instance of " + getSpecification());
-            return new DefaultHint();
-        }
-    }
-
     public boolean isDerived() {
         return getOneToOneAssociation().isDerived();
+    }
+
+    public Consent isEditable() {
+        return getOneToOneAssociation().isEditable();
     }
     
     public boolean isEmpty() {
@@ -104,16 +111,17 @@ public class ValueField extends ValueContent implements FieldContent {
     public boolean isMandatory() {
         return getOneToOneAssociation().isMandatory();
     }
-    
-    public void parseEntry(String entryText) throws TextEntryParseException, InvalidEntryException {
+
+    public void parseTextEntry(String entryText) {
+        checkValidEntry(entryText);
+        saveEntry(entryText);
+    }
+
+    private void saveEntry(String entryText) {
         if (object == null) {
             object = NakedObjects.getObjectLoader().createValueInstance(getSpecification());
         }
         object.parseTextEntry(entryText);
-    }
-
-    public void entryComplete() {
-        getParent().setValue(getOneToOneAssociation(), object.getObject());
     }
 
     public String title() {
@@ -123,40 +131,27 @@ public class ValueField extends ValueContent implements FieldContent {
     public String toString() {
         return (object == null ? "null" : object.titleString()) + "/" + getField();
     }
-    
+
     public String windowTitle() {
         return title();
-    }
-
-    public Naked drop(Content sourceContent) {
-        return null;
-    }
-
-    public Consent canDrop(Content sourceContent) {
-        return Veto.DEFAULT;
     }
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */

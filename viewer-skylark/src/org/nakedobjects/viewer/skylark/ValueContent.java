@@ -1,9 +1,6 @@
 package org.nakedobjects.viewer.skylark;
 
-import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.object.TextEntryParseException;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.basic.AbstractContent;
 
@@ -13,19 +10,12 @@ public abstract class ValueContent extends AbstractContent {
     public abstract void clear();
 
     public abstract void entryComplete();
-    
-    public Hint getHint() {
-        // TODO need to check whether a value can be edited
-        return getValueHint("");
-    }
 
     public Image getIconPicture(int iconHeight) {
         throw new NotImplementedException();
     }
 
     public abstract NakedValue getObject();
-
-    public abstract Hint getValueHint(String entryText);
 
     public abstract boolean isEmpty();
 
@@ -41,15 +31,8 @@ public abstract class ValueContent extends AbstractContent {
         return true;
     }
 
-    public abstract void parseEntry(String entryText) throws TextEntryParseException, InvalidEntryException;
+    public abstract void parseTextEntry(String entryText);
 
-    public void parseTextEntry(String entryText) throws InvalidEntryException {
-        Hint about = getValueHint(entryText);
-        if (about.isValid().isVetoed()) {
-            throw new InvalidEntryException(about.isValid().getReason());
-        }
-        parseEntry(entryText);
-    }
 }
 
 /*

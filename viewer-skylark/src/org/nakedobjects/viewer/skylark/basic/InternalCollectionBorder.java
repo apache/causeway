@@ -5,6 +5,7 @@ import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.OneToManyAssociation;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.CollectionContent;
@@ -70,9 +71,8 @@ public class InternalCollectionBorder extends AbstractBorder {
         OneToManyAssociation field = internalCollectionContent.getOneToManyAssociation();
         NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
         
-        Hint about = target.getHint(field, (NakedObject) result);
-        if(about.canUse().isAllowed()) {
-//        if(field.canAssociate(target, (NakedObject) result)) {
+        Consent valid = target.canAdd(field, (NakedObject) result);
+        if(valid.isAllowed()) {
         	target.setAssociation(field, (NakedObject) result);
         }
         super.objectActionResult(result, at);

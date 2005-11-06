@@ -7,7 +7,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.viewer.skylark.ParameterContent;
 
 
@@ -97,12 +96,15 @@ public class ActionHelper {
     }
 
     public Consent disabled() {
-        Hint about = target.getHint(action, parameters);
-        return about.canUse();
+        return target.isValid(action, parameters);
     }
 
     public String getName() {
-        return target.getLabel(action);
+        return action.getLabel();
+    }
+
+    public String getDescription() {
+        return action.getDescription();
     }
 
     public Naked getParameter(int index) {

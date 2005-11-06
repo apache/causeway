@@ -134,6 +134,14 @@ class ObjectParameter extends ObjectContent implements ParameterContent {
     public NakedObjectSpecification getSpecification() {
         return specification;
     }
+
+    public String getDescription() {
+        return null;
+    }
+
+    public String getName() {
+        return null;
+    }
 }
 
 /*

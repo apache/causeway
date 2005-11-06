@@ -93,6 +93,14 @@ public class ExampleContent implements Content {
     public String windowTitle() {
         return windowTitle;
     }
+    
+    public String getDescription() {
+        return "";
+    }
+    
+    public String getName() {
+        return "";
+    }
 }
 
 /*

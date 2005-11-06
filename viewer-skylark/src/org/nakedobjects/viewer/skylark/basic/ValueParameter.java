@@ -54,10 +54,6 @@ class ValueParameter extends ValueContent implements ParameterContent {
         return object;
     }
 
-    public Hint getValueHint(String entryText) {
-        return new DefaultHint();
-    }
-
     public boolean isEmpty() {
         return object.isEmpty();
     }
@@ -76,10 +72,6 @@ class ValueParameter extends ValueContent implements ParameterContent {
 
     public boolean isValue() {
         return true;
-    }
-
-    public void parseEntry(String entryText) throws InvalidEntryException {
-        object.parseTextEntry(entryText);
     }
 
     public String title() {
@@ -106,6 +98,18 @@ class ValueParameter extends ValueContent implements ParameterContent {
 
     public Consent canDrop(Content sourceContent) {
         return Veto.DEFAULT;
+    }
+    
+    public void parseTextEntry(String entryText) throws InvalidEntryException {
+        object.parseTextEntry(entryText);
+    }
+
+    public String getDescription() {
+        return null;
+    }
+
+    public String getName() {
+        return null;
     }
 }
 

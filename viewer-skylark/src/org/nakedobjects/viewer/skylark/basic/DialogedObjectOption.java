@@ -1,11 +1,9 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Action;
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
@@ -22,12 +20,11 @@ class DialogedObjectOption extends MenuOption {
     public static DialogedObjectOption createOption(Action action, NakedObject object) {
         int paramCount = action.getParameterCount();
         Assert.assertTrue("Only for actions taking one or more params", paramCount > 0);
-    	Hint about = object.getHint(action, action.parameterStubs());
-    	if(about.canAccess().isVetoed()) {
+    	if(! action.isAccessible() || object.isVisible(action).isVetoed()) {
     		return null;
     	}
 
-    	String label =  object.getLabel(action) + "...";
+    	String label =  action.getLabel() + "...";
     	DialogedObjectOption option = new DialogedObjectOption(label, action, object);
     	return option;
     }
@@ -42,13 +39,9 @@ class DialogedObjectOption extends MenuOption {
 	}
 
     public Consent disabled(View view) {
-        Naked[] parameterValues;
-        parameterValues = action.parameterStubs();        
-        
-		Hint about = object.getHint(action, parameterValues);
         // ignore the details from the About about useablility this will be
         // checked in the dialog
-        String description = getName(view) + ": " + about.getDescription();
+        String description = getName(view) + ": " + action.getDescription();
         if (action.hasReturn()) {
             description += " returns a " + action.getReturnType().getSingularName();
         }

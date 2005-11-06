@@ -29,8 +29,7 @@ public class OneToOneField extends ObjectContent implements FieldContent {
         NakedObject parentObject = getParent();
         OneToOneAssociation association = getOneToOneAssociation();
         NakedObject associatedObject = getObject();
-        Hint about = parentObject.getHint(association, associatedObject);
-        Consent edit = about.canUse();
+        Consent edit = parentObject.isValid(association, associatedObject);
         if (edit.isAllowed()) {
             String status = "Clear the association to this object from '" + parentObject.titleString() + "'";
             return new Allow(status);
@@ -60,7 +59,7 @@ public class OneToOneField extends ObjectContent implements FieldContent {
                 }
             }
 
-            Consent perm = getParent().getHint(getOneToOneAssociation(), object).canUse();
+            Consent perm = getParent().isValid(getOneToOneAssociation(), object);
             return perm;
         }
 
@@ -87,9 +86,9 @@ public class OneToOneField extends ObjectContent implements FieldContent {
     public NakedObjectField getFieldReflector() {
         return field.getFieldReflector();
     }
-
-    public Hint getHint() {
-        return getParent().getHint(getField(), null);
+    
+    public Consent isEditable() {
+        return getField().isEditable();
     }
 
     /*public String getIconName() {
@@ -174,6 +173,15 @@ public class OneToOneField extends ObjectContent implements FieldContent {
 
     public String windowTitle() {
         return title();
+    }
+    
+    
+    public String getName() {
+        return getOneToOneAssociation().getLabel();
+    }
+
+    public String getDescription() {
+        return getOneToOneAssociation().getDescription();
     }
 }
 

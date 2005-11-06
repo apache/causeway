@@ -4,7 +4,6 @@ import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.utility.DebugString;
 
 
@@ -21,8 +20,6 @@ public interface Content {
      * Implements the response to the dropping of the specified content onto this content.
      */
     Naked drop(Content sourceContent);
-
-    Hint getHint();
 
     /** 
      * The name of the icon to use to respresent the object represented by this content.
@@ -84,6 +81,12 @@ public interface Content {
     String title();
 
     String windowTitle();
+    
+
+    
+    String getDescription();
+
+    String getName();        
 }
 
 /*

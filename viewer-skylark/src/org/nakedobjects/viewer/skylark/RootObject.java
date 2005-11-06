@@ -36,6 +36,10 @@ public class RootObject extends ObjectContent {
         return object;
     }
 
+    public String getDescription() {
+        return "";
+    }
+
     public String getName() {
         return "";
     }

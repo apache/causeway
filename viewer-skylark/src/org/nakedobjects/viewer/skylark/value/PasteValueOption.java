@@ -39,7 +39,7 @@ public class PasteValueOption extends AbstractValueOption {
         String pasteValue = getClipboard();
         ValueContent objectContent = ((ValueContent) view.getContent());
         try {
-            objectContent.parseEntry(pasteValue);
+            objectContent.parseTextEntry(pasteValue);
 	        updateParent(view);
         } catch (TextEntryParseException e) {
             LOG.error("invalid clipboard operation " + e);

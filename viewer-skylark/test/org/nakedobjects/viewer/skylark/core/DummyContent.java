@@ -96,6 +96,14 @@ public class DummyContent implements Content {
     public String windowTitle() {
         return windowTitle;
     }
+
+    public String getDescription() {
+        return null;
+    }
+
+    public String getName() {
+        return null;
+    }
 }
 
 /*

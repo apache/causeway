@@ -116,6 +116,14 @@ public class ActionContent extends ObjectContent {
     public String windowTitle() {
         return getActionName();
     }
+    
+    public String getName() {
+        return invocation.getName();
+    }
+    
+    public String getDescription() {
+        return invocation.getDescription();
+    }
 }
 
 /*

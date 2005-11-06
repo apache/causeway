@@ -7,7 +7,6 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.viewer.skylark.basic.RemoveOneToManyAssociationOption;
@@ -30,8 +29,7 @@ public class OneToManyFieldElement extends ObjectContent implements FieldContent
         NakedObject parentObject = getParent();
         OneToManyAssociation association = getOneToManyAssociation();
         NakedObject associatedObject = getObject();
-        Hint about = association.getHint(parentObject, associatedObject, false);
-        Consent edit = about.canUse();
+        Consent edit = association.validToRemove(parentObject, associatedObject);
         if (edit.isAllowed()) {
             String status = "Clear the association to this object from '" + parentObject.titleString() + "'";
             return new Allow(status);
@@ -92,6 +90,10 @@ public class OneToManyFieldElement extends ObjectContent implements FieldContent
         return true;
     }
 
+    public Consent isEditable() {
+        return getOneToManyAssociation().isEditable();
+    }
+    
     public boolean isTransient() {
         return false;
     }
@@ -123,6 +125,14 @@ public class OneToManyFieldElement extends ObjectContent implements FieldContent
     
     public String windowTitle() {
         return field.getName();
+    }
+    
+    public String getName() {
+        return getOneToManyAssociation().getLabel();
+    }
+
+    public String getDescription() {
+        return getOneToManyAssociation().getDescription();
     }
 }
 

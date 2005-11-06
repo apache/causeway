@@ -22,18 +22,22 @@ final class ObjectField {
         debug.appendln(4, "parent", parent);
     }
 
-    public NakedObjectField getFieldReflector() {
+    public String getDescription() {
+        return field.getDescription();
+    }
+
+     public NakedObjectField getFieldReflector() {
         return field;
     }
 
-     public final String getName() {
-        return parent.getLabel(field);
+    public final String getName() {
+        return field.getLabel();
     }
 
     public NakedObject getParent() {
         return parent;
     }
-
+    
     public NakedObjectSpecification getSpecification() {
         return field.getSpecification();
     }

@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.NakedObjectField;
+import org.nakedobjects.object.control.Consent;
 
 public interface FieldContent extends Content {
 
@@ -9,6 +10,10 @@ public interface FieldContent extends Content {
 	NakedObjectField getFieldReflector();
 	
 	boolean isMandatory();
+
+    Consent isEditable();
+    
+
 }
 
 

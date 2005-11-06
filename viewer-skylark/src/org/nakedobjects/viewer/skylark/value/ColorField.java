@@ -8,6 +8,7 @@ import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.ValueField;
@@ -67,7 +68,7 @@ public class ColorField extends AbstractField {
     }
 
     public void firstClick(Click click) {
-        if (getContent().getHint().canUse().isAllowed()) {
+        if (((OneToOneField) getContent()).isEditable().isAllowed()) {
             View overlay = new ColorFieldOverlay(this);
             Location location = click.getLocation();
             // TODO offset by constant amount

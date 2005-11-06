@@ -63,8 +63,7 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
             public Consent disabled(View view) {
                 NakedObject target = ((ObjectContent) view.getContent()).getObject();
                 Action action = target.getSpecification().getObjectAction(Action.USER, "Find");
-                Hint about = target.getHint(action, null);
-                return about.canUse();
+                return target.isValid(action, null);
             }
             
             public void execute(Workspace workspace, View view, Location at) {

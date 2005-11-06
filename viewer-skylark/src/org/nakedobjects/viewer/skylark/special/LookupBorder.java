@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.OneToOneField;
@@ -24,8 +23,7 @@ public class LookupBorder extends OpenOptionFieldBorder {
         Content content = getContent();
         if(content instanceof OneToOneField) {
             OneToOneField oneToOneField = ((OneToOneField) content);
-            Hint hint = oneToOneField.getHint();
-            return hint.canUse().isAllowed();
+            return oneToOneField.isEditable().isAllowed();
         } else if(content instanceof ParameterContent) {
             return true;
         } else {

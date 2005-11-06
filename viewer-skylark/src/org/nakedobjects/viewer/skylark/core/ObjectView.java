@@ -44,11 +44,7 @@ public abstract class ObjectView extends AbstractView {
 
     public void dragIn(ContentDrag drag) {
         Consent perm = getContent().canDrop(drag.getSourceContent());
-        Hint hint = getContent().getHint();
-        String description = "";
-        if(hint != null) {
-            description = hint.getDescription();
-        }
+        String description = description = getContent().getDescription();
          if (perm.isAllowed()) {
             getViewManager().setStatus(perm.getReason() + " " + description);
             getState().setCanDrop();

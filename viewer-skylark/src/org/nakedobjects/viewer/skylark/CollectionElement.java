@@ -50,6 +50,10 @@ public class CollectionElement extends ObjectContent {
         return "";
     }
 
+    public String getDescription() {
+        return "";
+    }
+    
     public NakedObject getObject() {
         return object;
     }

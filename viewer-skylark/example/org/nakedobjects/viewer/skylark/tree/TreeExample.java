@@ -1,12 +1,12 @@
 package org.nakedobjects.viewer.skylark.tree;
 
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.OneToOneAssociation;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOneAssociationImpl;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.viewer.skylark.Content;
@@ -57,9 +57,9 @@ public class TreeExample extends TestViews {
 
         OneToOnePeer peer = new OneToOnePeer() {
 
-            public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
+            public void clearAssociation(NakedObject inObject, NakedObject associate) {}
 
-            public Naked getAssociation(MemberIdentifier identifier, NakedObject inObject) {
+            public Naked getAssociation(NakedObject inObject) {
                 return null;
             }
 
@@ -67,25 +67,17 @@ public class TreeExample extends TestViews {
                 return null;
             }
 
-            public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked value) {
+            public MemberIdentifier getIdentifier() {
                 return null;
-            }
-
-            public String getName() {
-                return "field";
             }
 
             public NakedObjectSpecification getType() {
                 return spec;
             }
 
-            public boolean hasHint() {
-                return false;
-            }
+            public void initAssociation(NakedObject inObject, NakedObject associate) {}
 
-            public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
-
-            public void initValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {}
+            public void initValue(NakedObject inObject, Object associate) {}
 
             public boolean isDerived() {
                 return false;
@@ -95,19 +87,43 @@ public class TreeExample extends TestViews {
                 return false;
             }
             
-            public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
+            public boolean isEmpty(NakedObject inObject) {
                 return false;
             }
 
-            public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
+            public void setAssociation(NakedObject inObject, NakedObject associate) {}
 
-            public void setValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {}
+            public void setValue(NakedObject inObject, Object associate) {}
          
             public Class[] getExtensions() {
                 return new Class[0];
             }
 
             public boolean isObject() {
+                return false;
+            }
+
+            public Consent validValue(NakedObject inObject, NakedValue value) {
+                return null;
+            }
+
+            public Consent validAssociation(NakedObject inObject, NakedObject value) {
+                return null;
+            }
+
+            public Consent isEditable() {
+                return null;
+            }
+
+            public String getDescription() {
+                return null;
+            }
+
+            public Consent isVisible(NakedObject target) {
+                return null;
+            }
+
+            public boolean isAccessible() {
                 return false;
             }
         };

@@ -7,9 +7,11 @@ import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.FieldContent;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Skylark;
@@ -36,7 +38,8 @@ public abstract class AbstractField extends AbstractView {
     }
 
     public boolean canChangeValue() {
-        return ! getContent().isDerived() && getContent().getHint().canUse().isAllowed();
+        FieldContent cont = (FieldContent) getContent();
+        return ! cont.isDerived() && cont.isEditable().isAllowed();
     }
     
     /**

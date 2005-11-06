@@ -48,6 +48,10 @@ public class RootCollection extends CollectionContent {
         return true;
     }
 
+    public String getDescription() {
+        return "";
+    }
+
     public String getIconName() {
         return null;
     }

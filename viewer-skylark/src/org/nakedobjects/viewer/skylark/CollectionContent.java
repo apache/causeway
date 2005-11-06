@@ -4,8 +4,6 @@ import org.nakedobjects.object.Action;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
-import org.nakedobjects.object.control.DefaultHint;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.utility.UnexpectedCallException;
 import org.nakedobjects.viewer.skylark.basic.AbstractContent;
 
@@ -17,10 +15,6 @@ public abstract class CollectionContent extends AbstractContent implements Conte
     public abstract Enumeration allElements();
 
     public abstract NakedCollection getCollection();
-
-    public Hint getHint() {
-        return new DefaultHint();
-    }
 
     public void menuOptions(MenuOptionSet options) {
         Naked object = getNaked();
