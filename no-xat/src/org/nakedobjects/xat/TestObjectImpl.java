@@ -477,14 +477,14 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
     private void assertFieldModifiable(String fieldName, NakedObjectField field) {
         //boolean canUse = getForNaked().canUse(session, field);
-        boolean canUse = field.isEditable().isAllowed();
+        boolean canUse = field.isEditable(getForNakedObject()).isAllowed();
         assertTrue("Field '" + fieldName + "' in " + getForNaked() + " is unmodifiable", canUse);
     }
 
     public void assertFieldUnmodifiable(final String fieldName) {
         NakedObjectField field = fieldAccessorFor(fieldName);
         //boolean canUse = getForNaked().canUse(session, field);
-        boolean canUse = field.isEditable().isAllowed();
+        boolean canUse = field.isEditable(getForNakedObject()).isAllowed();
         assertFalse("Field '" + fieldName + "' is modifiable", canUse);
     }
 
@@ -495,7 +495,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
     private void assertFieldVisible(NakedObjectField field) {
         boolean canAccess = field.isAccessible() && getForNakedObject().isVisible(field).isAllowed();
-        assertTrue("Field '" + field.getName() + "' is invisible", canAccess);
+        assertTrue("Field '" + field.getId() + "' is invisible", canAccess);
     }
 
     public void assertFirstElementInField(String fieldName, String expected) {
@@ -682,7 +682,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         NakedObject nakedObject = (NakedObject) getForNaked();
 
         boolean isAccessible = true;
-        isAccessible = association.isAccessible() && nakedObject.isVisible(association).isVetoed();
+        isAccessible = association.isAccessible() && nakedObject.isVisible(association).isAllowed();
         if (!isAccessible) {
             throw new IllegalActionError("Cannot access the field " + field);
         }
@@ -699,7 +699,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
             throw new NakedObjectRuntimeException();
         }
 
-        if (!valid.isVetoed()) {
+        if (valid.isVetoed()) {
             throw new IllegalActionError("Cannot associate " + obj + " in the field " + field + " within " + nakedObject + ": "
                     + valid.getReason());
         }
@@ -807,7 +807,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         } catch (InvalidEntryException e) {
             throw new IllegalActionError("");
         }
-        NakedObjects.getPersistenceManager().saveChanges();
+        NakedObjects.getObjectPersistor().saveChanges();
     }
 
     protected NakedObjectField fieldAccessorFor(final String fieldName) {
@@ -920,7 +920,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
                                 }
                             }
                         }
-                        fields.put(a[i].getName(), associatedView);
+                        fields.put(a[i].getId(), associatedView);
                     }
                 }
             }
@@ -942,7 +942,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         if(field instanceof NakedObject) {
             NakedObject nakedObject = (NakedObject) field;
             if(nakedObject.getResolveState().isResolvable(ResolveState.RESOLVING)) {
-                NakedObjects.getPersistenceManager().resolveImmediately(nakedObject);
+                NakedObjects.getObjectPersistor().resolveImmediately(nakedObject);
             }
         }
         fieldObject.setForNaked(field);
@@ -990,7 +990,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         }
 
         if(selectedObject.getResolveState().isResolvable(ResolveState.RESOLVING)) {
-            NakedObjects.getPersistenceManager().resolveImmediately(selectedObject);
+            NakedObjects.getObjectPersistor().resolveImmediately(selectedObject);
         }
         
         return factory.createTestObject(selectedObject);

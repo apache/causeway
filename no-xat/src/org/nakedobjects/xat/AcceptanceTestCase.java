@@ -68,7 +68,7 @@ public abstract class AcceptanceTestCase extends TestCase {
 
         NakedObject object = (NakedObject) view.getForNaked();
         if (object.getResolveState().isPersistent()) {
-            NakedObjects.getPersistenceManager().resolveImmediately(object);
+            NakedObjects.getObjectPersistor().resolveImmediately(object);
         }
 
         if (view == null) {
@@ -156,7 +156,7 @@ public abstract class AcceptanceTestCase extends TestCase {
             throw e;
         }
 
-        NakedObjects.getPersistenceManager().reset();
+        NakedObjects.getObjectPersistor().reset();
     }
 
     protected abstract FixtureBuilder createFixtureBuilder();

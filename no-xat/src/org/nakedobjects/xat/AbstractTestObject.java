@@ -144,7 +144,7 @@ abstract class AbstractTestObject {
     }
 
     protected void assertActionUsable(String name, Action action, final TestNaked[] parameters) {
-        assertTrue("Action cannot be seen (by this user): " + action.getLabel(), !action.isAccessible());
+        assertTrue("Action cannot be seen (by this user): " + action.getLabel(), action.isAccessible());
         assertTrue("Action cannot be seen (in current state): " + action.getLabel(), getForNakedObject().isVisible(action).isAllowed());
         
         Naked[] paramaterObjects = nakedObjects(parameters);
