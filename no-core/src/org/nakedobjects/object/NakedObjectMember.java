@@ -1,15 +1,19 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.object.control.Consent;
+
 
 public interface NakedObjectMember {
 
+    /**
+     * Returns a description of how the member is used - this is the essentially the help text.
+     */
+    String getDescription();
+
     Object getExtension(Class cls);
 
-    MemberIdentifier getIdentifier();
-
     /**
-     * Return the default label for this member. This is based on the name of
-     * this member.
+     * Return the default label for this member. This is based on the name of this member.
      * 
      * @see #getName()
      */
@@ -21,10 +25,18 @@ public interface NakedObjectMember {
     String getName();
 
     /**
-     * Returns true if an about method is defined for this Member.
+     * Determines if the user has acces to this member, and hence whether it is visible
+     * 
+     * @see #isVisible(NakedObject)
      */
-    boolean hasHint();
+    boolean isAccessible();
 
+    /**
+     * Determines if this member is visible according to the current state of the object.
+     * 
+     * @see #isAccessible()
+     */
+    Consent isVisible(NakedObject target);
 }
 
 /*

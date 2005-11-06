@@ -1,6 +1,6 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Consent;
 
 
 public interface OneToOneAssociation extends NakedObjectAssociation {
@@ -13,25 +13,24 @@ public interface OneToOneAssociation extends NakedObjectAssociation {
 
     Class[] getExtensions();
 
-    boolean hasHint();
-
     void initAssociation(NakedObject inObject, NakedObject associate);
 
-    boolean isDerived();
+    void initValue(NakedObject inObject, Object associate);
 
-    boolean isMandatory();
+    boolean isDerived();
 
     boolean isEmpty(NakedObject inObject);
 
     boolean isObject();
 
     boolean isValue();
-    
-    Hint getHint(NakedObject object, Naked value);
-    
+
     void setValue(NakedObject inObject, Object value);
-    
-    void initValue(NakedObject inObject, Object associate) ;
+
+    Consent validAssociation(NakedObject inObject, NakedObject value);
+
+    Consent validValue(NakedObject inObject, NakedValue value);
+
 }
 
 /*

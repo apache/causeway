@@ -1,8 +1,7 @@
 package org.nakedobjects.object.security;
 
-import org.nakedobjects.object.MemberIdentifier;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.Session;
 import org.nakedobjects.object.reflect.AbstractOneToManyPeer;
 import org.nakedobjects.object.reflect.OneToManyPeer;
 
@@ -14,13 +13,10 @@ public class OneToManyAuthorisation extends AbstractOneToManyPeer {
         this.authorisationManager = authorisationManager;
     }
     
-    public Hint getHint(MemberIdentifier identifier, NakedObject inObject, NakedObject associate, boolean add) {
-        Hint hint = super.getHint(identifier, inObject, associate, add);
-        return AuthorisationHint.merge(identifier, hint, authorisationManager);
-    }
-
-    public boolean hasHint() {
-        return true;
+    public boolean isAccessible() {
+        Session session = NakedObjects.getCurrentSession();
+        boolean isVisible = authorisationManager.isVisible(session, getIdentifier());
+        return isVisible;
     }
 }
 

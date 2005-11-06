@@ -6,6 +6,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectAssociation;
 import org.nakedobjects.object.NakedObjectField;
+import org.nakedobjects.object.NakedObjectMember;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedValue;
@@ -13,8 +14,7 @@ import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.ResolveState;
-import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.utility.NakedObjectRuntimeException;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.utility.ToString;
 
 import org.apache.log4j.Logger;
@@ -28,19 +28,19 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
         this.pojo = pojo;
      }
 
-    public void clearAssociation(NakedObjectAssociation specification, NakedObject associate) {
-        LOG.debug("clearAssociation " + specification.getName() + "/" + associate + " in " + this);
-        specification.clearAssociation(this, associate);
+    public void clearAssociation(NakedObjectAssociation field, NakedObject associate) {
+        LOG.debug("clearAssociation " + field.getName() + "/" + associate + " in " + this);
+        field.clearAssociation(this, associate);
     }
 
-    public void clearCollection(OneToManyAssociation association) {
-        LOG.debug("clearCollection " + association.getName() + " in " + this);
-        association.clearCollection(this);
+    public void clearCollection(OneToManyAssociation field) {
+        LOG.debug("clearCollection " + field.getName() + " in " + this);
+        field.clearCollection(this);
     }
 
-    public void clearValue(OneToOneAssociation association) {
-        LOG.debug("clearValue " + association.getName() + " in " + this);
-        association.clearValue(this);
+    public void clearValue(OneToOneAssociation field) {
+        LOG.debug("clearValue " + field.getName() + " in " + this);
+        field.clearValue(this);
     }
 
     /**
@@ -91,30 +91,31 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
     public NakedObjectField[] getFields() {
         return getSpecification().getFields();
     }
-
-    public Hint getHint(Action action, Naked[] parameterValues) {
-        return action.getHint(this, parameterValues);
+    
+    public Consent isValid(OneToOneAssociation field, NakedValue value) {
+        return field.validValue(this, value);
     }
 
-    public Hint getHint(NakedObjectField field, Naked value) {
-        if (field instanceof OneToOneAssociation) {
-            return ((OneToOneAssociation) field).getHint(this, value);
-        } else if (field instanceof OneToManyAssociation) {
-            return ((OneToManyAssociation) field).getHint(this);
-        } else {
-            throw new NakedObjectRuntimeException();
-        }
+    public Consent isValid(OneToOneAssociation field, NakedObject nakedObject) {
+        return field.validAssociation(this, nakedObject);
     }
-
-
-    public String getLabel(Action action) {
-        return action.getLabel(this);
+    
+    public Consent isValid(Action action, Naked[] parameters) {
+        return action.validParameters(this, parameters);
     }
-
-    public String getLabel(NakedObjectField field) {
-        return field.getLabel(this);
+    
+    public Consent isVisible(Action action) {
+        return action.isVisible(this);
     }
-
+    
+    public Consent isVisible(NakedObjectField field) {
+        return field.isVisible(this);
+    }
+    
+    public String getDescription(NakedObjectMember member) {
+        return member.getDescription();
+    }
+    
     public Object getObject() {
         return pojo;
     }
@@ -201,6 +202,10 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
     public void recreatedAs(Oid oid) {
         changeState(ResolveState.GHOST);
         setOid(oid);
+    }
+
+    public Consent canAdd(OneToManyAssociation field, NakedObject element) {
+        return field.validToAdd(this, element);
     }
 
     

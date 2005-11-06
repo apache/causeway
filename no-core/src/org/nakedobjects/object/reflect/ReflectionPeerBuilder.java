@@ -25,7 +25,7 @@ public class ReflectionPeerBuilder {
         for (int i = 0; i < factories.length; i++) {
             peer = factories[i].createAction(peer);
         }
-        return new ActionImpl(className, peer.getName(), peer);
+        return new ActionImpl(className, peer.getIdentifier().getName(), peer);
     }
 
     public NakedObjectField createField(String className, OneToManyPeer fieldPeer) {
@@ -33,7 +33,7 @@ public class ReflectionPeerBuilder {
         for (int i = 0; i < factories.length; i++) {
             peer = factories[i].createField(peer);
         }
-        return new OneToManyAssociationImpl(className, peer.getName(), peer.getType(), peer);
+        return new OneToManyAssociationImpl(className, peer.getIdentifier().getName(), peer.getType(), peer);
     }
 
     public NakedObjectField createField(String className, OneToOnePeer fieldPeer) {
@@ -41,7 +41,7 @@ public class ReflectionPeerBuilder {
         for (int i = 0; i < factories.length; i++) {
             peer = factories[i].createField(peer);
         }
-        return new OneToOneAssociationImpl(className, peer.getName(), peer.getType(), peer);
+        return new OneToOneAssociationImpl(className, peer.getIdentifier().getName(), peer.getType(), peer);
     }
 }
 

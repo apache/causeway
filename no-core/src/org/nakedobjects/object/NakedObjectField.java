@@ -1,5 +1,7 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.object.control.Consent;
+
 
 
 public interface NakedObjectField extends NakedObjectMember {
@@ -34,16 +36,22 @@ public interface NakedObjectField extends NakedObjectMember {
      */
     boolean isValue();
 
-    boolean isMandatory();
-
     Class[] getExtensions();
 
 
     Naked get(NakedObject fromObject);
 
+    
+    
+    /**
+     * Determines if this field must be complete before the object is in a valid state
+     */
+    boolean isMandatory();
 
-    String getLabel(NakedObject object);
-        
+    /**
+     * Determines if this field is editable.
+     */
+    Consent isEditable();
 }
 
 

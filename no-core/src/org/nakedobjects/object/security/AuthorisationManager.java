@@ -1,8 +1,8 @@
 package org.nakedobjects.object.security;
 
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.NakedObjectsComponent;
 import org.nakedobjects.object.Session;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 
 
 /**

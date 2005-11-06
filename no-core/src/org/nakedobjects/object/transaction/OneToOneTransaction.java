@@ -1,6 +1,5 @@
 package org.nakedobjects.object.transaction;
 
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectPersistenceManager;
 import org.nakedobjects.object.NakedObjects;
@@ -17,12 +16,12 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
         super(local);
     }
 
-    public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+    public void clearAssociation(NakedObject inObject, NakedObject associate) {
         NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
         if (inObject.getResolveState().isPersistent()) {
             try {
                 objectManager.startTransaction();
-                super.clearAssociation(identifier, inObject, associate);
+                super.clearAssociation(inObject, associate);
                 objectManager.saveChanges();
                 objectManager.endTransaction();
             } catch (RuntimeException e) {
@@ -30,16 +29,16 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
                 throw e;
             }
         } else {
-            super.clearAssociation(identifier, inObject, associate);
+            super.clearAssociation(inObject, associate);
         }
     }
 
-    public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+    public void setAssociation(NakedObject inObject, NakedObject associate) {
         NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
         if (inObject.getResolveState().isPersistent()) {
             try {
                 objectManager.startTransaction();
-                super.setAssociation(identifier, inObject, associate);
+                super.setAssociation(inObject, associate);
                 objectManager.saveChanges();
                 objectManager.endTransaction();
             } catch (RuntimeException e) {
@@ -47,16 +46,16 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
                throw e;
             }
         } else {
-            super.setAssociation(identifier, inObject, associate);
+            super.setAssociation(inObject, associate);
         }
     }
 
-    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object value) {
+    public void setValue(NakedObject inObject, Object value) {
         NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
         if (inObject.getResolveState().isPersistent()) {
             try {
                 objectManager.startTransaction();
-                super.setValue(identifier, inObject, value);
+                super.setValue(inObject, value);
                 objectManager.saveChanges();
                 objectManager.endTransaction();
             } catch (RuntimeException e) {
@@ -64,14 +63,14 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
                 throw e;
             }
         } else {
-            super.setValue(identifier, inObject, value);
+            super.setValue(inObject, value);
         }
 
     }
     
 
     private void abort(NakedObjectPersistenceManager objectManager) {
-        LOG.info("exception executing " + getName() + ", aborting transaction");
+        LOG.info("exception executing " + getIdentifier() + ", aborting transaction");
         try {
             objectManager.abortTransaction();
         } catch (Exception e2) {

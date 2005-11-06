@@ -1,13 +1,13 @@
 package org.nakedobjects.object.reflect.internal;
 
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjects;
-import org.nakedobjects.object.control.DefaultHint;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.reflect.MemberIdentifierImpl;
 import org.nakedobjects.object.reflect.OneToOnePeer;
-import org.nakedobjects.object.reflect.internal.about.InternalAbout;
 import org.nakedobjects.object.value.adapter.StringAdapter;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.utility.NotImplementedException;
@@ -25,56 +25,22 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
     protected Method setMethod;
     private final boolean isObject;
 
-    public InternalOneToOneAssociation(boolean isObject, String name, Class type, Method get, Method set, Method add, Method remove,
-        Method about) {
-        super(name, type, get, about, false);
+    public InternalOneToOneAssociation(boolean isObject, String className, String name, Class type, Method get, Method set, Method add, Method remove) {
+        super(type, get, false);
         this.isObject = isObject;
         this.setMethod = set;
         this.addMethod = add;
         removeMethod = remove;
+        
+        identifeir = new MemberIdentifierImpl(className, name);
     }
     
-    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked associate) {
-        Method aboutMethod = getAboutMethod();
-		
-		//Class parameter = setMethod.getParameterTypes()[0];
-        Class parameter = getMethod.getReturnType();
-		if(associate != null && !parameter.isAssignableFrom(associate.getObject().getClass())) {
-			InternalAbout about = new InternalAbout();
-			//about.unmodifiable("Invalid type: field must be set with a " + NakedObjects.getSpecificationLoader().loadSpecification(parameter.getName()));
-			return about;
-		}
-
-        if (aboutMethod == null) {
-			return new DefaultHint();
-        }
-
-        try {
-            InternalAbout about = new InternalAbout();
-        		Object[] parameters;
-                if(aboutMethod.getParameterTypes().length == 2) {
-        		    parameters = new Object[] { about, associate == null ? null : associate.getObject() };
-        		} else {
-        		    // default about
-        		    parameters = new Object[] { about };
-        		}
-    		    aboutMethod.invoke(object.getObject(), parameters);
-        		return about;
-        } catch (InvocationTargetException e) {
-            LOG.error("exception executing " + aboutMethod, e.getTargetException());
-        } catch (IllegalAccessException ignore) {
-            LOG.error("illegal access of " + aboutMethod, ignore);
-        }
-
-        return new DefaultHint();
-    }
-
-    public boolean hasAddMethod() {
+    private boolean hasAddMethod() {
         return addMethod != null;
     }
 
-    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object value) {
-        LOG.debug("set value "  + getName() + " in " + inObject + " - " + value);
+    public void setValue(NakedObject inObject, Object value) {
+        LOG.debug("set value "  + getIdentifier() + " in " + inObject + " - " + value);
 
         try {
             if (setMethod == null) {
@@ -102,8 +68,8 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
     /**
      Set the data in an NakedObject.  Passes in an existing object to for the EO to reference.
      */
-    public void initValue(MemberIdentifier identifier, NakedObject inObject, Object setValue) {
-        LOG.debug("init value " + getName() + " in " + inObject.getOid() + " - " + setValue);
+    public void initValue(NakedObject inObject, Object setValue) {
+        LOG.debug("init value " + getIdentifier() + " in " + inObject.getOid() + " - " + setValue);
 
         try {
             setMethod.invoke(inObject.getObject(), new Object[] { setValue });
@@ -120,8 +86,8 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
         } 
     }
 
-     public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("clear association " + getName() + " from " + inObject);
+     public void clearAssociation(NakedObject inObject, NakedObject associate) {
+        LOG.debug("clear association " + getIdentifier() + " from " + inObject);
 
             try {
                 if (removeMethod != null) {
@@ -141,8 +107,8 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
             }
     }
 
-     public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("init association " + getName() + " in " + inObject + " - " + associate);
+     public void initAssociation(NakedObject inObject, NakedObject associate) {
+        LOG.debug("init association " + getIdentifier() + " in " + inObject + " - " + associate);
 
         try {
             setMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
@@ -166,8 +132,8 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
      * Set the data in an NakedObject. Passes in an existing object to for the
      * EO to reference.
      */
-    public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("set association " + getName() + " in " + inObject + " - " + associate);
+    public void setAssociation(NakedObject inObject, NakedObject associate) {
+        LOG.debug("set association " + getIdentifier() + " in " + inObject + " - " + associate);
 
             try {
                 if (associate == null) {
@@ -205,12 +171,35 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
             (setMethod == null ? "" : " SET") + (addMethod == null ? "" : " ADD") +
             (removeMethod == null ? "" : " REMOVE");
 
-        return "Association [name=\"" + getName() + "\", method=" + getMethod + ",about=" +
-        getAboutMethod() + ", methods=" + methods + ", type=" + getType() + " ]";
+        return "Association [name=\"" + getIdentifier() + "\", method=" + getMethod + 
+            ", methods=" + methods + ", type=" + getType() + " ]";
     }
 
-	public Naked getAssociation(MemberIdentifier identifier, NakedObject fromObject) {
-		return getAssociation(fromObject);
+	public Naked getAssociation(NakedObject fromObject) {
+           try {
+                 Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
+                
+                if(obj == null)  {
+                    if(getType().isOfType(NakedObjects.getSpecificationLoader().loadSpecification(String.class)) ) {
+                        return new StringAdapter("");
+                    }
+                    
+                    throw new NakedObjectRuntimeException(getType().getFullName());
+                } else {
+                    Naked adapter = NakedObjects.getObjectLoader().createAdapterForValue(obj);
+                    if(adapter == null) {
+                        adapter = NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(obj);
+                    }
+                    return adapter;
+                }
+                
+            } catch (InvocationTargetException e) {
+                 LOG.error("exception executing " + getMethod, e.getTargetException());
+                 throw new NakedObjectRuntimeException(e);
+            } catch (IllegalAccessException ignore) {
+                LOG.error("illegal access of " + getMethod, ignore);
+                throw new NakedObjectRuntimeException(ignore);
+            }
 	}
 	
 	public Object getExtension(Class cls) {
@@ -221,34 +210,8 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
         return new Class[0];
     }
 	
-    private Naked getAssociation(NakedObject fromObject) {
-        try {
-             Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
-            
-            if(obj == null)  {
-                if(getType().isOfType(NakedObjects.getSpecificationLoader().loadSpecification(String.class)) ) {
-                    return new StringAdapter("");
-                }
-                
-                throw new NakedObjectRuntimeException(getType().getFullName());
-            } else {
-                Naked adapter = NakedObjects.getObjectLoader().createAdapterForValue(obj);
-                if(adapter == null) {
-                    adapter = NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(obj);
-                }
-                return adapter;
-            }
-            
-        } catch (InvocationTargetException e) {
-             LOG.error("exception executing " + getMethod, e.getTargetException());
-             throw new NakedObjectRuntimeException(e);
-        } catch (IllegalAccessException ignore) {
-            LOG.error("illegal access of " + getMethod, ignore);
-            throw new NakedObjectRuntimeException(ignore);
-        }
-    }
-
-    public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
+    
+    public boolean isEmpty(NakedObject inObject) {
         throw new NotImplementedException();
     }
     
@@ -258,6 +221,30 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
     
     public boolean isObject() {
         return isObject;
+    }
+
+    public Consent validValue(NakedObject inObject, NakedValue value) {
+        return Allow.DEFAULT;
+    }
+
+    public Consent validAssociation(NakedObject inObject, NakedObject value) {
+        return Allow.DEFAULT;
+    }
+
+    public Consent isEditable() {
+        return Allow.DEFAULT;
+    }
+
+    public String getDescription() {
+        return "";
+    }
+
+    public Consent isVisible(NakedObject target) {
+        return Allow.DEFAULT;
+    }
+
+    public boolean isAccessible() {
+        return true;
     }
 }
 

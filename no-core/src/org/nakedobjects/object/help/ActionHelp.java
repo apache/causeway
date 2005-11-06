@@ -1,9 +1,5 @@
 package org.nakedobjects.object.help;
 
-import org.nakedobjects.object.MemberIdentifier;
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.AbstractActionPeer;
 import org.nakedobjects.object.reflect.ActionPeer;
 
@@ -14,17 +10,10 @@ public class ActionHelp extends AbstractActionPeer {
         super(local);
         this.helpManager = helpManager;
     }
-
-    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
-        Hint hint = super.getHint(identifier, object, parameters);
-        final String help = helpManager == null ? "" : helpManager.help(identifier);
-        return HelpLookup.mergeHint(help, hint);
+    
+    public String getDescription() {
+        return helpManager == null ? "" : helpManager.help(getIdentifier());
     }
-
-    public boolean hasHint() {
-        return true;
-    }
-
 }
 
 

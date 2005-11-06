@@ -6,8 +6,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
-import org.nakedobjects.object.control.DefaultHint;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Consent;
 
 import org.apache.log4j.Logger;
 
@@ -35,31 +34,8 @@ public class ActionImpl extends AbstractNakedObjectMember implements Action {
     public Naked execute(final NakedObject object, final Naked[] parameters) {
         LOG.debug("execute action " + object + "." + getName());
         Naked[] params = parameters == null ?  new Naked[0] : parameters;
-        Naked result = reflectiveAdapter.execute(getIdentifier(), object, params);
+        Naked result = reflectiveAdapter.execute(object, params);
         return result;
-    }
-
-    public Hint getHint(NakedObject object, Naked[] parameters) {
-        if (hasHint()) {
-            if (parameters == null) {
-                return reflectiveAdapter.getHint(getIdentifier(), object, new NakedObject[0]);
-            } else {
-                return reflectiveAdapter.getHint(getIdentifier(), object, parameters);
-            }
-        } else {
-            return new DefaultHint(getLabel());
-        }
-    }
-
-    /**
-     * Return a label string that is specified in the About, if there is one, or
-     * is derived from method name, if there is no About or its name is set to
-     * null.
-     */
-    public String getLabel(NakedObject object) {
-        Hint about = getHint(object, parameterStubs());
-
-        return getLabel(about);
     }
 
     public int getParameterCount() {
@@ -76,10 +52,6 @@ public class ActionImpl extends AbstractNakedObjectMember implements Action {
 
     public Object getExtension(Class cls) {
         return reflectiveAdapter.getExtension(null);
-    }
-
-    public boolean hasHint() {
-        return reflectiveAdapter.hasHint();
     }
 
     /**
@@ -134,11 +106,46 @@ public class ActionImpl extends AbstractNakedObjectMember implements Action {
     }
 
     public ActionParameterSet getParameters(NakedObject object) {
-        ActionParameterSet parameters = reflectiveAdapter.getParameters(getIdentifier(), object, parameterStubs());
+        ActionParameterSet parameters = reflectiveAdapter.getParameters(object, parameterStubs());
         if(parameters != null) {
-            parameters.checkParameters(getIdentifier().toString(), parameters());
+            parameters.checkParameters(reflectiveAdapter.getIdentifier().toString(), parameters());
         }
         return parameters;
+    }
+
+    
+    
+    
+    public Consent invokable(NakedObject target, Naked[] parameters) {
+        return reflectiveAdapter.invokable(target, parameters);
+    }
+
+    public Consent validParameters(NakedObject object, Naked[] parameters) {
+        return reflectiveAdapter.validParameters(object, parameters);
+    }
+
+    public String[] parameterLabels() {
+        return reflectiveAdapter.parameterLabels();
+    }
+
+    public boolean[] mandatoryParameters() {
+        return reflectiveAdapter.mandatoryParameters();
+    }
+
+    public Object[] defaultParameters() {
+        return reflectiveAdapter.defaultParameters();
+    }
+
+    public String getDescription() {
+        return reflectiveAdapter.getDescription();
+    }
+
+    public Consent isVisible(NakedObject target) {
+        return reflectiveAdapter.isVisible(target);
+    }
+
+    public boolean isAccessible() {
+        return reflectiveAdapter.isAccessible();
     }
 }
 

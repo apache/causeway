@@ -1,6 +1,5 @@
 package org.nakedobjects.object.transaction;
 
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectPersistenceManager;
@@ -18,7 +17,7 @@ public class ActionTransaction extends AbstractActionPeer {
         super(decorated);
     }
     
-    public Naked execute(MemberIdentifier identifier, NakedObject object, Naked[] parameters) throws ReflectiveActionException {
+    public Naked execute(NakedObject object, Naked[] parameters) throws ReflectiveActionException {
         NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
 
         try {
@@ -49,14 +48,14 @@ public class ActionTransaction extends AbstractActionPeer {
                 transactionParameters = parameters == null ? new Naked[0] : parameters;
     //        }
 
-            Naked result = super.execute(identifier, transactionObject, transactionParameters);
+            Naked result = super.execute(transactionObject, transactionParameters);
 
             objectManager.saveChanges();
             objectManager.endTransaction();
 
             return result;
         } catch (RuntimeException e) {
-            LOG.info("exception executing " + getName() + "; aborting transaction");
+            LOG.info("exception executing " + getIdentifier() + "; aborting transaction");
             try {
                 objectManager.abortTransaction();
             } catch (Exception e2) {

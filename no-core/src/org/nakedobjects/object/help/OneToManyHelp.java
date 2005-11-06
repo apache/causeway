@@ -1,8 +1,5 @@
 package org.nakedobjects.object.help;
 
-import org.nakedobjects.object.MemberIdentifier;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.AbstractOneToManyPeer;
 import org.nakedobjects.object.reflect.OneToManyPeer;
 
@@ -13,17 +10,10 @@ public class OneToManyHelp extends AbstractOneToManyPeer {
         super(local);
         this.helpManager = helpManager;
     }
-
-    public Hint getHint(MemberIdentifier identifier, NakedObject object, NakedObject association, boolean add) {
-        Hint hint = super.getHint(identifier, object, association, add);
-        final String help = helpManager == null ? "" : helpManager.help(identifier);
-        return HelpLookup.mergeHint(help, hint);
+    
+    public String getDescription() {
+        return  helpManager == null ? "" : helpManager.help(getIdentifier());
     }
-
-    public boolean hasHint() {
-        return true;
-    }
-
 }
 
 

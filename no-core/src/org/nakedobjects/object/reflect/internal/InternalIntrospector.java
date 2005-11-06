@@ -187,7 +187,8 @@ public class InternalIntrospector {
 
             Action.Type action;
             action = new Action.Type[] { Action.USER, Action.EXPLORATION, Action.DEBUG }[prefix];
-            ActionPeer local = createAction(method, name, aboutMethod, action);
+            
+            ActionPeer local = new InternalAction(className(), name, action, method);
             actions.addElement(local);
         }
 
@@ -232,10 +233,6 @@ public class InternalIntrospector {
         return (ActionPeer[]) results;
     }
 
-    ActionPeer createAction(Method method, String name, Method aboutMethod, Action.Type action) {
-        return new InternalAction(name, action, method, aboutMethod);
-    }
-
     private void derivedFields(Vector fields) {
         Vector v = findPrefixedMethods(OBJECT, DERIVE_PREFIX, null, 0);
 
@@ -247,12 +244,9 @@ public class InternalIntrospector {
             LOG.info("  identified derived value method " + method);
             String name = method.getName();
 
-            Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { InternalAbout.class });
-
-            InternalOneToOneAssociation association = new InternalOneToOneAssociation(false, name, method.getReturnType(),
-                    method, null, null, null, aboutMethod);
+            InternalOneToOneAssociation association = new InternalOneToOneAssociation(false, className(), name, method.getReturnType(),
+                    method, null, null, null);
             fields.addElement(association);
-
         }
     }
 
@@ -630,8 +624,7 @@ public class InternalIntrospector {
                         + "all deal with same type of object.  There are at least two different " + "types");
             }
 
-            associations.addElement(new InternalOneToManyAssociation(name, elementType, getMethod, addMethod, removeMethod,
-                    aboutMethod));
+            associations.addElement(new InternalOneToManyAssociation(className(), name, elementType, getMethod, addMethod, removeMethod));
         }
     }
 
@@ -661,9 +654,6 @@ public class InternalIntrospector {
             String name = getMethod.getName().substring(GET_PREFIX.length());
             Class[] params = new Class[] { getMethod.getReturnType() };
 
-            Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { InternalAbout.class,
-                    getMethod.getReturnType() });
-
             // look for associate
             Method addMethod = findMethod(OBJECT, "associate" + name, void.class, params);
 
@@ -687,8 +677,8 @@ public class InternalIntrospector {
             }
 
             LOG.info("one-to-one association " + name + " ->" + addMethod);
-            InternalOneToOneAssociation association = new InternalOneToOneAssociation(true, name, getMethod.getReturnType(),
-                    getMethod, setMethod, addMethod, removeMethod, aboutMethod);
+            InternalOneToOneAssociation association = new InternalOneToOneAssociation(true, className(), name, getMethod.getReturnType(),
+                    getMethod, setMethod, addMethod, removeMethod);
             associations.addElement(association);
         }
     }
@@ -748,8 +738,6 @@ public class InternalIntrospector {
             Class returnType = getMethod.getReturnType();
             String name = getMethod.getName().substring(GET_PREFIX.length());
 
-            Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { InternalAbout.class, returnType });
-
             Method setMethod = findMethod(OBJECT, SET_PREFIX + name, null, new Class[] { returnType });
 
             // check for invalid methods
@@ -769,9 +757,9 @@ public class InternalIntrospector {
              * ValueField attribute = createValueField(getMethod, setMethod, name, aboutMethod, validMethod);
              * fields.addElement(attribute);
              */
-
-            InternalOneToOneAssociation association = new InternalOneToOneAssociation(false, name, getMethod.getReturnType(),
-                    getMethod, setMethod, null, null, aboutMethod);
+           
+            InternalOneToOneAssociation association = new InternalOneToOneAssociation(false, className(), name, getMethod.getReturnType(),
+                    getMethod, setMethod, null, null);
             fields.addElement(association);
         }
 

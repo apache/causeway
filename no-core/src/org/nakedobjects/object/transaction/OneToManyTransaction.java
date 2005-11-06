@@ -1,6 +1,5 @@
 package org.nakedobjects.object.transaction;
 
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectPersistenceManager;
 import org.nakedobjects.object.NakedObjects;
@@ -17,12 +16,12 @@ public class OneToManyTransaction extends AbstractOneToManyPeer {
         super(peer);
     }
 
-    public void addAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+    public void addAssociation(NakedObject inObject, NakedObject associate) {
         NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
         if (inObject.getResolveState().isPersistent()) {
             try {
                 objectManager.startTransaction();
-                super.addAssociation(identifier, inObject, associate);
+                super.addAssociation(inObject, associate);
                 objectManager.saveChanges();
                 objectManager.endTransaction();
             } catch (RuntimeException e) {
@@ -30,16 +29,16 @@ public class OneToManyTransaction extends AbstractOneToManyPeer {
                 throw e;
             }
         } else {
-            super.addAssociation(identifier, inObject, associate);
+            super.addAssociation(inObject, associate);
         }
     }
 
-    public void removeAllAssociations(MemberIdentifier identifier, NakedObject inObject) {
+    public void removeAllAssociations(NakedObject inObject) {
         NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
         if (inObject.getResolveState().isPersistent()) {
             try {
                 objectManager.startTransaction();
-                super.removeAllAssociations(identifier, inObject);
+                super.removeAllAssociations(inObject);
                 objectManager.saveChanges();
                 objectManager.endTransaction();
             } catch (RuntimeException e) {
@@ -47,13 +46,13 @@ public class OneToManyTransaction extends AbstractOneToManyPeer {
                 throw e;
             }
         } else {
-            super.removeAllAssociations(identifier, inObject);
+            super.removeAllAssociations(inObject);
 
         }
     }
 
     private void abort(NakedObjectPersistenceManager objectManager) {
-        LOG.info("exception executing " + getName() + ", aborting transaction");
+        LOG.info("exception executing " + getIdentifier() + ", aborting transaction");
         try {
             objectManager.abortTransaction();
         } catch (Exception e2) {
@@ -61,12 +60,12 @@ public class OneToManyTransaction extends AbstractOneToManyPeer {
         }
     }
 
-    public void removeAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+    public void removeAssociation(NakedObject inObject, NakedObject associate) {
         NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
         if (inObject.getResolveState().isPersistent()) {
             try {
                 objectManager.startTransaction();
-                super.removeAssociation(identifier, inObject, associate);
+                super.removeAssociation(inObject, associate);
                 objectManager.saveChanges();
                 objectManager.endTransaction();
             } catch (RuntimeException e) {
@@ -74,7 +73,7 @@ public class OneToManyTransaction extends AbstractOneToManyPeer {
                 throw e;
             }
         } else {
-            super.removeAssociation(identifier, inObject, associate);
+            super.removeAssociation(inObject, associate);
         }
 
     }

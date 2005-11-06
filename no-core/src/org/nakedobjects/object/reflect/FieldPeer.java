@@ -1,9 +1,11 @@
 package org.nakedobjects.object.reflect;
 
+
 public interface FieldPeer {
+    
+    String getDescription();
 
-    String getName();
-
+    MemberIdentifier getIdentifier();
 }
 
 

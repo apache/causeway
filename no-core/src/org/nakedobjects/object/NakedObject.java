@@ -1,6 +1,6 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Consent;
 
 
 public interface NakedObject extends NakedReference {
@@ -18,14 +18,6 @@ public interface NakedObject extends NakedReference {
     Naked getField(NakedObjectField field);
 
     NakedObjectField[] getFields();
-
-    Hint getHint(Action action, Naked[] parameters);
-
-    Hint getHint(NakedObjectField field, Naked value);
-
-    String getLabel(Action action);
-
-    String getLabel(NakedObjectField field);
 
     ActionParameterSet getParameters(Action action);
 
@@ -45,6 +37,19 @@ public interface NakedObject extends NakedReference {
 
     void setValue(OneToOneAssociation field, Object object);
 
+    
+    
+    Consent isValid(OneToOneAssociation field, NakedValue nakedValue);
+
+    Consent isValid(OneToOneAssociation field, NakedObject nakedObject);
+
+    Consent canAdd(OneToManyAssociation field, NakedObject nakedObject);
+
+    Consent isValid(Action action, Naked[] parameters);
+
+    Consent isVisible(NakedObjectField field);
+
+    Consent isVisible(Action action);
 }
 
 /*

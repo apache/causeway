@@ -4,8 +4,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.OneToManyAssociation;
-import org.nakedobjects.object.control.DefaultHint;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.utility.ToString;
 
 
@@ -22,18 +21,18 @@ public class OneToManyAssociationImpl extends AbstractNakedObjectAssociation imp
             throw new IllegalArgumentException("element should not be null");
         }
         if (readWrite()) {
-            reflectiveAdapter.removeAssociation(getIdentifier(), inObject, associate);
+            reflectiveAdapter.removeAssociation(inObject, associate);
         }
     }
 
     public void clearCollection(NakedObject inObject) {
         if (readWrite()) {
-            reflectiveAdapter.removeAllAssociations(getIdentifier(), inObject);
+            reflectiveAdapter.removeAllAssociations(inObject);
         }
     }
 
     public Naked get(NakedObject fromObject) {
-        return reflectiveAdapter.getAssociations(getIdentifier(), fromObject);
+        return reflectiveAdapter.getAssociations(fromObject);
     }
 
     public Object getExtension(Class cls) {
@@ -44,41 +43,19 @@ public class OneToManyAssociationImpl extends AbstractNakedObjectAssociation imp
         return reflectiveAdapter.getExtensions();
     }
 
-    public Hint getHint(NakedObject object) {
-        return getHint(object, null, true);
-    }
-
-    public Hint getHint(NakedObject container, NakedObject element, boolean add) {
-        if (hasHint()) {
-            return reflectiveAdapter.getHint(getIdentifier(), container, element, add);
-        } else {
-            return new DefaultHint();
-        }
-
-    }
-
-    public String getLabel(NakedObject object) {
-        Hint hint = getHint(object);
-        return getLabel(hint);
-    }
-
     private boolean readWrite() {
         return !reflectiveAdapter.isDerived();
     }
 
-    public boolean hasHint() {
-        return reflectiveAdapter.hasHint();
-    }
-
     public void initAssociation(NakedObject inObject, NakedObject associate) {
         if (readWrite()) {
-            reflectiveAdapter.initAssociation(getIdentifier(), inObject, associate);
+            reflectiveAdapter.initAssociation(inObject, associate);
         }
     }
 
     public void initOneToManyAssociation(NakedObject inObject, NakedObject[] instances) {
         if (readWrite()) {
-            reflectiveAdapter.initOneToManyAssociation(getIdentifier(), inObject, instances);
+            reflectiveAdapter.initOneToManyAssociation(inObject, instances);
         }
     }
 
@@ -90,8 +67,13 @@ public class OneToManyAssociationImpl extends AbstractNakedObjectAssociation imp
         return reflectiveAdapter.isDerived();
     }
 
+    public String getDescription() {
+        return "";
+    }
+    
+    
     public boolean isEmpty(NakedObject inObject) {
-        return reflectiveAdapter.isEmpty(getIdentifier(), inObject);
+        return reflectiveAdapter.isEmpty(inObject);
     }
 
     public boolean isPart() {
@@ -103,7 +85,7 @@ public class OneToManyAssociationImpl extends AbstractNakedObjectAssociation imp
             throw new IllegalArgumentException("Can't use null to add an item to a collection");
         }
         if (readWrite()) {
-            reflectiveAdapter.addAssociation(getIdentifier(), inObject, associate);
+            reflectiveAdapter.addAssociation(inObject, associate);
         }
     }
 
@@ -116,6 +98,29 @@ public class OneToManyAssociationImpl extends AbstractNakedObjectAssociation imp
         return str.toString();
     }
 
+    
+    
+    
+    
+    public Consent validToRemove(NakedObject container, NakedObject element) {
+      return reflectiveAdapter.validToRemove(container, element);
+    }
+    
+    public Consent validToAdd(NakedObject container, NakedObject element) {
+        return reflectiveAdapter.validToAdd(container, element);
+    }
+
+    public Consent isEditable() {
+        return reflectiveAdapter.isEditable();
+    }
+
+    public Consent isVisible(NakedObject target) {
+        return reflectiveAdapter.isVisible(target);
+    }
+
+    public boolean isAccessible() {
+        return reflectiveAdapter.isAccessible();
+    }
 }
 
 /*

@@ -1,6 +1,6 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Consent;
 
 import java.io.Serializable;
 
@@ -80,8 +80,6 @@ public interface Action extends NakedObjectMember {
 
     Object getExtension(Class cls);
 
-    boolean hasHint();
-
     /**
      * Returns true if the represented action returns something, else returns
      * false.
@@ -94,14 +92,26 @@ public interface Action extends NakedObjectMember {
 
     NakedObjectSpecification getReturnType();
 
+    /** @deprecated */
     ActionParameterSet getParameters(NakedObject object);
 
-    Naked execute(final NakedObject object, final Naked[] parameters);
+    Naked execute(final NakedObject target, final Naked[] parameters);
     
-    Hint getHint(NakedObject object, Naked[] parameters);
     
-    String getLabel(NakedObject object);
-        
+    
+
+    
+    Consent invokable(NakedObject target, Naked[] parameters);
+    
+    Consent validParameters(NakedObject object, Naked[] parameters);
+    
+    String[] parameterLabels();
+    
+    boolean[] mandatoryParameters();
+    
+    Object[] defaultParameters();
+    
+    
 }
 
 /*

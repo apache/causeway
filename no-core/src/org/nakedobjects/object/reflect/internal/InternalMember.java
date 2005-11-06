@@ -1,30 +1,17 @@
 package org.nakedobjects.object.reflect.internal;
 
-import java.lang.reflect.Method;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 
 
 public abstract class InternalMember {
-    private final String name;
-    private Method aboutMethod;
+    protected MemberIdentifier identifeir;
 
-    protected InternalMember(String name, Method about) {
-        this.aboutMethod = about;
-        this.name = name;
+    public MemberIdentifier getIdentifier() {
+        return identifeir;
     }
-
-    protected Method getAboutMethod() {
-        return aboutMethod;
-    }
-
-    /**
-     * Returns true if an about method is defined for this Member.
-     */
-    public boolean hasHint() {
-        return aboutMethod != null;
-    }
-
-    public String getName() {
-        return name;
+    
+    public String getDescription() {
+        return "";
     }
 }
 

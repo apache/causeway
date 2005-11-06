@@ -1,9 +1,6 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.MemberIdentifier;
-import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectMember;
-import org.nakedobjects.object.control.Hint;
 
 
 public abstract class AbstractNakedObjectMember implements NakedObjectMember {
@@ -37,37 +34,12 @@ public abstract class AbstractNakedObjectMember implements NakedObjectMember {
         return label;
     }
 
-    protected String getLabel(Hint hint) {
-        if (hint == null) {
-            return label;
-        } else {
-            if (hint.getName() == null) {
-                return label;
-            } else {
-                return hint.getName();
-            }
-        }
-    }
-
-    /**
-     * Return the label for this member in the current security context, and for
-     * the specified object.
-     * 
-     * @see #getLabel()
-     */
-    protected abstract String getLabel(NakedObject object);
-
     /**
      * Returns the name of the member.
      */
     public String getName() {
         return name;
     }
-
-    /**
-     * Returns true if an about method is defined for this Member.
-     */
-    public abstract boolean hasHint();
 
     public String toString() {
         return "name=" + getName() + ",label='" + getLabel() + "'";

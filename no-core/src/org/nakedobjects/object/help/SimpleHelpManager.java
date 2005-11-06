@@ -1,6 +1,6 @@
 package org.nakedobjects.object.help;
 
-import org.nakedobjects.object.MemberIdentifier;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -1,7 +1,7 @@
 package org.nakedobjects.object.help;
 
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.NakedObjectsComponent;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 
 public interface HelpManager extends NakedObjectsComponent {
 

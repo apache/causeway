@@ -2,11 +2,10 @@ package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.Action;
 import org.nakedobjects.object.ActionParameterSet;
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Consent;
 
 public abstract class AbstractActionPeer implements ActionPeer {
     private final ActionPeer decorated;
@@ -15,25 +14,17 @@ public abstract class AbstractActionPeer implements ActionPeer {
     public AbstractActionPeer(final ActionPeer decorated) {
         this.decorated = decorated;
     }
-    
-    public boolean hasHint() {
-        return decorated.hasHint();
-    }
 
     public Object getExtension(Class cls) {
         return decorated.getExtension(cls);
     }
     
-    public String getName() {
-        return decorated.getName();
+    public MemberIdentifier getIdentifier() {
+        return decorated.getIdentifier();
     }
-
-    public Naked execute(MemberIdentifier identifier, NakedObject object, Naked[] parameters) throws ReflectiveActionException {
-        return decorated.execute(identifier, object, parameters);
-    }
-
-    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
-        return decorated.getHint(identifier, object, parameters);
+    
+    public Naked execute(NakedObject object, Naked[] parameters) throws ReflectiveActionException {
+        return decorated.execute(object, parameters);
     }
 
     public int getParameterCount() {
@@ -52,12 +43,44 @@ public abstract class AbstractActionPeer implements ActionPeer {
         return decorated.returnType();
     }
 
-    public ActionParameterSet getParameters(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
-        return decorated.getParameters(identifier, object, parameters);
+    public ActionParameterSet getParameters(NakedObject object, Naked[] parameters) {
+        return decorated.getParameters(object, parameters);
     }
 
     public Action.Target getTarget() {
         return decorated.getTarget();
+    }
+
+    public Consent invokable(NakedObject target, Naked[] parameters) {
+        return decorated.invokable(target, parameters);
+    }
+
+    public Consent validParameters(NakedObject object, Naked[] parameters) {
+        return decorated.validParameters(object, parameters);
+    }
+
+    public String[] parameterLabels() {
+        return decorated.parameterLabels();
+    }
+
+    public boolean[] mandatoryParameters() {
+        return decorated.mandatoryParameters();
+    }
+
+    public Object[] defaultParameters() {
+        return decorated.defaultParameters();
+    }
+
+    public String getDescription() {
+        return decorated.getDescription();
+    }
+
+    public Consent isVisible(NakedObject target) {
+        return decorated.isVisible(target);
+    }
+
+    public boolean isAccessible() {
+        return decorated.isAccessible();
     }
 }
 

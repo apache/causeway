@@ -1,6 +1,5 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectAssociation;
 import org.nakedobjects.object.NakedObjectSpecification;

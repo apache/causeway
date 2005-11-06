@@ -1,44 +1,52 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.control.Consent;
 
 
 public interface OneToOnePeer extends FieldPeer {
 
-	void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate);
+	void clearAssociation(NakedObject inObject, NakedObject associate);
 
-	Naked getAssociation(MemberIdentifier identifier, NakedObject inObject);
+	Naked getAssociation(NakedObject inObject);
 
     Object getExtension(Class cls);
-
-	Hint getHint(MemberIdentifier identifier, NakedObject object, Naked value);
 	
 	/** TODO do we need to get the type from here? **/
 	NakedObjectSpecification getType();
 
-	boolean hasHint();
+	void initAssociation(NakedObject inObject, NakedObject associate);
 
-	void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate);
-
-	void initValue(MemberIdentifier identifier, NakedObject inObject, Object associate);
+	void initValue(NakedObject inObject, Object associate);
 
 	boolean isDerived();
 
-    boolean isEmpty(MemberIdentifier identifier, NakedObject inObject);
+    boolean isEmpty(NakedObject inObject);
 
-	void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate);
+	void setAssociation(NakedObject inObject, NakedObject associate);
 
-	void setValue(MemberIdentifier identifier, NakedObject inObject, Object associate);
+	void setValue(NakedObject inObject, Object associate);
 
     Class[] getExtensions();
 
     boolean isMandatory();
 
     boolean isObject();
+    
+    public Consent validValue(NakedObject inObject, NakedValue value);
+
+    public Consent validAssociation(NakedObject inObject, NakedObject value);
+
+    public Consent isEditable();
+
+    public String getDescription();
+
+    public Consent isVisible(NakedObject target);
+
+    public boolean isAccessible();
 }
 
 

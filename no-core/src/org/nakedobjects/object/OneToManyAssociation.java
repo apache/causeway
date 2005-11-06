@@ -1,6 +1,6 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Consent;
 
 
 public interface OneToManyAssociation extends NakedObjectAssociation {
@@ -15,12 +15,6 @@ public interface OneToManyAssociation extends NakedObjectAssociation {
 
     Class[] getExtensions();
 
-    Hint getHint(NakedObject object);
-
-    Hint getHint(NakedObject container, NakedObject element, boolean add);
-
-    boolean hasHint();
-
     void initAssociation(NakedObject inObject, NakedObject associate);
 
     void initOneToManyAssociation(NakedObject inObject, NakedObject[] instances);
@@ -34,6 +28,10 @@ public interface OneToManyAssociation extends NakedObjectAssociation {
     boolean isPart();
 
     void setAssociation(NakedObject inObject, NakedObject associate);
+
+    Consent validToAdd(NakedObject container, NakedObject element);
+
+    Consent validToRemove(NakedObject container, NakedObject element);
 
 }
 

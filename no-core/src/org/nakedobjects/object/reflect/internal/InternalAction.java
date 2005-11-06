@@ -2,17 +2,16 @@ package org.nakedobjects.object.reflect.internal;
 
 import org.nakedobjects.object.Action;
 import org.nakedobjects.object.ActionParameterSet;
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
-import org.nakedobjects.object.control.DefaultHint;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.reflect.ActionPeer;
+import org.nakedobjects.object.reflect.MemberIdentifierImpl;
 import org.nakedobjects.object.reflect.ReflectionException;
-import org.nakedobjects.object.reflect.internal.about.InternalAbout;
 import org.nakedobjects.utility.UnexpectedCallException;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,19 +26,20 @@ public class InternalAction extends InternalMember implements ActionPeer {
     private final int paramCount;
     private Action.Type type;
 
-    public InternalAction(String name, Action.Type type, Method action, Method about) {
-        super(name, about);
+    public InternalAction(String className, String name, Action.Type type, Method action) {
         this.type = type;
         this.actionMethod = action;
         paramCount = action.getParameterTypes().length;
+        
+        identifeir = new MemberIdentifierImpl(className, name, parameterTypes());
     }
 
-    public Naked execute(MemberIdentifier identifier, NakedObject inObject, Naked[] parameters) {
+    public Naked execute(NakedObject inObject, Naked[] parameters) {
         if (parameters.length != paramCount) {
             LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);
         }
         try {
-            LOG.debug("action: invoke " + inObject + "." + getName());
+            LOG.debug("action: invoke " + inObject + "." + getIdentifier());
             Object[] executionParameters = new Object[parameters.length];
             for (int i = 0; i < parameters.length; i++) {
                 executionParameters[i] = parameters[i] == null ? null : parameters[i].getObject();
@@ -63,49 +63,6 @@ public class InternalAction extends InternalMember implements ActionPeer {
         return null;
     }
     
-    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
-        if (parameters.length != paramCount) {
-            LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);
-        }
-
-        Method aboutMethod = getAboutMethod();
-
-        if (aboutMethod == null) { return new DefaultHint(); }
-
-        try {
-            InternalAbout about;
-            about = new InternalAbout();
-
-            if (aboutMethod.getName().equals("aboutActionDefault")) {
-                aboutMethod.invoke(object.getObject(), new Object[] { about });
-            } else {
-                Object[] longParams = new Object[parameters.length + 1];
-                longParams[0] = about;
-              //  System.arraycopy(parameters, 0, longParams, 1, parameters.length);
-                for (int i = 1; i < longParams.length; i++) {
-                 //   if(parameters[i - 1] instanceof Naked) {
-                  //      longParams[i] = parameters[i - 1];
-                 //   } else {
-                        longParams[i] = parameters[i - 1] == null ? null : ((NakedObject) parameters[i - 1]).getObject();
-                  //  }
-                }
-                aboutMethod.invoke(object.getObject(), longParams);
-            }
-
-            if (about == null) {
-                LOG.error("no about returned from " + aboutMethod + " allowing action by default.");
-                return new DefaultHint();
-            }
-            return about;
-        } catch (InvocationTargetException e) {
-            LOG.error("exception executing " + aboutMethod, e.getTargetException());
-        } catch (IllegalAccessException ignore) {
-            LOG.error("illegal access of " + aboutMethod, ignore);
-        }
-
-        return new DefaultHint();
-    }
-
     public int getParameterCount() {
         return paramCount;
     }
@@ -137,8 +94,40 @@ public class InternalAction extends InternalMember implements ActionPeer {
         return hasReturn ? nakedClass(returnType) : null;
     }
 
-    public ActionParameterSet getParameters(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
+    public ActionParameterSet getParameters(NakedObject object, Naked[] parameters) {
         throw new UnexpectedCallException();
+    }
+
+    public Consent invokable(NakedObject target, Naked[] parameters) {
+        return Allow.DEFAULT;
+    }
+
+    public Consent validParameters(NakedObject object, Naked[] parameters) {
+        return Allow.DEFAULT;
+    }
+
+    public String[] parameterLabels() {
+        return null;
+    }
+
+    public boolean[] mandatoryParameters() {
+        return null;
+    }
+
+    public Object[] defaultParameters() {
+        return null;
+    }
+
+    public String getDescription() {
+        return "";
+    }
+
+    public Consent isVisible(NakedObject target) {
+        return Allow.DEFAULT;
+    }
+
+    public boolean isAccessible() {
+        return true;
     }
 }
 

@@ -41,7 +41,7 @@ public abstract class AbstractNakedObjectSpecification implements NakedObjectSpe
     private SubclassList subclasses = new SubclassList();
     private AbstractNakedObjectSpecification superclass;
     private ObjectTitle title;
-    private NakedObjectField[] viewFields;
+   // private NakedObjectField[] viewFields;
     private String shortName;
 
     private Action[] createActions(ReflectionPeerBuilder builder, ActionPeer[] actions) {
@@ -254,7 +254,7 @@ public abstract class AbstractNakedObjectSpecification implements NakedObjectSpe
         NakedObjectField[] viewFields = new NakedObjectField[fields.length];
         int v = 0;
         for (int i = 0; i < fields.length; i++) {
-            boolean useField = object.getHint(fields[i], null).canAccess().isAllowed();            
+            boolean useField = fields[i].isAccessible()  && object.isVisible(fields[i]).isAllowed();            
             if (useField) {
                 viewFields[v++] = fields[i];
             }
@@ -264,7 +264,7 @@ public abstract class AbstractNakedObjectSpecification implements NakedObjectSpe
         for (int i = 0; i < selectedFields.length; i++) {
             selectedFields[i] = viewFields[i];
         }
-        this.viewFields = selectedFields;
+        //this.viewFields = selectedFields;
 
         return selectedFields;
     }

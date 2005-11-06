@@ -1,39 +1,45 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Consent;
 
 
 public interface OneToManyPeer extends FieldPeer {
 
-    void addAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate);
+    void addAssociation(NakedObject inObject, NakedObject associate);
 
-    NakedCollection getAssociations(MemberIdentifier identifier, NakedObject inObject);
+    NakedCollection getAssociations(NakedObject inObject);
 
     Object getExtension(Class cls);
 
-    Hint getHint(MemberIdentifier identifier, NakedObject inObject, NakedObject associate, boolean add);
-
     NakedObjectSpecification getType();
 
-    boolean hasHint();
+    void initAssociation(NakedObject inObject, NakedObject associate);
 
-    void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate);
-
-    void initOneToManyAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject[] instances);
+    void initOneToManyAssociation(NakedObject inObject, NakedObject[] instances);
 
     boolean isDerived();
 
-    boolean isEmpty(MemberIdentifier identifier, NakedObject inObject);
+    boolean isEmpty(NakedObject inObject);
 
-    void removeAllAssociations(MemberIdentifier identifier, NakedObject inObject);
+    void removeAllAssociations(NakedObject inObject);
 
-    void removeAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate);
+    void removeAssociation(NakedObject inObject, NakedObject associate);
 
     Class[] getExtensions();
+    
+
+    public Consent validToRemove(NakedObject container, NakedObject element);
+    
+    public Consent validToAdd(NakedObject container, NakedObject element);
+
+    public Consent isEditable();
+
+    public Consent isVisible(NakedObject target);
+
+    public boolean isAccessible();
 }
 
 /*

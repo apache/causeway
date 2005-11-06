@@ -5,8 +5,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.OneToOneAssociation;
-import org.nakedobjects.object.control.DefaultHint;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.utility.ToString;
 
 
@@ -22,7 +21,7 @@ public class OneToOneAssociationImpl extends AbstractNakedObjectAssociation impl
         if (associate == null) {
             throw new NullPointerException("Must specify the item to remove/dissociate");
         }
-        reflectiveAdapter.clearAssociation(getIdentifier(), inObject, associate);
+        reflectiveAdapter.clearAssociation(inObject, associate);
     }
 
     public void clearValue(NakedObject inObject) {
@@ -31,7 +30,7 @@ public class OneToOneAssociationImpl extends AbstractNakedObjectAssociation impl
     }
 
     public Naked get(NakedObject fromObject) {
-        return reflectiveAdapter.getAssociation(getIdentifier(), fromObject);
+        return reflectiveAdapter.getAssociation(fromObject);
     }
 
     public Object getExtension(Class cls) {
@@ -42,26 +41,9 @@ public class OneToOneAssociationImpl extends AbstractNakedObjectAssociation impl
         return reflectiveAdapter.getExtensions();
     }
 
-    public Hint getHint(NakedObject object, Naked value) {
-        if (hasHint()) {
-            return reflectiveAdapter.getHint(getIdentifier(), object, value);
-        } else {
-            return new DefaultHint();
-        }
-    }
-
-    public String getLabel(NakedObject object) {
-        Hint hint = getHint(object, get(object));
-        return getLabel(hint);
-    }
-
-    public boolean hasHint() {
-        return reflectiveAdapter.hasHint();
-    }
-
     public void initAssociation(NakedObject inObject, NakedObject associate) {
         if (readWrite()) {
-            reflectiveAdapter.initAssociation(getIdentifier(), inObject, associate);
+            reflectiveAdapter.initAssociation(inObject, associate);
         }
     }
 
@@ -71,7 +53,7 @@ public class OneToOneAssociationImpl extends AbstractNakedObjectAssociation impl
 
     public void initValue(NakedObject inObject, Object associate) {
         if (readWrite()) {
-            reflectiveAdapter.initValue(getIdentifier(), inObject, associate);
+            reflectiveAdapter.initValue(inObject, associate);
         }
     }
 
@@ -84,18 +66,18 @@ public class OneToOneAssociationImpl extends AbstractNakedObjectAssociation impl
     }
 
     public boolean isEmpty(NakedObject inObject) {
-        return reflectiveAdapter.isEmpty(getIdentifier(), inObject);
+        return reflectiveAdapter.isEmpty(inObject);
     }
 
     public void setAssociation(NakedObject inObject, NakedObject associate) {
         if (readWrite()) {
-            reflectiveAdapter.setAssociation(getIdentifier(), inObject, associate);
+            reflectiveAdapter.setAssociation(inObject, associate);
         }
     }
 
     public void setValue(NakedObject inObject, Object value) {
         if (readWrite()) {
-            reflectiveAdapter.setValue(getIdentifier(), inObject, value);
+            reflectiveAdapter.setValue(inObject, value);
         }
     }
 
@@ -111,12 +93,39 @@ public class OneToOneAssociationImpl extends AbstractNakedObjectAssociation impl
 
     public boolean isObject() {
         return reflectiveAdapter.isObject();
-     //   return isObject;
     }
 
     public boolean isValue() {
         return  ! reflectiveAdapter.isObject();
     }
+
+    
+    
+    
+    public Consent validValue(NakedObject inObject, NakedValue value) {
+        return reflectiveAdapter.validValue(inObject, value);
+    }
+
+    public Consent validAssociation(NakedObject inObject, NakedObject value) {
+        return reflectiveAdapter.validAssociation(inObject, value);
+    }
+
+    public Consent isEditable() {
+        return reflectiveAdapter.isEditable();
+    }
+
+    public String getDescription() {
+        return reflectiveAdapter.getDescription();
+    }
+
+    public Consent isVisible(NakedObject target) {
+        return reflectiveAdapter.isVisible(target);
+    }
+
+    public boolean isAccessible() {
+        return reflectiveAdapter.isAccessible();
+    }
+    
 }
 
 /*

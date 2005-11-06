@@ -228,21 +228,7 @@ public class InternalSpecification implements NakedObjectSpecification {
     }
 
     public NakedObjectField[] getVisibleFields(NakedObject object) {
-        NakedObjectField[] viewFields = new NakedObjectField[fields.length];
-        int v = 0;
-        for (int i = 0; i < fields.length; i++) {
-            boolean useField = object.getHint(fields[i], null).canAccess().isAllowed();
-            if (useField) {
-                viewFields[v++] = fields[i];
-            }
-        }
-
-        NakedObjectField[] selectedFields = new NakedObjectField[v];
-        for (int i = 0; i < selectedFields.length; i++) {
-            selectedFields[i] = viewFields[i];
-        }
-        return selectedFields;
-
+        return getFields();
     }
 
     public boolean hasSubclasses() {

@@ -2,36 +2,50 @@ package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.Action;
 import org.nakedobjects.object.ActionParameterSet;
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Consent;
 
 
 public interface ActionPeer {
 
-    Naked execute(MemberIdentifier identifier, NakedObject object, Naked[] parameters) throws ReflectiveActionException;
+    Naked execute(NakedObject object, Naked[] parameters) throws ReflectiveActionException;
 
     Object getExtension(Class cls);
-
-    Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters);
-
-    String getName();
+    
+    MemberIdentifier getIdentifier();
 
     int getParameterCount();
 
-    ActionParameterSet getParameters(MemberIdentifier identifier, NakedObject object, Naked[] parameters);
+    ActionParameterSet getParameters(NakedObject object, Naked[] parameters);
 
     Action.Target getTarget();
 
     Action.Type getType();
 
-    boolean hasHint();
-
     NakedObjectSpecification[] parameterTypes();
 
     NakedObjectSpecification returnType();
+    
+    
+
+    
+    Consent invokable(NakedObject target, Naked[] parameters);
+
+    Consent validParameters(NakedObject object, Naked[] parameters);
+
+    String[] parameterLabels();
+
+    boolean[] mandatoryParameters();
+
+    Object[] defaultParameters();
+
+    String getDescription();
+
+    Consent isVisible(NakedObject target);
+
+    boolean isAccessible();
 }
 
 /*

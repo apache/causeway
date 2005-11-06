@@ -1,33 +1,29 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.control.Consent;
 
 
-public class AbstractOneToOnePeer implements OneToOnePeer {
+public abstract class AbstractOneToOnePeer implements OneToOnePeer {
     private final OneToOnePeer decorated;
 
     public AbstractOneToOnePeer(OneToOnePeer local) {
         this.decorated = local;
     }
 
-    public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        decorated.clearAssociation(identifier, inObject, associate);
+    public void clearAssociation(NakedObject inObject, NakedObject associate) {
+        decorated.clearAssociation(inObject, associate);
     }
 
-    public Naked getAssociation(MemberIdentifier identifier, NakedObject inObject) {
-        return decorated.getAssociation(identifier, inObject);
+    public Naked getAssociation(NakedObject inObject) {
+        return decorated.getAssociation(inObject);
     }
-
-    public Hint getHint(MemberIdentifier identifier, NakedObject inObject, Naked associate) {
-        return decorated.getHint(identifier, inObject, associate);
-    }
-
-    public String getName() {
-        return decorated.getName();
+    
+    public MemberIdentifier getIdentifier() {
+        return decorated.getIdentifier();
     }
 
     public Object getExtension(Class cls) {
@@ -42,16 +38,12 @@ public class AbstractOneToOnePeer implements OneToOnePeer {
         return decorated.getType();
     }
 
-    public boolean hasHint() {
-        return decorated.hasHint();
+    public void initAssociation(NakedObject inObject, NakedObject associate) {
+        decorated.initAssociation(inObject, associate);
     }
 
-    public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        decorated.initAssociation(identifier, inObject, associate);
-    }
-
-    public void initValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {
-        decorated.initValue(identifier, inObject, associate);
+    public void initValue(NakedObject inObject, Object associate) {
+        decorated.initValue(inObject, associate);
     }
 
     public boolean isDerived() {
@@ -66,16 +58,40 @@ public class AbstractOneToOnePeer implements OneToOnePeer {
         return decorated.isObject();
     }
     
-    public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
-        return decorated.isEmpty(identifier, inObject);
+    public boolean isEmpty(NakedObject inObject) {
+        return decorated.isEmpty(inObject);
     }
 
-    public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        decorated.setAssociation(identifier, inObject, associate);
+    public void setAssociation(NakedObject inObject, NakedObject associate) {
+        decorated.setAssociation(inObject, associate);
     }
 
-    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {
-        decorated.setValue(identifier, inObject, associate);
+    public void setValue(NakedObject inObject, Object associate) {
+        decorated.setValue(inObject, associate);
+    }
+
+    public Consent validValue(NakedObject inObject, NakedValue value) {
+        return decorated.validValue(inObject, value);
+    }
+
+    public Consent validAssociation(NakedObject inObject, NakedObject value) {
+        return decorated.validAssociation(inObject, value);
+    }
+
+    public Consent isEditable() {
+        return decorated.isEditable();
+    }
+
+    public String getDescription() {
+        return decorated.getDescription();
+    }
+
+    public Consent isVisible(NakedObject target) {
+        return decorated.isVisible(target);
+    }
+
+    public boolean isAccessible() {
+        return decorated.isAccessible();
     }
 }
 

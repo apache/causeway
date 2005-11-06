@@ -12,8 +12,7 @@ public abstract class InternalField extends InternalMember {
     private final boolean isDerived;
     protected final  Class type;
 
-    public InternalField(String name, Class type, Method get, Method about, boolean isDerived) {
-        super(name, about);
+    public InternalField(Class type, Method get, boolean isDerived) {
         this.type = type;
         this.isDerived = isDerived;
         this.getMethod = get;

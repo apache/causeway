@@ -1,13 +1,12 @@
 package org.nakedobjects.object.reflect.internal;
 
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.DefaultHint;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.reflect.MemberIdentifierImpl;
 import org.nakedobjects.object.reflect.OneToManyPeer;
-import org.nakedobjects.object.reflect.internal.about.InternalAbout;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.utility.NotImplementedException;
 
@@ -24,14 +23,16 @@ public class InternalOneToManyAssociation extends InternalField implements OneTo
     private Method removeMethod;
     private Method clearMethod;
 
-    public InternalOneToManyAssociation(String name, Class type, Method get, Method add, Method remove, Method about) {
-        super(name, type, get, about, false);
+    public InternalOneToManyAssociation(String className, String name, Class type, Method get, Method add, Method remove) {
+        super(type, get, false);
         this.addMethod = add;
         this.removeMethod = remove;
+        
+        identifeir = new MemberIdentifierImpl(className, name);
    }
 
-    public void addAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("add association to " + getName() + " in " + inObject + " - " + associate);
+    public void addAssociation(NakedObject inObject, NakedObject associate) {
+        LOG.debug("add association to " + getIdentifier() + " in " + inObject + " - " + associate);
         try {
             addMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
         } catch (IllegalArgumentException e) {
@@ -46,8 +47,8 @@ public class InternalOneToManyAssociation extends InternalField implements OneTo
         }
     }
     
-    public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("init association " + getName() + " in " + inObject + " - " + associate);
+    public void initAssociation(NakedObject inObject, NakedObject associate) {
+        LOG.debug("init association " + getIdentifier() + " in " + inObject + " - " + associate);
 
         try {
             addMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
@@ -63,36 +64,12 @@ public class InternalOneToManyAssociation extends InternalField implements OneTo
         }
     }
 
-    public Hint getHint(MemberIdentifier identifier, NakedObject object, NakedObject element, boolean add) {
-        if (hasHint()) {
-            Method aboutMethod = getAboutMethod();
-            try {
-                InternalAbout about = new InternalAbout();
-                Object[] parameters;
-                if (aboutMethod.getParameterTypes().length == 3) {
-                    parameters = new Object[] { about, element, new Boolean(add) };
-                } else {
-                    // default about
-                    parameters = new Object[] { about };
-                }
-                aboutMethod.invoke(object.getObject(), parameters);
-                return about;
-            } catch (InvocationTargetException e) {
-               LOG.error("exception executing " + aboutMethod, e.getTargetException());
-            } catch (IllegalAccessException ignore) {
-                LOG.error("illegal access of " + aboutMethod, ignore);
-            }
-            return null;
-        } else {
-            return new DefaultHint();
-        }
-    }
 
-    public NakedCollection getAssociations(MemberIdentifier identifier, NakedObject fromObject) {
+    public NakedCollection getAssociations(NakedObject fromObject) {
         return (NakedCollection) get(fromObject);
     }
 
-    public void removeAllAssociations(MemberIdentifier identifier, NakedObject inObject) {
+    public void removeAllAssociations(NakedObject inObject) {
         try {
             clearMethod.invoke(inObject, null);
         } catch (InvocationTargetException e) {
@@ -108,8 +85,8 @@ public class InternalOneToManyAssociation extends InternalField implements OneTo
      * Remove an associated object (the element) from the specified NakedObject
      * in the association field represented by this object.
      */
-    public void removeAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("remove association " + associate + " from field " + getName() + " in " + inObject);
+    public void removeAssociation(NakedObject inObject, NakedObject associate) {
+        LOG.debug("remove association " + associate + " from field " + getIdentifier() + " in " + inObject);
 
         try {
             removeMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
@@ -129,11 +106,10 @@ public class InternalOneToManyAssociation extends InternalField implements OneTo
         String methods = (getMethod == null ? "" : "GET") + (addMethod == null ? "" : " ADD")
                 + (removeMethod == null ? "" : " REMOVE");
 
-        return "OneToManyAssociation [name=\"" + getName() + "\", method=" + getMethod + ",about=" + getAboutMethod()
+        return "OneToManyAssociation [name=\"" + getIdentifier() + "\", method=" + getMethod
                 + ", methods=" + methods + ", type=" + getType() + " ]";
     }
     
-
     private Naked get(NakedObject fromObject) {
         try {
              Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
@@ -163,11 +139,11 @@ public class InternalOneToManyAssociation extends InternalField implements OneTo
         return new Class[0];
     }
     
-    public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
+    public boolean isEmpty(NakedObject inObject) {
         throw new NotImplementedException();
     }
 
-    public void initOneToManyAssociation(MemberIdentifier identifier, NakedObject fromObject, NakedObject[] instances) {
+    public void initOneToManyAssociation(NakedObject fromObject, NakedObject[] instances) {
         try {
             Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
            
@@ -188,6 +164,26 @@ public class InternalOneToManyAssociation extends InternalField implements OneTo
            throw new NakedObjectRuntimeException(ignore);
        }
     
+    }
+
+    public Consent validToRemove(NakedObject container, NakedObject element) {
+        return Allow.DEFAULT;
+    }
+
+    public Consent validToAdd(NakedObject container, NakedObject element) {
+        return Allow.DEFAULT;
+    }
+
+    public Consent isEditable() {
+        return Allow.DEFAULT;
+    }
+
+    public Consent isVisible(NakedObject target) {
+        return Allow.DEFAULT;
+    }
+
+    public boolean isAccessible() {
+        return true;
     }
 }
 

@@ -1,9 +1,7 @@
 package org.nakedobjects.object.security;
 
-import org.nakedobjects.object.MemberIdentifier;
-import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.Session;
 import org.nakedobjects.object.reflect.AbstractActionPeer;
 import org.nakedobjects.object.reflect.ActionPeer;
 
@@ -16,14 +14,14 @@ public class ActionAuthorisation extends AbstractActionPeer {
         this.authorisationManager = authorisationManager;
     }
 
-    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
-        Hint hint = super.getHint(identifier, object, parameters);
-        return AuthorisationHint.merge(identifier, hint, authorisationManager);
+    public boolean isAccessible() {
+        Session session = NakedObjects.getCurrentSession();
+//        boolean isUsable = authorisationManager.isUsable(session, identifier);
+        boolean isVisible = authorisationManager.isVisible(session, getIdentifier());
+        return isVisible;
     }
-
-    public boolean hasHint() {
-        return true;
-    }
+    
+    
 }
 
 /*

@@ -1,6 +1,5 @@
 package org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.NakedObjectSpecification;
 
 public class MemberIdentifierImpl implements MemberIdentifier {

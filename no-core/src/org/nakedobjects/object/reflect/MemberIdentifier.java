@@ -1,4 +1,4 @@
-package org.nakedobjects.object;
+package org.nakedobjects.object.reflect;
 
 
 public interface MemberIdentifier {
