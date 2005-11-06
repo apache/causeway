@@ -389,9 +389,9 @@ public final class XmlSnapshot {
         // (the corresponding XSD element will later be attached to xmlElement
         // as its userData)
         LOG.debug("includeField(Pl, Vec, Str): locating corresponding XML element");
-        Vector xmlFieldElements = elementsUnder(xmlElement, field.getName());
+        Vector xmlFieldElements = elementsUnder(xmlElement, field.getId());
         if (xmlFieldElements.size() != 1) {
-            LOG.info("includeField(Pl, Vec, Str): could not locate " + log("field", field.getName())
+            LOG.info("includeField(Pl, Vec, Str): could not locate " + log("field", field.getId())
                     + andlog("xmlFieldElements.size", "" + xmlFieldElements.size()));
             return false;
         }
@@ -571,7 +571,7 @@ public final class XmlSnapshot {
         LOG.debug("objectToElement(NO): processing fields");
         eachField: for (int i = 0; i < fields.length; i++) {
             NakedObjectField field = fields[i];
-            String fieldName = field.getName();
+            String fieldName = field.getId();
 
             LOG.debug("objectToElement(NO): " + log("field", fieldName));
 
