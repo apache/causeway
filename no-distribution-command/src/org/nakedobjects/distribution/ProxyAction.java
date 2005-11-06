@@ -1,14 +1,13 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.Action;
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.AbstractActionPeer;
 import org.nakedobjects.object.reflect.ActionPeer;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.ReflectiveActionException;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 
@@ -18,7 +17,6 @@ import org.apache.log4j.Logger;
 public final class ProxyAction extends AbstractActionPeer {
     private final static Logger LOG = Logger.getLogger(ProxyAction.class);
     private Distribution connection;
-    private boolean fullProxy = false;
     private final DataFactory dataFactory;
 
     public ProxyAction(final ActionPeer local, final Distribution connection, DataFactory objectDataFactory) {
@@ -27,14 +25,14 @@ public final class ProxyAction extends AbstractActionPeer {
         this.dataFactory = objectDataFactory;
     }
 
-    public Naked execute(MemberIdentifier identifier, NakedObject target, Naked[] parameters) throws ReflectiveActionException {
+    public Naked execute(NakedObject target, Naked[] parameters) throws ReflectiveActionException {
         if (executeRemotely(target)) {
             Data[] parameterObjectData = parameterValues(parameters);
-            LOG.debug(debug("execute remotely", identifier, target, parameters));
+            LOG.debug(debug("execute remotely", getIdentifier(), target, parameters));
             ObjectData targetReference = dataFactory.createDataForActionTarget(target);
             Data result;
             try {
-                result = connection.executeAction(NakedObjects.getCurrentSession(), getType().getName(), getName(),
+                result = connection.executeAction(NakedObjects.getCurrentSession(), getType().getName(), getIdentifier().getName(),
 	                    targetReference, parameterObjectData);
             } catch (NakedObjectRuntimeException e) {
                 LOG.error("remote exception " + e.getMessage(), e);
@@ -44,8 +42,8 @@ public final class ProxyAction extends AbstractActionPeer {
             returnedObject = result instanceof NullData ? null : DataHelper.restore(result);
             return returnedObject;
         } else {
-            LOG.debug(debug("execute locally", identifier, target, parameters));
-            return super.execute(identifier, target, parameters);
+            LOG.debug(debug("execute locally", getIdentifier(), target, parameters));
+            return super.execute(target, parameters);
         }
     }
 
@@ -74,19 +72,6 @@ public final class ProxyAction extends AbstractActionPeer {
             parameterObjectData[i] = dataFactory.createDataForParameter(type, parameter);
         }
         return parameterObjectData;
-    }
-
-    public Hint getHint(MemberIdentifier identifier, NakedObject target, Naked[] parameters) {
-        if (executeRemotely(target) && fullProxy) {
-            Data[] parameterObjectData = parameterValues(parameters);
-            LOG.debug(debug("get hint remotely", identifier, target, parameters));
-            ObjectData targetReference = dataFactory.createDataForActionTarget(target);
-            return connection.getActionHint(NakedObjects.getCurrentSession(), getType().getName(), getName(), targetReference,
-                    parameterObjectData);
-        } else {
-            LOG.debug(debug("get hint locally", identifier, target, parameters));
-            return super.getHint(identifier, target, parameters);
-        }
     }
 
     private String debug(String message, MemberIdentifier identifier, NakedObject target, Naked[] parameters) {

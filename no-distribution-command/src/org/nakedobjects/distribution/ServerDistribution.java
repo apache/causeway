@@ -42,9 +42,8 @@ public class ServerDistribution implements Distribution {
         NakedObject inObject = getPersistentNakedObject(session, target);
         NakedObject associate = getPersistentNakedObject(session, associated);
         NakedObjectAssociation association = (NakedObjectAssociation) inObject.getSpecification().getField(fieldIdentifier);
-        Hint about = inObject.getHint(association, associate);
-        if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
-            throw new NakedObjectRuntimeException();
+        if (! association.isAccessible() || association.isEditable().isVetoed()) {
+            throw new IllegalRequestException("can't modify field as not visible or editable");
         }
         inObject.clearAssociation(association, associate);
     }
@@ -199,9 +198,8 @@ public class ServerDistribution implements Distribution {
         NakedObject inObject = getPersistentNakedObject(session, target);
         NakedObject associate = getPersistentNakedObject(session, associated);
         NakedObjectAssociation association = (NakedObjectAssociation) inObject.getSpecification().getField(fieldIdentifier);
-        Hint about = inObject.getHint(association, associate);
-        if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
-            throw new NakedObjectRuntimeException();
+        if (! association.isAccessible() || association.isEditable().isVetoed()) {
+            throw new IllegalRequestException("can't modify field as not visible or editable");
         }
         inObject.setAssociation(association, associate);
     }
@@ -218,9 +216,8 @@ public class ServerDistribution implements Distribution {
         LOG.debug("request setValue " + fieldIdentifier + " on " + target + " with " + value + " for " + session);
         NakedObject inObject = getPersistentNakedObject(session, target);
         OneToOneAssociation association = (OneToOneAssociation) inObject.getSpecification().getField(fieldIdentifier);
-        Hint about = inObject.getHint(association, NakedObjects.getObjectLoader().createAdapterForValue(value));
-        if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
-            throw new NakedObjectRuntimeException();
+        if (! association.isAccessible() || association.isEditable().isVetoed()) {
+            throw new IllegalRequestException("can't modify field as not visible or editable");
         }
 
         NakedValue fieldValue = (NakedValue) inObject.getValue(association);

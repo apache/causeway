@@ -1,10 +1,8 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjects;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.AbstractOneToManyPeer;
 import org.nakedobjects.object.reflect.OneToManyPeer;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
@@ -25,45 +23,30 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
         this.objectDataFactory = objectDataFactory;
     }
 
-    public void addAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+    public void addAssociation(NakedObject inObject, NakedObject associate) {
         if (isPersistent(inObject)) {
-            LOG.debug("set association remotely " + getName() + " in " + inObject + " with " + associate);
+            LOG.debug("set association remotely " + getIdentifier() + " in " + inObject + " with " + associate);
             try {
                 ReferenceData targetReference = objectDataFactory.createReference(inObject);
                 ReferenceData associateReference = objectDataFactory.createReference(associate);
-                connection.setAssociation(NakedObjects.getCurrentSession(), getName(), targetReference, associateReference);
+                connection.setAssociation(NakedObjects.getCurrentSession(), getIdentifier().getName(), targetReference, associateReference);
             } catch (NakedObjectRuntimeException e) {
                 LOG.error("problem with distribution ", e.getCause());
                 throw (NakedObjectRuntimeException) e.getCause();
             }
         } else {
-            LOG.debug("set association locally " + getName() + " in " + inObject + " with " + associate);
-            super.addAssociation(identifier, inObject, associate);
+            LOG.debug("set association locally " + getIdentifier() + " in " + inObject + " with " + associate);
+            super.addAssociation(inObject, associate);
         }
     }
 
-    public NakedCollection getAssociations(MemberIdentifier identifier, NakedObject inObject) {
+    public NakedCollection getAssociations(NakedObject inObject) {
         if (isPersistent(inObject) && fullProxy) {
             LOG.debug("get association remotely " + inObject);
             throw new NotImplementedException();
         } else {
             LOG.debug("get association locally " + inObject);
-            return super.getAssociations(identifier, inObject);
-        }
-    }
-
-    public Hint getHint(MemberIdentifier identifier, NakedObject inObject, NakedObject associate, boolean add) {
-        if (inObject.getOid() != null && fullProxy) {
-            //    			try {
-            // TODO implement
-            throw new NotImplementedException();
-            //    				return new AboutFieldRequest(element, this).about();
-            //  			} catch (ObjectStoreException e) {
-            //    				LOG.error("problem with distribution", e.getCause());
-            //    				return null;
-            //    			}
-        } else {
-            return super.getHint(identifier, inObject, associate, add);
+            return super.getAssociations(inObject);
         }
     }
 
@@ -75,19 +58,19 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
      * Remove an associated object (the element) from the specified NakedObject in the association
      * field represented by this object.
      */
-    public void removeAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+    public void removeAssociation(NakedObject inObject, NakedObject associate) {
         if (isPersistent(inObject) && fullProxy) {
             LOG.debug("clear association remotely " + inObject + "/" + associate);
             try {
                 ReferenceData targetReference = objectDataFactory.createReference(inObject);
                 ReferenceData associateReference = objectDataFactory.createReference(associate);
-                connection.clearAssociation(NakedObjects.getCurrentSession(), getName(), targetReference, associateReference);
+                connection.clearAssociation(NakedObjects.getCurrentSession(), getIdentifier().getName(), targetReference, associateReference);
             } catch (NakedObjectRuntimeException e) {
                 throw (NakedObjectRuntimeException) e.getCause();
             }
         } else {
             LOG.debug("clear association locally " + inObject + "/" + associate);
-            super.removeAssociation(identifier, inObject, associate);
+            super.removeAssociation(inObject, associate);
         }
     }
 }

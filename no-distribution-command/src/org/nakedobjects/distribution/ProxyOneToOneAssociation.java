@@ -1,10 +1,8 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjects;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.AbstractOneToOnePeer;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 
@@ -23,34 +21,26 @@ public final class ProxyOneToOneAssociation extends AbstractOneToOnePeer {
         this.objectDataFactory = objectDataFactory;
     }
 
-    public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+    public void clearAssociation(NakedObject inObject, NakedObject associate) {
         if (isPersistent(inObject)) {
             LOG.debug("clear association remotely " + inObject + "/" + associate);
             ReferenceData targetReference = objectDataFactory.createReference(inObject);
             ReferenceData associateReference = objectDataFactory.createReference(associate);
-            connection.clearAssociation(NakedObjects.getCurrentSession(), getName(), targetReference, associateReference);
+            connection.clearAssociation(NakedObjects.getCurrentSession(), getIdentifier().getName(), targetReference, associateReference);
         } else {
             LOG.debug("clear association locally " + inObject + "/" + associate);
-            super.clearAssociation(identifier, inObject, associate);
+            super.clearAssociation(inObject, associate);
         }
     }
 
-    public Naked getAssociation(MemberIdentifier identifier, NakedObject inObject) {
+    public Naked getAssociation(NakedObject inObject) {
         if (isPersistent(inObject) && fullProxy) {
             //  return
             // connection.getOneToOneAssociation(ClientSession.getSession(),
             // inObject);
             throw new NotExpectedException();
         } else {
-            return super.getAssociation(identifier, inObject);
-        }
-    }
-
-    public Hint getHint(MemberIdentifier identifier, NakedObject inObject, Naked associate) {
-        if (isPersistent(inObject) && fullProxy) {
-            throw new NotExpectedException();
-        } else {
-            return super.getHint(identifier, inObject, associate);
+            return super.getAssociation(inObject);
         }
     }
 
@@ -58,26 +48,26 @@ public final class ProxyOneToOneAssociation extends AbstractOneToOnePeer {
         return inObject.getOid() != null;
     }
 
-    public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+    public void setAssociation(NakedObject inObject, NakedObject associate) {
         if (isPersistent(inObject)) {
-            LOG.debug("set association remotely " + getName() + " in " + inObject + " with " + associate);
+            LOG.debug("set association remotely " + getIdentifier() + " in " + inObject + " with " + associate);
             ReferenceData targetReference = objectDataFactory.createReference(inObject);
             ReferenceData associateReference = objectDataFactory.createReference(associate);
-            connection.setAssociation(NakedObjects.getCurrentSession(), getName(), targetReference, associateReference);
+            connection.setAssociation(NakedObjects.getCurrentSession(), getIdentifier().getName(), targetReference, associateReference);
         } else {
-            LOG.debug("set association locally " + getName() + " in " + inObject + " with " + associate);
-            super.setAssociation(identifier, inObject, associate);
+            LOG.debug("set association locally " + getIdentifier() + " in " + inObject + " with " + associate);
+            super.setAssociation(inObject, associate);
         }
     }
 
-    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object value) {
+    public void setValue(NakedObject inObject, Object value) {
         if (isPersistent(inObject)) {
-            LOG.debug("set value remotely " + getName() + " in " + inObject + " with " + value);
+            LOG.debug("set value remotely " + getIdentifier() + " in " + inObject + " with " + value);
             ReferenceData targetReference = objectDataFactory.createReference(inObject);
-            connection.setValue(NakedObjects.getCurrentSession(), getName(), targetReference, value);
+            connection.setValue(NakedObjects.getCurrentSession(), getIdentifier().getName(), targetReference, value);
         } else {
-            LOG.debug("set value locally " + getName() + " in " + inObject + " with " + value);
-            super.setValue(identifier, inObject, value);
+            LOG.debug("set value locally " + getIdentifier() + " in " + inObject + " with " + value);
+            super.setValue(inObject, value);
         }
     }
 }
