@@ -94,7 +94,7 @@ public class XmlObjectStore implements NakedObjectStore {
 
             Naked field = object.getField(fields[i]);
             Naked fieldContent = field;
-            String fieldName = fields[i].getName();
+            String fieldName = fields[i].getId();
 
             if (fieldContent instanceof InternalCollection) {
                 data.addInternalCollection((InternalCollection) fieldContent, fieldName, ensurePersistent);
@@ -252,7 +252,7 @@ public class XmlObjectStore implements NakedObjectStore {
                 }
 
                 if (field.isValue()) {
-                    object.initValue((OneToOneAssociation) field, data.get(field.getName()));
+                    object.initValue((OneToOneAssociation) field, data.get(field.getId()));
                 } else if (field instanceof OneToManyAssociation) {
                     initObjectSetupCollection(object, data, field);
                 } else {
@@ -265,7 +265,7 @@ public class XmlObjectStore implements NakedObjectStore {
     }
 
     private void initObjectSetupReference(NakedObject object, ObjectData data, NakedObjectField field) {
-        SerialOid referenceOid = (SerialOid) data.get(field.getName());
+        SerialOid referenceOid = (SerialOid) data.get(field.getId());
         LOG.debug("setting up field " + field + " with " + referenceOid);
         if (referenceOid == null) {
             return;
@@ -303,7 +303,7 @@ public class XmlObjectStore implements NakedObjectStore {
          * The internal collection is already a part of the object, and
          * therefore cannot be recreated, but its oid must be set
          */
-        ReferenceVector refs = (ReferenceVector) data.get(field.getName());
+        ReferenceVector refs = (ReferenceVector) data.get(field.getId());
 
         if (refs == null) {
             return;
