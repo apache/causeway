@@ -7,7 +7,7 @@ import org.nakedobjects.object.loader.PojoAdapterHashMap;
 import org.nakedobjects.object.persistence.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.TimeBasedOidGenerator;
-import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistenceManager;
+import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistor;
 import org.nakedobjects.object.persistence.objectstore.inmemory.TransientObjectStore;
 import org.nakedobjects.object.reflect.ReflectionPeerFactory;
 import org.nakedobjects.object.repository.NakedObjectsClient;
@@ -92,12 +92,12 @@ public abstract class JavaAcceptanceTestCase extends AcceptanceTestCase {
         DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
         persistAlgorithm.setOidGenerator(oidGenerator);
 
-        ObjectStorePersistenceManager objectManager = new ObjectStorePersistenceManager();
+        ObjectStorePersistor objectManager = new ObjectStorePersistor();
         objectManager.setObjectStore(objectStore);
         objectManager.setPersistAlgorithm(persistAlgorithm);
 
 
-        nakedObjects.setPersistenceManager(objectManager);
+        nakedObjects.setObjectPersistor(objectManager);
 
 
         ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
