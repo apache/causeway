@@ -9,7 +9,7 @@ import org.nakedobjects.object.loader.PojoAdapterHashMap;
 import org.nakedobjects.object.persistence.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.SimpleOidGenerator;
-import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistenceManager;
+import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistor;
 import org.nakedobjects.object.persistence.objectstore.inmemory.TransientObjectStore;
 import org.nakedobjects.object.reflect.ReflectionPeerFactory;
 import org.nakedobjects.object.repository.NakedObjectsClient;
@@ -63,7 +63,7 @@ public class NakedObjectsSystem {
 
             setUpLocale(configuration.getString("locale"));
 
-            ObjectStorePersistenceManager objectManager = createObjectManager();
+            ObjectStorePersistor objectManager = createObjectManager();
             NakedObjectSpecificationLoader specificationLoader = createSpecificationLoader();
             AdapterFactory adapterFactory = createReflectorFactory();
             ObjectLoaderImpl objectLoader = createObjectLoader();
@@ -82,12 +82,12 @@ public class NakedObjectsSystem {
 
     private NakedObjectsClient setupNakedObjects(
             PropertiesConfiguration configuration,
-            ObjectStorePersistenceManager objectManager,
+            ObjectStorePersistor objectManager,
             NakedObjectSpecificationLoader specificationLoader,
             AdapterFactory adapterFactory,
             ObjectLoaderImpl objectLoader) {
         NakedObjectsClient nakedObjects = new NakedObjectsClient();
-        nakedObjects.setPersistenceManager(objectManager);
+        nakedObjects.setObjectPersistor(objectManager);
         nakedObjects.setSpecificationLoader(specificationLoader);
         nakedObjects.setConfiguration(configuration);
         nakedObjects.setObjectLoader(objectLoader);
@@ -122,14 +122,14 @@ public class NakedObjectsSystem {
         return specificationLoader;
     }
 
-    protected ObjectStorePersistenceManager createObjectManager() {
+    protected ObjectStorePersistor createObjectManager() {
         TransientObjectStore objectStore = new TransientObjectStore();
         OidGenerator oidGenerator = new SimpleOidGenerator();
 
         DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
         persistAlgorithm.setOidGenerator(oidGenerator);
 
-        ObjectStorePersistenceManager objectManager = new ObjectStorePersistenceManager();
+        ObjectStorePersistor objectManager = new ObjectStorePersistor();
         objectManager.setObjectStore(objectStore);
         objectManager.setPersistAlgorithm(persistAlgorithm);
         return objectManager;
