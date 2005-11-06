@@ -5,7 +5,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.persistence.objectstore.inmemory.MockTransientObjectStoreInstances;
 import org.nakedobjects.object.persistence.objectstore.inmemory.TransientObjectStore;
 import org.nakedobjects.object.transaction.PersistenceCommand;
 

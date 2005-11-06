@@ -1,10 +1,10 @@
 package test.org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.object.value.adapter.IntAdapter;
 import org.nakedobjects.utility.UnexpectedCallException;
@@ -13,9 +13,9 @@ import junit.framework.Assert;
 
 
 public class TestPojoValuePeer implements OneToOnePeer {
-    public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
+    public void clearAssociation(NakedObject inObject, NakedObject associate) {}
 
-    public Naked getAssociation(MemberIdentifier identifier, NakedObject inObject) {
+    public Naked getAssociation(NakedObject inObject) {
         Assert.assertTrue(inObject.getObject()  instanceof TestPojo);
 
         int value = ((TestPojo) inObject).getValue();
@@ -34,7 +34,7 @@ public class TestPojoValuePeer implements OneToOnePeer {
         return null;
     }
 
-    public String getName() {
+    public MemberIdentifier getIdentifier() {
         return null;
     }
 
@@ -46,12 +46,12 @@ public class TestPojoValuePeer implements OneToOnePeer {
         return false;
     }
 
-    public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+    public void initAssociation(NakedObject inObject, NakedObject associate) {
         Assert.assertTrue(inObject.getObject()  instanceof TestPojo);
 
     }
 
-    public void initValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {
+    public void initValue(NakedObject inObject, Object associate) {
         Assert.assertTrue(inObject.getObject() instanceof TestPojo);
 
         setValue(inObject, associate);
@@ -65,16 +65,16 @@ public class TestPojoValuePeer implements OneToOnePeer {
         return false;
     }
     
-    public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
+    public boolean isEmpty(NakedObject inObject) {
         Assert.assertTrue(inObject.getObject()  instanceof TestPojo);
         return false;
     }
 
-    public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+    public void setAssociation(NakedObject inObject, NakedObject associate) {
         throw new UnexpectedCallException();
     }
 
-    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {
+    public void setValue(NakedObject inObject, Object associate) {
         Assert.assertTrue(inObject.getObject()  instanceof TestPojo);
 
         setValue(inObject, associate);

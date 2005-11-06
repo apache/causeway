@@ -1,13 +1,13 @@
 package test.org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.InvalidEntryException;
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.TextEntryParseException;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 
 import java.util.Vector;
@@ -19,16 +19,11 @@ import junit.framework.Assert;
 
 public class DummyOneToOnePeer implements OneToOnePeer {
     private ExpectedSet expectedActions = new ExpectedSet();
-    public Hint hint;
     Vector actions = new Vector();
-    //Consent canAccess;
-    //Consent canUse;
-    //public boolean hasAbout;
     public NakedObject getObject;
-    //String name;
     public boolean isEmpty;
 
-    public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+    public void clearAssociation(NakedObject inObject, NakedObject associate) {
         actions.addElement("clear " + inObject);
         actions.addElement("clear " + associate);
     }
@@ -37,7 +32,7 @@ public class DummyOneToOnePeer implements OneToOnePeer {
         expectedActions.addExpected(string);
     }
 
-    public Naked getAssociation(MemberIdentifier identifier, NakedObject inObject) {
+    public Naked getAssociation(NakedObject inObject) {
         actions.addElement("get " + inObject);
         return getObject;
     }
@@ -50,13 +45,7 @@ public class DummyOneToOnePeer implements OneToOnePeer {
         return new Class[0];
     }
 
-    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked value) {
-        expectedActions.addActual("getHint " + identifier + " " + object + " " + value);
-        
-        return hint;
-    }
-
-    public String getName() {
+    public MemberIdentifier getIdentifier() {
         return null;
     }
 
@@ -64,17 +53,13 @@ public class DummyOneToOnePeer implements OneToOnePeer {
         return null;
     }
 
-    public boolean hasHint() {
-        return hint != null;
-    }
-
-    public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
+    public void initAssociation(NakedObject inObject, NakedObject associate) {}
 
     public boolean isDerived() {
         return false;
     }
 
-    public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
+    public boolean isEmpty(NakedObject inObject) {
         actions.addElement("empty " + inObject);
                return isEmpty;
     }
@@ -83,27 +68,22 @@ public class DummyOneToOnePeer implements OneToOnePeer {
         return false;
     }
 
-    public void setupHint(Hint hint) {
-        this.hint = hint;
-
-    }
-
-    public void initValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {
+    public void initValue(NakedObject inObject, Object associate) {
         actions.addElement("init " + inObject);
         actions.addElement("init " + associate);
     }
 
-    public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+    public void setAssociation(NakedObject inObject, NakedObject associate) {
         actions.addElement("associate " + inObject);
         actions.addElement("associate " + associate);
     }
-
+/*
     public void parseTextEntry(NakedObject inObject, String text) throws TextEntryParseException, InvalidEntryException {
         actions.addElement("parse " + inObject);
         actions.addElement("parse " + text);
     }
-
-    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object associate) {}
+*/
+    public void setValue(NakedObject inObject, Object associate) {}
 
     public void verify() {
         expectedActions.verify();

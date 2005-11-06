@@ -1,23 +1,21 @@
 package test.org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToManyPeer;
 
 import java.util.Vector;
 
-import test.org.nakedobjects.utility.ExpectedSet;
-
 import junit.framework.Assert;
+import test.org.nakedobjects.utility.ExpectedSet;
 
 import com.mockobjects.util.NotImplementedException;
 
 
 public class DummyOneToManyPeer implements OneToManyPeer {
-    public Hint hint;
     Vector actions = new Vector();
 
  //   Consent canAccess;
@@ -29,7 +27,7 @@ public class DummyOneToManyPeer implements OneToManyPeer {
     public String label;
     String name;
 
-    public void addAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+    public void addAssociation(NakedObject inObject, NakedObject associate) {
         actions.addElement("add " + inObject);
         actions.addElement("add " + associate);
     }
@@ -48,7 +46,7 @@ public class DummyOneToManyPeer implements OneToManyPeer {
         expectedActions.addExpected(string);
     }
 
-    public NakedCollection getAssociations(MemberIdentifier identifier, NakedObject inObject) {
+    public NakedCollection getAssociations(NakedObject inObject) {
         actions.addElement("get " + inObject);
         return getCollection;
     }
@@ -61,58 +59,63 @@ public class DummyOneToManyPeer implements OneToManyPeer {
         return new Class[0];
     }
 
-    public Hint getHint(MemberIdentifier identifier, NakedObject inObject, NakedObject associate, boolean add) {
-        expectedActions.addActual("getHint " + identifier + " " + inObject + " " + associate + " " + add);
-        
-        actions.addElement("about " + inObject);
-        actions.addElement("about " + associate);
-        actions.addElement("about " + add);
-
-        return hint;
-    }
-
-    public String getName() {
-        throw new NotImplementedException();
+    public MemberIdentifier getIdentifier() {
+        return new DummyIdentifier();
     }
 
     public NakedObjectSpecification getType() {
         throw new NotImplementedException();
     }
 
-    public boolean hasHint() {
-        return hint != null;
-    }
+    public void initAssociation(NakedObject inObject, NakedObject associate) {}
 
-    public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {}
-
-    public void initOneToManyAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject[] instances) {}
+    public void initOneToManyAssociation(NakedObject inObject, NakedObject[] instances) {}
 
     public boolean isDerived() {
         return false;
     }
 
-    public boolean isEmpty(MemberIdentifier identifier, NakedObject inObject) {
+    public boolean isEmpty(NakedObject inObject) {
         actions.addElement("empty " + inObject);
         return isEmpty;
     }
 
-    public void removeAllAssociations(MemberIdentifier identifier, NakedObject inObject) {
+    public void removeAllAssociations(NakedObject inObject) {
         actions.addElement("removeall " + inObject);
     }
 
-    public void removeAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+    public void removeAssociation(NakedObject inObject, NakedObject associate) {
         actions.addElement("remove " + inObject);
         actions.addElement("remove " + associate);
 
     }
 
-    public void setupHint(Hint hint) {
-        this.hint = hint;
-
-    }
-
     public void verify() {
         expectedActions.verify();
+    }
+
+    public Consent validToRemove(NakedObject container, NakedObject element) {
+        return null;
+    }
+
+    public Consent validToAdd(NakedObject container, NakedObject element) {
+        return null;
+    }
+
+    public Consent isEditable() {
+        return null;
+    }
+
+    public Consent isVisible(NakedObject target) {
+        return null;
+    }
+
+    public boolean isAccessible() {
+        return false;
+    }
+
+    public String getDescription() {
+        return null;
     }
 
 }

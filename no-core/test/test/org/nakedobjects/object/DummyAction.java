@@ -2,12 +2,13 @@ package test.org.nakedobjects.object;
 
 import org.nakedobjects.object.Action;
 import org.nakedobjects.object.ActionParameterSet;
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.ActionPeer;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 
 public class DummyAction implements Action {
 
@@ -31,10 +32,6 @@ public class DummyAction implements Action {
 
     public Object getExtension(Class cls) {
         return null;
-    }
-
-    public boolean hasHint() {
-        return peer.hasHint();
     }
 
     public boolean hasReturn() {
@@ -61,14 +58,6 @@ public class DummyAction implements Action {
         return null;
     }
 
-    public Hint getHint(NakedObject object, Naked[] parameters) {
-        return null;
-    }
-
-    public String getLabel(NakedObject object) {
-        return null;
-    }
-
     public MemberIdentifier getIdentifier() {
         return null;
     }
@@ -78,7 +67,39 @@ public class DummyAction implements Action {
     }
 
     public String getName() {
-        return peer.getName();
+        return peer.getIdentifier();
+    }
+
+    public Consent invokable(NakedObject target, Naked[] parameters) {
+        return null;
+    }
+
+    public Consent validParameters(NakedObject object, Naked[] parameters) {
+        return null;
+    }
+
+    public String[] parameterLabels() {
+        return null;
+    }
+
+    public boolean[] mandatoryParameters() {
+        return null;
+    }
+
+    public Object[] defaultParameters() {
+        return null;
+    }
+
+    public String getDescription() {
+        return null;
+    }
+
+    public Consent isVisible(NakedObject target) {
+        return null;
+    }
+
+    public boolean isAccessible() {
+        return false;
     }
 
 }

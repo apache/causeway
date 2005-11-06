@@ -2,13 +2,13 @@ package test.org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.Action;
 import org.nakedobjects.object.ActionParameterSet;
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.reflect.ActionParameterSetImpl;
 import org.nakedobjects.object.reflect.ActionPeer;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 
 import java.util.Vector;
 
@@ -17,14 +17,14 @@ import test.org.nakedobjects.utility.ExpectedSet;
 
 public final class DummyActionPeer implements ActionPeer {
     private ExpectedSet expectedActions = new ExpectedSet();
-    private Hint hint;
     private Naked returnObject;
     private NakedObjectSpecification returnType;
     private NakedObjectSpecification[] paramterTypes = new NakedObjectSpecification[0];
     private String name;
+    private String action_label;
 
-    public Naked execute(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
-        expectedActions.addActual("execute " + identifier + " " + object);
+    public Naked execute(NakedObject object, Naked[] parameters) {
+        expectedActions.addActual("execute " + getIdentifier() + " " + object);
         return returnObject;
     }
 
@@ -32,20 +32,15 @@ public final class DummyActionPeer implements ActionPeer {
         return null;
     }
 
-    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
-        expectedActions.addActual("getHint " + identifier + " " + object);
-        return hint;
-    }
-
-    public String getName() {
-        return name;
+    public MemberIdentifier getIdentifier() {
+        return new DummyIdentifier(name);
     }
 
     public int getParameterCount() {
         return 0;
     }
 
-    public ActionParameterSet getParameters(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
+    public ActionParameterSet getParameters(NakedObject object, Naked[] parameters) {
         return new ActionParameterSetImpl(new Object[] { new String(), new Integer(123), new Vector() }, new String[] { "one", "two",
                 "three" }, new boolean[3]);
     }
@@ -58,10 +53,6 @@ public final class DummyActionPeer implements ActionPeer {
         return null;
     }
 
-    public boolean hasHint() {
-        return hint != null;
-    }
-
     public NakedObjectSpecification[] parameterTypes() {
         return paramterTypes;
     }
@@ -70,12 +61,6 @@ public final class DummyActionPeer implements ActionPeer {
         return returnType;
     }
     
-    
-    public void setupHint(Hint hint) {
-        this.hint = hint;
-
-    }
-
     public void verify() {
         expectedActions.verify();
     }
@@ -100,6 +85,41 @@ public final class DummyActionPeer implements ActionPeer {
     public void setupName(String name) {
         this.name = name;
     }
+
+    public Consent invokable(NakedObject target, Naked[] parameters) {
+        return null;
+    }
+
+    public Consent validParameters(NakedObject object, Naked[] parameters) {
+        return null;
+    }
+
+    public String[] parameterLabels() {
+        return null;
+    }
+
+    public boolean[] mandatoryParameters() {
+        return null;
+    }
+
+    public Object[] defaultParameters() {
+        return null;
+    }
+
+    public String getDescription() {
+        return null;
+    }
+
+    public Consent isVisible(NakedObject target) {
+        return null;
+    }
+
+    public boolean isAccessible() {
+        return false;
+    }
+
+    public void setupLabel(String action_label) {
+        this.action_label = action_label;}
 
 }
 

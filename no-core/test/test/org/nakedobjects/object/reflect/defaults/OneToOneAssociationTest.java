@@ -5,8 +5,6 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.TextEntryParseException;
-import org.nakedobjects.object.control.DefaultHint;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.OneToOneAssociationImpl;
 
 import junit.framework.TestSuite;
@@ -17,7 +15,6 @@ import org.apache.log4j.LogManager;
 import test.org.nakedobjects.object.DummyNakedObjectSpecification;
 import test.org.nakedobjects.object.NakedObjectTestCase;
 import test.org.nakedobjects.object.TestSystem;
-import test.org.nakedobjects.object.control.MockHint;
 import test.org.nakedobjects.object.reflect.DummyNakedObject;
 import test.org.nakedobjects.object.reflect.DummyOneToOnePeer;
 
@@ -90,32 +87,15 @@ public class OneToOneAssociationTest extends NakedObjectTestCase {
     }
 
     public void testLabel() {
-        assertEquals(FIELD_LABEL, association.getLabel(nakedObject));
+        assertEquals(FIELD_LABEL, association.getLabel());
 
-        MockHint mockHint = new MockHint();
-        mockHint.setupName("label from hint");
-        associationDelegate.hint = mockHint;
+//        mockHint.setupName("label from hint");
 
         associationDelegate.expect("getHint " + "#SmallPerson()" + " " + nakedObject + " null");
         
-        assertEquals("label from hint", association.getLabel(nakedObject));
+        assertEquals("label from hint", association.getLabel());
     }
 
-    public void testAbout() {
-        assertFalse(association.hasHint());
-
-         Hint about = association.getHint(nakedObject, null);
-        assertNull(associationDelegate.hint);
-        assertTrue(about instanceof DefaultHint);
-
-        associationDelegate.hint = new DefaultHint();
-
-        associationDelegate.expect("getHint " + "#SmallPerson()" + " " + nakedObject + " null");
-
-        about = association.getHint(nakedObject, null);
-        assertEquals(associationDelegate.hint, about);
-    }
-    
     public void testIsEmpty() {
         assertFalse(association.isEmpty(nakedObject));
         associationDelegate.assertAction(0, "empty " + nakedObject);

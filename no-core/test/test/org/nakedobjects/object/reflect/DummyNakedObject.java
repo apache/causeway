@@ -15,7 +15,7 @@ import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.Version;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.utility.ToString;
 
 import java.util.Hashtable;
@@ -26,7 +26,6 @@ import junit.framework.Assert;
 public class DummyNakedObject implements NakedObject {
     private Hashtable fieldContents = new Hashtable();
     private NakedObjectField[] fields = new NakedObjectField[0];
-    private Hint hint;
     private String label;
     private Object object;
     private Oid oid;
@@ -78,14 +77,6 @@ public class DummyNakedObject implements NakedObject {
 
     public NakedObjectField[] getFields() {
         return fields;
-    }
-
-    public Hint getHint(Action action, Naked[] parameters) {
-        return hint;
-    }
-
-    public Hint getHint(NakedObjectField field, Naked value) {
-        return hint;
     }
 
     public String getIconName() {
@@ -172,10 +163,6 @@ public class DummyNakedObject implements NakedObject {
         this.fieldContents.put(name, field);
     }
 
-    public void setupHint(Hint hint) {
-        this.hint = hint;
-    }
-
     public void setupLabel(String label) {
         this.label = label;
     }
@@ -216,6 +203,34 @@ public class DummyNakedObject implements NakedObject {
         str.append("pojo", object);
         return str.toString();
     }
+
+    public Consent isValid(OneToOneAssociation field, NakedValue nakedValue) {
+        return null;
+    }
+
+    public Consent isValid(OneToOneAssociation field, NakedObject nakedObject) {
+        return null;
+    }
+
+    public Consent canAdd(OneToManyAssociation field, NakedObject nakedObject) {
+        return null;
+    }
+
+    public Consent isValid(Action action, Naked[] parameters) {
+        return null;
+    }
+
+    public Consent isVisible(NakedObjectField field) {
+        return null;
+    }
+
+    public Consent isVisible(Action action) {
+        return null;
+    }
+
+    public void persistedAs(Oid oid) {}
+
+    public void changeState(ResolveState newState) {}
 }
 
 /*

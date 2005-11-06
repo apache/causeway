@@ -1,7 +1,7 @@
 package test.org.nakedobjects.object.help;
 
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.help.SimpleHelpManager;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.MemberIdentifierImpl;
 
 import java.io.BufferedReader;

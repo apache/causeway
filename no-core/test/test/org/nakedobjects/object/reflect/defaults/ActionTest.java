@@ -5,8 +5,6 @@ import org.nakedobjects.object.ActionParameterSet;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ObjectPerstsistenceException;
-import org.nakedobjects.object.control.DefaultHint;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.ActionImpl;
 import org.nakedobjects.object.repository.NakedObjectsClient;
 
@@ -20,7 +18,6 @@ import org.apache.log4j.LogManager;
 import test.org.nakedobjects.object.DummyNakedObjectSpecification;
 import test.org.nakedobjects.object.DummyNakedObjectSpecificationLoader;
 import test.org.nakedobjects.object.NakedObjectTestCase;
-import test.org.nakedobjects.object.control.MockHint;
 import test.org.nakedobjects.object.defaults.MockObjectPersistenceManager;
 import test.org.nakedobjects.object.reflect.DummyActionPeer;
 import test.org.nakedobjects.object.reflect.DummyNakedObject;
@@ -51,29 +48,12 @@ public class ActionTest extends NakedObjectTestCase {
         nakedObjects.setSpecificationLoader(new DummyNakedObjectSpecificationLoader());
         
         actionPeer = new DummyActionPeer();
+        actionPeer.setupName("reduceheadcount()");
         action = new ActionImpl("", ACTION_NAME, actionPeer);
     }
 
     protected void tearDown() throws Exception {
         super.tearDown();
-    }
-
-    public void testHint() {
-        actionPeer.setupHint(null);
-        assertFalse(action.hasHint());
-        
-        Hint hint = action.getHint(nakedObject, null);
-        assertTrue(hint instanceof DefaultHint);
-
-        MockHint expectedHint = new MockHint();
-        actionPeer.setupHint(expectedHint);
-        assertTrue(action.hasHint());
-
-        actionPeer.expect("getHint #reduceheadcount() null");
-        hint = action.getHint(nakedObject, null);
-        assertEquals(expectedHint, hint);
-        
-        actionPeer.verify();
     }
 
     public void testAction() {
@@ -98,17 +78,14 @@ public class ActionTest extends NakedObjectTestCase {
     }
 
     public void testLabel() {
-        assertEquals(ACTION_NAME, action.getLabel(nakedObject));
-
-        actionPeer.expect("getHint #reduceheadcount() null" );
+        assertEquals(ACTION_NAME, action.getLabel());
         
-        MockHint hint = new MockHint();
-        hint.setupName(ACTION_LABEL);
-        actionPeer.setupHint(hint);
+        actionPeer.setupLabel(ACTION_LABEL);
+//        MockHint hint = new MockHint();
+//        hint.setupName(ACTION_LABEL);
+//        actionPeer.setupHint(hint);
         
-        assertEquals(ACTION_LABEL, action.getLabel(nakedObject));
-        
-        actionPeer.verify();
+        assertEquals(ACTION_LABEL, action.getLabel());
     }
 
     public void testName() {
