@@ -5,7 +5,7 @@ import org.nakedobjects.object.loader.PojoAdapterHashMap;
 import org.nakedobjects.object.persistence.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.SimpleOidGenerator;
-import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistenceManager;
+import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistor;
 import org.nakedobjects.object.reflect.ReflectionPeerFactory;
 import org.nakedobjects.object.repository.NakedObjectsClient;
 import org.nakedobjects.object.transaction.TransactionPeerFactory;
@@ -73,12 +73,12 @@ public class EcsPersistent {
             DefaultPersistAlgorithm algo = new DefaultPersistAlgorithm();
             algo.setOidGenerator(oidGenerator);
             
-            ObjectStorePersistenceManager objectManager = new ObjectStorePersistenceManager();
+            ObjectStorePersistor objectManager = new ObjectStorePersistor();
             objectManager.setObjectStore(objectStore);
             objectManager.setPersistAlgorithm(persistAlgorithm);
             objectManager.setCheckObjectsForDirtyFlag(true);
 
-            nakedObjects.setPersistenceManager(objectManager);
+            nakedObjects.setObjectPersistor(objectManager);
  
             ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
                     new TransactionPeerFactory(),
