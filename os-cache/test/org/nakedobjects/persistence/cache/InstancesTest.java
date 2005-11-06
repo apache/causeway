@@ -16,7 +16,7 @@ import java.util.Enumeration;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import test.org.nakedobjects.object.defaults.MockObjectPersistenceManager;
+import test.org.nakedobjects.object.defaults.MockObjectPersistor;
 import test.org.nakedobjects.object.repository.object.LoadedObjects;
 import test.org.nakedobjects.object.repository.object.MockLoadedObjects;
 import test.org.nakedobjects.object.repository.object.Person;
@@ -116,7 +116,7 @@ public class InstancesTest extends TestCase {
         ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
         ObjectInputStream ois = new ObjectInputStream(bais);
         
-        MockObjectPersistenceManager manager = MockObjectPersistenceManager.setup();
+        MockObjectPersistor manager = MockObjectPersistor.setup();
         
         
         NakedObjectSpecification personClass = NakedObjects.getSpecificationLoader().loadSpecification(Person.class);
@@ -165,7 +165,7 @@ public class InstancesTest extends TestCase {
         ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
         ObjectInputStream ois = new ObjectInputStream(bais);
         
-        MockObjectPersistenceManager manager = MockObjectPersistenceManager.setup();
+        MockObjectPersistor manager = MockObjectPersistor.setup();
         
         
         NakedObjectSpecification roleClass = NakedObjects.getSpecificationLoader().loadSpecification(Person.class);

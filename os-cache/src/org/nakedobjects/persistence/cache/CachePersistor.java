@@ -10,7 +10,7 @@ import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.UnsupportedFindException;
-import org.nakedobjects.object.defaults.AbstracObjectPersistenceManager;
+import org.nakedobjects.object.defaults.AbstracObjectPersistor;
 import org.nakedobjects.object.defaults.NullDirtyObjectSet;
 import org.nakedobjects.object.io.Memento;
 import org.nakedobjects.object.persistence.OidGenerator;
@@ -23,7 +23,7 @@ import java.util.Vector;
 import test.org.nakedobjects.object.repository.object.persistence.ObjectStoreException;
 
 
-public class CacheObjectManager extends AbstracObjectPersistenceManager {
+public class CachePersistor extends AbstracObjectPersistor {
     private Journal journal;
     private final Hashtable nakedClasses = new Hashtable();
     private ObjectStore objectStore;
