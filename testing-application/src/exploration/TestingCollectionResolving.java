@@ -1,6 +1,6 @@
 package exploration;
 
-import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.loader.IdentityAdapterHashMap;
 import org.nakedobjects.object.loader.ObjectLoaderImpl;
@@ -9,7 +9,7 @@ import org.nakedobjects.object.persistence.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.ObjectPesistorLogger;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.SimpleOidGenerator;
-import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistenceManager;
+import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistor;
 import org.nakedobjects.object.persistence.objectstore.NakedObjectStore;
 import org.nakedobjects.object.persistence.objectstore.ObjectStoreLogger;
 import org.nakedobjects.object.persistence.objectstore.inmemory.MemoryObjectStore;
@@ -86,13 +86,13 @@ public class TestingCollectionResolving {
             DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
             persistAlgorithm.setOidGenerator(oidGenerator);
 
-            ObjectStorePersistenceManager lom = new ObjectStorePersistenceManager();
+            ObjectStorePersistor lom = new ObjectStorePersistor();
             lom.setObjectStore(objectStore);
             lom.setCheckObjectsForDirtyFlag(true);
             lom.setPersistAlgorithm(persistAlgorithm);
             
-            NakedObjectPersistenceManager objectManager = new ObjectPesistorLogger(lom, "manager.log");
-            nakedObjects.setPersistenceManager(objectManager);
+            NakedObjectPersistor objectManager = new ObjectPesistorLogger(lom, "manager.log");
+            nakedObjects.setObjectPersistor(objectManager);
  
             ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
                     new TransactionPeerFactory(),

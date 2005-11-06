@@ -47,6 +47,7 @@ public class Telephone implements Common {
     public void aboutNumber(FieldAbout about, TextString entry) {
         about.unmodifiableOnCondition(temporary.isSet(), "Flag set");
         
+
         if(hide.isSet()) about.invisible();
     }
     

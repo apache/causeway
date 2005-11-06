@@ -23,9 +23,9 @@ public class CitiesFixture extends JavaFixture {
             cities[i].getName().setValue(cityNames[i]);
         }
 
-        boston = cities[1];
-        newYork = cities[0];
-        washington = cities[2];
+        boston = cities[3];
+        newYork = cities[16];
+        washington = cities[26];
     }
 }
 
