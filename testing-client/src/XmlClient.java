@@ -2,10 +2,10 @@
 import org.nakedobjects.application.system.SystemClock;
 import org.nakedobjects.application.valueholder.Date;
 import org.nakedobjects.distribution.DistributionLogger;
-import org.nakedobjects.distribution.ProxyPersistenceManager;
+import org.nakedobjects.distribution.ProxyPersistor;
 import org.nakedobjects.distribution.ProxyPeerFactory;
 import org.nakedobjects.distribution.java.JavaDataFactory;
-import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.loader.IdentityAdapterHashMap;
 import org.nakedobjects.object.loader.ObjectLoaderImpl;
 import org.nakedobjects.object.loader.PojoAdapterHashMap;
@@ -74,12 +74,12 @@ public class XmlClient {
 
             JavaDataFactory objectDataFactory = new JavaDataFactory();    
 
-            ProxyPersistenceManager proxyObjectManager = new ProxyPersistenceManager();
+            ProxyPersistor proxyObjectManager = new ProxyPersistor();
             proxyObjectManager.setConnection(connection);
             proxyObjectManager.setObjectDataFactory(objectDataFactory);
 
-            NakedObjectPersistenceManager objectManager = new ObjectPesistorLogger(proxyObjectManager, "manager.log");
-            nakedObjects.setPersistenceManager(objectManager);
+            NakedObjectPersistor objectManager = new ObjectPesistorLogger(proxyObjectManager, "manager.log");
+            nakedObjects.setObjectPersistor(objectManager);
             
             ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
             objectLoader.setPojoAdapterMap(new PojoAdapterHashMap());
