@@ -11,7 +11,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import test.org.nakedobjects.object.defaults.MockObjectPersistenceManager;
+import test.org.nakedobjects.object.defaults.MockObjectPersistor;
 import test.org.nakedobjects.object.repository.application.value.Money;
 import test.org.nakedobjects.object.repository.object.NakedObjectContext;
 import test.org.nakedobjects.object.repository.object.defaults.AbstractSpecificationLoader;
@@ -27,7 +27,7 @@ public class TestObjectImplTest extends TestCase {
     private TestObject elementThree;
 
     private TestNaked[] multipleParameters;
-    private MockObjectPersistenceManager om;
+    private MockObjectPersistor om;
     private TestObject singleParameter;
     private TestObject target;
     private TestObjectExample targetObject;
@@ -36,7 +36,7 @@ public class TestObjectImplTest extends TestCase {
         BasicConfigurator.configure();
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        om = MockObjectPersistenceManager.setup();
+        om = MockObjectPersistor.setup();
         new AbstractSpecificationLoader();
         NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
 //        NakedObjectSpecificationImpl.setReflectorFactory(new InternalReflectorFactory());

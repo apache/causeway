@@ -4,13 +4,13 @@ import org.nakedobjects.LocalReflectionFactory;
 import org.nakedobjects.application.value.Date;
 
 import test.org.nakedobjects.object.NakedObjectTestCase;
-import test.org.nakedobjects.object.defaults.MockObjectPersistenceManager;
+import test.org.nakedobjects.object.defaults.MockObjectPersistor;
 import test.org.nakedobjects.object.repository.object.NakedObjectContext;
 import test.org.nakedobjects.object.repository.object.defaults.AbstractSpecificationLoader;
 import test.org.nakedobjects.object.repository.object.defaults.NakedObjectSpecificationImpl;
 
 public class TestValueImplTest extends NakedObjectTestCase {
-    private MockObjectPersistenceManager om;
+    private MockObjectPersistor om;
     private NakedObjectContext context;
     
     public static void main(String[] args) {
@@ -20,7 +20,7 @@ public class TestValueImplTest extends NakedObjectTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         
-        om = MockObjectPersistenceManager.setup();
+        om = MockObjectPersistor.setup();
         new AbstractSpecificationLoader();
         NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
         AbstractSpecificationLoader.setReflectorFactory(new InternalReflectorFactory());

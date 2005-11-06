@@ -10,7 +10,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import test.org.nakedobjects.object.defaults.MockObjectPersistenceManager;
+import test.org.nakedobjects.object.defaults.MockObjectPersistor;
 import test.org.nakedobjects.object.repository.object.defaults.AbstractSpecificationLoader;
 import test.org.nakedobjects.object.repository.object.defaults.NakedObjectSpecificationImpl;
 
@@ -19,7 +19,7 @@ public abstract class NakedObjectStoreTestCase extends TestCase {
     private static final Logger LOG = Logger.getLogger(NakedObjectStoreTestCase.class);
     protected static NakedObjectStore objectStore;
     private int next;
-    protected MockObjectPersistenceManager manager;
+    protected MockObjectPersistor manager;
     protected NakedObjectContext context;
     
     public NakedObjectStoreTestCase(String name) {
@@ -46,7 +46,7 @@ public abstract class NakedObjectStoreTestCase extends TestCase {
         NakedObjectSpecificationImpl.setReflectionFactory(new LocalReflectionFactory());
 //        NakedObjectSpecificationImpl.setReflectorFactory(new InternalReflectorFactory());
 
-        manager = MockObjectPersistenceManager.setup();
+        manager = MockObjectPersistor.setup();
          
         context = new NakedObjectContext(manager);
         

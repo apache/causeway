@@ -8,17 +8,17 @@ import junit.framework.TestCase;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 
-import test.org.nakedobjects.object.defaults.MockObjectPersistenceManager;
+import test.org.nakedobjects.object.defaults.MockObjectPersistor;
 import test.org.nakedobjects.object.repository.object.defaults.AbstractSpecificationLoader;
 
 public abstract class IntegrationTestCase extends TestCase {
-    protected MockObjectPersistenceManager manager;
+    protected MockObjectPersistor manager;
 
     protected void setUp() throws Exception {
         super.setUp();
 
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
-        manager = MockObjectPersistenceManager.setup();
+        manager = MockObjectPersistor.setup();
         new AbstractSpecificationLoader();
         new NakedObjectsClient().setReflectionFactory(new LocalReflectionFactory());
     }

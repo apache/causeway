@@ -1,14 +1,14 @@
 package org.nakedobjects;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectLoader;
-import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.loader.IdentityAdapterHashMap;
 import org.nakedobjects.object.loader.ObjectLoaderImpl;
 import org.nakedobjects.object.loader.PojoAdapterHashImpl;
 import org.nakedobjects.object.persistence.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.SimpleOidGenerator;
-import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistenceManager;
+import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistor;
 import org.nakedobjects.object.persistence.objectstore.inmemory.TransientObjectStore;
 import org.nakedobjects.object.repository.NakedObjectsClient;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
@@ -22,7 +22,7 @@ public class BasicSystem {
     private final NakedObjectSpecificationLoader specificationLoader;
     private final NakedObjectLoader objectLoader;
     private final NakedObjectsClient nakedObjects;
-    private final NakedObjectPersistenceManager objectManager;
+    private final NakedObjectPersistor objectManager;
     private final ReflectionFactory reflectionFactory;
 
     public BasicSystem() {
@@ -35,8 +35,8 @@ public class BasicSystem {
         nakedObjects = new NakedObjectsClient();
     }
 
-    protected ObjectStorePersistenceManager setupObjectManager() {
-        ObjectStorePersistenceManager objectManager = new ObjectStorePersistenceManager();
+    protected ObjectStorePersistor setupObjectManager() {
+        ObjectStorePersistor objectManager = new ObjectStorePersistor();
         DefaultPersistAlgorithm defaultPersistAlgorithm = new DefaultPersistAlgorithm();
         defaultPersistAlgorithm.setOidGenerator(new SimpleOidGenerator());
         objectManager.setPersistAlgorithm(defaultPersistAlgorithm);
@@ -56,7 +56,7 @@ public class BasicSystem {
          nakedObjects.setConfiguration(new TestConfiguration());
         nakedObjects.setSpecificationLoader(specificationLoader);
         nakedObjects.setObjectLoader(objectLoader);
-        nakedObjects.setPersistenceManager(objectManager);        
+        nakedObjects.setObjectPersistor(objectManager);        
 
         nakedObjects.init();
     }
